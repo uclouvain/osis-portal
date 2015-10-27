@@ -62,6 +62,7 @@ class OfferEnrollment(models.Model):
 # class Tutor(models.Model):
 # class Exam(models.Model):
 # class ExamEnrollment(models.Model):
+
 class LearningUnit(models.Model):
     acronym     = models.CharField(max_length = 5,blank = False, null = False)
     number      = models.DecimalField(max_digits = 11, decimal_places = 0, blank = True, null = True)    
@@ -126,5 +127,11 @@ class LearningUnitEnrollment(models.Model):
         return self.student.name + " " + str(self.learning_unit_year.academicYear)
 # class Structure(models.Model):
 # class Attribution(models.Model):
+
+
+class Configuration(models.Model):
+    key  = models.CharField(max_length = 50, blank = False, null = False)    
+    value = models.CharField(max_length = 255, blank = False, null = False)    
+
 
    

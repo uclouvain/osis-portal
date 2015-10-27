@@ -8,6 +8,7 @@ from .models import AcademicYear
 from .models import LearningUnit
 from .models import LearningUnitYear
 from .models import LearningUnitEnrollment
+from .models import Configuration
 
 
 
@@ -19,3 +20,4 @@ admin.site.register(AcademicYear)
 admin.site.register(LearningUnit)
 admin.site.register(LearningUnitYear)
 admin.site.register(LearningUnitEnrollment)
+admin.site.register(Configuration)
