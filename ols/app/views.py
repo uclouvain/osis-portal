@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import datetime
 
-from .models import Student, Offer, OfferEnrollment, OfferYear
+from .models import Student, Offer, OfferEnrollment, OfferYear, Configuration
 
 
 def index(request):
@@ -224,3 +224,74 @@ def student(request,id_student,id_offer_year,year):
     html += "</body>"
     html += "</html>"
     return HttpResponse(html)
+    
+
+def attestations(request):
+    avisDispoNonImprime=True
+    avisDispoDejaImprime=False
+    deDispoNonImprime=True
+    deDispoDejaImprime=False
+    abcDispoNonImprime=True
+    abcDispoDejaImprime=False
+    echeanceDispoNonImprime=True
+    echeanceDispoDejaImprime=False
+    docDisponibles=True
+    inscritPourCetteAnnee=True
+    configuration = Configuration.objects.get(key='DEF0021_ETD')
+    if configuration:
+        anac=configuration.value
+    else :
+        anac=2015
+    
+    texte_avis="Votre attestation \'<b>avis d'enregistrement + facture</b>\' {0}-{1} <font style=\'color:green\'>est disponible</font> et peut être imprimée".format(anac, int(anac)+1)
+    if avisDispoDejaImprime:
+        texte_avis="Votre attestation 'avis d'enregistrement + facture' {0}-{1} a déjà été imprimée mais est toujours disponible".format(anac, int(anac)+1)
+    
+    texte_de = "Votre attestation \'<b>Carte d'étudiant provisoire + transports en commun</b>\' {0}-{1} <font style=\'color:green\'>est disponible</font> et peut être imprimée".format(anac, int(anac)+1)    
+    if deDispoDejaImprime:
+        texte_de = "Votre attestation 'Carte d'étudiant provisoire + transports en commun' {0}-{1} a déjà été imprimée mais est toujours disponible".format(anac, int(anac)+1)
+        
+    texte_alloc ="Votre attestation d\'inscription régulière \'<b>le cas échéant, pour les allocations familiales, mutuelles, ...</b>\'"
+    texte_alloc += " {0}-{1} <font style=\'color:green\'>est disponible</font> et peut être imprimée".format(anac, int(anac)+1)
+    if abcDispoDejaImprime: 
+        texte_alloc = "Votre attestation d\'inscription régulière \'<b>le cas échéant, pour les allocations familiales, mutuelles, ...</b>"
+        texte_alloc += "\' {0}-{1} <font style=\'color:orange\'>a déjà été imprimée</font> mais est toujours disponible".format(anac, int(anac)+1)  
+
+    texte_echeance = "Votre document <b>avis d'échéance</b> {0}-{1} <font style='color:green'>est disponible</font> et peut être imprimé".format(anac, int(anac)+1)    
+    if echeanceDispoDejaImprime:
+        texte_echeance = "<Votre document \'<b>avis d'échéance</b>\' {0}-{1}"
+        texte_echeance += " <font style=\'color:orange\'>a déjà été imprimé</font> mais est toujours disponible".format(anac, int(anac)+1)  
+    
+    html = "<html>"
+    html += "<head>"
+    html += "<link type='text/css' href='http://www.uclouvain.be/cps/ucl/styles/bv_page.css' rel='stylesheet' />"
+    html += "<link type='text/css' href='http://www.uclouvain.be/cps/ucl/styles/ucl_page_print.css' rel='stylesheet' media='print' />"
+    html += "<style>"
+    html += ".titre{color:#639443;border-bottom:1px solid #AAB537;}"
+    html += ".printingButton{width:200px;}"
+    html += "</style>"
+    
+    students = Student.objects.filter(name__isnull=False).order_by('name')
+    html += "</head>"
+    html += "<body>"
+    html += "<div class='composant-corps texte-base'>"
+    student = Student.objects.get(id=1)
+    html += "<form>"
+    html += "<table>"
+    html += "<tr>"
+    html += "<td>{0}</td><td><input type='submit' value='Avis' class='printingButton'/><td/>".format(texte_avis)
+    html += "</tr>"
+    html += "<tr>"
+    html += "<td>{0}</td><td><input type='submit' value='De' class='printingButton'/><td/>".format(texte_de)
+    html += "</tr>"    
+    html += "<tr>"
+    html += "<td>{0}</td><td><input type='submit' value='Allocations' class='printingButton'/><td/>".format(texte_alloc)
+    html += "</tr>"    
+    html += "<tr>"
+    html += "<td>{0}</td><td><input type='submit' value='Avis' class='printingButton'/><td/>".format(texte_echeance)
+    html += "</tr>"
+    html += "</table>"
+    html += "</form>"
+    html += "</div>"
+    html += "</body></html>"
+    return HttpResponse(html)    
