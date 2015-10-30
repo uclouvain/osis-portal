@@ -242,7 +242,7 @@ def attestations(request):
         anac=configuration.value
     else :
         anac=2015
-    
+    matricule = '00217282'
     texte_avis="Votre attestation \'<b>avis d'enregistrement + facture</b>\' {0}-{1} <font style=\'color:green\'>est disponible</font> et peut être imprimée".format(anac, int(anac)+1)
     if avisDispoDejaImprime:
         texte_avis="Votre attestation 'avis d'enregistrement + facture' {0}-{1} a déjà été imprimée mais est toujours disponible".format(anac, int(anac)+1)
@@ -269,6 +269,8 @@ def attestations(request):
     html += "<style>"
     html += ".titre{color:#639443;border-bottom:1px solid #AAB537;}"
     html += ".printingButton{width:200px;}"
+    
+    
     html += "</style>"
     
     students = Student.objects.filter(name__isnull=False).order_by('name')
@@ -279,16 +281,17 @@ def attestations(request):
     html += "<form>"
     html += "<table>"
     html += "<tr>"
-    html += "<td>{0}</td><td><input type='submit' value='Avis' class='printingButton'/><td/>".format(texte_avis)
+    
+    html += "<td>{0}</td><td><a href=\'https://pc-verpoorten.epc.uclouvain.be:8181/WebApi/resources/pdf/{1}/{2}/AVIS\'><input type=\'button\' value=\'Avis\' class='printingButton'/></a><td/>".format(texte_avis,matricule,anac)
     html += "</tr>"
     html += "<tr>"
-    html += "<td>{0}</td><td><input type='submit' value='De' class='printingButton'/><td/>".format(texte_de)
+    html += "<td>{0}</td><td><a href=\'https://pc-verpoorten.epc.uclouvain.be:8181/WebApi/resources/pdf/{1}/{2}/DE\'><input type=\'button\' value=\'De\' class='printingButton'/></a><td/>".format(texte_de,matricule,anac)
     html += "</tr>"    
     html += "<tr>"
-    html += "<td>{0}</td><td><input type='submit' value='Allocations' class='printingButton'/><td/>".format(texte_alloc)
+    html += "<td>{0}</td><td><a href=\'https://pc-verpoorten.epc.uclouvain.be:8181/WebApi/resources/pdf/{1}/{2}/ABC\'><input type=\'button\' value=\'Alloc\' class='printingButton'/></a><td/>".format(texte_alloc,matricule,anac)
     html += "</tr>"    
     html += "<tr>"
-    html += "<td>{0}</td><td><input type='submit' value='Avis' class='printingButton'/><td/>".format(texte_echeance)
+    html += "<td>{0}</td><td><a href=\'https://pc-verpoorten.epc.uclouvain.be:8181/WebApi/resources/pdf/{1}/{2}/ECHEANCE\'><input type=\'button\' value=\'Echéance\' class='printingButton'/></a><td/>".format(texte_echeance,matricule,anac)
     html += "</tr>"
     html += "</table>"
     html += "</form>"
