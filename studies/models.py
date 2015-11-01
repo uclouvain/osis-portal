@@ -8,7 +8,7 @@ class AcademicYear(models.Model):
     end_date = models.DateField()
 
     def __str__(self):
-        return str(self.year)
+        return u'%d - %d' % (self.year, self.year + 1)
 
 
 class Offer(models.Model):
@@ -23,7 +23,7 @@ class OfferYear(models.Model):
     academic_year = models.ForeignKey(AcademicYear)
 
     def __str__(self):
-        return self.offer.title + "(" + self.academic_year.year + ")"
+        return u'%s (%d)' % (self.offer.title, self.academic_year)
 
 
 class Student(models.Model):
@@ -31,7 +31,7 @@ class Student(models.Model):
     last_name  = models.CharField(max_length = 50, blank = False, null = False)
 
     def __str__(self):
-        return first_name + " " + last_name;
+        return u'%s %s' % (self.first_name, self.last_name)
 
 
 class OfferEnrollment(models.Model):
@@ -39,7 +39,7 @@ class OfferEnrollment(models.Model):
     student            = models.ForeignKey(Student)
 
     def __str__(self):
-        return self.offer_year
+        return u'%d' % (self.offer_year)
 
 
 class Tutor(models.Model):
@@ -47,7 +47,7 @@ class Tutor(models.Model):
     last_name  = models.CharField(max_length = 50, blank = False, null = False)
 
     def __str__(self):
-        return first_name + " " + last_name;
+        return u'%s %s' % (self.first_name, self.last_name)
 
 
 class Structure(models.Model):
@@ -67,7 +67,7 @@ class LearningUnitYear(models.Model):
     learning_unit = models.ForeignKey(LearningUnit)
 
     def __str__(self):
-        return self.academicYear + " " + self.learning_unit.acronym
+        return u'%s %s' % (self.academic_year, self.learning_unit.acronym)
 
 
 class LearningUnitEnrollment(models.Model):
@@ -75,7 +75,7 @@ class LearningUnitEnrollment(models.Model):
     learning_unit_year = models.ForeignKey(LearningUnitYear)
 
     def __str__(self):
-        return self.student
+        return u'%s - %s' % (self.student, self.learning_unit_year)
 
 
 class Exam(models.Model):
@@ -84,7 +84,7 @@ class Exam(models.Model):
     end_date = models.DateField()
 
     def __str__(self):
-        return str(self.start_date) + " - " + str(self.end_date)
+        return u'%s - %s' % (self.start_date, self.end_date)
 
 
 class ExamEnrollment(models.Model):
