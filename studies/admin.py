@@ -16,7 +16,10 @@ from .models import ExamEnrollmentHistory
 from .models import Attribution
 from .models import Configuration
 
-admin.site.register(AcademicYear)
+class AcademicYearAdmin(admin.ModelAdmin):
+    list_display = ('year', 'start_date', 'end_date')
+
+admin.site.register(AcademicYear, AcademicYearAdmin)
 admin.site.register(Offer)
 admin.site.register(OfferYear)
 admin.site.register(Student)
@@ -26,7 +29,11 @@ admin.site.register(Structure)
 admin.site.register(LearningUnit)
 admin.site.register(LearningUnitYear)
 admin.site.register(LearningUnitEnrollment)
-admin.site.register(Exam)
+
+class ExamAdmin(admin.ModelAdmin):
+    list_display = ('learning_unit_year', 'start_date', 'end_date')
+
+admin.site.register(Exam, ExamAdmin)
 admin.site.register(ExamEnrollment)
 admin.site.register(ExamEnrollmentHistory)
 admin.site.register(Attribution)
