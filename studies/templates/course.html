@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <h3 class="m-a-0">{{ enrollment.learning_unit_year.learning_unit.acronym }} - {{ enrollment.learning_unit_year.learning_unit.title }} {{ academic_year }}</h3>
+  </div>
+  <div class="panel-body">
+    <p>{{ enrollment.learning_unit_year.learning_unit.description }}</p>
+    <hr>
+    <h4>Examens</h4>
+
+    <table class="table">
+      <thead>
+        <th>Session</th>
+        <th>Début</th>
+        <th>Fin</th>
+        <th>Notes</th>
+      </thead>
+      <tbody>
+        {% for exam in exams %}
+          <tr>
+            <td>{{ exam.session }}</td>
+            <td>{{ exam.start_date }}</td>
+            <td>{{ exam.end_date }}</td>
+            <td>-</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock content %}
