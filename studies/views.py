@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.utils import timezone
-from .models import AcademicYear, OfferEnrollment, LearningUnitEnrollment
+from .models import AcademicYear, Exam, ExamEnrollment, OfferEnrollment, LearningUnitEnrollment
+
+def certifications(request):
+    return render(request, "certifications.html", {})
 
 def courses(request, year = 0):
-    academic_year = None
     if year == 0:
         academic_year = AcademicYear.objects.filter(start_date__lte=timezone.now()).filter(end_date__gte=timezone.now()).first()
     else:
@@ -16,10 +18,26 @@ def courses(request, year = 0):
     return render(request, "courses.html", {'enrollments': learning_unit_enrollments,
                                             'academic_year': academic_year})
 
+def course(request, year = 0, id = 0):
+    academic_year = None
+    if year == 0:
+        academic_year = AcademicYear.objects.filter(start_date__lte=timezone.now()).filter(end_date__gte=timezone.now()).first()
+    else:
+        academic_year = AcademicYear.objects.get(year=year)
+
+    learning_unit_enrollment = LearningUnitEnrollment.objects.get(id=id)
+
+    exams = Exam.objects.filter(learning_unit_year=learning_unit_enrollment.learning_unit_year)
+
+    return render(request, "course.html", {'enrollment': learning_unit_enrollment,
+                                           'academic_year': academic_year,
+                                           'exams': exams})
 
 def exams(request):
     return render(request, "exams.html", {})
 
+def requests(request):
+    return render(request, "requests.html", {})
 
 def studies(request):
     enrollments = OfferEnrollment.objects.all()

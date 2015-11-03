@@ -6,10 +6,10 @@
     <h3 class="m-a-0">Cours: {{ academic_year }}</h3>
   </div>
   <div class="panel-body">
-    <table class="table">
+    <table class="table table-striped">
       <thead>
-        <th>Sigle</th>
-        <th>Intitulé</th>
+        <th>Session</th>
+        <th>Notes</th>
         <th>ECTS</th>
         <th>Statut</th>
         <th>Notes</th>
@@ -18,7 +18,7 @@
       <tbody>
         {% for enrollment in enrollments %}
           <tr>
-            <td><a href="/courses/{{ enrollment.learning_unit_year.academic_year.year }}/{{ enrollment.learning_unit_year.id }}">{{ enrollment.learning_unit_year.learning_unit.acronym }}</a></td>
+            <td><a href="/courses/{{ enrollment.learning_unit_year.academic_year.year }}/{{ enrollment.id }}">{{ enrollment.learning_unit_year.learning_unit.acronym }}</a></td>
             <td>{{ enrollment.learning_unit_year.learning_unit }}</td>
             <td>-</td>
             <td>-</td>
