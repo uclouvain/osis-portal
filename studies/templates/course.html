@@ -18,12 +18,12 @@
         <th>Notes</th>
       </thead>
       <tbody>
-        {% for exam in exams %}
+        {% for exam_with_score in exams_with_scores %}
           <tr>
-            <td>{{ exam.session }}</td>
-            <td>{{ exam.start_date }}</td>
-            <td>{{ exam.end_date }}</td>
-            <td>-</td>
+            <td>{{ exam_with_score.exam.session }}</td>
+            <td>{{ exam_with_score.exam.start_date }}</td>
+            <td>{{ exam_with_score.exam.end_date }}</td>
+            <td>{{ exam_with_score.score }}</td>
           </tr>
         {% endfor %}
       </tbody>

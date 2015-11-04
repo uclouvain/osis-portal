@@ -24,7 +24,7 @@ class OfferYear(models.Model):
     academic_year = models.ForeignKey(AcademicYear)
 
     def __str__(self):
-        return u'%s (%d)' % (self.offer.title, self.academic_year)
+        return u'%s (%d)' % (self.offer.title, self.academic_year.year)
 
 
 class Student(models.Model):
@@ -40,7 +40,7 @@ class OfferEnrollment(models.Model):
     student    = models.ForeignKey(Student)
 
     def __str__(self):
-        return u'%d' % (self.offer_year)
+        return u'%s' % (self.offer_year.academic_year)
 
 
 class Tutor(models.Model):
@@ -67,6 +67,7 @@ class LearningUnit(models.Model):
 class LearningUnitYear(models.Model):
     academic_year = models.ForeignKey(AcademicYear)
     learning_unit = models.ForeignKey(LearningUnit)
+    credits = models.DecimalField(max_digits=2, decimal_places=0, blank = True, null = True)
 
     def __str__(self):
         return u'%s %s' % (self.academic_year, self.learning_unit.acronym)
