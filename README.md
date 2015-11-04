@@ -1,1 +1,1 @@
-# bureau-etudiant
+# OSIS Frontend
