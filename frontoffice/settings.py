@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'admission',
     'catalog',
+    'enrollments',
     'rest_framework',
 ]
 
