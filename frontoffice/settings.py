@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'admission',
     'catalog',
     'enrollments',
+    'dashboard',
     'rest_framework',
 ]
 
