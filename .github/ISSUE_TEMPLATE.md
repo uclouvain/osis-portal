@@ -6,4 +6,4 @@ User Story
 
 **de sorte que** [quelque raison].
 
-**lien ver la documentation**: 
+**lien vers la documentation** : 
