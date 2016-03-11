@@ -1,0 +1,205 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block content %}
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br><br>
+
+<div class="row">
+    <div class="col-md-12">Bienvenue sur la demande d'inscription en ligne de l'Université catholique de Louvain.</div>
+</div>
+<br>
+<div class="row">
+    <div class="col-md-12">Pour introduire votre demande d'inscription, il vous faut un compte d'accès</div>
+</div>
+<br>
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Si vous avez déjà demandé la création de ce compte</div>
+            <div class="panel-body">
+                Vous avez reçu, par mail, une confirmation de création de compte et ativé celui-ci en cliquant sur le
+                lien d'activation.
+                <br>Vous pouvez dès lors vous connecter à la demande d'inscription grâce à votre adresse mail et le mot
+                de passe que vous avez choisi antérieurement.
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="txt_email">E-mail</label>
+                        <input class="form-control" id="txt_email" name="email"
+                               value="{{ email }}">
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="txt_password">Mot de passe</label>
+                        <input class="form-control" id="txt_password" name="password"
+                               value="{{ password }}">
+
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <br>
+                        <button type="submit" id="bt_submit_user_connexion" class="btn btn-primary" role="button"
+                                title="Création nouveau compte">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Valider
+                        </button>
+                    </div>
+
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        Mot de passe oublié?
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Si vous êtes actuellement étudiant de l'UCL</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="txt_ucl_identification">Identifiant global UCL</label>
+                        <input class="form-control" id="txt_ucl_identification" name="ucl_identification"
+                               value="{{ ucl_identification }}">
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="txt_ucl_password">Mot de passe global UCL</label>
+                        <input class="form-control" id="txt_ucl_password" name="ucl_password"
+                               value="{{ ucl_password }}">
+
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <br>
+                        <button type="submit" id="bt_submit_ucl_user_connexion" class="btn btn-primary" role="button"
+                                title="Connexion via le compte global UCL">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Valider
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Si vous ne disposez pas encore de ce compte</div>
+            <div class="panel-body">
+                Nous vous invitons à vous créer ce compte, composé d'une adresse mail privée et d'un mot de
+                passe. <b>Tous les champs sont obligatoires</b>
+                <br><br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="txt_prenom_new">Prénom</label>
+                        <input class="form-control" id="txt_prenom_new" name="prenom_new"
+                               value="{{ prenom_new }}">
+                        <p class="text-muted">(ex : Frédéric <label style="text-decoration: line-through;" >frederic FREDERIC</label>)</p>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="txt_nom_new">Nom</label>
+                        <input class="form-control" id="txt_nom_new" name="nom_new"
+                               value="{{ nom_new }}">
+                        <p class="text-muted">(ex : Van der Elst / Vanderelst <label style="text-decoration: line-through;" > VANDERELST</label>)</p>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="txt_email_new">E-mail</label>
+                        <input class="form-control" id="txt_email_new" name="email_new"
+                               value="{{ email_new }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="txt_email_new_confirm">Confirmez l'e-mail</label>
+                        <input class="form-control" id="txt_email_new_confirm" name="email_new_confirm"
+                               value="{{ email_new_confirm }}">
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="txt_password_new">Choisissez un mot de passe</label>
+                        <input class="form-control" id="txt_password_new" name="password_new"
+                               value="{{ password_new }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="txt_password_new_confirm">Confirmez le mot de passe</label>
+                        <input class="form-control" id="txt_password_new_confirm" name="password_new_confirm"
+                               value="{{ password_new_confirm }}">
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                       Veuillez résoudre le calcul ci-contre. Ceci nous permet de
+                            vérifier que vous êtes une personne réelle.
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-3">
+                            19 + 14 - 11 =
+                    </div>
+                    <div class="col-md-3">
+                        <input class="form-control" id="txt_verification" name="verification"
+                               value="{{ verification }}">
+                    </div>
+                    <div class="col-md-6">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <br>
+                        <button type="submit" id="bt_submit_user_create" class="btn btn-primary" role="button"
+                                title="Création nouveau compte">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  Valider
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+{% endblock %}
