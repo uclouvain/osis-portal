@@ -30,4 +30,7 @@ from . import views
 urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^admission/$', views.home, name='admission'),
+    url(r'^admission/new_user/$', views.new_user, name='new_user'),
+    url(r'^admission/activation/mail/$', views.activation_mail, name='activation_mail'),
+
 ]

@@ -123,49 +123,61 @@
         <div class="panel panel-default">
             <div class="panel-heading">Si vous ne disposez pas encore de ce compte</div>
             <div class="panel-body">
+                    <form  method="post" action="{% url 'new_user' %}">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ number1 }}" name="number1" />
+                        <input type="hidden" value="{{number2 }}" name="number2" />
+                        <input type="hidden" value="{{ number3 }}" name="number3" />
+
                 Nous vous invitons à vous créer ce compte, composé d'une adresse mail privée et d'un mot de
                 passe. <b>Tous les champs sont obligatoires</b>
                 <br><br>
                 <div class="row">
                     <div class="col-md-6">
-                        <label for="txt_prenom_new">Prénom</label>
-                        <input class="form-control" id="txt_prenom_new" name="prenom_new"
-                               value="{{ prenom_new }}">
+                        <label for="txt_first_name_new">Prénom</label><br>{{ form.first_name_new }}<br>
                         <p class="text-muted">(ex : Frédéric <label style="text-decoration: line-through;" >frederic FREDERIC</label>)</p>
                     </div>
                     <div class="col-md-6">
-                        <label for="txt_nom_new">Nom</label>
-                        <input class="form-control" id="txt_nom_new" name="nom_new"
-                               value="{{ nom_new }}">
+                        <label for="txt_last_name_new">Nom</label><br>{{ form.last_name_new }}<br>
                         <p class="text-muted">(ex : Van der Elst / Vanderelst <label style="text-decoration: line-through;" > VANDERELST</label>)</p>
                     </div>
                 </div>
                 <br>
                 <div class="row">
                     <div class="col-md-6">
-                        <label for="txt_email_new">E-mail</label>
-                        <input class="form-control" id="txt_email_new" name="email_new"
-                               value="{{ email_new }}">
+                        <label for="txt_email_new">E-mail</label><br>
+                        {{ form.email_new }}
                     </div>
                     <div class="col-md-6">
-                        <label for="txt_email_new_confirm">Confirmez l'e-mail</label>
-                        <input class="form-control" id="txt_email_new_confirm" name="email_new_confirm"
-                               value="{{ email_new_confirm }}">
+                        <label for="txt_email_new_confirm">Confirmez l'e-mail</label><br>
+                        {{ form.email_new_confirm }}
                     </div>
                 </div>
+                {% if form.email_new_confirm.errors%}
+                        <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <font class="error">{{ form.email_new_confirm.errors }}</font>
+                 </div>
+                </div>
+                {%endif%}
                 <br>
                 <div class="row">
                     <div class="col-md-6">
-                        <label for="txt_password_new">Choisissez un mot de passe</label>
-                        <input class="form-control" id="txt_password_new" name="password_new"
-                               value="{{ password_new }}">
+                        <label for="txt_password_new">Choisissez un mot de passe</label><br>{{form.password_new}}
                     </div>
                     <div class="col-md-6">
-                        <label for="txt_password_new_confirm">Confirmez le mot de passe</label>
-                        <input class="form-control" id="txt_password_new_confirm" name="password_new_confirm"
-                               value="{{ password_new_confirm }}">
+                        <label for="txt_password_new_confirm">Confirmez le mot de passe</label><br>{{ form.password_new_confirm }}
                     </div>
                 </div>
+                 {% if form.password_new_confirm.errors%}
+                        <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <font class="error">{{ form.password_new_confirm.errors }}</font>
+                 </div>
+                </div>
+                {%endif%}
                 <br>
                 <div class="row">
                     <div class="col-md-12">
@@ -176,13 +188,12 @@
                 <br>
                 <div class="row">
                     <div class="col-md-3">
-                            19 + 14 - 11 =
+                            {{ number1 }} + {{ number2 }} - {{ number3}} =
                     </div>
-                    <div class="col-md-3">
-                        <input class="form-control" id="txt_verification" name="verification"
-                               value="{{ verification }}">
+                    <div class="col-md-5">
+                        {{ form.verification }}<font class="error">{{ form.verification.errors }}</font>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                     </div>
                 </div>
                 <div class="row">
@@ -194,6 +205,8 @@
                         </button>
                     </div>
                 </div>
+
+                </form>
             </div>
 
         </div>
