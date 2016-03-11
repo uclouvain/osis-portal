@@ -27,8 +27,8 @@ from django import forms
 
 class AccountForm(forms.Form):
 
-    first_name_new       = forms.CharField(required = True)
-    last_name_new        = forms.CharField(required = True)
+    first_name_new       = forms.CharField(required = True, max_length=30)
+    last_name_new        = forms.CharField(required = True, max_length=30)
     email_new            = forms.EmailField(help_text='Merci d\'encoder une adresse email correcte.', required = True)
     email_new_confirm    = forms.EmailField(help_text='Merci d\'encoder une adresse email correcte.', required = True)
     password_new         = forms.CharField(required = True)

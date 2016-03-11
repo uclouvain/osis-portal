@@ -23,15 +23,3 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url, include
-
-from . import views
-
-urlpatterns = [
-    url(r'^$', views.home, name='home'),
-    url(r'^admission/$', views.home, name='admission'),
-    url(r'^admission/new_user/$', views.new_user, name='new_user'),
-    url(r'^admission/activation_mail/([0-9]+)/$', views.activation_mail, name='activation_mail'),
-    url(r'^admission/test/$', views.test, name='test'),
-
-]

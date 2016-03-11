@@ -1,0 +1,50 @@
+Content-Type: multipart/alternative;
+ boundary="===============0427286481234283285=="
+MIME-Version: 1.0
+Subject: UCL - Votre code d'activation de compte.
+From: osis@localhost.be
+To: leila.verpootrtenln@gmail.com
+Date: Fri, 11 Mar 2016 14:33:50 -0000
+Message-ID: <20160311143350.31906.93593@verpoorten-laptop>
+
+--===============0427286481234283285==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+
+Bonjour, 
+Vous venez d'introduire une demande de création d'un compte pour accéder à la demande d'inscription ),en ligne 2015-2016 de l'Université catholique de Louvain, ce dont nous vous remercions .
+
+Pour activer ce compte, veuillez cliquer sur le lien suivant :
+
+Le service des inscription de l'UCL
+http://www.uclouvain.be/inscriptionenligne
+--===============0427286481234283285==
+Content-Type: text/html; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+
+<p>Bonjour, </p><br><p>Vous venez d'introduire une demande de création d'un compte pour accéder à la demande d'inscription ),en ligne 2015-2016 de l'Université catholique de Louvain, ce dont nous vous remercions </p><br>Pour activer ce compte, veuillez cliquer sur le lien suivant :<br>Le service des inscription de l'UCL<br><a href='http://www.uclouvain.be/inscriptionenligne'>http://www.uclouvain.be/inscriptionenligne</a>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"><title>signature</title>
+    </head>
+    <body>
+        <table cellpadding="5" cellspacing="5">
+            <tbody>
+                <tr>
+                    <td width="60">
+                        <img src="http://www.uclouvain.be/cps/ucl/doc/ac-arec/images/logo-signature.png">
+                    </td>
+                    <td>
+                        <img src="https://osis.uclouvain.be/static/img/logo_osis.png">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>
+
+--===============0427286481234283285==--
+
+-------------------------------------------------------------------------------

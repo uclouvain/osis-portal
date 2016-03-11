@@ -1,14 +1,31 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from admission.forms import AccountForm
+from admission.utils import send_mail
+from random import randint
+
+
+def test(request):
+    form = AccountForm()
+    send_mail.send_mail_activation('leila.verpoorten@gmail.com')
+    number1 = randint(1,20)
+    number2 = randint(1,20)
+    number3 = randint(1,20)
+    return render(request, "home.html",{'number1': number1,
+                                        'number2': number2,
+                                        'number3': number3,
+                                        'form':form})
+
 
 def home(request):
     form = AccountForm()
-
-    return render(request, "home.html",{'number1': 19,
-                                        'number2': 14,
-                                        'number3': 11,
-                                        'form':form})
+    number1 = randint(1,20)
+    number2 = randint(1,20)
+    number3 = randint(1,20)
+    return render(request, "home.html",{'number1': number1,
+                                        'number2': number2,
+                                        'number3': number3,
+                                        'form':    form})
 
 
 def new_user(request):
@@ -36,24 +53,36 @@ def new_user(request):
             form.errors['verification'] = "Résultat du calcul incorrect"
     else:
         validation = False
+    email =  form['email_new'].value()
+
+    user = User.objects.filter(email= email)
+    if user:
+        form.errors['email_new_confirm'] = "Il existe déjà un compte pour cette adresse email"
+        validation = False
 
     if validation:
-        user = User.objects.create_user(form['last_name_new'].value(), form['email_new'].value(), form['password_new'].value())
+        user = User.objects.create_user(form['email_new'].value(), form['email_new'].value(), form['password_new'].value())
         user.is_staff = False
         user.is_superuser = False
         user.is_active = False
         user.first_name = form['first_name_new'].value()
         user.last_name = form['last_name_new'].value()
         user.save()
-        return render(request, "confirm_account.html")
+        #send an email
+        send_mail.send_mail_activation(form['email_new'].value())
+        return render(request, "confirm_account.html",{'user_id': user.id})
     else:
+        number1 = randint(1,20)
+        number2 = randint(1,20)
+        number3 = randint(1,20)
         return render(request, "home.html",
-                          {'number1':     19,
-                           'number2':     14,
-                           'number3':     11,
+                          {'number1':     number1,
+                           'number2':     number2,
+                           'number3':     number3,
                            'form' :       form})
 
-def activation_mail(request):
-     return render(request, "home.html",{'number1': 19,
-                                        'number2': 14,
-                                        'number3': 11})
+
+def activation_mail(request, user_id):
+    user = User.objects.get(pk=user_id)
+    send_mail.send_mail_activation(user.email)
+    return home(request)
