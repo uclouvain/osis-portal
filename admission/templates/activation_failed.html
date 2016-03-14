@@ -32,14 +32,14 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <h2>Confirmation</h2><br><br>
-        <h3>Bonjour, votre compte a bien été activé!</h3><br><br>
+        <h2>Attention</h2><br><br>
+        <div class="alert alert-danger">Problème lors de l'activation de votre compte!</div><br><br>
+        <ul>
+            <li>Peut-être avez-vous déjà activé votre compte</li>
+            <li>ou...</li>
+        </ul>
+        <div>N'hésitez pas à contacter le <a href="http://www.uclouvain.be/ServiceDesk" target="_blank">service desk</a></div>
 
-        <a id="bt_login" class="btn btn-primary" role="button"
-           title="Login" href="{% url 'home'%}">
-            <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Login</a>
-        </a>
     </div>
 </div>
 {% endblock %}
-

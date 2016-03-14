@@ -32,21 +32,24 @@ from django.core.mail import send_mail
 from frontoffice.settings import DEFAULT_FROM_EMAIL
 
 
-def send_mail_activation(email):
+def send_mail_activation(request, activation_code, email):
     """
     Send an email to all the teachers after the scores submission for a learning unit
     :param persons: The list of the teachers of the leaning unit
     :param learning_unit_name: The name of the learning unit for wihch scores were submitted
     """
+    activation_link = request.scheme + "://" + request.get_host() + "/admission/activation/"+ activation_code
 
     subject = 'UCL - Votre code d\'activation de compte.'
     html_message = ''.join([
         str('<p>Bonjour, </p>'),
         str('<br>'),
-        str('<p>Vous venez d\'introduire une demande de création d\'un compte pour accéder à la demande d\'inscription ),'
+        str('<p>Vous venez d\'introduire une demande de création d\'un compte pour accéder à la demande d\'inscription '
             'en ligne 2015-2016 de l\'Université catholique de Louvain, ce dont nous vous remercions </p><br>'),
-        str('Pour activer ce compte, veuillez cliquer sur le lien suivant :<br>' ),
-        str('Le service des inscription de l\'UCL<br>' ),
+        str('Pour activer ce compte, veuillez cliquer sur le lien suivant :<br><br>' ),
+        str('<a href="%s">%s</a>') % (activation_link,activation_link),
+        str('<br><br>' ),
+        str('Le service des inscription de l\'UCL<br><br>' ),
         str('<a href=\'http://www.uclouvain.be/inscriptionenligne\'>http://www.uclouvain.be/inscriptionenligne</a>'),
 
 
@@ -55,15 +58,16 @@ def send_mail_activation(email):
     ])
     message = ''.join([
         str('Bonjour, \n'),
-        str('Vous venez d\'introduire une demande de création d\'un compte pour accéder à la demande d\'inscription ),'
+        str('Vous venez d\'introduire une demande de création d\'un compte pour accéder à la demande d\'inscription '
             'en ligne 2015-2016 de l\'Université catholique de Louvain, ce dont nous vous remercions .\n\n'),
         str('Pour activer ce compte, veuillez cliquer sur le lien suivant :\n\n'),
-        str('Le service des inscription de l\'UCL\n' ),
+        str(activation_link),
+        str('\n'),
+        str('Le service des inscription de l\'UCL\n\n' ),
         str('http://www.uclouvain.be/inscriptionenligne')
     ])
 
     send_mail(subject=subject,message=message,recipient_list=[email],html_message=html_message,from_email=DEFAULT_FROM_EMAIL)
-
 
 
 

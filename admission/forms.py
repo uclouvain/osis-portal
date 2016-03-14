@@ -31,8 +31,8 @@ class AccountForm(forms.Form):
     last_name_new        = forms.CharField(required = True, max_length=30)
     email_new            = forms.EmailField(help_text='Merci d\'encoder une adresse email correcte.', required = True)
     email_new_confirm    = forms.EmailField(help_text='Merci d\'encoder une adresse email correcte.', required = True)
-    password_new         = forms.CharField(required = True)
-    password_new_confirm = forms.CharField(required = True)
+    password_new         = forms.CharField(widget=forms.PasswordInput, required = True)
+    password_new_confirm = forms.CharField(widget=forms.PasswordInput, required = True)
     verification         = forms.CharField(required = True)
 
     def __init__(self, *args, **kwargs):
