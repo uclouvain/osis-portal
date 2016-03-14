@@ -62,7 +62,6 @@
                         <div class="col-md-6">
                             <label for="txt_password">Mot de passe</label>
                             <br>{{ form.password }}
-
                         </div>
                         <div class="col-md-6"></div>
                     </div>
@@ -93,40 +92,6 @@
                 </div>
             </div>
         </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">Si vous êtes actuellement étudiant de l'UCL</div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="txt_ucl_identification">Identifiant global UCL</label>
-                        <input class="form-control" id="txt_ucl_identification" name="ucl_identification"
-                               value="{{ ucl_identification }}">
-                    </div>
-                    <div class="col-md-6"></div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="txt_ucl_password">Mot de passe global UCL</label>
-                        <input class="form-control" id="txt_ucl_password" name="ucl_password"
-                               value="{{ ucl_password }}">
-
-                    </div>
-                    <div class="col-md-6"></div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-md-12">
-                        <br>
-                        <button type="submit" id="bt_submit_ucl_user_connexion" class="btn btn-primary" role="button"
-                                title="Connexion via le compte global UCL">
-                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Valider
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="col-md-6">
@@ -152,7 +117,6 @@
                         <p class="text-muted">(ex : Van der Elst / Vanderelst <label style="text-decoration: line-through;" > VANDERELST</label>)</p>
                     </div>
                 </div>
-                <br>
                 <div class="row">
                     <div class="col-md-6">
                         <label for="txt_email_new">E-mail</label><br>
