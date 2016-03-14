@@ -25,7 +25,7 @@ def find_by_user(user):
 def find_by_activation_code(activation_code):
     if validate_uuid4(activation_code):
         try:
-            return Person.objects.filter(activation_code=activation_code)
+            return Person.objects.filter(activation_code=activation_code).first()
         except:
             return None
     else:

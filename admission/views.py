@@ -184,7 +184,7 @@ def new_password_form(request, code):
     person = mdl.person.find_by_activation_code(code)
     person_id = None
     if person:
-        person_id = person[0].id
+        person_id = person.id
     return render(request, "new_password_form.html",{'form':   form,
                                                      'person_id': person_id})
 
