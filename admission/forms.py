@@ -25,7 +25,7 @@
 ##############################################################################
 from django import forms
 
-class AccountForm(forms.Form):
+class NewAccountForm(forms.Form):
 
     first_name_new       = forms.CharField(required = True, max_length=30)
     last_name_new        = forms.CharField(required = True, max_length=30)
@@ -36,10 +36,10 @@ class AccountForm(forms.Form):
     verification         = forms.CharField(required = True)
 
     def __init__(self, *args, **kwargs):
-        super(AccountForm, self).__init__(*args, **kwargs)
+        super(NewAccountForm, self).__init__(*args, **kwargs)
 
     def clean(self):
-        cleaned_data = super(AccountForm, self).clean()
+        cleaned_data = super(NewAccountForm, self).clean()
         email_new = cleaned_data.get("email_new")
         email_new_confirm = cleaned_data.get("email_new_confirm")
         if email_new != email_new_confirm:
@@ -51,3 +51,11 @@ class AccountForm(forms.Form):
         if len(password_new) < 8:
             self.errors['password_new'] = "This password is too short. It must contain at least 8 characters."
         return cleaned_data
+
+class AccountForm(forms.Form):
+
+    email    = forms.EmailField(help_text='Merci d\'encoder une adresse email correcte.', required = True)
+    password = forms.CharField(widget=forms.PasswordInput, required = True)
+
+    def __init__(self, *args, **kwargs):
+        super(AccountForm, self).__init__(*args, **kwargs)

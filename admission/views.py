@@ -1,21 +1,35 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from admission.forms import AccountForm
+from admission.forms import NewAccountForm, AccountForm
 from admission.utils import send_mail
 from random import randint
 from admission import models as mdl
-
+from django.contrib.auth import authenticate
 
 def home(request):
+    form_new = NewAccountForm()
     form = AccountForm()
     number1 = randint(1,20)
     number2 = randint(1,20)
     number3 = randint(1,20)
-    return render(request, "home.html",{'number1': number1,
-                                        'number2': number2,
-                                        'number3': number3,
-                                        'form':    form})
+    return render(request, "home.html",{'number1':  number1,
+                                        'number2':  number2,
+                                        'number3':  number3,
+                                        'form_new': form_new,
+                                        'form':     form})
 
+def home_error(request,message):
+    form_new = NewAccountForm()
+    form = AccountForm()
+    number1 = randint(1,20)
+    number2 = randint(1,20)
+    number3 = randint(1,20)
+    return render(request, "home.html",{'number1':  number1,
+                                        'number2':  number2,
+                                        'number3':  number3,
+                                        'form_new': form_new,
+                                        'form':     form,
+                                        'message' : message})
 
 def new_user(request):
     """
@@ -23,43 +37,43 @@ def new_user(request):
     :param request:
     :return:
     """
-    form = AccountForm(data=request.POST)
+    form_new = NewAccountForm(data=request.POST)
     number1 = request.POST['number1']
     number2 = request.POST['number2']
     number3 = request.POST['number3']
 
     validation = True
-    if form.is_valid():
+    if form_new.is_valid():
         try:
             result = int(number1) + int(number2) - int(number3)
         except:
             result = None
 
-        if str(result) != form['verification'].value():
+        if str(result) != form_new['verification'].value():
             validation = False
-            form.errors['verification'] = "Résultat du calcul incorrect"
+            form_new.errors['verification'] = "Résultat du calcul incorrect"
     else:
         validation = False
-    email = form['email_new'].value()
+    email = form_new['email_new'].value()
 
     user = User.objects.filter(email= email)
     if user:
-        form.errors['email_new_confirm'] = "Il existe déjà un compte pour cette adresse email"
+        form_new.errors['email_new_confirm'] = "Il existe déjà un compte pour cette adresse email"
         validation = False
 
     if validation:
-        user = User.objects.create_user(form['email_new'].value(), form['email_new'].value(), form['password_new'].value())
+        user = User.objects.create_user(form_new['email_new'].value(), form_new['email_new'].value(), form_new['password_new'].value())
         user.is_staff = False
         user.is_superuser = False
         user.is_active = False
-        user.first_name = form['first_name_new'].value()
-        user.last_name = form['last_name_new'].value()
+        user.first_name = form_new['first_name_new'].value()
+        user.last_name = form_new['last_name_new'].value()
         user.save()
         person = mdl.person.Person()
         person.user=user
         person.save()
         #send an activation email
-        send_mail.send_mail_activation(request, str(person.activation_code), form['email_new'].value())
+        send_mail.send_mail_activation(request, str(person.activation_code), form_new['email_new'].value())
         return render(request, "confirm_account.html",{'user_id': user.id})
     else:
         number1 = randint(1, 20)
@@ -69,7 +83,7 @@ def new_user(request):
                           {'number1':     number1,
                            'number2':     number2,
                            'number3':     number3,
-                           'form':        form})
+                           'form_new':        form_new})
 
 
 def activation_mail(request, user_id):
@@ -102,3 +116,24 @@ def activation(request, activation_code):
             return render(request, "activation_failed.html")
     else:
         return render(request, "activation_failed.html")
+
+
+def connexion(request):
+    form = AccountForm(data=request.POST)
+
+    user = authenticate(username=form['email'].value(), password=form['password'].value())
+
+    if user is not None:
+        # the password verified for the user
+        if user.is_active:
+            message="User is valid, active and authenticated"
+            return render(request, "admission.html", {'user':user})
+        else:
+            message="The password is valid, but the account has been disabled!"
+            return home_error(request, message)
+    else:
+        # the authentication system was unable to verify the username and password
+        message ="The username and password were incorrect."
+        return home_error(request, message)
+
+
