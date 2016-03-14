@@ -34,5 +34,8 @@ urlpatterns = [
     url(r'^admission/activation_mail/([0-9]+)/$', views.activation_mail, name='activation_mail'),
     url(r'^admission/activation/([0-9a-z-]+)/$', views.activation, name='activation'),
     url(r'^admission/connexion/$', views.connexion, name='connexion'),
-
+    url(r'^admission/new_password_request/$', views.new_password_request, name='new_password_request'),
+    url(r'^admission/new_password/$', views.new_password, name='new_password'),
+    url(r'^admission/new_password_form/([0-9a-z-]+)/$', views.new_password_form, name='new_password_form'),
+    url(r'^admission/set_new_password/$', views.set_new_password, name='set_new_password'),
 ]

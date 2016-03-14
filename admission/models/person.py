@@ -7,7 +7,6 @@ from django.contrib.auth.models import User
 
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('activation_code', 'user')
-    fieldsets = ((None, {'fields': ('activation_code', 'user')}),)
 
 
 class Person(models.Model):
@@ -24,11 +23,9 @@ def find_by_user(user):
 
 
 def find_by_activation_code(activation_code):
-    print('find_by_activation_code')
-    #valid activation_code ?
     if validate_uuid4(activation_code):
         try:
-            return Person.objects.get(activation_code=activation_code)
+            return Person.objects.filter(activation_code=activation_code)
         except:
             return None
     else:
@@ -55,3 +52,10 @@ def validate_uuid4(uuid_string):
 
 
     return True
+
+
+def find_by_id(id):
+    try:
+        return Person.objects.get(pk=id)
+    except:
+        return None

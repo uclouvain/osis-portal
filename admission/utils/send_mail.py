@@ -70,6 +70,34 @@ def send_mail_activation(request, activation_code, email):
     send_mail(subject=subject,message=message,recipient_list=[email],html_message=html_message,from_email=DEFAULT_FROM_EMAIL)
 
 
+def new_password(request, activation_code, email):
+    print('new_password',activation_code)
+    activation_link = request.scheme + "://" + request.get_host() + "/admission/new_password_form/"+ activation_code
+    print('sdfqsf')
+    subject = 'UCL - Votre code d\'activation pour la modification du mot de passe de votre compte.'
+    html_message = ''.join([
+        str('<p>Bonjour, </p>'),
+        str('<br>'),
+        str('Pour modifier votre mot de passe merci de cliquer sur le lien suivant :<br><br>' ),
+        str('<a href="%s">%s</a>') % (activation_link,activation_link),
+        str('<br><br>' ),
+        str('Le service des inscription de l\'UCL<br><br>' ),
+        str('<a href=\'http://www.uclouvain.be/inscriptionenligne\'>http://www.uclouvain.be/inscriptionenligne</a>'),
+
+        EMAIL_SIGNATURE,
+    ])
+    print('sdfqsf2')
+    message = ''.join([
+        str('Bonjour, \n'),
+        str('Pour modifier votre mot de passe merci de cliquer sur le lien suivant :\n\n'),
+        str(activation_link),
+        str('\n'),
+        str('Le service des inscription de l\'UCL\n\n' ),
+        str('http://www.uclouvain.be/inscriptionenligne')
+    ])
+    print('sljfqlsjf')
+    send_mail(subject=subject,message=message,recipient_list=[email],html_message=html_message,from_email=DEFAULT_FROM_EMAIL)
+
 
 EMAIL_SIGNATURE = """
 <html>

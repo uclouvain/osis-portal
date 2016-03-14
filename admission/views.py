@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from admission.forms import NewAccountForm, AccountForm
+from admission.forms import NewAccountForm, AccountForm, NewPasswordForm
 from admission.utils import send_mail
 from random import randint
 from admission import models as mdl
 from django.contrib.auth import authenticate
+import uuid
+from uuid import UUID
 
 def home(request):
     form_new = NewAccountForm()
@@ -136,4 +138,71 @@ def connexion(request):
         message ="The username and password were incorrect."
         return home_error(request, message)
 
+
+def new_password_request(request):
+    form = AccountForm()
+    return render(request, "new_password.html",{'form':form})
+
+
+def new_password(request):
+    form = AccountForm(data=request.POST)
+    email = form['email'].value()
+    message = None
+    try:
+        user = User.objects.get(username=email)
+        if user:
+            print('user')
+            person = mdl.person.find_by_user(user)
+            if not user.is_active:
+                message = "Votre compte n\'a pas encore été activé"
+                return render(request, "new_password.html", {'message': message, 'form':form})
+            else:
+                print('sendmail new_password')
+                #person = mdl.person.Person()
+                print('sendmail new_password 1')
+                # person.user=user
+                person.activation_code = uuid.uuid4()
+                print('sendmail new_password2')
+                person.save()
+                print('sendmail new_password3')
+                send_mail.new_password(request, str(person.activation_code), user.email)
+                print('kkk')
+                return render(request, "new_password_info.html", {'message': message})
+        else:
+            print('pas user')
+            message = "L'adresse email encodée ne correspond à aucun utilisateur"
+            return render(request, "new_password.html", {'message': message, 'form':form})
+
+
+    except:
+        message = "L'adresse email encodée ne correspond à aucun utilisateur"
+        return render(request, "new_password.html", {'message': message,'form':form })
+
+
+def new_password_form(request, code):
+    form = NewPasswordForm(data=request.POST)
+    person = mdl.person.find_by_activation_code(code)
+    person_id = None
+    if person:
+        person_id = person[0].id
+    return render(request, "new_password_form.html",{'form':   form,
+                                                     'person_id': person_id})
+
+
+def set_new_password(request):
+    form = NewPasswordForm(data=request.POST)
+    person_id = request.POST['person_id']
+    person = mdl.person.find_by_id(person_id)
+    if form.is_valid():
+        if person:
+            if person.user:
+                user = person.user
+                user.password = form['password_new'].value()
+                user.save()
+            person.activation_code=None
+            person.save()
+            return render(request, "new_password_confirmed.html")
+    else:
+        return render(request, "new_password_form.html",{'form':   form,
+                                                         'person_id': person_id})
 
