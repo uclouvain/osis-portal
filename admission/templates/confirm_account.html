@@ -36,9 +36,14 @@
         <h3>Votre compte a été crée!</h3><br><br>
         Un message d'activation a été envoyé sur votre adresse e-mail.<br>
         Veuillez vérifier votre e-mail maintenant et cliquez sur le lien dans le message que vous avez reçu.<br><br>
-        <a id="bt_re_send_activation_email" class="btn btn-primary" role="button"
-           title="Renvoi du mail d'activation" href="{% url 'activation_mail' user_id %}">
-            <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Renvoyez l'email d'activation</a>
+ <form method="post" action="{% url 'activation_mail' user%}">
+                    {% csrf_token %}
+
+     <button type="submit" id="bt_re_send_activation_email" class="btn btn-primary" role="button"
+                                title="Renvoi du mail d'activation">
+                            <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>  Renvoyez l'email d'activation
+                        </button>
+     </form>
         </a>
     </div>
 </div>

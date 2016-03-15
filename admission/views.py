@@ -5,7 +5,8 @@ from admission.utils import send_mail
 from random import randint
 from admission import models as mdl
 from django.contrib.auth import authenticate
-
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 def home(request):
     form_new = NewAccountForm()
@@ -41,6 +42,7 @@ def home_error(request, message):
 
 
 def new_user(request):
+    print('new_user')
     """
     To create a new user for the admission
     :param request:
@@ -85,7 +87,14 @@ def new_user(request):
         person.save()
         # send an activation email
         send_mail.send_mail_activation(request, str(person.activation_code), form_new['email_new'].value())
-        return render(request, "confirm_account.html", {'user_id': user.id})
+        # return render(request, "confirm_account.html", {'user_id': user.id})
+
+        #return HttpResponseRedirect('/admission/confirm_account.html')
+        #return HttpResponseRedirect('../../../confirm_account.html')
+        user_id = user.id
+        return HttpResponseRedirect(reverse('account_confirm',  args=(user_id,)))
+        #return HttpResponseRedirect('account-confirm')
+
     else:
         number1 = randint(1, 20)
         number2 = randint(1, 20)
@@ -106,13 +115,15 @@ def activation_mail(request, user_id):
     :param user_id:
     :return:
     """
-    user = User.objects.get(pk=user_id)
-    person = mdl.person.find_by_user(user)
-    if person:
-        send_mail.send_mail_activation(request, str(person.activation_code), user.email)
-        return home(request)
-    else:
-        return home(request)
+    if request.method == "POST":
+        user = User.objects.get(pk=user_id)
+        person = mdl.person.find_by_user(user)
+        if person:
+            send_mail.send_mail_activation(request, str(person.activation_code), user.email)
+            return HttpResponseRedirect(reverse('admission'))
+        else:
+            return HttpResponseRedirect(reverse('admission'))
+    return HttpResponseRedirect(reverse('admission'))
 
 
 def activation(request, activation_code):
@@ -151,3 +162,5 @@ def connexion(request):
         return home_error(request, message)
 
 
+def account_confirm(request,user_id):
+     return render(request, "confirm_account.html",{'user':user_id})

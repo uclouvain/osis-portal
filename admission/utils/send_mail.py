@@ -39,13 +39,13 @@ def send_mail_activation(request, activation_code, email):
     :param activation_code:
     :param email:
     """
-    activation_link = request.scheme + "://" + request.get_host() + "/admission/activation/"+ activation_code
+    activation_link = request.scheme + "://" + request.get_host() + "/admission/admission/user/" +activation_code+ "/activation"
 
     subject = 'UCL - Votre code d\'activation de compte.'
     html_message = ''.join([
         EMAIL_HEADER,
         str('<p>Bonjour, </p>'),
-        str('<br>'),
+        str('<br><br>'),
         str('<p>Vous venez d\'introduire une demande de création d\'un compte pour accéder à la demande d\'inscription '
             'en ligne 2015-2016 de l\'Université catholique de Louvain, ce dont nous vous remercions </p><br>'),
         str('Pour activer ce compte, veuillez cliquer sur le lien suivant :<br><br>' ),
