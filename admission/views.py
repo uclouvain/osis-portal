@@ -13,6 +13,9 @@ def home(request):
     number1 = randint(1, 20)
     number2 = randint(1, 20)
     number3 = randint(1, 20)
+    sum = number1 + number2
+    while number3 > sum:
+        number3 = randint(1, 20)
     return render(request, "home.html", {'number1':  number1,
                                          'number2':  number2,
                                          'number3':  number3,
@@ -26,6 +29,9 @@ def home_error(request, message):
     number1 = randint(1, 20)
     number2 = randint(1, 20)
     number3 = randint(1, 20)
+    sum = number1 + number2
+    while number3 > sum:
+        number3 = randint(1, 20)
     return render(request, "home.html", {'number1':  number1,
                                          'number2':  number2,
                                          'number3':  number3,
@@ -84,6 +90,9 @@ def new_user(request):
         number1 = randint(1, 20)
         number2 = randint(1, 20)
         number3 = randint(1, 20)
+        sum = number1 + number2
+        while number3 > sum:
+            number3 = randint(1, 20)
         return render(request, "home.html", {'number1': number1,
                                              'number2': number2,
                                              'number3': number3,
