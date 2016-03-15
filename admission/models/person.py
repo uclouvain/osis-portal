@@ -50,11 +50,9 @@ def find_by_user(user):
 
 
 def find_by_activation_code(activation_code):
-    print('find_by_activation_code')
-    # valid activation_code ?
     if is_uuid4(activation_code):
         try:
-            return Person.objects.get(activation_code=activation_code)
+            return Person.objects.filter(activation_code=activation_code).first()
         except ObjectDoesNotExist:
             return None
     else:
@@ -74,3 +72,10 @@ def is_uuid4(activ_code):
         # is not a valid hex code for a UUID.
         return False
     return True
+
+
+def find_by_id(id):
+    try:
+        return Person.objects.get(pk=id)
+    except:
+        return None

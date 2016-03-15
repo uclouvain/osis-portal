@@ -30,10 +30,17 @@ from . import views
 urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^admission/$', views.home, name='admission'),
+
+    url(r'^admission/new_password_request/$', views.new_password_request, name='new_password_request'),
+    url(r'^admission/new_password/$', views.new_password, name='new_password'),
+    url(r'^admission/new_password_form/([0-9a-z-]+)/$', views.new_password_form, name='new_password_form'),
+    url(r'^admission/set_new_password/$', views.set_new_password, name='set_new_password'),
     url(r'^admission/user/new/$', views.new_user, name='new_user'),
     url(r'^admission/user/([0-9]+)/mail/activation/$', views.activation_mail, name='activation_mail'),
     url(r'^admission/user/([0-9a-z-]+)/activation/$', views.activation, name='activation'),
     url(r'^admission/user/connexion/$', views.connexion, name='connexion'),
     url(r'^admission/user/new/confirm/([0-9]+)/$', views.account_confirm, name="account_confirm"),
+    url(r'^admission/new_password/info/$', views.new_password_info, name='new_password_info'),
+
 
 ]

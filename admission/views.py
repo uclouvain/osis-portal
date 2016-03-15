@@ -1,12 +1,15 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from admission.forms import NewAccountForm, AccountForm
+from admission.forms import NewAccountForm, AccountForm, NewPasswordForm
 from admission.utils import send_mail
 from random import randint
 from admission import models as mdl
 from django.contrib.auth import authenticate
+
+import uuid
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+
 
 def home(request):
     form_new = NewAccountForm()
@@ -24,9 +27,8 @@ def home(request):
                                          'form':     form})
 
 
-def home_error(request, message):
+def home_error(request, message,form):
     form_new = NewAccountForm()
-    form = AccountForm()
     number1 = randint(1, 20)
     number2 = randint(1, 20)
     number3 = randint(1, 20)
@@ -42,7 +44,6 @@ def home_error(request, message):
 
 
 def new_user(request):
-    print('new_user')
     """
     To create a new user for the admission
     :param request:
@@ -87,14 +88,8 @@ def new_user(request):
         person.save()
         # send an activation email
         send_mail.send_mail_activation(request, str(person.activation_code), form_new['email_new'].value())
-        # return render(request, "confirm_account.html", {'user_id': user.id})
-
-        #return HttpResponseRedirect('/admission/confirm_account.html')
-        #return HttpResponseRedirect('../../../confirm_account.html')
         user_id = user.id
         return HttpResponseRedirect(reverse('account_confirm',  args=(user_id,)))
-        #return HttpResponseRedirect('account-confirm')
-
     else:
         number1 = randint(1, 20)
         number2 = randint(1, 20)
@@ -145,7 +140,6 @@ def activation(request, activation_code):
 
 def connexion(request):
     form = AccountForm(data=request.POST)
-
     user = authenticate(username=form['email'].value(), password=form['password'].value())
 
     if user is not None:
@@ -155,12 +149,74 @@ def connexion(request):
             return render(request, "admission.html", {'user': user})
         else:
             message = "The password is valid, but the account has been disabled!"
-            return home_error(request, message)
+            return home_error(request, message, form)
     else:
         # the authentication system was unable to verify the username and password
         message = "The username and password were incorrect."
-        return home_error(request, message)
+        return home_error(request, message, form)
+
+
+def new_password_request(request):
+    form = AccountForm()
+    return render(request, "new_password.html",{'form':form})
+
+
+def new_password(request):
+    form = AccountForm(data=request.POST)
+    email = form['email'].value()
+
+    try:
+        user = User.objects.get(username=email)
+        if user:
+            person = mdl.person.find_by_user(user)
+            if not user.is_active:
+                message = "Votre compte n\'a pas encore été activé"
+                return render(request, "new_password.html", {'message': message, 'form':form})
+            else:
+                person.activation_code = uuid.uuid4()
+                person.save()
+                send_mail.new_password(request, str(person.activation_code), user.email)
+                return HttpResponseRedirect(reverse('new_password_info'))
+        else:
+            message = "L'adresse email encodée ne correspond à aucun utilisateur"
+            return render(request, "new_password.html", {'message': message, 'form':form})
+    except:
+        message = "L'adresse email encodée ne correspond à aucun utilisateur"
+        return render(request, "new_password.html", {'message': message,'form':form })
+
+
+def new_password_form(request, code):
+    form = NewPasswordForm()
+    person = mdl.person.find_by_activation_code(code)
+    if person:
+        return render(request, "new_password_form.html",{'form':   form,
+                                                         'person_id': person.id})
+    else:
+        return render(request, "new_password_form.html",{'form':   form,
+                                                         'person_id': None})
+
+
+def set_new_password(request):
+    person_id = request.POST['person_id']
+    person = mdl.person.find_by_id(person_id)
+    form = NewPasswordForm(data=request.POST)
+    if form.is_valid():
+        if person:
+            if person.user:
+                user = person.user
+                user.set_password(form['password_new'].value())
+                user.save()
+            person.activation_code=None
+            person.save()
+            return render(request, "new_password_confirmed.html")
+    else:
+        return render(request, "new_password_form.html",{'form':   form,
+                                                         'person_id': person_id})
 
 
 def account_confirm(request,user_id):
-     return render(request, "confirm_account.html",{'user':user_id})
+    return render(request, "confirm_account.html", {'user':user_id})
+
+
+def new_password_info(request):
+    return render(request, "new_password_info.html")

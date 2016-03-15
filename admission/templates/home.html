@@ -76,6 +76,7 @@
 
                     </div>
                     {% if message %}
+                    <br>
                         <div class="row">
                             <div class="col-md-12">
                               <font class="error">{{ message }}</font>
@@ -87,7 +88,7 @@
                 <br>
                 <div class="row">
                     <div class="col-md-12">
-                        Mot de passe oublié?
+                        <a href="{% url 'new_password_request' %}">Mot de passe oublié?</a>
                     </div>
                 </div>
             </div>
