@@ -23,9 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
-from admission.models import *
+from django.conf.urls import url, include
 
+from . import views
 
-admin.site.register(person.Person,
-                    person.PersonAdmin)
+urlpatterns = [
+    url(r'^$', views.home, name='home'),
+    url(r'^admission/$', views.home, name='admission'),
+    url(r'^admission/user/new/$', views.new_user, name='new_user'),
+    url(r'^admission/user/([0-9]+)/mail/activation/$', views.activation_mail, name='activation_mail'),
+    url(r'^admission/user/([0-9a-z-]+)/activation/$', views.activation, name='activation'),
+    url(r'^admission/user/connexion/$', views.connexion, name='connexion'),
+    url(r'^admission/user/new/confirm/([0-9]+)/$', views.account_confirm, name="account_confirm"),
+
+]

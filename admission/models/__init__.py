@@ -23,9 +23,4 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
-from admission.models import *
-
-
-admin.site.register(person.Person,
-                    person.PersonAdmin)
+from admission.models import person
