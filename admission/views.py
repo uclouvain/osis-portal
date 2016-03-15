@@ -6,30 +6,33 @@ from random import randint
 from admission import models as mdl
 from django.contrib.auth import authenticate
 
+
 def home(request):
     form_new = NewAccountForm()
     form = AccountForm()
-    number1 = randint(1,20)
-    number2 = randint(1,20)
-    number3 = randint(1,20)
-    return render(request, "home.html",{'number1':  number1,
-                                        'number2':  number2,
-                                        'number3':  number3,
-                                        'form_new': form_new,
-                                        'form':     form})
+    number1 = randint(1, 20)
+    number2 = randint(1, 20)
+    number3 = randint(1, 20)
+    return render(request, "home.html", {'number1':  number1,
+                                         'number2':  number2,
+                                         'number3':  number3,
+                                         'form_new': form_new,
+                                         'form':     form})
 
-def home_error(request,message):
+
+def home_error(request, message):
     form_new = NewAccountForm()
     form = AccountForm()
-    number1 = randint(1,20)
-    number2 = randint(1,20)
-    number3 = randint(1,20)
-    return render(request, "home.html",{'number1':  number1,
-                                        'number2':  number2,
-                                        'number3':  number3,
-                                        'form_new': form_new,
-                                        'form':     form,
-                                        'message' : message})
+    number1 = randint(1, 20)
+    number2 = randint(1, 20)
+    number3 = randint(1, 20)
+    return render(request, "home.html", {'number1':  number1,
+                                         'number2':  number2,
+                                         'number3':  number3,
+                                         'form_new': form_new,
+                                         'form':     form,
+                                         'message': message})
+
 
 def new_user(request):
     """
@@ -56,13 +59,15 @@ def new_user(request):
         validation = False
     email = form_new['email_new'].value()
 
-    user = User.objects.filter(email= email)
+    user = User.objects.filter(email=email)
     if user:
         form_new.errors['email_new_confirm'] = "Il existe déjà un compte pour cette adresse email"
         validation = False
 
     if validation:
-        user = User.objects.create_user(form_new['email_new'].value(), form_new['email_new'].value(), form_new['password_new'].value())
+        user = User.objects.create_user(form_new['email_new'].value(),
+                                        form_new['email_new'].value(),
+                                        form_new['password_new'].value())
         user.is_staff = False
         user.is_superuser = False
         user.is_active = False
@@ -72,18 +77,17 @@ def new_user(request):
         person = mdl.person.Person()
         person.user=user
         person.save()
-        #send an activation email
+        # send an activation email
         send_mail.send_mail_activation(request, str(person.activation_code), form_new['email_new'].value())
-        return render(request, "confirm_account.html",{'user_id': user.id})
+        return render(request, "confirm_account.html", {'user_id': user.id})
     else:
         number1 = randint(1, 20)
         number2 = randint(1, 20)
         number3 = randint(1, 20)
-        return render(request, "home.html",
-                          {'number1':     number1,
-                           'number2':     number2,
-                           'number3':     number3,
-                           'form_new':        form_new})
+        return render(request, "home.html", {'number1': number1,
+                                             'number2': number2,
+                                             'number3': number3,
+                                             'form_new': form_new})
 
 
 def activation_mail(request, user_id):
@@ -109,9 +113,10 @@ def activation(request, activation_code):
         if person and user:
             user.is_active = True
             user.save()
-            person.activation_code = None #to avoid a dubble activation
+            # to avoid a double activation
+            person.activation_code = None
             person.save()
-            return render(request, "confirmed_account.html",{'user': user})
+            return render(request, "confirmed_account.html", {'user': user})
         else:
             return render(request, "activation_failed.html")
     else:
@@ -126,14 +131,14 @@ def connexion(request):
     if user is not None:
         # the password verified for the user
         if user.is_active:
-            message="User is valid, active and authenticated"
-            return render(request, "admission.html", {'user':user})
+            message = "User is valid, active and authenticated"
+            return render(request, "admission.html", {'user': user})
         else:
-            message="The password is valid, but the account has been disabled!"
+            message = "The password is valid, but the account has been disabled!"
             return home_error(request, message)
     else:
         # the authentication system was unable to verify the username and password
-        message ="The username and password were incorrect."
+        message = "The username and password were incorrect."
         return home_error(request, message)
 
 

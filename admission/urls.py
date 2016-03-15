@@ -30,9 +30,8 @@ from . import views
 urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^admission/$', views.home, name='admission'),
-    url(r'^admission/new_user/$', views.new_user, name='new_user'),
-    url(r'^admission/activation_mail/([0-9]+)/$', views.activation_mail, name='activation_mail'),
-    url(r'^admission/activation/([0-9a-z-]+)/$', views.activation, name='activation'),
-    url(r'^admission/connexion/$', views.connexion, name='connexion'),
-
+    url(r'^admission/user/new/$', views.new_user, name='new_user'),
+    url(r'^admission/user/([0-9]+)/mail/activation/$', views.activation_mail, name='activation_mail'),
+    url(r'^admission/user/([0-9a-z-]+)/activation/$', views.activation, name='activation'),
+    url(r'^admission/user/connexion/$', views.connexion, name='connexion'),
 ]
