@@ -34,14 +34,16 @@ from frontoffice.settings import DEFAULT_FROM_EMAIL
 
 def send_mail_activation(request, activation_code, email):
     """
-    Send an email to all the teachers after the scores submission for a learning unit
-    :param persons: The list of the teachers of the leaning unit
-    :param learning_unit_name: The name of the learning unit for wihch scores were submitted
+    Send an email to user after  subscription to osis-portal.  Email needed for the subscription activation
+    :param request:
+    :param activation_code:
+    :param email:
     """
     activation_link = request.scheme + "://" + request.get_host() + "/admission/activation/"+ activation_code
 
     subject = 'UCL - Votre code d\'activation de compte.'
     html_message = ''.join([
+        EMAIL_HEADER,
         str('<p>Bonjour, </p>'),
         str('<br>'),
         str('<p>Vous venez d\'introduire une demande de création d\'un compte pour accéder à la demande d\'inscription '
@@ -51,10 +53,8 @@ def send_mail_activation(request, activation_code, email):
         str('<br><br>' ),
         str('Le service des inscription de l\'UCL<br><br>' ),
         str('<a href=\'http://www.uclouvain.be/inscriptionenligne\'>http://www.uclouvain.be/inscriptionenligne</a>'),
-
-
-
         EMAIL_SIGNATURE,
+        EMAIL_FOOTER
     ])
     message = ''.join([
         str('Bonjour, \n'),
@@ -70,13 +70,16 @@ def send_mail_activation(request, activation_code, email):
     send_mail(subject=subject,message=message,recipient_list=[email],html_message=html_message,from_email=DEFAULT_FROM_EMAIL)
 
 
-
-EMAIL_SIGNATURE = """
+EMAIL_HEADER = """
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"><title>signature</title>
     </head>
     <body>
+"""
+
+EMAIL_SIGNATURE = """
+
         <table cellpadding="5" cellspacing="5">
             <tbody>
                 <tr>
@@ -89,6 +92,10 @@ EMAIL_SIGNATURE = """
                 </tr>
             </tbody>
         </table>
+
+"""
+
+EMAIL_FOOTER = """
     </body>
 </html>
 """
