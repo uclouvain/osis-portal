@@ -23,12 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models import academic_year
-from admission.models import application
-from admission.models import domain
-from admission.models import grade_type
-from admission.models import message_template
-from admission.models import offer_year
-from admission.models import offer_year_calendar
-from admission.models import person
-from admission.models import supported_languages
+from django.db import models
+from django.contrib import admin
+
+
+class AcademicYearAdmin(admin.ModelAdmin):
+    list_display = ('name', 'start_date', 'end_date')
+    fieldsets = ((None, {'fields': ('year', 'start_date', 'end_date')}),)
+
+
+class AcademicYear(models.Model):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
+    year        = models.IntegerField()
+    start_date  = models.DateField(blank=True, null=True)
+    end_date    = models.DateField(blank=True, null=True)
+
+    @property
+    def name(self):
+        return self.__str__()
+
+    def __str__(self):
+        return u"%s-%s" % (self.year, self.year + 1)

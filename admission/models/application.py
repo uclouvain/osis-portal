@@ -23,12 +23,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models import academic_year
-from admission.models import application
-from admission.models import domain
-from admission.models import grade_type
-from admission.models import message_template
-from admission.models import offer_year
-from admission.models import offer_year_calendar
-from admission.models import person
-from admission.models import supported_languages
+from django.db import models
+from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
+
+
+class ApplicationAdmin(admin.ModelAdmin):
+    list_display = ('acronym', 'title', 'academic_year', 'domain')
+    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'domain', 'grade')}),)
+
+
+class Application(models.Model):
+    APPLICATION_TYPE = (('ADMISSION', _('Admission')),
+                        ('INSCRIPTION', _('Inscription')))
+
+    person = models.ForeignKey('Person')
+    offer_year = models.ForeignKey('OfferYear')
+    creation_date = models.DateTimeField(auto_now=True)
+    application_type = models.CharField(max_length=20, choices=APPLICATION_TYPE)
+    doctorate = models.BooleanField(default=False)
+
+    def __str__(self):
+        return u"%s - %s" % (self.academic_year, self.acronym)

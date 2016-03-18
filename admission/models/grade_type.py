@@ -23,12 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models import academic_year
-from admission.models import application
-from admission.models import domain
-from admission.models import grade_type
-from admission.models import message_template
-from admission.models import offer_year
-from admission.models import offer_year_calendar
-from admission.models import person
-from admission.models import supported_languages
+from django.db import models
+from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
+
+
+GRADE_CHOICES = (
+    ('BACHELOR', _('Bachelor')),
+    ('MASTER', _('Master')),
+    ('DOCTORATE', _('Ph.D')))
+
+
+class GradeTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'grade')
+    fieldsets = ((None, {'fields': ('name', 'grade')}),)
+
+
+class GradeType(models.Model):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
+    name  = models.CharField(max_length=255)
+    grade = models.CharField(max_length=20, choices=GRADE_CHOICES)
+
+    def __str__(self):
+        return self.name

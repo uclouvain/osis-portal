@@ -23,12 +23,32 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models import academic_year
-from admission.models import application
-from admission.models import domain
-from admission.models import grade_type
-from admission.models import message_template
-from admission.models import offer_year
-from admission.models import offer_year_calendar
-from admission.models import person
-from admission.models import supported_languages
+from django.db import models
+from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
+from admission.models.supported_languages import SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE
+
+
+class MessageTemplateAdmin(admin.ModelAdmin):
+    list_display = ('reference', 'subject', 'format', 'language')
+    fieldsets = ((None, {'fields': ('reference', 'subject', 'template', 'format', 'language')}),)
+
+
+class MessageTemplate(models.Model):
+    FORMAT_CHOICES = (('PLAIN', _('Plain')),
+                      ('HTML', 'HTML'),
+                      ('PLAIN_HTML', _('Plain and HTML')))
+
+    reference = models.CharField(max_length=50, unique=True)
+    subject   = models.CharField(max_length=255)
+    template  = models.TextField()
+    format    = models.CharField(max_length=15, choices=FORMAT_CHOICES)
+    language  = models.CharField(max_length=30, null=True, choices=SUPPORTED_LANGUAGES, default=DEFAULT_LANGUAGE)
+
+    def __str__(self):
+        return self.subject
+
+
+def find_by_reference(reference):
+    message_template = MessageTemplate.objects.get(reference=reference)
+    return message_template

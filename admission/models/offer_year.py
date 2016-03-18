@@ -23,12 +23,23 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models import academic_year
-from admission.models import application
-from admission.models import domain
-from admission.models import grade_type
-from admission.models import message_template
-from admission.models import offer_year
-from admission.models import offer_year_calendar
-from admission.models import person
-from admission.models import supported_languages
+from django.db import models
+from django.contrib import admin
+
+
+class OfferYearAdmin(admin.ModelAdmin):
+    list_display = ('acronym', 'title', 'academic_year', 'domain')
+    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'domain', 'grade')}),)
+
+
+class OfferYear(models.Model):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
+    academic_year = models.ForeignKey('AcademicYear')
+    acronym = models.CharField(max_length=15)
+    title = models.CharField(max_length=255)
+    title_international = models.CharField(max_length=255, blank=True, null=True)
+    domain = models.ForeignKey('Domain')
+    grade_type = models.ForeignKey('GradeType', blank=True, null=True, db_index=True)
+
+    def __str__(self):
+        return u"%s - %s" % (self.academic_year, self.acronym)
