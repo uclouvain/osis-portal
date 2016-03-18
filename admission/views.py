@@ -220,3 +220,11 @@ def account_confirm(request,user_id):
 
 def new_password_info(request):
     return render(request, "new_password_info.html")
+
+
+def offer_selection(request):
+    print('offer_selection')
+    return render(request, "offer_selection.html",
+                          {"gradetypes" : mdl.grade_type.find_all(),
+                           "domains" :    mdl.domain.find_all(),
+                           "offers" :     None})

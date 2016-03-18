@@ -41,6 +41,7 @@ urlpatterns = [
     url(r'^admission/user/connexion/$', views.connexion, name='connexion'),
     url(r'^admission/user/new/confirm/([0-9]+)/$', views.account_confirm, name="account_confirm"),
     url(r'^admission/new_password/info/$', views.new_password_info, name='new_password_info'),
+    url(r'^admission/offer/$', views.offer_selection, name='offer_selection'),
 
 
 ]

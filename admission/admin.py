@@ -29,3 +29,5 @@ from admission.models import *
 
 admin.site.register(person.Person,
                     person.PersonAdmin)
+admin.site.register(domain.Domain,
+                    domain.DomainAdmin)

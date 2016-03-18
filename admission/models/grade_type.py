@@ -46,3 +46,7 @@ class GradeType(models.Model):
 
     def __str__(self):
         return self.name
+
+
+def find_all():
+    return GradeType.objects.all().order_by("grade")
