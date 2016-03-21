@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
 from admission.forms import NewAccountForm, AccountForm, NewPasswordForm
 from admission.utils import send_mail
@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate
 import uuid
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     form_new = NewAccountForm()
@@ -146,7 +146,9 @@ def connexion(request):
         # the password verified for the user
         if user.is_active:
             message = "User is valid, active and authenticated"
-            return render(request, "admission.html", {'user': user})
+            applications = mdl.application.find_by_user(user)
+            return render(request, "admission.html", {'user': user,
+                                                      'applications' : applications})
         else:
             message = "The password is valid, but the account has been disabled!"
             return home_error(request, message, form)
@@ -223,8 +225,138 @@ def new_password_info(request):
 
 
 def offer_selection(request):
-    print('offer_selection')
+    print('offer_selection',request.user)
+    offer_type = None
+    offers = None
+    application = mdl.application.find_by_user(request.user)
     return render(request, "offer_selection.html",
-                          {"gradetypes" : mdl.grade_type.find_all(),
-                           "domains" :    mdl.domain.find_all(),
-                           "offers" :     None})
+                          {"gradetypes":  mdl.grade_type.find_all(),
+                           "domains":     mdl.domain.find_all(),
+                           "offers":      offers,
+                           "offer":       None,
+                           "application": application})
+
+
+def refresh_offer_selection(request):
+    print('refresh_offer_selection')
+    offer_type=None
+    if request.POST.get('bachelor_type'):
+        offer_type = request.POST['bachelor_type']
+    if request.POST.get('master_type'):
+        offer_type = request.POST['master_type']
+    if request.POST.get('doctorate_type'):
+        offer_type = request.POST['doctorate_type']
+
+    domain_id = request.POST.get('domain')
+    domain = get_object_or_404(mdl.domain.Domain, pk=domain_id)
+    offers = mdl.offer_year.find_by_domain_grade(domain, offer_type)
+    grade = get_object_or_404(mdl.grade_type.GradeType, pk=offer_type)
+    return render(request, "offer_selection.html",
+                          {"gradetypes":  mdl.grade_type.find_all(),
+                           "domains":     mdl.domain.find_all(),
+                           "offers":      offers,
+                           "offer_type":  grade,
+                           "domain":      domain})
+
+
+def _get_offer_type(request):
+    offer_type=None
+    if request.POST.get('bachelor_type'):
+        offer_type = request.POST['bachelor_type']
+    if request.POST.get('master_type'):
+        offer_type = request.POST['master_type']
+    if request.POST.get('doctorate_type'):
+        offer_type = request.POST['doctorate_type']
+    if offer_type:
+        return get_object_or_404(mdl.grade_type.GradeType, pk=offer_type)
+    return None
+
+
+def _get_domain(request):
+    domain_id = request.POST.get('domain')
+    print (domain_id)
+    domain = None
+    if domain_id:
+        domain = get_object_or_404(mdl.domain.Domain, pk=domain_id)
+    return domain
+
+
+def save_offer_selection(request):
+    print('save_offer_selection')
+
+    if request.method=='POST' and 'save_down' in request.POST:
+        print('save_down')
+        offer_year = None
+        application = None
+        offer_year_id = request.POST.get('offer_year_id')
+        print('offer_year_id',offer_year_id)
+
+        application_id = request.POST.get('application_id')
+        if application_id:
+            print('update')
+            application = get_object_or_404(mdl.application.Application, pk=application_id)
+        else:
+            print('new')
+            application = mdl.application.Application()
+            person_application = mdl.person.find_by_user(request.user)
+            print(person_application)
+            application.person = person_application
+        print('offer_year',offer_year)
+
+        if offer_year_id:
+            offer_year = mdl.offer_year.find_by_id(offer_year_id)
+            if offer_year.grade_type:
+                if offer_year.grade_type.grade == 'DOCTORATE':
+                    application.doctorate = True
+                else:
+                    application.doctorate = False
+
+        application.offer_year = offer_year
+        application.save()
+    else:
+        print('autre save_down')
+
+    return render(request, "offer_selection.html",
+                          {"gradetypes":  mdl.grade_type.find_all(),
+                           "domains":     mdl.domain.find_all(),
+                           "offers":      None,
+                           "offer_type":  None,
+                           "domain":      mdl})
+
+
+def selection_offer(request, offer_id):
+    print('selection_offer', offer_id)
+    offer_year = get_object_or_404(mdl.offer_year.OfferYear, pk=offer_id)
+    print('sdfqf1')
+    grade = _get_offer_type(request)
+    print('sdfqf1')
+    domain = _get_domain(request)
+    print('offer_year',offer_year)
+
+    return render(request, "offer_selection.html",
+                          {"gradetypes":  mdl.grade_type.find_all(),
+                           "domains":     mdl.domain.find_all(),
+                           "offers":      None,
+                           "offer":       offer_year,
+                           "offer_type":  grade,
+                           "domain":      domain})
+
+
+def application_update(request, application_id):
+    print('application_update')
+    application = mdl.application.find_by_id(application_id)
+    return render(request, "offer_selection.html",
+                          {"offers":      None,
+                           "offer":       application.offer_year,
+                           "application": application})
+
+def test(request):
+    print('test')
+    offer_type = None
+    if request.is_ajax():
+        offer_type = 'MASTER'
+
+    return render(request, "offer_selection.html",
+                              {"gradetypes":  mdl.grade_type.find_all(),
+                               "domains":     mdl.domain.find_all(),
+                               "offers":      mdl.offer_year.find_all()})

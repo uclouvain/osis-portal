@@ -24,12 +24,14 @@
 #
 ##############################################################################
 from django.conf.urls import url, include
-
+from django.contrib.auth.views import login, logout
 from . import views
 
 urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^admission/$', views.home, name='admission'),
+    url(r'^login/$', login, name='login'),
+    url(r'^logout/$', logout, name='logout'),
 
     url(r'^admission/new_password_request/$', views.new_password_request, name='new_password_request'),
     url(r'^admission/new_password/$', views.new_password, name='new_password'),
@@ -41,7 +43,13 @@ urlpatterns = [
     url(r'^admission/user/connexion/$', views.connexion, name='connexion'),
     url(r'^admission/user/new/confirm/([0-9]+)/$', views.account_confirm, name="account_confirm"),
     url(r'^admission/new_password/info/$', views.new_password_info, name='new_password_info'),
+    url(r'^admission/application/([0-9]+)/$', views.application_update, name='application_update'),
+
     url(r'^admission/offer/$', views.offer_selection, name='offer_selection'),
+    url(r'^admission/test/$', views.test, name='test'),
+    url(r'^admission/offer/search/$', views.refresh_offer_selection, name='refresh_offer_selection'),
+    url(r'^admission/offer/save/$', views.save_offer_selection, name='save_offer_selection'),
+    url(r'^admission/offer/application/([0-9]+)/$', views.selection_offer, name='selection_offer'),
 
 
 ]

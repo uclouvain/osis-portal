@@ -26,11 +26,13 @@
 from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import User
+from admission.models import person
 
 
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('acronym', 'title', 'academic_year', 'domain')
-    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'domain', 'grade')}),)
+    list_display = ('offer_year', 'person')
+    fieldsets = ((None, {'fields': ('offer_year', 'person')}),)
 
 
 class Application(models.Model):
@@ -44,4 +46,25 @@ class Application(models.Model):
     doctorate = models.BooleanField(default=False)
 
     def __str__(self):
-        return u"%s - %s" % (self.academic_year, self.acronym)
+        return u"%s" % ( self.offer_year)
+
+
+def find_by_user(user):
+    print('application find_by_user', user.id)
+
+    person_application = person.Person.objects.filter(user=1)#zut
+    if person_application:
+        print('if')
+        return Application.objects.filter(person=person_application)
+    else:
+        print('else')
+    return None
+
+
+def find_by_id(application_id):
+    return Application.objects.get(pk=application_id)
+
+
+
+
+

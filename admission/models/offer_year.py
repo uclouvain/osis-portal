@@ -25,11 +25,12 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from admission.models import offer_year_calendar
 
 
 class OfferYearAdmin(admin.ModelAdmin):
     list_display = ('acronym', 'title', 'academic_year', 'domain')
-    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'domain', 'grade')}),)
+    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'domain', 'grade_type')}),)
 
 
 class OfferYear(models.Model):
@@ -43,3 +44,23 @@ class OfferYear(models.Model):
 
     def __str__(self):
         return u"%s - %s" % (self.academic_year, self.acronym)
+
+
+    @property
+    def offer_year_calendar(self):
+        print('find_offer_year_calendar')
+        #Should only be one record
+        return offer_year_calendar.OfferYearCalendar.objects.filter(offer_year=self).order_by("start_date").first()
+
+
+def find_by_id(offer_year_id):
+    return OfferYear.objects.get(pk=offer_year_id)
+
+
+def find_all():
+    return OfferYear.objects.all().order_by("acronym")
+
+
+def find_by_domain_grade(domain, grade):
+    return OfferYear.objects.filter(domain=domain, grade_type=grade).order_by("acronym")
+

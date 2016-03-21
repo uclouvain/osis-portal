@@ -39,4 +39,4 @@ class OfferYearCalendar(models.Model):
     end_date    = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)
 
     def __str__(self):
-        return u"%s - %s" % (self.academic_calendar, self.offer_year)
+        return u"%s" % (self.offer_year)
