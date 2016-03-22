@@ -32,8 +32,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 
 class PersonAdmin(admin.ModelAdmin):
-    list_display = [ 'user']
-    fieldsets = ((None, {'fields': ['user']}),)
+    list_display = ('user', 'birth_date', 'gender')
+    fieldsets = ((None, {'fields': ('user', 'birth_date', 'gender')}),)
 
 
 class Person(models.Model):
@@ -113,3 +113,11 @@ def find_by_id(id):
         return Person.objects.get(pk=id)
     except:
         return None
+
+
+def profile_completed(user):
+    person_result = Person.objects.filter(user__id=user.id).first()
+    if person_result:
+         if person_result.gender:
+            return True
+    return False
