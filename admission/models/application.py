@@ -46,17 +46,13 @@ class Application(models.Model):
     doctorate = models.BooleanField(default=False)
 
     def __str__(self):
-        return u"%s" % ( self.offer_year)
+        return u"%s" % (self.offer_year)
 
 
 def find_by_user(user):
     person_application = person.Person.objects.get(user=user)
     if person_application:
-        print('if', person_application.id)
-        for a in Application.objects.all():
-            print(a.person.id)
         applications = Application.objects.filter(person=person_application)
-        print(applications)
         return applications
 
     return None

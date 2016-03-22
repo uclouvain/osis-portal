@@ -48,7 +48,6 @@ class OfferYear(models.Model):
 
     @property
     def offer_year_calendar(self):
-        print('find_offer_year_calendar')
         #Should only be one record
         return offer_year_calendar.OfferYearCalendar.objects.filter(offer_year=self).order_by("start_date").first()
 
