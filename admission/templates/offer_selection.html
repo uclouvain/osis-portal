@@ -81,7 +81,7 @@
     <div class="panel-body">
         <form method="post" action="{% url 'refresh_offer_selection' %}">
             {% csrf_token %}
-            <div class="row">
+            <div class="row" style="visibility:hidden">
                 <div class="col-md-2">
                     <button type="cancel" id="bt_cancel_offer_selection" class="btn" role="button"
                             title="Annuler">
@@ -95,7 +95,6 @@
                     </button>
                 </div>
                 <div class="col-md-2">
-                    {{offer_type}} zut{{domain}}
                 </div>
                 <div class="col-md-2">
                     <button type="submit" id="bt_back_to_step_1" class="btn" role="button"
@@ -104,7 +103,7 @@
                     </button>
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" id="bt_save" class="btn" role="button"
+                    <button type="submit" id="bt_save" class="btn" role="button" name="save_up"
                             title="Sauvegarder">
                         <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Sauvegarder
                     </button>
@@ -254,8 +253,6 @@
             <br>
             <div class="row">
                 <div class="col-md-12">
-
-
                     {% if offers|length > 0 %}
                     <table class="table table-striped table-hover">
                         {% for offer_year in offers %}
@@ -274,14 +271,14 @@
         </form>
 
         <form method="post" action="{% url 'save_offer_selection' %}">
-            <input type="text" id="txt_offer_year_id" name="offer_year_id" value="{{offer.id}}"/>
+            <input type="hidden" id="txt_offer_year_id" name="offer_year_id" value="{{offer.id}}"/>
             <input type="hidden" id="txt_application_id" name="application_id" value="{{ application.id }}"/>
             {% csrf_token %}
             {%if offer %}
             <br>
             <div class="row">
                 <div class="col-md-12">
-                    <label>Votre diplôme donnant accès à ce programme a-t-il été émis par une institution
+                    <label>Votre diplôme donnant accès(*) à ce programme a-t-il été émis par une institution
                         belge</label><br>
                         <span>
                             <input type="radio" name="belgian_diploma" checked>  Oui
@@ -290,10 +287,10 @@
 
                 </div>
             </div>
-            <br>
+
             <div class="row">
                 <div class="col-md-12">
-                    <label>Information du titre d'accès sur <a href="http://uclouvain.be/admission.html">http://uclouvain.be/admission.html</a></label>
+                    <span style="color:gray;font-size:small;font-style: italic;">* Information du titre d'accès sur <a href="http://uclouvain.be/admission.html">http://uclouvain.be/admission.html</a></span>
                 </div>
             </div>
             {% if offer.offer_year_calendar %}
@@ -348,13 +345,13 @@
             <div class="row">
                 <div class="col-md-2">
                     <button type="cancel" id="bt_cancel_offer_selection_down" class="btn" role="button"
-                            title="Annuler">
+                            title="Annuler" style="visibility:hidden">
                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Annuler la demande
                     </button>
                 </div>
                 <div class="col-md-2">
                     <button type="submit" id="bt_cancel_pgmer_communication_down" class="btn" role="button"
-                            title="Communiquer avec le gestionnaire">
+                            title="Communiquer avec le gestionnaire" style="visibility:hidden">
                         Communiquer avec le gestionnaire
                     </button>
                 </div>
@@ -362,7 +359,7 @@
                 </div>
                 <div class="col-md-2">
                     <button type="submit" id="bt_back_to_step_1_down" class="btn" role="button"
-                            title="Revenir à l'étape 1/4">
+                            title="Revenir à l'étape 1/4" style="visibility:hidden">
                         Revenir à l'étape 1/4
                     </button>
                 </div>
@@ -374,7 +371,7 @@
                 </div>
                 <div class="col-md-2">
                     <button type="submit" id="bt_skip_step_3_down" class="btn" role="button"
-                            title="Passer l'étape 3/4">
+                            title="Passer l'étape 3/4" style="visibility:hidden">
                         Passer l'étape 3/4
                     </button>
                 </div>
