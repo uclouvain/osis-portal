@@ -23,19 +23,30 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.db import models
 from django.contrib import admin
-from admission.models import *
+from django.utils.translation import ugettext_lazy as _
 
 
-admin.site.register(person.Person,
-                    person.PersonAdmin)
-admin.site.register(domain.Domain,
-                    domain.DomainAdmin)
-admin.site.register(academic_year.AcademicYear,
-                    academic_year.AcademicYearAdmin)
-admin.site.register(offer_year.OfferYear,
-                    offer_year.OfferYearAdmin)
-admin.site.register(offer_year_calendar.OfferYearCalendar,
-                    offer_year_calendar.OfferYearCalendarAdmin)
-admin.site.register(application.Application,
-                    application.ApplicationAdmin)
+GRADE_CHOICES = (
+    ('BACHELOR', _('Bachelor')),
+    ('MASTER', _('Master')),
+    ('DOCTORATE', _('Ph.D')))
+
+
+class GradeTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'grade')
+    fieldsets = ((None, {'fields': ('name', 'grade')}),)
+
+
+class GradeType(models.Model):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
+    name  = models.CharField(max_length=255)
+    grade = models.CharField(max_length=20, choices=GRADE_CHOICES)
+
+    def __str__(self):
+        return self.name
+
+
+def find_all():
+    return GradeType.objects.all().order_by("grade")

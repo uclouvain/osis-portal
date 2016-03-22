@@ -25,47 +25,42 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User
-from admission.models import person
+from admission.models import offer_year_calendar
 
 
-class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('offer_year', 'person')
-    fieldsets = ((None, {'fields': ('offer_year', 'person')}),)
+class OfferYearAdmin(admin.ModelAdmin):
+    list_display = ('acronym', 'title', 'academic_year', 'domain')
+    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'domain', 'grade_type')}),)
 
 
-class Application(models.Model):
-    APPLICATION_TYPE = (('ADMISSION', _('Admission')),
-                        ('INSCRIPTION', _('Inscription')))
-
-    person = models.ForeignKey('Person')
-    offer_year = models.ForeignKey('OfferYear')
-    creation_date = models.DateTimeField(auto_now=True)
-    application_type = models.CharField(max_length=20, choices=APPLICATION_TYPE)
-    doctorate = models.BooleanField(default=False)
+class OfferYear(models.Model):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
+    academic_year = models.ForeignKey('AcademicYear')
+    acronym = models.CharField(max_length=15)
+    title = models.CharField(max_length=255)
+    title_international = models.CharField(max_length=255, blank=True, null=True)
+    domain = models.ForeignKey('Domain')
+    grade_type = models.ForeignKey('GradeType', blank=True, null=True, db_index=True)
 
     def __str__(self):
-        return u"%s" % ( self.offer_year)
+        return u"%s - %s" % (self.academic_year, self.acronym)
 
 
-def find_by_user(user):
-    person_application = person.Person.objects.get(user=user)
-    if person_application:
-        print('if', person_application.id)
-        for a in Application.objects.all():
-            print(a.person.id)
-        applications = Application.objects.filter(person=person_application)
-        print(applications)
-        return applications
-
-    return None
+    @property
+    def offer_year_calendar(self):
+        print('find_offer_year_calendar')
+        #Should only be one record
+        return offer_year_calendar.OfferYearCalendar.objects.filter(offer_year=self).order_by("start_date").first()
 
 
-def find_by_id(application_id):
-    return Application.objects.get(pk=application_id)
+def find_by_id(offer_year_id):
+    return OfferYear.objects.get(pk=offer_year_id)
 
 
+def find_all():
+    return OfferYear.objects.all().order_by("acronym")
 
 
+def find_by_domain_grade(domain, grade):
+    return OfferYear.objects.filter(domain=domain, grade_type=grade).order_by("acronym")
 

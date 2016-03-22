@@ -32,21 +32,25 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 class PersonAdmin(admin.ModelAdmin):
-    list_display = ('activation_code', 'user')
-    fieldsets = ((None, {'fields': ('activation_code', 'user')}),)
+    list_display = [ 'user']
+    fieldsets = ((None, {'fields': ['user']}),)
 
 
 class Person(models.Model):
     activation_code = models.UUIDField(default=uuid.uuid4, editable=False, blank=True, null=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
 
+    def __str__(self):
+        return u"%s" % (self.user)
 
 def find_by_user(user):
+
     try:
-        person = Person.objects.get(user=user)
+
+        person_result = Person.objects.filter(user__id=user.id).first()
     except ObjectDoesNotExist:
         return None
-    return person
+    return person_result
 
 
 def find_by_activation_code(activation_code):

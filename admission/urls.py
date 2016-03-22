@@ -25,13 +25,13 @@
 ##############################################################################
 from django.conf.urls import url, include
 from django.contrib.auth.views import login, logout
-from admission.forms import NewAccountForm
 
 from . import views
 
 urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^admission/$', views.home, name='admission'),
+
     url(r'^login/$', views.osis_login,  name='login'),
     url(r'^logout/$', logout, name='logout'),
 
@@ -45,6 +45,7 @@ urlpatterns = [
     url(r'^admission/user/new/confirm/([0-9]+)/$', views.account_confirm, name="account_confirm"),
     url(r'^admission/new_password/info/$', views.new_password_info, name='new_password_info'),
     url(r'^admission/application/([0-9]+)/$', views.application_update, name='application_update'),
+
     url(r'^admission/offer/$', views.offer_selection, name='offer_selection'),
     url(r'^admission/offer/search/$', views.refresh_offer_selection, name='refresh_offer_selection'),
     url(r'^admission/offer/save/$', views.save_offer_selection, name='save_offer_selection'),

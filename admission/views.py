@@ -242,7 +242,8 @@ def refresh_offer_selection(request):
 
 
 def _get_offer_type(request):
-    offer_type = None
+    offer_type=None
+
     if request.POST.get('bachelor_type'):
         offer_type = request.POST['bachelor_type']
     if request.POST.get('master_type'):
@@ -277,6 +278,7 @@ def save_offer_selection(request):
             person_application = mdl.person.find_by_user(request.user)
             application.person = person_application
 
+
         if offer_year_id:
             offer_year = mdl.offer_year.find_by_id(offer_year_id)
             if offer_year.grade_type:
@@ -300,6 +302,7 @@ def selection_offer(request, offer_id):
     offer_year = get_object_or_404(mdl.offer_year.OfferYear, pk=offer_id)
     grade = _get_offer_type(request)
     domain = _get_domain(request)
+
 
     return render(request, "offer_selection.html",
                           {"gradetypes":  mdl.grade_type.find_all(),

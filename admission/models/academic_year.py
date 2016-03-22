@@ -23,19 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.db import models
 from django.contrib import admin
-from admission.models import *
 
 
-admin.site.register(person.Person,
-                    person.PersonAdmin)
-admin.site.register(domain.Domain,
-                    domain.DomainAdmin)
-admin.site.register(academic_year.AcademicYear,
-                    academic_year.AcademicYearAdmin)
-admin.site.register(offer_year.OfferYear,
-                    offer_year.OfferYearAdmin)
-admin.site.register(offer_year_calendar.OfferYearCalendar,
-                    offer_year_calendar.OfferYearCalendarAdmin)
-admin.site.register(application.Application,
-                    application.ApplicationAdmin)
+class AcademicYearAdmin(admin.ModelAdmin):
+    list_display = ('name', 'start_date', 'end_date')
+    fieldsets = ((None, {'fields': ('year', 'start_date', 'end_date')}),)
+
+
+class AcademicYear(models.Model):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
+    year        = models.IntegerField()
+    start_date  = models.DateField(blank=True, null=True)
+    end_date    = models.DateField(blank=True, null=True)
+
+    @property
+    def name(self):
+        return self.__str__()
+
+    def __str__(self):
+        return u"%s-%s" % (self.year, self.year + 1)
