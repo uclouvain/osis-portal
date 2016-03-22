@@ -23,19 +23,45 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.db import models
 from django.contrib import admin
-from admission.models import *
+from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import User
+from admission.models import person
 
 
-admin.site.register(person.Person,
-                    person.PersonAdmin)
-admin.site.register(domain.Domain,
-                    domain.DomainAdmin)
-admin.site.register(academic_year.AcademicYear,
-                    academic_year.AcademicYearAdmin)
-admin.site.register(offer_year.OfferYear,
-                    offer_year.OfferYearAdmin)
-admin.site.register(offer_year_calendar.OfferYearCalendar,
-                    offer_year_calendar.OfferYearCalendarAdmin)
-admin.site.register(application.Application,
-                    application.ApplicationAdmin)
+class ApplicationAdmin(admin.ModelAdmin):
+    list_display = ('offer_year', 'person')
+    fieldsets = ((None, {'fields': ('offer_year', 'person')}),)
+
+
+class Application(models.Model):
+    APPLICATION_TYPE = (('ADMISSION', _('Admission')),
+                        ('INSCRIPTION', _('Inscription')))
+
+    person = models.ForeignKey('Person')
+    offer_year = models.ForeignKey('OfferYear')
+    creation_date = models.DateTimeField(auto_now=True)
+    application_type = models.CharField(max_length=20, choices=APPLICATION_TYPE)
+    doctorate = models.BooleanField(default=False)
+
+    def __str__(self):
+        return u"%s" % (self.offer_year)
+
+
+def find_by_user(user):
+    person_application = person.Person.objects.get(user=user)
+    if person_application:
+        applications = Application.objects.filter(person=person_application)
+        return applications
+
+    return None
+
+
+def find_by_id(application_id):
+    return Application.objects.get(pk=application_id)
+
+
+
+
+

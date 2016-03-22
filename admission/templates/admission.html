@@ -34,6 +34,20 @@
     <div class="panel-body">
         <h2>Première page admission avec l'authentification pour {{user.username}}</h2><br><br>
 
+
+        {% if applications %}
+        <table>
+ <thead>
+        <th>Offer</th>
+      </thead>
+
+        {% for application in applications%}
+<tr><td><a href="{% url 'application_update' application.id %}">{{application.offer_year}}</a></td></tr>
+        {% endfor%}
+                  </table>
+        {%endif%}
+
+        <a href="{% url 'offer_selection' %}">Nouvelle application</a>
     </div>
 </div>
 {% endblock %}

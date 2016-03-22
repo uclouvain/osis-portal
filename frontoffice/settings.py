@@ -24,7 +24,7 @@
 #
 ##############################################################################
 import os
-
+from django.core.urlresolvers import reverse_lazy
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -153,3 +153,7 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, "admission/tests/sent_mails")
 
 DEFAULT_FROM_EMAIL = 'osis@localhost.be'
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
+LOGIN_URL = reverse_lazy('login')
+LOGOUT_URL = reverse_lazy('logout')
+LOGIN_REDIRECT_URL = '/admission/'
