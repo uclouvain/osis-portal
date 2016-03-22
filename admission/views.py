@@ -75,7 +75,7 @@ def new_user(request):
 
     user = User.objects.filter(email=email)
     if user:
-        form_new.errors['email_new_confirm'] = "Il existe déjà un compte pour cette adresse email"
+        form_new.errors['email_new_confirm'] = "Il existe déjà un compte pour cette adresse email %s" % email
         validation = False
 
     if validation:
@@ -96,17 +96,20 @@ def new_user(request):
         user_id = user.id
         return HttpResponseRedirect(reverse('account_confirm',  args=(user_id,)))
     else:
+
+
+        extra_context = {}
+        extra_context['form_new'] = form_new
         number1 = randint(1, 20)
+        extra_context['number1'] = number1
         number2 = randint(1, 20)
-        number3 = randint(1, 20)
+        extra_context['number2'] = number2
         sum = number1 + number2
+        number3 = randint(1, 20)
         while number3 > sum:
             number3 = randint(1, 20)
-        return render(request, "home.html", {'number1': number1,
-                                             'number2': number2,
-                                             'number3': number3,
-                                             'form_new': form_new})
-
+        extra_context['number3'] = number3
+        return login(request,  extra_context=extra_context)
 
 def activation_mail(request, user_id):
     """
@@ -334,3 +337,21 @@ def osis_login(request, *args, **kwargs):
         number3 = randint(1, 20)
     extra_context['number3'] = number3
     return login(request, *args, extra_context=extra_context, **kwargs)
+
+
+def osis_login_error(request, *args, **kwargs):
+    extra_context = {}
+    form_new = NewAccountForm()
+    form_new.errors['email_new_confirm'] = "Il existe déjà un compte pour cette adresse email"
+    extra_context['form_new'] = form_new
+    number1 = randint(1, 20)
+    extra_context['number1'] = number1
+    number2 = randint(1, 20)
+    extra_context['number2'] = number2
+    sum = number1 + number2
+    number3 = randint(1, 20)
+    while number3 > sum:
+        number3 = randint(1, 20)
+    extra_context['number3'] = number3
+    return login(request, *args, extra_context=extra_context, **kwargs)
+
