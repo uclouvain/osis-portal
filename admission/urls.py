@@ -32,7 +32,6 @@ urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^admission/$', views.home, name='admission'),
 
-    #url(r'^login/$', views.osis_login,{'template_name': 'admission.html'},  name='login'),
     url(r'^login/$', views.osis_login,  name='login'),
     url(r'^logout/$', logout, name='logout'),
 
