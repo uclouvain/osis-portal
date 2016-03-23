@@ -1,0 +1,13 @@
+[
+  {"model": "admission.offeryear", "fields": {"acronym" :"VETE11BA","title" : "Première année de bachelier en médecine vétérinaire", "title_international" : "","academic_year" : 4, "domain" : 1 }},
+  {"model": "admission.offeryear", "fields": {"acronym" :"FSA11BA","title" : "Première année de bachelier en sciences de l'ingénieur, orientation ingénieur civil", "title_international" : "","academic_year" : 4 , "domain" : 1}},
+  {"model": "admission.offeryear", "fields": {"acronym" :"SINF11BA","title" : "Première année de bachelier en sciences informatiques", "title_international" : "","academic_year" : 4 , "domain" : 1}},
+  {"model": "admission.offeryear", "fields": {"acronym" :"CRIM2MS","title" : "Master [120] en criminologie, à finalité spécialisée", "title_international" : "Master [120] in Criminology, Professional Focus","academic_year" : 4, "domain" : 1 }},
+  {"model": "admission.offeryear", "fields": {"acronym" :"FOPA2MS","title" : "Master [120] en sciences de l'éducation, à finalité spécialisée (horaire décalé)", "title_international" : "Master [120] in Education, Professional Focus (shift schedule)","academic_year" : 4 , "domain" : 2}},
+  {"model": "admission.offeryear", "fields": {"acronym" :"MSP9CE","title" : "Certificat universitaire de formation médicale spécialisée partielle", "title_international" : "","academic_year" : 4 , "domain" : 2}},
+  {"model": "admission.offeryear", "fields": {"acronym" :"CARD2MC","title" : "Master de spécialisation en cardiologie", "title_international" : "Advanced Master in Cardiology","academic_year" : 4 , "domain" : 3}},
+  {"model": "admission.offeryear", "fields": {"acronym" :"DERM2MC","title" : "Master de spécialisation en dermato-vénéréologie", "title_international" : "Advanced Master in Dermatology-Venereology","academic_year" : 4 , "domain" : 3}},
+  {"model": "admission.offeryear", "fields": {"acronym" :"ORTO2MC","title" : "Master de spécialisation en chirurgie orthopédique", "title_international" : "Advanced Master in Orthopaedic Surgery","academic_year" : 4 , "domain" : 4}},
+  {"model": "admission.offeryear", "fields": {"acronym" :"PHYS11BA","title" : "Première année de bachelier en sciences physiques", "title_international" : "","academic_year" : 4 , "domain" : 5}}
+]
+

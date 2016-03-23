@@ -1,0 +1,28 @@
+[
+{"model": "admission.domain", "fields": {"name" :"Art de bâtir et urbanisme" }},
+{"model": "admission.domain", "fields": {"name" :"Art et sciences de l'art" }},
+{"model": "admission.domain", "fields": {"name" :"Arts du spectacle et technique de diffusion et de communication" }},
+{"model": "admission.domain", "fields": {"name" :"Arts plastiques, visuels et de l'espace" }},
+{"model": "admission.domain", "fields": {"name" :"Criminologie" }},
+{"model": "admission.domain", "fields": {"name" :"Histoire, histoire de l'art et archéologie" }},
+{"model": "admission.domain", "fields": {"name" :"Information et communication" }},
+{"model": "admission.domain", "fields": {"name" :"Langues, lettres et traductologie" }},
+{"model": "admission.domain", "fields": {"name" :"Musique" }},
+{"model": "admission.domain", "fields": {"name" :"Philosophie" }},
+{"model": "admission.domain", "fields": {"name" :"Sciences" }},
+{"model": "admission.domain", "fields": {"name" :"Sciences agronomiques et ingénierie biologique" }},
+{"model": "admission.domain", "fields": {"name" :"Sciences biomédicales et pharmaceutiques" }},
+{"model": "admission.domain", "fields": {"name" :"Sciences de la motricité" }},
+{"model": "admission.domain", "fields": {"name" :"Sciences de la santé publique" }},
+{"model": "admission.domain", "fields": {"name" :"Sciences de l'ingénieur et technologie" }},
+{"model": "admission.domain", "fields": {"name" :"Sciences dentaires" }},
+{"model": "admission.domain", "fields": {"name" :"Sciences économiques et de gestion" }},
+{"model": "admission.domain", "fields": {"name" :"Sciences juridiques" }},
+{"model": "admission.domain", "fields": {"name" :"Sciences médicales" }},
+{"model": "admission.domain", "fields": {"name" :"Sciences politiques et sociales" }},
+{"model": "admission.domain", "fields": {"name" :"Sciences psychologiques et de l'éducation" }},
+{"model": "admission.domain", "fields": {"name" :"Sciences vétérinaires" }},
+{"model": "admission.domain", "fields": {"name" :"Théâtre et arts de la parole" }},
+{"model": "admission.domain", "fields": {"name" :"Théologie" }}
+
+]

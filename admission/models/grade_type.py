@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 ##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
@@ -24,12 +23,30 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import os
-import sys
+from django.db import models
+from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "frontoffice.settings")
 
-    from django.core.management import execute_from_command_line
+GRADE_CHOICES = (
+    ('BACHELOR', _('Bachelor')),
+    ('MASTER', _('Master')),
+    ('DOCTORATE', _('Ph.D')))
 
-    execute_from_command_line(sys.argv)
+
+class GradeTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'grade')
+    fieldsets = ((None, {'fields': ('name', 'grade')}),)
+
+
+class GradeType(models.Model):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
+    name  = models.CharField(max_length=255)
+    grade = models.CharField(max_length=20, choices=GRADE_CHOICES)
+
+    def __str__(self):
+        return self.name
+
+
+def find_all():
+    return GradeType.objects.all().order_by("grade")

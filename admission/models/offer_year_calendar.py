@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 ##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
@@ -24,12 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import os
-import sys
+from django.db import models
+from django.contrib import admin
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "frontoffice.settings")
 
-    from django.core.management import execute_from_command_line
+class OfferYearCalendarAdmin(admin.ModelAdmin):
+    list_display = ('offer_year', 'start_date', 'end_date')
+    fieldsets = ((None, {'fields': ('offer_year', 'start_date', 'end_date')}),)
 
-    execute_from_command_line(sys.argv)
+
+class OfferYearCalendar(models.Model):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
+    offer_year  = models.ForeignKey('OfferYear')
+    start_date  = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)
+    end_date    = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)
+
+    def __str__(self):
+        return u"%s" % (self.offer_year)

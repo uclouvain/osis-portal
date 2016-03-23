@@ -1,0 +1,10 @@
+[
+  {"model": "admission.gradetype", "fields": {"name" :"Bachelier" , "grade" : "BACHELOR" }},
+  {"model": "admission.gradetype", "fields": {"name" :"Master 60" , "grade" : "MASTER" }},
+  {"model": "admission.gradetype", "fields": {"name" :"Master 120" , "grade" : "MASTER" }},
+  {"model": "admission.gradetype", "fields": {"name" :"Master 180 et 240" , "grade" : "MASTER" }},
+  {"model": "admission.gradetype", "fields": {"name" :"Master de spécialisation" , "grade" : "MASTER" }},
+  {"model": "admission.gradetype", "fields": {"name" :"Agrégation" }},
+  {"model": "admission.gradetype", "fields": {"name" :"Certificat" }}
+
+]

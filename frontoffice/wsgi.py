@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 ##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
@@ -24,12 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+
 import os
-import sys
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "frontoffice.settings")
+from django.core.wsgi import get_wsgi_application
 
-    from django.core.management import execute_from_command_line
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "frontoffice.settings")
 
-    execute_from_command_line(sys.argv)
+application = get_wsgi_application()

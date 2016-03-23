@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 ##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
@@ -24,12 +23,45 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import os
-import sys
+from django.db import models
+from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import User
+from admission.models import person
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "frontoffice.settings")
 
-    from django.core.management import execute_from_command_line
+class ApplicationAdmin(admin.ModelAdmin):
+    list_display = ('offer_year', 'person')
+    fieldsets = ((None, {'fields': ('offer_year', 'person')}),)
 
-    execute_from_command_line(sys.argv)
+
+class Application(models.Model):
+    APPLICATION_TYPE = (('ADMISSION', _('Admission')),
+                        ('INSCRIPTION', _('Inscription')))
+
+    person = models.ForeignKey('Person')
+    offer_year = models.ForeignKey('OfferYear')
+    creation_date = models.DateTimeField(auto_now=True)
+    application_type = models.CharField(max_length=20, choices=APPLICATION_TYPE)
+    doctorate = models.BooleanField(default=False)
+
+    def __str__(self):
+        return u"%s" % (self.offer_year)
+
+
+def find_by_user(user):
+    person_application = person.Person.objects.get(user=user)
+    if person_application:
+        applications = Application.objects.filter(person=person_application)
+        return applications
+
+    return None
+
+
+def find_by_id(application_id):
+    return Application.objects.get(pk=application_id)
+
+
+
+
+

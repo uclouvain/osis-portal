@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 ##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
@@ -24,12 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import os
-import sys
+from django.contrib import admin
+from admission.models import *
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "frontoffice.settings")
 
-    from django.core.management import execute_from_command_line
-
-    execute_from_command_line(sys.argv)
+admin.site.register(person.Person,
+                    person.PersonAdmin)
+admin.site.register(domain.Domain,
+                    domain.DomainAdmin)
+admin.site.register(academic_year.AcademicYear,
+                    academic_year.AcademicYearAdmin)
+admin.site.register(offer_year.OfferYear,
+                    offer_year.OfferYearAdmin)
+admin.site.register(offer_year_calendar.OfferYearCalendar,
+                    offer_year_calendar.OfferYearCalendarAdmin)
+admin.site.register(application.Application,
+                    application.ApplicationAdmin)
