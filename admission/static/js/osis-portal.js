@@ -1,24 +1,19 @@
+$("#slt_offer_type").change(function() {
+    $("#grade_choices").find("label")
+      .remove()
+      .end()
 
+    $.ajax({
+        url: "/admission/levels?type=" + $("#slt_offer_type").val()
+      }).then(function(data) {
 
-/*$("#slt_offer_type").change(function() {
-    alert('change',$("#slt_offer_type").val());
+        $.each(data, function(key, value) {
+          $('#grade_choices').append($("<label></label>").attr("class", "radio-inline")
+                                      .append($("<input></input>").attr("type","radio")
+                                                                  .attr("name","grade_choice")
+                                                                  .attr("value",value.name))
+                                      .append(value.name));
+        });
+      });
 
-msg=""
-    url = window.location.href.toString();
-        url = url.replace("/" + msg, "");
-        url = url + "grade/" + $("#slt_offer_type").val();
-
-        $.ajax({
-      type: 'POST',
-
-
-      url: 'http://localhost:8000/admission/admission/offer/grade/'+$("#slt_offer_type").val()+'/',
-
-      success: function(data) {
-          console.log(data);
-          alert("Got response from server ...", data);
-          // $('#testdiv').append($("<label>qsdfsqdfqsf</label>");
-
-      }
-    });
-})*/
+});

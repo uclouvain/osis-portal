@@ -81,8 +81,7 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <form method="post" action="{% url 'refresh_offer_selection' %}">
-            {% csrf_token %}
+
             <div class="row" style="visibility:hidden">
                 <div class="col-md-2">
                     <button type="cancel" id="bt_cancel_offer_selection" class="btn" role="button"
@@ -119,7 +118,6 @@
             </div>
             {% if offer %}
             {% else %}
-
             <br>
             <div class="row">
                 <div class="col-md-12">
@@ -135,24 +133,20 @@
 
             <br>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-12">
                     <label>Choisissez un type d'études</label>
-                    <select class="form-control" id="slt_offer_type" name="offer_type" >
+                    <select class="form-control" id="slt_offer_type" name="type" >
                         <option value="" selected>...</option>
                     {% for grade_choice in grade_choices %}
                          <option value="{{grade_choice.0}}" >{{grade_choice.1}}</option>
                     {% endfor %}
                     </select>
                 </div>
-                <div class="col-md-8">
-                </div>
             </div>
             <br>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12" id="grade_choices">
                     <label><br></label>
-                    <input value="" id="test" name="test">
-  <div id="testdiv">test:</div>
                 </div>
             </div>
             <br>
@@ -172,10 +166,6 @@
                 </div>
                 <div class="col-md-8">
                     <br>
-                    <button type="submit" id="bt_submit_new_password_form" class="btn btn-primary" role="button"
-                            title="Refresh liste offre">
-                        <span class="glyphicon glyphicon-check" aria-hidden="true"></span> Valider
-                    </button>
                 </div>
             </div>
             {% endif %}
@@ -217,7 +207,7 @@
                 </div>
             </div>
             {% endif %}
-        </form>
+
 
         <form method="post" action="{% url 'save_offer_selection' %}">
             <input type="hidden" id="txt_offer_year_id" name="offer_year_id" value="{{offer.id}}"/>
