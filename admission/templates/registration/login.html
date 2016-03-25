@@ -48,7 +48,7 @@
                 lien d'activation.
                 <br>Vous pouvez dès lors vous connecter à la demande d'inscription grâce à votre adresse mail et le mot
                 de passe que vous avez choisi antérieurement.
-                <form action="{% url 'login' %}" method="post" class="form" role="form">
+                <form action="{% url 'login' %}" method="post" class="form" role="form" autocomplete="off">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-6">
@@ -97,7 +97,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">Si vous ne disposez pas encore de ce compte</div>
             <div class="panel-body">
-                    <form  method="post" action="{% url 'new_user' %}">
+                    <form  method="post" action="{% url 'new_user' %}" autocomplete="off">
                         {% csrf_token %}
                         <input type="hidden" value="{{ number1 }}" name="number1" />
                         <input type="hidden" value="{{ number2 }}" name="number2" />

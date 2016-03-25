@@ -52,6 +52,14 @@ class NewAccountForm(forms.Form):
             self.errors['password_new'] = "This password is too short. It must contain at least 8 characters."
         return cleaned_data
 
+    def clean_password_new(self):
+        data = self.cleaned_data['password_new']
+        return data.strip()
+
+    def clean_password_new_confirm(self):
+        data = self.cleaned_data['password_new_confirm']
+        return data.strip()
+
 
 class AccountForm(forms.Form):
     email =    forms.EmailField(help_text='Merci d\'encoder une adresse email correcte.', required = True)
@@ -59,6 +67,10 @@ class AccountForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(AccountForm, self).__init__(*args, **kwargs)
+
+    def clean_password(self):
+        data = self.cleaned_data['password']
+        return data.strip()
 
 
 class NewPasswordForm(forms.Form):
@@ -77,3 +89,11 @@ class NewPasswordForm(forms.Form):
         if password_new is not None and len(password_new) < 8:
             self.errors['password_new'] = "This password is too short. It must contain at least 8 characters."
         return cleaned_data
+
+    def clean_password_new(self):
+        data = self.cleaned_data['password_new']
+        return data.strip()
+
+    def clean_password_new_confirm(self):
+        data = self.cleaned_data['password_new_confirm']
+        return data.strip()

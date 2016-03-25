@@ -156,4 +156,9 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 LOGIN_URL = reverse_lazy('login')
 LOGOUT_URL = reverse_lazy('logout')
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/admission/'
+
+try  :
+    from frontoffice.server_settings import *
+except ImportError:
+    pass
