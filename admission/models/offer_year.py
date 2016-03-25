@@ -28,8 +28,8 @@ from django.contrib import admin
 
 
 class OfferYearAdmin(admin.ModelAdmin):
-    list_display = ('acronym', 'title', 'academic_year', 'domain')
-    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'domain', 'grade')}),)
+    list_display = ('acronym', 'title', 'academic_year', 'domain', 'grade_type')
+    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'domain', 'grade_type')}),)
 
 
 class OfferYear(models.Model):
@@ -43,3 +43,15 @@ class OfferYear(models.Model):
 
     def __str__(self):
         return u"%s - %s" % (self.academic_year, self.acronym)
+
+
+def find_by_id(offer_year_id):
+    return OfferYear.objects.get(pk=offer_year_id)
+
+
+def find_all():
+    return OfferYear.objects.all().order_by("acronym")
+
+
+def search(level=None, domain=None):
+    return OfferYear.objects.filter(grade_type=level, domain=domain).order_by("acronym")
