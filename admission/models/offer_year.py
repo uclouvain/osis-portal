@@ -78,6 +78,8 @@ def find_all():
 
 
 def search(level=None, domain=None):
+    print('search',level,', ' , domain)
+
     return OfferYear.objects.filter(grade_type=level, domain=domain).order_by("acronym")
 
 
