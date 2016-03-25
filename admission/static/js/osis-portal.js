@@ -1,4 +1,6 @@
-$("#slt_offer_type").change(function() {
+
+
+/*$("#slt_offer_type").change(function() {
     alert('change',$("#slt_offer_type").val());
 
 msg=""
@@ -19,11 +21,4 @@ msg=""
 
       }
     });
-
-
-
-
-})
-
-
-
+})*/

@@ -26,6 +26,7 @@
 from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ObjectDoesNotExist
 from admission.models import person
 
 
@@ -49,12 +50,16 @@ class Application(models.Model):
 
 
 def find_by_user(user):
-    person_application = person.Person.objects.get(user=user)
-    if person_application:
-        applications = Application.objects.filter(person=person_application)
-        return applications
+    try:
+        person_application = person.Person.objects.get(user=user)
 
-    return None
+        if person_application:
+            applications = Application.objects.filter(person=person_application)
+            return applications
+        else:
+            return None
+    except ObjectDoesNotExist:
+        return None
 
 
 def find_by_id(application_id):

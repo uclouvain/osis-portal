@@ -40,7 +40,9 @@ def home(request):
     sum = number1 + number2
     while number3 > sum:
         number3 = randint(1, 20)
+
     applications = mdl.application.find_by_user(request.user)
+
     return render(request, "home.html", {'number1':  number1,
                                          'number2':  number2,
                                          'number3':  number3,
