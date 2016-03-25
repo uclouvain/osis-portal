@@ -50,6 +50,8 @@ urlpatterns = [
     url(r'^admission/offer/search/$', views.refresh_offer_selection, name='refresh_offer_selection'),
     url(r'^admission/offer/save/$', views.save_offer_selection, name='save_offer_selection'),
     url(r'^admission/offer/application/([0-9]+)/$', views.selection_offer, name='selection_offer'),
+    url(r'^admission/offer/grade/(?P<grade>.+)/$', views.offer_selection_grade_choices, name='offer_selection_grade_choices'),
+
 
 
 

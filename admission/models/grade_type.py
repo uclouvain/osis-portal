@@ -31,7 +31,9 @@ from django.utils.translation import ugettext_lazy as _
 GRADE_CHOICES = (
     ('BACHELOR', _('Bachelor')),
     ('MASTER', _('Master')),
-    ('DOCTORATE', _('Ph.D')))
+    ('DOCTORATE', _('Ph.D')),
+    ('TRAINING_CERTIFICATE',_('Teacher training certificate')),
+    ('CERTIFICAT',_('Certificat')))
 
 
 class GradeTypeAdmin(admin.ModelAdmin):
@@ -50,3 +52,7 @@ class GradeType(models.Model):
 
 def find_all():
     return GradeType.objects.all().order_by("grade")
+
+
+def find_by_grade(grade):
+    return GradeType.objects.filter(grade=grade).order_by("name")

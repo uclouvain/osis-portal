@@ -28,6 +28,7 @@
 
 {% block content %}
 <script>
+
     function selection(row_number, offers_length, offer_year_id){
         var elt = "offer_row_" + row_number;
         var cpt = 0;
@@ -74,6 +75,7 @@
 
 
 </script>
+     <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <br><br>
 
@@ -130,81 +132,27 @@
                         href="http://www.uclouvain.be/programme-etudes-2015.html" target="_blank">programme d'études</a>
                 </div>
             </div>
+
             <br>
             <div class="row">
                 <div class="col-md-4">
                     <label>Choisissez un type d'études</label>
-                    <select class="form-control" id="slt_offer_type" name="offer_type" onchange="offerTypeSelection();">
-                        <option value=""></option>
-                        {% if offer_type.grade == 'BACHELOR'%}
-                        <option value="BACHELOR" selected>Bachelier</option>
-                        {% else %}
-                        <option value="BACHELOR">Bachelier</option>
-                        {% endif %}
-                        {% if offer_type.grade == 'MASTER'%}
-                        <option value="MASTER" selected>Master</option>
-                        {% else %}
-                        <option value="MASTER">Master</option>
-                        {% endif %}
-                        {% if offer_type.grade == 'DOCTORATE'%}
-                        <option value="DOCTORATE" selected>Ph.D</option>
-                        {% else %}
-                        <option value="DOCTORATE">Ph.D</option>
-                        {% endif %}
+                    <select class="form-control" id="slt_offer_type" name="offer_type" >
+                        <option value="" selected>...</option>
+                    {% for grade_choice in grade_choices %}
+                         <option value="{{grade_choice.0}}" >{{grade_choice.1}}</option>
+                    {% endfor %}
                     </select>
-                    <button type="submit" id="bt_submit_new_password_form" class="btn btn-primary" role="button"
-                            title="Refresh liste offre">
-                        <span class="glyphicon glyphicon-check" aria-hidden="true"></span> Valider
-                    </button>
                 </div>
                 <div class="col-md-8">
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-12">
                     <label><br></label>
-
-                    <div id="slt_BACHELOR_type" style="visibility:hidden;display:none;">
-                        {% for gt in gradetypes %}
-                        {% if gt.grade == 'BACHELOR'%}
-                        {% if gt == offer_type %}
-                        <input type="radio" name="bachelor_type" value="{{ gt.id }}" checked> {{ gt }}
-                        {%else%}
-                        <input type="radio" name="bachelor_type" value="{{ gt.id }}"> {{ gt }}
-                        {%endif%}
-                        {%endif%}
-                        {% endfor %}
-                    </div>
-                    <div id="slt_MASTER_type" style="visibility:hidden;display:none;">
-                        {% for gt in gradetypes %}
-                        {% if gt.grade == 'MASTER'%}
-                        {% if gt == offer_type %}
-                        <input type="radio" name="master_type" value="{{ gt.id }}" checked> {{ gt }}
-                        {%else%}
-                        <input type="radio" name="master_type" value="{{ gt.id }}"> {{ gt }}
-                        {%endif%}
-                        {%endif%}
-                        {% endfor %}
-                    </div>
-                    <div id="slt_DOCTORATE_type" style="visibility:hidden;display:none;">
-                        {% for gt in gradetypes %}
-                        {% if gt.grade == 'DOCTORATE'%}
-                        {% if gt == offer_type %}
-                        <input type="radio" name="doctorate_type" value="{{ gt.id }}" checked> {{ gt }}
-                        {% else %}
-                        <input type="radio" name="doctorate_type" value="{{ gt.id }}"> {{ gt }}
-                        {% endif %}
-                        {%endif%}
-                        {% endfor %}
-                    </div>
-                    <div id="slt_OTHER_type" style="visibility:hidden;display:none;">
-                        {% for gt in gradetypes %}
-                        {% if not gt.grade%}
-                        {% if gt == offer_type %}
-                        <input type="radio" name="other_type" value="{{ gt.id }}" checked> {{ gt }}
-                        {% else %}
-                        <input type="radio" name="other_type" value="{{ gt.id }}"> {{ gt }}
-                        {% endif %}
-                        {%endif%}
-                        {% endfor %}
-                    </div>
-
+                    <input value="" id="test" name="test">
+  <div id="testdiv">test:</div>
                 </div>
             </div>
             <br>
@@ -223,8 +171,11 @@
                     </select>
                 </div>
                 <div class="col-md-8">
-
-
+                    <br>
+                    <button type="submit" id="bt_submit_new_password_form" class="btn btn-primary" role="button"
+                            title="Refresh liste offre">
+                        <span class="glyphicon glyphicon-check" aria-hidden="true"></span> Valider
+                    </button>
                 </div>
             </div>
             {% endif %}
@@ -232,7 +183,6 @@
             <br>
             <div class="row">
                 <div class="col-md-6">
-
                     <label>Choix d'études sélectionné</label>
                     <h4><span class="label label-primary">{{ offer.acronym }} {{ offer.title }}</span></h4>
                 </div>
@@ -240,7 +190,6 @@
                     <label>&nbsp;</label><br>
                     <a href="{% url 'offer_selection' %}" title="Reset" class="btn btn-default"><span
                             class="glyphicon glyphicon-erase" aria-hidden="true"></span></a>
-
                 </div>
             </div>
             {% else %}
@@ -274,94 +223,18 @@
             <input type="hidden" id="txt_offer_year_id" name="offer_year_id" value="{{offer.id}}"/>
             <input type="hidden" id="txt_application_id" name="application_id" value="{{ application.id }}"/>
             {% csrf_token %}
-            {%if offer %}
-            <br>
-            <div class="row">
-                <div class="col-md-12">
-                    <label>Votre diplôme donnant accès(*) à ce programme a-t-il été émis par une institution
-                        belge</label><br>
-                        <span>
-                            <input type="radio" name="belgian_diploma" checked>  Oui
-                            <input type="radio" name="belgian_diploma">  Non
-                        </span>
-
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <span style="color:gray;font-size:small;font-style: italic;">* Information du titre d'accès sur <a href="http://uclouvain.be/admission.html">http://uclouvain.be/admission.html</a></span>
-                </div>
-            </div>
-            {% if offer.offer_year_calendar %}
-            <br>
-            <div class="row">
-                <div class="col-md-12">
-                    <label style="color:red">Pour l'année académique {{offer.academic_year}}, vous devez terminer votre
-                        demande d'inscription avant le {{offer.offer_year_calendar.end_date }}</label>
-                </div>
-            </div>
-
-            {% endif %}
-            <br>
-            <div class="row">
-                <div class="col-md-12">
-                    <label>Vous demandez une inscription à une offre contingentée, veuillez vous adressez au <a>Service
-                        Inscription de l'UCL</a></label>
-                </div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-md-12">
-                    <label>Vous pouvez trouver l'information complémentaire sur les études contingentées sur <a
-                            href="https://uclouvain.be/22310">https://uclouvain.be/22310</a></label>
-                </div>
-            </div>
-
-
-            <br>
-            <div class="row">
-                <div class="col-md-6">
-                    <label>Veuillez indiquer le numéro que le Service d'inscription vous a fourni* </label>
-                    <input id="txt_enrollment_number" name="enrollment_number"
-                           value="">
-                </div>
-            </div>
-
-            <br>
-            <div class="row">
-                <div class="col-md-12">
-                    <label>Vous souhaitez accéder au programme sur base de la valorisation des savoirs et compétences
-                        acqui par expérience professionnelle ou personnelle (VAE)? </label><br>
-                        <span>
-                            <input type="radio" name="vae" checked>  Oui
-                            <input type="radio" name="vae">  Non
-                        </span>
-                </div>
-            </div>
-            {% endif %}
-            
             <br>
             <div class="row">
                 <div class="col-md-2">
-                    <button type="cancel" id="bt_cancel_offer_selection_down" class="btn" role="button"
-                            title="Annuler" style="visibility:hidden">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Annuler la demande
-                    </button>
+
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" id="bt_cancel_pgmer_communication_down" class="btn" role="button"
-                            title="Communiquer avec le gestionnaire" style="visibility:hidden">
-                        Communiquer avec le gestionnaire
-                    </button>
+
                 </div>
                 <div class="col-md-2">
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" id="bt_back_to_step_1_down" class="btn" role="button"
-                            title="Revenir à l'étape 1/4" style="visibility:hidden">
-                        Revenir à l'étape 1/4
-                    </button>
+
                 </div>
                 <div class="col-md-2">
                     <button type="submit" id="bt_save_down" class="btn" role="button" name="save_down"
@@ -370,10 +243,7 @@
                     </button>
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" id="bt_skip_step_3_down" class="btn" role="button"
-                            title="Passer l'étape 3/4" style="visibility:hidden">
-                        Passer l'étape 3/4
-                    </button>
+
                 </div>
             </div>
         </form>

@@ -1,0 +1,63 @@
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+ * OSIS stands for Open Student Information System. It's an application
+ * designed to manage the core business of higher education institutions,
+ * such as universities, faculties, institutes and professional schools.
+ * The core business involves the administration of students, teachers,
+ * courses, programs and so on.
+ *
+ * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * A copy of this license - GNU General Public License - is available
+ * at the root of the source code of this program.  If not,
+ * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>OSIS</title>
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+		    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+        <link rel="icon" href="{% static 'img/favicon.ico' %}" />
+        <link rel="stylesheet" href="{% static 'css/armata.css' %}" type='text/css'>
+        <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+        <link rel="stylesheet" href="{% static 'css/tree.css' %}">
+        {% block style %}
+        {% endblock %}
+        <style>
+          body { font-family: 'Armata', sans-serif; }
+        </style>
+    </head>
+    <body>
+     <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+    <script>
+        $(document).ready(function() {
+            //alert('ready');
+
+        });
+    </script>
+
+    {% if data %}
+     {%for g in data%}
+        <input type="radio" name="bachelor_type" value="{{ g.0 }}" > {{ g.1}}{{g}}
+     {%endfor%}
+    {%endif%}
+
+    </body>
+</html>

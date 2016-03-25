@@ -10,8 +10,9 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import login
-
-
+import json
+from django.core import serializers
+from django.views.decorators.csrf import csrf_exempt
 
 @login_required
 def home(request):
@@ -212,12 +213,15 @@ def new_password_info(request):
 def offer_selection(request):
     offers = None
     application = mdl.application.find_by_user(request.user)
+    grade_choices = mdl.grade_type.GRADE_CHOICES
+    print(grade_choices)
     return render(request, "offer_selection.html",
-                          {"gradetypes":  mdl.grade_type.find_all(),
-                           "domains":     mdl.domain.find_all(),
-                           "offers":      offers,
-                           "offer":       None,
-                           "application": application})
+                          {"gradetypes":    mdl.grade_type.find_all(),
+                           "domains":       mdl.domain.find_all(),
+                           "offers":        offers,
+                           "offer":         None,
+                           "application":   application,
+                           "grade_choices": grade_choices})
 
 
 def refresh_offer_selection(request):
@@ -334,3 +338,11 @@ def osis_login(request, *args, **kwargs):
         number3 = randint(1, 20)
     extra_context['number3'] = number3
     return login(request, *args, extra_context=extra_context, **kwargs)
+
+@csrf_exempt
+def offer_selection_grade_choices(request, grade):
+    print('offer_selection_grade_choices', grade)
+    grade_type_list = mdl.grade_type.find_by_grade(grade)
+    data = serializers.serialize("xml", grade_type_list)
+    print('data : ',grade_type_list)
+    return render(request, "offer_selection.html", {'data': grade_type_list})
