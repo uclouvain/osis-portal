@@ -23,44 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.shortcuts import render, get_object_or_404
-from admission import models as mdl
-from django.contrib.auth import authenticate
 import uuid
+from admission.forms import NewAccountForm, AccountForm, NewPasswordForm
+from admission.utils import send_mail
+from random import randint
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-
-
-def home(request):
-    form_new = NewAccountForm()
-    form = AccountForm()
-    number1 = randint(1, 20)
-    number2 = randint(1, 20)
-    number3 = randint(1, 20)
-    sum = number1 + number2
-    while number3 > sum:
-        number3 = randint(1, 20)
-    return render(request, "home.html", {'number1':  number1,
-                                         'number2':  number2,
-                                         'number3':  number3,
-                                         'form_new': form_new,
-                                         'form':     form})
-
-
-def home_error(request, message,form):
-    form_new = NewAccountForm()
-    number1 = randint(1, 20)
-    number2 = randint(1, 20)
-    number3 = randint(1, 20)
-    sum = number1 + number2
-    while number3 > sum:
-        number3 = randint(1, 20)
-    return render(request, "home.html", {'number1':  number1,
-                                         'number2':  number2,
-                                         'number3':  number3,
-                                         'form_new': form_new,
-                                         'form':     form,
-                                         'message': message})
+from django.contrib.auth.views import login
+from django.shortcuts import render
+from admission import models as mdl
 
 
 def new_user(request):
@@ -90,7 +62,7 @@ def new_user(request):
 
     user = User.objects.filter(email=email)
     if user:
-        form_new.errors['email_new_confirm'] = "Il existe déjà un compte pour cette adresse email"
+        form_new.errors['email_new_confirm'] = "Il existe déjà un compte pour cette adresse email %s" % email
         validation = False
 
     if validation:
@@ -111,16 +83,18 @@ def new_user(request):
         user_id = user.id
         return HttpResponseRedirect(reverse('account_confirm',  args=(user_id,)))
     else:
+        extra_context = {}
+        extra_context['form_new'] = form_new
         number1 = randint(1, 20)
+        extra_context['number1'] = number1
         number2 = randint(1, 20)
-        number3 = randint(1, 20)
+        extra_context['number2'] = number2
         sum = number1 + number2
+        number3 = randint(1, 20)
         while number3 > sum:
             number3 = randint(1, 20)
-        return render(request, "home.html", {'number1': number1,
-                                             'number2': number2,
-                                             'number3': number3,
-                                             'form_new': form_new})
+        extra_context['number3'] = number3
+        return login(request,  extra_context=extra_context)
 
 
 def activation_mail(request, user_id):
@@ -158,24 +132,6 @@ def activation(request, activation_code):
         return render(request, "activation_failed.html")
 
 
-def connexion(request):
-    form = AccountForm(data=request.POST)
-    user = authenticate(username=form['email'].value(), password=form['password'].value())
-
-    if user is not None:
-        # the password verified for the user
-        if user.is_active:
-            message = "User is valid, active and authenticated"
-            return render(request, "admission.html", {'user': user})
-        else:
-            message = "The password is valid, but the account has been disabled!"
-            return home_error(request, message, form)
-    else:
-        # the authentication system was unable to verify the username and password
-        message = "The username and password were incorrect."
-        return home_error(request, message, form)
-
-
 def new_password_request(request):
     form = AccountForm()
     return render(request, "new_password.html",{'form':form})
@@ -209,11 +165,11 @@ def new_password_form(request, code):
     form = NewPasswordForm()
     person = mdl.person.find_by_activation_code(code)
     if person:
-        return render(request, "new_password_form.html",{'form':   form,
-                                                         'person_id': person.id})
+        return render(request, "new_password_form.html", {'form':   form,
+                                                          'person_id': person.id})
     else:
-        return render(request, "new_password_form.html",{'form':   form,
-                                                         'person_id': None})
+        return render(request, "new_password_form.html", {'form':   form,
+                                                          'person_id': None})
 
 
 def set_new_password(request):
@@ -240,3 +196,35 @@ def account_confirm(request,user_id):
 
 def new_password_info(request):
     return render(request, "new_password_info.html")
+
+
+def login_admission(request, *args, **kwargs):
+    extra_context = {}
+    extra_context['form_new'] = NewAccountForm()
+    number1 = randint(1, 20)
+    extra_context['number1'] = number1
+    number2 = randint(1, 20)
+    extra_context['number2'] = number2
+    sum = number1 + number2
+    number3 = randint(1, 20)
+    while number3 > sum:
+        number3 = randint(1, 20)
+    extra_context['number3'] = number3
+    return login(request, *args, extra_context=extra_context, **kwargs)
+
+
+def login_admission_error(request, *args, **kwargs):
+    extra_context = {}
+    form_new = NewAccountForm()
+    form_new.errors['email_new_confirm'] = "Il existe déjà un compte pour cette adresse email"
+    extra_context['form_new'] = form_new
+    number1 = randint(1, 20)
+    extra_context['number1'] = number1
+    number2 = randint(1, 20)
+    extra_context['number2'] = number2
+    sum = number1 + number2
+    number3 = randint(1, 20)
+    while number3 > sum:
+        number3 = randint(1, 20)
+    extra_context['number3'] = number3
+    return login(request, *args, extra_context=extra_context, **kwargs)

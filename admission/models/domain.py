@@ -28,8 +28,8 @@ from django.contrib import admin
 
 
 class DomainAdmin(admin.ModelAdmin):
-    list_display = ('name', 'grade')
-    fieldsets = ((None, {'fields': ('name', 'grade')}),)
+    list_display = ('name',)
+    fieldsets = ((None, {'fields': ('name',)}),)
 
 
 class Domain(models.Model):

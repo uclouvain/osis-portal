@@ -23,25 +23,27 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
-from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.decorators import login_required
+from admission.forms import NewAccountForm, AccountForm
+from random import randint
+from admission import models as mdl
+from django.shortcuts import render
 
 
-class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('person', 'offer_year', 'creation_date', 'application_type', 'doctorate')
-    fieldsets = ((None, {'fields': ('person', 'offer_year', 'creation_date', 'application_type', 'doctorate')}),)
-
-
-class Application(models.Model):
-    APPLICATION_TYPE = (('ADMISSION', _('Admission')),
-                        ('INSCRIPTION', _('Inscription')))
-
-    person = models.ForeignKey('Person')
-    offer_year = models.ForeignKey('OfferYear')
-    creation_date = models.DateTimeField(auto_now=True)
-    application_type = models.CharField(max_length=20, choices=APPLICATION_TYPE)
-    doctorate = models.BooleanField(default=False)
-
-    def __str__(self):
-        return u"%s - %s" % (self.academic_year, self.acronym)
+@login_required
+def home(request):
+    form_new = NewAccountForm()
+    form = AccountForm()
+    number1 = randint(1, 20)
+    number2 = randint(1, 20)
+    number3 = randint(1, 20)
+    sum = number1 + number2
+    while number3 > sum:
+        number3 = randint(1, 20)
+    applications = mdl.application.find_by_user(request.user)
+    return render(request, "home.html", {'number1':  number1,
+                                         'number2':  number2,
+                                         'number3':  number3,
+                                         'form_new': form_new,
+                                         'form':     form,
+                                         'applications': applications})

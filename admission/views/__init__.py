@@ -23,25 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
-from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
-
-
-class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('person', 'offer_year', 'creation_date', 'application_type', 'doctorate')
-    fieldsets = ((None, {'fields': ('person', 'offer_year', 'creation_date', 'application_type', 'doctorate')}),)
-
-
-class Application(models.Model):
-    APPLICATION_TYPE = (('ADMISSION', _('Admission')),
-                        ('INSCRIPTION', _('Inscription')))
-
-    person = models.ForeignKey('Person')
-    offer_year = models.ForeignKey('OfferYear')
-    creation_date = models.DateTimeField(auto_now=True)
-    application_type = models.CharField(max_length=20, choices=APPLICATION_TYPE)
-    doctorate = models.BooleanField(default=False)
-
-    def __str__(self):
-        return u"%s - %s" % (self.academic_year, self.acronym)
+from admission.views import application
+from admission.views import common
+from admission.views import identification
+from admission.views import offer
