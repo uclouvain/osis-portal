@@ -23,9 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url, include
-from django.contrib.auth.views import logout
+from django.conf.urls import url
 from admission.views import application, common, identification, offer
+from django.contrib.auth.views import logout
 
 
 urlpatterns = [

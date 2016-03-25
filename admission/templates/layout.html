@@ -43,24 +43,49 @@
     </head>
     <body>
       <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-          <!-- Brand and toggle get grouped for better mobile display -->
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{% url 'home' %}" id="lnk_home"><img src="{% static 'img/logo_osis.png' %}" style="margin-top: -10px;"></a>
-          </div>
-
-          <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-
-          </div>
+            <a class="navbar-brand" href="{% url 'home' %}" id="lnk_home"><img src="{% static 'img/logo_osis.png' %}"
+                                                                               style="margin-top: -10px;"></a>
         </div>
-      </nav>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+            <ul class="nav navbar-nav navbar-right">
+                {% if request.user.is_authenticated %}
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false" id="bt_user">
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                            {{ request.user }}
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'logout' %}" id="lnk_logout">
+                                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                                Logout</a></li>
+
+                        </ul>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'login' %}" id="lnk_login"><span class="glyphicon glyphicon-lock"
+                                                                         aria-hidden="true"></span> Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
 
       <div class="container">
         {% block content %}
@@ -70,6 +95,7 @@
       </div>
       <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
       <script src="{% static 'js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'js/osis-portal.js' %}"></script>
       {% block script %}
           <script type="text/javascript">
                // To avoid cut and paste on the email fields

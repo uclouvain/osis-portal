@@ -26,6 +26,7 @@
 from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+from admission.models import person
 
 
 class ApplicationAdmin(admin.ModelAdmin):
@@ -44,4 +45,17 @@ class Application(models.Model):
     doctorate = models.BooleanField(default=False)
 
     def __str__(self):
-        return u"%s - %s" % (self.academic_year, self.acronym)
+        return u"%s" % (self.offer_year)
+
+
+def find_by_user(user):
+    person_application = person.Person.objects.get(user=user)
+    if person_application:
+        applications = Application.objects.filter(person=person_application)
+        return applications
+
+    return None
+
+
+def find_by_id(application_id):
+    return Application.objects.get(pk=application_id)

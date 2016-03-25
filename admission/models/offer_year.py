@@ -25,6 +25,7 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from admission.models import offer_year_calendar, academic_year
 
 
 class OfferYearAdmin(admin.ModelAdmin):
@@ -44,6 +45,29 @@ class OfferYear(models.Model):
     def __str__(self):
         return u"%s - %s" % (self.academic_year, self.acronym)
 
+    @property
+    def offer_year_calendar(self):
+        #Should only be one record
+        return offer_year_calendar.OfferYearCalendar.objects.filter(offer_year=self).order_by("start_date").first()
+
+    @property
+    def find_offer_year_next_year(self):
+        print('find_offer_year_next_year1')
+        academic_year_next = academic_year.next_academic_year(self.academic_year)
+        print('kqljf')
+        of= OfferYear.objects.filter(acronym=self.acronym, academic_year=academic_year_next).first()
+        print('zut',of.academic_year)
+        return of.academic_year
+
+    @property
+    def find_offer_year_next_start_date(self):
+        print('find_offer_year_next_year1')
+        academic_year_next = academic_year.next_academic_year(self.academic_year)
+        print('kqljf')
+        of= OfferYear.objects.filter(acronym=self.acronym, academic_year=academic_year_next).first()
+        print('zut',of.academic_year)
+        return of.start_date
+
 
 def find_by_id(offer_year_id):
     return OfferYear.objects.get(pk=offer_year_id)
@@ -55,3 +79,7 @@ def find_all():
 
 def search(level=None, domain=None):
     return OfferYear.objects.filter(grade_type=level, domain=domain).order_by("acronym")
+
+
+def find_by_domain_grade(domain, grade):
+    return OfferYear.objects.filter(domain=domain, grade_type=grade).order_by("acronym")

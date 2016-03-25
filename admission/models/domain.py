@@ -38,3 +38,7 @@ class Domain(models.Model):
 
     def __str__(self):
         return self.name
+
+
+def find_all():
+    return Domain.objects.all()
