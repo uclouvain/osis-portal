@@ -28,8 +28,6 @@ $("#slt_offer_type").change(function() {
                                       .append(value.name));
 
         });
-        }else{
-
         }
       });
 
@@ -37,21 +35,19 @@ $("#slt_offer_type").change(function() {
 
 
 $("#slt_domain").change(function() {
-
-offer_selection_display();
-
+    offer_selection_display();
 });
 
 
 function offer_selection_display(){
-var radio_button_value;
+    var radio_button_value;
 
-           if ($("input[name='grade_choice']:checked").length > 0){
-               radio_button_value = $('input[name="grade_choice"]:checked').val();
-           }
-           else{
-               return False
-           }
+    if ($("input[name='grade_choice']:checked").length > 0){
+       radio_button_value = $('input[name="grade_choice"]:checked').val();
+    }
+    else{
+       return False
+    }
 
     $("#pnl_offers").find("table")
       .remove()
@@ -98,9 +94,9 @@ var radio_button_value;
             cpt++;
         }
         elt = "offer_row_" + row_number;
-                    document.getElementById(elt).style.color = "green";
-            document.getElementById("txt_offer_year_id").value = offer_year_id;
-            document.getElementById("bt_save").disabled = false;
+        document.getElementById(elt).style.color = "green";
+        document.getElementById("txt_offer_year_id").value = offer_year_id;
+        document.getElementById("bt_save").disabled = false;
 
 
         if(already_selected == true){

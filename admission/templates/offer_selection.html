@@ -35,8 +35,7 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-            {% if offer %}
-            {% else %}
+
             <br>
             <div class="row">
                 <div class="col-md-12">
@@ -87,27 +86,23 @@
                     <br>
                 </div>
             </div>
-            {% endif %}
-            {% if offer %}
-            <br>
-            <div class="row">
-                <div class="col-md-6">
-                    <label>Choix d'études sélectionné</label>
-                    <h4><span class="label label-primary">{{ offer.acronym }} {{ offer.title }}</span></h4>
+
+
+                <br>
+                <div id="pnl_offers">
+
                 </div>
-                <div class="col-md-6">
-                    <label>&nbsp;</label><br>
-                    <a href="{% url 'offer_selection' %}" title="Reset" class="btn btn-default"><span
-                            class="glyphicon glyphicon-erase" aria-hidden="true"></span></a>
+
+
+            {% if message%}
+            <div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                    </div>
                 </div>
             </div>
-            {% else %}
-            <br>
-            <div id="pnl_offers">
-
-            </div>
             {% endif %}
-
 
         <form method="post" action="{% url 'save_offer_selection' %}">
             <input type="hidden" id="txt_offer_year_id" name="offer_year_id" value="{{offer.id}}"/>

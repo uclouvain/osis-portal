@@ -54,8 +54,7 @@ def find_by_user(user):
         person_application = person.Person.objects.get(user=user)
 
         if person_application:
-            applications = Application.objects.filter(person=person_application)
-            return applications
+            return  Application.objects.filter(person=person_application)
         else:
             return None
     except ObjectDoesNotExist:
