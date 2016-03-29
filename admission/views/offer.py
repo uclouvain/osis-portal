@@ -109,6 +109,17 @@ def save_offer_selection(request):
 
         application.offer_year = offer_year
         application.save()
+        #answer_question_
+        for key, value in request.POST.items():
+            if "txt_answer_question_" in key:
+                print(value)
+                #answer to save
+                # answer = mdl.answer.Answer()
+                # answer.application = application
+                # answer.value = value
+                # answer.option #pas trop sûre pour l'option
+                # answer.save()
+
         return render(request, "diploma.html", {"application": application})
 
 
