@@ -39,3 +39,11 @@ admin.site.register(offer_year_calendar.OfferYearCalendar,
                     offer_year_calendar.OfferYearCalendarAdmin)
 admin.site.register(application.Application,
                     application.ApplicationAdmin)
+admin.site.register(form.Form,
+                    form.FormAdmin)
+admin.site.register(question.Question,
+                    question.QuestionAdmin)
+admin.site.register(option.Option,
+                    option.OptionAdmin)
+admin.site.register(answer.Answer,
+                    answer.AnswerAdmin)
