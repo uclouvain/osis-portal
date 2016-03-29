@@ -27,95 +27,14 @@
 {% endcomment %}
 
 {% block content %}
-<script>
-
-    function selection(row_number, offers_length, offer_year_id){
-        var elt = "offer_row_" + row_number;
-        var cpt = 0;
-        var valide = true;
-
-        while (cpt < offers_length ){
-            elt = "offer_row_" + cpt;
-            document.getElementById(elt).style.color = "black";
-            cpt++;
-        }
-        elt = "offer_row_" + row_number;
-        document.getElementById(elt).style.color = "green";
-        document.getElementById("txt_offer_year_id").value = offer_year_id;
-
-    }
-
-    function offerTypeSelection(){
-        document.getElementById("slt_BACHELOR_type").style.visibility='hidden';
-        document.getElementById("slt_BACHELOR_type").style.display='none';
-        document.getElementById("slt_BACHELOR_type").attributes["required"] = "";
-        document.getElementById("slt_MASTER_type").style.visibility='hidden';
-        document.getElementById("slt_MASTER_type").style.display='none';
-        document.getElementById("slt_MASTER_type").attributes["required"] = "";
-        document.getElementById("slt_DOCTORATE_type").style.visibility='hidden';
-        document.getElementById("slt_DOCTORATE_type").style.display='none';
-        document.getElementById("slt_DOCTORATE_type").attributes["required"] = "";
-
-        if(document.getElementById("slt_offer_type").selectedIndex == 1){
-            document.getElementById("slt_BACHELOR_type").style.visibility='visible';
-            document.getElementById("slt_BACHELOR_type").style.display='block';
-            document.getElementById("slt_BACHELOR_type").attributes["required"] = "required";
-        }
-        if(document.getElementById("slt_offer_type").selectedIndex == 2){
-            document.getElementById("slt_MASTER_type").style.visibility='visible';
-            document.getElementById("slt_MASTER_type").style.display='block';
-            document.getElementById("slt_MASTER_type").attributes["required"] = "required";
-        }
-        if(document.getElementById("slt_offer_type").selectedIndex == 3){
-            document.getElementById("slt_DOCTORATE_type").style.visibility='visible';
-            document.getElementById("slt_DOCTORATE_type").style.display='block';
-            document.getElementById("slt_DOCTORATE_type").attributes["required"] = "required";
-        }
-}
 
 
-</script>
-     <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<br><br>
+<br><br><br><br>
+
 
 <div class="panel panel-default">
     <div class="panel-body">
-
-            <div class="row" style="visibility:hidden">
-                <div class="col-md-2">
-                    <button type="cancel" id="bt_cancel_offer_selection" class="btn" role="button"
-                            title="Annuler">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Annuler la demande
-                    </button>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" id="bt_cancel_pgmer_communication" class="btn" role="button"
-                            title="Communiquer avec le gestionnaire">
-                        Communiquer avec le gestionnaire {{a}}
-                    </button>
-                </div>
-                <div class="col-md-2">
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" id="bt_back_to_step_1" class="btn" role="button"
-                            title="Revenir à l'étape 1/4">
-                        Revenir à l'étape 1/4
-                    </button>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" id="bt_save" class="btn" role="button" name="save_up"
-                            title="Sauvegarder">
-                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Sauvegarder
-                    </button>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" id="bt_skip_step_3" class="btn" role="button"
-                            title="Passer l'étape 3/4">
-                        Passer l'étape 3/4
-                    </button>
-                </div>
-            </div>
             {% if offer %}
             {% else %}
             <br>
@@ -184,16 +103,8 @@
             </div>
             {% else %}
             <br>
-            <div class="row">
-                <div class="col-md-12">
-                    <label>Cliquez sur votre choix d'études</label>
-                </div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-md-12" id="pnl_offers">
-gggg
-                </div>
+            <div id="pnl_offers">
+
             </div>
             {% endif %}
 
@@ -216,8 +127,8 @@ gggg
 
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" id="bt_save_down" class="btn" role="button" name="save_down"
-                            title="Sauvegarder">
+                    <button type="submit" id="bt_save" class="btn" role="button" name="save"
+                            title="Sauvegarder" disabled>
                         <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Sauvegarder
                     </button>
                 </div>

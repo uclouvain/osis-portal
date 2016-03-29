@@ -40,7 +40,7 @@ class JSONResponse(HttpResponse):
 class OfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = mdl.offer_year.OfferYear
-        fields = ('id', 'title', 'title_international')
+        fields = ('id', 'acronym','title', 'title_international')
 
 
 def search(request):
@@ -108,7 +108,7 @@ def _get_domain(request):
 
 
 def save_offer_selection(request):
-    if request.method=='POST' and 'save_down' in request.POST:
+    if request.method=='POST' and 'save' in request.POST:
         offer_year = None
 
         offer_year_id = request.POST.get('offer_year_id')
