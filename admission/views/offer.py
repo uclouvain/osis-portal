@@ -108,11 +108,8 @@ def save_offer_selection(request):
                     application.doctorate = False
 
         application.offer_year = offer_year
-
-
         application.save()
         return render(request, "diploma.html", {"application": application})
-
 
 
 def selection_offer(request, offer_id):

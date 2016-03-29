@@ -59,22 +59,6 @@ def home(request):
                                          'applications' : applications })
 
 
-def home_error(request, message,form):
-    form_new = NewAccountForm()
-    number1 = randint(1, 20)
-    number2 = randint(1, 20)
-    number3 = randint(1, 20)
-    sum = number1 + number2
-    while number3 > sum:
-        number3 = randint(1, 20)
-    return render(request, "home.html", {'number1':  number1,
-                                         'number2':  number2,
-                                         'number3':  number3,
-                                         'form_new': form_new,
-                                         'form':     form,
-                                         'message': message})
-
-
 def new_user(request):
     """
     To create a new user for the admission
@@ -274,27 +258,6 @@ def offer_selection(request):
                            "grade_choices": grade_choices})
 
 
-def refresh_offer_selection(request):
-    offer_type=None
-    if request.POST.get('bachelor_type'):
-        offer_type = request.POST['bachelor_type']
-    if request.POST.get('master_type'):
-        offer_type = request.POST['master_type']
-    if request.POST.get('doctorate_type'):
-        offer_type = request.POST['doctorate_type']
-
-    domain_id = request.POST.get('domain')
-    domain = get_object_or_404(mdl.domain.Domain, pk=domain_id)
-    offers = mdl.offer_year.find_by_domain_grade(domain, offer_type)
-    grade = get_object_or_404(mdl.grade_type.GradeType, pk=offer_type)
-    return render(request, "offer_selection.html",
-                          {"gradetypes":  mdl.grade_type.find_all(),
-                           "domains":     mdl.domain.find_all(),
-                           "offers":      offers,
-                           "offer_type":  grade,
-                           "domain":      domain})
-
-
 def _get_offer_type(request):
     offer_type=None
 
@@ -350,33 +313,9 @@ def save_offer_selection(request):
                            "domain":      mdl})
 
 
-def selection_offer(request, offer_id):
-    offer_year = get_object_or_404(mdl.offer_year.OfferYear, pk=offer_id)
-    grade = _get_offer_type(request)
-    domain = _get_domain(request)
-
-
-    return render(request, "offer_selection.html",
-                          {"gradetypes":  mdl.grade_type.find_all(),
-                           "domains":     mdl.domain.find_all(),
-                           "offers":      None,
-                           "offer":       offer_year,
-                           "offer_type":  grade,
-                           "domain":      domain})
-
-
 def application_update(request, application_id):
     application = mdl.application.find_by_id(application_id)
     return render(request, "offer_selection.html",
                           {"offers":      None,
                            "offer":       application.offer_year,
                            "application": application})
-
-
-@csrf_exempt
-def offer_selection_grade_choices(request, grade):
-    print('offer_selection_grade_choices', grade)
-    grade_type_list = mdl.grade_type.find_by_grade(grade)
-    data = serializers.serialize("xml", grade_type_list)
-    print('data : ',grade_type_list)
-    return render(request, "offer_selection.html", {'data': grade_type_list})
