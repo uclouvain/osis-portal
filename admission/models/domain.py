@@ -34,7 +34,8 @@ class DomainAdmin(admin.ModelAdmin):
 
 class Domain(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    name = models.CharField(max_length=255)
+    name        = models.CharField(max_length=255)
+    parent      = models.ForeignKey('self', null=True, blank=True)
 
     def __str__(self):
         return self.name
