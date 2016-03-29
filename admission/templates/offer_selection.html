@@ -104,6 +104,7 @@
             </div>
             {% endif %}
 
+            <div id="pnl_questions"></div>
         <form method="post" action="{% url 'save_offer_selection' %}">
             <input type="hidden" id="txt_offer_year_id" name="offer_year_id" value="{{offer.id}}"/>
             <input type="hidden" id="txt_application_id" name="application_id" value="{{ application.id }}"/>

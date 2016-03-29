@@ -7,6 +7,7 @@ $("#slt_offer_type").change(function() {
     $("#pnl_offers").find("table")
         .remove()
         .end()
+    set_pnl_questions_empty();
     //Cancel the previous selection
     document.getElementById("txt_offer_year_id").value = "";
 
@@ -52,6 +53,7 @@ function offer_selection_display(){
     $("#pnl_offers").find("table")
       .remove()
       .end()
+    set_pnl_questions_empty();
     //Cancel the previous selection
     document.getElementById("txt_offer_year_id").value = "";
 
@@ -109,6 +111,35 @@ function offer_selection_display(){
             document.getElementById("txt_offer_year_id").value = offer_year_id;
             document.getElementById("bt_save").disabled = false;
         }
+        set_pnl_questions_empty();
+
+        $.ajax({
+            url: "/admission/questions?offer=" + offer_year_id
+
+          }).then(function(data) {
+          var table_size=data.length;
+          if(data.length >0){
+
+            $.each(data, function(key, value) {
+                if(value.type=='LABEL'){
+                 $('#pnl_questions').append("<br>");
+                    $('#pnl_questions').append($("<label></label>").attr("style", "color:red")
+                    .append(value.label));
+                }
 
 
+            });
+
+            }
+          });
+
+    }
+
+    function set_pnl_questions_empty(){
+            $("#pnl_questions").find("label")
+            .remove()
+            .end()
+        $("#pnl_questions").find("br")
+            .remove()
+            .end()
     }

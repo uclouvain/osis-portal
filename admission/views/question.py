@@ -23,29 +23,33 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
-from admission.models import *
+from rest_framework import serializers
+from admission import models as mdl
+from django.http import HttpResponse
+from rest_framework.renderers import JSONRenderer
+from django.views.decorators.csrf import csrf_exempt
 
 
-admin.site.register(person.Person,
-                    person.PersonAdmin)
-admin.site.register(grade_type.GradeType,
-                    grade_type.GradeTypeAdmin)
-admin.site.register(domain.Domain,
-                    domain.DomainAdmin)
-admin.site.register(academic_year.AcademicYear,
-                    academic_year.AcademicYearAdmin)
-admin.site.register(offer_year.OfferYear,
-                    offer_year.OfferYearAdmin)
-admin.site.register(offer_year_calendar.OfferYearCalendar,
-                    offer_year_calendar.OfferYearCalendarAdmin)
-admin.site.register(application.Application,
-                    application.ApplicationAdmin)
-admin.site.register(form.Form,
-                    form.FormAdmin)
-admin.site.register(question.Question,
-                    question.QuestionAdmin)
-admin.site.register(option.Option,
-                    option.OptionAdmin)
-admin.site.register(answer.Answer,
-                    answer.AnswerAdmin)
+class JSONResponse(HttpResponse):
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
+
+
+class QuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = mdl.question.Question
+        fields = ('id', 'label', 'description', 'type', 'required')
+
+
+@csrf_exempt
+def find_by_offer(request):
+    print('find_by_offer')
+    offer_yr_id = request.GET['offer']
+
+    offer_yr = mdl.offer_year.find_by_id(offer_yr_id)
+    questions = mdl.question.find_form_ordered_questions(offer_yr)
+    serializer = QuestionSerializer(questions, many=True)
+    print('data:' ,serializer.data)
+    return JSONResponse(serializer.data)
