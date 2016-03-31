@@ -45,7 +45,6 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 @csrf_exempt
 def find_by_offer(request):
-    print('find_by_offer')
     offer_yr_id = request.GET['offer']
 
     offer_yr = mdl.offer_year.find_by_id(offer_yr_id)

@@ -52,3 +52,13 @@ def find_by_question_id(question_id):
     except ObjectDoesNotExist:
         return None
 
+
+def find_options_by_question_id(question_id):
+    return Option.objects.filter(question=question_id).order_by("order")
+
+
+def find_by_id(option_id):
+    try:
+        return Option.objects.get(pk=option_id)
+    except ObjectDoesNotExist:
+        return None
