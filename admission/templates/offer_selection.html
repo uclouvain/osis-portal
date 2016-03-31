@@ -99,7 +99,7 @@
             {% endif %}
 
 
-        <form method="post" action="{% url 'save_offer_selection' %}">
+        <form method="post" action="{% url 'save_offer_selection' %}" id="form_questions" name="form_questions">
             <input type="hidden" id="txt_offer_year_id" name="offer_year_id" value="{{offer.id}}"/>
             <input type="hidden" id="txt_application_id" name="application_id" value="{{ application.id }}"/>
             {% csrf_token %}

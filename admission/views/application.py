@@ -69,12 +69,12 @@ def save_application_offer(request):
                 answer.option = mdl.option.find_by_id(int(option_id))
                 answer.save()
             else:
-                if "txt_answer_radio_optid_" in key:
-                    #RADIO_BUTTTON
+                if "txt_answer_radio_chck_optid_" in key:
+                    #RADIO_BUTTON
                     if "on" == value:
                         answer = mdl.answer.Answer()
                         answer.application = application
-                        option_id = key.replace("txt_answer_radio_optid_", "")
+                        option_id = key.replace("txt_answer_radio_chck_optid_", "")
                         option =  mdl.option.find_by_id(int(option_id))
                         answer.option = option
                         answer.value = option.value

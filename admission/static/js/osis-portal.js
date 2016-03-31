@@ -155,7 +155,7 @@ function offer_selection_display(){
 
                 }
 
-                if(value.question_type=='RADIO_BUTTTON'){
+                if(value.question_type=='RADIO_BUTTON'){
                     var radio_checked = new Boolean(false)
                     if(value.option_order == 1){
                         radio_checked = new Boolean(true)
@@ -167,7 +167,7 @@ function offer_selection_display(){
                         if (value.question_required ){
                             $('#pnl_questions').append($("<label></label>")
                                   .append($("<input>").attr("type","radio")
-                                                              .attr("name","txt_answer_radio_optid_"+value.option_id)
+                                                              .attr("name","txt_answer_radio_chck_optid_"+value.option_id)
                                                               .attr("id","txt_answer_radio_"+value.option_id)
                                                               .prop("required",value.question_required)
                                                               .prop("checked",radio_checked))
@@ -175,7 +175,7 @@ function offer_selection_display(){
                           }else{
                             $('#pnl_questions').append($("<label></label>")
                               .append($("<input>").attr("type","radio")
-                                                          .attr("name","txt_answer_radio_optid_"+value.option_id)
+                                                          .attr("name","txt_answer_radio_chck_optid_"+value.option_id)
                                                           .attr("id","txt_answer_radio_"+value.option_id)
                                                           .prop("required",value.question_required))
                               .append("&nbsp;&nbsp;"+value.option_label));
@@ -183,11 +183,39 @@ function offer_selection_display(){
                     }else{
                         $('#pnl_questions').append($("<label></label>")
                               .append($("<input>").attr("type","radio")
-                                                          .attr("name","txt_answer_radio_optid_"+value.option_id)
+                                                          .attr("name","txt_answer_radio_chck_optid_"+value.option_id)
                                                           .attr("id","txt_answer_radio_"+value.option_id)
                                                           .prop("required",value.question_required))
                               .append("&nbsp;&nbsp;"+value.option_label));
                     }
+                }
+
+                if(value.question_type=='CHECKBOX'){
+
+                    if(value.option_order == 1){
+
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append($("<label></label>").append(value.question_label)
+                                                                .attr("id","lbl_question_"+value.question_id));
+
+                        $('#pnl_questions').append("<br>");
+                    }
+
+                    if(value.question_required){
+                        $('#pnl_questions').append($("<label></label>")
+                       .append($("<input>").attr("type","checkbox")
+                                                  .attr("name","txt_answer_radio_chck_optid_"+value.option_id)
+                                                  .attr("id","txt_answer_radio_chck_optid_req_"+value.option_id + "_q_"+ value.question_id))
+                       .append("&nbsp;&nbsp;"+value.option_label));
+                   }else{
+                        $('#pnl_questions').append($("<label></label>")
+                       .append($("<input>").attr("type","checkbox")
+                                                  .attr("name","txt_answer_radio_chck_optid_"+value.option_id)
+                                                  .attr("id","txt_answer_radio_chck_optid_"+value.option_id))
+                       .append("&nbsp;&nbsp;"+value.option_label));
+                    }
+
+
                 }
             });
 
