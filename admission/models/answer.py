@@ -41,3 +41,7 @@ class Answer(models.Model):
 
     def __str__(self):
         return u"%s" % self.value
+
+
+def find_by_application(application_id):
+    return Answer.objects.filter(application=application_id)
