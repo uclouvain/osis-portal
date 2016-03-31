@@ -29,6 +29,7 @@ from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
 from django.views.decorators.csrf import csrf_exempt
 
+
 class JSONResponse(HttpResponse):
     def __init__(self, data, **kwargs):
         content = JSONRenderer().render(data)
@@ -38,21 +39,25 @@ class JSONResponse(HttpResponse):
 
 @csrf_exempt
 def find_by_offer(request):
-    print('find_by_offer')
     offer_yr_id = request.GET['offer']
 
     offer_yr = mdl.offer_year.find_by_id(offer_yr_id)
     questions = mdl.question.find_form_ordered_questions(offer_yr)
     options = []
-    for question in questions:
-        options_by_question = mdl.option.find_options_by_question_id(question.id)
-        for o in options_by_question:
-            options.append(o)
+    question_list = []
+    if questions:
+        for question in questions:
+            options_by_question = mdl.option.find_options_by_question_id(question.id)
+            for o in options_by_question:
+                options.append(o)
 
-    list = []
-    for option in options:
-            list.append({'option_id': option.id, 'option_label': option.label, 'option_description': option.description,
-                         'option_order': option.order,
-                         'question_id':option.question.id, 'question_label': option.question.label,
-                         'question_type': option.question.type,'question_required': option.question.required })
-    return JSONResponse(list)
+        for option in options:
+                question_list.append({'option_id': option.id,
+                                      'option_label': option.label,
+                                      'option_description': option.description,
+                                      'option_order': option.order,
+                                      'question_id': option.question.id,
+                                      'question_label': option.question.label,
+                                      'question_type': option.question.type,
+                                      'question_required': option.question.required})
+    return JSONResponse(question_list)
