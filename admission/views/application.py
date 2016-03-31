@@ -70,7 +70,7 @@ def save_application_offer(request):
                 answer.save()
             else:
                 if "txt_answer_radio_optid_" in key:
-                    #RADIO_BUTTTON
+                    #RADIO_BUTTON
                     if "on" == value:
                         answer = mdl.answer.Answer()
                         answer.application = application

@@ -32,7 +32,7 @@ QUESTION_TYPES = (
     ('LABEL', _('Label')),
     ('SHORT_INPUT_TEXT', _('Short input text')),
     ('LONG_INPUT_TEXT', _('Long input text')),
-    ('RADIO_BUTTTON', _('Radio button')),
+    ('RADIO_BUTTON', _('Radio button')),
     ('CHECKBOX', _('Checkbox')),
     ('CHECKBOX', _('Checkbox')),
     ('DROPDOWN_LIST', _('Dropdown list')),
@@ -43,7 +43,7 @@ QUESTION_TYPES = (
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('label', 'description', 'form', 'order')
+    list_display = ('label', 'type', 'form', 'order')
     fieldsets = ((None, {'fields': ('label', 'description', 'type', 'order','required', 'form')}),)
     list_filter = ('form',)
 

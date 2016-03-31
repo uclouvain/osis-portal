@@ -155,7 +155,7 @@ function offer_selection_display(){
 
                 }
 
-                if(value.question_type=='RADIO_BUTTTON'){
+                if(value.question_type=='RADIO_BUTTON'){
                     var radio_checked = new Boolean(false)
                     if(value.option_order == 1){
                         radio_checked = new Boolean(true)
