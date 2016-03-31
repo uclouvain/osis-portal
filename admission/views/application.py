@@ -26,6 +26,7 @@
 from admission import models as mdl
 from django.shortcuts import render, get_object_or_404
 
+
 def application_update(request, application_id):
     application = mdl.application.find_by_id(application_id)
     return render(request, "offer_selection.html",
@@ -63,7 +64,7 @@ def save_application_offer(request):
                 answer = mdl.answer.Answer()
                 answer.application = application
                 answer.value = value
-                # as it's txt_answer we know that it's there is only one option available, (SHORT_INPUT_TEXT)
+                # as it's txt_answer we know that it's there is only one option available, (SHORT_INPUT_TEXT, LONG_INPUT_TEXT)
                 question_id = key.replace("txt_answer_question_","")
                 answer.option = mdl.option.find_by_question_id(int(question_id))
                 answer.save()

@@ -139,7 +139,18 @@ function offer_selection_display(){
 
 
                 }
+                if(value.type=='LONG_INPUT_TEXT'){
+                    $('#pnl_questions').append($("<label></label>").append(value.label)
+                                                                .attr("id","lbl_question_"+value.id));
+                    $('#pnl_questions').append("<br>");
+                    $('#pnl_questions').append($("<textarea></textarea>").attr("class", "form-control")
+                                            .attr("name","txt_answer_question_"+value.id)
+                                            .attr("id","txt_answer_question_"+value.id)
+                                            .attr("title",value.description)
+                                            .prop("required",value.required));
 
+
+                }
             });
 
             }
