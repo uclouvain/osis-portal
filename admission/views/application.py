@@ -75,7 +75,15 @@ def save_application_offer(request):
                         answer = mdl.answer.Answer()
                         answer.application = application
                         option_id = key.replace("txt_answer_radio_chck_optid_", "")
-                        option =  mdl.option.find_by_id(int(option_id))
+                        option = mdl.option.find_by_id(int(option_id))
+                        answer.option = option
+                        answer.value = option.value
+                        answer.save()
+                else:
+                    if "slt_question_" in key:
+                        answer = mdl.answer.Answer()
+                        answer.application = application
+                        option = mdl.option.find_by_id(value)
                         answer.option = option
                         answer.value = option.value
                         answer.save()

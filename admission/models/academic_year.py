@@ -48,5 +48,4 @@ class AcademicYear(models.Model):
 
 def next_academic_year(self):
     next_year = self.year + 1
-    print(next_year)
     return AcademicYear.objects.filter(year=next_year)

@@ -248,7 +248,6 @@ def offer_selection(request):
     offers = None
     application = mdl.application.find_by_user(request.user)
     grade_choices = mdl.grade_type.GRADE_CHOICES
-    print(grade_choices)
     return render(request, "offer_selection.html",
                           {"gradetypes":    mdl.grade_type.find_all(),
                            "domains":       mdl.domain.find_all(),

@@ -225,11 +225,18 @@ function offer_selection_display(){
                                                                 .attr("id","lbl_question_"+value.question_id));
 
                         $('#pnl_questions').append("<br>");
-                        $('#pnl_questions').append($("<select></select>")
-                                                                .attr("id","slt_question_"+value.question_id)
-                                                                .append($("<option></option").attr("value","").append("-"))
-                                                                .append($("<option></option").attr("value",value.option_id).append(value.option_label))
-                                                                );
+                        if(value.question_required){
+                            $('#pnl_questions').append($("<select></select>")
+                                .attr("name","slt_question_"+value.question_id)
+                                .attr("id","slt_question_"+value.question_id)
+                                .prop("required",value.question_required)
+                                .append($("<option></option").attr("value",value.option_id).append(value.option_label)));
+                        }else{
+                            $('#pnl_questions').append($("<select></select>")
+                                .attr("name","slt_question_"+value.question_id)
+                                .attr("id","slt_question_"+value.question_id)
+                                .append($("<option></option").attr("value",value.option_id).append(value.option_label)));
+                        }
 
                     }else{
                         $('#slt_question_'+value.question_id).append($("<option></option").attr("value",value.option_id).append(value.option_label));

@@ -29,6 +29,7 @@ from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
 from django.views.decorators.csrf import csrf_exempt
 
+
 class JSONResponse(HttpResponse):
     def __init__(self, data, **kwargs):
         content = JSONRenderer().render(data)
@@ -44,12 +45,9 @@ class LevelSerializer(serializers.ModelSerializer):
 
 @csrf_exempt
 def find_by_type(request):
-    print('find_by_type')
     type = request.GET['type']
 
     levels = mdl.grade_type.find_by_grade(type)
     serializer = LevelSerializer(levels, many=True)
 
-    d= JSONResponse(serializer.data)
-    print('d:',d)
-    return d
+    return JSONResponse(serializer.data)
