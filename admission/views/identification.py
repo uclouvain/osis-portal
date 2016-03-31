@@ -280,39 +280,6 @@ def _get_domain(request):
     return domain
 
 
-def save_offer_selection(request):
-    if request.method=='POST' and 'save_down' in request.POST:
-        offer_year = None
-
-        offer_year_id = request.POST.get('offer_year_id')
-
-        application_id = request.POST.get('application_id')
-        if application_id:
-            application = get_object_or_404(mdl.application.Application, pk=application_id)
-        else:
-            application = mdl.application.Application()
-            person_application = mdl.person.find_by_user(request.user)
-            application.person = person_application
-
-        if offer_year_id:
-            offer_year = mdl.offer_year.find_by_id(offer_year_id)
-            if offer_year.grade_type:
-                if offer_year.grade_type.grade == 'DOCTORATE':
-                    application.doctorate = True
-                else:
-                    application.doctorate = False
-
-        application.offer_year = offer_year
-        application.save()
-
-    return render(request, "offer_selection.html",
-                          {"gradetypes":  mdl.grade_type.find_all(),
-                           "domains":     mdl.domain.find_all(),
-                           "offers":      None,
-                           "offer_type":  None,
-                           "domain":      mdl})
-
-
 def application_update(request, application_id):
     application = mdl.application.find_by_id(application_id)
     return render(request, "offer_selection.html",

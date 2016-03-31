@@ -30,6 +30,7 @@ from django.contrib import admin
 class AnswerAdmin(admin.ModelAdmin):
     list_display = ['value']
     fieldsets = ((None, {'fields': ('value', 'option', 'application')}),)
+    list_filter = ('application', 'option',)
 
 
 class Answer(models.Model):
