@@ -123,13 +123,15 @@ function offer_selection_display(){
 
             $.each(data, function(key, value) {
 
-                $('#pnl_questions').append("<br>");
+
                 if(value.question_type=='LABEL'){
+                    $('#pnl_questions').append("<br>");
                     $('#pnl_questions').append($("<label></label>").attr("style", "color:red")
                     .append(value.option_label));
                 }
 
                 if(value.question_type=='SHORT_INPUT_TEXT'){
+                    $('#pnl_questions').append("<br>");
                     $('#pnl_questions').append($("<label></label>").append(value.option_label)
                                                                 .attr("id","lbl_question_"+value.option_id));
                     $('#pnl_questions').append("<br>");
@@ -143,6 +145,7 @@ function offer_selection_display(){
                 }
 
                 if(value.question_type=='LONG_INPUT_TEXT'){
+                    $('#pnl_questions').append("<br>");
                     $('#pnl_questions').append($("<label></label>").append(value.option_label)
                                                                 .attr("id","lbl_question_"+value.option_id));
                     $('#pnl_questions').append("<br>");
@@ -159,6 +162,7 @@ function offer_selection_display(){
                     var radio_checked = new Boolean(false)
                     if(value.option_order == 1){
                         radio_checked = new Boolean(true)
+                        $('#pnl_questions').append("<br>");
                         $('#pnl_questions').append("<br>");
                         $('#pnl_questions').append($("<label></label>").append(value.question_label)
                                                                 .attr("id","lbl_question_"+value.question_id));
@@ -181,6 +185,7 @@ function offer_selection_display(){
                               .append("&nbsp;&nbsp;"+value.option_label));
                           }
                     }else{
+                        $('#pnl_questions').append("<br>");
                         $('#pnl_questions').append($("<label></label>")
                               .append($("<input>").attr("type","radio")
                                                           .attr("name","txt_answer_radio_chck_optid_"+value.option_id)
@@ -193,11 +198,13 @@ function offer_selection_display(){
                 if(value.question_type=='CHECKBOX'){
 
                     if(value.option_order == 1){
-
+                        $('#pnl_questions').append("<br>");
                         $('#pnl_questions').append("<br>");
                         $('#pnl_questions').append($("<label></label>").append(value.question_label)
                                                                 .attr("id","lbl_question_"+value.question_id));
 
+                        $('#pnl_questions').append("<br>");
+                    }else{
                         $('#pnl_questions').append("<br>");
                     }
 
@@ -219,7 +226,7 @@ function offer_selection_display(){
                 }
                 if(value.question_type=='DROPDOWN_LIST'){
                     if(value.option_order == 1){
-
+                        $('#pnl_questions').append("<br>");
                         $('#pnl_questions').append("<br>");
                         $('#pnl_questions').append($("<label></label>").append(value.question_label)
                                                                 .attr("id","lbl_question_"+value.question_id));
@@ -244,6 +251,16 @@ function offer_selection_display(){
 
 
                 }
+                if(value.question_type=='DOWNLOAD_LINK'){
+                    $('#pnl_questions').append("<br>");
+                    $('#pnl_questions').append("<br>");
+                    $('#pnl_questions').append($("<label></label>").append(value.question_label)
+                                                                .attr("id","lbl_question_"+value.question_id));
+                    $('#pnl_questions').append($("<a></a>").append("&nbsp;&nbsp;Cliquez ici pour obtenir le fichier")
+                                                           .attr("id","lnk_question_"+value.option_id)
+                                                           .attr("target","_blank")
+                                                           .attr("href",value.option_value));
+                }
 
 
             });
@@ -264,6 +281,12 @@ function offer_selection_display(){
         .remove()
         .end()
         $("#pnl_questions").find("textarea")
+        .remove()
+        .end()
+        $("#pnl_questions").find("select")
+        .remove()
+        .end()
+        $("#pnl_questions").find("a")
         .remove()
         .end()
     }

@@ -55,6 +55,7 @@ def find_by_offer(request):
                 question_list.append({'option_id': option.id,
                                       'option_label': option.label,
                                       'option_description': option.description,
+                                      'option_value': option.value,
                                       'option_order': option.order,
                                       'question_id': option.question.id,
                                       'question_label': option.question.label,
