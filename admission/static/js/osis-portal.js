@@ -261,6 +261,14 @@ function offer_selection_display(){
                                                            .attr("target","_blank")
                                                            .attr("href",value.option_value));
                 }
+                if(value.question_type=='HTTP_LINK'){
+                    $('#pnl_questions').append("<br>");
+                    $('#pnl_questions').append("<br>");
+                    $('#pnl_questions').append($("<a></a>").append(value.option_value)
+                                                           .attr("id","lnk_question_"+value.option_id)
+                                                           .attr("target","_blank")
+                                                           .attr("href",value.option_value));
+                }
 
 
             });
