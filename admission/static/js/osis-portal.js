@@ -217,6 +217,28 @@ function offer_selection_display(){
 
 
                 }
+                if(value.question_type=='DROPDOWN_LIST'){
+                    if(value.option_order == 1){
+
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append($("<label></label>").append(value.question_label)
+                                                                .attr("id","lbl_question_"+value.question_id));
+
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append($("<select></select>")
+                                                                .attr("id","slt_question_"+value.question_id)
+                                                                .append($("<option></option").attr("value","").append("-"))
+                                                                .append($("<option></option").attr("value",value.option_id).append(value.option_label))
+                                                                );
+
+                    }else{
+                        $('#slt_question_'+value.question_id).append($("<option></option").attr("value",value.option_id).append(value.option_label));
+                    }
+
+
+                }
+
+
             });
 
             }
