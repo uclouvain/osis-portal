@@ -1,0 +1,134 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block content %}
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br><br><br><br>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <form class="form-inline">
+            <div class="form-group">
+                Combien de frères et soeurs?
+                <input class="form-control" id="txt_brother_sister" name="brother_sister"
+                       maxlength="2">
+            </div>
+            <br>
+            <label><h3>Père</h3></label>
+            <br>
+            <div class="form-group">
+                <label>&nbsp;&nbsp;&nbsp;Décédé : </label>
+                <input type="checkbox" id="chb_deceased_father" name="deceased_father">
+            </div>
+            <div class="form-group">
+                <label>Etude : </label>
+                <select name="father_study" id="slt_father_study">
+                    <option value=""></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Profession : </label>
+                <select name="father_profession" id="slt_father_profession">
+                    <option value=""></option>
+                </select>
+            </div>
+            <br>
+            <label><h3>Mère</h3></label>
+            <br>
+            <div class="form-group">
+                <label>&nbsp;&nbsp;&nbsp;Décédée : </label>
+                <input type="checkbox" id="chb_deceased_mother" name="deceased_mother">
+            </div>
+            <div class="form-group">
+                <label>Etude : </label>
+                <select name="mother_study" id="slt_mother_study">
+                    <option value=""></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Profession : </label>
+                <select name="mother_study" id="slt_mother_profession">
+                    <option value=""></option>
+                </select>
+            </div>
+
+            <br>
+            <label><h3>Etudiant</h3></label>
+            <br>
+            <div class="form-group">
+                <label>&nbsp;&nbsp;&nbsp;Activité professionnelle : </label>
+                <select name="student_professional_activity" id="slt_student_professional_activity">
+                    <option value=""></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Profession : </label>
+                <select name="student_profession" id="slt_student_profession">
+                    <option value=""></option>
+                </select>
+            </div>
+
+            <br>
+            <label><h3>Conjoint</h3></label>
+            <br>
+            <div class="form-group">
+                <label>&nbsp;&nbsp;&nbsp;Activité professionnelle : </label>
+                <select name="conjoint_professional_activity" id="slt_conjoint_professional_activity">
+                    <option value=""></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Profession : </label>
+                <select name="conjoint_profession" id="slt_conjoint_profession">
+                    <option value=""></option>
+                </select>
+            </div>
+
+
+            <br>
+            <label><h3>Grand-père (profession)</h3></label>
+            <br>
+            <div class="form-group">
+                <label>&nbsp;&nbsp;&nbsp;Paternel : </label>
+                <select name="paternal_grandfather_profession" id="slt_paternal_grandfather_profession">
+                    <option value=""></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Maternel :</label>
+                <select name="maternal_grandfather_profession" id="slt_maternal_grandfather_profession">
+                    <option value=""></option>
+                </select>
+            </div>
+        </form>
+
+
+    </div>
+</div>
+{% endblock %}
+

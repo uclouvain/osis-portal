@@ -355,3 +355,6 @@ def osis_login_error(request, *args, **kwargs):
     extra_context['number3'] = number3
     return login(request, *args, extra_context=extra_context, **kwargs)
 
+
+def sociological(request):
+    return render(request, "sociological.html")

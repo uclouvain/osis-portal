@@ -51,6 +51,6 @@ urlpatterns = [
     url(r'^admission/offer/save/$', views.save_offer_selection, name='save_offer_selection'),
     url(r'^admission/offer/application/([0-9]+)/$', views.selection_offer, name='selection_offer'),
 
-
+    url(r'^admission/application/sociological/$', views.sociological, name='sociological'),
 
 ]
