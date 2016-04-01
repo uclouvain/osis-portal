@@ -33,12 +33,12 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <h2 class="error">Veuillez compléter votre profil</h2><br><br>
-        <form method="post" action="{% url 'save_offer_selection' %}">
+         <form method="post" action="{% url 'profile' %}">
             {% csrf_token %}
             {{ person }}
             <br>
             <br>
-            <button type="submit" id="bt_profile_save" class="btn" role="button" name="save"
+            <button type="submit" id="bt_profile" class="btn" role="button" name="save"
                     title="Sauvegarder">
                 <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Sauvegarder
             </button>
@@ -46,6 +46,200 @@
                     title="Sauvegarder" disabled>
                 <span class="glyphicon glyphicon-forward" aria-hidden="true"></span> Etape suivante
             </button>
+
+             <!-- CREATE FORM FROM HERE ON -->0
+
+            {{ form.non_field_errors }}
+
+            <div class="container">
+                {{ person_form.user.errors }}
+                {{ person_form.user.label_tag }}
+                {{ person_form.user }}
+                {{ person_form.user.help_text }}
+
+                {{ person_form.middle_name.errors }}
+                {{ person_form.middle_name.label_tag }}
+                {{ person_form.middle_name }}
+                {{ person_form.middle_name.help_text }}
+                <br>
+
+                {{ person_form.birth_date.errors }}
+                {{ person_form.birth_date.label_tag }}
+                {{ person_form.birth_date }}
+                {{ person_form.birth_date.help_text }}
+
+                {{ person_form.birth_place.errors }}
+                {{ person_form.birth_place.label_tag }}
+                {{ person_form.birth_place }}
+                {{ person_form.birth_place.help_text }}
+
+                {{ person_form.birth_country.errors }}
+                {{ person_form.birth_country.label_tag }}
+                {{ person_form.birth_country }}
+                {{ person_form.birth_country.help_text }}
+                <br>
+
+                {{ person_form.gender.errors }}
+                {{ person_form.gender.label_tag }}
+                {{ person_form.gender }}
+                {{ person_form.gender.help_text }}
+
+                {{ person_form.civil_status.errors }}
+                {{ person_form.civil_status.label_tag }}
+                {{ person_form.civil_status }}
+                {{ person_form.civil_status.help_text }}
+
+                {{ person_form.number_children.errors }}
+                {{ person_form.number_children.label_tag }}
+                {{ person_form.number_children }}
+                {{ person_form.number_children.help_text }}
+
+                {{ person_form.spouse_name.errors }}
+                {{ person_form.spouse_name.label_tag }}
+                {{ person_form.spouse_name }}
+                {{ person_form.spouse_name.help_text }}
+                <br>
+
+                {{ person_form.nationality.errors }}
+                {{ person_form.nationality.label_tag }}
+                {{ person_form.nationality }}
+                {{ person_form.nationality.help_text }}
+
+           </div>
+
+           <div class="container">
+
+                {{ person_form.national_id.errors }}
+                {{ person_form.national_id.label_tag }}
+                {{ person_form.national_id }}
+                {{ person_form.national_id.help_text }}
+
+                {{ person_form.id_card_number.errors }}
+                {{ person_form.id_card_number.label_tag }}
+                {{ person_form.id_card_number }}
+                {{ person_form.id_card_number.help_text }}
+
+                {{ person_form.passport_number.errors }}
+                {{ person_form.passport_number.label_tag }}
+                {{ person_form.passport_number }}
+                {{ person_form.passport_number.help_text }}
+
+           </div>
+
+           <div class="container">
+
+                {{ person_legalAddress_form.street.errors }}
+                {{ person_legalAddress_form.street.label_tag }}
+                {{ person_legalAddress_form.street }}
+                {{ person_legalAddress_form.street.help_text }}
+
+                {{ person_legalAddress_form.number.errors }}
+                {{ person_legalAddress_form.number.label_tag }}
+                {{ person_legalAddress_form.number }}
+                {{ person_legalAddress_form.number.help_text }}
+
+                {{ person_legalAddress_form.complement.errors }}
+                {{ person_legalAddress_form.complement.label_tag }}
+                {{ person_legalAddress_form.complement }}
+                {{ person_legalAddress_form.complement.help_text }}
+                <br>
+
+                {{ person_legalAddress_form.postal_code.errors }}
+                {{ person_legalAddress_form.postal_code.label_tag }}
+                {{ person_legalAddress_form.postal_code }}
+                {{ person_legalAddress_form.postal_code.help_text }}
+
+                {{ person_legalAddress_form.city.errors }}
+                {{ person_legalAddress_form.city.label_tag }}
+                {{ person_legalAddress_form.city }}
+                {{ person_legalAddress_form.city.help_text }}
+
+                {{ person_legalAddress_form.country.errors }}
+                {{ person_legalAddress_form.country.label_tag }}
+                {{ person_legalAddress_form.country }}
+                {{ person_legalAddress_form.country.help_text }}
+
+           </div>
+
+           <div class="container">
+
+                {{ person_contactAddress_form.choice_field.errors }}
+                {{ person_contactAddress_form.choice_field.label_tag }}
+                {{ person_contactAddress_form.choice_field }}
+                {{ person_contactAddress_form.choice_field.help_text }}
+
+                {{ person_contactAddress_form.street.errors }}
+                {{ person_contactAddress_form.street.label_tag }}
+                {{ person_contactAddress_form.street }}
+                {{ person_contactAddress_form.street.help_text }}
+
+                {{ person_contactAddress_form.number.errors }}
+                {{ person_contactAddress_form.number.label_tag }}
+                {{ person_contactAddress_form.number }}
+                {{ person_contactAddress_form.number.help_text }}
+
+                {{ person_contactAddress_form.complement.errors }}
+                {{ person_contactAddress_form.complement.label_tag }}
+                {{ person_contactAddress_form.complement }}
+                {{ person_contactAddress_form.complement.help_text }}
+
+                <br>
+
+                {{ person_contactAddress_form.postal_code.errors }}
+                {{ person_contactAddress_form.postal_code.label_tag }}
+                {{ person_contactAddress_form.postal_code }}
+                {{ person_contactAddress_form.postal_code.help_text }}
+
+                {{ person_contactAddress_form.city.errors }}
+                {{ person_contactAddress_form.city.label_tag }}
+                {{ person_contactAddress_form.city }}
+                {{ person_contactAddress_form.city.help_text }}
+
+                {{ person_contactAddress_form.country.errors }}
+                {{ person_contactAddress_form.country.label_tag }}
+                {{ person_contactAddress_form.country }}
+                {{ person_contactAddress_form.country.help_text }}
+
+           </div>
+
+           <div class="container">
+
+                {{ person_form.phone_mobile.errors }}
+                {{ person_form.phone_mobile.label_tag }}
+                {{ person_form.phone_mobile }}
+                {{ person_form.phone_mobile.help_text }}
+
+                {{ person_form.phone.errors }}
+                {{ person_form.phone.label_tag }}
+                {{ person_form.phone }}
+                {{ person_form.phone.help_text }}
+
+                {{ person_form.additional_email.errors }}
+                {{ person_form.additional_email.label_tag }}
+                {{ person_form.additional_email }}
+                {{ person_form.additional_email.help_text }}
+
+           </div>
+
+           <div class="container">
+
+                {{ person_form.choice_field.errors }}
+                {{ person_form.choice_field.label_tag }}
+                {{ person_form.choice_field }}
+                {{ person_form.choice_field.help_text }}
+
+                {{ person_form.register_number.errors }}
+                {{ person_form.register_number.label_tag }}
+                {{ person_form.register_number }}
+                {{ person_form.register_number.help_text }}
+                <br>
+
+               {{ person_form.ucl_last_year.errors }}
+                {{ person_form.ucl_last_year.label_tag }}
+                {{ person_form.ucl_last_year }}
+                {{ person_form.ucl_last_year.help_text }}
+
+           </div>
         </form>
     </div>
 </div>
