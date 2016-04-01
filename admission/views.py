@@ -355,3 +355,16 @@ def osis_login_error(request, *args, **kwargs):
     extra_context['number3'] = number3
     return login(request, *args, extra_context=extra_context, **kwargs)
 
+
+def sec_diploma(request):
+    academic_yr = mdl.academic_year.current_academic_year()
+    academic_yrs = mdl.academic_year.find_academic_years()
+    cities = [] #le modèle référence a été ajouté dans un autre ticket
+    postal_codes = [] #le modèle référence a été ajouté dans un autre ticket
+    schools = []#le modèle référence a été ajouté dans un autre ticket
+    return render(request, "sec_diploma.html",
+                          {"academic_year": academic_yr,
+                           "academic_years": academic_yrs,
+                           "cities":cities,
+                           "postal_codes": postal_codes,
+                           "schools": schools})
