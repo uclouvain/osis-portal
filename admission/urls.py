@@ -51,6 +51,7 @@ urlpatterns = [
     url(r'^admission/offer/application/([0-9]+)/$', views.selection_offer, name='selection_offer'),
 
     url(r'^profile/$', views.profile, name='profile'),
+    url(r'^profile_confirmed/$', views.profile_confirmed, name='profile_confirmed'),
     # url(r'^admission/profile/$', views.profile, name='profile'),
     # url(r'^admission/profile/new/$', views.profile_new, name='profile_new'),
     # url(r'^admission/profile/save/$', views.profile_save, name='profile_save'),

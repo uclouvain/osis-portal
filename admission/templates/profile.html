@@ -32,8 +32,10 @@
 <br>
 <div class="panel panel-default">
     <div class="panel-body">
-        <h2 class="error">Veuillez compléter votre profil</h2><br><br>
-         <form method="post" action="{% url 'profile' %}">
+        <h2 class="error">Veuillez compléter votre profil</h2>
+        <h5>Tous les champs marqués d'une * sont obligatoires</h5>
+         <form method="post" action="{% url 'profile' %}" class="form-inline" role="form">
+           <div class="form-group">
             {% csrf_token %}
             {{ person }}
             <br>
@@ -47,199 +49,263 @@
                 <span class="glyphicon glyphicon-forward" aria-hidden="true"></span> Etape suivante
             </button>
 
-             <!-- CREATE FORM FROM HERE ON -->0
+            <font class="error">{{ form.non_field_errors }}</font>
 
-            {{ form.non_field_errors }}
+            <div class="panel panel-default">
+                <div class="panel-heading">Identification</div>
+                 <div  class="panel-body">
+                     {% if person_form.user.errors %}
+                        <font class="error">{{ person_form.user.errors }}</font>
+                     {% endif %}
+                     {{ person_form.user.label_tag }}
+                     {{ person_form.user }}
+                     {{ person_form.user.help_text }}
 
-            <div class="container">
-                {{ person_form.user.errors }}
-                {{ person_form.user.label_tag }}
-                {{ person_form.user }}
-                {{ person_form.user.help_text }}
+                     {% if person_form.middle_name.errors %}
+                        <font class="error">{{ person_form.middle_name.errors }}</font>
+                     {% endif %}
+                     {{ person_form.middle_name.label_tag }}
+                     {{ person_form.middle_name }}
+                     {{ person_form.middle_name.help_text }}
+                     <br>
 
-                {{ person_form.middle_name.errors }}
-                {{ person_form.middle_name.label_tag }}
-                {{ person_form.middle_name }}
-                {{ person_form.middle_name.help_text }}
-                <br>
 
-                {{ person_form.birth_date.errors }}
-                {{ person_form.birth_date.label_tag }}
-                {{ person_form.birth_date }}
-                {{ person_form.birth_date.help_text }}
+                     <!--<div class="control-group">-->
+                    <!--<label class="control-label">{{ person_form.middle_name.label_tag }}</label>-->
+                    <!--<div class="controls">{{ person_form.middle_name }}-->
+                        <!--{% if person_form.middle_name.help_text %}-->
+                            <!--<p class="help-inline"><small>{{ person_form.middle_name.help_text }}</small></p>-->
+                        <!--{% endif %}-->
+                    <!--</div>-->
+                <!--</div>-->
 
-                {{ person_form.birth_place.errors }}
-                {{ person_form.birth_place.label_tag }}
-                {{ person_form.birth_place }}
-                {{ person_form.birth_place.help_text }}
+                     <!---->
+                     {% if person_form.birth_date.errors %}
+                        <font class="error">{{ person_form.birth_date.errors }}</font>
+                     {% endif %}
+                     {{ person_form.birth_date.label_tag }}
+                     {{ person_form.birth_date }}
+                     {{ person_form.birth_date.help_text }}
 
-                {{ person_form.birth_country.errors }}
-                {{ person_form.birth_country.label_tag }}
-                {{ person_form.birth_country }}
-                {{ person_form.birth_country.help_text }}
-                <br>
+                     {% if person_form.birth_place.errors %}
+                        <font class="error">{{ person_form.birth_place.errors }}</font>
+                     {% endif %}
+                     {{ person_form.birth_place.label_tag }}
+                     {{ person_form.birth_place }}
+                     {{ person_form.birth_place.help_text }}
 
-                {{ person_form.gender.errors }}
-                {{ person_form.gender.label_tag }}
-                {{ person_form.gender }}
-                {{ person_form.gender.help_text }}
+                     {% if person_form.birth_country.errors %}
+                        <font class="error">{{ person_form.birth_country.errors }}</font>
+                     {% endif %}
+                     {{ person_form.birth_country.label_tag }}
+                     {{ person_form.birth_country }}
+                     {{ person_form.birth_country.help_text }}
+                     <br>
 
-                {{ person_form.civil_status.errors }}
-                {{ person_form.civil_status.label_tag }}
-                {{ person_form.civil_status }}
-                {{ person_form.civil_status.help_text }}
+                    {% if person_form.gender.errors %}
+                        <font class="error">{{ person_form.gender.errors }}</font>
+                     {% endif %}
+                    {{ person_form.gender.label_tag }}
+                    {{ person_form.gender }}
+                    {{ person_form.gender.help_text }}
 
-                {{ person_form.number_children.errors }}
-                {{ person_form.number_children.label_tag }}
-                {{ person_form.number_children }}
-                {{ person_form.number_children.help_text }}
 
-                {{ person_form.spouse_name.errors }}
-                {{ person_form.spouse_name.label_tag }}
-                {{ person_form.spouse_name }}
-                {{ person_form.spouse_name.help_text }}
-                <br>
+                    {% if person_form.civil_status.errors %}
+                        <font class="error">{{ person_form.civil_status.errors }}</font>
+                     {% endif %}
+                     {{ person_form.civil_status.label_tag }}
+                    {{ person_form.civil_status }}
+                    {{ person_form.civil_status.help_text }}
 
-                {{ person_form.nationality.errors }}
-                {{ person_form.nationality.label_tag }}
-                {{ person_form.nationality }}
-                {{ person_form.nationality.help_text }}
+                    {% if person_form.number_children.errors %}
+                        <font class="error">{{ person_form.number_children.errors }}</font>
+                     {% endif %}
+                      {{ person_form.number_children.label_tag }}
+                     {{ person_form.number_children }}
+                    {{ person_form.number_children.help_text }}
+                    <br>
 
+                     {% if person_form.spouse_name.errors %}
+                        <font class="error">{{ person_form.spouse_name.errors }}</font>
+                     {% endif %}
+                    {{ person_form.spouse_name.label_tag }}
+                    {{ person_form.spouse_name }}
+                    {{ person_form.spouse_name.help_text }}
+
+                     {% if person_form.nationality.errors %}
+                        <font class="error">{{ person_form.nationality.errors }}</font>
+                     {% endif %}
+                     {{ person_form.nationality.label_tag }}
+                     {{ person_form.nationality }}
+                     {{ person_form.nationality.help_text }}
+                </div>
            </div>
 
-           <div class="container">
-
-                {{ person_form.national_id.errors }}
+           <div class="panel panel-default">
+               <div class="panel-heading">Pièce d'identité</div>
+                <div  class="panel-body">
+                <font class="error">{{ person_form.national_id.errors }}</font>
                 {{ person_form.national_id.label_tag }}
                 {{ person_form.national_id }}
                 {{ person_form.national_id.help_text }}
 
-                {{ person_form.id_card_number.errors }}
+                <font class="error">{{ person_form.id_card_number.errors }}</font>
                 {{ person_form.id_card_number.label_tag }}
                 {{ person_form.id_card_number }}
                 {{ person_form.id_card_number.help_text }}
+                <br>
 
-                {{ person_form.passport_number.errors }}
+                <font class="error">{{ person_form.passport_number.errors }}</font>
                 {{ person_form.passport_number.label_tag }}
                 {{ person_form.passport_number }}
                 {{ person_form.passport_number.help_text }}
-
+                </div>
            </div>
 
-           <div class="container">
-
-                {{ person_legalAddress_form.street.errors }}
+           <div class="panel panel-default">
+               <div class="panel-heading">Domicile légal</div>
+                <div  class="panel-body">
+                {{ person_legalAddress_form.type }}
+                    {% if person_legalAddress_form.street.errors %}
+                      <font class="error">{{ person_legalAddress_form.street.errors }}</font>
+                    {% endif %}
                 {{ person_legalAddress_form.street.label_tag }}
                 {{ person_legalAddress_form.street }}
                 {{ person_legalAddress_form.street.help_text }}
 
-                {{ person_legalAddress_form.number.errors }}
+                <font class="error">{{ person_legalAddress_form.number.errors }}</font>
                 {{ person_legalAddress_form.number.label_tag }}
                 {{ person_legalAddress_form.number }}
                 {{ person_legalAddress_form.number.help_text }}
 
-                {{ person_legalAddress_form.complement.errors }}
+                <font class="error">{{ person_legalAddress_form.complement.errors }}</font>
                 {{ person_legalAddress_form.complement.label_tag }}
                 {{ person_legalAddress_form.complement }}
                 {{ person_legalAddress_form.complement.help_text }}
                 <br>
 
-                {{ person_legalAddress_form.postal_code.errors }}
+                <font class="error">{{ person_legalAddress_form.postal_code.errors }}</font>
                 {{ person_legalAddress_form.postal_code.label_tag }}
                 {{ person_legalAddress_form.postal_code }}
                 {{ person_legalAddress_form.postal_code.help_text }}
 
-                {{ person_legalAddress_form.city.errors }}
+                <font class="error">{{ person_legalAddress_form.city.errors }}</font>
                 {{ person_legalAddress_form.city.label_tag }}
                 {{ person_legalAddress_form.city }}
                 {{ person_legalAddress_form.city.help_text }}
 
-                {{ person_legalAddress_form.country.errors }}
+                <font class="error">{{ person_legalAddress_form.country.errors }}</font>
                 {{ person_legalAddress_form.country.label_tag }}
                 {{ person_legalAddress_form.country }}
                 {{ person_legalAddress_form.country.help_text }}
-
+                </div>
            </div>
 
-           <div class="container">
+           <div class="panel panel-default">
+               <div class="panel-heading">Adresse de contact</div>
+                <div  class="panel-body">
+                {{ person_contactAddress_form.type }}
 
-                {{ person_contactAddress_form.choice_field.errors }}
-                {{ person_contactAddress_form.choice_field.label_tag }}
-                {{ person_contactAddress_form.choice_field }}
-                {{ person_contactAddress_form.choice_field.help_text }}
+                {{ person_addressMatching_form.addressMatching_choice.errors }}</font>
+                {{ person_addressMatching_form.addressMatching_choice.label_tag }}
+                {% for radio in person_addressMatching_form.addressMatching_choice %}
+                        {{ radio }}
+                {% endfor %}
+                <!--{{ person_addressMatching_form.addressMatching_choice }}-->
+                {{ person_addressMatching_form.addressMatching_choice.help_text }}
+                <br>
 
-                {{ person_contactAddress_form.street.errors }}
+                <font class="error">{{ person_contactAddress_form.street.errors }}</font>
                 {{ person_contactAddress_form.street.label_tag }}
                 {{ person_contactAddress_form.street }}
                 {{ person_contactAddress_form.street.help_text }}
 
-                {{ person_contactAddress_form.number.errors }}
+                <font class="error">{{ person_contactAddress_form.number.errors }}</font>
                 {{ person_contactAddress_form.number.label_tag }}
                 {{ person_contactAddress_form.number }}
                 {{ person_contactAddress_form.number.help_text }}
 
-                {{ person_contactAddress_form.complement.errors }}
+                <font class="error">{{ person_contactAddress_form.complement.errors }}</font>
                 {{ person_contactAddress_form.complement.label_tag }}
                 {{ person_contactAddress_form.complement }}
                 {{ person_contactAddress_form.complement.help_text }}
 
                 <br>
 
-                {{ person_contactAddress_form.postal_code.errors }}
+                <font class="error">{{ person_contactAddress_form.postal_code.errors }}</font>
                 {{ person_contactAddress_form.postal_code.label_tag }}
                 {{ person_contactAddress_form.postal_code }}
                 {{ person_contactAddress_form.postal_code.help_text }}
 
-                {{ person_contactAddress_form.city.errors }}
+                <font class="error">{{ person_contactAddress_form.city.errors }}</font>
                 {{ person_contactAddress_form.city.label_tag }}
                 {{ person_contactAddress_form.city }}
                 {{ person_contactAddress_form.city.help_text }}
 
-                {{ person_contactAddress_form.country.errors }}
+                <font class="error">{{ person_contactAddress_form.country.errors }}</font>
                 {{ person_contactAddress_form.country.label_tag }}
                 {{ person_contactAddress_form.country }}
                 {{ person_contactAddress_form.country.help_text }}
-
+                </div>
            </div>
 
-           <div class="container">
-
-                {{ person_form.phone_mobile.errors }}
+           <div class="panel panel-default">
+               <div class="panel-heading">Contact</div>
+                <div  class="panel-body">
+                <font class="error">{{ person_form.phone_mobile.errors }}</font>
                 {{ person_form.phone_mobile.label_tag }}
                 {{ person_form.phone_mobile }}
                 {{ person_form.phone_mobile.help_text }}
 
-                {{ person_form.phone.errors }}
+                <font class="error">{{ person_form.phone.errors }}</font>
                 {{ person_form.phone.label_tag }}
                 {{ person_form.phone }}
                 {{ person_form.phone.help_text }}
 
-                {{ person_form.additional_email.errors }}
+                <font class="error">{{ person_form.additional_email.errors }}</font>
                 {{ person_form.additional_email.label_tag }}
                 {{ person_form.additional_email }}
                 {{ person_form.additional_email.help_text }}
-
+                </div>
            </div>
 
-           <div class="container">
+           <div class="panel panel-default">
+               <div class="panel-heading">{{ person_form.lastregistration_choice.label_tag }}</div>
+                <div  class="panel-body">
+                <font class="error">{{ person_form.lastregistration_choice.errors }}</font>
+                <!--{{ person_form.lastregistration_choice.label_tag }}-->
+                {% for radio in person_form.lastregistration_choice %}
+                        {{ radio }}
+                {% endfor %}
+                <!--{{ person_form.lastregistration_choice }}-->
+                {{ person_form.lastregistration_choice.help_text }}
+                <br>
 
-                {{ person_form.choice_field.errors }}
-                {{ person_form.choice_field.label_tag }}
-                {{ person_form.choice_field }}
-                {{ person_form.choice_field.help_text }}
-
-                {{ person_form.register_number.errors }}
+                <font class="error">{{ person_form.register_number.errors }}</font>
                 {{ person_form.register_number.label_tag }}
                 {{ person_form.register_number }}
                 {{ person_form.register_number.help_text }}
                 <br>
 
-               {{ person_form.ucl_last_year.errors }}
+               <font class="error">{{ person_form.ucl_last_year.errors }}</font>
                 {{ person_form.ucl_last_year.label_tag }}
                 {{ person_form.ucl_last_year }}
                 {{ person_form.ucl_last_year.help_text }}
-
+            </div>
            </div>
+          </div>
+
+             <!-- -->
+
+            <button type="submit" id="bt_profile" class="btn" role="button" name="save"
+                    title="Sauvegarder">
+                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Sauvegarder
+            </button>
+            <button type="submit" id="bt_next_step" class="btn" role="button" name="next_step"
+                    title="Sauvegarder" disabled>
+                <span class="glyphicon glyphicon-forward" aria-hidden="true"></span> Etape suivante
+            </button>
+
         </form>
     </div>
 </div>

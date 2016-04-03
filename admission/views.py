@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
 
 from admission.forms import NewAccountForm, AccountForm, NewPasswordForm
-from admission.forms import PersonForm, PersonLegalAddressForm, PersonContactAddressForm #AA
+from admission.forms import PersonForm, PersonLegalAddressForm, PersonContactAddressForm,PersonAddressMatchingForm #AA
 
 from admission.utils import send_mail
 from random import randint
@@ -347,34 +347,45 @@ def osis_login_error(request, *args, **kwargs):
     return login(request, *args, extra_context=extra_context, **kwargs)
 
 
-def profile(request):  # !!!!!! AA USE FRAMESETS ??
-    if request.method == 'POST':  # If the form has been submitted...
+def profile(request):
+    if request.method == 'POST':
 
         person_form = PersonForm(request.POST)
-        person_legalAddress_form = PersonLegalAddressForm(request.POST, prefix='l')
-        person_contactAddress_form = PersonContactAddressForm(request.POST, prefix='c')
+        person_legalAddress_form = PersonLegalAddressForm(request.POST)
+        person_addressMatching_form = PersonAddressMatchingForm(request.POST)
+        person_contactAddress_form = PersonContactAddressForm(request.POST)
 
-        print(person_form.is_valid())
-        print(person_legalAddress_form.is_valid())
-        print(person_contactAddress_form.is_valid())
+       # print(person_form.errors)
+       # print(person_legalAddress_form.errors)
+       # print(person_addressMatching_form.errors)
 
         if person_form.is_valid() and person_legalAddress_form.is_valid() and person_contactAddress_form.is_valid():
 
-            print('all validation passed')
             person = person_form.save()
-            person_legalAddress_form.cleaned_data['person'] = person
-            person_legalAddress = person_legalAddress_form.save()
+            person_legalAddress = person_legalAddress_form.save(commit=False)
+            person_contactAddress = person_contactAddress_form.save(commit=False)
 
-            person_contactAddress_form.cleaned_data['person'] = person
-            person_contactAddress = person_contactAddress_form.save()
+            person_legalAddress.person = person
+            person_legalAddress.save()
 
-           #return HttpResponseRedirect("admission/profile/" % (person.name))  # ???
+            person_contactAddress.person = person
+            person_contactAddress.save()
+
+            return HttpResponseRedirect(reverse('profile_confirmed')) # TMP - FOR TESTING PURPOSE
+
         else:
             print('failed')
     else:
-        print("Hello world !")
         person_form = PersonForm()
-        person_legalAddress_form = PersonLegalAddressForm(prefix="l")
-        person_contactAddress_form = PersonContactAddressForm(prefix="c")
-        print(person_contactAddress_form)
-    return render(request, "profile.html", dict(person_form=person_form, person_legalAddress_form=person_legalAddress_form, person_contactAddress_form=person_contactAddress_form))
+        person_addressMatching_form = PersonAddressMatchingForm()
+        person_legalAddress_form = PersonLegalAddressForm()
+        person_contactAddress_form = PersonContactAddressForm()
+
+    return render(request, "profile.html", dict(person_form=person_form,
+                                            person_legalAddress_form=person_legalAddress_form,
+                                            person_contactAddress_form=person_contactAddress_form,
+                                            person_addressMatching_form = person_addressMatching_form))
+
+
+def profile_confirmed(request): # TMP - FOR TESTING PURPOSE
+    return render(request, "profile_confirmed.html")

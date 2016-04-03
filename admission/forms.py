@@ -25,6 +25,8 @@
 ##############################################################################
 from django import forms
 from django.forms import ModelForm
+from django.utils.translation import ugettext_lazy as _
+
 from admission.models.person import Person #AA
 from admission.models.personAddress import PersonAddress #AA
 
@@ -106,25 +108,25 @@ class NewPasswordForm(forms.Form):
 class PersonForm(forms.ModelForm):
 
     LASTREGISTRATION_CHOICES = (
-        ('1', 'Oui'),
-        ('2', 'Non'))
+        ('1', _('Oui')),
+        ('2', _('Non')))
 
-    choice_field = forms.ChoiceField(widget=forms.RadioSelect, choices=LASTREGISTRATION_CHOICES, initial='1')
+    lastregistration_choice = forms.ChoiceField(widget=forms.RadioSelect, choices=LASTREGISTRATION_CHOICES, initial='1')
 
     def __init__(self, *args, **kwargs):
         super(PersonForm, self).__init__(*args, **kwargs)
         self.fields['user'].help_text = "(ex:  Van der Elst /...)"
-        self.fields['middle_name'].help_text = "(ex:  Pierre,Paul, Jacques)"
+        self.fields['middle_name'].help_text = "(ex:  Pierre, Paul, Jacques)"
         self.fields['birth_date'].help_text = "(jj/mm/aaaa)"
         self.fields['birth_place'].help_text = "(ex:  Louvain-la-Neuve ...)"
 
         self.fields['user'].label = "Nom"
-        self.fields['middle_name'].label="Autres prénoms *"
+        self.fields['middle_name'].label="Autres prénoms"
         self.fields['birth_date'].label="Date de naissance *"
         self.fields['birth_place'].label="Lieu de naissance *"
         self.fields['birth_country'].label="Pays de naissance *"
         self.fields['gender'].label="Genre *"
-        self.fields['civil_status'].label="Etat civil"
+        self.fields['civil_status'].label="Etat civil *"
         self.fields['number_children'].label="Nombre d\'enfants"
         self.fields['spouse_name'].label="Nom conjoint"
         self.fields['nationality'].label="Nationalité *"
@@ -134,7 +136,7 @@ class PersonForm(forms.ModelForm):
         self.fields['phone_mobile'].label="GSM"
         self.fields['phone'].label="Autre téléphone"
         self.fields['additional_email'].label="E-mail"
-        self.fields['choice_field'].label="Avez-vous déjà été inscrit à l\'UCL/Saint-Louis ?"
+        self.fields['lastregistration_choice'].label="Avez-vous déjà été inscrit à l\'UCL/Saint-Louis ?"
         self.fields['register_number'].label="Quel est votre numéro de matricule ? *"
         self.fields['ucl_last_year'].label="Quelle est votre dernière année à l\'UCL/Saint-Louis ? *"
 
@@ -144,7 +146,8 @@ class PersonForm(forms.ModelForm):
 
 
 class PersonLegalAddressForm(forms.ModelForm):
-
+     prefix='l'
+     type = forms.CharField(widget=forms.HiddenInput(), initial='LEGAL')
      def __init__(self, *args, **kwargs):
         super(PersonLegalAddressForm, self).__init__(*args, **kwargs)
 
@@ -160,17 +163,22 @@ class PersonLegalAddressForm(forms.ModelForm):
 
      class Meta:
         model = PersonAddress
-        exclude = ['person',]
+        exclude = ['person']
 
 
 class PersonContactAddressForm(PersonLegalAddressForm):
+     prefix='c'
+     type = forms.CharField(widget=forms.HiddenInput(), initial='CONTACT')
 
-    ADDRESSTYPE_CHOICES = (
-        ('1', 'Oui'),
-        ('2', 'Non'))
 
-    choice_field = forms.ChoiceField(widget=forms.RadioSelect, choices=ADDRESSTYPE_CHOICES, initial='2')
+class PersonAddressMatchingForm(forms.Form):
+
+    ADDRESSMATCHING_CHOICES = (
+        ('1', _('Oui')),
+        ('2', _('Non')))
+
+    addressMatching_choice = forms.ChoiceField(widget=forms.RadioSelect, choices=ADDRESSMATCHING_CHOICES, initial='2')
 
     def __init__(self, *args, **kwargs):
-        super(PersonContactAddressForm, self).__init__(*args, **kwargs)
-        self.fields['choice_field'].label="Adresse de contact est la même que votre domicile légal"
+        super(PersonAddressMatchingForm, self).__init__(*args, **kwargs)
+        self.fields['addressMatching_choice'].label="Adresse de contact est la même que votre domicile légal"
