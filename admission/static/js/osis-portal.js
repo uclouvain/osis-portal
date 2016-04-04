@@ -199,6 +199,13 @@ function offer_selection_display(){
                                                           .prop("required",value.question_required))
                               .append("&nbsp;&nbsp;"+value.option_label));
                     }
+                    if(value.option_order == value.options_max_number && value.question_description != ""){
+                            $('#pnl_questions').append("<br>");
+                            $('#pnl_questions').append($("<label></label>").append(value.question_description)
+                                               .attr("id","lbl_question_description_"+value.option_id)
+                                               .attr("class","description"));
+
+                    }
                 }
             });
 

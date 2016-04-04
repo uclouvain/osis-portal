@@ -34,7 +34,6 @@ QUESTION_TYPES = (
     ('LONG_INPUT_TEXT', _('Long input text')),
     ('RADIO_BUTTON', _('Radio button')),
     ('CHECKBOX', _('Checkbox')),
-    ('CHECKBOX', _('Checkbox')),
     ('DROPDOWN_LIST', _('Dropdown list')),
     ('UPLOAD_BUTTON', _('Upload button')),
     ('DOWNLOAD_LINK', _('Download link')),
