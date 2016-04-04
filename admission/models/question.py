@@ -43,6 +43,7 @@ QUESTION_TYPES = (
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ('label', 'description', 'form', 'order')
     fieldsets = ((None, {'fields': ('label', 'description', 'type', 'order','required', 'form')}),)
+    list_filter = ('form',)
 
 
 class Question(models.Model):

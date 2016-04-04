@@ -123,12 +123,24 @@ function offer_selection_display(){
           if(data.length >0){
 
             $.each(data, function(key, value) {
+                $('#pnl_questions').append("<br>");
                 if(value.type=='LABEL'){
-                 $('#pnl_questions').append("<br>");
                     $('#pnl_questions').append($("<label></label>").attr("style", "color:red")
                     .append(value.label));
                 }
 
+                if(value.type=='SHORT_INPUT_TEXT'){
+                    $('#pnl_questions').append($("<label></label>").append(value.label)
+                                                                .attr("id","lbl_question_"+value.id));
+                    $('#pnl_questions').append("<br>");
+                    $('#pnl_questions').append($("<input>").attr("class", "form-control")
+                                            .attr("name","txt_answer_question_"+value.id)
+                                            .attr("id","txt_answer_question_"+value.id)
+                                            .attr("title",value.description)
+                                            .prop("required",value.required));
+
+
+                }
 
             });
 
@@ -138,10 +150,13 @@ function offer_selection_display(){
     }
 
     function set_pnl_questions_empty(){
-            $("#pnl_questions").find("label")
-            .remove()
-            .end()
+        $("#pnl_questions").find("label")
+        .remove()
+        .end()
         $("#pnl_questions").find("br")
             .remove()
             .end()
+        $("#pnl_questions").find("input")
+        .remove()
+        .end()
     }

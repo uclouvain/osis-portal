@@ -44,7 +44,7 @@ urlpatterns = [
     url(r'^admission/application/([0-9]+)/$', application.application_update, name='application_update'),
 
     url(r'^admission/offer/$', offer.offer_selection, name='offer_selection'),
-    url(r'^admission/offer/save/$', offer.save_offer_selection, name='save_offer_selection'),
+    url(r'^admission/offer/save/$', application.save_application_offer, name='save_offer_selection'),
     url(r'^admission/offer/application/([0-9]+)/$', offer.selection_offer, name='selection_offer'),
 
     url(r'^login/$', identification.login_admission,  name='login'),
