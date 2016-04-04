@@ -65,8 +65,19 @@ def save_application_offer(request):
                 answer.application = application
                 answer.value = value
                 # as it's txt_answer we know that it's there is only one option available, (SHORT_INPUT_TEXT, LONG_INPUT_TEXT)
-                question_id = key.replace("txt_answer_question_","")
-                answer.option = mdl.option.find_by_question_id(int(question_id))
+                option_id = key.replace("txt_answer_question_", "")
+                answer.option = mdl.option.find_by_id(int(option_id))
                 answer.save()
+            else:
+                if "txt_answer_radio_optid_" in key:
+                    #RADIO_BUTTON
+                    if "on" == value:
+                        answer = mdl.answer.Answer()
+                        answer.application = application
+                        option_id = key.replace("txt_answer_radio_optid_", "")
+                        option =  mdl.option.find_by_id(int(option_id))
+                        answer.option = option
+                        answer.value = option.value
+                        answer.save()
 
         return render(request, "diploma.html", {"application": application})

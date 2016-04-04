@@ -24,7 +24,7 @@
 #
 ##############################################################################
 from django.conf.urls import url
-from admission.views import application, common, identification, offer, level, question
+from admission.views import application, common, identification, offer, level, question, option
 from django.contrib.auth.views import logout
 
 
@@ -53,4 +53,5 @@ urlpatterns = [
     url(r'^offers/$', offer.search),
     url(r'^levels/$', level.find_by_type),
     url(r'^questions/$', question.find_by_offer),
+    url(r'^options/$', option.find_by_offer),
 ]

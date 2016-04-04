@@ -116,42 +116,98 @@ function offer_selection_display(){
         set_pnl_questions_empty();
 
         $.ajax({
-            url: "/admission/questions?offer=" + offer_year_id
+            url: "/admission/options?offer=" + offer_year_id
 
           }).then(function(data) {
           var table_size=data.length;
+
           if(data.length >0){
 
             $.each(data, function(key, value) {
+
                 $('#pnl_questions').append("<br>");
-                if(value.type=='LABEL'){
+                if(value.question_type=='LABEL'){
                     $('#pnl_questions').append($("<label></label>").attr("style", "color:red")
-                    .append(value.label));
+                    .append(value.option_label));
                 }
 
-                if(value.type=='SHORT_INPUT_TEXT'){
-                    $('#pnl_questions').append($("<label></label>").append(value.label)
-                                                                .attr("id","lbl_question_"+value.id));
+                if(value.question_type=='SHORT_INPUT_TEXT'){
+                    $('#pnl_questions').append($("<label></label>").append(value.question_label)
+                                                                .attr("id","lbl_question_"+value.option_id));
                     $('#pnl_questions').append("<br>");
                     $('#pnl_questions').append($("<input>").attr("class", "form-control")
-                                            .attr("name","txt_answer_question_"+value.id)
-                                            .attr("id","txt_answer_question_"+value.id)
-                                            .attr("title",value.description)
-                                            .prop("required",value.required));
+                                            .attr("name","txt_answer_question_"+value.option_id)
+                                            .attr("id","txt_answer_question_"+value.option_id)
+                                            .attr("placeholder", value.option_label)
+                                            .attr("title",value.option_description)
+                                            .prop("required",value.question_required));
+                    if(value.question_description != ""){
+                        $('#pnl_questions').append($("<label></label>").append(value.question_description)
+                                                                .attr("id","lbl_question_description_"+value.option_id)
+                                                                .attr("class","description"));
+                    }
 
 
                 }
-                if(value.type=='LONG_INPUT_TEXT'){
-                    $('#pnl_questions').append($("<label></label>").append(value.label)
-                                                                .attr("id","lbl_question_"+value.id));
+
+                if(value.question_type=='LONG_INPUT_TEXT'){
+                    $('#pnl_questions').append($("<label></label>").append(value.question_label)
+                                                                .attr("id","lbl_question_"+value.option_id));
                     $('#pnl_questions').append("<br>");
                     $('#pnl_questions').append($("<textarea></textarea>").attr("class", "form-control")
-                                            .attr("name","txt_answer_question_"+value.id)
-                                            .attr("id","txt_answer_question_"+value.id)
-                                            .attr("title",value.description)
-                                            .prop("required",value.required));
+                                            .attr("name","txt_answer_question_"+value.option_id)
+                                            .attr("id","txt_answer_question_"+value.option_id)
+                                            .attr("placeholder", value.option_label)
+                                            .attr("title",value.option_description)
+                                            .prop("required",value.question_required));
+                    if(value.question_description != ""){
+                        $('#pnl_questions').append($("<label></label>").append(value.question_description)
+                                                                .attr("id","lbl_question_description_"+value.option_id)
+                                                                .attr("class","description"));
+                    }
 
+                }
 
+                if(value.question_type=='RADIO_BUTTON'){
+                    var radio_checked = new Boolean(false)
+                    if(value.option_order == 1){
+                        radio_checked = new Boolean(true)
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append($("<label></label>").append(value.question_label)
+                                                                .attr("id","lbl_question_"+value.question_id));
+
+                        $('#pnl_questions').append("<br>");
+                        if (value.question_required ){
+                            $('#pnl_questions').append($("<label></label>")
+                                  .append($("<input>").attr("type","radio")
+                                                              .attr("name","txt_answer_radio_optid_"+value.option_id)
+                                                              .attr("id","txt_answer_radio_"+value.option_id)
+                                                              .prop("required",value.question_required)
+                                                              .prop("checked",radio_checked))
+                                  .append("&nbsp;&nbsp;"+value.option_label));
+                          }else{
+                            $('#pnl_questions').append($("<label></label>")
+                              .append($("<input>").attr("type","radio")
+                                                          .attr("name","txt_answer_radio_optid_"+value.option_id)
+                                                          .attr("id","txt_answer_radio_"+value.option_id)
+                                                          .prop("required",value.question_required))
+                              .append("&nbsp;&nbsp;"+value.option_label));
+                          }
+                    }else{
+                        $('#pnl_questions').append($("<label></label>")
+                              .append($("<input>").attr("type","radio")
+                                                          .attr("name","txt_answer_radio_optid_"+value.option_id)
+                                                          .attr("id","txt_answer_radio_"+value.option_id)
+                                                          .prop("required",value.question_required))
+                              .append("&nbsp;&nbsp;"+value.option_label));
+                    }
+                    if(value.option_order == value.options_max_number && value.question_description != ""){
+                            $('#pnl_questions').append("<br>");
+                            $('#pnl_questions').append($("<label></label>").append(value.question_description)
+                                               .attr("id","lbl_question_description_"+value.option_id)
+                                               .attr("class","description"));
+
+                    }
                 }
             });
 
@@ -168,6 +224,9 @@ function offer_selection_display(){
             .remove()
             .end()
         $("#pnl_questions").find("input")
+        .remove()
+        .end()
+        $("#pnl_questions").find("textarea")
         .remove()
         .end()
     }
