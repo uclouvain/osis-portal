@@ -23,30 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
-from django.contrib import admin
-
-
-class AcademicYearAdmin(admin.ModelAdmin):
-    list_display = ('name', 'start_date', 'end_date')
-    fieldsets = ((None, {'fields': ('year', 'start_date', 'end_date')}),)
-
-
-class AcademicYear(models.Model):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    year        = models.IntegerField()
-    start_date  = models.DateField(blank=True, null=True)
-    end_date    = models.DateField(blank=True, null=True)
-
-    @property
-    def name(self):
-        return self.__str__()
-
-    def __str__(self):
-        return u"%s-%s" % (self.year, self.year + 1)
-
-
-def next_academic_year(self):
-    next_year = self.year + 1
-    print(next_year)
-    return AcademicYear.objects.filter(year=next_year)
+from admission.views import application
+from admission.views import common
+from admission.views import identification
+from admission.views import offer

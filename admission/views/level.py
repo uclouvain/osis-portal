@@ -23,30 +23,33 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
-from django.contrib import admin
+from rest_framework import serializers
+from admission import models as mdl
+from django.http import HttpResponse
+from rest_framework.renderers import JSONRenderer
+from django.views.decorators.csrf import csrf_exempt
+
+class JSONResponse(HttpResponse):
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
 
 
-class AcademicYearAdmin(admin.ModelAdmin):
-    list_display = ('name', 'start_date', 'end_date')
-    fieldsets = ((None, {'fields': ('year', 'start_date', 'end_date')}),)
+class LevelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = mdl.grade_type.GradeType
+        fields = ('id', 'name', 'grade')
 
 
-class AcademicYear(models.Model):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    year        = models.IntegerField()
-    start_date  = models.DateField(blank=True, null=True)
-    end_date    = models.DateField(blank=True, null=True)
+@csrf_exempt
+def find_by_type(request):
+    print('find_by_type')
+    type = request.GET['type']
 
-    @property
-    def name(self):
-        return self.__str__()
+    levels = mdl.grade_type.find_by_grade(type)
+    serializer = LevelSerializer(levels, many=True)
 
-    def __str__(self):
-        return u"%s-%s" % (self.year, self.year + 1)
-
-
-def next_academic_year(self):
-    next_year = self.year + 1
-    print(next_year)
-    return AcademicYear.objects.filter(year=next_year)
+    d= JSONResponse(serializer.data)
+    print('d:',d)
+    return d
