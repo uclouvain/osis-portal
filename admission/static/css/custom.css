@@ -4,3 +4,9 @@ body {
 .error {
   color:red;
 }
+
+.description {
+  color:grey;
+  font-style: italic;
+  font-weight: normal;
+}

@@ -130,28 +130,39 @@ function offer_selection_display(){
                 }
 
                 if(value.question_type=='SHORT_INPUT_TEXT'){
-                    $('#pnl_questions').append($("<label></label>").append(value.option_label)
+                    $('#pnl_questions').append($("<label></label>").append(value.question_label)
                                                                 .attr("id","lbl_question_"+value.option_id));
                     $('#pnl_questions').append("<br>");
                     $('#pnl_questions').append($("<input>").attr("class", "form-control")
                                             .attr("name","txt_answer_question_"+value.option_id)
                                             .attr("id","txt_answer_question_"+value.option_id)
+                                            .attr("placeholder", value.option_label)
                                             .attr("title",value.option_description)
                                             .prop("required",value.question_required));
+                    if(value.question_description != ""){
+                        $('#pnl_questions').append($("<label></label>").append(value.question_description)
+                                                                .attr("id","lbl_question_description_"+value.option_id)
+                                                                .attr("class","description"));
+                    }
 
 
                 }
 
                 if(value.question_type=='LONG_INPUT_TEXT'){
-                    $('#pnl_questions').append($("<label></label>").append(value.option_label)
+                    $('#pnl_questions').append($("<label></label>").append(value.question_label)
                                                                 .attr("id","lbl_question_"+value.option_id));
                     $('#pnl_questions').append("<br>");
                     $('#pnl_questions').append($("<textarea></textarea>").attr("class", "form-control")
                                             .attr("name","txt_answer_question_"+value.option_id)
                                             .attr("id","txt_answer_question_"+value.option_id)
+                                            .attr("placeholder", value.option_label)
                                             .attr("title",value.option_description)
                                             .prop("required",value.question_required));
-
+                    if(value.question_description != ""){
+                        $('#pnl_questions').append($("<label></label>").append(value.question_description)
+                                                                .attr("id","lbl_question_description_"+value.option_id)
+                                                                .attr("class","description"));
+                    }
 
                 }
 
@@ -188,6 +199,13 @@ function offer_selection_display(){
                                                           .prop("required",value.question_required))
                               .append("&nbsp;&nbsp;"+value.option_label));
                     }
+                    if(value.option_order == value.options_max_number && value.question_description != ""){
+                            $('#pnl_questions').append("<br>");
+                            $('#pnl_questions').append($("<label></label>").append(value.question_description)
+                                               .attr("id","lbl_question_description_"+value.option_id)
+                                               .attr("class","description"));
+
+                    }
                 }
 
                 if(value.question_type=='CHECKBOX'){
@@ -214,7 +232,13 @@ function offer_selection_display(){
                                                   .attr("id","txt_answer_radio_chck_optid_"+value.option_id))
                        .append("&nbsp;&nbsp;"+value.option_label));
                     }
+                    if(value.option_order == value.options_max_number && value.question_description != ""){
+                            $('#pnl_questions').append("<br>");
+                            $('#pnl_questions').append($("<label></label>").append(value.question_description)
+                                               .attr("id","lbl_question_description_"+value.option_id)
+                                               .attr("class","description"));
 
+                    }
 
                 }
             });
