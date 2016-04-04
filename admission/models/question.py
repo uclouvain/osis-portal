@@ -23,16 +23,35 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models import academic_year
-from admission.models import answer
-from admission.models import application
-from admission.models import domain
-from admission.models import form
-from admission.models import grade_type
-from admission.models import message_template
-from admission.models import offer_year
-from admission.models import offer_year_calendar
-from admission.models import option
-from admission.models import person
-from admission.models import question
-from admission.models import supported_languages
+from django.db import models
+from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
+
+
+QUESTION_TYPES = (
+    ('LABEL', _('Label')),
+    ('SHORT_INPUT_TEXT', _('Short input text')),
+    ('LONG_INPUT_TEXT', _('Long input text')),
+    ('RADIO_BUTTTON', _('Radio button')),
+    ('CHECKBOX', _('Checkbox')),
+    ('DROPDOWN_LIST', _('Dropdown list')),
+    ('UPLOAD_BUTTON', _('Upload button')),
+    ('DOWNLOAD_LINK', _('Download link')),
+    ('HTTP_LINK', _('HTTP link')))
+
+
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ('label', 'description', 'form', 'order')
+    fieldsets = ((None, {'fields': ('label', 'description', 'type', 'order','required', 'form')}),)
+
+
+class Question(models.Model):
+    label = models.CharField(max_length=255)
+    description = models.TextField()
+    type = models.CharField(max_length=20, choices=QUESTION_TYPES)
+    order = models.IntegerField()
+    required = models.BooleanField(default=False)
+    form = models.ForeignKey('Form')
+
+    def __str__(self):
+        return u"%s" % self.label
