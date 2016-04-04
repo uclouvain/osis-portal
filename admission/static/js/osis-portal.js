@@ -139,6 +139,11 @@ function offer_selection_display(){
                                             .attr("placeholder", value.option_label)
                                             .attr("title",value.option_description)
                                             .prop("required",value.question_required));
+                    if(value.question_description != ""){
+                        $('#pnl_questions').append($("<label></label>").append(value.question_description)
+                                                                .attr("id","lbl_question_description_"+value.option_id)
+                                                                .attr("class","description"));
+                    }
 
 
                 }
@@ -153,7 +158,11 @@ function offer_selection_display(){
                                             .attr("placeholder", value.option_label)
                                             .attr("title",value.option_description)
                                             .prop("required",value.question_required));
-
+                    if(value.question_description != ""){
+                        $('#pnl_questions').append($("<label></label>").append(value.question_description)
+                                                                .attr("id","lbl_question_description_"+value.option_id)
+                                                                .attr("class","description"));
+                    }
 
                 }
 
