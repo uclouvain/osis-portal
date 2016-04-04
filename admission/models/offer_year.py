@@ -25,11 +25,11 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-from admission.models import offer_year_calendar
+from admission.models import offer_year_calendar, academic_year
 
 
 class OfferYearAdmin(admin.ModelAdmin):
-    list_display = ('acronym', 'title', 'academic_year', 'domain')
+    list_display = ('acronym', 'title', 'academic_year', 'domain', 'grade_type')
     fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'domain', 'grade_type')}),)
 
 
@@ -45,11 +45,28 @@ class OfferYear(models.Model):
     def __str__(self):
         return u"%s - %s" % (self.academic_year, self.acronym)
 
-
     @property
     def offer_year_calendar(self):
         #Should only be one record
         return offer_year_calendar.OfferYearCalendar.objects.filter(offer_year=self).order_by("start_date").first()
+
+    @property
+    def find_offer_year_next_year(self):
+        print('find_offer_year_next_year1')
+        academic_year_next = academic_year.next_academic_year(self.academic_year)
+        print('kqljf')
+        of= OfferYear.objects.filter(acronym=self.acronym, academic_year=academic_year_next).first()
+        print('zut',of.academic_year)
+        return of.academic_year
+
+    @property
+    def find_offer_year_next_start_date(self):
+        print('find_offer_year_next_year1')
+        academic_year_next = academic_year.next_academic_year(self.academic_year)
+        print('kqljf')
+        of= OfferYear.objects.filter(acronym=self.acronym, academic_year=academic_year_next).first()
+        print('zut',of.academic_year)
+        return of.start_date
 
 
 def find_by_id(offer_year_id):
@@ -60,6 +77,11 @@ def find_all():
     return OfferYear.objects.all().order_by("acronym")
 
 
+def search(level=None, domain=None):
+    print('search',level,', ' , domain)
+
+    return OfferYear.objects.filter(grade_type=level, domain=domain).order_by("acronym")
+
+
 def find_by_domain_grade(domain, grade):
     return OfferYear.objects.filter(domain=domain, grade_type=grade).order_by("acronym")
-

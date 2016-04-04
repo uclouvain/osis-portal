@@ -29,6 +29,8 @@ from admission.models import *
 
 admin.site.register(person.Person,
                     person.PersonAdmin)
+admin.site.register(grade_type.GradeType,
+                    grade_type.GradeTypeAdmin)
 admin.site.register(domain.Domain,
                     domain.DomainAdmin)
 admin.site.register(academic_year.AcademicYear,
