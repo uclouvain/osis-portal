@@ -27,27 +27,20 @@
 {% endcomment %}
 
 {% block content %}
+
+
 &nbsp;&nbsp;&nbsp;&nbsp;
-<br><br>
+<br><br><br><br>
+
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <h2>Première page admission avec l'authentification pour {{user.username}}</h2><br><br>
-
-
-        {% if applications %}
-        <table>
- <thead>
-        <th>Offer</th>
-      </thead>
-
-        {% for application in applications%}
-<tr><td><a href="{% url 'application_update' application.id %}">{{application.offer_year}}</a></td></tr>
-        {% endfor%}
-                  </table>
-        {%endif%}
-
-        <a href="{% url 'offer_selection' %}">Nouvelle application</a>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                Encodage des diplômes pour la demande {{application.id}} de {{application.person}}
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

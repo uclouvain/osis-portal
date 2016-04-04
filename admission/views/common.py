@@ -23,16 +23,29 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models import academic_year
-from admission.models import answer
-from admission.models import application
-from admission.models import domain
-from admission.models import form
-from admission.models import grade_type
-from admission.models import message_template
-from admission.models import offer_year
-from admission.models import offer_year_calendar
-from admission.models import option
-from admission.models import person
-from admission.models import question
-from admission.models import supported_languages
+from django.contrib.auth.decorators import login_required
+from admission.forms import NewAccountForm, AccountForm
+from random import randint
+from admission import models as mdl
+from django.shortcuts import render
+
+
+@login_required
+def home(request):
+    form_new = NewAccountForm()
+    form = AccountForm()
+    number1 = randint(1, 20)
+    number2 = randint(1, 20)
+    number3 = randint(1, 20)
+    sum = number1 + number2
+    while number3 > sum:
+        number3 = randint(1, 20)
+
+    applications = mdl.application.find_by_user(request.user)
+
+    return render(request, "home.html", {'number1':  number1,
+                                         'number2':  number2,
+                                         'number3':  number3,
+                                         'form_new': form_new,
+                                         'form':     form,
+                                         'applications': applications})

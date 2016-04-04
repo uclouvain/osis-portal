@@ -81,19 +81,19 @@
                 </ul>
             </div>
         </div>
+        </nav>
     </nav>
-
     <div class="container">
         {% block content %}
         {% endblock %}
         <br>
         <br>
-    </div>
-    <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <!--<script src="{% static 'js/osis-portal.js' %}"></script>-->
-    {% block script %}
-    <script type="text/javascript">
+      </div>
+      <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+      <script src="{% static 'js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'js/osis-portal.js' %}"></script>
+      {% block script %}
+          <script type="text/javascript">
                // To avoid cut and paste on the email fields
                $(document).ready(function () {
                   $('#id_email_new').bind('paste', function (e) {
@@ -112,8 +112,7 @@
                      e.preventDefault();
                   });
                });
-
-    </script>
+        </script>
     {% endblock %}
 </body>
 </html>

@@ -34,9 +34,9 @@ class AcademicYearAdmin(admin.ModelAdmin):
 
 class AcademicYear(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    year        = models.IntegerField()
-    start_date  = models.DateField(blank=True, null=True)
-    end_date    = models.DateField(blank=True, null=True)
+    year = models.IntegerField()
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
 
     @property
     def name(self):
@@ -44,3 +44,9 @@ class AcademicYear(models.Model):
 
     def __str__(self):
         return u"%s-%s" % (self.year, self.year + 1)
+
+
+def next_academic_year(self):
+    next_year = self.year + 1
+    print(next_year)
+    return AcademicYear.objects.filter(year=next_year)
