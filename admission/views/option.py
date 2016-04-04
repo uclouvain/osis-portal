@@ -53,7 +53,7 @@ def find_by_offer(request):
 
         for option in options:
                 options_max_number = 0
-                if option.question.type == 'RADIO_BUTTON' or option.question.type == 'CHECKBOX':
+                if option.question.type == 'RADIO_BUTTON' or option.question.type == 'CHECKBOX' or option.question.type == 'DROPDOWN_LIST':
                     options_max_number = mdl.option.find_number_options_by_question_id(option.question.id)
                 question_list.append({'option_id': option.id,
                                       'option_label': option.label,

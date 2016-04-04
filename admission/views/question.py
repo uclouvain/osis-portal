@@ -50,5 +50,4 @@ def find_by_offer(request):
     offer_yr = mdl.offer_year.find_by_id(offer_yr_id)
     questions = mdl.question.find_form_ordered_questions(offer_yr)
     serializer = QuestionSerializer(questions, many=True)
-    print('data:' ,serializer.data)
     return JSONResponse(serializer.data)

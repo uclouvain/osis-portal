@@ -243,6 +243,40 @@ function offer_selection_display(){
                     }
 
                 }
+                if(value.question_type=='DROPDOWN_LIST'){
+                    if(value.option_order == 1){
+
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append($("<label></label>").append(value.question_label)
+                                                                .attr("id","lbl_question_"+value.question_id));
+
+                        $('#pnl_questions').append("<br>");
+                        if(value.question_required){
+                            $('#pnl_questions').append($("<select></select>")
+                                .attr("name","slt_question_"+value.question_id)
+                                .attr("id","slt_question_"+value.question_id)
+                                .prop("required",value.question_required)
+                                .append($("<option></option").attr("value",value.option_id).append(value.option_label)));
+                        }else{
+                            $('#pnl_questions').append($("<select></select>")
+                                .attr("name","slt_question_"+value.question_id)
+                                .attr("id","slt_question_"+value.question_id)
+                                .append($("<option></option").attr("value",value.option_id).append(value.option_label)));
+                        }
+                        if (value.question_description != ""){
+                            $('#pnl_questions').append("<br>");
+                            $('#pnl_questions').append($("<label></label>").append(value.question_description)
+                               .attr("id","lbl_question_description_"+value.option_id)
+                               .attr("class","description"));
+                        }
+
+                    }else{
+                        $('#slt_question_'+value.question_id).append($("<option></option").attr("value",value.option_id).append(value.option_label));
+                    }
+
+                }
+
+
             });
 
             }
@@ -261,6 +295,9 @@ function offer_selection_display(){
         .remove()
         .end()
         $("#pnl_questions").find("textarea")
+        .remove()
+        .end()
+        $("#pnl_questions").find("select")
         .remove()
         .end()
     }
