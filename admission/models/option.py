@@ -35,12 +35,11 @@ class OptionAdmin(admin.ModelAdmin):
 
 
 class Option(models.Model):
-
-    label       = models.CharField(max_length=255)
-    value       = models.TextField()
-    order       = models.IntegerField()
+    label = models.CharField(max_length=255)
+    value = models.TextField()
+    order = models.IntegerField()
     description = models.TextField()
-    question    = models.ForeignKey('Question')
+    question = models.ForeignKey('Question')
 
     def __str__(self):
         return u"%s" % self.label
@@ -62,3 +61,11 @@ def find_by_id(option_id):
         return Option.objects.get(pk=option_id)
     except ObjectDoesNotExist:
         return None
+
+
+def find_number_options_by_question_id(question_id):
+    opt = Option.objects.filter(question=question_id).order_by("order")
+
+    if opt:
+        return opt.reverse().first().order
+    return 0

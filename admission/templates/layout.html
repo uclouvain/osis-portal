@@ -43,7 +43,6 @@
     {% endblock %}
 </head>
 <body>
-<nav class="navbar navbar-default navbar-fixed-top">
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -82,44 +81,45 @@
             </div>
         </div>
     </nav>
-</nav>
+
     <div class="container">
         {% block content %}
         {% endblock %}
         <br>
         <br>
-      </div>
-    <nav class="navbar navbar-default navbar-fixed-bottom">
-    <div class="container">
-        <p class="navbar-text pull-left"></p>
-        <p class="navbar-text pull-right"><span class="glyphicon glyphicon-copyright-mark"></span> 2016 <a
-                href="http://www.uclouvain.be" target="_blank" id="lnk_ucl">Université catholique de Louvain</a></p>
     </div>
-</nav>
 
-      <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
-      <script src="{% static 'js/bootstrap.min.js' %}"></script>
-      <script src="{% static 'js/osis-portal.js' %}"></script>
-      {% block script %}
-          <script type="text/javascript">
-               // To avoid cut and paste on the email fields
-               $(document).ready(function () {
-                  $('#id_email_new').bind('paste', function (e) {
-                     e.preventDefault();
-                  });
-                  $('#id_email_new_confirm').bind('paste', function (e) {
-                     e.preventDefault();
-                  });
-               });
-               // To avoid cut and paste on the password fields
-               $(document).ready(function () {
-                  $('#id_password_new').bind('paste', function (e) {
-                     e.preventDefault();
-                  });
-                  $('#id_password_new_confirm').bind('paste', function (e) {
-                     e.preventDefault();
-                  });
-               });
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container">
+            <p class="navbar-text pull-left"></p>
+            <p class="navbar-text pull-right"><span class="glyphicon glyphicon-copyright-mark"></span> 2016 <a
+                    href="http://www.uclouvain.be" target="_blank" id="lnk_ucl">Université catholique de Louvain</a></p>
+        </div>
+    </nav>
+
+    <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/osis-portal.js' %}"></script>
+    {% block script %}
+        <script type="text/javascript">
+        // To avoid cut and paste on the email fields
+        $(document).ready(function () {
+            $('#id_email_new').bind('paste', function (e) {
+                e.preventDefault();
+            });
+            $('#id_email_new_confirm').bind('paste', function (e) {
+                e.preventDefault();
+            });
+        });
+        // To avoid cut and paste on the password fields
+        $(document).ready(function () {
+            $('#id_password_new').bind('paste', function (e) {
+                e.preventDefault();
+            });
+            $('#id_password_new_confirm').bind('paste', function (e) {
+                e.preventDefault();
+            });
+        });
         </script>
     {% endblock %}
 </body>

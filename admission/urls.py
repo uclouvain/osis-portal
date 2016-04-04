@@ -54,4 +54,6 @@ urlpatterns = [
     url(r'^levels/$', level.find_by_type),
     url(r'^questions/$', question.find_by_offer),
     url(r'^options/$', option.find_by_offer),
+
+    url(r'^admission/application/read/([0-9]+)/$', application.application_view, name='application_view'),
 ]
