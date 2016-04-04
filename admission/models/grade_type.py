@@ -33,7 +33,7 @@ GRADE_CHOICES = (
     ('MASTER', _('Master')),
     ('DOCTORATE', _('Ph.D')),
     ('TRAINING_CERTIFICATE', _('Teacher training certificate')),
-    ('CERTIFICAT', _('Certificat')))
+    ('CERTIFICATE', _('Certificate')))
 
 
 class GradeTypeAdmin(admin.ModelAdmin):

@@ -34,12 +34,10 @@ QUESTION_TYPES = (
     ('LONG_INPUT_TEXT', _('Long input text')),
     ('RADIO_BUTTTON', _('Radio button')),
     ('CHECKBOX', _('Checkbox')),
-    ('CHECKBOX', _('Checkbox')),
     ('DROPDOWN_LIST', _('Dropdown list')),
     ('UPLOAD_BUTTON', _('Upload button')),
     ('DOWNLOAD_LINK', _('Download link')),
-    ('HTTP_LINK', _('HTTP link'))
-    )
+    ('HTTP_LINK', _('HTTP link')))
 
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -49,13 +47,12 @@ class QuestionAdmin(admin.ModelAdmin):
 
 
 class Question(models.Model):
-
-    label       = models.CharField(max_length=255)
+    label = models.CharField(max_length=255)
     description = models.TextField()
-    type        = models.CharField(max_length=20, choices=QUESTION_TYPES)
-    order       = models.IntegerField()
-    required    = models.BooleanField(default=False)
-    form        = models.ForeignKey('Form')
+    type = models.CharField(max_length=20, choices=QUESTION_TYPES)
+    order = models.IntegerField()
+    required = models.BooleanField(default=False)
+    form = models.ForeignKey('Form')
 
     def __str__(self):
         return u"%s" % self.label
