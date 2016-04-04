@@ -34,10 +34,13 @@ class AnswerAdmin(admin.ModelAdmin):
 
 
 class Answer(models.Model):
-
-    value       = models.TextField()
-    option      = models.ForeignKey('Option')
+    value = models.TextField()
+    option = models.ForeignKey('Option')
     application = models.ForeignKey('Application')
 
     def __str__(self):
         return u"%s" % self.value
+
+
+def find_by_application(application_id):
+    return Answer.objects.filter(application=application_id)

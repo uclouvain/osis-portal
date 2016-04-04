@@ -70,6 +70,7 @@ def save_application_offer(request):
                 answer.save()
             else:
                 if "txt_answer_radio_chck_optid_" in key:
+
                     #RADIO_BUTTON
                     if "on" == value:
                         answer = mdl.answer.Answer()
@@ -89,3 +90,11 @@ def save_application_offer(request):
                         answer.save()
 
         return render(request, "diploma.html", {"application": application})
+
+
+def application_view(request, application_id):
+    application = mdl.application.find_by_id(application_id)
+    answers = mdl.answer.find_by_application(application_id)
+    return render(request, "application.html",
+                           {"application": application,
+                            "answers": answers})
