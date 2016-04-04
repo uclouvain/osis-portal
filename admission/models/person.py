@@ -32,7 +32,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 class PersonAdmin(admin.ModelAdmin):
-    list_display = [ 'user']
+    list_display = ['user']
     fieldsets = ((None, {'fields': ['user']}),)
 
 
@@ -43,10 +43,9 @@ class Person(models.Model):
     def __str__(self):
         return u"%s" % (self.user)
 
+
 def find_by_user(user):
-
     try:
-
         person_result = Person.objects.filter(user__id=user.id).first()
     except ObjectDoesNotExist:
         return None
@@ -81,5 +80,5 @@ def is_uuid4(activ_code):
 def find_by_id(id):
     try:
         return Person.objects.get(pk=id)
-    except:
+    except ObjectDoesNotExist:
         return None

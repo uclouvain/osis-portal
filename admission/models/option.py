@@ -33,12 +33,11 @@ class OptionAdmin(admin.ModelAdmin):
 
 
 class Option(models.Model):
-
-    label       = models.CharField(max_length=255)
-    value       = models.TextField()
-    order       = models.IntegerField()
+    label = models.CharField(max_length=255)
+    value = models.TextField()
+    order = models.IntegerField()
     description = models.TextField()
-    question    = models.ForeignKey('Question')
+    question = models.ForeignKey('Question')
 
     def __str__(self):
         return u"%s" % self.label

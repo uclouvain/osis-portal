@@ -46,7 +46,7 @@ class Application(models.Model):
     doctorate = models.BooleanField(default=False)
 
     def __str__(self):
-        return u"%s" % (self.offer_year)
+        return u"%s" % self.offer_year
 
 
 def find_by_user(user):
