@@ -33,9 +33,8 @@ class AnswerAdmin(admin.ModelAdmin):
 
 
 class Answer(models.Model):
-
-    value       = models.TextField()
-    option      = models.ForeignKey('Option')
+    value = models.TextField()
+    option = models.ForeignKey('Option')
     application = models.ForeignKey('Application')
 
     def __str__(self):
