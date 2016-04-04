@@ -23,16 +23,33 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models import academic_year
-from admission.models import answer
-from admission.models import application
-from admission.models import domain
-from admission.models import form
-from admission.models import grade_type
-from admission.models import message_template
-from admission.models import offer_year
-from admission.models import offer_year_calendar
-from admission.models import option
-from admission.models import person
-from admission.models import question
-from admission.models import supported_languages
+from rest_framework import serializers
+from admission import models as mdl
+from django.http import HttpResponse
+from rest_framework.renderers import JSONRenderer
+from django.views.decorators.csrf import csrf_exempt
+
+class JSONResponse(HttpResponse):
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
+
+
+class LevelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = mdl.grade_type.GradeType
+        fields = ('id', 'name', 'grade')
+
+
+@csrf_exempt
+def find_by_type(request):
+    print('find_by_type')
+    type = request.GET['type']
+
+    levels = mdl.grade_type.find_by_grade(type)
+    serializer = LevelSerializer(levels, many=True)
+
+    d= JSONResponse(serializer.data)
+    print('d:',d)
+    return d
