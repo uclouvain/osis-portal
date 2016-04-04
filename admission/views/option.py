@@ -60,5 +60,6 @@ def find_by_offer(request):
                                       'question_id': option.question.id,
                                       'question_label': option.question.label,
                                       'question_type': option.question.type,
-                                      'question_required': option.question.required})
+                                      'question_required': option.question.required,
+                                      'question_description': option.question.description})
     return JSONResponse(question_list)

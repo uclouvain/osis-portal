@@ -260,6 +260,12 @@ function offer_selection_display(){
                                                            .attr("id","lnk_question_"+value.option_id)
                                                            .attr("target","_blank")
                                                            .attr("href",value.option_value));
+                    if(value.question_description != ""){
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append($("<label></label>").append(value.question_description)
+                                                                .attr("id","lbl_question_description_"+value.option_id)
+                                                                .attr("class","description"));
+                    }
                 }
                 if(value.question_type=='HTTP_LINK'){
                     $('#pnl_questions').append("<br>");
@@ -268,6 +274,12 @@ function offer_selection_display(){
                                                            .attr("id","lnk_question_"+value.option_id)
                                                            .attr("target","_blank")
                                                            .attr("href",value.option_value));
+                    if(value.question_description != ""){
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append($("<label></label>").append(value.question_description)
+                                                                .attr("id","lbl_question_description_"+value.option_id)
+                                                                .attr("class","description"));
+                    }
                 }
 
 
