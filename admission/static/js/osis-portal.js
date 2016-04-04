@@ -68,12 +68,12 @@ function offer_selection_display(){
       if(data.length >0){
         $('#pnl_grade_choices').append($("<table><tr><td></td></tr></table>"));
         var trHTML = '<table class="table table-striped table-hover">';
-        trHTML += '<thead><th colspan=\'2\'><label>Cliquez sur votre choix d\'études</label></th></thead>';
+        trHTML += '<thead><th colspan=\'3\'><label>Cliquez sur votre choix d\'études</label></th></thead>';
         $.each(data, function(key, value) {
             id_str = "offer_row_" + i;
 
             onclick_str = "onclick=\'selection("+ i +", "+table_size+", " + value.id +")\'"
-            trHTML += "<tr id=\'" +  id_str + "\' "+ onclick_str +"><td>"+ value.acronym + "</td><td>" + value.title + "</td></tr>";
+            trHTML += "<tr id=\'" +  id_str + "\' "+ onclick_str +"><td><input type=\'radio\' name=\'offer_YearSel\' id=\'offer_sel_"+i+"\'></td><td>"+ value.acronym + "</td><td>" + value.title + "</td></tr>";
             i++;
         });
         trHTML += '</table>'
@@ -93,6 +93,7 @@ function offer_selection_display(){
                 already_selected=new Boolean(true);
             }
             document.getElementById(elt).style.color = "black";
+            document.getElementById("offer_sel_" + row_number).checked = false;
             cpt++;
         }
         elt = "offer_row_" + row_number;
@@ -110,6 +111,7 @@ function offer_selection_display(){
             document.getElementById(elt).style.color = "green";
             document.getElementById("txt_offer_year_id").value = offer_year_id;
             document.getElementById("bt_save").disabled = false;
+            document.getElementById("offer_sel_" + row_number).checked = true;
         }
         set_pnl_questions_empty();
 
@@ -232,7 +234,13 @@ function offer_selection_display(){
                                                   .attr("id","txt_answer_radio_chck_optid_"+value.option_id))
                        .append("&nbsp;&nbsp;"+value.option_label));
                     }
+                    if(value.option_order == value.options_max_number && value.question_description != ""){
+                            $('#pnl_questions').append("<br>");
+                            $('#pnl_questions').append($("<label></label>").append(value.question_description)
+                                               .attr("id","lbl_question_description_"+value.option_id)
+                                               .attr("class","description"));
 
+                    }
 
                 }
                 if(value.question_type=='DROPDOWN_LIST'){

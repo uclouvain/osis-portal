@@ -34,9 +34,9 @@ class AcademicYearAdmin(admin.ModelAdmin):
 
 class AcademicYear(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    year        = models.IntegerField()
-    start_date  = models.DateField(blank=True, null=True)
-    end_date    = models.DateField(blank=True, null=True)
+    year = models.IntegerField()
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
 
     @property
     def name(self):
