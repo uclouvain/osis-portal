@@ -26,7 +26,7 @@
 from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-
+from admission.models import form
 
 QUESTION_TYPES = (
     ('LABEL', _('Label')),
@@ -55,3 +55,10 @@ class Question(models.Model):
 
     def __str__(self):
         return u"%s" % self.label
+
+
+def find_form_ordered_questions(offer_year):
+    form_offer_yr = form.Form.objects.filter(offer_year=offer_year)
+    if form_offer_yr:
+        return Question.objects.filter(form=form_offer_yr).order_by("order")
+    return None
