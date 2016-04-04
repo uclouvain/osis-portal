@@ -46,6 +46,8 @@ urlpatterns = [
     url(r'^admission/offer/$', offer.offer_selection, name='offer_selection'),
     url(r'^admission/offer/save/$', offer.save_offer_selection, name='save_offer_selection'),
     url(r'^admission/offer/application/([0-9]+)/$', offer.selection_offer, name='selection_offer'),
+    url(r'^profile/$', application.profile, name='profile'),
+    url(r'^profile_confirmed/$', application.profile_confirmed, name='profile_confirmed'),
 
     url(r'^login/$', identification.login_admission,  name='login'),
     url(r'^logout/$', logout, name='logout'),

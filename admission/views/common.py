@@ -24,28 +24,18 @@
 #
 ##############################################################################
 from django.contrib.auth.decorators import login_required
-from admission.forms import NewAccountForm, AccountForm
-from random import randint
 from admission import models as mdl
 from django.shortcuts import render
+from admission.views import application
 
 
 @login_required
 def home(request):
-    form_new = NewAccountForm()
-    form = AccountForm()
-    number1 = randint(1, 20)
-    number2 = randint(1, 20)
-    number3 = randint(1, 20)
-    sum = number1 + number2
-    while number3 > sum:
-        number3 = randint(1, 20)
+    person = mdl.person.find_by_user(request.user)
 
-    applications = mdl.application.find_by_user(request.user)
+    if person.gender:
+        applications = mdl.application.find_by_user(request.user)
+        return render(request, "home.html", {'applications': applications})
+    else:
+        return application.profile(request)
 
-    return render(request, "home.html", {'number1':  number1,
-                                         'number2':  number2,
-                                         'number3':  number3,
-                                         'form_new': form_new,
-                                         'form':     form,
-                                         'applications': applications})
