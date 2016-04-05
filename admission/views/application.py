@@ -156,7 +156,6 @@ def profile(request):
             previous_enrollment=False
 
         if person_form.is_valid():
-            print('if form valid')
             if person_contact_address:
                 person_contact_address.save()
             person_legal_address.save()
@@ -169,9 +168,14 @@ def profile(request):
         person = mdl.person.find_by_user(request.user)
         person_legal_address = mdl.person_address.find_by_person_type(person,'LEGAL')
         person_contact_address = mdl.person_address.find_by_person_type(person,'CONTACT')
-        person_form = PersonForm()
         same_addresses = True
+        if person_contact_address:
+            same_addresses=False
+        person_form = PersonForm()
+
         previous_enrollment = False
+        if person.register_number or person.ucl_last_year:
+            previous_enrollment = True
 
     countries = Country.find_countries()
     return render(request, "profile.html", dict(person=person,

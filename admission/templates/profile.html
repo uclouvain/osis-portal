@@ -49,7 +49,7 @@
         <h5>Tous les champs marqués d'une * sont obligatoires</h5>
         <form method="post" action="{% url 'profile' %}">
             {% csrf_token %}
-            <font class="error">{{ person_form.errors }}</font>
+            <font class="error">{% if person_form.errors %}Attention il y a des erreurs{%endif%}</font>
             <br>
             <br>
             <button type="submit" id="bt_submit_profile" class="btn" role="button" name="save"

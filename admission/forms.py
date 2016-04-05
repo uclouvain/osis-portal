@@ -121,6 +121,8 @@ class PersonForm(forms.Form):
     contact_adr_city        = forms.CharField(help_text='Champ obligatoire.', required=False)
     contact_adr_country     = forms.CharField(help_text='Champ obligatoire.', required=False)
     additional_email        = forms.EmailField(help_text='Merci d\'encoder une adresse email correcte.', required=True)
+    previous_enrollment     = forms.CharField(help_text='Champ obligatoire.', required=False)
+    register_number         = forms.CharField(required=False)
     ucl_last_year           = forms.IntegerField(required=False)
 
 
@@ -128,10 +130,7 @@ class PersonForm(forms.Form):
         super(PersonForm, self).__init__(*args, **kwargs)
 
     def clean(self):
-        print('clean')
         cleaned_data = super(PersonForm, self).clean()
-
-
 
         same_contact_legal_addr = cleaned_data.get("same_contact_legal_addr")
 
@@ -141,7 +140,7 @@ class PersonForm(forms.Form):
                 self.errors['contact_adr_postal_code'] = "Champ obligatoire"
 
             contact_adr_city = cleaned_data.get("contact_adr_city")
-            print(contact_adr_city)
+
             if contact_adr_city is None or len(contact_adr_city) <= 0:
                 self.errors['contact_adr_city'] = "Champ obligatoire"
 
@@ -153,10 +152,13 @@ class PersonForm(forms.Form):
 
         if previous_enrollment:
             register_number = cleaned_data.get("register_number")
-            if register_number is not None and len(register_number) <= 0:
+
+            if register_number is None or len(register_number) <= 0:
                 self.errors['register_number'] = "Champ obligatoire"
+
             ucl_last_year = cleaned_data.get("ucl_last_year")
-            if ucl_last_year is not None and len(ucl_last_year) <= 0:
+
+            if ucl_last_year is None or ucl_last_year <= 0:
                 self.errors['ucl_last_year'] = "Champ obligatoire"
 
         return cleaned_data
