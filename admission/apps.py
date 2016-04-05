@@ -11,5 +11,7 @@ class AdmissionConfig(AppConfig):
     name = 'admission'
 
     def ready(self):
-        queue.listen_queue('hello', callback)
-        queue.listen_queue('hello2', callback2)
+        # if django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
+        # ===> This exception says that there is an error in the implementation of method ready(self) !!
+        queue.listen_queue("queue1")
+        queue.listen_queue("queue2")
