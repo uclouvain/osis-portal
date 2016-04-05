@@ -59,3 +59,6 @@ admin.site.register(option.Option,
 
 admin.site.register(answer.Answer,
                     answer.AnswerAdmin)
+
+admin.site.register(person_address.PersonAddress,
+                    person_address.PersonAddressAdmin)

@@ -35,7 +35,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import login
 
 from admission.forms import NewAccountForm, AccountForm, NewPasswordForm
-from admission.forms import PersonForm, PersonLegalAddressForm, PersonContactAddressForm, PersonAddressMatchingForm
+
 from admission.utils import send_mail
 from admission import models as mdl
 
@@ -381,33 +381,3 @@ def osis_login_error(request, *args, **kwargs):
     extra_context['number3'] = number3
     return login(request, *args, extra_context=extra_context, **kwargs)
 
-
-def profile(request):
-    if request.method == 'POST':
-        person_form = PersonForm(request.POST)
-        person_legalAddress_form = PersonLegalAddressForm(request.POST)
-        person_addressMatching_form = PersonAddressMatchingForm(request.POST)
-        person_contactAddress_form = PersonContactAddressForm(request.POST)
-
-        if person_form.is_valid() and person_legalAddress_form.is_valid() and person_contactAddress_form.is_valid():
-            person = person_form.save()
-            person_legalAddress = person_legalAddress_form.save(commit=False)
-            person_contactAddress = person_contactAddress_form.save(commit=False)
-
-            person_legalAddress.person = person
-            person_legalAddress.save()
-
-            person_contactAddress.person = person
-            person_contactAddress.save()
-
-            return HttpResponseRedirect(reverse('profile_confirmed')) # TMP - FOR TESTING PURPOSE
-    else:
-        person_form = PersonForm()
-        person_addressMatching_form = PersonAddressMatchingForm()
-        person_legalAddress_form = PersonLegalAddressForm()
-        person_contactAddress_form = PersonContactAddressForm()
-
-    return render(request, "profile.html", dict(person_form=person_form,
-                                            person_legalAddress_form=person_legalAddress_form,
-                                            person_contactAddress_form=person_contactAddress_form,
-                                            person_addressMatching_form = person_addressMatching_form))

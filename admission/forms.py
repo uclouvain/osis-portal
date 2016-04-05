@@ -24,11 +24,7 @@
 #
 ##############################################################################
 from django import forms
-from django.forms import ModelForm
-from django.utils.translation import ugettext_lazy as _
 
-from admission.models.person import Person #AA
-from admission.models.personAddress import PersonAddress #AA
 
 class NewAccountForm(forms.Form):
     first_name_new = forms.CharField(required=True, max_length=30)
@@ -103,82 +99,64 @@ class NewPasswordForm(forms.Form):
         return data.strip()
 
 
-#HOW TO EXTRACT FamilyName and FirstName from User ?
+class PersonForm(forms.Form):
 
-class PersonForm(forms.ModelForm):
+    last_name               = forms.CharField(help_text='Champ obligatoire.', required=True)
+    first_name              = forms.CharField(help_text='Champ obligatoire.', required=True)
+    birth_date              = forms.DateField(help_text='Champ obligatoire.',
+                                              required=True,input_formats=['%d/%m/%Y'],
+                                              widget=forms.DateInput(format = '%d/%m/%Y'))
+    birth_place             = forms.CharField(help_text='Champ obligatoire.', required=True)
+    birth_country           = forms.CharField(help_text='Champ obligatoire.', required=True)
+    gender                  = forms.CharField(help_text='Champ obligatoire.', required=True)
+    civil_status            = forms.CharField(help_text='Champ obligatoire.', required=True)
+    nationality             = forms.CharField(help_text='Champ obligatoire.', required=True)
+    legal_adr_street        = forms.CharField(help_text='Champ obligatoire.', required=True)
+    legal_adr_number        = forms.CharField(help_text='Champ obligatoire.', required=True)
+    legal_adr_postal_code   = forms.CharField(help_text='Champ obligatoire.', required=True)
+    legal_adr_city          = forms.CharField(help_text='Champ obligatoire.', required=True)
+    legal_adr_country       = forms.CharField(help_text='Champ obligatoire.', required=True)
+    same_contact_legal_addr = forms.CharField(help_text='Champ obligatoire.', required=True)
+    contact_adr_postal_code = forms.CharField(help_text='Champ obligatoire.', required=False)
+    contact_adr_city        = forms.CharField(help_text='Champ obligatoire.', required=False)
+    contact_adr_country     = forms.CharField(help_text='Champ obligatoire.', required=False)
+    additional_email        = forms.EmailField(help_text='Merci d\'encoder une adresse email correcte.', required=True)
+    ucl_last_year           = forms.IntegerField(required=False)
 
-    LASTREGISTRATION_CHOICES = (
-        ('1', _('Oui')),
-        ('2', _('Non')))
-
-    lastregistration_choice = forms.ChoiceField(widget=forms.RadioSelect, choices=LASTREGISTRATION_CHOICES, initial='1')
 
     def __init__(self, *args, **kwargs):
         super(PersonForm, self).__init__(*args, **kwargs)
-        self.fields['user'].help_text = "(ex:  Van der Elst /...)"
-        self.fields['middle_name'].help_text = "(ex:  Pierre, Paul, Jacques)"
-        self.fields['birth_date'].help_text = "(jj/mm/aaaa)"
-        self.fields['birth_place'].help_text = "(ex:  Louvain-la-Neuve ...)"
 
-        self.fields['user'].label = "Nom"
-        self.fields['middle_name'].label="Autres prénoms"
-        self.fields['birth_date'].label="Date de naissance *"
-        self.fields['birth_place'].label="Lieu de naissance *"
-        self.fields['birth_country'].label="Pays de naissance *"
-        self.fields['gender'].label="Genre *"
-        self.fields['civil_status'].label="Etat civil *"
-        self.fields['number_children'].label="Nombre d\'enfants"
-        self.fields['spouse_name'].label="Nom conjoint"
-        self.fields['nationality'].label="Nationalité *"
-        self.fields['national_id'].label="Numéro du registre national"
-        self.fields['id_card_number'].label="Numéro de carte d\'identité"
-        self.fields['passport_number'].label="Numéro de passport"
-        self.fields['phone_mobile'].label="GSM"
-        self.fields['phone'].label="Autre téléphone"
-        self.fields['additional_email'].label="E-mail"
-        self.fields['lastregistration_choice'].label="Avez-vous déjà été inscrit à l\'UCL/Saint-Louis ?"
-        self.fields['register_number'].label="Quel est votre numéro de matricule ? *"
-        self.fields['ucl_last_year'].label="Quelle est votre dernière année à l\'UCL/Saint-Louis ? *"
-
-    class Meta:
-        model = Person
-        exclude = ['activation_code']
+    def clean(self):
+        print('clean')
+        cleaned_data = super(PersonForm, self).clean()
 
 
-class PersonLegalAddressForm(forms.ModelForm):
-     prefix='l'
-     type = forms.CharField(widget=forms.HiddenInput(), initial='LEGAL')
-     def __init__(self, *args, **kwargs):
-        super(PersonLegalAddressForm, self).__init__(*args, **kwargs)
 
-        self.fields['postal_code'].help_text = "(ex: 1348)"
-        self.fields['city'].help_text = "(ex: Louvain-la-Neuve)"
+        same_contact_legal_addr = cleaned_data.get("same_contact_legal_addr")
 
-        self.fields['street'].label="Rue/Avenue"
-        self.fields['number'].label="Numéro"
-        self.fields['complement'].label="Lieu-dit (éventuellement)"
-        self.fields['postal_code'].label="Code postal *"
-        self.fields['city'].label="Localité *"
-        self.fields['country'].label="Pays *"
+        if same_contact_legal_addr == "false":
+            contact_adr_postal_code  = cleaned_data.get("contact_adr_postal_code")
+            if contact_adr_postal_code is None or len(contact_adr_postal_code) <= 0:
+                self.errors['contact_adr_postal_code'] = "Champ obligatoire"
 
-     class Meta:
-        model = PersonAddress
-        exclude = ['person']
+            contact_adr_city = cleaned_data.get("contact_adr_city")
+            print(contact_adr_city)
+            if contact_adr_city is None or len(contact_adr_city) <= 0:
+                self.errors['contact_adr_city'] = "Champ obligatoire"
 
+            contact_adr_country  = cleaned_data.get("contact_adr_country")
+            if contact_adr_country is None or len(contact_adr_country) <= 0:
+                self.errors['contact_adr_country'] = "Champ obligatoire"
 
-class PersonContactAddressForm(PersonLegalAddressForm):
-     prefix='c'
-     type = forms.CharField(widget=forms.HiddenInput(), initial='CONTACT')
+        previous_enrollment = cleaned_data.get("previous_enrollment")
 
+        if previous_enrollment:
+            register_number = cleaned_data.get("register_number")
+            if register_number is not None and len(register_number) <= 0:
+                self.errors['register_number'] = "Champ obligatoire"
+            ucl_last_year = cleaned_data.get("ucl_last_year")
+            if ucl_last_year is not None and len(ucl_last_year) <= 0:
+                self.errors['ucl_last_year'] = "Champ obligatoire"
 
-class PersonAddressMatchingForm(forms.Form):
-
-    ADDRESSMATCHING_CHOICES = (
-        ('1', _('Oui')),
-        ('2', _('Non')))
-
-    addressMatching_choice = forms.ChoiceField(widget=forms.RadioSelect, choices=ADDRESSMATCHING_CHOICES, initial='2')
-
-    def __init__(self, *args, **kwargs):
-        super(PersonAddressMatchingForm, self).__init__(*args, **kwargs)
-        self.fields['addressMatching_choice'].label="Adresse de contact est la même que votre domicile légal"
+        return cleaned_data

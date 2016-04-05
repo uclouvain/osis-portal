@@ -32,7 +32,8 @@ from admission.views import application
 @login_required
 def home(request):
     person = mdl.person.find_by_user(request.user)
-
+    print(person.gender)
+    person.gender = None
     if person.gender:
         applications = mdl.application.find_by_user(request.user)
         return render(request, "home.html", {'applications': applications})

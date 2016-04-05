@@ -27,7 +27,7 @@ from admission import models as mdl
 from reference.models import Country
 from django.shortcuts import render
 
-from admission.forms import PersonForm, PersonLegalAddressForm, PersonContactAddressForm,PersonAddressMatchingForm
+from admission.forms import PersonForm
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
@@ -43,14 +43,17 @@ def application_update(request, application_id):
 
 
 def profile(request):
-    if request.method == 'POST':
-        print('profile post')
-        person = mdl.person.find_by_user(request.user)
-        person_legal_address = mdl.personAddress.find_by_person_type(person,'LEGAL')
-        if person_legal_address is None:
-            person_legal_address = mdl.personAddress.PersonAddress()
-            person_legal_address.person = person
 
+    if request.method == 'POST':
+        person_form = PersonForm(data=request.POST)
+
+        person = mdl.person.find_by_user(request.user)
+        person_legal_address = mdl.person_address.find_by_person_type(person,'LEGAL')
+
+        if person_legal_address is None:
+            person_legal_address = mdl.person_address.PersonAddress()
+            person_legal_address.person = person
+            person_legal_address.type='LEGAL'
 
         if request.POST['last_name']:
             person.user.last_name = request.POST['last_name']
@@ -59,7 +62,13 @@ def profile(request):
         if request.POST['middle_name']:
             person.middle_name = request.POST['middle_name']
         if request.POST['birth_date']:
-            person.birth_date = datetime.strptime(request.POST['birth_date'], '%d/%m/%Y')
+            try:
+                person.birth_date = datetime.strptime(request.POST['birth_date'], '%d/%m/%Y')
+            except:
+                person.birth_date = None
+                person_form.errors['birth_date'] = "La date encodée('%s') semble incorrecte " % request.POST['birth_date']
+                                                                               # I should probably be able
+                                                                               # to do this in the forms.py
         if request.POST['birth_place']:
             person.birth_place = request.POST['birth_place']
         if request.POST['birth_country']:
@@ -101,13 +110,12 @@ def profile(request):
             country = Country.find_by_id(country_id)
             person_legal_address.country = country
 
-        if request.POST['contact_adr_street']== "on":
-            pass
-        else:
-            person_contact_address = mdl.personAddress.find_by_person_type(person,'CONTACT')
+        if request.POST['same_contact_legal_addr'] == "false":
+            person_contact_address = mdl.person_address.find_by_person_type(person,'CONTACT')
             if person_contact_address is None:
-                person_contact_address = mdl.personAddress.PersonAddress()
+                person_contact_address = mdl.person_address.PersonAddress()
                 person_contact_address.person = person
+                person_contact_address.type='CONTACT'
 
             if request.POST['contact_adr_street']:
                 person_contact_address.street = request.POST['contact_adr_street']
@@ -123,7 +131,12 @@ def profile(request):
                 country_id = request.POST['contact_adr_country']
                 country = Country.find_by_id(country_id)
                 person_contact_address.country = country
-            person_contact_address.save()
+            same_addresses = False
+
+        else:
+            #Question que faire si true, mais qu'une adresse de contact existe déjà
+            person_contact_address = None
+            same_addresses = True
 
         if request.POST['phone_mobile']:
             person.phone_mobile = request.POST['phone_mobile']
@@ -132,30 +145,43 @@ def profile(request):
         if request.POST['additional_email']:
             person.additional_email = request.POST['additional_email']
 
-        if request.POST['register_number']:
-            person.register_number = request.POST['register_number']
-        if request.POST['ucl_last_year']:
-            person.ucl_last_year = request.POST['ucl_last_year']
-        person.save()
+        if request.POST['previous_enrollment'] == "true":
+            if request.POST['register_number']:
+                person.register_number = request.POST['register_number']
+            if request.POST['ucl_last_year']:
+                person.ucl_last_year = request.POST['ucl_last_year']
+            previous_enrollment=True
+        else:
+            person.register_number = None
+            person.ucl_last_year = None
+            previous_enrollment=False
 
-        person_legal_address.save()
-        return HttpResponseRedirect(reverse('profile_confirmed')) # TMP - FOR TESTING PURPOSE
+        if person_form.is_valid():
+            print('if form valid')
+            if person_contact_address:
+                person_contact_address.save()
+            person_legal_address.save()
+            person.save()
 
+            return HttpResponseRedirect(reverse('profile_confirmed')) # TMP - FOR TESTING PURPOSE
 
     else:
-        print('profile init')
         person = mdl.person.find_by_user(request.user)
-        person_legal_address = mdl.personAddress.find_by_person_type(person,'LEGAL')
-        person_contact_address = mdl.personAddress.find_by_person_type(person,'CONTACT')
-
-        person_addressMatching_form = PersonAddressMatchingForm()
+        person_legal_address = mdl.person_address.find_by_person_type(person,'LEGAL')
+        person_contact_address = mdl.person_address.find_by_person_type(person,'CONTACT')
+        person_form = PersonForm()
+        same_addresses = True
+        previous_enrollment = False
 
     countries = Country.find_countries()
     return render(request, "profile.html", dict(person=person,
-                                                person_addressMatching_form = person_addressMatching_form,
+                                                person_form=person_form,
                                                 countries=countries,
                                                 person_legal_address=person_legal_address,
-                                                person_contact_address=person_contact_address))
+                                                person_contact_address=person_contact_address,
+                                                same_addresses=same_addresses,
+                                                previous_enrollment=previous_enrollment))
+
 
 def profile_confirmed(request):
     return render(request, "profile_confirmed.html")

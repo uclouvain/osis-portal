@@ -29,8 +29,8 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class PersonAddressAdmin(admin.ModelAdmin):
-    list_display = ('person', 'label', 'location', 'postal_code', 'city', 'country')
-    fieldsets = ((None, {'fields': ('person', 'label', 'location', 'postal_code', 'city', 'country')}),)
+    list_display = ('person', 'type', 'street', 'postal_code', 'city', 'country')
+    fieldsets = ((None, {'fields': ('person', 'type', 'street', 'postal_code', 'city', 'country')}),)
 
 
 class PersonAddress(models.Model):
@@ -60,7 +60,7 @@ def find_by_person_type(a_person,type):
     """ Return a list containing one or more addresses of a person. Returns None if there is no address.
     :param a_person: An instance of the class base.models.person.Person
     """
-    adrs =  PersonAddress.objects.filter(person=a_person, type=type)
+    adrs = PersonAddress.objects.filter(person=a_person, type=type)
     if adrs:
         return adrs[0]
     return None
