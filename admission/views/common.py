@@ -26,14 +26,13 @@
 from django.contrib.auth.decorators import login_required
 from admission import models as mdl
 from django.shortcuts import render
-from admission.views import application
+from admission.views import *
 
 
 @login_required
 def home(request):
     person = mdl.person.find_by_user(request.user)
-    print(person.gender)
-    person.gender = None
+
     if person.gender:
         applications = mdl.application.find_by_user(request.user)
         return render(request, "home.html", {'applications': applications})

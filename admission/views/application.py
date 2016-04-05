@@ -28,10 +28,9 @@ from reference.models import Country
 from django.shortcuts import render
 
 from admission.forms import PersonForm
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
 
 from datetime import datetime
+from admission.views import common
 
 
 def application_update(request, application_id):
@@ -163,7 +162,8 @@ def profile(request):
             person_legal_address.save()
             person.save()
 
-            return HttpResponseRedirect(reverse('profile_confirmed')) # TMP - FOR TESTING PURPOSE
+            #return HttpResponseRedirect(reverse('profile_confirmed')) # TMP - FOR TESTING PURPOSE
+            return common.home(request)
 
     else:
         person = mdl.person.find_by_user(request.user)

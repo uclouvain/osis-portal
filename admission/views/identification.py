@@ -31,24 +31,12 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import login
 
 from admission.forms import NewAccountForm, AccountForm, NewPasswordForm
 
 from admission.utils import send_mail
 from admission import models as mdl
-
-
-@login_required
-def home(request):
-    person = mdl.person.find_by_user(request.user)
-
-    if person.gender:
-        applications = mdl.application.find_by_user(request.user)
-        return render(request, "home.html", {'applications': applications})
-    else:
-        return render(request, "profile.html", {'person': person})
 
 
 def home_error(request, message, form):
