@@ -27,12 +27,6 @@
 {% endcomment %}
 
 {% block content %}
-
-
-&nbsp;&nbsp;&nbsp;&nbsp;
-<br><br><br><br>
-
-
 <div class="panel panel-default">
     <div class="panel-body">
 
@@ -104,10 +98,13 @@
             </div>
             {% endif %}
 
-        <form method="post" action="{% url 'save_offer_selection' %}">
+
+        <form method="post" action="{% url 'save_offer_selection' %}" id="form_questions" name="form_questions">
             <input type="hidden" id="txt_offer_year_id" name="offer_year_id" value="{{offer.id}}"/>
             <input type="hidden" id="txt_application_id" name="application_id" value="{{ application.id }}"/>
             {% csrf_token %}
+            <br>
+            <div id="pnl_questions"></div>
             <br>
             <div class="row">
                 <div class="col-md-2">

@@ -32,7 +32,7 @@ from admission.models import person
 
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = ('person', 'offer_year', 'creation_date', 'application_type', 'doctorate')
-    fieldsets = ((None, {'fields': ('person', 'offer_year', 'creation_date', 'application_type', 'doctorate')}),)
+    fieldsets = ((None, {'fields': ('person', 'offer_year', 'application_type', 'doctorate')}),)
 
 
 class Application(models.Model):
@@ -54,7 +54,7 @@ def find_by_user(user):
         person_application = person.Person.objects.get(user=user)
 
         if person_application:
-            return  Application.objects.filter(person=person_application)
+            return Application.objects.filter(person=person_application)
         else:
             return None
     except ObjectDoesNotExist:

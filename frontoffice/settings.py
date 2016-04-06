@@ -159,6 +159,12 @@ LOGIN_URL = reverse_lazy('login')
 LOGOUT_URL = reverse_lazy('logout')
 LOGIN_REDIRECT_URL = '/admission/'
 
+QUEUE_URL = 'localhost'
+QUEUE_USER = 'guest'
+QUEUE_PASSWORD = 'guest'
+QUEUE_PORT = 5672
+QUEUE_CONTEXT_ROOT = '/'
+
 try  :
     from frontoffice.server_settings import *
 except ImportError:

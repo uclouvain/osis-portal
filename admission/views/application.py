@@ -25,7 +25,7 @@
 ##############################################################################
 from admission import models as mdl
 from reference.models import Country
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from admission.forms import PersonForm
 
@@ -66,8 +66,7 @@ def profile(request):
             except:
                 person.birth_date = None
                 person_form.errors['birth_date'] = "La date encodée('%s') semble incorrecte " % request.POST['birth_date']
-                                                                               # I should probably be able
-                                                                               # to do this in the forms.py
+
         if request.POST['birth_place']:
             person.birth_place = request.POST['birth_place']
         if request.POST['birth_country']:
@@ -131,9 +130,8 @@ def profile(request):
                 country = Country.find_by_id(country_id)
                 person_contact_address.country = country
             same_addresses = False
-
         else:
-            #Question que faire si true, mais qu'une adresse de contact existe déjà
+            # Question que faire si true, mais qu'une adresse de contact existe déjà
             person_contact_address = None
             same_addresses = True
 
@@ -161,7 +159,6 @@ def profile(request):
             person_legal_address.save()
             person.save()
 
-            #return HttpResponseRedirect(reverse('profile_confirmed')) # TMP - FOR TESTING PURPOSE
             return common.home(request)
 
     else:
@@ -189,3 +186,69 @@ def profile(request):
 
 def profile_confirmed(request):
     return render(request, "profile_confirmed.html")
+
+
+def save_application_offer(request):
+    if request.method == 'POST' and 'save' in request.POST:
+        offer_year = None
+        offer_year_id = request.POST.get('offer_year_id')
+
+        application_id = request.POST.get('application_id')
+        if application_id:
+            application = get_object_or_404(mdl.application.Application, pk=application_id)
+        else:
+            application = mdl.application.Application()
+            person_application = mdl.person.find_by_user(request.user)
+            application.person = person_application
+
+        if offer_year_id:
+            offer_year = mdl.offer_year.find_by_id(offer_year_id)
+            if offer_year.grade_type:
+                if offer_year.grade_type.grade == 'DOCTORATE':
+                    application.doctorate = True
+                else:
+                    application.doctorate = False
+
+        application.offer_year = offer_year
+        application.save()
+        # answer_question_
+        for key, value in request.POST.items():
+            if "txt_answer_question_" in key:
+                answer = mdl.answer.Answer()
+                answer.application = application
+                answer.value = value
+                # as it's txt_answer we know that it's there is only one option available,
+                # (SHORT_INPUT_TEXT, LONG_INPUT_TEXT)
+                option_id = key.replace("txt_answer_question_", "")
+                answer.option = mdl.option.find_by_id(int(option_id))
+                answer.save()
+            else:
+                if "txt_answer_radio_chck_optid_" in key:
+
+                    # RADIO_BUTTON
+                    if "on" == value:
+                        answer = mdl.answer.Answer()
+                        answer.application = application
+                        option_id = key.replace("txt_answer_radio_chck_optid_", "")
+                        option = mdl.option.find_by_id(int(option_id))
+                        answer.option = option
+                        answer.value = option.value
+                        answer.save()
+                else:
+                    if "slt_question_" in key:
+                        answer = mdl.answer.Answer()
+                        answer.application = application
+                        option = mdl.option.find_by_id(value)
+                        answer.option = option
+                        answer.value = option.value
+                        answer.save()
+
+        return render(request, "diploma.html", {"application": application})
+
+
+def application_view(request, application_id):
+    application = mdl.application.find_by_id(application_id)
+    answers = mdl.answer.find_by_application(application_id)
+    return render(request, "application.html",
+                           {"application": application,
+                            "answers": answers})

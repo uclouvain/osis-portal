@@ -24,7 +24,7 @@
 #
 ##############################################################################
 from django.conf.urls import url
-from admission.views import application, common, identification, offer, level
+from admission.views import application, common, identification, offer, level, question, option
 from django.contrib.auth.views import logout
 
 
@@ -44,7 +44,7 @@ urlpatterns = [
     url(r'^admission/application/([0-9]+)/$', application.application_update, name='application_update'),
 
     url(r'^admission/offer/$', offer.offer_selection, name='offer_selection'),
-    url(r'^admission/offer/save/$', offer.save_offer_selection, name='save_offer_selection'),
+    url(r'^admission/offer/save/$', application.save_application_offer, name='save_offer_selection'),
     url(r'^admission/offer/application/([0-9]+)/$', offer.selection_offer, name='selection_offer'),
     url(r'^profile/$', application.profile, name='profile'),
     url(r'^profile_confirmed/$', application.profile_confirmed, name='profile_confirmed'),
@@ -54,4 +54,8 @@ urlpatterns = [
 
     url(r'^offers/$', offer.search),
     url(r'^levels/$', level.find_by_type),
+    url(r'^questions/$', question.find_by_offer),
+    url(r'^options/$', option.find_by_offer),
+
+    url(r'^admission/application/read/([0-9]+)/$', application.application_view, name='application_view'),
 ]

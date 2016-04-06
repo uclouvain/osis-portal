@@ -336,36 +336,3 @@ def application_update(request, application_id):
                   {"offers": None,
                    "offer": application.offer_year,
                    "application": application})
-
-
-def osis_login(request, *args, **kwargs):
-    extra_context = {}
-    extra_context['form_new'] = NewAccountForm()
-    number1 = randint(1, 20)
-    extra_context['number1'] = number1
-    number2 = randint(1, 20)
-    extra_context['number2'] = number2
-    sum = number1 + number2
-    number3 = randint(1, 20)
-    while number3 > sum:
-        number3 = randint(1, 20)
-    extra_context['number3'] = number3
-    return login(request, *args, extra_context=extra_context, **kwargs)
-
-
-def osis_login_error(request, *args, **kwargs):
-    extra_context = {}
-    form_new = NewAccountForm()
-    form_new.errors['email_new_confirm'] = "Il existe déjà un compte pour cette adresse email"
-    extra_context['form_new'] = form_new
-    number1 = randint(1, 20)
-    extra_context['number1'] = number1
-    number2 = randint(1, 20)
-    extra_context['number2'] = number2
-    sum = number1 + number2
-    number3 = randint(1, 20)
-    while number3 > sum:
-        number3 = randint(1, 20)
-    extra_context['number3'] = number3
-    return login(request, *args, extra_context=extra_context, **kwargs)
-

@@ -28,9 +28,6 @@
 
 {% block content %}
 &nbsp;&nbsp;&nbsp;&nbsp;
-<br><br>
-<br><br>
-<br><br>
 
 <div class="panel panel-default">
     <div class="panel-body">
@@ -60,7 +57,7 @@
                     {% for application in applications%}
                     <tr>
                         <td>{{ application.creation_date | default_if_none:''|date:"j/m/Y" }}</td>
-                        <td><a href="{% url 'application_update' application.id %}">{{ application.offer_year.title }}</a></td>
+                        <td><a href="{% url 'application_view' application.id %}">{{ application.offer_year.title }}</a></td>
                     </tr>
                     {% endfor%}
                 </table>

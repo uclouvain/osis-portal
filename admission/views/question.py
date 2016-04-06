@@ -23,24 +23,31 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
-from django.contrib import admin
+from rest_framework import serializers
+from admission import models as mdl
+from django.http import HttpResponse
+from rest_framework.renderers import JSONRenderer
+from django.views.decorators.csrf import csrf_exempt
 
 
-class AnswerAdmin(admin.ModelAdmin):
-    list_display = ['value']
-    fieldsets = ((None, {'fields': ('value', 'option', 'application')}),)
-    list_filter = ('application', 'option',)
+class JSONResponse(HttpResponse):
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
 
 
-class Answer(models.Model):
-    value = models.TextField()
-    option = models.ForeignKey('Option')
-    application = models.ForeignKey('Application')
-
-    def __str__(self):
-        return u"%s" % self.value
+class QuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = mdl.question.Question
+        fields = ('id', 'label', 'description', 'type', 'required')
 
 
-def find_by_application(application_id):
-    return Answer.objects.filter(application=application_id)
+@csrf_exempt
+def find_by_offer(request):
+    offer_yr_id = request.GET['offer']
+
+    offer_yr = mdl.offer_year.find_by_id(offer_yr_id)
+    questions = mdl.question.find_form_ordered_questions(offer_yr)
+    serializer = QuestionSerializer(questions, many=True)
+    return JSONResponse(serializer.data)
