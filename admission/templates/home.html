@@ -32,11 +32,19 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <ul class="nav nav-tabs">
+            <li><a data-toggle="tab" href="#tab_profile" id="lnk_profile_tab">Votre profil</a>
+            </li>
             <li class="active"><a data-toggle="tab" href="#tab_application" id="lnk_application_tab">Vos demandes</a>
             </li>
         </ul>
 
         <div class="tab-content">
+            <div id="tab_profile" class="tab-pane fade">
+                <br>
+                <a href="{% url 'profile' %}" class="btn btn-primary"><span class="glyphicon glyphicon-user"
+                                                                                    aria-hidden="true"></span>
+                    Modifier votre profil</a>
+            </div>
             <div id="tab_application" class="tab-pane fade in active">
                 <h2> {{ request.user.first_name }} {{ request.user.last_name }}</h2>
                 {% if applications %}
