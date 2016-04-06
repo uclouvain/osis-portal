@@ -1,6 +1,28 @@
 import pika
 from frontoffice.settings import QUEUE_URL, QUEUE_USER, QUEUE_PASSWORD, QUEUE_PORT, QUEUE_CONTEXT_ROOT
 import threading
+from couchbase import Couchbase
+from pprint import pprint
+import json
+
+
+def couchbase_insert(json_datas):
+    cb = Couchbase.connect(bucket='default')
+    data = json.loads(json_datas.decode("utf-8"))
+    key = "{0}-{1}".format(
+        data['id'],
+        data['name'].replace(' ', '_').lower()
+    )
+    print('inserting datas in couchDB...')
+    cb.set(key, data)
+    print('Done.')
+    print('getting datas just inserted in couchDB...')
+    result = cb.get(key)
+    pprint(result.value, indent=4)
+    print('Done.')
+    print('deleting datas just inserted in couchDB...')
+    cb.delete(key)
+    print('Done.')
 
 
 def listen_queue(queue_name):
@@ -329,6 +351,7 @@ class ExampleConsumer(object):
         """
         print(self._connection_parameters['queue_name'] + ' : Received message # %s from %s: %s' % (basic_deliver.delivery_tag, properties.app_id, body))
         self.acknowledge_message(basic_deliver.delivery_tag)
+        couchbase_insert(body)
 
     def acknowledge_message(self, delivery_tag):
         """Acknowledge the message delivery from RabbitMQ by sending a
