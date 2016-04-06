@@ -97,3 +97,68 @@ class NewPasswordForm(forms.Form):
     def clean_password_new_confirm(self):
         data = self.cleaned_data['password_new_confirm']
         return data.strip()
+
+
+class PersonForm(forms.Form):
+
+    last_name               = forms.CharField(help_text='Champ obligatoire.', required=True)
+    first_name              = forms.CharField(help_text='Champ obligatoire.', required=True)
+    birth_date              = forms.DateField(help_text='Champ obligatoire.',
+                                              required=True,input_formats=['%d/%m/%Y'],
+                                              widget=forms.DateInput(format = '%d/%m/%Y'))
+    birth_place             = forms.CharField(help_text='Champ obligatoire.', required=True)
+    birth_country           = forms.CharField(help_text='Champ obligatoire.', required=True)
+    gender                  = forms.CharField(help_text='Champ obligatoire.', required=True)
+    civil_status            = forms.CharField(help_text='Champ obligatoire.', required=True)
+    nationality             = forms.CharField(help_text='Champ obligatoire.', required=True)
+    legal_adr_street        = forms.CharField(help_text='Champ obligatoire.', required=True)
+    legal_adr_number        = forms.CharField(help_text='Champ obligatoire.', required=True)
+    legal_adr_postal_code   = forms.CharField(help_text='Champ obligatoire.', required=True)
+    legal_adr_city          = forms.CharField(help_text='Champ obligatoire.', required=True)
+    legal_adr_country       = forms.CharField(help_text='Champ obligatoire.', required=True)
+    same_contact_legal_addr = forms.CharField(help_text='Champ obligatoire.', required=True)
+    contact_adr_postal_code = forms.CharField(help_text='Champ obligatoire.', required=False)
+    contact_adr_city        = forms.CharField(help_text='Champ obligatoire.', required=False)
+    contact_adr_country     = forms.CharField(help_text='Champ obligatoire.', required=False)
+    additional_email        = forms.EmailField(help_text='Merci d\'encoder une adresse email correcte.', required=True)
+    previous_enrollment     = forms.CharField(help_text='Champ obligatoire.', required=False)
+    register_number         = forms.CharField(required=False)
+    ucl_last_year           = forms.IntegerField(required=False)
+
+
+    def __init__(self, *args, **kwargs):
+        super(PersonForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super(PersonForm, self).clean()
+
+        same_contact_legal_addr = cleaned_data.get("same_contact_legal_addr")
+
+        if same_contact_legal_addr == "false":
+            contact_adr_postal_code  = cleaned_data.get("contact_adr_postal_code")
+            if contact_adr_postal_code is None or len(contact_adr_postal_code) <= 0:
+                self.errors['contact_adr_postal_code'] = "Champ obligatoire"
+
+            contact_adr_city = cleaned_data.get("contact_adr_city")
+
+            if contact_adr_city is None or len(contact_adr_city) <= 0:
+                self.errors['contact_adr_city'] = "Champ obligatoire"
+
+            contact_adr_country  = cleaned_data.get("contact_adr_country")
+            if contact_adr_country is None or len(contact_adr_country) <= 0:
+                self.errors['contact_adr_country'] = "Champ obligatoire"
+
+        previous_enrollment = cleaned_data.get("previous_enrollment")
+
+        if previous_enrollment:
+            register_number = cleaned_data.get("register_number")
+
+            if register_number is None or len(register_number) <= 0:
+                self.errors['register_number'] = "Champ obligatoire"
+
+            ucl_last_year = cleaned_data.get("ucl_last_year")
+
+            if ucl_last_year is None or ucl_last_year <= 0:
+                self.errors['ucl_last_year'] = "Champ obligatoire"
+
+        return cleaned_data

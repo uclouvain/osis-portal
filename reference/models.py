@@ -23,42 +23,30 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.db import models
 from django.contrib import admin
-from admission.models import *
 
 
-admin.site.register(person.Person,
-                    person.PersonAdmin)
+class CountryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'iso_code', 'nationality', 'european_union', 'dialing_code', 'cref_code')
+    fieldsets = ((None, {'fields': ('iso_code', 'name', 'nationality', 'european_union', 'dialing_code', 'cref_code')}),)
+    ordering = ('name',)
+    search_fields = ['name']
 
-admin.site.register(grade_type.GradeType,
-                    grade_type.GradeTypeAdmin)
 
-admin.site.register(domain.Domain,
-                    domain.DomainAdmin)
+class Country(models.Model):
+    iso_code = models.CharField(max_length=2, unique=True)
+    name = models.CharField(max_length=80, unique=True)
+    nationality = models.CharField(max_length=80, blank=True, null=True)
+    european_union = models.BooleanField(default=False)
+    dialing_code = models.CharField(max_length=3, blank=True, null=True)
+    cref_code = models.CharField(max_length=3, blank=True, null=True)
 
-admin.site.register(academic_year.AcademicYear,
-                    academic_year.AcademicYearAdmin)
+    def __str__(self):
+        return self.name
 
-admin.site.register(offer_year.OfferYear,
-                    offer_year.OfferYearAdmin)
+    def find_countries():
+        return Country.objects.all()
 
-admin.site.register(offer_year_calendar.OfferYearCalendar,
-                    offer_year_calendar.OfferYearCalendarAdmin)
-
-admin.site.register(application.Application,
-                    application.ApplicationAdmin)
-
-admin.site.register(form.Form,
-                    form.FormAdmin)
-
-admin.site.register(question.Question,
-                    question.QuestionAdmin)
-
-admin.site.register(option.Option,
-                    option.OptionAdmin)
-
-admin.site.register(answer.Answer,
-                    answer.AnswerAdmin)
-
-admin.site.register(person_address.PersonAddress,
-                    person_address.PersonAddressAdmin)
+    def find_by_id(country_id):
+        return Country.objects.get(pk=country_id)
