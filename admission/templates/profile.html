@@ -185,7 +185,7 @@
                                 {% for country in countries%}
                                 <option value="{{country.id}}"
                                         {% if country.id = person.nationality.id %} selected {%endif %}>
-                                        {{ country.nationality }}
+                                        {{ country.name }}
                                 </option>
                                 {% endfor %}
                             </select>
