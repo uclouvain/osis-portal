@@ -40,23 +40,21 @@
     }
 
 </script>
-&nbsp;&nbsp;&nbsp;&nbsp;
-<br><br>
-<br>
+
 <div class="panel panel-default">
     <div class="panel-body">
         <h2 class="error">Veuillez compléter votre profil</h2>
         <h5>Tous les champs marqués d'une * sont obligatoires</h5>
         <form method="post" action="{% url 'profile' %}">
             {% csrf_token %}
-            <font class="error">{% if person_form.errors %}Attention il y a des erreurs{%endif%}</font>
+            <font class="error">{% if person_form.errors %}Attention il y a des erreurs.{%endif%}</font>
             <br>
             <br>
-            <button type="submit" id="bt_submit_profile" class="btn" role="button" name="save"
+            <button type="submit" id="bt_submit_profile" class="btn btn-primary" role="button" name="save"
                     title="Sauvegarder">
                 <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Sauvegarder
             </button>
-            <button type="submit" id="bt_submit_next_step" class="btn" role="button" name="next_step"
+            <button type="submit" id="bt_submit_next_step" class="btn btn-default" role="button" name="next_step"
                     title="Sauvegarder" disabled>
                 <span class="glyphicon glyphicon-forward" aria-hidden="true"></span> Etape suivante
             </button>
@@ -76,9 +74,8 @@
                             <label>Nom *</label>
                             <input class="form-control" id="txt_last_name" name="last_name"
                                    value="{{ person.user.last_name  | default_if_none:'' }}" maxlength="255">
-                            (ex: Van der Elst /...)
+                            (ex: Van der Elst)
                             <font class="error">{{ person_form.last_name.errors|striptags }}</font>
-
                         </div>
                         <div class="col-md-4">
                             <label>Prénom *</label>
@@ -86,7 +83,6 @@
                                    value="{{ person.user.first_name  | default_if_none:'' }}" maxlength="255">
                             (ex: Frédéric <span style="text-decoration: line-through;">frederic FREDERIC</span>)
                             <font class="error">{{ person_form.first_name.errors|striptags }}</font>
-
                         </div>
                         <div class="col-md-4">
                             <label>Autres prénoms</label>
@@ -112,7 +108,7 @@
                             <font class="error">{{ person_form.birth_place.errors|striptags}}</font>
 
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label>Pays de naissance *</label>
                             <select class="form-control" id="slt_birth_country" name="birth_country">
                                 {% for country in countries%}
@@ -123,7 +119,17 @@
                             </select>
                             <font class="error">{{ person_form.birth_country.errors|striptags }}</font>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
+                            <label>Nationalité *</label>
+                            <select class="form-control" id="slt_nationality" name="nationality">
+                                {% for country in countries%}
+                                <option value="{{country.id}}"
+                                        {% if country.id = person.nationality.id %} selected {%endif %}>
+                                        {{ country.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <font class="error">{{ person_form.nationality.errors|striptags }}</font>
                         </div>
                     </div>
                     <br>
@@ -146,23 +152,23 @@
                         <div class="col-md-3">
                             <label>Etat civil *</label>
                             <select class="form-control" id="slt_civil_status" name="civil_status">
-                                <option value="MARRIED" {% if person.civil_status = "MARRIED" %} selected {%endif%}>
-                                    Marié(e)
-                                </option>
                                 <option value="SINGLE" {% if person.civil_status = "SINGLE" %}selected{%endif%}>
                                     Célibataire
                                 </option>
-                                <option value="WIDOWED" {% if person.civil_status = "WIDOWED" %}selected{%endif%}>
-                                    Veuf(ve)
+                                <option value="COHABITANT" {% if person.civil_status = "COHABITANT" %}selected{%endif%}>
+                                    Cohabitant(e)
                                 </option>
-                                <option value="DIVORCED" {% if person.civil_status = "DIVORCED" %}selected{%endif%}>
-                                    Divorcé(e)
+                                <option value="MARRIED" {% if person.civil_status = "MARRIED" %} selected {%endif%}>
+                                    Marié(e)
                                 </option>
                                 <option value="SEPARATED" {% if person.civil_status = "SEPARATED" %}selected{%endif%}>
                                     Séparé(e)
                                 </option>
-                                <option value="COHABITANT" {% if person.civil_status = "COHABITANT" %}selected{%endif%}>
-                                    Cohabitant(e)
+                                <option value="DIVORCED" {% if person.civil_status = "DIVORCED" %}selected{%endif%}>
+                                    Divorcé(e)
+                                </option>
+                                <option value="WIDOWED" {% if person.civil_status = "WIDOWED" %}selected{%endif%}>
+                                    Veuf(ve)
                                 </option>
                             </select>
                             <font class="error">{{ person_form.civil_status.errors|striptags }}</font>
@@ -174,25 +180,9 @@
                             <font class="error">{{ person_form.number_children.errors|striptags }}</font>
                         </div>
                         <div class="col-md-3">
-                            <label>Nom conjoint</label>
+                            <label>Nom et prénom conjoint</label>
                             <input class="form-control" id="txt_spouse_name" name="spouse_name"
                                    value="{{ person.spouse_name | default_if_none:''}}" maxlength="50">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label>Nationalité *</label>
-                            <select class="form-control" id="slt_nationality" name="nationality">
-                                {% for country in countries%}
-                                <option value="{{country.id}}"
-                                        {% if country.id = person.nationality.id %} selected {%endif %}>
-                                        {{ country.name }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                            <font class="error">{{ person_form.nationality.errors|striptags }}</font>
-                        </div>
-                        <div class="col-md-8">
                         </div>
                     </div>
                 </div>
@@ -440,12 +430,12 @@
                 </div>
             </div>
 
-            <button type="submit" id="bt_profile" class="btn" role="button" name="save_down"
+            <button type="submit" id="bt_profile" class="btn btn-primary" role="button" name="save_down"
                     title="Sauvegarder">
                 <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Sauvegarder
             </button>
 
-            <button type="submit" id="bt_next_step" class="btn" role="button" name="next_step_down"
+            <button type="submit" id="bt_next_step" class="btn btn-default" role="button" name="next_step_down"
                     title="Sauvegarder" disabled>
                 <span class="glyphicon glyphicon-forward" aria-hidden="true"></span> Etape suivante
             </button>

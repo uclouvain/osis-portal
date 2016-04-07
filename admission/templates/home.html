@@ -27,8 +27,6 @@
 {% endcomment %}
 
 {% block content %}
-&nbsp;&nbsp;&nbsp;&nbsp;
-<br><br><br><br>
 <div class="panel panel-default">
     <div class="panel-body">
         {% if message %}
@@ -65,8 +63,8 @@
                     </table>
                     {%endif%}
                     <br>
-                    <a href="{% url 'offer_selection' %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"
-                                                                                        aria-hidden="true"></span>
+                    <a href="{% url 'offer_selection' %}" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         Introduire une nouvelle demande</a>
                 </div>
             </div>

@@ -25,16 +25,18 @@
 ##############################################################################
 from django.contrib.auth.decorators import login_required
 from admission import models as mdl
-from django.shortcuts import render
+
 from reference.models import Country
 from datetime import datetime
 from admission.forms import PersonForm
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
 
 @login_required
 def home(request):
     person = mdl.person.find_by_user(request.user)
 
-    if person is not None and person.gender:
+    if person and person.gender:
         applications = mdl.application.find_by_user(request.user)
         return render(request, "home.html", {'applications': applications})
     else:
@@ -42,7 +44,6 @@ def home(request):
 
 
 def profile(request):
-
     if request.method == 'POST':
         person_form = PersonForm(data=request.POST)
 
@@ -147,11 +148,11 @@ def profile(request):
                 person.register_number = request.POST['register_number']
             if request.POST['ucl_last_year']:
                 person.ucl_last_year = request.POST['ucl_last_year']
-            previous_enrollment=True
+            previous_enrollment = True
         else:
             person.register_number = None
             person.ucl_last_year = None
-            previous_enrollment=False
+            previous_enrollment = False
 
         if person_form.is_valid():
             if person_contact_address:
@@ -175,8 +176,7 @@ def profile(request):
             if person.register_number or person.ucl_last_year:
                 previous_enrollment = True
         else:
-            applications = mdl.application.find_by_user(request.user)
-            return render(request, "home.html", {'applications': applications,'message': 'Aucune personne associée à cet utilisateur!!!'})
+            return HttpResponseRedirect('/admission/logout/?next=/admission')
 
     countries = Country.find_countries()
     property = mdl.properties.find_by_key('INSTITUTION')
