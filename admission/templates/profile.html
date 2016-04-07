@@ -266,9 +266,8 @@
                             <input class="form-control" id="txt_legal_adr_city" name="legal_adr_city"
                                    value="{{ person_legal_address.city | default_if_none:''}}"
                                    maxlength="255">
-                            (ex: Louvain-la-Neuve <span style="text-decoration: line-through;">louvain-la-neuve</span>)
+                            (ex: Villers-le-Bouillet <span style="text-decoration: line-through;">villers-le-bouillet</span>)
                             <font class="error">{{ person_form.legal_adr_city.errors }}</font>
-
                         </div>
                         <div class="col-md-4">
                             <label>Pays *</label>
@@ -351,8 +350,8 @@
                                 <input class="form-control" id="txt_contact_adr_city" name="contact_adr_city"
                                        value="{{ person_contact_address.city | default_if_none:''}}"
                                        maxlength="255">
-                                (ex: Louvain-la-Neuve <span
-                                    style="text-decoration: line-through;">louvain-la-neuve</span>)
+                                (ex: Villers-le-Bouillet <span
+                                    style="text-decoration: line-through;">villers-le-bouillet</span>)
                                 <font class="error">{{ person_form.contact_adr_city.errors }}</font>
                             </div>
                             <div class="col-md-4">
@@ -400,7 +399,7 @@
             </div>
 
             <div class="panel panel-default">
-                <div class="panel-heading">Avez-vous déjà été inscrit à l'UCL/Saint-Louis antérieurement?</div>
+                <div class="panel-heading">Avez-vous déjà été inscrit, antérieurement,  à l'institution suivante: {{ institution }}?</div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-2">
@@ -430,17 +429,15 @@
                                 (ex: 1058-13-00)
                                 <font class="error">{{ person_form.register_number.errors }}</font>
                             </div>
-                            <div class="col-md-4">
-                                <label>Quel est votre dernière année à l'UCL ? *</label>
-                                <input class="form-control" id="txt_ucl_last_year" name="ucl_last_year"
+                            <div class="col-md-8">
+                                <label>Quelle est votre dernière année dans l'institution suivante : {{institution}}? *</label>
+                                <br>
+                                <input id="txt_ucl_last_year" name="ucl_last_year" size="10"
                                        value="{{ person.ucl_last_year| default_if_none:''}}" maxlength="9">
                                 <font class="error">{{ person_form.ucl_last_year.errors }}</font>
                             </div>
-                            <div class="col-md-4">
-                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 

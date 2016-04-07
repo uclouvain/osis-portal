@@ -179,10 +179,16 @@ def profile(request):
             return render(request, "home.html", {'applications': applications,'message': 'Aucune personne associée à cet utilisateur!!!'})
 
     countries = Country.find_countries()
+    property = mdl.properties.find_by_key('INSTITUTION')
+    if property is None:
+        institution_name = "<font style='color:red'>Aucune institution de définie</font>"
+    else:
+        institution_name = property.value
     return render(request, "profile.html", dict(person=person,
                                                 person_form=person_form,
                                                 countries=countries,
                                                 person_legal_address=person_legal_address,
                                                 person_contact_address=person_contact_address,
                                                 same_addresses=same_addresses,
-                                                previous_enrollment=previous_enrollment))
+                                                previous_enrollment=previous_enrollment,
+                                                institution=institution_name))

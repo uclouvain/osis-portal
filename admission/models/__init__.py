@@ -35,5 +35,6 @@ from admission.models import offer_year_calendar
 from admission.models import option
 from admission.models import person
 from admission.models import person_address
+from admission.models import properties
 from admission.models import question
 from admission.models import supported_languages
