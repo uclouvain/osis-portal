@@ -23,18 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models import academic_year
-from admission.models import answer
-from admission.models import application
-from admission.models import domain
-from admission.models import form
-from admission.models import grade_type
-from admission.models import message_template
-from admission.models import offer_year
-from admission.models import offer_year_calendar
-from admission.models import option
-from admission.models import person
-from admission.models import person_address
-from admission.models import properties
-from admission.models import question
-from admission.models import supported_languages
+from django.db import models
+from django.contrib import admin
+
+PROPERTIES_TYPE = (
+    ('INSTITUTION', 'Institution'),
+    ('LOGO', 'Logo'))
+
+
+class PropertiesAdmin(admin.ModelAdmin):
+    list_display = ('key', 'value')
+    fieldsets = ((None, {'fields': ('key', 'value')}),)
+
+
+class Properties(models.Model):
+    key = models.CharField(max_length=255, choices=PROPERTIES_TYPE)
+    value = models.CharField(max_length=255,blank=True, null=True)
+
+    def __str__(self):
+        return u"%s" % self.key
+
+
+def find_by_key(key):
+    return Properties.objects.filter(key=key).first()

@@ -62,3 +62,6 @@ admin.site.register(answer.Answer,
 
 admin.site.register(person_address.PersonAddress,
                     person_address.PersonAddressAdmin)
+
+admin.site.register(properties.Properties,
+                    properties.PropertiesAdmin)

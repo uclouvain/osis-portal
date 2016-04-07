@@ -1,4 +1,6 @@
 [
+  {"model": "admission.properties","pk": 1, "fields": {"key" :"INSTITUTION", "value":"UCL" }},
+
   {"model": "admission.academicyear","pk": 1, "fields": {"year" :"2016" }},
 
   {"model": "admission.domain", "pk": 1,"fields": {"name" :"Art de bâtir et urbanisme" }},

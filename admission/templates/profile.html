@@ -40,23 +40,21 @@
     }
 
 </script>
-&nbsp;&nbsp;&nbsp;&nbsp;
-<br><br>
-<br>
+
 <div class="panel panel-default">
     <div class="panel-body">
         <h2 class="error">Veuillez compléter votre profil</h2>
         <h5>Tous les champs marqués d'une * sont obligatoires</h5>
         <form method="post" action="{% url 'profile' %}">
             {% csrf_token %}
-            <font class="error">{% if person_form.errors %}Attention il y a des erreurs{%endif%}</font>
+            <font class="error">{% if person_form.errors %}Attention il y a des erreurs.{%endif%}</font>
             <br>
             <br>
-            <button type="submit" id="bt_submit_profile" class="btn" role="button" name="save"
+            <button type="submit" id="bt_submit_profile" class="btn btn-primary" role="button" name="save"
                     title="Sauvegarder">
                 <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Sauvegarder
             </button>
-            <button type="submit" id="bt_submit_next_step" class="btn" role="button" name="next_step"
+            <button type="submit" id="bt_submit_next_step" class="btn btn-default" role="button" name="next_step"
                     title="Sauvegarder" disabled>
                 <span class="glyphicon glyphicon-forward" aria-hidden="true"></span> Etape suivante
             </button>
@@ -76,17 +74,15 @@
                             <label>Nom *</label>
                             <input class="form-control" id="txt_last_name" name="last_name"
                                    value="{{ person.user.last_name  | default_if_none:'' }}" maxlength="255">
-                            (ex: Van der Elst /...)
-                            <font class="error">{{ person_form.last_name.errors }}</font>
-
+                            (ex: Van der Elst)
+                            <font class="error">{{ person_form.last_name.errors|striptags }}</font>
                         </div>
                         <div class="col-md-4">
                             <label>Prénom *</label>
                             <input class="form-control" id="txt_first_name" name="first_name"
                                    value="{{ person.user.first_name  | default_if_none:'' }}" maxlength="255">
                             (ex: Frédéric <span style="text-decoration: line-through;">frederic FREDERIC</span>)
-                            <font class="error">{{ person_form.first_name.errors }}</font>
-
+                            <font class="error">{{ person_form.first_name.errors|striptags }}</font>
                         </div>
                         <div class="col-md-4">
                             <label>Autres prénoms</label>
@@ -102,17 +98,17 @@
                             <label>Date de naissance *</label>
                             <input type="text" class="form-control" id="txt_birth_date" name="birth_date"
                                    value="{{ person.birth_date  | default_if_none:'' | date:"d/m/Y" }}">
-                            <font class="error">{{ person_form.birth_date.errors }}</font>
+                            <font class="error">{{ person_form.birth_date.errors|striptags }}</font>
 
                         </div>
                         <div class="col-md-4">
                             <label>Lieu de naissance *</label>
                             <input class="form-control" id="txt_birth_place" name="birth_place"
                                    value="{{ person.birth_place | default_if_none:''}}" maxlength="255">
-                            <font class="error">{{ person_form.birth_place.errors }}</font>
+                            <font class="error">{{ person_form.birth_place.errors|striptags}}</font>
 
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label>Pays de naissance *</label>
                             <select class="form-control" id="slt_birth_country" name="birth_country">
                                 {% for country in countries%}
@@ -121,9 +117,19 @@
                                 </option>
                                 {% endfor %}
                             </select>
-                            <font class="error">{{ person_form.birth_country.errors }}</font>
+                            <font class="error">{{ person_form.birth_country.errors|striptags }}</font>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
+                            <label>Nationalité *</label>
+                            <select class="form-control" id="slt_nationality" name="nationality">
+                                {% for country in countries%}
+                                <option value="{{country.id}}"
+                                        {% if country.id = person.nationality.id %} selected {%endif %}>
+                                        {{ country.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <font class="error">{{ person_form.nationality.errors|striptags }}</font>
                         </div>
                     </div>
                     <br>
@@ -140,58 +146,43 @@
                                            {% if person.gender = "FEMALE" %} checked {% endif %}> Féminin
                                 </label>
                             </div>
-                            <font class="error">{{ person_form.gender.errors }}</font>
+                            <font class="error">{{ person_form.gender.errors|striptags }}</font>
 
                         </div>
                         <div class="col-md-3">
                             <label>Etat civil *</label>
                             <select class="form-control" id="slt_civil_status" name="civil_status">
-                                <option value="MARRIED" {% if person.civil_status = "MARRIED" %} selected {%endif%}>
-                                    Marié(e)
-                                </option>
                                 <option value="SINGLE" {% if person.civil_status = "SINGLE" %}selected{%endif%}>
                                     Célibataire
-                                </option>
-                                <option value="WIDOWED" {% if person.civil_status = "WIDOWED" %}selected{%endif%}>
-                                    Veuf(ve)
-                                </option>
-                                <option value="DIVORCED" {% if person.civil_status = "DIVORCED" %}selected{%endif%}>
-                                    Divorcé(e)
-                                </option>
-                                <option value="SEPARATED" {% if person.civil_status = "SEPARATED" %}selected{%endif%}>
-                                    Séparé(e)
                                 </option>
                                 <option value="COHABITANT" {% if person.civil_status = "COHABITANT" %}selected{%endif%}>
                                     Cohabitant(e)
                                 </option>
+                                <option value="MARRIED" {% if person.civil_status = "MARRIED" %} selected {%endif%}>
+                                    Marié(e)
+                                </option>
+                                <option value="SEPARATED" {% if person.civil_status = "SEPARATED" %}selected{%endif%}>
+                                    Séparé(e)
+                                </option>
+                                <option value="DIVORCED" {% if person.civil_status = "DIVORCED" %}selected{%endif%}>
+                                    Divorcé(e)
+                                </option>
+                                <option value="WIDOWED" {% if person.civil_status = "WIDOWED" %}selected{%endif%}>
+                                    Veuf(ve)
+                                </option>
                             </select>
-                            <font class="error">{{ person_form.civil_status.errors }}</font>
+                            <font class="error">{{ person_form.civil_status.errors|striptags }}</font>
                         </div>
                         <div class="col-md-3">
                             <label>Nombre d'enfants</label>
                             <input class="form-control" id="txt_number_children" name="number_children"
                                    value="{{ person.number_children | default_if_none:''}}">
+                            <font class="error">{{ person_form.number_children.errors|striptags }}</font>
                         </div>
                         <div class="col-md-3">
-                            <label>Nom conjoint</label>
+                            <label>Nom et prénom conjoint</label>
                             <input class="form-control" id="txt_spouse_name" name="spouse_name"
                                    value="{{ person.spouse_name | default_if_none:''}}" maxlength="50">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label>Nationalité *</label>
-                            <select class="form-control" id="slt_nationality" name="nationality">
-                                {% for country in countries%}
-                                <option value="{{country.id}}"
-                                        {% if country.id = person.nationality.id %} selected {%endif %}>
-                                        {{ country.nationality }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                            <font class="error">{{ person_form.nationality.errors }}</font>
-                        </div>
-                        <div class="col-md-8">
                         </div>
                     </div>
                 </div>
@@ -205,10 +196,9 @@
                     <br>
                     <div class="row">
                         <div class="col-md-4">
-                            <label>Numéro du registre national (1)</label>
+                            <label>Numéro du registre national</label>
                             <input class="form-control" id="txt_national_id" name="national_id"
                                    value="{{ person.national_id | default_if_none:''}}">
-                            (1) A ne fournir que si vous êtes en possession d'une pièce d'identité belge.
                         </div>
                         <div class="col-md-4">
                             <label>Numéro de carte d'identité</label>
@@ -235,14 +225,14 @@
                                    value="{{ person_legal_address.street | default_if_none:''}}"
                                    maxlength="255">
                             (ex: Avenue Louis Braille, Rue de la Loi, Place de l'Université)
-                            <font class="error">{{ person_form.legal_adr_street.errors }}</font>
+                            <font class="error">{{ person_form.legal_adr_street.errors|striptags }}</font>
                         </div>
                         <div class="col-md-2">
                             <label>Numéro *</label>
                             <input class="form-control" id="txt_legal_adr_number" name="legal_adr_number"
                                    value="{{ person_legal_address.number | default_if_none:''}}"
                                    maxlength="6">
-                            <font class="error">{{ person_form.legal_adr_number.errors }}</font>
+                            <font class="error">{{ person_form.legal_adr_number.errors|striptags }}</font>
                         </div>
                         <div class="col-md-4">
                             <label>Lieu-dit (éventuellement)</label>
@@ -259,16 +249,14 @@
                                    value="{{ person_legal_address.postal_code | default_if_none:''}}"
                                    maxlength="20">
                             (ex: 1348)
-                            <font class="error">{{ person_form.legal_adr_postal_code.errors }}</font>
+                            <font class="error">{{ person_form.legal_adr_postal_code.errors|striptags }}</font>
                         </div>
                         <div class="col-md-6">
                             <label>Localité *</label>
                             <input class="form-control" id="txt_legal_adr_city" name="legal_adr_city"
                                    value="{{ person_legal_address.city | default_if_none:''}}"
                                    maxlength="255">
-                            (ex: Louvain-la-Neuve <span style="text-decoration: line-through;">louvain-la-neuve</span>)
-                            <font class="error">{{ person_form.legal_adr_city.errors }}</font>
-
+                            <font class="error">{{ person_form.legal_adr_city.errors|striptags }}</font>
                         </div>
                         <div class="col-md-4">
                             <label>Pays *</label>
@@ -280,7 +268,7 @@
                                 </option>
                                 {% endfor %}
                             </select>
-                            <font class="error">{{ person_form.legal_adr_country.errors }}</font>
+                            <font class="error">{{ person_form.legal_adr_country.errors|striptags }}</font>
                         </div>
                     </div>
 
@@ -288,7 +276,7 @@
             </div>
 
             <div class="panel panel-default">
-                <div class="panel-heading">Adresse de contact</div>
+                <div class="panel-heading">Adresse de correspondance</div>
                 <div class="panel-body">
 
                     <div class="row">
@@ -315,17 +303,19 @@
                          style="{% if same_addresses %} visibility:hidden;display:none; {% else %} visibility:visible;display:block; {%endif%} ">
                         <div class="row">
                             <div class="col-md-6">
-                                <label>Rue/Avenue</label>
+                                <label>Rue/Avenue *</label>
                                 <input class="form-control" id="txt_contact_adr_street" name="contact_adr_street"
                                        value="{{ person_contact_address.street | default_if_none:''}}"
                                        maxlength="255">
                                 (ex: Avenue Louis Braille, Rue de la Loi, Place de l'Université)
+                                <font class="error">{{ person_form.contact_adr_street.errors|striptags }}</font>
                             </div>
                             <div class="col-md-2">
-                                <label>Numéro</label>
+                                <label>Numéro *</label>
                                 <input class="form-control" id="txt_contact_adr_number" name="contact_adr_number"
                                        value="{{ person_contact_address.number | default_if_none:''}}"
                                        maxlength="6">
+                                <font class="error">{{ person_form.contact_adr_number.errors|striptags }}</font>
                             </div>
                             <div class="col-md-4">
                                 <label>Lieu-dit (éventuellement)</label>
@@ -344,16 +334,14 @@
                                        value="{{ person_contact_address.postal_code | default_if_none:''}}"
                                        maxlength="20">
                                 (ex: 1348)
-                                <font class="error">{{ person_form.contact_adr_postal_code.errors }}</font>
+                                <font class="error">{{ person_form.contact_adr_postal_code.errors|striptags }}</font>
                             </div>
                             <div class="col-md-6">
                                 <label>Localité *</label>
                                 <input class="form-control" id="txt_contact_adr_city" name="contact_adr_city"
                                        value="{{ person_contact_address.city | default_if_none:''}}"
                                        maxlength="255">
-                                (ex: Louvain-la-Neuve <span
-                                    style="text-decoration: line-through;">louvain-la-neuve</span>)
-                                <font class="error">{{ person_form.contact_adr_city.errors }}</font>
+                                <font class="error">{{ person_form.contact_adr_city.errors|striptags }}</font>
                             </div>
                             <div class="col-md-4">
                                 <label>Pays *</label>
@@ -365,7 +353,7 @@
                                     </option>
                                     {% endfor %}
                                 </select>
-                                <font class="error">{{ person_form.contact_adr_country.errors }}</font>
+                                <font class="error">{{ person_form.contact_adr_country.errors|striptags }}</font>
                             </div>
                         </div>
                     </div>
@@ -393,14 +381,14 @@
                             <label>E-mail *</label>
                             <input class="form-control" id="txt_additional_email" name="additional_email"
                                    value="{{ person.additional_email| default_if_none:''}}" maxlength="255">
-                            <font class="error">{{ person_form.additional_email.errors }}</font>
+                            <font class="error">{{ person_form.additional_email.errors|striptags }}</font>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="panel panel-default">
-                <div class="panel-heading">Avez-vous déjà été inscrit à l'UCL/Saint-Louis antérieurement?</div>
+                <div class="panel-heading">Avez-vous déjà été inscrit, antérieurement,  à l'institution suivante: {{ institution }}?</div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-2">
@@ -428,28 +416,26 @@
                                 <input class="form-control" id="txt_register_number" name="register_number"
                                        value="{{ person.register_number| default_if_none:''}}">
                                 (ex: 1058-13-00)
-                                <font class="error">{{ person_form.register_number.errors }}</font>
+                                <font class="error">{{ person_form.register_number.errors|striptags }}</font>
                             </div>
-                            <div class="col-md-4">
-                                <label>Quel est votre dernière année à l'UCL ? *</label>
-                                <input class="form-control" id="txt_ucl_last_year" name="ucl_last_year"
+                            <div class="col-md-8">
+                                <label>Quelle est votre dernière année dans l'institution suivante : {{institution}}? *</label>
+                                <br>
+                                <input id="txt_ucl_last_year" name="ucl_last_year" size="10"
                                        value="{{ person.ucl_last_year| default_if_none:''}}" maxlength="9">
-                                <font class="error">{{ person_form.ucl_last_year.errors }}</font>
-                            </div>
-                            <div class="col-md-4">
+                                <font class="error">{{ person_form.ucl_last_year.errors|striptags }}</font>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
-            <button type="submit" id="bt_profile" class="btn" role="button" name="save_down"
+            <button type="submit" id="bt_profile" class="btn btn-primary" role="button" name="save_down"
                     title="Sauvegarder">
                 <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Sauvegarder
             </button>
 
-            <button type="submit" id="bt_next_step" class="btn" role="button" name="next_step_down"
+            <button type="submit" id="bt_next_step" class="btn btn-default" role="button" name="next_step_down"
                     title="Sauvegarder" disabled>
                 <span class="glyphicon glyphicon-forward" aria-hidden="true"></span> Etape suivante
             </button>

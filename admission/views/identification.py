@@ -33,10 +33,9 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.views import login
 
-from admission.forms import NewAccountForm, AccountForm, NewPasswordForm
-
-from admission.utils import send_mail
 from admission import models as mdl
+from admission.forms import NewAccountForm, AccountForm, NewPasswordForm
+from admission.utils import send_mail
 
 
 def home_error(request, message, form):
