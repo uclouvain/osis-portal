@@ -31,45 +31,46 @@
 <br><br><br><br>
 <div class="panel panel-default">
     <div class="panel-body">
-        <ul class="nav nav-tabs">
-            <li><a data-toggle="tab" href="#tab_profile" id="lnk_profile_tab">Votre profil</a>
-            </li>
-            <li class="active"><a data-toggle="tab" href="#tab_application" id="lnk_application_tab">Vos demandes</a>
-            </li>
-        </ul>
-
-        <div class="tab-content">
-            <div id="tab_profile" class="tab-pane fade">
-                <br>
-                <a href="{% url 'profile' %}" class="btn btn-primary"><span class="glyphicon glyphicon-user"
-                                                                                    aria-hidden="true"></span>
-                    Modifier votre profil</a>
+        {% if message %}
+            <div class="alert alert-danger" role="alert">{{ message }}</div>
+        {% else %}
+            <ul class="nav nav-tabs">
+                <li><a data-toggle="tab" href="#tab_profile" id="lnk_profile_tab">Votre profil</a>
+                </li>
+                <li class="active"><a data-toggle="tab" href="#tab_application" id="lnk_application_tab">Vos demandes</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="tab_profile" class="tab-pane fade">
+                    <br>
+                    <a href="{% url 'profile' %}" class="btn btn-primary"><span class="glyphicon glyphicon-user"
+                                                                                        aria-hidden="true"></span>
+                        Modifier votre profil</a>
+                </div>
+                <div id="tab_application" class="tab-pane fade in active">
+                    <h2> {{ request.user.first_name }} {{ request.user.last_name }}</h2>
+                    {% if applications %}
+                    <table class="table table-striped table-hover">
+                        <tr><td colspan="2"></td></tr>
+                        <thead>
+                        <th>Création</th>
+                        <th>Etude demandée</th>
+                        </thead>
+                        {% for application in applications%}
+                        <tr>
+                            <td>{{ application.creation_date | default_if_none:''|date:"j/m/Y" }}</td>
+                            <td><a href="{% url 'application_view' application.id %}">{{ application.offer_year.title }}</a></td>
+                        </tr>
+                        {% endfor%}
+                    </table>
+                    {%endif%}
+                    <br>
+                    <a href="{% url 'offer_selection' %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"
+                                                                                        aria-hidden="true"></span>
+                        Introduire une nouvelle demande</a>
+                </div>
             </div>
-            <div id="tab_application" class="tab-pane fade in active">
-                <h2> {{ request.user.first_name }} {{ request.user.last_name }}</h2>
-                {% if applications %}
-                <table class="table table-striped table-hover">
-                    <tr><td colspan="2"></td></tr>
-                    <thead>
-                    <th>Création</th>
-                    <th>Etude demandée</th>
-                    </thead>
-                    {% for application in applications%}
-                    <tr>
-                        <td>{{ application.creation_date | default_if_none:''|date:"j/m/Y" }}</td>
-                        <td><a href="{% url 'application_view' application.id %}">{{ application.offer_year.title }}</a></td>
-                    </tr>
-                    {% endfor%}
-                </table>
-                {%endif%}
-                <br>
-                <a href="{% url 'offer_selection' %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"
-                                                                                    aria-hidden="true"></span>
-                    Introduire une nouvelle demande</a>
-            </div>
-        </div>
-
-
+        {% endif %}
     </div>
 </div>
 {% endblock %}
