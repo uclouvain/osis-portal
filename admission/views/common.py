@@ -73,7 +73,7 @@ def profile(request):
             birth_country_id = request.POST['birth_country']
             birth_country = Country.find_by_id(birth_country_id)
             person.birth_country = birth_country
-        if request.POST['gender']:
+        if request.POST.get('gender'):
             person.gender = request.POST['gender']
         if request.POST['civil_status']:
             person.civil_status = request.POST['civil_status']
