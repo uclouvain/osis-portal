@@ -1,31 +1,46 @@
+##############################################################################
+#
+#    OSIS stands for Open Student Information System. It's an application
+#    designed to manage the core business of higher education institutions,
+#    such as universities, faculties, institutes and professional schools.
+#    The core business involves the administration of students, teachers,
+#    courses, programs and so on.
+#
+#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    A copy of this license - GNU General Public License - is available
+#    at the root of the source code of this program.  If not,
+#    see http://www.gnu.org/licenses/.
+#
+##############################################################################
+
 import pika
 from frontoffice.settings import QUEUE_URL, QUEUE_USER, QUEUE_PASSWORD, QUEUE_PORT, QUEUE_CONTEXT_ROOT
 import threading
-from couchbase import Couchbase
-from pprint import pprint
+# from couchbase import Couchbase
+# from pprint import pprint
+from frontoffice import queue_actions
 import json
 
 
-def couchbase_insert(json_datas):
-    cb = Couchbase.connect(bucket='default')
-    data = json.loads(json_datas.decode("utf-8"))
-    key = "{0}-{1}".format(
-        data['id'],
-        data['name'].replace(' ', '_').lower()
-    )
-    print('inserting datas in couchDB...')
-    cb.set(key, data)
-    print('Done.')
-    print('getting datas just inserted in couchDB...')
-    result = cb.get(key)
-    pprint(result.value, indent=4)
-    print('Done.')
-    print('deleting datas just inserted in couchDB...')
-    cb.delete(key)
-    print('Done.')
-
-
-def listen_queue(queue_name):
+def listen_queue(queue_name, callback):
+    """
+    Create a thread in which a queue is created (from the queue name passed in parameter) and listened.
+    :param queue_name: The name of the queue to create and to listen.
+    :param callback: The action to perform when a message is consumed. (It is a function).
+    """
+    if not callable(callback) :
+        raise Exception("Error ! The second parameter of listen_queue MUST BE a function !")
     connection_parameters = {
         'queue_name' : queue_name,
         'queue_url' : QUEUE_URL,
@@ -36,7 +51,7 @@ def listen_queue(queue_name):
         'exchange' : queue_name,
         'routing_key' : '',
     }
-    consumer_thread = ConsumerThread(connection_parameters)
+    consumer_thread = ConsumerThread(connection_parameters, callback)
     try:
         consumer_thread.daemon = True
         consumer_thread.start()
@@ -46,10 +61,8 @@ def listen_queue(queue_name):
 
 
 class ConsumerThread(threading.Thread):
-    def __init__(self, connection_parameters, *args, **kwargs):
+    def __init__(self, connection_parameters, callback, *args, **kwargs):
         super(ConsumerThread, self).__init__(*args, **kwargs)
-
-        self._stop = threading.Event() # To make the thread stoppable
 
         self._queue_name = connection_parameters['queue_name']
         self._queue_url = connection_parameters['queue_url']
@@ -59,16 +72,11 @@ class ConsumerThread(threading.Thread):
         self._queue_context_root = connection_parameters['queue_context_root']
         self._exchange = connection_parameters['exchange']
         self._routing_key = connection_parameters['routing_key']
+        self.callback_func = callback
 
     # Not necessarily a method.
     def callback_func(self, channel, method, properties, body):
         print("{} received '{}'".format(self.name, body))
-
-    def stop(self):
-        self._stop.set()
-
-    def stopped(self):
-        return self._stop.isSet()
 
     def run(self):
         connection_parameters = {
@@ -81,7 +89,7 @@ class ConsumerThread(threading.Thread):
             'exchange' : self._exchange,
             'routing_key' : self._routing_key,
         }
-        example = ExampleConsumer(connection_parameters=connection_parameters)
+        example = ExampleConsumer(connection_parameters=connection_parameters, callback=self.callback_func)
         example.run()
 
 
@@ -105,7 +113,7 @@ class ExampleConsumer(object):
     # QUEUE = None
     ROUTING_KEY = None
 
-    def __init__(self, connection_parameters=None):
+    def __init__(self, connection_parameters=None, callback = None):
         """Create a new instance of the consumer class, passing in the AMQP
         URL used to connect to RabbitMQ.
 
@@ -119,6 +127,7 @@ class ExampleConsumer(object):
         self._connection_parameters = connection_parameters
         self.EXCHANGE = connection_parameters['exchange']
         self.ROUTING_KEY = connection_parameters['routing_key']
+        self.callback_func = callback
         # self._url = amqp_url
         # self.QUEUE = queue_name
 
@@ -351,7 +360,8 @@ class ExampleConsumer(object):
         """
         print(self._connection_parameters['queue_name'] + ' : Received message # %s from %s: %s' % (basic_deliver.delivery_tag, properties.app_id, body))
         self.acknowledge_message(basic_deliver.delivery_tag)
-        couchbase_insert(body)
+        self.callback_func(body)
+        # queue_actions.couchbase_insert(body)
 
     def acknowledge_message(self, delivery_tag):
         """Acknowledge the message delivery from RabbitMQ by sending a
