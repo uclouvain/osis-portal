@@ -1,1 +1,5 @@
 venv/
+*.pyc
+.idea/
+admission/tests/sent_mails/
+

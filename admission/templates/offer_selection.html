@@ -1,0 +1,136 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-body">
+
+            <br>
+            <div class="row">
+                <div class="col-md-12">
+                    Pour faire votre choix d'études, vous êtes invité(e) à sélectionner un type d'études(un sous-type
+                    d'études
+                    si nécessaire) et puis un domaine d'étude. Ensuite, choisissez les études désirées et confirmez
+                    votre
+                    choix.<br>
+                    Pour vous y aider, vous pouvez consulter le <a
+                        href="http://www.uclouvain.be/programme-etudes-2015.html" target="_blank">programme d'études</a>
+                </div>
+            </div>
+
+            <br>
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Choisissez un type d'études</label>
+                    <select class="form-control" id="slt_offer_type" name="type" >
+                        <option value="" selected>...</option>
+                    {% for grade_choice in grade_choices %}
+                         <option value="{{grade_choice.0}}" >{{grade_choice.1}}</option>
+                    {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-12" id="pnl_grade_choices">
+                    <label><br></label>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Choisissez un domaine d'études</label>
+                    <select class="form-control" id="slt_domain" name="domain" style="width:500px;">
+                        <option value=""></option>
+                        {% for d in domains %}
+                        {% if d == domain %}
+                        <option value="{{ d.id }}" selected>{{ d }}</option>
+                        {% else %}
+                        <option value="{{ d.id }}">{{ d }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-8">
+                    <br>
+                </div>
+            </div>
+
+
+                <br>
+                <div id="pnl_offers">
+
+                </div>
+
+
+            {% if message%}
+            <div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+
+        <form method="post" action="{% url 'save_offer_selection' %}" id="form_questions" name="form_questions">
+            <input type="hidden" id="txt_offer_year_id" name="offer_year_id" value="{{offer.id}}"/>
+            <input type="hidden" id="txt_application_id" name="application_id" value="{{ application.id }}"/>
+            {% csrf_token %}
+            <br>
+            <div id="pnl_questions"></div>
+            <br>
+            <div class="row">
+                <div class="col-md-2">
+
+                </div>
+                <div class="col-md-2">
+
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-2">
+
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" id="bt_save" class="btn" role="button" name="save"
+                            title="Sauvegarder" disabled>
+                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Sauvegarder
+                    </button>
+                </div>
+                <div class="col-md-2">
+
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}
+

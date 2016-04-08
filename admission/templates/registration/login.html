@@ -1,0 +1,188 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">Bienvenue sur la demande d'inscription en ligne de l'Université catholique de Louvain.</div>
+</div>
+<br>
+<div class="row">
+    <div class="col-md-12">Pour introduire votre demande d'inscription, il vous faut un compte d'accès</div>
+</div>
+<br>
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Si vous avez déjà demandé la création de ce compte</div>
+            <div class="panel-body">
+                Vous avez reçu, par mail, une confirmation de création de compte et activé celui-ci en cliquant sur le
+                lien d'activation.
+                <br>Vous pouvez dès lors vous connecter à la demande d'inscription grâce à votre adresse mail et le mot
+                de passe que vous avez choisi antérieurement.
+                <form action="{% url 'login' %}" method="post" class="form" role="form" autocomplete="off">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="txt_email">E-mail</label>
+                            <input id="id_username" maxlength="254" name="username" type="text" class="form-control" placeholder="email">
+                        </div>
+                        <div class="col-md-6"></div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="txt_password">Mot de passe</label>
+                            <input id="id_password" name="password" type="password" class="form-control" placeholder="mot de passe">
+                        </div>
+                        <div class="col-md-6"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <br>
+                              <input type="hidden" name="next" value="{{ next }}" />
+                             <input type="submit" value="Valider" class="btn btn-primary" id="post_login_btn">
+                        </div>
+
+                    </div>
+                    {% if message %}
+                    <br>
+                        <div class="row">
+                            <div class="col-md-12">
+                              <font class="error">{{ message }}</font>
+                            </div>
+
+                        </div>
+                    {%endif%}
+                </form>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <a href="{% url 'new_password_request' %}">Mot de passe oublié?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Si vous ne disposez pas encore de ce compte</div>
+            <div class="panel-body">
+                    <form  method="post" action="{% url 'new_user' %}" autocomplete="off">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ number1 }}" name="number1" />
+                        <input type="hidden" value="{{ number2 }}" name="number2" />
+                        <input type="hidden" value="{{ number3 }}" name="number3" />
+
+                Nous vous invitons à vous créer ce compte, composé d'une adresse mail privée et d'un mot de
+                passe. <b>Tous les champs sont obligatoires</b>
+                <br><br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="txt_first_name_new">Prénom</label><br>{{ form_new.first_name_new }}<br>
+                        <p class="text-muted">(ex : Frédéric <label style="text-decoration: line-through;" >frederic FREDERIC</label>)</p>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="txt_last_name_new">Nom</label><br>{{ form_new.last_name_new }}<br>
+                        <p class="text-muted">(ex : Van der Elst / Vanderelst <label style="text-decoration: line-through;" > VANDERELST</label>)</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="txt_email_new">E-mail</label><br>
+                        {{ form_new.email_new }}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="txt_email_new_confirm">Confirmez l'e-mail</label><br>
+                        {{ form_new.email_new_confirm }}
+                    </div>
+                </div>
+                {% if form_new.email_new_confirm.errors%}
+                        <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <font class="error">{{ form_new.email_new_confirm.errors }}</font>
+                 </div>
+                </div>
+                {%endif%}
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="txt_password_new">Choisissez un mot de passe</label><br>{{form_new.password_new}}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="txt_password_new_confirm">Confirmez le mot de passe</label><br>{{ form_new.password_new_confirm }}
+                    </div>
+                </div>
+                 {% if form_new.password_new_confirm.errors%}
+                        <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <font class="error">{{ form_new.password_new_confirm.errors }}</font>
+                 </div>
+                </div>
+                {%endif%}
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                       Veuillez résoudre le calcul ci-contre. Ceci nous permet de
+                            vérifier que vous êtes une personne réelle.
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-3">
+                            {{ number1 }} + {{ number2 }} - {{ number3}} =
+                    </div>
+                    <div class="col-md-5">
+                        {{ form_new.verification }}<font class="error">{{ form_new.verification.errors }}</font>
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <br>
+                        <button type="submit" id="bt_submit_user_create" class="btn btn-primary" role="button"
+                                title="Création nouveau compte">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  Valider
+                        </button>
+                    </div>
+                </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+
+{% endblock %}

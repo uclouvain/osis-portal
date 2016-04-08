@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 ##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
@@ -24,12 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import os
-import sys
+from django.db import models
+from django.contrib import admin
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "frontoffice.settings")
 
-    from django.core.management import execute_from_command_line
+class FormAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description')
+    fieldsets = ((None, {'fields': ('title', 'description', 'offer_year')}),)
 
-    execute_from_command_line(sys.argv)
+
+class Form(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    offer_year = models.ForeignKey('OfferYear')
+
+    def __str__(self):
+        return u"%s" % self.title

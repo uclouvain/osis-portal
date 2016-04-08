@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 ##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
@@ -24,12 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import os
-import sys
+from django.db import models
+from django.contrib import admin
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "frontoffice.settings")
+PROPERTIES_TYPE = (
+    ('INSTITUTION', 'Institution'),
+    ('LOGO', 'Logo'))
 
-    from django.core.management import execute_from_command_line
 
-    execute_from_command_line(sys.argv)
+class PropertiesAdmin(admin.ModelAdmin):
+    list_display = ('key', 'value')
+    fieldsets = ((None, {'fields': ('key', 'value')}),)
+
+
+class Properties(models.Model):
+    key = models.CharField(max_length=255, choices=PROPERTIES_TYPE)
+    value = models.CharField(max_length=255,blank=True, null=True)
+
+    def __str__(self):
+        return u"%s" % self.key
+
+
+def find_by_key(key):
+    return Properties.objects.filter(key=key).first()

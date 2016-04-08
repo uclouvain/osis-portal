@@ -1,0 +1,28 @@
+[
+{"model": "admission.domain", "fields": {"pk": 1, "name" :"Art de bâtir et urbanisme" }},
+{"model": "admission.domain", "fields": {"pk": 2, "name" :"Art et sciences de l'art" }},
+{"model": "admission.domain", "fields": {"pk": 3, "name" :"Arts du spectacle et technique de diffusion et de communication" }},
+{"model": "admission.domain", "fields": {"pk": 4, "name" :"Arts plastiques, visuels et de l'espace" }},
+{"model": "admission.domain", "fields": {"pk": 5, "name" :"Criminologie" }},
+{"model": "admission.domain", "fields": {"pk": 6, "name" :"Histoire, histoire de l'art et archéologie" }},
+{"model": "admission.domain", "fields": {"pk": 7, "name" :"Information et communication" }},
+{"model": "admission.domain", "fields": {"pk": 8, "name" :"Langues, lettres et traductologie" }},
+{"model": "admission.domain", "fields": {"pk": 9, "name" :"Musique" }},
+{"model": "admission.domain", "fields": {"pk": 10, "name" :"Philosophie" }},
+{"model": "admission.domain", "fields": {"pk": 11, "name" :"Sciences" }},
+{"model": "admission.domain", "fields": {"pk": 12, "name" :"Sciences agronomiques et ingénierie biologique" }},
+{"model": "admission.domain", "fields": {"pk": 13, "name" :"Sciences biomédicales et pharmaceutiques" }},
+{"model": "admission.domain", "fields": {"pk": 14, "name" :"Sciences de la motricité" }},
+{"model": "admission.domain", "fields": {"pk": 15, "name" :"Sciences de la santé publique" }},
+{"model": "admission.domain", "fields": {"pk": 16, "name" :"Sciences de l'ingénieur et technologie" }},
+{"model": "admission.domain", "fields": {"pk": 17, "name" :"Sciences dentaires" }},
+{"model": "admission.domain", "fields": {"pk": 18, "name" :"Sciences économiques et de gestion" }},
+{"model": "admission.domain", "fields": {"pk": 19, "name" :"Sciences juridiques" }},
+{"model": "admission.domain", "fields": {"pk": 20, "name" :"Sciences médicales" }},
+{"model": "admission.domain", "fields": {"pk": 21, "name" :"Sciences politiques et sociales" }},
+{"model": "admission.domain", "fields": {"pk": 22, "name" :"Sciences psychologiques et de l'éducation" }},
+{"model": "admission.domain", "fields": {"pk": 23, "name" :"Sciences vétérinaires" }},
+{"model": "admission.domain", "fields": {"pk": 24, "name" :"Théâtre et arts de la parole" }},
+{"model": "admission.domain", "fields": {"pk": 25, "name" :"Théologie" }}
+
+]

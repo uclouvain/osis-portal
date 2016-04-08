@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 ##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
@@ -24,12 +23,31 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import os
-import sys
+from rest_framework import serializers
+from admission import models as mdl
+from django.http import HttpResponse
+from rest_framework.renderers import JSONRenderer
+from django.views.decorators.csrf import csrf_exempt
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "frontoffice.settings")
 
-    from django.core.management import execute_from_command_line
+class JSONResponse(HttpResponse):
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
 
-    execute_from_command_line(sys.argv)
+
+class LevelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = mdl.grade_type.GradeType
+        fields = ('id', 'name', 'grade')
+
+
+@csrf_exempt
+def find_by_type(request):
+    type = request.GET['type']
+
+    levels = mdl.grade_type.find_by_grade(type)
+    serializer = LevelSerializer(levels, many=True)
+
+    return JSONResponse(serializer.data)

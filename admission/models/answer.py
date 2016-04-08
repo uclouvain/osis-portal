@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 ##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
@@ -24,12 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import os
-import sys
+from django.db import models
+from django.contrib import admin
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "frontoffice.settings")
 
-    from django.core.management import execute_from_command_line
+class AnswerAdmin(admin.ModelAdmin):
+    list_display = ['value']
+    fieldsets = ((None, {'fields': ('value', 'option', 'application')}),)
+    list_filter = ('application', 'option',)
 
-    execute_from_command_line(sys.argv)
+
+class Answer(models.Model):
+    value = models.TextField()
+    option = models.ForeignKey('Option')
+    application = models.ForeignKey('Application')
+
+    def __str__(self):
+        return u"%s" % self.value
+
+
+def find_by_application(application_id):
+    return Answer.objects.filter(application=application_id)

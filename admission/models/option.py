@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 ##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
@@ -24,12 +23,49 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import os
-import sys
+from django.db import models
+from django.contrib import admin
+from django.core.exceptions import ObjectDoesNotExist
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "frontoffice.settings")
 
-    from django.core.management import execute_from_command_line
+class OptionAdmin(admin.ModelAdmin):
+    list_display = ('label', 'description')
+    fieldsets = ((None, {'fields': ('label', 'value', 'order', 'description', 'question')}),)
+    list_filter = ('question',)
 
-    execute_from_command_line(sys.argv)
+
+class Option(models.Model):
+    label = models.CharField(max_length=255)
+    value = models.TextField()
+    order = models.IntegerField()
+    description = models.TextField()
+    question = models.ForeignKey('Question')
+
+    def __str__(self):
+        return u"%s" % self.label
+
+
+def find_by_question_id(question_id):
+    try:
+        return Option.objects.get(question=question_id)
+    except ObjectDoesNotExist:
+        return None
+
+
+def find_options_by_question_id(question_id):
+    return Option.objects.filter(question=question_id).order_by("order")
+
+
+def find_by_id(option_id):
+    try:
+        return Option.objects.get(pk=option_id)
+    except ObjectDoesNotExist:
+        return None
+
+
+def find_number_options_by_question_id(question_id):
+    opt = Option.objects.filter(question=question_id).order_by("order")
+
+    if opt:
+        return opt.reverse().first().order
+    return 0
