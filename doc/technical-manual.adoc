@@ -1,0 +1,524 @@
+= OSIS Portal Technical Manual
+Hildeberto Mendonça, PhD
+v0.1, 2016-03-24
+:toc: right
+
+This documentation explains how to contribute as a committer to OSIS project. A
+committer is an individual who is disciplined enough to gain the confidence of
+the project manager to commit directly to the repository without further
+bureaucracy. In fact, be accepted as a committer is a great recognition of the
+quality of your work as a programmer.
+
+== Installing OSIS
+
+The first thing to do to start contributing to the project is to prepare the
+development environment. During this section, we explain in details how to do
+that in a Debian-based distribution (Debian Linux, Ubuntu, Mint, etc.). This is
+the recommended operating system for development and deployment.
+
+If your operating system is not based on Debian Linux then you can rely on a
+virtual machine as a development environment. For the virtual machine, we
+suggest  https://www.virtualbox.org[VirtualBox] as virtual runtime and
+https://ubuntu-mate.org[Ubuntu Mate] as operating system. Follow the
+installation instructions on their respective websites according to your own
+platform. When the Ubuntu virtual machine is created and running, execute the
+following command to make the operating system aware of the virtual runtime:
+
+    $ sudo apt-get install virtualbox-guest-dkms virtualbox-guest-x11
+
+Now that you have a Debian-based Linux system available, you can start preparing
+the development environment in it. Follow the steps below:
+
+- <<installing-git>>
+- <<installing-postgresql>>
+- <<installing-couchbase>>
+- <<installing-django>>
+- <<installing-application>>
+
+[[installing-git]]
+=== Installing and Configuring Git
+
+Git is a distributed version control system used to manage the source code of
+OSIS. The source code is necessary to develop and deploy OSIS and we start the
+instructions by explaining how to install and configure it. We can use `apt-get`
+to install Git:
+
+    $ sudo apt-get update
+    $ sudo apt-get install git
+
+The `update` command downloads package lists from remote repositories to get
+information about the newest versions of packages and their dependencies. This
+way, we make sure we are getting the last version of Git and all other
+dependencies. Then `install git` performs the installation. We can test it by
+cloning the repository:
+
+    $ mkdir -p ~/python/projects/osis
+    $ cd ~/python/projects/osis
+    $ git clone git@github.com:uclouvain/osis.git
+
+Next, we add some personal information in the local Git installation to make
+sure you are well identified in all commits:
+
+    $ git config --global user.name "[Firstname] [Lastname]"
+    $ git config --global user.email "[firstname.lastname]@domain.com"
+
+Since version 2.0, Git has adopted a new behavior to pull and push commits while
+in a branch. When you execute `git push` or `git pull` Git will consider pushing
+or pulling just for the current branch. Before, these commands would push and
+pull all branches. But the change to this new behavior is voluntary, not
+automatically imposed. So, we have to explicitly say we have to move from the
+old behavior to the new one. To do that, execute the following command:
+
+    $ git config --global push.default simple
+
+=== Configuring Git to Simplify GitHub Authentication
+
+For the moment, every time we push code to GitHub the prompt asks for a username
+and password. We can bypass this step by registering a SSH key. To do that, we
+first check whether there is already an existing SSH key we can reuse:
+
+    $ ls -al ~/.ssh
+
+If files with the extension `.pub` are listed then one of them can be reused to
+authenticate to GitHub. If not, then we can create one:
+
+    $ ssh-keygen -t rsa -b 4096 -C "[firstname.lastname]@domain.com"
+      Enter file in which to save the key (/Users/[user]/.ssh/id_rsa): [Press enter]
+      Enter passphrase (empty for no passphrase): [Type a passphrase]
+      Enter same passphrase again: [Type passphrase again]
+
+The next step is to add the new key - or an existing one - to the `ssh-agent`.
+This program runs the duration of a local login session, stores unencrypted keys
+in memory, and communicates with SSH clients using a Unix domain socket.
+Everyone who is able to connect to this socket also has access to the ssh-agent.
+First, we have to enable the ssh-agent:
+
+    $ eval "$(ssh-agent -s)"
+
+And add key to it:
+
+    $ ssh-add ~/.ssh/id_rsa
+
+The next step is to make GitHub aware of the key. For that, we have to copy the
+exact content of the file `id_rsa.pub` and paste into GitHub. To make no mistake
+about the copy, install a program called `xclip`:
+
+    $ sudo apt-get install xclip
+
+And then copy the content of the file `id_rsa.pub` in the clipboard:
+
+    $ xclip -sel clip < ~/.ssh/id_rsa.pub
+
+The command above is the equivalent of opening the file `~/.ssh/id_rsa.pub`,
+selecting the whole content and pressing `Ctrl+C`. This way, you can paste the
+content on GitHub when required in the next steps. On the GitHub side:
+
+ . Login at https://github.com
+ . In the top right corner of the page, click on the profile photo and select
+   **Settings**
+ . In the user settings sidebar, click **SSH keys**
+ . Then click **Add SSH key**
+ . In the form, define a friendly title for the new key and paste the key in the
+   **Key** field
+ . Click **Add Key** to finish with GitHub
+
+To make sure everything is working, lets test the connection:
+
+    $ ssh -T git@github.com
+      The authenticity of host 'github.com (207.97.227.239)' can't be established.
+      RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.
+      Are you sure you want to continue connecting (yes/no)? yes
+      _
+      Hi [username]! You've successfully authenticated, but GitHub does not
+      provide shell access.
+
+This configuration works only when we use a ssh connection to GitHub. To verify
+that, go to one of your local GitHub projects and check the url pointing to the
+server:
+
+    $ cd ~/python/projects/osis/osis
+    $ git remote -v
+
+If the url starts with `https://` then you are using `https` instead of `ssh`.
+In this case, you should change the url to the ssh one:
+
+    $ git remote set-url origin git@github.com:uclouvain/osis.git
+
+The automatic authentication should work after that.
+
+[[installing-postgresql]]
+=== Installing and Configuring PostgreSQL
+
+PostgreSQL is the only database supported by OSIS. In theory, the Django ORM
+would make the application database-independent, but we do not test OSIS with
+other databases, thus we cannot guarantee that it works on other databases such
+as MySQL or Oracle. Fortunately, PostgreSQL has a very good reputation, a large
+community and a generous documentation.
+
+TIP: If you really need a database different from PostgreSQL then you could
+contribute to the project by testing OSIS on your favorite database.
+
+Execute the following commands to install PostgreSQL:
+
+    $ sudo apt-get install postgresql
+    $ sudo su - postgres -c "createuser -s $USER"
+    $ sudo apt-get install libpq-dev
+
+The first command installs PostgreSQL and creates a user named after the current
+logged OS user. The library libpq-dev is also installed for development purposes.
+
+=== Creating the Database
+
+Before moving forward, make sure you installed PostgreSQL, as explained in the
+section <<installing-postgresql>>. Then, follow the steps below to create the
+backend database:
+
+    $ createdb osis_backend_dev
+    $ createuser osis_usr -P    // Inform the password 'osis' when asked for.
+    $ psql -d osis_backend_dev
+      =# grant connect on database osis_backend_dev to osis_usr;
+      =# revoke connect on database osis_backend_dev from public;
+      =# \q
+
+Now, install the necessary dependencies to allow a Python application to connect
+to PostgreSQL:
+
+    $ sudo apt-get install python3-dev libpq-dev
+
+[[installing-couchbase]]
+=== Installing CouchBase
+
+    $ wget http://packages.couchbase.com/clients/c/libcouchbase-2.5.7_ubuntu1404_amd64.tar
+    $ tar -xf libcouchbase-2.5.7_ubuntu1404_amd64.tar
+    $ cd libcouchbase-2.5.7_ubuntu1404_amd64
+    $ sudo dpkg -i libcouchbase2-core_2.5.7-1_amd64.deb
+    $ sudo dpkg -i libcouchbase2-bin_2.5.7-1_amd64.deb
+    $ sudo dpkg -i libcouchbase-dev_2.5.7-1_amd64.deb
+
+[[installing-django]]
+=== Installing and Configuring Django
+
+Django is a modern and lightweight web framework to support our back office and
+front office applications. The choice for Django was made thanks to the
+following advantages:
+
+- Very well documented.
+- The most popular web framework on the Python ecosystem. Largely supported by
+  the majority of platforms, IDEs and web servers in general.
+- It supports several databases: Oracle, PortgreSQL, MySQL, etc.
+- Most of the time, modifications in the code can be immediately seen on the
+  browser, without the need for redeployments or restarts.
+- Easily testable with Selenium.
+- In general, more productive than most of the alternatives.
+
+The repository `osis` is a Django application. We already cloned that when
+installing git. At that point we executed the following commands:
+
+    $ cd ~/python/projects/osis
+    $ git clone git@github.com:uclouvain/osis.git
+
+Install the Python virtual environment and other system dependencies:
+
+    $ sudo apt-get install build-essential, python-virtualenv libjpeg-dev libpng-dev
+
+In the new repository, create a virtual environment to isolate all dependencies
+of the project:
+
+    $ cd osis
+    $ virtualenv --python=python3.4 venv
+
+[[installing-application]]
+=== Installing the Application
+
+Start the virtual environment and install the dependencies:
+
+    $ source venv/bin/activate
+    (venv)$ pip install -r requirements.txt
+
+Create the data structure in the database:
+
+    (venv)$ python manage.py migrate
+
+At this point we have two options:
+
+1. we create a super user and go on with an empty database or
+2. we load the demonstration data that already contains a superuser
+
+To create the super user and continue with an empty database:
+
+    (venv)$ python manage.py createsuperuser
+       Username (leave blank to use '[linux-user]'):
+       Email address: your@emailaddress.com
+       Password:
+       Password (again):
+       Superuser created successfully.
+
+You will need this user to login on OSIS for the first time and be able to
+create other users.
+
+To load the demonstration data that already contains a superuser:
+
+    (venv)$ python manage.py loaddata demo_data.json
+
+The demonstration data create a super user with the following credentials:
+
+    Username: osis
+    Password: osisosis
+
+The demonstration data also create several other users. The password for each
+user is the username typed twice (e.g. user: `antonin`  password:
+`antoninantonin`).
+
+Now, we can run the application:
+
+    (venv)$ python manage.py runserver
+
+You can leave the server running while you are developing. It will take into
+account all changes in your code, except the changes in the model. In this case,
+we have to stop the server to execute the commands `makemigrations` and `migrate`
+as shown above. When we have finished your daily work, we can deactivate the
+virtual environment:
+
+    (venv)$ deactivate
+
+== Contributing to the Project
+
+=== Following the Git Workflow
+
+The code repository is organized in three fixed branches:
+
+- *dev*: agregates developers' contributions that are intended to be in
+  production, but they still need to be validated.
+- *qa*: at the end of the sprint, when all features are frozen, the branch `dev`
+  is merged into `qa` to allow testers to validate the release before it gets
+  into production.
+- *master*: once the version in `qa` is fully validated, it is merged into the
+  branch `master`, which is the one to be deployed in production.
+
+Developers should not commit directly to any of these branches. By convention,
+these branches can only be changed if there is an issue in the
+https://github.com/uclouvain/osis/issues[issue tracking tool] that justifies
+the creation of an exclusive branch for that issue. For instance: if the
+issue's number is `#234` then its respective branch is named `issue#234`,
+created to isolate the changes described in the issue. To create a new branch
+for the issue, perform the following commands:
+
+    $ git checkout dev
+    $ git pull origin dev
+    $ git checkout -b issue#234
+
+The first command enters in the branch `dev`, if the developer is not already in
+there. Within the branch `dev`, the latest commits in the remote branch
+`origin/dev` are downloaded and merged within the local branch `dev`. Then, the
+new branch `issue#234` is created from the local branch `dev`.
+
+The developer in charge of the issue `#234` changes the code within the branch
+`issue#234`. Two commands are very useful to keep track of what has been done:
+
+    $ git status
+    $ git diff models.py
+
+The first command shows all created, modified, removed and untracked files that
+are candidates to be committed. The second shows the changes in one of the
+modified files. When we are ready to commit, we should decide whether all
+changed files will be included in the commit or just a subset of them. To
+include all files:
+
+    $ git commit -a -m "New entities added."
+
+To include a subset of files, we have to add each file individually:
+
+    $ git add base/models/academic_year.py
+    $ git add base/models/academic_calendar.py
+    $ git add base/models/__init__.py
+    $ git commit -m "New entities added."
+
+image::images/git-state-diagram.png[Git State Diagram]
+
+=== Creating and Working in a Branch
+
+The issue tracker generates an incremental id that we can use to name branches.
+It helps to keep branches linked to issues. For example: considering an issue
+with the id 260, we can create a local branch with the following commands:
+
+    $ git fetch origin dev
+    $ git checkout dev
+    $ git checkout -b issue#260
+
+The first command updates the branch `dev` with the last changes on the server.
+The second command moves from the branch we are at the moment to the branch
+`dev`. The last command creates the branch `issue#260` from `dev` and
+immediately moves to it. From this moment, every commit will be attached to the
+correct branch. If the branch `dev` already exists in local, then instead of
+fetching it we should pull it:
+
+    $ git pull origin dev
+
+Committing often is encouraged. All commits are done locally, thus there is no
+risk of conflicts until all commits are sent to the server. The `push` option
+sends all commits in a local branch to the server, identified by `origin`.
+
+    $ git push origin issue#260
+
+==== Fixing Mistakes
+
+Version control doesn’t always happens smoothly. We will certainly face some
+problems and fortunately Git is very gentile on which concerns recovering from
+mistakes. These are some common situations we may face during development.
+
+===== Moving to another branch before finishing the work in the current branch
+
+Sometimes we are working in a branch and a more urgent problem arrives,
+requiring us to move to or create another branch. In this case, we have to
+commit all changes in the current branch before moving to another one, otherwise
+we risk to have our changes to the current branch committed in another branch.
+So, first add your changes and commit:
+
+    $ git commit -a -m "New entities added but still incomplete."
+
+and then move to an existing branch:
+
+    $ git checkout issue#261
+
+or create another branch from `dev`:
+
+    $ git checkout dev
+    $ git checkout -b issue#261
+
+It also happens that we start fixing an issue but we forget to move to its
+respective branch. In this case, we have to commit the files related to the
+current branch and leave in the workspace the changes related to another branch:
+
+    $ git add calendar.py
+    $ git commit -m "Sort algorithm started."
+    $ git checkout issue#260
+
+The files that were not committed in the previous branch will be available for
+commit in the branch issue#260.
+
+This practical approach of moving from a branch to another while leaving some
+files uncommitted may not work if at least one of the files we have changed
+locally was also changed remotely. We may see a message like this:
+
+    From https://github.com/uclouvain/osis
+    * branch            dev        -> FETCH_HEAD
+    Updating 57c4a6d..9839a25
+    error: Your local changes to the following files would be overwritten
+           by merge:
+           __openerp__.py
+    Please, commit your changes or stash them before you can merge.
+    Aborting
+
+In this case, we have to commit local changes before moving to another branch.
+But things can get worse because the current branch might be actually related to
+a closed issue, thus committing to it doesn't make sense anymore. In this case,
+we can use `git stash`. It moves all changes in the current workspace to a
+transit area that can be recovered later on. To move all changes to the stash
+area, simply type :
+
+    $ git stash
+
+Now, if we type `git status` we find the working directory clean, which means we
+can move to another branch. To see the stashes we have stored we can use:
+
+    $ git stash list
+
+After moving to another branch, we can recover the changes from the stash are
+using:
+
+    $ git stash apply
+
+but if there is more than one stash in the list we can apply a specific one by
+referencing its identifier:
+
+    $ git stash apply stash@{2}
+
+== Fixing the latest commit message
+
+    $ git commit --amend -m "message"
+
+When we work with branches it’s very common to fool with the commits. There are
+many branches locally and sometimes we forget to switch to the branch related to
+the issue and we end up committing on the wrong branch. When it happens before
+pushing the commits to the server, we can undo the last commit done with the
+command:
+
+    $ git reset --soft HEAD~1
+
+But if the commit was already pushed to the server, it is still possible to undo
+the push as long as other people have not pushed to the same branch after the
+wrong push. It is done with the following command:
+
+    $ git push origin master -f
+
+Stop tracking a file without deleting it locally:
+
+    $ git rm --cached [file]
+
+Deleting remote branches:
+
+    $ git push origin --delete test
+
+== Adding the license to the source code
+
+OSIS is an open source project licensed under GPL v3. As such, it must respect
+certain rules of the license. The most important one is the addition of a
+license header in each one of the source files.
+
+For Python files, the following text should appear on the top of the file,
+before any Python code:
+
+    # -*- coding: utf-8 -*-
+    ############################################################################
+    #
+    #    OSIS stands for Open Student Information System. It's an application
+    #    designed to manage the core business of higher education institutions,
+    #    such as universities, faculties, institutes and professional schools.
+    #    The core business involves the administration of students, teachers,
+    #    courses, programs and so on.
+    #
+    #    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    #
+    #    This program is free software: you can redistribute it and/or modify
+    #    it under the terms of the GNU General Public License as published by
+    #    the Free Software Foundation, either version 3 of the License, or
+    #    (at your option) any later version.
+    #
+    #    This program is distributed in the hope that it will be useful,
+    #    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    #    GNU General Public License for more details.
+    #
+    #    A copy of this license - GNU General Public License - is available
+    #    at the root of the source code of this program.  If not,
+    #    see http://www.gnu.org/licenses/.
+    #
+    ############################################################################
+
+For HTML/Template files, we change just the comment syntax:
+
+    {% comment "License" %}
+     * OSIS stands for Open Student Information System. It's an application
+     * designed to manage the core business of higher education institutions,
+     * such as universities, faculties, institutes and professional schools.
+     * The core business involves the administration of students, teachers,
+     * courses, programs and so on.
+     *
+     * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+     *
+     * This program is free software: you can redistribute it and/or modify
+     * it under the terms of the GNU General Public License as published by
+     * the Free Software Foundation, either version 3 of the License, or
+     * (at your option) any later version.
+     *
+     * This program is distributed in the hope that it will be useful,
+     * but WITHOUT ANY WARRANTY; without even the implied warranty of
+     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     * GNU General Public License for more details.
+     *
+     * A copy of this license - GNU General Public License - is available
+     * at the root of the source code of this program.  If not,
+     * see http://www.gnu.org/licenses/.
+    {% endcomment %}
+
+=== Making changes in the model

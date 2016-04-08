@@ -1,38 +1,44 @@
+##############################################################################
+#
+#    OSIS stands for Open Student Information System. It's an application
+#    designed to manage the core business of higher education institutions,
+#    such as universities, faculties, institutes and professional schools.
+#    The core business involves the administration of students, teachers,
+#    courses, programs and so on.
+#
+#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    A copy of this license - GNU General Public License - is available
+#    at the root of the source code of this program.  If not,
+#    see http://www.gnu.org/licenses/.
+#
+##############################################################################
+import uuid
+from random import randint
+
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
-from admission.forms import NewAccountForm, AccountForm, NewPasswordForm
-from admission.utils import send_mail
-from random import randint
-from admission import models as mdl
-
-import uuid
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import login
 
+from admission import models as mdl
+from admission.forms import NewAccountForm, AccountForm, NewPasswordForm
+from admission.utils import send_mail
 
 
-@login_required
-def home(request):
-    form_new = NewAccountForm()
-    form = AccountForm()
-    number1 = randint(1, 20)
-    number2 = randint(1, 20)
-    number3 = randint(1, 20)
-    sum = number1 + number2
-    while number3 > sum:
-        number3 = randint(1, 20)
-    applications = mdl.application.find_by_user(request.user)
-    return render(request, "home.html", {'number1':  number1,
-                                         'number2':  number2,
-                                         'number3':  number3,
-                                         'form_new': form_new,
-                                         'form':     form,
-                                         'applications' : applications })
-
-
-def home_error(request, message,form):
+def home_error(request, message, form):
     form_new = NewAccountForm()
     number1 = randint(1, 20)
     number2 = randint(1, 20)
@@ -40,11 +46,11 @@ def home_error(request, message,form):
     sum = number1 + number2
     while number3 > sum:
         number3 = randint(1, 20)
-    return render(request, "home.html", {'number1':  number1,
-                                         'number2':  number2,
-                                         'number3':  number3,
+    return render(request, "home.html", {'number1': number1,
+                                         'number2': number2,
+                                         'number3': number3,
                                          'form_new': form_new,
-                                         'form':     form,
+                                         'form': form,
                                          'message': message})
 
 
@@ -89,15 +95,13 @@ def new_user(request):
         user.last_name = form_new['last_name_new'].value()
         user.save()
         person = mdl.person.Person()
-        person.user=user
+        person.user = user
         person.save()
         # send an activation email
         send_mail.send_mail_activation(request, str(person.activation_code), form_new['email_new'].value())
         user_id = user.id
-        return HttpResponseRedirect(reverse('account_confirm',  args=(user_id,)))
+        return HttpResponseRedirect(reverse('account_confirm', args=(user_id,)))
     else:
-
-
         extra_context = {}
         extra_context['form_new'] = form_new
         number1 = randint(1, 20)
@@ -109,7 +113,8 @@ def new_user(request):
         while number3 > sum:
             number3 = randint(1, 20)
         extra_context['number3'] = number3
-        return login(request,  extra_context=extra_context)
+        return login(request, extra_context=extra_context)
+
 
 def activation_mail(request, user_id):
     """
@@ -148,7 +153,7 @@ def activation(request, activation_code):
 
 def new_password_request(request):
     form = AccountForm()
-    return render(request, "new_password.html",{'form':form})
+    return render(request, "new_password.html", {'form': form})
 
 
 def new_password(request):
@@ -161,7 +166,7 @@ def new_password(request):
             person = mdl.person.find_by_user(user)
             if not user.is_active:
                 message = "Votre compte n\'a pas encore été activé"
-                return render(request, "new_password.html", {'message': message, 'form':form})
+                return render(request, "new_password.html", {'message': message, 'form': form})
             else:
                 person.activation_code = uuid.uuid4()
                 person.save()
@@ -169,21 +174,21 @@ def new_password(request):
                 return HttpResponseRedirect(reverse('new_password_info'))
         else:
             message = "L'adresse email encodée ne correspond à aucun utilisateur"
-            return render(request, "new_password.html", {'message': message, 'form':form})
-    except:
+            return render(request, "new_password.html", {'message': message, 'form': form})
+    except ObjectDoesNotExist:
         message = "L'adresse email encodée ne correspond à aucun utilisateur"
-        return render(request, "new_password.html", {'message': message,'form':form })
+        return render(request, "new_password.html", {'message': message, 'form': form})
 
 
 def new_password_form(request, code):
     form = NewPasswordForm()
     person = mdl.person.find_by_activation_code(code)
     if person:
-        return render(request, "new_password_form.html",{'form':   form,
-                                                         'person_id': person.id})
+        return render(request, "new_password_form.html", {'form': form,
+                                                          'person_id': person.id})
     else:
-        return render(request, "new_password_form.html",{'form':   form,
-                                                         'person_id': None})
+        return render(request, "new_password_form.html", {'form': form,
+                                                          'person_id': None})
 
 
 def set_new_password(request):
@@ -196,56 +201,59 @@ def set_new_password(request):
                 user = person.user
                 user.set_password(form['password_new'].value())
                 user.save()
-            person.activation_code=None
+            person.activation_code = None
             person.save()
             return render(request, "new_password_confirmed.html")
     else:
-        return render(request, "new_password_form.html",{'form':   form,
-                                                         'person_id': person_id})
+        return render(request, "new_password_form.html", {'form': form,
+                                                          'person_id': person_id})
 
 
-def account_confirm(request,user_id):
-    return render(request, "confirm_account.html", {'user':user_id})
+def account_confirm(request, user_id):
+    return render(request, "confirm_account.html", {'user': user_id})
 
 
 def new_password_info(request):
     return render(request, "new_password_info.html")
 
 
+def login_admission(request, *args, **kwargs):
+    extra_context = {}
+    extra_context['form_new'] = NewAccountForm()
+    number1 = randint(1, 20)
+    extra_context['number1'] = number1
+    number2 = randint(1, 20)
+    extra_context['number2'] = number2
+    sum = number1 + number2
+    number3 = randint(1, 20)
+    while number3 > sum:
+        number3 = randint(1, 20)
+    extra_context['number3'] = number3
+    return login(request, *args, extra_context=extra_context, **kwargs)
+
+
+def login_admission_error(request, *args, **kwargs):
+    extra_context = {}
+    form_new = NewAccountForm()
+    form_new.errors['email_new_confirm'] = "Il existe déjà un compte pour cette adresse email"
+    extra_context['form_new'] = form_new
+
+
 def offer_selection(request):
     offers = None
     application = mdl.application.find_by_user(request.user)
+    grade_choices = mdl.grade_type.GRADE_CHOICES
     return render(request, "offer_selection.html",
-                          {"gradetypes":  mdl.grade_type.find_all(),
-                           "domains":     mdl.domain.find_all(),
-                           "offers":      offers,
-                           "offer":       None,
-                           "application": application})
-
-
-def refresh_offer_selection(request):
-    offer_type=None
-    if request.POST.get('bachelor_type'):
-        offer_type = request.POST['bachelor_type']
-    if request.POST.get('master_type'):
-        offer_type = request.POST['master_type']
-    if request.POST.get('doctorate_type'):
-        offer_type = request.POST['doctorate_type']
-
-    domain_id = request.POST.get('domain')
-    domain = get_object_or_404(mdl.domain.Domain, pk=domain_id)
-    offers = mdl.offer_year.find_by_domain_grade(domain, offer_type)
-    grade = get_object_or_404(mdl.grade_type.GradeType, pk=offer_type)
-    return render(request, "offer_selection.html",
-                          {"gradetypes":  mdl.grade_type.find_all(),
-                           "domains":     mdl.domain.find_all(),
-                           "offers":      offers,
-                           "offer_type":  grade,
-                           "domain":      domain})
+                          {"gradetypes":    mdl.grade_type.find_all(),
+                           "domains":       mdl.domain.find_all(),
+                           "offers":        offers,
+                           "offer":         None,
+                           "application":   application,
+                           "grade_choices": grade_choices})
 
 
 def _get_offer_type(request):
-    offer_type=None
+    offer_type = None
 
     if request.POST.get('bachelor_type'):
         offer_type = request.POST['bachelor_type']
@@ -267,8 +275,7 @@ def _get_domain(request):
 
 
 def save_offer_selection(request):
-
-    if request.method=='POST' and 'save_down' in request.POST:
+    if request.method == 'POST' and 'save_down' in request.POST:
         offer_year = None
 
         offer_year_id = request.POST.get('offer_year_id')
@@ -280,7 +287,6 @@ def save_offer_selection(request):
             application = mdl.application.Application()
             person_application = mdl.person.find_by_user(request.user)
             application.person = person_application
-
 
         if offer_year_id:
             offer_year = mdl.offer_year.find_by_id(offer_year_id)
@@ -294,26 +300,11 @@ def save_offer_selection(request):
         application.save()
 
     return render(request, "offer_selection.html",
-                          {"gradetypes":  mdl.grade_type.find_all(),
-                           "domains":     mdl.domain.find_all(),
-                           "offers":      None,
-                           "offer_type":  None,
-                           "domain":      mdl})
-
-
-def selection_offer(request, offer_id):
-    offer_year = get_object_or_404(mdl.offer_year.OfferYear, pk=offer_id)
-    grade = _get_offer_type(request)
-    domain = _get_domain(request)
-
-
-    return render(request, "offer_selection.html",
-                          {"gradetypes":  mdl.grade_type.find_all(),
-                           "domains":     mdl.domain.find_all(),
-                           "offers":      None,
-                           "offer":       offer_year,
-                           "offer_type":  grade,
-                           "domain":      domain})
+                  {"gradetypes": mdl.grade_type.find_all(),
+                   "domains": mdl.domain.find_all(),
+                   "offers": None,
+                   "offer_type": None,
+                   "domain": mdl})
 
 
 def application_update(request, application_id):
@@ -324,34 +315,23 @@ def application_update(request, application_id):
                            "application": application})
 
 
-def osis_login(request, *args, **kwargs):
-    extra_context = {}
-    extra_context['form_new'] = NewAccountForm()
-    number1 = randint(1, 20)
-    extra_context['number1'] = number1
-    number2 = randint(1, 20)
-    extra_context['number2'] = number2
-    sum = number1 + number2
-    number3 = randint(1, 20)
-    while number3 > sum:
-        number3 = randint(1, 20)
-    extra_context['number3'] = number3
-    return login(request, *args, extra_context=extra_context, **kwargs)
+def selection_offer(request, offer_id):
+    offer_year = get_object_or_404(mdl.offer_year.OfferYear, pk=offer_id)
+    grade = _get_offer_type(request)
+    domain = _get_domain(request)
+
+    return render(request, "offer_selection.html",
+                  {"gradetypes": mdl.grade_type.find_all(),
+                   "domains": mdl.domain.find_all(),
+                   "offers": None,
+                   "offer": offer_year,
+                   "offer_type": grade,
+                   "domain": domain})
 
 
-def osis_login_error(request, *args, **kwargs):
-    extra_context = {}
-    form_new = NewAccountForm()
-    form_new.errors['email_new_confirm'] = "Il existe déjà un compte pour cette adresse email"
-    extra_context['form_new'] = form_new
-    number1 = randint(1, 20)
-    extra_context['number1'] = number1
-    number2 = randint(1, 20)
-    extra_context['number2'] = number2
-    sum = number1 + number2
-    number3 = randint(1, 20)
-    while number3 > sum:
-        number3 = randint(1, 20)
-    extra_context['number3'] = number3
-    return login(request, *args, extra_context=extra_context, **kwargs)
-
+def application_update(request, application_id):
+    application = mdl.application.find_by_id(application_id)
+    return render(request, "offer_selection.html",
+                  {"offers": None,
+                   "offer": application.offer_year,
+                   "application": application})

@@ -1,0 +1,458 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/bootstrap-datepicker3.min.css' %}" type='text/css'>
+{% endblock %}
+{% block content %}
+<script>
+    function display(id,state){
+        var elt = document.getElementById(id);
+        if(state){
+            elt.style = "visibility:visible;display:block;";
+        }else{
+            elt.style = "visibility:hidden;display:none;";
+        }
+    }
+
+</script>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h2 class="error">Veuillez compléter votre profil</h2>
+        <h5>Tous les champs marqués d'une * sont obligatoires</h5>
+        <form method="post" action="{% url 'profile' %}">
+            {% csrf_token %}
+            <font class="error">{% if person_form.errors %}Attention il y a des erreurs.{%endif%}</font>
+            <br>
+            <br>
+            <button type="submit" id="bt_submit_profile" class="btn btn-primary" role="button" name="save"
+                    title="Sauvegarder">
+                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Sauvegarder
+            </button>
+            <button type="submit" id="bt_submit_next_step" class="btn btn-default" role="button" name="next_step"
+                    title="Sauvegarder" disabled>
+                <span class="glyphicon glyphicon-forward" aria-hidden="true"></span> Etape suivante
+            </button>
+            <br>
+            <br>
+            <div class="panel panel-default">
+                <div class="panel-heading">Identification</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                        </div>
+                        <div class="col-md-6">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Nom *</label>
+                            <input class="form-control" id="txt_last_name" name="last_name"
+                                   value="{{ person.user.last_name  | default_if_none:'' }}" maxlength="255">
+                            (ex: Van der Elst)
+                            <font class="error">{{ person_form.last_name.errors|striptags }}</font>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Prénom *</label>
+                            <input class="form-control" id="txt_first_name" name="first_name"
+                                   value="{{ person.user.first_name  | default_if_none:'' }}" maxlength="255">
+                            (ex: Frédéric <span style="text-decoration: line-through;">frederic FREDERIC</span>)
+                            <font class="error">{{ person_form.first_name.errors|striptags }}</font>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Autres prénoms</label>
+                            <input class="form-control" id="txt_middle_name" name="middle_name"
+                                   value="{{ person.middle_name  | default_if_none:'' }}" maxlength="50">
+                            (ex: Pierre, Paul, Jacques  <span style="text-decoration: line-through;">pierre, paul,
+                             JACQUES</span>)
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Date de naissance *</label>
+                            <input type="text" class="form-control" id="txt_birth_date" name="birth_date"
+                                   value="{{ person.birth_date  | default_if_none:'' | date:"d/m/Y" }}">
+                            <font class="error">{{ person_form.birth_date.errors|striptags }}</font>
+
+                        </div>
+                        <div class="col-md-4">
+                            <label>Lieu de naissance *</label>
+                            <input class="form-control" id="txt_birth_place" name="birth_place"
+                                   value="{{ person.birth_place | default_if_none:''}}" maxlength="255">
+                            <font class="error">{{ person_form.birth_place.errors|striptags}}</font>
+
+                        </div>
+                        <div class="col-md-3">
+                            <label>Pays de naissance *</label>
+                            <select class="form-control" id="slt_birth_country" name="birth_country">
+                                {% for country in countries%}
+                                <option value="{{country.id}}"
+                                    {%if country.id = person.birth_country.id %} selected {% endif %}>{{ country}}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <font class="error">{{ person_form.birth_country.errors|striptags }}</font>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Nationalité *</label>
+                            <select class="form-control" id="slt_nationality" name="nationality">
+                                {% for country in countries%}
+                                <option value="{{country.id}}"
+                                        {% if country.id = person.nationality.id %} selected {%endif %}>
+                                        {{ country.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <font class="error">{{ person_form.nationality.errors|striptags }}</font>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Genre *</label>
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rd_gender_male" name="gender" value="MALE"
+                                           {% if person.gender = "MALE" %} checked {% endif %}> Masculin
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rd_gender_female" name="gender" value="FEMALE"
+                                           {% if person.gender = "FEMALE" %} checked {% endif %}> Féminin
+                                </label>
+                            </div>
+                            <font class="error">{{ person_form.gender.errors|striptags }}</font>
+
+                        </div>
+                        <div class="col-md-3">
+                            <label>Etat civil *</label>
+                            <select class="form-control" id="slt_civil_status" name="civil_status">
+                                <option value="SINGLE" {% if person.civil_status = "SINGLE" %}selected{%endif%}>
+                                    Célibataire
+                                </option>
+                                <option value="COHABITANT" {% if person.civil_status = "COHABITANT" %}selected{%endif%}>
+                                    Cohabitant(e)
+                                </option>
+                                <option value="MARRIED" {% if person.civil_status = "MARRIED" %} selected {%endif%}>
+                                    Marié(e)
+                                </option>
+                                <option value="SEPARATED" {% if person.civil_status = "SEPARATED" %}selected{%endif%}>
+                                    Séparé(e)
+                                </option>
+                                <option value="DIVORCED" {% if person.civil_status = "DIVORCED" %}selected{%endif%}>
+                                    Divorcé(e)
+                                </option>
+                                <option value="WIDOWED" {% if person.civil_status = "WIDOWED" %}selected{%endif%}>
+                                    Veuf(ve)
+                                </option>
+                            </select>
+                            <font class="error">{{ person_form.civil_status.errors|striptags }}</font>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Nombre d'enfants</label>
+                            <input class="form-control" id="txt_number_children" name="number_children"
+                                   value="{{ person.number_children | default_if_none:''}}">
+                            <font class="error">{{ person_form.number_children.errors|striptags }}</font>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Nom et prénom conjoint</label>
+                            <input class="form-control" id="txt_spouse_name" name="spouse_name"
+                                   value="{{ person.spouse_name | default_if_none:''}}" maxlength="50">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Pièce d'identité</div>
+                <div class="panel-body">
+                    Veuillez fournir au moins un numéro d'identité.
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Numéro du registre national</label>
+                            <input class="form-control" id="txt_national_id" name="national_id"
+                                   value="{{ person.national_id | default_if_none:''}}">
+                        </div>
+                        <div class="col-md-4">
+                            <label>Numéro de carte d'identité</label>
+                            <input class="form-control" id="txt_id_card_number" name="id_card_number"
+                                   value="{{ person.id_card_number | default_if_none:''}}">
+                        </div>
+                        <div class="col-md-4">
+                            <label>Numéro de passport</label>
+                            <input class="form-control" id="txt_passport_number" name="passport_number"
+                                   value="{{ person.passport_number | default_if_none:''}}">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Domicile légal</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Rue/Avenue *</label>
+                            <input class="form-control" id="txt_legal_adr_street" name="legal_adr_street"
+                                   value="{{ person_legal_address.street | default_if_none:''}}"
+                                   maxlength="255">
+                            (ex: Avenue Louis Braille, Rue de la Loi, Place de l'Université)
+                            <font class="error">{{ person_form.legal_adr_street.errors|striptags }}</font>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Numéro *</label>
+                            <input class="form-control" id="txt_legal_adr_number" name="legal_adr_number"
+                                   value="{{ person_legal_address.number | default_if_none:''}}"
+                                   maxlength="6">
+                            <font class="error">{{ person_form.legal_adr_number.errors|striptags }}</font>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Lieu-dit (éventuellement)</label>
+                            <input class="form-control" id="txt_legal_adr_complement" name="legal_adr_complement"
+                                   value="{{ person_legal_address.complement | default_if_none:''}}"
+                                   maxlength="255">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Code postal *</label>
+                            <input class="form-control" id="txt_legal_adr_postal_code" name="legal_adr_postal_code"
+                                   value="{{ person_legal_address.postal_code | default_if_none:''}}"
+                                   maxlength="20">
+                            (ex: 1348)
+                            <font class="error">{{ person_form.legal_adr_postal_code.errors|striptags }}</font>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Localité *</label>
+                            <input class="form-control" id="txt_legal_adr_city" name="legal_adr_city"
+                                   value="{{ person_legal_address.city | default_if_none:''}}"
+                                   maxlength="255">
+                            <font class="error">{{ person_form.legal_adr_city.errors|striptags }}</font>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Pays *</label>
+                            <select class="form-control" id="slt_legal_adr_country" name="legal_adr_country">
+                                {% for country in countries%}
+                                <option value="{{country.id}}"
+                                        {%if country.id = person_legal_address.country.id%}selected {%endif%}>
+                                        {{ country }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <font class="error">{{ person_form.legal_adr_country.errors|striptags }}</font>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Adresse de correspondance</div>
+                <div class="panel-body">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            Adresse de contact est la même que votre domicile légal?
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rd_same_contact_legal_addr_true"
+                                           name="same_contact_legal_addr" value="true"
+                                           onclick="display('pnl_contact_address',false);"
+                                           {% if same_addresses %}checked{%endif%}> Oui
+
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rd_same_contact_legal_addr_false"
+                                           name="same_contact_legal_addr" value="false"
+                                           onclick="display('pnl_contact_address',true);"
+                                           {% if same_addresses %}{%else%}checked{%endif%}> Non
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="pnl_contact_address"
+                         style="{% if same_addresses %} visibility:hidden;display:none; {% else %} visibility:visible;display:block; {%endif%} ">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Rue/Avenue *</label>
+                                <input class="form-control" id="txt_contact_adr_street" name="contact_adr_street"
+                                       value="{{ person_contact_address.street | default_if_none:''}}"
+                                       maxlength="255">
+                                (ex: Avenue Louis Braille, Rue de la Loi, Place de l'Université)
+                                <font class="error">{{ person_form.contact_adr_street.errors|striptags }}</font>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Numéro *</label>
+                                <input class="form-control" id="txt_contact_adr_number" name="contact_adr_number"
+                                       value="{{ person_contact_address.number | default_if_none:''}}"
+                                       maxlength="6">
+                                <font class="error">{{ person_form.contact_adr_number.errors|striptags }}</font>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Lieu-dit (éventuellement)</label>
+                                <input class="form-control" id="txt_contact_adr_complement"
+                                       name="contact_adr_complement"
+                                       value="{{ person_contact_address.complement | default_if_none:''}}"
+                                       maxlength="255">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Code postal *</label>
+                                <input class="form-control" id="txt_contact_adr_postal_code"
+                                       name="contact_adr_postal_code"
+                                       value="{{ person_contact_address.postal_code | default_if_none:''}}"
+                                       maxlength="20">
+                                (ex: 1348)
+                                <font class="error">{{ person_form.contact_adr_postal_code.errors|striptags }}</font>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Localité *</label>
+                                <input class="form-control" id="txt_contact_adr_city" name="contact_adr_city"
+                                       value="{{ person_contact_address.city | default_if_none:''}}"
+                                       maxlength="255">
+                                <font class="error">{{ person_form.contact_adr_city.errors|striptags }}</font>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Pays *</label>
+                                <select class="form-control" id="slt_contact_adr_country" name="contact_adr_country">
+                                    {% for country in countries%}
+                                    <option value="{{country.id}}"
+                                            {%if country.id = person_contact_address.country.id%} selected {%endif%}>
+                                            {{ country }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                                <font class="error">{{ person_form.contact_adr_country.errors|striptags }}</font>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Contact</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>GSM</label>
+                            <input class="form-control" id="txt_phone_mobile" name="phone_mobile"
+                                   value="{{ person.phone_mobile | default_if_none:''}}"
+                                   maxlength="30">
+                            (ex: +32 490 00 00 00)
+                        </div>
+                        <div class="col-md-3">
+                            <label>Autre téléphone</label>
+                            <input class="form-control" id="txt_phone" name="phone"
+                                   value="{{ person.phone | default_if_none:''}}" maxlength="30">
+                            (ex: +32 10 47 21 72)
+                        </div>
+                        <div class="col-md-3">
+                            <label>E-mail *</label>
+                            <input class="form-control" id="txt_additional_email" name="additional_email"
+                                   value="{{ person.additional_email| default_if_none:''}}" maxlength="255">
+                            <font class="error">{{ person_form.additional_email.errors|striptags }}</font>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Avez-vous déjà été inscrit, antérieurement,  à l'institution suivante: {{ institution }}?</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rd_previous_enrollment_true" name="previous_enrollment"
+                                           value="true" onclick="display('pnl_previous_enrollment',true);"
+                                           {% if previous_enrollment %}checked{% else %}{% endif %}> Oui
+
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rd_previous_enrollment_false" name="previous_enrollment"
+                                           value="false" onclick="display('pnl_previous_enrollment',false);"
+                                           {% if previous_enrollment%}{% else %}checked{% endif %}> Non
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="pnl_previous_enrollment"
+                         style="{% if previous_enrollment%}visibility:visible;display:block;{% else %}visibility:hidden;display:none;{% endif %}">
+                        <br>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Quel est votre numéro de matricule ? *</label>
+                                <input class="form-control" id="txt_register_number" name="register_number"
+                                       value="{{ person.register_number| default_if_none:''}}">
+                                (ex: 1058-13-00)
+                                <font class="error">{{ person_form.register_number.errors|striptags }}</font>
+                            </div>
+                            <div class="col-md-8">
+                                <label>Quelle est votre dernière année dans l'institution suivante : {{institution}}? *</label>
+                                <br>
+                                <input id="txt_ucl_last_year" name="ucl_last_year" size="10"
+                                       value="{{ person.ucl_last_year| default_if_none:''}}" maxlength="9">
+                                <font class="error">{{ person_form.ucl_last_year.errors|striptags }}</font>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" id="bt_profile" class="btn btn-primary" role="button" name="save_down"
+                    title="Sauvegarder">
+                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Sauvegarder
+            </button>
+
+            <button type="submit" id="bt_next_step" class="btn btn-default" role="button" name="next_step_down"
+                    title="Sauvegarder" disabled>
+                <span class="glyphicon glyphicon-forward" aria-hidden="true"></span> Etape suivante
+            </button>
+
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+{% block script %}
+<script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
+<script>
+  $("#txt_birth_date").datepicker({
+      format: "dd/mm/yyyy",
+      autoclose: true,
+      orientation: "bottom auto"
+  });
+
+</script>
+{% endblock %}
