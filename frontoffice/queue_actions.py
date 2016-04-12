@@ -23,33 +23,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.apps import AppConfig
-from frontoffice import queue
-import json
+
+from couchbase import Couchbase
+from pprint import pprint
 
 
-
-class ReferenceConfig(AppConfig):
-    name = 'reference'
-
-    def insert_or_update(self, json_datas):
-        """
-        Insert the records in PostGreSQL. If the records already exist, then the method makes an update.
-        """
-        data = json.loads(json_datas.decode("utf-8"))
-        from reference import models
-        map_classes = {
-            'reference.Country': models.Country,
-        }
-        cls_str = data['model_class_str']
-        model_class = map_classes[cls_str]
-        records = data['records']
-        # ids = [obj['id'] for obj in records]
-        for record in records :
-            obj, created = model_class.objects.update_or_create(defaults=record, **{'id' : record['id']})
-            print("created ? : " + str(created))
-
-    def ready(self):
-        # if django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
-        # ===> This exception says that there is an error in the implementation of method ready(self) !!
-        queue.listen_queue(self.name, self.insert_or_update)
+def couchbase_insert(json_datas):
+    cb = Couchbase.connect(bucket='default')
+    data = json.loads(json_datas.decode("utf-8"))
+    key = "{0}-{1}".format(
+        data['id'],
+        data['name'].replace(' ', '_').lower()
+    )
+    print('inserting datas in couchDB...')
+    cb.set(key, data)
+    print('Done.')
+    print('getting datas just inserted in couchDB...')
+    result = cb.get(key)
+    pprint(result.value, indent=4)
+    print('Done.')
+    print('deleting datas just inserted in couchDB...')
+    cb.delete(key)
+    print('Done.')
