@@ -128,8 +128,6 @@ class ExampleConsumer(object):
         self.EXCHANGE = connection_parameters['exchange']
         self.ROUTING_KEY = connection_parameters['routing_key']
         self.callback_func = callback
-        # self._url = amqp_url
-        # self.QUEUE = queue_name
 
     def connect(self):
         """This method connects to RabbitMQ, returning the connection handle.
@@ -358,10 +356,9 @@ class ExampleConsumer(object):
         :param str|unicode body: The message body
 
         """
-        print(self._connection_parameters['queue_name'] + ' : Received message # %s from %s: %s' % (basic_deliver.delivery_tag, properties.app_id, body))
+        print(self._connection_parameters['queue_name'] + ' : Received message # %s from %s' % (basic_deliver.delivery_tag, properties.app_id))
         self.acknowledge_message(basic_deliver.delivery_tag)
         self.callback_func(body)
-        # queue_actions.couchbase_insert(body)
 
     def acknowledge_message(self, delivery_tag):
         """Acknowledge the message delivery from RabbitMQ by sending a
