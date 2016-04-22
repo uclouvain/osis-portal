@@ -26,12 +26,10 @@
 
 from django.apps import AppConfig
 from frontoffice.queue import callbacks, queue
-import json
 
 
 class AdmissionConfig(AppConfig):
     name = 'admission'
-
 
     def ready(self):
         # if django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.

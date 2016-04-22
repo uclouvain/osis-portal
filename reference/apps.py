@@ -27,7 +27,6 @@ from django.apps import AppConfig
 from frontoffice.queue import callbacks, queue
 
 
-
 class ReferenceConfig(AppConfig):
     name = 'reference'
 
