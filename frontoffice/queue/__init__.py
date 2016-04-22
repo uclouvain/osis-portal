@@ -23,14 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.apps import AppConfig
-from frontoffice.queue import callbacks, queue
 
-
-class ReferenceConfig(AppConfig):
-    name = 'reference'
-
-    def ready(self):
-        # if django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
-        # ===> This exception says that there is an error in the implementation of method ready(self) !!
-        queue.listen_queue(self.name, callbacks.insert_or_update)
+from frontoffice.queue import callbacks
+from frontoffice.queue import queue

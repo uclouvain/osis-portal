@@ -23,14 +23,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.apps import AppConfig
-from frontoffice.queue import callbacks, queue
+
+from couchbase import Couchbase
+from pprint import pprint
 
 
-class ReferenceConfig(AppConfig):
-    name = 'reference'
-
-    def ready(self):
-        # if django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
-        # ===> This exception says that there is an error in the implementation of method ready(self) !!
-        queue.listen_queue(self.name, callbacks.insert_or_update)
+def couchbase_insert(json_datas):
+    cb = Couchbase.connect(bucket='default')
+    data = json.loads(json_datas.decode("utf-8"))
+    key = "{0}-{1}".format(
+        data['id'],
+        data['name'].replace(' ', '_').lower()
+    )
+    print('inserting datas in couchDB...')
+    cb.set(key, data)
+    print('Done.')
+    print('getting datas just inserted in couchDB...')
+    result = cb.get(key)
+    pprint(result.value, indent=4)
+    print('Done.')
+    print('deleting datas just inserted in couchDB...')
+    cb.delete(key)
+    print('Done.')

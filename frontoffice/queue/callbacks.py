@@ -23,14 +23,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.apps import AppConfig
-from frontoffice.queue import callbacks, queue
+
+import json
 
 
-class ReferenceConfig(AppConfig):
-    name = 'reference'
-
-    def ready(self):
-        # if django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
-        # ===> This exception says that there is an error in the implementation of method ready(self) !!
-        queue.listen_queue(self.name, callbacks.insert_or_update)
+def insert_or_update(json_data):
+    """
+    Insert the records in PostGreSQL. If the records already exist, then the method makes an update.
+    """
+    data = json.loads(json_data.decode("utf-8"))
+    # Import must be inside the method because django isn't loaded at the launch of the application
+    from reference import models as mdl_ref
+    from admission import models as mdl_adm
+    map_classes = {
+        'reference.Country': mdl_ref.Country,
+        'admission.Domain': mdl_adm.domain.Domain,
+    }
+    cls_str = data['model_class_str']
+    model_class = map_classes[cls_str]
+    records = data['records']
+    # ids = [obj['id'] for obj in records]
+    for record in records :
+        obj, created = model_class.objects.update_or_create(defaults=record, **{'id' : record['id']})
