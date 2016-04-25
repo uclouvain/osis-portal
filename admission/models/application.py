@@ -26,13 +26,13 @@
 from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from admission.models import person
 
 
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('offer_year', 'person')
-    fieldsets = ((None, {'fields': ('offer_year', 'person')}),)
+    list_display = ('person', 'offer_year', 'creation_date', 'application_type', 'doctorate')
+    fieldsets = ((None, {'fields': ('person', 'offer_year', 'application_type', 'doctorate')}),)
 
 
 class Application(models.Model):
@@ -46,22 +46,20 @@ class Application(models.Model):
     doctorate = models.BooleanField(default=False)
 
     def __str__(self):
-        return u"%s" % (self.offer_year)
+        return u"%s" % self.offer_year
 
 
 def find_by_user(user):
-    person_application = person.Person.objects.get(user=user)
-    if person_application:
-        applications = Application.objects.filter(person=person_application)
-        return applications
+    try:
+        person_application = person.Person.objects.get(user=user)
 
-    return None
+        if person_application:
+            return Application.objects.filter(person=person_application)
+        else:
+            return None
+    except ObjectDoesNotExist:
+        return None
 
 
 def find_by_id(application_id):
     return Application.objects.get(pk=application_id)
-
-
-
-
-

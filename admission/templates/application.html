@@ -27,27 +27,21 @@
 {% endcomment %}
 
 {% block content %}
-&nbsp;&nbsp;&nbsp;&nbsp;
-<br><br>
-
 <div class="panel panel-default">
     <div class="panel-body">
-        <h2>Première page admission avec l'authentification pour {{user.username}}</h2><br><br>
+        {{application.offer_year}}
 
-
-        {% if applications %}
-        <table>
- <thead>
-        <th>Offer</th>
+         <table class="table table-striped table-hover">
+      <thead>
+        <th>Question</th>
+        <th>Réponse</th>
       </thead>
-
-        {% for application in applications%}
-<tr><td><a href="{% url 'application_update' application.id %}">{{application.offer_year}}</a></td></tr>
+        {% for answer in answers %}
+            <tr><td>{{answer.option.question.label}}</td><td>{{answer.option.value}}</td></tr>
+            <br>
         {% endfor%}
-                  </table>
-        {%endif%}
+             </table>
 
-        <a href="{% url 'offer_selection' %}">Nouvelle application</a>
     </div>
 </div>
 {% endblock %}

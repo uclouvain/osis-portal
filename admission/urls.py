@@ -23,37 +23,41 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url, include
-from django.contrib.auth.views import login, logout
+from django.conf.urls import url
+from admission.views import application, common, identification, offer, level, question, option
+from django.contrib.auth.views import logout
 
-from . import views
 
 urlpatterns = [
-    url(r'^$', views.home, name='home'),
-    url(r'^admission/$', views.home, name='admission'),
+    url(r'^$', common.home, name='home'),
+    url(r'^admission/$', common.home, name='admission'),
 
-    url(r'^login/$', views.osis_login,  name='login'),
+    url(r'^admission/new_password_request/$', identification.new_password_request, name='new_password_request'),
+    url(r'^admission/new_password/$', identification.new_password, name='new_password'),
+    url(r'^admission/new_password_form/([0-9a-z-]+)/$', identification.new_password_form, name='new_password_form'),
+    url(r'^admission/set_new_password/$', identification.set_new_password, name='set_new_password'),
+    url(r'^admission/user/new/$', identification.new_user, name='new_user'),
+    url(r'^admission/user/([0-9]+)/mail/activation/$', identification.activation_mail, name='activation_mail'),
+    url(r'^admission/user/([0-9a-z-]+)/activation/$', identification.activation, name='activation'),
+    url(r'^admission/user/new/confirm/([0-9]+)/$', identification.account_confirm, name="account_confirm"),
+    url(r'^admission/new_password/info/$', identification.new_password_info, name='new_password_info'),
+    url(r'^admission/application/([0-9]+)/$', application.application_update, name='application_update'),
+
+    url(r'^admission/offer/$', offer.offer_selection, name='offer_selection'),
+    url(r'^admission/offer/save/$', application.save_application_offer, name='save_offer_selection'),
+    url(r'^admission/offer/application/([0-9]+)/$', offer.selection_offer, name='selection_offer'),
+    url(r'^profile/$', common.profile, name='profile'),
+    url(r'^profile_confirmed/$', application.profile_confirmed, name='profile_confirmed'),
+
+    url(r'^login/$', identification.login_admission,  name='login'),
     url(r'^logout/$', logout, name='logout'),
 
-    url(r'^admission/new_password_request/$', views.new_password_request, name='new_password_request'),
-    url(r'^admission/new_password/$', views.new_password, name='new_password'),
-    url(r'^admission/new_password_form/([0-9a-z-]+)/$', views.new_password_form, name='new_password_form'),
-    url(r'^admission/set_new_password/$', views.set_new_password, name='set_new_password'),
-    url(r'^admission/user/new/$', views.new_user, name='new_user'),
-    url(r'^admission/user/([0-9]+)/mail/activation/$', views.activation_mail, name='activation_mail'),
-    url(r'^admission/user/([0-9a-z-]+)/activation/$', views.activation, name='activation'),
-    url(r'^admission/user/new/confirm/([0-9]+)/$', views.account_confirm, name="account_confirm"),
-    url(r'^admission/new_password/info/$', views.new_password_info, name='new_password_info'),
-    url(r'^admission/application/([0-9]+)/$', views.application_update, name='application_update'),
+    url(r'^offers/$', offer.search),
+    url(r'^levels/$', level.find_by_type),
+    url(r'^questions/$', question.find_by_offer),
+    url(r'^options/$', option.find_by_offer),
 
-    url(r'^admission/offer/$', views.offer_selection, name='offer_selection'),
-    url(r'^admission/offer/search/$', views.refresh_offer_selection, name='refresh_offer_selection'),
-    url(r'^admission/offer/save/$', views.save_offer_selection, name='save_offer_selection'),
-    url(r'^admission/offer/application/([0-9]+)/$', views.selection_offer, name='selection_offer'),
+    url(r'^admission/application/read/([0-9]+)/$', application.application_view, name='application_view'),
 
-    url(r'^admission/application/secdiploma/$', views.sec_diploma, name='sec_diploma'),
-
-
-
-
+    url(r'^admission/application/secdiploma/$', application.sec_diploma, name='sec_diploma'),
 ]

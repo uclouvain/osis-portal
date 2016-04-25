@@ -29,7 +29,7 @@ from admission.models import offer_year_calendar
 
 
 class OfferYearAdmin(admin.ModelAdmin):
-    list_display = ('acronym', 'title', 'academic_year', 'domain')
+    list_display = ('acronym', 'title', 'academic_year', 'domain', 'grade_type')
     fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'domain', 'grade_type')}),)
 
 
@@ -45,7 +45,6 @@ class OfferYear(models.Model):
     def __str__(self):
         return u"%s - %s" % (self.academic_year, self.acronym)
 
-
     @property
     def offer_year_calendar(self):
         #Should only be one record
@@ -60,6 +59,12 @@ def find_all():
     return OfferYear.objects.all().order_by("acronym")
 
 
+def search(level=None, domain=None):
+    if level and domain:
+        return OfferYear.objects.filter(grade_type=level, domain=domain).order_by("acronym")
+    else:
+        return None
+
+
 def find_by_domain_grade(domain, grade):
     return OfferYear.objects.filter(domain=domain, grade_type=grade).order_by("acronym")
-
