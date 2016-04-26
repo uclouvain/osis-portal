@@ -46,7 +46,33 @@ class Country(models.Model):
         return self.name
 
     def find_countries():
-        return Country.objects.all()
+        return Country.objects.all().order_by('name')
 
     def find_by_id(country_id):
         return Country.objects.get(pk=country_id)
+
+
+class LanguageAdmin(admin.ModelAdmin):
+    list_display = ('code', 'name')
+    ordering = ('code',)
+    search_fields = ['code', 'name']
+    fieldsets = ((None, {'fields': ('code', 'name')}),)
+
+
+class Language(models.Model):
+    code = models.CharField(max_length=4, unique=True)
+    name = models.CharField(max_length=80, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    def find_by_id(a_language_id):
+        return Language.objects.get(pk=a_language_id)
+
+
+    def find_languages(self):
+        return Language.objects.all().order_by('name')
+
+
+    def find_languages_excepted(list):
+        return Language.objects.exclude(name__in=list)

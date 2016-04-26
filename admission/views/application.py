@@ -26,9 +26,11 @@
 from admission import models as mdl
 from django.shortcuts import render, get_object_or_404
 from admission.views.object_application import Object_application
+from reference.models import Country, Language
 
 ALERT_MANDATORY_FIELD = "Champ obligatoire"
 
+LANGUAGE_REGIME = ['Français',' Néerlandais', 'Anglais', 'Allemand', 'Italien', 'Espagnol', 'Portuguais']
 
 
 def application_update(request, application_id):
@@ -98,20 +100,16 @@ def save_application_offer(request):
                         answer.option = option
                         answer.value = option.value
                         answer.save()
-        print('1')
+        other_language_regime = Language.find_languages_excepted(LANGUAGE_REGIME)
         return render(request, "diploma.html", {"application": application,
                                                 "academic_years": mdl.academic_year.find_academic_years(),
-                                                "object_application": geto()})
+                                                "object_application": geto(),
+                                                "countries":Country.find_countries(),
+                                                "languages": other_language_regime})
 
 
 def geto():
-    print('geto')
     object_application=Object_application()
-    object_application.rdb_diploma_sec = True
-    object_application.academic_year = mdl.academic_year.find_by_id(3)
-    object_application.rdb_belgian_foreign = True
-    object_application.rdb_belgian_community = "FRENCH"
-    print(object_application.rdb_diploma_sec)
     return object_application
 
 
@@ -143,6 +141,7 @@ def diploma_save(request, application_id):
 
 
     application = get_object_or_404(mdl.application.Application, pk=application_id)
+    other_language_regime = Language.find_languages_excepted(LANGUAGE_REGIME)
     if next_step:
         objet_application = Object_application()
         object_application =geto()
@@ -154,12 +153,16 @@ def diploma_save(request, application_id):
             return render(request, "diploma.html", {"application": application,
                                                     "validation_messages":validation_messages,
                                                     "academic_years": academic_years,
-                                                    "object_application": geto()})
+                                                    "object_application": geto(),
+                                                    "countries":Country.find_countries(),
+                                                    "languages": other_language_regime})
     else:
         return render(request, "diploma.html", {"application": application,
                                                 "validation_messages":validation_messages,
                                                 "academic_years": academic_years,
-                                                "object_application": geto()})
+                                                "object_application": geto(),
+                                                "countries":Country.find_countries(),
+                                                "languages": other_language_regime})
 
 
 def validate_fields_form(request):
@@ -212,17 +215,37 @@ def validate_fields_form(request):
                             validation_messages['pnl_teaching_type'] = "Il faut préciser un type d'enseignement"
                             is_valid = False
 
-                if academic_year.year < 1994:
-                    if request.POST.get('repeated_grade') is None:
-                        validation_messages['repeated_grade'] = ALERT_MANDATORY_FIELD
+                    if academic_year.year < 1994:
+                        if request.POST.get('repeated_grade') is None:
+                            validation_messages['repeated_grade'] = ALERT_MANDATORY_FIELD
+                            is_valid = False
+                        if request.POST.get('re_orientation') is None:
+                            validation_messages['re_orientation'] = ALERT_MANDATORY_FIELD
+                            is_valid = False
+                else:
+                    #Foreign diploma
+                    if request.POST.get('foreign_baccalaureate_diploma') is None:
+                        validation_messages['foreign_baccalaureate_diploma'] = "Il faut préciser le diplôme obtenu"
                         is_valid = False
-                    if request.POST.get('re_orientation') is None:
-                        validation_messages['re_orientation'] = ALERT_MANDATORY_FIELD
-                        is_valid = False
+                    if request.POST.get('other_language_regime') == 'on':
+                        if request.POST.get('other_language_diploma') == "-":
+                            validation_messages['language_regime'] = "Il faut préciser un régime linguistique de type autre"
+                            is_valid = False
+                    else:
+                        print('language_diploma:',request.POST.get('language_diploma'))
+                        if request.POST.get('language_diploma') == "-":
+                            validation_messages['language_regime'] = "Il faut préciser un régime linguistique"
+                            is_valid = False
                 if request.POST.get('result') is None:
                     validation_messages['result'] = ALERT_MANDATORY_FIELD
                     is_valid = False
                 #validation for the uploaded file
+        else:
+            #admission exam
+            if request.POST.get('admission_exam') is None:
+                validation_messages['admission_exam'] = ALERT_MANDATORY_FIELD
+                is_valid = False
+
 
     else:
         validation_messages['rdb_diploma_sec'] = ALERT_MANDATORY_FIELD
@@ -238,8 +261,10 @@ def curriculum_read(request, application_id):
 
 def curriculum_save(request, application_id):
     application = mdl.application.find_by_id(application_id)
-    print('2')
-    return render(request, "diploma.html", {"application": application,
-                                            "academic_years": mdl.academic_year.find_academic_years(),
-                                            "object_application" : geto()})
+    other_language_regime = Language.find_languages_excepted(LANGUAGE_REGIME)
+    return render(request, "diploma.html", {"application":        application,
+                                            "academic_years":     mdl.academic_year.find_academic_years(),
+                                            "object_application": geto(),
+                                            "countries":          Country.find_countries(),
+                                            "languages":          other_language_regime})
 

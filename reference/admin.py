@@ -27,5 +27,6 @@ from reference.models import *
 
 
 admin.site.register(Country, CountryAdmin)
+admin.site.register(Language, LanguageAdmin)
 
 

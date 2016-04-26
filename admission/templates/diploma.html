@@ -95,6 +95,23 @@
             }
         }
     }
+
+    function enabled_other_language(elt){
+        if(elt.checked){
+            document.getElementById('slt_other_language_diploma').disabled = false;
+            document.getElementById('slt_language_diploma').selectedIndex = -1;
+            document.getElementById('slt_country').selectedIndex = -1;
+            document.getElementById('slt_language_diploma').disabled=true;
+            document.getElementById('slt_country').disabled=true;
+            document.getElementById('pnl_translation').style="visibility:visible;display:block;";
+
+        }else{
+            document.getElementById('slt_other_language_diploma').disabled = true;
+            document.getElementById('slt_language_diploma').disabled=false;
+            document.getElementById('slt_country').disabled=false;
+            document.getElementById('pnl_translation').style="visibility:hidden;display:none;";
+        }
+    }
 </script>
 
 <form method="post" action="{% url 'diploma' application.id %}">
@@ -112,12 +129,13 @@
         <br>
         <br>
     </div>
-    <div class="panel panel-default" style="{% if application.person.register_number%}visibility:hidden;display:none;{%else%}visibility:visible;display:block;{%endif%}">
+    <div class="panel panel-default"
+         style="{% if application.person.register_number%}visibility:hidden;display:none;{%else%}visibility:visible;display:block;{%endif%}">
         <div class="panel-heading">Etudes secondaires</div>
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-12">
-                    <label>Avez-vous obtenu un diplôme de fin d'études secondaires ou allez-vous l'obtenir cette année?*</label>
+                    <label>Avez-vous obtenu un diplôme de fin d'études secondaires ou allez-vous l'obtenir cette année?*{{object_application.rdb_diploma_sec}}</label>
                     <br>
                     <span style="font-size:smaller">Le diplôme d'études secondaires est le titre nécessaire pour entamer des
                         études supérieures (universitaires, en haute-école, ...). Ex : CESS, Baccalauréat, Diplôme de
@@ -128,11 +146,11 @@
                 <div class="col-md-12">
                     <label class="radio-inline">
                       <input type="radio" name="rdb_diploma_sec" id="rdb_diploma_sec1" value="true" {%if object_application.rdb_diploma_sec = True %}checked{%endif%}
-                             onclick="display('pnl_academic_year',true);"> Oui
+                             onclick="display('pnl_academic_year',true);display('pnl_admission_exam',false);"> Oui
                     </label>
                     <label class="radio-inline">
                       <input type="radio" name="rdb_diploma_sec" id="rdb_diploma_sec2" value="false" {%if object_application.rdb_diploma_sec = False %}checked{%endif%}
-                             onclick="display('pnl_academic_year',false)"> Non
+                             onclick="display('pnl_academic_year',false);display('pnl_admission_exam',true);"> Non
                     </label>
                     {%if  validation_messages and validation_messages|get_item:'rdb_diploma_sec'%}<font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'rdb_diploma_sec'}}</font>{% endif %}
                 </div>
@@ -156,18 +174,21 @@
                           Vous avez effectué vos études secondaires *
                         </label>
                         <label class="radio-inline">
-                          <input type="radio" name="rdb_belgian_foreign" id="rdb_belgium" value="true" {%if object_application.rdb_belgian_foreign = True %}checked{%endif%}
-                                 onclick="display('pnl_belgian_detail',true);"> En Belgique
+                          <input type="radio" name="rdb_belgian_foreign" id="rdb_belgium"
+                                 value="true" {%if object_application.rdb_belgian_foreign = True %}checked{%endif%}
+                                 onclick="display('pnl_belgian_detail',true);display('pnl_foreign_detail',false);"> En Belgique
                         </label>
                         <label class="radio-inline">
-                          <input type="radio" name="rdb_belgian_foreign" id="rdb_foreign" value="false" {%if object_application.rdb_belgian_foreign = False %}checked{%endif%}
-                                 onclick="display('pnl_belgian_detail',false)"> A l'étranger
+                          <input type="radio" name="rdb_belgian_foreign" id="rdb_foreign"
+                                 value="false" {%if object_application.rdb_belgian_foreign = False %}checked{%endif%}
+                                 onclick="display('pnl_belgian_detail',false);display('pnl_foreign_detail',true);"> A l'étranger
                         </label>
                         {%if  validation_messages and validation_messages|get_item:'rdb_belgian_foreign'%}<font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'rdb_belgian_foreign'}}</font>{% endif %}
                 </div>
                 <br>
                 <br>
-                <div id="pnl_belgian_detail" style="{%if object_application.rdb_belgian_foreign = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+                <div id="pnl_belgian_detail"
+                     style="{%if object_application.rdb_belgian_foreign = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
                     <div class="panel panel-default">
                         <div class="panel-heading">Etablissement</div>
                         <div class="panel-body">
@@ -429,8 +450,249 @@
                         </div>
                     </div>
                 </div>
+             <div id="pnl_foreign_detail" style="{%if object_application.rdb_belgian_foreign = False %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+                 <div >
+                 <br>
+                 <label>Quel diplôme avez-vous obtenu (ou obtiendrez-vous)</label>
+                 <br>
+                <input type="radio" name="foreign_baccalaureate_diploma"
+                       id="rdb_foreign_baccalaureate_diploma_national"
+                       value="NATIONAL"
+                       {%if object_application.foreign_baccalaureate_diploma = 'NATIONAL' %}checked{%endif%}
+                       onclick="display('pnl_equivalence',false);">&nbsp;&nbsp;Baccalauréat national (ou diplôme d'état, ...)
+                 <br>
+                <input type="radio" name="foreign_baccalaureate_diploma"
+                       id="rdb_foreign_baccalaureate_diploma_european"
+                       value="EUROPEAN"
+                       {%if object_application.foreign_baccalaureate_diploma = 'EUROPEAN' %}checked{%endif%}
+                       onclick="display('pnl_equivalence',false);">&nbsp;&nbsp;Baccalauréat européen (Schola Europaea)&nbsp;&nbsp;
+                <img src="{% static 'img/schola_europaea.jpg' %}"height="50px">
+                 <br>
+                <input type="radio" name="foreign_baccalaureate_diploma"
+                       id="rdb_foreign_baccalaureate_diploma_international"
+                       value="INTERNATIONAL"
+                       {%if object_application.foreign_baccalaureate_diploma = 'INTERNATIONAL' %}checked{%endif%}
+                       onclick="display('pnl_equivalence',true);">&nbsp;&nbsp;Baccalauréat international(IBO)&nbsp;&nbsp;
+                 <img src="{% static 'img/ib-world-school.png' %}" height="50px">
+                 {%if  validation_messages and validation_messages|get_item:'foreign_baccalaureate_diploma'%}<br><br><font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'foreign_baccalaureate_diploma'}}</font>{% endif %}
+                 <br><br>
+                 </div>
+                 <div class="row">
+                     <div class="col-md-4">
+                         <label for="slt_country" class="control-label">Pays organisateur</label>
+                         <select class="form-control" id="slt_country" name="country">
+                            {% for c in countries %}
+                                <option value="{{ c.id }}">{{ c }}</option>
+                            {% endfor %}
+                        </select>
+                     </div>
+                     <div class="col-md-4">
+                         <label for="slt_language_diploma">Régime linguistique *</label>
+                         <select class="form-control" id="slt_language_diploma" name="language_diploma">
+                            <option value="-">-</option>
+                            <option value="FRENCH" {%if object_application.language_diploma = 'FRENCH'%}checked{%endif%}>Français</option>
+                            <option value="DUTCH" {%if object_application.language_diploma = 'DUTCH'%}checked{%endif%}>Néerlandais</option>
+                            <option value="ENGLISH" {%if object_application.language_diploma = 'ENGLISH'%}checked{%endif%}>Anglais</option>
+                            <option value="GERMAN" {%if object_application.language_diploma = 'GERMAN'%}checked{%endif%}>Allemand</option>
+                            <option value="ITALIAN" {%if object_application.language_diploma = 'ITALIAN'%}checked{%endif%}>Italien</option>
+                            <option value="SPANISH" {%if object_application.language_diploma = 'SPANISH'%}checked{%endif%}>Espagnol</option>
+                            <option value="PORTUGUESE" {%if object_application.language_diploma = 'PORTUGUESE'%}checked{%endif%}>Portuguais</option>
+                        </select>
+
+                     </div>
+                     <div class="col-md-4">
+                         <label for="chb_other_language_regime">Si autre régime linguistique, précisez
+                                <input type="checkbox"
+                                       id="chb_other_language_regime"
+                                       name="other_language_regime"
+                                       onclick="enabled_other_language(this)"
+                                       class="form-control"
+                                       {%if object_application.other_language_diploma%}checked{%endif%}>
+                         </label>
+                         <select class="form-control" id="slt_other_language_diploma"
+                                 name="other_language_diploma" {%if object_application.other_language_diploma%}{%else%}disabled{%endif%}>
+                             <option value="-" >-</option>
+                            {% for l in languages %}
+                                <option value="{{ l.id }}" {%if object_application.other_language_diploma.id == l.id%}selected{%endif%}>{{ l }}</option>
+                            {% endfor %}
+                        </select>
+
+                     </div>
+                 </div>
+                 {%if  validation_messages and validation_messages|get_item:'language_regime'%}
+                 <div class="row">
+                     <div class="col-md-4"></div>
+                     <div class="col-md-8">
+                        <font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'language_regime'}}</font>
+                     </div>
+                 </div>
+                 {% endif %}
+
+                 <div id="pnl_equivalence"
+                      style="{%if object_application.foreign_baccalaureate_diploma = 'INTERNATIONAL' %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+                    <br>
+                    <label>Ce diplôme a-t-il fait l'objet d'une décision d'équivalence par les services de la Communauté française de Belgique? *</label>
+                    <br>
+                     <div class="form-group" >
+                        <label class="radio-inline">
+                        <input type="radio" name="belgian_equivalence"
+                               id="rdb_belgian_equivalence_yes"
+                               value="YES">&nbsp;&nbsp;Oui</label>
+
+                        <label class="radio-inline">
+                        <input type="radio" name="belgian_equivalence"
+                               id="rdb_belgian_equivalence_no"
+                               value="NO" class="radio-inline">&nbsp;&nbsp;Non</label>
+
+                        <label class="radio-inline">
+                        <input type="radio" name="belgian_equivalence"
+                               id="rdb_belgian_equivalence_in_progress"
+                               value="IN_PROGRESS" class="radio-inline">&nbsp;&nbsp;En cours de demande</label>
+                     </div>
+                     <br><br>
+                     Si vous la possédez, vous devrez fournir une photocopie recto-verso de la décision d'équivalence
+                     définitive délivrée par le Ministère de la Communauté française de Belgique. Si vous ne la possédez
+                     pas, une demande d'équivalence DOIT être introduite en respectant strictement les consignes
+                     indiquées par la <a target="_blank" href="http://www.equivalences.cfwb.be/">CFWB</a>.
+                     <br><br>
+                     <input type="button" value="Veuillez joindre la décision d'équivalence *"/>
+                 </div>
+                <br>
+                <div class="panel panel-default">
+                    <div class="panel-heading">Résultat</div>
+                    <div class="panel-body">
+                        <label>Quel résultat avez-vous obtenu? *</label>
+                        <br>
+                        <label class="radio-inline">
+                          <input type="radio" name="foreign_result" id="rdb_foreign_result_less_65" value="LESS_65" {%if object_application.result < 65 %}checked{%endif%}> Moins de 65%
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" name="foreign_result" id="rdb_foreign_result_between_65_75" value="BETWEEN_65_75" {%if object_application.result >= 65 and object_application.result <= 75%}checked{%endif%}> Entre 65 et 75%
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" name="foreign_result" id="rdb_foreign_result_more_75" value="MORE_75" {%if object_application.result > 75 %}checked{%endif%}> Plus de 75%
+                        </label>
+                        {%if  validation_messages and validation_messages|get_item:'result'%}<font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'result'}}</font>{% endif %}
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">Veuillez joindre la copie de *</div>
+                    <div class="panel-body">
+                        Vous devez fournir une copie recto-verso.  Si vous avez le recto-verso dans le même fichier,
+                        veuillez le joindre.
+                        <br>
+                        <label>Original de votre</label>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="button" value="Diplôme d'études secondaires - recto" id="bt_diploma_recto"/>
+                            </div>
+                             <div class="col-md-6">
+                                <input type="button" value="Diplôme d'études secondaires - verso" id="bt_diploma_verso"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="button" value="Relevé de notes pour votre dernière année d'études secondaires - recto" id="bt_note_sheet_recto"/>
+                            </div>
+                             <div class="col-md-6">
+                                <input type="button" value="Relevé de notes pour votre dernière année d'études secondaires- verso" id="bt_note_sheet_verso"/>
+                            </div>
+                        </div>
+                        <br>
+                        <div id="pnl_translation"
+                             style="{%if object_application.other_language_diploma%}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+                            <label>Traduction par un traducteur-juré</label>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="button" value="Diplôme d'études secondaires - recto" id="bt_diploma_translation_recto"/>
+                                </div>
+                                 <div class="col-md-6">
+                                    <input type="button" value="Diplôme d'études secondaires - verso" id="bt_diploma_translation_verso"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="button" value="Relevé de notes pour votre dernière année d'études secondaires - recto" id="bt_note_sheet_translation_recto"/>
+                                </div>
+                                 <div class="col-md-6">
+                                    <input type="button" value="Relevé de notes pour votre dernière année d'études secondaires- verso" id="bt_note_sheet_translation_verso"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             </div>
 
             </div>
+        </div>
+    </div>
+    <div class="panel panel-default" id="pnl_admission_exam"
+          style="{%if object_application.rdb_diploma_sec = False %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+        <div class="panel-heading">Examen d'admission</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Avez-vous été inscrit(e) ou allez-vous être inscrit(e) à un examen d'admission?*</label>
+                    <br>
+                    <label class="radio-inline">
+                      <input type="radio" name="admission_exam" id="rdb_admission_exam_true" value="true"
+                             onclick="display('pnl_admission_exam_detail',true);"> Oui
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" name="admission_exam" id="rdb_admission_exam_false" value="false"
+                             onclick="display('pnl_admission_exam_detail',false);"> Non
+                    </label>
+                    {%if  validation_messages and validation_messages|get_item:'admission_exam'%}
+                        <br><br><font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam'}}</font>
+                    {% endif %}
+
+                </div>
+            </div>
+            <div id="pnl_admission_exam_detail" style="visibility:hidden;display:none">
+                <div class="form-inline">
+                    <br>
+                    <label>A quelle session (date)? *</label>
+                    <input class="form-control" id="txt_admission_exam_date" name="admission_exam_date">
+                    <br>
+                    <br>
+                    <label>Auprès de quel établissement (nom)? *</label>
+                    <input class="form-control" id="txt_admission_exam_school" name="admission_exam_school">
+                    <br>
+                </div>
+                <br>
+                <label>Quel type d'examen? *</label>
+
+                {% for exam_type in exam_types %}
+                    <input type="radio" name="admission_exam_type" id="rdb_admission_exam_type" value="{{exam_type}}"
+                             > {{exam_type}}
+                {% endfor %}
+
+                <br>
+                <label>Si autre, précisez le nom:</label>
+                <input class="form-control" id="txt_admission_exam_type_other" name="admission_exam_type_other">
+                <br>
+                <label>Quel résultat avez-vous obtenu? *</label>
+                <br>
+                <label class="radio-inline">
+                  <input type="radio" name="admission_exam_result" id="rdb_admission_exam_result_less_65" value="LESS_65">
+                    Moins de 65%
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="admission_exam_result" id="rdb_admission_exam_result_between_65_75" value="BETWEEN_65_75">
+                    Entre 65 et 75%
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="admission_exam_result" id="rdb_admission_exam_result_more_75" value="MORE_75">
+                    Plus de 75%
+                </label>
+                <br>
+                <br>
+                <label>Veuillez joindre une copie de votre certificat ou une preuve d'inscription à </label>
+                &nbsp;&nbsp;<input type="button" value="Cliquez-ici pour joindre"/>
+            </div>
+
         </div>
     </div>
     <div class="panel panel-default" style="visibility:hidden;display:none;">
