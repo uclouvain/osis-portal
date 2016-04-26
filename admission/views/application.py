@@ -150,17 +150,23 @@ def diploma_save(request, application_id):
     other_language_regime = Language.find_languages_excepted(LANGUAGE_REGIME)
     exam_types = ADMISSION_EXAM_TYPE
     if next_step:
-        objet_application = Object_application()
+        print('next_step')
         object_application =geto()
         #Check if all the necessary fields have been filled
-        is_valid, validation_messages = validate_fields_form(request)
+        print('avt validate_fields_form')
+
+        is_valid, validation_messages = validate_fields_form(request, application.offer_year)
+        print('is_valid', is_valid)
+        print('validation_messages', validation_messages)
+        object_application = populate_object_application(object_application)
         if is_valid:
+            #populate object_application
             return render(request, "curriculum.html", {"application": application,"object_application": geto()})
         else:
             return render(request, "diploma.html", {"application": application,
                                                     "validation_messages":validation_messages,
                                                     "academic_years": academic_years,
-                                                    "object_application": geto(),
+                                                    "object_application": object_application,
                                                     "countries":Country.find_countries(),
                                                     "languages": other_language_regime,
                                                     "exam_types": exam_types})
@@ -174,30 +180,35 @@ def diploma_save(request, application_id):
                                                 "exam_types": exam_types})
 
 
-def validate_fields_form(request):
-    print('valide_fields_form')
+def validate_fields_form(request, offer_year):
     validation_messages = {}
     is_valid = True
     academic_year = None
-    if request.POST.get('rdb_diploma_sec'):
-        print(request.POST.get('rdb_diploma_sec'))
-        if request.POST.get('rdb_diploma_sec') == 'true':
+
+    if request.POST.get('diploma_sec'):
+        if request.POST.get('diploma_sec') == 'true':
+
             #secondary education diploma
             if request.POST.get('academic_year') is None:
                 validation_messages['academic_year'] = ALERT_MANDATORY_FIELD
                 is_valid = False
             else:
                 academic_year = mdl.academic_year.find_by_id(int(request.POST.get('academic_year')))
+
             if request.POST.get('rdb_belgian_foreign') is None:
+
                 validation_messages['rdb_belgian_foreign'] = ALERT_MANDATORY_FIELD
                 is_valid = False
             else:
                 if request.POST.get('rdb_belgian_foreign') == 'true':
+
                     #Belgian diploma
                     if request.POST.get('rdb_belgian_community') is None:
+
                         validation_messages['academic_year'] = ALERT_MANDATORY_FIELD
                         is_valid = False
                     else:
+
                         if request.POST.get('rdb_belgian_community') == 'FRENCH':
                             #diploma of the French community
                             if academic_year.year < 1994:
@@ -213,14 +224,19 @@ def validate_fields_form(request):
                                         is_valid = False
 
                     if request.POST.get('school') is None \
-                        and ((request.POST.get('CESS_other_school_name') is None or len(request.POST.get('CESS_other_school_name'))==0)
-                             and (request.POST.get('CESS_other_school_city') is None or len(request.POST.get('CESS_other_school_city'))==0)
-                             and (request.POST.get('CESS_other_school_postal_code') is None or len(request.POST.get('CESS_other_school_postal_code'))==0)):
+                        and ((request.POST.get('CESS_other_school_name') is None \
+                              or len(request.POST.get('CESS_other_school_name'))==0) \
+                             and (request.POST.get('CESS_other_school_city') is None \
+                                  or len(request.POST.get('CESS_other_school_city'))==0) \
+                             and (request.POST.get('CESS_other_school_postal_code') is None \
+                                  or len(request.POST.get('CESS_other_school_postal_code'))==0)):
                         validation_messages['school'] = "Il faut préciser un établissement scolaire"
                         is_valid = False
                     if request.POST.get('rdb_school_belgian_community') == 'FRENCH':
                         #Belgian school
-                        if request.POST.get('rdb_education_transition_type') is None and request.POST.get('rdb_education_technic_type') and request.POST.get('other_education'):
+                        if request.POST.get('rdb_education_transition_type') is None \
+                                and request.POST.get('rdb_education_technic_type') \
+                                and request.POST.get('other_education'):
                             validation_messages['pnl_teaching_type'] = "Il faut préciser un type d'enseignement"
                             is_valid = False
 
@@ -232,13 +248,15 @@ def validate_fields_form(request):
                             validation_messages['re_orientation'] = ALERT_MANDATORY_FIELD
                             is_valid = False
                 else:
+
                     #Foreign diploma
                     if request.POST.get('foreign_baccalaureate_diploma') is None:
                         validation_messages['foreign_baccalaureate_diploma'] = "Il faut préciser le diplôme obtenu"
                         is_valid = False
                     if request.POST.get('other_language_regime') == 'on':
                         if request.POST.get('other_language_diploma') == "-":
-                            validation_messages['language_regime'] = "Il faut préciser un régime linguistique de type autre"
+                            validation_messages['language_regime'] = "Il faut préciser un régime linguistique \
+                                                                      de type autre"
                             is_valid = False
                     else:
                         print('language_diploma:',request.POST.get('language_diploma'))
@@ -286,8 +304,27 @@ def validate_fields_form(request):
                                                             professionnelles"
                             is_valid = False
 
+        if (offer_year.grade_type.grade == 'BACHELOR'
+                or offer_year.grade_type.grade == 'MASTER'
+                or offer_year.grade_type.grade == 'TRAINING_CERTIFICATE') \
+            and request.POST.get('diploma_french') == 'true':
+            #french exam
+            if request.POST.get('french_exam_date') is None:
+                validation_messages['french_exam_date'] = ALERT_MANDATORY_FIELD
+                is_valid = False
+            print('french_exam_result : ',request.POST.get('french_exam_result'))
+            if request.POST.get('french_exam_result') is None:
+                validation_messages['french_exam_result'] = ALERT_MANDATORY_FIELD
+                is_valid = False
+            if request.POST.get('french_exam_enterprise') is None:
+                validation_messages['french_exam_enterprise'] = ALERT_MANDATORY_FIELD
+                is_valid = False
+
+        if request.POST.get('result') is None:
+            validation_messages['result'] = ALERT_MANDATORY_FIELD
+            is_valid = False
     else:
-        validation_messages['rdb_diploma_sec'] = ALERT_MANDATORY_FIELD
+        validation_messages['diploma_sec'] = ALERT_MANDATORY_FIELD
         is_valid = False
 
     return is_valid, validation_messages
@@ -309,3 +346,6 @@ def curriculum_save(request, application_id):
                                             "languages":          other_language_regime,
                                             "exam_types":         exam_types})
 
+
+def populate_object_application(object_application):
+    return object_application
