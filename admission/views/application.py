@@ -259,7 +259,6 @@ def validate_fields_form(request):
                     if request.POST.get('admission_exam_date') is None:
                         validation_messages['admission_exam_date'] = ALERT_MANDATORY_FIELD
                         is_valid = False
-
                     if request.POST.get('admission_exam_school') is None or len(request.POST.get('admission_exam_school').strip())==0:
                         validation_messages['admission_exam_school'] = ALERT_MANDATORY_FIELD
                         is_valid = False
@@ -267,7 +266,25 @@ def validate_fields_form(request):
                             and (request.POST.get('admission_exam_type_other') is None or len(request.POST.get('admission_exam_type_other').strip())==0):
                         validation_messages['admission_exam_type'] = ALERT_MANDATORY_FIELD
                         is_valid = False
-
+                else:
+                    if request.POST.get('professional_experience') is None:
+                        validation_messages['professional_experience'] = ALERT_MANDATORY_FIELD
+                        is_valid = False
+                    else:
+                        if request.POST.get('professional_experience') == 'true':
+                            #professionnal experience
+                            if request.POST.get('professional_experience_date') is None or len(request.POST.get('professional_experience_date').strip()) == 0:
+                                validation_messages['professional_experience_date'] = ALERT_MANDATORY_FIELD
+                                is_valid = False
+                            if request.POST.get('professional_experience_enterprise') is None or len(request.POST.get('professional_experience_enterprise').strip()) == 0:
+                                validation_messages['professional_experience_enterprise'] = ALERT_MANDATORY_FIELD
+                                is_valid = False
+                        else:
+                            validation_messages['final'] = "Impossible de passer à l'étape suivante.Il faut avoir \
+                                                            répondu 'Oui' pour les études secondaires ou \
+                                                            pour l'examen d'admission ou encore pour les expériences \
+                                                            professionnelles"
+                            is_valid = False
 
     else:
         validation_messages['rdb_diploma_sec'] = ALERT_MANDATORY_FIELD

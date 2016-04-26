@@ -34,6 +34,10 @@ class Object_application:
         self.rdb_diploma_sec = False
         self.admission_exam = True
         self.admission_exam_date = timezone.now()
+        #prof experie
+        self.rdb_diploma_sec = False
+        self.admission_exam = False
+        self.professional_experience = True
 
     def daes(self):
         print('ades', self.academic_year.year, " " , self.rdb_belgian_community)
