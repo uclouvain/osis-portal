@@ -1,5 +1,7 @@
 from admission import models as mdl
 from reference.models import Language
+from django.utils import timezone
+
 
 class Object_application:
 
@@ -30,6 +32,8 @@ class Object_application:
         self.result = 74
         #exam admission
         self.rdb_diploma_sec = False
+        self.admission_exam = True
+        self.admission_exam_date = timezone.now()
 
     def daes(self):
         print('ades', self.academic_year.year, " " , self.rdb_belgian_community)

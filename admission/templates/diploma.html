@@ -564,13 +564,16 @@
                         <label>Quel résultat avez-vous obtenu? *</label>
                         <br>
                         <label class="radio-inline">
-                          <input type="radio" name="foreign_result" id="rdb_foreign_result_less_65" value="LESS_65" {%if object_application.result < 65 %}checked{%endif%}> Moins de 65%
+                          <input type="radio" name="foreign_result" id="rdb_foreign_result_less_65" value="LESS_65"
+                                 {%if object_application.result < 65 %}checked{%endif%}> Moins de 65%
                         </label>
                         <label class="radio-inline">
-                          <input type="radio" name="foreign_result" id="rdb_foreign_result_between_65_75" value="BETWEEN_65_75" {%if object_application.result >= 65 and object_application.result <= 75%}checked{%endif%}> Entre 65 et 75%
+                          <input type="radio" name="foreign_result" id="rdb_foreign_result_between_65_75" value="BETWEEN_65_75"
+                                 {%if object_application.result >= 65 and object_application.result <= 75%}checked{%endif%}> Entre 65 et 75%
                         </label>
                         <label class="radio-inline">
-                          <input type="radio" name="foreign_result" id="rdb_foreign_result_more_75" value="MORE_75" {%if object_application.result > 75 %}checked{%endif%}> Plus de 75%
+                          <input type="radio" name="foreign_result" id="rdb_foreign_result_more_75" value="MORE_75"
+                                 {%if object_application.result > 75 %}checked{%endif%}> Plus de 75%
                         </label>
                         {%if  validation_messages and validation_messages|get_item:'result'%}<font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'result'}}</font>{% endif %}
                     </div>
@@ -638,54 +641,64 @@
                     <br>
                     <label class="radio-inline">
                       <input type="radio" name="admission_exam" id="rdb_admission_exam_true" value="true"
-                             onclick="display('pnl_admission_exam_detail',true);"> Oui
+                             onclick="display('pnl_admission_exam_detail',true);" {%if object_application.admission_exam = True %}checked{%endif%}> Oui
                     </label>
                     <label class="radio-inline">
                       <input type="radio" name="admission_exam" id="rdb_admission_exam_false" value="false"
-                             onclick="display('pnl_admission_exam_detail',false);"> Non
+                             onclick="display('pnl_admission_exam_detail',false);" {%if object_application.admission_exam = False %}checked{%endif%}> Non
                     </label>
                     {%if  validation_messages and validation_messages|get_item:'admission_exam'%}
                         <br><br><font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam'}}</font>
                     {% endif %}
-
                 </div>
             </div>
-            <div id="pnl_admission_exam_detail" style="visibility:hidden;display:none">
+            <div id="pnl_admission_exam_detail"
+                 style="{%if object_application.admission_exam = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
                 <div class="form-inline">
                     <br>
                     <label>A quelle session (date)? *</label>
-                    <input class="form-control" id="txt_admission_exam_date" name="admission_exam_date">
+                    <input class="form-control" id="txt_admission_exam_date" name="admission_exam_date"
+                           value="{{object_application.admission_exam_date | default_if_none:''|date:"j/m/Y"}}">
+                    {%if  validation_messages and validation_messages|get_item:'admission_exam_date'%}<font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_date'}}</font>{% endif %}
                     <br>
                     <br>
                     <label>Auprès de quel établissement (nom)? *</label>
                     <input class="form-control" id="txt_admission_exam_school" name="admission_exam_school">
                     <br>
+                    {%if validation_messages and validation_messages|get_item:'admission_exam_school'%}
+                        <br><font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_school'}}</font>
+                    {% endif %}
+
                 </div>
                 <br>
                 <label>Quel type d'examen? *</label>
-
+                <br>
                 {% for exam_type in exam_types %}
-                    <input type="radio" name="admission_exam_type" id="rdb_admission_exam_type" value="{{exam_type}}"
-                             > {{exam_type}}
+                    <input type="radio" name="admission_exam_type" id="rdb_admission_exam_type" value="{{exam_type.key}}"
+                             > {{exam_types|get_item:exam_type}}<br>
                 {% endfor %}
 
                 <br>
                 <label>Si autre, précisez le nom:</label>
                 <input class="form-control" id="txt_admission_exam_type_other" name="admission_exam_type_other">
+                {%if validation_messages and validation_messages|get_item:'admission_exam_type'%}
+                    <br>
+                    <font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_type'}}</font><br>
+                {% endif %}
                 <br>
                 <label>Quel résultat avez-vous obtenu? *</label>
                 <br>
                 <label class="radio-inline">
-                  <input type="radio" name="admission_exam_result" id="rdb_admission_exam_result_less_65" value="LESS_65">
-                    Moins de 65%
+                  <input type="radio" name="result" id="rdb_admission_exam_result_less_65" value="LESS_65"
+                         {%if object_application.result < 65 %}checked{%endif%}> Moins de 65%
                 </label>
                 <label class="radio-inline">
-                  <input type="radio" name="admission_exam_result" id="rdb_admission_exam_result_between_65_75" value="BETWEEN_65_75">
-                    Entre 65 et 75%
+                  <input type="radio" name="result" id="rdb_admission_exam_result_between_65_75" value="BETWEEN_65_75"
+                         {%if object_application.result >= 65 and object_application.result <= 75%}checked{%endif%}> Entre 65 et 75%
                 </label>
                 <label class="radio-inline">
-                  <input type="radio" name="admission_exam_result" id="rdb_admission_exam_result_more_75" value="MORE_75">
-                    Plus de 75%
+                  <input type="radio" name="result" id="rdb_admission_exam_result_more_75" value="MORE_75"
+                         {%if object_application.result > 75 %}checked{%endif%}> Plus de 75%
                 </label>
                 <br>
                 <br>

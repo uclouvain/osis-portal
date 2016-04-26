@@ -32,6 +32,12 @@ ALERT_MANDATORY_FIELD = "Champ obligatoire"
 
 LANGUAGE_REGIME = ['Français',' Néerlandais', 'Anglais', 'Allemand', 'Italien', 'Espagnol', 'Portuguais']
 
+ADMISSION_EXAM_TYPE = {
+    'FIRST_CYCLE':'Examen d\'admission aux études universitaires de 1er cycle',
+    'MATURITY':'Examen de maturité(ou d\'aptitude) de la Communauté française de Belgique',
+    'FIRST_CYCLE_CIVIL-ENGINEER':'Examen spécial d\'admission aux études universitaires de 1er cycle de l\'ingénieur (ingénieur civil)',
+    'OTHER_EXAM':'Autre examen ou épreuve d\'admission'
+}
 
 def application_update(request, application_id):
     application = mdl.application.find_by_id(application_id)
@@ -142,6 +148,7 @@ def diploma_save(request, application_id):
 
     application = get_object_or_404(mdl.application.Application, pk=application_id)
     other_language_regime = Language.find_languages_excepted(LANGUAGE_REGIME)
+    exam_types = ADMISSION_EXAM_TYPE
     if next_step:
         objet_application = Object_application()
         object_application =geto()
@@ -155,14 +162,16 @@ def diploma_save(request, application_id):
                                                     "academic_years": academic_years,
                                                     "object_application": geto(),
                                                     "countries":Country.find_countries(),
-                                                    "languages": other_language_regime})
+                                                    "languages": other_language_regime,
+                                                    "exam_types": exam_types})
     else:
         return render(request, "diploma.html", {"application": application,
                                                 "validation_messages":validation_messages,
                                                 "academic_years": academic_years,
                                                 "object_application": geto(),
                                                 "countries":Country.find_countries(),
-                                                "languages": other_language_regime})
+                                                "languages": other_language_regime,
+                                                "exam_types": exam_types})
 
 
 def validate_fields_form(request):
@@ -245,6 +254,19 @@ def validate_fields_form(request):
             if request.POST.get('admission_exam') is None:
                 validation_messages['admission_exam'] = ALERT_MANDATORY_FIELD
                 is_valid = False
+            else:
+                if request.POST.get('admission_exam') == 'true':
+                    if request.POST.get('admission_exam_date') is None:
+                        validation_messages['admission_exam_date'] = ALERT_MANDATORY_FIELD
+                        is_valid = False
+
+                    if request.POST.get('admission_exam_school') is None or len(request.POST.get('admission_exam_school').strip())==0:
+                        validation_messages['admission_exam_school'] = ALERT_MANDATORY_FIELD
+                        is_valid = False
+                    if request.POST.get('admission_exam_type') is None \
+                            and (request.POST.get('admission_exam_type_other') is None or len(request.POST.get('admission_exam_type_other').strip())==0):
+                        validation_messages['admission_exam_type'] = ALERT_MANDATORY_FIELD
+                        is_valid = False
 
 
     else:
@@ -262,9 +284,11 @@ def curriculum_read(request, application_id):
 def curriculum_save(request, application_id):
     application = mdl.application.find_by_id(application_id)
     other_language_regime = Language.find_languages_excepted(LANGUAGE_REGIME)
+    exam_types = ADMISSION_EXAM_TYPE
     return render(request, "diploma.html", {"application":        application,
                                             "academic_years":     mdl.academic_year.find_academic_years(),
                                             "object_application": geto(),
                                             "countries":          Country.find_countries(),
-                                            "languages":          other_language_regime})
+                                            "languages":          other_language_regime,
+                                            "exam_types":         exam_types})
 
