@@ -58,6 +58,8 @@ urlpatterns = [
     url(r'^options/$', option.find_by_offer),
 
     url(r'^admission/application/read/([0-9]+)/$', application.application_view, name='application_view'),
+    url(r'^admission/application/diploma/save/([0-9]+)/$', application.diploma_save, name='diploma'),
+    url(r'^admission/application/curriculum/read/([0-9]+)/$', application.curriculum_read, name='curriculum_read'),
+    url(r'^admission/application/diploma/save/([0-9]+)/$', application.curriculum_save, name='curriculum'),
 
-    url(r'^admission/application/secdiploma/$', application.sec_diploma, name='sec_diploma'),
 ]

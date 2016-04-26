@@ -23,47 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
-from django.contrib import admin
-from django.utils import timezone
+from django import template
+
+register = template.Library()
 
 
-class AcademicYearAdmin(admin.ModelAdmin):
-    list_display = ('name', 'start_date', 'end_date')
-    fieldsets = ((None, {'fields': ('year', 'start_date', 'end_date')}),)
-
-
-class AcademicYear(models.Model):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    year = models.IntegerField()
-    start_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
-
-    @property
-    def name(self):
-        return self.__str__()
-
-    def __str__(self):
-        return u"%s-%s" % (self.year, self.year + 1)
-
-
-def next_academic_year(self):
-    next_year = self.year + 1
-    return AcademicYear.objects.filter(year=next_year)
-
-
-def find_academic_years():
-    return AcademicYear.objects.all().order_by('year')
-
-
-def current_academic_year():
-    academic_yr = AcademicYear.objects.filter(start_date__lte=timezone.now()) \
-                                      .filter(end_date__gte=timezone.now()).first()
-    if academic_yr:
-        return academic_yr
-    else:
-        return None
-
-
-def find_by_id(id):
-    return AcademicYear.objects.get(pk=id)
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(str(key))

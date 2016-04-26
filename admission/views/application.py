@@ -25,6 +25,10 @@
 ##############################################################################
 from admission import models as mdl
 from django.shortcuts import render, get_object_or_404
+from admission.views.object_application import Object_application
+
+ALERT_MANDATORY_FIELD = "Champ obligatoire"
+
 
 
 def application_update(request, application_id):
@@ -45,6 +49,7 @@ def save_application_offer(request):
         offer_year_id = request.POST.get('offer_year_id')
 
         application_id = request.POST.get('application_id')
+
         if application_id:
             application = get_object_or_404(mdl.application.Application, pk=application_id)
         else:
@@ -93,8 +98,21 @@ def save_application_offer(request):
                         answer.option = option
                         answer.value = option.value
                         answer.save()
+        print('1')
+        return render(request, "diploma.html", {"application": application,
+                                                "academic_years": mdl.academic_year.find_academic_years(),
+                                                "object_application": geto()})
 
-        return render(request, "diploma.html", {"application": application})
+
+def geto():
+    print('geto')
+    object_application=Object_application()
+    object_application.rdb_diploma_sec = True
+    object_application.academic_year = mdl.academic_year.find_by_id(3)
+    object_application.rdb_belgian_foreign = True
+    object_application.rdb_belgian_community = "FRENCH"
+    print(object_application.rdb_diploma_sec)
+    return object_application
 
 
 def application_view(request, application_id):
@@ -104,15 +122,124 @@ def application_view(request, application_id):
                            {"application": application,
                             "answers": answers})
 
-def sec_diploma(request):
-    academic_yr = mdl.academic_year.current_academic_year()
-    academic_yrs = mdl.academic_year.find_academic_years()
-    cities = [] #le modèle référence a été ajouté dans un autre ticket
-    postal_codes = [] #le modèle référence a été ajouté dans un autre ticket
-    schools = []#le modèle référence a été ajouté dans un autre ticket
-    return render(request, "sec_diploma.html",
-                          {"academic_year": academic_yr,
-                           "academic_years": academic_yrs,
-                           "cities":cities,
-                           "postal_codes": postal_codes,
-                           "schools": schools})
+
+def diploma_save(request, application_id):
+    print('diploma_save')
+    next_step = False
+    previous_step = False
+    save_step = False
+    validation_messages={}
+    academic_years = mdl.academic_year.find_academic_years()
+    if request.POST:
+        if 'bt_next_step_up' in request.POST or 'bt_next_step_down' in request.POST:
+             next_step = True
+        else:
+            if 'bt_previous_step_up' in request.POST or 'bt_previous_step_down' in request.POST:
+                previous_step = True
+            else:
+                if 'bt_save_up' in request.POST or 'bt_save_down' in request.POST:
+                    save_step = True
+
+
+
+    application = get_object_or_404(mdl.application.Application, pk=application_id)
+    if next_step:
+        objet_application = Object_application()
+        object_application =geto()
+        #Check if all the necessary fields have been filled
+        is_valid, validation_messages = validate_fields_form(request)
+        if is_valid:
+            return render(request, "curriculum.html", {"application": application,"object_application": geto()})
+        else:
+            return render(request, "diploma.html", {"application": application,
+                                                    "validation_messages":validation_messages,
+                                                    "academic_years": academic_years,
+                                                    "object_application": geto()})
+    else:
+        return render(request, "diploma.html", {"application": application,
+                                                "validation_messages":validation_messages,
+                                                "academic_years": academic_years,
+                                                "object_application": geto()})
+
+
+def validate_fields_form(request):
+    print('valide_fields_form')
+    validation_messages = {}
+    is_valid = True
+    academic_year = None
+    if request.POST.get('rdb_diploma_sec'):
+        print(request.POST.get('rdb_diploma_sec'))
+        if request.POST.get('rdb_diploma_sec') == 'true':
+            #secondary education diploma
+            if request.POST.get('academic_year') is None:
+                validation_messages['academic_year'] = ALERT_MANDATORY_FIELD
+                is_valid = False
+            else:
+                academic_year = mdl.academic_year.find_by_id(int(request.POST.get('academic_year')))
+            if request.POST.get('rdb_belgian_foreign') is None:
+                validation_messages['rdb_belgian_foreign'] = ALERT_MANDATORY_FIELD
+                is_valid = False
+            else:
+                if request.POST.get('rdb_belgian_foreign') == 'true':
+                    #Belgian diploma
+                    if request.POST.get('rdb_belgian_community') is None:
+                        validation_messages['academic_year'] = ALERT_MANDATORY_FIELD
+                        is_valid = False
+                    else:
+                        if request.POST.get('rdb_belgian_community') == 'FRENCH':
+                            #diploma of the French community
+                            if academic_year.year < 1994:
+                                if request.POST.get('rdb_daes') is None:
+                                    validation_messages['rdb_daes'] = ALERT_MANDATORY_FIELD
+                                    is_valid = False
+                        else:
+                            if request.POST.get('rdb_belgian_community') == 'DUTCH':
+                                #diploma of the Dutch community
+                                if academic_year.year < 1992:
+                                    if request.POST.get('rdb_daes') is None:
+                                        validation_messages['rdb_daes'] = ALERT_MANDATORY_FIELD
+                                        is_valid = False
+
+                    if request.POST.get('school') is None \
+                        and ((request.POST.get('CESS_other_school_name') is None or len(request.POST.get('CESS_other_school_name'))==0)
+                             and (request.POST.get('CESS_other_school_city') is None or len(request.POST.get('CESS_other_school_city'))==0)
+                             and (request.POST.get('CESS_other_school_postal_code') is None or len(request.POST.get('CESS_other_school_postal_code'))==0)):
+                        validation_messages['school'] = "Il faut préciser un établissement scolaire"
+                        is_valid = False
+                    if request.POST.get('rdb_school_belgian_community') == 'FRENCH':
+                        #Belgian school
+                        if request.POST.get('rdb_education_transition_type') is None and request.POST.get('rdb_education_technic_type') and request.POST.get('other_education'):
+                            validation_messages['pnl_teaching_type'] = "Il faut préciser un type d'enseignement"
+                            is_valid = False
+
+                if academic_year.year < 1994:
+                    if request.POST.get('repeated_grade') is None:
+                        validation_messages['repeated_grade'] = ALERT_MANDATORY_FIELD
+                        is_valid = False
+                    if request.POST.get('re_orientation') is None:
+                        validation_messages['re_orientation'] = ALERT_MANDATORY_FIELD
+                        is_valid = False
+                if request.POST.get('result') is None:
+                    validation_messages['result'] = ALERT_MANDATORY_FIELD
+                    is_valid = False
+                #validation for the uploaded file
+
+    else:
+        validation_messages['rdb_diploma_sec'] = ALERT_MANDATORY_FIELD
+        is_valid = False
+
+    return is_valid, validation_messages
+
+
+def curriculum_read(request, application_id):
+    application = mdl.application.find_by_id(application_id)
+    return render(request, "curriculum.html", {"application": application})
+
+
+def curriculum_save(request, application_id):
+    application = mdl.application.find_by_id(application_id)
+    print('2')
+    return render(request, "diploma.html", {"application": application,
+                                            "academic_years": mdl.academic_year.find_academic_years(),
+                                            "object_application" : geto()})
+
