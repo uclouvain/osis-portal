@@ -132,7 +132,16 @@
             }
         }
     }
+    function reset_radio(elt_name){
+        x=document.getElementsByName(elt_name);
+        var i;
+        for (i = 0; i < x.length; i++) {
 
+            if (x[i].type == "radio") {
+                x[i].checked = false;
+            }
+        }
+    }
     function reset_input(id){
         document.getElementById(id).value="";
 

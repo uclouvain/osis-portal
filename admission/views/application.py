@@ -33,15 +33,7 @@ from django.core.urlresolvers import reverse
 from datetime import datetime
 
 ALERT_MANDATORY_FIELD = "Champ obligatoire"
-
 LANGUAGE_REGIME = ['Français',' Néerlandais', 'Anglais', 'Allemand', 'Italien', 'Espagnol', 'Portuguais']
-
-ADMISSION_EXAM_TYPE = {
-    'FIRST_CYCLE':'Examen d\'admission aux études universitaires de 1er cycle',
-    'MATURITY':'Examen de maturité(ou d\'aptitude) de la Communauté française de Belgique',
-    'FIRST_CYCLE_CIVIL_ENGINEER':'Examen spécial d\'admission aux études universitaires de 1er cycle de l\'ingénieur (ingénieur civil)',
-    'OTHER_EXAM':'Autre examen ou épreuve d\'admission'
-}
 
 
 def application_update(request, application_id):
@@ -120,7 +112,7 @@ def save_application_offer(request):
                         answer.save()
 
         other_language_regime = mdlref.language.find_languages_excepted(LANGUAGE_REGIME)
-        exam_types = ADMISSION_EXAM_TYPE
+        exam_types = mdlref.admission_exam_type.find_all_by_adhoc(False)
         local_language_exam_link = mdl.properties.find_by_key('PROFESSIONAL_EXAM_LINK')
         professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
         education_institutions = mdlref.education_institution.find_education_institution_by_adhoc(False)
@@ -169,7 +161,7 @@ def diploma_save(request, application_id):
 
     application = get_object_or_404(mdl.application.Application, pk=application_id)
     other_language_regime = mdlref.language.find_languages_excepted(LANGUAGE_REGIME)
-    exam_types = ADMISSION_EXAM_TYPE
+    exam_types = mdlref.admission_exam_type.find_all_by_adhoc(False)
     secondary_education = mdl.secondary_education.find_by_person(application.person)
     if secondary_education is None:
         secondary_education= mdl.secondary_education.SecondaryEducation()
@@ -251,6 +243,11 @@ def validate_fields_form(request, offer_yr, secondary_education):
                 if request.POST.get('rdb_belgian_foreign') == 'true':
                     secondary_education.national = True
                     # Belgian diploma
+                    if request.POST.get('result') is None:
+                        validation_messages['result'] = ALERT_MANDATORY_FIELD
+                        is_valid = False
+                    else:
+                        secondary_education.result = request.POST.get('result')
                     if request.POST.get('rdb_belgian_community') is None:
                         validation_messages['rdb_belgian_community'] = ALERT_MANDATORY_FIELD
                         is_valid = False
@@ -344,48 +341,54 @@ def validate_fields_form(request, offer_yr, secondary_education):
                         if request.POST.get('path_reorientation') is None:
                             validation_messages['path_reorientation'] = ALERT_MANDATORY_FIELD
                             is_valid = False
+
                 else:
-                    secondary_education.national=False
-                    # Foreign diploma
-                    if request.POST.get('international_diploma') is None:
-                        validation_messages['international_diploma'] = "Il faut préciser le diplôme obtenu"
-                        is_valid = False
-                    if request.POST.get('other_language_regime') == 'on':
-                        if request.POST.get('other_language_diploma') == "-":
-                            validation_messages['language_regime'] = "Il faut préciser un régime linguistique \
-                                                                      de type autre"
+                    if request.POST.get('rdb_belgian_foreign') == 'false':
+                        if request.POST.get('result') is None:
+                            validation_messages['result'] = ALERT_MANDATORY_FIELD
                             is_valid = False
-                    else:
-                        if request.POST.get('international_diploma_language') == "-":
-                            validation_messages['language_regime'] = "Il faut préciser un régime linguistique"
+                        else:
+                            secondary_education.result = request.POST.get('result')
+                        secondary_education.national = False
+                        # Foreign diploma
+                        if request.POST.get('international_diploma') is None:
+                            validation_messages['international_diploma'] = "Il faut préciser le diplôme obtenu"
                             is_valid = False
+                        if request.POST.get('other_language_regime') == 'on':
+                            if request.POST.get('other_language_diploma') == "-":
+                                validation_messages['language_regime'] = "Il faut préciser un régime linguistique \
+                                                                          de type autre"
+                                is_valid = False
+                        else:
+                            if request.POST.get('international_diploma_language') == "-":
+                                validation_messages['language_regime'] = "Il faut préciser un régime linguistique"
+                                is_valid = False
+
 
                 # validation for the uploaded file
             print('result:',request.POST.get('result'))
-            if request.POST.get('result') is None:
-                validation_messages['result'] = ALERT_MANDATORY_FIELD
-                is_valid = False
-            else:
-                secondary_education.result = request.POST.get('result')
+
         else:
-            secondary_education.secondary_education_diploma = False
-            if request.POST.get('result') is None:
-                validation_messages['result'] = ALERT_MANDATORY_FIELD
-                is_valid = False
-            else:
-                secondary_education.result = request.POST.get('result')
+            # secondary_education.secondary_education_diploma = False
+            # if request.POST.get('result') is None:
+            #     validation_messages['result'] = ALERT_MANDATORY_FIELD
+            #     is_valid = False
+            # else:
+            #     secondary_education.result = request.POST.get('result')
             # admission exam
             if request.POST.get('admission_exam') is None:
                 validation_messages['admission_exam'] = ALERT_MANDATORY_FIELD
                 is_valid = False
             else:
                 if request.POST.get('admission_exam') == 'true':
+                    secondary_education.admission_exam = True
+
                     if request.POST.get('admission_exam_date') is None:
                         validation_messages['admission_exam_date'] = ALERT_MANDATORY_FIELD
                         is_valid = False
-                    if request.POST.get('admission_exam_school') is None \
-                            or len(request.POST.get('admission_exam_school').strip()) == 0:
-                        validation_messages['admission_exam_school'] = ALERT_MANDATORY_FIELD
+                    if request.POST.get('admission_exam_institution') is None \
+                            or len(request.POST.get('admission_exam_institution').strip()) == 0:
+                        validation_messages['admission_exam_institution'] = ALERT_MANDATORY_FIELD
                         is_valid = False
                     if request.POST.get('admission_exam_type') is None \
                             and (request.POST.get('admission_exam_type_other') is None
@@ -410,9 +413,9 @@ def validate_fields_form(request, offer_yr, secondary_education):
                     if request.POST.get('admission_exam_result') is None:
                         validation_messages['admission_exam_result'] = ALERT_MANDATORY_FIELD
                         is_valid = False
-
                 else:
-                    pass
+                    if request.POST.get('admission_exam') == 'false':
+                        secondary_education.admission_exam = False
 
         if (offer_yr.grade_type.grade == 'BACHELOR'
                 or offer_yr.grade_type.grade == 'MASTER'
@@ -429,9 +432,9 @@ def validate_fields_form(request, offer_yr, secondary_education):
                 validation_messages['local_language_exam_enterprise'] = ALERT_MANDATORY_FIELD
                 is_valid = False
 
-        if request.POST.get('result') is None:
-            validation_messages['result'] = ALERT_MANDATORY_FIELD
-            is_valid = False
+        # if request.POST.get('result') is None:
+        #     validation_messages['result'] = ALERT_MANDATORY_FIELD
+        #     is_valid = False
     else:
         validation_messages['diploma_sec'] = ALERT_MANDATORY_FIELD
         is_valid = False
@@ -685,8 +688,8 @@ def populate_secondary_education(request, secondary_education):
             secondary_education.admission_exam = True
             if request.POST.get('admission_exam_date'):
                 secondary_education.admission_exam_date = datetime.strptime(request.POST.get('admission_exam_date'), '%d/%m/%Y')
-            if request.POST.get('admission_exam_school'):
-                secondary_education.admission_exam_institution = request.POST.get('admission_exam_school')
+            if request.POST.get('admission_exam_institution'):
+                secondary_education.admission_exam_institution = request.POST.get('admission_exam_institution')
             if request.POST.get('admission_exam_type_other') and len(request.POST.get('admission_exam_type_other').strip()) > 0:
                existing_admission_exam_type = mdlref.admission_exam_type.find_by_name(request.POST.get('admission_exam_type_other'))
                if existing_admission_exam_type:
@@ -697,6 +700,9 @@ def populate_secondary_education(request, secondary_education):
                    new_admission_exam_type.name = request.POST.get('admission_exam_type_other')
                    new_admission_exam_type.save()
                    secondary_education.admission_exam_type = new_admission_exam_type
+            else:
+                if request.POST.get('admission_exam_type'):
+                    secondary_education.admission_exam_type = mdlref.admission_exam_type.find_by_name(request.POST.get('admission_exam_type'))
 
             secondary_education.admission_exam_result = request.POST.get('admission_exam_result')
         else:

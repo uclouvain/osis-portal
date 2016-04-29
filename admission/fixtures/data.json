@@ -160,7 +160,6 @@
   {"model": "reference.admissionexamtype", "fields": {"name" :"Examen d'admission aux études universitaires de 1er cycle" ,"adhoc" : "False" }},
   {"model": "reference.admissionexamtype", "fields": {"name" :"Examen de maturité(ou d'aptitude) de la Communauté française de Belgique" ,"adhoc" : "False" }},
   {"model": "reference.admissionexamtype", "fields": {"name" :"Examen spécial d'admission aux études universitaires de 1er cycle de l'ingénieur (ingénieur civil)" ,"adhoc" : "False" }},
-  {"model": "reference.admissionexamtype", "fields": {"name" :"Autre examen ou épreuve d'admission" ,"adhoc" : "False" }},
 
 
   {"model": "reference.country", "pk":1, "fields": {"name" :"Belgique", "european_union" : "True" ,"iso_code" : "1"}},
