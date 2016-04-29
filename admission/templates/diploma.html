@@ -170,8 +170,21 @@
         alert(city_sel);
         var postal_code = document.getElementById("slt_postal_codes");
         var postal_code_sel = postal_code.options[postal_code.selectedIndex].text;
+        var elt = document.getElementById('slt_schools');
+        for(var i = 0 ,l = elt.options.length; i< l;i++ ){
+            if((elt.options[i].title).indexOf(city_sel) > -1 || (elt.options[i].title).indexOf(postal_code_sel) > -1){
+                elt.options[i].style="visibility:visible;display:block";
+
+            }else{
+                elt.options[i].style="visibility:hidden;display:none";
+            }
+		}
 
     }
+
+
+
+    </script>
 </script>
 
 <form method="post" action="{% url 'diploma'%}">
@@ -339,5 +352,8 @@
 		}
 
 	}
-	</script>
+
+
+
+    </script>
 {% endblock %}

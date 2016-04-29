@@ -63,3 +63,15 @@ def find_by_user(user):
 
 def find_by_id(application_id):
     return Application.objects.get(pk=application_id)
+
+
+def find_first_by_user(user):
+    try:
+        person_application = person.Person.objects.get(user=user)
+
+        if person_application:
+            return Application.objects.filter(person=person_application).first()
+        else:
+            return None
+    except ObjectDoesNotExist:
+        return None

@@ -10,7 +10,7 @@
         <div class="panel-heading">Etablissement</div>
         <div class="panel-body">
             <label>Dans quelle Communauté avez-vous suivi(ou suivez-vous) la dernière année de vos études
-                secondaires?*</label>
+                secondaires? *</label>
             <br>
             <label class="radio-inline">
                 <input type="radio"
@@ -39,7 +39,7 @@
             <br>
             <br>
             <label>Quel établissement scolaire a délivré ou délivrera votre certificat d'enseignement
-                secondaire supérieur (C.E.S.S.)?*</label>
+                secondaire supérieur (C.E.S.S.)? *</label>
             <br>
             Pour vous y aider, nous vous proposons de le rechercher soit par localité soit par code postal.
             <br>
@@ -68,8 +68,6 @@
                             <option value="{{ p }}"  {%if secondary_education.national_institution.postal_code = p %}checked{%endif%}>{{ p }}</option>
                         {% endfor %}
                     </select>
-
-
                 </div>
                 <div class="form-group">
                     <label>&nbsp;&nbsp;&nbsp;Par établissement</label>
@@ -78,7 +76,7 @@
                              name="school">
                          <option value="-">-</option>
                         {% for education_institution in education_institutions %}
-                            <option value="{{ education_institution.id }}" {%if secondary_education.national_institution.id = education_institution.id %}checked{%endif%}>{{ education_institution.name }}</option>
+                            <option title="{{education_institution.postal_code }} - {{education_institution.city}}" value="{{ education_institution.id }}" {%if secondary_education.national_institution.id = education_institution.id %}checked{%endif%}>{{ education_institution.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -240,8 +238,8 @@
                      {%if secondary_education.daes = False %}checked{%endif%}
                      > Non
             </label>
-            {%if validation_messages and validation_messages|get_item:'rdb_daes'%}
-                <br> <br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'rdb_daes'}}</font> <br>
+            {%if validation_messages and validation_messages|get_item:'daes'%}
+                <br> <br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'daes'}}</font> <br>
             {% endif %}
         </div>
     </div>
