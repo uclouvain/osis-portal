@@ -347,8 +347,8 @@ def validate_fields_form(request, offer_yr, secondary_education):
                 else:
                     secondary_education.national=False
                     # Foreign diploma
-                    if request.POST.get('foreign_baccalaureate_diploma') is None:
-                        validation_messages['foreign_baccalaureate_diploma'] = "Il faut préciser le diplôme obtenu"
+                    if request.POST.get('international_diploma') is None:
+                        validation_messages['international_diploma'] = "Il faut préciser le diplôme obtenu"
                         is_valid = False
                     if request.POST.get('other_language_regime') == 'on':
                         if request.POST.get('other_language_diploma') == "-":
@@ -356,7 +356,7 @@ def validate_fields_form(request, offer_yr, secondary_education):
                                                                       de type autre"
                             is_valid = False
                     else:
-                        if request.POST.get('language_diploma') == "-":
+                        if request.POST.get('international_diploma_language') == "-":
                             validation_messages['language_regime'] = "Il faut préciser un régime linguistique"
                             is_valid = False
 
@@ -499,10 +499,6 @@ def curriculum_save(request, application_id):
                                                 "education_type_qualification":education_type_qualification})
 
 
-def populate_object_application(object_application):
-    return object_application
-
-
 def upload_file(request, secondary_education_id):
     if request.method == 'POST':
         form = FileForm(request.POST, request.FILES)
@@ -571,9 +567,11 @@ def populate_secondary_education(request, secondary_education):
         academic_year = mdl.academic_year.find_by_id(int(request.POST.get('academic_year')))
         secondary_education.academic_year = academic_year
     secondary_education.national = None
+    secondary_education.result = None
     if request.POST.get('rdb_belgian_foreign'):
         if request.POST.get('rdb_belgian_foreign') == 'true':
             secondary_education.national = True
+            secondary_education.result = request.POST.get('result')
         else:
             secondary_education.national = False
     secondary_education.national_community = None
@@ -647,34 +645,34 @@ def populate_secondary_education(request, secondary_education):
             if request.POST.get('path_reorientation') == 'false':
                 secondary_education.path_reorientation = False
 
-    if request.POST.get('result'):
-        secondary_education.result = request.POST.get('result')
+
+
 
     #foreign
     secondary_education.international_diploma = None
     secondary_education.international_diploma_country = None
     secondary_education.international_diploma_language = None
     secondary_education.international_equivalence = None
-    if secondary_education.secondary_education_diploma is True and secondary_education.national is True:
-        if request.POST.get('foreign_baccalaureate_diploma'):
-            secondary_education.international_diploma = request.POST.get('foreign_baccalaureate_diploma')
-        if request.POST.get('country') and request.POST.get('country') != "-":
-            secondary_education.international_diploma_country = request.POST.get('country')
+    if secondary_education.secondary_education_diploma is True and secondary_education.national is False:
+        secondary_education.international_diploma = request.POST.get('international_diploma')
+        secondary_education.international_diploma_country = request.POST.get('international_diploma_country')
         if request.POST.get('other_language_regime') \
             and request.POST.get('other_language_regime') == "on" \
             and request.POST.get('other_language_regime') != "-":
             secondary_education.international_diploma_language = mdlref.language\
-                .find_by_id(int(request.POST.get('other_language_diploma')))
+                .find_by_id(int(request.POST.get('other_international_diploma_language')))
         else:
-            if request.POST.get('language_diploma') and request.POST.get('language_diploma') != "-":
+            if request.POST.get('international_diploma_language') and request.POST.get('international_diploma_language') != "-":
                 secondary_education.international_diploma_language = mdlref.language\
-                .find_by_id(int(request.POST.get('language_diploma')))
+                .find_by_id(int(request.POST.get('international_diploma_language')))
         if request.POST.get('belgian_equivalence'):
             if request.POST.get('belgian_equivalence') == 'true':
                 secondary_education.international_equivalence=True
             else:
                 if request.POST.get('belgian_equivalence') == 'false':
-                 secondary_education.international_equivalence = False
+                    secondary_education.international_equivalence = False
+        secondary_education.result = request.POST.get('foreign_result')
+
     #admission_exam
     secondary_education.admission_exam = None
     secondary_education.admission_exam_date = None

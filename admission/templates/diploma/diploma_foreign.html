@@ -1,25 +1,29 @@
 {% load dictionnary %}
 {% load staticfiles %}
 
-<div id="pnl_foreign_detail" style="{%if object_application.rdb_belgian_foreign = False %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+<div id="pnl_foreign_detail"
+     style="{%if secondary_education.national = False %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
                  <div >
                  <br>
                  <label>Quel diplôme avez-vous obtenu (ou obtiendrez-vous)</label>
                  <br>
-                <input type="radio" name="foreign_baccalaureate_diploma"
+                <input type="radio"
+                       name="international_diploma"
                        id="rdb_foreign_baccalaureate_diploma_national"
                        value="NATIONAL"
                        {%if secondary_education.international_diploma = 'NATIONAL' %}checked{%endif%}
                        onclick="display('pnl_equivalence',false);">&nbsp;&nbsp;Baccalauréat national (ou diplôme d'état, ...)
                  <br>
-                <input type="radio" name="foreign_baccalaureate_diploma"
+                <input type="radio"
+                       name="international_diploma"
                        id="rdb_foreign_baccalaureate_diploma_european"
                        value="EUROPEAN"
                        {%if secondary_education.international_diploma = 'EUROPEAN' %}checked{%endif%}
                        onclick="display('pnl_equivalence',false);">&nbsp;&nbsp;Baccalauréat européen (Schola Europaea)&nbsp;&nbsp;
                 <img src="{% static 'img/schola_europaea.jpg' %}"height="50px">
                  <br>
-                <input type="radio" name="foreign_baccalaureate_diploma"
+                <input type="radio"
+                       name="international_diploma"
                        id="rdb_foreign_baccalaureate_diploma_international"
                        value="INTERNATIONAL"
                        {%if secondary_education.international_diploma = 'INTERNATIONAL' %}checked{%endif%}
@@ -39,7 +43,7 @@
                                  name="country">
                                 <option value="-">-</option>
                             {% for c in countries %}
-                                <option value="{{ c.id }}">{{ c }}</option>
+                                <option value="{{ c.id }}" {%if secondary_education.international_diploma_country.id = c.id %}checked{%endif%}>{{ c }}</option>
                             {% endfor %}
                         </select>
                      </div>
@@ -47,7 +51,7 @@
                          <label for="slt_language_diploma">Régime linguistique *</label>
                          <select class="form-control"
                                  id="slt_language_diploma"
-                                 name="language_diploma">
+                                 name="international_diploma_language">
                             <option value="-">-</option>
                             <option value="FRENCH" {%if secondary_education.international_diploma_language = 'FRENCH'%}checked{%endif%}>Français</option>
                             <option value="DUTCH" {%if secondary_education.international_diploma_language = 'DUTCH'%}checked{%endif%}>Néerlandais</option>
@@ -70,11 +74,11 @@
                          </label>
                          <select class="form-control"
                                  id="slt_other_language_diploma"
-                                 name="other_language_diploma"
+                                 name="other_international_diploma_language"
                                  {%if  secondary_education.international_diploma_language = False %}{%else%}disabled{%endif%}>
                              <option value="-" >-</option>
                             {% for l in languages %}
-                                <option value="{{ l.id }}" {%if  secondary_education.international_diploma_language.id == l.id%}selected{%endif%}>{{ l }}</option>
+                                <option value="{{ l.id }}" {%if secondary_education.international_diploma_language.id == l.id%}selected{%endif%}>{{ l }}</option>
                             {% endfor %}
                         </select>
 
@@ -130,18 +134,22 @@
                         <label class="radio-inline">
                           <input type="radio"
                                  name="foreign_result"
-                                 id="rdb_foreign_result_less_65" value="LESS_65"
-                                 {%if object_application.result = 'LOW'%}checked{%endif%}> Moins de 65%
+                                 id="rdb_foreign_result_low"
+                                 value="LOW"
+                                 {%if secondary_education.result = 'LOW'%}checked{%endif%}> Moins de 65%
                         </label>
                         <label class="radio-inline">
-                          <input type="radio" name="foreign_result" id="rdb_foreign_result_between_65_75" value="BETWEEN_65_75"
-                                 {%if object_application.result = 'MIDDLE' %}checked{%endif%}> Entre 65 et 75%
+                          <input type="radio" name="foreign_result"
+                                 id="rdb_foreign_result_middle"
+                                 value="MIDDLE"
+                                 {%if secondary_education.result = 'MIDDLE' %}checked{%endif%}> Entre 65 et 75%
                         </label>
                         <label class="radio-inline">
                           <input type="radio"
                                  name="foreign_result"
-                                 id="rdb_foreign_result_more_75" value="MORE_75"
-                                 {%if object_application.result = 'HIGH' %}checked{%endif%}> Plus de 75%
+                                 id="rdb_foreign_result_high"
+                                 value="HIGH"
+                                 {%if secondary_education.result = 'HIGH' %}checked{%endif%}> Plus de 75%
                         </label>
                         {%if validation_messages and validation_messages|get_item:'result'%}<font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'result'}}</font>{% endif %}
                     </div>
