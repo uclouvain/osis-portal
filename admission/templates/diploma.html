@@ -174,7 +174,7 @@
     }
 </script>
 
-<form method="post" action="{% url 'diploma' application.id %}">
+<form method="post" action="{% url 'diploma'%}">
     {% csrf_token %}
     <div>
         <button type="submit" id="bt_previous_step_up" name="bt_previous_step_up" class="btn btn-default" role="button"
