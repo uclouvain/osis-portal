@@ -178,7 +178,7 @@ def profile(request):
         else:
             return HttpResponseRedirect('/admission/logout/?next=/admission')
 
-    countries = mdlref.country.find_countries()
+    countries = mdlref.country.find_all()
     property = mdl.properties.find_by_key('INSTITUTION')
     if property is None:
         institution_name = "<font style='color:red'>Aucune institution de définie</font>"

@@ -29,7 +29,6 @@ from django.utils.translation import ugettext_lazy as _
 from admission.models import form
 
 
-
 class SecondaryEducationAdmin(admin.ModelAdmin):
     list_display = ('person', 'national')
     fieldsets = ((None, {'fields': ('person', 'national')}),)
@@ -38,8 +37,8 @@ class SecondaryEducationAdmin(admin.ModelAdmin):
 class SecondaryEducation(models.Model):
     NATIONAL_COMMUNITY_TYPES = (
         ('FRENCH', 'Communauté française de Belgique'),
-        ('GERMAN', 'Communauté Germanophone'),
-        ('DUTCH', 'Communauté Néerlandophone'),
+        ('GERMAN', 'Communauté germanophone'),
+        ('DUTCH', 'Communauté flamande'),
         )
 
     RESULT_TYPE = (('LOW', 'Moins de 65%'),
@@ -59,9 +58,9 @@ class SecondaryEducation(models.Model):
     academic_year = models.ForeignKey('AcademicYear', blank=True, null=True)
     national = models.NullBooleanField(default=True)
     national_community = models.CharField(max_length=20, choices=NATIONAL_COMMUNITY_TYPES, blank=True, null=True)
-    national_institution = models.ForeignKey('reference.EducationInstitution',blank=True, null=True)
-    education_type = models.ForeignKey('reference.EducationType',blank=True, null=True)
-    daes = models.BooleanField(default=False,blank=True, null=True)
+    national_institution = models.ForeignKey('reference.EducationInstitution', blank=True, null=True)
+    education_type = models.ForeignKey('reference.EducationType', blank=True, null=True)
+    daes = models.NullBooleanField(default=False)
     path_repetition = models.NullBooleanField(default=False)
     path_reorientation = models.NullBooleanField(default=False)
     result = models.CharField(max_length=20, choices=RESULT_TYPE,blank=True, null=True)
@@ -81,13 +80,8 @@ class SecondaryEducation(models.Model):
     local_language_exam = models.NullBooleanField(default=False)
     local_language_exam_date = models.DateField(blank=True, null=True)
     local_language_exam_institution = models.CharField(max_length=100,blank=True, null=True)
-    local_language_exam_result = models.CharField(max_length=20, choices=RESULT_TYPE, blank=True, null=True)
+    local_language_exam_result = models.CharField(max_length=25, choices=RESULT_TYPE, blank=True, null=True)
 
-    @property
-    def has_secondary_education(self):
-        if self.national_community or international_diploma:
-            return True
-        return False
 
     @property
     def path(self):

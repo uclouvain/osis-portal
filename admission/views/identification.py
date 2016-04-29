@@ -98,8 +98,8 @@ def new_user(request):
         user = User.objects.get(pk=user.id)
         person = mdl.person.Person()
         person.user = user
-        person.birth_country=mdlref.Country.find_by_id(1)
-        person.nationality=mdlref.Country.find_by_id(1)
+        person.birth_country=mdlref.country.find_by_id(1)
+        person.nationality=mdlref.country.find_by_id(1)
         person.save()
         # send an activation email
         send_mail.send_mail_activation(request, str(person.activation_code), form_new['email_new'].value())

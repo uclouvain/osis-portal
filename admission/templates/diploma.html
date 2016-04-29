@@ -204,21 +204,21 @@
                              name="diploma_sec"
                              id="rdb_diploma_sec1"
                              value="true"
-                             {%if secondary_education.has_secondary_education = True %}checked{%endif%}
+                             {%if secondary_education.secondary_education_diploma = True %}checked{%endif%}
                              onclick="display('pnl_academic_year',true);display('pnl_admission_exam',false);"> Oui
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
                              name="diploma_sec"
                              id="rdb_diploma_sec2" value="false"
-                             {%if secondary_education.has_secondary_education = False %}checked{%endif%}
+                             {%if secondary_education.secondary_education_diploma = False %}checked{%endif%}
                              onclick="display('pnl_academic_year',false);display('pnl_admission_exam',true);"> Non
                     </label>
                     {%if validation_messages and validation_messages|get_item:'diploma_sec'%}<br><font class="error"style="margin-left:5px;">{{ validation_messages|get_item:'diploma_sec'}}</font>{% endif %}
                 </div>
             </div>
             <br>
-            <div id="pnl_academic_year" style="{%if secondary_education.has_secondary_education = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}" class="form-inline">
+            <div id="pnl_academic_year" style="{%if secondary_education.secondary_education_diploma = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}" class="form-inline">
                 <div class="form-group" >
                         <label style="width:400px;">
                           Veuillez indiquer l'année académique d'obtention *
@@ -259,100 +259,8 @@
         </div>
     </div>
     {% include "diploma/diploma_admission_exam.html" %}
+    {% include "diploma/diploma_professional_experience.html" %}
 
-    <div class="panel panel-default" id="pnl_professinal_experience" style="">
-        <div class="panel-heading">Expériences professionnelles</div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <label>Avez-vous été inscrit(e) ou allez-vous être inscrit(e) à un examen de la valorisation des acquis et expériences professionnelles (VAE)?</label>
-                    <br>
-                    <label class="radio-inline">
-                      <input type="radio"
-                             name="professional_experience"
-                             id="rdb_professional_experience_true"
-                             value="true"
-                             onclick="display('pnl_professional_experience_detail',true);"
-                             {%if secondary_education.professional_exam = True %}checked{%endif%}> Oui
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio"
-                             name="professional_experience"
-                             id="rdb_professional_experience_false"
-                             value="false"
-                             onclick="display('pnl_professional_experience_detail',false);"
-                             {%if secondary_education.professional_exam = False %}checked{%endif%}> Non
-                    </label>
-                    {%if validation_messages and validation_messages|get_item:'professional_experience'%}
-                        <br>
-                        <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'professional_experience'}}</font><br>
-                    {% endif %}
-                </div>
-            </div>
-            <br>
-            {% if local_language_exam_link %}
-                Information sur VAE : <a href="https://www.uclouvain.be/vae.html">{{local_language_exam_link.value}}</a>
-            {%endif%}
-            <div id="pnl_professional_experience_detail"
-                 style="{% if secondary_education.professional_exam = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
-                <div class="form-inline">
-                    <br>
-                    <label>A quelle session (date)? *</label>
-                    <input class="form-control"
-                           id="txt_professional_experience_date"
-                           name="professional_experience_date">
-                     {%if validation_messages and validation_messages|get_item:'professional_experience_date'%}
-                        <br><br>
-                        <font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'professional_experience_date'}}</font><br>
-                    {% endif %}
-                    <br>
-                    <br>
-                    <label>Auprès de quel établissement (nom)? *</label>
-                    <input class="form-control"
-                           id="txt_professional_experience_enterprise"
-                           name="professional_experience_enterprise">
-                    <br>
-                    {%if validation_messages and validation_messages|get_item:'professional_experience_enterprise'%}
-                        <br><br>
-                        <font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'professional_experience_enterprise'}}</font><br>
-                    {% endif %}
-                </div>
-                <br>
-                <br>
-                <label>Quel résultat avez-vous obtenu? *</label>
-                <br>
-                <label class="radio-inline">
-                  <input type="radio"
-                         name="result"
-                         id="rdb_aprofessional_experienceresult_less_65"
-                         value="LESS_65"
-                         {%if secondary_education.professional_exam_result = 'LOW' %}checked{%endif%}> Moins de 65%
-                </label>
-                <label class="radio-inline">
-                  <input type="radio"
-                         name="result"
-                         id="rdb_professional_experience_result_between_65_75"
-                         value="BETWEEN_65_75"
-                         {%if secondary_education.professional_exam_result = 'MIDDLE'%}checked{%endif%}> Entre 65 et 75%
-                </label>
-                <label class="radio-inline">
-                  <input type="radio"
-                         name="result"
-                         id="rdb_professional_experience_result_more_75" value="MORE_75"
-                         {%if secondary_education.professional_exam_result = 'HIGH' %}checked{%endif%}> Plus de 75%
-                </label>
-                <br>
-                {%if validation_messages and validation_messages|get_item:'result'%}
-                    <font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'result'}}</font>
-                {% endif %}
-                <br>
-                <label>Veuillez joindre une copie de votre certificat ou une preuve d'inscription à l'examen</label>
-                &nbsp;&nbsp;<input type="button" value="Cliquez-ici pour joindre"/>
-
-            </div>
-
-        </div>
-    </div>
     {% include "diploma/diploma_french_exam.html" %}
     {%if validation_messages and validation_messages|get_item:'final'%}
         <br>

@@ -10,7 +10,7 @@
                 <br>
                 <label class="radio-inline">
                   <input type="radio"
-                         name="diploma_french"
+                         name="local_language_exam"
                          id="rdb_diploma_french1"
                          value="true"
                          onclick="display('pnl_french_exam_detail',true);"
@@ -18,7 +18,7 @@
                 </label>
                 <label class="radio-inline">
                   <input type="radio"
-                         name="diploma_french"
+                         name="local_language_exam"
                          id="rdb_diploma_french2"
                          value="false"
                          onclick="display('pnl_french_exam_detail',false);"
@@ -40,7 +40,7 @@
                 <br>
                 <label>A quelle session (date)? *</label>
                 <input class="form-control" id="txt_french_exam_date"
-                       name="french_exam_date"
+                       name="local_language_exam_date"
                        value="{{secondary_education.local_language_exam_date | default_if_none:''|date:"j/m/Y"}}">
                 <br>
                 {%if validation_messages and validation_messages|get_item:'french_exam_date'%}
@@ -51,8 +51,8 @@
                 <label>Auprès de quel établissement (nom)? *</label>
                 <input class="form-control"
                        id="txt_french_exam_enterprise"
-                       name="french_exam_enterprise"
-                       value="{{secondary_education.local_language_exam_institution}}">
+                       name="local_language_exam_enterprise"
+                       value="{{ secondary_education.local_language_exam_institution | default_if_none:''}}">
                 <br>
                 {%if validation_messages and validation_messages|get_item:'french_exam_enterprise'%}
                     <br><br>
@@ -66,19 +66,21 @@
             <br>
             <label class="radio-inline">
               <input type="radio"
-                     name="french_exam_result"
-                     id="rdb_french_exam_session_succeed" value="SUCCEED">
+                     name="local_language_exam_result"
+                     id="rdb_french_exam_session_succeed"
+                     value="SUCCEED">
                 Réussite
             </label>
             <label class="radio-inline">
               <input type="radio"
-                     name="french_exam_result"
-                     id="rdb_french_exam_session_failed" value="FAILED">
+                     name="local_language_exam_result"
+                     id="rdb_french_exam_session_failed"
+                     value="FAILED">
                 Echec
             </label>
             <label class="radio-inline">
               <input type="radio"
-                     name="french_exam_result"
+                     name="local_language_exam_result"
                      id="rdb_french_exam_enrollment_session_in_progress"
                      value="ENROLLMENT_IN_PROGRESS">
                 En cours d'inscription à la session mentionnée

@@ -37,6 +37,7 @@
                          <select class="form-control"
                                  id="slt_country"
                                  name="country">
+                                <option value="-">-</option>
                             {% for c in countries %}
                                 <option value="{{ c.id }}">{{ c }}</option>
                             {% endfor %}

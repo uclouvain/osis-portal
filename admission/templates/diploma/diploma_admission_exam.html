@@ -2,7 +2,7 @@
 
 <div class="panel panel-default"
      id="pnl_admission_exam"
-     style="{%if secondary_education.has_secondary_education = False %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+     style="{%if secondary_education.secondary_education_diploma = False %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
     <div class="panel-heading">Examen d'admission</div>
     <div class="panel-body">
         <div class="row">
@@ -53,7 +53,6 @@
             <br>
             <label>Quel type d'examen? *</label>
             <br>
-
             {% for exam_type in exam_types %}
                 <input type="radio"
                        name="admission_exam_type"
@@ -86,26 +85,29 @@
             <br>
             <label class="radio-inline">
               <input type="radio"
-                     name="result"
-                     id="rdb_admission_exam_result_less_65"
-                     value="LESS_65"
+                     name="admission_exam_result"
+                     id="rdb_admission_exam_result_low"
+                     value="LOW"
                      {%if secondary_education.admission_exam_result = 'LOW' %}checked{%endif%}> Moins de 65%
             </label>
             <label class="radio-inline">
               <input type="radio"
-                     name="result"
-                     id="rdb_admission_exam_result_between_65_75"
-                     value="BETWEEN_65_75"
+                     name="admission_exam_result"
+                     id="rdb_admission_exam_result_middle"
+                     value="MIDDLE"
                      {%if secondary_education.admission_exam_result = 'MIDDLE'%}checked{%endif%}> Entre 65 et 75%
             </label>
             <label class="radio-inline">
-              <input type="radio" name="result"
-                     id="rdb_admission_exam_result_more_75"
-                     value="MORE_75"
+              <input type="radio"
+                     name="admission_exam_result"
+                     id="rdb_admission_exam_result_high"
+                     value="HIGH"
                      {%if secondary_education.admission_exam_result  = 'HIGH' %}checked{%endif%}> Plus de 75%
             </label>
             <br>
-            {%if validation_messages and validation_messages|get_item:'result'%}<font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'result'}}</font>{% endif %}
+            {%if validation_messages and validation_messages|get_item:'admission_exam_result'%}
+                <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_result'}}</font>
+            {% endif %}
             <br>
             <label>Veuillez joindre une copie de votre certificat ou une preuve d'inscription à </label>
             &nbsp;&nbsp;<input type="button" value="Cliquez-ici pour joindre"/>

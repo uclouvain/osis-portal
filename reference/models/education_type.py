@@ -49,4 +49,8 @@ def find_by_id(an_id):
 
 
 def find_education_type_by_adhoc(a_type, an_adhoc_type):
-    return EducationType.objects.filter(type=a_type,adhoc=an_adhoc_type).order_by('name')
+    return EducationType.objects.filter(type=a_type, adhoc=an_adhoc_type).order_by('name')
+
+
+def find_by_name(a_name):
+    return EducationType.objects.filter(name=a_name, adhoc=True).first()

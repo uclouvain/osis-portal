@@ -37,3 +37,7 @@ class AdmissionExamType(models.Model):
 
     def __str__(self):
         return self.name
+
+
+def find_by_name(a_name):
+    return AdmissionExamType.objects.filter(name__iexact=a_name, adhoc=False).first()
