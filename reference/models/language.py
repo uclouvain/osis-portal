@@ -27,31 +27,6 @@ from django.db import models
 from django.contrib import admin
 
 
-class CountryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'iso_code', 'nationality', 'european_union', 'dialing_code', 'cref_code')
-    fieldsets = ((None, {'fields': ('iso_code', 'name', 'nationality', 'european_union', 'dialing_code', 'cref_code')}),)
-    ordering = ('name',)
-    search_fields = ['name']
-
-
-class Country(models.Model):
-    iso_code = models.CharField(max_length=2, unique=True)
-    name = models.CharField(max_length=80, unique=True)
-    nationality = models.CharField(max_length=80, blank=True, null=True)
-    european_union = models.BooleanField(default=False)
-    dialing_code = models.CharField(max_length=3, blank=True, null=True)
-    cref_code = models.CharField(max_length=3, blank=True, null=True)
-
-    def __str__(self):
-        return self.name
-
-    def find_countries():
-        return Country.objects.all().order_by('name')
-
-    def find_by_id(country_id):
-        return Country.objects.get(pk=country_id)
-
-
 class LanguageAdmin(admin.ModelAdmin):
     list_display = ('code', 'name')
     ordering = ('code',)
@@ -66,13 +41,13 @@ class Language(models.Model):
     def __str__(self):
         return self.name
 
-    def find_by_id(a_language_id):
-        return Language.objects.get(pk=a_language_id)
+def find_by_id(a_language_id):
+    return Language.objects.get(pk=a_language_id)
 
 
-    def find_languages(self):
-        return Language.objects.all().order_by('name')
+def find_languages():
+    return Language.objects.all().order_by('name')
 
 
-    def find_languages_excepted(list):
-        return Language.objects.exclude(name__in=list)
+def find_languages_excepted(list):
+    return Language.objects.exclude(name__in=list)

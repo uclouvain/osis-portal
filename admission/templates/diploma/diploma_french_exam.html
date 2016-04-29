@@ -1,7 +1,7 @@
 {% load dictionnary %}
 
 <div class="panel panel-default" id="pnl_french_exam"
-         style="{% if object_application.offer_year.grade_type.grade = 'BACHELOR' or object_application.offer_year.grade_type.grade = 'MASTER' or object_application.offer_year.grade_type.grade = 'TRAINING_CERTIFICATE' %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}}"  >
+         style="{% if application.offer_year.grade_type.grade = 'BACHELOR' or application.offer_year.grade_type.grade = 'MASTER' or application.offer_year.grade_type.grade = 'TRAINING_CERTIFICATE' %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}}"  >
     <div class="panel-heading">Examen de maitrise de la langue française *</div>
     <div class="panel-body">
         <div class="row">
@@ -14,7 +14,7 @@
                          id="rdb_diploma_french1"
                          value="true"
                          onclick="display('pnl_french_exam_detail',true);"
-                         {%if object_application.diploma_french = True %}checked{%endif%}> Oui
+                         {%if secondary_education.local_language_exam = True %}checked{%endif%}> Oui
                 </label>
                 <label class="radio-inline">
                   <input type="radio"
@@ -22,40 +22,41 @@
                          id="rdb_diploma_french2"
                          value="false"
                          onclick="display('pnl_french_exam_detail',false);"
-                         {%if object_application.diploma_french = False %}checked{%endif%}> Non
+                         {%if secondary_education.local_language_exam = False %}checked{%endif%}> Non
                 </label>
                 <br>
                 <br>
                 {%if validation_messages and validation_messages|get_item:'diploma_french'%}
-                    <br><br>
-                    <font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'diploma_french'}}</font><br>
+                    <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'diploma_french'}}</font><br>
                 {% endif %}
-                Informations complémentaires : <a target="_blank" href="http://www.uclouvain.be/204100.html">http://www.uclouvain.be/204100.html</a>
+                {% if professional_exam_link %}
+                    Informations complémentaires : <a target="_blank" href="http://www.uclouvain.be/204100.html">{{professional_exam_link.value}}</a>
+                {%endif%}
             </div>
         </div>
         <div id="pnl_french_exam_detail"
-             style="{%if object_application.diploma_french = True %}visibility:visible;display:display;{%else%}visibility:hidden;display:none;{%endif%}">
+             style="{%if secondary_education.local_language_exam = True %}visibility:visible;display:display;{%else%}visibility:hidden;display:none;{%endif%}">
             <div class="form-inline">
                 <br>
                 <label>A quelle session (date)? *</label>
                 <input class="form-control" id="txt_french_exam_date"
                        name="french_exam_date"
-                       value="{{object_application.french_exam_date | default_if_none:''|date:"j/m/Y"}}">
+                       value="{{secondary_education.local_language_exam_date | default_if_none:''|date:"j/m/Y"}}">
                 <br>
                 {%if validation_messages and validation_messages|get_item:'french_exam_date'%}
                     <br><br>
-                    <font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'french_exam_date'}}</font><br>
+                    <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'french_exam_date'}}</font><br>
                 {% endif %}
                 <br>
                 <label>Auprès de quel établissement (nom)? *</label>
                 <input class="form-control"
                        id="txt_french_exam_enterprise"
                        name="french_exam_enterprise"
-                       value="{{object_application.french_exam_enterprise}}">
+                       value="{{secondary_education.local_language_exam_institution}}">
                 <br>
                 {%if validation_messages and validation_messages|get_item:'french_exam_enterprise'%}
                     <br><br>
-                    <font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'french_exam_enterprise'}}</font>
+                    <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'french_exam_enterprise'}}</font>
                 <br>
                 {% endif %}
             </div>
@@ -83,8 +84,8 @@
                 En cours d'inscription à la session mentionnée
             </label>
             <br>
-            {%if  validation_messages and validation_messages|get_item:'french_exam_result'%}
-                <br><br><font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'french_exam_result'}}</font><br>
+            {%if validation_messages and validation_messages|get_item:'french_exam_result'%}
+                <br><br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'french_exam_result'}}</font><br>
             {% endif %}
             <br>
             <label>Veuillez joindre l'attestation de réussite ou la preuve d'inscription</label>

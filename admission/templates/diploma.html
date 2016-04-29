@@ -37,6 +37,24 @@
         }
     }
 
+    function disabled_field_txt(id, state){
+
+        if(state){
+            document.getElementById(id).disabled = true;
+        }else{
+            document.getElementById(id).disabled = false;
+        }
+    }
+    function disabled_reset_field_txt(id, state){
+
+        if(state){
+            document.getElementById(id).disabled = true;
+        }else{
+            document.getElementById(id).disabled = false;
+        }
+        document.getElementById(id).value="";
+    }
+
     function display(id,state){
         var elt = document.getElementById(id);
         if(state){
@@ -45,11 +63,12 @@
             elt.style = "visibility:hidden;display:none;";
         }
     }
+
     function display_or_hide(id,elt){
         display(id,elt.checked);
     }
+
     function show_hide_parcours(elt){
-        //alert('show_hide_parcours');
         if (elt.selectedIndex == -1)
             return null;
         var s= elt.options[elt.selectedIndex].text;
@@ -104,6 +123,16 @@
         }
     }
 
+    function reset_chb(elt_name){
+        x=document.getElementsByName(elt_name);
+        var i;
+        for (i = 0; i < x.length; i++) {
+            if (x[i].type == "checkbox") {
+                x[i].checked = false;
+            }
+        }
+    }
+
     function reset_input(id){
         document.getElementById(id).value="";
 
@@ -125,6 +154,15 @@
             document.getElementById('pnl_translation').style="visibility:hidden;display:none;";
         }
     }
+
+    function refresh_slt_schools(){
+        var city = document.getElementById("slt_cities");
+        var city_sel = city.options[city.selectedIndex].text;
+        alert(city_sel);
+        var postal_code = document.getElementById("slt_postal_codes");
+        var postal_code_sel = postal_code.options[postal_code.selectedIndex].text;
+
+    }
 </script>
 
 <form method="post" action="{% url 'diploma' application.id %}">
@@ -141,6 +179,10 @@
                                     <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>Etape suivante</button>
         <br>
         <br>
+        {%if validation_messages%}
+            <br><font class="error" role="alert" style="margin-left:5px;">Il y a {{ validation_messages|length}} erreur(s)</font><br><br>
+        {{ validation_messages}}
+        {% endif %}
     </div>
     <div class="panel panel-default"
          style="{% if application.person.register_number%}visibility:hidden;display:none;{%else%}visibility:visible;display:block;{%endif%}">
@@ -162,21 +204,21 @@
                              name="diploma_sec"
                              id="rdb_diploma_sec1"
                              value="true"
-                             {%if object_application.diploma_sec = True %}checked{%endif%}
+                             {%if secondary_education.has_secondary_education = True %}checked{%endif%}
                              onclick="display('pnl_academic_year',true);display('pnl_admission_exam',false);"> Oui
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
                              name="diploma_sec"
                              id="rdb_diploma_sec2" value="false"
-                             {%if object_application.diploma_sec = False %}checked{%endif%}
+                             {%if secondary_education.has_secondary_education = False %}checked{%endif%}
                              onclick="display('pnl_academic_year',false);display('pnl_admission_exam',true);"> Non
                     </label>
-                    {%if  validation_messages and validation_messages|get_item:'diploma_sec'%}<font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'diploma_sec'}}</font>{% endif %}
+                    {%if validation_messages and validation_messages|get_item:'diploma_sec'%}<br><font class="error"style="margin-left:5px;">{{ validation_messages|get_item:'diploma_sec'}}</font>{% endif %}
                 </div>
             </div>
             <br>
-            <div id="pnl_academic_year" style="{%if object_application.diploma_sec = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}" class="form-inline">
+            <div id="pnl_academic_year" style="{%if secondary_education.has_secondary_education = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}" class="form-inline">
                 <div class="form-group" >
                         <label style="width:400px;">
                           Veuillez indiquer l'année académique d'obtention *
@@ -186,7 +228,7 @@
                                 name="academic_year"
                                 onchange="show_hide_parcours(this);show_hide_pnl_daes();">
                             {% for academic_yr in academic_years %}
-                                <option {% if academic_yr.id == object_application.academic_year.id %}selected{%endif%} value="{{ academic_yr.id }}" title="{{academic_yr.year}}">{{ academic_yr }}</option>
+                                <option {% if academic_yr.id == secondary_education.academic_year.id %}selected{%endif%} value="{{ academic_yr.id }}" title="{{academic_yr.year}}">{{ academic_yr }}</option>
                             {% endfor %}
                         </select>
                 </div>
@@ -198,29 +240,25 @@
                         <label class="radio-inline">
                           <input type="radio"
                                  name="rdb_belgian_foreign" id="rdb_belgium"
-                                 value="true" {%if object_application.rdb_belgian_foreign = True %}checked{%endif%}
+                                 value="true" {%if secondary_education.national = True %}checked{%endif%}
                                  onclick="display('pnl_belgian_detail',true);display('pnl_foreign_detail',false);"> En Belgique
                         </label>
                         <label class="radio-inline">
                           <input type="radio"
                                  name="rdb_belgian_foreign" id="rdb_foreign"
-                                 value="false" {%if object_application.rdb_belgian_foreign = False %}checked{%endif%}
+                                 value="false" {%if secondary_education.national = False %}checked{%endif%}
                                  onclick="display('pnl_belgian_detail',false);display('pnl_foreign_detail',true);"> A l'étranger
                         </label>
-                        {%if  validation_messages and validation_messages|get_item:'rdb_belgian_foreign'%}<font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'rdb_belgian_foreign'}}</font>{% endif %}
+                        {%if validation_messages and validation_messages|get_item:'rdb_belgian_foreign'%}<font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'rdb_belgian_foreign'}}</font>{% endif %}
                 </div>
                 <br>
                 <br>
                 {% include "diploma/diploma_belgian.html" %}
-
                 {% include "diploma/diploma_foreign.html" %}
-
-
             </div>
         </div>
     </div>
     {% include "diploma/diploma_admission_exam.html" %}
-
 
     <div class="panel panel-default" id="pnl_professinal_experience" style="">
         <div class="panel-heading">Expériences professionnelles</div>
@@ -235,7 +273,7 @@
                              id="rdb_professional_experience_true"
                              value="true"
                              onclick="display('pnl_professional_experience_detail',true);"
-                             {%if object_application.professional_experience = True %}checked{%endif%}> Oui
+                             {%if secondary_education.professional_exam = True %}checked{%endif%}> Oui
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
@@ -243,18 +281,20 @@
                              id="rdb_professional_experience_false"
                              value="false"
                              onclick="display('pnl_professional_experience_detail',false);"
-                             {%if object_application.professional_experience = False %}checked{%endif%}> Non
+                             {%if secondary_education.professional_exam = False %}checked{%endif%}> Non
                     </label>
                     {%if validation_messages and validation_messages|get_item:'professional_experience'%}
                         <br>
-                        <font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'professional_experience'}}</font><br>
+                        <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'professional_experience'}}</font><br>
                     {% endif %}
                 </div>
             </div>
             <br>
-            Information sur VAE : <a href="https://www.uclouvain.be/vae.html">https://www.uclouvain.be/vae.html</a>
+            {% if local_language_exam_link %}
+                Information sur VAE : <a href="https://www.uclouvain.be/vae.html">{{local_language_exam_link.value}}</a>
+            {%endif%}
             <div id="pnl_professional_experience_detail"
-                 style="{% if object_application.professional_experience = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+                 style="{% if secondary_education.professional_exam = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
                 <div class="form-inline">
                     <br>
                     <label>A quelle session (date)? *</label>
@@ -286,37 +326,39 @@
                          name="result"
                          id="rdb_aprofessional_experienceresult_less_65"
                          value="LESS_65"
-                         {%if object_application.result < 65 %}checked{%endif%}> Moins de 65%
+                         {%if secondary_education.professional_exam_result = 'LOW' %}checked{%endif%}> Moins de 65%
                 </label>
                 <label class="radio-inline">
                   <input type="radio"
                          name="result"
                          id="rdb_professional_experience_result_between_65_75"
                          value="BETWEEN_65_75"
-                         {%if object_application.result >= 65 and object_application.result <= 75%}checked{%endif%}> Entre 65 et 75%
+                         {%if secondary_education.professional_exam_result = 'MIDDLE'%}checked{%endif%}> Entre 65 et 75%
                 </label>
                 <label class="radio-inline">
                   <input type="radio"
                          name="result"
                          id="rdb_professional_experience_result_more_75" value="MORE_75"
-                         {%if object_application.result > 75 %}checked{%endif%}> Plus de 75%
+                         {%if secondary_education.professional_exam_result = 'HIGH' %}checked{%endif%}> Plus de 75%
                 </label>
                 <br>
-                {%if  validation_messages and validation_messages|get_item:'result'%}
+                {%if validation_messages and validation_messages|get_item:'result'%}
                     <font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'result'}}</font>
                 {% endif %}
                 <br>
                 <label>Veuillez joindre une copie de votre certificat ou une preuve d'inscription à l'examen</label>
                 &nbsp;&nbsp;<input type="button" value="Cliquez-ici pour joindre"/>
+
             </div>
 
         </div>
     </div>
-{% include "diploma/diploma_french_exam.html" %}
+    {% include "diploma/diploma_french_exam.html" %}
     {%if validation_messages and validation_messages|get_item:'final'%}
         <br>
         <span class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'final'}}</span><br><br>
     {% endif %}
+
     <br>
     <div>
         <button type="submit" id="bt_previous_step_down" class="btn btn-default" role="button"
@@ -331,4 +373,54 @@
 
     </div>
 </form>
+  <!-- UploadFile modal -->
+  <div class="modal fade" id="pnl_upload_file_modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <form method="post" enctype="multipart/form-data"
+                    action="{% url 'upload_file' 1 %}">
+                  {% csrf_token %}
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="bt_close_upload_file_modal"><span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title" id="uploadFileLabel">Fichier</h4>
+                  </div>
+                  <div class="modal-body">
+                      <label for="fle_input_file" class="btn btn-default" >Choisir un fichier</label>
+                      <input type="file" id="fle_input_file" name="file" style="display:none" />
+                      <div id="pnl_selectedFiles"></div>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal" id="bt_cancel_upload_score_modal">Annuler</button>
+                      <input type="submit" class="btn btn-primary" value="Ok" onclick="document.getElementById('files').style.visibility='visible'" id="bt_submit_upload_file_modal"/>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+  <script>
+	var selDiv = "";
+
+	document.addEventListener("DOMContentLoaded", init, false);
+
+	function init() {
+		document.querySelector('#fle_input_file').addEventListener('change', handleFileSelect, false);
+		selDiv = document.querySelector("#pnl_selectedFiles");
+	}
+
+	function handleFileSelect(e) {
+
+		if(!e.target.files) return;
+
+		selDiv.innerHTML = "<br/><p class='help-block'>Fichier sélectionné : </p>";
+
+		var files = e.target.files;
+		for(var i=0; i<files.length; i++) {
+			var f = files[i];
+
+			selDiv.innerHTML += f.name + "<br/>";
+
+		}
+
+	}
+	</script>
 {% endblock %}

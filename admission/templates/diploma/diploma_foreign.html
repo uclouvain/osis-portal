@@ -9,24 +9,24 @@
                 <input type="radio" name="foreign_baccalaureate_diploma"
                        id="rdb_foreign_baccalaureate_diploma_national"
                        value="NATIONAL"
-                       {%if object_application.foreign_baccalaureate_diploma = 'NATIONAL' %}checked{%endif%}
+                       {%if secondary_education.international_diploma = 'NATIONAL' %}checked{%endif%}
                        onclick="display('pnl_equivalence',false);">&nbsp;&nbsp;Baccalauréat national (ou diplôme d'état, ...)
                  <br>
                 <input type="radio" name="foreign_baccalaureate_diploma"
                        id="rdb_foreign_baccalaureate_diploma_european"
                        value="EUROPEAN"
-                       {%if object_application.foreign_baccalaureate_diploma = 'EUROPEAN' %}checked{%endif%}
+                       {%if secondary_education.international_diploma = 'EUROPEAN' %}checked{%endif%}
                        onclick="display('pnl_equivalence',false);">&nbsp;&nbsp;Baccalauréat européen (Schola Europaea)&nbsp;&nbsp;
                 <img src="{% static 'img/schola_europaea.jpg' %}"height="50px">
                  <br>
                 <input type="radio" name="foreign_baccalaureate_diploma"
                        id="rdb_foreign_baccalaureate_diploma_international"
                        value="INTERNATIONAL"
-                       {%if object_application.foreign_baccalaureate_diploma = 'INTERNATIONAL' %}checked{%endif%}
+                       {%if secondary_education.international_diploma = 'INTERNATIONAL' %}checked{%endif%}
                        onclick="display('pnl_equivalence',true);">&nbsp;&nbsp;Baccalauréat international(IBO)&nbsp;&nbsp;
                  <img src="{% static 'img/ib-world-school.png' %}" height="50px">
-                 {%if  validation_messages and validation_messages|get_item:'foreign_baccalaureate_diploma'%}
-                     <br><br><font class="alert alert-danger" role="alert" style="margin-left:5px;">
+                 {%if validation_messages and validation_messages|get_item:'foreign_baccalaureate_diploma'%}
+                     <br><br><font class="error" style="margin-left:5px;">
                      {{ validation_messages|get_item:'foreign_baccalaureate_diploma'}}</font>
                  {% endif %}
                  <br><br>
@@ -48,13 +48,13 @@
                                  id="slt_language_diploma"
                                  name="language_diploma">
                             <option value="-">-</option>
-                            <option value="FRENCH" {%if object_application.language_diploma = 'FRENCH'%}checked{%endif%}>Français</option>
-                            <option value="DUTCH" {%if object_application.language_diploma = 'DUTCH'%}checked{%endif%}>Néerlandais</option>
-                            <option value="ENGLISH" {%if object_application.language_diploma = 'ENGLISH'%}checked{%endif%}>Anglais</option>
-                            <option value="GERMAN" {%if object_application.language_diploma = 'GERMAN'%}checked{%endif%}>Allemand</option>
-                            <option value="ITALIAN" {%if object_application.language_diploma = 'ITALIAN'%}checked{%endif%}>Italien</option>
-                            <option value="SPANISH" {%if object_application.language_diploma = 'SPANISH'%}checked{%endif%}>Espagnol</option>
-                            <option value="PORTUGUESE" {%if object_application.language_diploma = 'PORTUGUESE'%}checked{%endif%}>Portuguais</option>
+                            <option value="FRENCH" {%if secondary_education.international_diploma_language = 'FRENCH'%}checked{%endif%}>Français</option>
+                            <option value="DUTCH" {%if secondary_education.international_diploma_language = 'DUTCH'%}checked{%endif%}>Néerlandais</option>
+                            <option value="ENGLISH" {%if secondary_education.international_diploma_language = 'ENGLISH'%}checked{%endif%}>Anglais</option>
+                            <option value="GERMAN" {%if secondary_education.international_diploma_language = 'GERMAN'%}checked{%endif%}>Allemand</option>
+                            <option value="ITALIAN" {%if secondary_education.international_diploma_language = 'ITALIAN'%}checked{%endif%}>Italien</option>
+                            <option value="SPANISH" {%if secondary_education.international_diploma_language = 'SPANISH'%}checked{%endif%}>Espagnol</option>
+                            <option value="PORTUGUESE" {%if secondary_education.international_diploma_language = 'PORTUGUESE'%}checked{%endif%}>Portuguais</option>
                         </select>
 
                      </div>
@@ -65,31 +65,31 @@
                                        name="other_language_regime"
                                        onclick="enabled_other_language(this)"
                                        class="form-control"
-                                       {%if object_application.other_language_diploma%}checked{%endif%}>
+                                       {%if secondary_education.international_diploma_language = False %}checked{%endif%}>
                          </label>
                          <select class="form-control"
                                  id="slt_other_language_diploma"
                                  name="other_language_diploma"
-                                 {%if object_application.other_language_diploma%}{%else%}disabled{%endif%}>
+                                 {%if  secondary_education.international_diploma_language = False %}{%else%}disabled{%endif%}>
                              <option value="-" >-</option>
                             {% for l in languages %}
-                                <option value="{{ l.id }}" {%if object_application.other_language_diploma.id == l.id%}selected{%endif%}>{{ l }}</option>
+                                <option value="{{ l.id }}" {%if  secondary_education.international_diploma_language.id == l.id%}selected{%endif%}>{{ l }}</option>
                             {% endfor %}
                         </select>
 
                      </div>
                  </div>
-                 {%if  validation_messages and validation_messages|get_item:'language_regime'%}
+                 {%if validation_messages and validation_messages|get_item:'language_regime'%}
                  <div class="row">
                      <div class="col-md-4"></div>
                      <div class="col-md-8">
-                        <font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'language_regime'}}</font>
+                        <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'language_regime'}}</font>
                      </div>
                  </div>
                  {% endif %}
 
                  <div id="pnl_equivalence"
-                      style="{%if object_application.foreign_baccalaureate_diploma = 'INTERNATIONAL' %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+                      style="{%if  secondary_education.international_diploma  = 'INTERNATIONAL' %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
                     <br>
                     <label>Ce diplôme a-t-il fait l'objet d'une décision d'équivalence par les services de la Communauté française de Belgique? *</label>
                     <br>
@@ -130,19 +130,19 @@
                           <input type="radio"
                                  name="foreign_result"
                                  id="rdb_foreign_result_less_65" value="LESS_65"
-                                 {%if object_application.result < 65 %}checked{%endif%}> Moins de 65%
+                                 {%if object_application.result = 'LOW'%}checked{%endif%}> Moins de 65%
                         </label>
                         <label class="radio-inline">
                           <input type="radio" name="foreign_result" id="rdb_foreign_result_between_65_75" value="BETWEEN_65_75"
-                                 {%if object_application.result >= 65 and object_application.result <= 75%}checked{%endif%}> Entre 65 et 75%
+                                 {%if object_application.result = 'MIDDLE' %}checked{%endif%}> Entre 65 et 75%
                         </label>
                         <label class="radio-inline">
                           <input type="radio"
                                  name="foreign_result"
                                  id="rdb_foreign_result_more_75" value="MORE_75"
-                                 {%if object_application.result > 75 %}checked{%endif%}> Plus de 75%
+                                 {%if object_application.result = 'HIGH' %}checked{%endif%}> Plus de 75%
                         </label>
-                        {%if validation_messages and validation_messages|get_item:'result'%}<font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'result'}}</font>{% endif %}
+                        {%if validation_messages and validation_messages|get_item:'result'%}<font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'result'}}</font>{% endif %}
                     </div>
                 </div>
                 <div class="panel panel-default">
@@ -183,7 +183,7 @@
                         </div>
                         <br>
                         <div id="pnl_translation"
-                             style="{%if object_application.other_language_diploma%}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+                             style="{%if secondary_education.international_diploma_language.adhoc = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
                             <label>Traduction par un traducteur-juré</label>
                             <br>
                             <div class="row">

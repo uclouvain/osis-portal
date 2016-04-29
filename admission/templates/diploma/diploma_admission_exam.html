@@ -2,7 +2,7 @@
 
 <div class="panel panel-default"
      id="pnl_admission_exam"
-     style="{%if object_application.diploma_sec = False %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+     style="{%if secondary_education.has_secondary_education = False %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
     <div class="panel-heading">Examen d'admission</div>
     <div class="panel-body">
         <div class="row">
@@ -15,7 +15,7 @@
                          id="rdb_admission_exam_true"
                          value="true"
                          onclick="display('pnl_admission_exam_detail',true);"
-                         {%if object_application.admission_exam = True %}checked{%endif%}> Oui
+                         {%if secondary_education.admission_exam = True %}checked{%endif%}> Oui
                 </label>
                 <label class="radio-inline">
                   <input type="radio"
@@ -23,52 +23,63 @@
                          id="rdb_admission_exam_false"
                          value="false"
                          onclick="display('pnl_admission_exam_detail',false);"
-                         {%if object_application.admission_exam = False %}checked{%endif%}> Non
+                         {%if secondary_education.admission_exam = False %}checked{%endif%}> Non
                 </label>
-                {%if  validation_messages and validation_messages|get_item:'admission_exam'%}
-                    <br><br><font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam'}}</font>
+                {%if validation_messages and validation_messages|get_item:'admission_exam'%}
+                    <br><br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam'}}</font>
                 {% endif %}
             </div>
         </div>
         <div id="pnl_admission_exam_detail"
-             style="{%if object_application.admission_exam = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+             style="{%if secondary_education.admission_exam = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
             <div class="form-inline">
                 <br>
                 <label>A quelle session (date)? *</label>
                 <input class="form-control"
                        id="txt_admission_exam_date"
                        name="admission_exam_date"
-                       value="{{object_application.admission_exam_date | default_if_none:''|date:"j/m/Y"}}">
-                {%if  validation_messages and validation_messages|get_item:'admission_exam_date'%}<font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_date'}}</font>{% endif %}
+                       value="{{secondary_education.admission_exam_date | default_if_none:''|date:"j/m/Y"}}">
+                {%if validation_messages and validation_messages|get_item:'admission_exam_date'%}<font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_date'}}</font>{% endif %}
                 <br>
                 <br>
                 <label>Auprès de quel établissement (nom)? *</label>
                 <input class="form-control" id="txt_admission_exam_school" name="admission_exam_school">
                 <br>
                 {%if validation_messages and validation_messages|get_item:'admission_exam_school'%}
-                    <br><font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_school'}}</font>
+                    <br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_school'}}</font>
                 {% endif %}
 
             </div>
             <br>
             <label>Quel type d'examen? *</label>
             <br>
+
             {% for exam_type in exam_types %}
                 <input type="radio"
                        name="admission_exam_type"
-                       id="rdb_admission_exam_type"
-                       value="{{exam_type.key}}"
+                       id="rdb_admission_exam_type{{forloop.counter0}}"
+                       value="{{exam_type}}"
+                       {% if secondary_education.admission_exam_type = exam_type %}
+                            checked
+                       {%endif%}
+                       {% if exam_type = 'OTHER_EXAM'%}
+                            onclick="disabled_field_txt('txt_admission_exam_type_other', false)"
+                       {%else%}
+                            onclick="disabled_field_txt('txt_admission_exam_type_other', true);reset_input('txt_admission_exam_type_other');"
+                       {%endif%}
                          > {{exam_types|get_item:exam_type}}<br>
             {% endfor %}
             <br>
             <label>Si autre, précisez le nom:</label>
             <input class="form-control"
                    id="txt_admission_exam_type_other"
-
-                   name="admission_exam_type_other">
+                   name="admission_exam_type_other"
+                   {% if secondary_education.admission_exam_type != 'OTHER_EXAM' %}
+                            disabled
+                   {%endif%}>
             {%if validation_messages and validation_messages|get_item:'admission_exam_type'%}
                 <br>
-                <font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_type'}}</font><br>
+                <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_type'}}</font><br>
             {% endif %}
             <br>
             <label>Quel résultat avez-vous obtenu? *</label>
@@ -78,23 +89,23 @@
                      name="result"
                      id="rdb_admission_exam_result_less_65"
                      value="LESS_65"
-                     {%if object_application.result < 65 %}checked{%endif%}> Moins de 65%
+                     {%if secondary_education.admission_exam_result = 'LOW' %}checked{%endif%}> Moins de 65%
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="result"
                      id="rdb_admission_exam_result_between_65_75"
                      value="BETWEEN_65_75"
-                     {%if object_application.result >= 65 and object_application.result <= 75%}checked{%endif%}> Entre 65 et 75%
+                     {%if secondary_education.admission_exam_result = 'MIDDLE'%}checked{%endif%}> Entre 65 et 75%
             </label>
             <label class="radio-inline">
               <input type="radio" name="result"
                      id="rdb_admission_exam_result_more_75"
                      value="MORE_75"
-                     {%if object_application.result > 75 %}checked{%endif%}> Plus de 75%
+                     {%if secondary_education.admission_exam_result  = 'HIGH' %}checked{%endif%}> Plus de 75%
             </label>
             <br>
-            {%if  validation_messages and validation_messages|get_item:'result'%}<font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'result'}}</font>{% endif %}
+            {%if validation_messages and validation_messages|get_item:'result'%}<font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'result'}}</font>{% endif %}
             <br>
             <label>Veuillez joindre une copie de votre certificat ou une preuve d'inscription à </label>
             &nbsp;&nbsp;<input type="button" value="Cliquez-ici pour joindre"/>

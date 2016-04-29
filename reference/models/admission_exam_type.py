@@ -26,25 +26,14 @@
 from django.db import models
 from django.contrib import admin
 
-PROPERTIES_TYPE = (
-    ('INSTITUTION', 'Institution'),
-    ('LOGO', 'Logo'),
-    ('PROFESSIONAL_EXAM_LINK','Professional exam link'),
-    ('LOCAL_LANGUAGE_EXAM_LINK','Local language exam link'))
+
+class AdmissionExamTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'adhoc')
 
 
-class PropertiesAdmin(admin.ModelAdmin):
-    list_display = ('key', 'value')
-    fieldsets = ((None, {'fields': ('key', 'value')}),)
-
-
-class Properties(models.Model):
-    key = models.CharField(max_length=255, choices=PROPERTIES_TYPE)
-    value = models.CharField(max_length=255,blank=True, null=True)
+class AdmissionExamType(models.Model):
+    name = models.CharField(max_length=100)
+    adhoc = models.BooleanField(default=False)
 
     def __str__(self):
-        return u"%s" % self.key
-
-
-def find_by_key(key):
-    return Properties.objects.filter(key=key).first()
+        return self.name

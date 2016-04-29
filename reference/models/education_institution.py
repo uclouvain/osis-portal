@@ -26,25 +26,33 @@
 from django.db import models
 from django.contrib import admin
 
-PROPERTIES_TYPE = (
-    ('INSTITUTION', 'Institution'),
-    ('LOGO', 'Logo'),
-    ('PROFESSIONAL_EXAM_LINK','Professional exam link'),
-    ('LOCAL_LANGUAGE_EXAM_LINK','Local language exam link'))
+
+class EducationInstitutionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'adhoc')
 
 
-class PropertiesAdmin(admin.ModelAdmin):
-    list_display = ('key', 'value')
-    fieldsets = ((None, {'fields': ('key', 'value')}),)
+class EducationInstitution(models.Model):
+    INSTITUTION_TYPE = (('SECONDARY', 'Secondaire'),
+                        ('UNIVERSITY', 'University'))
 
-
-class Properties(models.Model):
-    key = models.CharField(max_length=255, choices=PROPERTIES_TYPE)
-    value = models.CharField(max_length=255,blank=True, null=True)
+    name = models.CharField(max_length=100)
+    institution_type = models.CharField(max_length=20, choices=INSTITUTION_TYPE)
+    postal_code = models.CharField(max_length=20)
+    city = models.CharField(max_length=255)
+    adhoc = models.BooleanField(default=False)
 
     def __str__(self):
-        return u"%s" % self.key
+        return self.name
+
+def find_by_id(an_education_institution_id):
+    return EducationInstitution.objects.get(pk=an_education_institution_id)
 
 
-def find_by_key(key):
-    return Properties.objects.filter(key=key).first()
+def find_education_institution_by_adhoc(adhoc_type):
+    return EducationInstitution.objects.filter(adhoc=adhoc_type).order_by('name')
+
+
+def find_by_name_city_postal_code(a_name, a_city, a_postal_code):
+    return EducationInstitution.objects.filter(adhoc=False, name__iexact=a_name,
+                                               city__iexact=a_city,
+                                               postal_code__iexact=a_postal_code).first()

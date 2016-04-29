@@ -26,25 +26,29 @@
 from django.db import models
 from django.contrib import admin
 
-PROPERTIES_TYPE = (
-    ('INSTITUTION', 'Institution'),
-    ('LOGO', 'Logo'),
-    ('PROFESSIONAL_EXAM_LINK','Professional exam link'),
-    ('LOCAL_LANGUAGE_EXAM_LINK','Local language exam link'))
+
+class CountryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'iso_code', 'nationality', 'european_union', 'dialing_code', 'cref_code')
+    fieldsets = ((None, {'fields': ('iso_code', 'name', 'nationality', 'european_union', 'dialing_code', 'cref_code')}),)
+    ordering = ('name',)
+    search_fields = ['name']
 
 
-class PropertiesAdmin(admin.ModelAdmin):
-    list_display = ('key', 'value')
-    fieldsets = ((None, {'fields': ('key', 'value')}),)
-
-
-class Properties(models.Model):
-    key = models.CharField(max_length=255, choices=PROPERTIES_TYPE)
-    value = models.CharField(max_length=255,blank=True, null=True)
+class Country(models.Model):
+    iso_code = models.CharField(max_length=2, unique=True)
+    name = models.CharField(max_length=80, unique=True)
+    nationality = models.CharField(max_length=80, blank=True, null=True)
+    european_union = models.BooleanField(default=False)
+    dialing_code = models.CharField(max_length=3, blank=True, null=True)
+    cref_code = models.CharField(max_length=3, blank=True, null=True)
 
     def __str__(self):
-        return u"%s" % self.key
+        return self.name
 
 
-def find_by_key(key):
-    return Properties.objects.filter(key=key).first()
+def find_all():
+    return Country.objects.order_by('name')
+
+
+def find_by_id(country_id):
+    return Country.objects.get(pk=country_id)

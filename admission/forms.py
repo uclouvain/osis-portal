@@ -173,3 +173,7 @@ class PersonForm(forms.Form):
                 self.errors['ucl_last_year'] = "Champ numérique obligatoire"
 
         return cleaned_data
+
+
+class FileForm(forms.Form):
+    file = forms.FileField()

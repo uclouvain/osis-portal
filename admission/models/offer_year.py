@@ -68,3 +68,9 @@ def search(level=None, domain=None):
 
 def find_by_domain_grade(domain, grade):
     return OfferYear.objects.filter(domain=domain, grade_type=grade).order_by("acronym")
+
+
+def is_engineering(a_offer_year):
+    if a_offer_year.acronym == 'FSA1BA' or a_offer_year.acronym == 'ARCH1BA':
+        return True
+    return False

@@ -36,7 +36,8 @@ from django.contrib.auth.views import login
 from admission import models as mdl
 from admission.forms import NewAccountForm, AccountForm, NewPasswordForm
 from admission.utils import send_mail
-from reference.models import Country
+from reference import models as mdlref
+
 
 def home_error(request, message, form):
     form_new = NewAccountForm()
@@ -97,8 +98,8 @@ def new_user(request):
         user = User.objects.get(pk=user.id)
         person = mdl.person.Person()
         person.user = user
-        person.birth_country=Country.find_by_id(1)
-        person.nationality=Country.find_by_id(1)
+        person.birth_country=mdlref.Country.find_by_id(1)
+        person.nationality=mdlref.Country.find_by_id(1)
         person.save()
         # send an activation email
         send_mail.send_mail_activation(request, str(person.activation_code), form_new['email_new'].value())
