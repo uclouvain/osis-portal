@@ -30,7 +30,9 @@ from reference.models import Country
 from datetime import datetime
 from admission.forms import PersonForm
 from django.shortcuts import render
+#from django.views.decorators.csrf import csrf_protect #AA
 from django.http import HttpResponseRedirect
+
 
 @login_required
 def home(request):
@@ -42,18 +44,18 @@ def home(request):
     else:
         return profile(request)
 
-
 def profile(request):
+
     if request.method == 'POST':
         person_form = PersonForm(data=request.POST)
 
         person = mdl.person.find_by_user(request.user)
-        person_legal_address = mdl.person_address.find_by_person_type(person,'LEGAL')
+        person_legal_address = mdl.person_address.find_by_person_type(person, 'LEGAL')
 
         if person_legal_address is None:
             person_legal_address = mdl.person_address.PersonAddress()
             person_legal_address.person = person
-            person_legal_address.type='LEGAL'
+            person_legal_address.type = 'LEGAL'
 
         if request.POST['last_name']:
             person.user.last_name = request.POST['last_name']
@@ -66,7 +68,8 @@ def profile(request):
                 person.birth_date = datetime.strptime(request.POST['birth_date'], '%d/%m/%Y')
             except:
                 person.birth_date = None
-                person_form.errors['birth_date'] = "La date encodée('%s') semble incorrecte " % request.POST['birth_date']
+                person_form.errors['birth_date'] = "La date encodée('%s') semble incorrecte " % request.POST[
+                    'birth_date']
 
         if request.POST['birth_place']:
             person.birth_place = request.POST['birth_place']
@@ -110,11 +113,11 @@ def profile(request):
             person_legal_address.country = country
 
         if request.POST['same_contact_legal_addr'] == "false":
-            person_contact_address = mdl.person_address.find_by_person_type(person,'CONTACT')
+            person_contact_address = mdl.person_address.find_by_person_type(person, 'CONTACT')
             if person_contact_address is None:
                 person_contact_address = mdl.person_address.PersonAddress()
                 person_contact_address.person = person
-                person_contact_address.type='CONTACT'
+                person_contact_address.type = 'CONTACT'
 
             if request.POST['contact_adr_street']:
                 person_contact_address.street = request.POST['contact_adr_street']
@@ -154,11 +157,23 @@ def profile(request):
             person.ucl_last_year = None
             previous_enrollment = False
 
+        personAssimilationCriteria.objects.filter(person_id=person.id).delete()
+        for key in request.POST:
+            if key[0:22] == "assimilation_criteria_" and key[-5:] == "_true":
+                if request.POST[key]:
+                    personAssimilationCriteria.criteria_id = request.POST[key]
+                    personAssimilationCriteria.person_id = person.id
+                    personAssimilationCriteria_to_save = true
+
+
         if person_form.is_valid():
             if person_contact_address:
                 person_contact_address.save()
             person_legal_address.save()
             person.save()
+
+            if personAssimilationCriteria_to_save:
+                personAssimilationCriteria.save()
 
             return home(request)
 
@@ -166,11 +181,11 @@ def profile(request):
         person = mdl.person.find_by_user(request.user)
         person_form = PersonForm()
         if person:
-            person_legal_address = mdl.person_address.find_by_person_type(person,'LEGAL')
-            person_contact_address = mdl.person_address.find_by_person_type(person,'CONTACT')
+            person_legal_address = mdl.person_address.find_by_person_type(person, 'LEGAL')
+            person_contact_address = mdl.person_address.find_by_person_type(person, 'CONTACT')
             same_addresses = True
             if person_contact_address:
-                same_addresses=False
+                same_addresses = False
 
             previous_enrollment = False
             if person.register_number or person.ucl_last_year:
@@ -179,6 +194,8 @@ def profile(request):
             return HttpResponseRedirect('/admission/logout/?next=/admission')
 
     countries = Country.find_countries()
+    assimilationCriteria = mdl.assimilation_criteria.AssimilationCriteria.find_criteria()
+    personAssimilationCriteria = mdl.person_assimilation_criteria.PersonAssimilationCriteria.find_by_person(person.id)
     property = mdl.properties.find_by_key('INSTITUTION')
     if property is None:
         institution_name = "<font style='color:red'>Aucune institution de définie</font>"
@@ -187,6 +204,8 @@ def profile(request):
     return render(request, "profile.html", dict(person=person,
                                                 person_form=person_form,
                                                 countries=countries,
+                                                assimilationCriteria=assimilationCriteria,
+                                                personAssimilationCriteria=personAssimilationCriteria,
                                                 person_legal_address=person_legal_address,
                                                 person_contact_address=person_contact_address,
                                                 same_addresses=same_addresses,
