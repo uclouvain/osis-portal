@@ -88,9 +88,11 @@
                 <font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'professional_exam_result'}}</font>
             {% endif %}
             <br>
-            <label>Veuillez joindre une copie de votre certificat ou une preuve d'inscription à l'examen</label>
-            &nbsp;&nbsp;<input type="button" value="Cliquez-ici pour joindre"/>
-
+            <button type="button" class="btn btn-default" data-toggle="modal"
+                    data-target="#pnl_upload_file_modal"
+                    title="Veuillez joindre une copie de votre certificat ou une preuve d'inscription à l'examen" id="bt_upload_file_certificat">
+                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Veuillez joindre une copie de votre certificat ou une preuve d'inscription à l'examen
+            </button>
         </div>
 
     </div>

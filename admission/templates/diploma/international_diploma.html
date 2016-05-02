@@ -94,28 +94,38 @@
                  {% endif %}
 
                  <div id="pnl_equivalence"
-                      style="{%if  secondary_education.international_diploma  = 'INTERNATIONAL' %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+                      style="{%if secondary_education.international_diploma = 'INTERNATIONAL' %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
                     <br>
-                    <label>Ce diplôme a-t-il fait l'objet d'une décision d'équivalence par les services de la Communauté française de Belgique? *</label>
+                    <label>Ce diplôme a-t-il fait l'objet d'une décision d'équivalence par les services de la Communauté française de Belgique? *{{secondary_education.international_equivalence}}</label>
                     <br>
                      <div class="form-group" >
                         <label class="radio-inline">
                         <input type="radio"
-                               name="belgian_equivalence"
-                               id="rdb_belgian_equivalence_yes"
-                               value="YES">&nbsp;&nbsp;Oui</label>
+                               name="international_equivalence"
+                               id="rdb_international_equivalence_yes"
+                               value="YES"
+                               class="radio-inline"
+                               {%if secondary_education.international_equivalence = 'YES'%}checked{%endif%}>&nbsp;&nbsp;Oui</label>
 
                         <label class="radio-inline">
                         <input type="radio"
-                               name="belgian_equivalence"
-                               id="rdb_belgian_equivalence_no"
-                               value="NO" class="radio-inline">&nbsp;&nbsp;Non</label>
+                               name="international_equivalence"
+                               id="rdb_international_equivalence_no"
+                               value="NO"
+                               class="radio-inline"
+                               {%if secondary_education.international_equivalence = 'NO'%}checked{%endif%}>&nbsp;&nbsp;Non</label>
 
                         <label class="radio-inline">
                         <input type="radio"
-                               name="belgian_equivalence"
-                               id="rdb_belgian_equivalence_in_progress"
-                               value="IN_PROGRESS" class="radio-inline">&nbsp;&nbsp;En cours de demande</label>
+                               name="international_equivalence"
+                               id="rdb_international_equivalence_in_progress"
+                               value="DEMANDED"
+                               class="radio-inline"
+                               {%if secondary_education.international_equivalence = 'DEMANDED'%}checked{%endif%}>&nbsp;&nbsp;En cours de demande</label>
+                         {%if validation_messages and validation_messages|get_item:'international_equivalence'%}
+                             <br><br><font class="error" style="margin-left:5px;">
+                             {{ validation_messages|get_item:'international_equivalence'}}</font>
+                         {% endif %}
                      </div>
                      <br><br>
                      Si vous la possédez, vous devrez fournir une photocopie recto-verso de la décision d'équivalence

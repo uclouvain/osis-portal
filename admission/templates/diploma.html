@@ -142,6 +142,7 @@
             }
         }
     }
+
     function reset_input(id){
         document.getElementById(id).value="";
 
@@ -164,46 +165,58 @@
         }
     }
 
-    function refresh_slt_schools(){
-        var city = document.getElementById("slt_cities");
-        var city_sel = city.options[city.selectedIndex].text;
-        alert(city_sel);
-        var postal_code = document.getElementById("slt_postal_codes");
-        var postal_code_sel = postal_code.options[postal_code.selectedIndex].text;
+    function refresh_slt_schools(select_list){
+        var sel = select_list.options[select_list.selectedIndex].text;
         var elt = document.getElementById('slt_schools');
         for(var i = 0 ,l = elt.options.length; i< l;i++ ){
-            if((elt.options[i].title).indexOf(city_sel) > -1 || (elt.options[i].title).indexOf(postal_code_sel) > -1){
-                elt.options[i].style="visibility:visible;display:block";
-
+            if (sel != "-"){
+                if((elt.options[i].title).indexOf(sel) > -1){
+                    elt.options[i].style="visibility:visible;display:block";
+                }else{
+                    elt.options[i].style="visibility:hidden;display:none";
+                }
             }else{
-                elt.options[i].style="visibility:hidden;display:none";
+                elt.options[i].style="visibility:visible;display:block";
             }
 		}
-
+        if(select_list.id=='slt_cities'){
+            document.getElementById("slt_postal_codes").value="-";
+        }else{
+            if(select_list.id=='slt_postal_codes'){
+                document.getElementById("slt_cities").value="-";
+            }
+        }
     }
 
-
-
-    </script>
 </script>
 
 <form method="post" action="{% url 'diploma'%}">
     {% csrf_token %}
     <div>
         <button type="submit" id="bt_previous_step_up" name="bt_previous_step_up" class="btn btn-default" role="button"
-                                    title="Etape précédente">
-                                    <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>Etape précédente</button>
+                title="Etape précédente"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            Etape précédente</button>
         <button type="submit" id="bt_save_up" name="bt_save_up" class="btn btn-default" role="button"
-                                    title="Sauvegarder">
-                                    <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>Sauvegarder</button>
+                title="Sauvegarder"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+            Sauvegarder</button>
         <button type="submit" id="bt_next_step_up" name="bt_next_step_up" class="btn btn-default" role="button"
-                                    title="Etape suivante">
-                                    <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>Etape suivante</button>
+                title="Etape suivante"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            Etape suivante</button>
         <br>
         <br>
         {%if validation_messages%}
-            <br><font class="error" role="alert" style="margin-left:5px;">Il y a {{ validation_messages|length}} erreur(s)</font><br><br>
-        {{ validation_messages}}
+            <br>
+            <font class="error" role="alert" style="margin-left:5px;">
+                Il y a {{ validation_messages|length}} erreur(s)
+            </font>
+            <br><br>
+        {% endif %}
+        {%if message_success%}
+            <br>
+            <font class="alert alert-success" role="alert" style="margin-left:5px;">
+                {{ message_success}}
+            </font>
+            <br><br>
         {% endif %}
     </div>
     <div class="panel panel-default"
@@ -223,84 +236,95 @@
                 <div class="col-md-12">
                     <label class="radio-inline">
                       <input type="radio"
-                             name="diploma_sec"
-                             id="rdb_diploma_sec1"
+                             name="secondary_education_diploma"
+                             id="rdb_secondary_education_diploma_true"
                              value="true"
                              {%if secondary_education.secondary_education_diploma = True %}checked{%endif%}
                              onclick="display('pnl_academic_year',true);display('pnl_admission_exam',false);"> Oui
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
-                             name="diploma_sec"
-                             id="rdb_diploma_sec2" value="false"
+                             name="secondary_education_diploma"
+                             id="secondary_education_diploma_false" value="false"
                              {%if secondary_education.secondary_education_diploma = False %}checked{%endif%}
                              onclick="display('pnl_academic_year',false);display('pnl_admission_exam',true);"> Non
                     </label>
-                    {%if validation_messages and validation_messages|get_item:'diploma_sec'%}<br><font class="error"style="margin-left:5px;">{{ validation_messages|get_item:'diploma_sec'}}</font>{% endif %}
+                    {%if validation_messages and validation_messages|get_item:'secondary_education_diploma'%}<br><font class="error"style="margin-left:5px;">{{ validation_messages|get_item:'secondary_education_diploma'}}</font>{% endif %}
                 </div>
             </div>
             <br>
-            <div id="pnl_academic_year" style="{%if secondary_education.secondary_education_diploma = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}" class="form-inline">
+            <div id="pnl_academic_year"
+                 style="{%if secondary_education.secondary_education_diploma = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}" class="form-inline">
                 <div class="form-group" >
-                        <label style="width:400px;">
-                          Veuillez indiquer l'année académique d'obtention *
-                        </label>
-                        <select class="form-control"
-                                id="slt_academic_year"
-                                name="academic_year"
-                                onchange="show_hide_parcours(this);show_hide_pnl_daes();">
-                            {% for academic_yr in academic_years %}
-                                <option {% if academic_yr.id == secondary_education.academic_year.id %}selected{%endif%} value="{{ academic_yr.id }}" title="{{academic_yr.year}}">{{ academic_yr }}</option>
-                            {% endfor %}
-                        </select>
+                    <label style="width:400px;">
+                      Veuillez indiquer l'année académique d'obtention *
+                    </label>
+                    <select class="form-control"
+                            id="slt_academic_year"
+                            name="academic_year"
+                            onchange="show_hide_parcours(this);show_hide_pnl_daes();">
+                        {% for academic_yr in academic_years %}
+                            <option {% if academic_yr.id == secondary_education.academic_year.id %}selected{%endif%} value="{{ academic_yr.id }}" title="{{academic_yr.year}}">{{ academic_yr }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <br><br>
                 <div class="form-group" >
-                        <label style="width:400px;">
-                          Vous avez effectué vos études secondaires *
-                        </label>
-                        <label class="radio-inline">
-                          <input type="radio"
-                                 name="rdb_belgian_foreign" id="rdb_belgium"
-                                 value="true" {%if secondary_education.national = True %}checked{%endif%}
-                                 onclick="display('pnl_belgian_detail',true);display('pnl_foreign_detail',false);"> En Belgique
-                        </label>
-                        <label class="radio-inline">
-                          <input type="radio"
-                                 name="rdb_belgian_foreign" id="rdb_foreign"
-                                 value="false" {%if secondary_education.national = False %}checked{%endif%}
-                                 onclick="display('pnl_belgian_detail',false);display('pnl_foreign_detail',true);"> A l'étranger
-                        </label>
-                        {%if validation_messages and validation_messages|get_item:'rdb_belgian_foreign'%}<font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'rdb_belgian_foreign'}}</font>{% endif %}
+                    <label style="width:400px;">
+                      Vous avez effectué vos études secondaires *
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio"
+                             name="rdb_belgian_foreign" id="rdb_belgium"
+                             value="true" {%if secondary_education.national = True %}checked{%endif%}
+                             onclick="display('pnl_belgian_detail',true);display('pnl_foreign_detail',false);"> En Belgique
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio"
+                             name="rdb_belgian_foreign" id="rdb_foreign"
+                             value="false" {%if secondary_education.national = False %}checked{%endif%}
+                             onclick="display('pnl_belgian_detail',false);display('pnl_foreign_detail',true);"> A l'étranger
+                    </label>
+                    {%if validation_messages and validation_messages|get_item:'rdb_belgian_foreign'%}
+                        <font class="error" style="margin-left:5px;">
+                            {{ validation_messages|get_item:'rdb_belgian_foreign'}}
+                        </font>
+                    {% endif %}
                 </div>
                 <br>
                 <br>
-                {% include "diploma/diploma_belgian.html" %}
-                {% include "diploma/diploma_foreign.html" %}
+                {% include "diploma/national_diploma.html" %}
+                {% include "diploma/international_diploma.html" %}
             </div>
         </div>
     </div>
-    {% include "diploma/diploma_admission_exam.html" %}
-    {% include "diploma/diploma_professional_experience.html" %}
-
-    {% include "diploma/diploma_french_exam.html" %}
+    {% include "diploma/admission_exam.html" %}
+    {% include "diploma/professional_exam.html" %}
+    {% include "diploma/local_language_exam.html" %}
     {%if validation_messages and validation_messages|get_item:'final'%}
         <br>
-        <span class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'final'}}</span><br><br>
+        <span class="alert alert-danger" role="alert" style="margin-left:5px;">
+            {{ validation_messages|get_item:'final'}}
+        </span>
+        <br><br>
     {% endif %}
 
     <br>
     <div>
         <button type="submit" id="bt_previous_step_down" class="btn btn-default" role="button"
-                                    title="Etape précédente">
-                                    <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>Etape précédente</button>
-        <button type="submit" id="bt_save_down" class="btn btn-default" role="button"
-                                    title="Sauvegarder">
-                                    <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>Sauvegarder</button>
+                title="Etape précédente"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            Etape précédente</button>
+        <button type="submit" id="bt_save_down" name="bt_save_down" class="btn btn-default" role="button"
+                title="Sauvegarder"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+            Sauvegarder</button>
         <button type="submit" id="bt_next_step_down" name="bt_next_step_down" class="btn btn-default" role="button"
-                                    title="Etape suivante">
-                                    <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>Etape suivante</button>
-
+                title="Etape suivante"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            Etape suivante</button>
+        {%if message_success%}
+            <br><br>
+            <font class="alert alert-success" role="alert" style="margin-left:5px;">{{ message_success}}</font>
+            <br><br>
+        {% endif %}
     </div>
 </form>
   <!-- UploadFile modal -->
@@ -352,8 +376,5 @@
 		}
 
 	}
-
-
-
     </script>
 {% endblock %}

@@ -46,11 +46,11 @@
             <br>
             <div class="form-inline">
                 <div class="form-group">
-                    <label>Par localité</label>
+                    <label>Par localité&nbsp;&nbsp;</label>
                     <select class="form-control"
                              id="slt_cities"
                              name="city"
-                             onchange="refresh_slt_schools()">
+                             onchange="refresh_slt_schools(this)">
                          <option value="-">-</option>
                         {% for c in cities %}
                             <option value="{{ c.id }}" {%if secondary_education.national_institution.city = c %}checked{%endif%}>{{ c }}</option>
@@ -58,11 +58,11 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>&nbsp;&nbsp;&nbsp;Par code postal</label>
+                    <label>&nbsp;&nbsp;&nbsp;Par code postal&nbsp;&nbsp;</label>
                     <select class="form-control"
                              id="slt_postal_codes"
                              name="postal_code"
-                             onchange="refresh_slt_schools()">
+                             onchange="refresh_slt_schools(this)">
                          <option value="-">-</option>
                         {% for p in postal_codes %}
                             <option value="{{ p }}"  {%if secondary_education.national_institution.postal_code = p %}checked{%endif%}>{{ p }}</option>
@@ -70,13 +70,17 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>&nbsp;&nbsp;&nbsp;Par établissement</label>
+                    <label>&nbsp;&nbsp;&nbsp;Par établissement&nbsp;&nbsp;</label>
                      <select class="form-control"
                              id="slt_schools"
                              name="school">
                          <option value="-">-</option>
                         {% for education_institution in education_institutions %}
-                            <option title="{{education_institution.postal_code }} - {{education_institution.city}}" value="{{ education_institution.id }}" {%if secondary_education.national_institution.id = education_institution.id %}checked{%endif%}>{{ education_institution.name }}</option>
+                            <option title="{{education_institution.postal_code }} - {{education_institution.city}}"
+                                    value="{{ education_institution.id }}"
+                                    {%if secondary_education.national_institution.id = education_institution.id %}selected{%endif%}>
+                                {{ education_institution.name }}
+                            </option>
                         {% endfor %}
                     </select>
                 </div>
@@ -102,21 +106,24 @@
                             <input class="form-control"
                                    id="txt_CESS_other_school_name"
                                    name="CESS_other_school_name"
-                                   value="{{secondary_education.national_institution.name}}">
+                                   value="{% if secondary_education.national_institution.adhoc = True %}{{secondary_education.national_institution.name}}{%endif%}"
+                                   {% if secondary_education.national_institution.adhoc = False %}disabled{%endif%}>
                         </div>
                         <div class="col-md-3">
                             <label>Localité</label>
                             <input class="form-control"
                                    id="txt_CESS_other_school_city"
                                    name="CESS_other_school_city"
-                                   value="{{secondary_education.national_institution.city}}">
+                                   value="{% if secondary_education.national_institution.adhoc = True %}{{secondary_education.national_institution.city}}{%endif%}"
+                                   {% if secondary_education.national_institution.adhoc = False %}disabled{%endif%}>
                         </div>
                         <div class="col-md-3">
                             <label>Code postal</label>
                             <input class="form-control"
                                    id="txt_CESS_other_school_postal_code"
                                    name="CESS_other_school_postal_code"
-                                   value="{{secondary_education.national_institution.postal_code}}">
+                                   value="{% if secondary_education.national_institution.adhoc = True %}{{secondary_education.national_institution.postal_code}}{%endif%}"
+                                  {% if secondary_education.national_institution.adhoc = False %}disabled{%endif%}>
                         </div>
                     </div>
                 </div>
@@ -151,7 +158,9 @@
                     </div>
                 </div>
             </div>
-            {%if validation_messages and validation_messages|get_item:'school'%}<label class="error" style="margin-left:5px;">{{ validation_messages|get_item:'school'}}</label>{% endif %}
+            {%if validation_messages and validation_messages|get_item:'school'%}
+                <label class="error" style="margin-left:5px;">{{ validation_messages|get_item:'school'}}</label>
+            {% endif %}
             <br>
         </div>
     </div>
@@ -204,7 +213,7 @@
                 </div>
                 <div >
                     <div class="col-md-9">
-                        <label>A préciser{{secondary_education.education_type}}{{secondary_education.education_type.adhoc}}</label>
+                        <label>A préciser</label>
                         <input class="form-control"
                                id="txt_other_education_type"
                                name="other_education_type"
@@ -214,11 +223,13 @@
                 </div>
             </div>
         </div>
-        {%if validation_messages and validation_messages|get_item:'pnl_teaching_type'%}<font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'pnl_teaching_type'}}</font>{% endif %}
+        {%if validation_messages and validation_messages|get_item:'pnl_teaching_type'%}
+            <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'pnl_teaching_type'}}</font>
+        {% endif %}
 
     </div>
      <div class="panel panel-default" id="pnl_daes"
-          style="{%if secondary_education.daes = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+          style="{%if secondary_education.daes_possible = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
         <div class="panel-heading">DAES</div>
         <div class="panel-body">
             Comme vous avez terminé vos études au plus tard en 1993, avez-vous obtenu un diplôme belge
@@ -282,7 +293,9 @@
                      {%if secondary_education.path_reorientation = False %}checked{%endif%}> Non
             </label>
             {%if validation_messages and validation_messages|get_item:'path_reorientation'%}
-                <br><br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'path_reorientation'}}</font><br>
+                <br><br>
+                <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'path_reorientation'}}</font>
+                <br>
             {% endif %}
         </div>
     </div>
@@ -327,6 +340,8 @@
                     data-target="#pnl_upload_file_modal"
                     title="Diplôme d'études secondaires - recto" id="bt_upload_file_sec_diploma_recto">
                     <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Diplôme d'études secondaires - recto
+            </button>
+            &nbsp;&nbsp;
             <button type="button" class="btn btn-default" data-toggle="modal"
                     data-target="#pnl_upload_file_modal"
                     title="Diplôme d'études secondaires - verso" id="bt_upload_file_sec_diploma_rverso">

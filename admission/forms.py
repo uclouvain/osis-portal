@@ -168,7 +168,6 @@ class PersonForm(forms.Form):
                 self.errors['register_number'] = "Champ obligatoire"
 
             ucl_last_year = cleaned_data.get("ucl_last_year")
-            print(ucl_last_year)
             if ucl_last_year is None or ucl_last_year <= 0:
                 self.errors['ucl_last_year'] = "Champ numérique obligatoire"
 

@@ -90,7 +90,7 @@ class SecondaryEducation(models.Model):
         return False
 
     @property
-    def daes(self):
+    def daes_possible(self):
         if self.national_community == 'FRENCH' and self.academic_year.year < 1994:
             return True
         if self.national_community == 'DUTCH' and self.academic_year.year < 1992:
@@ -99,7 +99,4 @@ class SecondaryEducation(models.Model):
 
 
 def find_by_person(a_person):
-    print('find_by_person', a_person)
-    l = SecondaryEducation.objects.filter(person=a_person)
-    print(l)
     return SecondaryEducation.objects.filter(person=a_person).first()
