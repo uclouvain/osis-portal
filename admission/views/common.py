@@ -33,12 +33,13 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.utils import translation
 
+
 @login_required
 def home(request):
     person = mdl.person.find_by_user(request.user)
 
     if person and person.gender:
-        print('language')
+        print('language', person.language)
         if person.language:
             user_language = person.language
             translation.activate(user_language)

@@ -36,7 +36,6 @@ from functools import cmp_to_key
 import locale
 
 ALERT_MANDATORY_FIELD = "Champ obligatoire"
-LANGUAGE_REGIME = ['Français', 'Néerlandais', 'Anglais', 'Allemand', 'Italien', 'Espagnol', 'Portuguais']
 
 
 def application_update(request, application_id):
@@ -113,7 +112,8 @@ def save_application_offer(request):
                         answer.value = option.value
                         answer.save()
 
-        other_language_regime = mdl_reference.language.find_languages_excepted(LANGUAGE_REGIME)
+        other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
+        recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
         exam_types = mdl_reference.admission_exam_type.find_all_by_adhoc(False)
         local_language_exam_link = mdl.properties.find_by_key('PROFESSIONAL_EXAM_LINK')
         professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
@@ -121,19 +121,20 @@ def save_application_offer(request):
         cities, postal_codes = find_cities_postalcodes(education_institutions)
         education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
         education_type_qualification = mdl_reference.education_type.find_education_type_by_adhoc('QUALIFICATION', False)
-        return render(request, "diploma.html", {"application":         application,
-                                                "academic_years":      mdl.academic_year.find_academic_years(),
-                                                "secondary_education": secondary_education,
-                                                "countries":           mdl_reference.country.find_all(),
-                                                "languages":           other_language_regime,
-                                                "exam_types":          exam_types,
-                                                    'local_language_exam_link':local_language_exam_link,
-                                                    "professional_exam_link":professional_exam_link,
-                                                "education_institutions": education_institutions,
-                                                "cities":cities,
-                                                "postal_codes":postal_codes,
-                                                "education_type_transition":education_type_transition,
-                                                "education_type_qualification":education_type_qualification})
+        return render(request, "diploma.html", {"application":                  application,
+                                                "academic_years":               mdl.academic_year.find_academic_years(),
+                                                "secondary_education":          secondary_education,
+                                                "countries":                    mdl_reference.country.find_all(),
+                                                "recognized_languages":         recognized_languages,
+                                                "languages":                    other_language_regime,
+                                                "exam_types":                   exam_types,
+                                                "local_language_exam_link":     local_language_exam_link,
+                                                "professional_exam_link":       professional_exam_link,
+                                                "education_institutions":       education_institutions,
+                                                "cities":                       cities,
+                                                "postal_codes":                 postal_codes,
+                                                "education_type_transition":    education_type_transition,
+                                                "education_type_qualification": education_type_qualification})
 
 
 def application_view(request, application_id):
@@ -161,7 +162,8 @@ def diploma_save(request):
                     save_step = True
 
     application = mdl.application.find_first_by_user(request.user) #???
-    other_language_regime = mdl_reference.language.find_languages_excepted(LANGUAGE_REGIME)
+    other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
+    recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
     exam_types = mdl_reference.admission_exam_type.find_all_by_adhoc(False)
     person = mdl.person.find_by_user(request.user)
     secondary_education = mdl.secondary_education.find_by_person(person)
@@ -199,6 +201,7 @@ def diploma_save(request):
                                                             "academic_years":               academic_years,
                                                             "secondary_education":          secondary_education,
                                                             "countries":                    countries,
+                                                            "recognized_languages":         recognized_languages,
                                                             "languages":                    other_language_regime,
                                                             "exam_types":                   exam_types,
                                                             'local_language_exam_link':     local_language_exam_link,
@@ -219,6 +222,7 @@ def diploma_save(request):
                                                     "academic_years":               academic_years,
                                                     "secondary_education":          secondary_education,
                                                     "countries":                    mdl_reference.country.find_all(),
+                                                    "recognized_languages":         recognized_languages,
                                                     "languages":                    other_language_regime,
                                                     "exam_types":                   exam_types,
                                                     'local_language_exam_link':     local_language_exam_link,
@@ -235,6 +239,7 @@ def diploma_save(request):
                                                 "secondary_education":          secondary_education,
                                                 "countries":                    mdl_reference.country.find_all(),
                                                 "languages":                    other_language_regime,
+                                                "recognized_languages":         recognized_languages,
                                                 "exam_types":                   exam_types,
                                                 'local_language_exam_link':     local_language_exam_link,
                                                 "professional_exam_link":       professional_exam_link,
@@ -446,7 +451,8 @@ def curriculum_save(request, application_id):
     professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
 
     application = mdl.application.find_by_id(application_id)
-    other_language_regime = mdl_reference.language.find_languages_excepted(LANGUAGE_REGIME)
+    other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
+    recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
 
     secondary_education = mdl.secondary_education.find_by_person(application.person)
     education_institutions = mdl_reference.education_institution.find_education_institution_by_adhoc(False)
@@ -457,6 +463,7 @@ def curriculum_save(request, application_id):
                                             "academic_years":               mdl.academic_year.find_academic_years(),
                                             "secondary_education":          secondary_education,
                                             "countries":                    mdl_reference.country.find_all(),
+                                            "recognized_languages":         recognized_languages,
                                             "languages":                    other_language_regime,
                                             "exam_types":                   exam_types,
                                             'local_language_exam_link':     local_language_exam_link,
@@ -675,7 +682,8 @@ def populate_secondary_education(request, secondary_education):
 def diploma_update(request):
     application = mdl.application.find_first_by_user(request.user)
     person = mdl.person.find_by_user(request.user)
-    other_language_regime = mdl_reference.language.find_languages_excepted(LANGUAGE_REGIME)
+    other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
+    recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
     exam_types = mdl_reference.admission_exam_type.find_all_by_adhoc(False)
     secondary_education = mdl.secondary_education.find_by_person(person)
     education_institutions = mdl_reference.education_institution.find_education_institution_by_adhoc(False)
@@ -690,6 +698,7 @@ def diploma_update(request):
                                             "academic_years":               academic_years,
                                             "secondary_education":          secondary_education,
                                             "countries":                    countries,
+                                            "recognized_languages":         recognized_languages,
                                             "languages":                    other_language_regime,
                                             "exam_types":                   exam_types,
                                             'local_language_exam_link':     local_language_exam_link,
