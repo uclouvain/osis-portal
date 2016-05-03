@@ -1,4 +1,5 @@
 {% load dictionnary %}
+{% load i18n %}
 
 <div id="pnl_belgian_detail"
      style="{%if secondary_education.national = True %}
@@ -7,46 +8,44 @@
                 visibility:hidden;display:none;
             {%endif%}">
     <div class="panel panel-default">
-        <div class="panel-heading">Etablissement</div>
+        <div class="panel-heading">{% trans 'institution' %}</div>
         <div class="panel-body">
-            <label>Dans quelle Communauté avez-vous suivi(ou suivez-vous) la dernière année de vos études
-                secondaires? *</label>
+            <label>{% trans 'which_community'%}? *</label>
             <br>
             <label class="radio-inline">
                 <input type="radio"
                        name="rdb_belgian_community"
                        id="rdb_belgian_community_french"
                        {%if secondary_education.national_community = 'FRENCH' %}checked{%endif%}
-                       value="FRENCH" onclick="show_hide_pnl_daes();"> Communauté française de Belgique
+                       value="FRENCH" onclick="show_hide_pnl_daes();"> {%trans 'french_belgian_community'%}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="rdb_belgian_community"
                      id="rdb_belgian_community_dutch"
                      {%if secondary_education.national_community = 'DUTCH' %}checked{%endif%}
-                     value="DUTCH" onclick="show_hide_pnl_daes();"> Communauté néerlandophone de Belgique
+                     value="DUTCH" onclick="show_hide_pnl_daes();"> {%trans 'dutch_belgian_community'%}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="rdb_belgian_community"
                      id="rdb_belgian_community_german"
                      {%if secondary_education.national_community = 'GERMAN' %}checked{%endif%}
-                     value="GERMAN" onclick="show_hide_pnl_daes();"> Communauté germanophone
+                     value="GERMAN" onclick="show_hide_pnl_daes();"> {%trans 'german_belgian_community'%}
             </label>
             {%if validation_messages and validation_messages|get_item:'rdb_belgian_community'%}
                 <br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'rdb_belgian_community'}}</font>
             {% endif %}
             <br>
             <br>
-            <label>Quel établissement scolaire a délivré ou délivrera votre certificat d'enseignement
-                secondaire supérieur (C.E.S.S.)? *</label>
+            <label>{% trans 'institution_cess_question'%} *</label>
             <br>
-            Pour vous y aider, nous vous proposons de le rechercher soit par localité soit par code postal.
+            {% trans 'institution_cess_help'%}
             <br>
             <br>
             <div class="form-inline">
                 <div class="form-group">
-                    <label>Par localité&nbsp;&nbsp;</label>
+                    <label>{% trans 'by_city'%}&nbsp;&nbsp;</label>
                     <select class="form-control"
                              id="slt_cities"
                              name="city"
@@ -58,7 +57,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>&nbsp;&nbsp;&nbsp;Par code postal&nbsp;&nbsp;</label>
+                    <label>&nbsp;&nbsp;&nbsp;{% trans 'by_postal_code' %}&nbsp;&nbsp;</label>
                     <select class="form-control"
                              id="slt_postal_codes"
                              name="postal_code"
@@ -70,7 +69,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>&nbsp;&nbsp;&nbsp;Par établissement&nbsp;&nbsp;</label>
+                    <label>&nbsp;&nbsp;&nbsp;{% trans 'institution' %}&nbsp;&nbsp;</label>
                      <select class="form-control"
                              id="slt_schools"
                              name="school">
@@ -87,7 +86,7 @@
             </div>
             <br>
             <div>
-                Si vous ne trouvez pas votre établissement dans cette liste, mentionnez-le ci-après
+                {% trans 'institution_not_found'%}
                 <br><br>
                 <div class="row">
                     <div class="col-md-3">
@@ -97,12 +96,12 @@
                                  name="other_school"
                                  onclick="disabled_field('txt_CESS_other_school_name',this);disabled_field('txt_CESS_other_school_city',this);disabled_field('txt_CESS_other_school_postal_code',this);
                                           reset_input('txt_CESS_other_school_name');reset_input('txt_CESS_other_school_city');reset_input('txt_CESS_other_school_postal_code');"
-                                 {% if secondary_education.national_institution.adhoc = True %}checked{%endif%}> Autre établissement
+                                 {% if secondary_education.national_institution.adhoc = True %}checked{%endif%}> {% trans 'other_institution' %}
                         </label>
                     </div>
                     <div id="pnl_other_school">
                         <div class="col-md-3">
-                            <label>Nom d'établissement</label>
+                            <label>{% trans 'institution_name'%}</label>
                             <input class="form-control"
                                    id="txt_CESS_other_school_name"
                                    name="CESS_other_school_name"
@@ -110,7 +109,7 @@
                                    {% if secondary_education.national_institution.adhoc = False %}disabled{%endif%}>
                         </div>
                         <div class="col-md-3">
-                            <label>Localité</label>
+                            <label>{% trans 'city'%}</label>
                             <input class="form-control"
                                    id="txt_CESS_other_school_city"
                                    name="CESS_other_school_city"
@@ -118,7 +117,7 @@
                                    {% if secondary_education.national_institution.adhoc = False %}disabled{%endif%}>
                         </div>
                         <div class="col-md-3">
-                            <label>Code postal</label>
+                            <label>{% trans 'postal_code'%}</label>
                             <input class="form-control"
                                    id="txt_CESS_other_school_postal_code"
                                    name="CESS_other_school_postal_code"
@@ -129,15 +128,14 @@
                 </div>
                 <br>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-9">
+                    <div class="col-md-12">
                         <label class="radio-inline">
                             <input type="radio"
                                    name="school_belgian_community"
                                    id="rdb_school_belgian_community_french"
                                    {%if secondary_education.national_institution.national_community = 'FRENCH' %}checked{%endif%}
                                    value="FRENCH"
-                                   onclick="display('pnl_teaching_type',true)"> Communauté française de Belgique
+                                   onclick="display('pnl_teaching_type',true)"> {%trans 'french_belgian_community'%}
                         </label>
                         <label class="radio-inline">
                           <input type="radio"
@@ -145,7 +143,7 @@
                                  id="rdb_school_belgian_community_dutch"
                                  {%if secondary_education.national_institution.national_community = 'DUTCH' %}checked{%endif%}
                                  value="DUTCH"
-                                 onclick="display('pnl_teaching_type',false)"> Communauté néerlandophone de Belgique
+                                 onclick="display('pnl_teaching_type',false)"> {%trans 'dutch_belgian_community'%}
                         </label>
                         <label class="radio-inline">
                           <input type="radio"
@@ -153,7 +151,7 @@
                                  id="rdb_school__belgian_community"
                                  {%if secondary_education.national_institution.national_community = 'GERMAN' %}checked{%endif%}
                                  value="GERMAN"
-                                 onclick="display('pnl_teaching_type',false)"> Communauté germanophone
+                                 onclick="display('pnl_teaching_type',false)"> {%trans 'german_belgian_community'%}
                         </label>
                     </div>
                 </div>
@@ -171,9 +169,9 @@
                 {%else%}
                     visibility:hidden;display:none;
                 {%endif%}">
-        <div class="panel-heading">Quel type d'enseignement avez-vous suivi(ou suivez-vous)? *</div>
+        <div class="panel-heading">{% trans 'which_type_education' %} *</div>
         <div class="panel-body">
-            <label>Enseignement de transition</label>
+            <label>{%trans 'educational_transition'%}</label>
             <br>
             {%for edtype_transition in education_type_transition%}
                 <label class="radio-inline">
@@ -187,7 +185,7 @@
             {%endfor%}
             <br>
             <br>
-            <label>Enseignement de qualification</label>
+            <label>{%trans 'educational_qualification'%}</label>
             <br>
             {%for edtype_qualification in education_type_qualification%}
                 <label class="radio-inline">
@@ -208,12 +206,12 @@
                              id="chb_other_education"
                              name="other_education"
                              {%if secondary_education.education_type.adhoc = True %}checked{%endif%}
-                             onclick="disabled_field('txt_other_education_type',this);reset_rdb('rdb_education_transition_type');reset_rdb('rdb_education_technic_type');"> Autre enseignement
+                             onclick="disabled_field('txt_other_education_type',this);reset_rdb('rdb_education_transition_type');reset_rdb('rdb_education_technic_type');"> {% trans 'other_education' %}
                     </label>
                 </div>
                 <div >
                     <div class="col-md-9">
-                        <label>A préciser</label>
+                        <label>{%trans 'to_specify'%}</label>
                         <input class="form-control"
                                id="txt_other_education_type"
                                name="other_education_type"
@@ -230,24 +228,23 @@
     </div>
      <div class="panel panel-default" id="pnl_daes"
           style="{%if secondary_education.daes_possible = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
-        <div class="panel-heading">DAES</div>
-        <div class="panel-body">
-            Comme vous avez terminé vos études au plus tard en 1993, avez-vous obtenu un diplôme belge
-            d'aptitude à accéder à 'enseignement supérieur (DAES)?
+        <div class="panel-heading">{% trans 'daes' %}</div>
+        <div class="panel-body">{% trans 'daes_question'%}
+
             <br>
             <label class="radio-inline">
               <input type="radio"
                      name="daes"
                      id="rdb_daes_true" value="true"
                      {%if secondary_education.daes = True %}checked{%endif%}
-                     > Oui
+                     > {% trans 'yes' %}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="daes"
                      id="rdb_daes_false" value="false"
                      {%if secondary_education.daes = False %}checked{%endif%}
-                     > Non
+                     > {% trans 'no' %}
             </label>
             {%if validation_messages and validation_messages|get_item:'daes'%}
                 <br> <br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'daes'}}</font> <br>
@@ -256,41 +253,41 @@
     </div>
     <div class="panel panel-default" id="pnl_parcours"
          style="{%if secondary_education.path = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
-        <div class="panel-heading">Parcours</div>
+        <div class="panel-heading">{% trans 'path' %}</div>
         <div class="panel-body">
-            En cours d'études, avez-vous redoublé? *
+            {% trans 'path_repetition'%} *
             <br>
             <label class="radio-inline">
               <input type="radio"
                      name="path_repetition"
                      id="rdb_repeated_grade_true" value="true"
-                     {%if secondary_education.path_repetition = True %}checked{%endif%}> Oui
+                     {%if secondary_education.path_repetition = True %}checked{%endif%}> {% trans 'yes' %}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="path_repetition"
                      id="rdb_repeated_grade_false"
                      value="false"
-                     {%if secondary_education.path_repetition = False %}checked{%endif%}> Non
+                     {%if secondary_education.path_repetition = False %}checked{%endif%}> {% trans 'no' %}
             </label>
             {%if validation_messages and validation_messages|get_item:'path_repetition'%}
                 <br><br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'path_repetition'}}</font><br>
             {% endif %}
             <br><br>
-            En cours d'études, avez-vous changé d'orientation? *
+            {% trans 'question_path_reorientation'%} *
             <br>
             <label class="radio-inline">
               <input type="radio"
                      name="path_reorientation"
                      id="rdb_re_orientation_true" value="true"
-                     {%if secondary_education.path_reorientation = True %}checked{%endif%}> Oui
+                     {%if secondary_education.path_reorientation = True %}checked{%endif%}> {% trans 'yes' %}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="path_reorientation"
                      id="rdb_re_orientation_false"
                      value="false"
-                     {%if secondary_education.path_reorientation = False %}checked{%endif%}> Non
+                     {%if secondary_education.path_reorientation = False %}checked{%endif%}> {% trans 'no' %}
             </label>
             {%if validation_messages and validation_messages|get_item:'path_reorientation'%}
                 <br><br>
@@ -300,30 +297,30 @@
         </div>
     </div>
     <div class="panel panel-default">
-        <div class="panel-heading">Résultat</div>
+        <div class="panel-heading">{% trans 'result'%}</div>
         <div class="panel-body">
-            <label>Quel résultat avez-vous obtenu? *</label>
+            <label>{% trans 'which_result'%} *</label>
             <br>
             <label class="radio-inline">
               <input type="radio"
                      name="result"
                      id="rdb_result_less_65"
                      value="LOW"
-                     {%if secondary_education.result = 'LOW' %}checked{%endif%}> Moins de 65%
+                     {%if secondary_education.result = 'LOW' %}checked{%endif%}> {% trans 'low_result'%}
             </label>
             <label class="radio-inline">
                <input type="radio"
                       name="result"
                       id="rdb_result_between_65_75"
                       value="MIDDLE"
-                      {%if secondary_education.result = 'MIDDLE' %}checked{%endif%}> Entre 65 et 75%
+                      {%if secondary_education.result = 'MIDDLE' %}checked{%endif%}> {% trans 'middle_result'%}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="result"
                      id="rdb_result_more_75"
                      value="HIGH"
-                     {%if secondary_education.result = 'HIGH' %}checked{%endif%}> Plus de 75%
+                     {%if secondary_education.result = 'HIGH' %}checked{%endif%}> {% trans 'high_result'%}
             </label>
             {%if validation_messages and validation_messages|get_item:'result'%}
                 <br><br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'result'}}</font><br>
@@ -331,27 +328,26 @@
         </div>
     </div>
      <div class="panel panel-default">
-        <div class="panel-heading">Veuillez joindre la copie de *</div>
+        <div class="panel-heading">{% trans 'copy_add' %}*</div>
         <div class="panel-body">
-            Vous devez fournir une copie recto-verso. Si vous avez le recto-verso dans le même fichier,
-            veuillez joindre les 2
+            {% trans 'recto_verso_copy'%}
             <br>
             <button type="button" class="btn btn-default" data-toggle="modal"
                     data-target="#pnl_upload_file_modal"
-                    title="Diplôme d'études secondaires - recto" id="bt_upload_file_sec_diploma_recto">
-                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Diplôme d'études secondaires - recto
+                    title="{% trans 'high_school_diploma'%} - {% trans 'recto'%}" id="bt_upload_file_sec_diploma_recto">
+                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'high_school_diploma'%} - {% trans 'recto'%}
             </button>
             &nbsp;&nbsp;
             <button type="button" class="btn btn-default" data-toggle="modal"
                     data-target="#pnl_upload_file_modal"
-                    title="Diplôme d'études secondaires - verso" id="bt_upload_file_sec_diploma_rverso">
-                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Diplôme d'études secondaires - verso
+                    title="{% trans 'high_school_diploma'%} - {% trans 'verso'%}" id="bt_upload_file_sec_diploma_verso">
+                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'high_school_diploma'%} - {% trans 'verso'%}
             </button>
             {% if object_application.application_type == True %}
                 <br>
                 <input type="button"
-                       value="Relevé de notes"
-                       title="Relevé de notes">
+                       value="Relevé de notes{% trans 'transcript'%}"
+                       title="{% trans 'transcript'%}">
             {%endif%}
         </div>
     </div>

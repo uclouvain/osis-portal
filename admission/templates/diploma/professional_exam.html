@@ -1,11 +1,12 @@
 {% load dictionnary %}
+{% load i18n %}
 
  <div class="panel panel-default" id="pnl_professinal_experience" style="">
-        <div class="panel-heading">Expériences professionnelles</div>
+        <div class="panel-heading">{% trans 'professional_experiences'%}</div>
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-12">
-                    <label>Avez-vous été inscrit(e) ou allez-vous être inscrit(e) à un examen de la valorisation des acquis et expériences professionnelles (VAE)?</label>
+                    <label>{%trans 'question_professional_experience'%}</label>
                     <br>
                     <label class="radio-inline">
                       <input type="radio"
@@ -13,7 +14,7 @@
                              id="rdb_professional_experience_true"
                              value="true"
                              onclick="display('pnl_professional_experience_detail',true);"
-                             {%if secondary_education.professional_exam = True %}checked{%endif%}> Oui
+                             {%if secondary_education.professional_exam = True %}checked{%endif%}> {% trans 'yes' %}
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
@@ -21,7 +22,7 @@
                              id="rdb_professional_experience_false"
                              value="false"
                              onclick="display('pnl_professional_experience_detail',false);"
-                             {%if secondary_education.professional_exam = False %}checked{%endif%}> Non
+                             {%if secondary_education.professional_exam = False %}checked{%endif%}> {% trans 'no' %}
                     </label>
                     {%if validation_messages and validation_messages|get_item:'professional_experience'%}
                         <br>
@@ -31,13 +32,13 @@
             </div>
             <br>
             {% if local_language_exam_link %}
-                Information sur VAE : <a href="https://www.uclouvain.be/vae.html">{{local_language_exam_link.value}}</a>
+                {% trans 'vae_information' %} : <a href="https://www.uclouvain.be/vae.html">{{local_language_exam_link.value}}</a>
             {%endif%}
         <div id="pnl_professional_experience_detail"
              style="{% if secondary_education.professional_exam = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
             <div class="form-inline">
                 <br>
-                <label>A quelle session (date)? *</label>
+                <label>{% trans 'question_date_session'%} *</label>
                 <input class="form-control"
                        id="txt_professional_exam_date"
                        name="professional_exam_date"
@@ -48,7 +49,7 @@
                 {% endif %}
                 <br>
                 <br>
-                <label>Auprès de quel établissement (nom)? *</label>
+                <label>{% trans 'question_institution_name_nice' %} *</label>
                 <input class="form-control"
                        id="txt_professional_exam_institution"
                        name="professional_exam_institution"
@@ -61,27 +62,27 @@
             </div>
             <br>
             <br>
-            <label>Quel résultat avez-vous obtenu? *</label>
+            <label>{% trans 'which_result' %} *</label>
             <br>
             <label class="radio-inline">
               <input type="radio"
                      name="professional_exam_result"
                      id="rdb_professional_exam_result_result_low"
                      value="LOW"
-                     {%if secondary_education.professional_exam_result = 'LOW' %}checked{%endif%}> Moins de 65%
+                     {%if secondary_education.professional_exam_result = 'LOW' %}checked{%endif%}> {% trans 'low_result' %}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="professional_exam_result"
                      id="rdb_professional_exam_result_middle"
                      value="MIDDLE"
-                     {%if secondary_education.professional_exam_result = 'MIDDLE'%}checked{%endif%}> Entre 65 et 75%
+                     {%if secondary_education.professional_exam_result = 'MIDDLE'%}checked{%endif%}> {% trans 'middle_result' %}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="professional_exam_result"
                      id="rdb_professional_exam_result_high" value="HIGH"
-                     {%if secondary_education.professional_exam_result = 'HIGH' %}checked{%endif%}> Plus de 75%
+                     {%if secondary_education.professional_exam_result = 'HIGH' %}checked{%endif%}> {% trans 'high_result' %}
             </label>
             <br>
             {%if validation_messages and validation_messages|get_item:'professional_exam_result'%}
@@ -90,8 +91,8 @@
             <br>
             <button type="button" class="btn btn-default" data-toggle="modal"
                     data-target="#pnl_upload_file_modal"
-                    title="Veuillez joindre une copie de votre certificat ou une preuve d'inscription à l'examen" id="bt_upload_file_certificat">
-                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Veuillez joindre une copie de votre certificat ou une preuve d'inscription à l'examen
+                    title="{% trans 'add_professional_exam_file' %}" id="bt_upload_file_certificat">
+                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'add_professional_exam_file' %}
             </button>
         </div>
 

@@ -49,9 +49,9 @@ class SecondaryEducation(models.Model):
                                  ('EUROPEAN', 'Baccalauréat européen (Schola Europea)'),
                                  ('INTERNATIONAL', 'Baccalauréat international(IBO)'))
 
-    EQUIVALENCE_TYPE =(('YES', 'Oui'),
-                       ('NO', 'Non)'),
-                       ('DEMANDED', 'En cours de demande'))
+    EQUIVALENCE_TYPE =(('YES', _('Yes')),
+                       ('NO', _('No')),
+                       ('DEMANDED', _('Demanded')))
 
     person = models.OneToOneField('Person')
     secondary_education_diploma = models.BooleanField(default=False)

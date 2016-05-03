@@ -1,0 +1,412 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-05-03 08:56+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "admission"
+msgstr "Admission"
+
+msgid "inscription"
+msgstr "Enrollment"
+
+msgid "bachelor"
+msgstr "Bachelier"
+
+msgid "master"
+msgstr "Master"
+
+msgid "ph_d"
+msgstr "Doctorat"
+
+msgid "teacher_training_certificate"
+msgstr "Agrégation"
+
+msgid "certificate"
+msgstr "Certificat"
+
+msgid "plain"
+msgstr "Texte"
+
+msgid "plain_and_html"
+msgstr "Texte et HTML"
+
+msgid "female"
+msgstr "Féminin"
+
+msgid "male"
+msgstr "Masculin"
+
+msgid "married"
+msgstr "Marié"
+
+msgid "single"
+msgstr "Célibataire"
+
+msgid "widowed"
+msgstr "Veuf(ve)"
+
+msgid "divorced"
+msgstr "Divorcé(d)"
+
+msgid "separated"
+msgstr "Séparé(s)"
+
+msgid "cohabitant"
+msgstr "Cohabitant"
+
+msgid "unknown"
+msgstr "Inconnu "
+
+msgid "legal"
+msgstr "Légal"
+
+msgid "contact"
+msgstr "Contact"
+
+msgid "label"
+msgstr "Libellé"
+
+msgid "short_input_text"
+msgstr "Boite de texte courte"
+
+msgid "long_input_text"
+msgstr "Boite de texte longue"
+
+msgid "radio_button"
+msgstr "Bouton radio"
+
+msgid "checkbox"
+msgstr "Case à cocher"
+
+msgid "dropdown_list"
+msgstr "Liste déroulante"
+
+msgid "upload_button"
+msgstr "Bouton upload"
+
+msgid "download_link"
+msgstr "Download link"
+
+msgid "http_link"
+msgstr "HTTP link"
+
+msgid "yes"
+msgstr "Oui"
+
+msgid "no"
+msgstr "Non"
+
+msgid "demanded"
+msgstr "En cours de demande"
+
+msgid "previous_step"
+msgstr "Etape précédente"
+
+msgid "save"
+msgstr "Sauvegarder"
+
+msgid "next_step"
+msgstr "Etape suivante"
+
+msgid "errors"
+msgstr "erreur(s)"
+
+msgid "secondary_education"
+msgstr "Etudes secondaires"
+
+msgid "question_get_diploma"
+msgstr ""
+"Avez-vous obtenu un diplôme de fin d'études secondaires ou allez-vous "
+"l'obtenir cette année?"
+
+msgid "label_secondary_education"
+msgstr ""
+"Le diplôme d'études secondaires est le titre nécessaire pour entamer des "
+"études supérieures (universitaires, en haute-école, ...). Ex : CESS, "
+"Baccalauréat, Diplôme de  Maturité, Etudes Gymnasiales, Etudes Collégiales, "
+"High School, ..."
+
+msgid "pnl_academic_year_which_year"
+msgstr "Veuillez indiquer l'année académique d'obtention"
+
+msgid "academic_year"
+msgstr "Année académique"
+
+msgid "pnl_academic_year_secondary_education"
+msgstr "Vous avez effectué vos études secondaires"
+
+msgid "in_belgium"
+msgstr "En Belgique"
+
+msgid "not_in_belgium"
+msgstr "A l'étranger"
+
+msgid "file"
+msgstr "Fichier"
+
+msgid "choose_file"
+msgstr "Choisir un fichier"
+
+msgid "cancel"
+msgstr "Annuler"
+
+msgid "admission_exam"
+msgstr "Examen d'admission"
+
+msgid "question_admission_exam"
+msgstr ""
+"Avez-vous été inscrit(e) ou allez-vous être inscrit(e) à un examen "
+"d'admission?"
+
+msgid "question_date_session"
+msgstr "A quelle session (date)?"
+
+msgid "question_institution_name"
+msgstr "Nom de l'établissement"
+
+msgid "question_exam_type"
+msgstr "Quel type d'examen?"
+
+msgid "question_other_exam_type"
+msgstr "Autre type d'examen?"
+
+msgid "specify_name"
+msgstr ""
+
+msgid "which_result"
+msgstr "Quel résultat avez-vous obtenu?"
+
+msgid "low_result"
+msgstr "Moins de 65%"
+
+msgid "middle_result"
+msgstr "Entre 65 et 75%"
+
+msgid "high_result"
+msgstr "Plus de 75%"
+
+msgid "add_enrollment_file"
+msgstr ""
+"Veuillez joindre une copie de votre certificat ou une preuve d'inscription à"
+
+msgid "click_to_add"
+msgstr "Cliquez-ici pour joindre"
+
+msgid "international_diploma_question"
+msgstr "Quel diplôme avez-vous obtenu (ou obtiendrez-vous)"
+
+msgid "baccalaureat_national"
+msgstr "Baccalauréat national (ou diplôme d'état, ...)"
+
+msgid "baccalaureat_european"
+msgstr "Baccalauréat européen (Schola Europaea)"
+
+msgid "baccalaureat_international"
+msgstr "Baccalauréat international(IBO)"
+
+msgid "awarding_country"
+msgstr "Pays organisateur"
+
+msgid "linguistic_regime"
+msgstr "Régime linguistique"
+
+msgid "other_linguistic_regime"
+msgstr "Si autre régime linguistique, précisez"
+
+msgid "equivalence_question"
+msgstr "Ce diplôme a-t-il fait l'objet d'une décision d'équivalence par les services de la Communauté française de Belgique?"
+
+msgid "file_equivalence_instructions"
+msgstr ""
+"Si vous la possédez, vous devrez fournir une photocopie recto-verso de la "
+"décision d'équivalence définitive délivrée par le Ministère de la Communauté "
+"française de Belgique. Si vous ne la possédez pas, une demande d'équivalence "
+"DOIT être introduite en respectant strictement les consignes indiquées par "
+"la "
+
+msgid "file_equivalence_btn"
+msgstr "Veuillez joindre la décision d'équivalence"
+
+msgid "result"
+msgstr "Résultat"
+
+msgid "file_copy_add_instruction"
+msgstr "Veuillez joindre la copie de "
+
+msgid "file_copy_help_instruction"
+msgstr ""
+"Vous devez fournir une copie recto-verso.  Si vous avez le recto-verso dans "
+"le même fichier, veuillez le joindre."
+
+msgid "original_of"
+msgstr "Original de votre "
+
+msgid "high_school_diploma"
+msgstr "Diplôme d'études secondaires"
+
+msgid "recto"
+msgstr "Recto"
+
+msgid "verso"
+msgstr "Verso"
+
+msgid "high_school_diploma_transcript"
+msgstr "Relevé de notes des études secondaires"
+
+msgid "high_school_diplome_translation"
+msgstr "Traduction par un traducteur-juré"
+
+msgid "local_language_exam"
+msgstr "Examen de maitrise de la langue française"
+
+msgid "question_local_language_exam"
+msgstr "Avez-vous été inscrit(e) ou allez-vous être inscrit(e) à cet examen?"
+
+msgid "further_information"
+msgstr "Informations complémentaires"
+
+msgid "succeed_result"
+msgstr "Quel résultat avez-vous obtenu?"
+
+msgid "failed"
+msgstr "Echec"
+
+msgid "demanded_result"
+msgstr "En cours d'inscription à la session mentionnée "
+
+msgid "add_success_proof_file"
+msgstr "Veuillez joindre l'attestation de réussite ou la preuve d'inscription"
+
+msgid "institution"
+msgstr "Etablissement"
+
+msgid "which_community"
+msgstr ""
+"Dans quelle Communauté avez-vous suivi(ou suivez-vous) la dernière année de "
+"vos études"
+
+msgid "french_belgian_community"
+msgstr "Communauté française de Belgique"
+
+msgid "dutch_belgian_community"
+msgstr "Communauté flammande de Belgique"
+
+msgid "german_belgian_community"
+msgstr "Communauté germanophone de Belgique"
+
+msgid "institution_cess_question"
+msgstr ""
+"Quel établissement scolaire a délivré ou délivrera votre certificat "
+"d'enseignement secondaire supérieur (C.E.S.S.)?"
+
+msgid "institution_cess_help"
+msgstr ""
+"Pour vous y aider, nous vous proposons de le rechercher soit par localité "
+"soit par code postal. "
+
+msgid "by_city"
+msgstr "Par localité"
+
+msgid "by_postal_code"
+msgstr "Par code postal"
+
+msgid "institution_not_found"
+msgstr ""
+"Si vous ne trouvez pas votre établissement dans cette liste, mentionnez-le "
+"ci-après"
+
+msgid "other_institution"
+msgstr "Autre etablissement"
+
+msgid "institution_name"
+msgstr "Nom de l'établissement"
+
+msgid "city"
+msgstr "Par localité"
+
+msgid "postal_code"
+msgstr "Par code postal"
+
+msgid "which_type_education"
+msgstr "Quel type d'enseignement avez-vous suivi(ou suivez-vous)?"
+
+msgid "educational_transition"
+msgstr "Enseignement de transition"
+
+msgid "educational_qualification"
+msgstr "Enseignement de qualification"
+
+msgid "other_education"
+msgstr "Etudes secondaires"
+
+msgid "to_specify"
+msgstr "A spécifier"
+
+msgid "daes"
+msgstr "DAES"
+
+msgid "daes_question"
+msgstr ""
+"Comme vous avez terminé vos études au plus tard en 1993, avez-vous obtenu un "
+"diplôme belge d'aptitude à accéder à l'enseignement supérieur (DAES)?"
+
+msgid "path"
+msgstr "Parcours"
+
+msgid "path_repetition"
+msgstr "En cours d'études avez-vous redoublé?"
+
+msgid "question_path_reorientation"
+msgstr "En cours d'études, avez-vous changé d'orientation? "
+
+msgid "copy_add"
+msgstr "Veuillez joindre la copie de "
+
+msgid "recto_verso_copy"
+msgstr "Vous devez fournir une copie recto-verso. Si vous avez le recto-verso dans le même fichier, veuillez joindre les 2"
+
+msgid "transcript"
+msgstr "Enrollment"
+
+msgid "professional_experiences"
+msgstr "Expériences professionnelles"
+
+msgid "question_professional_experience"
+msgstr "Avez-vous été inscrit(e) ou allez-vous être inscrit(e) à un examen de la valorisation des acquis et expériences professionnelles (VAE)?"
+
+msgid "vae_information"
+msgstr "Informations complémentaires"
+
+msgid "question_institution_name_nice"
+msgstr "Nom de l'établissement"
+
+msgid "add_professional_exam_file"
+msgstr "Veuillez joindre une copie de votre certificat ou une preuve d'inscription à l'examen"
+"Veuillez joindre une copie de votre certificat ou une preuve d'inscription à "
+"l'examen"
+
+msgid "your_diplomas"
+msgstr "Vos diplômes"
+
+msgid "update_secondary_education"
+msgstr "Modifier diplômes/études secondaires"
+
+msgid "french"
+msgstr "Français"
+
+msgid "english"
+msgstr "Anglais"

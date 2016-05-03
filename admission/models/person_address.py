@@ -35,8 +35,8 @@ class PersonAddressAdmin(admin.ModelAdmin):
 
 class PersonAddress(models.Model):
     ADDRESS_TYPE = (
-    ('LEGAL', _('Legal')),
-    ('CONTACT', _('Contact')))
+    ('LEGAL', _('legal')),
+    ('CONTACT', _('contact')))
 
     person = models.ForeignKey('Person')
     type = models.CharField(max_length=20, choices=ADDRESS_TYPE)

@@ -194,44 +194,43 @@
     {% csrf_token %}
     <div>
         <button type="submit" id="bt_previous_step_up" name="bt_previous_step_up" class="btn btn-default" role="button"
-                title="Etape précédente"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-            Etape précédente</button>
+                title="{%trans 'previous_step' %}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%}</button>
         <button type="submit" id="bt_save_up" name="bt_save_up" class="btn btn-default" role="button"
-                title="Sauvegarder"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-            Sauvegarder</button>
+                title="{%trans 'save'%}"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+            {%trans 'save'%}</button>
         <button type="submit" id="bt_next_step_up" name="bt_next_step_up" class="btn btn-default" role="button"
-                title="Etape suivante"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            Etape suivante</button>
+                title="{%trans 'next_step'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            {%trans 'next_step'%}</button>
         <br>
         <br>
         {%if validation_messages%}
             <br>
             <font class="error" role="alert" style="margin-left:5px;">
-                Il y a {{ validation_messages|length}} erreur(s)
+                Il y a {{ validation_messages|length}} {% trans 'errors'%}
             </font>
             <br><br>
         {% endif %}
         {%if message_success%}
             <br>
             <font class="alert alert-success" role="alert" style="margin-left:5px;">
-                {{ message_success}}
+                {{message_success}}
             </font>
             <br><br>
         {% endif %}
     </div>
     <div class="panel panel-default"
          style="{% if application.person.register_number%}visibility:hidden;display:none;{%else%}visibility:visible;display:block;{%endif%}">
-        <div class="panel-heading">Etudes secondaires</div>
+        <div class="panel-heading">{% trans 'secondary_education' %}</div>
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-12">
-                    <label>Avez-vous obtenu un diplôme de fin d'études secondaires ou allez-vous l'obtenir cette année? *</label>
+                    <label>{% trans 'question_get_diploma'%} *</label>
                     <br>
-                    <span style="font-size:smaller">Le diplôme d'études secondaires est le titre nécessaire pour entamer des
-                        études supérieures (universitaires, en haute-école, ...). Ex : CESS, Baccalauréat, Diplôme de
-                        Maturité, Etudes Gymnasiales, Etudes Collégiales, High School, ...</span>
+                    <span >{% trans 'label_secondary_education' %}</span>
                 </div>
             </div>
+            <br>
             <div class="row">
                 <div class="col-md-12">
                     <label class="radio-inline">
@@ -240,50 +239,50 @@
                              id="rdb_secondary_education_diploma_true"
                              value="true"
                              {%if secondary_education.secondary_education_diploma = True %}checked{%endif%}
-                             onclick="display('pnl_academic_year',true);display('pnl_admission_exam',false);"> Oui
+                             onclick="display('pnl_academic_year',true);display('pnl_admission_exam',false);"> {% trans 'yes'%}
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
                              name="secondary_education_diploma"
                              id="secondary_education_diploma_false" value="false"
                              {%if secondary_education.secondary_education_diploma = False %}checked{%endif%}
-                             onclick="display('pnl_academic_year',false);display('pnl_admission_exam',true);"> Non
+                             onclick="display('pnl_academic_year',false);display('pnl_admission_exam',true);"> {% trans 'no'%}
                     </label>
-                    {%if validation_messages and validation_messages|get_item:'secondary_education_diploma'%}<br><font class="error"style="margin-left:5px;">{{ validation_messages|get_item:'secondary_education_diploma'}}</font>{% endif %}
+                    {%if validation_messages and validation_messages|get_item:'secondary_education_diploma'%}
+                        <br><font class="error"style="margin-left:5px;">{{ validation_messages|get_item:'secondary_education_diploma'}}</font>
+                    {% endif %}
                 </div>
             </div>
             <br>
             <div id="pnl_academic_year"
                  style="{%if secondary_education.secondary_education_diploma = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}" class="form-inline">
                 <div class="form-group" >
-                    <label style="width:400px;">
-                      Veuillez indiquer l'année académique d'obtention *
-                    </label>
+                    <label>{% trans 'pnl_academic_year_which_year'%} *</label>
                     <select class="form-control"
                             id="slt_academic_year"
                             name="academic_year"
                             onchange="show_hide_parcours(this);show_hide_pnl_daes();">
                         {% for academic_yr in academic_years %}
-                            <option {% if academic_yr.id == secondary_education.academic_year.id %}selected{%endif%} value="{{ academic_yr.id }}" title="{{academic_yr.year}}">{{ academic_yr }}</option>
+                            <option {% if academic_yr.id == secondary_education.academic_year.id %}selected{%endif%} value="{{ academic_yr.id }}" title="{% trans 'academic_year'%}{{academic_yr.year}}">{{ academic_yr }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <br><br>
                 <div class="form-group" >
-                    <label style="width:400px;">
-                      Vous avez effectué vos études secondaires *
+                    <label>
+                      {% trans 'pnl_academic_year_secondary_education'%} *
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
                              name="rdb_belgian_foreign" id="rdb_belgium"
                              value="true" {%if secondary_education.national = True %}checked{%endif%}
-                             onclick="display('pnl_belgian_detail',true);display('pnl_foreign_detail',false);"> En Belgique
+                             onclick="display('pnl_belgian_detail',true);display('pnl_foreign_detail',false);"> {% trans 'in_belgium'%}
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
                              name="rdb_belgian_foreign" id="rdb_foreign"
                              value="false" {%if secondary_education.national = False %}checked{%endif%}
-                             onclick="display('pnl_belgian_detail',false);display('pnl_foreign_detail',true);"> A l'étranger
+                             onclick="display('pnl_belgian_detail',false);display('pnl_foreign_detail',true);"> {% trans 'not_in_belgium'%}
                     </label>
                     {%if validation_messages and validation_messages|get_item:'rdb_belgian_foreign'%}
                         <font class="error" style="margin-left:5px;">
@@ -291,7 +290,6 @@
                         </font>
                     {% endif %}
                 </div>
-                <br>
                 <br>
                 {% include "diploma/national_diploma.html" %}
                 {% include "diploma/international_diploma.html" %}
@@ -308,18 +306,17 @@
         </span>
         <br><br>
     {% endif %}
-
     <br>
     <div>
         <button type="submit" id="bt_previous_step_down" class="btn btn-default" role="button"
-                title="Etape précédente"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-            Etape précédente</button>
+                title="{%trans 'previous_step'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%}</button>
         <button type="submit" id="bt_save_down" name="bt_save_down" class="btn btn-default" role="button"
-                title="Sauvegarder"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-            Sauvegarder</button>
+                title="{%trans 'save'%}"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+            {%trans 'save'%}</button>
         <button type="submit" id="bt_next_step_down" name="bt_next_step_down" class="btn btn-default" role="button"
-                title="Etape suivante"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            Etape suivante</button>
+                title="{%trans 'next_step'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            {%trans 'next_step'%}</button>
         {%if message_success%}
             <br><br>
             <font class="alert alert-success" role="alert" style="margin-left:5px;">{{ message_success}}</font>
@@ -336,15 +333,15 @@
                   {% csrf_token %}
                   <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="bt_close_upload_file_modal"><span aria-hidden="true">&times;</span></button>
-                      <h4 class="modal-title" id="uploadFileLabel">Fichier</h4>
+                      <h4 class="modal-title" id="uploadFileLabel">{%trans 'file'%}</h4>
                   </div>
                   <div class="modal-body">
-                      <label for="fle_input_file" class="btn btn-default" >Choisir un fichier</label>
+                      <label for="fle_input_file" class="btn btn-default" >{%trans 'choose_file'%}</label>
                       <input type="file" id="fle_input_file" name="file" style="display:none" />
                       <div id="pnl_selectedFiles"></div>
                   </div>
                   <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal" id="bt_cancel_upload_score_modal">Annuler</button>
+                      <button type="button" class="btn btn-default" data-dismiss="modal" id="bt_cancel_upload_score_modal">{%trans 'cancel'%}</button>
                       <input type="submit" class="btn btn-primary" value="Ok" onclick="document.getElementById('files').style.visibility='visible'" id="bt_submit_upload_file_modal"/>
                   </div>
               </form>

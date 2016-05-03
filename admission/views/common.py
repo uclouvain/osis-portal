@@ -26,17 +26,23 @@
 from django.contrib.auth.decorators import login_required
 from admission import models as mdl
 
-from reference import models as mdlref
+from reference import models as mdl_reference
 from datetime import datetime
 from admission.forms import PersonForm
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.utils import translation
 
 @login_required
 def home(request):
     person = mdl.person.find_by_user(request.user)
 
     if person and person.gender:
+        print('language')
+        if person.language:
+            user_language = person.language
+            translation.activate(user_language)
+            request.session[translation.LANGUAGE_SESSION_KEY] = user_language
         applications = mdl.application.find_by_user(request.user)
         return render(request, "home.html", {'applications': applications})
     else:
@@ -72,7 +78,7 @@ def profile(request):
             person.birth_place = request.POST['birth_place']
         if request.POST['birth_country']:
             birth_country_id = request.POST['birth_country']
-            birth_country = mdlref.country.find_by_id(birth_country_id)
+            birth_country = mdl_reference.country.find_by_id(birth_country_id)
             person.birth_country = birth_country
         if request.POST.get('gender'):
             person.gender = request.POST['gender']
@@ -84,7 +90,7 @@ def profile(request):
             person.spouse_name = request.POST['spouse_name']
         if request.POST['nationality']:
             country_id = request.POST['nationality']
-            country = mdlref.country.find_by_id(country_id)
+            country = mdl_reference.country.find_by_id(country_id)
             person.nationality = country
 
         if request.POST['national_id']:
@@ -106,7 +112,7 @@ def profile(request):
             person_legal_address.city = request.POST['legal_adr_city']
         if request.POST['legal_adr_country']:
             country_id = request.POST['legal_adr_country']
-            country = mdlref.country.find_by_id(country_id)
+            country = mdl_reference.country.find_by_id(country_id)
             person_legal_address.country = country
 
         if request.POST['same_contact_legal_addr'] == "false":
@@ -128,7 +134,7 @@ def profile(request):
                 person_contact_address.city = request.POST['contact_adr_city']
             if request.POST['contact_adr_country']:
                 country_id = request.POST['contact_adr_country']
-                country = mdlref.country.find_by_id(country_id)
+                country = mdl_reference.country.find_by_id(country_id)
                 person_contact_address.country = country
             same_addresses = False
         else:
@@ -178,7 +184,7 @@ def profile(request):
         else:
             return HttpResponseRedirect('/admission/logout/?next=/admission')
 
-    countries = mdlref.country.find_all()
+    countries = mdl_reference.country.find_all()
     property = mdl.properties.find_by_key('INSTITUTION')
     if property is None:
         institution_name = "<font style='color:red'>Aucune institution de définie</font>"

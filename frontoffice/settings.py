@@ -25,6 +25,7 @@
 ##############################################################################
 import os
 from django.core.urlresolvers import reverse_lazy
+from django.utils.translation import ugettext_lazy as _
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -67,6 +68,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware'
 ]
 
 REST_FRAMEWORK = {
@@ -130,8 +132,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
-
 LANGUAGE_CODE = 'fr-be'
+
+LANGUAGES = [
+    ('fr-be', _('French')),
+    ('en', _('English')),
+]
 
 TIME_ZONE = 'UTC'
 

@@ -36,8 +36,8 @@ class ApplicationAdmin(admin.ModelAdmin):
 
 
 class Application(models.Model):
-    APPLICATION_TYPE = (('ADMISSION', _('Admission')),
-                        ('INSCRIPTION', _('Inscription')))
+    APPLICATION_TYPE = (('ADMISSION', _('admission')),
+                        ('INSCRIPTION', _('inscription')))
 
     person = models.ForeignKey('Person')
     offer_year = models.ForeignKey('OfferYear')
