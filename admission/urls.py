@@ -61,6 +61,5 @@ urlpatterns = [
     url(r'^admission/application/diploma/save/$', application.diploma_save, name='diploma'),
     url(r'^admission/application/curriculum/read/([0-9]+)/$', application.curriculum_read, name='curriculum_read'),
     url(r'^admission/application/diploma/save2/([0-9]+)/$', application.curriculum_save, name='curriculum'),
-    url(r'^admission/application/diploma/upload/([0-9]+)/$', application.upload_file, name='upload_file'),
     url(r'^admission/application/diploma/update/$', application.diploma_update, name='diploma_update'),
 ]

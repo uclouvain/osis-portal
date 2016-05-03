@@ -410,3 +410,34 @@ msgstr "Français"
 
 msgid "english"
 msgstr "Anglais"
+
+msgid "mandatory_field"
+msgstr "Mandatory field"
+
+msgid "msg_info_saved"
+msgstr "Les données ont été enregistrées"
+
+msgid "msg_error_other_education_type"
+msgstr "Il faut préciser un type d'enseignement autre"
+
+msgid "msg_error_education_type"
+msgstr "Il faut préciser un type d'enseignement"
+
+msgid "msg_error_international_diploma"
+msgstr "Il faut préciser le diplôme obtenu"
+
+msgid "msg_other_language_diploma"
+msgstr "Si autre régime linguistique, précisez"
+
+msgid "msg_language_diploma"
+msgstr "Il faut préciser un régime linguistique"
+
+msgid "msg_school_name"
+msgstr "Veuillez indiquer auprès de quel établissement."
+
+msgid "msg_error_school_belgian_community"
+msgstr "Il faut préciser un type de communauté pour l'établissement"
+
+msgid "msg_error_next_step_impossible"
+msgstr ""
+ "Impossible de passer à l'étape suivante. Il faut avoir répondu 'Oui' à au moins unes des questions suivantes : "

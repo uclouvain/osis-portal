@@ -394,7 +394,7 @@ msgid "question_institution_name_nice"
 msgstr "At which institute (name)?"
 
 msgid "add_professional_exam_file"
-msgstr "Please add a copy of your certificate or a proof of your exam enrollment"
+msgstr "Please add a copy of your certificate or a proof of your exam enrollment."
 
 msgid "your_diplomas"
 msgstr "Your diplomas"
@@ -407,3 +407,35 @@ msgstr "French"
 
 msgid "english"
 msgstr "English"
+
+msgid "mandatory_field"
+msgstr "Mandatory field"
+
+msgid "msg_info_saved"
+msgstr "Data saved"
+
+msgid "msg_error_other_education_type"
+msgstr "Please specify the other education type."
+
+msgid "msg_error_education_type"
+msgstr "Please specify the education type."
+
+msgid "msg_error_international_diploma"
+msgstr "Please specify the diploma you have been awarded."
+
+msgid "msg_other_language_diploma"
+msgstr "If other linguistic regime, please clarify."
+
+msgid "msg_language_diploma"
+msgstr "Please clarify the linguistic regime."
+
+msgid "msg_school_name"
+msgstr "Please mention the name of  the institute where you were."
+
+msgid "msg_error_school_belgian_community"
+msgstr "Please mention the community of the school where you went to high school."
+
+msgid "msg_error_next_step_impossible"
+msgstr ""
+ "Impossible to go to the next step. You must have at least answered 'Yes' to one of the following questions : "
+

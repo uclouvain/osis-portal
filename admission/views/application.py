@@ -34,8 +34,10 @@ from datetime import datetime
 from admission.views.common import home
 from functools import cmp_to_key
 import locale
+from django.utils.translation import ugettext_lazy as _
 
-ALERT_MANDATORY_FIELD = "Champ obligatoire"
+
+ALERT_MANDATORY_FIELD = _('mandatory_field')
 
 
 def application_update(request, application_id):
@@ -188,7 +190,7 @@ def diploma_save(request):
         if is_valid:
             secondary_education = populate_secondary_education(request, secondary_education)
             secondary_education.save()
-            message_success = "Les données ont été enregistrées"
+            message_success = _('msg_info_saved')
             if next_step:
                 return render(request, "curriculum.html", {"application":         application,
                                                            "secondary_education": secondary_education,
@@ -291,8 +293,7 @@ def validate_fields_form(request, offer_yr, secondary_education, next_step):
                                     is_valid = False
                             if request.POST.get('chb_other_education') == 'on':
                                 if request.POST.get('other_education_type') is None:
-                                    validation_messages['pnl_teaching_type'] = "Il faut préciser un type " \
-                                                                               "d'enseignement autre"
+                                    validation_messages['pnl_teaching_type'] = _('msg_error_other_education_type')
                                     is_valid = False
                                 else:
                                     new_education_type = mdl_reference.education_type.EducationType()
@@ -314,7 +315,7 @@ def validate_fields_form(request, offer_yr, secondary_education, next_step):
                         if request.POST.get('rdb_education_transition_type') is None \
                                 and request.POST.get('rdb_education_technic_type') \
                                 and request.POST.get('other_education'):
-                            validation_messages['pnl_teaching_type'] = "Il faut préciser un type d'enseignement"
+                            validation_messages['pnl_teaching_type'] = _('msg_error_education_type')
                             is_valid = False
 
                         else:
@@ -343,13 +344,11 @@ def validate_fields_form(request, offer_yr, secondary_education, next_step):
                         secondary_education.national = False
                         # Foreign diploma
                         if request.POST.get('international_diploma') is None:
-                            validation_messages['international_diploma'] = "Il faut préciser le diplôme obtenu"
+                            validation_messages['international_diploma'] = _('msg_error_international_diploma')
                             is_valid = False
                         else:
                             secondary_education.international_diploma = request.POST.get('international_diploma')
-                            print('ici', secondary_education.international_diploma)
                             if secondary_education.international_diploma == 'INTERNATIONAL':
-                                print(request.POST.get('international_equivalence') )
                                 if request.POST.get('international_equivalence') is None:
                                     validation_messages['international_equivalence'] = ALERT_MANDATORY_FIELD
                                     is_valid = False
@@ -359,12 +358,11 @@ def validate_fields_form(request, offer_yr, secondary_education, next_step):
                                 secondary_education.international_equivalence = None
                         if request.POST.get('other_language_regime') == 'on':
                             if request.POST.get('other_language_diploma') == "-":
-                                validation_messages['language_regime'] = "Il faut préciser un régime linguistique \
-                                                                          de type autre"
+                                validation_messages['language_regime'] = _('msg_other_language_diploma')
                                 is_valid = False
                         else:
                             if request.POST.get('international_diploma_language') == "-":
-                                validation_messages['language_regime'] = "Il faut préciser un régime linguistique"
+                                validation_messages['language_regime'] = _('msg_language_diploma')
                                 is_valid = False
 
                 if (request.POST.get('school') is None or request.POST.get('school') == "-")\
@@ -374,7 +372,7 @@ def validate_fields_form(request, offer_yr, secondary_education, next_step):
                               or len(request.POST.get('CESS_other_school_city')) == 0)\
                          and (request.POST.get('CESS_other_school_postal_code') is None\
                               or len(request.POST.get('CESS_other_school_postal_code')) == 0)):
-                    validation_messages['school'] = "Il faut préciser un établissement scolaire"
+                    validation_messages['school'] = _('msg_school_name')
                     is_valid = False
                     # reset institution fields
                     secondary_education.national_institution = mdl_reference.education_institution.EducationInstitution()
@@ -385,8 +383,7 @@ def validate_fields_form(request, offer_yr, secondary_education, next_step):
                 else:
                     if request.POST.get('other_school') == "on":
                         if request.POST.get('school_belgian_community') is None:
-                            validation_messages['school'] = "Il faut préciser un type de communauté " \
-                                                            "pour l'établissement"
+                            validation_messages['school'] = _('msg_error_school_belgian_community')
                             is_valid = False
                             national_institution = mdl_reference.education_institution.EducationInstitution()
                             national_institution.adhoc = True
@@ -429,10 +426,10 @@ def validate_fields_form(request, offer_yr, secondary_education, next_step):
             and request.POST.get('secondary_education_diploma') == 'false' \
             and request.POST.get('admission_exam') == 'false' \
             and request.POST.get('professional_exam') == 'false':
-        validation_messages['final'] = "Impossible de passer à l'étape suivante. Il faut avoir \
-                                            répondu 'Oui' pour les études secondaires ou \
-                                            pour l'examen d'admission ou encore pour les expériences \
-                                            professionnelles."
+        validation_messages['final'] = "%s" % _('msg_error_next_step_impossible')
+        validation_messages['final1'] = "%s " %  _('question_get_diploma')
+        validation_messages['final2'] = "%s " %  _('question_admission_exam')
+        validation_messages['final3'] = "%s " %  _('question_professional_experience')
         is_valid = False
 
     return is_valid, validation_messages, secondary_education
@@ -473,16 +470,6 @@ def curriculum_save(request, application_id):
                                             "postal_codes":                 postal_codes,
                                             "education_type_transition":    education_type_transition,
                                             "education_type_qualification": education_type_qualification})
-
-
-def upload_file(request, secondary_education_id):
-    if request.method == 'POST':
-        form = FileForm(request.POST, request.FILES)
-        if form.is_valid():
-            file_name = request.FILES['file']
-            # faut sauver le fichier dans le model et sur disk?
-            print('file name:', file_name)
-    return HttpResponseRedirect(reverse('diploma', args=[ ]))
 
 
 def find_cities_postalcodes(education_institutions):
@@ -559,9 +546,11 @@ def populate_secondary_education(request, secondary_education):
             secondary_education.education_type = new_education_type
     else:
         if request.POST.get('rdb_education_transition_type'):
-            secondary_education.education_type = mdl_reference.education_type.find_by_id(int(request.POST.get('rdb_education_transition_type')))
+            secondary_education.education_type = mdl_reference.education_type\
+                .find_by_id(int(request.POST.get('rdb_education_transition_type')))
         if request.POST.get('rdb_education_technic_type'):
-            secondary_education.education_type = mdl_reference.education_type.find_by_id(int(request.POST.get('rdb_education_technic_type')))
+            secondary_education.education_type = mdl_reference.education_type\
+                .find_by_id(int(request.POST.get('rdb_education_technic_type')))
     # ???Je en comprends pas pq ceci donne une erreur
     #secondary_education.daes = None
     secondary_education.daes = False
@@ -594,7 +583,11 @@ def populate_secondary_education(request, secondary_education):
     secondary_education.international_equivalence = None
     if secondary_education.secondary_education_diploma is True and secondary_education.national is False:
         secondary_education.international_diploma = request.POST.get('international_diploma')
-        secondary_education.international_diploma_country = request.POST.get('international_diploma_country')
+        if request.POST.get('international_diploma_country') \
+                and request.POST.get('international_diploma_country') != "-":
+            international_diploma_country = mdl_reference.country\
+                .find_by_id(int(request.POST.get('international_diploma_country')))
+            secondary_education.international_diploma_country = international_diploma_country
         if request.POST.get('other_language_regime') \
             and request.POST.get('other_language_regime') == "on" \
             and request.POST.get('other_language_regime') != "-":

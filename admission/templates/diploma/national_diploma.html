@@ -72,7 +72,8 @@
                     <label>&nbsp;&nbsp;&nbsp;{% trans 'institution' %}&nbsp;&nbsp;</label>
                      <select class="form-control"
                              id="slt_schools"
-                             name="school">
+                             name="school"
+                             onchange="refresh_other(this)">
                          <option value="-">-</option>
                         {% for education_institution in education_institutions %}
                             <option title="{{education_institution.postal_code }} - {{education_institution.city}}"

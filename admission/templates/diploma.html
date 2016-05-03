@@ -169,14 +169,18 @@
         var sel = select_list.options[select_list.selectedIndex].text;
         var elt = document.getElementById('slt_schools');
         for(var i = 0 ,l = elt.options.length; i< l;i++ ){
-            if (sel != "-"){
-                if((elt.options[i].title).indexOf(sel) > -1){
-                    elt.options[i].style="visibility:visible;display:block";
-                }else{
-                    elt.options[i].style="visibility:hidden;display:none";
-                }
-            }else{
+            if(i==0){
                 elt.options[i].style="visibility:visible;display:block";
+            }else{
+                if (sel != "-"){
+                    if((elt.options[i].title).indexOf(sel) > -1){
+                        elt.options[i].style="visibility:visible;display:block";
+                    }else{
+                        elt.options[i].style="visibility:hidden;display:none";
+                    }
+                }else{
+                    elt.options[i].style="visibility:visible;display:block";
+                }
             }
 		}
         if(select_list.id=='slt_cities'){
@@ -185,6 +189,25 @@
             if(select_list.id=='slt_postal_codes'){
                 document.getElementById("slt_cities").value="-";
             }
+        }
+    }
+
+    function refresh_other(select_list){
+
+        var sel = select_list.options[select_list.selectedIndex].text;
+
+        if(sel == "-"){
+        }else{
+
+            document.getElementById("chb_other_school").checked = false;
+            document.getElementById("txt_CESS_other_school_name").value="";
+            document.getElementById("txt_CESS_other_school_city").value="";
+            document.getElementById("txt_CESS_other_school_postal_code").value="";
+
+            document.getElementById("txt_CESS_other_school_name").disabled=true;
+            document.getElementById("txt_CESS_other_school_city").disabled=true;
+            document.getElementById("txt_CESS_other_school_postal_code").disabled=true;
+
         }
     }
 
@@ -301,9 +324,14 @@
     {% include "diploma/local_language_exam.html" %}
     {%if validation_messages and validation_messages|get_item:'final'%}
         <br>
-        <span class="alert alert-danger" role="alert" style="margin-left:5px;">
-            {{ validation_messages|get_item:'final'}}
-        </span>
+        <font class="error" style="margin-left:5px;">
+            {{ validation_messages|get_item:'final'}}<br>
+            <ul>
+                <li>{{ validation_messages|get_item:'final1'}}</li>
+                <li>{{ validation_messages|get_item:'final2'}}</li>
+                <li>{{ validation_messages|get_item:'final3'}}</li>
+            </ul>
+        </font>
         <br><br>
     {% endif %}
     <br>
@@ -324,30 +352,7 @@
         {% endif %}
     </div>
 </form>
-  <!-- UploadFile modal -->
-  <div class="modal fade" id="pnl_upload_file_modal" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <form method="post" enctype="multipart/form-data"
-                    action="{% url 'upload_file' 1 %}">
-                  {% csrf_token %}
-                  <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="bt_close_upload_file_modal"><span aria-hidden="true">&times;</span></button>
-                      <h4 class="modal-title" id="uploadFileLabel">{%trans 'file'%}</h4>
-                  </div>
-                  <div class="modal-body">
-                      <label for="fle_input_file" class="btn btn-default" >{%trans 'choose_file'%}</label>
-                      <input type="file" id="fle_input_file" name="file" style="display:none" />
-                      <div id="pnl_selectedFiles"></div>
-                  </div>
-                  <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal" id="bt_cancel_upload_score_modal">{%trans 'cancel'%}</button>
-                      <input type="submit" class="btn btn-primary" value="Ok" onclick="document.getElementById('files').style.visibility='visible'" id="bt_submit_upload_file_modal"/>
-                  </div>
-              </form>
-          </div>
-      </div>
-  </div>
+
   <script>
 	var selDiv = "";
 

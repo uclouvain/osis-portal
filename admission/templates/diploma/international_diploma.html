@@ -30,9 +30,9 @@
                {%if secondary_education.international_diploma = 'INTERNATIONAL' %}checked{%endif%}
                onclick="display('pnl_equivalence',true);">&nbsp;&nbsp;{% trans 'baccalaureat_international' %}&nbsp;&nbsp;
          <img src="{% static 'img/ib-world-school.png' %}" height="50px">
-         {%if validation_messages and validation_messages|get_item:'foreign_baccalaureate_diploma'%}
+         {%if validation_messages and validation_messages|get_item:'international_diploma'%}
              <br><br><font class="error" style="margin-left:5px;">
-             {{ validation_messages|get_item:'foreign_baccalaureate_diploma'}}</font>
+             {{ validation_messages|get_item:'international_diploma'}}</font>
          {% endif %}
          <br><br>
      </div>
@@ -41,10 +41,10 @@
              <label for="slt_country" class="control-label">{%trans 'awarding_country' %}</label><br>
              <select class="form-control"
                      id="slt_country"
-                     name="country">
+                     name="international_diploma_country">
                     <option value="-">-</option>
                 {% for c in countries %}
-                    <option value="{{ c.id }}" {%if secondary_education.international_diploma_country.id = c.id %}checked{%endif%}>{{ c }}</option>
+                    <option value="{{ c.id }}" {%if secondary_education.international_diploma_country.id == c.id %}selected{%endif%}>{{ c }}</option>
                 {% endfor %}
             </select>
          </div>
