@@ -31,7 +31,7 @@ from admission.models import form
 
 class SecondaryEducationAdmin(admin.ModelAdmin):
     list_display = ('person', 'national')
-    fieldsets = ((None, {'fields': ('person', 'national')}),)
+    #fieldsets = ((None, {'fields': ('person', 'national')}),)
 
 
 class SecondaryEducation(models.Model):

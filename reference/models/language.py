@@ -52,7 +52,4 @@ def find_languages():
 
 
 def find_languages_by_recognized(a_recognized_state):
-    print('find_languages_by_recognized')
-    a = Language.objects.filter(recognized=a_recognized_state)
-    print('a',a)
-    return a
+    return Language.objects.filter(recognized=a_recognized_state)

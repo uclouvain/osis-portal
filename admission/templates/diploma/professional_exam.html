@@ -45,7 +45,7 @@
                        value="{{secondary_education.professional_exam_date | default_if_none:''|date:"j/m/Y"}}">
                  {%if validation_messages and validation_messages|get_item:'professional_exam_date'%}
                     <br><br>
-                    <font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'professional_exam_date'}}</font><br>
+                    <font class="error" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'professional_exam_date'}}</font><br>
                 {% endif %}
                 <br>
                 <br>
@@ -56,8 +56,8 @@
                        value="{{secondary_education.professional_exam_institution | default_if_none:''}}">
                 <br>
                 {%if validation_messages and validation_messages|get_item:'professional_exam_institution'%}
-                    <br><br>
-                    <font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'professional_exam_institution'}}</font><br>
+                    <br>
+                    <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'professional_exam_institution'}}</font><br>
                 {% endif %}
             </div>
             <br>
@@ -86,7 +86,7 @@
             </label>
             <br>
             {%if validation_messages and validation_messages|get_item:'professional_exam_result'%}
-                <font class="alert alert-danger" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'professional_exam_result'}}</font>
+                <font class="error" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'professional_exam_result'}}</font>
             {% endif %}
             <br>
             <button type="button" class="btn btn-default" data-toggle="modal"

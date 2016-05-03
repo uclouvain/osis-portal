@@ -40,8 +40,12 @@ class AdmissionExamType(models.Model):
 
 
 def find_by_name(a_name):
-    return AdmissionExamType.objects.filter(name__iexact=a_name, adhoc=False).first()
+    return AdmissionExamType.objects.filter(name__iexact=a_name, adhoc=True).first()
 
 
 def find_all_by_adhoc(an_adhoc):
     return AdmissionExamType.objects.filter(adhoc=an_adhoc).order_by('-adhoc', 'name')
+
+
+def find_by_id(an_id):
+    return AdmissionExamType.objects.get(pk=an_id)

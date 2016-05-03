@@ -185,7 +185,7 @@ msgid "question_other_exam_type"
 msgstr "Autre type d'examen?"
 
 msgid "specify_name"
-msgstr ""
+msgstr "Préciser le nom"
 
 msgid "which_result"
 msgstr "Quel résultat avez-vous obtenu?"
@@ -280,7 +280,7 @@ msgid "further_information"
 msgstr "Informations complémentaires"
 
 msgid "succeed_result"
-msgstr "Quel résultat avez-vous obtenu?"
+msgstr "Succès"
 
 msgid "failed"
 msgstr "Echec"
@@ -412,7 +412,7 @@ msgid "english"
 msgstr "Anglais"
 
 msgid "mandatory_field"
-msgstr "Mandatory field"
+msgstr "Champ obligatoire"
 
 msgid "msg_info_saved"
 msgstr "Les données ont été enregistrées"

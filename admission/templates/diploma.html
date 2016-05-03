@@ -272,7 +272,7 @@
                              onclick="display('pnl_academic_year',false);display('pnl_admission_exam',true);"> {% trans 'no'%}
                     </label>
                     {%if validation_messages and validation_messages|get_item:'secondary_education_diploma'%}
-                        <br><font class="error"style="margin-left:5px;">{{ validation_messages|get_item:'secondary_education_diploma'}}</font>
+                        <br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'secondary_education_diploma'}}</font>
                     {% endif %}
                 </div>
             </div>
@@ -285,9 +285,15 @@
                             id="slt_academic_year"
                             name="academic_year"
                             onchange="show_hide_parcours(this);show_hide_pnl_daes();">
-                        {% for academic_yr in academic_years %}
-                            <option {% if academic_yr.id == secondary_education.academic_year.id %}selected{%endif%} value="{{ academic_yr.id }}" title="{% trans 'academic_year'%}{{academic_yr.year}}">{{ academic_yr }}</option>
-                        {% endfor %}
+                        {%if secondary_education.academic_year%}
+                            {% for academic_yr in academic_years %}
+                                <option {% if academic_yr.id == secondary_education.academic_year.id %}selected{%endif%} value="{{ academic_yr.id }}" title="{% trans 'academic_year'%}{{academic_yr.year}}">{{ academic_yr }}</option>
+                            {% endfor %}
+                        {%else%}
+                            {% for academic_yr in academic_years %}
+                                <option {% if academic_yr.id == current_academic_year.id %}selected{%endif%} value="{{ academic_yr.id }}" title="{% trans 'academic_year'%}{{academic_yr.year}}">{{ academic_yr }}</option>
+                            {% endfor %}
+                        {%endif%}
                     </select>
                 </div>
                 <br><br>

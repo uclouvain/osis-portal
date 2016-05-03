@@ -49,7 +49,7 @@
                 <input class="form-control"
                        id="txt_admission_exam_institution"
                        name="admission_exam_institution"
-                       value="{{secondary_education.admission_exam_institution}}">
+                       value="{{secondary_education.admission_exam_institution | default_if_none:''}}">
                 <br>
                 {%if validation_messages and validation_messages|get_item:'admission_exam_institution'%}
                     <br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_institution'}}</font>
@@ -63,7 +63,7 @@
                 <input type="radio"
                        name="admission_exam_type"
                        id="rdb_admission_exam_type{{forloop.counter0}}"
-                       value="{{exam_type}}"
+                       value="{{exam_type.id}}"
                        {% if secondary_education.admission_exam_type = exam_type %}
                             checked
                        {%endif%}
@@ -88,11 +88,11 @@
 
                     </div>
                                 <div class="col-md-9">
-                                     <label>{% trans 'specify_name' %}Précisez le nom:</label>
+                                     <label>{% trans 'specify_name' %} :</label>
             <input class="form-control"
                    id="txt_admission_exam_type_other"
                    name="admission_exam_type_other"
-                   value="{{secondary_education.admission_exam_type.name| default_if_none:''}}"
+                   value="{% if secondary_education.admission_exam_type.adhoc = True %}{{secondary_education.admission_exam_type.name| default_if_none:''}}{%endif%}"
                    {% if secondary_education.admission_exam_type.adhoc = False %}
                             disabled
                    {%else%}

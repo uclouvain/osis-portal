@@ -439,3 +439,74 @@ msgid "msg_error_next_step_impossible"
 msgstr ""
  "Impossible to go to the next step. You must have at least answered 'Yes' to one of the following questions : "
 
+msgid "identification"
+msgstr "Identification"
+
+msgid "name"
+msgstr "Nom"
+
+msgid "name"
+msgstr "Nom"
+
+msgid "firstname"
+msgstr "Prénom"
+
+msgid "middle_name"
+msgstr "Autres prénoms"
+
+msgid "birth_day"
+msgstr "Date de naissance"
+
+msgid "birth_place"
+msgstr "Lieu de naissance"
+
+msgid "birth_country"
+msgstr "Pays de naissance"
+
+msgid "nationality"
+msgstr "Nationalité"
+
+msgid "gender"
+msgstr "Genre"
+
+msgid "civil_status"
+msgstr "Etat civil"
+
+msgid "children"
+msgstr "Nombre d'enfants"
+
+msgid "spouse_name"
+msgstr "Nom et prénom conjoint"
+
+msgid "id_card"
+msgstr "Pièce d'identité"
+
+msgid "question_identity"
+msgstr "Veuillez fournir au moins un numéro d'identité."
+
+msgid "legal_residence"
+msgstr "Domicile léga"
+
+msgid "street"
+msgstr "Rue/Avenue"
+
+msgid "number"
+msgstr "Numéro"
+
+msgid "place"
+msgstr "Lieu-dit (éventuellement)"
+
+msgid "postal_address"
+msgstr "Adresse de correspondance"
+
+msgid "question_address"
+msgstr "Adresse de contact est la même que votre domicile légal? "
+
+msgid "mobile"
+msgstr "GSM"
+
+msgid "other_phone"
+msgstr "Autre téléphone"
+
+msgid "other_phone"
+msgstr "Autre téléphone"

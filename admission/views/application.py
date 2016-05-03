@@ -136,7 +136,8 @@ def save_application_offer(request):
                                                 "cities":                       cities,
                                                 "postal_codes":                 postal_codes,
                                                 "education_type_transition":    education_type_transition,
-                                                "education_type_qualification": education_type_qualification})
+                                                "education_type_qualification": education_type_qualification,
+                                                "current_academic_year":        mdl.academic_year.current_academic_year()})
 
 
 def application_view(request, application_id):
@@ -181,15 +182,19 @@ def diploma_save(request):
     cities, postal_codes = find_cities_postalcodes(education_institutions)
     education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
     education_type_qualification = mdl_reference.education_type.find_education_type_by_adhoc('QUALIFICATION', False)
+
     if next_step or previous_step or save_step:
+
          # Check if all the necessary fields have been filled
         is_valid, validation_messages, secondary_education = validate_fields_form(request,
                                                                                   application.offer_year,
                                                                                   secondary_education,
                                                                                   next_step)
+        print('is_valid',is_valid)
         if is_valid:
             secondary_education = populate_secondary_education(request, secondary_education)
             secondary_education.save()
+            print_secondary_education(secondary_education)
             message_success = _('msg_info_saved')
             if next_step:
                 return render(request, "curriculum.html", {"application":         application,
@@ -213,7 +218,8 @@ def diploma_save(request):
                                                             "postal_codes":                 postal_codes,
                                                             "education_type_transition":    education_type_transition,
                                                             "education_type_qualification": education_type_qualification,
-                                                            "message_success":              message_success})
+                                                            "message_success":              message_success,
+                                                            "current_academic_year":        mdl.academic_year.current_academic_year()})
                 else:
                     if previous_step:
                         return home(request)
@@ -233,7 +239,8 @@ def diploma_save(request):
                                                     "cities":                       cities,
                                                     "postal_codes":                 postal_codes,
                                                     "education_type_transition":    education_type_transition,
-                                                    "education_type_qualification": education_type_qualification})
+                                                    "education_type_qualification": education_type_qualification,
+                                                    "current_academic_year":        mdl.academic_year.current_academic_year()})
     else:
         return render(request, "diploma.html", {"application":                  application,
                                                 "validation_messages":          validation_messages,
@@ -249,7 +256,8 @@ def diploma_save(request):
                                                 "cities":                       cities,
                                                 "postal_codes":                 postal_codes,
                                                 "education_type_transition":    education_type_transition,
-                                                "education_type_qualification": education_type_qualification})
+                                                "education_type_qualification": education_type_qualification,
+                                                "current_academic_year":        mdl.academic_year.current_academic_year()})
 
 
 def validate_fields_form(request, offer_yr, secondary_education, next_step):
@@ -313,11 +321,10 @@ def validate_fields_form(request, offer_yr, secondary_education, next_step):
                     if request.POST.get('school_belgian_community') == 'FRENCH':
                         # Belgian school
                         if request.POST.get('rdb_education_transition_type') is None \
-                                and request.POST.get('rdb_education_technic_type') \
-                                and request.POST.get('other_education'):
+                                and request.POST.get('rdb_education_technic_type') is None\
+                                and request.POST.get('other_education') is None:
                             validation_messages['pnl_teaching_type'] = _('msg_error_education_type')
                             is_valid = False
-
                         else:
                             if request.POST.get('rdb_education_transition_type'):
                                 secondary_education.education_type = mdl_reference.education_type\
@@ -469,7 +476,8 @@ def curriculum_save(request, application_id):
                                             "cities":                       cities,
                                             "postal_codes":                 postal_codes,
                                             "education_type_transition":    education_type_transition,
-                                            "education_type_qualification": education_type_qualification})
+                                            "education_type_qualification": education_type_qualification,
+                                            "current_academic_year":        mdl.academic_year.current_academic_year()})
 
 
 def find_cities_postalcodes(education_institutions):
@@ -486,102 +494,107 @@ def find_cities_postalcodes(education_institutions):
 def populate_secondary_education(request, secondary_education):
     #belgian
     secondary_education.secondary_education_diploma = None
+    secondary_education.academic_year = None
+    secondary_education.national = None
+    secondary_education.national_community = None
+    secondary_education.national_institution = None
+    secondary_education.education_type = None
+    secondary_education.daes = None
+    secondary_education.path_repetition = None
+    secondary_education.path_reorientation = None
+    secondary_education.result = None
+
     if request.POST.get('secondary_education_diploma'):
         if request.POST.get('secondary_education_diploma') == 'true':
             secondary_education.secondary_education_diploma = True
+            if request.POST.get('rdb_belgian_foreign'):
+                if request.POST.get('rdb_belgian_foreign') == 'true':
+                    secondary_education.national = True
+                    secondary_education.result = request.POST.get('result')
+                else:
+                    secondary_education.national = False
+            if request.POST.get('rdb_belgian_community'):
+                secondary_education.national_community = request.POST.get('rdb_belgian_community')
+
+            if request.POST.get('other_school') == "on":
+                existing_education_institution = mdl_reference.education_institution\
+                                        .find_by_name_city_postal_code(request.POST.get('CESS_other_school_name'),\
+                                                                       request.POST.get('CESS_other_school_city'),\
+                                                                       request.POST.get('CESS_other_school_postal_code'),
+                                                                       request.POST.get('school_belgian_community'))
+                if existing_education_institution:
+                    secondary_education.national_institution = existing_education_institution
+                else:
+                    new_education_institution = mdl_reference.education_institution.EducationInstitution()
+                    new_education_institution.name = request.POST.get('CESS_other_school_name')
+                    new_education_institution.city = request.POST.get('CESS_other_school_city')
+                    new_education_institution.postal_code = request.POST.get('CESS_other_school_postal_code')
+                    new_education_institution.institution_type="SECONDARY"
+                    new_education_institution.national_community = request.POST.get('school_belgian_community')
+                    new_education_institution.adhoc = True
+                    new_education_institution.save()
+                    secondary_education.national_institution = new_education_institution
+            else:
+                if request.POST.get('school'):
+                    national_institution = mdl_reference.education_institution.find_by_id(int(request.POST.get('school')))
+                    secondary_education.national_institution = national_institution
+
+            if request.POST.get('chb_other_education') == 'on':
+                existing_education_type = mdl_reference.education_type.find_by_name(request.POST.get('other_education_type'))
+                if existing_education_type:
+                    secondary_education.education_type = existing_education_type
+                else:
+                    new_education_type = mdl_reference.education_type.EducationType()
+                    new_education_type.adhoc = True
+                    new_education_type.name = request.POST.get('other_education_type')
+                    new_education_type.type = 'ANOTHER'
+                    new_education_type.save()
+                    secondary_education.education_type = new_education_type
+            else:
+                if request.POST.get('rdb_education_transition_type'):
+                    secondary_education.education_type = mdl_reference.education_type\
+                        .find_by_id(int(request.POST.get('rdb_education_transition_type')))
+                if request.POST.get('rdb_education_technic_type'):
+                    secondary_education.education_type = mdl_reference.education_type\
+                        .find_by_id(int(request.POST.get('rdb_education_technic_type')))
+            # ???Je en comprends pas pq ceci donne une erreur
+            #secondary_education.daes = None
+
+            if request.POST.get('daes'):
+                if request.POST.get('daes') == 'true':
+                    secondary_education.daes = True
+                else:
+                    if request.POST.get('daes') == 'false':
+                        secondary_education.daes = False
+
+            if request.POST.get('path_repetition'):
+                if request.POST.get('path_repetition') == 'true':
+                    secondary_education.path_repetition = True
+                else:
+                    if request.POST.get('path_repetition') == 'false':
+                        secondary_education.path_repetition = False
+
+            if request.POST.get('path_reorientation'):
+                if request.POST.get('path_reorientation') == 'true':
+                    secondary_education.path_reorientation = True
+                else:
+                    if request.POST.get('path_reorientation') == 'false':
+                        secondary_education.path_reorientation = False
+
         else:
             secondary_education.secondary_education_diploma = False
 
-    secondary_education.academic_year = None
-    if request.POST.get('academic_year'):
-        academic_year = mdl.academic_year.find_by_id(int(request.POST.get('academic_year')))
-        secondary_education.academic_year = academic_year
-    secondary_education.national = None
-    secondary_education.result = None
-    if request.POST.get('rdb_belgian_foreign'):
-        if request.POST.get('rdb_belgian_foreign') == 'true':
-            secondary_education.national = True
-            secondary_education.result = request.POST.get('result')
-        else:
-            secondary_education.national = False
-    secondary_education.national_community = None
-    if request.POST.get('rdb_belgian_community'):
-        secondary_education.national_community = request.POST.get('rdb_belgian_community')
-
-    secondary_education.national_institution = None
-    if request.POST.get('other_school') == "on":
-        existing_education_institution = mdl_reference.education_institution\
-                                .find_by_name_city_postal_code(request.POST.get('CESS_other_school_name'),\
-                                                               request.POST.get('CESS_other_school_city'),\
-                                                               request.POST.get('CESS_other_school_postal_code'),
-                                                               request.POST.get('school_belgian_community'))
-        if existing_education_institution:
-            secondary_education.national_institution = existing_education_institution
-        else:
-            new_education_institution = mdl_reference.education_institution.EducationInstitution()
-            new_education_institution.name = request.POST.get('CESS_other_school_name')
-            new_education_institution.city = request.POST.get('CESS_other_school_city')
-            new_education_institution.postal_code = request.POST.get('CESS_other_school_postal_code')
-            new_education_institution.institution_type="SECONDARY"
-            new_education_institution.national_community = request.POST.get('school_belgian_community')
-            new_education_institution.adhoc = True
-            new_education_institution.save()
-            secondary_education.national_institution = new_education_institution
-    else:
-        if request.POST.get('school'):
-            national_institution = mdl_reference.education_institution.find_by_id(int(request.POST.get('school')))
-            secondary_education.national_institution = national_institution
-
-    secondary_education.education_type = None
-    if request.POST.get('chb_other_education') == 'on':
-        existing_education_type = mdl_reference.education_type.find_by_name(request.POST.get('other_education_type'))
-        if existing_education_type:
-            secondary_education.education_type = existing_education_type
-        else:
-            new_education_type = mdl_reference.education_type.EducationType()
-            new_education_type.adhoc = True
-            new_education_type.name = request.POST.get('other_education_type')
-            new_education_type.type = 'ANOTHER'
-            new_education_type.save()
-            secondary_education.education_type = new_education_type
-    else:
-        if request.POST.get('rdb_education_transition_type'):
-            secondary_education.education_type = mdl_reference.education_type\
-                .find_by_id(int(request.POST.get('rdb_education_transition_type')))
-        if request.POST.get('rdb_education_technic_type'):
-            secondary_education.education_type = mdl_reference.education_type\
-                .find_by_id(int(request.POST.get('rdb_education_technic_type')))
-    # ???Je en comprends pas pq ceci donne une erreur
-    #secondary_education.daes = None
-    secondary_education.daes = False
-    if request.POST.get('daes'):
-        if request.POST.get('daes') == 'true':
-            secondary_education.daes = True
-        else:
-            if request.POST.get('daes') == 'false':
-                secondary_education.daes = False
-
-    secondary_education.path_repetition = None
-    if request.POST.get('path_repetition'):
-        if request.POST.get('path_repetition') == 'true':
-            secondary_education.path_repetition = True
-        else:
-            if request.POST.get('path_repetition') == 'false':
-                secondary_education.path_repetition = False
-
-    secondary_education.path_reorientation = None
-    if request.POST.get('path_reorientation'):
-        if request.POST.get('path_reorientation') == 'true':
-            secondary_education.path_reorientation = True
-        else:
-            if request.POST.get('path_reorientation') == 'false':
-                secondary_education.path_reorientation = False
     #international_diploma
     secondary_education.international_diploma = None
     secondary_education.international_diploma_country = None
     secondary_education.international_diploma_language = None
     secondary_education.international_equivalence = None
     if secondary_education.secondary_education_diploma is True and secondary_education.national is False:
+        if request.POST.get('international_diploma')== "true":
+            secondary_education.international_diploma = True
+        else:
+            if request.POST.get('international_diploma')== "false":
+                secondary_education.international_diploma = False
         secondary_education.international_diploma = request.POST.get('international_diploma')
         if request.POST.get('international_diploma_country') \
                 and request.POST.get('international_diploma_country') != "-":
@@ -602,7 +615,12 @@ def populate_secondary_education(request, secondary_education):
         secondary_education.international_equivalence = request.POST.get('international_equivalence')
 
         secondary_education.result = request.POST.get('foreign_result')
-
+    #common
+    if secondary_education.secondary_education_diploma is True \
+            and (secondary_education.national is True or secondary_education.international_diploma is True):
+        if request.POST.get('academic_year'):
+            academic_year = mdl.academic_year.find_by_id(int(request.POST.get('academic_year')))
+        secondary_education.academic_year = academic_year
     #admission_exam
     secondary_education.admission_exam = None
     secondary_education.admission_exam_date = None
@@ -631,8 +649,9 @@ def populate_secondary_education(request, secondary_education):
                     secondary_education.admission_exam_type = new_admission_exam_type
             else:
                 if request.POST.get('admission_exam_type'):
-                    secondary_education.admission_exam_type = mdl_reference.admission_exam_type\
-                        .find_by_name(request.POST.get('admission_exam_type'))
+                    admission_exam_type_existing = mdl_reference.admission_exam_type\
+                        .find_by_id(int(request.POST.get('admission_exam_type')))
+                    secondary_education.admission_exam_type = admission_exam_type_existing
 
             secondary_education.admission_exam_result = request.POST.get('admission_exam_result')
         else:
@@ -700,7 +719,8 @@ def diploma_update(request):
                                             "cities":                       cities,
                                             "postal_codes":                 postal_codes,
                                             "education_type_transition":    education_type_transition,
-                                            "education_type_qualification": education_type_qualification})
+                                            "education_type_qualification": education_type_qualification,
+                                            "current_academic_year":        mdl.academic_year.current_academic_year()})
 
 
 def validate_professional_exam(request,is_valid, validation_messages, secondary_education):
@@ -792,36 +812,86 @@ def validate_admission_exam(request,is_valid, validation_messages, secondary_edu
             if request.POST.get('admission_exam_date') is None:
                 validation_messages['admission_exam_date'] = ALERT_MANDATORY_FIELD
                 is_valid = False
+            else:
+                try:
+                    secondary_education.admission_exam_date = datetime\
+                        .strptime(request.POST.get('admission_exam_date'), '%d/%m/%Y')
+                except:
+                    validation_messages['admission_exam_date'] = "La date (%s) semble erronée" % \
+                                                                    request.POST.get('admission_exam_date')
+                    is_valid = False
+                    secondary_education.admission_exam_date = None
             if request.POST.get('admission_exam_institution') is None \
                     or len(request.POST.get('admission_exam_institution').strip()) == 0:
                 validation_messages['admission_exam_institution'] = ALERT_MANDATORY_FIELD
                 is_valid = False
+            else:
+                secondary_education.admission_exam_institution = request.POST.get('admission_exam_institution')
             if request.POST.get('admission_exam_type') is None \
                     and (request.POST.get('admission_exam_type_other') is None
                          or len(request.POST.get('admission_exam_type_other').strip()) == 0):
                 validation_messages['admission_exam_type'] = ALERT_MANDATORY_FIELD
                 is_valid = False
             else:
-                #???
-                if mdl.offer_year.is_engineering(offer_yr) is True:
-                    if request.POST.get('admission_exam_type') != 'FIRST_CYCLE_CIVIL_ENGINEER':
-                        validation_messages['admission_exam_type'] = "Pour les offres 'Ingenieur Civil' " \
-                                                                     "(FSA1BA et ARCH1BA), l'examen spécial " \
-                                                                     "d'admission aux études universitaires " \
-                                                                     "de 1er cycle de l'ingénieur (ingénieur " \
-                                                                     "civil) est obliqatoire"
-                        is_valid = False
-
                 if request.POST.get('admission_exam_type') == 'OTHER_EXAM':
                     if request.POST.get('admission_exam_type_other') is None \
                             or len(request.POST.get('admission_exam_type_other').strip()) == 0:
                         validation_messages['admission_exam_type'] = "Pour autre examen il faut préciser"
                         is_valid = False
+                    else:
+                        new_admission_exam_type = mdl_reference.admission_exam_type.AdmissionExamType()
+                        new_admission_exam_type.adhoc = True
+                        new_admission_exam_type.name = request.POST.get('admission_exam_type_other')
+                        secondary_education.admission_exam_type = new_admission_exam_type
+
+                if request.POST.get('chb_admission_exam_type_other')=="on":
+                    new_admission_exam_type = mdl_reference.admission_exam_type.AdmissionExamType()
+                    new_admission_exam_type.adhoc = True
+                    new_admission_exam_type.name = request.POST.get('admission_exam_type_other')
+                    secondary_education.admission_exam_type = new_admission_exam_type
+                else:
+                    admission_exam_type_existing = mdl_reference.admission_exam_type\
+                        .find_by_id(int(request.POST.get('admission_exam_type')))
+                    secondary_education.admission_exam_type = admission_exam_type_existing
+
             if request.POST.get('admission_exam_result') is None:
                 validation_messages['admission_exam_result'] = ALERT_MANDATORY_FIELD
                 is_valid = False
+            else:
+                secondary_education.admission_exam_result = request.POST.get('admission_exam_result')
         else:
             if request.POST.get('admission_exam') == 'false':
                 secondary_education.admission_exam = False
 
     return is_valid, validation_messages, secondary_education
+
+
+def print_secondary_education(secondary_education):
+    print('person                          : ',secondary_education.person)
+    print('secondary_education_diploma     : ',secondary_education.secondary_education_diploma)
+    print('academic_year                   : ',secondary_education.academic_year)
+    print('national                        : ',secondary_education.national)
+    print('national_community              : ',secondary_education.national_community )
+    print('national_institution            : ',secondary_education.national_institution)
+    print('education_type                  : ',secondary_education.education_type)
+    print('daes                            : ',secondary_education.daes)
+    print('path_repetition                 : ',secondary_education.path_repetition)
+    print('path_reorientation              : ',secondary_education.path_reorientation)
+    print('result                          : ',secondary_education.result)
+    print('international_diploma           : ',secondary_education.international_diploma)
+    print('international_diploma_country   : ',secondary_education.international_diploma_country )
+    print('international_diploma_language  : ',secondary_education.international_diploma_language )
+    print('international_equivalence       : ',secondary_education.international_equivalence)
+    print('admission_exam                  : ',secondary_education.admission_exam)
+    print('admission_exam_date             : ',secondary_education.admission_exam_date)
+    print('admission_exam_institution      : ',secondary_education.admission_exam_institution)
+    print('admission_exam_type             : ',secondary_education.admission_exam_type)
+    print('admission_exam_result           : ',secondary_education.admission_exam_result)
+    print('professional_exam               : ',secondary_education.professional_exam)
+    print('professional_exam_date          : ',secondary_education.professional_exam_date)
+    print('professional_exam_institution   : ',secondary_education.professional_exam_institution)
+    print('professional_exam_result        : ',secondary_education.professional_exam_result)
+    print('local_language_exam             : ',secondary_education.local_language_exam )
+    print('local_language_exam_date        : ',secondary_education.local_language_exam_date)
+    print('local_language_exam_institution : ',secondary_education.local_language_exam_institution )
+    print('local_language_exam_result      : ',secondary_education.local_language_exam_result)
