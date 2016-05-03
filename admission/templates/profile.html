@@ -51,17 +51,17 @@
             <br>
             <br>
             <button type="submit" id="bt_submit_profile" class="btn btn-primary" role="button" name="save"
-                    title="Sauvegarder">
-                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Sauvegarder
+                    title="{% trans 'save'%}">
+                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> {% trans 'save'%}
             </button>
             <button type="submit" id="bt_submit_next_step" class="btn btn-default" role="button" name="next_step"
-                    title="Sauvegarder" disabled>
-                <span class="glyphicon glyphicon-forward" aria-hidden="true"></span> Etape suivante
+                    title="{% trans 'next_step'%}" disabled>
+                <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>{% trans 'next_step'%}
             </button>
             <br>
             <br>
             <div class="panel panel-default">
-                <div class="panel-heading">Identification</div>
+                <div class="panel-heading">{% trans 'identification' %}</div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-6">
@@ -71,21 +71,21 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <label>Nom *</label>
+                            <label>{%trans 'lastname'%} *</label>
                             <input class="form-control" id="txt_last_name" name="last_name"
                                    value="{{ person.user.last_name  | default_if_none:'' }}" maxlength="255">
                             (ex: Van der Elst)
                             <font class="error">{{ person_form.last_name.errors|striptags }}</font>
                         </div>
                         <div class="col-md-4">
-                            <label>Prénom *</label>
+                            <label>{%trans 'firstname'%} *</label>
                             <input class="form-control" id="txt_first_name" name="first_name"
                                    value="{{ person.user.first_name  | default_if_none:'' }}" maxlength="255">
                             (ex: Frédéric <span style="text-decoration: line-through;">frederic FREDERIC</span>)
                             <font class="error">{{ person_form.first_name.errors|striptags }}</font>
                         </div>
                         <div class="col-md-4">
-                            <label>Autres prénoms</label>
+                            <label>{%trans 'middle_name'%}</label>
                             <input class="form-control" id="txt_middle_name" name="middle_name"
                                    value="{{ person.middle_name  | default_if_none:'' }}" maxlength="50">
                             (ex: Pierre, Paul, Jacques  <span style="text-decoration: line-through;">pierre, paul,
@@ -95,21 +95,21 @@
                     <br>
                     <div class="row">
                         <div class="col-md-2">
-                            <label>Date de naissance *</label>
+                            <label>{%trans 'birth_day'%} *</label>
                             <input type="text" class="form-control" id="txt_birth_date" name="birth_date"
                                    value="{{ person.birth_date  | default_if_none:'' | date:"d/m/Y" }}">
                             <font class="error">{{ person_form.birth_date.errors|striptags }}</font>
 
                         </div>
                         <div class="col-md-4">
-                            <label>Lieu de naissance *</label>
+                            <label>{%trans 'birth_place'%} *</label>
                             <input class="form-control" id="txt_birth_place" name="birth_place"
                                    value="{{ person.birth_place | default_if_none:''}}" maxlength="255">
                             <font class="error">{{ person_form.birth_place.errors|striptags}}</font>
 
                         </div>
                         <div class="col-md-3">
-                            <label>Pays de naissance *</label>
+                            <label>{%trans 'birth_country'%} *</label>
                             <select class="form-control" id="slt_birth_country" name="birth_country">
                                 {% for country in countries%}
                                 <option value="{{country.id}}"
@@ -120,7 +120,7 @@
                             <font class="error">{{ person_form.birth_country.errors|striptags }}</font>
                         </div>
                         <div class="col-md-3">
-                            <label>Nationalité *</label>
+                            <label>{%trans 'nationality'%} *</label>
                             <select class="form-control" id="slt_nationality" name="nationality">
                                 {% for country in countries%}
                                 <option value="{{country.id}}"
@@ -135,7 +135,7 @@
                     <br>
                     <div class="row">
                         <div class="col-md-3">
-                            <label>Genre *</label>
+                            <label>{%trans 'gender'%} *</label>
                             <div>
                                 <label class="radio-inline">
                                     <input type="radio" id="rd_gender_male" name="gender" value="MALE"
@@ -150,37 +150,37 @@
 
                         </div>
                         <div class="col-md-3">
-                            <label>Etat civil *</label>
+                            <label>{%trans 'civil_status'%} *</label>
                             <select class="form-control" id="slt_civil_status" name="civil_status">
                                 <option value="SINGLE" {% if person.civil_status = "SINGLE" %}selected{%endif%}>
-                                    Célibataire
+                                    {%trans 'single'%}
                                 </option>
                                 <option value="COHABITANT" {% if person.civil_status = "COHABITANT" %}selected{%endif%}>
-                                    Cohabitant(e)
+                                    {%trans 'cohabitant'%}
                                 </option>
                                 <option value="MARRIED" {% if person.civil_status = "MARRIED" %} selected {%endif%}>
-                                    Marié(e)
+                                    {%trans 'married'%}
                                 </option>
                                 <option value="SEPARATED" {% if person.civil_status = "SEPARATED" %}selected{%endif%}>
-                                    Séparé(e)
+                                    {%trans 'separated'%}
                                 </option>
                                 <option value="DIVORCED" {% if person.civil_status = "DIVORCED" %}selected{%endif%}>
-                                    Divorcé(e)
+                                    {%trans 'divorced'%}
                                 </option>
                                 <option value="WIDOWED" {% if person.civil_status = "WIDOWED" %}selected{%endif%}>
-                                    Veuf(ve)
+                                    {%trans 'widow'%}
                                 </option>
                             </select>
                             <font class="error">{{ person_form.civil_status.errors|striptags }}</font>
                         </div>
                         <div class="col-md-3">
-                            <label>Nombre d'enfants</label>
+                            <label>{%trans 'children'%}</label>
                             <input class="form-control" id="txt_number_children" name="number_children"
                                    value="{{ person.number_children | default_if_none:''}}">
                             <font class="error">{{ person_form.number_children.errors|striptags }}</font>
                         </div>
                         <div class="col-md-3">
-                            <label>Nom et prénom conjoint</label>
+                            <label>{%trans 'spouse_name'%}</label>
                             <input class="form-control" id="txt_spouse_name" name="spouse_name"
                                    value="{{ person.spouse_name | default_if_none:''}}" maxlength="50">
                         </div>
@@ -189,9 +189,9 @@
             </div>
 
             <div class="panel panel-default">
-                <div class="panel-heading">Pièce d'identité</div>
+                <div class="panel-heading">{%trans 'id_card'%}</div>
                 <div class="panel-body">
-                    Veuillez fournir au moins un numéro d'identité.
+                    {%trans 'question_identity'%}
                     <br>
                     <br>
                     <div class="row">
@@ -216,11 +216,11 @@
             </div>
 
             <div class="panel panel-default">
-                <div class="panel-heading">Domicile légal</div>
+                <div class="panel-heading">{% trans 'legal_residence'%}</div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <label>Rue/Avenue *</label>
+                            <label>{% trans 'street'%} *</label>
                             <input class="form-control" id="txt_legal_adr_street" name="legal_adr_street"
                                    value="{{ person_legal_address.street | default_if_none:''}}"
                                    maxlength="255">
@@ -228,14 +228,14 @@
                             <font class="error">{{ person_form.legal_adr_street.errors|striptags }}</font>
                         </div>
                         <div class="col-md-2">
-                            <label>Numéro *</label>
+                            <label>{% trans 'number'%} *</label>
                             <input class="form-control" id="txt_legal_adr_number" name="legal_adr_number"
                                    value="{{ person_legal_address.number | default_if_none:''}}"
                                    maxlength="6">
                             <font class="error">{{ person_form.legal_adr_number.errors|striptags }}</font>
                         </div>
                         <div class="col-md-4">
-                            <label>Lieu-dit (éventuellement)</label>
+                            <label>{% trans 'place'%}</label>
                             <input class="form-control" id="txt_legal_adr_complement" name="legal_adr_complement"
                                    value="{{ person_legal_address.complement | default_if_none:''}}"
                                    maxlength="255">
@@ -244,7 +244,7 @@
                     <br>
                     <div class="row">
                         <div class="col-md-2">
-                            <label>Code postal *</label>
+                            <label>{% trans 'postal_code'%} *</label>
                             <input class="form-control" id="txt_legal_adr_postal_code" name="legal_adr_postal_code"
                                    value="{{ person_legal_address.postal_code | default_if_none:''}}"
                                    maxlength="20">
@@ -252,14 +252,14 @@
                             <font class="error">{{ person_form.legal_adr_postal_code.errors|striptags }}</font>
                         </div>
                         <div class="col-md-6">
-                            <label>Localité *</label>
+                            <label>{% trans 'city'%} *</label>
                             <input class="form-control" id="txt_legal_adr_city" name="legal_adr_city"
                                    value="{{ person_legal_address.city | default_if_none:''}}"
                                    maxlength="255">
                             <font class="error">{{ person_form.legal_adr_city.errors|striptags }}</font>
                         </div>
                         <div class="col-md-4">
-                            <label>Pays *</label>
+                            <label>{% trans 'country'%} *</label>
                             <select class="form-control" id="slt_legal_adr_country" name="legal_adr_country">
                                 {% for country in countries%}
                                 <option value="{{country.id}}"
@@ -276,12 +276,12 @@
             </div>
 
             <div class="panel panel-default">
-                <div class="panel-heading">Adresse de correspondance</div>
+                <div class="panel-heading">{% trans 'postal_address'%}</div>
                 <div class="panel-body">
 
                     <div class="row">
                         <div class="col-md-4">
-                            Adresse de contact est la même que votre domicile légal?
+                            {% trans 'question_address'%}
                             <div>
                                 <label class="radio-inline">
                                     <input type="radio" id="rd_same_contact_legal_addr_true"
@@ -303,7 +303,7 @@
                          style="{% if same_addresses %} visibility:hidden;display:none; {% else %} visibility:visible;display:block; {%endif%} ">
                         <div class="row">
                             <div class="col-md-6">
-                                <label>Rue/Avenue *</label>
+                                <label>{% trans 'street'%} *</label>
                                 <input class="form-control" id="txt_contact_adr_street" name="contact_adr_street"
                                        value="{{ person_contact_address.street | default_if_none:''}}"
                                        maxlength="255">
@@ -311,14 +311,14 @@
                                 <font class="error">{{ person_form.contact_adr_street.errors|striptags }}</font>
                             </div>
                             <div class="col-md-2">
-                                <label>Numéro *</label>
+                                <label>{% trans 'number'%} *</label>
                                 <input class="form-control" id="txt_contact_adr_number" name="contact_adr_number"
                                        value="{{ person_contact_address.number | default_if_none:''}}"
                                        maxlength="6">
                                 <font class="error">{{ person_form.contact_adr_number.errors|striptags }}</font>
                             </div>
                             <div class="col-md-4">
-                                <label>Lieu-dit (éventuellement)</label>
+                                <label>{% trans 'place'%}</label>
                                 <input class="form-control" id="txt_contact_adr_complement"
                                        name="contact_adr_complement"
                                        value="{{ person_contact_address.complement | default_if_none:''}}"
@@ -328,7 +328,7 @@
                         <br>
                         <div class="row">
                             <div class="col-md-2">
-                                <label>Code postal *</label>
+                                <label>{% trans 'postal_code'%} *</label>
                                 <input class="form-control" id="txt_contact_adr_postal_code"
                                        name="contact_adr_postal_code"
                                        value="{{ person_contact_address.postal_code | default_if_none:''}}"
@@ -337,14 +337,14 @@
                                 <font class="error">{{ person_form.contact_adr_postal_code.errors|striptags }}</font>
                             </div>
                             <div class="col-md-6">
-                                <label>Localité *</label>
+                                <label>{% trans 'city'%} *</label>
                                 <input class="form-control" id="txt_contact_adr_city" name="contact_adr_city"
                                        value="{{ person_contact_address.city | default_if_none:''}}"
                                        maxlength="255">
                                 <font class="error">{{ person_form.contact_adr_city.errors|striptags }}</font>
                             </div>
                             <div class="col-md-4">
-                                <label>Pays *</label>
+                                <label>{% trans 'country'%} *</label>
                                 <select class="form-control" id="slt_contact_adr_country" name="contact_adr_country">
                                     {% for country in countries%}
                                     <option value="{{country.id}}"
@@ -361,7 +361,7 @@
             </div>
 
             <div class="panel panel-default">
-                <div class="panel-heading">Contact</div>
+                <div class="panel-heading">{% trans 'contact'%}</div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-3">
@@ -388,7 +388,7 @@
             </div>
 
             <div class="panel panel-default">
-                <div class="panel-heading">Avez-vous déjà été inscrit, antérieurement,  à l'institution suivante: {{ institution }}?</div>
+                <div class="panel-heading">{%trans 'question_previous_enrollment'%} {{ institution }}?</div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-2">
@@ -412,14 +412,14 @@
                         <br>
                         <div class="row">
                             <div class="col-md-4">
-                                <label>Quel est votre numéro de matricule ? *</label>
+                                <label>{% trans 'question_registration_number'%} *</label>
                                 <input class="form-control" id="txt_register_number" name="register_number"
                                        value="{{ person.register_number| default_if_none:''}}">
                                 (ex: 1058-13-00)
                                 <font class="error">{{ person_form.register_number.errors|striptags }}</font>
                             </div>
                             <div class="col-md-8">
-                                <label>Quelle est votre dernière année dans l'institution suivante : {{institution}}? *</label>
+                                <label>{% trans 'question_year_last_registration'%} {{institution}}? *</label>
                                 <br>
                                 <input id="txt_ucl_last_year" name="ucl_last_year" size="10"
                                        value="{{ person.ucl_last_year| default_if_none:''}}" maxlength="9">
@@ -431,13 +431,13 @@
             </div>
 
             <button type="submit" id="bt_profile" class="btn btn-primary" role="button" name="save_down"
-                    title="Sauvegarder">
-                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Sauvegarder
+                    title="{% trans 'save'%}">
+                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> {% trans 'Save'%}
             </button>
 
             <button type="submit" id="bt_next_step" class="btn btn-default" role="button" name="next_step_down"
-                    title="Sauvegarder" disabled>
-                <span class="glyphicon glyphicon-forward" aria-hidden="true"></span> Etape suivante
+                    title="{% trans 'next_step'%}" disabled>
+                <span class="glyphicon glyphicon-forward" aria-hidden="true"></span> {% trans 'next_step'%}
             </button>
 
         </form>

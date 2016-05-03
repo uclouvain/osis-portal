@@ -441,3 +441,90 @@ msgstr "Il faut préciser un type de communauté pour l'établissement"
 msgid "msg_error_next_step_impossible"
 msgstr ""
  "Impossible de passer à l'étape suivante. Il faut avoir répondu 'Oui' à au moins unes des questions suivantes : "
+
+msgid "identification"
+msgstr "Identification"
+
+msgid "your_profile"
+msgstr "Votre profil"
+
+msgid "update_profile"
+msgstr "Update profile"
+
+msgid "name"
+msgstr "Nom"
+
+msgid "lastname"
+msgstr "Nom"
+
+msgid "firstname"
+msgstr "Prénom"
+
+msgid "middle_name"
+msgstr "Autres prénoms"
+
+msgid "birth_day"
+msgstr "Date de naissance"
+
+msgid "birth_place"
+msgstr "Lieu de naissance"
+
+msgid "birth_country"
+msgstr "Pays de naissance"
+
+msgid "nationality"
+msgstr "Nationalité"
+
+msgid "gender"
+msgstr "Genre"
+
+msgid "civil_status"
+msgstr "Etat civil"
+
+msgid "children"
+msgstr "Nombre d'enfants"
+
+msgid "spouse_name"
+msgstr "Nom et prénom conjoint"
+
+msgid "id_card"
+msgstr "Pièce d'identité"
+
+msgid "question_identity"
+msgstr "Veuillez fournir au moins un numéro d'identité."
+
+msgid "legal_residence"
+msgstr "Domicile léga"
+
+msgid "street"
+msgstr "Rue/Avenue"
+
+msgid "number"
+msgstr "Numéro"
+
+msgid "place"
+msgstr "Lieu-dit (éventuellement)"
+
+msgid "postal_address"
+msgstr "Adresse de correspondance"
+
+msgid "question_address"
+msgstr "Adresse de contact est la même que votre domicile légal? "
+
+msgid "mobile"
+msgstr "GSM"
+
+msgid "other_phone"
+msgstr "Autre téléphone"
+
+msgid "mail"
+msgstr "E-mail"
+
+msgid "question_previous_enrollment"
+msgstr "Avez-vous déjà été inscrit, antérieurement, à l'institution suivante :"
+
+msgid "question_registration_number"
+msgstr "Quel est votre numéro de matricule ?"
+
+msgid "question_year_last_registration"
+msgstr "Quelle est votre dernière année dans l'institution suivante : "
