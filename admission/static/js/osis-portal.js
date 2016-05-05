@@ -351,8 +351,7 @@ $("#slt_nationality").change(function() {
         if (data.european_union) {
               $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
         }else{
-              display('#pnl_assimilation_criteria',True)
+              $('#pnl_assimilation_criteria').css('visibility', 'visible').css('display','block');
         }
      });
-
  });

@@ -26,6 +26,7 @@
 from admission.models import academic_year
 from admission.models import answer
 from admission.models import application
+from admission.models import assimilation_criteria
 from admission.models import domain
 from admission.models import form
 from admission.models import grade_type
@@ -35,6 +36,7 @@ from admission.models import offer_year_calendar
 from admission.models import option
 from admission.models import person
 from admission.models import person_address
+from admission.models import person_assimilation_criteria
 from admission.models import properties
 from admission.models import question
 from admission.models import supported_languages

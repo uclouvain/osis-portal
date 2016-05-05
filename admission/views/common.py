@@ -44,6 +44,7 @@ def home(request):
     else:
         return profile(request)
 
+
 def profile(request):
 
     if request.method == 'POST':
@@ -157,24 +158,23 @@ def profile(request):
             person.ucl_last_year = None
             previous_enrollment = False
 
-        personAssimilationCriteria.objects.filter(person_id=person.id).delete()
         for key in request.POST:
-            if key[0:22] == "assimilation_criteria_" and key[-5:] == "_true":
-                if request.POST[key]:
-                    personAssimilationCriteria.criteria_id = request.POST[key]
-                    personAssimilationCriteria.person_id = person.id
-                    personAssimilationCriteria_to_save = true
-
+            if key[0:22] == "assimilation_criteria_":
+                if request.POST[key] == "true":
+                    criteria_id = key[22:]
+                    criteria = mdl.assimilation_criteria.AssimilationCriteria.find_by_id(criteria_id)
+                    if criteria:
+                        personAssimilationCriteria = mdl.person_assimilation_criteria.PersonAssimilationCriteria()
+                        personAssimilationCriteria.criteria = criteria
+                        personAssimilationCriteria.person = person
+                        if person_form.is_valid():
+                            personAssimilationCriteria.save()
 
         if person_form.is_valid():
             if person_contact_address:
                 person_contact_address.save()
             person_legal_address.save()
             person.save()
-
-            if personAssimilationCriteria_to_save:
-                personAssimilationCriteria.save()
-
             return home(request)
 
     else:
@@ -201,13 +201,13 @@ def profile(request):
         institution_name = "<font style='color:red'>Aucune institution de définie</font>"
     else:
         institution_name = property.value
-    return render(request, "profile.html", dict(person=person,
-                                                person_form=person_form,
-                                                countries=countries,
-                                                assimilationCriteria=assimilationCriteria,
-                                                personAssimilationCriteria=personAssimilationCriteria,
-                                                person_legal_address=person_legal_address,
-                                                person_contact_address=person_contact_address,
-                                                same_addresses=same_addresses,
-                                                previous_enrollment=previous_enrollment,
-                                                institution=institution_name))
+    return render(request, "profile.html", {'person': person,
+                                            'person_form': person_form,
+                                            'countries': countries,
+                                            'assimilationCriteria': assimilationCriteria,
+                                            'personAssimilationCriteria': personAssimilationCriteria,
+                                            'person_legal_address': person_legal_address,
+                                            'person_contact_address': person_contact_address,
+                                            'same_addresses': same_addresses,
+                                            'previous_enrollment': previous_enrollment,
+                                            'institution': institution_name})

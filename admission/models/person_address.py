@@ -42,11 +42,11 @@ class PersonAddress(models.Model):
     type = models.CharField(max_length=20, choices=ADDRESS_TYPE)
     street = models.CharField(max_length=255)
     number = models.CharField(max_length=6)
-    #box missing
     complement = models.CharField(max_length=255, blank=True, null=True)
     postal_code = models.CharField(max_length=20)
     city = models.CharField(max_length=255)
     country = models.ForeignKey('reference.Country')
+    complement1 = models.CharField(max_length=255, blank=True, null=True)
 
 
 def find_by_person(a_person):

@@ -30,6 +30,7 @@ from django.contrib import admin
 
 class AssimilationCriteriaAdmin(admin.ModelAdmin):
     list_display = ('criteria', 'order')
+    fieldsets = ((None, {'fields': ('criteria', 'order')}),)
 
 
 class AssimilationCriteria(models.Model):
@@ -44,3 +45,6 @@ class AssimilationCriteria(models.Model):
 
     def find_by_id(criteria_id):
         return AssimilationCriteria.objects.get(pk=criteria_id)
+
+    class Meta:
+        ordering = ('order',)
