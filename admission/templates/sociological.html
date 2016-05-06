@@ -34,77 +34,85 @@
     <div class="panel-body">
         <form class="form-inline">
             <div class="form-group">
-                Combien de frères et soeurs?
+                {% trans 'sociological_survey'%}
                 <input class="form-control" id="txt_brother_sister" name="brother_sister"
                        maxlength="2">
             </div>
             <br>
-            <label><h3>Père</h3></label>
+            <label><h3>{% trans 'father'%}</h3></label>
             <br>
             <div class="form-group">
-                <label>&nbsp;&nbsp;&nbsp;Décédé : </label>
+                <label>&nbsp;&nbsp;&nbsp;{% trans 'deceased_male'%} : </label>
                 <input type="checkbox" id="chb_deceased_father" name="deceased_father">
             </div>
             <div class="form-group">
-                <label>Etude : </label>
-                <select name="father_study" id="slt_father_study">
+                <label>{% trans 'study'%} : </label>
+                <select name="father_study" id="slt_father_study" class="form-control" >
                     <option value=""></option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Profession : </label>
-                <select name="father_profession" id="slt_father_profession">
+                <label>{% trans 'profession'%} : </label>
+                <select name="father_profession" id="slt_father_profession" class="form-control" >
                     <option value=""></option>
                 </select>
             </div>
             <br>
-            <label><h3>Mère</h3></label>
+            <label><h3>{% trans 'mother'%}</h3></label>
             <br>
             <div class="form-group">
-                <label>&nbsp;&nbsp;&nbsp;Décédée : </label>
+                <label>&nbsp;&nbsp;&nbsp;{% trans 'deceased_female'%} : </label>
                 <input type="checkbox" id="chb_deceased_mother" name="deceased_mother">
             </div>
             <div class="form-group">
-                <label>Etude : </label>
-                <select name="mother_study" id="slt_mother_study">
+                <label>{% trans 'study'%} : </label>
+                <select name="mother_study" id="slt_mother_study" class="form-control" >
                     <option value=""></option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Profession : </label>
-                <select name="mother_study" id="slt_mother_profession">
-                    <option value=""></option>
-                </select>
-            </div>
-
-            <br>
-            <label><h3>Etudiant</h3></label>
-            <br>
-            <div class="form-group">
-                <label>&nbsp;&nbsp;&nbsp;Activité professionnelle : </label>
-                <select name="student_professional_activity" id="slt_student_professional_activity">
-                    <option value=""></option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Profession : </label>
-                <select name="student_profession" id="slt_student_profession">
+                <label>{% trans 'profession'%} : </label>
+                <select name="mother_study"
+                        id="slt_mother_profession"
+                        class="form-control" >
                     <option value=""></option>
                 </select>
             </div>
 
             <br>
-            <label><h3>Conjoint</h3></label>
+            <label><h3>{% trans 'student'%}</h3></label>
             <br>
             <div class="form-group">
-                <label>&nbsp;&nbsp;&nbsp;Activité professionnelle : </label>
-                <select name="conjoint_professional_activity" id="slt_conjoint_professional_activity">
+                <label>&nbsp;&nbsp;&nbsp;{% trans 'professional_activity'%} : </label>
+                <select name="student_professional_activity"
+                        id="slt_student_professional_activity"
+                        class="form-control" >
                     <option value=""></option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Profession : </label>
-                <select name="conjoint_profession" id="slt_conjoint_profession">
+                <label>{% trans 'profession'%}  : </label>
+                <select name="student_profession"
+                        id="slt_student_profession"
+                        class="form-control" >
+                    <option value=""></option>
+                </select>
+            </div>
+
+            <br>
+            <label><h3>{% trans 'conjoint'%}</h3></label>
+            <br>
+            <div class="form-group">
+                <label>&nbsp;&nbsp;&nbsp;{% trans 'professional_activity'%} : </label>
+                <select name="conjoint_professional_activity"
+                        id="slt_conjoint_professional_activity"
+                        class="form-control" >
+                    <option value=""></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>{% trans 'professional'%} : </label>
+                <select name="conjoint_profession" id="slt_conjoint_profession" class="form-control" >
                     <option value=""></option>
                 </select>
             </div>
@@ -114,14 +122,18 @@
             <label><h3>Grand-père (profession)</h3></label>
             <br>
             <div class="form-group">
-                <label>&nbsp;&nbsp;&nbsp;Paternel : </label>
-                <select name="paternal_grandfather_profession" id="slt_paternal_grandfather_profession">
+                <label>&nbsp;&nbsp;&nbsp;{% trans 'paternal'%} : </label>
+                <select name="paternal_grandfather_profession"
+                        id="slt_paternal_grandfather_profession"
+                        class="form-control" >
                     <option value=""></option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Maternel :</label>
-                <select name="maternal_grandfather_profession" id="slt_maternal_grandfather_profession">
+                <label>{% trans 'maternal'%} :</label>
+                <select name="maternal_grandfather_profession"
+                        id="slt_maternal_grandfather_profession"
+                        class="form-control" >
                     <option value=""></option>
                 </select>
             </div>
