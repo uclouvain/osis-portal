@@ -181,7 +181,7 @@ def profile(request):
     countries = Country.find_countries()
     property = mdl.properties.find_by_key('INSTITUTION')
     if property is None:
-        institution_name = "<font style='color:red'>Aucune institution de définie</font>"
+        institution_name = None
     else:
         institution_name = property.value
     return render(request, "profile.html", dict(person=person,
