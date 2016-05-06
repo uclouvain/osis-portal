@@ -32,6 +32,7 @@ from admission.forms import PersonForm
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
+
 @login_required
 def home(request):
     person = mdl.person.find_by_user(request.user)

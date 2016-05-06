@@ -74,14 +74,14 @@ def new_user(request):
 
         if str(result) != form_new['verification'].value():
             validation = False
-            form_new.errors['verification'] = "Résultat du calcul incorrect"
+            form_new.errors['verification'] = ["Résultat du calcul incorrect"]
     else:
         validation = False
     email = form_new['email_new'].value()
 
     user = User.objects.filter(email=email)
     if user:
-        form_new.errors['email_new_confirm'] = "Il existe déjà un compte pour cette adresse email %s" % email
+        form_new.errors['email_new_confirm'] = ["Il existe déjà un compte pour cette adresse email %s" % email]
         validation = False
 
     if validation:

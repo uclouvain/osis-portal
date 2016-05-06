@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'enrollments',
     'dashboard',
     'rest_framework',
+    'bootstrap3',
 ]
 
 MIDDLEWARE_CLASSES = [

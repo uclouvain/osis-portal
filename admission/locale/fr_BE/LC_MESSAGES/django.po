@@ -1,0 +1,641 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-05-03 08:56+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "admission"
+msgstr "Admission"
+
+msgid "inscription"
+msgstr "Enrollment"
+
+msgid "bachelor"
+msgstr "Bachelier"
+
+msgid "master"
+msgstr "Master"
+
+msgid "ph_d"
+msgstr "Doctorat"
+
+msgid "teacher_training_certificate"
+msgstr "Agrégation"
+
+msgid "certificate"
+msgstr "Certificat"
+
+msgid "plain"
+msgstr "Texte"
+
+msgid "plain_and_html"
+msgstr "Texte et HTML"
+
+msgid "female"
+msgstr "Féminin"
+
+msgid "male"
+msgstr "Masculin"
+
+msgid "married"
+msgstr "Marié"
+
+msgid "single"
+msgstr "Célibataire"
+
+msgid "widowed"
+msgstr "Veuf(ve)"
+
+msgid "divorced"
+msgstr "Divorcé(d)"
+
+msgid "separated"
+msgstr "Séparé(s)"
+
+msgid "cohabitant"
+msgstr "Cohabitant"
+
+msgid "unknown"
+msgstr "Inconnu "
+
+msgid "legal"
+msgstr "Légal"
+
+msgid "contact"
+msgstr "Contact"
+
+msgid "label"
+msgstr "Libellé"
+
+msgid "short_input_text"
+msgstr "Boite de texte courte"
+
+msgid "long_input_text"
+msgstr "Boite de texte longue"
+
+msgid "radio_button"
+msgstr "Bouton radio"
+
+msgid "checkbox"
+msgstr "Case à cocher"
+
+msgid "dropdown_list"
+msgstr "Liste déroulante"
+
+msgid "upload_button"
+msgstr "Bouton upload"
+
+msgid "download_link"
+msgstr "Download link"
+
+msgid "http_link"
+msgstr "HTTP link"
+
+msgid "yes"
+msgstr "Oui"
+
+msgid "no"
+msgstr "Non"
+
+msgid "demanded"
+msgstr "En cours de demande"
+
+msgid "previous_step"
+msgstr "Etape précédente"
+
+msgid "save"
+msgstr "Sauvegarder"
+
+msgid "next_step"
+msgstr "Etape suivante"
+
+msgid "errors"
+msgstr "erreur(s)"
+
+msgid "secondary_education"
+msgstr "Etudes secondaires"
+
+msgid "question_get_diploma"
+msgstr ""
+"Avez-vous obtenu un diplôme de fin d'études secondaires ou allez-vous "
+"l'obtenir cette année?"
+
+msgid "label_secondary_education"
+msgstr ""
+"Le diplôme d'études secondaires est le titre nécessaire pour entamer des "
+"études supérieures (universitaires, en haute-école, ...). Ex : CESS, "
+"Baccalauréat, Diplôme de  Maturité, Etudes Gymnasiales, Etudes Collégiales, "
+"High School, ..."
+
+msgid "pnl_academic_year_which_year"
+msgstr "Veuillez indiquer l'année académique d'obtention"
+
+msgid "academic_year"
+msgstr "Année académique"
+
+msgid "pnl_academic_year_secondary_education"
+msgstr "Vous avez effectué vos études secondaires"
+
+msgid "in_belgium"
+msgstr "En Belgique"
+
+msgid "not_in_belgium"
+msgstr "A l'étranger"
+
+msgid "file"
+msgstr "Fichier"
+
+msgid "choose_file"
+msgstr "Choisir un fichier"
+
+msgid "cancel"
+msgstr "Annuler"
+
+msgid "admission_exam"
+msgstr "Examen d'admission"
+
+msgid "question_admission_exam"
+msgstr ""
+"Avez-vous été inscrit(e) ou allez-vous être inscrit(e) à un examen "
+"d'admission?"
+
+msgid "question_date_session"
+msgstr "A quelle session (date)?"
+
+msgid "question_institution_name"
+msgstr "Nom de l'établissement"
+
+msgid "question_exam_type"
+msgstr "Quel type d'examen?"
+
+msgid "question_other_exam_type"
+msgstr "Autre type d'examen?"
+
+msgid "specify_name"
+msgstr "Préciser le nom"
+
+msgid "which_result"
+msgstr "Quel résultat avez-vous obtenu?"
+
+msgid "low_result"
+msgstr "Moins de 65%"
+
+msgid "middle_result"
+msgstr "Entre 65 et 75%"
+
+msgid "high_result"
+msgstr "Plus de 75%"
+
+msgid "add_enrollment_file"
+msgstr ""
+"Veuillez joindre une copie de votre certificat ou une preuve d'inscription à"
+
+msgid "click_to_add"
+msgstr "Cliquez-ici pour joindre"
+
+msgid "international_diploma_question"
+msgstr "Quel diplôme avez-vous obtenu (ou obtiendrez-vous)"
+
+msgid "baccalaureat_national"
+msgstr "Baccalauréat national (ou diplôme d'état, ...)"
+
+msgid "baccalaureat_european"
+msgstr "Baccalauréat européen (Schola Europaea)"
+
+msgid "baccalaureat_international"
+msgstr "Baccalauréat international(IBO)"
+
+msgid "awarding_country"
+msgstr "Pays organisateur"
+
+msgid "linguistic_regime"
+msgstr "Régime linguistique"
+
+msgid "other_linguistic_regime"
+msgstr "Si autre régime linguistique, précisez"
+
+msgid "equivalence_question"
+msgstr "Ce diplôme a-t-il fait l'objet d'une décision d'équivalence par les services de la Communauté française de Belgique?"
+
+msgid "file_equivalence_instructions"
+msgstr ""
+"Si vous la possédez, vous devrez fournir une photocopie recto-verso de la "
+"décision d'équivalence définitive délivrée par le Ministère de la Communauté "
+"française de Belgique. Si vous ne la possédez pas, une demande d'équivalence "
+"DOIT être introduite en respectant strictement les consignes indiquées par "
+"la "
+
+msgid "file_equivalence_btn"
+msgstr "Veuillez joindre la décision d'équivalence"
+
+msgid "result"
+msgstr "Résultat"
+
+msgid "file_copy_add_instruction"
+msgstr "Veuillez joindre la copie de "
+
+msgid "file_copy_help_instruction"
+msgstr ""
+"Vous devez fournir une copie recto-verso.  Si vous avez le recto-verso dans "
+"le même fichier, veuillez le joindre."
+
+msgid "original_of"
+msgstr "Original de votre "
+
+msgid "high_school_diploma"
+msgstr "Diplôme d'études secondaires"
+
+msgid "recto"
+msgstr "Recto"
+
+msgid "verso"
+msgstr "Verso"
+
+msgid "high_school_diploma_transcript"
+msgstr "Relevé de notes des études secondaires"
+
+msgid "high_school_diplome_translation"
+msgstr "Traduction par un traducteur-juré"
+
+msgid "local_language_exam"
+msgstr "Examen de maitrise de la langue française"
+
+msgid "question_local_language_exam"
+msgstr "Avez-vous été inscrit(e) ou allez-vous être inscrit(e) à cet examen?"
+
+msgid "further_information"
+msgstr "Informations complémentaires"
+
+msgid "succeed_result"
+msgstr "Succès"
+
+msgid "failed"
+msgstr "Echec"
+
+msgid "demanded_result"
+msgstr "En cours d'inscription à la session mentionnée "
+
+msgid "add_success_proof_file"
+msgstr "Veuillez joindre l'attestation de réussite ou la preuve d'inscription"
+
+msgid "institution"
+msgstr "Etablissement"
+
+msgid "which_community"
+msgstr ""
+"Dans quelle Communauté avez-vous suivi(ou suivez-vous) la dernière année de "
+"vos études"
+
+msgid "french_belgian_community"
+msgstr "Communauté française de Belgique"
+
+msgid "dutch_belgian_community"
+msgstr "Communauté flammande de Belgique"
+
+msgid "german_belgian_community"
+msgstr "Communauté germanophone de Belgique"
+
+msgid "institution_cess_question"
+msgstr ""
+"Quel établissement scolaire a délivré ou délivrera votre certificat "
+"d'enseignement secondaire supérieur (C.E.S.S.)?"
+
+msgid "institution_cess_help"
+msgstr ""
+"Pour vous y aider, nous vous proposons de le rechercher soit par localité "
+"soit par code postal. "
+
+msgid "by_city"
+msgstr "Par localité"
+
+msgid "by_postal_code"
+msgstr "Par code postal"
+
+msgid "institution_not_found"
+msgstr ""
+"Si vous ne trouvez pas votre établissement dans cette liste, mentionnez-le "
+"ci-après"
+
+msgid "other_institution"
+msgstr "Autre etablissement"
+
+msgid "institution_name"
+msgstr "Nom de l'établissement"
+
+msgid "city"
+msgstr "Par localité"
+
+msgid "postal_code"
+msgstr "Par code postal"
+
+msgid "which_type_education"
+msgstr "Quel type d'enseignement avez-vous suivi(ou suivez-vous)?"
+
+msgid "educational_transition"
+msgstr "Enseignement de transition"
+
+msgid "educational_qualification"
+msgstr "Enseignement de qualification"
+
+msgid "other_education"
+msgstr "Etudes secondaires"
+
+msgid "to_specify"
+msgstr "A spécifier"
+
+msgid "daes"
+msgstr "DAES"
+
+msgid "daes_question"
+msgstr ""
+"Comme vous avez terminé vos études au plus tard en 1993, avez-vous obtenu un "
+"diplôme belge d'aptitude à accéder à l'enseignement supérieur (DAES)?"
+
+msgid "path"
+msgstr "Parcours"
+
+msgid "path_repetition"
+msgstr "En cours d'études avez-vous redoublé?"
+
+msgid "question_path_reorientation"
+msgstr "En cours d'études, avez-vous changé d'orientation? "
+
+msgid "copy_add"
+msgstr "Veuillez joindre la copie de "
+
+msgid "recto_verso_copy"
+msgstr "Vous devez fournir une copie recto-verso. Si vous avez le recto-verso dans le même fichier, veuillez joindre les 2"
+
+msgid "transcript"
+msgstr "Enrollment"
+
+msgid "professional_experiences"
+msgstr "Expériences professionnelles"
+
+msgid "question_professional_experience"
+msgstr "Avez-vous été inscrit(e) ou allez-vous être inscrit(e) à un examen de la valorisation des acquis et expériences professionnelles (VAE)?"
+
+msgid "vae_information"
+msgstr "Informations complémentaires"
+
+msgid "question_institution_name_nice"
+msgstr "Nom de l'établissement"
+
+msgid "add_professional_exam_file"
+msgstr "Veuillez joindre une copie de votre certificat ou une preuve d'inscription à l'examen"
+"Veuillez joindre une copie de votre certificat ou une preuve d'inscription à "
+"l'examen"
+
+msgid "your_diplomas"
+msgstr "Vos diplômes"
+
+msgid "update_secondary_education"
+msgstr "Modifier diplômes/études secondaires"
+
+msgid "french"
+msgstr "Français"
+
+msgid "english"
+msgstr "Anglais"
+
+msgid "mandatory_field"
+msgstr "Champ obligatoire"
+
+msgid "msg_info_saved"
+msgstr "Les données ont été enregistrées"
+
+msgid "msg_error_other_education_type"
+msgstr "Il faut préciser un type d'enseignement autre"
+
+msgid "msg_error_education_type"
+msgstr "Il faut préciser un type d'enseignement"
+
+msgid "msg_error_international_diploma"
+msgstr "Il faut préciser le diplôme obtenu"
+
+msgid "msg_other_language_diploma"
+msgstr "Si autre régime linguistique, précisez"
+
+msgid "msg_language_diploma"
+msgstr "Il faut préciser un régime linguistique"
+
+msgid "msg_school_name"
+msgstr "Veuillez indiquer auprès de quel établissement."
+
+msgid "msg_error_school_belgian_community"
+msgstr "Il faut préciser un type de communauté pour l'établissement"
+
+msgid "msg_error_next_step_impossible"
+msgstr ""
+ "Impossible de passer à l'étape suivante. Il faut avoir répondu 'Oui' à au moins unes des questions suivantes : "
+
+msgid "identification"
+msgstr "Identification"
+
+msgid "your_profile"
+msgstr "Votre profil"
+
+msgid "update_profile"
+msgstr "Update profile"
+
+msgid "name"
+msgstr "Nom"
+
+msgid "lastname"
+msgstr "Nom"
+
+msgid "firstname"
+msgstr "Prénom"
+
+msgid "middle_name"
+msgstr "Autres prénoms"
+
+msgid "birth_day"
+msgstr "Date de naissance"
+
+msgid "birth_place"
+msgstr "Lieu de naissance"
+
+msgid "birth_country"
+msgstr "Pays de naissance"
+
+msgid "nationality"
+msgstr "Nationalité"
+
+msgid "gender"
+msgstr "Genre"
+
+msgid "civil_status"
+msgstr "Etat civil"
+
+msgid "children"
+msgstr "Nombre d'enfants"
+
+msgid "spouse_name"
+msgstr "Nom et prénom conjoint"
+
+msgid "id_card"
+msgstr "Pièce d'identité"
+
+msgid "question_identity"
+msgstr "Veuillez fournir au moins un numéro d'identité."
+
+msgid "legal_residence"
+msgstr "Domicile léga"
+
+msgid "street"
+msgstr "Rue/Avenue"
+
+msgid "number"
+msgstr "Numéro"
+
+msgid "place"
+msgstr "Lieu-dit (éventuellement)"
+
+msgid "postal_address"
+msgstr "Adresse de correspondance"
+
+msgid "question_address"
+msgstr "Adresse de contact est la même que votre domicile légal? "
+
+msgid "mobile"
+msgstr "GSM"
+
+msgid "other_phone"
+msgstr "Autre téléphone"
+
+msgid "mail"
+msgstr "E-mail"
+
+msgid "question_previous_enrollment"
+msgstr "Avez-vous déjà été inscrit, antérieurement, à l'institution suivante :"
+
+msgid "question_registration_number"
+msgstr "Quel est votre numéro de matricule ?"
+
+msgid "question_year_last_registration"
+msgstr "Quelle est votre dernière année dans l'institution suivante :"
+
+msgid "msg_error_username_password_not_matching"
+msgstr ""
+"La combinaison login/mot de passe entrée n'est pas valide. Veuillez "
+"réessayer."
+
+msgid "password"
+msgstr "Mot de passe"
+
+msgid "validate"
+msgstr "Valider"
+
+msgid "question_password_forgotten"
+msgstr "Mot de passe oublié?"
+
+msgid "no_account_yet"
+msgstr "Si vous ne disposez pas encore de ce compte"
+
+msgid "welcome"
+msgstr "Bienvenue sur la demande d'inscription en ligne de l'Université catholique de Louvain."
+
+msgid "account_needed"
+msgstr "Pour introduire votre demande d'inscription, il vous faut un compte d'accès."
+
+msgid "account_already_created"
+msgstr "Si vous avez déjà demandé la création de ce compte"
+
+msgid "mail_account_activation"
+msgstr ""
+ "Vous avez reçu, par mail, une confirmation de création de compte et activé celui-ci en cliquant sur le lien "
+ "d'activation."
+
+msgid "connection_possible"
+msgstr ""
+ "Vous pouvez dès lors vous connecter à la demande d'inscription grâce à votre adresse mail et le mot "
+ "de passe que vous avez choisi antérieurement."
+
+msgid "account_creation"
+msgstr "Nous vous invitons à vous créer ce compte, composé d'une adresse mail privée et d'un mot de passe."
+
+msgid "all_mandatory_fields"
+msgstr "Tous les champs sont obligatoires"
+
+msgid "confirm_email"
+msgstr "Confirmer l'e-mail"
+
+msgid "confirm_password"
+msgstr "Confirmer le mot de passe"
+
+msgid "different_emails"
+msgstr "Les 2 emails introduit sont différents"
+
+msgid "different_passwords"
+msgstr "Les 2 mots de passe sont différents"
+
+msgid "password_too_short"
+msgstr "Le mot de passe est trop court.  Il doit contenir au minimum 8 caractères."
+
+msgid "invalid_email"
+msgstr "Merci d'encoder une adresse email correcte."
+
+msgid "numeric_field"
+msgstr "Champ numérique obligatoire."
+
+msgid "captcha"
+msgstr "Veuillez résoudre le calcul ci-contre. Ceci nous permet de vérifier que vous êtes une personne réelle."
+
+msgid "help_new_account"
+msgstr "Création nouveau compte"
+
+msgid "password_label"
+msgstr "Mot de passe"
+
+msgid "changing_password"
+msgstr "Changement de mot de passe"
+
+msgid "changing_password_instruction"
+msgstr "Veuillez encoder votre adresse e-mail. Vous recevrez un lien vous permettant de changer votre mot de passe"
+
+msgid "changing_password_action"
+msgstr "Demander changement de mot de passe"
+
+msgid "confirmation"
+msgstr "Confirmation"
+
+msgid "info_password_changed"
+msgstr "Bonjour, votre compte mot de passe a bien été modifié!"
+
+msgid "login"
+msgstr "Login"
+
+msgid "new_password_instruction"
+msgstr "Merci d'encoder ci-dessous votre nouveau mot de passe"
+
+msgid "choose_new_password"
+msgstr "Choisissez un mot de passe"
+
+msgid "help_validate_new_password"
+msgstr "Validation d'un nouveau mot de passe"
+
+msgid "activation_link_not_valid"
+msgstr "Le lien n'est plus valide (ou pas valide)!"
+
+msgid "activation_mail_sent"
+msgstr "Un message a été envoyé sur votre adresse e-mail."
+
+msgid "activation_instruction"
+msgstr ""
+ "Veuillez vérifier votre e-mail maintenant et cliquez sur le lien dans le message que vous avez reçu pour pouvoir "
+ "encoder un nouveau mot de passe."
+
