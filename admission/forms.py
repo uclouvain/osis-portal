@@ -73,7 +73,7 @@ class NewAccountForm(forms.Form):
 
 class AccountForm(forms.Form):
     email =    forms.EmailField(required=True,label=_('mail'))
-    password = forms.CharField(widget=forms.PasswordInput, required=True,label=_('password'))
+    password = forms.CharField(widget=forms.PasswordInput, required=True, label=_('password'))
 
     def __init__(self, *args, **kwargs):
         super(AccountForm, self).__init__(*args, **kwargs)
@@ -84,8 +84,8 @@ class AccountForm(forms.Form):
 
 
 class NewPasswordForm(forms.Form):
-    password_new =         forms.CharField(widget=forms.PasswordInput, required=True, label=_('choose_new_password'))
-    password_new_confirm = forms.CharField(widget=forms.PasswordInput, required=True, label=_('confirm_password'))
+    password_new =         forms.CharField(widget=forms.PasswordInput, required=True)
+    password_new_confirm = forms.CharField(widget=forms.PasswordInput, required=True)
 
     def __init__(self, *args, **kwargs):
         super(NewPasswordForm, self).__init__(*args, **kwargs)
@@ -94,10 +94,11 @@ class NewPasswordForm(forms.Form):
         cleaned_data = super(NewPasswordForm, self).clean()
         password_new = cleaned_data.get("password_new")
         password_new_confirm = cleaned_data.get("password_new_confirm")
+        print(password_new , "/", password_new_confirm)
         if password_new != password_new_confirm:
-            self.errors['password_new_confirm'] = [_('different_passwords')]
+            self.errors['password_new_confirm'] = _('different_passwords')
         if password_new and len(password_new) < 8:
-            self.errors['password_new'] = [_('password_too_short')]
+            self.errors['password_new'] = _('password_too_short')
         return cleaned_data
 
     def clean_password_new(self):
