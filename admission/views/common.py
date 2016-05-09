@@ -180,10 +180,10 @@ def profile(request):
 
     countries = Country.find_countries()
     property = mdl.properties.find_by_key('INSTITUTION')
-    if property is None:
-        institution_name = None
-    else:
+    if property:
         institution_name = property.value
+    else:
+        institution_name = None
     return render(request, "profile.html", dict(person=person,
                                                 person_form=person_form,
                                                 countries=countries,
