@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
-{% load bootstrap3 %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -98,7 +97,6 @@
             <div class="panel-body">
 
                     <form  method="post" action="{% url 'new_user' %}" autocomplete="off">
-
                         {% csrf_token %}
                         <input type="hidden" value="{{ number1 }}" name="number1" />
                         <input type="hidden" value="{{ number2 }}" name="number2" />
@@ -108,30 +106,58 @@
                 <br><br>
                 <div class="row">
                     <div class="col-md-6">
-                        {% bootstrap_field form_new.first_name_new %}
+                        <label>{% trans 'firstname'%}</label>
+                        <input class="form-control" id="txt_first_name_new" name="first_name_new" required="true"
+                               value="{{first_name_new| default_if_none:''}}"><br>
+                        <p class="text-muted">(ex : Frédéric <label style="text-decoration: line-through;" >frederic FREDERIC</label>)</p>
                     </div>
                     <div class="col-md-6">
-                        {% bootstrap_field form_new.last_name_new %}
+                        <label>{% trans 'lastname'%}</label>
+                        <input class="form-control" id="txt_last_name_new" name="last_name_new"  required="true"
+                               value="{{last_name_new| default_if_none:''}}"><br>
+                        <p class="text-muted">(ex : Van der Elst / Vanderelst <label style="text-decoration: line-through;" > VANDERELST</label>)</p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        {% bootstrap_field form_new.email_new %}
+                        <label>{% trans 'mail'%}</label>
+                        <input class="form-control" id="txt_email_new" name="email_new" required="true"
+                               value="{{email_new| default_if_none:''}}">
                     </div>
                     <div class="col-md-6">
-                       {% bootstrap_field form_new.email_new_confirm %}
+                        <label>{% trans 'confirm_email'%}</label>
+                        <input class="form-control" id="txt_email_new_confirm" name="email_new_confirm"  required="true">
                     </div>
                 </div>
+                {% if form_new.email_new_confirm.errors%}
+                        <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <font class="error">{{ form_new.email_new_confirm.errors|striptags }}</font>
+                 </div>
+                </div>
+                {%endif%}
                 <br>
                 <div class="row" >
                     <div class="col-md-6">
-                        {% bootstrap_field form_new.password_new %}
+                         <label>{% trans 'choose_new_password'%}</label>
+                        <input type="password" class="form-control" id="txt_password_new" name="password_new"
+                               required="true"
+                               value="{{password_new| default_if_none:''}}">
                     </div>
                     <div class="col-md-6">
-                        {% bootstrap_field form_new.password_new_confirm %}
+                        <label>{% trans 'confirm_password'%}</label>
+                        <input type="password" class="form-control" id="txt_password_new_confirm" name="password_new_confirm"  required="true">
                     </div>
                 </div>
-
+                 {% if form_new.password_new_confirm.errors%}
+                        <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <font class="error">{{ form_new.password_new_confirm.errors|striptags }}</font>
+                 </div>
+                </div>
+                {%endif%}
                 <br>
                 <div class="row">
                     <div style="margin-left:15px;">{% trans 'captcha'%}</div>
@@ -142,7 +168,8 @@
                             {{ number1 }} + {{ number2 }} - {{ number3}} =
                     </div>
                     <div class="col-md-5">
-                        {% bootstrap_field form_new.verification %}
+                        <input type="text" class="form-control" id="txt_verification" name="verification" required="true">
+                        <font class="error">{{ form_new.verification.errors|striptags }}</font>
                     </div>
                     <div class="col-md-4">
                     </div>
@@ -155,7 +182,6 @@
                         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  {% trans 'validate'%}
                     </button>
                 </div>
-
                 </form>
             </div>
 

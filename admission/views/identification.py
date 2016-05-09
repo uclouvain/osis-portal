@@ -74,14 +74,14 @@ def new_user(request):
 
         if str(result) != form_new['verification'].value():
             validation = False
-            form_new.errors['verification'] = ["Résultat du calcul incorrect"]
+            form_new.errors['verification'] = "Résultat du calcul incorrect"
     else:
         validation = False
     email = form_new['email_new'].value()
 
     user = User.objects.filter(email=email)
     if user:
-        form_new.errors['email_new_confirm'] = ["Il existe déjà un compte pour cette adresse email %s" % email]
+        form_new.errors['email_new_confirm'] = "Il existe déjà un compte pour cette adresse email %s" % email
         validation = False
 
     if validation:
@@ -113,6 +113,11 @@ def new_user(request):
         while number3 > sum:
             number3 = randint(1, 20)
         extra_context['number3'] = number3
+
+        extra_context['first_name_new']=form_new['first_name_new'].value()
+        extra_context['last_name_new']=form_new['last_name_new'].value()
+        extra_context['email_new']=form_new['email_new'].value()
+        extra_context['password_new']=form_new['password_new'].value()
         return login(request, extra_context=extra_context)
 
 

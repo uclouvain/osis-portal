@@ -31,18 +31,12 @@ from django.core.validators import validate_email
 
 
 class NewAccountForm(forms.Form):
-    first_name_new = forms.CharField(required=True, max_length=30,
-                                     label=_('firstname'),
-                                     help_text='(ex : Frédéric <label style="text-decoration: line-through;" >'\
-                                               'frederic FREDERIC</label>)')
-    last_name_new = forms.CharField(required=True, max_length=30,
-                                    label=_('lastname'),
-                                    help_text='(ex : Van der Elst / Vanderelst ' \
-                                              '<label style="text-decoration: line-through;" > VANDERELST</label>)')
-    email_new = forms.EmailField(required=True, label=_('mail'))
-    email_new_confirm = forms.EmailField(required=True, label=_('confirm_email'))
-    password_new = forms.CharField(widget=forms.PasswordInput, required=True, label=_('password_label'))
-    password_new_confirm = forms.CharField(widget=forms.PasswordInput, required=True, label=_('confirm_password'))
+    first_name_new = forms.CharField(required=True, max_length=30)
+    last_name_new = forms.CharField(required=True, max_length=30)
+    email_new = forms.EmailField(required=True)
+    email_new_confirm = forms.EmailField(required=True)
+    password_new = forms.CharField(widget=forms.PasswordInput, required=True)
+    password_new_confirm = forms.CharField(widget=forms.PasswordInput, required=True)
     verification = forms.CharField(required=True, label=_(''))
 
     def __init__(self, *args, **kwargs):
@@ -53,14 +47,14 @@ class NewAccountForm(forms.Form):
         email_new = cleaned_data.get("email_new")
         email_new_confirm = cleaned_data.get("email_new_confirm")
         if email_new != email_new_confirm:
-            self.errors['email_new_confirm'] = [_('different_emails')]
+            self.errors['email_new_confirm'] = _('different_emails')
 
         password_new = cleaned_data.get("password_new")
         password_new_confirm = cleaned_data.get("password_new_confirm")
         if password_new != password_new_confirm:
-            self.errors['password_new_confirm'] = [_('different_passwords')]
+            self.errors['password_new_confirm'] = _('different_passwords')
         if password_new and len(password_new) < 8:
-            self.errors['password_new'] = [_('password_too_short')]
+            self.errors['password_new'] = _('password_too_short')
         return cleaned_data
 
     def clean_password_new(self):
@@ -156,24 +150,24 @@ class PersonForm(forms.Form):
         if same_contact_legal_addr == "false":
             contact_adr_street = cleaned_data.get("contact_adr_street")
             if contact_adr_street is None or len(contact_adr_street) <= 0:
-                self.errors['contact_adr_street'] = [_('mandatory_field')]
+                self.errors['contact_adr_street'] = _('mandatory_field')
 
             contact_adr_number = cleaned_data.get("contact_adr_number")
             if contact_adr_number is None or len(contact_adr_number) <= 0:
-                self.errors['contact_adr_number'] = [_('mandatory_field')]
+                self.errors['contact_adr_number'] = _('mandatory_field')
 
             contact_adr_postal_code = cleaned_data.get("contact_adr_postal_code")
             if contact_adr_postal_code is None or len(contact_adr_postal_code) <= 0:
-                self.errors['contact_adr_postal_code'] = [_('mandatory_field')]
+                self.errors['contact_adr_postal_code'] = _('mandatory_field')
 
             contact_adr_city = cleaned_data.get("contact_adr_city")
 
             if contact_adr_city is None or len(contact_adr_city) <= 0:
-                self.errors['contact_adr_city'] = [_('mandatory_field')]
+                self.errors['contact_adr_city'] = _('mandatory_field')
 
             contact_adr_country = cleaned_data.get("contact_adr_country")
             if contact_adr_country is None or len(contact_adr_country) <= 0:
-                self.errors['contact_adr_country'] = [_('mandatory_field')]
+                self.errors['contact_adr_country'] = _('mandatory_field')
 
         previous_enrollment = cleaned_data.get("previous_enrollment")
 
@@ -181,18 +175,18 @@ class PersonForm(forms.Form):
             register_number = cleaned_data.get("register_number")
 
             if register_number is None or len(register_number) <= 0:
-                self.errors['register_number'] = [_('mandatory_field')]
+                self.errors['register_number'] = _('mandatory_field')
 
             ucl_last_year = cleaned_data.get("ucl_last_year")
 
             if ucl_last_year is None or ucl_last_year <= 0:
-                self.errors['ucl_last_year'] = [_('numeric_field')]
+                self.errors['ucl_last_year'] = _('numeric_field')
 
         return cleaned_data
 
 
 class AccessAccountForm(forms.Form):
-    email =    forms.EmailField(required=True)
+    email = forms.EmailField(required=True)
 
     def __init__(self, *args, **kwargs):
         super(AccessAccountForm, self).__init__(*args, **kwargs)
