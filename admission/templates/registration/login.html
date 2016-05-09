@@ -29,11 +29,11 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-md-12">{% trans 'welcome' %}</div>
+    {% trans 'welcome' %}
 </div>
 <br>
 <div class="row">
-    <div class="col-md-12">{% trans 'account_needed'%}</div>
+    {% trans 'account_needed'%}
 </div>
 <br>
 <div class="row">
@@ -62,22 +62,19 @@
                         </div>
                         <div class="col-md-6"></div>
                     </div>
+                    <br>
                     <div class="row">
-                        <div class="col-md-12">
-                            <br>
-                             <input type="hidden" name="next" value="{{ next }}" />
-                             <button type="submit" id="post_login_btn" class="btn btn-primary" role="button"
-                                    title="{% trans 'validate'%}">
-                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  {% trans 'validate'%}
-                             </button>
-                        </div>
+                         <input type="hidden" name="next" value="{{ next }}" />
+                         <label>&nbsp;</label>
+                         <button type="submit" id="post_login_btn" class="btn btn-primary" role="button"
+                                title="{% trans 'validate'%}">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  {% trans 'validate'%}
+                         </button>
                     </div>
                     {% if message %}
                     <br>
                         <div class="row">
-                            <div class="col-md-12">
-                              <font class="error">{{ message }}</font>
-                            </div>
+                          <font class="error">{{ message }}</font>
                         </div>
                     {%endif%}
                       {% if form.errors %}
@@ -88,9 +85,8 @@
                 </form>
                 <br>
                 <div class="row">
-                    <div class="col-md-12">
-                        <a href="{% url 'new_password_request' %}">{% trans 'question_password_forgotten' %}</a>
-                    </div>
+                    <label>&nbsp;</label>
+                    <a href="{% url 'new_password_request' %}">{% trans 'question_password_forgotten' %}</a>
                 </div>
             </div>
         </div>
@@ -138,9 +134,7 @@
 
                 <br>
                 <div class="row">
-                    <div class="col-md-12">
-                        {% trans 'captcha'%}
-                    </div>
+                    <div style="margin-left:15px;">{% trans 'captcha'%}</div>
                 </div>
                 <br>
                 <div class="row">
@@ -153,14 +147,13 @@
                     <div class="col-md-4">
                     </div>
                 </div>
+                <br>
                 <div class="row">
-                    <div class="col-md-12">
-                        <br>
-                        <button type="submit" id="bt_submit_user_create" class="btn btn-primary" role="button"
-                                title="{% trans 'help_new_account'%}">
-                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  {% trans 'validate'%}
-                        </button>
-                    </div>
+                    <label>&nbsp;</label>
+                    <button type="submit" id="bt_submit_user_create" class="btn btn-primary" role="button"
+                            title="{% trans 'help_new_account'%}">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  {% trans 'validate'%}
+                    </button>
                 </div>
 
                 </form>
