@@ -26,8 +26,6 @@
 from django import forms
 from django.core.validators import MinValueValidator
 from django.utils.translation import ugettext_lazy as _
-from django.core.exceptions import ValidationError
-from django.core.validators import validate_email
 
 
 class NewAccountForm(forms.Form):
