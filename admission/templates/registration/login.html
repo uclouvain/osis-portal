@@ -121,7 +121,8 @@
                     </div>
                     <div class="col-md-6">
                         <label>{% trans 'confirm_email'%}</label>
-                        <input class="form-control" id="txt_email_new_confirm" name="email_new_confirm"  required="true">
+                        <input class="form-control" id="txt_email_new_confirm" name="email_new_confirm"  required="true"
+                               value="{{email_new_confirm| default_if_none:''}}">
                     </div>
                 </div>
                 {% if form_new.email_new_confirm.errors%}
