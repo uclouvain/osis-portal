@@ -165,6 +165,11 @@ QUEUE_PASSWORD = 'guest'
 QUEUE_PORT = 5672
 QUEUE_CONTEXT_ROOT = '/'
 
+# This has to be replaced by the actual url where you institution logo can be found.
+# Ex : LOGO_INSTITUTION_URL = 'https://www.google.be/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'
+# A relative URL will work on local , but not out of the box on the servers.
+LOGO_INSTITUTION_URL = os.path.join(BASE_DIR, "admission/static/img/logo_institution.jpg")
+
 try  :
     from frontoffice.server_settings import *
 except ImportError:
