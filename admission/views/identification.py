@@ -34,7 +34,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.views import login
 
 from admission import models as mdl
-from admission.forms import NewAccountForm, AccountForm, NewPasswordForm
+from admission.forms import NewAccountForm, AccountForm, NewPasswordForm, AccessAccountForm
 from admission.utils import send_mail
 
 
@@ -152,33 +152,36 @@ def activation(request, activation_code):
 
 
 def new_password_request(request):
-    form = AccountForm()
+    form = AccessAccountForm()
     return render(request, "new_password.html", {'form': form})
 
 
 def new_password(request):
-    form = AccountForm(data=request.POST)
+    form = AccessAccountForm(data=request.POST)
     email = form['email'].value()
 
-    try:
-        user = User.objects.get(username=email)
-        if user:
-            person = mdl.person.find_by_user(user)
-            if not user.is_active:
-                form.errors['email'] = ["Votre compte n\'a pas encore été activé"]
-                return render(request, "new_password.html", {'form': form})
+    if form.is_valid():
+        try:
+            user = User.objects.get(username=email)
+            if user:
+                person = mdl.person.find_by_user(user)
+                if not user.is_active:
+                    form.errors['email'] = "Votre compte n\'a pas encore été activé"
+                    return render(request, "new_password.html", {'form': form})
+                else:
+                    person.activation_code = uuid.uuid4()
+                    person.save()
+                    send_mail.new_password(request, str(person.activation_code), user.email)
+                    return HttpResponseRedirect(reverse('new_password_info'))
             else:
-                person.activation_code = uuid.uuid4()
-                person.save()
-                send_mail.new_password(request, str(person.activation_code), user.email)
-                return HttpResponseRedirect(reverse('new_password_info'))
-        else:
-            form.errors['email'] = ["L'adresse email encodée ne correspond à aucun utilisateur"]
-            return render(request, "new_password.html", {'form': form})
-    except ObjectDoesNotExist:
-        form.errors['email'] = ["L'adresse email encodée ne correspond à aucun utilisateur"]
+                form.errors['email'] = "L'adresse email encodée ne correspond à aucun utilisateur"
+                return render(request, "new_password.html", {'form': form})
+        except ObjectDoesNotExist:
+            form.errors['email'] = "L'adresse email encodée ne correspond à aucun utilisateur"
 
-        return render(request, "new_password.html", {'form': form})
+            return render(request, "new_password.html", {'form': form})
+    else:
+       return render(request, "new_password.html", {'form': form})
 
 
 def new_password_form(request, code):

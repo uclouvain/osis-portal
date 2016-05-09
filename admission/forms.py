@@ -27,6 +27,7 @@ from django import forms
 from django.core.validators import MinValueValidator
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 
 
 class NewAccountForm(forms.Form):
@@ -72,11 +73,17 @@ class NewAccountForm(forms.Form):
 
 
 class AccountForm(forms.Form):
-    email =    forms.EmailField(required=True,label=_('mail'))
-    password = forms.CharField(widget=forms.PasswordInput, required=True, label=_('password'))
+    email =    forms.EmailField(required=True)
+    password = forms.CharField(widget=forms.PasswordInput, required=True)
 
     def __init__(self, *args, **kwargs):
         super(AccountForm, self).__init__(*args, **kwargs)
+
+    def clean_email(self):
+        data = self.cleaned_data['email']
+        if data is None or len(data) == 0:
+            self.errors['email'] = _('mandatory_field')
+        return data.strip()
 
     def clean_password(self):
         data = self.cleaned_data['password']
@@ -94,7 +101,6 @@ class NewPasswordForm(forms.Form):
         cleaned_data = super(NewPasswordForm, self).clean()
         password_new = cleaned_data.get("password_new")
         password_new_confirm = cleaned_data.get("password_new_confirm")
-        print(password_new , "/", password_new_confirm)
         if password_new != password_new_confirm:
             self.errors['password_new_confirm'] = _('different_passwords')
         if password_new and len(password_new) < 8:
@@ -183,3 +189,16 @@ class PersonForm(forms.Form):
                 self.errors['ucl_last_year'] = [_('numeric_field')]
 
         return cleaned_data
+
+
+class AccessAccountForm(forms.Form):
+    email =    forms.EmailField(required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(AccessAccountForm, self).__init__(*args, **kwargs)
+
+    def clean_email(self):
+        data = self.cleaned_data['email']
+        if data is None or len(data) == 0:
+            self.errors['email'] = _('mandatory_field')
+        return data.strip()
