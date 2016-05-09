@@ -73,14 +73,9 @@
                     {% if message %}
                     <br>
                         <div class="row">
-                          <font class="error">{{ message }}</font>
+                          <font class="error" id="msg_message_error">{{ message }}</font>
                         </div>
                     {%endif%}
-                      {% if form.errors %}
-                        <p class="text-danger">
-                          {% trans 'msg_error_username_password_not_matching' %}
-                        </p>
-                      {% endif %}
                 </form>
                 <br>
                 <div class="row">
@@ -130,12 +125,12 @@
                     </div>
                 </div>
                 {% if form_new.email_new_confirm.errors%}
-                        <br>
-                <div class="row">
-                    <div class="col-md-12">
-                        <font class="error">{{ form_new.email_new_confirm.errors|striptags }}</font>
-                 </div>
-                </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <font class="error" id="msg_email_new_confirm_errors">{{ form_new.email_new_confirm.errors|striptags }}</font>
+                        </div>
+                    </div>
                 {%endif%}
                 <br>
                 <div class="row" >
@@ -145,18 +140,23 @@
                                required="true"
                                value="{{password_new| default_if_none:''}}">
                     </div>
+
                     <div class="col-md-6">
                         <label>{% trans 'confirm_password'%}</label>
                         <input type="password" class="form-control" id="txt_password_new_confirm" name="password_new_confirm"  required="true">
                     </div>
                 </div>
-                 {% if form_new.password_new_confirm.errors%}
-                        <br>
-                <div class="row">
-                    <div class="col-md-12">
-                        <font class="error">{{ form_new.password_new_confirm.errors|striptags }}</font>
-                 </div>
-                </div>
+                {% if form_new.password_new.errors%}
+                    <br>
+                    <div class="row">
+                        <font class="error" id="msg_password_new_errors">{{ form_new.password_new.errors|striptags }}</font>
+                    </div>
+                {%endif%}
+                {% if form_new.password_new_confirm.errors%}
+                    <br>
+                    <div class="row">
+                        <font class="error" id="msg_password_new_confirm_errors">{{ form_new.password_new_confirm.errors|striptags }}</font>
+                    </div>
                 {%endif%}
                 <br>
                 <div class="row">
@@ -169,7 +169,7 @@
                     </div>
                     <div class="col-md-5">
                         <input type="text" class="form-control" id="txt_verification" name="verification" required="true">
-                        <font class="error">{{ form_new.verification.errors|striptags }}</font>
+                        <font class="error" id="msg_verification_errors">{{ form_new.verification.errors|striptags }}</font>
                     </div>
                     <div class="col-md-4">
                     </div>
