@@ -34,8 +34,10 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.views import login
 
 from admission import models as mdl
-from admission.forms import NewAccountForm, AccountForm, NewPasswordForm
+from admission.forms import NewAccountForm, AccountForm, NewPasswordForm, AccessAccountForm
 from admission.utils import send_mail
+from django.contrib.auth import authenticate
+from django.utils.translation import ugettext_lazy as _
 
 
 def home_error(request, message, form):
@@ -113,6 +115,12 @@ def new_user(request):
         while number3 > sum:
             number3 = randint(1, 20)
         extra_context['number3'] = number3
+
+        extra_context['first_name_new']=form_new['first_name_new'].value()
+        extra_context['last_name_new']=form_new['last_name_new'].value()
+        extra_context['email_new']=form_new['email_new'].value()
+        extra_context['email_new_confirm']=form_new['email_new_confirm'].value()
+        extra_context['password_new']=form_new['password_new'].value()
         return login(request, extra_context=extra_context)
 
 
@@ -152,32 +160,36 @@ def activation(request, activation_code):
 
 
 def new_password_request(request):
-    form = AccountForm()
+    form = AccessAccountForm()
     return render(request, "new_password.html", {'form': form})
 
 
 def new_password(request):
-    form = AccountForm(data=request.POST)
+    form = AccessAccountForm(data=request.POST)
     email = form['email'].value()
 
-    try:
-        user = User.objects.get(username=email)
-        if user:
-            person = mdl.person.find_by_user(user)
-            if not user.is_active:
-                message = "Votre compte n\'a pas encore été activé"
-                return render(request, "new_password.html", {'message': message, 'form': form})
+    if form.is_valid():
+        try:
+            user = User.objects.get(username=email)
+            if user:
+                person = mdl.person.find_by_user(user)
+                if not user.is_active:
+                    form.errors['email'] = "Votre compte n\'a pas encore été activé"
+                    return render(request, "new_password.html", {'form': form})
+                else:
+                    person.activation_code = uuid.uuid4()
+                    person.save()
+                    send_mail.new_password(request, str(person.activation_code), user.email)
+                    return HttpResponseRedirect(reverse('new_password_info'))
             else:
-                person.activation_code = uuid.uuid4()
-                person.save()
-                send_mail.new_password(request, str(person.activation_code), user.email)
-                return HttpResponseRedirect(reverse('new_password_info'))
-        else:
-            message = "L'adresse email encodée ne correspond à aucun utilisateur"
-            return render(request, "new_password.html", {'message': message, 'form': form})
-    except ObjectDoesNotExist:
-        message = "L'adresse email encodée ne correspond à aucun utilisateur"
-        return render(request, "new_password.html", {'message': message, 'form': form})
+                form.errors['email'] = "L'adresse email encodée ne correspond à aucun utilisateur"
+                return render(request, "new_password.html", {'form': form})
+        except ObjectDoesNotExist:
+            form.errors['email'] = "L'adresse email encodée ne correspond à aucun utilisateur"
+
+            return render(request, "new_password.html", {'form': form})
+    else:
+       return render(request, "new_password.html", {'form': form})
 
 
 def new_password_form(request, code):
@@ -218,6 +230,9 @@ def new_password_info(request):
 
 
 def login_admission(request, *args, **kwargs):
+    username = request.POST.get('username', '')
+    password = request.POST.get('password', '')
+
     extra_context = {}
     extra_context['form_new'] = NewAccountForm()
     number1 = randint(1, 20)
@@ -229,10 +244,17 @@ def login_admission(request, *args, **kwargs):
     while number3 > sum:
         number3 = randint(1, 20)
     extra_context['number3'] = number3
+    extra_context['message'] = None
+    if username and password:
+        user = authenticate(username=username, password=password)
+        if user is None:
+            extra_context['message'] = _('msg_error_username_password_not_matching')
+
     return login(request, *args, extra_context=extra_context, **kwargs)
 
 
 def login_admission_error(request, *args, **kwargs):
+    print('login_admission_error')
     extra_context = {}
     form_new = NewAccountForm()
     form_new.errors['email_new_confirm'] = "Il existe déjà un compte pour cette adresse email"
