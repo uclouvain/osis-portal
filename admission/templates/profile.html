@@ -210,8 +210,9 @@
                             {% endfor %}
                         </ol>
                     </div>
-
-                    <div class="panel panel-default">
+            </div>
+            </div>
+            <div class="panel panel-default">
                 <div class="panel-heading">Pièce d'identité</div>
                 <div class="panel-body">
                     Veuillez fournir au moins un numéro d'identité.
@@ -301,10 +302,11 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Adresse de correspondance</div>
                 <div class="panel-body">
-
+                    Adresse de contact est la même que votre domicile légal?
+                    <br>
+                    <br>
                     <div class="row">
                         <div class="col-md-4">
-                            Adresse de contact est la même que votre domicile légal?
                             <div>
                                 <label class="radio-inline">
                                     <input type="radio" id="rd_same_contact_legal_addr_true"
@@ -324,6 +326,7 @@
                     </div>
                     <div id="pnl_contact_address"
                          style="{% if same_addresses %} visibility:hidden;display:none; {% else %} visibility:visible;display:block; {%endif%} ">
+                        <br>
                         <div class="row">
                             <div class="col-md-6">
                                 <label>Rue/Avenue *</label>

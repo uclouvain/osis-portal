@@ -197,7 +197,7 @@ def profile(request):
     if props:
         institution_name = props.value
     else:
-        institution_name = "<font style='color:red'>Aucune institution de définie</font>"
+        institution_name = None
 
     return render(request, "profile.html", {'person': person,
                                             'person_form': person_form,
