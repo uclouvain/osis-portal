@@ -24,7 +24,7 @@
 #
 ##############################################################################
 from rest_framework import serializers
-from reference.models import Country
+from reference import models as ref
 from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
 from django.views.decorators.csrf import csrf_exempt
@@ -39,7 +39,7 @@ class JSONResponse(HttpResponse):
 
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Country
+        model = ref.country.Country
         fields = '__all__'
 
 @csrf_exempt
