@@ -441,3 +441,201 @@ msgstr "Il faut préciser un type de communauté pour l'établissement"
 msgid "msg_error_next_step_impossible"
 msgstr ""
  "Impossible de passer à l'étape suivante. Il faut avoir répondu 'Oui' à au moins unes des questions suivantes : "
+
+msgid "identification"
+msgstr "Identification"
+
+msgid "your_profile"
+msgstr "Votre profil"
+
+msgid "update_profile"
+msgstr "Update profile"
+
+msgid "name"
+msgstr "Nom"
+
+msgid "lastname"
+msgstr "Nom"
+
+msgid "firstname"
+msgstr "Prénom"
+
+msgid "middle_name"
+msgstr "Autres prénoms"
+
+msgid "birth_day"
+msgstr "Date de naissance"
+
+msgid "birth_place"
+msgstr "Lieu de naissance"
+
+msgid "birth_country"
+msgstr "Pays de naissance"
+
+msgid "nationality"
+msgstr "Nationalité"
+
+msgid "gender"
+msgstr "Genre"
+
+msgid "civil_status"
+msgstr "Etat civil"
+
+msgid "children"
+msgstr "Nombre d'enfants"
+
+msgid "spouse_name"
+msgstr "Nom et prénom conjoint"
+
+msgid "id_card"
+msgstr "Pièce d'identité"
+
+msgid "question_identity"
+msgstr "Veuillez fournir au moins un numéro d'identité."
+
+msgid "legal_residence"
+msgstr "Domicile léga"
+
+msgid "street"
+msgstr "Rue/Avenue"
+
+msgid "number"
+msgstr "Numéro"
+
+msgid "place"
+msgstr "Lieu-dit (éventuellement)"
+
+msgid "postal_address"
+msgstr "Adresse de correspondance"
+
+msgid "question_address"
+msgstr "Adresse de contact est la même que votre domicile légal? "
+
+msgid "mobile"
+msgstr "GSM"
+
+msgid "other_phone"
+msgstr "Autre téléphone"
+
+msgid "mail"
+msgstr "E-mail"
+
+msgid "question_previous_enrollment"
+msgstr "Avez-vous déjà été inscrit, antérieurement, à l'institution suivante :"
+
+msgid "question_registration_number"
+msgstr "Quel est votre numéro de matricule ?"
+
+msgid "question_year_last_registration"
+msgstr "Quelle est votre dernière année dans l'institution suivante :"
+
+msgid "msg_error_username_password_not_matching"
+msgstr ""
+"La combinaison login/mot de passe entrée n'est pas valide. Veuillez "
+"réessayer."
+
+msgid "password"
+msgstr "Mot de passe"
+
+msgid "validate"
+msgstr "Valider"
+
+msgid "question_password_forgotten"
+msgstr "Mot de passe oublié?"
+
+msgid "no_account_yet"
+msgstr "Si vous ne disposez pas encore de ce compte"
+
+msgid "welcome"
+msgstr "Bienvenue sur la demande d'inscription en ligne de l'Université catholique de Louvain."
+
+msgid "account_needed"
+msgstr "Pour introduire votre demande d'inscription, il vous faut un compte d'accès."
+
+msgid "account_already_created"
+msgstr "Si vous avez déjà demandé la création de ce compte"
+
+msgid "mail_account_activation"
+msgstr ""
+ "Vous avez reçu, par mail, une confirmation de création de compte et activé celui-ci en cliquant sur le lien "
+ "d'activation."
+
+msgid "connection_possible"
+msgstr ""
+ "Vous pouvez dès lors vous connecter à la demande d'inscription grâce à votre adresse mail et le mot "
+ "de passe que vous avez choisi antérieurement."
+
+msgid "account_creation"
+msgstr "Nous vous invitons à vous créer ce compte, composé d'une adresse mail privée et d'un mot de passe."
+
+msgid "all_mandatory_fields"
+msgstr "Tous les champs sont obligatoires"
+
+msgid "confirm_email"
+msgstr "Confirmer l'e-mail"
+
+msgid "confirm_password"
+msgstr "Confirmer le mot de passe"
+
+msgid "different_emails"
+msgstr "Les 2 emails introduit sont différents"
+
+msgid "different_passwords"
+msgstr "Les 2 mots de passe sont différents"
+
+msgid "password_too_short"
+msgstr "Le mot de passe est trop court.  Il doit contenir au minimum 8 caractères."
+
+msgid "invalid_email"
+msgstr "Merci d'encoder une adresse email correcte."
+
+msgid "numeric_field"
+msgstr "Champ numérique obligatoire."
+
+msgid "captcha"
+msgstr "Veuillez résoudre le calcul ci-contre. Ceci nous permet de vérifier que vous êtes une personne réelle."
+
+msgid "help_new_account"
+msgstr "Création nouveau compte"
+
+msgid "password_label"
+msgstr "Mot de passe"
+
+msgid "changing_password"
+msgstr "Changement de mot de passe"
+
+msgid "changing_password_instruction"
+msgstr "Veuillez encoder votre adresse e-mail. Vous recevrez un lien vous permettant de changer votre mot de passe"
+
+msgid "changing_password_action"
+msgstr "Demander changement de mot de passe"
+
+msgid "confirmation"
+msgstr "Confirmation"
+
+msgid "info_password_changed"
+msgstr "Bonjour, votre compte mot de passe a bien été modifié!"
+
+msgid "login"
+msgstr "Login"
+
+msgid "new_password_instruction"
+msgstr "Merci d'encoder ci-dessous votre nouveau mot de passe"
+
+msgid "choose_new_password"
+msgstr "Choisissez un mot de passe"
+
+msgid "help_validate_new_password"
+msgstr "Validation d'un nouveau mot de passe"
+
+msgid "activation_link_not_valid"
+msgstr "Le lien n'est plus valide (ou pas valide)!"
+
+msgid "activation_mail_sent"
+msgstr "Un message a été envoyé sur votre adresse e-mail."
+
+msgid "activation_instruction"
+msgstr ""
+ "Veuillez vérifier votre e-mail maintenant et cliquez sur le lien dans le message que vous avez reçu pour pouvoir "
+ "encoder un nouveau mot de passe."
+

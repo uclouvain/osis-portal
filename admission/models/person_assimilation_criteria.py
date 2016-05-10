@@ -25,40 +25,24 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
 
 
-class PersonAddressAdmin(admin.ModelAdmin):
-    list_display = ('person', 'type', 'street', 'postal_code', 'city', 'country')
-    fieldsets = ((None, {'fields': ('person', 'type', 'street', 'postal_code', 'city', 'country')}),)
+class PersonAssimilationCriteriaAdmin(admin.ModelAdmin):
+    list_display = ('person', 'criteria')
 
 
-class PersonAddress(models.Model):
-    ADDRESS_TYPE = (('LEGAL', _('Legal')),
-                    ('CONTACT', _('Contact')))
-
+class PersonAssimilationCriteria(models.Model):
     person = models.ForeignKey('Person')
-    type = models.CharField(max_length=20, choices=ADDRESS_TYPE)
-    street = models.CharField(max_length=255)
-    number = models.CharField(max_length=6)
-    complement = models.CharField(max_length=255, blank=True, null=True)
-    postal_code = models.CharField(max_length=20)
-    city = models.CharField(max_length=255)
-    country = models.ForeignKey('reference.Country')
+    criteria = models.ForeignKey('AssimilationCriteria')
 
 
 def find_by_person(a_person):
-    """ Return a list containing one or more addresses of a person. Returns None if there is no address.
-    :param a_person: An instance of the class base.models.person.Person
-    """
-    return PersonAddress.objects.filter(person=a_person)
+    return PersonAssimilationCriteria.objects.filter(person=a_person)
 
 
-def find_by_person_type(a_person, type):
-    """ Return a list containing one or more addresses of a person. Returns None if there is no address.
-    :param a_person: An instance of the class base.models.person.Person
-    """
-    addresses = PersonAddress.objects.filter(person=a_person, type=type)
-    if addresses:
-        return addresses[0]
-    return None
+def find_by_criteria(criteria_id):
+    return PersonAssimilationCriteria.objects.get(pk=criteria_id)
+
+
+def find_by_person_criteria(person_id, criteria_id):
+    return PersonAssimilationCriteria.objects.filter(person=person_id, criteria=criteria_id)

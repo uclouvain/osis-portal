@@ -442,71 +442,192 @@ msgstr ""
 msgid "identification"
 msgstr "Identification"
 
-msgid "name"
-msgstr "Nom"
+msgid "your_profile"
+msgstr "Your profille"
+
+msgid "update_profile"
+msgstr "Update profile"
 
 msgid "name"
 msgstr "Nom"
+
+msgid "lastname"
+msgstr "Lastname"
 
 msgid "firstname"
-msgstr "Prénom"
+msgstr "Firstname"
 
 msgid "middle_name"
-msgstr "Autres prénoms"
+msgstr "Middle name(s)"
 
 msgid "birth_day"
-msgstr "Date de naissance"
+msgstr "Birthday"
 
 msgid "birth_place"
-msgstr "Lieu de naissance"
+msgstr "Birth place"
 
 msgid "birth_country"
-msgstr "Pays de naissance"
+msgstr "Birth country"
 
 msgid "nationality"
-msgstr "Nationalité"
+msgstr "Nationality"
 
 msgid "gender"
-msgstr "Genre"
+msgstr "Gender"
 
 msgid "civil_status"
-msgstr "Etat civil"
+msgstr "Civil status"
 
 msgid "children"
-msgstr "Nombre d'enfants"
+msgstr "Number of children"
 
 msgid "spouse_name"
-msgstr "Nom et prénom conjoint"
+msgstr "Spouse complete name"
 
 msgid "id_card"
-msgstr "Pièce d'identité"
+msgstr "Identity card"
 
 msgid "question_identity"
-msgstr "Veuillez fournir au moins un numéro d'identité."
+msgstr "Please mention at least one identity number."
 
 msgid "legal_residence"
-msgstr "Domicile léga"
+msgstr "Legal residence"
 
 msgid "street"
-msgstr "Rue/Avenue"
+msgstr "Street"
 
 msgid "number"
-msgstr "Numéro"
+msgstr "Number"
 
 msgid "place"
-msgstr "Lieu-dit (éventuellement)"
+msgstr "Complement"
 
 msgid "postal_address"
-msgstr "Adresse de correspondance"
+msgstr "Postal address"
 
 msgid "question_address"
-msgstr "Adresse de contact est la même que votre domicile légal? "
+msgstr "Is the contact address identical to your resident address? "
 
 msgid "mobile"
-msgstr "GSM"
+msgstr "Mobile"
 
 msgid "other_phone"
-msgstr "Autre téléphone"
+msgstr "Other phone"
 
-msgid "other_phone"
-msgstr "Autre téléphone"
+msgid "mail"
+msgstr "Email"
+
+msgid "question_previous_enrollment"
+msgstr "Have you previously been registered at :"
+
+msgid "question_registration_number"
+msgstr "What is your registration number ?"
+
+msgid "question_year_last_registration"
+msgstr "What is your last registration year at : "
+
+msgid "msg_error_username_password_not_matching"
+msgstr "Your username and password didn't match. Please try again."
+
+msgid "password"
+msgstr "Password"
+
+msgid "validate"
+msgstr "Validate"
+
+msgid "question_password_forgotten"
+msgstr "Password forgotten?"
+
+msgid "no_account_yet"
+msgstr "If you do not yet have an account"
+
+msgid "welcome"
+msgstr "Welcome to the Online Enrolment at the Université catholique de Louvain"
+
+msgid "account_needed"
+msgstr "In order to enter your enrolment request online, you need an access account."
+
+msgid "account_already_created"
+msgstr "If you already have requested creation of this account"
+
+msgid "mail_account_activation"
+msgstr ""
+ "You have received by e-mail, a confirmation of account and activity creation, by clicking on the activation link."
+
+msgid "connection_possible"
+msgstr ""
+ "You can as from now connect to the request enrolment thanks to your e-mail address and  the password you previously "
+ "selected."
+
+msgid "account_creation"
+msgstr "Please create this account, composed of a private e-mail address and a password."
+
+msgid "all_mandatory_fields"
+msgstr "All fields are mandatory"
+
+msgid "confirm_email"
+msgstr "Confirm mail"
+
+msgid "confirm_password"
+msgstr "Confirm password"
+
+msgid "different_emails"
+msgstr "The emails encoded are different"
+
+msgid "different_passwords"
+msgstr "The passwords encoded are different"
+
+
+msgid "password_too_short"
+msgstr "This password is too short. It must contain at least 8 characters."
+
+msgid "invalid_email"
+msgstr "Please indicate a valid email."
+
+msgid "numeric_field"
+msgstr "Please indicate a numeric value."
+
+msgid "captcha"
+msgstr "Please type in the result of the following expression."
+
+msgid "help_new_account"
+msgstr "Create a new account"
+
+msgid "password_label"
+msgstr "Password"
+
+msgid "changing_password"
+msgstr "Changing password"
+
+msgid "changing_password_instruction"
+msgstr "Please enter your e-mail address. You will receive a link, allowing you to change your password."
+
+msgid "changing_password_action"
+msgstr "Request to change password"
+
+msgid "confirmation"
+msgstr "Confirmation"
+
+msgid "info_password_changed"
+msgstr "Hello, your password has been modified!"
+
+msgid "login"
+msgstr "Login"
+
+msgid "new_password_instruction"
+msgstr "Please indicate your new password"
+
+msgid "choose_new_password"
+msgstr "Choose a password"
+
+msgid "help_validate_new_password"
+msgstr "New password validation"
+
+msgid "activation_link_not_valid"
+msgstr "Activation link invalid!"
+
+msgid "activation_mail_sent"
+msgstr "An activation message has been sent to your email account."
+
+msgid "activation_instruction"
+msgstr "Please check your email new et clic on the link to indicate a new password."

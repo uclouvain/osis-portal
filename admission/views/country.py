@@ -23,21 +23,29 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models import academic_year
-from admission.models import answer
-from admission.models import application
-from admission.models import assimilation_criteria
-from admission.models import domain
-from admission.models import form
-from admission.models import grade_type
-from admission.models import message_template
-from admission.models import offer_year
-from admission.models import offer_year_calendar
-from admission.models import option
-from admission.models import person
-from admission.models import person_address
-from admission.models import person_assimilation_criteria
-from admission.models import properties
-from admission.models import question
-from admission.models import secondary_education
-from admission.models import supported_languages
+from rest_framework import serializers
+from reference import models as ref
+from django.http import HttpResponse
+from rest_framework.renderers import JSONRenderer
+from django.views.decorators.csrf import csrf_exempt
+
+
+class JSONResponse(HttpResponse):
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
+
+
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ref.country.Country
+        fields = '__all__'
+
+@csrf_exempt
+def find_by_id(request):
+    country_id = request.GET['nationality']
+
+    country = Country.find_by_id(country_id)
+    serializer = CountrySerializer(country)
+    return JSONResponse(serializer.data)

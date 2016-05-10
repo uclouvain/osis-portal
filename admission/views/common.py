@@ -25,8 +25,7 @@
 ##############################################################################
 from django.contrib.auth.decorators import login_required
 from admission import models as mdl
-
-from reference import models as mdl_reference
+from reference import models as mdl_ref
 from datetime import datetime
 from admission.forms import PersonForm
 from django.shortcuts import render
@@ -39,7 +38,6 @@ def home(request):
     person = mdl.person.find_by_user(request.user)
 
     if person and person.gender:
-        print('language', person.language)
         if person.language:
             user_language = person.language
             translation.activate(user_language)
@@ -55,12 +53,12 @@ def profile(request):
         person_form = PersonForm(data=request.POST)
 
         person = mdl.person.find_by_user(request.user)
-        person_legal_address = mdl.person_address.find_by_person_type(person,'LEGAL')
+        person_legal_address = mdl.person_address.find_by_person_type(person, 'LEGAL')
 
         if person_legal_address is None:
             person_legal_address = mdl.person_address.PersonAddress()
             person_legal_address.person = person
-            person_legal_address.type='LEGAL'
+            person_legal_address.type = 'LEGAL'
 
         if request.POST['last_name']:
             person.user.last_name = request.POST['last_name']
@@ -71,15 +69,16 @@ def profile(request):
         if request.POST['birth_date']:
             try:
                 person.birth_date = datetime.strptime(request.POST['birth_date'], '%d/%m/%Y')
-            except:
+            except ValueError:
                 person.birth_date = None
-                person_form.errors['birth_date'] = "La date encodée('%s') semble incorrecte " % request.POST['birth_date']
+                person_form.errors['birth_date'] = "La date encodée('%s') semble incorrecte " % request.POST[
+                    'birth_date']
 
         if request.POST['birth_place']:
             person.birth_place = request.POST['birth_place']
         if request.POST['birth_country']:
             birth_country_id = request.POST['birth_country']
-            birth_country = mdl_reference.country.find_by_id(birth_country_id)
+            birth_country = mdl_ref.country.find_by_id(birth_country_id)
             person.birth_country = birth_country
         if request.POST.get('gender'):
             person.gender = request.POST['gender']
@@ -91,7 +90,7 @@ def profile(request):
             person.spouse_name = request.POST['spouse_name']
         if request.POST['nationality']:
             country_id = request.POST['nationality']
-            country = mdl_reference.country.find_by_id(country_id)
+            country = mdl_ref.country.find_by_id(country_id)
             person.nationality = country
 
         if request.POST['national_id']:
@@ -113,15 +112,15 @@ def profile(request):
             person_legal_address.city = request.POST['legal_adr_city']
         if request.POST['legal_adr_country']:
             country_id = request.POST['legal_adr_country']
-            country = mdl_reference.country.find_by_id(country_id)
+            country = mdl_ref.country.find_by_id(country_id)
             person_legal_address.country = country
 
         if request.POST['same_contact_legal_addr'] == "false":
-            person_contact_address = mdl.person_address.find_by_person_type(person,'CONTACT')
+            person_contact_address = mdl.person_address.find_by_person_type(person, 'CONTACT')
             if person_contact_address is None:
                 person_contact_address = mdl.person_address.PersonAddress()
                 person_contact_address.person = person
-                person_contact_address.type='CONTACT'
+                person_contact_address.type = 'CONTACT'
 
             if request.POST['contact_adr_street']:
                 person_contact_address.street = request.POST['contact_adr_street']
@@ -135,7 +134,7 @@ def profile(request):
                 person_contact_address.city = request.POST['contact_adr_city']
             if request.POST['contact_adr_country']:
                 country_id = request.POST['contact_adr_country']
-                country = mdl_reference.country.find_by_id(country_id)
+                country = mdl_ref.country.find_by_id(country_id)
                 person_contact_address.country = country
             same_addresses = False
         else:
@@ -161,23 +160,33 @@ def profile(request):
             person.ucl_last_year = None
             previous_enrollment = False
 
+        for key in request.POST:
+            if key[0:22] == "assimilation_criteria_":
+                if request.POST[key] == "true":
+                    criteria_id = key[22:]
+                    criteria = mdl.assimilation_criteria.find_by_id(criteria_id)
+                    if criteria:
+                        person_assimilation_criteria = mdl.person_assimilation_criteria.PersonAssimilationCriteria()
+                        person_assimilation_criteria.criteria = criteria
+                        person_assimilation_criteria.person = person
+                        if person_form.is_valid():
+                            person_assimilation_criteria.save()
+
         if person_form.is_valid():
             if person_contact_address:
                 person_contact_address.save()
             person_legal_address.save()
             person.save()
-
             return home(request)
-
     else:
         person = mdl.person.find_by_user(request.user)
         person_form = PersonForm()
         if person:
-            person_legal_address = mdl.person_address.find_by_person_type(person,'LEGAL')
-            person_contact_address = mdl.person_address.find_by_person_type(person,'CONTACT')
+            person_legal_address = mdl.person_address.find_by_person_type(person, 'LEGAL')
+            person_contact_address = mdl.person_address.find_by_person_type(person, 'CONTACT')
             same_addresses = True
             if person_contact_address:
-                same_addresses=False
+                same_addresses = False
 
             previous_enrollment = False
             if person.register_number or person.ucl_last_year:
@@ -185,17 +194,23 @@ def profile(request):
         else:
             return HttpResponseRedirect('/admission/logout/?next=/admission')
 
-    countries = mdl_reference.country.find_all()
-    property = mdl.properties.find_by_key('INSTITUTION')
-    if property is None:
-        institution_name = "<font style='color:red'>Aucune institution de définie</font>"
+    countries = mdl_ref.country.find_all()
+    props = mdl.properties.find_by_key('INSTITUTION')
+    if props:
+        institution_name = props.value
     else:
-        institution_name = property.value
-    return render(request, "profile.html", dict(person=person,
-                                                person_form=person_form,
-                                                countries=countries,
-                                                person_legal_address=person_legal_address,
-                                                person_contact_address=person_contact_address,
-                                                same_addresses=same_addresses,
-                                                previous_enrollment=previous_enrollment,
-                                                institution=institution_name))
+        institution_name = "<font style='color:red'>Aucune institution de définie</font>"
+
+    assimilation_criteria = mdl.assimilation_criteria.find_criteria()
+    person_assimilation_criteria = mdl.person_assimilation_criteria.find_by_person(person.id)
+
+    return render(request, "profile.html", {'person': person,
+                                            'person_form': person_form,
+                                            'countries': countries,
+                                            'assimilationCriteria': assimilation_criteria,
+                                            'personAssimilationCriteria': person_assimilation_criteria,
+                                            'person_legal_address': person_legal_address,
+                                            'person_contact_address': person_contact_address,
+                                            'same_addresses': same_addresses,
+                                            'previous_enrollment': previous_enrollment,
+                                            'institution': institution_name})

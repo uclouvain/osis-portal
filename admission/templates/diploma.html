@@ -132,6 +132,7 @@
             }
         }
     }
+
     function reset_radio(elt_name){
         x=document.getElementsByName(elt_name);
         var i;
@@ -196,9 +197,7 @@
 
         var sel = select_list.options[select_list.selectedIndex].text;
 
-        if(sel == "-"){
-        }else{
-
+        if(sel != "-") {
             document.getElementById("chb_other_school").checked = false;
             document.getElementById("txt_CESS_other_school_name").value="";
             document.getElementById("txt_CESS_other_school_city").value="";
@@ -207,10 +206,8 @@
             document.getElementById("txt_CESS_other_school_name").disabled=true;
             document.getElementById("txt_CESS_other_school_city").disabled=true;
             document.getElementById("txt_CESS_other_school_postal_code").disabled=true;
-
         }
     }
-
 </script>
 
 <form method="post" action="{% url 'diploma'%}">
