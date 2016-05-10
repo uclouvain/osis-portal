@@ -28,7 +28,9 @@ from django.contrib import admin
 
 PROPERTIES_TYPE = (
     ('INSTITUTION', 'Institution'),
-    ('LOGO', 'Logo'))
+    ('LOGO', 'Logo'),
+    ('PROFESSIONAL_EXAM_LINK','Professional exam link'),
+    ('LOCAL_LANGUAGE_EXAM_LINK','Local language exam link'))
 
 
 class PropertiesAdmin(admin.ModelAdmin):

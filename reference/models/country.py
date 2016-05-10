@@ -46,8 +46,8 @@ class Country(models.Model):
         return self.name
 
 
-def find_countries():
-    return Country.objects.all()
+def find_all():
+    return Country.objects.order_by('name')
 
 
 def find_by_id(country_id):

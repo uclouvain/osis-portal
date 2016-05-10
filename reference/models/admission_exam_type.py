@@ -25,30 +25,27 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
-from admission.models.supported_languages import SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE
 
 
-class MessageTemplateAdmin(admin.ModelAdmin):
-    list_display = ('reference', 'subject', 'format', 'language')
-    fieldsets = ((None, {'fields': ('reference', 'subject', 'template', 'format', 'language')}),)
+class AdmissionExamTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'adhoc')
 
 
-class MessageTemplate(models.Model):
-    FORMAT_CHOICES = (('PLAIN', _('plain')),
-                      ('HTML', 'html'),
-                      ('PLAIN_HTML', _('plain_and_html')))
-
-    reference = models.CharField(max_length=50, unique=True)
-    subject   = models.CharField(max_length=255)
-    template  = models.TextField()
-    format    = models.CharField(max_length=15, choices=FORMAT_CHOICES)
-    language  = models.CharField(max_length=30, null=True, choices=SUPPORTED_LANGUAGES, default=DEFAULT_LANGUAGE)
+class AdmissionExamType(models.Model):
+    name = models.CharField(max_length=100)
+    adhoc = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.subject
+        return self.name
 
 
-def find_by_reference(reference):
-    message_template = MessageTemplate.objects.get(reference=reference)
-    return message_template
+def find_by_name(a_name):
+    return AdmissionExamType.objects.filter(name__iexact=a_name, adhoc=True).first()
+
+
+def find_all_by_adhoc(an_adhoc):
+    return AdmissionExamType.objects.filter(adhoc=an_adhoc).order_by('-adhoc', 'name')
+
+
+def find_by_id(an_id):
+    return AdmissionExamType.objects.get(pk=an_id)

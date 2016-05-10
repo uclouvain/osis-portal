@@ -30,26 +30,26 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
-
+from django.conf import settings
 
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('user', 'birth_date', 'gender')
-    fieldsets = ((None, {'fields': ('user', 'birth_date', 'gender')}),)
+    fieldsets = ((None, {'fields': ('user', 'birth_date', 'gender', 'language')}),)
 
 
 class Person(models.Model):
     GENDER_CHOICES = (
-        ('FEMALE', _('Female')),
-        ('MALE', _('Male')))
+        ('FEMALE', _('female')),
+        ('MALE', _('male')))
 
     CIVIL_STATUS_CHOICES = (
-        ('MARRIED', _('Married')),
-        ('SINGLE', _('Single')),
-        ('WIDOWED', _('Widowed')),
-        ('DIVORCED', _('Divorced')),
-        ('SEPARATED', _('Separated')),
-        ('COHABITANT', _('Cohabitant')),
-        ('UNKNOWN', _('Unknown')))
+        ('MARRIED', _('married')),
+        ('SINGLE', _('single')),
+        ('WIDOWED', _('widowed')),
+        ('DIVORCED', _('divorced')),
+        ('SEPARATED', _('separated')),
+        ('COHABITANT', _('cohabitant')),
+        ('UNKNOWN', _('unknown')))
 
     activation_code = models.UUIDField(default=uuid.uuid4, editable=False, blank=True, null=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
@@ -70,6 +70,7 @@ class Person(models.Model):
     additional_email = models.EmailField(max_length=255, blank=True, null=True)
     register_number = models.CharField(max_length=20, blank=True, null=True)
     ucl_last_year = models.IntegerField(blank=True, null=True)
+    language = models.CharField(max_length=30, null=True, choices=settings.LANGUAGES, default=settings.LANGUAGE_CODE)
 
     def __str__(self):
         return u"%s" % self.user

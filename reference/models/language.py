@@ -25,30 +25,31 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
-from admission.models.supported_languages import SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE
 
 
-class MessageTemplateAdmin(admin.ModelAdmin):
-    list_display = ('reference', 'subject', 'format', 'language')
-    fieldsets = ((None, {'fields': ('reference', 'subject', 'template', 'format', 'language')}),)
+class LanguageAdmin(admin.ModelAdmin):
+    list_display = ('code', 'name', 'recognized')
+    ordering = ('code',)
+    search_fields = ['code', 'name']
+    fieldsets = ((None, {'fields': ('code', 'name', 'recognized')}),)
 
 
-class MessageTemplate(models.Model):
-    FORMAT_CHOICES = (('PLAIN', _('plain')),
-                      ('HTML', 'html'),
-                      ('PLAIN_HTML', _('plain_and_html')))
-
-    reference = models.CharField(max_length=50, unique=True)
-    subject   = models.CharField(max_length=255)
-    template  = models.TextField()
-    format    = models.CharField(max_length=15, choices=FORMAT_CHOICES)
-    language  = models.CharField(max_length=30, null=True, choices=SUPPORTED_LANGUAGES, default=DEFAULT_LANGUAGE)
+class Language(models.Model):
+    code = models.CharField(max_length=4, unique=True)
+    name = models.CharField(max_length=80, unique=True)
+    recognized = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.subject
+        return self.name
 
 
-def find_by_reference(reference):
-    message_template = MessageTemplate.objects.get(reference=reference)
-    return message_template
+def find_by_id(a_language_id):
+    return Language.objects.get(pk=a_language_id)
+
+
+def find_languages():
+    return Language.objects.all().order_by('name')
+
+
+def find_languages_by_recognized(a_recognized_state):
+    return Language.objects.filter(recognized=a_recognized_state)

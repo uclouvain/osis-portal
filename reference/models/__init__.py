@@ -23,4 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from reference.models import admission_exam_type
 from reference.models import country
+from reference.models import education_institution
+from reference.models import education_type
+from reference.models import language

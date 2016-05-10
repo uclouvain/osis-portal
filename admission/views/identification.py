@@ -38,6 +38,7 @@ from admission.forms import NewAccountForm, AccountForm, NewPasswordForm, Access
 from admission.utils import send_mail
 from django.contrib.auth import authenticate
 from django.utils.translation import ugettext_lazy as _
+from reference import models as mdlref
 
 
 def home_error(request, message, form):
@@ -96,8 +97,11 @@ def new_user(request):
         user.first_name = form_new['first_name_new'].value()
         user.last_name = form_new['last_name_new'].value()
         user.save()
+        user = User.objects.get(pk=user.id)
         person = mdl.person.Person()
         person.user = user
+        person.birth_country=mdlref.country.find_by_id(1)
+        person.nationality=mdlref.country.find_by_id(1)
         person.save()
         # send an activation email
         send_mail.send_mail_activation(request, str(person.activation_code), form_new['email_new'].value())
@@ -254,7 +258,6 @@ def login_admission(request, *args, **kwargs):
 
 
 def login_admission_error(request, *args, **kwargs):
-    print('login_admission_error')
     extra_context = {}
     form_new = NewAccountForm()
     form_new.errors['email_new_confirm'] = "Il existe déjà un compte pour cette adresse email"
