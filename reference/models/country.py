@@ -45,8 +45,10 @@ class Country(models.Model):
     def __str__(self):
         return self.name
 
-    def find_countries():
-        return Country.objects.all()
 
-    def find_by_id(country_id):
-        return Country.objects.get(pk=country_id)
+def find_countries():
+    return Country.objects.all()
+
+
+def find_by_id(country_id):
+    return Country.objects.get(pk=country_id)

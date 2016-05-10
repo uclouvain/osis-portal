@@ -25,12 +25,10 @@
 ##############################################################################
 from django.contrib.auth.decorators import login_required
 from admission import models as mdl
-
-from reference.models import Country
+from reference import models as ref
 from datetime import datetime
 from admission.forms import PersonForm
 from django.shortcuts import render
-#from django.views.decorators.csrf import csrf_protect #AA
 from django.http import HttpResponseRedirect
 
 
@@ -46,7 +44,6 @@ def home(request):
 
 
 def profile(request):
-
     if request.method == 'POST':
         person_form = PersonForm(data=request.POST)
 
@@ -67,7 +64,7 @@ def profile(request):
         if request.POST['birth_date']:
             try:
                 person.birth_date = datetime.strptime(request.POST['birth_date'], '%d/%m/%Y')
-            except:
+            except ValueError:
                 person.birth_date = None
                 person_form.errors['birth_date'] = "La date encodée('%s') semble incorrecte " % request.POST[
                     'birth_date']
@@ -76,7 +73,7 @@ def profile(request):
             person.birth_place = request.POST['birth_place']
         if request.POST['birth_country']:
             birth_country_id = request.POST['birth_country']
-            birth_country = Country.find_by_id(birth_country_id)
+            birth_country = ref.country.Country.find_by_id(birth_country_id)
             person.birth_country = birth_country
         if request.POST.get('gender'):
             person.gender = request.POST['gender']
@@ -88,7 +85,7 @@ def profile(request):
             person.spouse_name = request.POST['spouse_name']
         if request.POST['nationality']:
             country_id = request.POST['nationality']
-            country = Country.find_by_id(country_id)
+            country = ref.country.Country.find_by_id(country_id)
             person.nationality = country
 
         if request.POST['national_id']:
@@ -110,7 +107,7 @@ def profile(request):
             person_legal_address.city = request.POST['legal_adr_city']
         if request.POST['legal_adr_country']:
             country_id = request.POST['legal_adr_country']
-            country = Country.find_by_id(country_id)
+            country = ref.country.Country.find_by_id(country_id)
             person_legal_address.country = country
 
         if request.POST['same_contact_legal_addr'] == "false":
@@ -132,7 +129,7 @@ def profile(request):
                 person_contact_address.city = request.POST['contact_adr_city']
             if request.POST['contact_adr_country']:
                 country_id = request.POST['contact_adr_country']
-                country = Country.find_by_id(country_id)
+                country = ref.country.Country.find_by_id(country_id)
                 person_contact_address.country = country
             same_addresses = False
         else:
@@ -164,11 +161,11 @@ def profile(request):
                     criteria_id = key[22:]
                     criteria = mdl.assimilation_criteria.AssimilationCriteria.find_by_id(criteria_id)
                     if criteria:
-                        personAssimilationCriteria = mdl.person_assimilation_criteria.PersonAssimilationCriteria()
-                        personAssimilationCriteria.criteria = criteria
-                        personAssimilationCriteria.person = person
+                        person_assimilation_criteria = mdl.person_assimilation_criteria.PersonAssimilationCriteria()
+                        person_assimilation_criteria.criteria = criteria
+                        person_assimilation_criteria.person = person
                         if person_form.is_valid():
-                            personAssimilationCriteria.save()
+                            person_assimilation_criteria.save()
 
         if person_form.is_valid():
             if person_contact_address:
@@ -176,7 +173,6 @@ def profile(request):
             person_legal_address.save()
             person.save()
             return home(request)
-
     else:
         person = mdl.person.find_by_user(request.user)
         person_form = PersonForm()
@@ -193,19 +189,20 @@ def profile(request):
         else:
             return HttpResponseRedirect('/admission/logout/?next=/admission')
 
-    countries = Country.find_countries()
-    assimilationCriteria = mdl.assimilation_criteria.AssimilationCriteria.find_criteria()
-    personAssimilationCriteria = mdl.person_assimilation_criteria.PersonAssimilationCriteria.find_by_person(person.id)
-    property = mdl.properties.find_by_key('INSTITUTION')
-    if property is None:
-        institution_name = "<font style='color:red'>Aucune institution de définie</font>"
+    countries = ref.country.Country.find_countries()
+    assimilation_criteria = mdl.assimilation_criteria.AssimilationCriteria.find_criteria()
+    person_assimilation_criteria = mdl.person_assimilation_criteria.PersonAssimilationCriteria.find_by_person(person.id)
+    props = mdl.properties.find_by_key('INSTITUTION')
+    if props:
+        institution_name = props.value
     else:
-        institution_name = property.value
+        institution_name = "<font style='color:red'>Aucune institution de définie</font>"
+
     return render(request, "profile.html", {'person': person,
                                             'person_form': person_form,
                                             'countries': countries,
-                                            'assimilationCriteria': assimilationCriteria,
-                                            'personAssimilationCriteria': personAssimilationCriteria,
+                                            'assimilationCriteria': assimilation_criteria,
+                                            'personAssimilationCriteria': person_assimilation_criteria,
                                             'person_legal_address': person_legal_address,
                                             'person_contact_address': person_contact_address,
                                             'same_addresses': same_addresses,

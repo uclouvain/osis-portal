@@ -23,27 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
 from django.db import models
 from django.contrib import admin
 
+
 class PersonAssimilationCriteriaAdmin(admin.ModelAdmin):
-     list_display = ('person', 'criteria')
+    list_display = ('person', 'criteria')
+
 
 class PersonAssimilationCriteria(models.Model):
     person = models.ForeignKey('Person')
     criteria = models.ForeignKey('AssimilationCriteria')
 
-    @staticmethod
-    def find_by_person(a_person):
-        return PersonAssimilationCriteria.objects.filter(person=a_person)
 
-    @staticmethod
-    def find_by_criteria(criteria_id):
-        return PersonAssimilationCriteria.objects.get(pk=criteria_id)
-
-    @staticmethod
-    def find_by_person_criteria(person_id,criteria_id):
-        return PersonAssimilationCriteria.objects.filter(person=person_id,criteria=criteria_id)
+def find_by_person(a_person):
+    return PersonAssimilationCriteria.objects.filter(person=a_person)
 
 
+def find_by_criteria(criteria_id):
+    return PersonAssimilationCriteria.objects.get(pk=criteria_id)
+
+
+def find_by_person_criteria(person_id, criteria_id):
+    return PersonAssimilationCriteria.objects.filter(person=person_id, criteria=criteria_id)
