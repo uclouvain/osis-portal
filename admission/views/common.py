@@ -50,7 +50,6 @@ def home(request):
 
 def profile(request):
     if request.method == 'POST':
-        print('poste')
         person_form = PersonForm(data=request.POST)
 
         person = mdl.person.find_by_user(request.user)
@@ -229,7 +228,6 @@ def profile(request):
             return home(request)
 
     else:
-        print('get')
         person = mdl.person.find_by_user(request.user)
         person_form = PersonForm()
         if person:
