@@ -90,12 +90,11 @@
         <div class="panel panel-default">
             <div class="panel-heading">{% trans 'no_account_yet' %}</div>
             <div class="panel-body">
-
-                    <form  method="post" action="{% url 'new_user' %}" autocomplete="off">
-                        {% csrf_token %}
-                        <input type="hidden" value="{{ number1 }}" name="number1" />
-                        <input type="hidden" value="{{ number2 }}" name="number2" />
-                        <input type="hidden" value="{{ number3 }}" name="number3" />
+                <form  method="post" action="{% url 'new_user' %}" autocomplete="off">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ number1 }}" name="number1" />
+                    <input type="hidden" value="{{ number2 }}" name="number2" />
+                    <input type="hidden" value="{{ number3 }}" name="number3" />
 
                 {% trans 'account_creation' %}<b>{% trans 'all_mandatory_fields' %}</b>
                 <br><br>
