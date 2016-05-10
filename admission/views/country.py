@@ -23,7 +23,29 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
-from reference.models import country
+from rest_framework import serializers
+from reference import models as ref
+from django.http import HttpResponse
+from rest_framework.renderers import JSONRenderer
+from django.views.decorators.csrf import csrf_exempt
 
-admin.site.register(country.Country, country.CountryAdmin)
+
+class JSONResponse(HttpResponse):
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
+
+
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ref.country.Country
+        fields = '__all__'
+
+@csrf_exempt
+def find_by_id(request):
+    country_id = request.GET['nationality']
+
+    country = Country.find_by_id(country_id)
+    serializer = CountrySerializer(country)
+    return JSONResponse(serializer.data)

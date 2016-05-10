@@ -23,30 +23,27 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+
 from django.db import models
 from django.contrib import admin
 
 
-class CountryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'iso_code', 'nationality', 'european_union', 'dialing_code', 'cref_code')
-    fieldsets = ((None, {'fields': ('iso_code', 'name', 'nationality', 'european_union', 'dialing_code', 'cref_code')}),)
-    ordering = ('name',)
-    search_fields = ['name']
+class AssimilationCriteriaAdmin(admin.ModelAdmin):
+    list_display = ('criteria', 'order')
+    fieldsets = ((None, {'fields': ('criteria', 'order')}),)
 
 
-class Country(models.Model):
-    iso_code = models.CharField(max_length=2, unique=True)
-    name = models.CharField(max_length=80, unique=True)
-    nationality = models.CharField(max_length=80, blank=True, null=True)
-    european_union = models.BooleanField(default=False)
-    dialing_code = models.CharField(max_length=3, blank=True, null=True)
-    cref_code = models.CharField(max_length=3, blank=True, null=True)
+class AssimilationCriteria(models.Model):
+    criteria = models.CharField(max_length=255, unique=True)
+    order = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return self.criteria
 
-    def find_countries():
-        return Country.objects.all()
 
-    def find_by_id(country_id):
-        return Country.objects.get(pk=country_id)
+def find_criteria():
+    return AssimilationCriteria.objects.all().order_by("order")
+
+
+def find_by_id(criteria_id):
+    return AssimilationCriteria.objects.get(pk=criteria_id)
