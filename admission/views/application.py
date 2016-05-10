@@ -27,9 +27,6 @@ from admission import models as mdl
 from django.shortcuts import render, get_object_or_404
 from reference import models as mdl_reference
 
-from admission.forms import FileForm
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
 from datetime import datetime
 from admission.views.common import home
 from functools import cmp_to_key
