@@ -135,7 +135,7 @@ def save_application_offer(request):
                                                 "education_type_transition":    education_type_transition,
                                                 "education_type_qualification": education_type_qualification,
                                                 "current_academic_year":        mdl.academic_year.current_academic_year(),
-                                                "local_language_exam_needed":   is_local_language_exam_needed(user)})
+                                                "local_language_exam_needed":   is_local_language_exam_needed(request.user)})
 
 
 def application_view(request, application_id):
@@ -479,7 +479,7 @@ def curriculum_save(request, application_id):
                                             "education_type_transition":    education_type_transition,
                                             "education_type_qualification": education_type_qualification,
                                             "current_academic_year":        mdl.academic_year.current_academic_year(),
-                                            "local_language_exam_needed":   is_local_language_exam_needed(user)})
+                                            "local_language_exam_needed":   is_local_language_exam_needed(request.user)})
 
 
 def find_cities_postalcodes(education_institutions):
@@ -723,7 +723,7 @@ def diploma_update(request):
                                             "education_type_transition":    education_type_transition,
                                             "education_type_qualification": education_type_qualification,
                                             "current_academic_year":        mdl.academic_year.current_academic_year(),
-                                            "local_language_exam_needed":   is_local_language_exam_needed(user)})
+                                            "local_language_exam_needed":   is_local_language_exam_needed(request.user)})
 
 
 def validate_professional_exam(request,is_valid, validation_messages, secondary_education):

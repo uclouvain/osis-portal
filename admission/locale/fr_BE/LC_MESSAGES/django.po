@@ -656,3 +656,6 @@ msgstr "Si vous êtes dans une des situations suivantes"
 
 msgid "wrong_date"
 msgstr "La date semble erronée"
+
+msgid "succeeded"
+msgstr "Réussite"

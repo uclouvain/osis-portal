@@ -53,6 +53,10 @@ class SecondaryEducation(models.Model):
                        ('NO', _('No')),
                        ('DEMANDED', _('Demanded')))
 
+    LOCAL_LANGUAGE_EXAM_RESULT_TYPE = (('SUCCEED', _('succeeded')),
+                                       ('FAILED', _('failed')),
+                                       ('ENROLLMENT_IN_PROGRESS', _('demanded_result')))
+
     person = models.OneToOneField('Person')
     secondary_education_diploma = models.BooleanField(default=False)
     academic_year = models.ForeignKey('AcademicYear', blank=True, null=True)
@@ -80,7 +84,7 @@ class SecondaryEducation(models.Model):
     local_language_exam = models.NullBooleanField(default=False)
     local_language_exam_date = models.DateField(blank=True, null=True)
     local_language_exam_institution = models.CharField(max_length=100,blank=True, null=True)
-    local_language_exam_result = models.CharField(max_length=25, choices=RESULT_TYPE, blank=True, null=True)
+    local_language_exam_result = models.CharField(max_length=25, choices=LOCAL_LANGUAGE_EXAM_RESULT_TYPE, blank=True, null=True)
 
 
     @property
