@@ -653,3 +653,6 @@ msgstr "Attention il y a des erreurs."
 
 msgid "criteria_question"
 msgstr "Si vous êtes dans une des situations suivantes"
+
+msgid "wrong_date"
+msgstr "La date semble erronée"

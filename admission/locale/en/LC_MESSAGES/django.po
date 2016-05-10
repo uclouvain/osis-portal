@@ -646,3 +646,6 @@ msgstr "There are errors"
 
 msgid "criteria_question"
 msgstr "Are you in one of these situations"
+
+msgid "wrong_date"
+msgstr "Wrong date "

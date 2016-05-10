@@ -163,36 +163,41 @@
         <div class="panel-heading">{%trans 'file_copy_add_instruction'%}*</div>
         <div class="panel-body">
             {%trans 'file_copy_help_instruction'%}
-
+            <br>
             <br>
             <label>{% trans 'original_of' %}</label>
             <br>
             <div class="row">
                 <div class="col-md-6">
-                    <input type="button"
-                           value="{% trans 'high_school_diploma'%} - {% trans 'recto'%}"
-                           id="bt_diploma_recto"
-                           name="diploma_recto"/>
+                    <button type="button" class="btn btn-default" data-toggle="modal"
+                        data-target="#pnl_upload_file_modal"
+                        title="{% trans 'high_school_diploma'%} - {% trans 'verso'%}" id="bt_diploma_recto">
+                        <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'high_school_diploma'%} - {% trans 'recto'%}
+                    </button>
                 </div>
                  <div class="col-md-6">
-                    <input type="button"
-                           value="{% trans 'high_school_diploma'%} - {% trans 'verso'%}"
-                           id="bt_diploma_verso"
-                           name="diploma_verso"/>
+                    <button type="button" class="btn btn-default" data-toggle="modal"
+                        data-target="#pnl_upload_file_modal"
+                        title="{% trans 'high_school_diploma'%} - {% trans 'verso'%}" id="bt_diploma_verso">
+                        <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'high_school_diploma'%} - {% trans 'verso'%}
+                    </button>
                 </div>
             </div>
+            <br>
             <div class="row">
                 <div class="col-md-6">
-                    <input type="button"
-                           value="{% trans 'high_school_diploma_transcript'%} - {% trans 'recto'%}"
-                           id="bt_note_sheet_recto"
-                           name="note_sheet_recto"/>
+                     <button type="button" class="btn btn-default" data-toggle="modal"
+                        data-target="#pnl_upload_file_modal"
+                        title="{% trans 'high_school_diploma'%} - {% trans 'verso'%}" id="bt_note_sheet_recto">
+                        <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'high_school_diploma_transcript'%} - {% trans 'recto'%}
+                    </button>
                 </div>
                  <div class="col-md-6">
-                    <input type="button"
-                           value="{% trans 'high_school_diploma_transcript'%} - {% trans 'verso'%}"
-                           id="bt_note_sheet_verso"
-                           name="note_sheet_verso"/>
+                     <button type="button" class="btn btn-default" data-toggle="modal"
+                        data-target="#pnl_upload_file_modal"
+                        title="{% trans 'high_school_diploma'%} - {% trans 'verso'%}" id="bt_note_sheet_verso">
+                        <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'high_school_diploma_transcript'%} - {% trans 'verso'%}
+                    </button>
                 </div>
             </div>
             <br>
@@ -202,27 +207,35 @@
                 <br>
                 <div class="row">
                     <div class="col-md-6">
-                        <input type="button" value="{% trans 'high_school_diploma'%} - {% trans 'recto'%}"
-                               id="bt_diploma_translation_recto"
-                               name="diploma_translation_recto"/>
+                        <button type="button" class="btn btn-default" data-toggle="modal"
+                                data-target="#pnl_upload_file_modal"
+                                    title="{% trans 'high_school_diploma'%} - {% trans 'recto'%}" id="bt_diploma_translation_recto">
+                                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'high_school_diploma'%} - {% trans 'recto'%}
+                        </button>
                     </div>
                      <div class="col-md-6">
-                        <input type="button" value="{% trans 'high_school_diploma'%} - {% trans 'verso'%}"
-                               id="bt_diploma_translation_verso"
-                               name="diploma_translation_verso"/>
+                        <button type="button" class="btn btn-default" data-toggle="modal"
+                                data-target="#pnl_upload_file_modal"
+                                title="{% trans 'high_school_diploma'%} - {% trans 'verso'%}" id="bt_diploma_translation_verso">
+                                <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'high_school_diploma'%} - {% trans 'verso'%}
+                        </button>
                     </div>
                 </div>
+                <br>
                 <div class="row">
                     <div class="col-md-6">
-                        <input type="button"
-                               value="{% trans 'high_school_diploma_transcript'%} - {% trans 'recto'%}"
-                               id="bt_note_sheet_translation_recto"
-                               name="note_sheet_translation_recto"/>
+                        <button type="button" class="btn btn-default" data-toggle="modal"
+                                data-target="#pnl_upload_file_modal"
+                                title="{% trans 'high_school_diploma_transcript'%} - {% trans 'recto'%}" id="bt_note_sheet_translation_recto">
+                                <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'high_school_diploma_transcript'%} - {% trans 'recto'%}
+                        </button>
                     </div>
                      <div class="col-md-6">
-                        <input type="button" value="{% trans 'high_school_diploma_transcript' %} - {% trans 'verso'%}"
-                               id="bt_note_sheet_translation_verso"
-                               name="bt_note_sheet_translation_verso"/>
+                        <button type="button" class="btn btn-default" data-toggle="modal"
+                                data-target="#pnl_upload_file_modal"
+                                title="{% trans 'high_school_diploma_transcript' %} - {% trans 'verso'%}" id="bt_note_sheet_translation_verso">
+                                <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'high_school_diploma_transcript' %} - {% trans 'verso'%}
+                        </button>
                     </div>
                 </div>
             </div>
