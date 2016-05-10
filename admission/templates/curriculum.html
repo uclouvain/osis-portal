@@ -33,21 +33,49 @@
     {% csrf_token %}
     <div>
         <button type="submit" id="bt_previous_step_up" name="bt_previous_step_up" class="btn btn-default" role="button"
-                title="Etape précédente">
-                                    <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>Etape précédente</button>
+                title="{%trans 'previous_step' %}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%}</button>
+        <button type="submit" id="bt_save_up" name="bt_save_up" class="btn btn-default" role="button"
+                title="{%trans 'save'%}"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+            {%trans 'save'%}</button>
+        <button type="submit" id="bt_next_step_up" name="bt_next_step_up" class="btn btn-default" role="button"
+                title="{%trans 'next_step'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            {%trans 'next_step'%}</button>
         <br>
+        {%if message_success%}
+            <br>
+            <font class="alert alert-success" role="alert" style="margin-left:5px;">
+                {{message_success}}
+            </font>
+            <br><br>
+        {% endif %}
     </div>
     <br>
     <div class="panel panel-default">
         <div class="panel-heading">Curriculum</div>
         <div class="panel-body">
-            Curriculum
+            {% trans 'curriculum_instruction' %}
+            <br>
+            {% trans 'curriculum_instruction_warning' %}
+            <br>
+            {% trans 'curriculum_instruction_duplicate' %}
         </div>
     </div>
     <div>
-        <button type="submit" id="bt_previous_step_down" name="bt_previous_step_down" class="btn btn-default" role="button"
-                                    title="Etape précédente">
-                                    <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>Etape précédente</button>
+        <button type="submit" id="bt_previous_step_down" class="btn btn-default" role="button"
+                title="{%trans 'previous_step'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%}</button>
+        <button type="submit" id="bt_save_down" name="bt_save_down" class="btn btn-default" role="button"
+                title="{%trans 'save'%}"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+            {%trans 'save'%}</button>
+        <button type="submit" id="bt_next_step_down" name="bt_next_step_down" class="btn btn-default" role="button"
+                title="{%trans 'next_step'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            {%trans 'next_step'%}</button>
+        {%if message_success%}
+            <br><br>
+            <font class="alert alert-success" role="alert" style="margin-left:5px;">{{ message_success}}</font>
+            <br><br>
+        {% endif %}
     </div>
 </form>
 {% endblock %}

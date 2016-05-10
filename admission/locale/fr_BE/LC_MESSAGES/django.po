@@ -639,3 +639,17 @@ msgstr ""
  "Veuillez vérifier votre e-mail maintenant et cliquez sur le lien dans le message que vous avez reçu pour pouvoir "
  "encoder un nouveau mot de passe."
 
+msgid "curriculum_instruction"
+msgstr ""
+  "Veuillez remplir ci-dessous pour chaque année mentionnée quelles ont été vos occupations. Chaque année d'études "
+  "(réussie ou échouée) ou chaque activité doit être complétée."
+
+msgid "curriculum_instruction_warning"
+msgstr ""
+ "ATTENTION, en cas de cumul d'études supérieures et d'activités lors de la même année académique, veuillez n'indiquer "
+ "que les études entreprises."
+
+msgid "curriculum_instruction_duplicate"
+msgstr ""
+ "Aidez-vous, au besoin, du bouton 'Dupliquer' pour un parcours en plusieurs années dans une même institution."
+

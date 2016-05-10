@@ -631,3 +631,17 @@ msgstr "An activation message has been sent to your email account."
 
 msgid "activation_instruction"
 msgstr "Please check your email new et clic on the link to indicate a new password."
+
+msgid "curriculum_instruction"
+msgstr ""
+  "Please complete below for each year mentioned  what were your activities.  Every study year (successful or "
+  "unsuccessful) or activity has to be completed"
+
+msgid "curriculum_instruction_warning"
+msgstr ""
+ "ATTENTION, en cas de cumul d'études supérieures et d'activités lors de la même année académique, veuillez n'indiquer "
+ "que les études entreprises."
+
+msgid "curriculum_instruction_duplicate"
+msgstr ""
+ "Please use, if needed, the 'Duplicate' button for a study course of several years within the same institute."
