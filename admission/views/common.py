@@ -50,6 +50,7 @@ def home(request):
 
 def profile(request):
     if request.method == 'POST':
+        print('poste')
         person_form = PersonForm(data=request.POST)
 
         person = mdl.person.find_by_user(request.user)
@@ -62,10 +63,16 @@ def profile(request):
 
         if request.POST['last_name']:
             person.user.last_name = request.POST['last_name']
+        else:
+            person.user.last_name = None
         if request.POST['first_name']:
             person.user.first_name = request.POST['first_name']
+        else:
+            person.user.first_name = None
         if request.POST['middle_name']:
             person.middle_name = request.POST['middle_name']
+        else:
+            person.middle_name = None
         if request.POST['birth_date']:
             try:
                 person.birth_date = datetime.strptime(request.POST['birth_date'], '%d/%m/%Y')
@@ -73,48 +80,78 @@ def profile(request):
                 person.birth_date = None
                 person_form.errors['birth_date'] = "La date encodée('%s') semble incorrecte " % request.POST[
                     'birth_date']
-
+        else:
+            person.birth_date = None
         if request.POST['birth_place']:
             person.birth_place = request.POST['birth_place']
+        else:
+            person.birth_place = None
         if request.POST['birth_country']:
             birth_country_id = request.POST['birth_country']
             birth_country = mdl_ref.country.find_by_id(birth_country_id)
             person.birth_country = birth_country
+        else:
+            person.birth_country = None
         if request.POST.get('gender'):
             person.gender = request.POST['gender']
+        else:
+            person.gender = None
         if request.POST['civil_status']:
             person.civil_status = request.POST['civil_status']
+        else:
+            person.civil_status = None
         if request.POST['number_children']:
             person.number_children = request.POST['number_children']
+        else:
+            person.number_children = None
         if request.POST['spouse_name']:
             person.spouse_name = request.POST['spouse_name']
+        else:
+            person.spouse_name = None
         if request.POST['nationality']:
             country_id = request.POST['nationality']
             country = mdl_ref.country.find_by_id(country_id)
             person.nationality = country
-
+        else:
+            person.nationality = None
         if request.POST['national_id']:
             person.national_id = request.POST['national_id']
+        else:
+            person.national_id = None
         if request.POST['id_card_number']:
             person.id_card_number = request.POST['id_card_number']
+        else:
+            person.id_card_number = None
         if request.POST['passport_number']:
             person.passport_number = request.POST['passport_number']
-
+        else:
+            person.passport_number = None
         if request.POST['legal_adr_street']:
             person_legal_address.street = request.POST['legal_adr_street']
+        else:
+            person_legal_address.street = None
         if request.POST['legal_adr_number']:
             person_legal_address.number = request.POST['legal_adr_number']
+        else:
+            person_legal_address.number = None
         if request.POST['legal_adr_complement']:
             person_legal_address.complement = request.POST['legal_adr_complement']
+        else:
+            person_legal_address.complement = None
         if request.POST['legal_adr_postal_code']:
             person_legal_address.postal_code = request.POST['legal_adr_postal_code']
+        else:
+            person_legal_address.postal_code = None
         if request.POST['legal_adr_city']:
             person_legal_address.city = request.POST['legal_adr_city']
+        else:
+            person_legal_address.city = None
         if request.POST['legal_adr_country']:
             country_id = request.POST['legal_adr_country']
             country = mdl_ref.country.find_by_id(country_id)
             person_legal_address.country = country
-
+        else:
+            person_legal_address.country = None
         if request.POST['same_contact_legal_addr'] == "false":
             person_contact_address = mdl.person_address.find_by_person_type(person, 'CONTACT')
             if person_contact_address is None:
@@ -124,18 +161,30 @@ def profile(request):
 
             if request.POST['contact_adr_street']:
                 person_contact_address.street = request.POST['contact_adr_street']
+            else:
+                person_contact_address.street = None
             if request.POST['contact_adr_number']:
                 person_contact_address.number = request.POST['contact_adr_number']
+            else:
+                person_contact_address.number = None
             if request.POST['contact_adr_complement']:
                 person_contact_address.complement = request.POST['contact_adr_complement']
+            else:
+                person_contact_address.complement = None
             if request.POST['contact_adr_postal_code']:
                 person_contact_address.postal_code = request.POST['contact_adr_postal_code']
+            else:
+                person_contact_address.postal_code = None
             if request.POST['contact_adr_city']:
                 person_contact_address.city = request.POST['contact_adr_city']
+            else:
+                person_contact_address.city = None
             if request.POST['contact_adr_country']:
                 country_id = request.POST['contact_adr_country']
                 country = mdl_ref.country.find_by_id(country_id)
                 person_contact_address.country = country
+            else:
+                person_contact_address.country = None
             same_addresses = False
         else:
             # Question que faire si true, mais qu'une adresse de contact existe déjà
@@ -178,7 +227,9 @@ def profile(request):
             person_legal_address.save()
             person.save()
             return home(request)
+
     else:
+        print('get')
         person = mdl.person.find_by_user(request.user)
         person_form = PersonForm()
         if person:
