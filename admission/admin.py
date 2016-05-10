@@ -71,3 +71,6 @@ admin.site.register(person_assimilation_criteria.PersonAssimilationCriteria,
 
 admin.site.register(properties.Properties,
                     properties.PropertiesAdmin)
+
+admin.site.register(secondary_education.SecondaryEducation,
+                    secondary_education.SecondaryEducationAdmin)

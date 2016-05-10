@@ -1,7 +1,38 @@
 [
   {"model": "admission.properties","pk": 1, "fields": {"key" :"INSTITUTION", "value":"UCL" }},
+  {"model": "admission.properties","pk": 2, "fields": {"key" :"LOGO" ,"value" : "" }},
+  {"model": "admission.properties","pk": 3,"fields": {"key" :"PROFESSIONAL_EXAM_LINK" ,"value" : "https://www.uclouvain.be/vae.html" }},
+  {"model": "admission.properties","pk": 4,"fields": {"key" :"LOCAL_LANGUAGE_EXAM_LINK" ,"value" : "http://www.uclouvain.be/204100.html" }},
 
-  {"model": "admission.academicyear","pk": 1, "fields": {"year" :"2016" }},
+
+
+  {"model": "admission.academicyear","pk": 1, "fields": {"year" :"2016" , "start_date": "2016-09-01", "end_date": "2017-06-30"}},
+  {"model": "admission.academicyear","pk": 2,"fields": {"year" :"2015" , "start_date": "2015-09-01", "end_date": "2016-06-30"}},
+  {"model": "admission.academicyear", "pk": 3,"fields": {"year" :"1990" }},
+  {"model": "admission.academicyear", "pk": 4,"fields": {"year" :"1991" }},
+  {"model": "admission.academicyear", "pk": 5,"fields": {"year" :"1992" }},
+  {"model": "admission.academicyear", "pk": 6,"fields": {"year" :"1993" }},
+  {"model": "admission.academicyear", "pk": 7,"fields": {"year" :"1994" }},
+  {"model": "admission.academicyear", "pk": 8,"fields": {"year" :"1995" }},
+  {"model": "admission.academicyear", "pk": 9,"fields": {"year" :"1996" }},
+  {"model": "admission.academicyear", "pk": 10,"fields": {"year" :"1997" }},
+  {"model": "admission.academicyear", "pk": 11,"fields": {"year" :"1998" }},
+  {"model": "admission.academicyear", "pk": 12,"fields": {"year" :"1999" }},
+  {"model": "admission.academicyear", "pk": 13,"fields": {"year" :"2000" }},
+  {"model": "admission.academicyear", "pk": 14,"fields": {"year" :"2001" }},
+  {"model": "admission.academicyear", "pk": 15,"fields": {"year" :"2002" }},
+  {"model": "admission.academicyear", "pk": 16,"fields": {"year" :"2003" }},
+  {"model": "admission.academicyear", "pk": 17,"fields": {"year" :"2004" }},
+  {"model": "admission.academicyear", "pk": 18,"fields": {"year" :"2005" }},
+  {"model": "admission.academicyear", "pk": 19,"fields": {"year" :"2006" }},
+  {"model": "admission.academicyear", "pk": 20,"fields": {"year" :"2007" }},
+  {"model": "admission.academicyear", "pk": 21,"fields": {"year" :"2008" }},
+  {"model": "admission.academicyear", "pk": 22,"fields": {"year" :"2009" }},
+  {"model": "admission.academicyear", "pk": 23,"fields": {"year" :"2010" }},
+  {"model": "admission.academicyear", "pk": 24,"fields": {"year" :"2011" }},
+  {"model": "admission.academicyear", "pk": 25,"fields": {"year" :"2012" }},
+  {"model": "admission.academicyear", "pk": 26,"fields": {"year" :"2013" }},
+  {"model": "admission.academicyear", "pk": 27,"fields": {"year" :"2014" }},
 
   {"model": "admission.domain", "pk": 1,"fields": {"name" :"Art de bâtir et urbanisme" }},
   {"model": "admission.domain", "pk": 2,"fields": {"name" :"Art et sciences de l'art" }},
@@ -40,6 +71,32 @@
   {"model": "admission.gradetype","pk": 9, "fields": {"name" :"Certificat universitaire", "grade" : "CERFIFICAT"}},
   {"model": "admission.gradetype","pk": 10, "fields": {"name" :"Doctorat", "grade" : "DOCTORATE"  }},
 
+  {"model": "admission.domain","pk": 1, "fields": { "name" :"Art de bâtir et urbanisme" }},
+  {"model": "admission.domain", "pk": 2,"fields": { "name" :"Art et sciences de l'art" }},
+  {"model": "admission.domain", "pk": 3,"fields": { "name" :"Arts du spectacle et technique de diffusion et de communication" }},
+  {"model": "admission.domain", "pk": 4,"fields": { "name" :"Arts plastiques, visuels et de l'espace" }},
+  {"model": "admission.domain","pk": 5,  "fields": {"name" :"Criminologie" }},
+  {"model": "admission.domain", "pk": 6,"fields": { "name" :"Histoire, histoire de l'art et archéologie" }},
+  {"model": "admission.domain", "pk": 7,"fields": { "name" :"Information et communication" }},
+  {"model": "admission.domain", "pk": 8,"fields": { "name" :"Langues, lettres et traductologie" }},
+  {"model": "admission.domain", "pk": 9,"fields": { "name" :"Musique" }},
+  {"model": "admission.domain", "pk": 10,"fields": { "name" :"Philosophie" }},
+  {"model": "admission.domain", "pk": 11,"fields": { "name" :"Sciences" }},
+  {"model": "admission.domain", "pk": 12, "fields": {"name" :"Sciences agronomiques et ingénierie biologique" }},
+  {"model": "admission.domain","pk": 13, "fields": { "name" :"Sciences biomédicales et pharmaceutiques" }},
+  {"model": "admission.domain", "pk": 14,"fields": { "name" :"Sciences de la motricité" }},
+  {"model": "admission.domain","pk": 15, "fields": { "name" :"Sciences de la santé publique" }},
+  {"model": "admission.domain","pk": 16, "fields": { "name" :"Sciences de l'ingénieur et technologie" }},
+  {"model": "admission.domain","pk": 17, "fields": { "name" :"Sciences dentaires" }},
+  {"model": "admission.domain", "pk": 18,"fields": { "name" :"Sciences économiques et de gestion" }},
+  {"model": "admission.domain", "pk": 19,"fields": { "name" :"Sciences juridiques" }},
+  {"model": "admission.domain", "pk": 20,"fields": { "name" :"Sciences médicales" }},
+  {"model": "admission.domain", "pk": 21,"fields": { "name" :"Sciences politiques et sociales" }},
+  {"model": "admission.domain", "pk": 22,"fields": { "name" :"Sciences psychologiques et de l'éducation" }},
+  {"model": "admission.domain", "pk": 23,"fields": { "name" :"Sciences vétérinaires" }},
+  {"model": "admission.domain", "pk": 24, "fields": {"name" :"Théâtre et arts de la parole" }},
+  {"model": "admission.domain", "pk": 25,"fields": { "name" :"Théologie" }},
+
   {"model": "admission.offeryear", "fields": {"acronym" :"VETE11BA","title" : "Première année de bachelier en médecine vétérinaire", "title_international" : "","academic_year" : 1, "domain" : 1 ,"grade_type" : 1 }},
   {"model": "admission.offeryear", "fields": {"acronym" :"FSA11BA","title" : "Première année de bachelier en sciences de l'ingénieur, orientation ingénieur civil", "title_international" : "","academic_year" : 1 , "domain" : 1 ,"grade_type" : 1}},
   {"model": "admission.offeryear", "fields": {"acronym" :"SINF11BA","title" : "Première année de bachelier en sciences informatiques", "title_international" : "","academic_year" : 1 , "domain" : 1 ,"grade_type" : 1}},
@@ -49,7 +106,79 @@
   {"model": "admission.offeryear", "fields": {"acronym" :"CARD2MC","title" : "Master de spécialisation en cardiologie", "title_international" : "Advanced Master in Cardiology","academic_year" : 1 , "domain" : 3,"grade_type" : 5}},
   {"model": "admission.offeryear", "fields": {"acronym" :"DERM2MC","title" : "Master de spécialisation en dermato-vénéréologie", "title_international" : "Advanced Master in Dermatology-Venereology","academic_year" : 1 , "domain" : 3,"grade_type" : 5}},
   {"model": "admission.offeryear", "fields": {"acronym" :"ORTO2MC","title" : "Master de spécialisation en chirurgie orthopédique", "title_international" : "Advanced Master in Orthopaedic Surgery","academic_year" : 1, "domain" : 4,"grade_type" : 5}},
-  {"model": "admission.offeryear", "fields": {"acronym" :"PHYS11BA","title" : "Première année de bachelier en sciences physiques", "title_international" : "","academic_year" : 1, "domain" : 5,"grade_type" : 1}}
+  {"model": "admission.offeryear", "fields": {"acronym" :"PHYS11BA","title" : "Première année de bachelier en sciences physiques", "title_international" : "","academic_year" : 1, "domain" : 5,"grade_type" : 1}},
+
+
+
+  {"model": "reference.educationinstitution", "fields": {"name" :"ATHENEE ROYAL LUCIENNE TELLIER" ,
+                                              "institution_type":"SECONDARY",
+                                              "postal_code":"7910",
+                                              "city":"ANVAING",
+                                              "national_community": "FRENCH",
+                                              "adhoc" : "False"}},
+
+
+  {"model": "reference.educationinstitution", "fields": {"name" :"INSTITUT NOTRE-DAME" ,
+                                              "institution_type":"SECONDARY",
+                                              "postal_code":"6000",
+                                              "city":"CHARLEROI",
+                                              "national_community": "FRENCH",
+                                              "adhoc" : "False"}},
+
+  {"model": "reference.educationinstitution", "fields": {"name" :"STED. INST. VOOR HANDEL EN AMBACHTEN" ,
+                                              "institution_type":"SECONDARY",
+                                              "postal_code":"2000",
+                                              "city":"Antwerpen",
+                                              "national_community": "DUTCH",
+                                              "adhoc" : "False"}},
+
+  {"model": "reference.educationinstitution", "fields": {"name" :"STELLA MARISINSTITUUT" ,
+                                              "institution_type":"SECONDARY",
+                                              "postal_code":"2000",
+                                              "city":"Antwerpen",
+                                              "national_community": "DUTCH",
+                                              "adhoc" : "False"}},
+
+  {"model": "reference.educationinstitution", "fields": {"name" :"INSTITUT DE LA PROVIDENCE,HUMANITES (G.P.H.)" ,
+                                              "institution_type":"SECONDARY",
+                                              "postal_code":"6041",
+                                              "city":"GOSSELIES",
+                                              "national_community": "FRENCH",
+                                              "adhoc" : "False"}},
+
+
+
+  {"model": "reference.educationtype", "fields": {"type":"TRANSITION","name" :"Enseignement de formation générale" ,"adhoc" : "False"}},
+  {"model": "reference.educationtype", "fields": {"type":"TRANSITION","name" :"Technique de transition"  ,"adhoc" : "False"}},
+  {"model": "reference.educationtype", "fields": {"type":"TRANSITION","name" :"Artistique de transition"  ,"adhoc" : "False"}},
+  {"model": "reference.educationtype", "fields": {"type":"QUALIFICATION","name" :"Technique de qualification"  ,"adhoc" : "False"}},
+  {"model": "reference.educationtype", "fields": {"type":"QUALIFICATION","name" :"Artistique de qualification" ,"adhoc" : "False" }},
+  {"model": "reference.educationtype", "fields": {"type":"QUALIFICATION","name" :"Enseignement professionnel" ,"adhoc" : "False" }},
+  {"model": "reference.educationtype", "fields": {"type":"QUALIFICATION","name" :"Enseignement professionnel+Examen de maturité" ,"adhoc" : "False" }},
+
+
+  {"model": "reference.admissionexamtype", "fields": {"name" :"Examen d'admission aux études universitaires de 1er cycle" ,"adhoc" : "False" }},
+  {"model": "reference.admissionexamtype", "fields": {"name" :"Examen de maturité(ou d'aptitude) de la Communauté française de Belgique" ,"adhoc" : "False" }},
+  {"model": "reference.admissionexamtype", "fields": {"name" :"Examen spécial d'admission aux études universitaires de 1er cycle de l'ingénieur (ingénieur civil)" ,"adhoc" : "False" }},
+
+
+  {"model": "reference.country", "pk":1, "fields": {"name" :"Belgique", "european_union" : "True" ,"iso_code" : "1"}},
+  {"model": "reference.country", "pk":2, "fields": {"name" :"France" , "european_union" : "True"  ,"iso_code" : "2"}},
+  {"model": "reference.country", "pk":3, "fields": {"name" :"Brésil" , "european_union" : "False" ,"iso_code" : "3"}},
+  {"model": "reference.country", "pk":4, "fields": {"name" :"Russie" , "european_union" : "False" ,"iso_code" : "4"}},
+
+
+  {"model": "reference.language", "pk":1, "fields": {"name" :"Français", "code" : "1", "recognized" : "True"}},
+  {"model": "reference.language", "pk":2, "fields": {"name" :"Néerlandais", "code" : "2", "recognized" : "True"}},
+  {"model": "reference.language", "pk":3, "fields": {"name" :"Anglais", "code" : "3", "recognized" : "True"}},
+  {"model": "reference.language", "pk":4, "fields": {"name" :"Allemand", "code" : "4", "recognized" : "True"}},
+  {"model": "reference.language", "pk":5, "fields": {"name" :"Italien", "code" : "5", "recognized" : "True"}},
+  {"model": "reference.language", "pk":6, "fields": {"name" :"Espagnol", "code" : "6", "recognized" : "True"}},
+  {"model": "reference.language", "pk":7, "fields": {"name" :"Portuguais", "code" : "7","recognized" : "True"}},
+  {"model": "reference.language", "pk":8, "fields": {"name" :"Russe", "code" : "8", "recognized" : "False"}},
+  {"model": "reference.language", "pk":9, "fields": {"name" :"Chinois", "code" : "9", "recognized" : "False"}},
+  {"model": "reference.language", "pk":10, "fields": {"name" :"Japonais", "code" : "10", "recognized" : "False"}},
+  {"model": "reference.language", "pk":11, "fields": {"name" :"Vietnamien", "code" : "11", "recognized" : "False"}}
 
 
 ]

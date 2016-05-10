@@ -25,6 +25,7 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from django.utils import timezone
 
 
 class AcademicYearAdmin(admin.ModelAdmin):
@@ -49,3 +50,20 @@ class AcademicYear(models.Model):
 def next_academic_year(self):
     next_year = self.year + 1
     return AcademicYear.objects.filter(year=next_year)
+
+
+def find_academic_years():
+    return AcademicYear.objects.all().order_by('year')
+
+
+def current_academic_year():
+    academic_yr = AcademicYear.objects.filter(start_date__lte=timezone.now()) \
+                                      .filter(end_date__gte=timezone.now()).first()
+    if academic_yr:
+        return academic_yr
+    else:
+        return None
+
+
+def find_by_id(id):
+    return AcademicYear.objects.get(pk=id)
