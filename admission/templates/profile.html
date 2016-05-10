@@ -301,7 +301,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">{% trans 'postal_address'%}</div>
                 <div class="panel-body">
-
+                    Adresse de contact est la même que votre domicile légal?
+                    <br>
+                    <br>
                     <div class="row">
                         <div class="col-md-4">
                             {% trans 'question_address'%}
@@ -324,6 +326,7 @@
                     </div>
                     <div id="pnl_contact_address"
                          style="{% if same_addresses %} visibility:hidden;display:none; {% else %} visibility:visible;display:block; {%endif%} ">
+                        <br>
                         <div class="row">
                             <div class="col-md-6">
                                 <label>{% trans 'street'%} *</label>

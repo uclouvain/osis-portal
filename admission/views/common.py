@@ -199,7 +199,7 @@ def profile(request):
     if props:
         institution_name = props.value
     else:
-        institution_name = "<font style='color:red'>Aucune institution de définie</font>"
+        institution_name = None
 
     assimilation_criteria = mdl.assimilation_criteria.find_criteria()
     person_assimilation_criteria = mdl.person_assimilation_criteria.find_by_person(person.id)
