@@ -29,17 +29,6 @@
 <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker3.min.css' %}" type='text/css'>
 {% endblock %}
 {% block content %}
-<script>
-    function display(id,state){
-        var elt = document.getElementById(id);
-        if(state){
-            elt.style = "visibility:visible;display:block;";
-        }else{
-            elt.style = "visibility:hidden;display:none;";
-        }
-    }
-
-</script>
 
 <div class="panel panel-default">
     <div class="panel-body">
@@ -185,10 +174,44 @@
                                    value="{{ person.spouse_name | default_if_none:''}}" maxlength="50">
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="panel panel-default">
+                    <div id="pnl_assimilation_criteria"
+                         style="visibility:hidden;display:none;">
+                        <br>
+                        Si vous êtes dans une des situations suivantes :
+                        <ol>
+                            {% for criteria in assimilationCriteria %}
+
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <li>{{criteria}}</li>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div>
+                                        <label class="radio-inline">
+                                            <input type="radio" id="assimilation_criteria_{{forloop.counter}}_true"
+                                                   name="assimilation_criteria_{{criteria.id}}"
+                                                   value="true"
+                                                   {% for personCriteria in personAssimilationCriteria %}
+                                                     {% if personCriteria.criteria.id == criteria.id %} checked {% endif %}
+                                                   {% endfor %}
+                                            > oui
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" id="assimilation_criteria_{{forloop.counter}}_false"
+                                                   name="assimilation_criteria_{{criteria.id}}"
+                                                   value="false"
+                                            > Non
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </ol>
+                    </div>
+
+                    <div class="panel panel-default">
                 <div class="panel-heading">Pièce d'identité</div>
                 <div class="panel-body">
                     Veuillez fournir au moins un numéro d'identité.
@@ -448,11 +471,28 @@
 {% block script %}
 <script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
 <script>
-  $("#txt_birth_date").datepicker({
-      format: "dd/mm/yyyy",
-      autoclose: true,
-      orientation: "bottom auto"
-  });
+    $("#txt_birth_date").datepicker({
+    format: "dd/mm/yyyy",
+    autoclose: true,
+    orientation: "bottom auto"
+    });
+
+    #$(document).ready(function()
+
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+    url: "/admission/country?nationality=" + $("#slt_nationality").val()
+    }).then(function(data) {
+
+    if (data.european_union) {
+    $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
+    }else{
+    $('#pnl_assimilation_criteria').css('visibility', 'visible').css('display','block');
+    }
+    });
+    });
 
 </script>
 {% endblock %}

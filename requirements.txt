@@ -3,6 +3,7 @@ couchbase==2.0.7
 coverage==4.0.3
 django-jenkins==0.18.1
 djangorestframework==3.3.2
+django-bootstrap3==7.0.1
 jdcal==1.2
 pika==0.10.0
 psycopg2==2.6.1

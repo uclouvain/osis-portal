@@ -24,7 +24,7 @@
 #
 ##############################################################################
 from django.conf.urls import url
-from admission.views import application, common, identification, offer, level, question, option
+from admission.views import application, common, identification, offer, level, question, option, country
 from django.contrib.auth.views import logout
 
 
@@ -58,4 +58,6 @@ urlpatterns = [
     url(r'^options/$', option.find_by_offer),
 
     url(r'^admission/application/read/([0-9]+)/$', application.application_view, name='application_view'),
+
+    url(r'^country/$', country.find_by_id),
 ]
