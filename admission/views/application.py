@@ -441,7 +441,25 @@ def validate_fields_form(request, offer_yr, secondary_education, next_step):
 
 def curriculum_read(request, application_id):
     application = mdl.application.find_by_id(application_id)
-    return render(request, "curriculum.html", {"application": application})
+    secondary_education = mdl.secondary_education.find_by_person(request.user)
+    first_academic_year_for_cv = None
+    curricula = None
+    if secondary_education:
+        first_academic_year_for_cv = secondary_education.academic_year
+    # find existing cv
+    # add cv empty cv's for the year if it's needed
+    path_types = None
+    education_types = None
+    local_universities = None
+    domains = mdl.domain.find_all()
+    grade_types = mdl.grade_type.find_all()
+    return render(request, "curriculum.html", {"application": application,
+                                               "curricula": curricula,
+                                               "path_types":  path_types,
+                                               "education_types" : education_types,
+                                               "local_universities": local_universities,
+                                               "domains": domains,
+                                               "grade_types": grade_types })
 
 
 def curriculum_save(request, application_id):
@@ -863,32 +881,38 @@ def validate_admission_exam(request,is_valid, validation_messages, secondary_edu
     return is_valid, validation_messages, secondary_education
 
 
-def print_secondary_education(secondary_education):
-    print('person                          : ',secondary_education.person)
-    print('secondary_education_diploma     : ',secondary_education.secondary_education_diploma)
-    print('academic_year                   : ',secondary_education.academic_year)
-    print('national                        : ',secondary_education.national)
-    print('national_community              : ',secondary_education.national_community )
-    print('national_institution            : ',secondary_education.national_institution)
-    print('education_type                  : ',secondary_education.education_type)
-    print('daes                            : ',secondary_education.daes)
-    print('path_repetition                 : ',secondary_education.path_repetition)
-    print('path_reorientation              : ',secondary_education.path_reorientation)
-    print('result                          : ',secondary_education.result)
-    print('international_diploma           : ',secondary_education.international_diploma)
-    print('international_diploma_country   : ',secondary_education.international_diploma_country )
-    print('international_diploma_language  : ',secondary_education.international_diploma_language )
-    print('international_equivalence       : ',secondary_education.international_equivalence)
-    print('admission_exam                  : ',secondary_education.admission_exam)
-    print('admission_exam_date             : ',secondary_education.admission_exam_date)
-    print('admission_exam_institution      : ',secondary_education.admission_exam_institution)
-    print('admission_exam_type             : ',secondary_education.admission_exam_type)
-    print('admission_exam_result           : ',secondary_education.admission_exam_result)
-    print('professional_exam               : ',secondary_education.professional_exam)
-    print('professional_exam_date          : ',secondary_education.professional_exam_date)
-    print('professional_exam_institution   : ',secondary_education.professional_exam_institution)
-    print('professional_exam_result        : ',secondary_education.professional_exam_result)
-    print('local_language_exam             : ',secondary_education.local_language_exam )
-    print('local_language_exam_date        : ',secondary_education.local_language_exam_date)
-    print('local_language_exam_institution : ',secondary_education.local_language_exam_institution )
-    print('local_language_exam_result      : ',secondary_education.local_language_exam_result)
+def curriculum_update(request):
+    a_person = mdl.person.find_by_user(request.user)
+    secondary_education = mdl.secondary_education.find_by_person(a_person)
+    first_academic_year_for_cv = None
+    curricula = None
+    message = None
+    if secondary_education:
+        if secondary_education.academic_year is None:
+            message ="Vous ne pouvez pas encoder d'études supérieures sans avoir réussit vos études secondaires"
+        else:
+            first_academic_year_for_cv = secondary_education.academic_year.year + 1
+    current_academic_year = mdl.academic_year.current_academic_year().year
+    year = first_academic_year_for_cv
+    while year < current_academic_year:
+        academic_year = mdl.academic_year.find_by_year(year)
+        curriculum = mdl.curriculum.find_by_academic_year(academic_year)
+        if curriculum is None:
+            curriculum = mdl.curriculum.Curriculum()
+            curriculum.person = a_person
+            curriculum.academic_year = academic_year
+        curricula.append(curriculum)
+    # find existing cv
+    # add cv empty cv's for the year if it's needed
+    path_types = None
+    education_types = None
+    local_universities = mdl_reference.education_institution.find_by_institution_type('UNIVERSITY', False)
+    if message:
+        return home(request)
+    else:
+        return render(request, "curriculum.html", {"curricula":          curricula,
+                                                   "path_types":         path_types,
+                                                   "education_types":    education_types,
+                                                   "local_universities": local_universities,
+                                                   "domains":            mdl.domain.find_all(),
+                                                   "grade_types":        mdl.grade_type.find_all()})
