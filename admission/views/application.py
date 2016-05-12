@@ -116,7 +116,7 @@ def save_application_offer(request):
         exam_types = mdl_reference.admission_exam_type.find_all_by_adhoc(False)
         local_language_exam_link = mdl.properties.find_by_key('PROFESSIONAL_EXAM_LINK')
         professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
-        education_institutions = mdl_reference.education_institution.find_education_institution_by_adhoc(False)
+        education_institutions = mdl_reference.education_institution.find_by_institution_type('SECONDARY',False)
         cities, postal_codes = find_cities_postalcodes(education_institutions)
         education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
         education_type_qualification = mdl_reference.education_type.find_education_type_by_adhoc('QUALIFICATION', False)
@@ -175,7 +175,7 @@ def diploma_save(request):
         secondary_education.academic_year = mdl.academic_year.current_academic_year()
         secondary_education.person = application.person
 
-    education_institutions = mdl_reference.education_institution.find_education_institution_by_adhoc(False)
+    education_institutions = mdl_reference.education_institution.find_by_institution_type('SECONDARY',False)
     cities, postal_codes = find_cities_postalcodes(education_institutions)
     education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
     education_type_qualification = mdl_reference.education_type.find_education_type_by_adhoc('QUALIFICATION', False)
@@ -187,11 +187,10 @@ def diploma_save(request):
                                                                                   application.offer_year,
                                                                                   secondary_education,
                                                                                   next_step)
-        print('is_valid',is_valid)
+
         if is_valid:
             secondary_education = populate_secondary_education(request, secondary_education)
             secondary_education.save()
-            print_secondary_education(secondary_education)
             message_success = _('msg_info_saved')
             if next_step:
                 return render(request, "curriculum.html", {"application":         application,
@@ -439,62 +438,6 @@ def validate_fields_form(request, offer_yr, secondary_education, next_step):
     return is_valid, validation_messages, secondary_education
 
 
-def curriculum_read(request, application_id):
-    application = mdl.application.find_by_id(application_id)
-    secondary_education = mdl.secondary_education.find_by_person(request.user)
-    first_academic_year_for_cv = None
-    curricula = None
-    if secondary_education:
-        first_academic_year_for_cv = secondary_education.academic_year
-    # find existing cv
-    # add cv empty cv's for the year if it's needed
-    path_types = None
-    education_types = None
-    local_universities = None
-    domains = mdl.domain.find_all()
-    grade_types = mdl.grade_type.find_all()
-    return render(request, "curriculum.html", {"application": application,
-                                               "curricula": curricula,
-                                               "path_types":  path_types,
-                                               "education_types" : education_types,
-                                               "local_universities": local_universities,
-                                               "domains": domains,
-                                               "grade_types": grade_types })
-
-
-def curriculum_save(request, application_id):
-
-    exam_types = mdl_reference.admission_exam_type.find_all_by_adhoc(False)
-
-    local_language_exam_link = mdl.properties.find_by_key('PROFESSIONAL_EXAM_LINK')
-    professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
-
-    application = mdl.application.find_by_id(application_id)
-    other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
-    recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
-
-    secondary_education = mdl.secondary_education.find_by_person(application.person)
-    education_institutions = mdl_reference.education_institution.find_education_institution_by_adhoc(False)
-    cities, postal_codes = find_cities_postalcodes(education_institutions)
-    education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
-    education_type_qualification = mdl_reference.education_type.find_education_type_by_adhoc('QUALIFICATION', False)
-    return render(request, "diploma.html", {"application":                  application,
-                                            "academic_years":               mdl.academic_year.find_academic_years(),
-                                            "secondary_education":          secondary_education,
-                                            "countries":                    mdl_reference.country.find_all(),
-                                            "recognized_languages":         recognized_languages,
-                                            "languages":                    other_language_regime,
-                                            "exam_types":                   exam_types,
-                                            'local_language_exam_link':     local_language_exam_link,
-                                            "professional_exam_link":       professional_exam_link,
-                                            "education_institutions":       education_institutions,
-                                            "cities":                       cities,
-                                            "postal_codes":                 postal_codes,
-                                            "education_type_transition":    education_type_transition,
-                                            "education_type_qualification": education_type_qualification,
-                                            "current_academic_year":        mdl.academic_year.current_academic_year()})
-
-
 def find_cities_postalcodes(education_institutions):
     cities = []
     postal_codes = []
@@ -713,7 +656,7 @@ def diploma_update(request):
     recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
     exam_types = mdl_reference.admission_exam_type.find_all_by_adhoc(False)
     secondary_education = mdl.secondary_education.find_by_person(person)
-    education_institutions = mdl_reference.education_institution.find_education_institution_by_adhoc(False)
+    education_institutions = mdl_reference.education_institution.find_by_institution_type('SECONDARY',False)
     cities, postal_codes = find_cities_postalcodes(education_institutions)
     education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
     education_type_qualification = mdl_reference.education_type.find_education_type_by_adhoc('QUALIFICATION', False)
@@ -879,40 +822,3 @@ def validate_admission_exam(request,is_valid, validation_messages, secondary_edu
                 secondary_education.admission_exam = False
 
     return is_valid, validation_messages, secondary_education
-
-
-def curriculum_update(request):
-    a_person = mdl.person.find_by_user(request.user)
-    secondary_education = mdl.secondary_education.find_by_person(a_person)
-    first_academic_year_for_cv = None
-    curricula = None
-    message = None
-    if secondary_education:
-        if secondary_education.academic_year is None:
-            message ="Vous ne pouvez pas encoder d'études supérieures sans avoir réussit vos études secondaires"
-        else:
-            first_academic_year_for_cv = secondary_education.academic_year.year + 1
-    current_academic_year = mdl.academic_year.current_academic_year().year
-    year = first_academic_year_for_cv
-    while year < current_academic_year:
-        academic_year = mdl.academic_year.find_by_year(year)
-        curriculum = mdl.curriculum.find_by_academic_year(academic_year)
-        if curriculum is None:
-            curriculum = mdl.curriculum.Curriculum()
-            curriculum.person = a_person
-            curriculum.academic_year = academic_year
-        curricula.append(curriculum)
-    # find existing cv
-    # add cv empty cv's for the year if it's needed
-    path_types = None
-    education_types = None
-    local_universities = mdl_reference.education_institution.find_by_institution_type('UNIVERSITY', False)
-    if message:
-        return home(request)
-    else:
-        return render(request, "curriculum.html", {"curricula":          curricula,
-                                                   "path_types":         path_types,
-                                                   "education_types":    education_types,
-                                                   "local_universities": local_universities,
-                                                   "domains":            mdl.domain.find_all(),
-                                                   "grade_types":        mdl.grade_type.find_all()})

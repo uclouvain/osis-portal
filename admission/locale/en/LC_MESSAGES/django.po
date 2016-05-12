@@ -645,3 +645,69 @@ msgstr ""
 msgid "curriculum_instruction_duplicate"
 msgstr ""
  "Please use, if needed, the 'Duplicate' button for a study course of several years within the same institute."
+
+msgid "path_type"
+msgstr "Path type"
+
+msgid "education_community"
+msgstr "Community of education"
+
+msgid "university"
+msgstr "University"
+
+msgid "domain"
+msgstr "Domain"
+
+msgid "grade_type"
+msgstr "Type d'étude"
+
+msgid "question_year_diploma"
+msgstr "Did you obtain your diploma for that year?"
+
+msgid "obtained_result"
+msgstr "Obtained result"
+
+msgid "no_result"
+msgstr "No result"
+
+msgid "credits_enrolled"
+msgstr "Number of enrolled credits"
+
+msgid "credits_acquired"
+msgstr "Number of acquired credits"
+
+msgid "your_requests"
+msgstr "Your requests"
+
+msgid "curriculum"
+msgstr "Curriculum"
+
+msgid "update_curriculum"
+msgstr "Update your curriculum"
+
+msgid "national_university"
+msgstr "Belgian university"
+
+msgid "foreign_university"
+msgstr "Foreign university"
+
+msgid "high_national_non_university"
+msgstr "Belgian higher non-university education"
+
+msgid "high_foreign_non_university"
+msgstr "Foreign higher non-university education"
+
+msgid "other"
+msgstr "Other"
+
+msgid "internship"
+msgstr "Internship"
+
+msgid "volunteering"
+msgstr "Volunteering"
+
+msgid "unemployment"
+msgstr "Unemployment"
+
+msgid "mandatory_field"
+msgstr "Mandatory field"

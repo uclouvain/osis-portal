@@ -38,7 +38,7 @@ class Curriculum(models.Model):
     PATH_TYPES = (
             ('LOCAL_UNIVERSITY', _('national_university')),
             ('FOREIGN_UNIVERSITY', _('foreign_university')),
-            ('LOCAL_HIGH_EDUCATION', _('national_university')),
+            ('LOCAL_HIGH_EDUCATION', _('high_national_non_university')),
             ('FOREIGN_HIGH_EDUCATION', _('high_foreign_non_university')),
             ('ANOTHER_ACTIVITY', _('other')),
             )
@@ -56,7 +56,7 @@ class Curriculum(models.Model):
             ('OTHER', _('other')),
             )
 
-    person = models.OneToOneField('Person')
+    person = models.ForeignKey('Person')
     academic_year = models.ForeignKey('AcademicYear')
     path_type = models.CharField(max_length=25, choices=PATH_TYPES)
     national_education = models.CharField(max_length=20, choices=NATIONAL_COMMUNITY_TYPES, blank=True, null=True)
@@ -74,5 +74,17 @@ class Curriculum(models.Model):
     activity_place = models.CharField(max_length=255, blank=True, null=True)
 
 
-def find_by_academic_year(an_academic_year):
-    return Curriculum.objects.get(year=an_academic_year)
+def find_by_id(an_id):
+    return Curriculum.objects.get(pk=an_id)
+
+
+def find_one_by_academic_year(an_academic_year):
+    return Curriculum.objects.filter(academic_year=an_academic_year).first()
+
+
+def find_user(a_person):
+    return Curriculum.objects.filter(person=a_person)
+
+
+def find_by_person_year(a_person, year):
+    return Curriculum.objects.filter(person=a_person, academic_year__year=year).first()

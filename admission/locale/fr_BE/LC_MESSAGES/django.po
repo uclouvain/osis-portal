@@ -653,3 +653,68 @@ msgid "curriculum_instruction_duplicate"
 msgstr ""
  "Aidez-vous, au besoin, du bouton 'Dupliquer' pour un parcours en plusieurs années dans une même institution."
 
+msgid "path_type"
+msgstr "Type de parcours"
+
+msgid "education_community"
+msgstr "Communauté d'enseignement"
+
+msgid "university"
+msgstr "Université"
+
+msgid "domain"
+msgstr "Domaine"
+
+msgid "grade_type"
+msgstr "Type d'étude"
+
+msgid "question_year_diploma"
+msgstr "Avez-vous obtenu votre diplôme cette année-là?"
+
+msgid "obtained_result"
+msgstr "Résultat obtenu"
+
+msgid "no_result"
+msgstr "Pas de résultat"
+
+msgid "credits_enrolled"
+msgstr "Nombre de crédits inscrits"
+
+msgid "credits_acquired"
+msgstr "Nombre de crédits acquis"
+
+msgid "your_requests"
+msgstr "Vos demandes"
+
+msgid "curriculum"
+msgstr "Curriculum"
+
+msgid "update_curriculum"
+msgstr "Modifier votre curriculum"
+
+msgid "national_university"
+msgstr "Université belge"
+
+msgid "foreign_university"
+msgstr "Université étrangère"
+
+msgid "high_national_non_university"
+msgstr "Supérieur Non Universitaire belge"
+
+msgid "high_foreign_non_university"
+msgstr "Supérieur Non Universitaire étranger"
+
+msgid "other"
+msgstr "Autre"
+
+msgid "internship"
+msgstr "Stage"
+
+msgid "volunteering"
+msgstr "Bénévolat"
+
+msgid "unemployment"
+msgstr "Chômage"
+
+msgid "mandatory_field"
+msgstr "Champ obligatoire"
