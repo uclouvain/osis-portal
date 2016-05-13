@@ -714,3 +714,9 @@ msgstr "Duplicate"
 
 msgid "duplicate_help"
 msgstr "Duplicate the year's data to "
+
+msgid "show_detail"
+msgstr "Show detail"
+
+msgid "hide_detail"
+msgstr "Hide detail"

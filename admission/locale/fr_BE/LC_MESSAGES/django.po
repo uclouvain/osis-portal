@@ -721,3 +721,9 @@ msgstr "Dupliquer"
 
 msgid "duplicate_help"
 msgstr "Dupliquer les informations de l'année en "
+
+msgid "show_detail"
+msgstr "Montrer detail"
+
+msgid "hide_detail"
+msgstr "Masquer detail"
