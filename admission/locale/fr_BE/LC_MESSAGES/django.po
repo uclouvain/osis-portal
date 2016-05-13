@@ -715,6 +715,3 @@ msgstr "Bénévolat"
 
 msgid "unemployment"
 msgstr "Chômage"
-
-msgid "mandatory_field"
-msgstr "Champ obligatoire"

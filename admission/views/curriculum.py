@@ -26,7 +26,6 @@
 from admission import models as mdl
 from django.shortcuts import render, get_object_or_404
 from reference import models as mdl_reference
-from admission.forms import CurriculumForm
 
 from datetime import datetime
 from admission.views.common import home
@@ -127,21 +126,21 @@ def save(request):
 
 
 def update(request):
-    a_person = mdl.person.find_by_user(request.user)
-    first_academic_year_for_cv = None
     curricula = []
     message = None
-    # find existing cv
+    a_person = mdl.person.find_by_user(request.user)
     secondary_education = mdl.secondary_education.find_by_person(a_person)
-    if secondary_education:
-        if secondary_education.academic_year is None:
-            message ="Vous ne pouvez pas encoder d'études supérieures sans avoir réussit vos études secondaires"
-        else:
-            first_academic_year_for_cv = secondary_education.academic_year.year + 1
     current_academic_year = mdl.academic_year.current_academic_year().year
-    year = first_academic_year_for_cv
+    admission = is_admission(a_person, secondary_education)
+
+    year = current_academic_year - 5
+    if admission:
+        if secondary_education.secondary_education_diploma is True:
+            year = secondary_education.academic_year.year + 1
+
     while year < current_academic_year:
         academic_year = mdl.academic_year.find_by_year(year)
+        # find existing cv
         curriculum = mdl.curriculum.find_one_by_academic_year(academic_year)
         if curriculum is None:
             # add cv empty cv's for the year if it's needed
@@ -189,3 +188,10 @@ def validate_fields_form(request):
         curricula.append(curriculum)
 
     return is_valid, validation_messages, curricula
+
+
+def is_admission(a_person, secondary_education):
+    if a_person.nationality.european_union:
+        if secondary_education.national is True:
+            return False
+    return True

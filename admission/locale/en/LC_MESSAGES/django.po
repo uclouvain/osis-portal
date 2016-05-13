@@ -708,6 +708,3 @@ msgstr "Volunteering"
 
 msgid "unemployment"
 msgstr "Unemployment"
-
-msgid "mandatory_field"
-msgstr "Mandatory field"
