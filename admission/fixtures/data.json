@@ -291,17 +291,17 @@
   {"model": "reference.country", "pk":4, "fields": {"name" :"Russie" , "european_union" : "False" ,"iso_code" : "4"}},
 
 
-  {"model": "reference.language", "pk":1, "fields": {"name" :"Français", "code" : "1", "recognized" : "True"}},
-  {"model": "reference.language", "pk":2, "fields": {"name" :"Néerlandais", "code" : "2", "recognized" : "True"}},
-  {"model": "reference.language", "pk":3, "fields": {"name" :"Anglais", "code" : "3", "recognized" : "True"}},
-  {"model": "reference.language", "pk":4, "fields": {"name" :"Allemand", "code" : "4", "recognized" : "True"}},
-  {"model": "reference.language", "pk":5, "fields": {"name" :"Italien", "code" : "5", "recognized" : "True"}},
-  {"model": "reference.language", "pk":6, "fields": {"name" :"Espagnol", "code" : "6", "recognized" : "True"}},
-  {"model": "reference.language", "pk":7, "fields": {"name" :"Portuguais", "code" : "7","recognized" : "True"}},
-  {"model": "reference.language", "pk":8, "fields": {"name" :"Russe", "code" : "8", "recognized" : "False"}},
-  {"model": "reference.language", "pk":9, "fields": {"name" :"Chinois", "code" : "9", "recognized" : "False"}},
-  {"model": "reference.language", "pk":10, "fields": {"name" :"Japonais", "code" : "10", "recognized" : "False"}},
-  {"model": "reference.language", "pk":11, "fields": {"name" :"Vietnamien", "code" : "11", "recognized" : "False"}}
+  {"model": "reference.language", "pk":1, "fields": {"name" :"Français", "code" : "fr", "recognized" : "True"}},
+  {"model": "reference.language", "pk":2, "fields": {"name" :"Néerlandais", "code" : "nl", "recognized" : "True"}},
+  {"model": "reference.language", "pk":3, "fields": {"name" :"Anglais", "code" : "en", "recognized" : "True"}},
+  {"model": "reference.language", "pk":4, "fields": {"name" :"Allemand", "code" : "de", "recognized" : "True"}},
+  {"model": "reference.language", "pk":5, "fields": {"name" :"Italien", "code" : "it", "recognized" : "True"}},
+  {"model": "reference.language", "pk":6, "fields": {"name" :"Espagnol", "code" : "es", "recognized" : "True"}},
+  {"model": "reference.language", "pk":7, "fields": {"name" :"Portuguais", "code" : "pt","recognized" : "True"}},
+  {"model": "reference.language", "pk":8, "fields": {"name" :"Russe", "code" : "ru", "recognized" : "False"}},
+  {"model": "reference.language", "pk":9, "fields": {"name" :"Chinois", "code" : "zh", "recognized" : "False"}},
+  {"model": "reference.language", "pk":10, "fields": {"name" :"Japonais", "code" : "ja", "recognized" : "False"}},
+  {"model": "reference.language", "pk":11, "fields": {"name" :"Vietnamien", "code" : "vi", "recognized" : "False"}}
 
 
 ]
