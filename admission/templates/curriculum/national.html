@@ -55,7 +55,6 @@
             {% endfor %}
         </select>
         <font class="error" style="margin-left:5px;">{% message_error validation_messages year=curriculum.academic_year.year|lower param='national_institution_dutch' %}</font>
-
         <br>
         <br>
         <div class="row">
@@ -144,7 +143,6 @@
                        id="txt_credits_enrolled_{{curriculum.academic_year.year}}"
                        value="{{ curriculum.credits_enrolled | default_if_none:'' }}"
                        class="form-control">
-
                 <font class="error" style="margin-left:5px;">{% message_error validation_messages year=curriculum.academic_year.year|lower param='credits_enrolled' %}</font>
             </div>
             <div class="col-md-3">
@@ -191,7 +189,6 @@
                         style="width:250px;">
                         <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'transcript'%} - {% trans 'recto'%}
                 </button>
-
             </div>
             <div class="col-md-6">
                 <button type="button" class="btn btn-default" data-toggle="modal"
