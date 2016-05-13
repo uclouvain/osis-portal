@@ -715,3 +715,9 @@ msgstr "Bénévolat"
 
 msgid "unemployment"
 msgstr "Chômage"
+
+msgid "duplicate"
+msgstr "Dupliquer"
+
+msgid "duplicate_help"
+msgstr "Dupliquer les informations de l'année en "

@@ -2,6 +2,7 @@
 {% load staticfiles %}
 {% load i18n %}
 {% load message %}
+{% load math %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -62,7 +63,26 @@
     <br>
     {% for curriculum in curricula %}
         <div class="panel panel-default" id="pnl_curriculum_id_{{curriculum.academic_year.year}}">
-            <div class="panel-heading"><label>{{curriculum.academic_year}} *</label></div>
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label>{{curriculum.academic_year}} *</label>
+                    </div>
+                    <div class="col-md-2">
+                        {%if not forloop.last%}
+                            <button type="button" class="btn btn-default"
+                                    title="{% trans 'duplicate_help'%} {{curriculum.academic_year.year}}-{{curriculum.academic_year.year|add:1 }}"
+                                    id="bt_duplicate_{{curriculum.academic_year.year}}"
+                                    onclick="duplicate_cv({{curriculum.academic_year.year}})"
+                                    data-toggle="tooltip" data-placement="bottom" >
+                                    <span class="glyphicon glyphicon-paste" aria-hidden="true"></span>
+                                    {% trans 'duplicate'%}
+                            </button>
+                        {%endif%}
+
+                    </div>
+                </div>
+            </div>
             <div class="panel-body">
                 <input type="hidden" id="hdn_curriculum_year_{{curriculum.academic_year.year}}" name="curriculum_year_{{curriculum.academic_year.year}}" value="{{curriculum.academic_year.year}}">
                 <label> {% trans 'path_type'%} *</label>
@@ -128,4 +148,35 @@
         {% endif %}
     </div>
 </form>
+<script>
+    function duplicate_cv(origin_year){
+        dest_year = origin_year +1;
+        // copy path type
+        if (document.getElementById('rdb_path_type_local_university_'+origin_year).checked){
+            document.getElementById('rdb_path_type_local_university_'+dest_year).checked = true;
+        }else{
+            document.getElementById('rdb_path_type_local_university_'+dest_year).checked = false;
+        }
+        if (document.getElementById('rdb_path_type_foreign_university_'+origin_year).checked){
+            document.getElementById('rdb_path_type_foreign_university_'+dest_year).checked = true;
+        }else{
+            document.getElementById('rdb_path_type_foreign_university_'+dest_year).checked = false;
+        }
+        if (document.getElementById('rdb_path_type_local_high_non_university_'+origin_year).checked){
+            document.getElementById('rdb_path_type_local_high_non_university_'+dest_year).checked = true;
+        }else{
+            document.getElementById('rdb_path_type_local_high_non_university_'+dest_year).checked = false;
+        }
+        if (document.getElementById('rdb_path_type_high_foreign_non_university_'+origin_year).checked){
+            document.getElementById('rdb_path_type_high_foreign_non_university_'+dest_year).checked = true;
+        }else{
+            document.getElementById('rdb_path_type_high_foreign_non_university_'+dest_year).checked = false;
+        }
+        if (document.getElementById('rdb_path_type_other_'+origin_year).checked){
+            document.getElementById('rdb_path_type_other_'+dest_year).checked = true;
+        }else{
+            document.getElementById('rdb_path_type_other_'+dest_year).checked = false;
+        }
+    }
+</script>
 {% endblock %}

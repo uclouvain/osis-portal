@@ -708,3 +708,9 @@ msgstr "Volunteering"
 
 msgid "unemployment"
 msgstr "Unemployment"
+
+msgid "duplicate"
+msgstr "Duplicate"
+
+msgid "duplicate_help"
+msgstr "Duplicate the year's data to "
