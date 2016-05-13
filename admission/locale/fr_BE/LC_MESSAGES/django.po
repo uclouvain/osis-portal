@@ -727,3 +727,6 @@ msgstr "Montrer detail"
 
 msgid "hide_detail"
 msgstr "Masquer detail"
+
+msgid "diploma"
+msgstr "Diplome"

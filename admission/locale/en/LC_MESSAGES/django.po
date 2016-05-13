@@ -720,3 +720,6 @@ msgstr "Show detail"
 
 msgid "hide_detail"
 msgstr "Hide detail"
+
+msgid "diploma"
+msgstr "Diploma"

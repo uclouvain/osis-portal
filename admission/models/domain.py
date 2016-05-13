@@ -43,3 +43,7 @@ class Domain(models.Model):
 
 def find_all():
     return Domain.objects.all()
+
+
+def find_by_id(an_id):
+    return Domain.objects.get(pk=an_id)

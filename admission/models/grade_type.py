@@ -56,3 +56,7 @@ def find_all():
 
 def find_by_grade(grade):
     return GradeType.objects.filter(grade=grade).order_by("name")
+
+
+def find_by_id(an_id):
+    return GradeType.objects.get(pk=an_id)

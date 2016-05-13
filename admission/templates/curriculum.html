@@ -62,7 +62,9 @@
     <br>
     <br>
     {% for curriculum in curricula %}
-        <div class="panel panel-default" id="pnl_curriculum_id_{{curriculum.academic_year.year}}">
+        {% pnl_national_education__message_error validation_messages year=curriculum.academic_year.year as pnl_national_detail_error%}
+        <div class="panel panel-default"
+             id="pnl_curriculum_id_{{curriculum.academic_year.year}}">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-md-9">
@@ -88,7 +90,9 @@
                                    id="bt_show_data_{{curriculum.academic_year.year}}"
                                    onclick="display('pnl_detail_{{curriculum.academic_year.year}}',true);display('bt_hide_data_{{curriculum.academic_year.year}}',true);display('bt_show_data_{{curriculum.academic_year.year}}',false);"
                                    data-toggle="tooltip"
-                                   data-placement="bottom" >
+                                   data-placement="bottom"
+                                   style="{%if pnl_national_detail_error%}visibility:hidden;display:none;{%else%}visibility:visible;display:block;{%endif%}"
+                                    >
                                    <span class="glyphicon glyphicon-chevron-down"></span>
                            </button>
                            <button type="button"
@@ -98,23 +102,25 @@
                                    onclick="display('pnl_detail_{{curriculum.academic_year.year}}',false);display('bt_hide_data_{{curriculum.academic_year.year}}',false);display('bt_show_data_{{curriculum.academic_year.year}}',true)"
                                    data-toggle="tooltip"
                                    data-placement="bottom"
-                                   style="visibility:hidden;display:none;">
+                                   style="{%if pnl_national_detail_error%}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
                                    <span class="glyphicon glyphicon-chevron-up"></span>
                            </button>
                     </div>
                 </div>
             </div>
-            <div class="panel-body" id="pnl_detail_{{curriculum.academic_year.year}}" style="visibility:hidden;display:none;">
+            <div class="panel-body"
+                 id="pnl_detail_{{curriculum.academic_year.year}}"
+                 style="{%if pnl_national_detail_error%}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
                 <input type="hidden" id="hdn_curriculum_year_{{curriculum.academic_year.year}}" name="curriculum_year_{{curriculum.academic_year.year}}" value="{{curriculum.academic_year.year}}">
                 <label> {% trans 'path_type'%} *</label>
                 <br>
                 <label class="radio-inline">
-                    <input type="radio"
+                    <input type="radio"curriculum.path_type
                            name="path_type_{{curriculum.academic_year.year}}"
                            id="rdb_path_type_local_university_{{curriculum.academic_year.year}}"
                            {%if curriculum.path_type = 'LOCAL_UNIVERSITY' %}checked{%endif%}
                            value="LOCAL_UNIVERSITY"
-                           onclick="display('pnl_national_detail_{{curriculum.academic_year.year}}',true);display('pnl_national_education_{{curriculum.academic_year.year}}',true);"> {% trans 'national_university'%}
+                           onclick="display('pnl_national_education_{{curriculum.academic_year.year}}',true);display('pnl_national_education_{{curriculum.academic_year.year}}',true);"> {% trans 'national_university'%}
                 </label>
                 <label class="radio-inline">
                     <input type="radio"
@@ -122,7 +128,7 @@
                            id="rdb_path_type_foreign_university_{{curriculum.academic_year.year}}"
                            {%if curriculum.path_type = 'FOREIGN_UNIVERSITY' %}checked{%endif%}
                            value="FOREIGN_UNIVERSITY"
-                           onclick="display('pnl_national_detail_{{curriculum.academic_year.year}}',false);display('pnl_national_education_{{curriculum.academic_year.year}}',false);"> {% trans 'foreign_university'%}
+                           onclick="display('pnl_national_education_{{curriculum.academic_year.year}}',false);display('pnl_national_education_{{curriculum.academic_year.year}}',false);"> {% trans 'foreign_university'%}
                 </label>
                 <label class="radio-inline">
                     <input type="radio"
@@ -130,7 +136,7 @@
                            id="rdb_path_type_local_high_non_university_{{curriculum.academic_year.year}}"
                            {%if curriculum.path_type = 'LOCAL_HIGH_EDUCATION' %}checked{%endif%}
                            value="LOCAL_HIGH_EDUCATION"
-                           onclick="display('pnl_national_detail_{{curriculum.academic_year.year}}',false);display('pnl_national_education_{{curriculum.academic_year.year}}',true);"> {% trans 'high_national_non_university'%}
+                           onclick="display('pnl_national_education_{{curriculum.academic_year.year}}',false);display('pnl_national_education_{{curriculum.academic_year.year}}',true);"> {% trans 'high_national_non_university'%}
                 </label>
                 <label class="radio-inline">
                     <input type="radio"
@@ -149,6 +155,7 @@
                            onclick="display('pnl_national_education_{{curriculum.academic_year.year}}',false);"> {% trans 'other'%}
                 </label>
                 <font class="error" style="margin-left:5px;">{% message_error validation_messages year=curriculum.academic_year.year|lower param='path_type' %}</font>
+                {% include "curriculum/national.html" %}
               </div>
         </div>
     {%endfor%}
@@ -171,7 +178,7 @@
 </form>
 <script>
     function duplicate_cv(origin_year){
-        dest_year = origin_year +1;
+        var dest_year = origin_year +1;
         // copy path type
         if (document.getElementById('rdb_path_type_local_university_'+origin_year).checked){
             document.getElementById('rdb_path_type_local_university_'+dest_year).checked = true;
@@ -198,6 +205,55 @@
         }else{
             document.getElementById('rdb_path_type_other_'+dest_year).checked = false;
         }
+        if (document.getElementById('rdb_national_education_french_'+origin_year).checked){
+            document.getElementById('rdb_national_education_french_'+dest_year).checked = true;
+        }else{
+            document.getElementById('rdb_national_education_french_'+dest_year).checked = false;
+        }
+        if (document.getElementById('rdb_national_education_dutch_'+origin_year).checked){
+            document.getElementById('rdb_national_education_dutch_'+dest_year).checked = true;
+        }else{
+            document.getElementById('rdb_national_education_dutch_'+dest_year).checked = false;
+        }
+
+        document.getElementById('slt_french_universities_'+dest_year).selectedIndex = document.getElementById('slt_french_universities_'+origin_year).selectedIndex;
+        document.getElementById('slt_dutch_universities_'+dest_year).selectedIndex = document.getElementById('slt_dutch_universities_'+origin_year).selectedIndex;
+        document.getElementById('slt_domain_'+dest_year).selectedIndex = document.getElementById('slt_domain_'+origin_year).selectedIndex;
+        document.getElementById('slt_grade_type_'+dest_year).selectedIndex = document.getElementById('slt_grade_type_'+origin_year).selectedIndex;
+
+        if (document.getElementById('rdb_diploma_true_'+origin_year).checked){
+            document.getElementById('rdb_diploma_true_'+dest_year).checked = true;
+        }else{
+            document.getElementById('rdb_diploma_true_'+dest_year).checked = false;
+        }
+        if (document.getElementById('rdb_diploma_false_'+origin_year).checked){
+            document.getElementById('rdb_diploma_false_'+dest_year).checked = true;
+        }else{
+            document.getElementById('rdb_diploma_false_'+dest_year).checked = false;
+        }
+        if (document.getElementById('rdb_result_succeed_'+origin_year).checked){
+            document.getElementById('rdb_result_succeed_'+dest_year).checked = true;
+        }else{
+            document.getElementById('rdb_result_succeed_'+dest_year).checked = false;
+        }
+        if (document.getElementById('rdb_result_failed_'+origin_year).checked){
+            document.getElementById('rdb_result_failed_'+dest_year).checked = true;
+        }else{
+            document.getElementById('rdb_result_failed_'+dest_year).checked = false;
+        }
+        if (document.getElementById('rdb_no_result_'+origin_year).checked){
+            document.getElementById('rdb_no_result_'+dest_year).checked = true;
+        }else{
+            document.getElementById('rdb_no_result_'+dest_year).checked = false;
+        }
+        document.getElementById('txt_credits_enrolled_'+dest_year).value = document.getElementById('txt_credits_enrolled_'+origin_year).value;
+        document.getElementById('txt_credits_obtained_'+dest_year).value = document.getElementById('txt_credits_obtained_'+origin_year).value;
     }
+
+    function reset_slt(id){
+        document.getElementById(id).selectedIndex = -1;
+
+    }
+
 </script>
 {% endblock %}
