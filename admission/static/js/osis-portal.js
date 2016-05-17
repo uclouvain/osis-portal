@@ -343,6 +343,17 @@ function display(id,state){
     }
 }
 
+function reset_radio(elt_name){
+    x=document.getElementsByName(elt_name);
+    var i;
+    for (i = 0; i < x.length; i++) {
+
+        if (x[i].type == "radio") {
+            x[i].checked = false;
+        }
+    }
+}
+
 $("#slt_nationality").change(function() {
    $.ajax({
        url: "/admission/country?nationality=" + $("#slt_nationality").val()

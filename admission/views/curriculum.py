@@ -124,8 +124,9 @@ def validate_fields_form(request):
     validation_messages = {}
     a_person = mdl.person.find_by_user(request.user)
     names = [v for k, v in request.POST.items() if k.startswith('curriculum_year_')]
-
+    sorted(names, key=cmp_to_key(locale.strcoll))
     for curriculum_form in names:
+        print('curricululm',curriculum_form)
         curriculum_year = curriculum_form.replace('curriculum_year_', '')
         academic_year = mdl.academic_year.find_by_year(curriculum_year)
         curriculum = mdl.curriculum.find_by_person_year(a_person, int(curriculum_year))
@@ -239,11 +240,18 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
             validation_messages['credits_enrolled_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
     if request.POST.get('credits_enrolled_%s' % curriculum_year) \
-            and len(request.POST.get('credits_enrolled_%s' % curriculum_year)) > 0 :
+            and len(request.POST.get('credits_enrolled_%s' % curriculum_year)) > 0:
             try:
                 credits = float(request.POST.get('credits_enrolled_%s' % curriculum_year)\
                             .strip().replace(',', '.'))
                 curriculum.credits_enrolled = credits
+                if credits > 75:
+                    validation_messages['credits_enrolled_%s' % curriculum_year] = _('credits_too_high')
+                    is_valid = False
+                else:
+                    if credits < 0:
+                        validation_messages['credits_enrolled_%s' % curriculum_year] = _('credits_negative')
+                        is_valid = False
             except ValueError:
                 validation_messages['credits_enrolled_%s' % curriculum_year] = _('numeric_field')
                 is_valid = False
@@ -256,10 +264,17 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
     if request.POST.get('credits_obtained_%s' % curriculum_year) \
             and len(request.POST.get('credits_obtained_%s' % curriculum_year)) > 0:
             try:
-                credits = float(request.POST.get('credits_obtained_%s' % curriculum_year)\
+                credits = float(request.POST.get('credits_obtained_%s' % curriculum_year)
                             .strip().replace(',', '.'))
 
                 curriculum.credits_obtained = credits
+                if credits > 75:
+                    validation_messages['credits_obtained_%s' % curriculum_year] = _('credits_too_high')
+                    is_valid = False
+                else:
+                    if credits < 0:
+                        validation_messages['credits_obtained_%s' % curriculum_year] = _('credits_negative')
+                        is_valid = False
             except ValueError:
                 validation_messages['credits_obtained_%s' % curriculum_year] = _('numeric_field')
                 is_valid = False
