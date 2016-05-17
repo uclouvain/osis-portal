@@ -739,3 +739,9 @@ msgstr "Le nombre de crédits doit être positif"
 
 msgid "subdomain"
 msgstr "Sous-domaine"
+
+msgid "question_domain_title"
+msgstr "Introduisez l'intitulé de vos études"
+
+msgid "data_duplicated"
+msgstr "Données dupliquées"

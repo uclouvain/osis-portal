@@ -95,14 +95,15 @@
                     <select class="form-control"
                             id="slt_subdomain_{{curriculum.academic_year.year}}"
                             name="subdomain_{{curriculum.academic_year.year}}"
-                           {%if curriculum.domain.sub_domains %}{%else%}disabled{%endif%}>
+                           {%if not curriculum.domain.sub_domains %}disabled{%endif%}>
                         <option value="-">-</option>
                         {% for subdomain in subdomains %}
-                        <option value="{{ subdomain.id }}" {%if curriculum.subdomain.id == subdomain.id %}selected{%endif%} title="{{subdomain.parent.name}} - {{subdomain.name}}">
+                        <option value="{{ subdomain.id }}" {%if curriculum.sub_domain.id == subdomain.id %}selected{%endif%} title="{{subdomain.parent.name}} - {{subdomain.name}}">
                             {{ subdomain }}
                         </option>
                         {% endfor %}
                     </select>
+
                     <font class="error" style="margin-left:5px;">
                         {% message_error validation_messages year=curriculum.academic_year.year|lower param='subdomain' %}</font>
                 </div>
@@ -125,6 +126,40 @@
                     {% message_error validation_messages year=curriculum.academic_year.year|lower param='grade_type' %}</font>
             </div>
         </div>
+    </div>
+    <br>
+    <div class="form-group">
+        <label>{% trans 'question_domain_title' %}</label>
+        <div>
+            <label class="radio-inline">
+                <input type="radio"
+                       name="corresponds_to_domain_{{curriculum.academic_year.year}}"
+                       id="rdb_corresponds_to_domain_true_{{curriculum.academic_year.year}}"
+                       value="true"
+                       {%if curriculum.diploma_title %}checked{%endif%}
+                       onclick="disabled_reset_field_txt('txt_diploma_title_{{curriculum.academic_year.year}}',false);"
+                > {% trans 'yes' %}
+            </label>
+            <label class="radio-inline">
+                <input type="radio"
+                       name="corresponds_to_domain_{{curriculum.academic_year.year}}"
+                       id="rdb_corresponds_to_domain_false_{{curriculum.academic_year.year}}" value="false"
+                       {%if not curriculum.diploma_title %}checked{%endif%}
+                       onclick="disabled_reset_field_txt('txt_diploma_title_{{curriculum.academic_year.year}}',true);"
+                > {% trans 'no' %}
+            </label>
+            <font class="error" style="margin-left:5px;">{% message_error validation_messages year=curriculum.academic_year.year|lower param='diploma' %}</font>
+
+        </div>
+    </div>
+    <br>
+    <div>
+       <label>{% trans 'question_domain_title' %}</label>
+       <input type="text" class="form-control"
+              id="txt_diploma_title_{{curriculum.academic_year.year}}"
+              name="diploma_title_{{curriculum.academic_year.year}}"
+              value="{{ curriculum.diploma_title  | default_if_none:'' }}"
+              {%if not curriculum.diploma_title %}disabled{%endif%}>
     </div>
     <br>
     <div class="form-group">

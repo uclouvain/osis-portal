@@ -61,8 +61,7 @@ def save(request):
             for curriculum in curricula:
                 curriculum.save()
 
-
-    #Get the data in bd for dropdown list
+    # Get the data in bd for dropdown list
     local_universities_french = mdl_reference.education_institution\
         .find_by_institution_type_national_community('UNIVERSITY', 'FRENCH', False)
 
@@ -126,9 +125,8 @@ def validate_fields_form(request):
     validation_messages = {}
     a_person = mdl.person.find_by_user(request.user)
     names = [v for k, v in request.POST.items() if k.startswith('curriculum_year_')]
-    print('names',names)
-    names = sorted(names, key=cmp_to_key(locale.strcoll))
-    print('names pares',names)
+    names = sorted(names, key=cmp_to_key(locale.strcoll)) #to keep the order of the cv from the oldest to the more recent
+
     for curriculum_form in names:
         curriculum_year = curriculum_form.replace('curriculum_year_', '')
         academic_year = mdl.academic_year.find_by_year(curriculum_year)
@@ -217,9 +215,11 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
         if domain.sub_domains:
             if request.POST.get('subdomain_%s' % curriculum_year) is None \
                         or request.POST.get('subdomain_%s' % curriculum_year) == '-':
+                print('test 1')
                 validation_messages['subdomain_%s' % curriculum_year] = _('mandatory_field')
                 is_valid = False
             else:
+                print('test 11')
                 sub_domain = mdl.domain.find_by_id(int(request.POST.get('subdomain_%s' % curriculum_year)))
                 curriculum.sub_domain = sub_domain
 
@@ -230,6 +230,9 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
     else:
         grade_type = mdl.grade_type.find_by_id(int(request.POST.get('grade_type_%s' % curriculum_year)))
         curriculum.grade_type = grade_type
+
+    if request.POST.get('diploma_title_%s' % curriculum_year):
+        curriculum.diploma_title = request.POST.get('diploma_title_%s' % curriculum_year)
 
     if request.POST.get('diploma_%s' % curriculum_year) is None:
         validation_messages['diploma_%s' % curriculum_year] = _('mandatory_field')

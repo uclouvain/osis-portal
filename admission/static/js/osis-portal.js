@@ -354,6 +354,16 @@ function reset_radio(elt_name){
     }
 }
 
+function disabled_reset_field_txt(id, state){
+
+    if(state){
+        document.getElementById(id).disabled = true;
+    }else{
+        document.getElementById(id).disabled = false;
+    }
+    document.getElementById(id).value="";
+}
+
 $("#slt_nationality").change(function() {
    $.ajax({
        url: "/admission/country?nationality=" + $("#slt_nationality").val()

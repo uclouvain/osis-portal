@@ -47,9 +47,11 @@
             <br>
             <font class="alert alert-success" role="alert" style="margin-left:5px;">
                 {{message_success}}
+
             </font>
             <br><br>
         {% endif %}
+
     </div>
     <br>
     {% trans 'curriculum_instruction' %}
@@ -67,13 +69,19 @@
              id="pnl_curriculum_id_{{curriculum.academic_year.year}}">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-md-9">
+                    <div class="col-md-6">
                         <label>{{curriculum.academic_year}} *</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label style="visibility:hidden;display:none;"
+                               id="message_success_{{curriculum.academic_year.year}}"
+                               class="label label-success">{% trans 'data_duplicated'%}
+                        </label>
                     </div>
                     <div class="col-md-2">
                         {%if not forloop.last%}
                             <button type="button" class="btn btn-default"
-                                    title="{% trans 'duplicate_help'%} {{curriculum.academic_year.year}}-{{curriculum.academic_year.year|add:1 }}"
+                                    title="{% trans 'duplicate_help'%} {{curriculum.academic_year.year|add:1 }}-{{curriculum.academic_year.year|add:2 }}"
                                     id="bt_duplicate_{{curriculum.academic_year.year}}"
                                     onclick="duplicate_cv({{curriculum.academic_year.year}})"
                                     data-toggle="tooltip" data-placement="bottom" >
@@ -81,7 +89,6 @@
                                     {% trans 'duplicate'%}
                             </button>
                         {%endif%}
-
                     </div>
                     <div class="col-md-1">
                            <button type="button"
@@ -185,6 +192,14 @@
 <script>
     function duplicate_cv(origin_year){
         var dest_year = origin_year +1;
+        //To hide previous message "data duplicated"
+        var elts = document.getElementsByTagName("label");
+        for (var i = 0; i < elts.length; i++) {
+            if(elts[i].id.indexOf('message_success_') > -1){
+                elts[i].style = "visibility:hidden;display:none;";
+
+            }
+        }
         //pnl non-mandatory hidden by default
         document.getElementById('pnl_national_education_'+dest_year).style = "visibility:hidden;display:none;";
         document.getElementById('pnl_national_detail_'+dest_year).style = "visibility:hidden;display:none;";
@@ -239,8 +254,23 @@
         document.getElementById('slt_french_universities_'+dest_year).selectedIndex = document.getElementById('slt_french_universities_'+origin_year).selectedIndex;
         document.getElementById('slt_dutch_universities_'+dest_year).selectedIndex = document.getElementById('slt_dutch_universities_'+origin_year).selectedIndex;
         document.getElementById('slt_domain_'+dest_year).selectedIndex = document.getElementById('slt_domain_'+origin_year).selectedIndex;
+        document.getElementById('slt_subdomain_'+dest_year).selectedIndex = document.getElementById('slt_subdomain_'+origin_year).selectedIndex;
         document.getElementById('slt_grade_type_'+dest_year).selectedIndex = document.getElementById('slt_grade_type_'+origin_year).selectedIndex;
 
+        document.getElementById('txt_diploma_title_'+dest_year).disabled = true;
+        if (document.getElementById('rdb_corresponds_to_domain_true_'+origin_year).checked){
+            document.getElementById('rdb_corresponds_to_domain_true_'+dest_year).checked = true;
+            document.getElementById('txt_diploma_title_'+dest_year).value = document.getElementById('txt_diploma_title_'+origin_year).value;
+            document.getElementById('txt_diploma_title_'+dest_year).disabled = false;
+        }else{
+            document.getElementById('rdb_diploma_true_'+dest_year).checked = false;
+        }
+        if (document.getElementById('rdb_corresponds_to_domain_false_'+origin_year).checked){
+            document.getElementById('rdb_corresponds_to_domain_false_'+dest_year).checked = true;
+            document.getElementById('txt_diploma_title_'+dest_year).value = "";
+        }else{
+            document.getElementById('rdb_corresponds_to_domain_false_'+dest_year).checked = false;
+        }
         if (document.getElementById('rdb_diploma_true_'+origin_year).checked){
             document.getElementById('rdb_diploma_true_'+dest_year).checked = true;
             document.getElementById('pnl_diploma_files_'+dest_year).style = "visibility:visible;display:block";
@@ -269,6 +299,7 @@
         }
         document.getElementById('txt_credits_enrolled_'+dest_year).value = document.getElementById('txt_credits_enrolled_'+origin_year).value;
         document.getElementById('txt_credits_obtained_'+dest_year).value = document.getElementById('txt_credits_obtained_'+origin_year).value;
+        document.getElementById('message_success_'+dest_year).style = "visibility:visible;display:block";
     }
 
     function reset_slt(id){
@@ -307,6 +338,17 @@
     }
 
 
+    // to check disabled status after duplicate
+    var elts = document.getElementsByTagName("select");
+    for (var i = 0; i < elts.length; i++) {
+        if(elts[i].id.indexOf('slt_subdomain_') > -1){
+            if(elts[i].value == ""){
+                elts[i].disabled = true;
+            }else{
+                elts[i].disabled = false;
+            }
+        }
+    }
 
 </script>
 {% endblock %}

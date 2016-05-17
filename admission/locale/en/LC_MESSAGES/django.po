@@ -732,3 +732,11 @@ msgstr "Credits must be positive"
 
 msgid "subdomain"
 msgstr "Subdomain"
+
+msgid "question_domain_title"
+msgstr "Domain, subdomain, and grade type corresponds to your studies"
+
+msgid "data_duplicated"
+msgstr "Data duplicated"
+
+
