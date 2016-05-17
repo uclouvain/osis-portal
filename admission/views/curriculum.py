@@ -72,7 +72,7 @@ def save(request):
     return render(request, "curriculum.html", {"curricula":                 curricula,
                                                "local_universities_french": local_universities_french,
                                                "local_universities_dutch":  local_universities_dutch,
-                                               "domains":                   mdl.domain.find_all(),
+                                               "domains":                   mdl.domain.find_all_domains(),
                                                "subdomains":                mdl.domain.find_all_subdomains(),
                                                "grade_types":               mdl.grade_type.find_all(),
                                                "validation_messages":       validation_messages,
@@ -89,7 +89,7 @@ def update(request):
 
     year = current_academic_year - 5
     if admission:
-        if secondary_education.secondary_education_diploma is True:
+        if secondary_education and secondary_education.secondary_education_diploma is True:
             year = secondary_education.academic_year.year + 1
 
     while year < current_academic_year:
@@ -115,7 +115,7 @@ def update(request):
         return render(request, "curriculum.html", {"curricula":                 curricula,
                                                    "local_universities_french": local_universities_french,
                                                    "local_universities_dutch":  local_universities_dutch,
-                                                   "domains":                   mdl.domain.find_all(),
+                                                   "domains":                   mdl.domain.find_all_domains(),
                                                    "subdomains":                mdl.domain.find_all_subdomains(),
                                                    "grade_types":               mdl.grade_type.find_all()})
 
@@ -174,7 +174,7 @@ def validate_fields_form(request):
 
 def is_admission(a_person, secondary_education):
     if a_person.nationality.european_union:
-        if secondary_education.national is True:
+        if secondary_education and secondary_education.national is True:
             return False
     return True
 

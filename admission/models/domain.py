@@ -56,5 +56,9 @@ def find_by_id(an_id):
     return Domain.objects.get(pk=an_id)
 
 
+def find_all_domains():
+    return Domain.objects.filter(parent=None)
+
+
 def find_all_subdomains():
     return Domain.objects.exclude(parent=None)
