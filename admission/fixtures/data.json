@@ -59,6 +59,13 @@
   {"model": "admission.domain", "pk": 23,"fields": {"name" :"Sciences vétérinaires" }},
   {"model": "admission.domain", "pk": 24,"fields": {"name" :"Théâtre et arts de la parole" }},
   {"model": "admission.domain", "pk": 25,"fields": {"name" :"Théologie" }},
+  {"model": "admission.domain", "pk": 26,"fields": {"name" :"Architecture" , "parent" : "1" }},
+  {"model": "admission.domain", "pk": 27,"fields": {"name" :"Ingénieur civil architecte" , "parent" : "1" }},
+  {"model": "admission.domain", "pk": 28,"fields": {"name" :"Sciences de l'ingénieur, or. ingénieur civil architecte" , "parent" : "1" }},
+  {"model": "admission.domain", "pk": 29,"fields": {"name" :"Communication appliquée spécialisée - publicité et communication commerciale" , "parent" : "7" }},
+  {"model": "admission.domain", "pk": 29,"fields": {"name" :"Communication multilingue" , "parent" : "7" }},
+  {"model": "admission.domain", "pk": 29,"fields": {"name" :"Arts du spectacle" , "parent" : "7" }},
+  {"model": "admission.domain", "pk": 29,"fields": {"name" :"Communication multilingue" , "parent" : "7" }},
 
   {"model": "admission.gradetype","pk": 1, "fields": {"name" :"Bachelier" , "grade" : "BACHELOR" }},
   {"model": "admission.gradetype","pk": 2, "fields": {"name" :"Master 60" , "grade" : "MASTER" }},
