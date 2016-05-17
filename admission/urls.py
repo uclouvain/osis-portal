@@ -24,7 +24,7 @@
 #
 ##############################################################################
 from django.conf.urls import url
-from admission.views import application, common, identification, offer, level, question, option, country, curriculum
+from admission.views import application, common, identification, offer, level, question, option, country, curriculum, education_institution
 from django.contrib.auth.views import logout
 
 
@@ -66,4 +66,8 @@ urlpatterns = [
     url(r'^profile_confirmed/$', application.profile_confirmed, name='profile_confirmed'),
 
     url(r'^questions/$', question.find_by_offer),
+
+    url(r'^cities/$', education_institution.find_by_country),
+    url(r'^universities/$', education_institution.find_by_city),
+
 ]

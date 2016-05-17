@@ -74,6 +74,7 @@ def save(request):
                                                "domains":                   mdl.domain.find_all_domains(),
                                                "subdomains":                mdl.domain.find_all_subdomains(),
                                                "grade_types":               mdl.grade_type.find_all(),
+                                               "universities_countries":    mdl_reference.education_institution.find_countries(),
                                                "validation_messages":       validation_messages,
                                                "message_success":           message_success})
 
@@ -116,7 +117,8 @@ def update(request):
                                                    "local_universities_dutch":  local_universities_dutch,
                                                    "domains":                   mdl.domain.find_all_domains(),
                                                    "subdomains":                mdl.domain.find_all_subdomains(),
-                                                   "grade_types":               mdl.grade_type.find_all()})
+                                                   "grade_types":               mdl.grade_type.find_all(),
+                                                   "universities_countries":    mdl_reference.education_institution.find_countries()})
 
 
 def validate_fields_form(request):

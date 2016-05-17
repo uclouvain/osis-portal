@@ -739,4 +739,11 @@ msgstr "Domain, subdomain, and grade type corresponds to your studies"
 msgid "data_duplicated"
 msgstr "Data duplicated"
 
+msgid "university_country"
+msgstr "University country"
+
+msgid "university_name"
+msgstr "University name"
+
+
 

@@ -65,6 +65,7 @@
     <br>
     {% for curriculum in curricula %}
         {% pnl_national_education__message_error validation_messages year=curriculum.academic_year.year as pnl_national_detail_error%}
+        {% pnl_foreign_education_message_error validation_messages year=curriculum.academic_year.year as pnl_foreign_detail_error%}
         <div class="panel panel-default"
              id="pnl_curriculum_id_{{curriculum.academic_year.year}}">
             <div class="panel-heading">
@@ -128,7 +129,7 @@
                            {%if curriculum.path_type = 'LOCAL_UNIVERSITY' %}checked{%endif%}
                            value="LOCAL_UNIVERSITY"
                            onclick="display('pnl_national_education_{{curriculum.academic_year.year}}',true);
-                                    display('pnl_national_detail_{{curriculum.academic_year.year}}',true);"> {% trans 'national_university'%}
+                                    display('pnl_national_detail_{{curriculum.academic_year.year}}',true);display('pnl_foreign_education_{{curriculum.academic_year.year}}',false);"> {% trans 'national_university'%}
                 </label>
                 <label class="radio-inline">
                     <input type="radio"
@@ -138,7 +139,7 @@
                            value="FOREIGN_UNIVERSITY"
                            onclick="display('pnl_national_education_{{curriculum.academic_year.year}}',false);
                                     display('pnl_national_detail_{{curriculum.academic_year.year}}',false);
-                                    reset_radio('national_education_{{curriculum.academic_year.year}}');"> {% trans 'foreign_university'%}
+                                    reset_radio('national_education_{{curriculum.academic_year.year}}');display('pnl_foreign_education_{{curriculum.academic_year.year}}',true);"> {% trans 'foreign_university'%}
                 </label>
                 <label class="radio-inline">
                     <input type="radio"
@@ -147,7 +148,7 @@
                            {%if curriculum.path_type = 'LOCAL_HIGH_EDUCATION' %}checked{%endif%}
                            value="LOCAL_HIGH_EDUCATION"
                            onclick="display('pnl_national_education_{{curriculum.academic_year.year}}',false);
-                                    display('pnl_national_detail_{{curriculum.academic_year.year}}',true);"> {% trans 'high_national_non_university'%}
+                                    display('pnl_national_detail_{{curriculum.academic_year.year}}',true);display('pnl_foreign_education_{{curriculum.academic_year.year}}',false);"> {% trans 'high_national_non_university'%}
                 </label>
                 <label class="radio-inline">
                     <input type="radio"
@@ -157,7 +158,7 @@
                            value="FOREIGN_HIGH_EDUCATION"
                            onclick="display('pnl_national_education_{{curriculum.academic_year.year}}',false);
                                     display('pnl_national_detail_{{curriculum.academic_year.year}}',false);
-                                    reset_radio('national_education_{{curriculum.academic_year.year}}');"> {% trans 'high_foreign_non_university'%}
+                                    reset_radio('national_education_{{curriculum.academic_year.year}}');display('pnl_foreign_education_{{curriculum.academic_year.year}}',false);"> {% trans 'high_foreign_non_university'%}
                 </label>
                 <label class="radio-inline">
                     <input type="radio"
@@ -165,10 +166,11 @@
                            id="rdb_path_type_other_{{curriculum.academic_year.year}}"
                            {%if curriculum.path_type = 'ANOTHER_ACTIVITY' %}checked{%endif%}
                            value="ANOTHER_ACTIVITY"
-                           onclick="display('pnl_national_education_{{curriculum.academic_year.year}}',false);display('pnl_national_detail_{{curriculum.academic_year.year}}',false);reset_radio('national_education_{{curriculum.academic_year.year}}');"> {% trans 'other'%}
+                           onclick="display('pnl_national_education_{{curriculum.academic_year.year}}',false);display('pnl_national_detail_{{curriculum.academic_year.year}}',false);reset_radio('national_education_{{curriculum.academic_year.year}}');display('pnl_foreign_education_{{curriculum.academic_year.year}}',false);"> {% trans 'other'%}
                 </label>
                 <font class="error" style="margin-left:5px;">{% message_error validation_messages year=curriculum.academic_year.year|lower param='path_type' %}</font>
                 {% include "curriculum/national_university.html" %}
+                {% include "curriculum/foreign_university.html" %}
               </div>
         </div>
     {%endfor%}

@@ -376,3 +376,63 @@ $("#slt_nationality").change(function() {
         }
      });
  });
+
+$("select[id^='slt_national_institution_']" ).change(function(event) {
+    var target = $(event.target);
+    var id = target.attr("id");
+    if (typeof id == 'undefined') {
+        target = target.parent();
+        id = target.attr("id");
+    }
+    year = id.replace('slt_national_institution_','');
+
+    $("#slt_cities_"+year).find("option")
+        .remove()
+       .end();
+
+    $("#slt_foreign_university_name_"+year).find("option")
+        .remove()
+       .end();
+
+    $.ajax({
+        url: "/admission/cities?country=" + target.val()
+      }).then(function(data) {
+          if(data.length >0){
+            $("<option></option>").attr("value","-").append("-").appendTo("#slt_cities_"+year);
+            $.each(data, function(key, value) {
+                $("<option></option>").attr("value",value.city).append(value.city).appendTo("#slt_cities_"+year);
+            });
+          }
+
+      });
+
+ });
+
+ $("select[id^='slt_cities_']" ).change(function(event) {
+    var target = $(event.target);
+    var id = target.attr("id");
+    if (typeof id == 'undefined') {
+        target = target.parent();
+        id = target.attr("id");
+    }
+    year = id.replace('slt_cities_','');
+    country = document.getElementById('slt_national_institution_'+year);
+
+    $("#slt_foreign_university_name_"+year).find("option")
+        .remove()
+       .end();
+
+    $.ajax({
+        url: "/admission/universities?city=" + target.val()
+      }).then(function(data) {
+          if(data.length >0){
+          $("<option></option>").attr("value","-").append("-").appendTo("#slt_foreign_university_name_"+year);
+            $.each(data, function(key, value) {
+                $("<option></option>").attr("value",value.id).append(value.name).appendTo("#slt_foreign_university_name_"+year);
+            });
+          }
+
+      });
+
+ });
+

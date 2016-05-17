@@ -1,0 +1,40 @@
+{% load staticfiles %}
+{% load i18n %}
+
+<div id="pnl_foreign_education_{{curriculum.academic_year.year}}"
+     style="{%if curriculum.path_type = 'FOREIGN_UNIVERSITY' or pnl_foreign_detail_error %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+    <br>
+    <div id="pnl_university_{{curriculum.academic_year.year}}" class="row">
+        <div class="col-md-4">
+            <label>{% trans 'university_country'%}</label>
+            <select class="form-control"
+                    id="slt_national_institution_{{curriculum.academic_year.year}}"
+                    name="national_institution_{{curriculum.academic_year.year}}">
+                <option value="-">-</option>
+                {% for university in universities_countries %}
+                <option value="{{ university.country.id }}" {%if curriculum.national_institution.country.id == university.country.id %}selected{%endif%}>
+                    {{ university.country }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label>{% trans 'city'%}</label>
+                 <select class="form-control"
+                        id="slt_cities_{{curriculum.academic_year.year}}"
+                        name="cities_{{curriculum.academic_year.year}}">
+                    <option value="-">-</option>
+                </select>
+
+        </div>
+        <div class="col-md-4">
+            <label>{% trans 'university_name'%}</label>
+             <select class="form-control"
+                    id="slt_foreign_university_name_{{curriculum.academic_year.year}}"
+                    name="foreign_university_name_{{curriculum.academic_year.year}}">
+                <option value="-">-</option>
+            </select>
+
+        </div>
+    </div>
+</div>

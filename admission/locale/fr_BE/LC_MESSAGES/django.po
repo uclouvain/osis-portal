@@ -336,7 +336,7 @@ msgid "institution_name"
 msgstr "Nom de l'établissement"
 
 msgid "city"
-msgstr "Par localité"
+msgstr "Localité"
 
 msgid "postal_code"
 msgstr "Par code postal"
@@ -745,3 +745,9 @@ msgstr "Introduisez l'intitulé de vos études"
 
 msgid "data_duplicated"
 msgstr "Données dupliquées"
+
+msgid "university_country"
+msgstr "Pays de l'université"
+
+msgid "university_name"
+msgstr "Nom de l'university"

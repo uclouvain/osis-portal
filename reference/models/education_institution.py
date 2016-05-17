@@ -77,3 +77,15 @@ def find_by_institution_type_national_community(an_institution_type, a_national_
     return EducationInstitution.objects.filter(adhoc=an_adhoc,
                                                institution_type=an_institution_type,
                                                national_community=a_national_community)
+
+
+def find_countries():
+    return EducationInstitution.objects.all().distinct('country')
+
+
+def find_by_country(a_country):
+    return EducationInstitution.objects.filter(country=a_country).distinct('city').order_by('city')
+
+
+def find_by_city(a_city):
+    return EducationInstitution.objects.filter(city=a_city).order_by('name')
