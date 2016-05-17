@@ -168,7 +168,7 @@
                            onclick="display('pnl_national_education_{{curriculum.academic_year.year}}',false);display('pnl_national_detail_{{curriculum.academic_year.year}}',false);reset_radio('national_education_{{curriculum.academic_year.year}}');"> {% trans 'other'%}
                 </label>
                 <font class="error" style="margin-left:5px;">{% message_error validation_messages year=curriculum.academic_year.year|lower param='path_type' %}</font>
-                {% include "curriculum/national.html" %}
+                {% include "curriculum/national_university.html" %}
               </div>
         </div>
     {%endfor%}
