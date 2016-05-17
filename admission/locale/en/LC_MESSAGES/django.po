@@ -730,3 +730,5 @@ msgstr "Credits shouldn't be more than 75"
 msgid "credits_negative"
 msgstr "Credits must be positive"
 
+msgid "subdomain"
+msgstr "Subdomain"

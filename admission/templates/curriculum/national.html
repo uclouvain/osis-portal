@@ -69,12 +69,13 @@
     <br>
     <br>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <label>{% trans 'domain' %} *</label>
             <div>
                 <select class="form-control"
                         id="slt_domain_{{curriculum.academic_year.year}}"
-                        name="domain_{{curriculum.academic_year.year}}">
+                        name="domain_{{curriculum.academic_year.year}}"
+                        onchange="refresh_pnl_subdomain(this,{{curriculum.academic_year.year}});">
                     <option value="-">-</option>
                     {% for domain in domains %}
                     <option value="{{ domain.id }}" {%if curriculum.domain.id == domain.id %}selected{%endif%}>
@@ -86,7 +87,28 @@
                     {% message_error validation_messages year=curriculum.academic_year.year|lower param='domain' %}</font>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
+            <div id="pnl_subdomain_{{curriculum.academic_year.year}}"
+                 >
+                <label>{% trans 'subdomain' %} <span id="lbl_subdomain_mandatory_{{curriculum.academic_year.year}}">{%if curriculum.domain.sub_domains%}*{%endif%}</span></label>
+                <div>
+                    <select class="form-control"
+                            id="slt_subdomain_{{curriculum.academic_year.year}}"
+                            name="subdomain_{{curriculum.academic_year.year}}"
+                           {%if curriculum.domain.sub_domains %}{%else%}disabled{%endif%}>
+                        <option value="-">-</option>
+                        {% for subdomain in subdomains %}
+                        <option value="{{ subdomain.id }}" {%if curriculum.subdomain.id == subdomain.id %}selected{%endif%} title="{{subdomain.parent.name}} - {{subdomain.name}}">
+                            {{ subdomain }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <font class="error" style="margin-left:5px;">
+                        {% message_error validation_messages year=curriculum.academic_year.year|lower param='subdomain' %}</font>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
             <label>{% trans 'grade_type' %} *</label>
             <div>
                 <select class="form-control"

@@ -276,5 +276,37 @@
 
     }
 
+    function refresh_pnl_subdomain(domain, year){
+        var sel = domain.options[domain.selectedIndex].text;
+        var elt = document.getElementById('slt_subdomain_'+year);
+        var cpt = 0;
+        document.getElementById('slt_subdomain_'+year).selectedIndex = -1;
+        for(var i = 0 ,l = elt.options.length; i< l;i++ ){
+            if(i==0){
+                elt.options[i].style="visibility:visible;display:block";
+            }else{
+                if (sel != "-"){
+                    if((elt.options[i].title).indexOf(sel) > -1){
+                        elt.options[i].style="visibility:visible;display:block";
+                        cpt = cpt + 1;
+                    }else{
+                        elt.options[i].style="visibility:hidden;display:none";
+                    }
+                }else{
+                    elt.options[i].style="visibility:visible;display:block";
+                }
+            }
+		}
+		if(cpt == 0){
+		    document.getElementById('slt_subdomain_'+year).disabled = true;
+		    document.getElementById('lbl_subdomain_mandatory_'+year).style="visibility:hidden;display:none";
+		}else{
+		    document.getElementById('slt_subdomain_'+year).disabled = false;
+		    document.getElementById('lbl_subdomain_mandatory_'+year).style="visibility:visible;display:block";
+		}
+    }
+
+
+
 </script>
 {% endblock %}

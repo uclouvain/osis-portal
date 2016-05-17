@@ -28,7 +28,7 @@ from django.contrib import admin
 
 
 class DomainAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name','parent')
     fieldsets = ((None, {'fields': ('name',)}),)
 
 
@@ -40,6 +40,13 @@ class Domain(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def sub_domains(self):
+        """
+        To find children
+        """
+        return Domain.objects.filter(parent=self)
+
 
 def find_all():
     return Domain.objects.all()
@@ -47,3 +54,7 @@ def find_all():
 
 def find_by_id(an_id):
     return Domain.objects.get(pk=an_id)
+
+
+def find_all_subdomains():
+    return Domain.objects.exclude(parent=None)

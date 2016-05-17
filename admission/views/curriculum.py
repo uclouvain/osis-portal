@@ -73,6 +73,7 @@ def save(request):
                                                "local_universities_french": local_universities_french,
                                                "local_universities_dutch":  local_universities_dutch,
                                                "domains":                   mdl.domain.find_all(),
+                                               "subdomains":                mdl.domain.find_all_subdomains(),
                                                "grade_types":               mdl.grade_type.find_all(),
                                                "validation_messages":       validation_messages,
                                                "message_success":           message_success})
@@ -115,6 +116,7 @@ def update(request):
                                                    "local_universities_french": local_universities_french,
                                                    "local_universities_dutch":  local_universities_dutch,
                                                    "domains":                   mdl.domain.find_all(),
+                                                   "subdomains":                mdl.domain.find_all_subdomains(),
                                                    "grade_types":               mdl.grade_type.find_all()})
 
 
@@ -124,9 +126,10 @@ def validate_fields_form(request):
     validation_messages = {}
     a_person = mdl.person.find_by_user(request.user)
     names = [v for k, v in request.POST.items() if k.startswith('curriculum_year_')]
-    sorted(names, key=cmp_to_key(locale.strcoll))
+    print('names',names)
+    names = sorted(names, key=cmp_to_key(locale.strcoll))
+    print('names pares',names)
     for curriculum_form in names:
-        print('curricululm',curriculum_form)
         curriculum_year = curriculum_form.replace('curriculum_year_', '')
         academic_year = mdl.academic_year.find_by_year(curriculum_year)
         curriculum = mdl.curriculum.find_by_person_year(a_person, int(curriculum_year))
@@ -141,6 +144,7 @@ def validate_fields_form(request):
         curriculum.language = None
         curriculum.national_institution = None
         curriculum.domain = None
+        curriculum.sub_domain = None
         curriculum.grade_type = None
         curriculum.result = None
         curriculum.credits_enrolled = None
@@ -210,6 +214,14 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
     else:
         domain = mdl.domain.find_by_id(int(request.POST.get('domain_%s' % curriculum_year)))
         curriculum.domain = domain
+        if domain.sub_domains:
+            if request.POST.get('subdomain_%s' % curriculum_year) is None \
+                        or request.POST.get('subdomain_%s' % curriculum_year) == '-':
+                validation_messages['subdomain_%s' % curriculum_year] = _('mandatory_field')
+                is_valid = False
+            else:
+                sub_domain = mdl.domain.find_by_id(int(request.POST.get('subdomain_%s' % curriculum_year)))
+                curriculum.sub_domain = sub_domain
 
     if request.POST.get('grade_type_%s' % curriculum_year) is None \
             or request.POST.get('grade_type_%s' % curriculum_year) == '-':
@@ -234,7 +246,6 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
         curriculum.result = request.POST.get('result_%s' % curriculum_year)
 
     if curriculum.academic_year.year >= 2014:
-        print('ici',request.POST.get('credits_enrolled_%s' % curriculum_year))
         if request.POST.get('credits_enrolled_%s' % curriculum_year) is None \
                 or len(request.POST.get('credits_enrolled_%s' % curriculum_year)) == 0:
             validation_messages['credits_enrolled_%s' % curriculum_year] = _('mandatory_field')

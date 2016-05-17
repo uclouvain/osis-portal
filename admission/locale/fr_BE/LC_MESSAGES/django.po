@@ -736,3 +736,6 @@ msgstr "Le nombre de crédits ne peut dépasser 75"
 
 msgid "credits_negative"
 msgstr "Le nombre de crédits doit être positif"
+
+msgid "subdomain"
+msgstr "Sous-domaine"
