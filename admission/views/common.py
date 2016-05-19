@@ -76,7 +76,7 @@ def profile(request):
 
         if request.POST['birth_place']:
             person.birth_place = request.POST['birth_place']
-        if request.POST['birth_country']:
+        if request.POST.get('birth_country'):
             birth_country_id = request.POST['birth_country']
             birth_country = mdl_ref.country.find_by_id(birth_country_id)
             person.birth_country = birth_country
@@ -88,7 +88,7 @@ def profile(request):
             person.number_children = request.POST['number_children']
         if request.POST['spouse_name']:
             person.spouse_name = request.POST['spouse_name']
-        if request.POST['nationality']:
+        if request.POST.get('nationality'):
             country_id = request.POST['nationality']
             country = mdl_ref.country.find_by_id(country_id)
             person.nationality = country
@@ -110,12 +110,12 @@ def profile(request):
             person_legal_address.postal_code = request.POST['legal_adr_postal_code']
         if request.POST['legal_adr_city']:
             person_legal_address.city = request.POST['legal_adr_city']
-        if request.POST['legal_adr_country']:
+        if request.POST.get('legal_adr_country'):
             country_id = request.POST['legal_adr_country']
             country = mdl_ref.country.find_by_id(country_id)
             person_legal_address.country = country
 
-        if request.POST['same_contact_legal_addr'] == "false":
+        if request.POST.get('same_contact_legal_addr') == "false":
             person_contact_address = mdl.person_address.find_by_person_type(person, 'CONTACT')
             if person_contact_address is None:
                 person_contact_address = mdl.person_address.PersonAddress()
