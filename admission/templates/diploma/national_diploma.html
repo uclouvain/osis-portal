@@ -7,6 +7,7 @@
             {%else%}
                 visibility:hidden;display:none;
             {%endif%}">
+    <br>
     <div class="panel panel-default">
         <div class="panel-heading">{% trans 'institution' %}</div>
         <div class="panel-body">
@@ -96,6 +97,7 @@
                                  id="chb_other_school"
                                  name="other_school"
                                  onclick="disabled_field('txt_CESS_other_school_name',this);disabled_field('txt_CESS_other_school_city',this);disabled_field('txt_CESS_other_school_postal_code',this);
+                                          reset_select('slt_cities');reset_select('slt_postal_codes');reset_select('slt_schools');
                                           reset_input('txt_CESS_other_school_name');reset_input('txt_CESS_other_school_city');reset_input('txt_CESS_other_school_postal_code');"
                                  {% if secondary_education.national_institution.adhoc = True %}checked{%endif%}> {% trans 'other_institution' %}
                         </label>
@@ -107,7 +109,11 @@
                                    id="txt_CESS_other_school_name"
                                    name="CESS_other_school_name"
                                    value="{% if secondary_education.national_institution.adhoc = True %}{{secondary_education.national_institution.name}}{%endif%}"
-                                   {% if secondary_education.national_institution.adhoc = False %}disabled{%endif%}>
+                                   {% if secondary_education.national_institution %}
+                                    {% if secondary_education.national_institution.adhoc = False %}disabled{%endif%}
+                                   {%else%}
+                                    disabled
+                                   {%endif%}>
                         </div>
                         <div class="col-md-3">
                             <label>{% trans 'city'%}</label>
@@ -115,7 +121,11 @@
                                    id="txt_CESS_other_school_city"
                                    name="CESS_other_school_city"
                                    value="{% if secondary_education.national_institution.adhoc = True %}{{secondary_education.national_institution.city}}{%endif%}"
-                                   {% if secondary_education.national_institution.adhoc = False %}disabled{%endif%}>
+                                   {% if secondary_education.national_institution %}
+                                    {% if secondary_education.national_institution.adhoc = False %}disabled{%endif%}
+                                   {%else%}
+                                    disabled
+                                   {%endif%}>
                         </div>
                         <div class="col-md-3">
                             <label>{% trans 'postal_code'%}</label>
@@ -123,7 +133,11 @@
                                    id="txt_CESS_other_school_postal_code"
                                    name="CESS_other_school_postal_code"
                                    value="{% if secondary_education.national_institution.adhoc = True %}{{secondary_education.national_institution.postal_code}}{%endif%}"
-                                  {% if secondary_education.national_institution.adhoc = False %}disabled{%endif%}>
+                                   {% if secondary_education.national_institution %}
+                                    {% if secondary_education.national_institution.adhoc = False %}disabled{%endif%}
+                                   {%else%}
+                                    disabled
+                                   {%endif%}>
                         </div>
                     </div>
                 </div>

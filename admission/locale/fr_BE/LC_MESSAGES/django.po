@@ -494,7 +494,7 @@ msgid "question_identity"
 msgstr "Veuillez fournir au moins un numéro d'identité."
 
 msgid "legal_residence"
-msgstr "Domicile léga"
+msgstr "Domicile légal"
 
 msgid "street"
 msgstr "Rue/Avenue"
@@ -639,10 +639,31 @@ msgstr ""
  "Veuillez vérifier votre e-mail maintenant et cliquez sur le lien dans le message que vous avez reçu pour pouvoir "
  "encoder un nouveau mot de passe."
 
+msgid "country"
+msgstr "Pays"
+
 msgid "curriculum_instruction"
 msgstr ""
   "Veuillez remplir ci-dessous pour chaque année mentionnée quelles ont été vos occupations. Chaque année d'études "
   "(réussie ou échouée) ou chaque activité doit être complétée."
+
+msgid "complete_profile_instruction"
+msgstr "Veuillez compléter votre profil"
+
+msgid "mandatory_asterisk"
+msgstr "Tous les champs marqués d'une * sont obligatoires."
+
+msgid "errors_warning"
+msgstr "Attention il y a des erreurs."
+
+msgid "criteria_question"
+msgstr "Si vous êtes dans une des situations suivantes"
+
+msgid "wrong_date"
+msgstr "La date semble erronée"
+
+msgid "succeeded"
+msgstr "Réussite"
 
 msgid "curriculum_instruction_warning"
 msgstr ""

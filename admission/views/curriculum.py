@@ -60,6 +60,30 @@ def save(request):
             message_success = _('msg_info_saved')
             for curriculum in curricula:
                 curriculum.save()
+    #Get the data in bd
+    a_person = mdl.person.find_by_user(request.user)
+    first_academic_year_for_cv = None
+    curricula = []
+    message = None
+    # find existing cv
+    secondary_education = mdl.secondary_education.find_by_person(a_person)
+    if secondary_education:
+        if secondary_education.academic_year is None:
+            message ="Vous ne pouvez pas encoder d'études supérieures sans avoir réussit vos études secondaires"
+        else:
+            first_academic_year_for_cv = secondary_education.academic_year.year + 1
+    current_academic_year = mdl.academic_year.current_academic_year().year
+    year = first_academic_year_for_cv
+    while year < current_academic_year:
+        academic_year = mdl.academic_year.find_by_year(year)
+        curriculum = mdl.curriculum.find_by_academic_year(academic_year)
+        if curriculum is None:
+            # add cv empty cv's for the year if it's needed
+            curriculum = mdl.curriculum.Curriculum()
+            curriculum.person = a_person
+            curriculum.academic_year = academic_year
+        curricula.append(curriculum)
+        year = year + 1
 
     # Get the data in bd for dropdown list
     local_universities_french = mdl_reference.education_institution\
@@ -94,7 +118,7 @@ def update(request):
     while year < current_academic_year:
         academic_year = mdl.academic_year.find_by_year(year)
         # find existing cv
-        curriculum = mdl.curriculum.find_one_by_academic_year(academic_year)
+        curriculum = mdl.curriculum.find_by_academic_year(academic_year)
         if curriculum is None:
             # add cv empty cv's for the year if it's needed
             curriculum = mdl.curriculum.Curriculum()

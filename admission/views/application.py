@@ -134,7 +134,8 @@ def save_application_offer(request):
                                                 "postal_codes":                 postal_codes,
                                                 "education_type_transition":    education_type_transition,
                                                 "education_type_qualification": education_type_qualification,
-                                                "current_academic_year":        mdl.academic_year.current_academic_year()})
+                                                "current_academic_year":        mdl.academic_year.current_academic_year(),
+                                                "local_language_exam_needed":   is_local_language_exam_needed(request.user)})
 
 
 def application_view(request, application_id):
@@ -173,18 +174,17 @@ def diploma_save(request):
     if secondary_education is None:
         secondary_education = mdl.secondary_education.SecondaryEducation()
         secondary_education.academic_year = mdl.academic_year.current_academic_year()
-        secondary_education.person = application.person
+        secondary_education.person = person
 
     education_institutions = mdl_reference.education_institution.find_by_institution_type('SECONDARY',False)
     cities, postal_codes = find_cities_postalcodes(education_institutions)
     education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
     education_type_qualification = mdl_reference.education_type.find_education_type_by_adhoc('QUALIFICATION', False)
-
+    local_language_exam_needed = is_local_language_exam_needed(request.user)
     if next_step or previous_step or save_step:
 
          # Check if all the necessary fields have been filled
         is_valid, validation_messages, secondary_education = validate_fields_form(request,
-                                                                                  application.offer_year,
                                                                                   secondary_education,
                                                                                   next_step)
 
@@ -215,7 +215,8 @@ def diploma_save(request):
                                                             "education_type_transition":    education_type_transition,
                                                             "education_type_qualification": education_type_qualification,
                                                             "message_success":              message_success,
-                                                            "current_academic_year":        mdl.academic_year.current_academic_year()})
+                                                            "current_academic_year":        mdl.academic_year.current_academic_year(),
+                                                            "local_language_exam_needed":   local_language_exam_needed})
                 else:
                     if previous_step:
                         return home(request)
@@ -236,7 +237,8 @@ def diploma_save(request):
                                                     "postal_codes":                 postal_codes,
                                                     "education_type_transition":    education_type_transition,
                                                     "education_type_qualification": education_type_qualification,
-                                                    "current_academic_year":        mdl.academic_year.current_academic_year()})
+                                                    "current_academic_year":        mdl.academic_year.current_academic_year(),
+                                                    "local_language_exam_needed":   local_language_exam_needed})
     else:
         return render(request, "diploma.html", {"application":                  application,
                                                 "validation_messages":          validation_messages,
@@ -253,10 +255,11 @@ def diploma_save(request):
                                                 "postal_codes":                 postal_codes,
                                                 "education_type_transition":    education_type_transition,
                                                 "education_type_qualification": education_type_qualification,
-                                                "current_academic_year":        mdl.academic_year.current_academic_year()})
+                                                "current_academic_year":        mdl.academic_year.current_academic_year(),
+                                                "local_language_exam_needed":   local_language_exam_needed})
 
 
-def validate_fields_form(request, offer_yr, secondary_education, next_step):
+def validate_fields_form(request, secondary_education, next_step):
     validation_messages = {}
     is_valid = True
     academic_year = None
@@ -407,11 +410,13 @@ def validate_fields_form(request, offer_yr, secondary_education, next_step):
                                 .find_by_id(int(request.POST.get('school')))
                             secondary_education.national_institution = national_institution
         else:
+            if request.POST.get('secondary_education_diploma') == 'false':
+                secondary_education.secondary_education_diploma = False
+
             is_valid, validation_messages, secondary_education = validate_admission_exam(request,
                                                                                          is_valid,
                                                                                          validation_messages,
-                                                                                         secondary_education,
-                                                                                         offer_yr)
+                                                                                         secondary_education)
     else:
         validation_messages['secondary_education_diploma'] = ALERT_MANDATORY_FIELD
         is_valid = False
@@ -430,12 +435,51 @@ def validate_fields_form(request, offer_yr, secondary_education, next_step):
             and request.POST.get('admission_exam') == 'false' \
             and request.POST.get('professional_exam') == 'false':
         validation_messages['final'] = "%s" % _('msg_error_next_step_impossible')
-        validation_messages['final1'] = "%s " %  _('question_get_diploma')
-        validation_messages['final2'] = "%s " %  _('question_admission_exam')
-        validation_messages['final3'] = "%s " %  _('question_professional_experience')
+        validation_messages['final1'] = "%s " % _('question_get_diploma')
+        validation_messages['final2'] = "%s " % _('question_admission_exam')
+        validation_messages['final3'] = "%s " % _('question_professional_experience')
         is_valid = False
 
     return is_valid, validation_messages, secondary_education
+
+
+def curriculum_read(request, application_id):
+    application = mdl.application.find_by_id(application_id)
+    return render(request, "curriculum.html", {"application": application})
+
+
+def curriculum_save(request, application_id):
+
+    exam_types = mdl_reference.admission_exam_type.find_all_by_adhoc(False)
+
+    local_language_exam_link = mdl.properties.find_by_key('PROFESSIONAL_EXAM_LINK')
+    professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
+
+    application = mdl.application.find_by_id(application_id)
+    other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
+    recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
+
+    secondary_education = mdl.secondary_education.find_by_person(application.person)
+    education_institutions = mdl_reference.education_institution.find_education_institution_by_adhoc(False)
+    cities, postal_codes = find_cities_postalcodes(education_institutions)
+    education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
+    education_type_qualification = mdl_reference.education_type.find_education_type_by_adhoc('QUALIFICATION', False)
+    return render(request, "diploma.html", {"application":                  application,
+                                            "academic_years":               mdl.academic_year.find_academic_years(),
+                                            "secondary_education":          secondary_education,
+                                            "countries":                    mdl_reference.country.find_all(),
+                                            "recognized_languages":         recognized_languages,
+                                            "languages":                    other_language_regime,
+                                            "exam_types":                   exam_types,
+                                            'local_language_exam_link':     local_language_exam_link,
+                                            "professional_exam_link":       professional_exam_link,
+                                            "education_institutions":       education_institutions,
+                                            "cities":                       cities,
+                                            "postal_codes":                 postal_codes,
+                                            "education_type_transition":    education_type_transition,
+                                            "education_type_qualification": education_type_qualification,
+                                            "current_academic_year":        mdl.academic_year.current_academic_year(),
+                                            "local_language_exam_needed":   is_local_language_exam_needed(request.user)})
 
 
 def find_cities_postalcodes(education_institutions):
@@ -678,7 +722,8 @@ def diploma_update(request):
                                             "postal_codes":                 postal_codes,
                                             "education_type_transition":    education_type_transition,
                                             "education_type_qualification": education_type_qualification,
-                                            "current_academic_year":        mdl.academic_year.current_academic_year()})
+                                            "current_academic_year":        mdl.academic_year.current_academic_year(),
+                                            "local_language_exam_needed":   is_local_language_exam_needed(request.user)})
 
 
 def validate_professional_exam(request,is_valid, validation_messages, secondary_education):
@@ -697,8 +742,7 @@ def validate_professional_exam(request,is_valid, validation_messages, secondary_
                     secondary_education.professional_exam_date = datetime\
                         .strptime(request.POST.get('professional_exam_date'), '%d/%m/%Y')
                 except:
-                    validation_messages['professional_exam_date'] = "La date (%s) semble erronée" % \
-                                                                    request.POST.get('professional_exam_date')
+                    validation_messages['professional_exam_date'] = _('wrong_date')
                     is_valid = False
                     secondary_education.professional_exam_date = None
 
@@ -737,8 +781,7 @@ def validate_local_language_exam(request,is_valid, validation_messages, secondar
                     secondary_education.local_language_exam_date = datetime\
                         .strptime(request.POST.get('local_language_exam_date'), '%d/%m/%Y')
                 except:
-                    validation_messages['local_language_exam_date'] = "La date (%s) semble erronée" % \
-                                                                    request.POST.get('local_language_exam_date')
+                    validation_messages['local_language_exam_date'] = _('wrong_date')
                     is_valid = False
                     secondary_education.local_language_exam_date = None
 
@@ -759,7 +802,7 @@ def validate_local_language_exam(request,is_valid, validation_messages, secondar
     return is_valid, validation_messages, secondary_education
 
 
-def validate_admission_exam(request,is_valid, validation_messages, secondary_education, offer_yr):
+def validate_admission_exam(request,is_valid, validation_messages, secondary_education):
     if request.POST.get('admission_exam') is None:
         validation_messages['admission_exam'] = ALERT_MANDATORY_FIELD
         is_valid = False
@@ -767,7 +810,8 @@ def validate_admission_exam(request,is_valid, validation_messages, secondary_edu
         if request.POST.get('admission_exam') == 'true':
             secondary_education.admission_exam = True
 
-            if request.POST.get('admission_exam_date') is None:
+            if request.POST.get('admission_exam_date') is None \
+                    or len(request.POST.get('admission_exam_date').strip()) == 0:
                 validation_messages['admission_exam_date'] = ALERT_MANDATORY_FIELD
                 is_valid = False
             else:
@@ -775,8 +819,7 @@ def validate_admission_exam(request,is_valid, validation_messages, secondary_edu
                     secondary_education.admission_exam_date = datetime\
                         .strptime(request.POST.get('admission_exam_date'), '%d/%m/%Y')
                 except:
-                    validation_messages['admission_exam_date'] = "La date (%s) semble erronée" % \
-                                                                    request.POST.get('admission_exam_date')
+                    validation_messages['admission_exam_date'] = _('wrong_date')
                     is_valid = False
                     secondary_education.admission_exam_date = None
             if request.POST.get('admission_exam_institution') is None \
@@ -822,3 +865,15 @@ def validate_admission_exam(request,is_valid, validation_messages, secondary_edu
                 secondary_education.admission_exam = False
 
     return is_valid, validation_messages, secondary_education
+
+
+def is_local_language_exam_needed(user):
+    local_language_exam_needed = False
+    applications = mdl.application.find_by_user(user)
+    for application in applications:
+        if application.offer_year.grade_type.grade == 'BACHELOR' \
+        or application.offer_year.grade_type.grade == 'MASTER' \
+        or application.offer_year.grade_type.grade == 'TRAINING_CERTIFICATE':
+            local_language_exam_needed = True
+            break
+    return local_language_exam_needed
