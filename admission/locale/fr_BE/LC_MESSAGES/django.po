@@ -380,7 +380,7 @@ msgid "recto_verso_copy"
 msgstr "Vous devez fournir une copie recto-verso. Si vous avez le recto-verso dans le même fichier, veuillez joindre les 2"
 
 msgid "transcript"
-msgstr "Enrollment"
+msgstr "Relevé de notes"
 
 msgid "professional_experiences"
 msgstr "Expériences professionnelles"
@@ -748,3 +748,21 @@ msgstr "Montrer detail"
 
 msgid "hide_detail"
 msgstr "Masquer detail"
+
+msgid "diploma"
+msgstr "Diplome"
+
+msgid "credits_too_high"
+msgstr "Le nombre de crédits ne peut dépasser 75"
+
+msgid "credits_negative"
+msgstr "Le nombre de crédits doit être positif"
+
+msgid "subdomain"
+msgstr "Sous-domaine"
+
+msgid "question_domain_title"
+msgstr "Introduisez l'intitulé de vos études"
+
+msgid "data_duplicated"
+msgstr "Données dupliquées"

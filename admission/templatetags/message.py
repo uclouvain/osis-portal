@@ -41,6 +41,23 @@ def message_error(a, **kwargs):
 
     ch = a.get(str(key))
     if ch:
-        return mark_safe('<br>%s' % ch)
+        return mark_safe('<br>%s<br>' % ch)
     else:
         return ''
+
+
+@register.assignment_tag
+def pnl_national_education__message_error(a, **kwargs):
+
+    if a is None or len(a) == 0:
+        return False
+    keys = ['path_type', 'national_education', 'national_institution_french', 'national_institution_dutch', 'domain',
+            'subdomain', 'grade_type', 'diploma', 'result', 'credits_enrolled', 'credits_obtained']
+    year = kwargs['year']
+    for elt_name in keys:
+        key = '%s_%s' % (elt_name, year)
+        for k, v in a.items():
+            if k.startswith(key):
+                return True
+    return False
+

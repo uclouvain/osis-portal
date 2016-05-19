@@ -720,6 +720,25 @@ msgstr "Show detail"
 
 msgid "hide_detail"
 msgstr "Hide detail"
+
+msgid "diploma"
+msgstr "Diploma"
+
+msgid "credits_too_high"
+msgstr "Credits shouldn't be more than 75"
+
+msgid "credits_negative"
+msgstr "Credits must be positive"
+
+msgid "subdomain"
+msgstr "Subdomain"
+
+msgid "question_domain_title"
+msgstr "Domain, subdomain, and grade type corresponds to your studies"
+
+msgid "data_duplicated"
+msgstr "Data duplicated"
+
 msgid "country"
 msgstr "Country"
 
