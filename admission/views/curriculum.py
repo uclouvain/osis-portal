@@ -102,7 +102,7 @@ def save(request):
     year = first_academic_year_for_cv
     while year < current_academic_year:
         academic_year = mdl.academic_year.find_by_year(year)
-        curriculum = mdl.curriculum.find_one_by_academic_year(academic_year)
+        curriculum = mdl.curriculum.find_by_academic_year(academic_year)
         if curriculum is None:
             # add cv empty cv's for the year if it's needed
             curriculum = mdl.curriculum.Curriculum()
@@ -135,13 +135,13 @@ def update(request):
 
     year = current_academic_year - 5
     if admission:
-        if secondary_education.secondary_education_diploma is True:
+        if secondary_education and secondary_education.secondary_education_diploma is True:
             year = secondary_education.academic_year.year + 1
 
     while year < current_academic_year:
         academic_year = mdl.academic_year.find_by_year(year)
         # find existing cv
-        curriculum = mdl.curriculum.find_one_by_academic_year(academic_year)
+        curriculum = mdl.curriculum.find_by_academic_year(academic_year)
         if curriculum is None:
             # add cv empty cv's for the year if it's needed
             curriculum = mdl.curriculum.Curriculum()
@@ -192,6 +192,6 @@ def validate_fields_form(request):
 
 def is_admission(a_person, secondary_education):
     if a_person.nationality.european_union:
-        if secondary_education.national is True:
+        if secondary_education and  secondary_education.national is True:
             return False
     return True
