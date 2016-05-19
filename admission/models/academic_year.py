@@ -26,6 +26,7 @@
 from django.db import models
 from django.contrib import admin
 from django.utils import timezone
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class AcademicYearAdmin(admin.ModelAdmin):
@@ -70,4 +71,7 @@ def find_by_id(id):
 
 
 def find_by_year(a_year):
-    return AcademicYear.objects.get(year=a_year)
+    try:
+        return AcademicYear.objects.get(year=a_year)
+    except ObjectDoesNotExist:
+        return None

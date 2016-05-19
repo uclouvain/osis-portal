@@ -776,3 +776,6 @@ msgstr "Numéro de carte d'identité"
 
 msgid "passport_number"
 msgstr "Numéro de passeport"
+
+msgid "question_domain"
+msgstr "Le domaine, sous-domaine et type d'études correspondent à vos études"
