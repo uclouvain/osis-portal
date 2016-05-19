@@ -75,7 +75,7 @@ msgid "legal"
 msgstr "Légal"
 
 msgid "contact"
-msgstr "contact"
+msgstr "Contact"
 
 msgid "label"
 msgstr "Label"
@@ -759,3 +759,12 @@ msgstr "Wrong date "
 
 msgid "succeeded"
 msgstr "Succeeded"
+
+msgid "national_registry_number"
+msgstr "National registry number"
+
+msgid "identity_card_number"
+msgstr "Identity card number"
+
+msgid "passport_number"
+msgstr "Passport number"

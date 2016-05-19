@@ -766,3 +766,13 @@ msgstr "Introduisez l'intitulé de vos études"
 
 msgid "data_duplicated"
 msgstr "Données dupliquées"
+
+msgid "national_registry_number"
+msgstr "Numéro du registre national"
+
+
+msgid "identity_card_number"
+msgstr "Numéro de carte d'identité"
+
+msgid "passport_number"
+msgstr "Numéro de passeport"
