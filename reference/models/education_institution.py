@@ -89,3 +89,7 @@ def find_by_country(a_country):
 
 def find_by_city(a_city):
     return EducationInstitution.objects.filter(city=a_city).order_by('name')
+
+
+def find_by_country_city_name(a_country, a_city, a_name):
+    return EducationInstitution.objects.filter(country=a_country, city=a_city, name=a_name, adhoc=False).first()

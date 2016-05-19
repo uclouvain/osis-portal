@@ -750,4 +750,16 @@ msgid "university_country"
 msgstr "Pays de l'université"
 
 msgid "university_name"
-msgstr "Nom de l'university"
+msgstr "Nom de l'université"
+
+msgid "specify_locality"
+msgstr "Vous ne trouvez pas la localité dans la liste"
+
+msgid "specify_university_name"
+msgstr "Vous ne trouvez pas l'université dans la liste"
+
+msgid "mandatory_university_name"
+msgstr "Merci de préciser un nom d'université."
+
+msgid "specify"
+msgstr "Préciser"

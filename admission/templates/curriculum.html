@@ -65,7 +65,7 @@
     <br>
     {% for curriculum in curricula %}
         {% pnl_national_education__message_error validation_messages year=curriculum.academic_year.year as pnl_national_detail_error%}
-        {% pnl_foreign_education_message_error validation_messages year=curriculum.academic_year.year as pnl_foreign_detail_error%}
+        {% pnl_foreign_education_message_error validation_messages year=curriculum.academic_year.year as pnl_foreign_detail_error %}
         <div class="panel panel-default"
              id="pnl_curriculum_id_{{curriculum.academic_year.year}}">
             <div class="panel-heading">
@@ -118,7 +118,7 @@
             </div>
             <div class="panel-body"
                  id="pnl_detail_{{curriculum.academic_year.year}}"
-                 style="{%if pnl_national_detail_error%}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+                 style="{%if pnl_national_detail_error or  pnl_foreign_detail_error%}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
                 <input type="hidden" id="hdn_curriculum_year_{{curriculum.academic_year.year}}" name="curriculum_year_{{curriculum.academic_year.year}}" value="{{curriculum.academic_year.year}}">
                 <label> {% trans 'path_type'%} *</label>
                 <br>
