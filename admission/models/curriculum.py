@@ -29,6 +29,7 @@ from django.utils.translation import ugettext_lazy as _
 from .secondary_education import NATIONAL_COMMUNITY_TYPES
 from django.core.exceptions import ObjectDoesNotExist
 
+
 class CurriculumAdmin(admin.ModelAdmin):
     list_display = ('person', 'path_type')
 

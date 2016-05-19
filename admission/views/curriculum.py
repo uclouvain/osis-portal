@@ -66,6 +66,7 @@ def save(request):
         if is_valid:
             message_success = _('msg_info_saved')
             for curriculum in curricula:
+                print('ll:', curriculum.language)
                 curriculum.save()
         else:
             return render(request, "curriculum.html", {"curricula":                 curricula,
@@ -75,7 +76,8 @@ def save(request):
                                            "subdomains":                mdl.domain.find_all_subdomains(),
                                            "grade_types":               mdl.grade_type.find_all(),
                                            "validation_messages":       validation_messages,
-                                           "message_success":           message_success})
+                                           "message_success":           message_success,
+                                           "languages":                 mdl_reference.language.find_languages()})
     #Get the data in bd
     a_person = mdl.person.find_by_user(request.user)
     first_academic_year_for_cv = None
@@ -113,7 +115,8 @@ def save(request):
                                                "validation_messages":       validation_messages,
                                                "message_success":           message_success,
                                                "universities_cities":       universities_cities,
-                                               "universities":              universities})
+                                               "universities":              universities,
+                                               "languages":                 mdl_reference.language.find_languages()})
 
 
 def update(request):
@@ -155,13 +158,11 @@ def update(request):
 
     local_universities_dutch = mdl_reference.education_institution\
         .find_by_institution_type_national_community('UNIVERSITY', 'DUTCH', False)
+
     if message:
         return home(request)
     else:
-        #to populate the dropdown list of cities and universities
         universities_cities, universities = populate_dropdown_list(curricula)
-
-        #
         return render(request, "curriculum.html", {"curricula":                 curricula,
                                                    "local_universities_french": local_universities_french,
                                                    "local_universities_dutch":  local_universities_dutch,
@@ -170,7 +171,8 @@ def update(request):
                                                    "grade_types":               mdl.grade_type.find_all(),
                                                    "universities_countries":    mdl_reference.education_institution.find_countries(),
                                                    "universities_cities":       universities_cities,
-                                                   "universities":              universities})
+                                                   "universities":              universities,
+                                                   "languages":                 mdl_reference.language.find_languages()})
 
 
 def validate_fields_form(request):
@@ -229,6 +231,7 @@ def validate_fields_form(request):
                                                                                                         is_valid,
                                                                                                         universities_cities,
                                                                                                         universities)
+                    print('tet:', curriculum.language)
 
         curricula.append(curriculum)
 
@@ -494,7 +497,12 @@ def validate_foreign_university_fields_form(request, curriculum, curriculum_year
             except ValueError:
                 validation_messages['credits_obtained_%s' % curriculum_year] = _('numeric_field')
                 is_valid = False
-    
+
+    if request.POST.get('linguistic_regime_%s' % curriculum_year) \
+            and request.POST.get('linguistic_regime_%s' % curriculum_year) != "-":
+        l = mdl_reference.language.find_by_id(int(request.POST.get('linguistic_regime_%s' % curriculum_year)))
+        curriculum.language = l
+
     return is_valid, validation_messages, curriculum, universities_cities, universities
 
 

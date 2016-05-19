@@ -167,6 +167,22 @@
         </div>
     </div>
     <br>
+    <div class="row">
+        <div class="col-md-6">
+            <label>{% trans 'linguistic_regime' %}</label>
+             <select class="form-control"
+                     id="slt_linguistic_regime_{{curriculum.academic_year.year}}"
+                     name="linguistic_regime_{{curriculum.academic_year.year}}">
+                <option value="-">-</option>
+                {%for language in languages %}
+                 <option value="{{ language.id }}" {%if curriculum.language.id == language.id %}selected{%endif%}>{{ language.name }}</option>
+                 {%endfor%}
+            </select>
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+    <br>
     <div class="form-group">
         <label>{% trans 'question_domain' %}</label>
         <div>
