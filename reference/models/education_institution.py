@@ -44,7 +44,7 @@ class EducationInstitution(models.Model):
     institution_type = models.CharField(max_length=20, choices=INSTITUTION_TYPE)
     postal_code = models.CharField(max_length=20)
     city = models.CharField(max_length=255)
-    country = models.ForeignKey('reference.Country')
+    country = models.ForeignKey('reference.Country', blank=True, null=True)
     national_community = models.CharField(max_length=20, choices=NATIONAL_COMMUNITY_TYPES, blank=True, null=True)
     adhoc = models.BooleanField(default=False)
 

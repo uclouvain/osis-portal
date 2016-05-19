@@ -41,7 +41,7 @@
                     name="foreign_institution_name_{{curriculum.academic_year.year}}">
                 <option value="-">-</option>
                 {% for university in universities|get_at_index:forloop.counter0 %}
-                <option value="{{ university }}" {%if curriculum.national_institution.id == university.id %}selected{%endif%}>
+                <option value="{{ university.id }}" {%if curriculum.national_institution.id == university.id %}selected{%endif%}>
                     {{ university }}
                 </option>
                 {% endfor %}

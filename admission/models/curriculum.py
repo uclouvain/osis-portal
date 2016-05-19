@@ -27,7 +27,7 @@ from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from .secondary_education import NATIONAL_COMMUNITY_TYPES
-
+from django.core.exceptions import ObjectDoesNotExist
 
 class CurriculumAdmin(admin.ModelAdmin):
     list_display = ('person', 'path_type')
@@ -80,7 +80,10 @@ def find_by_id(an_id):
 
 
 def find_by_academic_year(an_academic_year):
-    return Curriculum.objects.get(academic_year=an_academic_year)
+    try:
+        return Curriculum.objects.get(academic_year=an_academic_year)
+    except ObjectDoesNotExist:
+        return None
 
 
 def find_user(a_person):

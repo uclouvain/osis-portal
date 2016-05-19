@@ -54,12 +54,28 @@ def save(request):
         return home(request)
 
     message_success = None
+    # Get the data in bd for dropdown list
+    local_universities_french = mdl_reference.education_institution\
+        .find_by_institution_type_national_community('UNIVERSITY', 'FRENCH', False)
+
+    local_universities_dutch = mdl_reference.education_institution\
+        .find_by_institution_type_national_community('UNIVERSITY', 'DUTCH', False)
+
     if save_step or next_step:
         is_valid, validation_messages, curricula, universities_cities,universities = validate_fields_form(request)
         if is_valid:
             message_success = _('msg_info_saved')
             for curriculum in curricula:
                 curriculum.save()
+        else:
+            return render(request, "curriculum.html", {"curricula":                 curricula,
+                                           "local_universities_french": local_universities_french,
+                                           "local_universities_dutch":  local_universities_dutch,
+                                           "domains":                   mdl.domain.find_all_domains(),
+                                           "subdomains":                mdl.domain.find_all_subdomains(),
+                                           "grade_types":               mdl.grade_type.find_all(),
+                                           "validation_messages":       validation_messages,
+                                           "message_success":           message_success})
     #Get the data in bd
     a_person = mdl.person.find_by_user(request.user)
     first_academic_year_for_cv = None
@@ -74,6 +90,7 @@ def save(request):
             first_academic_year_for_cv = secondary_education.academic_year.year + 1
     current_academic_year = mdl.academic_year.current_academic_year().year
     year = first_academic_year_for_cv
+
     while year < current_academic_year:
         academic_year = mdl.academic_year.find_by_year(year)
         curriculum = mdl.curriculum.find_by_academic_year(academic_year)
@@ -85,12 +102,6 @@ def save(request):
         curricula.append(curriculum)
         year = year + 1
 
-    # Get the data in bd for dropdown list
-    local_universities_french = mdl_reference.education_institution\
-        .find_by_institution_type_national_community('UNIVERSITY', 'FRENCH', False)
-
-    local_universities_dutch = mdl_reference.education_institution\
-        .find_by_institution_type_national_community('UNIVERSITY', 'DUTCH', False)
 
     return render(request, "curriculum.html", {"curricula":                 curricula,
                                                "local_universities_french": local_universities_french,
@@ -108,29 +119,37 @@ def save(request):
 def update(request):
     print('update')
     curricula = []
+    universities_cities = []
+    universities  = []
     message = None
     a_person = mdl.person.find_by_user(request.user)
     secondary_education = mdl.secondary_education.find_by_person(a_person)
     current_academic_year = mdl.academic_year.current_academic_year().year
     admission = is_admission(a_person, secondary_education)
-
+    year_secondary = None
     year = current_academic_year - 5
+    if secondary_education and secondary_education.secondary_education_diploma is True:
+        year_secondary= secondary_education.academic_year.year
+
     if admission:
         if secondary_education and secondary_education.secondary_education_diploma is True:
             year = secondary_education.academic_year.year + 1
 
+    if year_secondary and year < year_secondary:
+        year = year_secondary + 1
+
     while year < current_academic_year:
         academic_year = mdl.academic_year.find_by_year(year)
-        # find existing cv
-        curriculum = mdl.curriculum.find_by_academic_year(academic_year)
-        if curriculum is None:
-            # add cv empty cv's for the year if it's needed
-            curriculum = mdl.curriculum.Curriculum()
-            curriculum.person = a_person
-            curriculum.academic_year = academic_year
-        curricula.append(curriculum)
+        if academic_year:
+            # find existing cv
+            curriculum = mdl.curriculum.find_by_academic_year(academic_year)
+            if curriculum is None:
+                # add cv empty cv's for the year if it's needed
+                curriculum = mdl.curriculum.Curriculum()
+                curriculum.person = a_person
+                curriculum.academic_year = academic_year
+            curricula.append(curriculum)
         year = year + 1
-
     local_universities_french = mdl_reference.education_institution\
         .find_by_institution_type_national_community('UNIVERSITY', 'FRENCH', False)
 
@@ -297,6 +316,7 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
                 or len(request.POST.get('credits_enrolled_%s' % curriculum_year)) == 0:
             validation_messages['credits_enrolled_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
+            curriculum.credits_enrolled = None
     if request.POST.get('credits_enrolled_%s' % curriculum_year) \
             and len(request.POST.get('credits_enrolled_%s' % curriculum_year)) > 0:
             try:
@@ -319,6 +339,7 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
                 or len(request.POST.get('credits_obtained_%s' % curriculum_year)) == 0:
             validation_messages['credits_obtained_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
+            curriculum.credits_obtained = None
     if request.POST.get('credits_obtained_%s' % curriculum_year) \
             and len(request.POST.get('credits_obtained_%s' % curriculum_year)) > 0:
             try:
@@ -336,7 +357,7 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
             except ValueError:
                 validation_messages['credits_obtained_%s' % curriculum_year] = _('numeric_field')
                 is_valid = False
-
+    print('la',curriculum.credits_enrolled)
     return is_valid, validation_messages, curriculum
 
 
@@ -409,14 +430,15 @@ def populate_dropdown_list(curricula):
     for curriculum in curricula:
         cities_list = []
         universities_list = []
-        universities_by_city = mdl_reference.education_institution.find_by_city(curriculum.national_institution.city)
-        universities_by_country = mdl_reference.education_institution.find_by_country(curriculum.national_institution.country)
+        if curriculum.national_institution:
+            universities_by_city = mdl_reference.education_institution.find_by_city(curriculum.national_institution.city)
+            universities_by_country = mdl_reference.education_institution.find_by_country(curriculum.national_institution.country)
 
-        for university in universities_by_country:
-            cities_list.append(university.city)
+            for university in universities_by_country:
+                cities_list.append(university.city)
 
-        universities_cities.append(cities_list)
-        for university in universities_by_city:
-            universities_list.append(university)
-        universities.append(universities_list)
+            universities_cities.append(cities_list)
+            for university in universities_by_city:
+                universities_list.append(university)
+            universities.append(universities_list)
     return universities_cities, universities
