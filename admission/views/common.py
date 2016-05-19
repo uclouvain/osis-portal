@@ -31,7 +31,7 @@ from admission.forms import PersonForm
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.utils import translation
-
+from django.utils.translation import ugettext_lazy as _
 
 @login_required
 def home(request):
@@ -85,7 +85,7 @@ def profile(request):
             person.birth_place = request.POST['birth_place']
         else:
             person.birth_place = None
-        if request.POST['birth_country']:
+        if request.POST.get('birth_country'):
             birth_country_id = request.POST['birth_country']
             birth_country = mdl_ref.country.find_by_id(birth_country_id)
             person.birth_country = birth_country
@@ -107,7 +107,7 @@ def profile(request):
             person.spouse_name = request.POST['spouse_name']
         else:
             person.spouse_name = None
-        if request.POST['nationality']:
+        if request.POST.get('nationality'):
             country_id = request.POST['nationality']
             country = mdl_ref.country.find_by_id(country_id)
             person.nationality = country
@@ -145,13 +145,14 @@ def profile(request):
             person_legal_address.city = request.POST['legal_adr_city']
         else:
             person_legal_address.city = None
-        if request.POST['legal_adr_country']:
+        if request.POST.get('legal_adr_country'):
             country_id = request.POST['legal_adr_country']
             country = mdl_ref.country.find_by_id(country_id)
             person_legal_address.country = country
         else:
-            person_legal_address.country = None
-        if request.POST['same_contact_legal_addr'] == "false":
+            person_form.errors['legal_adr_country'] = _('mandatory_field')
+            #person_legal_address.country = None
+        if request.POST.get('same_contact_legal_addr') == "false":
             person_contact_address = mdl.person_address.find_by_person_type(person, 'CONTACT')
             if person_contact_address is None:
                 person_contact_address = mdl.person_address.PersonAddress()

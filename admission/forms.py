@@ -114,11 +114,11 @@ class PersonForm(forms.Form):
             ('FEMALE', 'FEMALE'))
     last_name               = forms.CharField(required=True)
     first_name              = forms.CharField(required=True)
-    birth_date              = forms.DateField(required=True,input_formats=['%d/%m/%Y'],
+    birth_date              = forms.DateField(required=True, input_formats=['%d/%m/%Y'],
                                               widget=forms.DateInput(format='%d/%m/%Y'))
     birth_place             = forms.CharField(required=True)
     birth_country           = forms.CharField(required=True)
-    gender                  = forms.ChoiceField(choices=GENDER_CHOICES,required=True)
+    gender                  = forms.ChoiceField(choices=GENDER_CHOICES, required=True)
     civil_status            = forms.CharField(required=True)
     number_children         = forms.IntegerField(validators=[MinValueValidator(0)], required=False)
     nationality             = forms.CharField(required=True)
@@ -140,6 +140,21 @@ class PersonForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(PersonForm, self).__init__(*args, **kwargs)
+        self.fields['last_name'].error_messages = {'required': _('mandatory_field')}
+        self.fields['first_name'].error_messages = {'required': _('mandatory_field')}
+        self.fields['birth_date'].error_messages = {'required': _('mandatory_field')}
+        self.fields['birth_place'].error_messages = {'required': _('mandatory_field')}
+        self.fields['birth_country'].error_messages = {'required': _('mandatory_field')}
+        self.fields['gender'].error_messages = {'required': _('mandatory_field')}
+        self.fields['civil_status'].error_messages = {'required': _('mandatory_field')}
+        self.fields['nationality'].error_messages = {'required': _('mandatory_field')}
+        self.fields['legal_adr_street'].error_messages = {'required': _('mandatory_field')}
+        self.fields['legal_adr_number'].error_messages = {'required': _('mandatory_field')}
+        self.fields['legal_adr_postal_code'].error_messages = {'required': _('mandatory_field')}
+        self.fields['legal_adr_city'].error_messages = {'required': _('mandatory_field')}
+        self.fields['legal_adr_country'].error_messages = {'required': _('mandatory_field')}
+        self.fields['same_contact_legal_addr'].error_messages = {'required': _('mandatory_field')}
+        self.fields['additional_email'].error_messages = {'required': _('mandatory_field')}
 
     def clean(self):
         cleaned_data = super(PersonForm, self).clean()

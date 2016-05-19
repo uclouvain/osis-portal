@@ -75,7 +75,7 @@ msgid "legal"
 msgstr "Légal"
 
 msgid "contact"
-msgstr "contact"
+msgstr "Contact"
 
 msgid "label"
 msgstr "Label"
@@ -734,7 +734,7 @@ msgid "subdomain"
 msgstr "Subdomain"
 
 msgid "question_domain_title"
-msgstr "Domain, subdomain, and grade type corresponds to your studies"
+msgstr "Mention your studies title"
 
 msgid "data_duplicated"
 msgstr "Data duplicated"
@@ -759,3 +759,15 @@ msgstr "Wrong date "
 
 msgid "succeeded"
 msgstr "Succeeded"
+
+msgid "national_registry_number"
+msgstr "National registry number"
+
+msgid "identity_card_number"
+msgstr "Identity card number"
+
+msgid "passport_number"
+msgstr "Passport number"
+
+msgid "question_domain"
+msgstr "Domain, subdomain, and grade type corresponds to your studies"

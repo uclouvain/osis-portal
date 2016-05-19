@@ -44,7 +44,7 @@
                 <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> {% trans 'save'%}
             </button>
             <button type="submit" id="bt_submit_next_step" class="btn btn-default" role="button" name="next_step"
-                    title="{% trans 'next_step'%}" disabled>
+                    title="{% trans 'next_step'%}">
                 <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>{% trans 'next_step'%}
             </button>
             <br>
@@ -220,17 +220,17 @@
                     <br>
                     <div class="row">
                         <div class="col-md-4">
-                            <label>Numéro du registre national</label>
+                            <label>{% trans 'national_registry_number'%}</label>
                             <input class="form-control" id="txt_national_id" name="national_id"
                                    value="{{ person.national_id | default_if_none:''}}">
                         </div>
                         <div class="col-md-4">
-                            <label>Numéro de carte d'identité</label>
+                            <label>{% trans 'identity_card_number'%}</label>
                             <input class="form-control" id="txt_id_card_number" name="id_card_number"
                                    value="{{ person.id_card_number | default_if_none:''}}">
                         </div>
                         <div class="col-md-4">
-                            <label>Numéro de passport</label>
+                            <label>{% trans 'passport_number'%}</label>
                             <input class="form-control" id="txt_passport_number" name="passport_number"
                                    value="{{ person.passport_number | default_if_none:''}}">
                         </div>
@@ -392,20 +392,20 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-3">
-                            <label>GSM</label>
+                            <label>{% trans 'mobile'%}</label>
                             <input class="form-control" id="txt_phone_mobile" name="phone_mobile"
                                    value="{{ person.phone_mobile | default_if_none:''}}"
                                    maxlength="30">
                             (ex: +32 490 00 00 00)
                         </div>
                         <div class="col-md-3">
-                            <label>Autre téléphone</label>
+                            <label>{% trans 'other_phone'%}</label>
                             <input class="form-control" id="txt_phone" name="phone"
                                    value="{{ person.phone | default_if_none:''}}" maxlength="30">
                             (ex: +32 10 47 21 72)
                         </div>
                         <div class="col-md-3">
-                            <label>E-mail *</label>
+                            <label>{% trans 'mail' %} *</label>
                             <input class="form-control" id="txt_additional_email" name="additional_email"
                                    value="{{ person.additional_email| default_if_none:''}}" maxlength="255">
                             <font class="error">{{ person_form.additional_email.errors|striptags }}</font>
@@ -414,7 +414,7 @@
                 </div>
             </div>
 
-            <div class="panel panel-default">
+            <div class="panel panel-default" style="{%if institution %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
                 <div class="panel-heading">{%trans 'question_previous_enrollment'%} {{ institution }}?</div>
                 <div class="panel-body">
                     <div class="row">
@@ -463,7 +463,7 @@
             </button>
 
             <button type="submit" id="bt_next_step" class="btn btn-default" role="button" name="next_step_down"
-                    title="{% trans 'next_step'%}" disabled>
+                    title="{% trans 'next_step'%}">
                 <span class="glyphicon glyphicon-forward" aria-hidden="true"></span> {% trans 'next_step'%}
             </button>
 
