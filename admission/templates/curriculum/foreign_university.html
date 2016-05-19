@@ -226,7 +226,7 @@
                        id="rdb_diploma_true_{{curriculum.academic_year.year}}"
                        value="true"
                        {%if curriculum.diploma = True %}checked{%endif%}
-                       onclick="display('pnl_diploma_files_{{curriculum.academic_year.year}}',true);"
+                       onclick="display('pnl_diploma_foreign_files_{{curriculum.academic_year.year}}',true);"
                 > {% trans 'yes' %}
             </label>
             <label class="radio-inline">
@@ -234,7 +234,7 @@
                        name="diploma_{{curriculum.academic_year.year}}"
                        id="rdb_diploma_false_{{curriculum.academic_year.year}}" value="false"
                        {%if curriculum.diploma = False %}checked{%endif%}
-                       onclick="display('pnl_diploma_files_{{curriculum.academic_year.year}}',false);"
+                       onclick="display('pnl_diploma_foreign_files_{{curriculum.academic_year.year}}',false);"
                 > {% trans 'no' %}
             </label>
             <font class="error" style="margin-left:5px;">{% message_error validation_messages year=curriculum.academic_year.year|lower param='diploma' %}</font>
@@ -293,6 +293,32 @@
                    class="form-control">
 
             <font class="error" style="margin-left:5px;">{% message_error validation_messages year=curriculum.academic_year.year|lower param='credits_obtained' %}</font>
+        </div>
+    </div>
+    <br>
+
+    <div id="pnl_diploma_foreign_files_{{curriculum.academic_year.year}}"
+         style="{%if curriculum.diploma == True %}visibility:true;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+        <label>{% trans 'original_of' %} * </label>
+        <div class="row"
+             >
+            <div class="col-md-6">
+                <button type="button" class="btn btn-default" data-toggle="modal"
+                        data-target="#pnl_upload_file_modal"
+                        title="{% trans 'diploma'%} - {% trans 'recto'%}"
+                        id="bt_upload_file_curriculum_diploma_recto_{{curriculum.academic_year.year}}" style="width:250px;">
+                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'diploma'%} - {% trans 'recto'%}
+                </button>
+            </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-default" data-toggle="modal"
+                        data-target="#pnl_upload_file_modal"
+                        title="{% trans 'diploma'%} - {% trans 'verso'%}"
+                        id="bt_upload_file_curriculum_diploma_verso_{{curriculum.academic_year.year}}"
+                        style="width:250px;">
+                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'diploma'%} - {% trans 'verso'%}
+                </button>
+            </div>
         </div>
     </div>
 </div>
