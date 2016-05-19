@@ -82,6 +82,7 @@ def save(request):
 
 
 def update(request):
+    print('update')
     curricula = []
     message = None
     a_person = mdl.person.find_by_user(request.user)
@@ -97,7 +98,7 @@ def update(request):
     while year < current_academic_year:
         academic_year = mdl.academic_year.find_by_year(year)
         # find existing cv
-        curriculum = mdl.curriculum.find_one_by_academic_year(academic_year)
+        curriculum = mdl.curriculum.find_by_academic_year(academic_year)
         if curriculum is None:
             # add cv empty cv's for the year if it's needed
             curriculum = mdl.curriculum.Curriculum()
@@ -114,15 +115,10 @@ def update(request):
     if message:
         return home(request)
     else:
-        universities_cities = []
-        universities = []
-        for curriculum in curricula:
-            cities_list = []
-            universities_list = []
-            universities_by_city = mdl_reference.education_institution.find_by_city(request.POST.get('foreign_institution_city_%s' % curriculum_year))
+        #to populate the dropdown list of cities and universities
+        universities_cities, universities = populate_dropdown_list(curricula)
 
-            for university in universities_by_city:
-                universities_list.append(university)
+        #
         return render(request, "curriculum.html", {"curricula":                 curricula,
                                                    "local_universities_french": local_universities_french,
                                                    "local_universities_dutch":  local_universities_dutch,
@@ -381,3 +377,22 @@ def validate_foreign_university_fields_form(request, curriculum, curriculum_year
     universities_cities.append(cities_list)
     universities.append(universities_list)
     return is_valid, validation_messages, curriculum, universities_cities, universities
+
+
+def populate_dropdown_list(curricula):
+    universities_cities = []
+    universities = []
+    for curriculum in curricula:
+        cities_list = []
+        universities_list = []
+        universities_by_city = mdl_reference.education_institution.find_by_city(curriculum.national_institution.city)
+        universities_by_country = mdl_reference.education_institution.find_by_country(curriculum.national_institution.country)
+
+        for university in universities_by_country:
+            cities_list.append(university.city)
+
+        universities_cities.append(cities_list)
+        for university in universities_by_city:
+            universities_list.append(university)
+        universities.append(universities_list)
+    return universities_cities, universities
