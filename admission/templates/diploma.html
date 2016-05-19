@@ -28,188 +28,6 @@
 {% endcomment %}
 
 {% block content %}
-<script>
-    function disabled_field(id,chb){
-        if(chb.checked){
-            document.getElementById(id).disabled = false;
-        }else{
-            document.getElementById(id).disabled = true;
-        }
-    }
-
-    function disabled_field_txt(id, state){
-
-        if(state){
-            document.getElementById(id).disabled = true;
-        }else{
-            document.getElementById(id).disabled = false;
-        }
-    }
-    function disabled_reset_field_txt(id, state){
-
-        if(state){
-            document.getElementById(id).disabled = true;
-        }else{
-            document.getElementById(id).disabled = false;
-        }
-        document.getElementById(id).value="";
-    }
-
-    function display(id,state){
-        var elt = document.getElementById(id);
-        if(state){
-            elt.style = "visibility:visible;display:block;";
-        }else{
-            elt.style = "visibility:hidden;display:none;";
-        }
-    }
-
-    function display_or_hide(id,elt){
-        display(id,elt.checked);
-    }
-
-    function show_hide_parcours(elt){
-        if (elt.selectedIndex == -1)
-            return null;
-        var s= elt.options[elt.selectedIndex].text;
-        var pos = s.indexOf("-");
-        var year=""
-        if (pos > -1){
-            year = s.substring(0,pos);
-        }
-        if(year < 1994){
-            display('pnl_parcours',true);
-        }else{
-            display('pnl_parcours',false);
-        }
-    }
-
-    function show_hide_pnl_daes(){
-        //alert('show_hide_pnl_daes');
-        var elt = document.getElementById('slt_academic_year');
-        if (elt.selectedIndex == -1)
-            return null;
-
-        var s= elt.options[elt.selectedIndex].text;
-        var pos = s.indexOf("-");
-        var year=""
-        if (pos > -1){
-            year = s.substring(0,pos);
-        }
-
-        elt = document.getElementById('rdb_belgian_community_french');
-
-        if(elt.checked){
-            if(year < 1994){
-                return display('pnl_daes',true);
-            }
-        }
-        elt = document.getElementById('rdb_belgian_community_dutch');
-        if(elt.checked){
-            if(year < 1992){
-               return display('pnl_daes',true);
-            }
-        }
-        display('pnl_daes',false);
-    }
-
-    function reset_rdb(elt_name){
-        x=document.getElementsByName(elt_name);
-        var i;
-        for (i = 0; i < x.length; i++) {
-            if (x[i].type == "radio") {
-                x[i].checked = false;
-            }
-        }
-    }
-
-    function reset_chb(elt_name){
-        x=document.getElementsByName(elt_name);
-        var i;
-        for (i = 0; i < x.length; i++) {
-            if (x[i].type == "checkbox") {
-                x[i].checked = false;
-            }
-        }
-    }
-
-    function reset_radio(elt_name){
-        x=document.getElementsByName(elt_name);
-        var i;
-        for (i = 0; i < x.length; i++) {
-
-            if (x[i].type == "radio") {
-                x[i].checked = false;
-            }
-        }
-    }
-
-    function reset_input(id){
-        document.getElementById(id).value="";
-
-    }
-
-    function enabled_other_language(elt){
-        if(elt.checked){
-            document.getElementById('slt_other_language_diploma').disabled = false;
-            document.getElementById('slt_language_diploma').selectedIndex = -1;
-            document.getElementById('slt_country').selectedIndex = -1;
-            document.getElementById('slt_language_diploma').disabled=true;
-            document.getElementById('slt_country').disabled=true;
-            document.getElementById('pnl_translation').style="visibility:visible;display:block;";
-
-        }else{
-            document.getElementById('slt_other_language_diploma').disabled = true;
-            document.getElementById('slt_language_diploma').disabled=false;
-            document.getElementById('slt_country').disabled=false;
-            document.getElementById('pnl_translation').style="visibility:hidden;display:none;";
-        }
-    }
-
-    function refresh_slt_schools(select_list){
-        var sel = select_list.options[select_list.selectedIndex].text;
-        var elt = document.getElementById('slt_schools');
-        for(var i = 0 ,l = elt.options.length; i< l;i++ ){
-            if(i==0){
-                elt.options[i].style="visibility:visible;display:block";
-            }else{
-                if (sel != "-"){
-                    if((elt.options[i].title).indexOf(sel) > -1){
-                        elt.options[i].style="visibility:visible;display:block";
-                    }else{
-                        elt.options[i].style="visibility:hidden;display:none";
-                    }
-                }else{
-                    elt.options[i].style="visibility:visible;display:block";
-                }
-            }
-		}
-        if(select_list.id=='slt_cities'){
-            document.getElementById("slt_postal_codes").value="-";
-        }else{
-            if(select_list.id=='slt_postal_codes'){
-                document.getElementById("slt_cities").value="-";
-            }
-        }
-    }
-
-    function refresh_other(select_list){
-
-        var sel = select_list.options[select_list.selectedIndex].text;
-
-        if(sel != "-") {
-            document.getElementById("chb_other_school").checked = false;
-            document.getElementById("txt_CESS_other_school_name").value="";
-            document.getElementById("txt_CESS_other_school_city").value="";
-            document.getElementById("txt_CESS_other_school_postal_code").value="";
-
-            document.getElementById("txt_CESS_other_school_name").disabled=true;
-            document.getElementById("txt_CESS_other_school_city").disabled=true;
-            document.getElementById("txt_CESS_other_school_postal_code").disabled=true;
-        }
-    }
-</script>
-
 <form method="post" action="{% url 'diploma'%}">
     {% csrf_token %}
     <div>
@@ -381,5 +199,188 @@
 		}
 
 	}
+
+    function disabled_field(id,chb) {
+        if(chb.checked){
+            document.getElementById(id).disabled = false;
+        }else{
+            document.getElementById(id).disabled = true;
+        }
+    }
+
+    function disabled_field_txt(id, state){
+        if(state){
+            document.getElementById(id).disabled = true;
+        }else{
+            document.getElementById(id).disabled = false;
+        }
+    }
+
+    function disabled_reset_field_txt(id, state){
+
+        if(state){
+            document.getElementById(id).disabled = true;
+        }else{
+            document.getElementById(id).disabled = false;
+        }
+        document.getElementById(id).value="";
+    }
+
+    function display(id,state){
+        var elt = document.getElementById(id);
+        if(state){
+            elt.style = "visibility:visible;display:block;";
+        }else{
+            elt.style = "visibility:hidden;display:none;";
+        }
+    }
+
+    function display_or_hide(id,elt){
+        display(id,elt.checked);
+    }
+
+    function show_hide_parcours(elt){
+        if (elt.selectedIndex == -1)
+            return null;
+        var s= elt.options[elt.selectedIndex].text;
+        var pos = s.indexOf("-");
+        var year=""
+        if (pos > -1){
+            year = s.substring(0,pos);
+        }
+        if(year < 1994){
+            display('pnl_parcours',true);
+        }else{
+            display('pnl_parcours',false);
+        }
+    }
+
+    function show_hide_pnl_daes(){
+        //alert('show_hide_pnl_daes');
+        var elt = document.getElementById('slt_academic_year');
+        if (elt.selectedIndex == -1)
+            return null;
+
+        var s= elt.options[elt.selectedIndex].text;
+        var pos = s.indexOf("-");
+        var year=""
+        if (pos > -1){
+            year = s.substring(0,pos);
+        }
+
+        elt = document.getElementById('rdb_belgian_community_french');
+
+        if(elt.checked){
+            if(year < 1994){
+                return display('pnl_daes',true);
+            }
+        }
+        elt = document.getElementById('rdb_belgian_community_dutch');
+        if(elt.checked){
+            if(year < 1992){
+               return display('pnl_daes',true);
+            }
+        }
+        display('pnl_daes',false);
+    }
+
+    function reset_rdb(elt_name){
+        x=document.getElementsByName(elt_name);
+        var i;
+        for (i = 0; i < x.length; i++) {
+            if (x[i].type == "radio") {
+                x[i].checked = false;
+            }
+        }
+    }
+
+    function reset_chb(elt_name){
+        x=document.getElementsByName(elt_name);
+        var i;
+        for (i = 0; i < x.length; i++) {
+            if (x[i].type == "checkbox") {
+                x[i].checked = false;
+            }
+        }
+    }
+
+    function reset_radio(elt_name){
+        x=document.getElementsByName(elt_name);
+        var i;
+        for (i = 0; i < x.length; i++) {
+
+            if (x[i].type == "radio") {
+                x[i].checked = false;
+            }
+        }
+    }
+
+    function reset_input(id){
+        document.getElementById(id).value="";
+    }
+
+    function reset_select(id){
+        document.getElementById(id).selectedIndex = -1;
+    }
+
+    function enabled_other_language(elt){
+        if(elt.checked){
+            document.getElementById('slt_other_language_diploma').disabled = false;
+            document.getElementById('slt_language_diploma').selectedIndex = -1;
+            document.getElementById('slt_country').selectedIndex = -1;
+            document.getElementById('slt_language_diploma').disabled=true;
+            document.getElementById('slt_country').disabled=true;
+            document.getElementById('pnl_translation').style="visibility:visible;display:block;";
+
+        }else{
+            document.getElementById('slt_other_language_diploma').disabled = true;
+            document.getElementById('slt_language_diploma').disabled=false;
+            document.getElementById('slt_country').disabled=false;
+            document.getElementById('pnl_translation').style="visibility:hidden;display:none;";
+        }
+    }
+
+    function refresh_slt_schools(select_list){
+        var sel = select_list.options[select_list.selectedIndex].text;
+        var elt = document.getElementById('slt_schools');
+        for(var i = 0 ,l = elt.options.length; i< l;i++ ){
+            if(i==0){
+                elt.options[i].style="visibility:visible;display:block";
+            }else{
+                if (sel != "-"){
+                    if((elt.options[i].title).indexOf(sel) > -1){
+                        elt.options[i].style="visibility:visible;display:block";
+                    }else{
+                        elt.options[i].style="visibility:hidden;display:none";
+                    }
+                }else{
+                    elt.options[i].style="visibility:visible;display:block";
+                }
+            }
+		}
+        if(select_list.id=='slt_cities'){
+            document.getElementById("slt_postal_codes").value="-";
+        }else{
+            if(select_list.id=='slt_postal_codes'){
+                document.getElementById("slt_cities").value="-";
+            }
+        }
+    }
+
+    function refresh_other(select_list){
+
+        var sel = select_list.options[select_list.selectedIndex].text;
+
+        if(sel != "-") {
+            document.getElementById("chb_other_school").checked = false;
+            document.getElementById("txt_CESS_other_school_name").value="";
+            document.getElementById("txt_CESS_other_school_city").value="";
+            document.getElementById("txt_CESS_other_school_postal_code").value="";
+
+            document.getElementById("txt_CESS_other_school_name").disabled=true;
+            document.getElementById("txt_CESS_other_school_city").disabled=true;
+            document.getElementById("txt_CESS_other_school_postal_code").disabled=true;
+        }
+    }
     </script>
 {% endblock %}

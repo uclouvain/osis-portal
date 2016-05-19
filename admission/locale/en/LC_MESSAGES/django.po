@@ -720,3 +720,23 @@ msgstr "Show detail"
 
 msgid "hide_detail"
 msgstr "Hide detail"
+msgid "country"
+msgstr "Country"
+
+msgid "complete_profile_instruction"
+msgstr "Please complete your profile"
+
+msgid "mandatory_asterisk"
+msgstr "All fields marked with a * are mandatory."
+
+msgid "errors_warning"
+msgstr "There are errors"
+
+msgid "criteria_question"
+msgstr "Are you in one of these situations"
+
+msgid "wrong_date"
+msgstr "Wrong date "
+
+msgid "succeeded"
+msgstr "Succeeded"

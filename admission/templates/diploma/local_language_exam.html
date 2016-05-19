@@ -1,7 +1,7 @@
 {% load dictionnary %}
 {% load i18n %}
 <div class="panel panel-default" id="pnl_local_exam"
-         style="{% if application.offer_year.grade_type.grade = 'BACHELOR' or application.offer_year.grade_type.grade = 'MASTER' or application.offer_year.grade_type.grade = 'TRAINING_CERTIFICATE' %}visibility:visible;display:block; {%else%}visibility:hidden;display:none;{%endif%}">
+         style="{% if local_language_exam_needed %}visibility:visible;display:block; {%else%}visibility:hidden;display:none;{%endif%}">
     <div class="panel-heading"> {% trans 'local_language_exam' %} *</div>
     <div class="panel-body">
         <div class="row">
