@@ -24,7 +24,8 @@
 #
 ##############################################################################
 from django.conf.urls import url
-from admission.views import application, common, identification, offer, level, question, option, country, curriculum, education_institution
+from admission.views import application, common, identification, offer, level, question, option, country, curriculum, \
+    education_institution, language
 from django.contrib.auth.views import logout
 
 
@@ -69,5 +70,7 @@ urlpatterns = [
 
     url(r'^cities/$', education_institution.find_by_country),
     url(r'^universities/$', education_institution.find_by_city),
+    url(r'^langue_recognized/$', language.is_recognized),
+
 
 ]

@@ -176,7 +176,7 @@
                 <option value="-">-</option>
                 {%for language in languages %}
                  <option value="{{ language.id }}" {%if curriculum.language.id == language.id %}selected{%endif%}>{{ language.name }}</option>
-                 {%endfor%}
+                {%endfor%}
             </select>
         </div>
         <div class="col-md-6">
@@ -300,8 +300,7 @@
     <div id="pnl_diploma_foreign_files_{{curriculum.academic_year.year}}"
          style="{%if curriculum.diploma == True %}visibility:true;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
         <label>{% trans 'original_of' %} * </label>
-        <div class="row"
-             >
+        <div class="row">
             <div class="col-md-6">
                 <button type="button" class="btn btn-default" data-toggle="modal"
                         data-target="#pnl_upload_file_modal"
@@ -320,5 +319,8 @@
                 </button>
             </div>
         </div>
+    </div>
+    <div id="pnl_translation_{{curriculum.academic_year.year}}">
+        <label>{% trans 'files_translated' %} * </label>
     </div>
 </div>

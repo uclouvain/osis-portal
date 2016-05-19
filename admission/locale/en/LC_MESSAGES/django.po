@@ -789,3 +789,6 @@ msgstr "Please mention an university's name."
 
 msgid "specify"
 msgstr "Specify"
+
+msgid "files_translated"
+msgstr "A translation by a sworn translator"

@@ -435,3 +435,30 @@ $("select[id^='slt_national_institution_']" ).change(function(event) {
 
  });
 
+ $("select[id^='slt_linguistic_regime_']" ).change(function(event) {
+    var target = $(event.target);
+    var id = target.attr("id");
+    if (typeof id == 'undefined') {
+        target = target.parent();
+        id = target.attr("id");
+    }
+    year = id.replace('slt_linguistic_regime_','');
+
+    $.ajax({
+        url: "/admission/langue_recognized?language=" + target.val()
+      }).then(function(data) {
+          if(data.length >0){
+            $.each(data, function(key, value) {
+                if(value.recognized ){
+                    $("#pnl_translation_"+year).hide();
+                }else{
+                    $("#pnl_translation_"+year).show();
+                }
+
+            });
+          }
+
+      });
+
+ });
+

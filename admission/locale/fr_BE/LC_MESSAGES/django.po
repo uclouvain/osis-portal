@@ -797,3 +797,6 @@ msgstr "Merci de préciser un nom d'université."
 
 msgid "specify"
 msgstr "Préciser"
+
+msgid "files_translated"
+msgstr "Traduction par un traducteur"
