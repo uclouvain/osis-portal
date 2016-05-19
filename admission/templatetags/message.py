@@ -23,40 +23,41 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
-from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
+from django import template
+from admission import models as mdl
+from django.utils.safestring import mark_safe
+
+register = template.Library()
 
 
-GRADE_CHOICES = (
-    ('BACHELOR', _('bachelor')),
-    ('MASTER', _('master')),
-    ('DOCTORATE', _('ph_d')),
-    ('TRAINING_CERTIFICATE', _('teacher_training_certificate')),
-    ('CERTIFICATE', _('certificate')))
+@register.simple_tag
+def message_error(a, **kwargs):
+    if a is None or len(a) == 0:
+        return ''
+
+    year = kwargs['year']
+    elt_name = kwargs['param']
+    key = '%s_%s' % (elt_name, year)
+
+    ch = a.get(str(key))
+    if ch:
+        return mark_safe('<br>%s<br>' % ch)
+    else:
+        return ''
 
 
-class GradeTypeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'grade')
-    fieldsets = ((None, {'fields': ('name', 'grade')}),)
+@register.assignment_tag
+def pnl_national_education__message_error(a, **kwargs):
 
+    if a is None or len(a) == 0:
+        return False
+    keys = ['path_type', 'national_education', 'national_institution_french', 'national_institution_dutch', 'domain',
+            'subdomain', 'grade_type', 'diploma', 'result', 'credits_enrolled', 'credits_obtained']
+    year = kwargs['year']
+    for elt_name in keys:
+        key = '%s_%s' % (elt_name, year)
+        for k, v in a.items():
+            if k.startswith(key):
+                return True
+    return False
 
-class GradeType(models.Model):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    name = models.CharField(max_length=255)
-    grade = models.CharField(max_length=20, choices=GRADE_CHOICES)
-
-    def __str__(self):
-        return self.name
-
-
-def find_all():
-    return GradeType.objects.all().order_by("grade")
-
-
-def find_by_grade(grade):
-    return GradeType.objects.filter(grade=grade).order_by("name")
-
-
-def find_by_id(an_id):
-    return GradeType.objects.get(pk=an_id)

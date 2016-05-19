@@ -34,13 +34,16 @@
         {% else %}
             <ul class="nav nav-tabs">
                 <li>
-                    <a data-toggle="tab" href="#tab_profile" id="lnk_profile_tab">Votre profil</a>
+                    <a data-toggle="tab" href="#tab_profile" id="lnk_profile_tab">{%trans 'your_profile'%}</a>
                 </li>
                 <li>
                     <a data-toggle="tab" href="#tab_diploma" id="lnk_diploma_tab">{%trans 'your_diplomas'%}/{%trans 'secondary_education'%}</a>
                 </li>
+                <li>
+                    <a data-toggle="tab" href="#tab_curriculum" id="lnk_curriculum_tab">{%trans 'curriculum'%}</a>
+                </li>
                 <li class="active">
-                    <a data-toggle="tab" href="#tab_application" id="lnk_application_tab">Vos demandes</a>
+                    <a data-toggle="tab" href="#tab_application" id="lnk_application_tab">{%trans 'your_requests'%}</a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -49,6 +52,12 @@
                     <a href="{% url 'profile' %}" class="btn btn-primary"><span class="glyphicon glyphicon-user"
                                                                                         aria-hidden="true"></span>
                         Modifier votre profil</a>
+                </div>
+                <div id="tab_curriculum" class="tab-pane fade">
+                    <br>
+                    <a href="{% url 'curriculum_update' %}" class="btn btn-primary"><span class="glyphicon glyphicon-user"
+                                                                                        aria-hidden="true"></span>
+                        {% trans 'update_curriculum'%}</a>
                 </div>
                 <div id="tab_diploma" class="tab-pane fade">
                     <br>

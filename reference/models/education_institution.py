@@ -44,6 +44,7 @@ class EducationInstitution(models.Model):
     institution_type = models.CharField(max_length=20, choices=INSTITUTION_TYPE)
     postal_code = models.CharField(max_length=20)
     city = models.CharField(max_length=255)
+    country = models.ForeignKey('reference.Country')
     national_community = models.CharField(max_length=20, choices=NATIONAL_COMMUNITY_TYPES, blank=True, null=True)
     adhoc = models.BooleanField(default=False)
 
@@ -65,3 +66,14 @@ def find_by_name_city_postal_code(a_name, a_city, a_postal_code, a_national_comm
                                                city__iexact=a_city,
                                                postal_code__iexact=a_postal_code,
                                                national_community=a_national_community).first()
+
+
+def find_by_institution_type(an_institution_type, an_adhoc):
+    return EducationInstitution.objects.filter(adhoc=an_adhoc,
+                                               institution_type=an_institution_type)
+
+
+def find_by_institution_type_national_community(an_institution_type, a_national_community, an_adhoc):
+    return EducationInstitution.objects.filter(adhoc=an_adhoc,
+                                               institution_type=an_institution_type,
+                                               national_community=a_national_community)

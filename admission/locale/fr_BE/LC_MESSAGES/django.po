@@ -380,7 +380,7 @@ msgid "recto_verso_copy"
 msgstr "Vous devez fournir une copie recto-verso. Si vous avez le recto-verso dans le même fichier, veuillez joindre les 2"
 
 msgid "transcript"
-msgstr "Enrollment"
+msgstr "Relevé de notes"
 
 msgid "professional_experiences"
 msgstr "Expériences professionnelles"
@@ -494,7 +494,7 @@ msgid "question_identity"
 msgstr "Veuillez fournir au moins un numéro d'identité."
 
 msgid "legal_residence"
-msgstr "Domicile léga"
+msgstr "Domicile légal"
 
 msgid "street"
 msgstr "Rue/Avenue"
@@ -639,3 +639,130 @@ msgstr ""
  "Veuillez vérifier votre e-mail maintenant et cliquez sur le lien dans le message que vous avez reçu pour pouvoir "
  "encoder un nouveau mot de passe."
 
+msgid "country"
+msgstr "Pays"
+
+msgid "curriculum_instruction"
+msgstr ""
+  "Veuillez remplir ci-dessous pour chaque année mentionnée quelles ont été vos occupations. Chaque année d'études "
+  "(réussie ou échouée) ou chaque activité doit être complétée."
+
+msgid "complete_profile_instruction"
+msgstr "Veuillez compléter votre profil"
+
+msgid "mandatory_asterisk"
+msgstr "Tous les champs marqués d'une * sont obligatoires."
+
+msgid "errors_warning"
+msgstr "Attention il y a des erreurs."
+
+msgid "criteria_question"
+msgstr "Si vous êtes dans une des situations suivantes"
+
+msgid "wrong_date"
+msgstr "La date semble erronée"
+
+msgid "succeeded"
+msgstr "Réussite"
+
+msgid "curriculum_instruction_warning"
+msgstr ""
+ "ATTENTION, en cas de cumul d'études supérieures et d'activités lors de la même année académique, veuillez n'indiquer "
+ "que les études entreprises."
+
+msgid "curriculum_instruction_duplicate"
+msgstr ""
+ "Aidez-vous, au besoin, du bouton 'Dupliquer' pour un parcours en plusieurs années dans une même institution."
+
+msgid "path_type"
+msgstr "Type de parcours"
+
+msgid "education_community"
+msgstr "Communauté d'enseignement"
+
+msgid "university"
+msgstr "Université"
+
+msgid "domain"
+msgstr "Domaine"
+
+msgid "grade_type"
+msgstr "Type d'étude"
+
+msgid "question_year_diploma"
+msgstr "Avez-vous obtenu votre diplôme cette année-là?"
+
+msgid "obtained_result"
+msgstr "Résultat obtenu"
+
+msgid "no_result"
+msgstr "Pas de résultat"
+
+msgid "credits_enrolled"
+msgstr "Nombre de crédits inscrits"
+
+msgid "credits_acquired"
+msgstr "Nombre de crédits acquis"
+
+msgid "your_requests"
+msgstr "Vos demandes"
+
+msgid "curriculum"
+msgstr "Curriculum"
+
+msgid "update_curriculum"
+msgstr "Modifier votre curriculum"
+
+msgid "national_university"
+msgstr "Université belge"
+
+msgid "foreign_university"
+msgstr "Université étrangère"
+
+msgid "high_national_non_university"
+msgstr "Supérieur Non Universitaire belge"
+
+msgid "high_foreign_non_university"
+msgstr "Supérieur Non Universitaire étranger"
+
+msgid "other"
+msgstr "Autre"
+
+msgid "internship"
+msgstr "Stage"
+
+msgid "volunteering"
+msgstr "Bénévolat"
+
+msgid "unemployment"
+msgstr "Chômage"
+
+msgid "duplicate"
+msgstr "Dupliquer"
+
+msgid "duplicate_help"
+msgstr "Dupliquer les informations de l'année en "
+
+msgid "show_detail"
+msgstr "Montrer detail"
+
+msgid "hide_detail"
+msgstr "Masquer detail"
+
+msgid "diploma"
+msgstr "Diplome"
+
+msgid "credits_too_high"
+msgstr "Le nombre de crédits ne peut dépasser 75"
+
+msgid "credits_negative"
+msgstr "Le nombre de crédits doit être positif"
+
+msgid "subdomain"
+msgstr "Sous-domaine"
+
+msgid "question_domain_title"
+msgstr "Introduisez l'intitulé de vos études"
+
+msgid "data_duplicated"
+msgstr "Données dupliquées"

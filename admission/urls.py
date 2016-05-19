@@ -24,7 +24,7 @@
 #
 ##############################################################################
 from django.conf.urls import url
-from admission.views import application, common, identification, offer, level, question, option, country
+from admission.views import application, common, identification, offer, level, question, option, country, curriculum
 from django.contrib.auth.views import logout
 
 
@@ -43,8 +43,8 @@ urlpatterns = [
     url(r'^admission/new_password/info/$', identification.new_password_info, name='new_password_info'),
     url(r'^admission/application/([0-9]+)/$', application.application_update, name='application_update'),
     url(r'^admission/application/diploma/save/$', application.diploma_save, name='diploma'),
-    url(r'^admission/application/curriculum/read/([0-9]+)/$', application.curriculum_read, name='curriculum_read'),
-    url(r'^admission/application/diploma/save2/([0-9]+)/$', application.curriculum_save, name='curriculum'),
+    url(r'^admission/curriculum/save/$', curriculum.save, name='curriculum'),
+    url(r'^admission/curriculum/update/$', curriculum.update, name='curriculum_update'),
     url(r'^admission/application/diploma/update/$', application.diploma_update, name='diploma_update'),
     url(r'^admission/offer/$', offer.offer_selection, name='offer_selection'),
     url(r'^admission/offer/save/$', application.save_application_offer, name='save_offer_selection'),

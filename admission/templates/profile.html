@@ -32,11 +32,11 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <h2 class="error">Veuillez compléter votre profil</h2>
-        <h5>Tous les champs marqués d'une * sont obligatoires</h5>
+        <h2 class="error">{% trans 'complete_profile_instruction'%}</h2>
+        <h5>{% trans 'mandatory_asterisk'%}</h5>
         <form method="post" action="{% url 'profile' %}">
             {% csrf_token %}
-            <font class="error">{% if person_form.errors %}Attention il y a des erreurs.{%endif%}</font>
+            <font class="error">{% if person_form.errors %}{% trans 'errors_warning'%}{%endif%}</font>
             <br>
             <br>
             <button type="submit" id="bt_submit_profile" class="btn btn-primary" role="button" name="save"
@@ -178,7 +178,7 @@
                     <div id="pnl_assimilation_criteria"
                          style="visibility:hidden;display:none;">
                         <br>
-                        Si vous êtes dans une des situations suivantes :
+                        {% trans 'criteria_question'%} :
                         <ol>
                             {% for criteria in assimilationCriteria %}
 
@@ -302,12 +302,12 @@
             <div class="panel panel-default">
                 <div class="panel-heading">{% trans 'postal_address'%}</div>
                 <div class="panel-body">
-                    Adresse de contact est la même que votre domicile légal?
+                    {% trans 'question_address'%}
                     <br>
                     <br>
                     <div class="row">
                         <div class="col-md-4">
-                            {% trans 'question_address'%}
+
                             <div>
                                 <label class="radio-inline">
                                     <input type="radio" id="rd_same_contact_legal_addr_true"
@@ -423,13 +423,13 @@
                                 <label class="radio-inline">
                                     <input type="radio" id="rd_previous_enrollment_true" name="previous_enrollment"
                                            value="true" onclick="display('pnl_previous_enrollment',true);"
-                                           {% if previous_enrollment %}checked{% else %}{% endif %}> Oui
+                                           {% if previous_enrollment %}checked{% else %}{% endif %}> {% trans 'yes'%}
 
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" id="rd_previous_enrollment_false" name="previous_enrollment"
                                            value="false" onclick="display('pnl_previous_enrollment',false);"
-                                           {% if previous_enrollment%}{% else %}checked{% endif %}> Non
+                                           {% if previous_enrollment%}{% else %}checked{% endif %}> {% trans 'no'%}
                                 </label>
                             </div>
                         </div>
@@ -450,7 +450,7 @@
                                 <br>
                                 <input id="txt_ucl_last_year" name="ucl_last_year" size="10"
                                        value="{{ person.ucl_last_year| default_if_none:''}}" maxlength="9">
-                                <font class="error">{{ person_form.ucl_last_year.errors|striptags }}</font>
+                                <br><font class="error">{{ person_form.ucl_last_year.errors|striptags }}</font>
                             </div>
                         </div>
                     </div>
@@ -459,7 +459,7 @@
 
             <button type="submit" id="bt_profile" class="btn btn-primary" role="button" name="save_down"
                     title="{% trans 'save'%}">
-                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> {% trans 'Save'%}
+                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> {% trans 'save'%}
             </button>
 
             <button type="submit" id="bt_next_step" class="btn btn-default" role="button" name="next_step_down"

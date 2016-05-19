@@ -23,40 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
-from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
+from django import template
+
+register = template.Library()
 
 
-GRADE_CHOICES = (
-    ('BACHELOR', _('bachelor')),
-    ('MASTER', _('master')),
-    ('DOCTORATE', _('ph_d')),
-    ('TRAINING_CERTIFICATE', _('teacher_training_certificate')),
-    ('CERTIFICATE', _('certificate')))
-
-
-class GradeTypeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'grade')
-    fieldsets = ((None, {'fields': ('name', 'grade')}),)
-
-
-class GradeType(models.Model):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    name = models.CharField(max_length=255)
-    grade = models.CharField(max_length=20, choices=GRADE_CHOICES)
-
-    def __str__(self):
-        return self.name
-
-
-def find_all():
-    return GradeType.objects.all().order_by("grade")
-
-
-def find_by_grade(grade):
-    return GradeType.objects.filter(grade=grade).order_by("name")
-
-
-def find_by_id(an_id):
-    return GradeType.objects.get(pk=an_id)
+@register.filter
+def add(year, number):
+    return int(year) + int(number)

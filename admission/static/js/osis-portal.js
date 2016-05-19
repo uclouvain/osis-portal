@@ -343,6 +343,27 @@ function display(id,state){
     }
 }
 
+function reset_radio(elt_name){
+    x=document.getElementsByName(elt_name);
+    var i;
+    for (i = 0; i < x.length; i++) {
+
+        if (x[i].type == "radio") {
+            x[i].checked = false;
+        }
+    }
+}
+
+function disabled_reset_field_txt(id, state){
+
+    if(state){
+        document.getElementById(id).disabled = true;
+    }else{
+        document.getElementById(id).disabled = false;
+    }
+    document.getElementById(id).value="";
+}
+
 $("#slt_nationality").change(function() {
    $.ajax({
        url: "/admission/country?nationality=" + $("#slt_nationality").val()
