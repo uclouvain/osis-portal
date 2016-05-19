@@ -29,17 +29,19 @@ from django.utils.translation import ugettext_lazy as _
 from admission.models import form
 
 
+NATIONAL_COMMUNITY_TYPES = (
+    ('FRENCH', 'Communauté française de Belgique'),
+    ('GERMAN', 'Communauté germanophone'),
+    ('DUTCH', 'Communauté flamande'),
+    )
+
 class SecondaryEducationAdmin(admin.ModelAdmin):
     list_display = ('person', 'national')
     #fieldsets = ((None, {'fields': ('person', 'national')}),)
 
 
 class SecondaryEducation(models.Model):
-    NATIONAL_COMMUNITY_TYPES = (
-        ('FRENCH', 'Communauté française de Belgique'),
-        ('GERMAN', 'Communauté germanophone'),
-        ('DUTCH', 'Communauté flamande'),
-        )
+
 
     RESULT_TYPE = (('LOW', 'Moins de 65%'),
                    ('MIDDLE', 'entre 65% et 75%'),

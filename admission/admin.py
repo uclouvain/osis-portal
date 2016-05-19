@@ -74,3 +74,6 @@ admin.site.register(properties.Properties,
 
 admin.site.register(secondary_education.SecondaryEducation,
                     secondary_education.SecondaryEducationAdmin)
+
+admin.site.register(curriculum.Curriculum,
+                    curriculum.CurriculumAdmin)

@@ -67,3 +67,7 @@ def current_academic_year():
 
 def find_by_id(id):
     return AcademicYear.objects.get(pk=id)
+
+
+def find_by_year(a_year):
+    return AcademicYear.objects.get(year=a_year)

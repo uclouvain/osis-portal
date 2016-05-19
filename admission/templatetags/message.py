@@ -23,22 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models import academic_year
-from admission.models import answer
-from admission.models import application
-from admission.models import assimilation_criteria
-from admission.models import curriculum
-from admission.models import domain
-from admission.models import form
-from admission.models import grade_type
-from admission.models import message_template
-from admission.models import offer_year
-from admission.models import offer_year_calendar
-from admission.models import option
-from admission.models import person
-from admission.models import person_address
-from admission.models import person_assimilation_criteria
-from admission.models import properties
-from admission.models import question
-from admission.models import secondary_education
-from admission.models import supported_languages
+from django import template
+from admission import models as mdl
+from django.utils.safestring import mark_safe
+
+register = template.Library()
+
+
+@register.simple_tag
+def message_error(a, **kwargs):
+    if a is None or len(a) == 0:
+        return ''
+
+    year = kwargs['year']
+    elt_name = kwargs['param']
+    key = '%s_%s' % (elt_name, year)
+
+    ch = a.get(str(key))
+    if ch:
+        return mark_safe('<br>%s' % ch)
+    else:
+        return ''
