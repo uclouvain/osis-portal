@@ -78,10 +78,10 @@ class Person(models.Model):
 
 def find_by_user(user):
     try:
-        person_result = Person.objects.filter(user__id=user.id).first()
+        person = Person.objects.get(user=user)
     except ObjectDoesNotExist:
         return None
-    return person_result
+    return person
 
 
 def find_by_activation_code(activation_code):

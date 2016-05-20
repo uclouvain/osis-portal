@@ -174,15 +174,22 @@ def new_password(request):
         try:
             user = User.objects.get(username=email)
             if user:
-                person = mdl.person.find_by_user(user)
-                if not user.is_active:
-                    form.errors['email'] = "Votre compte n\'a pas encore été activé"
-                    return render(request, "new_password.html", {'form': form})
-                else:
-                    person.activation_code = uuid.uuid4()
-                    person.save()
+                if user.is_active:
+                    person = mdl.person.find_by_user(user)
+                    if person:
+                        person.activation_code = uuid.uuid4()
+                        person.save()
+                    else:
+                        person = mdl.person.Person()
+                        person.user = user
+                        person.activation_code = uuid.uuid4()
+                        person.save()
+
                     send_mail.new_password(request, str(person.activation_code), user.email)
                     return HttpResponseRedirect(reverse('new_password_info'))
+                else:
+                    form.errors['email'] = "Votre compte n\'a pas encore été activé"
+                    return render(request, "new_password.html", {'form': form})
             else:
                 form.errors['email'] = "L'adresse email encodée ne correspond à aucun utilisateur"
                 return render(request, "new_password.html", {'form': form})
