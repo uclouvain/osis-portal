@@ -242,8 +242,7 @@ def login_admission(request, *args, **kwargs):
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
 
-    extra_context = {}
-    extra_context['form_new'] = NewAccountForm()
+    extra_context = {'form_new': NewAccountForm()}
     number1 = randint(1, 20)
     extra_context['number1'] = number1
     number2 = randint(1, 20)

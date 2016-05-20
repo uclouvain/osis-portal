@@ -32,6 +32,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
+
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('user', 'birth_date', 'gender')
     fieldsets = ((None, {'fields': ('user', 'birth_date', 'gender', 'language')}),)
