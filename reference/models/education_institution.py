@@ -33,7 +33,8 @@ class EducationInstitutionAdmin(admin.ModelAdmin):
 
 class EducationInstitution(models.Model):
     INSTITUTION_TYPE = (('SECONDARY', 'Secondaire'),
-                        ('UNIVERSITY', 'University'))
+                        ('UNIVERSITY', 'University'),
+                        ('HIGHER_NON_UNIVERSITY', 'Higher non-university'))
 
     NATIONAL_COMMUNITY_TYPES = (
         ('FRENCH', 'Communauté française de Belgique'),
@@ -41,7 +42,7 @@ class EducationInstitution(models.Model):
         ('DUTCH', 'Communauté flamande'),
         )
     name = models.CharField(max_length=100)
-    institution_type = models.CharField(max_length=20, choices=INSTITUTION_TYPE)
+    institution_type = models.CharField(max_length=25, choices=INSTITUTION_TYPE)
     postal_code = models.CharField(max_length=20)
     city = models.CharField(max_length=255)
     country = models.ForeignKey('reference.Country', blank=True, null=True)
