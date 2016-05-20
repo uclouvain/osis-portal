@@ -188,7 +188,7 @@
         <div>
             <label class="radio-inline">
                 <input type="radio"
-                       name="corresponds_to_domain_{{curriculum.academic_year.year}}"
+                       name="corresponds_to_domain_foreign_{{curriculum.academic_year.year}}"
                        id="rdb_corresponds_to_domain_true_{{curriculum.academic_year.year}}"
                        value="true"
                        {%if curriculum.diploma_title %}checked{%endif%}
@@ -197,7 +197,7 @@
             </label>
             <label class="radio-inline">
                 <input type="radio"
-                       name="corresponds_to_domain_{{curriculum.academic_year.year}}"
+                       name="corresponds_to_domain_foreign_{{curriculum.academic_year.year}}"
                        id="rdb_corresponds_to_domain_false_{{curriculum.academic_year.year}}" value="false"
                        {%if not curriculum.diploma_title %}checked{%endif%}
                        onclick="disabled_reset_field_txt('txt_diploma_title_{{curriculum.academic_year.year}}',true);"

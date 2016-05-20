@@ -792,3 +792,6 @@ msgstr "Specify"
 
 msgid "files_translated"
 msgstr "A translation by a sworn translator"
+
+msgid "establishment"
+msgstr "Establishment"

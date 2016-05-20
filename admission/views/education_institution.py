@@ -57,8 +57,22 @@ def find_by_city(request):
     # country = request.GET['country']
 
     if city != "-":
-        education_institutions = mdl_reference.education_institution.find_by_city(city)
+        education_institutions = mdl_reference.education_institution.find_by_city_isocode(city, 'BE')
     else:
         education_institutions = mdl_reference.education_institution.find_education_institution_by_adhoc(False)
+    serializer = EducationInstitutionSerializer(education_institutions, many=True)
+    return JSONResponse(serializer.data)
+
+
+@csrf_exempt
+def find_national_by_city_type(request):
+    city = request.GET['city']
+    print(city)
+    if city != "-":
+        education_institutions = mdl_reference.education_institution\
+            .find_by_institution_city_type_iso_code(city, 'HIGHER_NON_UNIVERSITY', 'BE', False)
+    else:
+        education_institutions = mdl_reference.education_institution.find_education_institution_by_adhoc(False)
+    print(education_institutions)
     serializer = EducationInstitutionSerializer(education_institutions, many=True)
     return JSONResponse(serializer.data)

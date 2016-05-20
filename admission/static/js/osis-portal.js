@@ -464,3 +464,59 @@ $("select[id^='slt_national_institution_']" ).change(function(event) {
 
  });
 
+function disabled_field(id,chb) {
+    if(chb.checked){
+        document.getElementById(id).disabled = false;
+    }else{
+        document.getElementById(id).disabled = true;
+    }
+}
+
+function disabled_field_specify(id, state) {
+alert(state);
+    if(! state){
+        document.getElementById(id).disabled = false;
+    }else{
+        document.getElementById(id).disabled = true;
+    }
+}
+
+function reset_select_state(id, state){
+    if(state.checked){
+        document.getElementById(id).selectedIndex = -1;
+    }
+}
+
+function reset_input(id){
+    document.getElementById(id).value="";
+}
+
+ $("select[id^='slt_national_high_non_university_institution_city_']" ).change(function(event) {
+    var target = $(event.target);
+    var id = target.attr("id");
+
+    if (typeof id == 'undefined') {
+        target = target.parent();
+        id = target.attr("id");
+    }
+
+    year = id.replace('slt_national_high_non_university_institution_city_','');
+
+
+    $("#slt_national_high_non_university_institution_"+year).find("option")
+        .remove()
+       .end();
+
+    $.ajax({
+        url: "/admission/highnonuniversity?city=" + target.val()
+      }).then(function(data) {
+          if(data.length >0){
+          $("<option></option>").attr("value","-").append("-").appendTo("#slt_national_high_non_university_institution_"+year);
+            $.each(data, function(key, value) {
+                $("<option></option>").attr("value",value.id).append(value.name).appendTo("#slt_national_high_non_university_institution_"+year);
+            });
+          }
+
+      });
+
+ });

@@ -94,3 +94,24 @@ def find_by_city(a_city):
 
 def find_by_country_city_name(a_country, a_city, a_name):
     return EducationInstitution.objects.filter(country=a_country, city=a_city, name=a_name, adhoc=False).first()
+
+
+def find_by_institution_type_iso_code(an_institution_type, iso_code,an_adhoc):
+    return EducationInstitution.objects.filter(adhoc=an_adhoc,
+                                               institution_type=an_institution_type,
+                                               country__iso_code=iso_code)
+
+
+def find_by_isocode_type(an_iso_code, an_institution_type, an_adhoc):
+    return EducationInstitution.objects.filter(country__iso_code=an_iso_code, institution_type=an_institution_type, adhoc=an_adhoc).distinct('city').order_by('city')
+
+
+def find_by_institution_city_type_iso_code(a_city, an_institution_type, iso_code,an_adhoc):
+    return EducationInstitution.objects.filter(city=a_city,
+                                               adhoc=an_adhoc,
+                                               institution_type=an_institution_type,
+                                               country__iso_code=iso_code)
+
+
+def find_by_city_isocode(a_city, iso_code):
+    return EducationInstitution.objects.filter(city=a_city, country__iso_code=iso_code).order_by('name')

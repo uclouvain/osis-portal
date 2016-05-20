@@ -200,14 +200,6 @@
 
 	}
 
-    function disabled_field(id,chb) {
-        if(chb.checked){
-            document.getElementById(id).disabled = false;
-        }else{
-            document.getElementById(id).disabled = true;
-        }
-    }
-
     function disabled_field_txt(id, state){
         if(state){
             document.getElementById(id).disabled = true;
@@ -315,9 +307,6 @@
         }
     }
 
-    function reset_input(id){
-        document.getElementById(id).value="";
-    }
 
     function reset_select(id){
         document.getElementById(id).selectedIndex = -1;

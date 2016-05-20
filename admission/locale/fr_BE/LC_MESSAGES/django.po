@@ -800,3 +800,6 @@ msgstr "Préciser"
 
 msgid "files_translated"
 msgstr "Traduction par un traducteur"
+
+msgid "establishment"
+msgstr "Etablissement"
