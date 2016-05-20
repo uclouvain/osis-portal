@@ -450,9 +450,11 @@ $("select[id^='slt_national_institution_']" ).change(function(event) {
           if(data.length >0){
             $.each(data, function(key, value) {
                 if(value.recognized ){
-                    $("#pnl_translation_"+year).hide();
+                    $("#pnl_translation_"+year).css('visibility', 'hidden').css('display','none');
+                    $("#hdn_language_"+year).val('True');
                 }else{
-                    $("#pnl_translation_"+year).show();
+                    $("#pnl_translation_"+year).css('visibility', 'visible').css('display','block');
+                    $("#hdn_language_"+year).val('False');
                 }
 
             });

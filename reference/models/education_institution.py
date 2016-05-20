@@ -80,7 +80,7 @@ def find_by_institution_type_national_community(an_institution_type, a_national_
 
 
 def find_countries():
-    return EducationInstitution.objects.all().distinct('country')
+    return EducationInstitution.objects.all().exclude(country__iso_code="BE").distinct('country')
 
 
 def find_by_country(a_country):

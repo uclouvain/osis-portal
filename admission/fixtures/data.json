@@ -116,10 +116,10 @@
 
 
 
-  {"model": "reference.country", "pk":1, "fields": {"name" :"Belgique", "european_union" : "True" ,"iso_code" : "1"}},
-  {"model": "reference.country", "pk":2, "fields": {"name" :"France" , "european_union" : "True"  ,"iso_code" : "2"}},
-  {"model": "reference.country", "pk":3, "fields": {"name" :"Brésil" , "european_union" : "False" ,"iso_code" : "3"}},
-  {"model": "reference.country", "pk":4, "fields": {"name" :"Russie" , "european_union" : "False" ,"iso_code" : "4"}},
+  {"model": "reference.country", "pk":1, "fields": {"name" :"Belgique", "european_union" : "True" ,"iso_code" : "BE", "nationality" : "belge"}},
+  {"model": "reference.country", "pk":2, "fields": {"name" :"France" , "european_union" : "True"  ,"iso_code" : "FR", "nationality" : "française"}},
+  {"model": "reference.country", "pk":3, "fields": {"name" :"Brésil" , "european_union" : "False" ,"iso_code" : "BR", "nationality" : "brésilienne"}},
+  {"model": "reference.country", "pk":4, "fields": {"name" :"Russie" , "european_union" : "False" ,"iso_code" : "RU", "nationality" : "russe"}},
 
   {"model": "reference.educationinstitution", "fields": {"name" :"ATHENEE ROYAL LUCIENNE TELLIER" ,
                                               "institution_type":"SECONDARY",

@@ -60,13 +60,13 @@ def save(request):
 
     local_universities_dutch = mdl_reference.education_institution\
         .find_by_institution_type_national_community('UNIVERSITY', 'DUTCH', False)
-
+    universities_cities = []
+    universities  = []
     if save_step or next_step:
-        is_valid, validation_messages, curricula, universities_cities,universities = validate_fields_form(request)
+        is_valid, validation_messages, curricula, universities_cities, universities = validate_fields_form(request)
         if is_valid:
             message_success = _('msg_info_saved')
             for curriculum in curricula:
-                print('ll:', curriculum.language)
                 curriculum.save()
         else:
             return render(request, "curriculum.html", {"curricula":                 curricula,
@@ -78,6 +78,7 @@ def save(request):
                                            "validation_messages":       validation_messages,
                                            "message_success":           message_success,
                                            "languages":                 mdl_reference.language.find_languages()})
+
     #Get the data in bd
     a_person = mdl.person.find_by_user(request.user)
     first_academic_year_for_cv = None
@@ -103,7 +104,6 @@ def save(request):
             curriculum.academic_year = academic_year
         curricula.append(curriculum)
         year = year + 1
-
 
     return render(request, "curriculum.html", {"curricula":                 curricula,
                                                "local_universities_french": local_universities_french,
@@ -450,11 +450,11 @@ def validate_foreign_university_fields_form(request, curriculum, curriculum_year
     if request.POST.get('diploma_title_%s' % curriculum_year):
         curriculum.diploma_title = request.POST.get('diploma_title_%s' % curriculum_year)
 
-    if request.POST.get('diploma_%s' % curriculum_year) is None:
-        validation_messages['diploma_%s' % curriculum_year] = _('mandatory_field')
+    if request.POST.get('diploma_foreign_%s' % curriculum_year) is None:
+        validation_messages['diploma_foreign_%s' % curriculum_year] = _('mandatory_field')
         is_valid = False
     else:
-        if request.POST.get('diploma_%s' % curriculum_year) == "true":
+        if request.POST.get('diploma_foreign_%s' % curriculum_year) == "true":
             curriculum.diploma = True
 
     if request.POST.get('result_%s' % curriculum_year) is None \

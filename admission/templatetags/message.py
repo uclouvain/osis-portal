@@ -66,7 +66,7 @@ def pnl_national_education__message_error(a, **kwargs):
 def pnl_foreign_education_message_error(a, **kwargs):
     if a is None or len(a) == 0:
         return False
-    keys = ['path_type', 'foreign_institution_country', 'foreign_institution', 'foreign_institution_city']
+    keys = ['path_type', 'foreign_institution_country', 'foreign_institution', 'foreign_institution_city', 'diploma_foreign']
     year = kwargs['year']
     for elt_name in keys:
         key = '%s_%s' % (elt_name, year)
