@@ -23,26 +23,3 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-from couchbase import Couchbase
-from pprint import pprint
-import json
-
-
-def couchbase_insert(json_datas):
-    cb = Couchbase.connect(bucket='default')
-    data = json.loads(json_datas.decode("utf-8"))
-    key = "{0}-{1}".format(
-        data['id'],
-        data['name'].replace(' ', '_').lower()
-    )
-    print('inserting datas in couchDB...')
-    cb.set(key, data)
-    print('Done.')
-    print('getting datas just inserted in couchDB...')
-    result = cb.get(key)
-    pprint(result.value, indent=4)
-    print('Done.')
-    print('deleting datas just inserted in couchDB...')
-    cb.delete(key)
-    print('Done.')

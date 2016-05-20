@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -23,26 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-from couchbase import Couchbase
-from pprint import pprint
-import json
+from dashboard import models as mdl
+from dashboard.document import paper_sheet
 
 
-def couchbase_insert(json_datas):
-    cb = Couchbase.connect(bucket='default')
-    data = json.loads(json_datas.decode("utf-8"))
-    key = "{0}-{1}".format(
-        data['id'],
-        data['name'].replace(' ', '_').lower()
-    )
-    print('inserting datas in couchDB...')
-    cb.set(key, data)
-    print('Done.')
-    print('getting datas just inserted in couchDB...')
-    result = cb.get(key)
-    pprint(result.value, indent=4)
-    print('Done.')
-    print('deleting datas just inserted in couchDB...')
-    cb.delete(key)
-    print('Done.')
+def print_scores(request):
+    global_id = "1111"
+    document = mdl.score_encoding.get_document(global_id)
+    return paper_sheet.build_pdf(document.value)
