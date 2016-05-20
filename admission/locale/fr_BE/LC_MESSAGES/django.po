@@ -294,6 +294,9 @@ msgstr "Veuillez joindre l'attestation de réussite ou la preuve d'inscription"
 msgid "institution"
 msgstr "Etablissement"
 
+msgid "institution_identification"
+msgstr "Université catholique de Louvain"
+
 msgid "which_community"
 msgstr ""
 "Dans quelle Communauté avez-vous suivi(ou suivez-vous) la dernière année de "
