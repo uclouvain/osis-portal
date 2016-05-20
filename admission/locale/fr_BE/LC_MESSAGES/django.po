@@ -803,3 +803,15 @@ msgstr "Traduction par un traducteur"
 
 msgid "establishment"
 msgstr "Etablissement"
+
+msgid "higher_non_university"
+msgstr "Supérieur Non-Universitaire"
+
+msgid "study_systems"
+msgstr "Système d'études"
+
+msgid "social_advancement"
+msgstr "Promotion social"
+
+msgid "full_exercise"
+msgstr "Plein exercice"

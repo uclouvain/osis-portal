@@ -57,6 +57,17 @@ class Curriculum(models.Model):
             ('OTHER', _('other')),
             )
 
+    GRADE_TYPE_NO_UNIVERSITY = (
+        ('HIGHER_NON_UNIVERSITY',_('higher_non_university')),
+        ('BACHELOR',_('bachelor')),
+        ('MASTER',_('master')),
+        ('OTHER',_('other'))
+    )
+
+    STUDY_SYSTEM = (
+        ('SOCIAL_ADVANCEMENT',_('social_advancement')),
+        ('FULL_EXERCISE',_('full_exercise'))
+    )
     person = models.ForeignKey('Person')
     academic_year = models.ForeignKey('AcademicYear')
     path_type = models.CharField(max_length=25, choices=PATH_TYPES)
@@ -66,6 +77,7 @@ class Curriculum(models.Model):
     domain = models.ForeignKey('Domain', blank=True, null=True, related_name='Curriculum_domain')
     sub_domain = models.ForeignKey('Domain', blank=True, null=True, related_name='Curriculum_sub_domain')
     grade_type = models.ForeignKey('GradeType', blank=True, null=True)
+    grade_type_no_university = models.CharField(max_length=25, choices=GRADE_TYPE_NO_UNIVERSITY, blank=True, null=True)
     result = models.CharField(max_length=20, choices=RESULT_TYPE, blank=True, null=True)
     credits_enrolled = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     credits_obtained = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
@@ -74,6 +86,7 @@ class Curriculum(models.Model):
     activity_type = models.CharField(max_length=255, choices=ACTIVITY_TYPES, blank=True, null=True)
     activity = models.CharField(max_length=255, blank=True, null=True)
     activity_place = models.CharField(max_length=255, blank=True, null=True)
+    study_system = models.CharField(max_length=25, choices=STUDY_SYSTEM, blank=True, null=True)
 
 
 def find_by_id(an_id):

@@ -795,3 +795,15 @@ msgstr "A translation by a sworn translator"
 
 msgid "establishment"
 msgstr "Establishment"
+
+msgid "higher_non_university"
+msgstr "Higher non university"
+
+msgid "study_systems"
+msgstr "Study systems"
+
+msgid "social_advancement"
+msgstr "Social advancement"
+
+msgid "full_exercise"
+msgstr "Full exercise"
