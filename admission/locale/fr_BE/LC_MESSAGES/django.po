@@ -811,7 +811,10 @@ msgid "study_systems"
 msgstr "Système d'études"
 
 msgid "social_advancement"
-msgstr "Promotion social"
+msgstr "Promotion sociale"
 
 msgid "full_exercise"
 msgstr "Plein exercice"
+
+msgid "undefined"
+msgstr "Non-précisé"

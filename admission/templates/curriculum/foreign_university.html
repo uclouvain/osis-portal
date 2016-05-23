@@ -3,7 +3,6 @@
 {% load message %}
 {% load get_at_index %}
 
-{{pnl_foreign_detail_error}}
 <div id="pnl_foreign_education_{{curriculum.academic_year.year}}"
      style="{%if curriculum.path_type = 'FOREIGN_UNIVERSITY' or pnl_foreign_detail_error %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
     <br>
@@ -112,8 +111,8 @@
             <label>{% trans 'domain' %} *</label>
             <div>
                 <select class="form-control"
-                        id="slt_domain_{{curriculum.academic_year.year}}"
-                        name="domain_{{curriculum.academic_year.year}}"
+                        id="slt_domain_foreign_{{curriculum.academic_year.year}}"
+                        name="domain_foreign_{{curriculum.academic_year.year}}"
                         onchange="refresh_pnl_subdomain(this,{{curriculum.academic_year.year}});">
                     <option value="-">-</option>
                     {% for domain in domains %}
@@ -123,7 +122,7 @@
                     {% endfor %}
                 </select>
                 <font class="error" style="margin-left:5px;">
-                    {% message_error validation_messages year=curriculum.academic_year.year|lower param='domain' %}</font>
+                    {% message_error validation_messages year=curriculum.academic_year.year|lower param='domain_foreign' %}</font>
             </div>
         </div>
         <div class="col-md-4">
@@ -132,8 +131,8 @@
                 <label>{% trans 'subdomain' %} <span id="lbl_subdomain_mandatory_{{curriculum.academic_year.year}}">{%if curriculum.domain.sub_domains%}*{%endif%}</span></label>
                 <div>
                     <select class="form-control"
-                            id="slt_subdomain_{{curriculum.academic_year.year}}"
-                            name="subdomain_{{curriculum.academic_year.year}}"
+                            id="slt_subdomain_foreign_{{curriculum.academic_year.year}}"
+                            name="subdomain_foreign_{{curriculum.academic_year.year}}"
                            {%if not curriculum.domain.sub_domains %}disabled{%endif%}>
                         <option value="-">-</option>
                         {% for subdomain in subdomains %}
@@ -144,7 +143,7 @@
                     </select>
 
                     <font class="error" style="margin-left:5px;">
-                        {% message_error validation_messages year=curriculum.academic_year.year|lower param='subdomain' %}</font>
+                        {% message_error validation_messages year=curriculum.academic_year.year|lower param='subdomain_foreign' %}</font>
                 </div>
             </div>
         </div>
@@ -152,8 +151,8 @@
             <label>{% trans 'grade_type' %} *</label>
             <div>
                 <select class="form-control"
-                        id="slt_grade_type_{{curriculum.academic_year.year}}"
-                        name="grade_type_{{curriculum.academic_year.year}}">
+                        id="slt_grade_type_foreign_{{curriculum.academic_year.year}}"
+                        name="grade_type_foreign_{{curriculum.academic_year.year}}">
                     <option value="-">-</option>
                     {% for grade_type in grade_types %}
                     <option value="{{ grade_type.id }}"
@@ -162,7 +161,7 @@
                     {% endfor %}
                 </select>
                 <font class="error" style="margin-left:5px;">
-                    {% message_error validation_messages year=curriculum.academic_year.year|lower param='grade_type' %}</font>
+                    {% message_error validation_messages year=curriculum.academic_year.year|lower param='grade_type_foreign' %}</font>
             </div>
         </div>
     </div>
@@ -189,7 +188,7 @@
             <label class="radio-inline">
                 <input type="radio"
                        name="corresponds_to_domain_foreign_{{curriculum.academic_year.year}}"
-                       id="rdb_corresponds_to_domain_true_{{curriculum.academic_year.year}}"
+                       id="rdb_corresponds_to_domain_foreign_true_{{curriculum.academic_year.year}}"
                        value="true"
                        {%if curriculum.diploma_title %}checked{%endif%}
                        onclick="disabled_reset_field_txt('txt_diploma_title_{{curriculum.academic_year.year}}',false);"
@@ -198,7 +197,7 @@
             <label class="radio-inline">
                 <input type="radio"
                        name="corresponds_to_domain_foreign_{{curriculum.academic_year.year}}"
-                       id="rdb_corresponds_to_domain_false_{{curriculum.academic_year.year}}" value="false"
+                       id="rdb_corresponds_to_domain_foreign_false_{{curriculum.academic_year.year}}" value="false"
                        {%if not curriculum.diploma_title %}checked{%endif%}
                        onclick="disabled_reset_field_txt('txt_diploma_title_{{curriculum.academic_year.year}}',true);"
                 > {% trans 'no' %}
@@ -211,8 +210,8 @@
     <div>
        <label>{% trans 'question_domain_title' %}</label>
        <input type="text" class="form-control"
-              id="txt_diploma_title_{{curriculum.academic_year.year}}"
-              name="diploma_title_{{curriculum.academic_year.year}}"
+              id="txt_diploma_title_foreign_{{curriculum.academic_year.year}}"
+              name="diploma_title_foreign_{{curriculum.academic_year.year}}"
               value="{{ curriculum.diploma_title  | default_if_none:'' }}"
               {%if not curriculum.diploma_title %}disabled{%endif%}>
     </div>
@@ -278,25 +277,26 @@
         <div class="col-md-3">
             <label>{% trans 'credits_enrolled' %}</label>
             <input type="text"
-                   name="credits_enrolled_{{curriculum.academic_year.year}}"
-                   id="txt_credits_enrolled_{{curriculum.academic_year.year}}"
+                   name="credits_enrolled_foreign_{{curriculum.academic_year.year}}"
+                   id="txt_credits_enrolled_foreign_{{curriculum.academic_year.year}}"
                    value="{{ curriculum.credits_enrolled | default_if_none:'' }}"
                    class="form-control">
             <font class="error" style="margin-left:5px;">
-                {% message_error validation_messages year=curriculum.academic_year.year|lower param='credits_enrolled' %}</font>
+                {% message_error validation_messages year=curriculum.academic_year.year|lower param='credits_enrolled_foreign' %}</font>
         </div>
         <div class="col-md-3">
             <label>{% trans 'credits_acquired' %}</label>
             <input type="text"
-                   name="credits_obtained_{{curriculum.academic_year.year}}"
-                   id="txt_credits_obtained_{{curriculum.academic_year.year}}"
+                   name="credits_obtained_foreign_{{curriculum.academic_year.year}}"
+                   id="txt_credits_obtained_foreign_{{curriculum.academic_year.year}}"
                    value="{{ curriculum.credits_obtained  | default_if_none:'' }}"
                    class="form-control">
 
-            <font class="error" style="margin-left:5px;">{% message_error validation_messages year=curriculum.academic_year.year|lower param='credits_obtained' %}</font>
+            <font class="error" style="margin-left:5px;">{% message_error validation_messages year=curriculum.academic_year.year|lower param='credits_obtained_foreign' %}</font>
         </div>
     </div>
     <br>
+
     <div id="pnl_upload_{{curriculum.academic_year.year}}"
          style="{%if curriculum.diploma%}visibility:true;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
         <div id="pnl_diploma_foreign_files_{{curriculum.academic_year.year}}"
@@ -321,11 +321,14 @@
                     </button>
                 </div>
             </div>
+
         </div>
         <div id="pnl_translation_{{curriculum.academic_year.year}}"
              style="{%if curriculum.language.recognized %}visibility:hidden;display:none;{%else%}visibility:visible;display:block;{%endif%}">
             <br>
             <label>{% trans 'files_translated' %} * </label>
         </div>
+
     </div>
+
 </div>

@@ -283,6 +283,29 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
                         national_institution = mdl_reference.education_institution\
                             .find_by_id(int(request.POST.get('national_institution_dutch_%s' % curriculum_year)))
                         curriculum.national_institution = national_institution
+        if request.POST.get('domain_%s' % curriculum_year) is None \
+                or request.POST.get('domain_%s' % curriculum_year) == '-':
+            validation_messages['domain_%s' % curriculum_year] = _('mandatory_field')
+            is_valid = False
+        else:
+            domain = mdl.domain.find_by_id(int(request.POST.get('domain_%s' % curriculum_year)))
+            curriculum.domain = domain
+            if domain.sub_domains:
+                if request.POST.get('subdomain_%s' % curriculum_year) is None \
+                            or request.POST.get('subdomain_%s' % curriculum_year) == '-':
+                    validation_messages['subdomain_%s' % curriculum_year] = _('mandatory_field')
+                    is_valid = False
+                else:
+                    sub_domain = mdl.domain.find_by_id(int(request.POST.get('subdomain_%s' % curriculum_year)))
+                    curriculum.sub_domain = sub_domain
+
+        if request.POST.get('result_national_%s' % curriculum_year) is None \
+                and ((curriculum.academic_year.year < 2014) or (curriculum.academic_year.year >= 2014 and curriculum.diploma)):
+            validation_messages['result_national_%s' % curriculum_year] = _('mandatory_field')
+            is_valid = False
+        else:
+            curriculum.result = request.POST.get('result_national_%s' % curriculum_year)
+
     if curriculum.path_type == "LOCAL_HIGH_EDUCATION":
         if request.POST.get('national_education_%s' % curriculum_year):
             curriculum.national_education = request.POST.get('national_education_%s' % curriculum_year)
@@ -305,23 +328,32 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
                 national_institution = mdl_reference.education_institution\
                             .find_by_id(int(request.POST.get('national_high_non_university_institution_%s' % curriculum_year)))
                 curriculum.national_institution = national_institution
+        if request.POST.get('domain_non_university_%s' % curriculum_year) is None \
+                or request.POST.get('domain_non_university_%s' % curriculum_year) == '-':
+            validation_messages['domain_non_university_%s' % curriculum_year] = _('mandatory_field')
+            is_valid = False
+        else:
+            domain = mdl.domain.find_by_id(int(request.POST.get('domain_non_university_%s' % curriculum_year)))
+            curriculum.domain = domain
+        if request.POST.get('grade_type_no_university_%s' % curriculum_year) is None \
+                or request.POST.get('grade_type_no_university_%s' % curriculum_year) == '-':
+            validation_messages['grade_type_no_university_%s' % curriculum_year] = _('mandatory_field')
+            is_valid = False
+        else:
+            curriculum.grade_type_no_university = request.POST.get('grade_type_no_university_%s' % curriculum_year)
 
-    if request.POST.get('domain_%s' % curriculum_year) is None \
-            or request.POST.get('domain_%s' % curriculum_year) == '-':
-        validation_messages['domain_%s' % curriculum_year] = _('mandatory_field')
-        is_valid = False
-    else:
-        domain = mdl.domain.find_by_id(int(request.POST.get('domain_%s' % curriculum_year)))
-        curriculum.domain = domain
-        if domain.sub_domains:
-            if request.POST.get('subdomain_%s' % curriculum_year) is None \
-                        or request.POST.get('subdomain_%s' % curriculum_year) == '-':
-                validation_messages['subdomain_%s' % curriculum_year] = _('mandatory_field')
-                is_valid = False
-            else:
-                sub_domain = mdl.domain.find_by_id(int(request.POST.get('subdomain_%s' % curriculum_year)))
-                curriculum.sub_domain = sub_domain
+        if request.POST.get('study_systems_%s' % curriculum_year):
+            curriculum.study_system = request.POST.get('study_systems_%s' % curriculum_year)
+        else:
+            curriculum.study_system = None
 
+        if request.POST.get('result_national_%s' % curriculum_year) \
+                and request.POST.get('result_national_%s' % curriculum_year) != "-":
+            curriculum.result = request.POST.get('result_national_%s' % curriculum_year)
+        else:
+            curriculum.result = None
+
+    # common fields for belgian university and no-university curriculum
     if request.POST.get('grade_type_%s' % curriculum_year) is None \
             or request.POST.get('grade_type_%s' % curriculum_year) == '-':
         validation_messages['grade_type_%s' % curriculum_year] = _('mandatory_field')
@@ -339,13 +371,6 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
     else:
         if request.POST.get('diploma_%s' % curriculum_year) == "true":
             curriculum.diploma = True
-
-    if request.POST.get('result_national_%s' % curriculum_year) is None \
-            and ((curriculum.academic_year.year < 2014) or (curriculum.academic_year.year >= 2014 and curriculum.diploma)):
-        validation_messages['result_national_%s' % curriculum_year] = _('mandatory_field')
-        is_valid = False
-    else:
-        curriculum.result = request.POST.get('result_national_%s' % curriculum_year)
 
     if curriculum.academic_year.year >= 2014:
         if request.POST.get('credits_enrolled_%s' % curriculum_year) is None \
@@ -456,20 +481,20 @@ def validate_foreign_university_fields_form(request, curriculum, curriculum_year
     universities_cities.append(cities_list)
     universities.append(universities_list)
 
-    if request.POST.get('domain_%s' % curriculum_year) is None \
-            or request.POST.get('domain_%s' % curriculum_year) == '-':
-        validation_messages['domain_%s' % curriculum_year] = _('mandatory_field')
+    if request.POST.get('domain_foreign_%s' % curriculum_year) is None \
+            or request.POST.get('domain_foreign_%s' % curriculum_year) == '-':
+        validation_messages['domain_foreign_%s' % curriculum_year] = _('mandatory_field')
         is_valid = False
     else:
-        domain = mdl.domain.find_by_id(int(request.POST.get('domain_%s' % curriculum_year)))
+        domain = mdl.domain.find_by_id(int(request.POST.get('domain_foreign_%s' % curriculum_year)))
         curriculum.domain = domain
         if domain.sub_domains:
-            if request.POST.get('subdomain_%s' % curriculum_year) is None \
-                        or request.POST.get('subdomain_%s' % curriculum_year) == '-':
-                validation_messages['subdomain_%s' % curriculum_year] = _('mandatory_field')
+            if request.POST.get('subdomain_foreign_%s' % curriculum_year) is None \
+                        or request.POST.get('subdomain_foreign_%s' % curriculum_year) == '-':
+                validation_messages['subdomain_foreign_%s' % curriculum_year] = _('mandatory_field')
                 is_valid = False
             else:
-                sub_domain = mdl.domain.find_by_id(int(request.POST.get('subdomain_%s' % curriculum_year)))
+                sub_domain = mdl.domain.find_by_id(int(request.POST.get('subdomain_foreign_%s' % curriculum_year)))
                 curriculum.sub_domain = sub_domain
 
     if request.POST.get('grade_type_%s' % curriculum_year) is None \
@@ -497,38 +522,38 @@ def validate_foreign_university_fields_form(request, curriculum, curriculum_year
     else:
         curriculum.result = request.POST.get('result_%s' % curriculum_year)
 
-    if request.POST.get('credits_enrolled_%s' % curriculum_year) \
-            and len(request.POST.get('credits_enrolled_%s' % curriculum_year)) > 0:
+    if request.POST.get('credits_enrolled_foreign_%s' % curriculum_year) \
+            and len(request.POST.get('credits_enrolled_foreign_%s' % curriculum_year)) > 0:
             try:
-                credits = float(request.POST.get('credits_enrolled_%s' % curriculum_year)\
+                credits = float(request.POST.get('credits_enrolled_foreign_%s' % curriculum_year)\
                             .strip().replace(',', '.'))
                 curriculum.credits_enrolled = credits
                 if credits > 75:
-                    validation_messages['credits_enrolled_%s' % curriculum_year] = _('credits_too_high')
+                    validation_messages['credits_enrolled_foreign_%s' % curriculum_year] = _('credits_too_high')
                     is_valid = False
                 else:
                     if credits < 0:
-                        validation_messages['credits_enrolled_%s' % curriculum_year] = _('credits_negative')
+                        validation_messages['credits_enrolled_foreign_%s' % curriculum_year] = _('credits_negative')
                         is_valid = False
             except ValueError:
-                validation_messages['credits_enrolled_%s' % curriculum_year] = _('numeric_field')
+                validation_messages['credits_enrolled_foreign_%s' % curriculum_year] = _('numeric_field')
                 is_valid = False
 
-    if request.POST.get('credits_obtained_%s' % curriculum_year) \
-            and len(request.POST.get('credits_obtained_%s' % curriculum_year)) > 0:
+    if request.POST.get('credits_obtained_foreign_%s' % curriculum_year) \
+            and len(request.POST.get('credits_obtained_foreign_%s' % curriculum_year)) > 0:
             try:
-                credits = float(request.POST.get('credits_obtained_%s' % curriculum_year)
+                credits = float(request.POST.get('credits_obtained_foreign_%s' % curriculum_year)
                             .strip().replace(',', '.'))
                 curriculum.credits_obtained = credits
                 if credits > 75:
-                    validation_messages['credits_obtained_%s' % curriculum_year] = _('credits_too_high')
+                    validation_messages['credits_obtained_foreign_%s' % curriculum_year] = _('credits_too_high')
                     is_valid = False
                 else:
                     if credits < 0:
-                        validation_messages['credits_obtained_%s' % curriculum_year] = _('credits_negative')
+                        validation_messages['credits_obtained_foreign_%s' % curriculum_year] = _('credits_negative')
                         is_valid = False
             except ValueError:
-                validation_messages['credits_obtained_%s' % curriculum_year] = _('numeric_field')
+                validation_messages['credits_obtained_foreign_%s' % curriculum_year] = _('numeric_field')
                 is_valid = False
 
     if request.POST.get('linguistic_regime_%s' % curriculum_year) \

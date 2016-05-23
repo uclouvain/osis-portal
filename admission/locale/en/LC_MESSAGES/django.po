@@ -807,3 +807,6 @@ msgstr "Social advancement"
 
 msgid "full_exercise"
 msgstr "Full exercise"
+
+msgid "undefined"
+msgstr "Undefined"

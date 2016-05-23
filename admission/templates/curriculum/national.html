@@ -35,6 +35,7 @@
         </div>
     </div>
 </div>
+{{pnl_national_detail_error}}
 <div id="pnl_national_detail_{{curriculum.academic_year.year}}"
      style="{%if curriculum.path_type = 'LOCAL_UNIVERSITY' or curriculum.path_type = 'LOCAL_HIGH_EDUCATION' or pnl_national_detail_error %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
     <br>
@@ -69,7 +70,8 @@
             {% message_error validation_messages year=curriculum.academic_year.year|lower param='national_institution_dutch' %}</font>
         <br>
         <br>
-        <div class="row">
+        <div class="row" id="pnl_domain_university_{{curriculum.academic_year.year}}"
+             style="{%if curriculum.path_type = 'LOCAL_UNIVERSITY' or pnl_national_detail_error %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
             <div class="col-md-4">
                 <label>{% trans 'domain' %} *</label>
                 <div>
@@ -129,6 +131,7 @@
             </div>
         </div>
     </div>
+    {{curriculum.path_type}}
     <div id="pnl_local_high_education_{{curriculum.academic_year.year}}"
           style="{%if curriculum.path_type = 'LOCAL_HIGH_EDUCATION' or pnl_national_detail_error %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
         <div class="row">
@@ -192,6 +195,80 @@
         </div>
         <font class="error" style="margin-left:5px;">
             {% message_error validation_messages year=curriculum.academic_year.year|lower param='high_non_university_name' %}</font>
+    </div>
+    <br>
+    <div class="row" id="pnl_domain_no_university_{{curriculum.academic_year.year}}"
+         style="{%if curriculum.path_type = 'LOCAL_HIGH_EDUCATION' or pnl_national_detail_error %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+        <div class="col-md-4">
+            <label>{% trans 'domain' %} *</label>
+            <div>
+                <select class="form-control"
+                        id="slt_domain_non_university_{{curriculum.academic_year.year}}"
+                        name="domain_non_university_{{curriculum.academic_year.year}}">
+                    <option value="-">-</option>
+                    {% for domain in domains %}
+                    <option value="{{ domain.id }}" {%if curriculum.domain.id == domain.id %}selected{%endif%}>
+                        {{ domain }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <font class="error" style="margin-left:5px;">
+                    {% message_error validation_messages year=curriculum.academic_year.year|lower param='domain_non_university' %}</font>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label>{% trans 'grade_type' %} *</label>
+            <div>
+                <select class="form-control"
+                        id="slt_grade_type_no_university_{{curriculum.academic_year.year}}"
+                        name="grade_type_no_university_{{curriculum.academic_year.year}}">
+                    <option value="-">-</option>
+
+                    <option value="HIGHER_NON_UNIVERSITY"
+                            {%if curriculum.grade_type_no_university == 'HIGHER_NON_UNIVERSITY' %}selected{%endif%}>{% trans 'higher_non_university'%}
+                    </option>
+                    <option value="BACHELOR"
+                            {%if curriculum.grade_type_no_university == 'BACHELOR' %}selected{%endif%}>{% trans 'bachelor'%}
+                    </option>
+                    <option value="MASTER"
+                            {%if curriculum.grade_type_no_university == 'MASTER' %}selected{%endif%}>{% trans 'master'%}
+                    </option>
+                    <option value="OTHER"
+                            {%if curriculum.grade_type_no_university == 'OTHER' %}selected{%endif%}>{% trans 'other'%}
+                    </option>
+                </select>
+                <font class="error" style="margin-left:5px;">
+                    {% message_error validation_messages year=curriculum.academic_year.year|lower param='grade_type_non_university' %}</font>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <label>{% trans 'study_systems' %}</label>
+            <br>
+            <label class="radio-inline">
+                <input type="radio"
+                       name="study_systems_{{curriculum.academic_year.year}}"
+                       id="rdb_study_systems_unidefined_{{curriculum.academic_year.year}}"
+                       {{ curriculum.study_system|default_if_none:"checked" }}
+                       value="-">
+                {%trans 'undefined'%}
+            </label>
+            <label class="radio-inline">
+                <input type="radio"
+                       name="study_systems_{{curriculum.academic_year.year}}"
+                       id="rdb_study_systems_social_advancement_{{curriculum.academic_year.year}}"
+                       {%if curriculum.study_system == 'SOCIAL_ADVANCEMENT' %}checked{%endif%}
+                       value="SOCIAL_ADVANCEMENT">
+                {%trans 'social_advancement'%}
+            </label>
+            <label class="radio-inline">
+                <input type="radio"
+                       name="study_systems_{{curriculum.academic_year.year}}"
+                       id="rdb_study_systems_full_exercise_{{curriculum.academic_year.year}}"
+                       {%if curriculum.study_system == 'FULL_EXERCISE' %}checked{%endif%}
+                       value="FULL_EXERCISE">
+                {%trans 'full_exercise'%}
+            </label>
+        </div>
     </div>
     <br>
     <div class="form-group">
