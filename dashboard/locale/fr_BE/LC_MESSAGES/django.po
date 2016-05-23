@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -17,11 +16,89 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "absent_pdf_legend"
+msgstr "A=Absent"
+
+msgid "academic_year"
+msgstr "Année académique"
+
+msgid "cheating_pdf_legend"
+msgstr "T=Tricherie"
+
 msgid "dashboard"
 msgstr "Tableau de bord"
+
+msgid "deliberation_date"
+msgstr "Date de délibération"
+
+msgid "desc_lnk_scores_encoding"
+msgstr "Imprimez les feuilles des notes pour encoder les notes de vos étudiants."
+
+msgid "done_at"
+msgstr "Fait à"
+
+msgid "fax"
+msgstr "Fax"
+
+msgid "firstname"
+msgstr "Prénom"
+
+msgid "in_accordance_to_regulation"
+msgstr "Conformément aux articles 104, 109 et 111 RGEE (Règlement Général des Examens) disponible au lien suivant"
+
+msgid "institution_denomination"
+msgstr "Université catholique de Louvain"
+
+msgid "justification"
+msgstr "Justification"
+
+msgid "justification_legend"
+msgstr "Légende pour le champ 'Justification': %s"
+
+msgid "lastname"
+msgstr "Nom"
+
+msgid "learning_unit_responsible"
+msgstr "Responsable du cours"
+
+msgid "link_to_RGEE"
+msgstr "https://www.uclouvain.be/enseignement-reglements.html"
+
+msgid "none"
+msgstr "Aucun"
+
+msgid "numbered_score"
+msgstr "Note chiffrée"
+
+msgid "phone"
+msgstr "Téléphone"
+
+msgid "program"
+msgstr "Programme"
+
+msgid "registration_number"
+msgstr "Noma"
+
+msgid "return_doc_to_administrator"
+msgstr "Veuillez envoyer ce formulaire au secrétariat de l'entité gestionnaire avant le %s."
 
 msgid "scores_encoding"
 msgstr "Encodage des notes"
 
-msgid "desc_lnk_scores_encoding"
-msgstr "Imprimez les feuilles des notes pour encoder les notes de vos étudiants."
+msgid "score_legend"
+msgstr "Légende pour le champ 'Note chiffrée': %s (0=Cote de présence)"
+
+msgid "score_missing_pdf_legend"
+msgstr "?=Note manquante"
+
+msgid "scores_sheet"
+msgstr "Feuille des notes"
+
+msgid "signature"
+msgstr "Signature"
+
+msgid "the"
+msgstr "le"
+
+msgid "unauthorized_decimal"
+msgstr "Attention : décimales non autorisées pour ce cours"
