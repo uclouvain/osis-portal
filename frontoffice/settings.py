@@ -44,7 +44,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -52,12 +52,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'reference',
+    'base',
     'admission',
     'catalog',
     'enrollments',
     'dashboard',
     'rest_framework'
-]
+)
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -176,7 +177,12 @@ QUEUE_CONTEXT_ROOT = '/'
 # A relative URL will work on local , but not out of the box on the servers.
 LOGO_INSTITUTION_URL = os.path.join(BASE_DIR, "admission/static/img/logo_institution.jpg")
 
-try  :
+try:
     from frontoffice.server_settings import *
+
+    try:
+        INSTALLED_APPS = INSTALLED_APPS + SERVER_APPS
+    except NameError:
+        pass
 except ImportError:
     pass
