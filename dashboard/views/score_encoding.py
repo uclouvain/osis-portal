@@ -27,7 +27,6 @@ from dashboard import models as mdl
 from dashboard.document import paper_sheet
 
 
-def print_scores(request):
-    global_id = "1111"
+def print_scores(request, global_id):
     document = mdl.score_encoding.get_document(global_id)
     return paper_sheet.build_pdf(document.value)

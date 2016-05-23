@@ -41,8 +41,6 @@ COLS_WIDTH = [25*mm,50*mm,50*mm,25*mm,25*mm]
 STUDENTS_PER_PAGE = 24
 
 
-
-
 def add_header_footer(canvas, doc):
     """
     Add the page number
