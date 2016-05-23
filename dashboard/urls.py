@@ -23,36 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
-from django.conf.urls import url, include
-from django.contrib.auth.models import User
-from rest_framework import serializers, viewsets, routers
+from django.conf.urls import url
+from dashboard.views import main
 
-
-# Serializers define the API representation.
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ('url', 'username', 'email', 'is_staff')
-
-
-# ViewSets define the view behavior.
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
-# Routers provide a way of automatically determining the URL conf.
-router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
-
-
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    url(r'^', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^admin/', admin.site.urls),
-    url(r'^admission/', include('admission.urls')),
-    url(r'^dashboard/', include('dashboard.urls')),
+    url(r'^$', main.home, name='dashboard_home'),
+    url(r'^scores_encoding/$', main.score_encoding, name='scores_encoding'),
+    url(r'^scores_encoding/download/$', main.download_papersheet, name='scores_download'),
 ]
