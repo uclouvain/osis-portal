@@ -112,6 +112,9 @@ DATABASES = {
 }
 
 
+COUCHBASE_CONNECTION_STRING='couchbase://localhost/score_encoding'
+COUCHBASE_PASSWORD=''
+
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
