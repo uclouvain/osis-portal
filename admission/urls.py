@@ -52,7 +52,7 @@ urlpatterns = [
     url(r'^admission/offer/application/([0-9]+)/$', offer.selection_offer, name='selection_offer'),
     url(r'^admission/application/read/([0-9]+)/$', application.application_view, name='application_view'),
 
-    url(r'^country/$', country.find_by_id),
+    url(r'^country/$', country.find_by_id_json),
 
     url(r'^levels/$', level.find_by_type),
 
@@ -72,6 +72,9 @@ urlpatterns = [
     url(r'^universities/$', education_institution.find_by_city),
     url(r'^langue_recognized/$', language.is_recognized),
     url(r'^highnonuniversity/$', education_institution.find_national_by_city_type),
+
+    url(r'^high_cities/$', education_institution.find_by_country_type_adhoc),
+    url(r'^high_institutions/$', education_institution.find_high_institution_by_city),
 
 
 

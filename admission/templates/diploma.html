@@ -218,15 +218,6 @@
         document.getElementById(id).value="";
     }
 
-    function display(id,state){
-        var elt = document.getElementById(id);
-        if(state){
-            elt.style = "visibility:visible;display:block;";
-        }else{
-            elt.style = "visibility:hidden;display:none;";
-        }
-    }
-
     function display_or_hide(id,elt){
         display(id,elt.checked);
     }

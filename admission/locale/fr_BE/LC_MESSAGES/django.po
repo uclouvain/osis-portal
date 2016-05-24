@@ -818,3 +818,7 @@ msgstr "Plein exercice"
 
 msgid "undefined"
 msgstr "Non-précisé"
+
+msgid "institution_country"
+msgstr "Pays de l'établissement"
+

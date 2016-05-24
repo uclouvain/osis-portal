@@ -64,6 +64,78 @@
     <br>
     <br>
     {% for curriculum in curricula %}
+    <input type="hidden"
+           id="hdn_original_academic_year_{{curriculum.academic_year.year}}"
+           name="original_academic_year_{{curriculum.academic_year.year}}"
+           value="{{curriculum.academic_year.year}}" >
+    <input type="hidden"
+           id="hdn_original_path_type_{{curriculum.academic_year.year}}"
+           name="original_path_type_{{curriculum.academic_year.year}}"
+           value="{{curriculum.path_type}}" >
+    <input type="hidden"
+           id="hdn_original_national_education_{{curriculum.academic_year.year}}"
+           name="original_national_education_{{curriculum.academic_year.year}}"
+           value="{{curriculum.national_education}}" >
+    <input type="hidden"
+           id="hdn_original_language_id_{{curriculum.academic_year.year}}"
+           name="original_language_id_{{curriculum.academic_year.year}}"
+           value="{{curriculum.language.id}}" >
+    <input type="hidden"
+           id="hdn_original_national_institution_id_{{curriculum.academic_year.year}}"
+           name="original_national_institution_id_{{curriculum.academic_year.year}}"
+           value="{{curriculum.national_institution.id}}" >
+    <input type="hidden"
+           id="hdn_original_domain_id_{{curriculum.academic_year.year}}"
+           name="original_domain_id_{{curriculum.academic_year.year}}"
+           value="{{curriculum.domain.id}}" >
+    <input type="hidden"
+           id="hdn_original_sub_domain_id_{{curriculum.academic_year.year}}"
+           value="{{curriculum.sub_domain.id}}" >
+    <input type="hidden"
+           id="hdn_original_grade_type_id_{{curriculum.academic_year.year}}"
+           name="original_grade_type_id_{{curriculum.academic_year.year}}"
+           value="{{curriculum.grade_type.id}}" >
+    <input type="hidden"
+           id="hdn_original_grade_type_no_university_{{curriculum.academic_year.year}}"
+           name="original_grade_type_no_university_{{curriculum.academic_year.year}}"
+           value="{{curriculum.grade_type_no_university}}" >
+    <input type="hidden"
+           id="hdn_original_result_{{curriculum.academic_year.year}}"
+           name="original_result_{{curriculum.academic_year.year}}"
+           value="{{curriculum.result}}" >
+    <input type="hidden"
+           id="hdn_original_credits_enrolled_{{curriculum.academic_year.year}}"
+           name="original_credits_enrolled_{{curriculum.academic_year.year}}"
+           value="{{curriculum.credits_enrolled}}" >
+    <input type="hidden"
+           id="hdn_original_credits_obtained_{{curriculum.academic_year.year}}"
+           name="original_credits_obtained_{{curriculum.academic_year.year}}"
+           value="{{curriculum.credits_obtained}}" >
+    <input type="hidden"
+           id="hdn_original_diploma_{{curriculum.academic_year.year}}"
+           name="original_diploma_{{curriculum.academic_year.year}}"
+           value="{{curriculum.diploma}}" >
+    <input type="hidden"
+           id="hdn_original_diploma_title_{{curriculum.academic_year.year}}"
+           name="original_diploma_title_{{curriculum.academic_year.year}}"
+           value="{{curriculum.diploma_title}}" >
+    <input type="hidden"
+           id="hdn_original_activity_type_{{curriculum.academic_year.year}}"
+           name="original_activity_type_{{curriculum.academic_year.year}}"
+           value="{{curriculum.activity_type}}" >
+    <input type="hidden"
+           id="hdn_original_activity_{{curriculum.academic_year.year}}"
+           name="original_activity_{{curriculum.academic_year.year}}"
+           value="{{curriculum.activity}}" >
+    <input type="hidden"
+           id="hdn_original_activity_place_{{curriculum.academic_year.year}}"
+           name="original_activity_place_{{curriculum.academic_year.year}}"
+           value="{{curriculum.activity_place}}" >
+    <input type="hidden"
+           id="hdn_original_study_system_{{curriculum.academic_year.year}}"
+           name="original_study_system_{{curriculum.academic_year.year}}"
+           value="{{curriculum.study_system}}" >
+
         {% pnl_national_education__message_error validation_messages year=curriculum.academic_year.year as pnl_national_detail_error%}
         {% pnl_foreign_education_message_error validation_messages year=curriculum.academic_year.year as pnl_foreign_detail_error %}
         <div class="panel panel-default"
@@ -89,7 +161,6 @@
                                     <span class="glyphicon glyphicon-paste" aria-hidden="true"></span>
                                     {% trans 'duplicate'%}
                             </button>
-                            <a href="" id="btn_duplicate_{{curriculum.academic_year.year}}">duplicate</a>
                         {%endif%}
                     </div>
                     <div class="col-md-1">
@@ -129,13 +200,7 @@
                            id="rdb_path_type_local_university_{{curriculum.academic_year.year}}"
                            {%if curriculum.path_type = 'LOCAL_UNIVERSITY' %}checked{%endif%}
                            value="LOCAL_UNIVERSITY"
-                           onclick="display('pnl_national_education_{{curriculum.academic_year.year}}',true);
-                                    display('pnl_national_detail_{{curriculum.academic_year.year}}',true);
-                                    display('pnl_foreign_education_{{curriculum.academic_year.year}}',false);
-                                    display('pnl_local_university_{{curriculum.academic_year.year}}',true);
-                                    display('pnl_local_high_education_{{curriculum.academic_year.year}}',false);
-                                    display('pnl_domain_university_{{curriculum.academic_year.year}}',true);
-                                    display('pnl_domain_no_university_{{curriculum.academic_year.year}}',false);"
+
                                     > {% trans 'national_university'%}
                 </label>
                 <label class="radio-inline">
@@ -144,14 +209,7 @@
                            id="rdb_path_type_foreign_university_{{curriculum.academic_year.year}}"
                            {%if curriculum.path_type = 'FOREIGN_UNIVERSITY' %}checked{%endif%}
                            value="FOREIGN_UNIVERSITY"
-                           onclick="display('pnl_national_education_{{curriculum.academic_year.year}}',false);
-                                    display('pnl_national_detail_{{curriculum.academic_year.year}}',false);
-                                    reset_radio('national_education_{{curriculum.academic_year.year}}');
-                                    display('pnl_foreign_education_{{curriculum.academic_year.year}}',true);
-                                    display('pnl_local_university_{{curriculum.academic_year.year}}',false);
-                                    display('pnl_local_high_education_{{curriculum.academic_year.year}}',false);
-                                    display('pnl_domain_university_{{curriculum.academic_year.year}}',false);
-                                    display('pnl_domain_no_university_{{curriculum.academic_year.year}}',false);"> {% trans 'foreign_university'%}
+                         > {% trans 'foreign_university'%}
                 </label>
                 <label class="radio-inline">
                     <input type="radio"
@@ -159,13 +217,7 @@
                            id="rdb_path_type_local_high_non_university_{{curriculum.academic_year.year}}"
                            {%if curriculum.path_type = 'LOCAL_HIGH_EDUCATION' %}checked{%endif%}
                            value="LOCAL_HIGH_EDUCATION"
-                           onclick="display('pnl_national_education_{{curriculum.academic_year.year}}',true);
-                                    display('pnl_national_detail_{{curriculum.academic_year.year}}',true);
-                                    display('pnl_foreign_education_{{curriculum.academic_year.year}}',false);
-                                    display('pnl_local_university_{{curriculum.academic_year.year}}',false);
-                                    display('pnl_local_high_education_{{curriculum.academic_year.year}}',true);
-                                    display('pnl_domain_university_{{curriculum.academic_year.year}}',false);
-                                    display('pnl_domain_no_university_{{curriculum.academic_year.year}}',true);"> {% trans 'high_national_non_university'%}
+                           > {% trans 'high_national_non_university'%}
                 </label>
                 <label class="radio-inline">
                     <input type="radio"
@@ -173,34 +225,19 @@
                            id="rdb_path_type_high_foreign_non_university_{{curriculum.academic_year.year}}"
                            {%if curriculum.path_type = 'FOREIGN_HIGH_EDUCATION' %}checked{%endif%}
                            value="FOREIGN_HIGH_EDUCATION"
-                           onclick="display('pnl_national_education_{{curriculum.academic_year.year}}',false);
-                                    display('pnl_national_detail_{{curriculum.academic_year.year}}',false);
-                                    reset_radio('national_education_{{curriculum.academic_year.year}}');
-                                    display('pnl_foreign_education_{{curriculum.academic_year.year}}',false);
-                                    display('pnl_local_university_{{curriculum.academic_year.year}}',false);
-                                    display('pnl_local_high_education_{{curriculum.academic_year.year}}',false);
-                                    display('pnl_domain_university_{{curriculum.academic_year.year}}',false);
-                                    display('pnl_domain_no_university_{{curriculum.academic_year.year}}',false);"> {% trans 'high_foreign_non_university'%}
+                          > {% trans 'high_foreign_non_university'%}
                 </label>
                 <label class="radio-inline">
                     <input type="radio"
                            name="path_type_{{curriculum.academic_year.year}}"
                            id="rdb_path_type_other_{{curriculum.academic_year.year}}"
                            {%if curriculum.path_type = 'ANOTHER_ACTIVITY' %}checked{%endif%}
-                           value="ANOTHER_ACTIVITY"
-                           onclick="display('pnl_national_education_{{curriculum.academic_year.year}}',false);
-                           display('pnl_national_detail_{{curriculum.academic_year.year}}',false);
-                           reset_radio('national_education_{{curriculum.academic_year.year}}');
-                           display('pnl_foreign_education_{{curriculum.academic_year.year}}',false);
-                           display('pnl_local_university_{{curriculum.academic_year.year}}',false);
-                           display('pnl_local_high_education_{{curriculum.academic_year.year}}',false);
-                           display('pnl_domain_university{{curriculum.academic_year.year}}',false);
-                           display('pnl_domain_no_university{{curriculum.academic_year.year}}',false);"> {% trans 'other'%}
+                           value="ANOTHER_ACTIVITY""> {% trans 'other'%}
                 </label>
                 <font class="error" style="margin-left:5px;">{% message_error validation_messages year=curriculum.academic_year.year|lower param='path_type' %}</font>
                 {% include "curriculum/national.html" %}
 
-                {% include "curriculum/foreign_university.html" %}
+                {% include "curriculum/foreign.html" %}
 
               </div>
         </div>
@@ -571,7 +608,6 @@
     }
 
     function refresh_pnl_subdomain(domain, year){
-        alert('refresh_pnl_subdomain');
         var sel = domain.options[domain.selectedIndex].text;
         var elt = document.getElementById('slt_subdomain_'+year);
         var cpt = 0;
@@ -622,7 +658,6 @@
             if (typeof id == 'undefined') {
 
             }else{
-                alert('kk1');
                 if (elt.tagName == "INPUT" && (elt.type == "radio" || elt.type=="checkbox")) {
                     elt.checked = false;
                 }
@@ -639,4 +674,6 @@
     }
 
 </script>
+
+
 {% endblock %}

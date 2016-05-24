@@ -30,6 +30,7 @@ from rest_framework.renderers import JSONRenderer
 from django.views.decorators.csrf import csrf_exempt
 from reference import models as mdl_reference
 
+
 class JSONResponse(HttpResponse):
     def __init__(self, data, **kwargs):
         content = JSONRenderer().render(data)
@@ -40,7 +41,7 @@ class JSONResponse(HttpResponse):
 class EducationInstitutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = mdl_reference.education_institution.EducationInstitution
-        fields = ('id', 'name', 'postal_code', 'city', 'country')
+        fields = ('id', 'name', 'postal_code', 'city')
 
 
 @csrf_exempt
@@ -54,7 +55,6 @@ def find_by_country(request):
 @csrf_exempt
 def find_by_city(request):
     city = request.GET['city']
-    # country = request.GET['country']
 
     if city != "-":
         education_institutions = mdl_reference.education_institution.find_by_city_isocode(city, 'BE')
@@ -67,12 +67,34 @@ def find_by_city(request):
 @csrf_exempt
 def find_national_by_city_type(request):
     city = request.GET['city']
-    print(city)
     if city != "-":
         education_institutions = mdl_reference.education_institution\
             .find_by_institution_city_type_iso_code(city, 'HIGHER_NON_UNIVERSITY', 'BE', False)
     else:
         education_institutions = mdl_reference.education_institution.find_education_institution_by_adhoc(False)
     print(education_institutions)
+    serializer = EducationInstitutionSerializer(education_institutions, many=True)
+    return JSONResponse(serializer.data)
+
+
+@csrf_exempt
+def find_high_institution_by_city(request):
+    print('find_high_institution_by_city')
+    city = request.GET['city']
+    print('city', city)
+    if city != "-":
+        education_institutions = mdl_reference.education_institution.find_by_city_not_isocode(city, 'BE', 'HIGHER_NON_UNIVERSITY')
+    else:
+        education_institutions = mdl_reference.education_institution\
+            .find_education_institution_by_adhoc_type_not_isocode(False, 'HIGHER_NON_UNIVERSITY', 'BE')
+    print('education_institutions',education_institutions)
+    serializer = EducationInstitutionSerializer(education_institutions, many=True)
+    return JSONResponse(serializer.data)
+
+
+@csrf_exempt
+def find_by_country_type_adhoc(request):
+    country = request.GET['country']
+    education_institutions = mdl_reference.education_institution.find_education_institution_by_country_adhoc_type(country,False,'HIGHER_NON_UNIVERSITY')
     serializer = EducationInstitutionSerializer(education_institutions, many=True)
     return JSONResponse(serializer.data)

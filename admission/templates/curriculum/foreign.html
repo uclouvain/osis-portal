@@ -2,11 +2,12 @@
 {% load i18n %}
 {% load message %}
 {% load get_at_index %}
-
+{% load is_list %}
 <div id="pnl_foreign_education_{{curriculum.academic_year.year}}"
-     style="{%if curriculum.path_type = 'FOREIGN_UNIVERSITY' or pnl_foreign_detail_error %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+     style="{%if curriculum.path_type = 'FOREIGN_UNIVERSITY' or curriculum.path_type = 'FOREIGN_HIGH_EDUCATION' or pnl_foreign_detail_error %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
     <br>
-    <div id="pnl_university_{{curriculum.academic_year.year}}" class="row">
+    <div id="pnl_university_{{curriculum.academic_year.year}}" class="row"
+         style="{%if curriculum.path_type == 'FOREIGN_UNIVERSITY' %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
         <div class="col-md-3">
             <label>{% trans 'university_country'%}</label>
             <select class="form-control"
@@ -34,7 +35,7 @@
             </select>
         </div>
         <div class="col-md-5">
-            <label>{% trans 'university_name'%}</label>
+            <label>{% trans 'university_name'%}{{curriculum.national_institution}}</label>
              <select class="form-control"
                     id="slt_foreign_university_name_{{curriculum.academic_year.year}}"
                     name="foreign_institution_name_{{curriculum.academic_year.year}}">
@@ -42,6 +43,47 @@
                 {% for university in universities|get_at_index:forloop.counter0 %}
                 <option value="{{ university.id }}" {%if curriculum.national_institution.id == university.id %}selected{%endif%}>
                     {{ university }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div id="pnl_foreign_no_university_institution_{{curriculum.academic_year.year}}">
+        <div class="col-md-3">
+            <label>{% trans 'institution_country'%}</label>
+            <select class="form-control"
+                    id="slt_foreign_high_institution_{{curriculum.academic_year.year}}"
+                    name="foreign_high_institution_country_{{curriculum.academic_year.year}}">
+                <option value="-">-</option>
+                {% for university in foreign_high_institution_countries %}
+                <option value="{{ university.country.id }}" {%if curriculum.national_institution.country.id == university.country.id %}selected{%endif%}>
+                    {{ university.country }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label>{% trans 'city'%}</label>
+             <select class="form-control"
+                    id="slt_cities_high_{{curriculum.academic_year.year}}"
+                    name="foreign_high_institution_city_{{curriculum.academic_year.year}}">
+                <option value="-">-</option>
+                {% for city in foreign_high_institution_cities|is_list|get_at_index:forloop.counter0 %}
+                <option value="{{ city }}" {%if curriculum.national_institution.city == city %}selected{%endif%}>
+                    {{ city }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-5">
+            <label>{% trans 'institution_name'%}</label>
+             <select class="form-control"
+                    id="slt_foreign_high_name_{{curriculum.academic_year.year}}"
+                    name="foreign_high_institution_name_{{curriculum.academic_year.year}}">
+                <option value="-">-</option>
+                {% for high_institution in foreign_high_institutions|is_list|get_at_index:forloop.counter0 %}
+                <option value="{{ high_institution.id }}" {%if curriculum.national_institution.id == high_institution.id %}selected{%endif%}>
+                    {{ high_institution }}
                 </option>
                 {% endfor %}
             </select>
@@ -63,7 +105,7 @@
             </label>
         </div>
         <div class="col-md-5">
-            <label>{% trans 'specify_university_name'%}</label>
+            <label>{% trans 'institution_not_found'%}</label>
             <label class="radio-inline">
                 <input type="checkbox"
                        name="foreign_institution_name_adhoc_{{curriculum.academic_year.year}}"
@@ -191,7 +233,7 @@
                        id="rdb_corresponds_to_domain_foreign_true_{{curriculum.academic_year.year}}"
                        value="true"
                        {%if curriculum.diploma_title %}checked{%endif%}
-                       onclick="disabled_reset_field_txt('txt_diploma_title_{{curriculum.academic_year.year}}',false);"
+                       onclick="disabled_reset_field_txt('txt_diploma_title_foreign_{{curriculum.academic_year.year}}',false);"
                 > {% trans 'yes' %}
             </label>
             <label class="radio-inline">
@@ -199,7 +241,7 @@
                        name="corresponds_to_domain_foreign_{{curriculum.academic_year.year}}"
                        id="rdb_corresponds_to_domain_foreign_false_{{curriculum.academic_year.year}}" value="false"
                        {%if not curriculum.diploma_title %}checked{%endif%}
-                       onclick="disabled_reset_field_txt('txt_diploma_title_{{curriculum.academic_year.year}}',true);"
+                       onclick="disabled_reset_field_txt('txt_diploma_title_foreign_{{curriculum.academic_year.year}}',true);"
                 > {% trans 'no' %}
             </label>
             <font class="error" style="margin-left:5px;">{% message_error validation_messages year=curriculum.academic_year.year|lower param='diploma' %}</font>

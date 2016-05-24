@@ -62,10 +62,16 @@ def save(request):
         .find_by_institution_type_national_community('UNIVERSITY', 'DUTCH', False)
     universities_cities = []
     universities = []
-    national_high_non_university_institutions = mdl_reference.education_institution.find_by_institution_type_iso_code('HIGHER_NON_UNIVERSITY', 'BE', False )
-    cities_national_high_non_university_institutions = mdl_reference.education_institution.find_by_isocode_type('BE', 'HIGHER_NON_UNIVERSITY', False )
+    national_high_non_university_institutions = mdl_reference.education_institution.find_by_institution_type_iso_code('HIGHER_NON_UNIVERSITY', 'BE', False)
+    cities_national_high_non_university_institutions = mdl_reference.education_institution.find_by_isocode_type('BE', 'HIGHER_NON_UNIVERSITY', False)
+
+    foreign_high_institution_countries = mdl_reference.education_institution.find_countries_by_type_excluding_country('HIGHER_NON_UNIVERSITY', False, "BE")
+    foreign_high_institution_cities = mdl_reference.education_institution\
+        .find_by_not_isocode_type('BE', 'HIGHER_NON_UNIVERSITY', False)
+    foreign_high_institutions = mdl_reference.education_institution.find_by_institution_type_not_isocode('HIGHER_NON_UNIVERSITY', 'BE', False)
+
     if save_step or next_step:
-        is_valid, validation_messages, curricula, universities_cities, universities = validate_fields_form(request)
+        is_valid, validation_messages, curricula, universities_cities, universities, foreign_high_institution_cities, foreign_high_institutions = validate_fields_form(request)
         if is_valid:
             message_success = _('msg_info_saved')
             for curriculum in curricula:
@@ -83,7 +89,10 @@ def save(request):
                                            "universities":              universities,
                                            "cities_national_high_non_university_institutions":cities_national_high_non_university_institutions,
                                            "national_high_non_university_institutions": national_high_non_university_institutions,
-                                           "languages":                 mdl_reference.language.find_languages()})
+                                           "languages":                 mdl_reference.language.find_languages(),
+                                           "foreign_high_institution_countries": foreign_high_institution_countries,
+                                           "foreign_high_institution_cities": foreign_high_institution_cities,
+                                           "foreign_high_institutions":foreign_high_institutions})
 
     #Get the data in bd
     a_person = mdl.person.find_by_user(request.user)
@@ -124,7 +133,10 @@ def save(request):
                                                "universities":              universities,
                                                "cities_national_high_non_university_institutions":cities_national_high_non_university_institutions,
                                                "national_high_non_university_institutions": national_high_non_university_institutions,
-                                               "languages":                 mdl_reference.language.find_languages()})
+                                               "languages":                 mdl_reference.language.find_languages(),
+                                               "foreign_high_institution_countries": foreign_high_institution_countries,
+                                               "foreign_high_institution_cities": foreign_high_institution_cities,
+                                               "foreign_high_institutions": foreign_high_institutions})
 
 
 def update(request):
@@ -163,11 +175,15 @@ def update(request):
 
     local_universities_dutch = mdl_reference.education_institution\
         .find_by_institution_type_national_community('UNIVERSITY', 'DUTCH', False)
+    foreign_high_institution_countries = mdl_reference.education_institution.find_countries_by_type_excluding_country('HIGHER_NON_UNIVERSITY', False, "BE")
+    foreign_high_institution_cities = mdl_reference.education_institution.find_by_not_isocode_type("BE", "HIGHER_NON_UNIVERSITY", False)
+    foreign_high_institutions = mdl_reference.education_institution.find_by_institution_type_not_isocode('HIGHER_NON_UNIVERSITY', 'BE', False )
 
     if message:
         return home(request)
     else:
         universities_cities, universities = populate_dropdown_list(curricula)
+        foreign_high_institution_countries, foreign_high_institution_cities, foreign_high_institutions = populate_dropdown_foreign_high_list(curricula)
         national_high_non_university_institutions = mdl_reference.education_institution.find_by_institution_type_iso_code('HIGHER_NON_UNIVERSITY', 'BE', False )
         cities_national_high_non_university_institutions = mdl_reference.education_institution.find_by_isocode_type('BE', 'HIGHER_NON_UNIVERSITY', False )
         return render(request, "curriculum.html", {"curricula":                 curricula,
@@ -179,9 +195,12 @@ def update(request):
                                                    "universities_countries":    mdl_reference.education_institution.find_countries(),
                                                    "universities_cities":       universities_cities,
                                                    "universities":              universities,
-                                                   "cities_national_high_non_university_institutions":cities_national_high_non_university_institutions,
-                                                   "national_high_non_university_institutions":national_high_non_university_institutions,
-                                                   "languages":                 mdl_reference.language.find_languages()})
+                                                   "cities_national_high_non_university_institutions": cities_national_high_non_university_institutions,
+                                                   "national_high_non_university_institutions": national_high_non_university_institutions,
+                                                   "languages":                 mdl_reference.language.find_languages(),
+                                                   "foreign_high_institution_countries": foreign_high_institution_countries,
+                                                   "foreign_high_institution_cities": foreign_high_institution_cities,
+                                                   "foreign_high_institutions": foreign_high_institutions})
 
 
 def validate_fields_form(request):
@@ -189,6 +208,8 @@ def validate_fields_form(request):
     curricula = []
     universities_cities = []
     universities = []
+    high_non_universities_cities = []
+    high_non_universities_names = []
     validation_messages = {}
     a_person = mdl.person.find_by_user(request.user)
     names = [v for k, v in request.POST.items() if k.startswith('curriculum_year_')]
@@ -232,19 +253,20 @@ def validate_fields_form(request):
                                                                                          validation_messages,
                                                                                          is_valid)
             else:
-                if curriculum.path_type == 'FOREIGN_UNIVERSITY':
-                    is_valid, validation_messages, curriculum, universities_cities, universities = validate_foreign_university_fields_form(request,
+                if curriculum.path_type == 'FOREIGN_UNIVERSITY' or 'FOREIGN_HIGH_EDUCATION':
+                    is_valid, validation_messages, curriculum, universities_cities, universities, \
+                    high_non_universities_cities,high_non_universities_names = validate_foreign_university_fields_form(request,
                                                                                                         curriculum,
                                                                                                         curriculum_year,
                                                                                                         validation_messages,
                                                                                                         is_valid,
                                                                                                         universities_cities,
-                                                                                                        universities)
-                    print('tet:', curriculum.language)
+                                                                                                        universities,
+                                                                                                        high_non_universities_cities,
+                                                                                                        high_non_universities_names)
 
         curricula.append(curriculum)
-
-    return is_valid, validation_messages, curricula, universities_cities, universities
+    return is_valid, validation_messages, curricula, universities_cities, universities, high_non_universities_cities, high_non_universities_names
 
 
 def is_admission(a_person, secondary_education):
@@ -298,6 +320,13 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
                 else:
                     sub_domain = mdl.domain.find_by_id(int(request.POST.get('subdomain_%s' % curriculum_year)))
                     curriculum.sub_domain = sub_domain
+        print(request.POST.get('corresponds_to_domain_%s' % curriculum_year))
+        if request.POST.get('corresponds_to_domain_%s' % curriculum_year) == "false":
+            print(request.POST.get('diploma_title_%s' % curriculum_year))
+            if request.POST.get('diploma_title_%s' % curriculum_year) is None \
+                    or len(request.POST.get('diploma_title_%s' % curriculum_year).strip()) == 0:
+                validation_messages['diploma_title_%s' % curriculum_year] = _('mandatory_field')
+                is_valid = False
 
         if request.POST.get('result_national_%s' % curriculum_year) is None \
                 and ((curriculum.academic_year.year < 2014) or (curriculum.academic_year.year >= 2014 and curriculum.diploma)):
@@ -352,7 +381,6 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
             curriculum.result = request.POST.get('result_national_%s' % curriculum_year)
         else:
             curriculum.result = None
-
     # common fields for belgian university and no-university curriculum
     if request.POST.get('grade_type_%s' % curriculum_year) is None \
             or request.POST.get('grade_type_%s' % curriculum_year) == '-':
@@ -420,66 +448,126 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
     return is_valid, validation_messages, curriculum
 
 
-def validate_foreign_university_fields_form(request, curriculum, curriculum_year, validation_messages, is_valid, universities_cities, universities):
+def validate_foreign_university_fields_form(request, curriculum, curriculum_year, validation_messages, is_valid, universities_cities, universities, high_non_universities_cities,
+                                                                                                        high_non_universities_names):
     print('validate_foreign_university_fields_form')
     cities_list = []
     universities_list = []
+    high_non_universities_cities_list = []
+    high_non_universities_names_list = []
     national_institution = mdl_reference.education_institution.EducationInstitution()
     national_institution.adhoc = False
-    if request.POST.get('foreign_institution_country_%s' % curriculum_year) is None \
-            or request.POST.get('foreign_institution_country_%s' % curriculum_year) == "-":
-        validation_messages['foreign_institution_country_%s' % curriculum_year] = _('mandatory_field')
-        is_valid = False
-    else:
-        country = mdl_reference.country.find_by_id(int(request.POST.get('foreign_institution_country_%s' % curriculum_year) ))
-        universities_by_country = mdl_reference.education_institution.find_by_country(country)
 
-        for university in universities_by_country:
-            cities_list.append(university.city)
-
-        national_institution.country = country
-        if (request.POST.get('foreign_institution_city_%s' % curriculum_year) is None \
-                or request.POST.get('foreign_institution_city_%s' % curriculum_year) == "-") \
-                and request.POST.get('city_specify_%s' % curriculum_year) is None:
-            validation_messages['foreign_institution_city_%s' % curriculum_year] = _('mandatory_field')
+    if curriculum.path_type == 'FOREIGN_UNIVERSITY':
+        if request.POST.get('foreign_institution_country_%s' % curriculum_year) is None \
+                or request.POST.get('foreign_institution_country_%s' % curriculum_year) == "-":
+            validation_messages['foreign_institution_country_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
         else:
-            universities_by_city = mdl_reference.education_institution.find_by_city(request.POST.get('foreign_institution_city_%s' % curriculum_year))
+            country = mdl_reference.country.find_by_id(int(request.POST.get('foreign_institution_country_%s' % curriculum_year) ))
+            universities_by_country = mdl_reference.education_institution.find_by_country(country)
 
-            for university in universities_by_city:
-                universities_list.append(university)
+            for university in universities_by_country:
+                cities_list.append(university.city)
 
-            if request.POST.get('foreign_institution_city_%s' % curriculum_year) \
-                    and request.POST.get('foreign_institution_city_%s' % curriculum_year) != "-":
-                national_institution.city = request.POST.get('foreign_institution_city_%s' % curriculum_year)
-            else:
-                national_institution.city = request.POST.get('city_specify_%s' % curriculum_year)
-                national_institution.adhoc = True
-            if (request.POST.get('foreign_institution_name_%s' % curriculum_year) is None \
-                or request.POST.get('foreign_institution_name_%s' % curriculum_year) == "-") \
-                    and (request.POST.get('name_specify_%s' % curriculum_year) is None or len(request.POST.get('name_specify_%s' % curriculum_year)) == 0):
-                validation_messages['foreign_institution_%s' % curriculum_year] = _('mandatory_university_name')
+            national_institution.country = country
+            if (request.POST.get('foreign_institution_city_%s' % curriculum_year) is None \
+                    or request.POST.get('foreign_institution_city_%s' % curriculum_year) == "-") \
+                    and request.POST.get('city_specify_%s' % curriculum_year) is None:
+                validation_messages['foreign_institution_city_%s' % curriculum_year] = _('mandatory_field')
                 is_valid = False
             else:
-                if (request.POST.get('foreign_institution_name_%s' % curriculum_year)
-                        and request.POST.get('foreign_institution_name_%s' % curriculum_year) != "-"):
-                    national_institution = mdl_reference.education_institution\
-                        .find_by_id(int(request.POST.get('foreign_institution_name_%s' % curriculum_year)))
-                    national_institution = national_institution
+                universities_by_city = mdl_reference.education_institution.find_by_city(request.POST.get('foreign_institution_city_%s' % curriculum_year))
+
+                for university in universities_by_city:
+                    universities_list.append(university)
+
+                if request.POST.get('foreign_institution_city_%s' % curriculum_year) \
+                        and request.POST.get('foreign_institution_city_%s' % curriculum_year) != "-":
+                    national_institution.city = request.POST.get('foreign_institution_city_%s' % curriculum_year)
                 else:
-                    if request.POST.get('name_specify_%s' % curriculum_year) \
-                           and len(request.POST.get('name_specify_%s' % curriculum_year)) > 0:
-                        national_institution.name = request.POST.get('name_specify_%s' % curriculum_year)
-                        national_institution.adhoc = True
+                    national_institution.city = request.POST.get('city_specify_%s' % curriculum_year)
+                    national_institution.adhoc = True
+                if (request.POST.get('foreign_institution_name_%s' % curriculum_year) is None \
+                    or request.POST.get('foreign_institution_name_%s' % curriculum_year) == "-") \
+                        and (request.POST.get('name_specify_%s' % curriculum_year) is None or len(request.POST.get('name_specify_%s' % curriculum_year)) == 0):
+                    validation_messages['foreign_institution_%s' % curriculum_year] = _('mandatory_university_name')
+                    is_valid = False
+                else:
+                    if (request.POST.get('foreign_institution_name_%s' % curriculum_year)
+                            and request.POST.get('foreign_institution_name_%s' % curriculum_year) != "-"):
+                        national_institution = mdl_reference.education_institution\
+                            .find_by_id(int(request.POST.get('foreign_institution_name_%s' % curriculum_year)))
+                        national_institution = national_institution
+                    else:
+                        if request.POST.get('name_specify_%s' % curriculum_year) \
+                               and len(request.POST.get('name_specify_%s' % curriculum_year)) > 0:
+                            national_institution.name = request.POST.get('name_specify_%s' % curriculum_year)
+                            national_institution.adhoc = True
 
-    if national_institution.adhoc is True:
-        national_institution.save()
-    else:
-        national_institution = mdl_reference.education_institution.find_by_country_city_name(national_institution.country, national_institution.city, national_institution.name)
+        if national_institution.adhoc is True:
+            national_institution.save()
+        else:
+            national_institution = mdl_reference.education_institution.find_by_country_city_name(national_institution.country, national_institution.city, national_institution.name)
 
-    curriculum.national_institution = national_institution
-    universities_cities.append(cities_list)
-    universities.append(universities_list)
+        curriculum.national_institution = national_institution
+
+        universities_cities.append(cities_list)
+        universities.append(universities_list)
+    print('abant ici',curriculum_year)
+
+    if curriculum.path_type == "FOREIGN_HIGH_EDUCATION":
+        print('ici', request.POST.get('foreign_high_institution_country_%s' % curriculum_year))
+        if request.POST.get('foreign_high_institution_name_%s' % curriculum_year) \
+                and request.POST.get('foreign_high_institution_name_%s' % curriculum_year) != "-":
+            print('ici1')
+            if (request.POST.get('national_institution_locality_adhoc_%s' % curriculum_year) is None \
+                or request.POST.get('national_institution_locality_adhoc_%s' % curriculum_year) != "on") \
+                    and (request.POST.get('national_institution_name_adhoc_%s' % curriculum_year) is None \
+                         or request.POST.get('national_institution_name_adhoc_%s' % curriculum_year) != "on"):
+
+                n= mdl_reference.education_institution\
+                    .find_by_id(int(request.POST.get('foreign_high_institution_name_%s' % curriculum_year)))
+                print('ici2', n)
+                curriculum.national_institution = n
+            else:
+
+                national_institution = mdl_reference.education_institution.EducationInstitution()
+                national_institution.adhoc = True
+                if request.POST.get('national_institution_locality_adhoc_%s' % curriculum_year) == "on":
+                    if request.POST.get('city_specify_%s' % curriculum_year) is None:
+                        validation_messages['foreign_institution_city_%s' % curriculum_year] = _('mandatory_field')
+                        is_valid = False
+                    else:
+                        national_institution.city = request.POST.get('city_specify_%s' % curriculum_year)
+                if request.POST.get('national_institution_name_adhoc_%s' % curriculum_year) == "on":
+                    if request.POST.get('name_specify_%s' % curriculum_year) is None:
+                        validation_messages['foreign_institution%s' % curriculum_year] = _('mandatory_field')
+                        is_valid = False
+                    else:
+                        national_institution.name = request.POST.get('txt_name_specify_%s' % curriculum_year)
+
+                if request.POST.get('foreign_high_institution_country_%s' % curriculum_year) \
+                    and request.POST.get('foreign_high_institution_country_%s' % curriculum_year) == "-":
+                    validation_messages['foreign_institution_country_%s' % curriculum_year] = _('mandatory_field')
+                    is_valid = False
+                else:
+                    national_institution.country = mdl_reference.country.find_by_id(int(request.POST.get('foreign_high_institution_country_%s' % curriculum_year)))
+                #to avoid duplication
+                existing_national_institution = mdl_reference.education_institution.find_by_country_city_name(national_institution.country, national_institution.city, national_institution.name)
+                if existing_national_institution:
+                    curriculum.national_institution = existing_national_institution
+                else:
+                    curriculum.national_institution = national_institution
+        if curriculum.national_institution.country:
+            high_non_universities_by_country = mdl_reference.education_institution.find_by_country(curriculum.national_institution.country)
+
+            for university in high_non_universities_by_country:
+                high_non_universities_cities_list.append(university.city)
+        if curriculum.national_institution.city:
+            universities_by_city = mdl_reference.education_institution.find_by_city(curriculum.national_institution.city)
+            for university in universities_by_city:
+                universities_list.append(university)
 
     if request.POST.get('domain_foreign_%s' % curriculum_year) is None \
             or request.POST.get('domain_foreign_%s' % curriculum_year) == '-':
@@ -560,8 +648,11 @@ def validate_foreign_university_fields_form(request, curriculum, curriculum_year
             and request.POST.get('linguistic_regime_%s' % curriculum_year) != "-":
         l = mdl_reference.language.find_by_id(int(request.POST.get('linguistic_regime_%s' % curriculum_year)))
         curriculum.language = l
-
-    return is_valid, validation_messages, curriculum, universities_cities, universities
+    if len(high_non_universities_cities_list) > 0:
+        high_non_universities_cities.append(high_non_universities_cities_list)
+    if len(high_non_universities_names_list) > 0:
+        high_non_universities_names.append(high_non_universities_names_list)
+    return is_valid, validation_messages, curriculum, universities_cities, universities, high_non_universities_cities, high_non_universities_names
 
 
 def populate_dropdown_list(curricula):
@@ -582,3 +673,28 @@ def populate_dropdown_list(curricula):
                 universities_list.append(university)
             universities.append(universities_list)
     return universities_cities, universities
+
+
+def populate_dropdown_foreign_high_list(curricula):
+    foreign_high_institution_countries = []
+    foreign_high_institution_cities = []
+    foreign_high_institutions = []
+    for curriculum in curricula:
+        cities_list = []
+        institutions_list = []
+        countries_list = []
+        if curriculum.national_institution:
+            institutions_by_city = mdl_reference.education_institution.find_by_city_country(curriculum.national_institution.city,curriculum.national_institution.country)
+            institution_by_country = mdl_reference.education_institution.find_by_country(curriculum.national_institution.country)
+            countries_list.append(curriculum.national_institution.country)
+            foreign_high_institution_countries.append(countries_list)
+            for institution in institution_by_country:
+                cities_list.append(institution.city)
+
+            foreign_high_institution_cities.append(cities_list)
+
+            for institution in institutions_by_city:
+                institutions_list.append(institution)
+            foreign_high_institutions.append(institutions_list)
+
+    return  foreign_high_institution_countries, foreign_high_institution_cities, foreign_high_institutions

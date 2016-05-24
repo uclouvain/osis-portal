@@ -24,12 +24,11 @@
 #
 ##############################################################################
 from django import template
+from admission import models as mdl
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
-
-@register.filter
-def add(year, number):
-    if year and number:
-        return int(year) + int(number)
-    return ""
+@register.filter(is_safe=True)
+def is_list(value):
+    return type(value) == list

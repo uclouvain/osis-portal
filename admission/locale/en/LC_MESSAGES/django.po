@@ -810,3 +810,6 @@ msgstr "Full exercise"
 
 msgid "undefined"
 msgstr "Undefined"
+
+msgid "institution_country"
+msgstr "Institution country"
