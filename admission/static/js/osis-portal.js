@@ -587,16 +587,20 @@ $("select[id^='slt_foreign_high_institution_']" ).change(function(event) {
     year = name.replace('path_type_','');
 
     var radio_value = target.val();
+    // To erase the data from previous saving
+    var elts = document.getElementsByTagName("input");
+    for (var i = 0; i < elts.length; i++) {
+        if(elts[i].id.indexOf('hdn_original_') > -1 && elts[i].id.indexOf('_'+year) > -1 ){
+            elts[i].value = "";
+        }
+    }
     display_main_panel(radio_value,year);
  });
 
 $("input[name^='national_education_']").change(function(event) {
-    alert('kkkk');
     var target = $(event.target);
     var name = target.attr("name");
-
     year = name.replace('national_education_','');
-
     var radio_value = target.val();
     display_belgian_universities(radio_value, year);
  });
@@ -605,13 +609,16 @@ $("input[name^='national_education_']").change(function(event) {
 
 function display_main_panel(radio_value, year){
     //alert('display_main_panel');
-    //alert(radio_value);
+
+    // LOCAL_UNIVERSITY
     $('#rdb_national_education_french_'+year).prop( "checked", false );
     $('#rdb_national_education_dutch_'+year).prop( "checked", false );
     $('#slt_french_universities_'+year).css('visibility', 'hidden');
     $('#slt_french_universities_'+year).css('display','none');
+    $('#slt_french_universities_'+year).prop("selectedIndex",-1);
     $('#slt_dutch_universities_'+year).css('visibility', 'hidden');
     $('#slt_dutch_universities_'+year).css('display','none');
+    $('#slt_dutch_universities_'+year).prop("selectedIndex",-1);
     $('#rdb_corresponds_to_domain_true_'+year).prop( "checked", false );
     $('#rdb_corresponds_to_domain_false_'+year).prop( "checked", false );
     $('#txt_diploma_title_'+year).prop( "disabled", true );
@@ -620,13 +627,25 @@ function display_main_panel(radio_value, year){
     $('#rdb_result_succeed_'+year).prop( "checked", false );
     $('#rdb_result_failed_'+year).prop( "checked", false );
     $('#rdb_no_result_'+year).prop( "checked", false );
+    $('#lbl_obtained_result__'+year).css('visibility', 'hidden');
+    $('#lbl_obtained_result__'+year).css('display','none');
 
+    // LOCAL_HIGH_EDUCATION
+    $('#slt_national_high_non_university_institution_city_'+year).prop("selectedIndex",-1);
+    $('#slt_national_high_non_university_institution_'+year).prop("selectedIndex",-1);
+    $('#chb_other_school_'+year).prop( "checked", false);
+    $('#txt_other_high_non_university_name_'+year).val('');
+    $('#txt_other_high_non_university_name_'+year).prop( "disabled", true);
+    $('#slt_domain_non_university_'+year).prop("selectedIndex",-1);
+    $('#slt_grade_type_no_university_'+year).prop("selectedIndex",-1);
+    $('#rdb_study_systems_undefined_'+year).prop( "checked", false);
+    $('#rdb_study_systems_social_advancement_'+year).prop( "checked", false);
+    $('#rdb_study_systems_full_exercise_'+year).prop( "checked", false);
+    //
     if (radio_value=='LOCAL_UNIVERSITY' || radio_value=='LOCAL_HIGH_EDUCATION'   ){
         $('#pnl_national_education_'+year).css('visibility', 'visible').css('display','block');
         $('#pnl_national_detail_'+year).css('visibility', 'visible').css('display','block');
         $('#pnl_foreign_education_'+year).css('visibility', 'hidden').css('display','none');
-
-
     }else{
         $('#pnl_national_education_'+year).css('visibility', 'hidden').css('display','none');
         $('#pnl_national_detail_'+year).css('visibility', 'hidden').css('display','hidden');
@@ -640,8 +659,6 @@ function display_main_panel(radio_value, year){
         $('#pnl_domain_no_university_'+year).css('visibility', 'hidden').css('display','none');
         $('#pnl_university_'+year).css('visibility', 'hidden').css('display','none');
         $('#pnl_foreign_no_university_institution_'+year).css('visibility', 'hidden').css('display','none');
-
-
     }
     if (radio_value=='FOREIGN_UNIVERSITY'){
         $('#pnl_local_university_'+year).css('visibility', 'hidden').css('display','none');
@@ -653,16 +670,17 @@ function display_main_panel(radio_value, year){
     }
     if (radio_value=='LOCAL_HIGH_EDUCATION'){
         $('#pnl_local_university_'+year).css('visibility', 'hidden').css('display','none');
-        $('#pnl_local_high_education_'+year).css('visibility', 'visible').css('display','display');
-        $('#pnl_domain_university_'+year).css('visibility', 'visible').css('display','block');
-        $('#pnl_domain_no_university_'+year).css('visibility', 'visible').css('display','display');
+        $('#pnl_local_high_education_'+year).css('visibility', 'visible').css('display','');
+        $('#pnl_domain_university_'+year).css('visibility', 'hidden').css('display','none');
+        $('#pnl_domain_no_university_'+year).css('visibility', 'visible').css('display','');
         $('#pnl_university_'+year).css('visibility', 'hidden').css('display','none');
         $('#pnl_foreign_no_university_institution_'+year).css('visibility', 'hidden').css('display','none');
+
     }
     if (radio_value=='FOREIGN_HIGH_EDUCATION'){
         $('#pnl_local_university_'+year).css('visibility', 'hidden').css('display','none');
         $('#pnl_local_high_education_'+year).css('visibility', 'hidden').css('display','none');
-        $('#pnl_domain_university_'+year).css('visibility', 'visible').css('display','block');
+        $('#pnl_domain_university_'+year).css('visibility', 'visible').css('display','');
         $('#pnl_domain_no_university_'+year).css('visibility', 'hidden').css('display','none');
         $('#pnl_university_'+year).css('visibility', 'hidden').css('display','none');
         $('#pnl_foreign_no_university_institution_'+year).css('visibility', 'visible').css('display','display');
@@ -676,8 +694,7 @@ function display_main_panel(radio_value, year){
         $('#pnl_university_'+year).css('visibility', 'hidden').css('display','none');
         $('#pnl_foreign_no_university_institution_'+year).css('visibility', 'hidden').css('display','none');
     }
-    if (radio_value == 'LOCAL_UNIVERSITY'){
-        alert($('#hdn_original_national_education_'+year).val());
+    if (radio_value == 'LOCAL_UNIVERSITY' || radio_value == 'LOCAL_HIGH_EDUCATION'){
         if($('#hdn_original_national_education_'+year).val() == 'FRENCH'){
             $('#rdb_national_education_french_'+year).prop( "checked", true );
         }else{
@@ -685,8 +702,62 @@ function display_main_panel(radio_value, year){
                 $('#rdb_national_education_dutch_'+year).prop( "checked", true );
             }
         }
-        display_belgian_universities($('#hdn_original_national_education_'+year).val(),year)
+        if (radio_value == 'LOCAL_UNIVERSITY' ){
+            display_belgian_universities($('#hdn_original_national_education_'+year).val(),year)
+        }else{
+            if (radio_value == 'LOCAL_HIGH_EDUCATION' ){
+                if($('#hdn_original_national_institution_adhoc_'+year).val() == 'True'){
+                    $('#chb_other_school_'+year).prop( "checked", true );
+                    $('#txt_other_high_non_university_name_'+year).prop( "disabled", false );
+                    $('#txt_other_high_non_university_name_'+year).val($('#hdn_original_national_institution_name_'+year).val());
+                    $('#slt_national_high_non_university_institution_city_'+year).prop( "disabled", true );
+                    $('#slt_national_high_non_university_institution_'+year).prop( "disabled", true );
+                }else{
+                    $('#txt_other_high_non_university_name_'+year).prop( "disabled", true );
+                    if($('#hdn_original_national_institution_id_'+year).val() != 'None'){
+                        $('#slt_national_high_non_university_institution_city_'+year+' option').each(function(){
+                            if($(this).attr('value')==$('#hdn_original_national_institution_city_'+year).val()){
+                                $(this).prop('selected', true);
+                            }
+                        });
+                        $('#slt_national_high_non_university_institution_'+year+' option').each(function(){
+                            if($(this).attr('value')==$('#hdn_original_national_institution_id_'+year).val()){
+                                $(this).prop('selected', true);
+                            }
+                        });
 
+                    }
+
+                }
+                if($('#hdn_original_domain_id_'+year).val() != 'None'){
+                    $('#slt_domain_non_university_'+year+' option').each(function(){
+                        if($(this).attr('value')==$('#hdn_original_domain_id_'+year).val()){
+                            $(this).prop('selected', true);
+                        }
+                    });
+                }
+
+                if($('#hdn_original_grade_type_no_university_'+year).val() != 'None'){
+                    $('#slt_grade_type_no_university_'+year+' option').each(function(){
+                        if($(this).attr('value')==$('#hdn_original_grade_type_no_university_'+year).val()){
+                            $(this).prop('selected', true);
+                        }
+                    });
+                }
+                alert($('#hdn_original_study_system_'+year).val());
+                if($('#hdn_original_study_system_'+year).val() == 'SOCIAL_ADVANCEMENT'){
+                    $('#rdb_study_systems_social_advancement_'+year).prop( "checked", true);
+                }else{
+                    if($('#hdn_original_study_system_'+year).val() == 'FULL_EXERCISE'){
+                        $('#rdb_study_systems_social_advancement_'+year).prop( "checked", true);
+                    }else{
+                        $('#rdb_study_systems_undefined_'+year).prop( "checked", true);
+                    }
+                }
+
+            }
+
+        }
         if($('#hdn_original_diploma_title_'+year).val() == ''){
             $('#rdb_corresponds_to_domain_true_'+year).prop( "checked", true );
             $('#txt_diploma_title_'+year).prop( "disabled", true );
@@ -697,9 +768,16 @@ function display_main_panel(radio_value, year){
 
         if($('#hdn_original_diploma_'+year).val() == 'True'){
             $('#rdb_diploma_true_'+year).prop( "checked", true );
-
+            $('#pnl_diploma_files_'+year).css('visibility', 'visible').css('display','');
+            if($('#hdn_original_academic_year_'+year).val()>="2014"){
+                $('#lbl_obtained_result__'+year).css('visibility', 'visible').css('display','');
+            }
         }else{
             $('#rdb_diploma_false_'+year).prop( "checked", true );
+             $('#pnl_diploma_files_'+year).css('visibility', 'hidden').css('display','none');
+             if($('#hdn_original_academic_year_'+year).val()<"2014"){
+                $('#lbl_obtained_result__'+year).css('visibility', 'visible').css('display','');
+            }
         }
         if($('#hdn_original_result_'+year).val() == 'SUCCEED'){
             $('#rdb_result_succeed_'+year).prop( "checked", true );
@@ -711,6 +789,15 @@ function display_main_panel(radio_value, year){
             $('#rdb_no_result_'+year).prop( "checked", true );
         }
 
+    }
+    if (radio_value=='FOREIGN_UNIVERSITY'){
+
+    }
+    if (radio_value=='FOREIGN_HIGH_EDUCATION'){
+    }
+
+    if (radio_value=='ANOTHER_ACTIVITY'){
+    
     }
 }
 
@@ -724,14 +811,11 @@ function display_belgian_universities(radio_value, year){
         $('#slt_french_universities_'+year).css('display','');
         $('#slt_dutch_universities_'+year).css('visibility', 'hidden');
         $('#slt_dutch_universities_'+year).css('display','none');
-
-        reset_slt('slt_dutch_universities_'+year);
     }else{
         if(radio_value == 'DUTCH'){
             $('#pnl_national_detail_'+year).css('visibility', 'visible').css('display','');
             $('#slt_french_universities_'+year).css('visibility', 'hidden').css('display','none');
             $('#slt_dutch_universities_'+year).css('visibility', 'visible').css('display','');
-            reset_slt('slt_french_universities_'+year);
         }
     }
 }

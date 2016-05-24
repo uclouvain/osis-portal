@@ -338,9 +338,12 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
     if curriculum.path_type == "LOCAL_HIGH_EDUCATION":
         if request.POST.get('national_education_%s' % curriculum_year):
             curriculum.national_education = request.POST.get('national_education_%s' % curriculum_year)
-        if request.POST.get('other_school_high_non_university_%s' % curriculum_year) \
-                and request.POST.get('other_school_high_non_university_%s' % curriculum_year) == "on":
-            if request.POST.get('other_high_non_university_name_%s' % curriculum_year) is None:
+
+
+        if request.POST.get('other_school_high_non_university_%s' % curriculum_year) == "on":
+            print(request.POST.get('other_high_non_university_name_%s' % curriculum_year) )
+            if request.POST.get('other_high_non_university_name_%s' % curriculum_year) is None \
+                    or len(request.POST.get('other_high_non_university_name_%s' % curriculum_year).strip()) == 0:
                 validation_messages['high_non_university_name_%s' % curriculum_year] = _('msg_school_name')
                 is_valid = False
             else:
