@@ -31,14 +31,12 @@ from frontoffice.queue.queue import ScoresSheetClient
 import datetime
 import json
 
-scores_sheets_cli = None
 
 def get_score_sheet(global_id):
-    global scores_sheets_cli
-    if not scores_sheets_cli :
-        print("Instanciating the QueueConnection ScoresSheetClient...")
-        scores_sheets_cli = ScoresSheetClient()
-        print("Done.")
+    print("Instanciating the QueueConnection ScoresSheetClient...")
+    scores_sheets_cli = ScoresSheetClient()
+    print("Done.")
+
     print("Sending the global id in the queue and waiting for a response...")
     json_data = scores_sheets_cli.call(global_id)
     print("Done.")
