@@ -32,6 +32,15 @@ import threading
 # from pprint import pprint
 
 
+class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+
+
 class ScoresSheetClient(object):
     def __init__(self):
         self.paper_sheet_queue = 'PAPER_SHEET_QUEUE'
