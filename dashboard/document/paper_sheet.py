@@ -24,7 +24,6 @@
 #
 ##############################################################################
 from io import BytesIO
-from django.http import HttpResponse
 from django.conf import settings
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.enums import TA_JUSTIFY, TA_RIGHT, TA_CENTER, TA_LEFT
@@ -32,7 +31,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Page
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import mm
 from reportlab.lib import colors
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
 
 
 PAGE_SIZE = A4
@@ -60,10 +59,6 @@ def add_header_footer(canvas, doc):
 
 
 def build_pdf(document):
-    filename = "%s.pdf" % _('scores_sheet')
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="%s"' % filename
-
     buffer = BytesIO()
     doc = SimpleDocTemplate(buffer,
                             pagesize=PAGE_SIZE,
@@ -116,8 +111,7 @@ def build_pdf(document):
     doc.build(content, onFirstPage=add_header_footer, onLaterPages=add_header_footer)
     pdf = buffer.getvalue()
     buffer.close()
-    response.write(pdf)
-    return response
+    return pdf
 
 
 def header_building(canvas, doc, styles):
@@ -125,9 +119,9 @@ def header_building(canvas, doc, styles):
 
     p = Paragraph('''<para align=center>
                         <font size=16>%s</font>
-                    </para>''' % (_('scores_transcript')), styles["BodyText"])
+                    </para>''' % (_('scores_sheet')), styles["BodyText"])
 
-    data_header = [[a, '%s' % _('ucl_denom_location'), p], ]
+    data_header = [[a, '%s' % _('institution_denomination'), p], ]
 
     t_header = Table(data_header, [30*mm, 100*mm, 50*mm])
 
@@ -172,7 +166,7 @@ def legend_building_json(decimal_scores, content):
     legend_text = _('justification_legend') % justification_label_authorized()
     legend_text += "<br/>%s" % (str(_('score_legend') % "0 - 20"))
     if not decimal_scores:
-        legend_text += "<br/><font color=red>%s</font>" % _('unauthorized_decimal_for_this_activity')
+        legend_text += "<br/><font color=red>%s</font>" % _('unauthorized_decimal')
 
     legend_text += '''<br/> %s : <a href="%s"><font color=blue><u>%s</u></font></a>''' \
                    % (_("in_accordance_to_regulation"), _("link_to_RGEE"), _("link_to_RGEE"))
@@ -195,7 +189,7 @@ def legend_building(learning_unit_year, content):
     legend_text = _('justification_legend') % justification_label_authorized()
     legend_text += "<br/>%s" % (str(_('score_legend') % "0 - 20"))
     if not learning_unit_year.decimal_scores:
-        legend_text += "<br/><font color=red>%s</font>" % _('unauthorized_decimal_for_this_activity')
+        legend_text += "<br/><font color=red>%s</font>" % _('unauthorized_decimal')
 
     legend_text += '''<br/> %s : <a href="%s"><font color=blue><u>%s</u></font></a>''' \
                    % (_("in_accordance_to_regulation"), _("link_to_RGEE"), _("link_to_RGEE"))
@@ -228,7 +222,7 @@ def get_data_coordinator_json(learning_unit_year, styles):
             p_coord_location = Paragraph('''%s''' % address['location'], styles["Normal"])
             if address['postal_code'] or address['city']:
                 p_coord_address = Paragraph(
-                    '''%s %s''' % (address['postal_code'], address['city']),styles["Normal"])
+                    '''%s %s''' % (address['postal_code'], address['city']), styles["Normal"])
     else:
         p_coord_name = Paragraph('%s' % _('none'), styles["Normal"])
 
