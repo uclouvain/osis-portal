@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -23,34 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from .score_encoding import print_scores
-from base import models as mdl_base
-from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
-from django.http import HttpResponse
-
-@login_required
-def home(request):
-    return render(request, "dashboard.html", {})
+from base.models import *
+from django.contrib import admin
 
 
-@login_required
-def score_encoding(request):
-    return render(request, "score_encoding.html", {})
-
-
-@login_required
-def download_papersheet(request):
-    person = mdl_base.person.find_by_user(request.user)
-    pdf = print_scores(request, person.global_id)
-    if pdf:
-        filename = "%s.pdf" % _('scores_sheet')
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
-        response.write(pdf)
-        return response
-    else:
-        messages.add_message(request, messages.WARNING, _('no_score_to_encode'))
-        return score_encoding(request)
+admin.site.register(person.BasePerson,
+                    person.BasePersonAdmin)

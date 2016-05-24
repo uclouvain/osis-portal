@@ -23,11 +23,31 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from couchbase import Couchbase
+from couchbase.bucket import Bucket, NotFoundError
+from django.conf import settings
 
-BUCKET = 'score_encoding'
+
+def connect_db():
+    if settings.COUCHBASE_PASSWORD:
+        cb = Bucket(settings.COUCHBASE_CONNECTION_STRING, password=settings.COUCHBASE_PASSWORD)
+    else:
+        cb = Bucket(settings.COUCHBASE_CONNECTION_STRING)
+    return cb
+
+cb = connect_db()
 
 
 def get_document(global_id):
-    cb = Couchbase.connect(bucket=BUCKET)
-    return cb.get(global_id)
+    try:
+        return cb.get(global_id)
+    except NotFoundError:
+        return None
+
+
+def insert_or_update_document(key, data):
+    """
+    Insert a new document if the key passed in parameter doesn't exist in CouchDB.
+    :param key: The key of the document
+    :param data: The document (JSON) to insert/update in Couchbase
+    """
+    cb.set(key, data)
