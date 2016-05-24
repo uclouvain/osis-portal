@@ -67,6 +67,9 @@ msgstr "https://www.uclouvain.be/enseignement-reglements.html"
 msgid "none"
 msgstr "Aucun"
 
+msgid "no_score_to_encode"
+msgstr "Vous n'avez aucune note à encoder. Vous n'avez donc pas de PDF disponible."
+
 msgid "numbered_score"
 msgstr "Note chiffrée"
 

@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from couchbase.bucket import Bucket
+from couchbase.bucket import Bucket, NotFoundError
 from django.conf import settings
 
 
@@ -38,7 +38,10 @@ cb = connect_db()
 
 
 def get_document(global_id):
-    return cb.get(global_id)
+    try:
+        return cb.get(global_id)
+    except NotFoundError:
+        return None
 
 
 def insert_or_update_document(key, data):

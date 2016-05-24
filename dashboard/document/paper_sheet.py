@@ -24,7 +24,6 @@
 #
 ##############################################################################
 from io import BytesIO
-from django.http import HttpResponse
 from django.conf import settings
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.enums import TA_JUSTIFY, TA_RIGHT, TA_CENTER, TA_LEFT
@@ -32,7 +31,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Page
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import mm
 from reportlab.lib import colors
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
 
 
 PAGE_SIZE = A4
@@ -60,10 +59,6 @@ def add_header_footer(canvas, doc):
 
 
 def build_pdf(document):
-    filename = "%s.pdf" % _('scores_sheet')
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="%s"' % filename
-
     buffer = BytesIO()
     doc = SimpleDocTemplate(buffer,
                             pagesize=PAGE_SIZE,
@@ -116,8 +111,7 @@ def build_pdf(document):
     doc.build(content, onFirstPage=add_header_footer, onLaterPages=add_header_footer)
     pdf = buffer.getvalue()
     buffer.close()
-    response.write(pdf)
-    return response
+    return pdf
 
 
 def header_building(canvas, doc, styles):

@@ -23,11 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from couchbase.exceptions import ValueFormatError
+
 from dashboard import models as mdl
 from dashboard.document import paper_sheet
 from frontoffice.queue.queue import ScoresSheetClient
 import datetime
 import json
+
+
+def get_score_sheet(global_id):
+    scores_sheets_cli = ScoresSheetClient()
+    json_data = scores_sheets_cli.call(global_id)
+    updated_document = json.loads(json_data.decode("utf-8"))
+    try:
+        mdl.score_encoding.insert_or_update_document(global_id, updated_document)
+    except ValueFormatError:
+        return None
+    return updated_document
 
 
 def print_scores(request, global_id):
@@ -37,15 +50,10 @@ def print_scores(request, global_id):
         now = datetime.datetime.now()
         now_str = '%s/%s/%s' % (now.day, now.month, now.year)
         if document.get('publication_date', None) != now_str:
-            scores_sheets_cli = ScoresSheetClient()
-            json_datas = scores_sheets_cli.call(global_id)
-            updated_document = json.loads(json_datas.decode("utf-8"))
-            mdl.score_encoding.insert_or_update_document(global_id, updated_document)
-            document = updated_document
+            document = get_score_sheet(global_id)
     else:
-        scores_sheets_cli = ScoresSheetClient()
-        updated_document = scores_sheets_cli.call(global_id)
-        mdl.score_encoding.insert_or_update_document(global_id, updated_document)
-        document = updated_document
-
-    return paper_sheet.build_pdf(document)
+        document = get_score_sheet(global_id)
+    if document:
+        return paper_sheet.build_pdf(document)
+    else:
+        return None
