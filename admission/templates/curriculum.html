@@ -80,11 +80,11 @@
            id="hdn_original_language_id_{{curriculum.academic_year.year}}"
            name="original_language_id_{{curriculum.academic_year.year}}"
            value="{{curriculum.language.id}}" >
-    <input type="text"
+    <input type="hidden"
            id="hdn_original_national_institution_id_{{curriculum.academic_year.year}}"
            name="original_national_institution_id_{{curriculum.academic_year.year}}"
            value="{{curriculum.national_institution.id}}" >
-    <input type="text"
+    <input type="hidden"
            id="hdn_original_national_institution_adhoc_{{curriculum.academic_year.year}}"
            name="original_national_institution_adhoc_{{curriculum.academic_year.year}}"
            value="{{curriculum.national_institution.adhoc}}" >
@@ -92,22 +92,26 @@
            id="hdn_original_national_institution_city_{{curriculum.academic_year.year}}"
            name="original_national_institution_city_{{curriculum.academic_year.year}}"
            value="{{curriculum.national_institution.city}}" >
-    <input type="text"
+    <input type="hidden"
+           id="hdn_original_national_institution_country_id_{{curriculum.academic_year.year}}"
+           name="original_national_institution_country_id_{{curriculum.academic_year.year}}"
+           value="{{curriculum.national_institution.country.id}}" >
+    <input type="hidden"
            id="hdn_original_national_institution_name_{{curriculum.academic_year.year}}"
            name="original_national_institution_name_{{curriculum.academic_year.year}}"
            value="{{curriculum.national_institution.name}}" >
-    <input type="text"
+    <input type="hidden"
            id="hdn_original_domain_id_{{curriculum.academic_year.year}}"
            name="original_domain_id_{{curriculum.academic_year.year}}"
            value="{{curriculum.domain.id}}" >
-    <input type="text"
+    <input type="hidden"
            id="hdn_original_sub_domain_id_{{curriculum.academic_year.year}}"
            value="{{curriculum.sub_domain.id}}" >
     <input type="hidden"
            id="hdn_original_grade_type_id_{{curriculum.academic_year.year}}"
            name="original_grade_type_id_{{curriculum.academic_year.year}}"
            value="{{curriculum.grade_type.id}}" >
-    <input type="text"
+    <input type="hidden"
            id="hdn_original_grade_type_no_university_{{curriculum.academic_year.year}}"
            name="original_grade_type_no_university_{{curriculum.academic_year.year}}"
            value="{{curriculum.grade_type_no_university}}" >
@@ -143,13 +147,14 @@
            id="hdn_original_activity_place_{{curriculum.academic_year.year}}"
            name="original_activity_place_{{curriculum.academic_year.year}}"
            value="{{curriculum.activity_place}}" >
-    <input type="text"
+    <input type="hidden"
            id="hdn_original_study_system_{{curriculum.academic_year.year}}"
            name="original_study_system_{{curriculum.academic_year.year}}"
            value="{{curriculum.study_system}}" >
 
         {% pnl_national_education__message_error validation_messages year=curriculum.academic_year.year as pnl_national_detail_error%}
         {% pnl_foreign_education_message_error validation_messages year=curriculum.academic_year.year as pnl_foreign_detail_error %}
+        Erreur{{pnl_foreign_education_message_error}}fin erreur
         <div class="panel panel-default"
              id="pnl_curriculum_id_{{curriculum.academic_year.year}}">
             <div class="panel-heading">
@@ -649,6 +654,35 @@
 		}
     }
 
+    function refresh_pnl_subdomain_foreign(domain, year){
+        var sel = domain.options[domain.selectedIndex].text;
+        var elt = document.getElementById('slt_subdomain_foreign_'+year);
+        var cpt = 0;
+        document.getElementById('slt_subdomain_foreign_'+year).selectedIndex = -1;
+        for(var i = 0 ,l = elt.options.length; i< l;i++ ){
+            if(i==0){
+                elt.options[i].style="visibility:visible;display:block";
+            }else{
+                if (sel != "-"){
+                    if((elt.options[i].title).indexOf(sel) > -1){
+                        elt.options[i].style="visibility:visible;display:block";
+                        cpt = cpt + 1;
+                    }else{
+                        elt.options[i].style="visibility:hidden;display:none";
+                    }
+                }else{
+                    elt.options[i].style="visibility:visible;display:block";
+                }
+            }
+		}
+		if(cpt == 0){
+		    document.getElementById('slt_subdomain_foreign_'+year).disabled = true;
+		    document.getElementById('lbl_subdomain_mandatory_foreign_'+year).style="visibility:hidden;display:none";
+		}else{
+		    document.getElementById('slt_subdomain_foreign_'+year).disabled = false;
+		    document.getElementById('lbl_subdomain_mandatory_foreign_'+year).style="visibility:visible;display:block";
+		}
+    }
 
     // to check disabled status after duplicate
     var elts = document.getElementsByTagName("select");

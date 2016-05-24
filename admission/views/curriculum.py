@@ -183,6 +183,7 @@ def update(request):
         return home(request)
     else:
         universities_cities, universities = populate_dropdown_list(curricula)
+        #universities_cities = mdl_reference.education_institution.find_cities_by_type_excluding_country('UNIVERSITY',False, 'BE')
         foreign_high_institution_countries, foreign_high_institution_cities, foreign_high_institutions = populate_dropdown_foreign_high_list(curricula)
         national_high_non_university_institutions = mdl_reference.education_institution.find_by_institution_type_iso_code('HIGHER_NON_UNIVERSITY', 'BE', False )
         cities_national_high_non_university_institutions = mdl_reference.education_institution.find_by_isocode_type('BE', 'HIGHER_NON_UNIVERSITY', False )
@@ -339,7 +340,6 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
         if request.POST.get('national_education_%s' % curriculum_year):
             curriculum.national_education = request.POST.get('national_education_%s' % curriculum_year)
 
-
         if request.POST.get('other_school_high_non_university_%s' % curriculum_year) == "on":
             print(request.POST.get('other_high_non_university_name_%s' % curriculum_year) )
             if request.POST.get('other_high_non_university_name_%s' % curriculum_year) is None \
@@ -453,7 +453,6 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
 
 def validate_foreign_university_fields_form(request, curriculum, curriculum_year, validation_messages, is_valid, universities_cities, universities, high_non_universities_cities,
                                                                                                         high_non_universities_names):
-    print('validate_foreign_university_fields_form')
     cities_list = []
     universities_list = []
     high_non_universities_cities_list = []
@@ -517,7 +516,6 @@ def validate_foreign_university_fields_form(request, curriculum, curriculum_year
 
         universities_cities.append(cities_list)
         universities.append(universities_list)
-    print('abant ici',curriculum_year)
 
     if curriculum.path_type == "FOREIGN_HIGH_EDUCATION":
         print('ici', request.POST.get('foreign_high_institution_country_%s' % curriculum_year))
@@ -588,12 +586,12 @@ def validate_foreign_university_fields_form(request, curriculum, curriculum_year
                 sub_domain = mdl.domain.find_by_id(int(request.POST.get('subdomain_foreign_%s' % curriculum_year)))
                 curriculum.sub_domain = sub_domain
 
-    if request.POST.get('grade_type_%s' % curriculum_year) is None \
-            or request.POST.get('grade_type_%s' % curriculum_year) == '-':
-        validation_messages['grade_type_%s' % curriculum_year] = _('mandatory_field')
+    if request.POST.get('grade_type_foreign_%s' % curriculum_year) is None \
+            or request.POST.get('grade_type_foreign_%s' % curriculum_year) == '-':
+        validation_messages['grade_type_foreign_%s' % curriculum_year] = _('mandatory_field')
         is_valid = False
     else:
-        grade_type = mdl.grade_type.find_by_id(int(request.POST.get('grade_type_%s' % curriculum_year)))
+        grade_type = mdl.grade_type.find_by_id(int(request.POST.get('grade_type_foreign_%s' % curriculum_year)))
         curriculum.grade_type = grade_type
 
     if request.POST.get('diploma_title_%s' % curriculum_year):
@@ -613,6 +611,7 @@ def validate_foreign_university_fields_form(request, curriculum, curriculum_year
     else:
         curriculum.result = request.POST.get('result_%s' % curriculum_year)
 
+    print(request.POST.get('credits_enrolled_foreign_%s' % curriculum_year));
     if request.POST.get('credits_enrolled_foreign_%s' % curriculum_year) \
             and len(request.POST.get('credits_enrolled_foreign_%s' % curriculum_year)) > 0:
             try:
@@ -629,7 +628,7 @@ def validate_foreign_university_fields_form(request, curriculum, curriculum_year
             except ValueError:
                 validation_messages['credits_enrolled_foreign_%s' % curriculum_year] = _('numeric_field')
                 is_valid = False
-
+    print(curriculum.credits_enrolled )
     if request.POST.get('credits_obtained_foreign_%s' % curriculum_year) \
             and len(request.POST.get('credits_obtained_foreign_%s' % curriculum_year)) > 0:
             try:
@@ -665,7 +664,8 @@ def populate_dropdown_list(curricula):
         cities_list = []
         universities_list = []
         if curriculum.national_institution:
-            universities_by_city = mdl_reference.education_institution.find_by_city(curriculum.national_institution.city)
+            universities_by_city = mdl_reference.education_institution.find_by_city_not_isocode(curriculum.national_institution.city, 'BE', 'UNIVERSITY')
+            print(universities_by_city)
             universities_by_country = mdl_reference.education_institution.find_by_country(curriculum.national_institution.country)
 
             for university in universities_by_country:

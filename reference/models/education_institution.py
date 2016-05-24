@@ -83,7 +83,7 @@ def find_by_institution_type_national_community(an_institution_type, a_national_
 
 
 def find_countries():
-    return EducationInstitution.objects.all().exclude(country__iso_code="BE").distinct('country')
+    return EducationInstitution.objects.filter(country__isnull=False).exclude(country__iso_code="BE").distinct('country')
 
 
 def find_by_country(a_country):
@@ -151,3 +151,12 @@ def find_education_institution_by_country_adhoc_type(a_country_id, adhoc_type, a
 
 def find_by_city_country(a_city, a_country):
     return EducationInstitution.objects.filter(city=a_city, country=a_country).order_by('name')
+
+
+def find_cities_by_type_excluding_country(an_institution_type, an_adhoc, iso_code_excluded):
+    return EducationInstitution.objects.all().filter(institution_type=an_institution_type, adhoc=an_adhoc)\
+        .exclude(country__iso_code=iso_code_excluded).distinct('city')
+
+
+def find_one_by_city(a_city):
+    return EducationInstitution.objects.filter(city=a_city).first()

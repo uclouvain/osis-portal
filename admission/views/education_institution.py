@@ -29,7 +29,7 @@ from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
 from django.views.decorators.csrf import csrf_exempt
 from reference import models as mdl_reference
-
+from django.core.serializers.python import Serializer
 
 class JSONResponse(HttpResponse):
     def __init__(self, data, **kwargs):
@@ -41,11 +41,13 @@ class JSONResponse(HttpResponse):
 class EducationInstitutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = mdl_reference.education_institution.EducationInstitution
-        fields = ('id', 'name', 'postal_code', 'city')
+        fields = ('id', 'name', 'postal_code', 'city', 'country')
+
 
 
 @csrf_exempt
 def find_by_country(request):
+    print('find_by_country')
     country = request.GET['country']
     education_institutions = mdl_reference.education_institution.find_by_country(country)
     serializer = EducationInstitutionSerializer(education_institutions, many=True)
@@ -54,10 +56,15 @@ def find_by_country(request):
 
 @csrf_exempt
 def find_by_city(request):
-    city = request.GET['city']
 
+    city = request.GET['city']
+    education_institution = mdl_reference.education_institution.find_one_by_city(city)
+
+    an_isocode="BE"
+    if education_institution.country:
+        an_isocode = education_institution.country.iso_code
     if city != "-":
-        education_institutions = mdl_reference.education_institution.find_by_city_isocode(city, 'BE')
+        education_institutions = mdl_reference.education_institution.find_by_city_isocode(city, an_isocode)
     else:
         education_institutions = mdl_reference.education_institution.find_education_institution_by_adhoc(False)
     serializer = EducationInstitutionSerializer(education_institutions, many=True)
@@ -98,3 +105,20 @@ def find_by_country_type_adhoc(request):
     education_institutions = mdl_reference.education_institution.find_education_institution_by_country_adhoc_type(country,False,'HIGHER_NON_UNIVERSITY')
     serializer = EducationInstitutionSerializer(education_institutions, many=True)
     return JSONResponse(serializer.data)
+
+class MySerialiser(Serializer):
+    def end_object( self, obj ):
+        self._current['id'] = obj._get_pk_val()
+        self._current['name'] = obj.name
+        self._current['country_id'] = obj.country.id
+        self._current['country_name'] = obj.country.name
+        self.objects.append( self._current)
+
+
+@csrf_exempt
+def find_countries(request):
+    education_institutions = mdl_reference.education_institution.find_countries_by_type_excluding_country('UNIVERSITY',False,"BE")
+    #serializer = EducationInstitutionSerializer(education_institutions, many=True)
+    serializer = MySerialiser()
+    data = serializer.serialize(education_institutions)
+    return JSONResponse(data)
