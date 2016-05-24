@@ -28,17 +28,6 @@ import pika
 import uuid
 from frontoffice.settings import QUEUE_URL, QUEUE_USER, QUEUE_PASSWORD, QUEUE_PORT, QUEUE_CONTEXT_ROOT
 import threading
-# from couchbase import Couchbase
-# from pprint import pprint
-
-
-class Singleton(type):
-    _instances = {}
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
-        return cls._instances[cls]
-
 
 
 class ScoresSheetClient(object):
@@ -68,8 +57,8 @@ class ScoresSheetClient(object):
         self.channel.basic_publish(exchange='',
                                    routing_key=self.paper_sheet_queue,
                                    properties=pika.BasicProperties(
-                                         reply_to = self.callback_queue,
-                                         correlation_id = self.corr_id,
+                                         reply_to=self.callback_queue,
+                                         correlation_id=self.corr_id,
                                          content_type='application/json',
                                          ),
                                    body=str(n))
