@@ -1,0 +1,97 @@
+{% load dictionnary %}
+{% load i18n %}
+
+ <div class="panel panel-default" id="pnl_professinal_experience" style="">
+        <div class="panel-heading">{% trans 'professional_experiences'%}</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <label>{%trans 'question_professional_experience'%}</label>
+                    <br>
+                    <label class="radio-inline">
+                      <input type="radio"
+                             name="professional_exam"
+                             id="rdb_professional_experience_true"
+                             value="true"
+                             onclick="display('pnl_professional_experience_detail',true);"
+                             {%if secondary_education.professional_exam = True %}checked{%endif%}> {% trans 'yes' %}
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio"
+                             name="professional_exam"
+                             id="rdb_professional_experience_false"
+                             value="false"
+                             onclick="display('pnl_professional_experience_detail',false);"
+                             {%if secondary_education.professional_exam = False %}checked{%endif%}> {% trans 'no' %}
+                    </label>
+                    {%if validation_messages and validation_messages|get_item:'professional_experience'%}
+                        <br>
+                        <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'professional_experience'}}</font><br>
+                    {% endif %}
+                </div>
+            </div>
+            <br>
+            {% if local_language_exam_link %}
+                {% trans 'vae_information' %} : <a href="https://www.uclouvain.be/vae.html">{{local_language_exam_link.value}}</a>
+            {%endif%}
+        <div id="pnl_professional_experience_detail"
+             style="{% if secondary_education.professional_exam = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+            <div class="form-inline">
+                <br>
+                <label>{% trans 'question_date_session'%} *</label>
+                <input class="form-control"
+                       id="txt_professional_exam_date"
+                       name="professional_exam_date"
+                       value="{{secondary_education.professional_exam_date | default_if_none:''|date:"j/m/Y"}}">
+                 {%if validation_messages and validation_messages|get_item:'professional_exam_date'%}
+                    <br>
+                    <font class="error" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'professional_exam_date'}}</font>
+                {% endif %}
+                <br><br>
+                <label>{% trans 'question_institution_name_nice' %} *</label>
+                <input class="form-control"
+                       id="txt_professional_exam_institution"
+                       name="professional_exam_institution"
+                       value="{{secondary_education.professional_exam_institution | default_if_none:''}}">
+                <br>
+                {%if validation_messages and validation_messages|get_item:'professional_exam_institution'%}
+                    <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'professional_exam_institution'}}</font><br>
+                {% endif %}
+            </div>
+            <br>
+            <label>{% trans 'which_result' %} *</label>
+            <br>
+            <label class="radio-inline">
+              <input type="radio"
+                     name="professional_exam_result"
+                     id="rdb_professional_exam_result_result_low"
+                     value="LOW"
+                     {%if secondary_education.professional_exam_result = 'LOW' %}checked{%endif%}> {% trans 'low_result' %}
+            </label>
+            <label class="radio-inline">
+              <input type="radio"
+                     name="professional_exam_result"
+                     id="rdb_professional_exam_result_middle"
+                     value="MIDDLE"
+                     {%if secondary_education.professional_exam_result = 'MIDDLE'%}checked{%endif%}> {% trans 'middle_result' %}
+            </label>
+            <label class="radio-inline">
+              <input type="radio"
+                     name="professional_exam_result"
+                     id="rdb_professional_exam_result_high" value="HIGH"
+                     {%if secondary_education.professional_exam_result = 'HIGH' %}checked{%endif%}> {% trans 'high_result' %}
+            </label>
+            <br>
+            {%if validation_messages and validation_messages|get_item:'professional_exam_result'%}
+                <font class="error" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'professional_exam_result'}}</font>
+            {% endif %}
+            <br>
+            <button type="button" class="btn btn-default" data-toggle="modal"
+                    data-target="#pnl_upload_file_modal"
+                    title="{% trans 'add_professional_exam_file' %}" id="bt_upload_file_certificat">
+                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'add_professional_exam_file' %}
+            </button>
+        </div>
+
+    </div>
+</div>

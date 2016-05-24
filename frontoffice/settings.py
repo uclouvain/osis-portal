@@ -25,6 +25,7 @@
 ##############################################################################
 import os
 from django.core.urlresolvers import reverse_lazy
+from django.utils.translation import ugettext_lazy as _
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -43,7 +44,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,23 +52,25 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'reference',
+    'base',
     'admission',
     'catalog',
     'enrollments',
     'dashboard',
-    'rest_framework',
-]
+    'rest_framework'
+)
 
-MIDDLEWARE_CLASSES = [
-    'django.middleware.security.SecurityMiddleware',
+MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
+    'django.middleware.security.SecurityMiddleware',
+)
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -109,6 +112,9 @@ DATABASES = {
 }
 
 
+COUCHBASE_CONNECTION_STRING='couchbase://localhost/score_encoding'
+COUCHBASE_PASSWORD=''
+
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
@@ -130,8 +136,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
-
 LANGUAGE_CODE = 'fr-be'
+
+LANGUAGES = [
+    ('fr-be', _('French')),
+    ('en', _('English')),
+]
 
 TIME_ZONE = 'UTC'
 
@@ -165,7 +175,17 @@ QUEUE_PASSWORD = 'guest'
 QUEUE_PORT = 5672
 QUEUE_CONTEXT_ROOT = '/'
 
-try  :
+# This has to be replaced by the actual url where you institution logo can be found.
+# Ex : LOGO_INSTITUTION_URL = 'https://www.google.be/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'
+# A relative URL will work on local , but not out of the box on the servers.
+LOGO_INSTITUTION_URL = os.path.join(BASE_DIR, "admission/static/img/logo_institution.jpg")
+
+try:
     from frontoffice.server_settings import *
+
+    try:
+        INSTALLED_APPS = INSTALLED_APPS + SERVER_APPS
+    except NameError:
+        pass
 except ImportError:
     pass

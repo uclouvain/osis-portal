@@ -1,5 +1,5 @@
 body {
-  padding-top: 70px;
+  padding-top: 120px;
 }
 .error {
   color:red;
@@ -9,4 +9,13 @@ body {
   color:grey;
   font-style: italic;
   font-weight: normal;
+}
+
+.navbar-nav > li > a {
+    padding-top:45px !important;
+    padding-bottom:5px !important;
+}
+
+.navbar {
+    min-height:85px !important
 }

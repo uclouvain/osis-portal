@@ -29,11 +29,11 @@ from django.utils.translation import ugettext_lazy as _
 
 
 GRADE_CHOICES = (
-    ('BACHELOR', _('Bachelor')),
-    ('MASTER', _('Master')),
-    ('DOCTORATE', _('Ph.D')),
-    ('TRAINING_CERTIFICATE', _('Teacher training certificate')),
-    ('CERTIFICATE', _('Certificate')))
+    ('BACHELOR', _('bachelor')),
+    ('MASTER', _('master')),
+    ('DOCTORATE', _('ph_d')),
+    ('TRAINING_CERTIFICATE', _('teacher_training_certificate')),
+    ('CERTIFICATE', _('certificate')))
 
 
 class GradeTypeAdmin(admin.ModelAdmin):
@@ -56,3 +56,7 @@ def find_all():
 
 def find_by_grade(grade):
     return GradeType.objects.filter(grade=grade).order_by("name")
+
+
+def find_by_id(an_id):
+    return GradeType.objects.get(pk=an_id)

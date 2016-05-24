@@ -26,6 +26,7 @@
 
 from couchbase import Couchbase
 from pprint import pprint
+import json
 
 
 def couchbase_insert(json_datas):

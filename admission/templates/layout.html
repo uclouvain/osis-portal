@@ -54,14 +54,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{% url 'home' %}" id="lnk_home"><img
-                        src="{% static 'img/logo_osis.png' %}"
-                        style="margin-top: -10px;"></a>
+                <a class="navbar-brand" href="{% url 'home' %}" id="lnk_home">
+                    <img src="{% static 'img/logo_institution.jpg' %}" style="margin-top: -10px;"></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-
+                <h2 class="navbar-text" style="padding-top:6px">{% trans 'institution_identification' %}</h2>
                 <ul class="nav navbar-nav navbar-right">
                     {% if request.user.is_authenticated %}
                     <li class="dropdown">
@@ -81,21 +80,20 @@
             </div>
         </div>
     </nav>
-
+</nav>
     <div class="container">
         {% block content %}
         {% endblock %}
         <br>
         <br>
     </div>
+    <hr>
 
-    <nav class="navbar navbar-default navbar-fixed-bottom">
-        <div class="container">
-            <p class="navbar-text pull-left"></p>
-            <p class="navbar-text pull-right"><span class="glyphicon glyphicon-copyright-mark"></span> 2016 <a
-                    href="http://www.uclouvain.be" target="_blank" id="lnk_ucl">Université catholique de Louvain</a></p>
-        </div>
-    </nav>
+    <div class="container">
+        <p class="navbar-text pull-left"></p>
+        <p class="navbar-text pull-right"><span class="glyphicon glyphicon-copyright-mark"></span> 2016 <a
+                href="http://www.uclouvain.be" target="_blank" id="lnk_ucl">Université catholique de Louvain</a></p>
+    </div>
 
     <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>

@@ -34,15 +34,13 @@ class PersonAddressAdmin(admin.ModelAdmin):
 
 
 class PersonAddress(models.Model):
-    ADDRESS_TYPE = (
-    ('LEGAL', _('Legal')),
-    ('CONTACT', _('Contact')))
+    ADDRESS_TYPE = (('LEGAL', _('Legal')),
+                    ('CONTACT', _('Contact')))
 
     person = models.ForeignKey('Person')
     type = models.CharField(max_length=20, choices=ADDRESS_TYPE)
     street = models.CharField(max_length=255)
     number = models.CharField(max_length=6)
-    #box missing
     complement = models.CharField(max_length=255, blank=True, null=True)
     postal_code = models.CharField(max_length=20)
     city = models.CharField(max_length=255)
@@ -56,11 +54,11 @@ def find_by_person(a_person):
     return PersonAddress.objects.filter(person=a_person)
 
 
-def find_by_person_type(a_person,type):
+def find_by_person_type(a_person, type):
     """ Return a list containing one or more addresses of a person. Returns None if there is no address.
     :param a_person: An instance of the class base.models.person.Person
     """
-    adrs = PersonAddress.objects.filter(person=a_person, type=type)
-    if adrs:
-        return adrs[0]
+    addresses = PersonAddress.objects.filter(person=a_person, type=type)
+    if addresses:
+        return addresses[0]
     return None

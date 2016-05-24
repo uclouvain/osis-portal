@@ -330,3 +330,49 @@ function offer_selection_display(){
         .remove()
         .end()
     }
+
+// AA : 25/04/16
+
+function display(id,state){
+    var elt = document.getElementById(id);
+
+    if(state){
+        elt.style = "visibility:visible;display:block;";
+    }else{
+        elt.style = "visibility:hidden;display:none;";
+    }
+}
+
+function reset_radio(elt_name){
+    x=document.getElementsByName(elt_name);
+    var i;
+    for (i = 0; i < x.length; i++) {
+
+        if (x[i].type == "radio") {
+            x[i].checked = false;
+        }
+    }
+}
+
+function disabled_reset_field_txt(id, state){
+
+    if(state){
+        document.getElementById(id).disabled = true;
+    }else{
+        document.getElementById(id).disabled = false;
+    }
+    document.getElementById(id).value="";
+}
+
+$("#slt_nationality").change(function() {
+   $.ajax({
+       url: "/admission/country?nationality=" + $("#slt_nationality").val()
+     }).then(function(data) {
+
+        if (data.european_union) {
+              $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
+        }else{
+              $('#pnl_assimilation_criteria').css('visibility', 'visible').css('display','block');
+        }
+     });
+ });
