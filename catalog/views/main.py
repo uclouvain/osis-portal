@@ -23,12 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
-from django.conf.urls import url, include
+from django.contrib import messages
+from django.shortcuts import render
+from django.utils.translation import ugettext_lazy as _
 
-urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^admission/', include('admission.urls')),
-    url(r'^dashboard/', include('dashboard.urls')),
-    url(r'^catalog/',include('catalog.urls'))
-]
+# Create your views here.
+
+
+def catalog_home(request):
+    messages.add_message(request, messages.ERROR, _('dev_message'))
+    return render(request, "catalog_home.html", {})

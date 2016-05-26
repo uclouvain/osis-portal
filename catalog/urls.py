@@ -23,12 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
-from django.conf.urls import url, include
+from django.conf.urls import url
+from catalog.views import main
+
+app_name = 'catalog'
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^admission/', include('admission.urls')),
-    url(r'^dashboard/', include('dashboard.urls')),
-    url(r'^catalog/',include('catalog.urls'))
+    url(r'^$', main.catalog_home, name='catalog_home'),
 ]
