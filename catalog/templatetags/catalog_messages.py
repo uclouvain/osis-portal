@@ -23,12 +23,37 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
-from django.conf.urls import url, include
+from django import template
+from django.contrib import messages
 
-urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^admission/', include('admission.urls')),
-    url(r'^dashboard/', include('dashboard.urls')),
-    url(r'^catalog/',include('catalog.urls'))
-]
+register = template.Library()
+
+@register.assignment_tag(takes_context=True)
+def as_messages_info(context):
+    request = context['request']
+    msgs = messages.get_messages(request)
+
+    for m in msgs:
+        if 'info' in m.tags:
+            return True
+    return False
+
+@register.assignment_tag(takes_context=True)
+def as_messages_warning(context):
+    request = context['request']
+    msgs = messages.get_messages(request)
+
+    for m in msgs:
+        if 'warning' in m.tags:
+            return True
+    return False
+
+@register.assignment_tag(takes_context=True)
+def as_messages_error(context):
+    request = context['request']
+    msgs = messages.get_messages(request)
+
+    for m in msgs:
+        if 'error' in m.tags:
+            return True
+    return False
