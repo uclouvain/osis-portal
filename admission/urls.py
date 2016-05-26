@@ -59,6 +59,7 @@ urlpatterns = [
     url(r'^logout/$', logout, name='logout'),
 
     url(r'^offers/$', offer.search),
+    url(r'^offer/$', offer.find_by_id),
 
     url(r'^options/$', option.find_by_offer),
 

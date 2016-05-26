@@ -78,6 +78,40 @@ def save_application_offer(request):
                     application.doctorate = False
 
         application.offer_year = offer_year
+
+        if request.POST.get('rdb_offer_belgiandegree'):
+            if request.POST.get('rdb_offer_belgiandegree') == "true":
+                application.belgian_degree = True
+            else:
+                application.belgian_degree = False
+        if request.POST.get('rdb_offer_vae'):
+            if request.POST.get('rdb_offer_vae') == "true":
+                application.vae = True
+            else:
+                application.vae = False
+        if request.POST.get('rdb_offer_samestudies'):
+            if request.POST.get('rdb_offer_samestudies') == "true":
+                application.started_samestudies = True
+            else:
+                application.started_samestudies = False
+        if request.POST.get('rdb_offer_valuecredits'):
+            if request.POST.get('rdb_offer_valuecredits') == "true":
+                application.credits_to_value = True
+            else:
+                application.credits_to_value = False
+        if request.POST.get('rdb_offer_sameprogram'):
+            if request.POST.get('rdb_offer_sameprogram') == "true":
+                application.applied_to_sameprogram = True
+            else:
+                application.resident = False
+        if request.POST.get('rdb_offer_resident'):
+            if request.POST.get('rdb_offer_resident') == "true":
+                application.resident = True
+            else:
+                application.resident = False
+        if request.POST.get('txt_offer_lottery'):
+            application.lottery_number = request.POST.get('txt_offer_lottery')
+
         application.save()
         # answer_question_
         for key, value in request.POST.items():

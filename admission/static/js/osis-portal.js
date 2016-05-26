@@ -1,5 +1,6 @@
 $("#slt_offer_type").change(function() {
 
+    init_static_questions();
     $("#pnl_grade_choices").find("label")
         .remove()
         .end()
@@ -308,6 +309,32 @@ function offer_selection_display(){
             });
             }
           });
+
+           $.ajax({
+            url: "/admission/offer?offer=" + offer_year_id
+           }).then(function(data) {
+
+            init_static_questions();
+//            alert(data.subject_to_quota);
+//            alert(data.grade_type);
+            if (data.subject_to_quota){
+                $('#pnl_offer_sameprogram').css('visibility', 'visible').css('display','block');
+                $('#pnl_offer_sameprogram').find('input').prop('required', true);
+
+              }else{
+
+                $('#pnl_offer_belgiandegree').css('visibility', 'visible').css('display','block');
+                $('#pnl_offer_belgiandegree').find('input').prop('required', true);
+
+                //// BACHELOR grade_type must have fixed values
+                if (data.grade_type==1) {
+                    $('#pnl_offer_samestudies').css('visibility', 'visible').css('display','block');
+                    $('#pnl_offer_samestudies').find('input').prop('required', true);
+                }
+        }
+
+        });
+
     }
 
     function set_pnl_questions_empty(){
@@ -330,8 +357,6 @@ function offer_selection_display(){
         .remove()
         .end()
     }
-
-// AA : 25/04/16
 
 function display(id,state){
     var elt = document.getElementById(id);
@@ -376,3 +401,84 @@ $("#slt_nationality").change(function() {
         }
      });
  });
+
+//Display pnl_offer_vae only for Masters and only when rdb_offer_belgiandegree_false is clicked
+
+$("#rdb_offer_belgiandegree_true").click(function() {
+           $.ajax({
+            url: "/admission/offer?offer=" + $("#txt_offer_year_id").val()
+           }).then(function(data) {
+
+            if (data.grade_type!=1){
+               $('#pnl_offer_vae').css('visibility', 'hidden').css('display','none');
+               $('#pnl_offer_vae').find('input[type=radio]:checked').removeAttr('checked');
+               $('#pnl_offer_vae').find('input').removeAttr('required');
+              }
+        });
+
+});
+
+$("#rdb_offer_belgiandegree_false").click(function() {
+           $.ajax({
+            url: "/admission/offer?offer=" + $("#txt_offer_year_id").val()
+           }).then(function(data) {
+
+            if (data.grade_type!=1){
+               $('#pnl_offer_vae').css('visibility', 'visible').css('display','block');
+               $('#pnl_offer_vae').find('input').prop('required', true );
+              }
+        });
+
+});
+
+
+$("#rdb_offer_samestudies_true").click(function() {
+   $('#pnl_offer_valuecredits').css('visibility', 'visible').css('display','block');
+   $('#pnl_offer_valuecredits').find('input').prop('required', true );
+});
+
+$("#rdb_offer_samestudies_false").click(function() {
+   $('#pnl_offer_valuecredits').css('visibility', 'hidden').css('display','none');
+   $('#pnl_offer_valuecredits').find('input[type=radio]:checked').removeAttr('checked');
+   $('#pnl_offer_valuecredits').find('input').removeAttr('required');
+});
+
+///OFFER SUBJECT TO QUOTA
+
+$("#rdb_offer_sameprogram_true").click(function() {
+
+   $('#pnl_offer_resident').css('visibility', 'hidden').css('display','none');
+   $('#pnl_offer_resident').find('input[type=radio]:checked').removeAttr('checked');
+   $('#pnl_offer_resident').find('input').removeAttr('required');
+
+   $('#pnl_offer_lottery').css('visibility', 'hidden').css('display','none');
+   $('#txt_offer_lottery').val('');
+   $('#txt_offer_lottery').find('input').removeAttr('required');
+});
+
+$("#rdb_offer_sameprogram_false").click(function() {
+
+   $('#pnl_offer_resident').css('visibility', 'visible').css('display','block');
+   $('#pnl_offer_resident').find('input').prop('required', true );
+});
+
+$("#rdb_offer_resident_true").click(function() {
+   $('#pnl_offer_lottery').css('visibility', 'hidden').css('display','none');
+   $('#txt_offer_lottery').val('');
+   $('#txt_offer_lottery').find('input').removeAttr('required');
+});
+
+$("#rdb_offer_resident_false").click(function() {
+   $('#pnl_offer_lottery').css('visibility', 'visible').css('display','block');
+   $('#pnl_offer_lottery').find('input').prop('required', true);
+});
+
+
+function init_static_questions (){
+
+   $("#pnl_static_questions").children().css('visibility', 'hidden').css('display','none');
+   $('#pnl_static_questions').find('input[type=radio]:checked').removeAttr('checked');
+   $('#pnl_static_questions').find('input').removeAttr('required');
+   $('#txt_offer_lottery').val('');
+
+}
