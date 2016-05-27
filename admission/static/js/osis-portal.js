@@ -520,20 +520,21 @@ function reset_input(id){
  });
 
 
-$("select[id^='slt_foreign_high_institution_']" ).change(function(event) {
+$("select[id^='slt_foreign_high_institution_country_']" ).change(function(event) {
+alert('slt_foreign_high_institution_country_');
     var target = $(event.target);
     var id = target.attr("id");
     if (typeof id == 'undefined') {
         target = target.parent();
         id = target.attr("id");
     }
-    year = id.replace('slt_foreign_high_institution_','');
+    year = id.replace('slt_foreign_high_institution_country_','');
 
     $("#slt_cities_high_"+year).find("option")
         .remove()
        .end();
 
-    $("#slt_foreign_university_name_"+year).find("option")
+    $("#slt_foreign_high_name_"+year).find("option")
         .remove()
        .end();
 
@@ -666,6 +667,16 @@ function display_main_panel(radio_value, year){
     $('#lbl_obtained_result_foreign_'+year).css('visibility', 'hidden').css('display','none');
     $('#txt_credits_enrolled_foreign_'+year).val('');
     $('#txt_credits_obtained_foreign_'+year).val('');
+    //FOREIGN_HIGH_EDUCATION
+    $('#slt_foreign_high_institution_country_'+year).prop("selectedIndex",-1);
+    $('#slt_cities_high_'+year).prop("selectedIndex",-1);
+    $('#slt_foreign_high_name_'+year).prop("selectedIndex",-1);
+    $('#chb_foreign_institution_locality_adhoc_'+year).prop( "checked", false );
+    $('#chb_foreign_institution_name_adhoc_'+year).prop( "checked", false );
+    $('#txt_foreing_city_specify_'+year).val('');
+    $('#txt_foreign_name_specify_'+year).val('');
+    $('#txt_foreing_city_specify_'+year).prop( "disabled", true );
+    $('#txt_foreign_name_specify_'+year).prop( "disabled", true );
 
     if (radio_value=='LOCAL_UNIVERSITY' || radio_value=='LOCAL_HIGH_EDUCATION'   ){
         $('#pnl_national_education_'+year).css('visibility', 'visible').css('display','block');
@@ -708,7 +719,7 @@ function display_main_panel(radio_value, year){
         $('#pnl_domain_university_'+year).css('visibility', 'visible').css('display','block');
         $('#pnl_domain_no_university_'+year).css('visibility', 'hidden').css('display','none');
         $('#pnl_university_'+year).css('visibility', 'hidden').css('display','none');
-        $('#pnl_foreign_no_university_institution_'+year).css('visibility', 'visible').css('display','display');
+        $('#pnl_foreign_no_university_institution_'+year).css('visibility', 'visible').css('display','block');
     }
 
     if (radio_value=='ANOTHER_ACTIVITY'){
@@ -816,43 +827,90 @@ function display_main_panel(radio_value, year){
 
     }
 
-    if (radio_value=='FOREIGN_UNIVERSITY'){
-        if($('#hdn_original_national_institution_adhoc_'+year).val() == 'True'){
-            $('#chb_national_institution_locality_adhoc_'+year).prop( "checked", true );
-            $('#chb_national_institution_name_adhoc_'+year).prop( "checked", true );
-            $('#txt_city_specify_'+year).prop( "disabled", false );
-            $('#txt_name_specify_'+year).prop( "disabled", false );
-            $('#slt_foreign_institution_country_'+year).prop( "disabled", true );
-            $('#slt_cities_'+year).prop( "disabled", true );
-            $('#slt_foreign_university_name_'+year).prop( "disabled", true );
+    if (radio_value=='FOREIGN_UNIVERSITY' || radio_value=='FOREIGN_HIGH_EDUCATION'){
+        if (radio_value=='FOREIGN_UNIVERSITY' ){
+            if($('#hdn_original_national_institution_adhoc_'+year).val() == 'True'){
+                $('#chb_national_institution_locality_adhoc_'+year).prop( "checked", true );
+                $('#chb_national_institution_name_adhoc_'+year).prop( "checked", true );
+                $('#txt_city_specify_'+year).prop( "disabled", false );
+                $('#txt_name_specify_'+year).prop( "disabled", false );
+                $('#slt_foreign_institution_country_'+year).prop( "disabled", true );
+                $('#slt_cities_'+year).prop( "disabled", true );
+                $('#slt_foreign_university_name_'+year).prop( "disabled", true );
+            }else{
+
+                if($('#hdn_original_national_institution_country_id_'+year).val() != 'None'){
+                    populate_slt_foreign_university('slt_foreign_institution_country_'+year, $('#hdn_original_national_institution_country_id_'+year).val(), year, $('#hdn_original_national_institution_city_'+year).val(),$('#hdn_original_national_institution_id_'+year).val());
+
+                    /*$('#slt_foreign_institution_country_'+year+' option').each(function(){
+                        alert((this).attr('value'));
+                        alert($('#hdn_original_national_institution_country_id_'+year).val());
+                        if($(this).attr('value')==$('#hdn_original_national_institution_country_id_'+year).val()){
+                            $(this).prop('selected', true);
+                        }
+                    });*/
+                }
+
+                if($('#hdn_original_national_institution_city_'+year).val() != 'None'){
+                    /*$('#slt_cities_'+year+' option').each(function(){
+                        if($(this).attr('value')==$('#hdn_original_national_institution_city_'+year).val()){
+                            $(this).prop('selected', true);
+                        }
+                    });*/
+                }
+
+                if($('#hdn_original_national_institution_id_'+year).val() != 'None'){
+                    /*$('#slt_foreign_university_name_'+year+' option').each(function(){
+                        if($(this).attr('value')==$('#hdn_original_national_institution_id_'+year).val()){
+                            $(this).prop('selected', true);
+                        }
+                    });*/
+                }
+            }
         }else{
+            if(radio_value=='FOREIGN_HIGH_EDUCATION'){
+                if($('#hdn_original_national_institution_adhoc_'+year).val() == 'True'){
+                    $('#chb_foreign_institution_locality_adhoc_'+year).prop( "checked", true );
+                    $('#chb_foreign_institution_name_adhoc_'+year).prop( "checked", true );
+                    $('#txt_foreing_city_specify_'+year).prop( "disabled", false );
+                    $('#txt_foreign_name_specify_'+year).prop( "disabled", false );
+                    $('#slt_foreign_high_institution_country_'+year).prop( "disabled", true );
+                    $('#slt_cities_high_'+year).prop( "disabled", true );
+                    $('#slt_foreign_high_name_'+year).prop( "disabled", true );
+                }else{
 
-            if($('#hdn_original_national_institution_country_id_'+year).val() != 'None'){
-                populate_slt_foreign_university('slt_foreign_institution_country_'+year, $('#hdn_original_national_institution_country_id_'+year).val(), year, $('#hdn_original_national_institution_city_'+year).val(),$('#hdn_original_national_institution_id_'+year).val());
+                    if($('#hdn_original_national_institution_country_id_'+year).val() != 'None'){
+                        populate_slt_foreign_high_institution('slt_foreign_high_institution_country_'+year,
+                                                              $('#hdn_original_national_institution_country_id_'+year).val(),
+                                                              year,
+                                                              $('#hdn_original_national_institution_city_'+year).val(),
+                                                              $('#hdn_original_national_institution_id_'+year).val());
 
-                /*$('#slt_foreign_institution_country_'+year+' option').each(function(){
-                    alert((this).attr('value'));
-                    alert($('#hdn_original_national_institution_country_id_'+year).val());
-                    if($(this).attr('value')==$('#hdn_original_national_institution_country_id_'+year).val()){
-                        $(this).prop('selected', true);
+                        /*$('#slt_foreign_institution_country_'+year+' option').each(function(){
+                            alert((this).attr('value'));
+                            alert($('#hdn_original_national_institution_country_id_'+year).val());
+                            if($(this).attr('value')==$('#hdn_original_national_institution_country_id_'+year).val()){
+                                $(this).prop('selected', true);
+                            }
+                        });*/
                     }
-                });*/
-            }
 
-            if($('#hdn_original_national_institution_city_'+year).val() != 'None'){
-                /*$('#slt_cities_'+year+' option').each(function(){
-                    if($(this).attr('value')==$('#hdn_original_national_institution_city_'+year).val()){
-                        $(this).prop('selected', true);
+                    if($('#hdn_original_national_institution_city_'+year).val() != 'None'){
+                        /*$('#slt_cities_'+year+' option').each(function(){
+                            if($(this).attr('value')==$('#hdn_original_national_institution_city_'+year).val()){
+                                $(this).prop('selected', true);
+                            }
+                        });*/
                     }
-                });*/
-            }
 
-            if($('#hdn_original_national_institution_id_'+year).val() != 'None'){
-                /*$('#slt_foreign_university_name_'+year+' option').each(function(){
-                    if($(this).attr('value')==$('#hdn_original_national_institution_id_'+year).val()){
-                        $(this).prop('selected', true);
+                    if($('#hdn_original_national_institution_id_'+year).val() != 'None'){
+                        /*$('#slt_foreign_university_name_'+year+' option').each(function(){
+                            if($(this).attr('value')==$('#hdn_original_national_institution_id_'+year).val()){
+                                $(this).prop('selected', true);
+                            }
+                        });*/
                     }
-                });*/
+                }
             }
         }
         if($('#hdn_original_domain_id_'+year).val() != 'None'){
@@ -1024,6 +1082,58 @@ function populate_slt_foreign_university(id, country_id, year,city, name){
                     $("<option></option>").attr("value",value.id).prop('selected', true).append(value.name).appendTo("#slt_foreign_university_name_"+year);
                 }else{
                     $("<option></option>").attr("value",value.id).append(value.name).appendTo("#slt_foreign_university_name_"+year);
+                }
+            });
+          }
+
+      });
+}
+
+function populate_slt_foreign_high_institution(id, country_id, year,city, education_institution_id){
+    $("#"+id).find("option")
+        .remove()
+       .end();
+
+    $.ajax({
+        url: "/admission/high_countries"
+      }).then(function(data) {
+          if(data.length >0){
+            $("<option></option>").attr("value","-").append("-").appendTo("#"+id);
+            $.each(data, function(key, value) {
+                if(value.country_id == country_id){
+                    $("<option></option>").attr("value",value.country_id).prop('selected', true).append(value.country_name).appendTo("#"+id);
+                }else{
+                    $("<option></option>").attr("value",value.country_id).append(value.country_name).appendTo("#"+id);
+                }
+            });
+          }
+
+      });
+    $.ajax({
+        url: "/admission/high_cities?country="+country_id
+      }).then(function(data) {
+          if(data.length >0){
+            $("<option></option>").attr("value","-").append("-").appendTo("#slt_cities_high_"+year);
+            $.each(data, function(key, value) {
+                if(value.city == city){
+                    $("<option></option>").attr("value",value.city).prop('selected', true).append(value.city).appendTo("#slt_cities_high_"+year);
+                }else{
+                    $("<option></option>").attr("value",value.city).append(value.city).appendTo("#slt_cities_high_"+year);
+                }
+            });
+          }
+
+      });
+    $.ajax({
+        url: "/admission/high_institutions?city="+city
+      }).then(function(data) {
+          if(data.length >0){
+            $("<option></option>").attr("value","-").append("-").appendTo("#slt_foreign_high_name_"+year);
+            $.each(data, function(key, value) {
+                if(value.id == education_institution_id){
+                    $("<option></option>").attr("value",value.id).prop('selected', true).append(value.name).appendTo("#slt_foreign_high_name_"+year);
+                }else{
+                    $("<option></option>").attr("value",value.id).append(value.name).appendTo("#slt_foreign_high_name_"+year);
                 }
             });
           }

@@ -34,14 +34,8 @@
         <div class="col-md-3">
             <label>{% trans 'institution_country'%}</label>
             <select class="form-control"
-                    id="slt_foreign_high_institution_{{curriculum.academic_year.year}}"
+                    id="slt_foreign_high_institution_country_{{curriculum.academic_year.year}}"
                     name="foreign_high_institution_country_{{curriculum.academic_year.year}}">
-                <option value="-">-</option>
-                {% for university in foreign_high_institution_countries %}
-                <option value="{{ university.country.id }}" {%if curriculum.national_institution.country.id == university.country.id %}selected{%endif%}>
-                    {{ university.country }}
-                </option>
-                {% endfor %}
             </select>
         </div>
         <div class="col-md-4">
@@ -49,12 +43,6 @@
              <select class="form-control"
                     id="slt_cities_high_{{curriculum.academic_year.year}}"
                     name="foreign_high_institution_city_{{curriculum.academic_year.year}}">
-                <option value="-">-</option>
-                {% for city in foreign_high_institution_cities|is_list|get_at_index:forloop.counter0 %}
-                <option value="{{ city }}" {%if curriculum.national_institution.city == city %}selected{%endif%}>
-                    {{ city }}
-                </option>
-                {% endfor %}
             </select>
         </div>
         <div class="col-md-5">
@@ -62,15 +50,13 @@
              <select class="form-control"
                     id="slt_foreign_high_name_{{curriculum.academic_year.year}}"
                     name="foreign_high_institution_name_{{curriculum.academic_year.year}}">
-                <option value="-">-</option>
-                {% for high_institution in foreign_high_institutions|is_list|get_at_index:forloop.counter0 %}
-                <option value="{{ high_institution.id }}" {%if curriculum.national_institution.id == high_institution.id %}selected{%endif%}>
-                    {{ high_institution }}
-                </option>
-                {% endfor %}
             </select>
         </div>
     </div>
+
+    <font class="error" style="margin-left:5px;">
+        {% message_error validation_messages year=curriculum.academic_year.year|lower param='foreign_institution' %}</font>
+
     <div class="row">
         <div class="col-md-3">
             <font class="error" style="margin-left:5px;">
@@ -81,7 +67,7 @@
             <label class="radio-inline">
                 <input type="checkbox"
                        name="foreign_institution_locality_adhoc_{{curriculum.academic_year.year}}"
-                       id="chb_national_institution_locality_adhoc_{{curriculum.academic_year.year}}"
+                       id="chb_foreign_institution_locality_adhoc_{{curriculum.academic_year.year}}"
                        onclick="disabled_reset_field_txt('txt_city_specify_{{curriculum.academic_year.year}}',! this.checked);reset_slt('slt_cities_{{curriculum.academic_year.year}}');">
             </label>
         </div>
@@ -90,7 +76,7 @@
             <label class="radio-inline">
                 <input type="checkbox"
                        name="foreign_institution_name_adhoc_{{curriculum.academic_year.year}}"
-                       id="chb_national_institution_name_adhoc_{{curriculum.academic_year.year}}"
+                       id="chb_foreign_institution_name_adhoc_{{curriculum.academic_year.year}}"
                        onclick="disabled_reset_field_txt('txt_name_specify_{{curriculum.academic_year.year}}',! this.checked);reset_slt('slt_foreign_university_name_{{curriculum.academic_year.year}}');">
             </label>
         </div>
@@ -101,15 +87,15 @@
         <div class="col-md-4">
             <label>{% trans 'specify'%}</label>
             <input type="text" class="form-control"
-                   id="txt_city_specify_{{curriculum.academic_year.year}}"
-                   name="city_specify_{{curriculum.academic_year.year}}"
+                   id="txt_foreing_city_specify_{{curriculum.academic_year.year}}"
+                   name="foreign_city_specify_{{curriculum.academic_year.year}}"
                    value="{%if curriculum.national_institution.adhoc = True %}curriculum.national_institution.city{%endif%}">
         </div>
         <div class="col-md-5">
             <label>{% trans 'specify'%}</label>
             <input type="text" class="form-control"
-                   id="txt_name_specify_{{curriculum.academic_year.year}}"
-                   name="name_specify_{{curriculum.academic_year.year}}"
+                   id="txt_foreign_name_specify_{{curriculum.academic_year.year}}"
+                   name="foreign_name_specify_{{curriculum.academic_year.year}}"
                    value="{%if curriculum.national_institution.adhoc = True %}curriculum.national_institution.name{%endif%}">
         </div>
     </div>
@@ -121,11 +107,8 @@
                 {% message_error validation_messages year=curriculum.academic_year.year|lower param='foreign_institution_city' %}</font>
         </div>
         <div class="col-md-4">
-            <font class="error" style="margin-left:5px;">
-                {% message_error validation_messages year=curriculum.academic_year.year|lower param='foreign_institution' %}</font>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-4">
             <label>{% trans 'domain' %} *</label>
@@ -145,7 +128,7 @@
                     {% message_error validation_messages year=curriculum.academic_year.year|lower param='domain_foreign' %}</font>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-5">
             <div id="pnl_subdomain_foreign_{{curriculum.academic_year.year}}">
                 <label>{% trans 'subdomain' %} <span id="lbl_subdomain_mandatory_foreign_{{curriculum.academic_year.year}}">{%if curriculum.domain.sub_domains%}*{%endif%}</span></label>
                 <div>
@@ -166,7 +149,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label>{% trans 'grade_type' %} *</label>
             <div>
                 <select class="form-control"
@@ -185,7 +168,7 @@
     <br>
     <div class="row">
         <div class="col-md-6">
-            <label>{% trans 'linguistic_regime' %}</label>
+            <label>{% trans 'linguistic_regime' %} *</label>
              <select class="form-control"
                      id="slt_linguistic_regime_{{curriculum.academic_year.year}}"
                      name="linguistic_regime_{{curriculum.academic_year.year}}">
@@ -306,7 +289,6 @@
                    id="txt_credits_obtained_foreign_{{curriculum.academic_year.year}}"
                    value="{{ curriculum.credits_obtained  | default_if_none:'' }}"
                    class="form-control">
-
             <font class="error" style="margin-left:5px;">{% message_error validation_messages year=curriculum.academic_year.year|lower param='credits_obtained_foreign' %}</font>
         </div>
     </div>

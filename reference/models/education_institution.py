@@ -29,7 +29,7 @@ from reference.models import country
 
 
 class EducationInstitutionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'adhoc')
+    list_display = ('name', 'institution_type', 'country', 'adhoc')
 
 
 class EducationInstitution(models.Model):
@@ -144,6 +144,7 @@ def find_education_institution_by_adhoc_type_not_isocode(adhoc_type, a_type, an_
 
 
 def find_education_institution_by_country_adhoc_type(a_country_id, adhoc_type, a_type):
+
     a_country = country.find_by_id(a_country_id)
     return EducationInstitution.objects\
         .filter(adhoc=adhoc_type, institution_type=a_type, country__iso_code=a_country.iso_code).order_by('name')

@@ -73,6 +73,7 @@ urlpatterns = [
     url(r'^langue_recognized/$', language.is_recognized),
     url(r'^highnonuniversity/$', education_institution.find_national_by_city_type),
 
+    url(r'^high_countries/$', education_institution.find_countries_by_type_adhoc),
     url(r'^high_cities/$', education_institution.find_by_country_type_adhoc),
     url(r'^high_institutions/$', education_institution.find_high_institution_by_city),
     url(r'^countries/$', education_institution.find_countries),

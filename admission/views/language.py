@@ -50,7 +50,6 @@ def is_recognized(request):
     language = mdl_reference.language.find_by_id(a_language_id)
     languages = []
     if language:
-        print('language:', language.recognized)
         languages.append(language)
     serializer = LanguageSerializer(languages, many=True)
     return JSONResponse(serializer.data)

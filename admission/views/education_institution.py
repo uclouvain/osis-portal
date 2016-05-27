@@ -47,7 +47,6 @@ class EducationInstitutionSerializer(serializers.ModelSerializer):
 
 @csrf_exempt
 def find_by_country(request):
-    print('find_by_country')
     country = request.GET['country']
     education_institutions = mdl_reference.education_institution.find_by_country(country)
     serializer = EducationInstitutionSerializer(education_institutions, many=True)
@@ -79,22 +78,19 @@ def find_national_by_city_type(request):
             .find_by_institution_city_type_iso_code(city, 'HIGHER_NON_UNIVERSITY', 'BE', False)
     else:
         education_institutions = mdl_reference.education_institution.find_education_institution_by_adhoc(False)
-    print(education_institutions)
     serializer = EducationInstitutionSerializer(education_institutions, many=True)
     return JSONResponse(serializer.data)
 
 
 @csrf_exempt
 def find_high_institution_by_city(request):
-    print('find_high_institution_by_city')
     city = request.GET['city']
-    print('city', city)
-    if city != "-":
+    if city and city != "-":
         education_institutions = mdl_reference.education_institution.find_by_city_not_isocode(city, 'BE', 'HIGHER_NON_UNIVERSITY')
     else:
         education_institutions = mdl_reference.education_institution\
             .find_education_institution_by_adhoc_type_not_isocode(False, 'HIGHER_NON_UNIVERSITY', 'BE')
-    print('education_institutions',education_institutions)
+
     serializer = EducationInstitutionSerializer(education_institutions, many=True)
     return JSONResponse(serializer.data)
 
@@ -102,9 +98,13 @@ def find_high_institution_by_city(request):
 @csrf_exempt
 def find_by_country_type_adhoc(request):
     country = request.GET['country']
-    education_institutions = mdl_reference.education_institution.find_education_institution_by_country_adhoc_type(country,False,'HIGHER_NON_UNIVERSITY')
+    if country and country != "-":
+        education_institutions = mdl_reference.education_institution.find_education_institution_by_country_adhoc_type(country, False,'HIGHER_NON_UNIVERSITY')
+    else:
+        education_institutions = mdl_reference.education_institution.find_education_institution_by_adhoc_type_not_isocode(False, 'HIGHER_NON_UNIVERSITY',"BE")
     serializer = EducationInstitutionSerializer(education_institutions, many=True)
     return JSONResponse(serializer.data)
+
 
 class MySerialiser(Serializer):
     def end_object( self, obj ):
@@ -118,7 +118,21 @@ class MySerialiser(Serializer):
 @csrf_exempt
 def find_countries(request):
     education_institutions = mdl_reference.education_institution.find_countries_by_type_excluding_country('UNIVERSITY',False,"BE")
-    #serializer = EducationInstitutionSerializer(education_institutions, many=True)
+    serializer = MySerialiser()
+    data = serializer.serialize(education_institutions)
+    return JSONResponse(data)
+
+
+@csrf_exempt
+def find_countries_by_type_adhoc(request):
+    '''
+    Get all the countries present in the table education_institution.
+    Non belgian Countries of HIGHER_NON_UNIVERSITY type and with adhoc = false
+    :param request:
+    :return:
+    '''
+    education_institutions = mdl_reference.education_institution\
+        .find_countries_by_type_excluding_country('HIGHER_NON_UNIVERSITY', False, "BE")
     serializer = MySerialiser()
     data = serializer.serialize(education_institutions)
     return JSONResponse(data)

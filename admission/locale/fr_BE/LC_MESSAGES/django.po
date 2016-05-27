@@ -822,3 +822,5 @@ msgstr "Non-précisé"
 msgid "institution_country"
 msgstr "Pays de l'établissement"
 
+msgid "institution_mandatory"
+msgstr "Veuillez indiquer auprès de quel établissement."
