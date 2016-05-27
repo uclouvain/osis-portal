@@ -79,3 +79,19 @@ def pnl_foreign_education_message_error(a, **kwargs):
                 return True
     return False
 
+
+@register.assignment_tag
+def pnl_other_message_error(a, **kwargs):
+    print('pnl_other_message_error')
+
+    if a is None or len(a) == 0:
+        return False
+    keys = ['activity_type', 'activity', 'activity_place']
+    year = kwargs['year']
+    for elt_name in keys:
+        key = '%s_%s' % (elt_name, year)
+        for k, v in a.items():
+            if k.startswith(key):
+                print('erreur Other', key)
+                return True
+    return False

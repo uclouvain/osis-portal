@@ -92,7 +92,8 @@ def save(request):
                                            "languages":                 mdl_reference.language.find_languages(),
                                            "foreign_high_institution_countries": foreign_high_institution_countries,
                                            "foreign_high_institution_cities": foreign_high_institution_cities,
-                                           "foreign_high_institutions":foreign_high_institutions})
+                                           "foreign_high_institutions":foreign_high_institutions,
+                                           "current_academic_year": mdl.academic_year.current_academic_year()})
 
     #Get the data in bd
     a_person = mdl.person.find_by_user(request.user)
@@ -136,7 +137,8 @@ def save(request):
                                                "languages":                 mdl_reference.language.find_languages(),
                                                "foreign_high_institution_countries": foreign_high_institution_countries,
                                                "foreign_high_institution_cities": foreign_high_institution_cities,
-                                               "foreign_high_institutions": foreign_high_institutions})
+                                               "foreign_high_institutions": foreign_high_institutions,
+                                               "current_academic_year": mdl.academic_year.current_academic_year()})
 
 
 def update(request):
@@ -201,7 +203,8 @@ def update(request):
                                                    "languages":                 mdl_reference.language.find_languages(),
                                                    "foreign_high_institution_countries": foreign_high_institution_countries,
                                                    "foreign_high_institution_cities": foreign_high_institution_cities,
-                                                   "foreign_high_institutions": foreign_high_institutions})
+                                                   "foreign_high_institutions": foreign_high_institutions,
+                                                   "current_academic_year": mdl.academic_year.current_academic_year()})
 
 
 def validate_fields_form(request):
@@ -247,6 +250,7 @@ def validate_fields_form(request):
             is_valid = False
         else:
             curriculum.path_type = request.POST.get('path_type_%s' % curriculum_year)
+            print('curriculum.path_type :', curriculum.path_type, '!' )
             if curriculum.path_type == 'LOCAL_UNIVERSITY' or curriculum.path_type == 'LOCAL_HIGH_EDUCATION':
                 is_valid, validation_messages, curriculum = validate_belgian_fields_form(request,
                                                                                          curriculum,
@@ -254,7 +258,8 @@ def validate_fields_form(request):
                                                                                          validation_messages,
                                                                                          is_valid)
             else:
-                if curriculum.path_type == 'FOREIGN_UNIVERSITY' or 'FOREIGN_HIGH_EDUCATION':
+                if curriculum.path_type == 'FOREIGN_UNIVERSITY' or curriculum.path_type =='FOREIGN_HIGH_EDUCATION':
+                    print('111')
                     is_valid, validation_messages, curriculum, universities_cities, universities, \
                     high_non_universities_cities,high_non_universities_names = validate_foreign_university_fields_form(request,
                                                                                                         curriculum,
@@ -265,6 +270,17 @@ def validate_fields_form(request):
                                                                                                         universities,
                                                                                                         high_non_universities_cities,
                                                                                                         high_non_universities_names)
+                else:
+                    print('1111')
+                    print('ici a ')
+                    if curriculum.path_type == 'ANOTHER_ACTIVITY':
+                        print('11111')
+                        print('ici b')
+                        is_valid, validation_messages, curriculum = validate_another_activity_fields_form(request,
+                                                                                                        curriculum,
+                                                                                                        curriculum_year,
+                                                                                                        validation_messages,
+                                                                                                        is_valid)
 
         curricula.append(curriculum)
     return is_valid, validation_messages, curricula, universities_cities, universities, high_non_universities_cities, high_non_universities_names
@@ -703,4 +719,34 @@ def populate_dropdown_foreign_high_list(curricula):
                 institutions_list.append(institution)
             foreign_high_institutions.append(institutions_list)
 
-    return  foreign_high_institution_countries, foreign_high_institution_cities, foreign_high_institutions
+    return foreign_high_institution_countries, foreign_high_institution_cities, foreign_high_institutions
+
+
+def validate_another_activity_fields_form(request, curriculum, curriculum_year, validation_messages, is_valid):
+    print(request.POST.get('activity_type_%s' % curriculum_year))
+    if request.POST.get('activity_type_%s' % curriculum_year) is None:
+        validation_messages['activity_type_%s' % curriculum_year] = _('mandatory_field')
+        is_valid = False
+    else:
+        curriculum.activity_type = request.POST.get('activity_type_%s' % curriculum_year)
+        if curriculum.activity_type == 'JOB' \
+                or curriculum.activity_type == 'INTERNSHIP' \
+                or curriculum.activity_type == 'VOLUNTEERING':
+            if request.POST.get('activity_%s' % curriculum_year) is None \
+                    or len(request.POST.get('activity_%s' % curriculum_year)) == 0:
+                validation_messages['activity_%s' % curriculum_year] = _('mandatory_field')
+                is_valid = False
+            else:
+                curriculum.activity = request.POST.get('activity_%s' % curriculum_year)
+            if request.POST.get('activity_place_%s' % curriculum_year) is None \
+                    or len(request.POST.get('activity_place_%s' % curriculum_year)) == 0:
+                validation_messages['activity_place_%s' % curriculum_year] = _('mandatory_field')
+                is_valid = False
+            else:
+                curriculum.activity_place = request.POST.get('activity_place_%s' % curriculum_year)
+
+    return is_valid, validation_messages, curriculum
+
+
+def errors_update(request):
+    return update(request)

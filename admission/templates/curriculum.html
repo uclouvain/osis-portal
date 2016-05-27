@@ -63,6 +63,9 @@
     {% trans 'curriculum_instruction_duplicate' %}
     <br>
     <br>
+    <input type="hidden"
+           id="hdn_current_academic_year"
+           value="{{current_academic_year.year}}" >
     {% for curriculum in curricula %}
     <input type="hidden"
            id="hdn_original_academic_year_{{curriculum.academic_year.year}}"
@@ -142,11 +145,11 @@
     <input type="hidden"
            id="hdn_original_activity_{{curriculum.academic_year.year}}"
            name="original_activity_{{curriculum.academic_year.year}}"
-           value="{{curriculum.activity}}" >
+           value="{{curriculum.activity | default_if_none:''}}" >
     <input type="hidden"
            id="hdn_original_activity_place_{{curriculum.academic_year.year}}"
            name="original_activity_place_{{curriculum.academic_year.year}}"
-           value="{{curriculum.activity_place}}" >
+           value="{{curriculum.activity_place | default_if_none:''}}" >
     <input type="hidden"
            id="hdn_original_study_system_{{curriculum.academic_year.year}}"
            name="original_study_system_{{curriculum.academic_year.year}}"
@@ -154,6 +157,7 @@
 
         {% pnl_national_education__message_error validation_messages year=curriculum.academic_year.year as pnl_national_detail_error%}
         {% pnl_foreign_education_message_error validation_messages year=curriculum.academic_year.year as pnl_foreign_detail_error %}
+        {% pnl_other_message_error validation_messages year=curriculum.academic_year.year as pnl_other_error %}
         Erreur{{pnl_foreign_education_message_error}}fin erreur
         <div class="panel panel-default"
              id="pnl_curriculum_id_{{curriculum.academic_year.year}}">
@@ -212,19 +216,15 @@
                 <label> {% trans 'path_type'%} *</label>
                 <br>
                 <label class="radio-inline">
-                    <input type="radio"curriculum.path_type
+                    <input type="radio"
                            name="path_type_{{curriculum.academic_year.year}}"
                            id="rdb_path_type_local_university_{{curriculum.academic_year.year}}"
-                           {%if curriculum.path_type = 'LOCAL_UNIVERSITY' %}checked{%endif%}
-                           value="LOCAL_UNIVERSITY"
-
-                                    > {% trans 'national_university'%}
+                           value="LOCAL_UNIVERSITY" > {% trans 'national_university'%}
                 </label>
                 <label class="radio-inline">
                     <input type="radio"
                            name="path_type_{{curriculum.academic_year.year}}"
                            id="rdb_path_type_foreign_university_{{curriculum.academic_year.year}}"
-                           {%if curriculum.path_type = 'FOREIGN_UNIVERSITY' %}checked{%endif%}
                            value="FOREIGN_UNIVERSITY"
                          > {% trans 'foreign_university'%}
                 </label>
@@ -232,7 +232,6 @@
                     <input type="radio"
                            name="path_type_{{curriculum.academic_year.year}}"
                            id="rdb_path_type_local_high_non_university_{{curriculum.academic_year.year}}"
-                           {%if curriculum.path_type = 'LOCAL_HIGH_EDUCATION' %}checked{%endif%}
                            value="LOCAL_HIGH_EDUCATION"
                            > {% trans 'high_national_non_university'%}
                 </label>
@@ -240,7 +239,6 @@
                     <input type="radio"
                            name="path_type_{{curriculum.academic_year.year}}"
                            id="rdb_path_type_high_foreign_non_university_{{curriculum.academic_year.year}}"
-                           {%if curriculum.path_type = 'FOREIGN_HIGH_EDUCATION' %}checked{%endif%}
                            value="FOREIGN_HIGH_EDUCATION"
                           > {% trans 'high_foreign_non_university'%}
                 </label>
@@ -248,14 +246,12 @@
                     <input type="radio"
                            name="path_type_{{curriculum.academic_year.year}}"
                            id="rdb_path_type_other_{{curriculum.academic_year.year}}"
-                           {%if curriculum.path_type = 'ANOTHER_ACTIVITY' %}checked{%endif%}
-                           value="ANOTHER_ACTIVITY""> {% trans 'other'%}
+                           value="ANOTHER_ACTIVITY" > {% trans 'other'%}
                 </label>
                 <font class="error" style="margin-left:5px;">{% message_error validation_messages year=curriculum.academic_year.year|lower param='path_type' %}</font>
                 {% include "curriculum/national.html" %}
-
                 {% include "curriculum/foreign.html" %}
-
+                {% include "curriculum/other.html" %}
               </div>
         </div>
     {%endfor%}

@@ -824,3 +824,22 @@ msgstr "Pays de l'établissement"
 
 msgid "institution_mandatory"
 msgstr "Veuillez indiquer auprès de quel établissement."
+
+msgid "activity_type"
+msgstr "Type d'activité"
+
+msgid "question_activity_place"
+msgstr "A quel endroit?"
+
+msgid "question_activity"
+msgstr "Quelle activité?"
+
+
+msgid "onem_needed"
+msgstr "Veuillez joindre l'attestation de l'ONEM stipulant qui n'a pas bénificier d'une dégoration l'autorisation de poursuivre des études"
+
+msgid "job"
+msgstr "Travail"
+
+msgid "illness"
+msgstr "Maladie"

@@ -49,7 +49,7 @@ class Curriculum(models.Model):
                    ('NO_RESULT', _('no_result')))
 
     ACTIVITY_TYPES = (
-            ('JOB', _('Job')),
+            ('JOB', _('job')),
             ('INTERNSHIP', _('internship')),
             ('VOLUNTEERING', _('volunteering')),
             ('UNEMPLOYMENT', _('unemployment')),
