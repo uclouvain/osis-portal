@@ -30,5 +30,10 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^admission/', include('admission.urls')),
     url(r'^dashboard/', include('dashboard.urls')),
-    url(r'^catalog/',include('catalog.urls'))
+    url(r'^catalog/', include('catalog.urls'))
 ]
+
+try:
+    from frontoffice.server_urls import *
+except ImportError:
+    pass
