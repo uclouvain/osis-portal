@@ -136,3 +136,13 @@ def find_countries_by_type_adhoc(request):
     serializer = MySerialiser()
     data = serializer.serialize(education_institutions)
     return JSONResponse(data)
+
+
+@csrf_exempt
+def find_cities_by_country_type_adhoc(request):
+   education_institutions = mdl_reference.education_institution.find_by_isocode_type('BE',
+                                                                                                                'HIGHER_NON_UNIVERSITY',
+                                                                                                                False)
+   serializer = MySerialiser()
+   data = serializer.serialize(education_institutions)
+   return JSONResponse(data)

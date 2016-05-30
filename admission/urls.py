@@ -78,7 +78,8 @@ urlpatterns = [
     url(r'^high_institutions/$', education_institution.find_high_institution_by_city),
     url(r'^countries/$', education_institution.find_countries),
     url(r'^errors_update/$', curriculum.errors_update),
-     url(r'^subdomains/$', domain.find_subdomains),
+    url(r'^subdomains/$', domain.find_subdomains),
+    url(r'^highnonuniversity_cities/$', education_institution.find_cities_by_country_type_adhoc),
 
 
 

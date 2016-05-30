@@ -499,23 +499,10 @@ function reset_input(id){
     }
 
     year = id.replace('slt_national_high_non_university_institution_city_','');
-
-
-    $("#slt_national_high_non_university_institution_"+year).find("option")
-        .remove()
-       .end();
-
-    $.ajax({
-        url: "/admission/highnonuniversity?city=" + target.val()
-      }).then(function(data) {
-          if(data.length >0){
-          $("<option></option>").attr("value","-").append("-").appendTo("#slt_national_high_non_university_institution_"+year);
-            $.each(data, function(key, value) {
-                $("<option></option>").attr("value",value.id).append(value.name).appendTo("#slt_national_high_non_university_institution_"+year);
-            });
-          }
-
-      });
+    populate_institution($("#hdn_original_national_institution_id_"+year).val(),
+                         target.val(),
+                         'slt_national_high_non_university_institution_city_'+year,
+                         'slt_national_high_non_university_institution_'+year)
 
  });
 
@@ -773,6 +760,10 @@ function display_main_panel(radio_value, year){
 
         }else{
             if (radio_value == 'LOCAL_HIGH_EDUCATION' ){
+                populate_institution($('#hdn_original_national_institution_id_'+year).val(),
+                                     $('#hdn_original_national_institution_city_'+year).val(),
+                                     'slt_national_high_non_university_institution_city_'+year,
+                                     'slt_national_high_non_university_institution_'+year)
                 if($('#hdn_original_national_institution_adhoc_'+year).val() == 'True'){
                     $('#chb_other_school_'+year).prop( "checked", true);
                     $('#txt_other_high_non_university_name_'+year).prop( "disabled", false);
@@ -1253,3 +1244,52 @@ $("select[id^='slt_domain_']" ).change(function(event) {
 
     populate_slt_subdomains(id, 'slt_subdomain_'+year, target.val(), '')
 });
+
+
+function populate_institution(national_institution_id, city_name, slt_city_id, slt_institution_id){
+
+    $("#"+slt_institution_id).find("option")
+        .remove()
+       .end();
+    $("#"+slt_city_id).find("option")
+        .remove()
+       .end();
+    if(city_name==''){
+        city_name = "-"
+        }
+        $.ajax({
+            url: "/admission/highnonuniversity_cities"
+          }).then(function(data) {
+              if(data.length >0){
+              $("<option></option>").attr("value","-").append("-").appendTo("#"+slt_city_id);
+                $.each(data, function(key, value) {
+                    if(value.city == city_name){
+                        $("<option></option>").attr("value",value.city).prop('selected', true).append(value.city).appendTo("#"+slt_city_id);
+
+                    }else{
+                        $("<option></option>").attr("value",value.city).append(value.city).appendTo("#"+slt_city_id);
+                    }
+                });
+              }
+
+          });
+
+        $.ajax({
+            url: "/admission/highnonuniversity?city=" + city_name
+          }).then(function(data) {
+              if(data.length >0){
+              $("<option></option>").attr("value","-").append("-").appendTo("#"+slt_institution_id);
+                $.each(data, function(key, value) {
+                    if(value.id == national_institution_id){
+                        $("<option></option>").attr("value",value.id).prop('selected', true).append(value.name).appendTo("#"+slt_institution_id);
+
+                    }else{
+                        $("<option></option>").attr("value",value.id).append(value.name).appendTo("#"+slt_institution_id);
+                    }
+                });
+              }
+
+          });
+
+
+}

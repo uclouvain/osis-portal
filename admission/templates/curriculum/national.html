@@ -116,12 +116,6 @@
                     <select class="form-control"
                             id="slt_national_high_non_university_institution_city_{{curriculum.academic_year.year}}"
                             name="national_high_non_university_institution_city_{{curriculum.academic_year.year}}">
-                        <option value="-">-</option>
-                        {% for city_national_high_non_university_institution in cities_national_high_non_university_institutions %}
-                        <option value="{{ city_national_high_non_university_institution.city }}" >
-                            {{ city_national_high_non_university_institution.city }}
-                        </option>
-                        {% endfor %}
                     </select>
                 </div>
                 <div class="col-md-6">
@@ -129,12 +123,6 @@
                     <select class="form-control"
                             id="slt_national_high_non_university_institution_{{curriculum.academic_year.year}}"
                             name="national_high_non_university_institution_{{curriculum.academic_year.year}}">
-                        <option value="-">-</option>
-                        {% for national_high_non_university_institution in national_high_non_university_institutions %}
-                        <option value="{{ national_high_non_university_institution.id }}" >
-                            {{ national_high_non_university_institution }}
-                        </option>
-                        {% endfor %}
                     </select>
                 </div>
             </div>
