@@ -760,7 +760,7 @@ function display_main_panel(radio_value, year){
 
         }else{
             if (radio_value == 'LOCAL_HIGH_EDUCATION' ){
-                populate_institution($('#hdn_original_national_institution_id_'+year).val(),
+                populate_institution_city($('#hdn_original_national_institution_id_'+year).val(),
                                      $('#hdn_original_national_institution_city_'+year).val(),
                                      'slt_national_high_non_university_institution_city_'+year,
                                      'slt_national_high_non_university_institution_'+year)
@@ -1246,17 +1246,14 @@ $("select[id^='slt_domain_']" ).change(function(event) {
 });
 
 
-function populate_institution(national_institution_id, city_name, slt_city_id, slt_institution_id){
+function populate_institution_city(national_institution_id, city_name, slt_city_id, slt_institution_id){
 
-    $("#"+slt_institution_id).find("option")
-        .remove()
-       .end();
     $("#"+slt_city_id).find("option")
         .remove()
        .end();
     if(city_name==''){
         city_name = "-"
-        }
+    }
         $.ajax({
             url: "/admission/highnonuniversity_cities"
           }).then(function(data) {
@@ -1273,7 +1270,24 @@ function populate_institution(national_institution_id, city_name, slt_city_id, s
               }
 
           });
+    if(national_institution_id != ''){
+        populate_institution($("#hdn_original_national_institution_id_"+year).val(),
+                             city_name,
+                             'slt_national_high_non_university_institution_city_'+year,
+                             'slt_national_high_non_university_institution_'+year)
+    }
 
+}
+
+function populate_institution(national_institution_id, city_name, slt_city_id, slt_institution_id){
+
+    $("#"+slt_institution_id).find("option")
+        .remove()
+       .end();
+
+    if(city_name==''){
+        city_name = "-"
+    }
         $.ajax({
             url: "/admission/highnonuniversity?city=" + city_name
           }).then(function(data) {

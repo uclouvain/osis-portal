@@ -240,7 +240,7 @@ def validate_fields_form(request, duplicate_year_origin):
                      'result_national':  request.POST.get('result_national_%s' % curriculum_year),
                      'other_school_high_non_university':  request.POST.get('other_school_high_non_university_%s' % curriculum_year),
                      'other_high_non_university_name':  request.POST.get('other_high_non_university_name_%s' % curriculum_year),
-                     'national_high_non_university_institution':  request.POST.get('national_high_non_university_institution_%s' % curriculum_year),
+                     'national_high_non_university_institution': request.POST.get('national_high_non_university_institution_%s' % curriculum_year),
                      'domain_non_university':  request.POST.get('domain_non_university_%s' % curriculum_year),
                      'grade_type_no_university': request.POST.get('grade_type_no_university_%s' % curriculum_year),
                      'study_systems': request.POST.get('study_systems_%s' % curriculum_year),
@@ -356,7 +356,6 @@ def is_admission(a_person, secondary_education):
 
 
 def validate_belgian_fields_form(curriculum, curriculum_year, validation_messages, is_valid, data_dict):
-
     if curriculum.path_type == "LOCAL_UNIVERSITY":
         if data_dict['national_education'] is None:
             validation_messages['national_education_%s' % curriculum_year] = _('mandatory_field')
@@ -368,10 +367,8 @@ def validate_belgian_fields_form(curriculum, curriculum_year, validation_message
                 if data_dict['national_institution_french'] is None \
                         or data_dict['national_institution_french'] == '-':
                     validation_messages['national_institution_french_%s' % curriculum_year] = _('mandatory_field')
-                    print('ab')
                     is_valid = False
                 else:
-                    print('abc')
                     national_institution = mdl_reference.education_institution\
                         .find_by_id(int(data_dict['national_institution_french']))
                     curriculum.national_institution = national_institution
@@ -401,13 +398,19 @@ def validate_belgian_fields_form(curriculum, curriculum_year, validation_message
                 else:
                     sub_domain = mdl.domain.find_by_id(int(data_dict['subdomain']))
                     curriculum.sub_domain = sub_domain
-        print('corresponds_to_domain :', data_dict['corresponds_to_domain'])
+
         if data_dict['corresponds_to_domain'] == "false":
             if data_dict['diploma_title'] is None \
                     or len(data_dict['diploma_title'].strip()) == 0:
                 validation_messages['diploma_title_%s' % curriculum_year] = _('mandatory_field')
                 is_valid = False
-
+        if data_dict['grade_type'] is None \
+                or data_dict['grade_type'] == '-':
+            validation_messages['grade_type_%s' % curriculum_year] = _('mandatory_field')
+            is_valid = False
+        else:
+            grade_type = mdl.grade_type.find_by_id(int(data_dict['grade_type']))
+            curriculum.grade_type = grade_type
         if data_dict['result_national'] is None \
                 and ((curriculum.academic_year.year < 2014) or (curriculum.academic_year.year >= 2014 and curriculum.diploma)):
             validation_messages['result_national_%s' % curriculum_year] = _('mandatory_field')
@@ -433,6 +436,7 @@ def validate_belgian_fields_form(curriculum, curriculum_year, validation_message
                 curriculum.national_institution = national_institution
         else:
             if data_dict['national_high_non_university_institution'] is None or data_dict['national_high_non_university_institution'] == "-":
+                print('a1')
                 validation_messages['high_non_university_name_%s' % curriculum_year] = _('msg_school_name')
                 is_valid = False
             else:
@@ -464,13 +468,7 @@ def validate_belgian_fields_form(curriculum, curriculum_year, validation_message
         else:
             curriculum.result = None
     # common fields for belgian university and no-university curriculum
-    if data_dict['grade_type'] is None \
-            or data_dict['grade_type'] == '-':
-        validation_messages['grade_type_%s' % curriculum_year] = _('mandatory_field')
-        is_valid = False
-    else:
-        grade_type = mdl.grade_type.find_by_id(int(data_dict['grade_type']))
-        curriculum.grade_type = grade_type
+
 
     if data_dict['diploma_title'] and len(data_dict['diploma_title'].strip()) > 0:
         curriculum.diploma_title = data_dict['diploma_title']
