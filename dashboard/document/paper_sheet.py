@@ -36,7 +36,7 @@ from django.utils.translation import ugettext as _
 
 PAGE_SIZE = A4
 MARGIN_SIZE = 15 * mm
-COLS_WIDTH = [25*mm,50*mm,50*mm,25*mm,25*mm]
+COLS_WIDTH = [20*mm,55*mm,45*mm,15*mm,40*mm]
 STUDENTS_PER_PAGE = 24
 
 
@@ -83,7 +83,7 @@ def build_pdf(document):
                              Paragraph(enrollment["last_name"], styles['Normal']),
                              Paragraph(enrollment["first_name"], styles['Normal']),
                              enrollment["score"],
-                             Paragraph(enrollment["justification"], styles['Normal'])])
+                             Paragraph(_(enrollment["justification"]), styles['Normal'])])
 
                 students_printed += 1
                 enrollments_to_print -= 1
@@ -177,34 +177,11 @@ def legend_building_json(decimal_scores, content):
                             ''' % legend_text, p))
 
 
-def legend_building(learning_unit_year, content):
-    p = ParagraphStyle('legend')
-    p.textColor = 'grey'
-    p.borderColor = 'grey'
-    p.borderWidth = 1
-    p.alignment = TA_CENTER
-    p.fontSize = 8
-    p.borderPadding = 5
-
-    legend_text = _('justification_legend') % justification_label_authorized()
-    legend_text += "<br/>%s" % (str(_('score_legend') % "0 - 20"))
-    if not learning_unit_year.decimal_scores:
-        legend_text += "<br/><font color=red>%s</font>" % _('unauthorized_decimal')
-
-    legend_text += '''<br/> %s : <a href="%s"><font color=blue><u>%s</u></font></a>''' \
-                   % (_("in_accordance_to_regulation"), _("link_to_RGEE"), _("link_to_RGEE"))
-    content.append(Paragraph('''
-                            <para>
-                                %s
-                            </para>
-                            ''' % legend_text, p))
-
-
 def headers_table():
     data = [['''%s''' % _('registration_number'),
              '''%s''' % _('lastname'),
              '''%s''' % _('firstname'),
-             '''%s''' % _('numbered_score'),
+             '''%s''' % _('score'),
              '''%s''' % _('justification')]]
     return data
 
@@ -286,7 +263,6 @@ def main_data_json(learning_unit_year, program, styles, content):
                                                           learning_unit_year['academic_year'],
                                                           learning_unit_year['session_number']),
                              text_left_style))
-    # content.append(Paragraph('Session : %d' % session_exam.number_session, text_left_style))
     content.append(Paragraph("<strong>%s : %s</strong>" % (learning_unit_year['acronym'], learning_unit_year['title']),
                              styles["Normal"]))
     content.append(Paragraph('''<b>%s : %s</b>''' % (_('program'), program['acronym']), styles["Normal"]))
