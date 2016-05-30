@@ -23,46 +23,36 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
-from django.contrib import admin
+from rest_framework import serializers
+from admission import models as mdl
+from django.http import HttpResponse
+from rest_framework.renderers import JSONRenderer
+from django.views.decorators.csrf import csrf_exempt
+from reference import models as mdl_reference
+from django.core.serializers.python import Serializer
 
 
-class DomainAdmin(admin.ModelAdmin):
-    list_display = ('name','parent')
-    fieldsets = ((None, {'fields': ('name',)}),)
+class JSONResponse(HttpResponse):
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
 
 
-class Domain(models.Model):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    name = models.CharField(max_length=255)
-    parent = models.ForeignKey('self', null=True, blank=True)
-
-    def __str__(self):
-        return self.name
-
-    @property
-    def sub_domains(self):
-        """
-        To find children
-        """
-        return Domain.objects.filter(parent=self)
+class DomainSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = mdl.domain.Domain
+        fields = ('id','name')
 
 
-def find_all():
-    return Domain.objects.all()
-
-
-def find_by_id(an_id):
-    return Domain.objects.get(pk=an_id)
-
-
-def find_all_domains():
-    return Domain.objects.filter(parent=None)
-
-
-def find_all_subdomains():
-    return Domain.objects.exclude(parent=None)
-
-
-def find_subdomains_by_domain_id(a_domain_id):
-    return Domain.objects.filter(parent=a_domain_id)
+@csrf_exempt
+def find_subdomains(request):
+    print('find_subdomains')
+    domain = request.GET['domain']
+    print(domain)
+    if domain and domain != "-":
+        subdomains = mdl.domain.find_subdomains_by_domain_id(int(domain))
+        print(subdomains)
+        serializer = DomainSerializer(subdomains, many=True)
+        return JSONResponse(serializer.data)
+    return None

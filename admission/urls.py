@@ -25,7 +25,7 @@
 ##############################################################################
 from django.conf.urls import url
 from admission.views import application, common, identification, offer, level, question, option, country, curriculum, \
-    education_institution, language
+    education_institution, language, domain
 from django.contrib.auth.views import logout
 
 
@@ -78,6 +78,8 @@ urlpatterns = [
     url(r'^high_institutions/$', education_institution.find_high_institution_by_city),
     url(r'^countries/$', education_institution.find_countries),
     url(r'^errors_update/$', curriculum.errors_update),
+     url(r'^subdomains/$', domain.find_subdomains),
+
 
 
 

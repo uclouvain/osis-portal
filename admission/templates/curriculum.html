@@ -103,7 +103,7 @@
            id="hdn_original_national_institution_name_{{curriculum.academic_year.year}}"
            name="original_national_institution_name_{{curriculum.academic_year.year}}"
            value="{{curriculum.national_institution.name}}" >
-    <input type="hidden"
+    <input type="text"
            id="hdn_original_domain_id_{{curriculum.academic_year.year}}"
            name="original_domain_id_{{curriculum.academic_year.year}}"
            value="{{curriculum.domain.id}}" >
@@ -125,11 +125,11 @@
     <input type="hidden"
            id="hdn_original_credits_enrolled_{{curriculum.academic_year.year}}"
            name="original_credits_enrolled_{{curriculum.academic_year.year}}"
-           value="{{curriculum.credits_enrolled}}" >
+           value="{{curriculum.credits_enrolled | default_if_none:''}}" >
     <input type="hidden"
            id="hdn_original_credits_obtained_{{curriculum.academic_year.year}}"
            name="original_credits_obtained_{{curriculum.academic_year.year}}"
-           value="{{curriculum.credits_obtained}}" >
+           value="{{curriculum.credits_obtained | default_if_none:''}}" >
     <input type="hidden"
            id="hdn_original_diploma_{{curriculum.academic_year.year}}"
            name="original_diploma_{{curriculum.academic_year.year}}"
@@ -137,7 +137,7 @@
     <input type="hidden"
            id="hdn_original_diploma_title_{{curriculum.academic_year.year}}"
            name="original_diploma_title_{{curriculum.academic_year.year}}"
-           value="{{curriculum.diploma_title}}" >
+           value="{{curriculum.diploma_title | default_if_none:''}}" >
     <input type="hidden"
            id="hdn_original_activity_type_{{curriculum.academic_year.year}}"
            name="original_activity_type_{{curriculum.academic_year.year}}"
@@ -278,35 +278,7 @@
 
     }
 
-    function refresh_pnl_subdomain(domain, year){
-        var sel = domain.options[domain.selectedIndex].text;
-        var elt = document.getElementById('slt_subdomain_'+year);
-        var cpt = 0;
-        document.getElementById('slt_subdomain_'+year).selectedIndex = -1;
-        for(var i = 0 ,l = elt.options.length; i< l;i++ ){
-            if(i==0){
-                elt.options[i].style="visibility:visible;display:block";
-            }else{
-                if (sel != "-"){
-                    if((elt.options[i].title).indexOf(sel) > -1){
-                        elt.options[i].style="visibility:visible;display:block";
-                        cpt = cpt + 1;
-                    }else{
-                        elt.options[i].style="visibility:hidden;display:none";
-                    }
-                }else{
-                    elt.options[i].style="visibility:visible;display:block";
-                }
-            }
-		}
-		if(cpt == 0){
-		    document.getElementById('slt_subdomain_'+year).disabled = true;
-		    document.getElementById('lbl_subdomain_mandatory_'+year).style="visibility:hidden;display:none";
-		}else{
-		    document.getElementById('slt_subdomain_'+year).disabled = false;
-		    document.getElementById('lbl_subdomain_mandatory_'+year).style="visibility:visible;display:block";
-		}
-    }
+
 
     function refresh_pnl_subdomain_foreign(domain, year){
         var sel = domain.options[domain.selectedIndex].text;

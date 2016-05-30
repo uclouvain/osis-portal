@@ -48,7 +48,7 @@
                     name="national_institution_dutch_{{curriculum.academic_year.year}}">
                 <option value="-">-</option>
                 {% for university in local_universities_dutch %}
-                <option value="{{ university.id }}">
+                <option value="{{ university.id }}" >
                     {{ university }}
                 </option>
                 {% endfor %}
@@ -64,8 +64,7 @@
                     <div>
                         <select class="form-control"
                                 id="slt_domain_{{curriculum.academic_year.year}}"
-                                name="domain_{{curriculum.academic_year.year}}"
-                                onchange="refresh_pnl_subdomain(this,{{curriculum.academic_year.year}});">
+                                name="domain_{{curriculum.academic_year.year}}">
                             <option value="-">-</option>
                             {% for domain in domains %}
                             <option value="{{ domain.id }}" >
@@ -83,14 +82,7 @@
                         <div>
                             <select class="form-control"
                                     id="slt_subdomain_{{curriculum.academic_year.year}}"
-                                    name="subdomain_{{curriculum.academic_year.year}}"
-                                   {%if not curriculum.domain.sub_domains %}disabled{%endif%}>
-                                <option value="-">-</option>
-                                {% for subdomain in subdomains %}
-                                <option value="{{ subdomain.id }}" title="{{subdomain.parent.name}} - {{subdomain.name}}">
-                                    {{ subdomain }}
-                                </option>
-                                {% endfor %}
+                                    name="subdomain_{{curriculum.academic_year.year}}">
                             </select>
 
                             <font class="error" style="margin-left:5px;">
@@ -186,9 +178,7 @@
                             name="domain_non_university_{{curriculum.academic_year.year}}">
                         <option value="-">-</option>
                         {% for domain in domains %}
-                        <option value="{{ domain.id }}">
-                            {{ domain }}
-                        </option>
+                        <option value="{{ domain.id }}">{{ domain }}</option>
                         {% endfor %}
                     </select>
                     <font class="error" style="margin-left:5px;">
@@ -202,19 +192,10 @@
                             id="slt_grade_type_no_university_{{curriculum.academic_year.year}}"
                             name="grade_type_no_university_{{curriculum.academic_year.year}}">
                         <option value="-">-</option>
-
-                        <option value="HIGHER_NON_UNIVERSITY"
-                                >{% trans 'higher_non_university'%}
-                        </option>
-                        <option value="BACHELOR"
-                                >{% trans 'bachelor'%}
-                        </option>
-                        <option value="MASTER"
-                                >{% trans 'master'%}
-                        </option>
-                        <option value="OTHER"
-                               >{% trans 'other'%}
-                        </option>
+                        <option value="HIGHER_NON_UNIVERSITY">{% trans 'higher_non_university'%}</option>
+                        <option value="BACHELOR">{% trans 'bachelor'%}</option>
+                        <option value="MASTER">{% trans 'master'%}</option>
+                        <option value="OTHER">{% trans 'other'%}</option>
                     </select>
                     <font class="error" style="margin-left:5px;">
                         {% message_error validation_messages year=curriculum.academic_year.year|lower param='grade_type_non_university' %}</font>
