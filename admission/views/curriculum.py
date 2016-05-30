@@ -39,6 +39,8 @@ def save(request):
     next_step = False
     previous_step = False
     save_step = False
+    duplicate = False
+    duplicate_year_origin = None
     validation_messages = {}
     if request.POST:
         if 'bt_next_step_up' in request.POST or 'bt_next_step_down' in request.POST:
@@ -49,6 +51,13 @@ def save(request):
             else:
                 if 'bt_save_up' in request.POST or 'bt_save_down' in request.POST:
                     save_step = True
+                else:
+                    key = 'bt_duplicate_'
+                    for k, v in request.POST.items():
+                        if k.startswith(key):
+                            duplicate = True
+                            duplicate_year_origin = int(k.replace(key, ''))
+                            break
 
     if previous_step:
         return home(request)
@@ -62,16 +71,15 @@ def save(request):
         .find_by_institution_type_national_community('UNIVERSITY', 'DUTCH', False)
     universities_cities = []
     universities = []
-    national_high_non_university_institutions = mdl_reference.education_institution.find_by_institution_type_iso_code('HIGHER_NON_UNIVERSITY', 'BE', False)
-    cities_national_high_non_university_institutions = mdl_reference.education_institution.find_by_isocode_type('BE', 'HIGHER_NON_UNIVERSITY', False)
+    national_high_non_university_institutions = mdl_reference.education_institution.find_by_institution_type_iso_code('HIGHER_NON_UNIVERSITY',
+                                                                                                                      'BE',
+                                                                                                                      False)
+    cities_national_high_non_university_institutions = mdl_reference.education_institution.find_by_isocode_type('BE',
+                                                                                                                'HIGHER_NON_UNIVERSITY',
+                                                                                                                False)
 
-    foreign_high_institution_countries = mdl_reference.education_institution.find_countries_by_type_excluding_country('HIGHER_NON_UNIVERSITY', False, "BE")
-    foreign_high_institution_cities = mdl_reference.education_institution\
-        .find_by_not_isocode_type('BE', 'HIGHER_NON_UNIVERSITY', False)
-    foreign_high_institutions = mdl_reference.education_institution.find_by_institution_type_not_isocode('HIGHER_NON_UNIVERSITY', 'BE', False)
-
-    if save_step or next_step:
-        is_valid, validation_messages, curricula, universities_cities, universities, foreign_high_institution_cities, foreign_high_institutions = validate_fields_form(request)
+    if save_step or next_step or duplicate:
+        is_valid, validation_messages, curricula, universities_cities, universities, duplication_possible = validate_fields_form(request, duplicate_year_origin)
         if is_valid:
             message_success = _('msg_info_saved')
             for curriculum in curricula:
@@ -90,9 +98,6 @@ def save(request):
                                            "cities_national_high_non_university_institutions":cities_national_high_non_university_institutions,
                                            "national_high_non_university_institutions": national_high_non_university_institutions,
                                            "languages":                 mdl_reference.language.find_languages(),
-                                           "foreign_high_institution_countries": foreign_high_institution_countries,
-                                           "foreign_high_institution_cities": foreign_high_institution_cities,
-                                           "foreign_high_institutions":foreign_high_institutions,
                                            "current_academic_year": mdl.academic_year.current_academic_year()})
 
     #Get the data in bd
@@ -104,7 +109,7 @@ def save(request):
     secondary_education = mdl.secondary_education.find_by_person(a_person)
     if secondary_education:
         if secondary_education.academic_year is None:
-            message ="Vous ne pouvez pas encoder d'études supérieures sans avoir réussit vos études secondaires"
+            message = "Vous ne pouvez pas encoder d'études supérieures sans avoir réussit vos études secondaires"
         else:
             first_academic_year_for_cv = secondary_education.academic_year.year + 1
     current_academic_year = mdl.academic_year.current_academic_year().year
@@ -135,9 +140,6 @@ def save(request):
                                                "cities_national_high_non_university_institutions":cities_national_high_non_university_institutions,
                                                "national_high_non_university_institutions": national_high_non_university_institutions,
                                                "languages":                 mdl_reference.language.find_languages(),
-                                               "foreign_high_institution_countries": foreign_high_institution_countries,
-                                               "foreign_high_institution_cities": foreign_high_institution_cities,
-                                               "foreign_high_institutions": foreign_high_institutions,
                                                "current_academic_year": mdl.academic_year.current_academic_year()})
 
 
@@ -178,8 +180,6 @@ def update(request):
     local_universities_dutch = mdl_reference.education_institution\
         .find_by_institution_type_national_community('UNIVERSITY', 'DUTCH', False)
     foreign_high_institution_countries = mdl_reference.education_institution.find_countries_by_type_excluding_country('HIGHER_NON_UNIVERSITY', False, "BE")
-    foreign_high_institution_cities = mdl_reference.education_institution.find_by_not_isocode_type("BE", "HIGHER_NON_UNIVERSITY", False)
-    foreign_high_institutions = mdl_reference.education_institution.find_by_institution_type_not_isocode('HIGHER_NON_UNIVERSITY', 'BE', False )
 
     if message:
         return home(request)
@@ -201,13 +201,11 @@ def update(request):
                                                    "cities_national_high_non_university_institutions": cities_national_high_non_university_institutions,
                                                    "national_high_non_university_institutions": national_high_non_university_institutions,
                                                    "languages":                 mdl_reference.language.find_languages(),
-                                                   "foreign_high_institution_countries": foreign_high_institution_countries,
-                                                   "foreign_high_institution_cities": foreign_high_institution_cities,
-                                                   "foreign_high_institutions": foreign_high_institutions,
                                                    "current_academic_year": mdl.academic_year.current_academic_year()})
 
 
-def validate_fields_form(request):
+def validate_fields_form(request, duplicate_year_origin):
+    duplication_possible=True
     is_valid = True
     curricula = []
     universities_cities = []
@@ -218,9 +216,66 @@ def validate_fields_form(request):
     a_person = mdl.person.find_by_user(request.user)
     names = [v for k, v in request.POST.items() if k.startswith('curriculum_year_')]
     names = sorted(names, key=cmp_to_key(locale.strcoll)) #to keep the order of the cv from the oldest to the more recent
-
+    duplicate_year_destination = None
+    if duplicate_year_origin:
+        duplicate_year_destination = duplicate_year_origin + 1
+    index_duplicated_destination = None
+    index_duplicated_origin = None
+    cpt = 0
+    data_dict_to_duplicate = None
     for curriculum_form in names:
         curriculum_year = curriculum_form.replace('curriculum_year_', '')
+        data_dict = {'path_type': request.POST.get('path_type_%s' % curriculum_year),
+                     'national_education': request.POST.get('national_education_%s' % curriculum_year),
+                     'national_institution_french':  request.POST.get('national_institution_french_%s' % curriculum_year),
+                     'national_institution_dutch':  request.POST.get('national_institution_dutch_%s' % curriculum_year),
+                     'domain':  request.POST.get('domain_%s' % curriculum_year),
+                     'subdomain':  request.POST.get('subdomain_%s' % curriculum_year),
+                     'corresponds_to_domain':  request.POST.get('corresponds_to_domain_%s' % curriculum_year),
+                     'diploma_title':  request.POST.get('diploma_title_%s' % curriculum_year),
+                     'result_national':  request.POST.get('result_national_%s' % curriculum_year),
+                     'other_school_high_non_university':  request.POST.get('other_school_high_non_university_%s' % curriculum_year),
+                     'other_high_non_university_name':  request.POST.get('other_high_non_university_name_%s' % curriculum_year),
+                     'national_high_non_university_institution':  request.POST.get('national_high_non_university_institution_%s' % curriculum_year),
+                     'domain_non_university':  request.POST.get('domain_non_university_%s' % curriculum_year),
+                     'grade_type_no_university': request.POST.get('grade_type_no_university_%s' % curriculum_year),
+                     'study_systems': request.POST.get('study_systems_%s' % curriculum_year),
+                     'grade_type': request.POST.get('grade_type_%s' % curriculum_year),
+                     'diploma': request.POST.get('diploma_%s' % curriculum_year),
+                     'credits_enrolled': request.POST.get('credits_enrolled_%s' % curriculum_year),
+                     'credits_obtained': request.POST.get('credits_obtained_%s' % curriculum_year),
+                     'foreign_institution_country': request.POST.get('foreign_institution_country_%s' % curriculum_year),
+                     'foreign_institution_city': request.POST.get('foreign_institution_city_%s' % curriculum_year),
+                     'city_specify': request.POST.get('city_specify_%s' % curriculum_year),
+                     'foreign_institution_name': request.POST.get('foreign_institution_name_%s' % curriculum_year),
+                     'name_specify': request.POST.get('name_specify_%s' % curriculum_year),
+                     'foreign_institution': request.POST.get('foreign_institution_%s' % curriculum_year),
+                     'foreign_high_institution_name': request.POST.get('foreign_high_institution_name_%s' % curriculum_year),
+                     'national_institution_locality_adhoc': request.POST.get('national_institution_locality_adhoc_%s' % curriculum_year),
+                     'national_institution_name_adhoc': request.POST.get('national_institution_name_adhoc_%s' % curriculum_year),
+                     'domain_foreign': request.POST.get('domain_foreign_%s' % curriculum_year),
+                     'grade_type_foreign': request.POST.get('grade_type_foreign_%s' % curriculum_year),
+                     'subdomain_foreign': request.POST.get('subdomain_foreign_%s' % curriculum_year),
+                     'diploma_foreign': request.POST.get('diploma_foreign_%s' % curriculum_year),
+                     'result': request.POST.get('result_%s' % curriculum_year),
+                     'credits_enrolled_foreign': request.POST.get('credits_enrolled_foreign_%s' % curriculum_year),
+                     'credits_obtained_foreign': request.POST.get('credits_obtained_foreign_%s' % curriculum_year),
+                     'linguistic_regime': request.POST.get('linguistic_regime_%s' % curriculum_year),
+                     'activity': request.POST.get('activity_%s' % curriculum_year),
+                     'activity_type': request.POST.get('activity_type_%s' % curriculum_year),
+                     'activity_place': request.POST.get('activity_place_%s' % curriculum_year)}
+
+        if duplicate_year_origin:
+            #If duplication expected
+            if int(curriculum_year) == duplicate_year_destination:
+                index_duplicated_destination = cpt
+                data_dict=data_dict_to_duplicate.copy()
+            if int(curriculum_year) == duplicate_year_origin:
+                index_duplicated_origin = cpt
+                data_dict_to_duplicate = data_dict.copy()
+
+
+        #No need to validate the curriculum of the year which is going to be duplicated
         academic_year = mdl.academic_year.find_by_year(curriculum_year)
         curriculum = mdl.curriculum.find_by_person_year(a_person, int(curriculum_year))
 
@@ -245,21 +300,21 @@ def validate_fields_form(request):
         curriculum.activity = None
         curriculum.activity_place = None
         #
-        if request.POST.get('path_type_%s' % curriculum_year) is None:
+        if data_dict['path_type'] is None:
             validation_messages['path_type_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
         else:
-            curriculum.path_type = request.POST.get('path_type_%s' % curriculum_year)
-            print('curriculum.path_type :', curriculum.path_type, '!' )
+            curriculum.path_type = data_dict['path_type']
+
             if curriculum.path_type == 'LOCAL_UNIVERSITY' or curriculum.path_type == 'LOCAL_HIGH_EDUCATION':
                 is_valid, validation_messages, curriculum = validate_belgian_fields_form(request,
                                                                                          curriculum,
                                                                                          curriculum_year,
                                                                                          validation_messages,
-                                                                                         is_valid)
+                                                                                         is_valid,
+                                                                                         data_dict)
             else:
-                if curriculum.path_type == 'FOREIGN_UNIVERSITY' or curriculum.path_type =='FOREIGN_HIGH_EDUCATION':
-                    print('111')
+                if curriculum.path_type == 'FOREIGN_UNIVERSITY' or curriculum.path_type == 'FOREIGN_HIGH_EDUCATION':
                     is_valid, validation_messages, curriculum, universities_cities, universities, \
                     high_non_universities_cities,high_non_universities_names = validate_foreign_university_fields_form(request,
                                                                                                         curriculum,
@@ -269,21 +324,26 @@ def validate_fields_form(request):
                                                                                                         universities_cities,
                                                                                                         universities,
                                                                                                         high_non_universities_cities,
-                                                                                                        high_non_universities_names)
+                                                                                                        high_non_universities_names,
+                                                                                                        data_dict)
                 else:
-                    print('1111')
-                    print('ici a ')
                     if curriculum.path_type == 'ANOTHER_ACTIVITY':
-                        print('11111')
-                        print('ici b')
                         is_valid, validation_messages, curriculum = validate_another_activity_fields_form(request,
                                                                                                         curriculum,
                                                                                                         curriculum_year,
                                                                                                         validation_messages,
-                                                                                                        is_valid)
-
+                                                                                                        is_valid,
+                                                                                                        data_dict)
+            if duplicate_year_origin and int(curriculum_year) == duplicate_year_origin and not is_valid:
+                duplication_possible=False
         curricula.append(curriculum)
-    return is_valid, validation_messages, curricula, universities_cities, universities, high_non_universities_cities, high_non_universities_names
+
+
+
+
+        cpt = cpt + 1
+
+    return is_valid, validation_messages, curricula, universities_cities, universities, duplication_possible
 
 
 def is_admission(a_person, secondary_education):
@@ -293,142 +353,142 @@ def is_admission(a_person, secondary_education):
     return True
 
 
-def validate_belgian_fields_form(request, curriculum, curriculum_year, validation_messages, is_valid):
+def validate_belgian_fields_form(request, curriculum, curriculum_year, validation_messages, is_valid, data_dict):
 
     if curriculum.path_type == "LOCAL_UNIVERSITY":
-        if request.POST.get('national_education_%s' % curriculum_year) is None:
+        if data_dict['national_education'] is None:
             validation_messages['national_education_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
         else:
-            curriculum.national_education = request.POST.get('national_education_%s' % curriculum_year)
+            curriculum.national_education = data_dict['national_education']
             if curriculum.national_education == 'FRENCH':
                 curriculum.language = mdl_reference.language.find_by_code('fr')
-                if request.POST.get('national_institution_french_%s' % curriculum_year) is None \
-                        or request.POST.get('national_institution_french_%s' % curriculum_year) == '-':
+                if data_dict['national_institution_french'] is None \
+                        or data_dict['national_institution_french'] == '-':
                     validation_messages['national_institution_french_%s' % curriculum_year] = _('mandatory_field')
                     is_valid = False
                 else:
                     national_institution = mdl_reference.education_institution\
-                        .find_by_id(int(request.POST.get('national_institution_french_%s' % curriculum_year)))
+                        .find_by_id(int(data_dict['national_institution_french']))
                     curriculum.national_institution = national_institution
             else:
                 if curriculum.national_education == 'DUTCH':
                     curriculum.language = mdl_reference.language.find_by_code('nl')
-                    if request.POST.get('national_institution_dutch_%s' % curriculum_year) is None \
-                            or request.POST.get('national_institution_dutch_%s' % curriculum_year) == '-':
+                    if data_dict['national_institution_dutch'] is None \
+                            or data_dict['national_institution_dutch'] == '-':
                         validation_messages['national_institution_dutch_%s' % curriculum_year] = _('mandatory_field')
                         is_valid = False
                     else:
                         national_institution = mdl_reference.education_institution\
-                            .find_by_id(int(request.POST.get('national_institution_dutch_%s' % curriculum_year)))
+                            .find_by_id(int(data_dict['national_institution_dutch']))
                         curriculum.national_institution = national_institution
-        if request.POST.get('domain_%s' % curriculum_year) is None \
-                or request.POST.get('domain_%s' % curriculum_year) == '-':
+        if data_dict['domain'] is None \
+                or data_dict['domain'] == '-':
             validation_messages['domain_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
         else:
-            domain = mdl.domain.find_by_id(int(request.POST.get('domain_%s' % curriculum_year)))
+            domain = mdl.domain.find_by_id(int(data_dict['domain']))
             curriculum.domain = domain
             if domain.sub_domains:
-                if request.POST.get('subdomain_%s' % curriculum_year) is None \
-                            or request.POST.get('subdomain_%s' % curriculum_year) == '-':
+                if data_dict['subdomain'] is None \
+                            or data_dict['subdomain'] == '-':
                     validation_messages['subdomain_%s' % curriculum_year] = _('mandatory_field')
                     is_valid = False
                 else:
-                    sub_domain = mdl.domain.find_by_id(int(request.POST.get('subdomain_%s' % curriculum_year)))
+                    sub_domain = mdl.domain.find_by_id(int(data_dict['subdomain']))
                     curriculum.sub_domain = sub_domain
 
-        if request.POST.get('corresponds_to_domain_%s' % curriculum_year) == "false":
+        if data_dict['corresponds_to_domain'] == "false":
 
-            if request.POST.get('diploma_title_%s' % curriculum_year) is None \
-                    or len(request.POST.get('diploma_title_%s' % curriculum_year).strip()) == 0:
+            if data_dict['diploma_title'] is None \
+                    or len(data_dict['diploma_title'].strip()) == 0:
                 validation_messages['diploma_title_%s' % curriculum_year] = _('mandatory_field')
                 is_valid = False
 
-        if request.POST.get('result_national_%s' % curriculum_year) is None \
+        if data_dict['result_national'] is None \
                 and ((curriculum.academic_year.year < 2014) or (curriculum.academic_year.year >= 2014 and curriculum.diploma)):
             validation_messages['result_national_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
         else:
-            curriculum.result = request.POST.get('result_national_%s' % curriculum_year)
+            curriculum.result = data_dict['result_national']
 
     if curriculum.path_type == "LOCAL_HIGH_EDUCATION":
-        if request.POST.get('national_education_%s' % curriculum_year):
-            curriculum.national_education = request.POST.get('national_education_%s' % curriculum_year)
+        if data_dict['national_education']:
+            curriculum.national_education = data_dict['national_education']
 
-        if request.POST.get('other_school_high_non_university_%s' % curriculum_year) == "on":
+        if data_dict['other_school_high_non_university'] == "on":
 
-            if request.POST.get('other_high_non_university_name_%s' % curriculum_year) is None \
-                    or len(request.POST.get('other_high_non_university_name_%s' % curriculum_year).strip()) == 0:
+            if data_dict['other_high_non_university_name'] is None \
+                    or len(data_dict['other_high_non_university_name'].strip()) == 0:
                 validation_messages['high_non_university_name_%s' % curriculum_year] = _('msg_school_name')
                 is_valid = False
             else:
                 national_institution = mdl_reference.education_institution.EducationInstitution()
                 national_institution.adhoc = True
-                national_institution.name = request.POST.get('other_high_non_university_name_%s' % curriculum_year)
+                national_institution.name = data_dict['other_high_non_university_name']
                 national_institution.save()
                 curriculum.national_institution = national_institution
         else:
-            if request.POST.get('national_high_non_university_institution_%s' % curriculum_year) is None or request.POST.get('national_high_non_university_institution_%s' % curriculum_year) == "-":
+            if data_dict['national_high_non_university_institution'] is None or data_dict['national_high_non_university_institution'] == "-":
                 validation_messages['high_non_university_name_%s' % curriculum_year] = _('msg_school_name')
                 is_valid = False
             else:
                 national_institution = mdl_reference.education_institution\
-                            .find_by_id(int(request.POST.get('national_high_non_university_institution_%s' % curriculum_year)))
+                            .find_by_id(int(data_dict['national_high_non_university_institution']))
                 curriculum.national_institution = national_institution
-        if request.POST.get('domain_non_university_%s' % curriculum_year) is None \
-                or request.POST.get('domain_non_university_%s' % curriculum_year) == '-':
+        if data_dict['domain_non_university'] is None \
+                or data_dict['domain_non_university'] == '-':
             validation_messages['domain_non_university_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
         else:
-            domain = mdl.domain.find_by_id(int(request.POST.get('domain_non_university_%s' % curriculum_year)))
+            domain = mdl.domain.find_by_id(int(data_dict['domain_non_university']))
             curriculum.domain = domain
-        if request.POST.get('grade_type_no_university_%s' % curriculum_year) is None \
-                or request.POST.get('grade_type_no_university_%s' % curriculum_year) == '-':
+        if data_dict['grade_type_no_university'] is None \
+                or data_dict['grade_type_no_university'] == '-':
             validation_messages['grade_type_no_university_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
         else:
-            curriculum.grade_type_no_university = request.POST.get('grade_type_no_university_%s' % curriculum_year)
+            curriculum.grade_type_no_university = data_dict['grade_type_no_university']
 
-        if request.POST.get('study_systems_%s' % curriculum_year):
-            curriculum.study_system = request.POST.get('study_systems_%s' % curriculum_year)
+        if data_dict['study_systems']:
+            curriculum.study_system = data_dict['study_systems']
         else:
             curriculum.study_system = None
 
-        if request.POST.get('result_national_%s' % curriculum_year) \
-                and request.POST.get('result_national_%s' % curriculum_year) != "-":
-            curriculum.result = request.POST.get('result_national_%s' % curriculum_year)
+        if data_dict['result_national'] \
+                and data_dict['result_national'] != "-":
+            curriculum.result = data_dict['result_national']
         else:
             curriculum.result = None
     # common fields for belgian university and no-university curriculum
-    if request.POST.get('grade_type_%s' % curriculum_year) is None \
-            or request.POST.get('grade_type_%s' % curriculum_year) == '-':
+    if data_dict['grade_type'] is None \
+            or data_dict['grade_type'] == '-':
         validation_messages['grade_type_%s' % curriculum_year] = _('mandatory_field')
         is_valid = False
     else:
-        grade_type = mdl.grade_type.find_by_id(int(request.POST.get('grade_type_%s' % curriculum_year)))
+        grade_type = mdl.grade_type.find_by_id(int(data_dict['grade_type']))
         curriculum.grade_type = grade_type
 
-    if request.POST.get('diploma_title_%s' % curriculum_year):
-        curriculum.diploma_title = request.POST.get('diploma_title_%s' % curriculum_year)
+    if data_dict['diploma_title']:
+        curriculum.diploma_title = data_dict['diploma_title']
 
-    if request.POST.get('diploma_%s' % curriculum_year) is None:
+    if data_dict['diploma'] is None:
         validation_messages['diploma_%s' % curriculum_year] = _('mandatory_field')
         is_valid = False
     else:
-        if request.POST.get('diploma_%s' % curriculum_year) == "true":
+        if data_dict['diploma'] == "true":
             curriculum.diploma = True
 
     if curriculum.academic_year.year >= 2014:
-        if request.POST.get('credits_enrolled_%s' % curriculum_year) is None \
-                or len(request.POST.get('credits_enrolled_%s' % curriculum_year)) == 0:
+        if data_dict['credits_enrolled'] is None \
+                or len(data_dict['credits_enrolled']) == 0:
             validation_messages['credits_enrolled_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
             curriculum.credits_enrolled = None
-    if request.POST.get('credits_enrolled_%s' % curriculum_year) \
-            and len(request.POST.get('credits_enrolled_%s' % curriculum_year)) > 0:
+    if data_dict['credits_enrolled'] \
+            and len(data_dict['credits_enrolled']) > 0:
             try:
-                credits = float(request.POST.get('credits_enrolled_%s' % curriculum_year)\
+                credits = float(data_dict['credits_enrolled']\
                             .strip().replace(',', '.'))
                 curriculum.credits_enrolled = credits
                 if credits > 75:
@@ -443,15 +503,15 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
                 is_valid = False
 
     if curriculum.academic_year.year >= 2014:
-        if request.POST.get('credits_obtained_%s' % curriculum_year) is None \
-                or len(request.POST.get('credits_obtained_%s' % curriculum_year)) == 0:
+        if data_dict['credits_obtained'] is None \
+                or len(data_dict['credits_obtained']) == 0:
             validation_messages['credits_obtained_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
             curriculum.credits_obtained = None
-    if request.POST.get('credits_obtained_%s' % curriculum_year) \
-            and len(request.POST.get('credits_obtained_%s' % curriculum_year)) > 0:
+    if data_dict['credits_obtained'] \
+            and len(data_dict['credits_obtained']) > 0:
             try:
-                credits = float(request.POST.get('credits_obtained_%s' % curriculum_year)
+                credits = float(data_dict['credits_obtained']
                             .strip().replace(',', '.'))
                 curriculum.credits_obtained = credits
                 if credits > 75:
@@ -468,7 +528,7 @@ def validate_belgian_fields_form(request, curriculum, curriculum_year, validatio
 
 
 def validate_foreign_university_fields_form(request, curriculum, curriculum_year, validation_messages, is_valid, universities_cities, universities, high_non_universities_cities,
-                                                                                                        high_non_universities_names):
+                                                                                                        high_non_universities_names, data_dict):
     cities_list = []
     universities_list = []
     high_non_universities_cities_list = []
@@ -477,50 +537,50 @@ def validate_foreign_university_fields_form(request, curriculum, curriculum_year
     national_institution.adhoc = False
 
     if curriculum.path_type == 'FOREIGN_UNIVERSITY':
-        if request.POST.get('foreign_institution_country_%s' % curriculum_year) is None \
-                or request.POST.get('foreign_institution_country_%s' % curriculum_year) == "-":
+        if data_dict['foreign_institution_country'] is None \
+                or data_dict['foreign_institution_country'] == "-":
             validation_messages['foreign_institution_country_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
         else:
-            country = mdl_reference.country.find_by_id(int(request.POST.get('foreign_institution_country_%s' % curriculum_year) ))
+            country = mdl_reference.country.find_by_id(int(data_dict['foreign_institution_country'] ))
             universities_by_country = mdl_reference.education_institution.find_by_country(country)
 
             for university in universities_by_country:
                 cities_list.append(university.city)
 
             national_institution.country = country
-            if (request.POST.get('foreign_institution_city_%s' % curriculum_year) is None \
-                    or request.POST.get('foreign_institution_city_%s' % curriculum_year) == "-") \
-                    and request.POST.get('city_specify_%s' % curriculum_year) is None:
+            if (data_dict['foreign_institution_city'] is None \
+                    or data_dict['foreign_institution_city'] == "-") \
+                    and data_dict['city_specify'] is None:
                 validation_messages['foreign_institution_city_%s' % curriculum_year] = _('mandatory_field')
                 is_valid = False
             else:
-                universities_by_city = mdl_reference.education_institution.find_by_city(request.POST.get('foreign_institution_city_%s' % curriculum_year))
+                universities_by_city = mdl_reference.education_institution.find_by_city(data_dict['foreign_institution_city'])
 
                 for university in universities_by_city:
                     universities_list.append(university)
 
-                if request.POST.get('foreign_institution_city_%s' % curriculum_year) \
-                        and request.POST.get('foreign_institution_city_%s' % curriculum_year) != "-":
-                    national_institution.city = request.POST.get('foreign_institution_city_%s' % curriculum_year)
+                if data_dict['foreign_institution_city'] \
+                        and data_dict['foreign_institution_city'] != "-":
+                    national_institution.city = data_dict['foreign_institution_city']
                 else:
-                    national_institution.city = request.POST.get('city_specify_%s' % curriculum_year)
+                    national_institution.city = data_dict['city_specify']
                     national_institution.adhoc = True
-                if (request.POST.get('foreign_institution_name_%s' % curriculum_year) is None \
-                    or request.POST.get('foreign_institution_name_%s' % curriculum_year) == "-") \
-                        and (request.POST.get('name_specify_%s' % curriculum_year) is None or len(request.POST.get('name_specify_%s' % curriculum_year)) == 0):
+                if (data_dict['foreign_institution_name'] is None \
+                    or data_dict['foreign_institution_name'] == "-") \
+                        and (data_dict['name_specify'] is None or len(data_dict['name_specify']) == 0):
                     validation_messages['foreign_institution_%s' % curriculum_year] = _('mandatory_university_name')
                     is_valid = False
                 else:
-                    if (request.POST.get('foreign_institution_name_%s' % curriculum_year)
-                            and request.POST.get('foreign_institution_name_%s' % curriculum_year) != "-"):
+                    if (data_dict['foreign_institution_name']
+                            and data_dict['foreign_institution_name'] != "-"):
                         national_institution = mdl_reference.education_institution\
-                            .find_by_id(int(request.POST.get('foreign_institution_name_%s' % curriculum_year)))
+                            .find_by_id(int(data_dict['foreign_institution_name']))
                         national_institution = national_institution
                     else:
-                        if request.POST.get('name_specify_%s' % curriculum_year) \
-                               and len(request.POST.get('name_specify_%s' % curriculum_year)) > 0:
-                            national_institution.name = request.POST.get('name_specify_%s' % curriculum_year)
+                        if data_dict['name_specify'] \
+                               and len(data_dict['name_specify']) > 0:
+                            national_institution.name = data_dict['name_specify']
                             national_institution.adhoc = True
 
         if national_institution.adhoc is True:
@@ -534,28 +594,28 @@ def validate_foreign_university_fields_form(request, curriculum, curriculum_year
         universities.append(universities_list)
 
     if curriculum.path_type == "FOREIGN_HIGH_EDUCATION":
-        if request.POST.get('foreign_high_institution_name_%s' % curriculum_year) \
-                and request.POST.get('foreign_high_institution_name_%s' % curriculum_year) != "-":
-            if (request.POST.get('national_institution_locality_adhoc_%s' % curriculum_year) is None \
-                or request.POST.get('national_institution_locality_adhoc_%s' % curriculum_year) != "on") \
-                    and (request.POST.get('national_institution_name_adhoc_%s' % curriculum_year) is None \
-                         or request.POST.get('national_institution_name_adhoc_%s' % curriculum_year) != "on"):
+        if data_dict['foreign_high_institution_name'] \
+                and data_dict['foreign_high_institution_name'] != "-":
+            if (data_dict['national_institution_locality_adhoc'] is None \
+                or data_dict['national_institution_locality_adhoc'] != "on") \
+                    and (data_dict['national_institution_name_adhoc'] is None \
+                         or data_dict['national_institution_name_adhoc'] != "on"):
 
                 n = mdl_reference.education_institution\
-                    .find_by_id(int(request.POST.get('foreign_high_institution_name_%s' % curriculum_year)))
+                    .find_by_id(int(data_dict['foreign_high_institution_name']))
                 curriculum.national_institution = n
             else:
 
                 national_institution = mdl_reference.education_institution.EducationInstitution()
                 national_institution.adhoc = True
-                if request.POST.get('national_institution_locality_adhoc_%s' % curriculum_year) == "on":
-                    if request.POST.get('city_specify_%s' % curriculum_year) is None:
+                if data_dict['national_institution_locality_adhoc'] == "on":
+                    if data_dict['city_specify'] is None:
                         validation_messages['foreign_institution_city_%s' % curriculum_year] = _('mandatory_field')
                         is_valid = False
                     else:
-                        national_institution.city = request.POST.get('city_specify_%s' % curriculum_year)
-                if request.POST.get('national_institution_name_adhoc_%s' % curriculum_year) == "on":
-                    if request.POST.get('name_specify_%s' % curriculum_year) is None:
+                        national_institution.city = data_dict['city_specify']
+                if data_dict['national_institution_name_adhoc'] == "on":
+                    if data_dict['name_specify'] is None:
                         validation_messages['foreign_institution%s' % curriculum_year] = _('mandatory_field')
                         is_valid = False
                     else:
@@ -586,51 +646,51 @@ def validate_foreign_university_fields_form(request, curriculum, curriculum_year
                 for university in universities_by_city:
                     universities_list.append(university)
 
-    if request.POST.get('domain_foreign_%s' % curriculum_year) is None \
-            or request.POST.get('domain_foreign_%s' % curriculum_year) == '-':
+    if data_dict['domain_foreign'] is None \
+            or data_dict['domain_foreign'] == '-':
         validation_messages['domain_foreign_%s' % curriculum_year] = _('mandatory_field')
         is_valid = False
     else:
-        domain = mdl.domain.find_by_id(int(request.POST.get('domain_foreign_%s' % curriculum_year)))
+        domain = mdl.domain.find_by_id(int(data_dict['domain_foreign']))
         curriculum.domain = domain
         if domain.sub_domains:
-            if request.POST.get('subdomain_foreign_%s' % curriculum_year) is None \
-                        or request.POST.get('subdomain_foreign_%s' % curriculum_year) == '-':
+            if data_dict['subdomain_foreign'] is None \
+                        or data_dict['subdomain_foreign'] == '-':
                 validation_messages['subdomain_foreign_%s' % curriculum_year] = _('mandatory_field')
                 is_valid = False
             else:
-                sub_domain = mdl.domain.find_by_id(int(request.POST.get('subdomain_foreign_%s' % curriculum_year)))
+                sub_domain = mdl.domain.find_by_id(int(data_dict['subdomain_foreign']))
                 curriculum.sub_domain = sub_domain
 
-    if request.POST.get('grade_type_foreign_%s' % curriculum_year) is None \
-            or request.POST.get('grade_type_foreign_%s' % curriculum_year) == '-':
+    if data_dict['grade_type_foreign'] is None \
+            or data_dict['grade_type_foreign'] == '-':
         validation_messages['grade_type_foreign_%s' % curriculum_year] = _('mandatory_field')
         is_valid = False
     else:
-        grade_type = mdl.grade_type.find_by_id(int(request.POST.get('grade_type_foreign_%s' % curriculum_year)))
+        grade_type = mdl.grade_type.find_by_id(int(data_dict['grade_type_foreign']))
         curriculum.grade_type = grade_type
 
-    if request.POST.get('diploma_title_%s' % curriculum_year):
-        curriculum.diploma_title = request.POST.get('diploma_title_%s' % curriculum_year)
+    if data_dict['diploma_title']:
+        curriculum.diploma_title = data_dict['diploma_title']
 
-    if request.POST.get('diploma_foreign_%s' % curriculum_year) is None:
+    if data_dict['diploma_foreign'] is None:
         validation_messages['diploma_foreign_%s' % curriculum_year] = _('mandatory_field')
         is_valid = False
     else:
-        if request.POST.get('diploma_foreign_%s' % curriculum_year) == "true":
+        if data_dict['diploma_foreign'] == "true":
             curriculum.diploma = True
 
-    if request.POST.get('result_%s' % curriculum_year) is None \
+    if data_dict['result'] is None \
             and ((curriculum.academic_year.year < 2014) or (curriculum.academic_year.year >= 2014 and curriculum.diploma)):
         validation_messages['result_%s' % curriculum_year] = _('mandatory_field')
         is_valid = False
     else:
-        curriculum.result = request.POST.get('result_%s' % curriculum_year)
+        curriculum.result = data_dict['result']
 
-    if request.POST.get('credits_enrolled_foreign_%s' % curriculum_year) \
-            and len(request.POST.get('credits_enrolled_foreign_%s' % curriculum_year)) > 0:
+    if data_dict['credits_enrolled_foreign'] \
+            and len(data_dict['credits_enrolled_foreign']) > 0:
             try:
-                credits = float(request.POST.get('credits_enrolled_foreign_%s' % curriculum_year)\
+                credits = float(data_dict['credits_enrolled_foreign']\
                             .strip().replace(',', '.'))
                 curriculum.credits_enrolled = credits
                 if credits > 75:
@@ -644,10 +704,10 @@ def validate_foreign_university_fields_form(request, curriculum, curriculum_year
                 validation_messages['credits_enrolled_foreign_%s' % curriculum_year] = _('numeric_field')
                 is_valid = False
 
-    if request.POST.get('credits_obtained_foreign_%s' % curriculum_year) \
-            and len(request.POST.get('credits_obtained_foreign_%s' % curriculum_year)) > 0:
+    if data_dict['credits_obtained_foreign'] \
+            and len(data_dict['credits_obtained_foreign']) > 0:
             try:
-                credits = float(request.POST.get('credits_obtained_foreign_%s' % curriculum_year)
+                credits = float(data_dict['credits_obtained_foreign']
                             .strip().replace(',', '.'))
                 curriculum.credits_obtained = credits
                 if credits > 75:
@@ -661,13 +721,13 @@ def validate_foreign_university_fields_form(request, curriculum, curriculum_year
                 validation_messages['credits_obtained_foreign_%s' % curriculum_year] = _('numeric_field')
                 is_valid = False
     if curriculum.path_type == "FOREIGN_HIGH_EDUCATION":
-        if request.POST.get('linguistic_regime_%s' % curriculum_year) is None or request.POST.get('linguistic_regime_%s' % curriculum_year) == "-":
+        if data_dict['linguistic_regime'] is None or data_dict['linguistic_regime'] == "-":
             validation_messages['credits_obtained_foreign_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
 
-    if request.POST.get('linguistic_regime_%s' % curriculum_year) \
-            and request.POST.get('linguistic_regime_%s' % curriculum_year) != "-":
-        l = mdl_reference.language.find_by_id(int(request.POST.get('linguistic_regime_%s' % curriculum_year)))
+    if data_dict['linguistic_regime'] \
+            and data_dict['linguistic_regime'] != "-":
+        l = mdl_reference.language.find_by_id(int(data_dict['linguistic_regime']))
         curriculum.language = l
 
     if len(high_non_universities_cities_list) > 0:
@@ -722,31 +782,35 @@ def populate_dropdown_foreign_high_list(curricula):
     return foreign_high_institution_countries, foreign_high_institution_cities, foreign_high_institutions
 
 
-def validate_another_activity_fields_form(request, curriculum, curriculum_year, validation_messages, is_valid):
-    print(request.POST.get('activity_type_%s' % curriculum_year))
-    if request.POST.get('activity_type_%s' % curriculum_year) is None:
+def validate_another_activity_fields_form(request, curriculum, curriculum_year, validation_messages, is_valid, data_dict):
+    if data_dict['activity_type'] is None:
         validation_messages['activity_type_%s' % curriculum_year] = _('mandatory_field')
         is_valid = False
     else:
-        curriculum.activity_type = request.POST.get('activity_type_%s' % curriculum_year)
+        curriculum.activity_type = data_dict['activity_type']
         if curriculum.activity_type == 'JOB' \
                 or curriculum.activity_type == 'INTERNSHIP' \
                 or curriculum.activity_type == 'VOLUNTEERING':
-            if request.POST.get('activity_%s' % curriculum_year) is None \
-                    or len(request.POST.get('activity_%s' % curriculum_year)) == 0:
+            
+            if data_dict['activity'] is None \
+                    or len(data_dict['activity']) == 0:
                 validation_messages['activity_%s' % curriculum_year] = _('mandatory_field')
                 is_valid = False
             else:
-                curriculum.activity = request.POST.get('activity_%s' % curriculum_year)
-            if request.POST.get('activity_place_%s' % curriculum_year) is None \
-                    or len(request.POST.get('activity_place_%s' % curriculum_year)) == 0:
+                curriculum.activity = data_dict['activity']
+            if data_dict['activity_place'] is None \
+                    or len(data_dict['activity_place']) == 0:
                 validation_messages['activity_place_%s' % curriculum_year] = _('mandatory_field')
                 is_valid = False
             else:
-                curriculum.activity_place = request.POST.get('activity_place_%s' % curriculum_year)
+                curriculum.activity_place = data_dict['activity_place']
 
     return is_valid, validation_messages, curriculum
 
 
 def errors_update(request):
     return update(request)
+
+
+
+

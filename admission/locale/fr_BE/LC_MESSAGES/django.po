@@ -843,3 +843,9 @@ msgstr "Travail"
 
 msgid "illness"
 msgstr "Maladie"
+
+msgid "msg_info_duplicated"
+msgstr "Données dupliquées"
+
+msgid "msg_info_not_duplicated"
+msgstr "Données non dupliquées car données invalides"

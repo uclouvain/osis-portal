@@ -834,3 +834,9 @@ msgstr "Job"
 
 msgid "illness"
 msgstr "Illness"
+
+msgid "msg_info_duplicated"
+msgstr "Data duplicated"
+
+msgid "msg_info_not_duplicated"
+msgstr "Data not duplicated"
