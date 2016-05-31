@@ -44,7 +44,6 @@ class LanguageSerializer(serializers.ModelSerializer):
         fields = ('id', 'code', 'name', 'recognized')
 
 
-@csrf_exempt
 def is_recognized(request):
     a_language_id = request.GET['language']
     language = mdl_reference.language.find_by_id(a_language_id)

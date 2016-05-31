@@ -841,5 +841,5 @@ msgstr "Data duplicated"
 msgid "msg_info_not_duplicated"
 msgstr "Data not duplicated"
 
-msgid "update_profile"
-msgstr "Update profile"
+msgid "msg_warning_curriculum"
+msgstr "Please mention your secondary education and diplomas informations, before encoding the curricula."

@@ -43,7 +43,6 @@ class QuestionSerializer(serializers.ModelSerializer):
         fields = ('id', 'label', 'description', 'type', 'required')
 
 
-@csrf_exempt
 def find_by_offer(request):
     offer_yr_id = request.GET['offer']
 

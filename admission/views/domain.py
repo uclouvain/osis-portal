@@ -45,7 +45,6 @@ class DomainSerializer(serializers.ModelSerializer):
         fields = ('id', 'name')
 
 
-@csrf_exempt
 def find_subdomains(request):
     domain = request.GET['domain']
     if domain and domain != "-":

@@ -32,6 +32,9 @@
         {% if message %}
             <div class="alert alert-danger" role="alert">{{ message }}</div>
         {% else %}
+            {% if message_warning %}
+                <div class="alert alert-warning" role="alert">{{ message_warning }}</div>
+            {% endif %}
             <ul class="nav nav-tabs">
                 <li>
                     <a data-toggle="tab" href="#tab_profile" id="lnk_profile_tab">{%trans 'your_profile'%}</a>

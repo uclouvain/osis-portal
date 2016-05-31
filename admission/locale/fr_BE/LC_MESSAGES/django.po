@@ -834,7 +834,6 @@ msgstr "A quel endroit?"
 msgid "question_activity"
 msgstr "Quelle activité?"
 
-
 msgid "onem_needed"
 msgstr "Veuillez joindre l'attestation de l'ONEM stipulant qui n'a pas bénificier d'une dégoration l'autorisation de poursuivre des études"
 
@@ -850,5 +849,5 @@ msgstr "Données dupliquées"
 msgid "msg_info_not_duplicated"
 msgstr "Données non dupliquées car données invalides"
 
-msgid "update_profile"
-msgstr "Modifier votre profil"
+msgid "msg_warning_curriculum"
+msgstr "Veuillez encoder vos études secondaires avant d'encoder les curricula.  Merci"
