@@ -51,7 +51,7 @@
                     <br>
                     <a href="{% url 'profile' %}" class="btn btn-primary"><span class="glyphicon glyphicon-user"
                                                                                         aria-hidden="true"></span>
-                        Modifier votre profil</a>
+                        {% trans 'update_profile'%}</a>
                 </div>
                 <div id="tab_curriculum" class="tab-pane fade">
                     <br>
@@ -68,12 +68,12 @@
                 <div id="tab_application" class="tab-pane fade in active">
                     <h2> {{ request.user.first_name }} {{ request.user.last_name }}</h2>
                     {% if applications %}
+                    <br>
                     <table class="table table-striped table-hover">
-                        <tr><td colspan="2"></td></tr>
-                        <thead>
-                        <th>Création</th>
-                        <th>Etude demandée</th>
-                        </thead>
+                        <tr>
+                            <th>Création</th>
+                            <th>Etude demandée</th>
+                        </tr>
                         {% for application in applications%}
                         <tr>
                             <td>{{ application.creation_date | default_if_none:''|date:"j/m/Y" }}</td>

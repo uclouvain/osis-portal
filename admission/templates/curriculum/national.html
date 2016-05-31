@@ -24,41 +24,40 @@
             {%trans 'dutch_belgian_community'%}
         </label>
         {% message_error validation_messages year=curriculum.academic_year.year|lower param='national_education' as national_education_msg %}
-        {%if national_education_msg%}<font class="error" style="margin-left:5px;">{{national_education_msg}}</font>{%endif%}
+        {%if national_education_msg%}<br><font class="error" style="margin-left:5px;">{{national_education_msg}}</font>{%endif%}
     </div>
 
     <div id="pnl_national_detail_{{curriculum.academic_year.year}}">
-        <br>
         <div id="pnl_local_university_{{curriculum.academic_year.year}}">
-            <label>{% trans 'university' %} *</label>
-            <select class="form-control"
-                    id="slt_french_universities_{{curriculum.academic_year.year}}"
-                    name="national_institution_french_{{curriculum.academic_year.year}}">
-                <option value="-">-</option>
-                {% for university in local_universities_french %}
-                <option value="{{ university.id }}" >
-                    {{ university }}
-                </option>
-                {% endfor %}
-            </select>
-            {% message_error validation_messages year=curriculum.academic_year.year|lower param='national_institution_french' as national_institution_french_msg %}
-            {%if national_institution_french_msg%}<font class="error" style="margin-left:5px;">{{national_institution_french_msg}}</font>{%endif%}
-            <select class="form-control"
-                    id="slt_dutch_universities_{{curriculum.academic_year.year}}"
-                    name="national_institution_dutch_{{curriculum.academic_year.year}}">
-                <option value="-">-</option>
-                {% for university in local_universities_dutch %}
-                <option value="{{ university.id }}" >
-                    {{ university }}
-                </option>
-                {% endfor %}
-            </select>
-            {% message_error validation_messages year=curriculum.academic_year.year|lower param='national_institution_dutch' as national_institution_dutch_msg%}
-            {% if national_institution_dutch_msg%}<font class="error" style="margin-left:5px;">{{national_institution_dutch_msg}}</font>{%endif%}
-            <br>
-            <br>
-            <div class="row" id="pnl_domain_university_{{curriculum.academic_year.year}}"
-                 >
+            <div id="pnl_universtity_{{curriculum.academic_year.year}}">
+                <label>{% trans 'university' %} *</label>
+                <select class="form-control"
+                        id="slt_french_universities_{{curriculum.academic_year.year}}"
+                        name="national_institution_french_{{curriculum.academic_year.year}}">
+                    <option value="-">-</option>
+                    {% for university in local_universities_french %}
+                    <option value="{{ university.id }}" >
+                        {{ university }}
+                    </option>
+                    {% endfor %}
+                </select>
+                {% message_error validation_messages year=curriculum.academic_year.year|lower param='national_institution_french' as national_institution_french_msg %}
+                {%if national_institution_french_msg%}<font class="error" style="margin-left:5px;">{{national_institution_french_msg}}</font>{%endif%}
+                <select class="form-control"
+                        id="slt_dutch_universities_{{curriculum.academic_year.year}}"
+                        name="national_institution_dutch_{{curriculum.academic_year.year}}">
+                    <option value="-">-</option>
+                    {% for university in local_universities_dutch %}
+                    <option value="{{ university.id }}" >
+                        {{ university }}
+                    </option>
+                    {% endfor %}
+                </select>
+                {% message_error validation_messages year=curriculum.academic_year.year|lower param='national_institution_dutch' as national_institution_dutch_msg%}
+                {% if national_institution_dutch_msg%}<font class="error" style="margin-left:5px;">{{national_institution_dutch_msg}}</font>{%endif%}
+            </div>
+            <div class="row" id="pnl_domain_university_{{curriculum.academic_year.year}}">
+                <br>
                 <div class="col-md-4">
                     <label>{% trans 'domain' %} *</label>
                     <div>
@@ -346,8 +345,9 @@
                     <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'diploma'%} - {% trans 'verso'%}
                 </button>
             </div>
+            <br>
         </div>
-        <br>
+
         <div class="row">
             <div class="col-md-6">
                 <button type="button" class="btn btn-default" data-toggle="modal"

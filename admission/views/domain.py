@@ -42,17 +42,14 @@ class JSONResponse(HttpResponse):
 class DomainSerializer(serializers.ModelSerializer):
     class Meta:
         model = mdl.domain.Domain
-        fields = ('id','name')
+        fields = ('id', 'name')
 
 
 @csrf_exempt
 def find_subdomains(request):
-    print('find_subdomains')
     domain = request.GET['domain']
-    print(domain)
     if domain and domain != "-":
         subdomains = mdl.domain.find_subdomains_by_domain_id(int(domain))
-        print(subdomains)
         serializer = DomainSerializer(subdomains, many=True)
         return JSONResponse(serializer.data)
     return None

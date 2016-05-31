@@ -40,7 +40,7 @@ def message_error(a, **kwargs):
     key = '%s_%s' % (elt_name, year)
 
     ch = a.get(str(key))
-    if ch:
+    if ch and len(ch) > 0:
         return mark_safe('<br>%s<br>' % ch)
     else:
         return ''
@@ -59,7 +59,6 @@ def pnl_national_education__message_error(a, **kwargs):
         key = '%s_%s' % (elt_name, year)
         for k, v in a.items():
             if k.startswith(key):
-                print('erreur national', key)
                 return True
     return False
 
@@ -68,21 +67,19 @@ def pnl_national_education__message_error(a, **kwargs):
 def pnl_foreign_education_message_error(a, **kwargs):
     if a is None or len(a) == 0:
         return False
-    keys = ['path_type', 'foreign_institution_country', 'foreign_institution', 'foreign_institution_city', 'domain_foreign',
-            'subdomain_foreign', 'grade_type_foreign', 'diploma_foreign']
+    keys = ['path_type', 'foreign_institution_country', 'foreign_institution', 'foreign_institution_city',
+            'domain_foreign', 'subdomain_foreign', 'grade_type_foreign', 'diploma_foreign']
     year = kwargs['year']
     for elt_name in keys:
         key = '%s_%s' % (elt_name, year)
         for k, v in a.items():
             if k.startswith(key):
-                print('erreur foreign : ', key)
                 return True
     return False
 
 
 @register.assignment_tag
 def pnl_other_message_error(a, **kwargs):
-    print('pnl_other_message_error')
 
     if a is None or len(a) == 0:
         return False
@@ -92,6 +89,5 @@ def pnl_other_message_error(a, **kwargs):
         key = '%s_%s' % (elt_name, year)
         for k, v in a.items():
             if k.startswith(key):
-                print('erreur Other', key)
                 return True
     return False

@@ -840,3 +840,6 @@ msgstr "Data duplicated"
 
 msgid "msg_info_not_duplicated"
 msgstr "Data not duplicated"
+
+msgid "update_profile"
+msgstr "Update profile"

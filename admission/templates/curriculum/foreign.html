@@ -295,10 +295,8 @@
     </div>
     <br>
 
-    <div id="pnl_upload_{{curriculum.academic_year.year}}"
-         style="{%if curriculum.diploma%}visibility:true;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
-        <div id="pnl_diploma_foreign_files_{{curriculum.academic_year.year}}"
-             style="{%if curriculum.diploma == True %}visibility:true;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+    <div id="pnl_upload_{{curriculum.academic_year.year}}">
+        <div id="pnl_diploma_foreign_files_{{curriculum.academic_year.year}}">
             <label>{% trans 'original_of' %} * </label>
             <div class="row">
                 <div class="col-md-6">
@@ -321,8 +319,7 @@
             </div>
 
         </div>
-        <div id="pnl_translation_{{curriculum.academic_year.year}}"
-             style="{%if curriculum.language.recognized %}visibility:hidden;display:none;{%else%}visibility:visible;display:block;{%endif%}">
+        <div id="pnl_translation_{{curriculum.academic_year.year}}">
             <br>
             <label>{% trans 'files_translated' %} * </label>
         </div>

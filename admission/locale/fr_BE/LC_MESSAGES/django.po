@@ -849,3 +849,6 @@ msgstr "Données dupliquées"
 
 msgid "msg_info_not_duplicated"
 msgstr "Données non dupliquées car données invalides"
+
+msgid "update_profile"
+msgstr "Modifier votre profil"
