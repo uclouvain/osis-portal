@@ -1307,3 +1307,50 @@ function populate_institution(national_institution_id, city_name, slt_city_id, s
 
 
 }
+
+function reset_slt(id){
+    document.getElementById(id).selectedIndex = -1;
+
+}
+
+    function refresh_pnl_subdomain_foreign(domain, year){
+        var sel = domain.options[domain.selectedIndex].text;
+        var elt = document.getElementById('slt_subdomain_foreign_'+year);
+        var cpt = 0;
+        document.getElementById('slt_subdomain_foreign_'+year).selectedIndex = -1;
+        for(var i = 0 ,l = elt.options.length; i< l;i++ ){
+            if(i==0){
+                elt.options[i].style="visibility:visible;display:block";
+            }else{
+                if (sel != "-"){
+                    if((elt.options[i].title).indexOf(sel) > -1){
+                        elt.options[i].style="visibility:visible;display:block";
+                        cpt = cpt + 1;
+                    }else{
+                        elt.options[i].style="visibility:hidden;display:none";
+                    }
+                }else{
+                    elt.options[i].style="visibility:visible;display:block";
+                }
+            }
+		}
+		if(cpt == 0){
+		    document.getElementById('slt_subdomain_foreign_'+year).disabled = true;
+		    document.getElementById('lbl_subdomain_mandatory_foreign_'+year).style="visibility:hidden;display:none";
+		}else{
+		    document.getElementById('slt_subdomain_foreign_'+year).disabled = false;
+		    document.getElementById('lbl_subdomain_mandatory_foreign_'+year).style="visibility:visible;display:block";
+		}
+    }
+
+    // to check disabled status after duplicate
+    var elts = document.getElementsByTagName("select");
+    for (var i = 0; i < elts.length; i++) {
+        if(elts[i].id.indexOf('slt_subdomain_') > -1){
+            if(elts[i].value == ""){
+                elts[i].disabled = true;
+            }else{
+                elts[i].disabled = false;
+            }
+        }
+    }

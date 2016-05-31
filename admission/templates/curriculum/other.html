@@ -7,66 +7,74 @@
 <div id="pnl_other_{{curriculum.academic_year.year}}">
     <br>
     <label> {% trans 'activity_type'%} *</label>
-    <br>
-    <label class="radio-inline">
-        <input type="radio"
-               name="activity_type_{{curriculum.academic_year.year}}"
-               id="rdb_activity_type_job_{{curriculum.academic_year.year}}"
-               value="JOB"> {% trans 'job'%}
-    </label>
-    <label class="radio-inline">
-        <input type="radio"
-               name="activity_type_{{curriculum.academic_year.year}}"
-               id="rdb_activity_type_internship_{{curriculum.academic_year.year}}"
-               value="INTERNSHIP" > {% trans 'internship'%}
-    </label>
-    <label class="radio-inline">
-        <input type="radio"
-               name="activity_type_{{curriculum.academic_year.year}}"
-               id="rdb_activity_type_volunteering_{{curriculum.academic_year.year}}"
-               value="VOLUNTEERING" > {% trans 'volunteering'%}
-    </label>
-    <label class="radio-inline">
-        <input type="radio"
-               name="activity_type_{{curriculum.academic_year.year}}"
-               id="rdb_activity_type_unemployment_{{curriculum.academic_year.year}}"
-               value="UNEMPLOYMENT" > {% trans 'unemployment'%}
-    </label>
-    <label class="radio-inline">
-        <input type="radio"
-               name="activity_type_{{curriculum.academic_year.year}}"
-               id="rdb_activity_type_illness_{{curriculum.academic_year.year}}"
-               value="ILLNESS"> {% trans 'illness'%}
-    </label>
-    <font class="error" style="margin-left:5px;">{% message_error validation_messages year=curriculum.academic_year.year|lower param='activity_type' %}</font>
+<br>
 
-    <br><br>
+            <label class="radio-inline">
+                <input type="radio"
+                       name="activity_type_{{curriculum.academic_year.year}}"
+                       id="rdb_activity_type_job_{{curriculum.academic_year.year}}"
+                       value="JOB"> {% trans 'job'%}
+            </label>
+            <label class="radio-inline">
+                <input type="radio"
+                       name="activity_type_{{curriculum.academic_year.year}}"
+                       id="rdb_activity_type_internship_{{curriculum.academic_year.year}}"
+                       value="INTERNSHIP" > {% trans 'internship'%}
+            </label>
+            <label class="radio-inline">
+                <input type="radio"
+                       name="activity_type_{{curriculum.academic_year.year}}"
+                       id="rdb_activity_type_volunteering_{{curriculum.academic_year.year}}"
+                       value="VOLUNTEERING" > {% trans 'volunteering'%}
+            </label>
+            <label class="radio-inline">
+                <input type="radio"
+                       name="activity_type_{{curriculum.academic_year.year}}"
+                       id="rdb_activity_type_unemployment_{{curriculum.academic_year.year}}"
+                       value="UNEMPLOYMENT" > {% trans 'unemployment'%}
+            </label>
+            <label class="radio-inline">
+                <input type="radio"
+                       name="activity_type_{{curriculum.academic_year.year}}"
+                       id="rdb_activity_type_illness_{{curriculum.academic_year.year}}"
+                       value="ILLNESS"> {% trans 'illness'%}
+            </label>
+            {% message_error validation_messages year=curriculum.academic_year.year|lower param='activity_type' as activity_type_msg %}
+            {%if activity_type%}
+            <font class="error">{{activity_type}}</font>
+            {%endif%}
+
     <div class="row" id="pnl_activity_detail_{{curriculum.academic_year.year}}">
+        <br>
         <div class="col-md-6">
             <label>{% trans 'question_activity' %}</label>
             <input type="text" id="txt_activity_{{curriculum.academic_year.year}}"
                    name="activity_{{curriculum.academic_year.year}}"
                    class="form-control" >
-                    <font class="error" style="margin-left:5px;">{% message_error validation_messages year=curriculum.academic_year.year|lower param='activity' %}</font>
+            {% message_error validation_messages year=curriculum.academic_year.year|lower param='activity' as activity_msg %}
+            {%if activity_msg%}
+            <font class="error">{{activity_msg}}</font>
+            {%endif%}
         </div>
         <div class="col-md-6">
             <label>{% trans 'question_activity_place' %}</label>
             <input type="text" id="txt_activity_place_{{curriculum.academic_year.year}}"
                    name="activity_place_{{curriculum.academic_year.year}}"
                    class="form-control" >
-                <font class="error" style="margin-left:5px;">{% message_error validation_messages year=curriculum.academic_year.year|lower param='activity_place' %}</font>
+            {% message_error validation_messages year=curriculum.academic_year.year|lower param='activity_place' as activity_place_msg %}
+            {%if activity_place_msg%}
+            <font class="error">{{activity_place_msg}}</font>
+            {%endif%}
         </div>
     </div>
-
-    <div id="pnl_onem_{{curriculum.academic_year.year}}">
+    <div id="pnl_onem_{{curriculum.academic_year.year}}" >
+        <br>
         <label>{% trans 'onem_needed' %}</label>
-        <button type="button" class="btn btn-default" data-toggle="modal"
-                data-target="#pnl_upload_file_modal"
+        <button type="button" class="btn btn-default"
                 title="{% trans 'onem_needed'%}"
                 id="bt_upload_onem_file_{{curriculum.academic_year.year}}"
                 style="width:250px;">
             <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'click_to_add'%}
         </button>
     </div>
-
 </div>

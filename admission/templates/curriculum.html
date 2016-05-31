@@ -91,7 +91,7 @@
            id="hdn_original_national_institution_adhoc_{{curriculum.academic_year.year}}"
            name="original_national_institution_adhoc_{{curriculum.academic_year.year}}"
            value="{{curriculum.national_institution.adhoc}}" >
-    <input type="text"
+    <input type="hidden"
            id="hdn_original_national_institution_city_{{curriculum.academic_year.year}}"
            name="original_national_institution_city_{{curriculum.academic_year.year}}"
            value="{{curriculum.national_institution.city}}" >
@@ -103,7 +103,7 @@
            id="hdn_original_national_institution_name_{{curriculum.academic_year.year}}"
            name="original_national_institution_name_{{curriculum.academic_year.year}}"
            value="{{curriculum.national_institution.name}}" >
-    <input type="text"
+    <input type="hidden"
            id="hdn_original_domain_id_{{curriculum.academic_year.year}}"
            name="original_domain_id_{{curriculum.academic_year.year}}"
            value="{{curriculum.domain.id}}" >
@@ -225,22 +225,19 @@
                     <input type="radio"
                            name="path_type_{{curriculum.academic_year.year}}"
                            id="rdb_path_type_foreign_university_{{curriculum.academic_year.year}}"
-                           value="FOREIGN_UNIVERSITY"
-                         > {% trans 'foreign_university'%}
+                           value="FOREIGN_UNIVERSITY"> {% trans 'foreign_university'%}
                 </label>
                 <label class="radio-inline">
                     <input type="radio"
                            name="path_type_{{curriculum.academic_year.year}}"
                            id="rdb_path_type_local_high_non_university_{{curriculum.academic_year.year}}"
-                           value="LOCAL_HIGH_EDUCATION"
-                           > {% trans 'high_national_non_university'%}
+                           value="LOCAL_HIGH_EDUCATION"> {% trans 'high_national_non_university'%}
                 </label>
                 <label class="radio-inline">
                     <input type="radio"
                            name="path_type_{{curriculum.academic_year.year}}"
                            id="rdb_path_type_high_foreign_non_university_{{curriculum.academic_year.year}}"
-                           value="FOREIGN_HIGH_EDUCATION"
-                          > {% trans 'high_foreign_non_university'%}
+                           value="FOREIGN_HIGH_EDUCATION"> {% trans 'high_foreign_non_university'%}
                 </label>
                 <label class="radio-inline">
                     <input type="radio"
@@ -248,10 +245,9 @@
                            id="rdb_path_type_other_{{curriculum.academic_year.year}}"
                            value="ANOTHER_ACTIVITY" > {% trans 'other'%}
                 </label>
-                <font class="error" style="margin-left:5px;">{% message_error validation_messages year=curriculum.academic_year.year|lower param='path_type' %}</font>
-                {% include "curriculum/national.html" %}
-                {% include "curriculum/foreign.html" %}
-                {% include "curriculum/other.html" %}
+                {% message_error validation_messages year=curriculum.academic_year.year|lower param='path_type' as path_type_msg %}
+                {%if path_type_msg%}<font class="error" style="margin-left:5px;">{{path_type_msg}}</font>{%endif%}
+
               </div>
         </div>
     {%endfor%}
@@ -272,80 +268,4 @@
         {% endif %}
     </div>
 </form>
-<script>
-    function reset_slt(id){
-        document.getElementById(id).selectedIndex = -1;
-
-    }
-
-
-
-    function refresh_pnl_subdomain_foreign(domain, year){
-        var sel = domain.options[domain.selectedIndex].text;
-        var elt = document.getElementById('slt_subdomain_foreign_'+year);
-        var cpt = 0;
-        document.getElementById('slt_subdomain_foreign_'+year).selectedIndex = -1;
-        for(var i = 0 ,l = elt.options.length; i< l;i++ ){
-            if(i==0){
-                elt.options[i].style="visibility:visible;display:block";
-            }else{
-                if (sel != "-"){
-                    if((elt.options[i].title).indexOf(sel) > -1){
-                        elt.options[i].style="visibility:visible;display:block";
-                        cpt = cpt + 1;
-                    }else{
-                        elt.options[i].style="visibility:hidden;display:none";
-                    }
-                }else{
-                    elt.options[i].style="visibility:visible;display:block";
-                }
-            }
-		}
-		if(cpt == 0){
-		    document.getElementById('slt_subdomain_foreign_'+year).disabled = true;
-		    document.getElementById('lbl_subdomain_mandatory_foreign_'+year).style="visibility:hidden;display:none";
-		}else{
-		    document.getElementById('slt_subdomain_foreign_'+year).disabled = false;
-		    document.getElementById('lbl_subdomain_mandatory_foreign_'+year).style="visibility:visible;display:block";
-		}
-    }
-
-    // to check disabled status after duplicate
-    var elts = document.getElementsByTagName("select");
-    for (var i = 0; i < elts.length; i++) {
-        if(elts[i].id.indexOf('slt_subdomain_') > -1){
-            if(elts[i].value == ""){
-                elts[i].disabled = true;
-            }else{
-                elts[i].disabled = false;
-            }
-        }
-    }
-
-
-    function reset_fields(dest_year, origin_year, ids){
-        for (var i = 0; i < ids.length; i++) {
-
-            var elt = document.getElementById(ids[i]);
-            if (typeof id == 'undefined') {
-
-            }else{
-                if (elt.tagName == "INPUT" && (elt.type == "radio" || elt.type=="checkbox")) {
-                    elt.checked = false;
-                }
-                if (elt.tagName == "INPUT" && elt.type == "text" ) {
-                    elt.value = "";
-                }
-                if(elt.tagName=="SELECT"){
-                    elt.selectedIndex = -1;
-                }
-            }
-
-        }
-
-    }
-
-</script>
-
-
 {% endblock %}
