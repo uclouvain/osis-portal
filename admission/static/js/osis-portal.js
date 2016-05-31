@@ -19,15 +19,29 @@ $("#slt_offer_type").change(function() {
 
         if(data.length >0){
         $.each(data, function(key, value) {
+            if(data.length == 1){
+                $('#pnl_grade_choices').append($("<label></label>").attr("class", "radio-inline")
+                                                                   .attr("style","visibility:hidden;display:none;")
+                                                                   .append($("<input>").attr("type","radio")
+                                                                      .attr("name","grade_choice")
+                                                                      .attr("value",value.id )
+                                                                      .attr("id","grade_choice_"+value.id)
+                                                                      .attr("onchange","offer_selection_display()")
+                                                                      .attr("style","visibility:hidden;display:none;")
+                                                                      .attr("checked","checked"))
+                                          .append(value.name));
+                                          offer_selection_display();
 
+            }else{
           $('#pnl_grade_choices').append($("<label></label>").attr("class", "radio-inline")
                                       .append($("<input>").attr("type","radio")
                                                                   .attr("name","grade_choice")
                                                                   .attr("value",value.id )
                                                                   .attr("id","grade_choice_"+value.id)
-                                                                  .attr("onchange","offer_selection_display()"))
+                                                                  .attr("onchange","offer_selection_display()")
+                                                                  .attr("style","visibility:visible;display:block;"))
                                       .append(value.name));
-
+            }
         });
         }
       });
