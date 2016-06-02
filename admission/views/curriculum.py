@@ -28,11 +28,12 @@ from django.shortcuts import render, get_object_or_404
 from reference import models as mdl_reference
 
 from datetime import datetime
-from admission.views.common import home
 from functools import cmp_to_key
 import locale
 from django.utils.translation import ugettext_lazy as _
 import string
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 
 
 def save(request):
@@ -51,7 +52,7 @@ def save(request):
                     save_step = True
 
     if previous_step:
-        return home(request)
+        return HttpResponseRedirect(reverse('home'))
 
     message_success = None
     # Get the data in bd for dropdown list

@@ -32,6 +32,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
 
 
 @login_required
@@ -229,8 +230,11 @@ def profile(request):
             person.user.save()
             request.user = person.user # Otherwise it was not refreshed while going back to home page
             person.save()
-            return home_retour(request)
-
+            if 'save' in request.POST:
+                return home_retour(request)
+            else:
+                if 'next_step' in request.POST:
+                    return HttpResponseRedirect(reverse('curriculum_update'))
     else:
         person = mdl.person.find_by_user(request.user)
         person_form = PersonForm()
