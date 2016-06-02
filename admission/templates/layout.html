@@ -82,6 +82,9 @@
     </nav>
 </nav>
     <div class="container">
+        {% if message_info%}
+            <div id="message_info" class="alert alert-success">{{message_info}}</div>
+        {%endif%}
         {% block content %}
         {% endblock %}
         <br>
@@ -118,6 +121,11 @@
                 e.preventDefault();
             });
         });
+        //If information message is on the screen it will disappear after 5s
+        $(document).ready(function () {
+            $('#message_info').fadeOut(5000);
+        });
+
         </script>
     {% endblock %}
 </body>
