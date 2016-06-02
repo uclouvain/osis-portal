@@ -42,10 +42,14 @@ class CountrySerializer(serializers.ModelSerializer):
         model = ref.country.Country
         fields = '__all__'
 
-@csrf_exempt
-def find_by_id(request):
+
+def find_by_id_json(request):
     country_id = request.GET['nationality']
 
     country = Country.find_by_id(country_id)
     serializer = CountrySerializer(country)
     return JSONResponse(serializer.data)
+
+
+def find_by_id(an_id):
+    return Country.find_by_id(an_id)

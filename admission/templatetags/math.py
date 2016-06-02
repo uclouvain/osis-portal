@@ -30,4 +30,6 @@ register = template.Library()
 
 @register.filter
 def add(year, number):
-    return int(year) + int(number)
+    if year and number:
+        return int(year) + int(number)
+    return ""

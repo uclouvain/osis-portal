@@ -1,0 +1,329 @@
+{% load staticfiles %}
+{% load i18n %}
+{% load message %}
+{% load get_at_index %}
+{% load is_list %}
+<div id="pnl_foreign_education_{{curriculum.academic_year.year}}">
+    <br>
+    <div id="pnl_university_{{curriculum.academic_year.year}}" class="row">
+        <div class="col-md-3">
+            <label>{% trans 'university_country'%}</label>
+            <select class="form-control"
+                    id="slt_foreign_institution_country_{{curriculum.academic_year.year}}"
+                    name="foreign_institution_country_{{curriculum.academic_year.year}}">
+
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label>{% trans 'city'%}</label>
+             <select class="form-control"
+                    id="slt_cities_{{curriculum.academic_year.year}}"
+                    name="foreign_institution_city_{{curriculum.academic_year.year}}">
+
+            </select>
+        </div>
+        <div class="col-md-5">
+            <label>{% trans 'university_name'%}{{curriculum.national_institution}}</label>
+             <select class="form-control"
+                    id="slt_foreign_university_name_{{curriculum.academic_year.year}}"
+                    name="foreign_institution_name_{{curriculum.academic_year.year}}">
+            </select>
+        </div>
+    </div>
+    <div id="pnl_foreign_no_university_institution_{{curriculum.academic_year.year}}">
+        <div class="col-md-3">
+            <label>{% trans 'institution_country'%}</label>
+            <select class="form-control"
+                    id="slt_foreign_high_institution_country_{{curriculum.academic_year.year}}"
+                    name="foreign_high_institution_country_{{curriculum.academic_year.year}}">
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label>{% trans 'city'%}</label>
+             <select class="form-control"
+                    id="slt_cities_high_{{curriculum.academic_year.year}}"
+                    name="foreign_high_institution_city_{{curriculum.academic_year.year}}">
+            </select>
+        </div>
+        <div class="col-md-5">
+            <label>{% trans 'institution_name'%}</label>
+             <select class="form-control"
+                    id="slt_foreign_high_name_{{curriculum.academic_year.year}}"
+                    name="foreign_high_institution_name_{{curriculum.academic_year.year}}">
+            </select>
+        </div>
+    </div>
+    {% message_error validation_messages year=curriculum.academic_year.year|lower param='foreign_institution' as foreign_institution_msg%}
+    {%if foreign_institution_msg%}<font class="error" style="margin-left:5px;">{{foreign_institution_msg}}</font>{%endif%}
+
+    <div class="row">
+        <div class="col-md-3">
+            {% message_error validation_messages year=curriculum.academic_year.year|lower param='foreign_institution_country' as foreign_institution_country_msg%}
+            {%if foreign_institution_country_msg %}<font class="error" style="margin-left:5px;">{{foreign_institution_country_msg}}</font>{%endif%}
+        </div>
+        <div class="col-md-4">
+            <label>{% trans 'specify_locality'%}</label>
+            <label class="radio-inline">
+                <input type="checkbox"
+                       name="foreign_institution_locality_adhoc_{{curriculum.academic_year.year}}"
+                       id="chb_foreign_institution_locality_adhoc_{{curriculum.academic_year.year}}"
+                       onclick="disabled_reset_field_txt('txt_city_specify_{{curriculum.academic_year.year}}',! this.checked);reset_slt('slt_cities_{{curriculum.academic_year.year}}');">
+            </label>
+        </div>
+        <div class="col-md-5">
+            <label>{% trans 'institution_not_found'%}</label>
+            <label class="radio-inline">
+                <input type="checkbox"
+                       name="foreign_institution_name_adhoc_{{curriculum.academic_year.year}}"
+                       id="chb_foreign_institution_name_adhoc_{{curriculum.academic_year.year}}"
+                       onclick="disabled_reset_field_txt('txt_name_specify_{{curriculum.academic_year.year}}',! this.checked);reset_slt('slt_foreign_university_name_{{curriculum.academic_year.year}}');">
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-4">
+            <label>{% trans 'specify'%}</label>
+            <input type="text" class="form-control"
+                   id="txt_foreing_city_specify_{{curriculum.academic_year.year}}"
+                   name="foreign_city_specify_{{curriculum.academic_year.year}}"
+                   value="{%if curriculum.national_institution.adhoc = True %}curriculum.national_institution.city{%endif%}">
+        </div>
+        <div class="col-md-5">
+            <label>{% trans 'specify'%}</label>
+            <input type="text" class="form-control"
+                   id="txt_foreign_name_specify_{{curriculum.academic_year.year}}"
+                   name="foreign_name_specify_{{curriculum.academic_year.year}}"
+                   value="{%if curriculum.national_institution.adhoc = True %}curriculum.national_institution.name{%endif%}">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-4">
+            {% message_error validation_messages year=curriculum.academic_year.year|lower param='foreign_institution_city' as foreign_institution_city_msg%}
+            {% if foreign_institution_city_msg%}<font class="error" style="margin-left:5px;">{{foreign_institution_city_msg}}</font>{%endif%}
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <label>{% trans 'domain' %} *</label>
+            <div>
+                <select class="form-control"
+                        id="slt_domain_foreign_{{curriculum.academic_year.year}}"
+                        name="domain_foreign_{{curriculum.academic_year.year}}"
+                        onchange="refresh_pnl_subdomain_foreign(this,{{curriculum.academic_year.year}});">
+                    <option value="-">-</option>
+                    {% for domain in domains %}
+                    <option value="{{ domain.id }}" >
+                        {{ domain }}
+                    </option>
+                    {% endfor %}
+                </select>
+                {% message_error validation_messages year=curriculum.academic_year.year|lower param='domain_foreign' as domain_foreign_msg%}
+                {%if domain_foreign_msg%}<font class="error" style="margin-left:5px;">{{domain_foreign_msg}}</font>{%endif%}
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div id="pnl_subdomain_foreign_{{curriculum.academic_year.year}}">
+                <label>{% trans 'subdomain' %} <span id="lbl_subdomain_mandatory_foreign_{{curriculum.academic_year.year}}">{%if curriculum.domain.sub_domains%}*{%endif%}</span></label>
+                <div>
+                    <select class="form-control"
+                            id="slt_subdomain_foreign_{{curriculum.academic_year.year}}"
+                            name="subdomain_foreign_{{curriculum.academic_year.year}}"
+                           >
+                        <option value="-">-</option>
+                        {% for subdomain in subdomains %}
+                        <option value="{{ subdomain.id }}" title="{{subdomain.parent.name}} - {{subdomain.name}}">
+                            {{ subdomain }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    {% message_error validation_messages year=curriculum.academic_year.year|lower param='subdomain_foreign' as subdomain_foreign_msg%}
+                    {%if subdomain_foreign_msg%}<font class="error" style="margin-left:5px;">{{subdomain_foreign_msg}}</font>{%endif%}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label>{% trans 'grade_type' %} *</label>
+            <div>
+                <select class="form-control"
+                        id="slt_grade_type_foreign_{{curriculum.academic_year.year}}"
+                        name="grade_type_foreign_{{curriculum.academic_year.year}}">
+                    <option value="-">-</option>
+                    {% for grade_type in grade_types %}
+                    <option value="{{ grade_type.id }}">{{ grade_type }}</option>
+                    {% endfor %}
+                </select>
+                {% message_error validation_messages year=curriculum.academic_year.year|lower param='grade_type_foreign' as  grade_type_foreign_msg%}
+                {%if grade_type_foreign_msg%}<font class="error" style="margin-left:5px;">{{grade_type_foreign_msg}}</font>{%endif%}
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-6">
+            <label>{% trans 'linguistic_regime' %} *</label>
+             <select class="form-control"
+                     id="slt_linguistic_regime_{{curriculum.academic_year.year}}"
+                     name="linguistic_regime_{{curriculum.academic_year.year}}">
+                <option value="-">-</option>
+                {%for language in languages %}
+                 <option value="{{ language.id }}">{{ language.name }}</option>
+                {%endfor%}
+            </select>
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+    <br>
+    <div class="form-group">
+        <label>{% trans 'question_domain' %}</label>
+        <div>
+            <label class="radio-inline">
+                <input type="radio"
+                       name="corresponds_to_domain_foreign_{{curriculum.academic_year.year}}"
+                       id="rdb_corresponds_to_domain_foreign_true_{{curriculum.academic_year.year}}"
+                       value="true"
+                       onclick="disabled_reset_field_txt('txt_diploma_title_foreign_{{curriculum.academic_year.year}}',false);"
+                > {% trans 'yes' %}
+            </label>
+            <label class="radio-inline">
+                <input type="radio"
+                       name="corresponds_to_domain_foreign_{{curriculum.academic_year.year}}"
+                       id="rdb_corresponds_to_domain_foreign_false_{{curriculum.academic_year.year}}" value="false"
+                       onclick="disabled_reset_field_txt('txt_diploma_title_foreign_{{curriculum.academic_year.year}}',true);"
+                > {% trans 'no' %}
+            </label>
+            {% message_error validation_messages year=curriculum.academic_year.year|lower param='diploma' as diploma_msg%}
+            {%if diploma_msg%}<font class="error" style="margin-left:5px;">{{diploma_msg}}</font>{%endif%}
+        </div>
+    </div>
+    <br>
+    <div>
+       <label>{% trans 'question_domain_title' %}</label>
+       <input type="text" class="form-control"
+              id="txt_diploma_title_foreign_{{curriculum.academic_year.year}}"
+              name="diploma_title_foreign_{{curriculum.academic_year.year}}"
+              value="{{ curriculum.diploma_title  | default_if_none:'' }}"
+              {%if not curriculum.diploma_title %}disabled{%endif%}>
+    </div>
+    <br>
+    <div class="form-group">
+        <label>{% trans 'question_year_diploma' %} *</label>
+        <div>
+            <label class="radio-inline">
+                <input type="radio"
+                       name="diploma_foreign_{{curriculum.academic_year.year}}"
+                       id="rdb_diploma_foreign_true_{{curriculum.academic_year.year}}"
+                       value="true"
+                       {%if curriculum.diploma == True %}checked="checked"{%endif%}
+                       onclick="display('pnl_diploma_foreign_files_{{curriculum.academic_year.year}}',true);display('pnl_upload_{{curriculum.academic_year.year}}',true);"
+                > {% trans 'yes' %}
+            </label>
+            <label class="radio-inline">
+                <input type="radio"
+                       name="diploma_foreign_{{curriculum.academic_year.year}}"
+                       id="rdb_diploma_foreign_false_{{curriculum.academic_year.year}}"
+                       value="false"
+                       {%if  curriculum.diploma == False %}checked="checked"{%endif%}
+                       onclick="display('pnl_diploma_foreign_files_{{curriculum.academic_year.year}}',false);display('pnl_upload_{{curriculum.academic_year.year}}',false);"
+                > {% trans 'no' %}
+            </label>
+            {% message_error validation_messages year=curriculum.academic_year.year|lower param='diploma_foreign' as diploma_foreign_msg%}
+            {%if diploma_foreign_msg%}<font class="error" style="margin-left:5px;">{{diploma_foreign_msg}}</font>{%endif%}
+
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-6">
+            <span><label>{% trans 'obtained_result' %}</label><label id="lbl_obtained_result_foreign_{{curriculum.academic_year.year}}"
+                    >*</label></span>
+            <div>
+                <label class="radio-inline">
+                    <input type="radio"
+                           name="result_{{curriculum.academic_year.year}}"
+                           id="rdb_result_foreign_succeed_{{curriculum.academic_year.year}}"
+                           value="SUCCEED"
+                           {%if curriculum.result = 'SUCCEED' %}checked{%endif%}>
+                    {% trans 'succeed_result' %}
+                </label>
+                <label class="radio-inline">
+                    <input type="radio"
+                           name="result_{{curriculum.academic_year.year}}"
+                           id="rdb_result_foreign_failed_{{curriculum.academic_year.year}}"
+                           value="FAILED"
+                           {%if curriculum.result = 'FAILED' %}checked{%endif%}>
+                    {% trans 'failed' %}
+                </label>
+                <label class="radio-inline">
+                    <input type="radio"
+                           name="result_{{curriculum.academic_year.year}}"
+                           id="rdb_no_result_foreign_{{curriculum.academic_year.year}}"
+                           value="NO_RESULT"
+                           {%if curriculum.result = 'NO_RESULT' %}checked{%endif%}>
+                    {% trans 'no_result' %}
+                </label>
+                {% message_error validation_messages year=curriculum.academic_year.year|lower param='result' as result_msg%}
+                {%if result_msg%}<font class="error" style="margin-left:5px;">{{result_msg}}</font>{%endif%}
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label>{% trans 'credits_enrolled' %}</label>
+            <input type="text"
+                   name="credits_enrolled_foreign_{{curriculum.academic_year.year}}"
+                   id="txt_credits_enrolled_foreign_{{curriculum.academic_year.year}}"
+                   value="{{ curriculum.credits_enrolled | default_if_none:'' }}"
+                   class="form-control">
+            {% message_error validation_messages year=curriculum.academic_year.year|lower param='credits_enrolled_foreign' as credits_enrolled_foreign_msg %}
+            {%if credits_enrolled_foreign_msg%}<font class="error" style="margin-left:5px;">{{credits_enrolled_foreign_msg}}</font>{%endif%}
+        </div>
+        <div class="col-md-3">
+            <label>{% trans 'credits_acquired' %}</label>
+            <input type="text"
+                   name="credits_obtained_foreign_{{curriculum.academic_year.year}}"
+                   id="txt_credits_obtained_foreign_{{curriculum.academic_year.year}}"
+                   value="{{ curriculum.credits_obtained  | default_if_none:'' }}"
+                   class="form-control">
+            {% message_error validation_messages year=curriculum.academic_year.year|lower param='credits_obtained_foreign' as credits_obtained_foreign_msg%}
+            {%if credits_obtained_foreign_msg%}<font class="error" style="margin-left:5px;">{{credits_obtained_foreign_msg}}</font>{%endif%}
+        </div>
+    </div>
+    <br>
+
+    <div id="pnl_upload_{{curriculum.academic_year.year}}">
+        <div id="pnl_diploma_foreign_files_{{curriculum.academic_year.year}}">
+            <label>{% trans 'original_of' %} * </label>
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-default" data-toggle="modal"
+                            data-target="#pnl_upload_file_modal"
+                            title="{% trans 'diploma'%} - {% trans 'recto'%}"
+                            id="bt_upload_file_curriculum_diploma_recto_{{curriculum.academic_year.year}}" style="width:250px;">
+                        <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'diploma'%} - {% trans 'recto'%}
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-default" data-toggle="modal"
+                            data-target="#pnl_upload_file_modal"
+                            title="{% trans 'diploma'%} - {% trans 'verso'%}"
+                            id="bt_upload_file_curriculum_diploma_verso_{{curriculum.academic_year.year}}"
+                            style="width:250px;">
+                        <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'diploma'%} - {% trans 'verso'%}
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        <div id="pnl_translation_{{curriculum.academic_year.year}}">
+            <br>
+            <label>{% trans 'files_translated' %} * </label>
+        </div>
+
+    </div>
+
+</div>

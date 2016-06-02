@@ -339,7 +339,7 @@ msgid "institution_name"
 msgstr "Nom de l'établissement"
 
 msgid "city"
-msgstr "Par localité"
+msgstr "Localité"
 
 msgid "postal_code"
 msgstr "Par code postal"
@@ -782,3 +782,75 @@ msgstr "Numéro de passeport"
 
 msgid "question_domain"
 msgstr "Le domaine, sous-domaine et type d'études correspondent à vos études"
+
+msgid "university_country"
+msgstr "Pays de l'université"
+
+msgid "university_name"
+msgstr "Nom de l'université"
+
+msgid "specify_locality"
+msgstr "Vous ne trouvez pas la localité dans la liste"
+
+msgid "specify_university_name"
+msgstr "Vous ne trouvez pas l'université dans la liste"
+
+msgid "mandatory_university_name"
+msgstr "Merci de préciser un nom d'université."
+
+msgid "specify"
+msgstr "Préciser"
+
+msgid "files_translated"
+msgstr "Traduction par un traducteur"
+
+msgid "establishment"
+msgstr "Etablissement"
+
+msgid "higher_non_university"
+msgstr "Supérieur Non-Universitaire"
+
+msgid "study_systems"
+msgstr "Système d'études"
+
+msgid "social_advancement"
+msgstr "Promotion sociale"
+
+msgid "full_exercise"
+msgstr "Plein exercice"
+
+msgid "undefined"
+msgstr "Non-précisé"
+
+msgid "institution_country"
+msgstr "Pays de l'établissement"
+
+msgid "institution_mandatory"
+msgstr "Veuillez indiquer auprès de quel établissement."
+
+msgid "activity_type"
+msgstr "Type d'activité"
+
+msgid "question_activity_place"
+msgstr "A quel endroit?"
+
+msgid "question_activity"
+msgstr "Quelle activité?"
+
+msgid "onem_needed"
+msgstr "Veuillez joindre l'attestation de l'ONEM stipulant qui n'a pas bénificier d'une dégoration l'autorisation de poursuivre des études"
+
+msgid "job"
+msgstr "Travail"
+
+msgid "illness"
+msgstr "Maladie"
+
+msgid "msg_info_duplicated"
+msgstr "Données dupliquées"
+
+msgid "msg_info_not_duplicated"
+msgstr "Données non dupliquées car données invalides"
+
+msgid "msg_warning_curriculum"
+msgstr "Veuillez encoder vos études secondaires avant d'encoder les curricula.  Merci"

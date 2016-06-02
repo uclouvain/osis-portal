@@ -737,13 +737,19 @@ msgid "subdomain"
 msgstr "Subdomain"
 
 msgid "question_domain_title"
-msgstr "Mention your studies title"
+msgstr "Domain, subdomain, and grade type corresponds to your studies"
 
 msgid "data_duplicated"
 msgstr "Data duplicated"
 
 msgid "country"
 msgstr "Country"
+
+msgid "university_country"
+msgstr "University country"
+
+msgid "university_name"
+msgstr "University name"
 
 msgid "complete_profile_instruction"
 msgstr "Please complete your profile"
@@ -774,3 +780,69 @@ msgstr "Passport number"
 
 msgid "question_domain"
 msgstr "Domain, subdomain, and grade type corresponds to your studies"
+
+msgid "specify_locality"
+msgstr "In case you could not find the locality in the list, please mention it below."
+
+msgid "specify_university_name"
+msgstr "In case you could not find your university in the list, please mention it below."
+
+msgid "mandatory_university_name"
+msgstr "Please mention an university's name."
+
+msgid "specify"
+msgstr "Specify"
+
+msgid "files_translated"
+msgstr "A translation by a sworn translator"
+
+msgid "establishment"
+msgstr "Establishment"
+
+msgid "higher_non_university"
+msgstr "Higher non university"
+
+msgid "study_systems"
+msgstr "Study systems"
+
+msgid "social_advancement"
+msgstr "Social advancement"
+
+msgid "full_exercise"
+msgstr "Full exercise"
+
+msgid "undefined"
+msgstr "Undefined"
+
+msgid "institution_country"
+msgstr "Institution country"
+
+msgid "institution_mandatory"
+msgstr "Please mention the name of the institute where you were"
+
+msgid "activity_type"
+msgstr "Activity type"
+
+msgid "question_activity_place"
+msgstr "Where?"
+
+msgid "question_activity"
+msgstr "What kind of activity?"
+
+msgid "onem_needed"
+msgstr "Veuillez joindre l'attestation de l'ONEM stipulant qui n'a pas bénificier d'une dégoration l'autorisation de poursuivre des études"
+
+msgid "job"
+msgstr "Job"
+
+msgid "illness"
+msgstr "Illness"
+
+msgid "msg_info_duplicated"
+msgstr "Data duplicated"
+
+msgid "msg_info_not_duplicated"
+msgstr "Data not duplicated"
+
+msgid "msg_warning_curriculum"
+msgstr "Please mention your secondary education and diplomas informations, before encoding the curricula."
