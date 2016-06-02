@@ -31,32 +31,28 @@
     <div class="panel-body">
 
             <br>
-            <div class="row">
-                Pour faire votre choix d'études, vous êtes invité(e) à sélectionner un type d'études(un sous-type
-                d'études
-                si nécessaire) et puis un domaine d'étude. Ensuite, choisissez les études désirées et confirmez
-                votre
-                choix.<br>
-                Pour vous y aider, vous pouvez consulter le <a
-                    href="http://www.uclouvain.be/programme-etudes-2015.html" target="_blank">programme d'études</a>
+            Pour faire votre choix d'études, vous êtes invité(e) à sélectionner un type d'études(un sous-type
+            d'études
+            si nécessaire) et puis un domaine d'étude. Ensuite, choisissez les études désirées et confirmez
+            votre
+            choix.<br>
+            Pour vous y aider, vous pouvez consulter le <a
+                href="http://www.uclouvain.be/programme-etudes-2015.html" target="_blank">programme d'études</a>
+            <br>
+
+            <label>Choisissez un type d'études</label>
+            <select class="form-control" id="slt_offer_type" name="type" >
+                <option value="" selected>...</option>
+            {% for grade_choice in grade_choices %}
+                 <option value="{{grade_choice.0}}" >{{grade_choice.1}}</option>
+            {% endfor %}
+            </select>
+            <br>
+
+            <div id="pnl_grade_choices">
+                <label><br></label>
             </div>
 
-            <br>
-            <div class="row">
-                <label>Choisissez un type d'études</label>
-                <select class="form-control" id="slt_offer_type" name="type" >
-                    <option value="" selected>...</option>
-                {% for grade_choice in grade_choices %}
-                     <option value="{{grade_choice.0}}" >{{grade_choice.1}}</option>
-                {% endfor %}
-                </select>
-            </div>
-            <br>
-            <div class="row">
-                <div id="pnl_grade_choices">
-                    <label><br></label>
-                </div>
-            </div>
             <br>
             <div class="row">
                 <div class="col-md-4">
@@ -77,12 +73,9 @@
                 </div>
             </div>
 
-
-                <br>
-                <div id="pnl_offers">
-
-                </div>
-
+            <br>
+            <div id="pnl_offers">
+            </div>
 
             {% if message%}
             <div>
@@ -91,7 +84,6 @@
                 </div>
             </div>
             {% endif %}
-
 
         <form method="post" action="{% url 'save_offer_selection' %}" id="form_questions" name="form_questions">
             <input type="hidden" id="txt_offer_year_id" name="offer_year_id" value="{{offer.id}}"/>

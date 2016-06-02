@@ -4,3 +4,4 @@ venv/
 admission/tests/sent_mails/
 *.mo
 
+/osis-portal.iml

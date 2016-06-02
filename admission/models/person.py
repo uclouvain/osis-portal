@@ -32,6 +32,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
+
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('user', 'birth_date', 'gender')
     fieldsets = ((None, {'fields': ('user', 'birth_date', 'gender', 'language')}),)
@@ -78,10 +79,10 @@ class Person(models.Model):
 
 def find_by_user(user):
     try:
-        person_result = Person.objects.filter(user__id=user.id).first()
+        person = Person.objects.get(user=user)
     except ObjectDoesNotExist:
         return None
-    return person_result
+    return person
 
 
 def find_by_activation_code(activation_code):

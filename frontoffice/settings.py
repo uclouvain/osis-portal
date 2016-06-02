@@ -44,7 +44,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -52,26 +52,25 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'reference',
+    'base',
     'admission',
     'catalog',
     'enrollments',
     'dashboard',
     'rest_framework',
-    'livereload',
-]
+)
 
-MIDDLEWARE_CLASSES = [
-    'django.middleware.security.SecurityMiddleware',
+MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-    'livereload.middleware.LiveReloadScript',
-]
+    'django.middleware.security.SecurityMiddleware',
+)
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -112,6 +111,9 @@ DATABASES = {
     },
 }
 
+
+COUCHBASE_CONNECTION_STRING='couchbase://localhost/score_encoding'
+COUCHBASE_PASSWORD=''
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -178,7 +180,12 @@ QUEUE_CONTEXT_ROOT = '/'
 # A relative URL will work on local , but not out of the box on the servers.
 LOGO_INSTITUTION_URL = os.path.join(BASE_DIR, "admission/static/img/logo_institution.jpg")
 
-try  :
+try:
     from frontoffice.server_settings import *
+
+    try:
+        INSTALLED_APPS = INSTALLED_APPS + SERVER_APPS
+    except NameError:
+        pass
 except ImportError:
     pass
