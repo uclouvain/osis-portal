@@ -87,6 +87,7 @@
                             <label>{%trans 'birth_day'%} *</label>
                             <input type="text" class="form-control" id="txt_birth_date" name="birth_date"
                                    value="{{ person.birth_date  | default_if_none:'' | date:"d/m/Y" }}">
+                            (format : {% trans 'format_date'%})
                             <font class="error">{{ person_form.birth_date.errors|striptags }}</font>
 
                         </div>
@@ -483,14 +484,15 @@ $("#txt_birth_date").datepicker({
 
 $(document).ready(function() {
     $.ajax({
-        url: "/admission/country?nationality=" + $("#slt_nationality").val();
+        url: "/admission/country?nationality=" + $("#slt_nationality").val()
     }).then(function(data) {
 
-    if (data.european_union) {
-        $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
-    }else{
-        $('#pnl_assimilation_criteria').css('visibility', 'visible').css('display','block');
-    }
+        if (data.european_union) {
+            $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
+        }else{
+            $('#pnl_assimilation_criteria').css('visibility', 'visible').css('display','block');
+        }
+    });
 });
 </script>
 {% endblock %}

@@ -854,3 +854,12 @@ msgstr "Données non dupliquées car données invalides"
 
 msgid "msg_warning_curriculum"
 msgstr "Veuillez encoder vos études secondaires avant d'encoder les curricula.  Merci"
+
+msgid "invalid_date"
+msgstr "Date incorrecte"
+
+msgid "invalid_year"
+msgstr "Année invalide"
+
+msgid "format_date"
+msgstr "jj/mm/aaaa"
