@@ -87,6 +87,7 @@
                             <label>{%trans 'birth_day'%} *</label>
                             <input type="text" class="form-control" id="txt_birth_date" name="birth_date"
                                    value="{{ person.birth_date  | default_if_none:'' | date:"d/m/Y" }}">
+                            (format : {% trans 'format_date'%})
                             <font class="error">{{ person_form.birth_date.errors|striptags }}</font>
 
                         </div>

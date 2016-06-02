@@ -774,3 +774,12 @@ msgstr "Passport number"
 
 msgid "question_domain"
 msgstr "Domain, subdomain, and grade type corresponds to your studies"
+
+msgid "invalid_date"
+msgstr "Invalid date"
+
+msgid "invalid_year"
+msgstr "Invalid year"
+
+msgid "format_date"
+msgstr "dd/mm/yyyy"

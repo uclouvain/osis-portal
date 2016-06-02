@@ -782,3 +782,12 @@ msgstr "Numéro de passeport"
 
 msgid "question_domain"
 msgstr "Le domaine, sous-domaine et type d'études correspondent à vos études"
+
+msgid "invalid_date"
+msgstr "Date incorrecte"
+
+msgid "invalid_year"
+msgstr "Année invalide"
+
+msgid "format_date"
+msgstr "jj/mm/aaaa"

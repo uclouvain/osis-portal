@@ -26,6 +26,7 @@
 from django import forms
 from django.core.validators import MinValueValidator
 from django.utils.translation import ugettext_lazy as _
+from admission.validators import date_validator
 
 
 class NewAccountForm(forms.Form):
@@ -115,7 +116,8 @@ class PersonForm(forms.Form):
     last_name               = forms.CharField(required=True)
     first_name              = forms.CharField(required=True)
     birth_date              = forms.DateField(required=True, input_formats=['%d/%m/%Y'],
-                                              widget=forms.DateInput(format='%d/%m/%Y'))
+                                              widget=forms.DateInput(format='%d/%m/%Y'),
+                                              validators=[date_validator.validate_birth_date])
     birth_place             = forms.CharField(required=True)
     birth_country           = forms.CharField(required=True)
     gender                  = forms.ChoiceField(choices=GENDER_CHOICES, required=True)
@@ -142,7 +144,8 @@ class PersonForm(forms.Form):
         super(PersonForm, self).__init__(*args, **kwargs)
         self.fields['last_name'].error_messages = {'required': _('mandatory_field')}
         self.fields['first_name'].error_messages = {'required': _('mandatory_field')}
-        self.fields['birth_date'].error_messages = {'required': _('mandatory_field')}
+        self.fields['birth_date'].error_messages = {'required': _('mandatory_field'),
+                                                    'invalid': _('invalid_date')}
         self.fields['birth_place'].error_messages = {'required': _('mandatory_field')}
         self.fields['birth_country'].error_messages = {'required': _('mandatory_field')}
         self.fields['gender'].error_messages = {'required': _('mandatory_field')}
