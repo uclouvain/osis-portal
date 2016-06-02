@@ -24,7 +24,8 @@
 #
 ##############################################################################
 from django.conf.urls import url
-from admission.views import application, common, identification, offer, level, question, option, country, curriculum
+from admission.views import application, common, identification, offer, level, question, option, country, curriculum, \
+    education_institution, language, domain
 from django.contrib.auth.views import logout
 
 
@@ -51,7 +52,7 @@ urlpatterns = [
     url(r'^admission/offer/application/([0-9]+)/$', offer.selection_offer, name='selection_offer'),
     url(r'^admission/application/read/([0-9]+)/$', application.application_view, name='application_view'),
 
-    url(r'^country/$', country.find_by_id),
+    url(r'^country/$', country.find_by_id_json),
 
     url(r'^levels/$', level.find_by_type),
 
@@ -66,4 +67,22 @@ urlpatterns = [
     url(r'^profile_confirmed/$', application.profile_confirmed, name='profile_confirmed'),
 
     url(r'^questions/$', question.find_by_offer),
+
+    url(r'^cities/$', education_institution.find_by_country),
+    url(r'^universities/$', education_institution.find_by_city),
+    url(r'^langue_recognized/$', language.is_recognized),
+    url(r'^highnonuniversity/$', education_institution.find_national_by_city_type),
+
+    url(r'^high_countries/$', education_institution.find_countries_by_type_adhoc),
+    url(r'^high_cities/$', education_institution.find_by_country_type_adhoc),
+    url(r'^high_institutions/$', education_institution.find_high_institution_by_city),
+    url(r'^countries/$', education_institution.find_countries),
+    url(r'^errors_update/$', curriculum.errors_update),
+    url(r'^subdomains/$', domain.find_subdomains),
+    url(r'^highnonuniversity_cities/$', education_institution.find_cities_by_country_type_adhoc),
+
+
+
+
+
 ]

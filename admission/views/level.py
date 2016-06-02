@@ -43,7 +43,6 @@ class LevelSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'grade')
 
 
-@csrf_exempt
 def find_by_type(request):
     type = request.GET['type']
 

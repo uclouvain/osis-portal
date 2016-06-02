@@ -28,6 +28,7 @@ from admission import models as mdl
 from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
 from django.views.decorators.csrf import csrf_exempt
+from reference import models as mdl_reference
 
 
 class JSONResponse(HttpResponse):
@@ -37,32 +38,17 @@ class JSONResponse(HttpResponse):
         super(JSONResponse, self).__init__(content, **kwargs)
 
 
-def find_by_offer(request):
-    offer_yr_id = request.GET['offer']
+class LanguageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = mdl_reference.language.Language
+        fields = ('id', 'code', 'name', 'recognized')
 
-    offer_yr = mdl.offer_year.find_by_id(offer_yr_id)
-    questions = mdl.question.find_form_ordered_questions(offer_yr)
-    options = []
-    question_list = []
-    if questions:
-        for question in questions:
-            options_by_question = mdl.option.find_options_by_question_id(question.id)
-            for o in options_by_question:
-                options.append(o)
 
-        for option in options:
-                options_max_number = 0
-                if option.question.type == 'RADIO_BUTTON' or option.question.type == 'CHECKBOX' or option.question.type == 'DROPDOWN_LIST':
-                    options_max_number = mdl.option.find_number_options_by_question_id(option.question.id)
-                question_list.append({'option_id': option.id,
-                                      'option_label': option.label,
-                                      'option_description': option.description,
-                                      'option_value': option.value,
-                                      'option_order': option.order,
-                                      'question_id': option.question.id,
-                                      'question_label': option.question.label,
-                                      'question_type': option.question.type,
-                                      'question_required': option.question.required,
-                                      'question_description': option.question.description,
-                                      'options_max_number': options_max_number})
-    return JSONResponse(question_list)
+def is_recognized(request):
+    a_language_id = request.GET['language']
+    language = mdl_reference.language.find_by_id(a_language_id)
+    languages = []
+    if language:
+        languages.append(language)
+    serializer = LanguageSerializer(languages, many=True)
+    return JSONResponse(serializer.data)
