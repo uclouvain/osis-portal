@@ -28,6 +28,7 @@ from reference import models as ref
 from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
 from django.views.decorators.csrf import csrf_exempt
+from reference import models as mdl_reference
 
 
 class JSONResponse(HttpResponse):
@@ -45,8 +46,7 @@ class CountrySerializer(serializers.ModelSerializer):
 
 def find_by_id_json(request):
     country_id = request.GET['nationality']
-
-    country = Country.find_by_id(country_id)
+    country = mdl_reference.country.find_by_id(country_id)
     serializer = CountrySerializer(country)
     return JSONResponse(serializer.data)
 
