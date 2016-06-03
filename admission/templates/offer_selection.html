@@ -31,16 +31,13 @@
     <div class="panel-body">
 
             <br>
-            Pour faire votre choix d'études, vous êtes invité(e) à sélectionner un type d'études(un sous-type
-            d'études
-            si nécessaire) et puis un domaine d'étude. Ensuite, choisissez les études désirées et confirmez
-            votre
-            choix.<br>
-            Pour vous y aider, vous pouvez consulter le <a
-                href="http://www.uclouvain.be/programme-etudes-2015.html" target="_blank">programme d'études</a>
+            {% trans 'instruction_offer_selection_part1' %}
             <br>
-
-            <label>Choisissez un type d'études</label>
+            {% trans 'instruction_offer_selection_part2' %}
+                <a href="http://www.uclouvain.be/programme-etudes-2015.html" target="_blank">{% trans 'study_programs' %}</a>
+            <br>
+            <br>
+            <label>{% trans 'question_study_type'%}</label>
             <select class="form-control" id="slt_offer_type" name="type" >
                 <option value="" selected>...</option>
             {% for grade_choice in grade_choices %}
@@ -56,7 +53,7 @@
             <br>
             <div class="row">
                 <div class="col-md-4">
-                    <label>Choisissez un domaine d'études</label>
+                    <label>{% trans 'question_study_domain'%}</label>
                     <select class="form-control" id="slt_domain" name="domain" style="width:500px;">
                         <option value=""></option>
                         {% for d in domains %}
@@ -90,6 +87,181 @@
             <input type="hidden" id="txt_application_id" name="application_id" value="{{ application.id }}"/>
             {% csrf_token %}
             <br>
+
+            <!--Static questions :-->
+            <div id="pnl_static_questions">
+                <div id="pnl_offer_belgiandegree" style="visibility:hidden;display:none;">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>{% trans 'question_belgian_diploma' %}?</label>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_belgiandegree_true" name="rdb_offer_belgiandegree"
+                                           value="true"
+                                           {% if application.belgian_degree %}checked{%endif%}
+                                    > {% trans 'yes'%}
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_belgiandegree_false" name="rdb_offer_belgiandegree"
+                                           value="false"
+                                           {% if application.belgian_degree %}{%else%}checked{%endif%}
+                                    > {% trans 'no'%}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pnl_offer_vae" style="visibility:hidden;display:none;">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>{% trans 'question_vae'%} ?</label>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_vae_true" name="rdb_offer_vae" value="true"
+                                           {% if application.vae %}checked{%endif%}
+                                    > {% trans 'yes'%}
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_vae_false" name="rdb_offer_vae" value="false"
+                                           {% if application.vae %}{%else%}checked{%endif%}
+                                    > {% trans 'no'%}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pnl_offer_samestudies" style="visibility:hidden;display:none;">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>{% trans 'question_same_studies'%} ?</label>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_samestudies_true" name="rdb_offer_samestudies"
+                                           value="true"
+                                           {% if application.started_samestudies %}checked{%endif%}
+                                    > {% trans 'yes'%}
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_samestudies_false" name="rdb_offer_samestudies"
+                                           value="false"
+                                           {% if application.started_samestudies %}{%else%}checked{%endif%}
+                                    > {% trans 'no'%}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pnl_offer_valuecredits" style="visibility:hidden;display:none;">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>{% trans 'question_credits_valorisation'%} ?</label>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_valuecredits_true" name="rdb_offer_valuecredits"
+                                           value="true"
+                                           {% if application.credits_to_value %}checked{%endif%}
+                                    > {% trans 'yes'%}
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_valuecredits_false" name="rdb_offer_valuecredits"
+                                           value="false"
+                                           {% if application.credits_to_value %}{%else%}checked{%endif%}
+                                    > {% trans 'no'%}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pnl_offer_sameprogram" style="visibility:hidden;display:none;">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>{% trans 'question_same_program'%} ?</label>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_sameprogram_true" name="rdb_offer_sameprogram"
+                                           value="true"
+                                           {% if application.applied_to_sameprogram %}checked{%endif%}
+                                    > {% trans 'yes'%}
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_sameprogram_false" name="rdb_offer_sameprogram"
+                                           value="false"
+                                           {% if application.applied_to_sameprogram %}{%else%}checked{%endif%}
+                                    > {% trans 'no'%}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pnl_offer_resident" style="visibility:hidden;display:none;">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>{% trans 'question_resident'%} ?</label>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_resident_true" name="rdb_offer_resident" value="true"
+                                           {% if application.resident %}checked{%endif%}
+                                    > {% trans 'yes'%}
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_resident_false" name="rdb_offer_resident" value="false"
+                                           {% if application.resident %}{%else%}checked{%endif%}
+                                    >  {% trans 'no'%}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="pnl_offer_lottery" style="visibility:hidden;display:none;">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>{% trans 'question_lottery_number'%} : </label>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div>
+                                <input class="form-control" id="txt_offer_lottery" name="txt_offer_lottery"
+                                       value="{{application.lottery_number  | default_if_none:'' }}" maxlength="50">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Dynamic questions :-->
+
             <div id="pnl_questions"></div>
             <br>
             <div class="row">
@@ -106,8 +278,8 @@
                 </div>
                 <div class="col-md-2">
                     <button type="submit" id="bt_save" class="btn" role="button" name="save"
-                            title="Sauvegarder" disabled>
-                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Sauvegarder
+                            title="{% trans 'save'%}" disabled>
+                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> {% trans 'save'%}
                     </button>
                 </div>
                 <div class="col-md-2">

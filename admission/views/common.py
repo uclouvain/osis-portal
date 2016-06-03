@@ -230,10 +230,10 @@ def profile(request):
             person.user.save()
             request.user = person.user # Otherwise it was not refreshed while going back to home page
             person.save()
-            if 'save' in request.POST:
+            if 'save_up' in request.POST or 'save_down' in request.POST:
                 return home_retour(request)
             else:
-                if 'next_step' in request.POST:
+                if 'next_step_up' in request.POST or 'next_step_down' in request.POST:
                     return HttpResponseRedirect(reverse('curriculum_update'))
     else:
         person = mdl.person.find_by_user(request.user)

@@ -1,5 +1,6 @@
 $("#slt_offer_type").change(function() {
 
+    init_static_questions();
     $("#pnl_grade_choices").find("label")
         .remove()
         .end()
@@ -175,14 +176,14 @@ function selection(row_number, offers_length, offer_year_id){
                 }
             }
 
-            if(value.question_type=='RADIO_BUTTON'){
-                var radio_checked = new Boolean(false)
-                if(value.option_order == 1){
-                    radio_checked = new Boolean(true)
-                    $('#pnl_questions').append("<br>");
-                    $('#pnl_questions').append("<br>");
-                    $('#pnl_questions').append($("<label></label>").append(value.question_label)
-                                                            .attr("id","lbl_question_"+value.question_id));
+                if(value.question_type=='RADIO_BUTTON'){
+                    var radio_checked = new Boolean(false)
+                    if(value.option_order == 1){
+                        radio_checked = new Boolean(true)
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append($("<label></label>").append(value.question_label)
+                                                                .attr("id","lbl_question_"+value.question_id));
 
                     $('#pnl_questions').append("<br>");
                     if (value.question_required ){
@@ -286,6 +287,7 @@ function selection(row_number, offers_length, offer_year_id){
                 }
 
             }
+
             if(value.question_type=='DOWNLOAD_LINK'){
                 $('#pnl_questions').append("<br>");
                 $('#pnl_questions').append("<br>");
@@ -319,7 +321,33 @@ function selection(row_number, offers_length, offer_year_id){
         });
         }
       });
-}
+
+       $.ajax({
+        url: "/admission/offer?offer=" + offer_year_id
+       }).then(function(data) {
+
+        init_static_questions();
+//            alert(data.subject_to_quota);
+//            alert(data.grade_type);
+        if (data.subject_to_quota){
+            $('#pnl_offer_sameprogram').css('visibility', 'visible').css('display','block');
+            $('#pnl_offer_sameprogram').find('input').prop('required', true);
+
+          }else{
+
+            $('#pnl_offer_belgiandegree').css('visibility', 'visible').css('display','block');
+            $('#pnl_offer_belgiandegree').find('input').prop('required', true);
+
+            //// BACHELOR grade_type must have fixed values
+            if (data.grade_type==1) {
+                $('#pnl_offer_samestudies').css('visibility', 'visible').css('display','block');
+                $('#pnl_offer_samestudies').find('input').prop('required', true);
+            }
+        }
+
+        });
+
+    }
 
 function set_pnl_questions_empty(){
     $("#pnl_questions").find("label")
@@ -342,7 +370,6 @@ function set_pnl_questions_empty(){
     .end()
 }
 
-// AA : 25/04/16
 function display(id,state){
     var elt = document.getElementById(id);
 
@@ -385,6 +412,88 @@ $("#slt_nationality").change(function() {
         }
      });
  });
+
+//Display pnl_offer_vae only for Masters and only when rdb_offer_belgiandegree_false is clicked
+
+$("#rdb_offer_belgiandegree_true").click(function() {
+           $.ajax({
+            url: "/admission/offer?offer=" + $("#txt_offer_year_id").val()
+           }).then(function(data) {
+
+            if (data.grade_type!=1){
+               $('#pnl_offer_vae').css('visibility', 'hidden').css('display','none');
+               $('#pnl_offer_vae').find('input[type=radio]:checked').removeAttr('checked');
+               $('#pnl_offer_vae').find('input').removeAttr('required');
+              }
+        });
+
+});
+
+$("#rdb_offer_belgiandegree_false").click(function() {
+           $.ajax({
+            url: "/admission/offer?offer=" + $("#txt_offer_year_id").val()
+           }).then(function(data) {
+
+            if (data.grade_type!=1){
+               $('#pnl_offer_vae').css('visibility', 'visible').css('display','block');
+               $('#pnl_offer_vae').find('input').prop('required', true );
+              }
+        });
+
+});
+
+
+$("#rdb_offer_samestudies_true").click(function() {
+   $('#pnl_offer_valuecredits').css('visibility', 'visible').css('display','block');
+   $('#pnl_offer_valuecredits').find('input').prop('required', true );
+});
+
+$("#rdb_offer_samestudies_false").click(function() {
+   $('#pnl_offer_valuecredits').css('visibility', 'hidden').css('display','none');
+   $('#pnl_offer_valuecredits').find('input[type=radio]:checked').removeAttr('checked');
+   $('#pnl_offer_valuecredits').find('input').removeAttr('required');
+});
+
+///OFFER SUBJECT TO QUOTA
+
+$("#rdb_offer_sameprogram_true").click(function() {
+
+   $('#pnl_offer_resident').css('visibility', 'hidden').css('display','none');
+   $('#pnl_offer_resident').find('input[type=radio]:checked').removeAttr('checked');
+   $('#pnl_offer_resident').find('input').removeAttr('required');
+
+   $('#pnl_offer_lottery').css('visibility', 'hidden').css('display','none');
+   $('#txt_offer_lottery').val('');
+   $('#txt_offer_lottery').find('input').removeAttr('required');
+});
+
+$("#rdb_offer_sameprogram_false").click(function() {
+
+   $('#pnl_offer_resident').css('visibility', 'visible').css('display','block');
+   $('#pnl_offer_resident').find('input').prop('required', true );
+});
+
+$("#rdb_offer_resident_true").click(function() {
+   $('#pnl_offer_lottery').css('visibility', 'hidden').css('display','none');
+   $('#txt_offer_lottery').val('');
+   $('#txt_offer_lottery').find('input').removeAttr('required');
+});
+
+$("#rdb_offer_resident_false").click(function() {
+   $('#pnl_offer_lottery').css('visibility', 'visible').css('display','block');
+   $('#pnl_offer_lottery').find('input').prop('required', true);
+});
+
+
+function init_static_questions (){
+
+   $("#pnl_static_questions").children().css('visibility', 'hidden').css('display','none');
+   $('#pnl_static_questions').find('input[type=radio]:checked').removeAttr('checked');
+   $('#pnl_static_questions').find('input').removeAttr('required');
+   $('#txt_offer_lottery').val('');
+
+}
+
 
 $("select[id^='slt_foreign_institution_country_']" ).change(function(event) {
     var target = $(event.target);

@@ -44,6 +44,13 @@ class Application(models.Model):
     creation_date = models.DateTimeField(auto_now=True)
     application_type = models.CharField(max_length=20, choices=APPLICATION_TYPE)
     doctorate = models.BooleanField(default=False)
+    belgian_degree = models.NullBooleanField(default=None)
+    vae = models.NullBooleanField(default=None)
+    started_samestudies = models.NullBooleanField(default=None)
+    credits_to_value = models.NullBooleanField(default=None)
+    applied_to_sameprogram = models.NullBooleanField(default=None)
+    resident = models.NullBooleanField(default=None)
+    lottery_number = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return u"%s" % self.offer_year

@@ -188,14 +188,14 @@
                        name="corresponds_to_domain_foreign_{{curriculum.academic_year.year}}"
                        id="rdb_corresponds_to_domain_foreign_true_{{curriculum.academic_year.year}}"
                        value="true"
-                       onclick="disabled_reset_field_txt('txt_diploma_title_foreign_{{curriculum.academic_year.year}}',false);"
+                       onclick="disabled_reset_field_txt('txt_diploma_title_foreign_{{curriculum.academic_year.year}}',true);"
                 > {% trans 'yes' %}
             </label>
             <label class="radio-inline">
                 <input type="radio"
                        name="corresponds_to_domain_foreign_{{curriculum.academic_year.year}}"
                        id="rdb_corresponds_to_domain_foreign_false_{{curriculum.academic_year.year}}" value="false"
-                       onclick="disabled_reset_field_txt('txt_diploma_title_foreign_{{curriculum.academic_year.year}}',true);"
+                       onclick="disabled_reset_field_txt('txt_diploma_title_foreign_{{curriculum.academic_year.year}}',false);"
                 > {% trans 'no' %}
             </label>
             {% message_error validation_messages year=curriculum.academic_year.year|lower param='diploma' as diploma_msg%}
