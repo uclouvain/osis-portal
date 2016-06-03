@@ -197,13 +197,13 @@
                                                    {% for personCriteria in personAssimilationCriteria %}
                                                      {% if personCriteria.criteria.id == criteria.id %} checked {% endif %}
                                                    {% endfor %}
-                                            > oui
+                                            > {% trans 'yes' %}
                                         </label>
                                         <label class="radio-inline">
                                             <input type="radio" id="assimilation_criteria_{{forloop.counter}}_false"
                                                    name="assimilation_criteria_{{criteria.id}}"
                                                    value="false"
-                                            > Non
+                                            > {% trans 'no' %}
                                         </label>
                                     </div>
                                 </div>
@@ -314,14 +314,14 @@
                                     <input type="radio" id="rd_same_contact_legal_addr_true"
                                            name="same_contact_legal_addr" value="true"
                                            onclick="display('pnl_contact_address',false);"
-                                           {% if same_addresses %}checked{%endif%}> Oui
+                                           {% if same_addresses %}checked{%endif%}> {% trans 'yes' %}
 
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" id="rd_same_contact_legal_addr_false"
                                            name="same_contact_legal_addr" value="false"
                                            onclick="display('pnl_contact_address',true);"
-                                           {% if same_addresses %}{%else%}checked{%endif%}> Non
+                                           {% if same_addresses %}{%else%}checked{%endif%}> {% trans 'no' %}
                                 </label>
                             </div>
                         </div>
@@ -476,11 +476,7 @@
 {% block script %}
 <script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
 <script>
-$("#txt_birth_date").datepicker({
-    format: "dd/mm/yyyy",
-    autoclose: true,
-    orientation: "bottom auto"
-});
+
 
 $(document).ready(function() {
     $.ajax({

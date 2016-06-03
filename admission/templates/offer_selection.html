@@ -90,6 +90,184 @@
             <input type="hidden" id="txt_application_id" name="application_id" value="{{ application.id }}"/>
             {% csrf_token %}
             <br>
+
+            <!--Static questions :-->
+            <div id="pnl_static_questions">
+                <div id="pnl_offer_belgiandegree" style="visibility:hidden;display:none;">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>Votre diplôme donnant accès à ce programme a-t-il été émis par une institution belge
+                                ?</label>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_belgiandegree_true" name="rdb_offer_belgiandegree"
+                                           value="true"
+                                           {% if application.belgian_degree %}checked{%endif%}
+                                    > oui
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_belgiandegree_false" name="rdb_offer_belgiandegree"
+                                           value="false"
+                                           {% if application.belgian_degree %}{%else%}checked{%endif%}
+                                    > Non
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pnl_offer_vae" style="visibility:hidden;display:none;">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>Souhaitez-vous accéder au programme sur base de la valorisation des savoirs et
+                                compétences acquis par expérience professionnelle (VAE) ?</label>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_vae_true" name="rdb_offer_vae" value="true"
+                                           {% if application.vae %}checked{%endif%}
+                                    > oui
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_vae_false" name="rdb_offer_vae" value="false"
+                                           {% if application.vae %}{%else%}checked{%endif%}
+                                    > Non
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pnl_offer_samestudies" style="visibility:hidden;display:none;">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>Avez-vous déjà entamé les mêmes études dans un autre établissement ?</label>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_samestudies_true" name="rdb_offer_samestudies"
+                                           value="true"
+                                           {% if application.started_samestudies %}checked{%endif%}
+                                    > oui
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_samestudies_false" name="rdb_offer_samestudies"
+                                           value="false"
+                                           {% if application.started_samestudies %}{%else%}checked{%endif%}
+                                    > Non
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pnl_offer_valuecredits" style="visibility:hidden;display:none;">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>Voulez-vous valoriser des crédits pour ces études ?</label>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_valuecredits_true" name="rdb_offer_valuecredits"
+                                           value="true"
+                                           {% if application.credits_to_value %}checked{%endif%}
+                                    > oui
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_valuecredits_false" name="rdb_offer_valuecredits"
+                                           value="false"
+                                           {% if application.credits_to_value %}{%else%}checked{%endif%}
+                                    > Non
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pnl_offer_sameprogram" style="visibility:hidden;display:none;">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>Etes-vous déjà inscrit au même programme dans un établissement de la communauté
+                                française ?</label>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_sameprogram_true" name="rdb_offer_sameprogram"
+                                           value="true"
+                                           {% if application.applied_to_sameprogram %}checked{%endif%}
+                                    > oui
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_sameprogram_false" name="rdb_offer_sameprogram"
+                                           value="false"
+                                           {% if application.applied_to_sameprogram %}{%else%}checked{%endif%}
+                                    > Non
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pnl_offer_resident" style="visibility:hidden;display:none;">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>Etes-vous resident ?</label>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_resident_true" name="rdb_offer_resident" value="true"
+                                           {% if application.resident %}checked{%endif%}
+                                    > oui
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" id="rdb_offer_resident_false" name="rdb_offer_resident" value="false"
+                                           {% if application.resident %}{%else%}checked{%endif%}
+                                    > Non
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="pnl_offer_lottery" style="visibility:hidden;display:none;">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>Veuillez indiquer le numéro que le service des inscriptions vous a fourni : </label>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div>
+                                <input class="form-control" id="txt_offer_lottery" name="txt_offer_lottery"
+                                       value="{{application.lottery_number  | default_if_none:'' }}" maxlength="50">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Dynamic questions :-->
+
             <div id="pnl_questions"></div>
             <br>
             <div class="row">

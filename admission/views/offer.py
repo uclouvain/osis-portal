@@ -40,7 +40,7 @@ class JSONResponse(HttpResponse):
 class OfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = mdl.offer_year.OfferYear
-        fields = ('id', 'acronym','title', 'title_international')
+        fields = ('id', 'acronym','title', 'title_international','grade_type','subject_to_quota')
 
 
 def search(request):
@@ -48,6 +48,13 @@ def search(request):
     domain = request.GET['domain']
     offers = mdl.offer_year.search(level, domain)
     serializer = OfferSerializer(offers, many=True)
+    return JSONResponse(serializer.data)
+
+
+def find_by_id(request):
+    offer_year_id = request.GET['offer']
+    offer_year = mdl.offer_year.find_by_id(offer_year_id)
+    serializer = OfferSerializer(offer_year)
     return JSONResponse(serializer.data)
 
 
