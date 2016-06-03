@@ -863,3 +863,44 @@ msgstr "Année invalide"
 
 msgid "format_date"
 msgstr "jj/mm/aaaa"
+
+msgid "instruction_offer_selection_part1"
+msgstr ""
+"Pour faire votre choix d'études, vous êtes invité(e) à sélectionner un type d'études(un sous-type d'études "
+"si nécessaire) et puis un domaine d'étude. Ensuite, choisissez les études désirées et confirmez votre choix."
+
+msgid "instruction_offer_selection_part2"
+msgstr "Pour vous y aider, vous pouvez consulter le "
+
+msgid "study_programs"
+msgstr "programme d'études"
+
+msgid "question_study_type"
+msgstr "Choisissez un type d'études"
+
+msgid "question_study_domain"
+msgstr "Choisissez un domaine d'études"
+
+msgid "question_belgian_diploma"
+msgstr "Votre diplôme donnant accès à ce programme a-t-il été émis par une institution belge"
+
+msgid "question_vae"
+msgstr ""
+"Souhaitez-vous accéder au programme sur base de la valorisation des savoirs et  compétences acquis par expérience "
+"professionnelle (VAE)"
+
+msgid "question_same_studies"
+msgstr "Avez-vous déjà entamé les mêmes études dans un autre établissement"
+
+msgid "question_credits_valorisation"
+msgstr "Voulez-vous valoriser des crédits pour ces études"
+
+msgid "question_same_program"
+msgstr "Etes-vous déjà inscrit au même programme dans un établissement de la communauté française"
+
+msgid "question_resident"
+msgstr "Etes-vous resident"
+
+msgid "question_lottery_number"
+msgstr "Veuillez indiquer le numéro que le service des inscriptions vous a fourni"
+

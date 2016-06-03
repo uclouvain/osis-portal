@@ -31,16 +31,13 @@
     <div class="panel-body">
 
             <br>
-            Pour faire votre choix d'études, vous êtes invité(e) à sélectionner un type d'études(un sous-type
-            d'études
-            si nécessaire) et puis un domaine d'étude. Ensuite, choisissez les études désirées et confirmez
-            votre
-            choix.<br>
-            Pour vous y aider, vous pouvez consulter le <a
-                href="http://www.uclouvain.be/programme-etudes-2015.html" target="_blank">programme d'études</a>
+            {% trans 'instruction_offer_selection_part1' %}
             <br>
-
-            <label>Choisissez un type d'études</label>
+            {% trans 'instruction_offer_selection_part2' %}
+                <a href="http://www.uclouvain.be/programme-etudes-2015.html" target="_blank">{% trans 'study_programs' %}</a>
+            <br>
+            <br>
+            <label>{% trans 'question_study_type'%}</label>
             <select class="form-control" id="slt_offer_type" name="type" >
                 <option value="" selected>...</option>
             {% for grade_choice in grade_choices %}
@@ -56,7 +53,7 @@
             <br>
             <div class="row">
                 <div class="col-md-4">
-                    <label>Choisissez un domaine d'études</label>
+                    <label>{% trans 'question_study_domain'%}</label>
                     <select class="form-control" id="slt_domain" name="domain" style="width:500px;">
                         <option value=""></option>
                         {% for d in domains %}
@@ -97,8 +94,7 @@
 
                     <div class="row">
                         <div class="col-md-8">
-                            <label>Votre diplôme donnant accès à ce programme a-t-il été émis par une institution belge
-                                ?</label>
+                            <label>{% trans 'question_belgian_diploma' %}?</label>
                         </div>
 
                         <div class="col-md-4">
@@ -107,13 +103,13 @@
                                     <input type="radio" id="rdb_offer_belgiandegree_true" name="rdb_offer_belgiandegree"
                                            value="true"
                                            {% if application.belgian_degree %}checked{%endif%}
-                                    > oui
+                                    > {% trans 'yes'%}
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" id="rdb_offer_belgiandegree_false" name="rdb_offer_belgiandegree"
                                            value="false"
                                            {% if application.belgian_degree %}{%else%}checked{%endif%}
-                                    > Non
+                                    > {% trans 'no'%}
                                 </label>
                             </div>
                         </div>
@@ -124,8 +120,7 @@
 
                     <div class="row">
                         <div class="col-md-8">
-                            <label>Souhaitez-vous accéder au programme sur base de la valorisation des savoirs et
-                                compétences acquis par expérience professionnelle (VAE) ?</label>
+                            <label>{% trans 'question_vae'%} ?</label>
                         </div>
 
                         <div class="col-md-4">
@@ -133,12 +128,12 @@
                                 <label class="radio-inline">
                                     <input type="radio" id="rdb_offer_vae_true" name="rdb_offer_vae" value="true"
                                            {% if application.vae %}checked{%endif%}
-                                    > oui
+                                    > {% trans 'yes'%}
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" id="rdb_offer_vae_false" name="rdb_offer_vae" value="false"
                                            {% if application.vae %}{%else%}checked{%endif%}
-                                    > Non
+                                    > {% trans 'no'%}
                                 </label>
                             </div>
                         </div>
@@ -149,7 +144,7 @@
 
                     <div class="row">
                         <div class="col-md-8">
-                            <label>Avez-vous déjà entamé les mêmes études dans un autre établissement ?</label>
+                            <label>{% trans 'question_same_studies'%} ?</label>
                         </div>
 
                         <div class="col-md-4">
@@ -158,13 +153,13 @@
                                     <input type="radio" id="rdb_offer_samestudies_true" name="rdb_offer_samestudies"
                                            value="true"
                                            {% if application.started_samestudies %}checked{%endif%}
-                                    > oui
+                                    > {% trans 'yes'%}
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" id="rdb_offer_samestudies_false" name="rdb_offer_samestudies"
                                            value="false"
                                            {% if application.started_samestudies %}{%else%}checked{%endif%}
-                                    > Non
+                                    > {% trans 'no'%}
                                 </label>
                             </div>
                         </div>
@@ -175,7 +170,7 @@
 
                     <div class="row">
                         <div class="col-md-8">
-                            <label>Voulez-vous valoriser des crédits pour ces études ?</label>
+                            <label>{% trans 'question_credits_valorisation'%} ?</label>
                         </div>
 
                         <div class="col-md-4">
@@ -184,13 +179,13 @@
                                     <input type="radio" id="rdb_offer_valuecredits_true" name="rdb_offer_valuecredits"
                                            value="true"
                                            {% if application.credits_to_value %}checked{%endif%}
-                                    > oui
+                                    > {% trans 'yes'%}
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" id="rdb_offer_valuecredits_false" name="rdb_offer_valuecredits"
                                            value="false"
                                            {% if application.credits_to_value %}{%else%}checked{%endif%}
-                                    > Non
+                                    > {% trans 'no'%}
                                 </label>
                             </div>
                         </div>
@@ -201,8 +196,7 @@
 
                     <div class="row">
                         <div class="col-md-8">
-                            <label>Etes-vous déjà inscrit au même programme dans un établissement de la communauté
-                                française ?</label>
+                            <label>{% trans 'question_same_program'%} ?</label>
                         </div>
 
                         <div class="col-md-4">
@@ -211,13 +205,13 @@
                                     <input type="radio" id="rdb_offer_sameprogram_true" name="rdb_offer_sameprogram"
                                            value="true"
                                            {% if application.applied_to_sameprogram %}checked{%endif%}
-                                    > oui
+                                    > {% trans 'yes'%}
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" id="rdb_offer_sameprogram_false" name="rdb_offer_sameprogram"
                                            value="false"
                                            {% if application.applied_to_sameprogram %}{%else%}checked{%endif%}
-                                    > Non
+                                    > {% trans 'no'%}
                                 </label>
                             </div>
                         </div>
@@ -228,7 +222,7 @@
 
                     <div class="row">
                         <div class="col-md-8">
-                            <label>Etes-vous resident ?</label>
+                            <label>{% trans 'question_resident'%} ?</label>
                         </div>
 
                         <div class="col-md-4">
@@ -236,12 +230,12 @@
                                 <label class="radio-inline">
                                     <input type="radio" id="rdb_offer_resident_true" name="rdb_offer_resident" value="true"
                                            {% if application.resident %}checked{%endif%}
-                                    > oui
+                                    > {% trans 'yes'%}
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" id="rdb_offer_resident_false" name="rdb_offer_resident" value="false"
                                            {% if application.resident %}{%else%}checked{%endif%}
-                                    > Non
+                                    >  {% trans 'no'%}
                                 </label>
                             </div>
                         </div>
@@ -253,7 +247,7 @@
 
                     <div class="row">
                         <div class="col-md-8">
-                            <label>Veuillez indiquer le numéro que le service des inscriptions vous a fourni : </label>
+                            <label>{% trans 'question_lottery_number'%} : </label>
                         </div>
 
                         <div class="col-md-4">
@@ -284,8 +278,8 @@
                 </div>
                 <div class="col-md-2">
                     <button type="submit" id="bt_save" class="btn" role="button" name="save"
-                            title="Sauvegarder" disabled>
-                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Sauvegarder
+                            title="{% trans 'save'%}" disabled>
+                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> {% trans 'save'%}
                     </button>
                 </div>
                 <div class="col-md-2">

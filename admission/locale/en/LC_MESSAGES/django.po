@@ -855,3 +855,43 @@ msgstr "Data not duplicated"
 
 msgid "msg_warning_curriculum"
 msgstr "Please mention your secondary education and diplomas informations, before encoding the curricula."
+
+msgid "instruction_offer_selection_part1"
+msgstr ""
+"In order to make you choice, please start by selecting a grade type(sub-grade type) and next select a study type. "
+"Next, select the required study and confirm your choice.<br/>In order to help you, you can"
+
+msgid "instruction_offer_selection_part2"
+msgstr "In order to help you, you can consult the study programs : "
+
+msgid "study_programs"
+msgstr "study programs"
+
+msgid "question_study_type"
+msgstr "Please select a study type"
+
+msgid "question_study_domain"
+msgstr "Please select a study domain"
+
+msgid "question_belgian_diploma"
+msgstr "Is your diploma, a belgian one"
+
+msgid "question_vae"
+msgstr ""
+"Souhaitez-vous accéder au programme sur base de la valorisation des savoirs et  compétences acquis par expérience "
+"professionnelle (VAE)"
+
+msgid "question_same_studies"
+msgstr "Did you already start the same studies in another institution"
+
+msgid "question_credits_valorisation"
+msgstr "Would you like to take advantage of credits for these studies"
+
+msgid "question_same_program"
+msgstr "Are you already enrolled to the same program in an institution of the French community"
+
+msgid "question_resident"
+msgstr "Are you resident"
+
+msgid "question_lottery_number"
+msgstr "Please mention the number given be the enrolment service"
