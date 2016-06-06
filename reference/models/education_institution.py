@@ -161,3 +161,16 @@ def find_cities_by_type_excluding_country(an_institution_type, an_adhoc, iso_cod
 
 def find_one_by_city(a_city):
     return EducationInstitution.objects.filter(city=a_city).first()
+
+
+def find_postal_codes_by_isocode_type(an_iso_code, an_institution_type, an_adhoc):
+    return EducationInstitution.objects.filter(country__iso_code=an_iso_code,
+                                               institution_type=an_institution_type,
+                                               adhoc=an_adhoc).distinct('postal_code').order_by('postal_code')
+
+
+def find_by_institution_postal_code_type_iso_code(a_postal_code, an_institution_type, iso_code, an_adhoc):
+    return EducationInstitution.objects.filter(postal_code=a_postal_code,
+                                               adhoc=an_adhoc,
+                                               institution_type=an_institution_type,
+                                               country__iso_code=iso_code)

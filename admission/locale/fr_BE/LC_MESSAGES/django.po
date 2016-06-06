@@ -904,3 +904,5 @@ msgstr "Etes-vous resident"
 msgid "question_lottery_number"
 msgstr "Veuillez indiquer le numéro que le service des inscriptions vous a fourni"
 
+msgid "other_education_type"
+msgstr "Autre enseignement"

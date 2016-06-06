@@ -25,7 +25,7 @@
 ##############################################################################
 from django.conf.urls import url
 from admission.views import application, common, identification, offer, level, question, option, country, curriculum, \
-    education_institution, language, domain
+    education_institution, language, domain, secondary_education
 from django.contrib.auth.views import logout
 
 
@@ -43,10 +43,10 @@ urlpatterns = [
     url(r'^admission/user/new/confirm/([0-9]+)/$', identification.account_confirm, name="account_confirm"),
     url(r'^admission/new_password/info/$', identification.new_password_info, name='new_password_info'),
     url(r'^admission/application/([0-9]+)/$', application.application_update, name='application_update'),
-    url(r'^admission/application/diploma/save/$', application.diploma_save, name='diploma'),
+    url(r'^admission/application/diploma/save/$', secondary_education.diploma_save, name='diploma'),
     url(r'^admission/curriculum/save/$', curriculum.save, name='curriculum'),
     url(r'^admission/curriculum/update/$', curriculum.update, name='curriculum_update'),
-    url(r'^admission/application/diploma/update/$', application.diploma_update, name='diploma_update'),
+    url(r'^admission/application/diploma/update/$', secondary_education.diploma_update, name='diploma_update'),
     url(r'^admission/offer/$', offer.offer_selection, name='offer_selection'),
     url(r'^admission/offer/save/$', application.save_application_offer, name='save_offer_selection'),
     url(r'^admission/offer/application/([0-9]+)/$', offer.selection_offer, name='selection_offer'),
@@ -81,6 +81,11 @@ urlpatterns = [
     url(r'^errors_update/$', curriculum.errors_update),
     url(r'^subdomains/$', domain.find_subdomains),
     url(r'^highnonuniversity_cities/$', education_institution.find_cities_by_country_type_adhoc),
+    url(r'^institution_cities/$', education_institution.find_cities_by_type),
+    url(r'^institution_postal_codes/$', education_institution.find_postal_codes_by_type),
+    url(r'^institutions/$', education_institution.find_institution_by_city_postal_code_type),
+
+
 
 
 
