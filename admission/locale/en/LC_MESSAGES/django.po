@@ -898,3 +898,112 @@ msgstr "Please mention the number given be the enrolment service"
 
 msgid "other_education_type"
 msgstr "Other education type"
+
+msgid "reduction"
+msgstr "Reduction"
+
+msgid "question_study_grant"
+msgstr "Do you have a study grant request?"
+
+msgid "reduction_enrolment_fees"
+msgstr "Reduction of the enrolment fees"
+
+msgid "study_grant_number"
+msgstr "In case of a request for a study grant, please mention the pending file number"
+
+msgid "unknow_number_yet"
+msgstr "In case you do not know this number yet, you can always provide us this information later on."
+
+msgid "additional_information"
+msgstr "For all additional information"
+
+msgid "french_community_grant"
+msgstr "study grant French-speaking community"
+
+msgid "institution_help_center"
+msgstr "the UCL help center"
+
+msgid "other_study_grant"
+msgstr "Do you benefit from a study grant provided by another institute?"
+
+msgid "other_study_grant_address"
+msgstr "If affirmative, please provide the name and address of the organisation"
+
+msgid "debts"
+msgstr "Debts"
+
+msgid "add_file_no_debts"
+msgstr ""
+ "Please add a certificate stating the absence of debts with regards to the institution attended during "
+ "the academic year"
+
+msgid "add"
+msgstr "Add"
+
+msgid "sport_affiliation"
+msgstr "Affiliation sports activities"
+
+msgid "sport_affiliation_lln"
+msgstr ""
+ "Would you like to participate to sports activities organised at the site of Louvain-la-Neuve and Brussels Woluwe?"
+
+msgid "sport_affiliation_lln_cost_part1"
+msgstr ""
+ "In case this is affirmative, the cost of "
+
+msgid "sport_affiliation_lln_cost_part2"
+msgstr ""
+ " will be added to your enrolment rights."
+
+msgid "sport_affiliation_lln_information"
+msgstr "Information on sports at Louvain-la-Neuve and Brussels-Woluwe"
+
+msgid "culture_card"
+msgstr "Culture card"
+
+msgid "question_culture_card"
+msgstr "Would you like to receive the culture card?"
+
+msgid "additional_info_culture_card"
+msgstr "Additional information on the culture card"
+
+msgid "solidarity_card"
+msgstr "Solidarity Card"
+
+msgid "question_solidarity_card"
+msgstr "Would you like to receive the solidarity card?"
+
+
+msgid "additional_info_solidarity_card"
+msgstr "Additional information on the solidarity card"
+
+msgid "bank_account"
+msgstr "Bank account"
+
+msgid "belgian_bank_account"
+msgstr ""
+ "If you are belgian banking account holder,  you can encode your contact details so that we can proceed to a "
+ "possible repayment."
+
+msgid "belgian_bank_account_precision"
+msgstr "For the IBAN and BIC/SWIFT code, please encode only alphanumerics characters (neither space, nor dash)."
+
+msgid "iban_number"
+msgstr "Account number (IBAN)"
+
+msgid "bic_number"
+msgstr "BIC/SWIFT Code"
+
+msgid "bank_account_holder_firstname"
+msgstr "Holder's first name of the bank account"
+
+msgid "bank_account_holder_name"
+msgstr "Holder's name of the bank account"
+
+msgid "general_notice"
+msgstr "Notice  : "
+
+msgid "general_reduction_notice"
+msgstr ""
+ "d'autres types de réduction existent à l'UCL.  Elles nécessitent l'introduction d'un dossier particulier.  "
+ "Informations"

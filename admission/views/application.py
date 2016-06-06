@@ -148,7 +148,6 @@ def save_application_offer(request):
         local_language_exam_link = mdl.properties.find_by_key('PROFESSIONAL_EXAM_LINK')
         professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
         education_institutions = mdl_reference.education_institution.find_by_institution_type('SECONDARY', False)
-        cities, postal_codes = find_cities_postalcodes(education_institutions)
         education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
         education_type_qualification = mdl_reference.education_type.find_education_type_by_adhoc('QUALIFICATION', False)
         return render(request, "diploma.html",
@@ -162,8 +161,6 @@ def save_application_offer(request):
                        "local_language_exam_link":     local_language_exam_link,
                        "professional_exam_link":       professional_exam_link,
                        "education_institutions":       education_institutions,
-                       "cities":                       cities,
-                       "postal_codes":                 postal_codes,
                        "education_type_transition":    education_type_transition,
                        "education_type_qualification": education_type_qualification,
                        "current_academic_year":        mdl.academic_year.current_academic_year(),
@@ -176,3 +173,15 @@ def application_view(request, application_id):
     return render(request, "application.html",
                            {"application": application,
                             "answers": answers})
+
+
+def is_local_language_exam_needed(user):
+    local_language_exam_needed = False
+    applications = mdl.application.find_by_user(user)
+    for application in applications:
+        if application.offer_year.grade_type.grade == 'BACHELOR' or \
+            application.offer_year.grade_type.grade == 'MASTER' or \
+                application.offer_year.grade_type.grade == 'TRAINING_CERTIFICATE':
+            local_language_exam_needed = True
+            break
+    return local_language_exam_needed

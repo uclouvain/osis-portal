@@ -212,3 +212,27 @@ class AccessAccountForm(forms.Form):
         if data is None or len(data) == 0:
             self.errors['email'] = _('mandatory_field')
         return data.strip()
+
+
+class AccountingForm(forms.Form):
+    scholarship = forms.BooleanField()
+    scholarship_organization = forms.CharField()
+
+    def __init__(self, *args, **kwargs):
+        print('ini')
+        super(AccountingForm, self).__init__(*args, **kwargs)
+
+
+    def clean(self):
+        cleaned_data = super(AccountingForm, self).clean()
+
+        print('clean')
+        data = cleaned_data.get('scholarship_organization')
+        data_scholarship = cleaned_data.get('scholarship')
+        print('1')
+        print(data_scholarship)
+        print('.')
+        if data_scholarship and (data is None or len(data) == 0):
+            self.errors['scholarship_organization'] = _('mandatory_field')
+
+        return cleaned_data

@@ -51,6 +51,17 @@ class Application(models.Model):
     applied_to_sameprogram = models.NullBooleanField(default=None)
     resident = models.NullBooleanField(default=None)
     lottery_number = models.CharField(max_length=50, blank=True, null=True)
+    study_grant = models.BooleanField(default=False)
+    study_grant_number = models.CharField(max_length=50, blank=True, null=True)
+    deduction_children = models.BooleanField(default=False)
+    scholarship = models.BooleanField(default=False)
+    scholarship_organization = models.TextField(blank=True, null=True)
+    sport_membership = models.BooleanField(default=False)
+    culture_membership = models.BooleanField(default=False)
+    solidary_membership = models.BooleanField(default=False)
+    bank_account_iban = models.CharField(max_length=50, blank=True, null=True)
+    bank_account_bic = models.CharField(max_length=50, blank=True, null=True)
+    bank_account_name = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return u"%s" % self.offer_year
