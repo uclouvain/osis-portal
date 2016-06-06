@@ -1016,3 +1016,6 @@ msgid "general_reduction_notice"
 msgstr ""
  "d'autres types de réduction existent à l'UCL.  Elles nécessitent l'introduction d'un dossier particulier.  "
  "Informations"
+
+msgid "there_are"
+msgstr "Il y a "

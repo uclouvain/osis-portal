@@ -3,11 +3,12 @@ $('document').ready(function(){
     if ($('#form_accounting')){
         $('#pnl_study_grant_detail').css('visibility', 'hidden').css('display','none');
         $('#pnl_scholarship_organization').css('visibility', 'hidden').css('display','none');
-        
-        if ($("input[name='study_grant']:checked").val()){
+
+        if ($("input[name='study_grant']:checked").val()=='true'){
+
             $('#pnl_study_grant_detail').css('visibility', 'visible').css('display','block');
         }
-        if ($("input[name='rdb_no_UCL_scholarship_true']:checked").val()){
+        if ($("input[name='scholarship']:checked").val()=='true'){
             $('#pnl_scholarship_organization').css('visibility', 'visible').css('display','block');
         }
 

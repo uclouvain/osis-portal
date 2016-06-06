@@ -39,6 +39,13 @@
         title="{%trans 'save'%}"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
     {%trans 'save'%}</button>
     <br>
+    {%if form.errors%}
+        <br>
+        <font class="error" role="alert" style="margin-left:5px;">
+            {% trans 'there_are' %} {{ form.errors|length}} {% trans 'errors'%}
+        </font>
+        <br><br>
+    {% endif %}
     <div class="panel panel-default">
         <div class="panel-heading">{% trans 'reduction'%}</div>
         <div class="panel-body">
@@ -195,14 +202,12 @@
             </div>
             <br>
             <br>
-
             <label>{% trans 'bank_account_holder_name'%}</label>&nbsp;&nbsp;
             <input class="form-control"
                    id="txt_bank_account_name"
                    name="bank_account_name"
                    value="{{application.bank_account_name | default_if_none:''}}">
 
-            </div>
         </div>
     </div>
     <br>

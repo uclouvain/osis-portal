@@ -36,6 +36,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import login
 from admission.forms import AccountingForm
 
+
 def accounting(request):
     academic_yr = mdl.academic_year.current_academic_year()
     previous_academic_year = mdl.academic_year.find_by_year(academic_yr.year-1)
@@ -43,12 +44,12 @@ def accounting(request):
     culture_affiliation_amount = 0
     solidary_affiliation_amount = 0
     application = mdl.application.find_first_by_user(request.user)
-    return render(request, "accounting.html",{"academic_year": academic_yr,
-                                              "previous_academic_year":      previous_academic_year,
-                                              "sport_affiliation_amount":    sport_affiliation_amount,
-                                              "culture_affiliation_amount":  culture_affiliation_amount,
-                                              "solidary_affiliation_amount": solidary_affiliation_amount,
-                                              "application":                 application})
+    return render(request, "accounting.html", {"academic_year": academic_yr,
+                                               "previous_academic_year":      previous_academic_year,
+                                               "sport_affiliation_amount":    sport_affiliation_amount,
+                                               "culture_affiliation_amount":  culture_affiliation_amount,
+                                               "solidary_affiliation_amount": solidary_affiliation_amount,
+                                               "application":                 application})
 
 
 def accounting_update(request):
@@ -58,33 +59,20 @@ def accounting_update(request):
     sport_affiliation_amount = 0
     culture_affiliation_amount = 0
     solidary_affiliation_amount = 0
-    application = mdl.application.find_first_by_user(request.user)
-    # is_valid, validation_messages = fields_validation(request)
+
     accounting_form = AccountingForm(data=request.POST)
     application = populate_application(request)
 
     if accounting_form.is_valid():
         application.save()
 
-    return render(request, "accounting.html",{"academic_year": academic_yr,
-                                              "previous_academic_year":      previous_academic_year,
-                                              "sport_affiliation_amount":    sport_affiliation_amount,
-                                              "culture_affiliation_amount":  culture_affiliation_amount,
-                                              "solidary_affiliation_amount": solidary_affiliation_amount,
-                                              "application":                 application,
-                                              "form":                        accounting_form})
-
-
-def fields_validation(request):
-    is_valid = True
-    validation_messages = {}
-
-    if request.POST.get('scholarship') == 'true':
-        if request.POST.get('scholarship_organization') is None or \
-                len(request.POST.get('scholarship_organization').strip()) == 0 :
-            validation_messages['scholarship_organization'] = _('mandatory_field')
-            is_valid = False
-    return is_valid, validation_messages
+    return render(request, "accounting.html", {"academic_year": academic_yr,
+                                               "previous_academic_year":      previous_academic_year,
+                                               "sport_affiliation_amount":    sport_affiliation_amount,
+                                               "culture_affiliation_amount":  culture_affiliation_amount,
+                                               "solidary_affiliation_amount": solidary_affiliation_amount,
+                                               "application":                 application,
+                                               "form":                        accounting_form})
 
 
 def populate_application(request):
@@ -123,5 +111,5 @@ def populate_application(request):
     if request.POST.get('bank_account_bic'):
         application.bank_account_bic = request.POST.get('bank_account_bic')
     if request.POST.get('bank_account_name'):
-        application.bank_account_bic = request.POST.get('bank_account_name')
+        application.bank_account_name = request.POST.get('bank_account_name')
     return application
