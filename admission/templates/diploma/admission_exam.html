@@ -2,8 +2,7 @@
 {% load i18n %}
 
 <div class="panel panel-default"
-     id="pnl_admission_exam"
-     style="{%if secondary_education.secondary_education_diploma = False %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+     id="pnl_admission_exam">
     <div class="panel-heading">{% trans 'admission_exam'%}</div>
     <div class="panel-body">
         <div class="row">
@@ -15,16 +14,14 @@
                          name="admission_exam"
                          id="rdb_admission_exam_true"
                          value="true"
-                         onclick="display('pnl_admission_exam_detail',true);"
-                         {%if secondary_education.admission_exam = True %}checked{%endif%}> {% trans 'yes' %}
+                         onclick="display('pnl_admission_exam_detail',true);"> {% trans 'yes' %}
                 </label>
                 <label class="radio-inline">
                   <input type="radio"
                          name="admission_exam"
                          id="rdb_admission_exam_false"
                          value="false"
-                         onclick="display('pnl_admission_exam_detail',false);"
-                         {%if secondary_education.admission_exam = False %}checked{%endif%}> {% trans 'no' %}
+                         onclick="display('pnl_admission_exam_detail',false);"> {% trans 'no' %}
                 </label>
                 {%if validation_messages and validation_messages|get_item:'admission_exam'%}
                     <br><br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam'}}</font>
@@ -48,8 +45,7 @@
                 <label>{% trans 'question_institution_name' %} *</label>
                 <input class="form-control"
                        id="txt_admission_exam_institution"
-                       name="admission_exam_institution"
-                       value="{{secondary_education.admission_exam_institution | default_if_none:''}}">
+                       name="admission_exam_institution">
 
                 {%if validation_messages and validation_messages|get_item:'admission_exam_institution'%}
                     <br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_institution'}}</font>
@@ -62,15 +58,13 @@
             {% for exam_type in exam_types %}
                 <input type="radio"
                        name="admission_exam_type"
-                       id="rdb_admission_exam_type{{forloop.counter0}}"
+                       id="rdb_admission_exam_type_{{exam_type.id}}"
                        value="{{exam_type.id}}"
-                       {% if secondary_education.admission_exam_type = exam_type %}
-                            checked
-                       {%endif%}
+
                        {% if exam_type = 'OTHER_EXAM'%}
-                            onclick="disabled_field_txt('txt_admission_exam_type_other', false)"
+                            onclick="disabled_field_txt('txt_admission_exam_type_other', false);reset_chb('chb_admission_exam_type_other')"
                        {%else%}
-                            onclick="disabled_field_txt('txt_admission_exam_type_other', true);reset_input('txt_admission_exam_type_other');"
+                            onclick="disabled_field_txt('txt_admission_exam_type_other', true);reset_input('txt_admission_exam_type_other');reset_chb('chb_admission_exam_type_other');"
                        {%endif%}
                          > {{exam_type}}<br>
             {% endfor %}
@@ -82,22 +76,22 @@
               <input type="checkbox"
                      id="chb_admission_exam_type"
                      name="chb_admission_exam_type_other"
-                     onclick="reset_radio('admission_exam_type');disabled_field('txt_admission_exam_type_other', this);"
+                     onclick="reset_radio('admission_exam_type');disabled_field('txt_admission_exam_type_other', this);if(!this.checked){reset_input('txt_admission_exam_type_other')}"
                      {% if secondary_education.admission_exam_type.adhoc  = True %}checked{%endif%}>
             </label>
 
                     </div>
-                                <div class="col-md-9">
-                                     <label>{% trans 'specify_name' %} :</label>
-            <input class="form-control"
-                   id="txt_admission_exam_type_other"
-                   name="admission_exam_type_other"
-                   value="{% if secondary_education.admission_exam_type.adhoc = True %}{{secondary_education.admission_exam_type.name| default_if_none:''}}{%endif%}"
-                   {% if secondary_education.admission_exam_type.adhoc = False %}
-                            disabled
-                   {%else%}
-                        {{secondary_education.admission_exam_type | default_if_none:"disabled"}}
-                   {%endif%}>
+                    <div class="col-md-9">
+                         <label>{% trans 'specify_name' %} :</label>
+                        <input class="form-control"
+                               id="txt_admission_exam_type_other"
+                               name="admission_exam_type_other"
+                               value="{% if secondary_education.admission_exam_type.adhoc = True %}{{secondary_education.admission_exam_type.name| default_if_none:''}}{%endif%}"
+                               {% if secondary_education.admission_exam_type.adhoc = False %}
+                                        disabled
+                               {%else%}
+                                    {{secondary_education.admission_exam_type | default_if_none:"disabled"}}
+                               {%endif%}>
                     </div>
             </div>
 

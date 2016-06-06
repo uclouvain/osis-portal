@@ -895,3 +895,6 @@ msgstr "Are you resident"
 
 msgid "question_lottery_number"
 msgstr "Please mention the number given be the enrolment service"
+
+msgid "other_education_type"
+msgstr "Other education type"
