@@ -744,6 +744,6 @@ def populate_secondary_education(request, secondary_education):
         else:
             if request.POST.get('local_language_exam') == 'false':
                 secondary_education.local_language_exam = False
-    
+
     return secondary_education
 
