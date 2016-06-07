@@ -32,6 +32,8 @@ from admission.views.common import home
 from functools import cmp_to_key
 import locale
 from django.utils.translation import ugettext_lazy as _
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 
 def application_update(request, application_id):

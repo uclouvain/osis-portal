@@ -52,7 +52,8 @@ def accounting(request):
                                                "solidary_affiliation_amount": solidary_affiliation_amount,
                                                "application":                 application,
                                                "debts_check":                 debts_check(application),
-                                               "reduction_possible":          reduction_possible(application)})
+                                               "reduction_possible":          reduction_possible(application),
+                                               "third_cycle":                 third_cycle(application)})
 
 
 def accounting_update(request):
@@ -76,7 +77,8 @@ def accounting_update(request):
                                                "application":                 application,
                                                "form":                        accounting_form,
                                                "debts_check":                 debts_check(application),
-                                               "reduction_possible":          reduction_possible(application)})
+                                               "reduction_possible":          reduction_possible(application),
+                                               "third_cycle":                 third_cycle(application)})
 
 
 def populate_application(request):
@@ -139,5 +141,11 @@ def reduction_possible(application):
             application.offer_year.acronym.endswith("2MC") or \
             application.offer_year.acronym.endswith("3D") or \
             application.offer_year.acronym.indexOf("2MS/") != -1:
+        return True
+    return False
+
+
+def third_cycle(application):
+    if application.offer_year.acronym.endswith("2MC") or application.offer_year.acronym.endswith("3D"):
         return True
     return False

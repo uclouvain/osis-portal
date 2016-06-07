@@ -39,6 +39,12 @@
     <input type="hidden"
            value="{{application.offer_year.acronym}}"
            id="hdn_offer_name"/>
+    <input type="hidden"
+           value="{{third_cycle}}"
+           id="hdn_third_cycle"/>
+    <input type="hidden"
+           value="{{application.study_grant}}"
+           id="hdn_study_grant"/>
     <button type="submit" id="bt_save_up" class="btn btn-default"
         title="{%trans 'save'%}"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
     {%trans 'save'%}</button>
@@ -63,61 +69,72 @@
                      name="study_grant"
                      id="rdb_study_grant_true"
                      value="true"
-                     onclick="display('pnl_study_grant_detail',true);display('pnl_study_grant_number',true);display('pnl_no_study_grant',false);" {%if application.study_grant = True %}checked{%endif%}> {% trans 'yes' %}
+                     onclick="display('pnl_study_grant_detail',true);display('pnl_study_grant_number',true);display('pnl_no_study_grant',false);display_third(true);" {%if application.study_grant = True %}checked{%endif%}> {% trans 'yes' %}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="study_grant"
                      id="rdb_study_grant_false"
                      value="false"
-                     onclick="display('pnl_study_grant_detail',true);display('pnl_study_grant_number',false);display('pnl_no_study_grant',true);" {%if application.study_grant != True %}checked{%endif%}> {% trans 'no' %}
+                     onclick="display('pnl_study_grant_detail',true);display('pnl_study_grant_number',false);display('pnl_no_study_grant',true);display_third(false);" {%if application.study_grant != True %}checked{%endif%}> {% trans 'no' %}
             </label>
             <br>
             <br>
-            {%trans 'additional_information'%} : <a target="_blank" href="http://www.federation-wallonie-bruxelles.be/">
-            {% trans 'french_community_grant'%}</a> ou <a target="_blank" href="http://www.uclouvain.be/aide">
-            {% trans 'institution_help_center'%}</a>
-            <br>
-            <br>
-            <div id="pnl_study_grant_number">
-                <label>{% trans 'study_grant_number'%}</label>
+            <div id="pnl_no_third_cycle" >
+                {%trans 'additional_information'%} : <a target="_blank" href="http://www.federation-wallonie-bruxelles.be/">
+                {% trans 'french_community_grant'%}</a> ou <a target="_blank" href="http://www.uclouvain.be/aide">
+                {% trans 'institution_help_center'%}</a>
                 <br>
-                <input id="txt_study_grant_number"
-                       name="study_grant_number"
-                       value="{{application.study_grant_number | default_if_none:''}}"
-                       class="form-control">
+                <br>
+                <div id="pnl_study_grant_number">
+                    <label>{% trans 'study_grant_number'%}</label>
+                    <br>
+                    <input id="txt_study_grant_number"
+                           name="study_grant_number"
+                           value="{{application.study_grant_number | default_if_none:''}}"
+                           class="form-control">
 
-                <span style="font-style:italic;font-size:smaller">{% trans 'unknow_number_yet'%}</span>
+                    <span style="font-style:italic;font-size:smaller">{% trans 'unknow_number_yet'%}</span>
+                </div>
+                <div id="pnl_no_study_grant">
+
+                    <label>{%trans 'question_reduction_children'%} *</label>
+                    <br>
+                    <label class="radio-inline">
+                      <input type="radio"
+                             name="deduction_children"
+                             id="rdb_deduction_children_true"
+                             value="true"
+                            {%if application.deduction_children = True %}checked{%endif%}> {% trans 'yes' %}
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio"
+                             name="deduction_children"
+                             id="rdb_deduction_children_false"
+                             value="false"
+                            {%if application.deduction_children != True %}checked{%endif%}> {% trans 'no' %}
+                    </label>
+                    <br>
+                    <br>
+                    {% trans 'additional_information'%}
+                    <a target="_blank"
+                       href="http://www.uclouvain.be/67986.html"
+                       id="lnk_ucl_children_deduction">Université catholique de Louvain</a>
+                    {% trans 'or'%}
+                    <a target="_blank"
+                       href="http://www.lmv.ucl.ac.be/SITE%20LMV%20REN/index.html"
+                       id="lnk_martin_v_children_deduction">Lycée Martin V</a>
+                    <br>
+                    <br>
+                    <label>{% trans 'add_file_children_deduction'%}</label>
+                    <input type="button" value="{% trans 'add' %}">
+                </div>
             </div>
-            <div id="pnl_no_study_grant">
-
-                <label>{%trans 'question_reduction_children'%} *</label>
-                <br>
-                <label class="radio-inline">
-                  <input type="radio"
-                         name="deduction_children"
-                         id="rdb_deduction_children_true"
-                         value="true"
-                        {%if application.deduction_children = True %}checked{%endif%}> {% trans 'yes' %}
-                </label>
-                <label class="radio-inline">
-                  <input type="radio"
-                         name="deduction_children"
-                         id="rdb_deduction_children_false"
-                         value="false"
-                        {%if application.deduction_children != True %}checked{%endif%}> {% trans 'no' %}
-                </label>
-                <br>
-                <br>
+            <div id="pnl_third_cycle">
                 {% trans 'additional_information'%}
                 <a target="_blank"
-                   href="http://www.uclouvain.be/67986.html"
-                   id="lnk_ucl_children_deduction">Université catholique de Louvain</a>
-                {% trans 'or'%}
-                <a target="_blank"
-                   href="http://www.lmv.ucl.ac.be/SITE%20LMV%20REN/index.html"
-                   id="lnk_martin_v_children_deduction">Lycée Martin V</a>
-                <br>
+                   href="http://www.uclouvain.be/513082.html"
+                   id="lnk_ucl_third_cycle_deduction">Réduction "3e cycle" ou "Master complémentaire" </a>
                 <br>
                 <label>{% trans 'add_file_children_deduction'%}</label>
                 <input type="button" value="{% trans 'add' %}">
