@@ -44,16 +44,18 @@ def accounting(request):
     culture_affiliation_amount = 0
     solidary_affiliation_amount = 0
     application = mdl.application.find_first_by_user(request.user)
+
     return render(request, "accounting.html", {"academic_year": academic_yr,
                                                "previous_academic_year":      previous_academic_year,
                                                "sport_affiliation_amount":    sport_affiliation_amount,
                                                "culture_affiliation_amount":  culture_affiliation_amount,
                                                "solidary_affiliation_amount": solidary_affiliation_amount,
-                                               "application":                 application})
+                                               "application":                 application,
+                                               "debts_check":                 debts_check(application),
+                                               "reduction_possible":          reduction_possible(application)})
 
 
 def accounting_update(request):
-    print('accounting_update')
     academic_yr = mdl.academic_year.current_academic_year()
     previous_academic_year = mdl.academic_year.find_by_year(academic_yr.year-1)
     sport_affiliation_amount = 0
@@ -72,7 +74,9 @@ def accounting_update(request):
                                                "culture_affiliation_amount":  culture_affiliation_amount,
                                                "solidary_affiliation_amount": solidary_affiliation_amount,
                                                "application":                 application,
-                                               "form":                        accounting_form})
+                                               "form":                        accounting_form,
+                                               "debts_check":                 debts_check(application),
+                                               "reduction_possible":          reduction_possible(application)})
 
 
 def populate_application(request):
@@ -95,7 +99,9 @@ def populate_application(request):
         application.study_grant = True
         if request.POST.get('study_grant_number'):
             application.study_grant_number = request.POST.get('study_grant_number')
-
+    else:
+        if request.POST.get('deduction_children') == "true":
+            application.deduction_children = True
     if request.POST.get('scholarship') == "true":
         application.scholarship = True
         if request.POST.get('scholarship_organization'):
@@ -113,3 +119,25 @@ def populate_application(request):
     if request.POST.get('bank_account_name'):
         application.bank_account_name = request.POST.get('bank_account_name')
     return application
+
+
+def debts_check(application):
+    academic_yr = mdl.academic_year.current_academic_year()
+    previous_academic_year = mdl.academic_year.find_by_year(academic_yr.year-1)
+    secondary_curriculum = mdl.curriculum.find_belgian_french(application.person, previous_academic_year)
+    if secondary_curriculum:
+        return True
+
+    return False
+
+
+def reduction_possible(application):
+    if application.offer_year.acronym.endswith("1BA") or \
+            application.offer_year.acronym.endswith("2M1") or \
+            application.offer_year.acronym.endswith("2MD") or \
+            application.offer_year.acronym.endswith("2MA") or \
+            application.offer_year.acronym.endswith("2MC") or \
+            application.offer_year.acronym.endswith("3D") or \
+            application.offer_year.acronym.indexOf("2MS/") != -1:
+        return True
+    return False

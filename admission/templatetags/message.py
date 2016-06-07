@@ -92,14 +92,3 @@ def pnl_other_message_error(a, **kwargs):
                 return True
     return False
 
-
-@register.assignment_tag
-def form_accounting_message_error(a, **kwargs):
-    print('form_accounting_message_error')
-    keys = ['scholarship_organization']
-    for elt_name in keys:
-        key = '%s_%s' % (elt_name, year)
-        for k, v in a.items():
-            if k.startswith(key):
-                return True
-    return False

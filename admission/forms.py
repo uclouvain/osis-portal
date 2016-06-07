@@ -27,6 +27,7 @@ from django import forms
 from django.core.validators import MinValueValidator
 from django.utils.translation import ugettext_lazy as _
 from admission.validators import date_validator
+from localflavor.generic.forms import BICFormField, IBANFormField
 
 
 class NewAccountForm(forms.Form):
@@ -217,22 +218,16 @@ class AccessAccountForm(forms.Form):
 class AccountingForm(forms.Form):
     scholarship = forms.BooleanField()
     scholarship_organization = forms.CharField()
+    bank_account_iban = IBANFormField()
+    bank_account_bic = BICFormField()
 
     def __init__(self, *args, **kwargs):
-        print('ini')
         super(AccountingForm, self).__init__(*args, **kwargs)
-
 
     def clean(self):
         cleaned_data = super(AccountingForm, self).clean()
-
-        print('clean')
         data = cleaned_data.get('scholarship_organization')
         data_scholarship = cleaned_data.get('scholarship')
-        print('1')
-        print(data_scholarship)
-        print('.')
         if data_scholarship and (data is None or len(data) == 0):
             self.errors['scholarship_organization'] = _('mandatory_field')
-
         return cleaned_data

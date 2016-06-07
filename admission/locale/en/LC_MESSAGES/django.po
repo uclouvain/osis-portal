@@ -1011,3 +1011,14 @@ msgstr ""
 msgid "there_are"
 msgstr "There are "
 
+msgid "question_reduction_children"
+msgstr "Avez-vous une demande de réduction 'Enfant du personnel UCL ou du Lycée Martin V'?"
+
+msgid "or"
+msgstr "or"
+
+msgid "add_file_children_deduction"
+msgstr "Veuillez joindre l'attestation officelle pour bénéficier de cette réduction"
+
+msgid "title_no_debts"
+msgstr "Certificate stating the absence of debts"

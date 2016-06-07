@@ -157,19 +157,15 @@ def find_postal_codes_by_type(request):
 
 
 def find_institution_by_city_postal_code_type(request):
-    print('find_institution_by_city_postal_code_type')
     type = request.GET['type']
     city = request.GET['city']
     postal_code = request.GET['postal_code']
-    print(type)
-    print(city)
-    print(postal_code)
     education_institutions = None
     if city != "-":
         education_institutions = mdl_reference.education_institution\
             .find_by_institution_city_type_iso_code(city, type, 'BE', False)
     else:
-        if postal_code!="-":
+        if postal_code != "-":
             education_institutions = mdl_reference.education_institution\
                 .find_by_institution_postal_code_type_iso_code(postal_code, type, 'BE', False)
 
