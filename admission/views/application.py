@@ -145,11 +145,6 @@ def save_application_offer(request):
                         answer.save()
 
         return HttpResponseRedirect(reverse('curriculum_update'))
-<<<<<<< HEAD
-=======
-
->>>>>>> 33ca19097a428ace732da93c7c80bd296231760e
-
 
 def application_view(request, application_id):
     application = mdl.application.find_by_id(application_id)
