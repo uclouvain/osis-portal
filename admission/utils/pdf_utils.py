@@ -43,7 +43,7 @@ from reportlab.lib import colors
 
 from PyPDF2 import PdfFileMerger,  PdfFileReader, PdfFileWriter
 from math import *
-
+import io
 
 PAGE_SIZE = A4
 MARGIN_SIZE = 15 * mm
@@ -52,12 +52,16 @@ TOP_MARGIN = 85
 COLS_WIDTH = [165*mm, 15*mm]
 FIRST_MERGE_PAGE = 2
 MAX_NUMBER_OF_LINE_PER_TOC_PAGE = 38
-ALLOWED_EXTENSIONS = ['jpg', 'jpge', 'png', 'gif']
+ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif']
 
 
-def convert_image_to_pdf(image_file, document_type):
-    filename = "%s.pdf" % document_type
-    if allowed_file(image_file):
+def convert_image_to_pdf(image_file, filename):
+    """
+    :param image_file: path to image file.  (expected : gif, jpg, jpeg, png)
+    :param filename: filename with pdf extention (ex : test2.pdf)
+    :return:
+    """
+    if filename.lower().endswith('.pdf') and allowed_file(image_file) and os.path.isfile(image_file):
         doc = SimpleDocTemplate(filename,
                                 pagesize=PAGE_SIZE,
                                 rightMargin=MARGIN_SIZE,
@@ -65,38 +69,46 @@ def convert_image_to_pdf(image_file, document_type):
                                 topMargin=TOP_MARGIN,
                                 bottomMargin=BOTTOM_MARGIN)
 
-        image = get_image(image_file)
-        content = [image]
-        doc.build(content)
+        image = resize_image(image_file)
+        if image:
+            content = [image]
+            doc.build(content)
 
-    return HttpResponseRedirect(reverse('home'))
+            return doc
+
+    return None
 
 
-def get_image(path):
+def resize_image(image_file):
     """
     Get the image ready.
-    Change the dimensions if needted to fit on the page
-    :param path:
+    Change the dimensions if needed to fit on the page
+    :param image_file:
     :return:
     """
-    img = utils.ImageReader(path)
-    xsize, ysize = img.getSize()
-    width, height = A4
-    width = width - (MARGIN_SIZE * 2)
-    height = height - (BOTTOM_MARGIN + TOP_MARGIN)
+    if os.path.isfile(image_file):
+        try:
+            img = utils.ImageReader(image_file)
+            xsize, ysize = img.getSize()
+            width, height = A4
+            width = width - (MARGIN_SIZE * 2)
+            height = height - (BOTTOM_MARGIN + TOP_MARGIN)
 
-    if xsize > ysize:  # deal with cases were xsize is bigger than ysize
-        if xsize > width:
-            xsize_corrected = width
-            ysize_corrected = int(ysize*(xsize_corrected/xsize))
-            return Image(path, width=xsize_corrected, height=ysize_corrected)
-    else:  # deal with cases where ysize is bigger than xsize
-        if ysize > height:
-            ysize_corrected = height
-            a = ysize_corrected/ysize
-            xsize_corrected = xsize * a
-            return Image(path, width=xsize_corrected, height=ysize_corrected)
-    return Image(path)
+            if xsize > ysize:  # deal with cases were xsize is bigger than ysize
+                if xsize > width:
+                    xsize_corrected = width
+                    ysize_corrected = int(ysize*(xsize_corrected/xsize))
+                    return Image(image_file, width=xsize_corrected, height=ysize_corrected)
+            else:  # deal with cases where ysize is bigger than xsize
+                if ysize > height:
+                    ysize_corrected = height
+                    a = ysize_corrected/ysize
+                    xsize_corrected = xsize * a
+                    return Image(image_file, width=xsize_corrected, height=ysize_corrected)
+            return Image(image_file)
+        except OSError:
+            return None
+    return None
 
 
 def allowed_file(filename):
@@ -105,73 +117,77 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
-def merge_pdf():
-    pdf_list = ["pdf1.pdf", "pdf2.pdf"]
-    buffer = BytesIO()
+def create_pdf_with_cover(document_list, pdf_files_to_merge, noma):
+    pdf_cover = create_cover_sheet(document_list, noma)
+    pdf_files = []
+    if pdf_cover:
+        pdf_files.append(pdf_cover)
+    if pdf_files_to_merge and len(pdf_files_to_merge) > 0:
+        pdf_files.extend(pdf_files_to_merge)
+    if len(pdf_files) > 0:
+        return merge_pdfs(pdf_files)
+    return None
 
-    doc = SimpleDocTemplate(buffer,
+
+def create_cover_sheet(document_list, noma):
+    cover_file_name = "cover.pdf"
+    doc = SimpleDocTemplate(cover_file_name,
                             pagesize=PAGE_SIZE,
                             rightMargin=MARGIN_SIZE,
                             leftMargin=MARGIN_SIZE,
                             topMargin=85,
                             bottomMargin=18)
-
     content = []
-
-    if not pdf_list or len(pdf_list) < 2:
-        exit("Please enter at least two pdfs for merging!")
-
     # Prepare the table of contents
-    content.append(Paragraph('<br/><br/>', ParagraphStyle("Normal")))
-    content.append(build_toc(pdf_list))
-    doc.build(content, onFirstPage=add_header_footer)
+    if noma:
+        content.append(Paragraph('<br/><br/>', ParagraphStyle("Normal")))
+        content.append(Paragraph('%s : %s' % (_('student'), noma), ParagraphStyle("Normal")))
+    if document_list and len(document_list) > 0:
+        content.append(Paragraph('<br/><br/>', ParagraphStyle("Normal")))
+        content = build_toc(content, document_list)
+    if len(content) > 0:
+        doc.build(content, onFirstPage=add_header)
+        return cover_file_name
+    return None
+
+
+def merge_pdfs(pdf_files):
+    filename = "%s.pdf" % _('scores_sheet')
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+    if not pdf_files or len(pdf_files) == 0:
+        return None
 
     merger = PdfFileMerger()
     merger.setPageMode('/UseOC')
-    merger.append(buffer)
-    num_page = 1
-    no_page = 1
 
-    for filename in pdf_list:
-        input = PdfFileReader(open(filename, 'rb'))
-        number_of_page = input.getNumPages()
-        lien = filename
-        merger.append(input, bookmark=lien, import_bookmarks=False)
-        num_page = num_page+1
-        no_page = no_page + number_of_page
+    merged_file = 0
+    for filename in pdf_files:
+        if filename.lower().endswith('.pdf') and os.path.isfile(filename):
+            input = PdfFileReader(open(filename, 'rb'))
+            merger.append(input, bookmark=filename, import_bookmarks=False)
+            merged_file = merged_file + 1
 
-    output = open("output.pdf", "wb")
-    merger.write(output)
-    output.close()
-
-    return HttpResponseRedirect(reverse('home'))
+    if merged_file > 0:
+        output = open("output.pdf", "wb")
+        merger.write(output)
+        output.close()
+        return output
+    return None
 
 
-def build_toc(pdf_list):
-    no_page = FIRST_MERGE_PAGE
-    # max 38 lines in the toc on one page
-    if len(pdf_list) > MAX_NUMBER_OF_LINE_PER_TOC_PAGE:
-        no_page = ceil(len(pdf_list)/MAX_NUMBER_OF_LINE_PER_TOC_PAGE)+1
-    data = [[_('table_contents')]]
-    for filename in pdf_list:
-        input = PdfFileReader(open(filename, 'rb'))
-        number_of_page = input.getNumPages()
-        data.append([filename, no_page])
-        no_page = no_page + number_of_page
-
-    t = Table(data, COLS_WIDTH, repeatRows=1)
-    t.setStyle(TableStyle([('VALIGN', (0, 0), (-1, -1), 'TOP'),
-                           ('BACKGROUND', (0, 0), (-1, 0), colors.white)]))
-    return t
+def build_toc(content, document_list):
+    if document_list:
+        content.append(Paragraph('<br/>', ParagraphStyle("Normal")))
+        for document in document_list:
+            content.append(Paragraph('%s' % document, ParagraphStyle("Normal")))
+    return content
 
 
-def add_header_footer(canvas, doc):
+def add_header(canvas, doc):
     styles = getSampleStyleSheet()
-    # Save the state of our canvas so we can draw on it
     canvas.saveState()
-    # Header
     header_building(canvas, doc, styles)
-    # Release the canvas
     canvas.restoreState()
 
 
