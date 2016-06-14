@@ -898,3 +898,12 @@ msgstr "Please mention the number given be the enrolment service"
 
 msgid "other_education_type"
 msgstr "Other education type"
+
+msgid "table_contents"
+msgstr "Table of contents"
+
+msgid "documents"
+msgstr "Documents"
+
+msgid "ucl_denom_location"
+msgstr "Université catholique de Louvain"
