@@ -54,7 +54,7 @@ cloning the repository:
 
     $ mkdir -p ~/python/projects/osis
     $ cd ~/python/projects/osis
-    $ git clone git@github.com:uclouvain/osis.git
+    $ git clone git@github.com:uclouvain/osis-portal.git
 
 Next, we add some personal information in the local Git installation to make
 sure you are well identified in all commits:
@@ -142,7 +142,7 @@ server:
 If the url starts with `https://` then you are using `https` instead of `ssh`.
 In this case, you should change the url to the ssh one:
 
-    $ git remote set-url origin git@github.com:uclouvain/osis.git
+    $ git remote set-url origin git@github.com:uclouvain/osis-portal.git
 
 The automatic authentication should work after that.
 
@@ -224,7 +224,7 @@ The repository `osis` is a Django application. We already cloned that when
 installing git. At that point we executed the following commands:
 
     $ cd ~/python/projects/osis
-    $ git clone git@github.com:uclouvain/osis.git
+    $ git clone git@github.com:uclouvain/osis-portal.git
 
 Install the Python virtual environment and other system dependencies:
 

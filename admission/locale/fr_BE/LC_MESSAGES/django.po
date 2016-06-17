@@ -907,6 +907,15 @@ msgstr "Veuillez indiquer le numéro que le service des inscriptions vous a four
 msgid "other_education_type"
 msgstr "Autre enseignement"
 
+msgid "table_contents"
+msgstr "Table des matières"
+
+msgid "documents"
+msgstr "Documents"
+
+msgid "ucl_denom_location"
+msgstr "Université catholique de Louvain"
+
 msgid "reduction"
 msgstr "Réduction"
 
