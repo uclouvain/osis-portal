@@ -25,7 +25,7 @@
 ##############################################################################
 from django.conf.urls import url
 from admission.views import application, common, identification, offer, level, question, option, country, curriculum, \
-    education_institution, language, domain, secondary_education
+    education_institution, language, domain, secondary_education, accounting
 from django.contrib.auth.views import logout
 
 
@@ -85,10 +85,8 @@ urlpatterns = [
     url(r'^institution_postal_codes/$', education_institution.find_postal_codes_by_type),
     url(r'^institutions/$', education_institution.find_institution_by_city_postal_code_type),
 
-
-
-
-
+    url(r'^admission/application/accounting/$', accounting.accounting, name='accounting'),
+    url(r'^admission/application/accounting/update/$', accounting.accounting_update, name='accounting_update'),
 
 
 ]

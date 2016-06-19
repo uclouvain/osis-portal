@@ -35,25 +35,23 @@ NATIONAL_COMMUNITY_TYPES = (
     ('DUTCH', 'Communauté flamande'),
     )
 
+
 class SecondaryEducationAdmin(admin.ModelAdmin):
     list_display = ('person', 'national')
-    #fieldsets = ((None, {'fields': ('person', 'national')}),)
 
 
 class SecondaryEducation(models.Model):
-
-
     RESULT_TYPE = (('LOW', 'Moins de 65%'),
                    ('MIDDLE', 'entre 65% et 75%'),
                    ('HIGH', 'plus de 75%'))
 
-    INTERNATIONAL_DIPLOMA_TYPE =(('NATIONAL', 'Baccalauréat national (ou diplôme d\'état, ...)'),
-                                 ('EUROPEAN', 'Baccalauréat européen (Schola Europea)'),
-                                 ('INTERNATIONAL', 'Baccalauréat international(IBO)'))
+    INTERNATIONAL_DIPLOMA_TYPE = (('NATIONAL', 'Baccalauréat national (ou diplôme d\'état, ...)'),
+                                  ('EUROPEAN', 'Baccalauréat européen (Schola Europea)'),
+                                  ('INTERNATIONAL', 'Baccalauréat international(IBO)'))
 
-    EQUIVALENCE_TYPE =(('YES', _('Yes')),
-                       ('NO', _('No')),
-                       ('DEMANDED', _('Demanded')))
+    EQUIVALENCE_TYPE = (('YES', _('Yes')),
+                        ('NO', _('No')),
+                        ('DEMANDED', _('Demanded')))
 
     LOCAL_LANGUAGE_EXAM_RESULT_TYPE = (('SUCCEED', _('succeeded')),
                                        ('FAILED', _('failed')),
@@ -69,39 +67,27 @@ class SecondaryEducation(models.Model):
     daes = models.NullBooleanField(default=False)
     path_repetition = models.NullBooleanField(default=False)
     path_reorientation = models.NullBooleanField(default=False)
-    result = models.CharField(max_length=20, choices=RESULT_TYPE,blank=True, null=True)
-    international_diploma = models.CharField(max_length=20, choices=INTERNATIONAL_DIPLOMA_TYPE,blank=True, null=True)
-    international_diploma_country = models.ForeignKey('reference.Country',blank=True, null=True)
-    international_diploma_language = models.ForeignKey('reference.Language',blank=True, null=True)
-    international_equivalence = models.CharField(max_length=20, choices=EQUIVALENCE_TYPE,blank=True, null=True)
+    result = models.CharField(max_length=20, choices=RESULT_TYPE, blank=True, null=True)
+    international_diploma = models.CharField(max_length=20, choices=INTERNATIONAL_DIPLOMA_TYPE, blank=True, null=True)
+    international_diploma_country = models.ForeignKey('reference.Country', blank=True, null=True)
+    international_diploma_language = models.ForeignKey('reference.Language', blank=True, null=True)
+    international_equivalence = models.CharField(max_length=20, choices=EQUIVALENCE_TYPE, blank=True, null=True)
     admission_exam = models.NullBooleanField(default=False)
     admission_exam_date = models.DateField(blank=True, null=True)
-    admission_exam_institution = models.CharField(max_length=100,blank=True, null=True)
-    admission_exam_type = models.ForeignKey('reference.AdmissionExamType',blank=True, null=True)
+    admission_exam_institution = models.CharField(max_length=100, blank=True, null=True)
+    admission_exam_type = models.ForeignKey('reference.AdmissionExamType', blank=True, null=True)
     admission_exam_result = models.CharField(max_length=20, choices=RESULT_TYPE, blank=True, null=True)
     professional_exam = models.NullBooleanField(default=False)
     professional_exam_date = models.DateField(blank=True, null=True)
-    professional_exam_institution = models.CharField(max_length=100,blank=True, null=True)
-    professional_exam_result = models.CharField(max_length=20, choices=RESULT_TYPE,blank=True, null=True)
+    professional_exam_institution = models.CharField(max_length=100, blank=True, null=True)
+    professional_exam_result = models.CharField(max_length=20, choices=RESULT_TYPE, blank=True, null=True)
     local_language_exam = models.NullBooleanField(default=False)
     local_language_exam_date = models.DateField(blank=True, null=True)
-    local_language_exam_institution = models.CharField(max_length=100,blank=True, null=True)
-    local_language_exam_result = models.CharField(max_length=25, choices=LOCAL_LANGUAGE_EXAM_RESULT_TYPE, blank=True, null=True)
-
-
-    @property
-    def path(self):
-        if self.academic_year.year < 1994:
-            return True
-        return False
-
-    @property
-    def daes_possible(self):
-        if self.national_community == 'FRENCH' and self.academic_year.year < 1994:
-            return True
-        if self.national_community == 'DUTCH' and self.academic_year.year < 1992:
-            return True
-        return False
+    local_language_exam_institution = models.CharField(max_length=100, blank=True, null=True)
+    local_language_exam_result = models.CharField(max_length=25,
+                                                  choices=LOCAL_LANGUAGE_EXAM_RESULT_TYPE,
+                                                  blank=True,
+                                                  null=True)
 
 
 def find_by_person(a_person):

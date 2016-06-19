@@ -58,15 +58,15 @@ class Curriculum(models.Model):
             )
 
     GRADE_TYPE_NO_UNIVERSITY = (
-        ('HIGHER_NON_UNIVERSITY',_('higher_non_university')),
-        ('BACHELOR',_('bachelor')),
-        ('MASTER',_('master')),
-        ('OTHER',_('other'))
+        ('HIGHER_NON_UNIVERSITY', _('higher_non_university')),
+        ('BACHELOR', _('bachelor')),
+        ('MASTER', _('master')),
+        ('OTHER', _('other'))
     )
 
     STUDY_SYSTEM = (
-        ('SOCIAL_ADVANCEMENT',_('social_advancement')),
-        ('FULL_EXERCISE',_('full_exercise'))
+        ('SOCIAL_ADVANCEMENT', _('social_advancement')),
+        ('FULL_EXERCISE', _('full_exercise'))
     )
     person = models.ForeignKey('Person')
     academic_year = models.ForeignKey('AcademicYear')
@@ -106,3 +106,12 @@ def find_user(a_person):
 
 def find_by_person_year(a_person, year):
     return Curriculum.objects.filter(person=a_person, academic_year__year=year).first()
+
+
+def find_belgian_french(a_person, an_academic_year):
+    path_types = ['LOCAL_UNIVERSITY', 'LOCAL_HIGH_EDUCATION']
+    return Curriculum.objects.filter(person=a_person,
+                                     path_type__in=path_types,
+                                     academic_year=an_academic_year,
+                                     national_education='FRENCH',
+                                     national_institution__country__iso_code='BE')

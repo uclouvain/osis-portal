@@ -1,0 +1,317 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load message %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block content %}
+<br>
+
+<form method="post" action="{% url 'accounting_update'%}" id="form_accounting">
+    {% csrf_token %}
+    <input type="hidden"
+           value="{{application.id}}"
+           name="application_id"
+           id="hdn_application_id"/>
+    <input type="hidden"
+           value="{{application.offer_year.acronym}}"
+           id="hdn_offer_name"/>
+    <input type="hidden"
+           value="{{third_cycle}}"
+           id="hdn_third_cycle"/>
+    <input type="hidden"
+           value="{{application.study_grant}}"
+           id="hdn_study_grant"/>
+    <button type="submit" id="bt_save_up" class="btn btn-default"
+        title="{%trans 'save'%}"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+    {%trans 'save'%}</button>
+    <br>
+    <br>
+    {%if form.errors%}
+        <br>
+        <font class="error" role="alert" style="margin-left:5px;">
+            {% trans 'there_are' %} {{ form.errors|length}} {% trans 'errors'%}
+        </font>
+        <br><br>
+    {% endif %}
+    <div class="panel panel-default"
+         id="pnl_reduction"
+         style="{%if reduction_possible%}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+        <div class="panel-heading">{% trans 'reduction'%}</div>
+        <div class="panel-body">
+            <label>{% trans 'question_study_grant'%}</label>
+            <br>
+            <label class="radio-inline">
+              <input type="radio"
+                     name="study_grant"
+                     id="rdb_study_grant_true"
+                     value="true"
+                     onclick="display('pnl_study_grant_detail',true);display('pnl_study_grant_number',true);display('pnl_no_study_grant',false);display_third(true);" {%if application.study_grant = True %}checked{%endif%}> {% trans 'yes' %}
+            </label>
+            <label class="radio-inline">
+              <input type="radio"
+                     name="study_grant"
+                     id="rdb_study_grant_false"
+                     value="false"
+                     onclick="display('pnl_study_grant_detail',true);display('pnl_study_grant_number',false);display('pnl_no_study_grant',true);display_third(false);" {%if application.study_grant != True %}checked{%endif%}> {% trans 'no' %}
+            </label>
+            <br>
+            <br>
+            <div id="pnl_no_third_cycle" >
+                {%trans 'additional_information'%} : <a target="_blank" href="http://www.federation-wallonie-bruxelles.be/">
+                {% trans 'french_community_grant'%}</a> ou <a target="_blank" href="http://www.uclouvain.be/aide">
+                {% trans 'institution_help_center'%}</a>
+                <br>
+                <br>
+                <div id="pnl_study_grant_number">
+                    <label>{% trans 'study_grant_number'%}</label>
+                    <br>
+                    <input id="txt_study_grant_number"
+                           name="study_grant_number"
+                           value="{{application.study_grant_number | default_if_none:''}}"
+                           class="form-control">
+
+                    <span style="font-style:italic;font-size:smaller">{% trans 'unknow_number_yet'%}</span>
+                </div>
+                <div id="pnl_no_study_grant">
+
+                    <label>{%trans 'question_reduction_children'%} *</label>
+                    <br>
+                    <label class="radio-inline">
+                      <input type="radio"
+                             name="deduction_children"
+                             id="rdb_deduction_children_true"
+                             value="true"
+                            {%if application.deduction_children = True %}checked{%endif%}> {% trans 'yes' %}
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio"
+                             name="deduction_children"
+                             id="rdb_deduction_children_false"
+                             value="false"
+                            {%if application.deduction_children != True %}checked{%endif%}> {% trans 'no' %}
+                    </label>
+                    <br>
+                    <br>
+                    {% trans 'additional_information'%}
+                    <a target="_blank"
+                       href="http://www.uclouvain.be/67986.html"
+                       id="lnk_ucl_children_deduction">Université catholique de Louvain</a>
+                    {% trans 'or'%}
+                    <a target="_blank"
+                       href="http://www.lmv.ucl.ac.be/SITE%20LMV%20REN/index.html"
+                       id="lnk_martin_v_children_deduction">Lycée Martin V</a>
+                    <br>
+                    <br>
+                    <label>{% trans 'add_file_children_deduction'%}</label>
+                    <input type="button" value="{% trans 'add' %}">
+                </div>
+            </div>
+            <div id="pnl_third_cycle">
+                {% trans 'additional_information'%}
+                <a target="_blank"
+                   href="http://www.uclouvain.be/513082.html"
+                   id="lnk_ucl_third_cycle_deduction">Réduction "3e cycle" ou "Master complémentaire" </a>
+                <br>
+                <label>{% trans 'add_file_children_deduction'%}</label>
+                <input type="button" value="{% trans 'add' %}">
+            </div>
+            <div id="pnl_study_grant_detail">
+                <br>
+                <label>{%trans 'other_study_grant'%} *</label>
+                <br>
+                <label class="radio-inline">
+                  <input type="radio" name="scholarship"
+                         id="rdb_scholarship_true"
+                         value="true"
+                         onclick="display('pnl_scholarship_organization',true);"
+                         {%if application.scholarship = True %}checked{%endif%}> {% trans 'yes' %}
+                </label>
+                <label class="radio-inline">
+                  <input type="radio"
+                         name="scholarship"
+                         id="rdb_scholarship_false"
+                         value="false"
+                         onclick="display('pnl_scholarship_organization',false);"
+                        {%if application.scholarship != True %}checked{%endif%}> {% trans 'no' %}
+                </label>
+
+                <div id="pnl_scholarship_organization">
+                    <br>
+                    <label>{% trans 'other_study_grant_address'%}</label>
+                    <br>
+                    <textarea id="txt_scholarship_organization"
+                              name="scholarship_organization"
+                              class="form-control"
+                           >{{application.scholarship_organization | default_if_none:''}}</textarea>
+                    {% if form.scholarship_organization.errors %}
+                        <br>
+                        <font class="error">{{ form.scholarship_organization.errors | striptags  }}</font>
+                    {%endif%}
+                </div>
+                <br>
+                <label>{%trans 'general_notice'%}</label>&nbsp;{%trans 'general_reduction_notice'%}
+                <a target="_blank" href="http://www.uclouvain.be/270686.html">http://www.uclouvain.be/270686.html</a>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" id="pnl_debts" style="{%if debts_check%}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+        <div class="panel-heading">{% trans 'title_no_debts'%}</div>
+        <div class="panel-body">
+            <label>{% trans 'add_file_no_debts'%}</label>
+            {{ previous_academic_year }} &nbsp;&nbsp; <input type="button" value="{% trans 'add' %}">
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">{% trans 'sport_affiliation'%} {{ academic_year}}</div>
+        <div class="panel-body">
+            <label>{% trans 'sport_affiliation_lln'%}</label>
+            <br>
+            <label class="error">{%trans 'affiliation_cost_part1'%} {{sport_affiliation_amount}}
+                {%trans 'affiliation_cost_part2'%}</label>
+            <br>
+            <label class="radio-inline">
+              <input type="radio"
+                     name="sport_membership"
+                     id="rdb_sport_membership_true"
+                     value="true"
+                     {%if application.sport_membership = True %}checked{%endif%}> {%trans 'yes'%}
+            </label>
+            <label class="radio-inline">
+              <input type="radio"
+                     name="sport_membership"
+                     id="rdb_sport_membership_false"
+                     value="false"
+                     {%if application.sport_membership != True %}checked{%endif%}> {%trans 'no'%}
+            </label>
+            <br>
+            {%trans 'sport_affiliation_lln_information'%}
+            <a target="_blank" href="http://www.uclouvain.be/sport-infos">http://www.uclouvain.be/sport-infos</a>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">{%trans 'culture_card'%} {{ academic_year}}</div>
+        <div class="panel-body">
+            <label>{% trans 'question_culture_card'%}</label>
+            <br>
+            <label class="error">{% trans 'affiliation_cost_part1'%}{{culture_affiliation_amount}}
+                {% trans 'affiliation_cost_part2'%}</label>
+            <br>
+            <label class="radio-inline">
+              <input type="radio" name="culture_membership" id="rdb_culture_membership_true" value="true"
+                     {%if application.culture_membership = True %}checked{%endif%}> {% trans 'yes'%}
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="culture_membership" id="rdb_culture_membership_false" value="false"
+                     {%if application.culture_membership != True %}checked{%endif%}> {% trans 'no'%}
+            </label>
+            <br>
+            {% trans 'additional_info_culture_card'%}
+            <a target="_blank" href="http://www.carteculture.be">http://www.carteculture.be</a>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">{% trans 'solidarity_card'%} {{ academic_year}}</div>
+        <div class="panel-body">
+            <label>{% trans 'question_solidarity_card'%} </label>
+            <br>
+            <label class="error">{% trans 'affiliation_cost_part1'%} {{solidary_affiliation_amount}}
+                {% trans 'affiliation_cost_part2'%}</label>
+            <br>
+            <label class="radio-inline">
+              <input type="radio"
+                     name="solidary_membership"
+                     id="rdb_solidary_membership_true"
+                     value="true"
+                     {%if application.solidary_membership = True %}checked{%endif%}> {% trans 'yes'%}
+            </label>
+            <label class="radio-inline">
+              <input type="radio"
+                     name="solidary_membership"
+                     id="rdb_solidary_membership_false"
+                     value="false"
+                     {%if application.solidary_membership != True %}checked{%endif%}> {% trans 'no'%}
+            </label>
+            <br>
+            {% trans 'additional_info_solidarity_card'%}
+            <a target="_blank" href="http://www.louvaincooperation.org/index.php/la-carte-solidaire">
+                http://www.louvaincooperation.org/index.php/la-carte-solidaire</a>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">{% trans 'bank_account'%}</div>
+        <div class="panel-body">
+            {%trans 'belgian_bank_account'%}
+            <br>
+            {% trans 'belgian_bank_account_precision'%}
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>{% trans 'iban_number'%}</label>&nbsp;&nbsp;
+                    <input class="form-control"
+                           id="txt_bank_account_iban"
+                           name="bank_account_iban"
+                           value="{{application.bank_account_iban | default_if_none:''}}">
+                </div>
+                 <div class="col-md-6">
+                    <label>{% trans 'bic_number'%}</label>&nbsp;&nbsp;
+                    <input class="form-control"
+                           id="txt_bank_account_bic"
+                           name="bank_account_bic"
+                           value="{{application.bank_account_bic | default_if_none:''}}">
+                </div>
+            </div>
+            {% if form.bank_account_iban.errors or  form.bank_account_bic.errors%}
+            <div class="row">
+                <div class="col-md-6">
+                    {% if form.bank_account_iban.errors %}
+                        <br>
+                        <font class="error">{{ form.bank_account_iban.errors   }}</font>
+                    {%endif%}
+                </div>
+                 <div class="col-md-6">
+                    {% if form.bank_account_bic.errors %}
+                        <br>
+                        <font class="error">{{ form.bank_account_bic.errors   }}</font>
+                    {%endif%}
+                </div>
+            </div>
+            {%endif%}
+            <br>
+            <label>{% trans 'bank_account_holder_name'%}</label>&nbsp;&nbsp;
+            <input class="form-control"
+                   id="txt_bank_account_name"
+                   name="bank_account_name"
+                   value="{{application.bank_account_name | default_if_none:''}}">
+        </div>
+    </div>
+
+    <button type="submit" id="bt_save_down"class="btn btn-default"
+        title="{%trans 'save'%}"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+    {%trans 'save'%}</button>
+</form>
+{% endblock %}

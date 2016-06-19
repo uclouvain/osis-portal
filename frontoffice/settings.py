@@ -58,6 +58,7 @@ INSTALLED_APPS = (
     'enrollments',
     'dashboard',
     'rest_framework',
+    'localflavor',
 )
 
 MIDDLEWARE_CLASSES = (

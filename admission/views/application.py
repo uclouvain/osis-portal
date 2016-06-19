@@ -32,6 +32,8 @@ from admission.views.common import home
 from functools import cmp_to_key
 import locale
 from django.utils.translation import ugettext_lazy as _
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 
 def application_update(request, application_id):
@@ -143,8 +145,6 @@ def save_application_offer(request):
                         answer.save()
 
         return HttpResponseRedirect(reverse('curriculum_update'))
-
-
 
 def application_view(request, application_id):
     application = mdl.application.find_by_id(application_id)

@@ -915,3 +915,128 @@ msgstr "Documents"
 
 msgid "ucl_denom_location"
 msgstr "Université catholique de Louvain"
+
+msgid "reduction"
+msgstr "Réduction"
+
+msgid "question_study_grant"
+msgstr "Avez-vous une demande d'une allocation d'études ?"
+
+msgid "reduction_enrolment_fees"
+msgstr "Réduction des droits d'inscription"
+
+msgid "study_grant_number"
+msgstr "Veuillez indiquer le n° du dossier ouvert "
+
+msgid "unknow_number_yet"
+msgstr ""
+ "Si vous ne connaissez pas encore ce numéro, il vous sera toujours possible de nous le communiquer ultérieurement."
+
+msgid "additional_information"
+msgstr "Pour toute information complémentaire"
+
+msgid "french_community_grant"
+msgstr "allocations d'études de la Communauté française"
+
+msgid "institution_help_center"
+msgstr "le Service d'aide de l'UCL"
+
+msgid "other_study_grant"
+msgstr "Bénéficiez-vous d'une bourse d'études auprès d'un autre organisme?"
+
+msgid "other_study_grant_address"
+msgstr "Veuillez indiquer le nom et l'adresse de cet organisme"
+
+msgid "debts"
+msgstr "Dette"
+
+msgid "add_file_no_debts"
+msgstr ""
+ "Veuillez joindre l'attestation stipulant l'absence de dettes vis-à-vis de l'établissement fréquenté durant "
+ "l'année académique"
+
+msgid "add"
+msgstr "Joindre"
+
+msgid "sport_affiliation"
+msgstr "Affiliation SPORT"
+
+msgid "sport_affiliation_lln"
+msgstr ""
+ "Désirez-vous l'affiliation aux activités sportives qui sont organisées sur les sites de Louvain-la-Neuve et Bruxelles"
+
+msgid "affiliation_cost_part1"
+msgstr ""
+ "Dans l'affirmative, le coût de cette affiliation qui est de "
+
+msgid "affiliation_cost_part2"
+msgstr ""
+ " sera ajouté à vos droits d'inscription."
+
+msgid "sport_affiliation_lln_information"
+msgstr "Informations sur le sport à Louvain-la-Neuve et à Bruxelle Woluwé"
+
+msgid "culture_card"
+msgstr "Carte 'Culture'"
+
+msgid "question_culture_card"
+msgstr "Désirez-vous la carte culture?"
+
+msgid "additional_info_culture_card"
+msgstr "Informations complémentaires sur la carte culture"
+
+msgid "solidarity_card"
+msgstr "Carte 'Solidaire'"
+
+msgid "question_solidarity_card"
+msgstr "Désirez-vous la carte solidaire?"
+
+msgid "additional_info_solidarity_card"
+msgstr "Informations complémentaires sur la carte solidaire"
+
+msgid "bank_account"
+msgstr "Compte bancaire"
+
+msgid "belgian_bank_account"
+msgstr ""
+ "Si vous possédez un compte bancaire belge, vous pouvez encoder les coordonnées afin que nous puissions procéder"
+ " à un éventuel remboursement."
+
+msgid "belgian_bank_account_precision"
+msgstr ""
+ "Pour les codes IBAN et BIC/SWIFT, veuillez encoder uniquement des caractères alphanumériques (ni espace, ni tiret)."
+
+msgid "iban_number"
+msgstr "Numéro de compte IBAN"
+
+msgid "bic_number"
+msgstr "Code BIC/SWIFT"
+
+msgid "bank_account_holder_firstname"
+msgstr "Prénom du titulaire du compte"
+
+msgid "bank_account_holder_name"
+msgstr "Nom du titulaire du compte"
+
+msgid "general_notice"
+msgstr "Remarque générale : "
+
+msgid "general_reduction_notice"
+msgstr ""
+ "d'autres types de réduction existent à l'UCL.  Elles nécessitent l'introduction d'un dossier particulier.  "
+ "Informations"
+
+msgid "there_are"
+msgstr "Il y a "
+
+msgid "question_reduction_children"
+msgstr "Avez-vous une demande de réduction 'Enfant du personnel UCL ou du Lycée Martin V'?"
+
+msgid "or"
+msgstr "ou"
+
+msgid "add_file_children_deduction"
+msgstr "Veuillez joindre l'attestation officelle pour bénéficier de cette réduction"
+
+msgid "title_no_debts"
+msgstr "Attestation stipulant l'absence de dettes"
