@@ -35,7 +35,7 @@ from admission.models import message_template
 from admission.models import offer_year
 from admission.models import offer_year_calendar
 from admission.models import option
-from admission.models import person
+from admission.models import applicant
 from admission.models import person_address
 from admission.models import person_assimilation_criteria
 from admission.models import properties

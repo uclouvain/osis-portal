@@ -32,7 +32,7 @@ class PersonAssimilationCriteriaAdmin(admin.ModelAdmin):
 
 
 class PersonAssimilationCriteria(models.Model):
-    person = models.ForeignKey('Person')
+    person = models.ForeignKey('Applicant')
     criteria = models.ForeignKey('AssimilationCriteria')
 
 

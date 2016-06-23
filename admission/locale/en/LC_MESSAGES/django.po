@@ -893,7 +893,7 @@ msgstr "Are you already enrolled to the same program in an institution of the Fr
 msgid "question_resident"
 msgstr "Are you resident"
 
-msgid "question_lottery_number"
+msgid "question_raffle_number"
 msgstr "Please mention the number given be the enrolment service"
 
 msgid "other_education_type"

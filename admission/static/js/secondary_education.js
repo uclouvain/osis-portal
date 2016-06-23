@@ -5,8 +5,8 @@ $('document').ready(function(){
         $('#pnl_academic_year').css('visibility', 'hidden').css('display','none');
         $('#pnl_admission_exam').css('visibility', 'hidden').css('display','none');
 
-        $('#rdb_secondary_education_diploma_true').prop( "checked", false);
-        $('#rdb_secondary_education_diploma_false').prop( "checked", false);
+        $('#rdb_diploma_true').prop( "checked", false);
+        $('#rdb_diploma_false').prop( "checked", false);
 
         $('#slt_academic_year').prop("selectedIndex",-1);
 
@@ -19,7 +19,7 @@ $('document').ready(function(){
         $('#rdb_belgian_community_dutch').prop( "checked", false);
         $('#rdb_belgian_community_german').prop( "checked", false);
 
-        $('#pnl_daes').css('visibility', 'hidden').css('display','none');
+        $('#pnl_dipl_acc_high_educ').css('visibility', 'hidden').css('display','none');
 
         $('#slt_cities').prop("selectedIndex",-1);
         $('#slt_postal_codes').prop("selectedIndex",-1);
@@ -49,8 +49,8 @@ $('document').ready(function(){
         $('#txt_other_education_type').val('');
         $('#txt_other_education_type').prop( "disabled", true);
 
-        $('#rdb_daes_true').prop( "checked", false);
-        $('#rdb_daes_false').prop( "checked", false);
+        $('#rdb_dipl_acc_high_educ_true').prop( "checked", false);
+        $('#rdb_dipl_acc_high_educ_false').prop( "checked", false);
 
         $('#pnl_parcours').css('visibility', 'hidden').css('display','none');
         $('#rdb_repeated_grade_true').prop( "checked", false);
@@ -114,13 +114,13 @@ $('document').ready(function(){
         $('#rdb_admission_exam_result_middle').prop( "checked", false);
         $('#rdb_admission_exam_result_high').prop( "checked", false);
 
-        if ($('#hdn_person_register_number').val()){
+        if ($('#hdn_person_registration_id').val()){
         }else{
 //Belgian diploma
             $('#pnl_secondary_education_main').css('visibility', 'visible').css('display','block');
             // on pnl_secondary_education_main
-            if($('#hdn_secondary_education_secondary_education_diploma').val() == 'True'){
-                $('#rdb_secondary_education_diploma_true').prop( "checked", true);
+            if($('#hdn_diploma').val() == 'True'){
+                $('#rdb_diploma_true').prop( "checked", true);
                 $('#pnl_academic_year').css('visibility', 'visible').css('display','block');
                 //on pnl_academic_year
                 $('#slt_academic_year'+' option').each(function(){
@@ -135,7 +135,7 @@ $('document').ready(function(){
                 }
 
             }else{
-                $('#rdb_secondary_education_diploma_false').prop( "checked", true);
+                $('#rdb_diploma_false').prop( "checked", true);
                 //exam admi
                 $('#pnl_admission_exam').css('visibility', 'visible').css('display','block');
                 if($('#hdn_secondary_education_admission_exam').val() == 'True'){
@@ -424,10 +424,10 @@ function display_belgian_secondary(){
     national_community_display();
     if(($('#rdb_belgian_community_french').checked && $('#hdn_secondary_education_academic_year').val()<1994)
         || (($('#rdb_belgian_community_dutch').checked && $('#hdn_secondary_education_academic_year').val()<1992))){
-        $('#rdb_daes_true').prop( "checked", true);
-        $('#pnl_daes').css('visibility', 'visible').css('display','block');
+        $('#rdb_dipl_acc_high_educ_true').prop( "checked", true);
+        $('#pnl_dipl_acc_high_educ').css('visibility', 'visible').css('display','block');
     }else{
-        $('#rdb_daes_false').prop( "checked", true);
+        $('#rdb_dipl_acc_high_educ_false').prop( "checked", true);
     }
     if( $('#hdn_secondary_education_academic_year').val()<1994){
         $('#rdb_repeated_grade_true').prop( "checked", true);

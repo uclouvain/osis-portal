@@ -110,7 +110,7 @@ class NewPasswordForm(forms.Form):
         return data.strip()
 
 
-class PersonForm(forms.Form):
+class ApplicantForm(forms.Form):
     GENDER_CHOICES=(
             ('MALE', 'MALE'),
             ('FEMALE', 'FEMALE'))
@@ -138,11 +138,11 @@ class PersonForm(forms.Form):
     contact_adr_country     = forms.CharField(required=False)
     additional_email        = forms.EmailField(required=True)
     previous_enrollment     = forms.CharField(required=False)
-    register_number         = forms.CharField(required=False)
-    ucl_last_year           = forms.IntegerField(required=False)
+    registration_id         = forms.CharField(required=False)
+    last_academic_year      = forms.IntegerField(required=False)
 
     def __init__(self, *args, **kwargs):
-        super(PersonForm, self).__init__(*args, **kwargs)
+        super(ApplicantForm, self).__init__(*args, **kwargs)
         self.fields['last_name'].error_messages = {'required': _('mandatory_field')}
         self.fields['first_name'].error_messages = {'required': _('mandatory_field')}
         self.fields['birth_date'].error_messages = {'required': _('mandatory_field'),
@@ -161,7 +161,7 @@ class PersonForm(forms.Form):
         self.fields['additional_email'].error_messages = {'required': _('mandatory_field')}
 
     def clean(self):
-        cleaned_data = super(PersonForm, self).clean()
+        cleaned_data = super(ApplicantForm, self).clean()
         same_contact_legal_addr = cleaned_data.get("same_contact_legal_addr")
 
         if same_contact_legal_addr == "false":
@@ -189,15 +189,15 @@ class PersonForm(forms.Form):
         previous_enrollment = cleaned_data.get("previous_enrollment")
 
         if previous_enrollment == 'true':
-            register_number = cleaned_data.get("register_number")
+            registration_id = cleaned_data.get("registration_id")
 
-            if register_number is None or len(register_number) <= 0:
-                self.errors['register_number'] = _('mandatory_field')
+            if registration_id is None or len(registration_id) <= 0:
+                self.errors['registration_id'] = _('mandatory_field')
 
-            ucl_last_year = cleaned_data.get("ucl_last_year")
+            last_academic_year = cleaned_data.get("last_academic_year")
 
-            if ucl_last_year is None or ucl_last_year <= 0:
-                self.errors['ucl_last_year'] = _('numeric_field')
+            if last_academic_year is None or last_academic_year <= 0:
+                self.errors['last_academic_year'] = _('numeric_field')
 
         return cleaned_data
 

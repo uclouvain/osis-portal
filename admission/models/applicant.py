@@ -33,12 +33,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 
-class PersonAdmin(admin.ModelAdmin):
+class ApplicantAdmin(admin.ModelAdmin):
     list_display = ('user', 'birth_date', 'gender')
     fieldsets = ((None, {'fields': ('user', 'birth_date', 'gender', 'language')}),)
 
 
-class Person(models.Model):
+class Applicant(models.Model):
     GENDER_CHOICES = (
         ('FEMALE', _('female')),
         ('MALE', _('male')))
@@ -69,8 +69,8 @@ class Person(models.Model):
     phone_mobile = models.CharField(max_length=30, blank=True, null=True)
     phone = models.CharField(max_length=30, blank=True, null=True)
     additional_email = models.EmailField(max_length=255, blank=True, null=True)
-    register_number = models.CharField(max_length=20, blank=True, null=True)
-    ucl_last_year = models.IntegerField(blank=True, null=True)
+    registration_id = models.CharField(max_length=20, blank=True, null=True)
+    last_academic_year = models.IntegerField(blank=True, null=True)
     language = models.CharField(max_length=30, null=True, choices=settings.LANGUAGES, default=settings.LANGUAGE_CODE)
 
     def __str__(self):
@@ -79,16 +79,16 @@ class Person(models.Model):
 
 def find_by_user(user):
     try:
-        person = Person.objects.get(user=user)
+        applicant = Applicant.objects.get(user=user)
     except ObjectDoesNotExist:
         return None
-    return person
+    return applicant
 
 
 def find_by_activation_code(activation_code):
     if is_uuid4(activation_code):
         try:
-            return Person.objects.filter(activation_code=activation_code).first()
+            return Applicant.objects.filter(activation_code=activation_code).first()
         except ObjectDoesNotExist:
             return None
     else:
@@ -112,6 +112,6 @@ def is_uuid4(activ_code):
 
 def find_by_id(id):
     try:
-        return Person.objects.get(pk=id)
+        return Applicant.objects.get(pk=id)
     except ObjectDoesNotExist:
         return None

@@ -42,10 +42,10 @@ def validate_fields_form(request, secondary_education, next_step):
     is_valid = True
     academic_year = None
 
-    if request.POST.get('secondary_education_diploma'):
-        if request.POST.get('secondary_education_diploma') == 'true':
+    if request.POST.get('diploma'):
+        if request.POST.get('diploma') == 'true':
             # secondary education diploma
-            secondary_education.secondary_education_diploma = True
+            secondary_education.diploma = True
 
             if request.POST.get('academic_year') is None:
                 validation_messages['academic_year'] = ALERT_MANDATORY_FIELD
@@ -73,8 +73,8 @@ def validate_fields_form(request, secondary_education, next_step):
                         if request.POST.get('belgian_community') == 'FRENCH':
                             # diploma of the French community
                             if academic_year.year < 1994:
-                                if request.POST.get('daes') is None:
-                                    validation_messages['daes'] = ALERT_MANDATORY_FIELD
+                                if request.POST.get('dipl_acc_high_educ') is None:
+                                    validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
                                     is_valid = False
                             if request.POST.get('chb_other_education') == 'on':
                                 if request.POST.get('other_education_type') is None:
@@ -91,8 +91,8 @@ def validate_fields_form(request, secondary_education, next_step):
                             if request.POST.get('belgian_community') == 'DUTCH':
                                 # diploma of the Dutch community
                                 if academic_year.year < 1992:
-                                    if request.POST.get('daes') is None:
-                                        validation_messages['daes'] = ALERT_MANDATORY_FIELD
+                                    if request.POST.get('dipl_acc_high_educ') is None:
+                                        validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
                                         is_valid = False
 
                     if request.POST.get('school_belgian_community') == 'FRENCH':
@@ -191,15 +191,15 @@ def validate_fields_form(request, secondary_education, next_step):
                                 validation_messages['language_regime'] = _('msg_language_diploma')
                                 is_valid = False
         else:
-            if request.POST.get('secondary_education_diploma') == 'false':
-                secondary_education.secondary_education_diploma = False
+            if request.POST.get('diploma') == 'false':
+                secondary_education.diploma = False
 
             is_valid, validation_messages, secondary_education = validate_admission_exam(request,
                                                                                          is_valid,
                                                                                          validation_messages,
                                                                                          secondary_education)
     else:
-        validation_messages['secondary_education_diploma'] = ALERT_MANDATORY_FIELD
+        validation_messages['diploma'] = ALERT_MANDATORY_FIELD
         is_valid = False
 
     is_valid, validation_messages, secondary_education = validate_professional_exam(request,
@@ -212,7 +212,7 @@ def validate_fields_form(request, secondary_education, next_step):
                                                                                       secondary_education)
 
     if next_step is True \
-            and request.POST.get('secondary_education_diploma') == 'false' \
+            and request.POST.get('diploma') == 'false' \
             and request.POST.get('admission_exam') == 'false' \
             and request.POST.get('professional_exam') == 'false':
         validation_messages['final'] = "%s" % _('msg_error_next_step_impossible')
@@ -235,7 +235,7 @@ def curriculum_save(request, application_id):
     other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
     recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
 
-    secondary_education = mdl.secondary_education.find_by_person(application.person)
+    secondary_education = mdl.secondary_education.find_by_person(application.applicant)
     education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
     education_type_qualification = mdl_reference.education_type.find_education_type_by_adhoc('QUALIFICATION', False)
     return render(request, "diploma.html",
@@ -274,15 +274,15 @@ def diploma_save(request):
     other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
     recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
     exam_types = mdl_reference.admission_exam_type.find_all_by_adhoc(False)
-    person = mdl.person.find_by_user(request.user)
-    secondary_education = mdl.secondary_education.find_by_person(person)
+    applicant = mdl.applicant.find_by_user(request.user)
+    secondary_education = mdl.secondary_education.find_by_person(applicant)
 
     local_language_exam_link = mdl.properties.find_by_key('PROFESSIONAL_EXAM_LINK')
     professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
     if secondary_education is None:
         secondary_education = mdl.secondary_education.SecondaryEducation()
         secondary_education.academic_year = mdl.academic_year.current_academic_year()
-        secondary_education.person = person
+        secondary_education.person = applicant
 
     education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
     education_type_qualification = mdl_reference.education_type.find_education_type_by_adhoc('QUALIFICATION', False)
@@ -360,11 +360,11 @@ def diploma_save(request):
 
 def diploma_update(request):
     application = mdl.application.find_first_by_user(request.user)
-    person = mdl.person.find_by_user(request.user)
+    applicant = mdl.applicant.find_by_user(request.user)
     other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
     recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
     exam_types = mdl_reference.admission_exam_type.find_all_by_adhoc(False)
-    secondary_education = mdl.secondary_education.find_by_person(person)
+    secondary_education = mdl.secondary_education.find_by_person(applicant)
     education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
     education_type_qualification = mdl_reference.education_type.find_education_type_by_adhoc('QUALIFICATION', False)
     local_language_exam_link = mdl.properties.find_by_key('PROFESSIONAL_EXAM_LINK')
@@ -543,23 +543,23 @@ def is_local_language_exam_needed(user):
 
 def populate_secondary_education(request, secondary_education):
     # belgian
-    secondary_education.secondary_education_diploma = None
+    secondary_education.diploma = None
     secondary_education.academic_year = None
     secondary_education.national = None
     secondary_education.national_community = None
     secondary_education.national_institution = None
     secondary_education.education_type = None
-    secondary_education.daes = None
+    secondary_education.dipl_acc_high_educ = None
     secondary_education.path_repetition = None
     secondary_education.path_reorientation = None
     secondary_education.result = None
 
-    if request.POST.get('secondary_education_diploma'):
-        if request.POST.get('secondary_education_diploma') == 'true':
+    if request.POST.get('diploma'):
+        if request.POST.get('diploma') == 'true':
             if request.POST.get('academic_year'):
                 academic_year = mdl.academic_year.find_by_id(int(request.POST.get('academic_year')))
                 secondary_education.academic_year = academic_year
-            secondary_education.secondary_education_diploma = True
+            secondary_education.diploma = True
             if request.POST.get('rdb_belgian_foreign'):
                 if request.POST.get('rdb_belgian_foreign') == 'true':
                     secondary_education.national = True
@@ -615,12 +615,12 @@ def populate_secondary_education(request, secondary_education):
                     secondary_education.education_type = mdl_reference.education_type\
                         .find_by_id(int(request.POST.get('rdb_education_technic_type')))
 
-            if request.POST.get('daes'):
-                if request.POST.get('daes') == 'true':
-                    secondary_education.daes = True
+            if request.POST.get('dipl_acc_high_educ'):
+                if request.POST.get('dipl_acc_high_educ') == 'true':
+                    secondary_education.dipl_acc_high_educ = True
                 else:
-                    if request.POST.get('daes') == 'false':
-                        secondary_education.daes = False
+                    if request.POST.get('dipl_acc_high_educ') == 'false':
+                        secondary_education.dipl_acc_high_educ = False
 
             if request.POST.get('path_repetition'):
                 if request.POST.get('path_repetition') == 'true':
@@ -637,14 +637,14 @@ def populate_secondary_education(request, secondary_education):
                         secondary_education.path_reorientation = False
 
         else:
-            secondary_education.secondary_education_diploma = False
+            secondary_education.diploma = False
 
     # international_diploma
     secondary_education.international_diploma = None
     secondary_education.international_diploma_country = None
     secondary_education.international_diploma_language = None
     secondary_education.international_equivalence = None
-    if secondary_education.secondary_education_diploma is True and secondary_education.national is False:
+    if secondary_education.diploma is True and secondary_education.national is False:
         if request.POST.get('international_diploma') == "true":
             secondary_education.international_diploma = True
         else:
@@ -672,7 +672,7 @@ def populate_secondary_education(request, secondary_education):
 
         secondary_education.result = request.POST.get('foreign_result')
     # common
-    if secondary_education.secondary_education_diploma is True \
+    if secondary_education.diploma is True \
             and (secondary_education.national is True or secondary_education.international_diploma is True):
         academic_year = None
         if request.POST.get('academic_year'):

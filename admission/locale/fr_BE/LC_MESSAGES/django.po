@@ -901,7 +901,7 @@ msgstr "Etes-vous déjà inscrit au même programme dans un établissement de la
 msgid "question_resident"
 msgstr "Etes-vous resident"
 
-msgid "question_lottery_number"
+msgid "question_raffle_number"
 msgstr "Veuillez indiquer le numéro que le service des inscriptions vous a fourni"
 
 msgid "other_education_type"

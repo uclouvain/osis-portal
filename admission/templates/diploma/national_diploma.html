@@ -12,19 +12,19 @@
                 <input type="radio"
                        name="belgian_community"
                        id="rdb_belgian_community_french"
-                       value="FRENCH" onclick="show_hide_pnl_daes();"> {%trans 'french_belgian_community'%}
+                       value="FRENCH" onclick="show_hide_pnl_dipl_acc_high_educ();"> {%trans 'french_belgian_community'%}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="belgian_community"
                      id="rdb_belgian_community_dutch"
-                     value="DUTCH" onclick="show_hide_pnl_daes();"> {%trans 'dutch_belgian_community'%}
+                     value="DUTCH" onclick="show_hide_pnl_dipl_acc_high_educ();"> {%trans 'dutch_belgian_community'%}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="belgian_community"
                      id="rdb_belgian_community_german"
-                     value="GERMAN" onclick="show_hide_pnl_daes();"> {%trans 'german_belgian_community'%}
+                     value="GERMAN" onclick="show_hide_pnl_dipl_acc_high_educ();"> {%trans 'german_belgian_community'%}
             </label>
             {%if validation_messages and validation_messages|get_item:'belgian_community'%}
                 <br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'belgian_community'}}</font>
@@ -185,25 +185,25 @@
         {% endif %}
 
     </div>
-     <div class="panel panel-default" id="pnl_daes">
+     <div class="panel panel-default" id="pnl_dipl_acc_high_educ">
         <div class="panel-heading">{% trans 'daes' %}</div>
         <div class="panel-body">{% trans 'daes_question'%}
 
             <br>
             <label class="radio-inline">
               <input type="radio"
-                     name="daes"
-                     id="rdb_daes_true" value="true"
+                     name="dipl_acc_high_educ"
+                     id="rdb_dipl_acc_high_educ_true" value="true"
                      > {% trans 'yes' %}
             </label>
             <label class="radio-inline">
               <input type="radio"
-                     name="daes"
-                     id="rdb_daes_false" value="false"
+                     name="dipl_acc_high_educ"
+                     id="rdb_dipl_acc_high_educ_false" value="false"
                      > {% trans 'no' %}
             </label>
-            {%if validation_messages and validation_messages|get_item:'daes'%}
-                <br> <br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'daes'}}</font> <br>
+            {%if validation_messages and validation_messages|get_item:'dipl_acc_high_educ'%}
+                <br> <br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'dipl_acc_high_educ'}}</font> <br>
             {% endif %}
         </div>
     </div>

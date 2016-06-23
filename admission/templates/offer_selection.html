@@ -102,13 +102,13 @@
                                 <label class="radio-inline">
                                     <input type="radio" id="rdb_offer_belgiandegree_true" name="rdb_offer_belgiandegree"
                                            value="true"
-                                           {% if application.belgian_degree %}checked{%endif%}
+                                           {% if application.national_degree %}checked{%endif%}
                                     > {% trans 'yes'%}
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" id="rdb_offer_belgiandegree_false" name="rdb_offer_belgiandegree"
                                            value="false"
-                                           {% if application.belgian_degree %}{%else%}checked{%endif%}
+                                           {% if application.national_degree %}{%else%}checked{%endif%}
                                     > {% trans 'no'%}
                                 </label>
                             </div>
@@ -127,12 +127,12 @@
                             <div>
                                 <label class="radio-inline">
                                     <input type="radio" id="rdb_offer_vae_true" name="rdb_offer_vae" value="true"
-                                           {% if application.vae %}checked{%endif%}
+                                           {% if application.valuation_possible %}checked{%endif%}
                                     > {% trans 'yes'%}
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" id="rdb_offer_vae_false" name="rdb_offer_vae" value="false"
-                                           {% if application.vae %}{%else%}checked{%endif%}
+                                           {% if application.valuation_possible %}{%else%}checked{%endif%}
                                     > {% trans 'no'%}
                                 </label>
                             </div>
@@ -152,13 +152,13 @@
                                 <label class="radio-inline">
                                     <input type="radio" id="rdb_offer_samestudies_true" name="rdb_offer_samestudies"
                                            value="true"
-                                           {% if application.started_samestudies %}checked{%endif%}
+                                           {% if application.started_similar_studies %}checked{%endif%}
                                     > {% trans 'yes'%}
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" id="rdb_offer_samestudies_false" name="rdb_offer_samestudies"
                                            value="false"
-                                           {% if application.started_samestudies %}{%else%}checked{%endif%}
+                                           {% if application.started_similar_studies %}{%else%}checked{%endif%}
                                     > {% trans 'no'%}
                                 </label>
                             </div>
@@ -247,13 +247,13 @@
 
                     <div class="row">
                         <div class="col-md-8">
-                            <label>{% trans 'question_lottery_number'%} : </label>
+                            <label>{% trans 'question_raffle_number'%} : </label>
                         </div>
 
                         <div class="col-md-4">
                             <div>
                                 <input class="form-control" id="txt_offer_lottery" name="txt_offer_lottery"
-                                       value="{{application.lottery_number  | default_if_none:'' }}" maxlength="50">
+                                       value="{{application.raffle_number  | default_if_none:'' }}" maxlength="50">
                             </div>
                         </div>
                     </div>

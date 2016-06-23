@@ -68,7 +68,7 @@ class Curriculum(models.Model):
         ('SOCIAL_ADVANCEMENT', _('social_advancement')),
         ('FULL_EXERCISE', _('full_exercise'))
     )
-    person = models.ForeignKey('Person')
+    person = models.ForeignKey('Applicant')
     academic_year = models.ForeignKey('AcademicYear')
     path_type = models.CharField(max_length=25, choices=PATH_TYPES)
     national_education = models.CharField(max_length=20, choices=NATIONAL_COMMUNITY_TYPES, blank=True, null=True)

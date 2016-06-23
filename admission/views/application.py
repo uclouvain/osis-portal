@@ -57,13 +57,13 @@ def save_application_offer(request):
 
         if application_id:
             application = get_object_or_404(mdl.application.Application, pk=application_id)
-            secondary_education = mdl.secondary_education.find_by_person(application.person)
+            secondary_education = mdl.secondary_education.find_by_person(application.applicant)
         else:
             application = mdl.application.Application()
-            person_application = mdl.person.find_by_user(request.user)
-            application.person = person_application
+            person_application = mdl.applicant.find_by_user(request.user)
+            application.applicant = person_application
             secondary_education = mdl.secondary_education.SecondaryEducation()
-            secondary_education.person = application.person
+            secondary_education.applicant = application.applicant
 
         if secondary_education.academic_year is None:
             secondary_education.academic_year = mdl.academic_year.current_academic_year()
@@ -80,19 +80,19 @@ def save_application_offer(request):
 
         if request.POST.get('rdb_offer_belgiandegree'):
             if request.POST.get('rdb_offer_belgiandegree') == "true":
-                application.belgian_degree = True
+                application.national_degree = True
             else:
-                application.belgian_degree = False
+                application.national_degree = False
         if request.POST.get('rdb_offer_vae'):
             if request.POST.get('rdb_offer_vae') == "true":
-                application.vae = True
+                application.valuation_possible = True
             else:
-                application.vae = False
+                application.valuation_possible = False
         if request.POST.get('rdb_offer_samestudies'):
             if request.POST.get('rdb_offer_samestudies') == "true":
-                application.started_samestudies = True
+                application.started_similar_studies = True
             else:
-                application.started_samestudies = False
+                application.started_similar_studies = False
         if request.POST.get('rdb_offer_valuecredits'):
             if request.POST.get('rdb_offer_valuecredits') == "true":
                 application.credits_to_value = True
@@ -109,7 +109,7 @@ def save_application_offer(request):
             else:
                 application.resident = False
         if request.POST.get('txt_offer_lottery'):
-            application.lottery_number = request.POST.get('txt_offer_lottery')
+            application.raffle_number = request.POST.get('txt_offer_lottery')
 
         application.save()
         # answer_question_
