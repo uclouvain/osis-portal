@@ -27,7 +27,6 @@ from admission.models import academic_year
 from admission.models import answer
 from admission.models import applicant
 from admission.models import application
-from admission.models import assimilation_criteria
 from admission.models import curriculum
 from admission.models import domain
 from admission.models import form

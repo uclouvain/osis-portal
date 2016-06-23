@@ -23,16 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib.auth.decorators import login_required
-from admission import models as mdl
-from reference import models as mdl_ref
 from datetime import datetime
-from admission.forms import ApplicantForm
-from django.shortcuts import render
+
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
+
+from admission import models as mdl
+from admission.forms import ApplicantForm
+from reference import models as mdl_ref
 
 
 @login_required
@@ -215,7 +217,7 @@ def profile(request):
             if key[0:22] == "assimilation_criteria_":
                 if request.POST[key] == "true":
                     criteria_id = key[22:]
-                    criteria = mdl.assimilation_criteria.find_by_id(criteria_id)
+                    criteria = mdl_ref.assimilation_criteria.find_by_id(criteria_id)
                     if criteria:
                         person_assimilation_criteria = mdl.person_assimilation_criteria.PersonAssimilationCriteria()
                         person_assimilation_criteria.criteria = criteria
@@ -258,7 +260,7 @@ def profile(request):
     else:
         institution_name = None
 
-    assimilation_criteria = mdl.assimilation_criteria.find_criteria()
+    assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
     person_assimilation_criteria = mdl.person_assimilation_criteria.find_by_person(applicant.id)
 
     return render(request, "profile.html", {'applicant': applicant,

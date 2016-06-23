@@ -33,7 +33,7 @@ class PersonAssimilationCriteriaAdmin(admin.ModelAdmin):
 
 class PersonAssimilationCriteria(models.Model):
     person = models.ForeignKey('Applicant')
-    criteria = models.ForeignKey('AssimilationCriteria')
+    criteria = models.ForeignKey('reference.AssimilationCriteria')
 
 
 def find_by_person(a_person):

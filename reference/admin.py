@@ -30,6 +30,9 @@ from django.contrib import admin
 admin.site.register(admission_exam_type.AdmissionExamType,
                     admission_exam_type.AdmissionExamTypeAdmin)
 
+admin.site.register(assimilation_criteria.AssimilationCriteria,
+                    assimilation_criteria.AssimilationCriteriaAdmin)
+
 admin.site.register(country.Country,
                     country.CountryAdmin)
 
