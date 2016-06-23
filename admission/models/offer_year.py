@@ -25,7 +25,6 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-from admission.models import offer_year_calendar
 
 
 class OfferYearAdmin(admin.ModelAdmin):
@@ -45,11 +44,6 @@ class OfferYear(models.Model):
 
     def __str__(self):
         return u"%s - %s" % (self.academic_year, self.acronym)
-
-    @property
-    def offer_year_calendar(self):
-        #Should only be one record
-        return offer_year_calendar.OfferYearCalendar.objects.filter(offer_year=self).order_by("start_date").first()
 
 
 def find_by_id(offer_year_id):

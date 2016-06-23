@@ -33,7 +33,6 @@ from admission.models import form
 from admission.models import grade_type
 from admission.models import message_template
 from admission.models import offer_year
-from admission.models import offer_year_calendar
 from admission.models import option
 from admission.models import applicant
 from admission.models import person_address
