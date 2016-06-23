@@ -26,19 +26,19 @@
 import uuid
 from random import randint
 
-from django.shortcuts import render, get_object_or_404
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
 from django.contrib.auth.views import login
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+from django.utils.translation import ugettext_lazy as _
 
 from admission import models as mdl
-from admission.forms import NewAccountForm, AccountForm, NewPasswordForm, AccessAccountForm
+from reference import models as reference_mdl
+from admission.forms import NewAccountForm, NewPasswordForm, AccessAccountForm
 from admission.utils import send_mail
-from django.contrib.auth import authenticate
-from django.utils.translation import ugettext_lazy as _
-from reference import models as mdlref
 
 
 def home_error(request, message, form):
@@ -271,9 +271,9 @@ def login_admission_error(request, *args, **kwargs):
 def offer_selection(request):
     offers = None
     application = mdl.application.find_by_user(request.user)
-    grade_choices = mdl.grade_type.GRADE_CHOICES
+    grade_choices = reference_mdl.grade_type.GRADE_CHOICES
     return render(request, "offer_selection.html",
-                          {"gradetypes":    mdl.grade_type.find_all(),
+                          {"gradetypes":    reference_mdl.grade_type.find_all(),
                            "domains":       mdl.domain.find_all_domains(),
                            "offers":        offers,
                            "offer":         None,
@@ -291,7 +291,7 @@ def _get_offer_type(request):
     if request.POST.get('doctorate_type'):
         offer_type = request.POST['doctorate_type']
     if offer_type:
-        return get_object_or_404(mdl.grade_type.GradeType, pk=offer_type)
+        return get_object_or_404(reference_mdl.grade_type.GradeType, pk=offer_type)
     return None
 
 
@@ -329,7 +329,7 @@ def save_offer_selection(request):
         application.save()
 
     return render(request, "offer_selection.html",
-                  {"gradetypes": mdl.grade_type.find_all(),
+                  {"gradetypes": reference_mdl.grade_type.find_all(),
                    "domains": mdl.domain.find_all_domains(),
                    "offers": None,
                    "offer_type": None,
@@ -350,7 +350,7 @@ def selection_offer(request, offer_id):
     domain = _get_domain(request)
 
     return render(request, "offer_selection.html",
-                  {"gradetypes": mdl.grade_type.find_all(),
+                  {"gradetypes": reference_mdl.grade_type.find_all(),
                    "domains": mdl.domain.find_all_domains(),
                    "offers": None,
                    "offer": offer_year,

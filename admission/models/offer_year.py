@@ -39,7 +39,7 @@ class OfferYear(models.Model):
     title = models.CharField(max_length=255)
     title_international = models.CharField(max_length=255, blank=True, null=True)
     domain = models.ForeignKey('Domain')
-    grade_type = models.ForeignKey('GradeType', blank=True, null=True, db_index=True)
+    grade_type = models.ForeignKey('reference.GradeType', blank=True, null=True, db_index=True)
     subject_to_quota = models.BooleanField(default=False)
 
     def __str__(self):

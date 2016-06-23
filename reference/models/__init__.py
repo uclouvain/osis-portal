@@ -27,4 +27,5 @@ from reference.models import admission_exam_type
 from reference.models import country
 from reference.models import education_institution
 from reference.models import education_type
+from reference.models import grade_type
 from reference.models import language

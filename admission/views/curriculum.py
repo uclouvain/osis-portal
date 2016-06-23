@@ -23,16 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission import models as mdl
-from django.shortcuts import render
-from reference import models as mdl_reference
-from admission.views import common
-
-from functools import cmp_to_key
 import locale
-from django.utils.translation import ugettext_lazy as _
+from functools import cmp_to_key
+
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.utils.translation import ugettext_lazy as _
+
+from admission import models as mdl
+from admission.views import common
+from reference import models as mdl_reference
 
 
 def save(request):
@@ -86,7 +87,7 @@ def save(request):
                            "local_universities_dutch": local_universities_dutch,
                            "domains": mdl.domain.find_all_domains(),
                            "subdomains": mdl.domain.find_all_subdomains(),
-                           "grade_types": mdl.grade_type.find_all(),
+                           "grade_types": mdl_reference.grade_type.find_all(),
                            "validation_messages": validation_messages,
                            "message_success": message_success,
                            "universities_cities": universities_cities,
@@ -124,7 +125,7 @@ def save(request):
                                                "local_universities_dutch": local_universities_dutch,
                                                "domains": mdl.domain.find_all_domains(),
                                                "subdomains": mdl.domain.find_all_subdomains(),
-                                               "grade_types": mdl.grade_type.find_all(),
+                                               "grade_types": mdl_reference.grade_type.find_all(),
                                                "universities_countries": mdl_reference.education_institution.find_countries(),
                                                "validation_messages": validation_messages,
                                                "message_success": message_success,
@@ -185,7 +186,7 @@ def update(request):
                        "local_universities_dutch": local_universities_dutch,
                        "domains": mdl.domain.find_all_domains(),
                        "subdomains": mdl.domain.find_all_subdomains(),
-                       "grade_types": mdl.grade_type.find_all(),
+                       "grade_types": mdl_reference.grade_type.find_all(),
                        "universities_countries": mdl_reference.education_institution.find_countries(),
                        "universities_cities": universities_cities,
                        "universities": universities,
@@ -346,7 +347,7 @@ def validate_belgian_fields_form(curriculum, curriculum_year, validation_message
             validation_messages['grade_type_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
         else:
-            grade_type = mdl.grade_type.find_by_id(int(data_dict['grade_type']))
+            grade_type = mdl_reference.grade_type.find_by_id(int(data_dict['grade_type']))
             curriculum.grade_type = grade_type
         if data_dict['result_national'] is None \
                 and (curriculum.academic_year.year < 2014 or
@@ -602,7 +603,7 @@ def validate_foreign_university_fields_form(curriculum,
         validation_messages['grade_type_foreign_%s' % curriculum_year] = _('mandatory_field')
         is_valid = False
     else:
-        grade_type = mdl.grade_type.find_by_id(int(data_dict['grade_type_foreign']))
+        grade_type = mdl_reference.grade_type.find_by_id(int(data_dict['grade_type_foreign']))
         curriculum.grade_type = grade_type
 
     if data_dict['diploma_title']:

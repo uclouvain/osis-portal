@@ -26,9 +26,22 @@
 from reference.models import *
 from django.contrib import admin
 
-admin.site.register(country.Country, country.CountryAdmin)
-admin.site.register(language.Language, language.LanguageAdmin)
-admin.site.register(admission_exam_type.AdmissionExamType, admission_exam_type.AdmissionExamTypeAdmin)
-admin.site.register(education_institution.EducationInstitution, education_institution.EducationInstitutionAdmin)
-admin.site.register(education_type.EducationType,education_type.EducationTypeAdmin)
+
+admin.site.register(admission_exam_type.AdmissionExamType,
+                    admission_exam_type.AdmissionExamTypeAdmin)
+
+admin.site.register(country.Country,
+                    country.CountryAdmin)
+
+admin.site.register(education_institution.EducationInstitution,
+                    education_institution.EducationInstitutionAdmin)
+
+admin.site.register(education_type.EducationType,
+                    education_type.EducationTypeAdmin)
+
+admin.site.register(grade_type.GradeType,
+                    grade_type.GradeTypeAdmin)
+
+admin.site.register(language.Language,
+                    language.LanguageAdmin)
 

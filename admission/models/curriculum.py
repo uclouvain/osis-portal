@@ -76,7 +76,7 @@ class Curriculum(models.Model):
     national_institution = models.ForeignKey('reference.EducationInstitution', blank=True, null=True)
     domain = models.ForeignKey('Domain', blank=True, null=True, related_name='Curriculum_domain')
     sub_domain = models.ForeignKey('Domain', blank=True, null=True, related_name='Curriculum_sub_domain')
-    grade_type = models.ForeignKey('GradeType', blank=True, null=True)
+    grade_type = models.ForeignKey('reference.GradeType', blank=True, null=True)
     grade_type_no_university = models.CharField(max_length=25, choices=GRADE_TYPE_NO_UNIVERSITY, blank=True, null=True)
     result = models.CharField(max_length=20, choices=RESULT_TYPE, blank=True, null=True)
     credits_enrolled = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)

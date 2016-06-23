@@ -23,11 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from rest_framework import serializers
-from admission import models as mdl
-from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
+from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
+
+from admission import models as mdl
+from reference import models as reference_mdl
 
 
 class JSONResponse(HttpResponse):
@@ -61,9 +63,9 @@ def find_by_id(request):
 def offer_selection(request):
     offers = None
     application = mdl.application.find_by_user(request.user)
-    grade_choices = mdl.grade_type.GRADE_CHOICES
+    grade_choices = reference_mdl.grade_type.GRADE_CHOICES
     return render(request, "offer_selection.html",
-                          {"gradetypes":  mdl.grade_type.find_all(),
+                          {"gradetypes":  reference_mdl.grade_type.find_all(),
                            "domains":     mdl.domain.find_all_domains(),
                            "offers":      offers,
                            "offer":       None,
@@ -81,7 +83,7 @@ def _get_offer_type(request):
     if request.POST.get('doctorate_type'):
         offer_type = request.POST['doctorate_type']
     if offer_type:
-        return get_object_or_404(mdl.grade_type.GradeType, pk=offer_type)
+        return get_object_or_404(reference_mdl.grade_type.GradeType, pk=offer_type)
     return None
 
 
@@ -99,7 +101,7 @@ def selection_offer(request, offer_id):
     domain = _get_domain(request)
 
     return render(request, "offer_selection.html",
-                           {"gradetypes":  mdl.grade_type.find_all(),
+                           {"gradetypes":  reference_mdl.grade_type.find_all(),
                             "domains":     mdl.domain.find_all_domains(),
                             "offers":      None,
                             "offer":       offer_year,

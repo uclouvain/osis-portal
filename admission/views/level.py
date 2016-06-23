@@ -23,11 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from rest_framework import serializers
-from admission import models as mdl
+from reference import models as reference_mdl
 from django.http import HttpResponse
+from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
-from django.views.decorators.csrf import csrf_exempt
 
 
 class JSONResponse(HttpResponse):
@@ -39,14 +38,14 @@ class JSONResponse(HttpResponse):
 
 class LevelSerializer(serializers.ModelSerializer):
     class Meta:
-        model = mdl.grade_type.GradeType
+        model = reference_mdl.grade_type.GradeType
         fields = ('id', 'name', 'grade')
 
 
 def find_by_type(request):
     type = request.GET['type']
 
-    levels = mdl.grade_type.find_by_grade(type)
+    levels = reference_mdl.grade_type.find_by_grade(type)
     serializer = LevelSerializer(levels, many=True)
 
     return JSONResponse(serializer.data)

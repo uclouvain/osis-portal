@@ -24,14 +24,12 @@
 #
 ##############################################################################
 from django.contrib import admin
+
 from admission.models import *
 from admission.models import assimilation_criteria, person_assimilation_criteria
 
 admin.site.register(applicant.Applicant,
                     applicant.ApplicantAdmin)
-
-admin.site.register(grade_type.GradeType,
-                    grade_type.GradeTypeAdmin)
 
 admin.site.register(domain.Domain,
                     domain.DomainAdmin)
@@ -41,9 +39,6 @@ admin.site.register(academic_year.AcademicYear,
 
 admin.site.register(offer_year.OfferYear,
                     offer_year.OfferYearAdmin)
-
-admin.site.register(offer_year_calendar.OfferYearCalendar,
-                    offer_year_calendar.OfferYearCalendarAdmin)
 
 admin.site.register(application.Application,
                     application.ApplicationAdmin)
