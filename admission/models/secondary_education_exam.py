@@ -26,7 +26,6 @@
 from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-from admission.models import form
 
 
 class SecondaryEducationExamAdmin(admin.ModelAdmin):
@@ -47,7 +46,7 @@ class SecondaryEducationExam(models.Model):
                   ('PROFESSIONAL', _('professional')))
 
     secondary_education = models.ForeignKey('SecondaryEducation')
-    admission_exam_type = models.ForeignKey('reference.AdmissionExamType')
+    admission_exam_type = models.ForeignKey('AdmissionExamType')
     type = models.CharField(max_length=20, choices=EXAM_TYPES)
     exam_date = models.DateField(blank=True, null=True)
     institution = models.CharField(max_length=100, blank=True, null=True)

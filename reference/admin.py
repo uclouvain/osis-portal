@@ -27,9 +27,6 @@ from reference.models import *
 from django.contrib import admin
 
 
-admin.site.register(admission_exam_type.AdmissionExamType,
-                    admission_exam_type.AdmissionExamTypeAdmin)
-
 admin.site.register(assimilation_criteria.AssimilationCriteria,
                     assimilation_criteria.AssimilationCriteriaAdmin)
 

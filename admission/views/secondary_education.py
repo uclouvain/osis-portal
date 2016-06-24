@@ -23,14 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission import models as mdl
-from django.shortcuts import render, get_object_or_404
-from reference import models as mdl_reference
-
 from datetime import datetime
-from admission.views.common import home
+
+from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 
+from admission import models as mdl
+from admission.views.common import home
+from reference import models as mdl_reference
 
 ALERT_MANDATORY_FIELD = _('mandatory_field')
 
@@ -238,7 +238,7 @@ def get_secondary_education_exams_data(secondary_education):
 
 
 def curriculum_save(request, application_id):
-    exam_types = mdl_reference.admission_exam_type.find_all_by_adhoc(False)
+    exam_types = mdl.admission_exam_type.find_all_by_adhoc(False)
 
     local_language_exam_link = mdl.properties.find_by_key('PROFESSIONAL_EXAM_LINK')
     professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
@@ -288,7 +288,7 @@ def diploma_save(request):
     application = mdl.application.find_first_by_user(request.user)
     other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
     recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
-    exam_types = mdl_reference.admission_exam_type.find_all_by_adhoc(False)
+    exam_types = mdl.admission_exam_type.find_all_by_adhoc(False)
     applicant = mdl.applicant.find_by_user(request.user)
     secondary_education = mdl.secondary_education.find_by_person(applicant)
 
@@ -348,7 +348,7 @@ def diploma_update(request):
     applicant = mdl.applicant.find_by_user(request.user)
     other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
     recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
-    exam_types = mdl_reference.admission_exam_type.find_all_by_adhoc(False)
+    exam_types = mdl.admission_exam_type.find_all_by_adhoc(False)
     secondary_education = mdl.secondary_education.find_by_person(applicant)
     education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
     education_type_qualification = mdl_reference.education_type.find_education_type_by_adhoc('QUALIFICATION', False)
@@ -488,18 +488,18 @@ def validate_admission_exam(request, is_valid, validation_messages, secondary_ed
                         validation_messages['admission_exam_type'] = "Pour autre examen il faut préciser"
                         is_valid = False
                     else:
-                        new_admission_exam_type = mdl_reference.admission_exam_type.AdmissionExamType()
+                        new_admission_exam_type = mdl.admission_exam_type.AdmissionExamType()
                         new_admission_exam_type.adhoc = True
                         new_admission_exam_type.name = request.POST.get('admission_exam_type_other')
                         admission_exam.admission_exam_type = new_admission_exam_type
 
                 if request.POST.get('chb_admission_exam_type_other') == "on":
-                    new_admission_exam_type = mdl_reference.admission_exam_type.AdmissionExamType()
+                    new_admission_exam_type = mdl.admission_exam_type.AdmissionExamType()
                     new_admission_exam_type.adhoc = True
                     new_admission_exam_type.name = request.POST.get('admission_exam_type_other')
                     admission_exam.admission_exam_type = new_admission_exam_type
                 else:
-                    admission_exam_type_existing = mdl_reference.admission_exam_type\
+                    admission_exam_type_existing = mdl.admission_exam_type \
                         .find_by_id(int(request.POST.get('admission_exam_type')))
                     admission_exam.admission_exam_type = admission_exam_type_existing
 

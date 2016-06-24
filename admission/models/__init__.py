@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from admission.models import academic_year
+from admission.models import admission_exam_type
 from admission.models import answer
 from admission.models import applicant
 from admission.models import application

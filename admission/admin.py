@@ -28,6 +28,9 @@ from django.contrib import admin
 from admission.models import *
 from admission.models import person_assimilation_criteria
 
+admin.site.register(admission_exam_type.AdmissionExamType,
+                    admission_exam_type.AdmissionExamTypeAdmin)
+
 admin.site.register(applicant.Applicant,
                     applicant.ApplicantAdmin)
 
