@@ -72,22 +72,6 @@ class SecondaryEducation(models.Model):
     international_diploma_country = models.ForeignKey('reference.Country', blank=True, null=True)
     international_diploma_language = models.ForeignKey('reference.Language', blank=True, null=True)
     international_equivalence = models.CharField(max_length=20, choices=EQUIVALENCE_TYPE, blank=True, null=True)
-    admission_exam = models.NullBooleanField(default=False)
-    admission_exam_date = models.DateField(blank=True, null=True)
-    admission_exam_institution = models.CharField(max_length=100, blank=True, null=True)
-    admission_exam_type = models.ForeignKey('reference.AdmissionExamType', blank=True, null=True)
-    admission_exam_result = models.CharField(max_length=20, choices=RESULT_TYPE, blank=True, null=True)
-    professional_exam = models.NullBooleanField(default=False)
-    professional_exam_date = models.DateField(blank=True, null=True)
-    professional_exam_institution = models.CharField(max_length=100, blank=True, null=True)
-    professional_exam_result = models.CharField(max_length=20, choices=RESULT_TYPE, blank=True, null=True)
-    local_language_exam = models.NullBooleanField(default=False)
-    local_language_exam_date = models.DateField(blank=True, null=True)
-    local_language_exam_institution = models.CharField(max_length=100, blank=True, null=True)
-    local_language_exam_result = models.CharField(max_length=25,
-                                                  choices=LOCAL_LANGUAGE_EXAM_RESULT_TYPE,
-                                                  blank=True,
-                                                  null=True)
 
 
 def find_by_person(a_person):

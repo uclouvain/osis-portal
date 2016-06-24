@@ -33,7 +33,7 @@
                 {% trans 'vae_information' %} : <a href="https://www.uclouvain.be/vae.html">{{local_language_exam_link.value}}</a>
             {%endif%}
         <div id="pnl_professional_experience_detail"
-             style="{% if secondary_education.professional_exam = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+             style="{% if professional_exam == True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
             <div class="form-inline">
                 <br>
                 <label>{% trans 'question_date_session'%} *</label>
@@ -62,20 +62,20 @@
                      name="professional_exam_result"
                      id="rdb_professional_exam_result_result_low"
                      value="LOW"
-                     {%if secondary_education.professional_exam_result = 'LOW' %}checked{%endif%}> {% trans 'low_result' %}
+                     {%if professional_exam.result = 'LOW' %}checked{%endif%}> {% trans 'low_result' %}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="professional_exam_result"
                      id="rdb_professional_exam_result_middle"
                      value="MIDDLE"
-                     {%if secondary_education.professional_exam_result = 'MIDDLE'%}checked{%endif%}> {% trans 'middle_result' %}
+                     {%if professional_exam.result = 'MIDDLE'%}checked{%endif%}> {% trans 'middle_result' %}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="professional_exam_result"
                      id="rdb_professional_exam_result_high" value="HIGH"
-                     {%if secondary_education.professional_exam_result = 'HIGH' %}checked{%endif%}> {% trans 'high_result' %}
+                     {%if professional_exam.result = 'HIGH' %}checked{%endif%}> {% trans 'high_result' %}
             </label>
             <br>
             {%if validation_messages and validation_messages|get_item:'professional_exam_result'%}

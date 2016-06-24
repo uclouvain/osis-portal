@@ -1012,6 +1012,15 @@ msgstr "Holder's name of the bank account"
 msgid "general_notice"
 msgstr "Notice  : "
 
+msgid "admission"
+msgstr "Admission"
+
+msgid "language"
+msgstr "Language"
+
+msgid "professional"
+msgstr "Professional"
+
 msgid "general_reduction_notice"
 msgstr ""
  "d'autres types de réduction existent à l'UCL.  Elles nécessitent l'introduction d'un dossier particulier.  "
