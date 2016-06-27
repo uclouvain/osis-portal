@@ -1012,9 +1012,6 @@ msgstr "Holder's name of the bank account"
 msgid "general_notice"
 msgstr "Notice  : "
 
-msgid "admission"
-msgstr "Admission"
-
 msgid "language"
 msgstr "Language"
 

@@ -70,11 +70,6 @@ def save_application_offer(request):
 
         if offer_year_id:
             offer_year = mdl.offer_year.find_by_id(offer_year_id)
-            if offer_year.grade_type:
-                if offer_year.grade_type.grade == 'DOCTORATE':
-                    application.doctorate = True
-                else:
-                    application.doctorate = False
 
         application.offer_year = offer_year
 

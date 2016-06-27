@@ -1021,9 +1021,6 @@ msgstr "Nom du titulaire du compte"
 msgid "general_notice"
 msgstr "Remarque générale : "
 
-msgid "admission"
-msgstr "Admission"
-
 msgid "language"
 msgstr "Langue"
 
