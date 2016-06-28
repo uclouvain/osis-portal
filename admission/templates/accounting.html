@@ -243,17 +243,17 @@
             <br>
             <label class="radio-inline">
               <input type="radio"
-                     name="solidary_membership"
-                     id="rdb_solidary_membership_true"
+                     name="solidarity_membership"
+                     id="rdb_solidarity_membership_true"
                      value="true"
-                     {%if application.solidary_membership = True %}checked{%endif%}> {% trans 'yes'%}
+                     {%if application.solidarity_membership = True %}checked{%endif%}> {% trans 'yes'%}
             </label>
             <label class="radio-inline">
               <input type="radio"
-                     name="solidary_membership"
-                     id="rdb_solidary_membership_false"
+                     name="solidarity_membership"
+                     id="rdb_solidarity_membership_false"
                      value="false"
-                     {%if application.solidary_membership != True %}checked{%endif%}> {% trans 'no'%}
+                     {%if application.solidarity_membership != True %}checked{%endif%}> {% trans 'no'%}
             </label>
             <br>
             {% trans 'additional_info_solidarity_card'%}

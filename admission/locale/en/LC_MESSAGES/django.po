@@ -893,7 +893,7 @@ msgstr "Are you already enrolled to the same program in an institution of the Fr
 msgid "question_resident"
 msgstr "Are you resident"
 
-msgid "question_lottery_number"
+msgid "question_raffle_number"
 msgstr "Please mention the number given be the enrolment service"
 
 msgid "other_education_type"
@@ -1011,6 +1011,12 @@ msgstr "Holder's name of the bank account"
 
 msgid "general_notice"
 msgstr "Notice  : "
+
+msgid "language"
+msgstr "Language"
+
+msgid "professional"
+msgstr "Professional"
 
 msgid "general_reduction_notice"
 msgstr ""

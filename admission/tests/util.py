@@ -29,7 +29,7 @@ Utility file for Tests units
 from django.contrib.auth.models import User
 import os
 
-from base.models.person import Person
+from base.models.person import BasePerson
 
 
 ADMIN_USER = 'admin_user'
@@ -84,7 +84,7 @@ def init_all_test_users():
 
 
 def email_destination_person():
-    return Person(last_name='Test user', gender='M', email='gaetan.lamarca@uclouvain.be')
+    return BasePerson(last_name='Test user', gender='M', email='gaetan.lamarca@uclouvain.be')
 
 
 def test_if_file_starting_with_exists(starting_with, file_dir_path):

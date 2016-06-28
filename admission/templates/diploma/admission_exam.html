@@ -29,14 +29,14 @@
             </div>
         </div>
         <div id="pnl_admission_exam_detail"
-             style="{%if secondary_education.admission_exam = True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+             style="{%if admission_exam %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
             <div class="form-inline">
                 <br>
                 <label>{% trans 'question_date_session' %} *</label>
                 <input class="form-control"
                        id="txt_admission_exam_date"
                        name="admission_exam_date"
-                       value="{{secondary_education.admission_exam_date | default_if_none:''|date:"j/m/Y"}}">
+                       value="{{admission_exam.exam_date | default_if_none:''|date:"j/m/Y"}}">
                 {%if validation_messages and validation_messages|get_item:'admission_exam_date'%}
                     <br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_date'}}</font>
                 {% endif %}
@@ -77,7 +77,7 @@
                      id="chb_admission_exam_type"
                      name="chb_admission_exam_type_other"
                      onclick="reset_radio('admission_exam_type');disabled_field('txt_admission_exam_type_other', this);if(!this.checked){reset_input('txt_admission_exam_type_other')}"
-                     {% if secondary_education.admission_exam_type.adhoc  = True %}checked{%endif%}>
+                     {% if admission_exam.admission_exam_type.adhoc == True %}checked{%endif%}>
             </label>
 
                     </div>
@@ -86,11 +86,11 @@
                         <input class="form-control"
                                id="txt_admission_exam_type_other"
                                name="admission_exam_type_other"
-                               value="{% if secondary_education.admission_exam_type.adhoc = True %}{{secondary_education.admission_exam_type.name| default_if_none:''}}{%endif%}"
-                               {% if secondary_education.admission_exam_type.adhoc = False %}
+                               value="{% if admission_exam.admission_exam_type.adhoc = True %}{{admission_exam.admission_exam_type.name| default_if_none:''}}{%endif%}"
+                               {% if admission_exam.admission_exam_type.adhoc = False %}
                                         disabled
                                {%else%}
-                                    {{secondary_education.admission_exam_type | default_if_none:"disabled"}}
+                                    {{admission_exam.admission_exam_type | default_if_none:"disabled"}}
                                {%endif%}>
                     </div>
             </div>
@@ -108,21 +108,21 @@
                      name="admission_exam_result"
                      id="rdb_admission_exam_result_low"
                      value="LOW"
-                     {%if secondary_education.admission_exam_result = 'LOW' %}checked{%endif%}> {% trans 'low_result' %}
+                     {%if admission_exam.result = 'LOW' %}checked{%endif%}> {% trans 'low_result' %}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="admission_exam_result"
                      id="rdb_admission_exam_result_middle"
                      value="MIDDLE"
-                     {%if secondary_education.admission_exam_result = 'MIDDLE'%}checked{%endif%}>  {% trans 'middle_result' %}
+                     {%if admission_exam.result = 'MIDDLE'%}checked{%endif%}>  {% trans 'middle_result' %}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="admission_exam_result"
                      id="rdb_admission_exam_result_high"
                      value="HIGH"
-                     {%if secondary_education.admission_exam_result  = 'HIGH' %}checked{%endif%}>  {% trans 'high_result' %}
+                     {%if admission_exam.result  = 'HIGH' %}checked{%endif%}>  {% trans 'high_result' %}
             </label>
             <br>
             {%if validation_messages and validation_messages|get_item:'admission_exam_result'%}

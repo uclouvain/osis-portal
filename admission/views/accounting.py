@@ -93,7 +93,7 @@ def populate_application(request):
     application.scholarship_organization = None
     application.sport_membership = False
     application.culture_membership = False
-    application.solidary_membership = False
+    application.solidarity_membership = False
     application.bank_account_iban = None
     application.bank_account_bic = None
     application.bank_account_name = None
@@ -112,8 +112,8 @@ def populate_application(request):
         application.sport_membership = True
     if request.POST.get('culture_membership') == "true":
         application.culture_membership = True
-    if request.POST.get('solidary_membership') == "true":
-        application.solidary_membership = True
+    if request.POST.get('solidarity_membership') == "true":
+        application.solidarity_membership = True
     if request.POST.get('bank_account_iban'):
         application.bank_account_iban = request.POST.get('bank_account_iban')
     if request.POST.get('bank_account_bic'):
@@ -126,7 +126,7 @@ def populate_application(request):
 def debts_check(application):
     academic_yr = mdl.academic_year.current_academic_year()
     previous_academic_year = mdl.academic_year.find_by_year(academic_yr.year-1)
-    secondary_curriculum = mdl.curriculum.find_belgian_french(application.person, previous_academic_year)
+    secondary_curriculum = mdl.curriculum.find_belgian_french(application.applicant, previous_academic_year)
     if secondary_curriculum:
         return True
 

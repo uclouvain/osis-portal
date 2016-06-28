@@ -1,16 +1,42 @@
-from django.shortcuts import render, get_object_or_404
+##############################################################################
+#
+#    OSIS stands for Open Student Information System. It's an application
+#    designed to manage the core business of higher education institutions,
+#    such as universities, faculties, institutes and professional schools.
+#    The core business involves the administration of students, teachers,
+#    courses, programs and so on.
+#
+#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    A copy of this license - GNU General Public License - is available
+#    at the root of the source code of this program.  If not,
+#    see http://www.gnu.org/licenses/.
+#
+##############################################################################
+import uuid
+from random import randint
+
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.auth.views import login
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+
+from admission import models as mdl
+from reference import models as reference_mdl
 from admission.forms import NewAccountForm, AccountForm, NewPasswordForm
 from admission.utils import send_mail
-from random import randint
-from admission import models as mdl
-
-import uuid
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import login
-
 
 
 @login_required
@@ -88,11 +114,11 @@ def new_user(request):
         user.first_name = form_new['first_name_new'].value()
         user.last_name = form_new['last_name_new'].value()
         user.save()
-        person = mdl.person.Person()
-        person.user=user
-        person.save()
+        applicant = mdl.applicant.Applicant()
+        applicant.user=user
+        applicant.save()
         # send an activation email
-        send_mail.send_mail_activation(request, str(person.activation_code), form_new['email_new'].value())
+        send_mail.send_mail_activation(request, str(applicant.activation_code), form_new['email_new'].value())
         user_id = user.id
         return HttpResponseRedirect(reverse('account_confirm',  args=(user_id,)))
     else:
@@ -120,9 +146,9 @@ def activation_mail(request, user_id):
     """
     if request.method == "POST":
         user = User.objects.get(pk=user_id)
-        person = mdl.person.find_by_user(user)
-        if person:
-            send_mail.send_mail_activation(request, str(person.activation_code), user.email)
+        applicant = mdl.applicant.find_by_user(user)
+        if applicant:
+            send_mail.send_mail_activation(request, str(applicant.activation_code), user.email)
             return HttpResponseRedirect(reverse('admission'))
         else:
             return HttpResponseRedirect(reverse('admission'))
@@ -130,15 +156,15 @@ def activation_mail(request, user_id):
 
 
 def activation(request, activation_code):
-    person = mdl.person.find_by_activation_code(activation_code)
-    if person:
-        user = User.objects.get(pk=person.user.id)
-        if person and user:
+    applicant = mdl.applicant.find_by_activation_code(activation_code)
+    if applicant:
+        user = User.objects.get(pk=applicant.user.id)
+        if applicant and user:
             user.is_active = True
             user.save()
             # to avoid a double activation
-            person.activation_code = None
-            person.save()
+            applicant.activation_code = None
+            applicant.save()
             return render(request, "confirmed_account.html", {'user': user})
         else:
             return render(request, "activation_failed.html")
@@ -158,14 +184,14 @@ def new_password(request):
     try:
         user = User.objects.get(username=email)
         if user:
-            person = mdl.person.find_by_user(user)
+            applicant = mdl.applicant.find_by_user(user)
             if not user.is_active:
                 message = "Votre compte n\'a pas encore été activé"
                 return render(request, "new_password.html", {'message': message, 'form':form})
             else:
-                person.activation_code = uuid.uuid4()
-                person.save()
-                send_mail.new_password(request, str(person.activation_code), user.email)
+                applicant.activation_code = uuid.uuid4()
+                applicant.save()
+                send_mail.new_password(request, str(applicant.activation_code), user.email)
                 return HttpResponseRedirect(reverse('new_password_info'))
         else:
             message = "L'adresse email encodée ne correspond à aucun utilisateur"
@@ -177,31 +203,31 @@ def new_password(request):
 
 def new_password_form(request, code):
     form = NewPasswordForm()
-    person = mdl.person.find_by_activation_code(code)
-    if person:
+    applicant = mdl.applicant.find_by_activation_code(code)
+    if applicant:
         return render(request, "new_password_form.html",{'form':   form,
-                                                         'person_id': person.id})
+                                                         'applicant_id': applicant.id})
     else:
         return render(request, "new_password_form.html",{'form':   form,
-                                                         'person_id': None})
+                                                         'applicant_id': None})
 
 
 def set_new_password(request):
-    person_id = request.POST['person_id']
-    person = mdl.person.find_by_id(person_id)
+    applicant_id = request.POST['applicant_id']
+    applicant = mdl.applicant.find_by_id(applicant_id)
     form = NewPasswordForm(data=request.POST)
     if form.is_valid():
-        if person:
-            if person.user:
-                user = person.user
+        if applicant:
+            if applicant.user:
+                user = applicant.user
                 user.set_password(form['password_new'].value())
                 user.save()
-            person.activation_code=None
-            person.save()
+            applicant.activation_code=None
+            applicant.save()
             return render(request, "new_password_confirmed.html")
     else:
         return render(request, "new_password_form.html",{'form':   form,
-                                                         'person_id': person_id})
+                                                         'applicant_id': applicant_id})
 
 
 def account_confirm(request,user_id):
@@ -216,7 +242,7 @@ def offer_selection(request):
     offers = None
     application = mdl.application.find_by_user(request.user)
     return render(request, "offer_selection.html",
-                          {"gradetypes":  mdl.grade_type.find_all(),
+                          {"gradetypes":  reference_mdl.grade_type.find_all(),
                            "domains":     mdl.domain.find_all(),
                            "offers":      offers,
                            "offer":       None,
@@ -235,9 +261,9 @@ def refresh_offer_selection(request):
     domain_id = request.POST.get('domain')
     domain = get_object_or_404(mdl.domain.Domain, pk=domain_id)
     offers = mdl.offer_year.find_by_domain_grade(domain, offer_type)
-    grade = get_object_or_404(mdl.grade_type.GradeType, pk=offer_type)
+    grade = get_object_or_404(reference_mdl.grade_type.GradeType, pk=offer_type)
     return render(request, "offer_selection.html",
-                          {"gradetypes":  mdl.grade_type.find_all(),
+                          {"gradetypes":  reference_mdl.grade_type.find_all(),
                            "domains":     mdl.domain.find_all(),
                            "offers":      offers,
                            "offer_type":  grade,
@@ -254,7 +280,7 @@ def _get_offer_type(request):
     if request.POST.get('doctorate_type'):
         offer_type = request.POST['doctorate_type']
     if offer_type:
-        return get_object_or_404(mdl.grade_type.GradeType, pk=offer_type)
+        return get_object_or_404(reference_mdl.grade_type.GradeType, pk=offer_type)
     return None
 
 
@@ -278,23 +304,17 @@ def save_offer_selection(request):
             application = get_object_or_404(mdl.application.Application, pk=application_id)
         else:
             application = mdl.application.Application()
-            person_application = mdl.person.find_by_user(request.user)
-            application.person = person_application
-
+            applicant = mdl.applicant.find_by_user(request.user)
+            application.applicant = applicant
 
         if offer_year_id:
             offer_year = mdl.offer_year.find_by_id(offer_year_id)
-            if offer_year.grade_type:
-                if offer_year.grade_type.grade == 'DOCTORATE':
-                    application.doctorate = True
-                else:
-                    application.doctorate = False
 
         application.offer_year = offer_year
         application.save()
 
     return render(request, "offer_selection.html",
-                          {"gradetypes":  mdl.grade_type.find_all(),
+                          {"gradetypes":  reference_mdl.grade_type.find_all(),
                            "domains":     mdl.domain.find_all(),
                            "offers":      None,
                            "offer_type":  None,
@@ -308,7 +328,7 @@ def selection_offer(request, offer_id):
 
 
     return render(request, "offer_selection.html",
-                          {"gradetypes":  mdl.grade_type.find_all(),
+                          {"gradetypes":  reference_mdl.grade_type.find_all(),
                            "domains":     mdl.domain.find_all(),
                            "offers":      None,
                            "offer":       offer_year,

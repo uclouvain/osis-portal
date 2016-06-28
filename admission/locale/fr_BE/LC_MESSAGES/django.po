@@ -901,7 +901,7 @@ msgstr "Etes-vous déjà inscrit au même programme dans un établissement de la
 msgid "question_resident"
 msgstr "Etes-vous resident"
 
-msgid "question_lottery_number"
+msgid "question_raffle_number"
 msgstr "Veuillez indiquer le numéro que le service des inscriptions vous a fourni"
 
 msgid "other_education_type"
@@ -1020,6 +1020,12 @@ msgstr "Nom du titulaire du compte"
 
 msgid "general_notice"
 msgstr "Remarque générale : "
+
+msgid "language"
+msgstr "Langue"
+
+msgid "professional"
+msgstr "Professionel"
 
 msgid "general_reduction_notice"
 msgstr ""

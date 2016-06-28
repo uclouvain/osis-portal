@@ -32,8 +32,8 @@ class PersonAssimilationCriteriaAdmin(admin.ModelAdmin):
 
 
 class PersonAssimilationCriteria(models.Model):
-    person = models.ForeignKey('Person')
-    criteria = models.ForeignKey('AssimilationCriteria')
+    person = models.ForeignKey('Applicant')
+    criteria = models.ForeignKey('reference.AssimilationCriteria')
 
 
 def find_by_person(a_person):

@@ -23,17 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission import models as mdl
-from django.shortcuts import render, get_object_or_404
-from reference import models as mdl_reference
-
-from datetime import datetime
-from functools import cmp_to_key
 import locale
-from django.utils.translation import ugettext_lazy as _
-import string
+from functools import cmp_to_key
+
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.utils.translation import ugettext_lazy as _
+
+from admission import models as mdl
+from admission.views import common
+from reference import models as mdl_reference
 
 
 def save(request):
@@ -87,7 +87,7 @@ def save(request):
                            "local_universities_dutch": local_universities_dutch,
                            "domains": mdl.domain.find_all_domains(),
                            "subdomains": mdl.domain.find_all_subdomains(),
-                           "grade_types": mdl.grade_type.find_all(),
+                           "grade_types": mdl_reference.grade_type.find_all(),
                            "validation_messages": validation_messages,
                            "message_success": message_success,
                            "universities_cities": universities_cities,
@@ -96,11 +96,11 @@ def save(request):
                            "current_academic_year": mdl.academic_year.current_academic_year()})
 
     # Get the data in bd
-    a_person = mdl.person.find_by_user(request.user)
+    applicant = mdl.applicant.find_by_user(request.user)
     first_academic_year_for_cv = None
     curricula = []
     # find existing cv
-    secondary_education = mdl.secondary_education.find_by_person(a_person)
+    secondary_education = mdl.secondary_education.find_by_person(applicant)
     if secondary_education:
         if secondary_education.academic_year:
             first_academic_year_for_cv = secondary_education.academic_year.year + 1
@@ -115,19 +115,18 @@ def save(request):
         if curriculum is None:
             # add cv empty cv's for the year if it's needed
             curriculum = mdl.curriculum.Curriculum()
-            curriculum.person = a_person
+            curriculum.person = applicant
             curriculum.academic_year = academic_year
         curricula.append(curriculum)
-        year = year + 1
+        year += 1
 
     return render(request, "curriculum.html", {"curricula": curricula,
                                                "local_universities_french": local_universities_french,
                                                "local_universities_dutch": local_universities_dutch,
                                                "domains": mdl.domain.find_all_domains(),
                                                "subdomains": mdl.domain.find_all_subdomains(),
-                                               "grade_types": mdl.grade_type.find_all(),
-                                               "universities_countries": mdl_reference.education_institution
-                  .find_countries(),
+                                               "grade_types": mdl_reference.grade_type.find_all(),
+                                               "universities_countries": mdl_reference.education_institution.find_countries(),
                                                "validation_messages": validation_messages,
                                                "message_success": message_success,
                                                "universities_cities": universities_cities,
@@ -139,21 +138,21 @@ def save(request):
 def update(request):
     curricula = []
     message = None
-    a_person = mdl.person.find_by_user(request.user)
-    secondary_education = mdl.secondary_education.find_by_person(a_person)
+    applicant = mdl.applicant.find_by_user(request.user)
+    secondary_education = mdl.secondary_education.find_by_person(applicant)
     current_academic_year = mdl.academic_year.current_academic_year().year
-    admission = is_admission(a_person, secondary_education)
+    admission = is_admission(applicant, secondary_education)
     year_secondary = None
     year = current_academic_year - 5
     if secondary_education is None:
         applications = mdl.application.find_by_user(request.user)
         return render(request, "home.html",
                       {'applications': applications, 'message_warning': _('msg_warning_curriculum')})
-    if secondary_education and secondary_education.secondary_education_diploma is True:
+    if secondary_education and secondary_education.diploma is True:
         year_secondary = secondary_education.academic_year.year
 
     if admission:
-        if secondary_education and secondary_education.secondary_education_diploma is True:
+        if secondary_education and secondary_education.diploma is True:
             year = secondary_education.academic_year.year + 1
 
     if year_secondary and year < year_secondary:
@@ -167,7 +166,7 @@ def update(request):
             if curriculum is None:
                 # add cv empty cv's for the year if it's needed
                 curriculum = mdl.curriculum.Curriculum()
-                curriculum.person = a_person
+                curriculum.person = applicant
                 curriculum.academic_year = academic_year
             curricula.append(curriculum)
         year = year + 1
@@ -178,7 +177,7 @@ def update(request):
         .find_by_institution_type_national_community('UNIVERSITY', 'DUTCH', False)
 
     if message:
-        return home(request)
+        return common.home(request)
     else:
         universities_cities, universities = populate_dropdown_list(curricula)
         return render(request, "curriculum.html",
@@ -187,7 +186,7 @@ def update(request):
                        "local_universities_dutch": local_universities_dutch,
                        "domains": mdl.domain.find_all_domains(),
                        "subdomains": mdl.domain.find_all_subdomains(),
-                       "grade_types": mdl.grade_type.find_all(),
+                       "grade_types": mdl_reference.grade_type.find_all(),
                        "universities_countries": mdl_reference.education_institution.find_countries(),
                        "universities_cities": universities_cities,
                        "universities": universities,
@@ -202,7 +201,7 @@ def validate_fields_form(request, duplicate_year_origin):
     universities_cities = []
     universities = []
     validation_messages = {}
-    a_person = mdl.person.find_by_user(request.user)
+    applicant = mdl.applicant.find_by_user(request.user)
     names = [v for k, v in request.POST.items() if k.startswith('curriculum_year_')]
     # to keep the order of the cv from the oldest to the more recent
     names = sorted(names, key=cmp_to_key(locale.strcoll))
@@ -225,11 +224,11 @@ def validate_fields_form(request, duplicate_year_origin):
 
         # No need to validate the curriculum of the year which is going to be duplicated
         academic_year = mdl.academic_year.find_by_year(curriculum_year)
-        curriculum = mdl.curriculum.find_by_person_year(a_person, int(curriculum_year))
+        curriculum = mdl.curriculum.find_by_person_year(applicant, int(curriculum_year))
 
         if curriculum is None:
             curriculum = mdl.curriculum.Curriculum()
-            curriculum.person = a_person
+            curriculum.person = applicant
             curriculum.academic_year = academic_year
         # default
         curriculum.path_type = None
@@ -287,8 +286,8 @@ def validate_fields_form(request, duplicate_year_origin):
     return is_valid, validation_messages, curricula, universities_cities, universities, duplication_possible
 
 
-def is_admission(a_person, secondary_education):
-    if a_person.nationality.european_union:
+def is_admission(applicant, secondary_education):
+    if applicant.nationality.european_union:
         if secondary_education and secondary_education.national is True:
             return False
     return True
@@ -348,7 +347,7 @@ def validate_belgian_fields_form(curriculum, curriculum_year, validation_message
             validation_messages['grade_type_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
         else:
-            grade_type = mdl.grade_type.find_by_id(int(data_dict['grade_type']))
+            grade_type = mdl_reference.grade_type.find_by_id(int(data_dict['grade_type']))
             curriculum.grade_type = grade_type
         if data_dict['result_national'] is None \
                 and (curriculum.academic_year.year < 2014 or
@@ -604,7 +603,7 @@ def validate_foreign_university_fields_form(curriculum,
         validation_messages['grade_type_foreign_%s' % curriculum_year] = _('mandatory_field')
         is_valid = False
     else:
-        grade_type = mdl.grade_type.find_by_id(int(data_dict['grade_type_foreign']))
+        grade_type = mdl_reference.grade_type.find_by_id(int(data_dict['grade_type_foreign']))
         curriculum.grade_type = grade_type
 
     if data_dict['diploma_title']:
