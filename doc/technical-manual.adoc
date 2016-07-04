@@ -205,7 +205,8 @@ the libraries used by Python to connect to CouchBase:
     $ sudo dpkg -i libcouchbase-dev_2.5.7-1_amd64.deb
 
 The following buckets should be created:
-  - score_encoding
+
+- score_encoding
 
 [[installing-django]]
 === Installing and Configuring Django
