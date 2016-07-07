@@ -29,7 +29,6 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 
-# TODO check if student
 @login_required
 def home(request):
     return render(request, "performance_home.html")
