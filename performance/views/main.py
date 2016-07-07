@@ -26,9 +26,11 @@
 ############################################################################
 
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from base.models.student import is_student
 
 
 @login_required
+@user_passes_test(is_student)
 def home(request):
     return render(request, "performance_home.html")
