@@ -27,5 +27,5 @@ from base.models import *
 from django.contrib import admin
 
 
-admin.site.register(person.BasePerson,
+admin.site.register(person.Person,
                     person.BasePersonAdmin)

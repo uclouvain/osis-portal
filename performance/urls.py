@@ -27,5 +27,5 @@ from django.conf.urls import url
 from performance.views import main
 
 urlpatterns = [
-    url(r'^$', main.home),
+    url(r'^$', main.home, name='performance_home'),
 ]

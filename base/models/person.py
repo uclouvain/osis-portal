@@ -40,7 +40,7 @@ class BasePersonAdmin(admin.ModelAdmin):
     raw_id_fields = ('user',)
 
 
-class BasePerson(models.Model):
+class Person(models.Model):
     GENDER_CHOICES = (
         ('F', _('female')),
         ('M', _('male')),
@@ -80,20 +80,20 @@ class BasePerson(models.Model):
 
 
 def find_by_id(person_id):
-    return BasePerson.objects.get(id=person_id)
+    return Person.objects.get(id=person_id)
 
 
 def find_by_user(user):
-    person = BasePerson.objects.filter(user=user).first()
+    person = Person.objects.filter(user=user).first()
     return person
 
 
 def change_language(user, new_language):
     if new_language:
-        person = BasePerson.objects.get(user=user)
+        person = Person.objects.get(user=user)
         person.language = new_language
         person.save()
 
 
 def find_by_global_id(global_id):
-    return BasePerson.objects.filter(global_id=global_id).first()
+    return Person.objects.filter(global_id=global_id).first()
