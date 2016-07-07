@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib.auth.models import Group
 from django.db import models
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
@@ -31,7 +30,7 @@ from base.models import person as model_person
 
 
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ('person', 'registration_id', 'changed')
+    list_display = ('person', 'registration_id')
     fieldsets = ((None, {'fields': ('registration_id', 'person')}),)
     raw_id_fields = ('person', )
     search_fields = ['person__first_name', 'person__last_name']

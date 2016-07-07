@@ -41,6 +41,7 @@
                     <p>{% trans 'desc_lnk_scores_encoding' %}</p>
                 </div>
             </div>
+            {% if is_student %}
             <div class="row">
                 <div class="col-md-1"><i class="fa fa-line-chart " style="font-size: 400%; color: #6699FF;"></i></div>
                 <div class="col-md-11">
@@ -48,6 +49,7 @@
                     <p>{% trans 'desc_lnk_performance' %}</p>
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>
