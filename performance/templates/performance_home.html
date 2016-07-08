@@ -36,7 +36,23 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-        Affiche points étudiants.
+        <!-- Dropdown -->
+        <div class="dropdown pull-right">
+            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Views
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li><a href="#">Graphs</a></li>
+                <li><a href="#">Analysis</a></li>
+                <li><a href="#">Etc</a></li>
+            </ul>
+        </div>
+        <div id="div_results">
+            <script src="{% static 'js/performance.js' %}"></script>
+            <script>
+                var results = {{ results|safe }};
+                display_results( results );
+                display_summary_results(results);
+            </script>
     </div>
 </div>
 {% endblock %}
