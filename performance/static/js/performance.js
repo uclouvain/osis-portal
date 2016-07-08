@@ -3,6 +3,8 @@ function display_results(data){
     display_tab_panes(data);
 }
 
+/********************  NAVIGATION TABS *******************/
+
 function display_nav_tabs(data){
     var nav_tabs = document.createElement("UL");
     nav_tabs.id = "nav_tabs";
@@ -24,6 +26,9 @@ function display_nav_tabs(data){
     t.appendChild(a);
 }
 
+/**************** COURSES SCORE TABLE  *************/
+
+
 function display_tab_panes(data){
     var div_tab_content = document.createElement("DIV");
     div_tab_content.id = "div_tab_content";
@@ -36,8 +41,12 @@ function display_tab_panes(data){
     div_tab_panel.setAttribute("class", "tab-pane active");
     div_tab_content.appendChild(div_tab_panel);
 
+    //table of courses with results
     var table = display_table(div_tab_content);
     fill_table(data, table);
+
+    //table of summary of results
+    display_summary_results(data, div_tab_content)
 }
 
 function display_table(parent){
@@ -76,15 +85,18 @@ function fill_table(data, table){
     }
 }
 
-function display_summary_results(data){
-    var table = display_summary_table();
+/**************** SUMMARY TABLE  *************/
+
+
+function display_summary_results(data, parent){
+    var table = display_summary_table(parent);
     fill_summary_table(data, table);
 }
 
-function display_summary_table(){
+function display_summary_table(parent){
     var div_summary_results = document.createElement("DIV");
     div_summary_results.setAttribute("class", "row");
-    document.getElementById("div_results").appendChild(div_summary_results);
+    parent.appendChild(div_summary_results);
 
     var div_positionement = document.createElement("DIV");
     div_positionement.setAttribute("class", "col-md-4 col-md-offset-4");
@@ -101,6 +113,7 @@ function display_summary_table(){
     return table;
 }
 
+
 function fill_summary_table(data, table){
     fill_row_credits(data, table);
     fill_row_date_sessions(table);
@@ -108,14 +121,26 @@ function fill_summary_table(data, table){
     fill_row_mention(data, table);
 }
 
+//display the row showing total credits done this year
 function fill_row_credits(data, table){
     var table_row = table.insertRow(0);
     table_row.insertCell(0).textContent = "Crédits";
-    table_row.insertCell(1).textContent = "60";
+    table_row.insertCell(1).textContent = compute_total_credit(data).toString();
     table_row.insertCell(2).textContent = "-";
     table_row.insertCell(3).textContent = "-";
 }
 
+function compute_total_credit(data){
+    var courses = data.learning_units;
+    var total = 0.0;
+    var i;
+    for( i = 0; i < courses.length; i++){
+        total = total + courses[i].credits;
+    }
+    return total;
+}
+
+//display the row showing the dates of session
 function fill_row_date_sessions(table){
     var table_row = table.insertRow(1);
     table_row.insertCell(0).textContent = " ";
@@ -124,18 +149,30 @@ function fill_row_date_sessions(table){
     table_row.insertCell(3).textContent = "Sept";
 }
 
+//display the row showing the mean scores
 function fill_row_mean_scores(data, table){
     var table_row = table.insertRow(2);
     table_row.insertCell(0).textContent = "Moyenne";
-    table_row.insertCell(1).textContent = "-";
-    table_row.insertCell(2).textContent = "15.0";
-    table_row.insertCell(3).textContent = "-";
+    table_row.insertCell(1).textContent = compute_session_mean(data, 0).toString();
+    table_row.insertCell(2).textContent = compute_session_mean(data, 1).toString();
+    table_row.insertCell(3).textContent = compute_session_mean(data, 2).toString();
 }
 
+function compute_session_mean(data, num_session){
+    var courses = data.learning_units;
+    var total = 0.0;
+    var i;
+    for( i = 0; i < courses.length; i++){
+        total = total + courses[i].exams[num_session].score;
+    }
+    return total / i;
+}
+
+//display the row showing the mention
 function fill_row_mention(data, table){
     var table_row = table.insertRow(3);
     table_row.insertCell(0).textContent = "Mention";
     table_row.insertCell(1).textContent = "-";
-    table_row.insertCell(2).textContent = "D";
+    table_row.insertCell(2).textContent = "-";
     table_row.insertCell(3).textContent = "-";
 }
