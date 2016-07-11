@@ -25,7 +25,7 @@
 ##############################################################################
 from django.conf.urls import url
 from admission.views import application, common, identification, offer, level, question, option, country, curriculum, \
-    education_institution, language, domain, secondary_education, accounting
+    education_institution, language, domain, secondary_education, accounting, file
 from django.contrib.auth.views import logout
 
 
@@ -87,6 +87,8 @@ urlpatterns = [
 
     url(r'^admission/application/accounting/$', accounting.accounting, name='accounting'),
     url(r'^admission/application/accounting/update/$', accounting.accounting_update, name='accounting_update'),
+
+    url(r'^upload/$', file.new_file, name='new_file'),
 
 
 ]
