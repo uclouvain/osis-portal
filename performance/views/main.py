@@ -34,6 +34,12 @@ from performance import models as mdl
 @login_required
 @user_passes_test(is_student)
 def home(request):
+    """
+    Display the academic results of the student.
+    """
+
+    # Fetch the student academic results.
     stud = find_by_user(request.user)
-    document = mdl.student_scores.get_document(stud.registration_id)
+    document = mdl.student_scores.fetch_document(stud.registration_id)
+
     return render(request, "performance_home.html", {"results": document})

@@ -26,8 +26,15 @@
 from couchbase.bucket import Bucket, NotFoundError
 from django.conf import settings
 
+# Helper functions to interact (connection, fetch, upsert) with the CouchBase bucket containing
+# student academic results.
+
 
 def connect_db():
+    """
+    Connect to the bucket "bucket_name" located on the server at address "COUCHBASE_CONNECTION_STRING"
+    :return: the bucket
+    """
     bucket_name = "student_results"
     if settings.COUCHBASE_PASSWORD:
         cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name, password=settings.COUCHBASE_PASSWORD)
@@ -38,9 +45,14 @@ def connect_db():
 cb = connect_db()
 
 
-def get_document(global_id):
+def fetch_document(document_id):
+    """
+    Fetch the document having id (key) "document_id" from the bucket "cb".
+    :param document_id: The key of the document
+    :return: the document if exists, None if not.
+    """
     try:
-        return cb.get(global_id)
+        return cb.get(document_id)
     except NotFoundError:
         return None
 
