@@ -4,5 +4,8 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
+msgid "no_results"
+msgstr "No results to show."
+
 msgid "performance"
 msgstr "performance"
