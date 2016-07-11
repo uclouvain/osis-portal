@@ -12,41 +12,55 @@ function display_nav_tabs(data){
     nav_tabs.setAttribute("role", "tablist");
     document.getElementById("div_results").appendChild(nav_tabs);
 
-    var t = document.createElement("LI");
-    t.setAttribute("class", "active");
-    t.setAttribute("role", "presentation");
-    nav_tabs.appendChild(t);
+    academic_years = data.academic_years;
+    var i = 0;
+    for( i = 0; i < academic_years.length; i++){
+        var t = document.createElement("LI");
+        if (i == 0){
+            t.setAttribute("class", "active");
+        }
+        t.setAttribute("role", "presentation");
+        nav_tabs.appendChild(t);
 
-    var a = document.createElement("A");
-    a.setAttribute("href", "#ma1");
-    a.setAttribute("aria-controls", "home");
-    a.setAttribute("role", "tab");
-    a.setAttribute("data-toggle", "tab");
-    a.textContent = data.programme;
-    t.appendChild(a);
+        var a = document.createElement("A");
+        a.setAttribute("href", "#year"+i.toString());
+        a.setAttribute("aria-controls", "year"+i.toString());
+        a.setAttribute("role", "tab");
+        a.setAttribute("data-toggle", "tab");
+        a.textContent = academic_years[i].programme;
+        t.appendChild(a);
+    }
 }
 
 /**************** COURSES SCORE TABLE  *************/
 
 
 function display_tab_panes(data){
+    academic_years = data.academic_years;
+
     var div_tab_content = document.createElement("DIV");
     div_tab_content.id = "div_tab_content";
     div_tab_content.setAttribute("class", "tab-content");
     document.getElementById("div_results").appendChild(div_tab_content);
 
-    var div_tab_panel = document.createElement("DIV");
-    div_tab_panel.id = "ma1";
-    div_tab_panel.setAttribute("role", "tabpanel");
-    div_tab_panel.setAttribute("class", "tab-pane active");
-    div_tab_content.appendChild(div_tab_panel);
+    var i = 0;
+    for(i = 0; i < academic_years.length; i++){
+        var div_tab_panel = document.createElement("DIV");
+        div_tab_panel.id = "year"+i.toString();
+        div_tab_panel.setAttribute("role", "tabpanel");
+        div_tab_panel.setAttribute("class", "tab-pane");
+        if(i == 0){
+            div_tab_panel.setAttribute("class", "tab-pane active");
+        }
+        div_tab_content.appendChild(div_tab_panel);
 
-    //table of courses with results
-    var table = display_table(div_tab_content);
-    fill_table(data, table);
+        //table of courses with results
+        var table = display_table(div_tab_panel);
+        fill_table(academic_years[i], table);
 
-    //table of summary of results
-    display_summary_results(data, div_tab_content)
+        //table of summary of results
+        display_summary_results(academic_years[i], div_tab_panel)
+    }
 }
 
 function display_table(parent){

@@ -36,4 +36,5 @@ from performance import models as mdl
 def home(request):
     stud = find_by_user(request.user)
     document = mdl.student_scores.get_document(stud.registration_id)
+    print(document.value)
     return render(request, "performance_home.html", {"results": document.value})
