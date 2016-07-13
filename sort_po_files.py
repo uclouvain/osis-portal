@@ -24,8 +24,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+# Sort the "filename_to_be_sorted" located in "dir_path".
+# The file to be sorted must be a ".po" file used in django for translation.
+
 import os
-import sys
+
 
 key_keyword = "msgid"
 value_keyword = "msgstr"
@@ -34,6 +37,23 @@ filename_to_be_sorted= "django.po"
 filename_sorted = "django_ordered.po"
 
 dir_path = "./admission/locale/en/LC_MESSAGES/"
+
+
+# ******************************** MAIN FUNCTIONS *********************
+def sort_po_file(relative_dir_path):
+    """
+    Create a file "filename_sorted" which is the sorted version of the file
+    "filename_to_be_sorted".
+    :param relative_dir_path: path of the directory containing the file to be sorted.
+    """
+    with open(relative_dir_path+filename_to_be_sorted) as f:
+        d = dic_from_file(f)
+
+        list_keys = list(d.keys())
+        list_keys.sort()
+
+    with open(relative_dir_path+filename_sorted, "w") as new_f:
+        dic_to_file(list_keys, d, new_f)
 
 
 def replace_file(old_file, new_file):
@@ -50,20 +70,7 @@ def replace_file(old_file, new_file):
     os.rename(src=new_file, dst=old_file)
 
 
-def sort_po_file(relative_dir_path):
-    """
-    Create a file "filename_sorted" which is the sorted version of the file
-    "filename_to_be_sorted".
-    :param relative_dir_path: path of the directory containing the file to be sorted.
-    """
-    with open(relative_dir_path+filename_to_be_sorted) as f:
-        d = dic_from_file(f)
-
-        list_keys = list(d.keys())
-        list_keys.sort()
-
-    with open(relative_dir_path+filename_sorted, "w") as new_f:
-        dic_to_file(list_keys, d, new_f)
+# ******************************** UTILITY FUNCTIONS *********************
 
 
 def dic_to_file(key_order, d, f):
@@ -93,13 +100,36 @@ def dic_from_file(file):
     d = {}
     key = ""
     for line in file:
-        if line.startswith(key_keyword):
+        if is_unnecessary_line(line):
+            continue
+        elif line.startswith(key_keyword):
             key = msg_after_prefix(line, key_keyword)
-        if line.startswith(value_keyword):
+        elif line.startswith(value_keyword):
             value = msg_after_prefix(line, value_keyword)
             # Add an entry to the dict "d" with key "key" and value "value"
             d[key] = value
+        elif line.strip() != "\n":
+            d[key] = d[key] + line
+
     return d
+
+
+def is_unnecessary_line(line):
+    """
+    A line is unnecessary if it is a comment, indicates the mime-type, etc.
+    Ex: "Project-Id-Version: PACKAGE VERSION\n"
+        "Report-Msgid-Bugs-To: \n"
+    :param line: a string representing a line of a ."po" file
+    :return: a truth value if the line is unnecessary
+    """
+    prefixes = ["#", '"Project-Id-Version:', '"Report-Msgid-Bugs-To:', '"POT-Creation-Date:',
+              '"PO-Revision-Date:', '"Last-Translator:', '"Language-Team:', '"Language:',
+              '"MIME-Version:', '"Content-Type:', '"Content-Transfer-Encoding:']
+
+    for prefix in prefixes:
+        if line.startswith(prefix):
+            return True
+    return False
 
 
 def msg_after_prefix(s, prefix):
@@ -112,6 +142,8 @@ def msg_after_prefix(s, prefix):
     msg = s.split(prefix)[1]
     msg.strip("\r\n")
     return msg
+
+# *********************** SORT AND REPLACE FILE *******************************
 
 sort_po_file(dir_path)
 replace_file(dir_path + filename_to_be_sorted, dir_path + filename_sorted)
