@@ -29,7 +29,8 @@ from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
 
 from admission import models as mdl
-from reference import models as reference_mdl
+from reference import models as mdl_reference
+from admission.views.common import extra_information, validated_extra
 
 
 class JSONResponse(HttpResponse):
@@ -63,9 +64,9 @@ def find_by_id(request):
 def offer_selection(request):
     offers = None
     application = mdl.application.find_by_user(request.user)
-    grade_choices = reference_mdl.grade_type.GRADE_CHOICES
+    grade_choices = mdl_reference.grade_type.GRADE_CHOICES
     return render(request, "offer_selection.html",
-                  {"gradetypes":  reference_mdl.grade_type.find_all(),
+                  {"gradetypes":  mdl_reference.grade_type.find_all(),
                    "domains":     mdl.domain.find_all_domains(),
                    "offers":      offers,
                    "offer":       None,
@@ -83,7 +84,7 @@ def _get_offer_type(request):
     if request.POST.get('doctorate_type'):
         offer_type = request.POST['doctorate_type']
     if offer_type:
-        return get_object_or_404(reference_mdl.grade_type.GradeType, pk=offer_type)
+        return get_object_or_404(mdl_reference.grade_type.GradeType, pk=offer_type)
     return None
 
 
@@ -101,7 +102,7 @@ def selection_offer(request, offer_id):
     domain = _get_domain(request)
 
     return render(request, "offer_selection.html",
-                           {"gradetypes":  reference_mdl.grade_type.find_all(),
+                           {"gradetypes":  mdl_reference.grade_type.find_all(),
                             "domains":     mdl.domain.find_all_domains(),
                             "offers":      None,
                             "offer":       offer_year,
@@ -115,11 +116,11 @@ def demande_update(request, application_id=None):
         application = mdl.application.find_by_id(application_id)
     else:
         application = mdl.application.init_application(request.user)
-    grade_choices = mdl.grade_type.GRADE_CHOICES
-    a_person = mdl.person.find_by_user(request.user)
-    secondary_education = mdl.secondary_education.find_by_person(a_person)
+    grade_choices = mdl_reference.grade_type.GRADE_CHOICES
+    an_applicant= mdl.applicant.find_by_user(request.user)
+    secondary_education = mdl.secondary_education.find_by_person(an_applicant)
     return render(request, "offer_selection.html",
-                  {"gradetypes":             mdl.grade_type.find_all(),
+                  {"gradetypes":             mdl_reference.grade_type.find_all(),
                    "domains":                mdl.domain.find_all_domains(),
                    "offers":                 offers,
                    "offer":                  None,

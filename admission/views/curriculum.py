@@ -37,31 +37,21 @@ from reference import models as mdl_reference
 
 
 def save(request):
-    next_step = False
-    previous_step = False
     save_step = False
     duplicate = False
     duplicate_year_origin = None
     validation_messages = {}
-    if request.POST:
-        if 'bt_next_step_up' in request.POST or 'bt_next_step_down' in request.POST:
-            next_step = True
-        else:
-            if 'bt_previous_step_up' in request.POST or 'bt_previous_step_down' in request.POST:
-                previous_step = True
-            else:
-                if 'bt_save_up' in request.POST or 'bt_save_down' in request.POST:
-                    save_step = True
-                else:
-                    key = 'bt_duplicate_'
-                    for k, v in request.POST.items():
-                        if k.startswith(key):
-                            duplicate = True
-                            duplicate_year_origin = int(k.replace(key, ''))
-                            break
 
-    if previous_step:
-        return HttpResponseRedirect(reverse('home'))
+    key = 'bt_duplicate_'
+    for k, v in request.POST.items():
+        if k.startswith(key):
+            duplicate = True
+            duplicate_year_origin = int(k.replace(key, ''))
+            break
+    if duplicate:
+        pass
+    else:
+        save_step = True
 
     message_success = None
     # Get the data in bd for dropdown list
@@ -73,9 +63,10 @@ def save(request):
     universities_cities = []
     universities = []
 
-    if save_step or next_step or duplicate:
+    if save_step or duplicate:
         is_valid, validation_messages, curricula, universities_cities, universities, duplication_possible \
             = validate_fields_form(request, duplicate_year_origin)
+        is_valid = True  # a modifier avec issue 180
         if is_valid:
             message_success = _('msg_info_saved')
             for curriculum in curricula:
@@ -108,17 +99,17 @@ def save(request):
     current_academic_year = mdl.academic_year.current_academic_year().year
 
     year = first_academic_year_for_cv
-
-    while year < current_academic_year:
-        academic_year = mdl.academic_year.find_by_year(year)
-        curriculum = mdl.curriculum.find_by_academic_year(academic_year)
-        if curriculum is None:
-            # add cv empty cv's for the year if it's needed
-            curriculum = mdl.curriculum.Curriculum()
-            curriculum.person = applicant
-            curriculum.academic_year = academic_year
-        curricula.append(curriculum)
-        year += 1
+    if year:
+        while year < current_academic_year:
+            academic_year = mdl.academic_year.find_by_year(year)
+            curriculum = mdl.curriculum.find_by_academic_year(academic_year)
+            if curriculum is None:
+                # add cv empty cv's for the year if it's needed
+                curriculum = mdl.curriculum.Curriculum()
+                curriculum.person = applicant
+                curriculum.academic_year = academic_year
+            curricula.append(curriculum)
+            year += 1
 
     return render(request, "curriculum.html", {"curricula": curricula,
                                                "local_universities_french": local_universities_french,
@@ -146,7 +137,7 @@ def update(request):
     year = current_academic_year - 5
     if secondary_education is None:
         return common.home(request)
-    if secondary_education and secondary_education.diploma is True:
+    if secondary_education and secondary_education.diploma is True and secondary_education.academic_year:
         year_secondary = secondary_education.academic_year.year
 
     if admission:

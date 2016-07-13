@@ -1047,5 +1047,110 @@ msgstr "Veuillez joindre l'attestation officelle pour bénéficier de cette réd
 msgid "title_no_debts"
 msgstr "Attestation stipulant l'absence de dettes"
 
+msgid "question"
+msgstr "Question"
+
+msgid "answer"
+msgstr "Réponse"
+
+msgid "applications_list"
+msgstr "Vos demandes d'inscription"
+
+msgid "new_demand"
+msgstr "Introduire une nouvelle demande"
+
+msgid "tab_diplomas"
+msgstr "Diplômes et certificats"
+
+msgid "profile"
+msgstr "Profil"
+
+msgid "demandes"
+msgstr "Demandes"
+
+msgid "accounting"
+msgstr "Comptabilité"
+
+msgid "sociological_survey"
+msgstr "Enquête sociologique"
+
+msgid "demande"
+msgstr "Demande"
+
+msgid "submission"
+msgstr "Soumission"
+
+msgid "reference_number"
+msgstr "Numéro de dossier"
+
+msgid "creation"
+msgstr "Création"
+
+msgid "requested_study"
+msgstr "Etude demandée"
+
+msgid "residence_country"
+msgstr "Pays de résidence"
+
+msgid "brother_sister_number"
+msgstr "Combien de frères et soeurs?"
+
+msgid "father"
+msgstr "Père"
+
+msgid "mother"
+msgstr "Mère"
+
+msgid "student"
+msgstr "Etudiant"
+
+msgid "conjoint"
+msgstr "Conjoint"
+
+msgid "grandfather_profession"
+msgstr "Grand-père (profession)"
+
+msgid "deceased_female"
+msgstr "Décédé(e)"
+
+msgid "deceased_male"
+msgstr "Décédé"
+
+msgid "paternal"
+msgstr "Paternel"
+
+msgid "maternal"
+msgstr "Maternel"
+
+msgid "profession"
+msgstr "Profession"
+
+msgid "study"
+msgstr "Etude"
+
+msgid "professional_activity"
+msgstr "Activité professionelle"
+
+msgid "attachments"
+msgstr "Pïèces jointes"
+
+msgid "further_information_required"
+msgstr "Informations complémentaires requises"
+
+msgid "for_curriculum"
+msgstr "For curriculum"
+
+msgid "to_submit"
+msgstr "A soumettre"
+
+msgid "submitted"
+msgstr "Soumise"
+
+msgid "canceled"
+msgstr "Annulée"
+
+msgid "confirmed"
+msgstr "Confirmée"
+
 msgid "offer_choice"
 msgstr "Choix de l'offre"

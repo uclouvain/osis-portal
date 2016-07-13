@@ -25,7 +25,6 @@
 ##############################################################################
 from django.shortcuts import render
 from admission import models as mdl
-from admission.views.common import extra_information
 
 
 def update(request):

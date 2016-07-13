@@ -42,141 +42,122 @@
     </span>
     <br>
     <br>
+    <div class="row">
+        <div class="col-md-2">
+            <ul class="nav nav-pills nav-stacked">
+                <li class="{%if tab_active == 0 %}active{%endif%}">
+                    <a href="{% url 'profile' %}" id="lnk_profile_tab">
+                        &nbsp;&nbsp;{%trans 'profile'%}</a><div class="nav-arrow"></div>
+                </li>
+                <li class="{%if tab_active == 1 %}active{%endif%}">
+                    {%if tab_active < 1 and first%}
+                        <a class="not-active" id="lnk_application_tab">
+                            &nbsp;&nbsp;{%trans 'offer_choice'%}</a>
+                    {%else%}
+                    <a href="{% url 'applications' %}" id="lnk_application_tab">
+                        &nbsp;&nbsp;{%trans 'offer_choice'%}</a>
+                    {%endif%}
+                </li>
+                <li class="{%if tab_active == 2 %}active{%endif%}" >
+                    {%if tab_active < 2 and first%}
+                    <a class="not-active">
+                        {%if validated_diploma%}
 
-    <ul class="nav nav-pills nav-wizard">
-        <li class="{%if tab_active == 0 %}active{%endif%}">
-            <a href="{% url 'profile' %}" id="lnk_profile_tab">
-                {%if validated_profil%}
+                        {%else%}
 
-                {%else%}
+                        {%endif%}
+                        &nbsp;&nbsp;{%trans 'tab_diplomas'%}</a>
+                    {%else%}
+                    <a href="{% url 'diploma_update'%}" id="lnk_diploma_tab" >
+                        {%if validated_diploma%}
 
-                {%endif%}
-                &nbsp;&nbsp;{%trans 'profile'%}</a><div class="nav-arrow"></div>
-        </li>
-        <li class="{%if tab_active == 1 %}active;{%endif%}{%if tab_active < 1 and first%}not-active{%endif%}">
-            <div class="nav-wedge"></div>
-            {%if tab_active < 1 and first%}
-                <a class="not-active" id="lnk_application_tab">
-                    {%if validated_applications%}
+                        {%else%}
+
+                        {%endif%}
+                        &nbsp;&nbsp;{%trans 'tab_diplomas'%}</a>
+                    {%endif%}
+                </li>
+                <li class="{%if tab_active == 3 %}active{%endif%}">
+                    {%if tab_active < 3 and first%}
+                    <a class="not-active" id="lnk_curriculum_tab">
+                        {%if validated_curriculum %}
+
+                        {%else%}
+
+                        {%endif%}
+                        &nbsp;&nbsp;{%trans 'curriculum'%}</a>
 
                     {%else%}
+                    <a href="{% url 'curriculum_update' %}" id="lnk_curriculum_tab">
+                        {%if validated_curriculum %}
+
+                        {%else%}
+
+                        {%endif%}
+                        &nbsp;&nbsp;{%trans 'curriculum'%}</a>
                     {%endif%}
-                    &nbsp;&nbsp;{%trans 'offer_choice'%}</a>
+                </li>
+                <li class="{%if tab_active == 4 %}active{%endif%}">
+                    {%if tab_active < 4 and first%}
+                        <a class="not-active" id="lnk_accounting_tab">
+                            &nbsp;&nbsp;{%trans 'accounting'%}</a>
+                    {%else%}
+                        <a href="{% url 'accounting_update' %}" id="lnk_accounting_tab">
+                            &nbsp;&nbsp;{%trans 'accounting'%}</a>
+                    {%endif%}
+                </li>
+                <li class="{%if tab_active == 5 %}active{%endif%}">
+                    {%if tab_active < 5 and first%}
+                        <a class="not-active" id="lnk_sociological_tab">
 
-            {%else%}
-            <a href="{% url 'applications' %}" id="lnk_application_tab">
-                {%if validated_applications%}
-                {%else%}
-                {%endif%}
-                &nbsp;&nbsp;{%trans 'demandes'%}</a>
+                            &nbsp;&nbsp;{%trans 'sociological_survey'%}</a>
+
+                    {%else%}
+                        <a href="{% url 'sociological_survey' %}" id="lnk_sociological_tab">
+
+                            &nbsp;&nbsp;{%trans 'sociological_survey'%}</a>
+                    {%endif%}
+
+                </li>
+                <li class="{%if tab_active == 6 %}active{%endif%}">
+                    {%if tab_active < 6 and first%}
+                        <a class="not-active" id="lnk_attachments_tab">
+                            &nbsp;&nbsp;{%trans 'attachments'%}</a>
+                    {%else%}
+                        <a href="{% url 'attachments' %}" id="lnk_attachments_tab">
+                            &nbsp;&nbsp;{%trans 'attachments'%}</a>
+                    {%endif%}
+                </li>
+                <li class="{%if tab_active == 7 %}active{%endif%}">
+                    {%if tab_active < 7 and first%}
+                        <a class="not-active" id="lnk_submission_tab">
+                            &nbsp;&nbsp;{%trans 'submission'%}</a>
+                    {%else%}
+                        <a href="{% url 'submission' %}" id="lnk_submission_tab">
+                            &nbsp;&nbsp;{%trans 'submission'%}</a>
+                    {%endif%}
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-10">
+            {%if tab_demande_active >= 0 and tab_demande_active < 3 and application.offer_year%}
+                <h4>{{application.offer_year.title}}</h4>
             {%endif%}
-            <div class="nav-arrow"></div>
-        </li>
-        <li class="{%if tab_active == 2 %}active;{%endif%}{%if tab_active < 2 and first%}not-active{%endif%}" >
-            <div class="nav-wedge"></div>
-            {%if tab_active < 2 and first%}
-            <a class="not-active">
-                {%if validated_diploma%}
 
-                {%else%}
-
-                {%endif%}
-                &nbsp;&nbsp;{%trans 'tab_diplomas'%}</a>
-            {%else%}
-            <a href="{% url 'diploma_update'%}" id="lnk_diploma_tab" >
-                {%if validated_diploma%}
-
-                {%else%}
-
-                {%endif%}
-                &nbsp;&nbsp;{%trans 'tab_diplomas'%}</a>
-            {%endif%}
-            <div class="nav-arrow"></div>
-        </li>
-        <li class="{%if tab_active == 3 %}active;{%endif%}{%if tab_active < 3 and first%}not-active{%endif%}">
-            <div class="nav-wedge"></div>
-            {%if tab_active < 3 and first%}
-            <a class="not-active" id="lnk_curriculum_tab">
-                {%if validated_curriculum %}
-
-                {%else%}
-
-                {%endif%}
-                &nbsp;&nbsp;{%trans 'curriculum'%}</a>
-
-            {%else%}
-            <a href="{% url 'curriculum_update' %}" id="lnk_curriculum_tab">
-                {%if validated_curriculum %}
-
-                {%else%}
-
-                {%endif%}
-                &nbsp;&nbsp;{%trans 'curriculum'%}</a>
-            {%endif%}
-            <div class="nav-arrow"></div>
-        </li>
-        <li class="{%if tab_active == 4 %}active;{%endif%}{%if tab_active < 4 and first%}not-active{%endif%}">
-            <div class="nav-wedge"></div>
-            {%if tab_active < 4 and first%}
-                <a class="not-active" id="lnk_accounting_tab">
-                    &nbsp;&nbsp;{%trans 'accounting'%}</a>
-            {%else%}
-                <a href="{% url 'accounting_update' %}" id="lnk_accounting_tab">
-                    &nbsp;&nbsp;{%trans 'accounting'%}</a>
-            {%endif%}
-            <div class="nav-arrow"></div>
-        </li>
-        <li class="{%if tab_active == 5 %}active;{%endif%}{%if tab_active < 5 and first%}not-active{%endif%}">
-            <div class="nav-wedge"></div>
-            {%if tab_active < 5 and first%}
-                <a class="not-active" id="lnk_sociological_tab">
-
-                    &nbsp;&nbsp;{%trans 'sociological_survey'%}</a>
-
-            {%else%}
-                <a href="{% url 'sociological_survey' %}" id="lnk_sociological_tab">
-
-                    &nbsp;&nbsp;{%trans 'sociological_survey'%}</a>
-            {%endif%}
-            <div class="nav-arrow"></div>
-
-        </li>
-        <li class="{%if tab_active == 6 %}active;{%endif%}{%if tab_active < 6 and first%}not-active{%endif%}">
-            <div class="nav-wedge"></div>
-            {%if tab_active < 6 and first%}
-                <a class="not-active" id="lnk_attachments_tab">
-                    &nbsp;&nbsp;{%trans 'attachments'%}</a>
-            {%else%}
-                <a href="{% url 'attachments' %}" id="lnk_attachments_tab">
-                    &nbsp;&nbsp;{%trans 'attachments'%}</a>
-            {%endif%}
-            <div class="nav-arrow"></div>
-        </li>
-        <li class="{%if tab_active == 7 %}active;{%endif%}{%if tab_active < 7 and first%}not-active{%endif%}">
-            <div class="nav-wedge"></div>
-            {%if tab_active < 7 and first%}
-                <a class="not-active" id="lnk_submission_tab">
-                    &nbsp;&nbsp;{%trans 'submission'%}</a>
-            {%else%}
-                <a href="{% url 'submission' %}" id="lnk_submission_tab">
-                    &nbsp;&nbsp;{%trans 'submission'%}</a>
-            {%endif%}
-        </li>
-    </ul>
-    <br>
-    {%if tab_demande_active >= 0 and tab_demande_active < 3 and application.offer_year%}
-        <h4>{{application.offer_year.title}}</h4>
-    {%endif%}
-
-    <div class="panel panel-default">
-        <div class="panel-body">
-            {%if tab_active != 4 %}
-            <h5>{% trans 'mandatory_asterisk'%}</h5>
-            {%endif%}
-            {% block admission_tabs %}
-            {% endblock %}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {%if tab_active != 4 %}
+                    <h5>{% trans 'mandatory_asterisk'%}</h5>
+                    {%endif%}
+                    {% block admission_tabs %}
+                    {% endblock %}
+                </div>
+            </div>
         </div>
     </div>
+
+    <br>
+
 {% endblock %}
 
 {% block script %}

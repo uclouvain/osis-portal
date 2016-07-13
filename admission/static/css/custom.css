@@ -25,16 +25,3 @@ body {
     cursor: default;
     opacity: 0.6;
 }
-
-.nav-pills.nav-wizard > li.not-active .nav-arrow {
-  border-color: transparent transparent transparent #eee;
-  opacity: 0.6;
-}
-.nav-pills.nav-wizard > li.not-active .nav-wedge {
-  border-color: #eee #eee #eee transparent;
-  opacity: 0.6;
-}
-.nav-pills.nav-wizard > li.not-active a {
-  background-color: #eee;
-  opacity: 0.6;
-}

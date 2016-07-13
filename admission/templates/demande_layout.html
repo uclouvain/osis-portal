@@ -26,7 +26,7 @@
 {% endcomment %}
 
 {% block content %}
-<form method="post" action="{% url 'curriculum' %}" id="form_questions">
+<form method="post" action="{% url 'demande_update' %}" id="form_questions">
     <input type="hidden" value="{{application.id}}" id="hdn_application_id">
     <input type="hidden" value="{{application.offer_year.grade_type.grade}}" id="hdn_application_grade">
     <input type="hidden" value="{{application.offer_year.grade_type.id}}" id="hdn_application_grade_type_id">
@@ -273,43 +273,15 @@
 <div>
     <a id="lnk_previous_step"
        class="btn btn-default"
-       {%if tab_active == 0 %}disabled{%endif%}
-       href="{%if tab_active == 1 %}{% url 'profile'%}{%endif%}
-             {%if tab_active == 2 %}{% url 'diploma_update'%}{%endif%}
-             {%if tab_active == 3  or tab_active == 31%}{% url 'curriculum_update'%}{%endif%}
-             {%if tab_active == 4 %}{% url 'applications'%}{%endif%}
-             {%if tab_active == 5 %}{% url 'sociological_survey'%}{%endif%}"
-               onclick="{%if tab_active == 0 %}save('form_profile');{%endif%}
-                    {%if tab_active == 1 %}save('form_secondary_education');{%endif%}
-                    {%if tab_active == 2 %}save('form_curriculum');{%endif%}
-                    {%if tab_active == 3  or tab_active == 31%}save('form_questions');{%endif%}
-                    {%if tab_active == 4 %}save('form_sociological_survey');{%endif%}
-                    {%if tab_active == 5 %}save('form_attachments');{%endif%}"
-       title="{%if tab_active == 1 %}{% trans 'profile'%}{%endif%}
-              {%if tab_active == 2 %}{% trans 'diploma'%}{%endif%}
-              {%if tab_active == 3  or tab_active == 31 %}{% trans 'curriculum'%}{%endif%}
-              {%if tab_active == 4 %}{% trans 'demandes'%}{%endif%}
-              {%if tab_active == 5 %}{% trans 'sociological_survey'%}{%endif%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+       href="{% url 'profile'%}"
+       onclick="save('form_questions');"
+       title="{% trans 'profile'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
         {%trans 'previous_step'%}</a>
     <a id="lnk_next_step"
        class="btn btn-default"
-       {%if tab_active == 5 %}disabled{%endif%}
-       href="{%if tab_active == 0 %}{% url 'diploma_update'%}{%endif%}
-             {%if tab_active == 1 %}{% url 'curriculum_update'%}{%endif%}
-             {%if tab_active == 2 %}{% url 'applications'%}{%endif%}
-             {%if tab_active == 3  or tab_active == 31%}{% url 'sociological_survey'%}{%endif%}
-             {%if tab_active == 4 %}{% url 'attachments'%}{%endif%}"
-               onclick="{%if tab_active == 0 %}save('form_profile');{%endif%}
-                    {%if tab_active == 1 %}save('form_secondary_education');{%endif%}
-                    {%if tab_active == 2 %}save('form_curriculum');{%endif%}
-                    {%if tab_active == 3  or tab_active == 31%}save('form_questions');{%endif%}
-                    {%if tab_active == 4 %}save('form_sociological_survey');{%endif%}
-                    {%if tab_active == 5 %}save('form_attachments');{%endif%}"
-       title="{%if tab_active == 0 %}{% trans 'diploma'%}{%endif%}
-              {%if tab_active == 1 %}{% trans 'curriculum'%}{%endif%}
-              {%if tab_active == 2 %}{% trans 'demandes'%}{%endif%}
-              {%if tab_active == 3  or tab_active == 31%}{% trans 'sociological_survey'%}{%endif%}
-              {%if tab_active == 4 %}{% trans 'attachments'%}{%endif%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+       href="{% url 'diploma_update'%}"
+       onclick="save('form_questions');"
+       title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
         {%trans 'next_step'%}</a>
 </div>
 {% endblock %}

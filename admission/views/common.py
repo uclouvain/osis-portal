@@ -47,7 +47,7 @@ def home(request):
             translation.activate(user_language)
             request.session[translation.LANGUAGE_SESSION_KEY] = user_language
         applications = mdl.application.find_by_user(request.user)
-        return render(request, "home.html", {'applications': applications})
+        return render(request, "home.html", {'applications': applications, "tab_active": 0})
     else:
         return profile(request)
 
