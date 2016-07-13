@@ -36,26 +36,20 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <!-- Dropdown -->
-        <div class="dropdown pull-right">
-            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Views
-            <span class="caret"></span></button>
-            <ul class="dropdown-menu">
-                <li><a href="#">Graphs</a></li>
-                <li><a href="#">Analysis</a></li>
-                <li><a href="#">Etc</a></li>
-            </ul>
-        </div>
         <div id="div_results">
             {% if not results %}
             <p>{% trans 'no_results' %}</p>
             {% else %}
             <script src="{% static 'js/performance.js' %}"></script>
+            <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
             <script>
-                var results = {{ results.value|safe }};
-                display_results( results );
+                $(document).ready(function() {
+                    var results = {{ results.value|safe }};
+                    display_results( results );
+                });
             </script>
             {% endif %}
+         </div>
     </div>
 </div>
 {% endblock %}

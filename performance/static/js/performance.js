@@ -6,30 +6,32 @@ function display_results(data){
 /********************  NAVIGATION TABS *******************/
 
 function display_nav_tabs(data){
-    var nav_tabs = document.createElement("UL");
-    nav_tabs.id = "nav_tabs";
-    nav_tabs.setAttribute("class", "nav nav-tabs");
-    nav_tabs.setAttribute("role", "tablist");
-    document.getElementById("div_results").appendChild(nav_tabs);
+    var $nav_tabs = $("<ul/>", {
+                        id: "nav_tabs",
+                        "class": "nav nav-tabs",
+                        role: "tablist"
+                    });
+    $nav_tabs.appendTo("#div_results");
 
-    academic_years = data.academic_years;
-    var i = 0;
-    for( i = 0; i < academic_years.length; i++){
-        var t = document.createElement("LI");
-        if (i == 0){
-            t.setAttribute("class", "active");
+    academic_years = data.academic_years; // TO MODIFY
+    $.each(academic_years, function(index, academic_year){
+        var $tab = $("<li/>", {
+                        role: "presentation"
+                    });
+        if (index == 0){
+            $tab.attr("class", "active");
         }
-        t.setAttribute("role", "presentation");
-        nav_tabs.appendChild(t);
+        $tab.appendTo($nav_tabs);
 
-        var a = document.createElement("A");
-        a.setAttribute("href", "#year"+i.toString());
-        a.setAttribute("aria-controls", "year"+i.toString());
-        a.setAttribute("role", "tab");
-        a.setAttribute("data-toggle", "tab");
-        a.textContent = academic_years[i].programme;
-        t.appendChild(a);
-    }
+        var $a = $("<a/>", {
+                    href: "#year"+index.toString(),
+                    "aria-controls": "year"+index.toString(),
+                    role: "tab",
+                    "data-toggle": "tab"
+                 });
+        $a.text(academic_year.programme);
+        $a.appendTo($tab);
+    });
 }
 
 /**************** COURSES SCORE TABLE  *************/
@@ -38,93 +40,103 @@ function display_nav_tabs(data){
 function display_tab_panes(data){
     academic_years = data.academic_years;
 
-    var div_tab_content = document.createElement("DIV");
-    div_tab_content.id = "div_tab_content";
-    div_tab_content.setAttribute("class", "tab-content");
-    document.getElementById("div_results").appendChild(div_tab_content);
+    var $div_tab_content = $("<div/>", {
+                                id: "div_tab_content",
+                                "class": "tab-content"
+                            });
+    $div_tab_content.appendTo("#div_results");
 
-    var i = 0;
-    for(i = 0; i < academic_years.length; i++){
-        var div_tab_panel = document.createElement("DIV");
-        div_tab_panel.id = "year"+i.toString();
-        div_tab_panel.setAttribute("role", "tabpanel");
-        div_tab_panel.setAttribute("class", "tab-pane");
-        if(i == 0){
-            div_tab_panel.setAttribute("class", "tab-pane active");
+    $.each(academic_years, function(index, academic_year) {
+        var $div_tab_panel = $("<div/>", {
+                                id: "year"+index.toString(),
+                                "class": "tab-pane",
+                                role: "tabpanel"
+                             });
+        if(index == 0){
+            $div_tab_panel.attr("class", "tab-pane active");
         }
-        div_tab_content.appendChild(div_tab_panel);
+        $div_tab_panel.appendTo($div_tab_content);
 
         //table of courses with results
-        var table = display_table(div_tab_panel);
-        fill_table(academic_years[i], table);
+        var $table = display_table($div_tab_panel);
+        fill_table(academic_year, $table);
 
         //table of summary of results
-        display_summary_results(academic_years[i], div_tab_panel)
-    }
+        display_summary_results(academic_year, $div_tab_panel)
+    });
 }
 
 function display_table(parent){
-    var div_table_responsive = document.createElement("DIV");
-    div_table_responsive.id = "div_table_responsive_" + parent.id
-    div_table_responsive.setAttribute("class", "table-responsive");
-    parent.appendChild(div_table_responsive);
+    $div_table_responsive = $("<div/>", {
+                                id: "div_table_responsive_" + parent.get(0).id,
+                                "class": "table-responsive"
+                            });
+    $div_table_responsive.appendTo(parent);
 
-    var table = document.createElement("TABLE");
-    table.setAttribute("class", "table table-striped table-bordered table-hover");
-    div_table_responsive.appendChild(table);
+    var $table = $("<table/>", {
+                    "class": "table table-striped table-bordered table-hover"
+                 });
+    $table.appendTo($div_table_responsive);
 
-    var table_row_header = table.insertRow(0);
+    var $table_row_header = $("<tr/>");
+    $table_row_header.appendTo($table);
 
     var headers = ["Cours", "Intitulé", "ECTS", "Insc.", "Janv", "Juin", "Sept", "Crédit"];
-    for (i=0; i < headers.length; i++) {
-        var table_element = document.createElement("TH");
-        table_element.textContent = headers[i];
-        table_row_header.appendChild(table_element);
-    }
-    return table;
+    $.each(headers, function(index, header) {
+        var $table_element = $("<th/>");
+        $table_element.text(header);
+        $table_element.appendTo($table_row_header);
+    });
+    return $table.get(0);
 }
 
-function fill_table(data, table){
+function fill_table(data, $table){
     var courses = data.learning_units
-    for( i = 0; i < courses.length; i++){
-        var table_row = table.insertRow(i+1);
-        table_row.insertCell(0).textContent = courses[i].acronym;
-        table_row.insertCell(1).textContent = courses[i].title;
-        table_row.insertCell(2).textContent = courses[i].credits;
+    $.each(courses, function(index, course){
+        var $table_row = $("<tr/>");
+        $table_row.appendTo($table);
+        var table_row = $table_row.get(0);
+        table_row.insertCell(0).textContent = course.acronym;
+        table_row.insertCell(1).textContent = course.title;
+        table_row.insertCell(2).textContent = course.credits;
         table_row.insertCell(3).textContent = "Inscr";
-        table_row.insertCell(4).textContent = courses[i].exams[0].score;
-        table_row.insertCell(5).textContent = courses[i].exams[1].score;
-        table_row.insertCell(6).textContent = courses[i].exams[2].score;
+        table_row.insertCell(4).textContent = course.exams[0].score;
+        table_row.insertCell(5).textContent = course.exams[1].score;
+        table_row.insertCell(6).textContent = course.exams[2].score;
         table_row.insertCell(7).textContent = "Crédit";
-    }
+    });
 }
 
 /**************** SUMMARY TABLE  *************/
 
 
-function display_summary_results(data, parent){
-    var table = display_summary_table(parent);
-    fill_summary_table(data, table);
+function display_summary_results(data, $parent){
+    var $table = display_summary_table($parent);
+    fill_summary_table(data, $table.get(0));
 }
 
 function display_summary_table(parent){
-    var div_summary_results = document.createElement("DIV");
-    div_summary_results.setAttribute("class", "row");
-    parent.appendChild(div_summary_results);
+    var $div_summary_results = $("<div/>", {
+                                    "class": "row"
+                               });
+    $div_summary_results.appendTo(parent);
 
-    var div_positionement = document.createElement("DIV");
-    div_positionement.setAttribute("class", "col-md-4 col-md-offset-4");
-    div_summary_results.appendChild(div_positionement);
+    var $div_positionement = $("<div/>", {
+                                    "class": "col-md-4 col-md-offset-4"
+                               });
+    $div_positionement.appendTo($div_summary_results);
 
-    var div_table_responsive = document.createElement("DIV");
-    div_table_responsive.setAttribute("class", "table-responsive");
-    div_positionement.appendChild(div_table_responsive);
+    var $div_table_responsive = $("<div/>", {
+                                    "class": "table-responsive"
+                               });
+    $div_table_responsive.appendTo($div_positionement);
 
-    var table = document.createElement("TABLE");
-    table.setAttribute("class", "table table-striped table-condensed");
-    div_table_responsive.appendChild(table);
+    var $table = $("<table/>", {
+                    "class": "table table-striped table-condensed"
+                });
+    $table.appendTo($div_table_responsive);
 
-    return table;
+    return $table;
 }
 
 
@@ -139,20 +151,11 @@ function fill_summary_table(data, table){
 function fill_row_credits(data, table){
     var table_row = table.insertRow(0);
     table_row.insertCell(0).textContent = "Crédits";
-    table_row.insertCell(1).textContent = compute_total_credit(data).toString();
+    table_row.insertCell(1).textContent = "-";
     table_row.insertCell(2).textContent = "-";
     table_row.insertCell(3).textContent = "-";
 }
 
-function compute_total_credit(data){
-    var courses = data.learning_units;
-    var total = 0.0;
-    var i;
-    for( i = 0; i < courses.length; i++){
-        total = total + courses[i].credits;
-    }
-    return total;
-}
 
 //display the row showing the dates of session
 function fill_row_date_sessions(table){
@@ -167,20 +170,11 @@ function fill_row_date_sessions(table){
 function fill_row_mean_scores(data, table){
     var table_row = table.insertRow(2);
     table_row.insertCell(0).textContent = "Moyenne";
-    table_row.insertCell(1).textContent = compute_session_mean(data, 0).toString();
-    table_row.insertCell(2).textContent = compute_session_mean(data, 1).toString();
-    table_row.insertCell(3).textContent = compute_session_mean(data, 2).toString();
+    table_row.insertCell(1).textContent = "-";
+    table_row.insertCell(2).textContent = "-";
+    table_row.insertCell(3).textContent = "-";
 }
 
-function compute_session_mean(data, num_session){
-    var courses = data.learning_units;
-    var total = 0.0;
-    var i;
-    for( i = 0; i < courses.length; i++){
-        total = total + courses[i].exams[num_session].score;
-    }
-    return total / i;
-}
 
 //display the row showing the mention
 function fill_row_mention(data, table){
