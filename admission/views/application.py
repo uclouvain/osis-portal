@@ -34,6 +34,7 @@ import locale
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from admission.views.common import extra_information
 
 
 def application_update(request, application_id):
@@ -141,9 +142,30 @@ def save_application_offer(request):
 
         return HttpResponseRedirect(reverse('curriculum_update'))
 
+
 def application_view(request, application_id):
     application = mdl.application.find_by_id(application_id)
     answers = mdl.answer.find_by_application(application_id)
     return render(request, "application.html",
                            {"application": application,
                             "answers": answers})
+
+
+def applications(request):
+    application_list = mdl.application.find_by_user(request.user)
+    return render(request, "home.html", {'applications': application_list,
+                                         "grade_choices": mdl_reference.grade_type.GRADE_CHOICES,
+                                         "domains": mdl.domain.find_all_domains(),
+                                         'tab_active': 1,
+                                         "first": True})
+
+
+def submission(request, application_id=None):
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
+    else:
+        application = mdl.application.init_application(request.user)
+    return render(request, "home.html",
+                  {'application':            application,
+                   'display_admission_exam': extra_information(request, application),
+                   'tab_active': 7})

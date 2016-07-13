@@ -52,7 +52,7 @@ def home(request):
         return profile(request)
 
 
-def profile(request):
+def profile(request, message_success=None):
     if request.method == 'POST':
         applicant_form = ApplicantForm(data=request.POST)
 
@@ -155,7 +155,7 @@ def profile(request):
             person_legal_address.country = country
         else:
             applicant_form.errors['legal_adr_country'] = _('mandatory_field')
-            #person_legal_address.country = None
+            # person_legal_address.country = None
         if request.POST.get('same_contact_legal_addr') == "false":
             person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
             if person_contact_address is None:
@@ -230,13 +230,19 @@ def profile(request):
                 person_contact_address.save()
             person_legal_address.save()
             applicant.user.save()
-            request.user = applicant.user # Otherwise it was not refreshed while going back to home page
+            request.user = applicant.user  # Otherwise it was not refreshed while going back to home page
             applicant.save()
             if 'save_up' in request.POST or 'save_down' in request.POST:
-                return home_retour(request)
+                message_success = 'ok'
+                if message_success:
+                    return HttpResponseRedirect(reverse('profile', kwargs={'message_success': message_success}))
+                else:
+                    return HttpResponseRedirect(reverse('profile'))
             else:
                 if 'next_step_up' in request.POST or 'next_step_down' in request.POST:
-                    return HttpResponseRedirect(reverse('curriculum_update'))
+                    return HttpResponseRedirect(reverse('applications'))
+        else:
+            message_success = None
     else:
         applicant = mdl.applicant.find_by_user(request.user)
         applicant_form = ApplicantForm()
@@ -263,19 +269,58 @@ def profile(request):
     assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
     person_assimilation_criteria = mdl.person_assimilation_criteria.find_by_person(applicant.id)
 
-    return render(request, "profile.html", {'applicant': applicant,
-                                            'applicant_form': applicant_form,
-                                            'countries': countries,
-                                            'assimilationCriteria': assimilation_criteria,
-                                            'personAssimilationCriteria': person_assimilation_criteria,
-                                            'person_legal_address': person_legal_address,
-                                            'person_contact_address': person_contact_address,
-                                            'same_addresses': same_addresses,
-                                            'previous_enrollment': previous_enrollment,
-                                            'institution': institution_name})
+    # validated are not ready yet, to be achieved in another issue - Leila
+
+    return render(request, "home.html", {'applicant': applicant,
+                                         'applicant_form': applicant_form,
+                                         'countries': countries,
+                                         'assimilationCriteria': assimilation_criteria,
+                                         'personAssimilationCriteria': person_assimilation_criteria,
+                                         'person_legal_address': person_legal_address,
+                                         'person_contact_address': person_contact_address,
+                                         'same_addresses': same_addresses,
+                                         'previous_enrollment': previous_enrollment,
+                                         'institution': institution_name,
+                                         "message_success": message_success,
+                                         'tab_active': 0,
+                                         'validated_profil': False,
+                                         'validated_diploma': False,
+                                         'validated_curriculum': False,
+                                         'validated_applications': False,
+                                         'validated_demande': False,
+                                         'validated_accounting': False,
+                                         "first": True})
 
 
 @login_required
 def home_retour(request):
     applications = mdl.application.find_by_user(request.user)
     return render(request, "home.html", {'applications': applications, 'message_info': _('msg_info_saved')})
+
+
+def extra_information(request, application):
+    a_person = mdl.applicant.find_by_user(request.user)
+    try:
+        if application.offer_year:
+            admission_exam_offer_yr = mdl.admission_exam_offer_year.find_by_offer_year(application.offer_year)
+            if admission_exam_offer_yr:
+                return True
+        return False
+    except:  # RelatedObjectDoesNotExist
+        return False
+
+
+def validated_extra(secondary_education, application):
+    if secondary_education:
+        try:
+            if application.offer_year:
+                admission_exam_offer_yr = mdl.admission_exam_offer_year.find_by_offer_year(application.offer_year)
+                if secondary_education.admission_exam_type == admission_exam_offer_yr.admission_exam_type \
+                        and secondary_education.admission_exam and secondary_education.admission_exam_date \
+                        and secondary_education.admission_exam_institution \
+                        and secondary_education.admission_exam_result:
+                    return True
+        except:
+            return True
+
+    return False

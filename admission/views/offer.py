@@ -42,7 +42,7 @@ class JSONResponse(HttpResponse):
 class OfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = mdl.offer_year.OfferYear
-        fields = ('id', 'acronym','title', 'title_international','grade_type','subject_to_quota')
+        fields = ('id', 'acronym', 'title', 'title_international', 'grade_type', 'subject_to_quota')
 
 
 def search(request):
@@ -65,16 +65,16 @@ def offer_selection(request):
     application = mdl.application.find_by_user(request.user)
     grade_choices = reference_mdl.grade_type.GRADE_CHOICES
     return render(request, "offer_selection.html",
-                          {"gradetypes":  reference_mdl.grade_type.find_all(),
-                           "domains":     mdl.domain.find_all_domains(),
-                           "offers":      offers,
-                           "offer":       None,
-                           "application": application,
-                           "grade_choices": grade_choices})
+                  {"gradetypes":  reference_mdl.grade_type.find_all(),
+                   "domains":     mdl.domain.find_all_domains(),
+                   "offers":      offers,
+                   "offer":       None,
+                   "application": application,
+                   "grade_choices": grade_choices})
 
 
 def _get_offer_type(request):
-    offer_type=None
+    offer_type = None
 
     if request.POST.get('bachelor_type'):
         offer_type = request.POST['bachelor_type']
@@ -107,3 +107,25 @@ def selection_offer(request, offer_id):
                             "offer":       offer_year,
                             "offer_type":  grade,
                             "domain":      domain})
+
+
+def demande_update(request, application_id=None):
+    offers = None
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
+    else:
+        application = mdl.application.init_application(request.user)
+    grade_choices = mdl.grade_type.GRADE_CHOICES
+    a_person = mdl.person.find_by_user(request.user)
+    secondary_education = mdl.secondary_education.find_by_person(a_person)
+    return render(request, "offer_selection.html",
+                  {"gradetypes":             mdl.grade_type.find_all(),
+                   "domains":                mdl.domain.find_all_domains(),
+                   "offers":                 offers,
+                   "offer":                  None,
+                   "application":            application,
+                   "grade_choices":          grade_choices,
+                   'tab_active':             31,
+                   "tab_demande_active":     0,
+                   "display_admission_exam": extra_information(request, application),
+                   "validated_extra":        validated_extra(secondary_education, application)})

@@ -145,9 +145,7 @@ def update(request):
     year_secondary = None
     year = current_academic_year - 5
     if secondary_education is None:
-        applications = mdl.application.find_by_user(request.user)
-        return render(request, "home.html",
-                      {'applications': applications, 'message_warning': _('msg_warning_curriculum')})
+        return common.home(request)
     if secondary_education and secondary_education.diploma is True:
         year_secondary = secondary_education.academic_year.year
 
@@ -175,12 +173,11 @@ def update(request):
 
     local_universities_dutch = mdl_reference.education_institution \
         .find_by_institution_type_national_community('UNIVERSITY', 'DUTCH', False)
-
     if message:
         return common.home(request)
     else:
         universities_cities, universities = populate_dropdown_list(curricula)
-        return render(request, "curriculum.html",
+        return render(request, "home.html",
                       {"curricula": curricula,
                        "local_universities_french": local_universities_french,
                        "local_universities_dutch": local_universities_dutch,
@@ -191,7 +188,9 @@ def update(request):
                        "universities_cities": universities_cities,
                        "universities": universities,
                        "languages": mdl_reference.language.find_languages(),
-                       "current_academic_year": mdl.academic_year.current_academic_year()})
+                       "current_academic_year": mdl.academic_year.current_academic_year(),
+                       "tab_active": 3,
+                       "first": True})
 
 
 def validate_fields_form(request, duplicate_year_origin):

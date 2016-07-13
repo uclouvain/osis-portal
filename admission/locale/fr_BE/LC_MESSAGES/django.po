@@ -1046,3 +1046,6 @@ msgstr "Veuillez joindre l'attestation officelle pour bénéficier de cette réd
 
 msgid "title_no_debts"
 msgstr "Attestation stipulant l'absence de dettes"
+
+msgid "offer_choice"
+msgstr "Choix de l'offre"

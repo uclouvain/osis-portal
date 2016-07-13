@@ -94,3 +94,10 @@ def find_first_by_user(user):
             return None
     except ObjectDoesNotExist:
         return None
+
+
+def init_application(user):
+    person_application = applicant.Applicant.objects.get(user=user)
+    application = Application()
+    application.person = person_application
+    return application

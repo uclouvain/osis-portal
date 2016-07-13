@@ -1,0 +1,217 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/bootstrap-datepicker3.min.css' %}" type='text/css'>
+<link rel="stylesheet" href="{% static 'css/nav-wizard.bootstrap.css' %}" type='text/css'>
+
+{% endblock %}
+{% block content %}
+    <h2>{{ request.user.first_name }} {{ request.user.last_name }}</h2>
+    <span>
+        La procédure de demande d'inscription en ligne est divisée en plusieurs onglets. La demande d'inscription ne
+        pourra être validée que lorsque tous les onglets auront valablement été complétés. Les icônes
+        <font class="green">verte <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span></font>
+        ou <font class="green">orange <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span></font>
+        vous rappellent l'état d'avancement de votre demande d'inscription que vous pouvez d'ailleurs arrêter et
+        reprendre à tout moment.
+    </span>
+    <br>
+    <br>
+
+    <ul class="nav nav-pills nav-wizard">
+        <li class="{%if tab_active == 0 %}active{%endif%}">
+            <a href="{% url 'profile' %}" id="lnk_profile_tab">
+                {%if validated_profil%}
+
+                {%else%}
+
+                {%endif%}
+                &nbsp;&nbsp;{%trans 'profile'%}</a><div class="nav-arrow"></div>
+        </li>
+        <li class="{%if tab_active == 1 %}active;{%endif%}{%if tab_active < 1 and first%}not-active{%endif%}">
+            <div class="nav-wedge"></div>
+            {%if tab_active < 1 and first%}
+                <a class="not-active" id="lnk_application_tab">
+                    {%if validated_applications%}
+
+                    {%else%}
+                    {%endif%}
+                    &nbsp;&nbsp;{%trans 'offer_choice'%}</a>
+
+            {%else%}
+            <a href="{% url 'applications' %}" id="lnk_application_tab">
+                {%if validated_applications%}
+                {%else%}
+                {%endif%}
+                &nbsp;&nbsp;{%trans 'demandes'%}</a>
+            {%endif%}
+            <div class="nav-arrow"></div>
+        </li>
+        <li class="{%if tab_active == 2 %}active;{%endif%}{%if tab_active < 2 and first%}not-active{%endif%}" >
+            <div class="nav-wedge"></div>
+            {%if tab_active < 2 and first%}
+            <a class="not-active">
+                {%if validated_diploma%}
+
+                {%else%}
+
+                {%endif%}
+                &nbsp;&nbsp;{%trans 'tab_diplomas'%}</a>
+            {%else%}
+            <a href="{% url 'diploma_update'%}" id="lnk_diploma_tab" >
+                {%if validated_diploma%}
+
+                {%else%}
+
+                {%endif%}
+                &nbsp;&nbsp;{%trans 'tab_diplomas'%}</a>
+            {%endif%}
+            <div class="nav-arrow"></div>
+        </li>
+        <li class="{%if tab_active == 3 %}active;{%endif%}{%if tab_active < 3 and first%}not-active{%endif%}">
+            <div class="nav-wedge"></div>
+            {%if tab_active < 3 and first%}
+            <a class="not-active" id="lnk_curriculum_tab">
+                {%if validated_curriculum %}
+
+                {%else%}
+
+                {%endif%}
+                &nbsp;&nbsp;{%trans 'curriculum'%}</a>
+
+            {%else%}
+            <a href="{% url 'curriculum_update' %}" id="lnk_curriculum_tab">
+                {%if validated_curriculum %}
+
+                {%else%}
+
+                {%endif%}
+                &nbsp;&nbsp;{%trans 'curriculum'%}</a>
+            {%endif%}
+            <div class="nav-arrow"></div>
+        </li>
+        <li class="{%if tab_active == 4 %}active;{%endif%}{%if tab_active < 4 and first%}not-active{%endif%}">
+            <div class="nav-wedge"></div>
+            {%if tab_active < 4 and first%}
+                <a class="not-active" id="lnk_accounting_tab">
+                    &nbsp;&nbsp;{%trans 'accounting'%}</a>
+            {%else%}
+                <a href="{% url 'accounting_update' %}" id="lnk_accounting_tab">
+                    &nbsp;&nbsp;{%trans 'accounting'%}</a>
+            {%endif%}
+            <div class="nav-arrow"></div>
+        </li>
+        <li class="{%if tab_active == 5 %}active;{%endif%}{%if tab_active < 5 and first%}not-active{%endif%}">
+            <div class="nav-wedge"></div>
+            {%if tab_active < 5 and first%}
+                <a class="not-active" id="lnk_sociological_tab">
+
+                    &nbsp;&nbsp;{%trans 'sociological_survey'%}</a>
+
+            {%else%}
+                <a href="{% url 'sociological_survey' %}" id="lnk_sociological_tab">
+
+                    &nbsp;&nbsp;{%trans 'sociological_survey'%}</a>
+            {%endif%}
+            <div class="nav-arrow"></div>
+
+        </li>
+        <li class="{%if tab_active == 6 %}active;{%endif%}{%if tab_active < 6 and first%}not-active{%endif%}">
+            <div class="nav-wedge"></div>
+            {%if tab_active < 6 and first%}
+                <a class="not-active" id="lnk_attachments_tab">
+                    &nbsp;&nbsp;{%trans 'attachments'%}</a>
+            {%else%}
+                <a href="{% url 'attachments' %}" id="lnk_attachments_tab">
+                    &nbsp;&nbsp;{%trans 'attachments'%}</a>
+            {%endif%}
+            <div class="nav-arrow"></div>
+        </li>
+        <li class="{%if tab_active == 7 %}active;{%endif%}{%if tab_active < 7 and first%}not-active{%endif%}">
+            <div class="nav-wedge"></div>
+            {%if tab_active < 7 and first%}
+                <a class="not-active" id="lnk_submission_tab">
+                    &nbsp;&nbsp;{%trans 'submission'%}</a>
+            {%else%}
+                <a href="{% url 'submission' %}" id="lnk_submission_tab">
+                    &nbsp;&nbsp;{%trans 'submission'%}</a>
+            {%endif%}
+        </li>
+    </ul>
+    <br>
+    {%if tab_demande_active >= 0 and tab_demande_active < 3 and application.offer_year%}
+        <h4>{{application.offer_year.title}}</h4>
+    {%endif%}
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            {%if tab_active != 4 %}
+            <h5>{% trans 'mandatory_asterisk'%}</h5>
+            {%endif%}
+            {% block admission_tabs %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
+    <script>
+
+    $(document).ready(function() {
+        if($("#slt_nationality").val()){
+            $.ajax({
+                url: "/admission/country?nationality=" + $("#slt_nationality").val()
+            }).then(function(data) {
+
+                if (data.european_union) {
+                    $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
+                }else{
+                    $('#pnl_assimilation_criteria').css('visibility', 'visible').css('display','block');
+                }
+            });
+        }
+        $('#txt_admission_exam_date').val('');
+        $('#txt_admission_exam_institution').val('');
+        $('[id^="rdb_admission_exam_type_"]').prop( "checked", false);
+        $('#txt_admission_exam_type_other').val('');
+        $('#txt_admission_exam_type_other').prop( "disabled", true);
+        $('#chb_admission_exam_type').prop( "checked", false);
+        $('#rdb_admission_exam_result_low').prop( "checked", false);
+        $('#rdb_admission_exam_result_middle').prop( "checked", false);
+        $('#rdb_admission_exam_result_high').prop( "checked", false);
+        populate_exam_admin();
+    });
+
+    function save(form_to_submit){
+        id = 'form#' + form_to_submit;
+        $(id).submit();
+
+    }
+    </script>
+{% endblock %}

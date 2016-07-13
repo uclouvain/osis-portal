@@ -284,7 +284,7 @@ def diploma_save(request):
             else:
                 if 'bt_save_up' in request.POST or 'bt_save_down' in request.POST:
                     save_step = True
-
+    save_step = True
     application = mdl.application.find_first_by_user(request.user)
     other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
     recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
@@ -368,11 +368,13 @@ def diploma_update(request):
             "education_type_transition":    education_type_transition,
             "education_type_qualification": education_type_qualification,
             "current_academic_year":        mdl.academic_year.current_academic_year(),
-            "local_language_exam_needed":   is_local_language_exam_needed(request.user)}
+            "local_language_exam_needed":   is_local_language_exam_needed(request.user),
+            'tab_active': 2,
+            "first": True}
 
     # merge 2 dictionaries
     data.update(get_secondary_education_exams_data(secondary_education))
-    return render(request, "diploma.html", data)
+    return render(request, "home.html", data)
 
 
 def validate_professional_exam(request, is_valid, validation_messages, secondary_education):
@@ -556,7 +558,7 @@ def populate_secondary_education(request, secondary_education):
                     secondary_education.result = request.POST.get('foreign_result')
                     secondary_education.national = False
             if request.POST.get('other_school') == "on":
-                existing_institution= mdl_reference.education_institution\
+                existing_institution = mdl_reference.education_institution\
                     .find_by_name_city_postal_code(request.POST.get('CESS_other_school_name'),
                                                    request.POST.get('CESS_other_school_city'),
                                                    request.POST.get('CESS_other_school_postal_code'),

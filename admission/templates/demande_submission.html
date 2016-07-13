@@ -1,6 +1,6 @@
-{% extends "demande_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
+{% load message %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -25,26 +25,19 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
+{% block content %}
 
-{% block demande_tabs %}
-<form method="post" action="{% url 'save_offer_selection' %}" id="form_questions" name="form_questions">
-     {% csrf_token %}
-    {% include "demande_offer.html" %}
+<form id="form_submission">
+    <h3>En construction, formulaire de submission</h3>
 </form>
-{% endblock %}
-{% block script %}
-<script >
-$(document).ready(function() {
-    if ($('#hdn_application_id').val()){
-        $('#slt_offer_type option').each(function(){
-            if($(this).attr('value')==$('#hdn_application_grade').val()){
-                $(this).prop('selected', true);
-            }
-        });
-        $('#slt_offer_type').trigger('change');
+    <div>
+        <a id="lnk_previous_step"
+           class="btn btn-default"
+           {%if tab_active == 0 %}disabled{%endif%}
+           href="{% url 'attachments'%}"
+               onclick="save('form_submission');"
+           title="{% trans 'attachments'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%}</a>
 
-
-    }
-});
-</script>
+    </div>
 {% endblock %}
