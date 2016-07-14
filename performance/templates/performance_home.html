@@ -45,7 +45,7 @@
             <script>
                 $(document).ready(function() {
                     var results = {{ results.value|safe }};
-                    display_results( results );
+                    display_results( results, "#div_results");
                 });
             </script>
             {% endif %}
