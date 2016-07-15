@@ -36,8 +36,8 @@ class ApplicantAssimilationCriteria(models.Model):
     criteria = models.ForeignKey('reference.AssimilationCriteria')
 
 
-def find_by_person(a_person):
-    return ApplicantAssimilationCriteria.objects.filter(person=a_person)
+def find_by_applicant(applicant):
+    return ApplicantAssimilationCriteria.objects.filter(applicant=applicant)
 
 
 def find_by_criteria(criteria):
