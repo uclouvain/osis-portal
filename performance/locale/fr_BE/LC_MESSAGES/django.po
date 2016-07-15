@@ -8,4 +8,4 @@ msgid "no_results"
 msgstr "Aucun résultats à afficher."
 
 msgid "performance"
-msgstr "performance"
+msgstr "Performance"
