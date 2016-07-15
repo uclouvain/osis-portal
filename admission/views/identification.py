@@ -36,9 +36,9 @@ from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
 from admission import models as mdl
-from reference import models as reference_mdl
 from admission.forms import NewAccountForm, NewPasswordForm, AccessAccountForm
 from admission.utils import send_mail
+from reference import models as reference_mdl
 
 
 def home_error(request, message, form):
@@ -274,7 +274,7 @@ def offer_selection(request):
     grade_choices = reference_mdl.grade_type.GRADE_CHOICES
     return render(request, "offer_selection.html",
                           {"gradetypes":    reference_mdl.grade_type.find_all(),
-                           "domains":       mdl.domain.find_all_domains(),
+                           "domains":       reference_mdl.domain.find_all_domains(),
                            "offers":        offers,
                            "offer":         None,
                            "application":   application,
@@ -299,7 +299,7 @@ def _get_domain(request):
     domain_id = request.POST.get('domain')
     domain = None
     if domain_id:
-        domain = get_object_or_404(mdl.domain.Domain, pk=domain_id)
+        domain = get_object_or_404(reference_mdl.domain.Domain, pk=domain_id)
     return domain
 
 
@@ -325,7 +325,7 @@ def save_offer_selection(request):
 
     return render(request, "offer_selection.html",
                   {"gradetypes": reference_mdl.grade_type.find_all(),
-                   "domains": mdl.domain.find_all_domains(),
+                   "domains": reference_mdl.domain.find_all_domains(),
                    "offers": None,
                    "offer_type": None,
                    "domain": mdl})
@@ -346,16 +346,8 @@ def selection_offer(request, offer_id):
 
     return render(request, "offer_selection.html",
                   {"gradetypes": reference_mdl.grade_type.find_all(),
-                   "domains": mdl.domain.find_all_domains(),
+                   "domains": reference_mdl.domain.find_all_domains(),
                    "offers": None,
                    "offer": offer_year,
                    "offer_type": grade,
                    "domain": domain})
-
-
-def application_update(request, application_id):
-    application = mdl.application.find_by_id(application_id)
-    return render(request, "offer_selection.html",
-                  {"offers": None,
-                   "offer": application.offer_year,
-                   "application": application})

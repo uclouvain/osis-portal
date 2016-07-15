@@ -25,6 +25,7 @@
 ##############################################################################
 from reference.models import assimilation_criteria
 from reference.models import country
+from reference.models import domain
 from reference.models import education_institution
 from reference.models import education_type
 from reference.models import grade_type

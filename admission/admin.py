@@ -51,9 +51,6 @@ admin.site.register(application_assimilation_criteria.ApplicationAssimilationCri
 admin.site.register(curriculum.Curriculum,
                     curriculum.CurriculumAdmin)
 
-admin.site.register(domain.Domain,
-                    domain.DomainAdmin)
-
 admin.site.register(form.Form,
                     form.FormAdmin)
 
