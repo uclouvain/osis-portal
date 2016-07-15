@@ -30,6 +30,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from admission.models import applicant
 from localflavor.generic.models import IBANField, BICField
 from localflavor.generic.countries.sepa import IBAN_SEPA_COUNTRIES
+from frontoffice.sync import sync_to_osis
 
 
 class ApplicationAdmin(admin.ModelAdmin):
@@ -66,6 +67,10 @@ class Application(models.Model):
 
     def __str__(self):
         return u"%s" % self.offer_year
+
+    def save(self, *args, **kwargs):
+        sync_to_osis.send_new_offer_enrollment_to_osis(self)
+        super(Application).save(*args, **kwargs)
 
 
 def find_by_user(user):

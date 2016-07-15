@@ -27,22 +27,18 @@ from django.db import models
 from django.contrib import admin
 
 
-class PersonAssimilationCriteriaAdmin(admin.ModelAdmin):
-    list_display = ('person', 'criteria')
+class ApplicantAssimilationCriteriaAdmin(admin.ModelAdmin):
+    list_display = ('applicant', 'criteria')
 
 
-class PersonAssimilationCriteria(models.Model):
-    person = models.ForeignKey('Applicant')
+class ApplicantAssimilationCriteria(models.Model):
+    applicant = models.ForeignKey('Applicant')
     criteria = models.ForeignKey('reference.AssimilationCriteria')
 
 
 def find_by_person(a_person):
-    return PersonAssimilationCriteria.objects.filter(person=a_person)
+    return ApplicantAssimilationCriteria.objects.filter(person=a_person)
 
 
-def find_by_criteria(criteria_id):
-    return PersonAssimilationCriteria.objects.get(pk=criteria_id)
-
-
-def find_by_person_criteria(person_id, criteria_id):
-    return PersonAssimilationCriteria.objects.filter(person=person_id, criteria=criteria_id)
+def find_by_criteria(criteria):
+    return ApplicantAssimilationCriteria.objects.get(criteria=criteria)

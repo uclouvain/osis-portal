@@ -23,23 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models import academic_year
-from admission.models import admission_exam_type
-from admission.models import answer
-from admission.models import applicant
-from admission.models import applicant_assimilation_criteria
-from admission.models import application
-from admission.models import application_assimilation_criteria
-from admission.models import curriculum
-from admission.models import domain
-from admission.models import form
-from admission.models import message_template
-from admission.models import offer_year
-from admission.models import option
-from admission.models import person_address
-from admission.models import properties
-from admission.models import question
-from admission.models import secondary_education
-from admission.models import secondary_education_exam
-from admission.models import supported_languages
+from django.db import models
+from django.contrib import admin
 
+
+class ApplicationAssimilationCriteriaAdmin(admin.ModelAdmin):
+    list_display = ('application', 'criteria')
+
+
+class ApplicationAssimilationCriteria(models.Model):
+    application = models.ForeignKey('Application')
+    criteria = models.ForeignKey('reference.AssimilationCriteria')
+
+
+def find_by_application(application):
+    return ApplicationAssimilationCriteria.objects.filter(application=application)
+
+
+def find_by_criteria(criteria):
+    return ApplicationAssimilationCriteria.objects.get(criteria=criteria)

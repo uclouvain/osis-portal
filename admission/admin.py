@@ -26,7 +26,6 @@
 from django.contrib import admin
 
 from admission.models import *
-from admission.models import person_assimilation_criteria
 
 admin.site.register(academic_year.AcademicYear,
                     academic_year.AcademicYearAdmin)
@@ -40,8 +39,14 @@ admin.site.register(answer.Answer,
 admin.site.register(applicant.Applicant,
                     applicant.ApplicantAdmin)
 
+admin.site.register(applicant_assimilation_criteria.ApplicantAssimilationCriteria,
+                    applicant_assimilation_criteria.ApplicantAssimilationCriteriaAdmin)
+
 admin.site.register(application.Application,
                     application.ApplicationAdmin)
+
+admin.site.register(application_assimilation_criteria.ApplicationAssimilationCriteria,
+                    application_assimilation_criteria.ApplicationAssimilationCriteriaAdmin)
 
 admin.site.register(curriculum.Curriculum,
                     curriculum.CurriculumAdmin)
@@ -63,9 +68,6 @@ admin.site.register(option.Option,
 
 admin.site.register(person_address.PersonAddress,
                     person_address.PersonAddressAdmin)
-
-admin.site.register(person_assimilation_criteria.PersonAssimilationCriteria,
-                    person_assimilation_criteria.PersonAssimilationCriteriaAdmin)
 
 admin.site.register(properties.Properties,
                     properties.PropertiesAdmin)
