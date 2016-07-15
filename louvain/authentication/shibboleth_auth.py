@@ -30,7 +30,7 @@ from django.contrib import auth
 from django.contrib.auth import backends
 from django.core.exceptions import ImproperlyConfigured
 
-from base.models.person import BasePerson, find_by_global_id, find_by_user
+from base.models.person import Person, find_by_global_id, find_by_user
 
 
 class ShibbolethAuthBackend(RemoteUserBackend):
@@ -90,7 +90,7 @@ class ShibbolethAuthBackend(RemoteUserBackend):
         if not person:
             person = find_by_user(user)
         if not person:
-            person = BasePerson(user=user, global_id=user_infos['USER_FGS'], first_name=user_infos['USER_FIRST_NAME'],
+            person = Person(user=user, global_id=user_infos['USER_FGS'], first_name=user_infos['USER_FIRST_NAME'],
                             last_name=user_infos['USER_LAST_NAME'], email=user_infos['USER_EMAIL'])
         else:
             person.user = user
