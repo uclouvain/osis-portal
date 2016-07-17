@@ -24,9 +24,8 @@
 #
 ##############################################################################
 from couchbase.exceptions import ValueFormatError
-
+from osis_common.document import paper_sheet
 from dashboard import models as mdl
-from dashboard.document import paper_sheet
 from frontoffice.queue.queue import ScoresSheetClient
 import datetime
 import json
