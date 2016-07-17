@@ -1,4 +1,5 @@
-##############################################################################
+# -*- coding: utf-8 -*-
+############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -22,19 +23,14 @@
 #    at the root of the source code of this program.  If not,
 #    see http://www.gnu.org/licenses/.
 #
-##############################################################################
-from django.contrib import admin
-from django.conf.urls import url, include
+############################################################################
 
-urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^admission/', include('admission.urls')),
-    url(r'^dashboard/', include('dashboard.urls')),
-    url(r'^catalog/', include('catalog.urls')),
-    url(r'^performance/', include('performance.urls'))
-]
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required, user_passes_test
+from base.models.student import is_student
 
-try:
-    from frontoffice.server_urls import *
-except ImportError:
-    pass
+
+@login_required
+@user_passes_test(is_student)
+def home(request):
+    return render(request, "performance_home.html")

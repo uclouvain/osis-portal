@@ -60,6 +60,7 @@ INSTALLED_APPS = (
     'dashboard',
     'rest_framework',
     'localflavor',
+    'performance',
 )
 
 MIDDLEWARE_CLASSES = (
