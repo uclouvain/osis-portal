@@ -29,7 +29,7 @@ from base.models.person import find_by_global_id, find_by_user, Person
 try:
     from osis_louvain_auth.authentication.shibboleth_auth import user_updated_signal, user_created_signal
 
-    @receiver(user_updated_signal)
+    @receiver([user_updated_signal, user_created_signal])
     def update_person_from_user(sender, **kwargs):
         user = kwargs.get('user')
         user_infos = kwargs.get('user_infos')
