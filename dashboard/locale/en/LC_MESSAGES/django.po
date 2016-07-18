@@ -34,6 +34,9 @@ msgstr "Deliberation date"
 msgid "desc_lnk_scores_encoding"
 msgstr "Print the papersheet to encode the scores of your students."
 
+msgid "desc_lnk_performance"
+msgstr "Show the student results."
+
 msgid "done_at"
 msgstr "Done at"
 

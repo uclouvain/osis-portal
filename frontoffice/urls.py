@@ -30,7 +30,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^admission/', include('admission.urls')),
     url(r'^dashboard/', include('dashboard.urls')),
-    url(r'^catalog/', include('catalog.urls'))
+    url(r'^catalog/', include('catalog.urls')),
+    url(r'^performance/', include('performance.urls'))
 ]
 
 try:
