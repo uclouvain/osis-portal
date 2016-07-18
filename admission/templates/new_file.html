@@ -27,33 +27,17 @@
 {% endcomment %}
 
 {% block content %}
-<div class="page-header">
+  <div class="page-header">
     <h2>{% trans 'new_file' %}</h2>
-</div>
-<div class="panel panel-default">
-      <div class="panel-body">
-          <form method="POST" class="post-form" enctype="multipart/form-data">
-              {% csrf_token %}
-              <div class="row">
-                  <div class="col-md-2 col-lg-offset-1" style="text-align:right">
-                      <label for="txt_name" {% if form.name.errors %} style="color:red;" {% endif %}>{% trans 'name' %}</label>
-                  </div>
-                  <div class="col-md-4">
-                      <input class="form-control" id="txt_name"  name="name" style="margin:-6px;">
-                  </div>
-              </div>
-              <br>
-              <div class="row">
-                  <div class="col-md-2 col-lg-offset-1" style="text-align:right">
-                      <label for="txt_file" {% if form.file.errors %} style="color:red;" {% endif %}>{% trans 'file' %}</label>
-                  </div>
-                  <div class="col-md-4">
-                      <input type="file" id="txt_file"  name="file" style="margin:-6px;">
-                  </div>
-              </div>
-              <br>
-              <button type="submit" class="save btn btn-default" onclick="return confirm('{% trans 'proposition_dissertation_confirmation_message' %}')">Save</button>
-          </form>
-      </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <form method="POST" class="post-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include "upload_file_form.html" %}
+        <button type="submit" class="save btn btn-default" onclick="return confirm('{% trans 'new_file_confirmation_message' %}')">Save</button>
+      </form>
+    </div>
   </div>
 {% endblock %}
+

@@ -23,12 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models import *
-from django.contrib import admin
+from django import forms
+from django.forms import ModelForm
+from base.models.document_file import DocumentFile
 
 
-admin.site.register(person.BasePerson,
-                    person.BasePersonAdmin)
-
-admin.site.register(document_file.DocumentFile,
-                    document_file.DocumentFileAdmin)
+class UploadDocumentFileForm(ModelForm):
+    class Meta:
+        model = DocumentFile
+        fields = ('file_name', 'content_type', 'storage_duration', 'file', 'physical_extension', 'description', 'user',
+                  'document_type', 'size')
+        widgets = {'storage_duration': forms.HiddenInput(), 'physical_extension': forms.HiddenInput(),
+                   'user': forms.HiddenInput(), 'size': forms.HiddenInput(), 'document_type': forms.HiddenInput()}

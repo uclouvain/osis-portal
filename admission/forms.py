@@ -231,8 +231,3 @@ class AccountingForm(forms.Form):
         if data_scholarship and (data is None or len(data) == 0):
             self.errors['scholarship_organization'] = _('mandatory_field')
         return cleaned_data
-
-
-class NewFileForm(forms.Form):
-    name = forms.CharField()
-    file = forms.FileField()
