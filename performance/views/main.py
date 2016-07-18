@@ -1,4 +1,5 @@
-##############################################################################
+# -*- coding: utf-8 -*-
+############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -22,6 +23,14 @@
 #    at the root of the source code of this program.  If not,
 #    see http://www.gnu.org/licenses/.
 #
-##############################################################################
+############################################################################
 
-default_app_config = 'base.apps.BaseConfig'
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required, user_passes_test
+from base.models.student import is_student
+
+
+@login_required
+@user_passes_test(is_student)
+def home(request):
+    return render(request, "performance_home.html")

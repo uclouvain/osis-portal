@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'osis_common',
     'reference',
     'base',
     'admission',
@@ -59,6 +60,7 @@ INSTALLED_APPS = (
     'dashboard',
     'rest_framework',
     'localflavor',
+    'performance',
 )
 
 MIDDLEWARE_CLASSES = (

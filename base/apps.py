@@ -23,5 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.apps import AppConfig
 
-default_app_config = 'base.apps.BaseConfig'
+
+class BaseConfig(AppConfig):
+    name = 'base'
+
+    def ready(self):
+        from base.models.signals import update_person_from_user
