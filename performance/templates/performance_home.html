@@ -52,6 +52,13 @@
                         <th>Sigle</th>
                         <th>Année d'études</th>
                     </tr>
+                    {% for row in doc %}
+                    <tr>
+                        <td>{{row.year}}</td>
+                        <td>{{row.acronym}}</td>
+                        <td>{{row.title}}</td>
+                    </tr>
+                    {% endfor %}
                 </table>
             </div>
         </div>

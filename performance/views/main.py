@@ -39,8 +39,9 @@ def home(request):
     """
     # Fetch the student academic results.
     stud = find_by_user(request.user)
-    # document = mdl.student_scores.get_document(stud.registration_id)
-    return render(request, "performance_home.html", {"student": stud})
+    document = mdl.student_scores.select_where_global_id_is(stud.registration_id)
+    print(str(document))
+    return render(request, "performance_home.html", {"student": stud, "doc": document})
 
 
 @login_required
