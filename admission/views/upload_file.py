@@ -4,6 +4,7 @@ from base.models.document_file import DocumentFile
 
 
 def upload_file(request):
+    documents = DocumentFile.objects.filter(user=request.user).filter(document_type="admission")
     if request.method == "POST":
         form = UploadDocumentFileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -17,7 +18,8 @@ def upload_file(request):
         else:
             return render(request, 'new_file.html', {'form': form,
                                                      'content_type_choices': DocumentFile.CONTENT_TYPE_CHOICES,
-                                                     'description_choices': DocumentFile.DESCRIPTION_CHOICES})
+                                                     'description_choices': DocumentFile.DESCRIPTION_CHOICES,
+                                                     'documents': documents})
     else:
         form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                                'physical_extension': "none",
@@ -25,4 +27,5 @@ def upload_file(request):
                                                'user': request.user})
         return render(request, 'new_file.html', {'form': form,
                                                  'content_type_choices': DocumentFile.CONTENT_TYPE_CHOICES,
-                                                 'description_choices': DocumentFile.DESCRIPTION_CHOICES})
+                                                 'description_choices': DocumentFile.DESCRIPTION_CHOICES,
+                                                 'documents': documents})

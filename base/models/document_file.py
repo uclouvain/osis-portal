@@ -38,10 +38,6 @@ class DocumentFileAdmin(admin.ModelAdmin):
     search_fields = ('file_name', 'user')
 
 
-def rename(instance, filename):
-    return '/'.join(['uploads', instance.file_name])
-
-
 class DocumentFile(models.Model):
     CONTENT_TYPE_CHOICES = (('APPLICATION_CSV', 'application/csv'),
                             ('APPLICATION_DOC', 'application/doc'),
@@ -63,7 +59,7 @@ class DocumentFile(models.Model):
     content_type = models.CharField(max_length=50, choices=CONTENT_TYPE_CHOICES, default='APPLICATION_PDF')
     creation_date = models.DateTimeField(auto_now_add=True, editable=False)
     storage_duration = models.IntegerField()
-    file = models.FileField(upload_to=rename)
+    file = models.FileField(upload_to='/'.join(['uploads']))
     physical_name = models.UUIDField(default=uuid.uuid4, editable=False)
     physical_extension = models.CharField(max_length=10)
     description = models.CharField(max_length=50, choices=DESCRIPTION_CHOICES, default='LETTER_MOTIVATION')
