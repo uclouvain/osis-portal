@@ -25,5 +25,4 @@
 ##############################################################################
 from base.models import person
 from base.models import student
-from base.models import document_file
 

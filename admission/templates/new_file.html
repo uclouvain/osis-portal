@@ -34,11 +34,13 @@
     <div class="panel-body">
       <form method="POST" class="post-form" enctype="multipart/form-data">
         {% csrf_token %}
-        {% include "upload_file_form.html" %}
+        {% include "uploading/upload_file_form.html" %}
+        <input type="hidden" name="description" value='LETTER_MOTIVATION' />
+        <input type="hidden" name="content_type" value='APPLICATION_PDF' />
         <button type="submit" class="save btn btn-default" onclick="return confirm('{% trans 'new_file_confirmation_message' %}')">Save</button>
       </form>
     </div>
   </div>
-  {% include "upload_file_list.html" %}
+  {% include "uploading/upload_file_list.html" %}
 {% endblock %}
 

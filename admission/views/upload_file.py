@@ -24,8 +24,8 @@
 #
 ##############################################################################
 from django.shortcuts import render, redirect
-from base.forms import UploadDocumentFileForm
-from base.models.document_file import DocumentFile
+from osis_common.forms import UploadDocumentFileForm
+from osis_common.models.document_file import DocumentFile
 
 
 def upload_file(request):
@@ -35,9 +35,7 @@ def upload_file(request):
         if form.is_valid():
             file = form.save()
             file.size = file.file.size
-            file_type = form.cleaned_data["file"]
-            content_type = file_type.content_type.split('/')[1]
-            file.physical_extension = content_type
+            file.file_name = request.FILES['file'].name
             file.save()
             return redirect('new_file')
         else:
