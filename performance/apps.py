@@ -38,9 +38,25 @@ class PerformanceConfig(AppConfig):
         queue.listen_queue(self.name, insert_or_update)
 
 
+def key_from_json(json):
+    """
+    Return a key for the json
+    :param json: a json object
+    :return: a string key
+    """
+    global_id = json["global_id"]
+    academic_year = json["academic_years"][0]["year"]
+    program = json["academic_years"][0]["programs"][0]["acronym"]
+    key = "" + global_id + "_" + academic_year + "_" + program
+    return key
+
+
 def insert_or_update(json_data):
     """
         Insert the records in CouchBase. If the records already exist, then the method makes an update.
     """
     data = json.loads(json_data.decode("utf-8"))
-    mdl.student_scores.insert_or_update_document(data["global_id"], data)
+    key = key_from_json(data)
+    mdl.student_scores.insert_or_update_document(key, data)
+
+
