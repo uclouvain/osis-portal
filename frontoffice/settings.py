@@ -115,7 +115,7 @@ DATABASES = {
 }
 
 
-COUCHBASE_CONNECTION_STRING='couchbase://localhost/score_encoding'
+COUCHBASE_CONNECTION_STRING='couchbase://localhost/'
 COUCHBASE_PASSWORD=''
 
 # Password validation

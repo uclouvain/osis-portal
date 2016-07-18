@@ -28,10 +28,11 @@ from django.conf import settings
 
 
 def connect_db():
+    bucket_name = "score_encoding"
     if settings.COUCHBASE_PASSWORD:
-        cb = Bucket(settings.COUCHBASE_CONNECTION_STRING, password=settings.COUCHBASE_PASSWORD)
+        cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name, password=settings.COUCHBASE_PASSWORD)
     else:
-        cb = Bucket(settings.COUCHBASE_CONNECTION_STRING)
+        cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name)
     return cb
 
 cb = connect_db()
