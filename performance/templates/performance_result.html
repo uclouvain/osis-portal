@@ -36,25 +36,22 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <div class="row col-md-3">
-            <p><b>Nom Prénom</b></p>
-            <p><b>Numéro de matricule</b></p>
+        <!-- Dropdown -->
+        <div class="dropdown pull-right">
+            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Views
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li><a href="#">Graphs</a></li>
+                <li><a href="#">Analysis</a></li>
+                <li><a href="#">Etc</a></li>
+            </ul>
         </div>
-        <div class="row col-md-9">
-            <p>{{ student.person.last_name}} {{ student.person.first_name }}</p>
-            <p>{{ student.person.global_id }}</p>
-        </div>
-        <div class="row col-md-12">
-            <div class="table-responsive">
-                <table id="table_academic_years" class="table table-condensed table-hover">
-                    <tr>
-                        <th>Année</th>
-                        <th>Sigle</th>
-                        <th>Année d'études</th>
-                    </tr>
-                </table>
-            </div>
-        </div>
+        <div id="div_results">
+            <script src="{% static 'js/performance_result.js' %}"></script>
+            <script>
+                var results = {{ results|safe }};
+                display_results( results );
+            </script>
     </div>
 </div>
 {% endblock %}
