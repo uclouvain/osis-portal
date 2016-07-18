@@ -47,12 +47,13 @@ def sort_po_file(relative_dir_path):
     :param relative_dir_path: path of the directory containing the file to be sorted.
     """
     with open(relative_dir_path+filename_to_be_sorted) as f:
-        d = dic_from_file(f)
+        d, header = parse_file(f)
 
         list_keys = list(d.keys())
         list_keys.sort()
 
     with open(relative_dir_path+filename_sorted, "w") as new_f:
+        header_to_file(header, new_f);
         dic_to_file(list_keys, d, new_f)
 
 
@@ -88,43 +89,62 @@ def dic_to_file(key_order, d, f):
         f.write("\n")
 
 
-def dic_from_file(file):
+def parse_file(file):
     """
-    Creates a dictionary containing all pairs "key_keyword" - "value_keyword".
-    Ex: msgid "professional"
-        msgstr "Professional"
-        Will return d = {"professional": "Professional}
+    Parse the file by keeping the header and by adding the other lines in a dictionnary.
     :param file: a .po object file.
-    :return: A dictionary
+    :return: A dictionary and header lines.
     """
     d = {}
+    header = ""
+    for line in file:
+        if not is_header_line(line):
+            dic_from_file(file, d)
+            return d, header
+        header = header + line;
+    return d, header
+
+
+def dic_from_file(file, d):
+    """
+        Creates a dictionary containing all pairs "key_keyword" - "value_keyword".
+        Ex: msgid "professional"
+            msgstr "Professional"
+            Will return d = {"professional": "Professional}
+        :param file: a .po object file.
+        :param d:  a dictionary
+        :return: A dictionary
+    """
     key = ""
     for line in file:
-        if is_unnecessary_line(line):
-            continue
-        elif line.startswith(key_keyword):
+        if line.startswith(key_keyword):
             key = msg_after_prefix(line, key_keyword)
         elif line.startswith(value_keyword):
             value = msg_after_prefix(line, value_keyword)
             # Add an entry to the dict "d" with key "key" and value "value"
             d[key] = value
-        elif line.strip() != "\n":
+        elif line.strip('\n') != "":
             d[key] = d[key] + line
 
     return d
 
 
-def is_unnecessary_line(line):
+def header_to_file(header, f):
+    f.write(header);
+
+
+def is_header_line(line):
     """
-    A line is unnecessary if it is a comment, indicates the mime-type, etc.
+    A line is header if it is a comment, indicates the mime-type, etc.
     Ex: "Project-Id-Version: PACKAGE VERSION\n"
         "Report-Msgid-Bugs-To: \n"
     :param line: a string representing a line of a ."po" file
-    :return: a truth value if the line is unnecessary
+    :return: a truth value if the line is header
     """
     prefixes = ["#", '"Project-Id-Version:', '"Report-Msgid-Bugs-To:', '"POT-Creation-Date:',
               '"PO-Revision-Date:', '"Last-Translator:', '"Language-Team:', '"Language:',
-              '"MIME-Version:', '"Content-Type:', '"Content-Transfer-Encoding:']
+              '"MIME-Version:', '"Content-Type:', '"Content-Transfer-Encoding:', 'msgid ""',
+                'msgstr ""']
 
     for prefix in prefixes:
         if line.startswith(prefix):
@@ -140,8 +160,8 @@ def msg_after_prefix(s, prefix):
     :return:
     """
     msg = s.split(prefix)[1]
-    msg.strip("\r\n")
-    return msg
+    msg = msg.strip('\n\r')
+    return msg+"\n"
 
 # *********************** SORT AND REPLACE FILE *******************************
 
