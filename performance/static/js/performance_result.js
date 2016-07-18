@@ -1,178 +1,307 @@
-function display_results(data){
-    display_nav_tabs(data);
-    display_tab_panes(data);
+// Note: Suppose bootsrap is used.
+
+
+/*
+ * Display the results of the student.
+ * data: json representing the student results
+ * parent_id: container view for the student results (div for example)
+ */
+function display_results(data, parent_id){
+    create_academic_years_nav_tabs(data.academic_years, parent_id);
+    create_academic_years_tab_panes(data.academic_years, parent_id);
+
+}
+
+function create_academic_years_tab_panes(academic_years, parent_id){
+    var attributes_global_div = { "class": "tab-content" };
+    var attributes_div = { "class": "tab-pane", role: "tabpanel" };
+
+    var $global_div = createJQObjectNoText("<div/>", attributes_global_div, parent_id);
+
+    //Fragment use for efficiency as dom manipulaiton is costy
+    var $frag = $(document.createDocumentFragment());
+    var array_$div = createMultipleJQObject("<div/>", attributes_div, $frag, academic_years.length);
+    array_$div[0].attr("class", "tab-pane active");
+    $.each(array_$div, function(index, $div) {
+        $div.attr("id", "year"+index.toString());
+
+        create_programs_nav_tabs(academic_years[index].programs, $div);
+        create_programs_tab_panes(academic_years[index].programs, $div);
+
+    });
+    $frag.appendTo($global_div);
 }
 
 /********************  NAVIGATION TABS *******************/
 
-function display_nav_tabs(data){
-    var nav_tabs = document.createElement("UL");
-    nav_tabs.id = "nav_tabs";
-    nav_tabs.setAttribute("class", "nav nav-tabs");
-    nav_tabs.setAttribute("role", "tablist");
-    document.getElementById("div_results").appendChild(nav_tabs);
+function create_academic_years_nav_tabs(academic_years, parent_id){
+    var attributes_ul = { "class": "nav nav-tabs", role: "tablist"};
+    var attributes_li = { role: "presentation" };
+    var attributes_a = { role: "tab", "data-toggle": "tab" }
+    var $ul = createJQObjectNoText("<ul/>", attributes_ul, parent_id);
 
-    var t = document.createElement("LI");
-    t.setAttribute("class", "active");
-    t.setAttribute("role", "presentation");
-    nav_tabs.appendChild(t);
+    //Fragment use for efficiency as dom manipulaiton is costy
+    var $frag = $(document.createDocumentFragment());
+    var array_$li = createMultipleJQObject("<li/>", attributes_li, $frag, academic_years.length );
+    array_$li[0].attr("class", "active");
 
-    var a = document.createElement("A");
-    a.setAttribute("href", "#ma1");
-    a.setAttribute("aria-controls", "home");
-    a.setAttribute("role", "tab");
-    a.setAttribute("data-toggle", "tab");
-    a.textContent = data.programme;
-    t.appendChild(a);
+    $.each(array_$li, function(index, $li) {
+      var $a = createJQObject("<a/>", attributes_a, academic_years[index].year ,$li);
+      $a.attr({ href: "#year"+index.toString(), "aria-controls": "year"+index.toString()});
+    })
+    $frag.appendTo($ul);
 }
 
-/**************** COURSES SCORE TABLE  *************/
+/*
+ * Create the navigation tabs used to switch between programs results for
+ * a same academic year..
+ * Ex: <ul>
+ *        <li> <a href="program_1_results">program 1</a> </li>
+ *        <li> <a href="program_2_results">program 2</a> </li>
+ *     </ul>
+ * programs: programs of the students
+ * parent_id: container view for the student results (a div for example)
+ */
+function create_programs_nav_tabs(programs, parent_id){
+    var attributes_ul = { "class": "nav nav-tabs", role: "tablist"};
+    var attributes_li = { role: "presentation" };
+    var attributes_a = { role: "tab", "data-toggle": "tab" }
+    var $ul = createJQObjectNoText("<ul/>", attributes_ul, parent_id);
 
+    //Fragment use for efficiency as dom manipulaiton is costy
+    var $frag = $(document.createDocumentFragment());
+    var array_$li = createMultipleJQObject("<li/>", attributes_li, $frag, programs.length );
+    array_$li[0].attr("class", "active");
 
-function display_tab_panes(data){
-    var div_tab_content = document.createElement("DIV");
-    div_tab_content.id = "div_tab_content";
-    div_tab_content.setAttribute("class", "tab-content");
-    document.getElementById("div_results").appendChild(div_tab_content);
-
-    var div_tab_panel = document.createElement("DIV");
-    div_tab_panel.id = "ma1";
-    div_tab_panel.setAttribute("role", "tabpanel");
-    div_tab_panel.setAttribute("class", "tab-pane active");
-    div_tab_content.appendChild(div_tab_panel);
-
-    //table of courses with results
-    var table = display_table(div_tab_content);
-    fill_table(data, table);
-
-    //table of summary of results
-    display_summary_results(data, div_tab_content)
+    $.each(array_$li, function(index, $li) {
+      var $a = createJQObject("<a/>", attributes_a, programs[index].title ,$li);
+      $a.attr({ href: "#program"+index.toString(), "aria-controls": "program"+index.toString()});
+    })
+    $frag.appendTo($ul);
 }
 
-function display_table(parent){
-    var div_table_responsive = document.createElement("DIV");
-    div_table_responsive.id = "div_table_responsive_" + parent.id
-    div_table_responsive.setAttribute("class", "table-responsive");
-    parent.appendChild(div_table_responsive);
+/**************** PANES OF STUDENT RESULTS  *************/
 
-    var table = document.createElement("TABLE");
-    table.setAttribute("class", "table table-striped table-bordered table-hover");
-    div_table_responsive.appendChild(table);
+/*
+ * Create the tab panes which are referred by the navigation tabs
+ * and contains the student results. One program result by tab pane.
+ * Ex: <div class= "tab-content">
+          <div role="tabpanel" id="program1"> "table of results ""</div>
+          <div role="tabpanel" id="program2"> "table of results" </div>
+       </div>
+ * programs: programs of the student
+ * parent_id: container view for the student results (a div for example)
+ */
+function create_programs_tab_panes(programs, parent_id){
+    var attributes_global_div = { "class": "tab-content" };
+    var attributes_div = { "class": "tab-pane", role: "tabpanel" };
 
-    var table_row_header = table.insertRow(0);
+    var $global_div = createJQObjectNoText("<div/>", attributes_global_div, parent_id);
 
-    var headers = ["Cours", "Intitulé", "ECTS", "Insc.", "Janv", "Juin", "Sept", "Crédit"];
-    for (i=0; i < headers.length; i++) {
-        var table_element = document.createElement("TH");
-        table_element.textContent = headers[i];
-        table_row_header.appendChild(table_element);
-    }
-    return table;
+    //Fragment use for efficiency as dom manipulaiton is costy
+    var $frag = $(document.createDocumentFragment());
+    var array_$div = createMultipleJQObject("<div/>", attributes_div, $frag, programs.length);
+    array_$div[0].attr("class", "tab-pane active");
+    $.each(array_$div, function(index, $div) {
+        $div.attr("id", "program"+index.toString());
+
+        //table of courses with their results
+        var $table = create_results_table($div);
+        fill_table_results($table, programs[index]);
+
+        //table of summary of the results
+        display_summary_results(programs[index], $div);
+
+        display_mention_explanation(programs[index], $div);
+    });
+    $frag.appendTo($global_div);
 }
 
-function fill_table(data, table){
-    var courses = data.learning_units
-    for( i = 0; i < courses.length; i++){
-        var table_row = table.insertRow(i+1);
-        table_row.insertCell(0).textContent = courses[i].acronym;
-        table_row.insertCell(1).textContent = courses[i].title;
-        table_row.insertCell(2).textContent = courses[i].credits;
-        table_row.insertCell(3).textContent = "Inscr";
-        table_row.insertCell(4).textContent = courses[i].exams[0].score;
-        table_row.insertCell(5).textContent = courses[i].exams[1].score;
-        table_row.insertCell(6).textContent = courses[i].exams[2].score;
-        table_row.insertCell(7).textContent = "Crédit";
-    }
+function display_mention_explanation(program, $parent) {
+    var $div= createJQObject("<div/>", {}, program.mention_explanation,$parent);
 }
 
-/**************** SUMMARY TABLE  *************/
+/*
+ * Create a jQuery object representing a "table" dom.
+ * This object will be contained by $parent.
+ */
+function create_results_table($parent){
+    var attributes_div_table = { "class": "table-responsive" };
+    var attributes_table = { "class": "table table-striped table-bordered table-hover" };
+    var $div_table= createJQObjectNoText("<div/>", attributes_div_table, $parent);
 
-
-function display_summary_results(data, parent){
-    var table = display_summary_table(parent);
-    fill_summary_table(data, table);
+    var $table = createJQObjectNoText("<table/>", attributes_table, $div_table);
+    return $table;
 }
 
-function display_summary_table(parent){
-    var div_summary_results = document.createElement("DIV");
-    div_summary_results.setAttribute("class", "row");
-    parent.appendChild(div_summary_results);
+/*
+ * Fill the table with the student results contained in data.
+ * See the "header_table" to know the format of data.
+ * $table: jQuery object that represents a dom table.
+ * program: two dimension arrays of data (program info) to fill in the table.
+ */
+function fill_table_results($table, program) {
+  var headers_table = ["Cours", "Intitulé", "ECTS", "Insc.", "Janv", "Juin", "Sept", "Crédit"];
+  var data_table = [headers_table];
+  data_table = $.merge(data_table, results_json_to_array(program));
+  fillTable($table, data_table);
+}
 
-    var div_positionement = document.createElement("DIV");
-    div_positionement.setAttribute("class", "col-md-4 col-md-offset-4");
-    div_summary_results.appendChild(div_positionement);
+/*
+ * Convert the student program in json into an array representation.
+ * Typically it returns a two dimension table of courses results.
+ */
+function results_json_to_array(program) {
+  var courses = program.learning_units;
+  var array_results = [];
+  $.each(courses, function(index, course){
+      var course_result = [];
+      course_result.push(course.acronym);
+      course_result.push(course.title);
+      course_result.push(course.credits);
+      course_result.push("Inscr");
+      course_result.push(course.exams[0].score);
+      course_result.push(course.exams[1].score);
+      course_result.push(course.exams[2].score);
+      course_result.push("Crédit");
 
-    var div_table_responsive = document.createElement("DIV");
-    div_table_responsive.setAttribute("class", "table-responsive");
-    div_positionement.appendChild(div_table_responsive);
+      array_results.push(course_result);
+  });
+  return array_results;
+}
 
-    var table = document.createElement("TABLE");
-    table.setAttribute("class", "table table-striped table-condensed");
-    div_table_responsive.appendChild(table);
+/**************** SUMMARY OF STUDENT RESULTS *************/
 
-    return table;
+/*
+ * Dsiplay a table that summarize the student results.
+ * data: json representing the student results
+ * $parent: parent jQuery object that will contain the student results.
+ */
+function display_summary_results(data, $parent){
+    var $table = create_summary_table($parent);
+    fill_summary_table(data, $table);
+}
+
+/*
+ * Create a jQuery object representing a "table" dom.
+ * This object will be contained by $parent.
+ */
+function create_summary_table($parent){
+    var attributes_global_div = { "class": "row" };
+    var attributes_div_positionement = { "class": "col-md-4 col-md-offset-4" };
+    var attributes_div_table = { "class": "table-responsive" };
+    var attributes_table = { "class": "table table-striped table-condensed" };
+
+    var $global_div = createJQObjectNoText("<div/>", attributes_global_div, $parent);
+
+    var $div_positionement = createJQObjectNoText("<div/>", attributes_div_positionement, $global_div);
+
+    var $div_table= createJQObjectNoText("<div/>", attributes_div_table, $div_positionement);
+
+    var $table = createJQObjectNoText("<table/>", attributes_table, $div_table);
+
+    return $table;
+}
+
+/*
+ * Fill the table with a summary of the student results.
+ * $table: jQuery object that represents a dom table.
+ * data: json object of student results.
+ */
+function fill_summary_table(program, $table){
+  var total_ects = program.total_ECTS;
+  var mean_jan = program.results[0].mean;
+  var mean_june = program.results[1].mean;
+  var mean_sept = program.results[2].mean;
+  var mention_jan = program.results[0].mention;
+  var mention_june = program.results[1].mention;
+  var mention_sept = program.results[2].mention;
+  row_credits = ["Crédits", total_ects, "", ""];
+  row_date_sessions = [" ", "Janv", "Juin", "Sept"];
+  row_mean_scores = ["Moyenne", mean_jan, mean_june, mean_sept];
+  row_mention = ["Mention", mention_jan, mention_june, mention_sept];
+
+  data_table = [row_credits, row_date_sessions, row_mean_scores, row_mention];
+  fillTable($table, data_table);
 }
 
 
-function fill_summary_table(data, table){
-    fill_row_credits(data, table);
-    fill_row_date_sessions(table);
-    fill_row_mean_scores(data, table);
-    fill_row_mention(data, table);
-}
+/***************************** UTILITY FUNCTIONS ***********************/
 
-//display the row showing total credits done this year
-function fill_row_credits(data, table){
-    var table_row = table.insertRow(0);
-    table_row.insertCell(0).textContent = "Crédits";
-    table_row.insertCell(1).textContent = compute_total_credit(data).toString();
-    table_row.insertCell(2).textContent = "-";
-    table_row.insertCell(3).textContent = "-";
-}
+/*
+ * Creates a new jQuery object representing a DOM document.
+ * tag: string of the form "<HTML_tag/>" which is the DOM type
+ * attributes: object of key/value pairs that are attributes of the DOM
+ * text: string which is the content of the DOM
+ * $parent: jQuery object that will be the parent (container)
+ */
+ function createJQObject(tag, attributes, text, $parent) {
+   var $jQObj = $(tag, attributes);
+   $jQObj.text(text);
+   $jQObj.appendTo($parent) ;
+   return $jQObj;
+ }
 
-function compute_total_credit(data){
-    var courses = data.learning_units;
-    var total = 0.0;
-    var i;
-    for( i = 0; i < courses.length; i++){
-        total = total + courses[i].credits;
-    }
-    return total;
-}
+ /*
+  * Creates a new jQuery object representing a DOM document.
+  * tag: string of the form "<HTML_tag/>" which is the DOM type
+  * attributes: object of key/value pairs that are attributes of the DOM
+  * $parent: jQuery object that will be the parent (container)
+  */
+  function createJQObjectNoText(tag, attributes, $parent) {
+    var $jQObj = $(tag, attributes);
+    $jQObj.appendTo($parent) ;
+    return $jQObj;
+  }
 
-//display the row showing the dates of session
-function fill_row_date_sessions(table){
-    var table_row = table.insertRow(1);
-    table_row.insertCell(0).textContent = " ";
-    table_row.insertCell(1).textContent = "Janv";
-    table_row.insertCell(2).textContent = "Juin";
-    table_row.insertCell(3).textContent = "Sept";
-}
+ /*
+  * Creates a new jQuery object representing a DOM document.
+  * tag: string of the form "<HTML_tag/>" which is the DOM type
+  * attributes: object of key/value pairs that are attributes of the DOM
+  */
+  function createJQObjectNoParentNoText(tag, attributes) {
+    var $jQObj = $(tag, attributes);
+    return $jQObj;
+  }
 
-//display the row showing the mean scores
-function fill_row_mean_scores(data, table){
-    var table_row = table.insertRow(2);
-    table_row.insertCell(0).textContent = "Moyenne";
-    table_row.insertCell(1).textContent = compute_session_mean(data, 0).toString();
-    table_row.insertCell(2).textContent = compute_session_mean(data, 1).toString();
-    table_row.insertCell(3).textContent = compute_session_mean(data, 2).toString();
-}
+  /*
+   * Creates "n" same jQuery objects that are child of "parent".
+   * tag: string of the form "<HTML_tag/>" which is the DOM type
+   * attributes: object of key/value pairs that are attributes of the DOM
+   * $parent: jQuery object that will be the parent (container)
+   * n: number of objects to create
+   */
+   function createMultipleJQObject(tag, attributes, $parent, n){
+     //Fragment use for efficiency as dom manipulaiton is costy
+     var $frag = $(document.createDocumentFragment());
+     var array_obj = [];
 
-function compute_session_mean(data, num_session){
-    var courses = data.learning_units;
-    var total = 0.0;
-    var i;
-    for( i = 0; i < courses.length; i++){
-        total = total + courses[i].exams[num_session].score;
-    }
-    return total / i;
-}
+     for(var i = 0; i < n; i++){
+       var obj = createJQObjectNoText(tag, attributes, $frag);
+       array_obj.push(obj);
+     }
 
-//display the row showing the mention
-function fill_row_mention(data, table){
-    var table_row = table.insertRow(3);
-    table_row.insertCell(0).textContent = "Mention";
-    table_row.insertCell(1).textContent = "-";
-    table_row.insertCell(2).textContent = "-";
-    table_row.insertCell(3).textContent = "-";
-}
+     $frag.appendTo($parent);
+     return array_obj;
+   }
+
+  /*
+   * Fill the table with data.
+   * $table: jQuery object representing a table DOM document
+   * data: a two dimension array of data to put in the table
+   */
+   function fillTable($table, data){
+     //Fragment use for efficiency as dom manipulation is costy
+     var $frag = $(document.createDocumentFragment());
+
+     $.each(data, function(row_index, row_data) {
+       var $row = createJQObjectNoText("<tr>", {}, $frag);
+
+       $.each(row_data, function(cell_index, cell_data) {
+         var $cell = createJQObject("<td>", {}, cell_data, $row);
+       });
+
+     });
+
+     $frag.appendTo($table);
+   }

@@ -35,7 +35,7 @@ from performance import models as mdl
 @user_passes_test(is_student)
 def home(request):
     stud = find_by_user(request.user)
-    document = mdl.student_scores.get_document(stud.registration_id)
+    # document = mdl.student_scores.get_document(stud.registration_id)
     return render(request, "performance_home.html", {"student": stud})
 
 
@@ -44,4 +44,4 @@ def home(request):
 def result_by_year_and_program(request):
     stud = find_by_user(request.user)
     document = mdl.student_scores.get_document(stud.registration_id)
-    return render(request, "performance_result.html", {"results": document.value})
+    return render(request, "performance_result.html", {"results": document})
