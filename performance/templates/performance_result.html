@@ -39,19 +39,66 @@
         {% if not results %}
         <p>{% trans 'no_results' %}</p>
         {% else %}
-        <div id="div_results">
-            <script src="{% static 'js/performance_result.js' %}"></script>
-            <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
-            <script>
-                $(document).ready(function() {
-                    var results = {{ results|safe }};
-                    display_results( results, "#div_results");
-                });
-
-
-            </script>
+        <div class="row container-fluid">
+            <!-- Student information's-->
+            <div class="row col-md-3">
+                <p><b>{% trans 'last_name' %} {% trans 'first_name' %}</b></p>
+                <p><b>{% trans 'academic_year' %}</b></p>
+                <p><b>{% trans 'program' %}</b></p>
+            </div>
+            <div class="row col-md-9">
+                <p id="student_name"></p>
+                <p id="academic_year"></p>
+                <p id="program_title"></p>
+            </div>
         </div>
-        <div class="center-block">
+        <div class="row container-fluid">
+            <!-- Student sessions summary-->
+            <div class="pull-right table-responsive">
+                <table class="table table-condensed table-borderless">
+                    <tr>
+                        <th></th>
+                        <th>ECTS</th>
+                        <th>Janv.</th>
+                        <th>Juin</th>
+                        <th>Sept.</th>
+                    </tr>
+                    <tr id="summary_ects">
+                        <td><strong>Total ECTS / Inscription</strong></td>
+                    </tr>
+                    <tr id="summary_mean">
+                        <td><strong>Moyenne</strong></td>
+                    </tr>
+                    <tr id="summary_mention">
+                        <td><strong>Mention</strong></td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+        <div class="row container-fluid">
+            <!-- Student courses results -->
+            <div class="table-responsive ">
+                <table class="table table-stripped table-hover table-bordered" id="table_courses">
+                    <tr>
+                        <th>Cours</th>
+                        <th>Intitulé</th>
+                        <th>ECTS</th>
+                        <th>Inscr.</th>
+                        <th>Janv.</th>
+                        <th>Juin</th>
+                        <th>Sept.</th>
+                        <th>Crédit</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!-- Text explaining the mention attributed for the session. -->
+        <div class="row center-block">
+          <p class="bg-info" id="paragraph_mention_explanation"></p>
+        </div>
+        <!-- Legend explaining letters signification -->
+        <div class="row container-fluid">
             <table class="table table-condensed table-borderless">
                 <tr>
                     <th>Légende</th>
@@ -78,7 +125,19 @@
                 </tr>
             </table>
         </div>
-        <p class="text-warning">Attention : à partir de juin 2009, la moyenne est exprimée sur un maximum de 20. </p>
+        <div class = "row container-fluid">
+            <p class="text-warning">
+                Attention : à partir de juin 2009, la moyenne est exprimée sur un maximum de 20.
+            </p>
+        </div>
+        <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+        <script src="{% static 'js/performance_result.js' %}"></script>
+        <script type="text/javascript">
+          $( document ).ready(function() {
+            var studentJson = {{ results|safe }};
+            fillPage(studentJson);
+          });
+        </script>
         {% endif %}
     </div>
 </div>
