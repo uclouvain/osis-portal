@@ -105,20 +105,25 @@ function create_programs_tab_panes(programs, parent_id){
     $.each(array_$div, function(index, $div) {
         $div.attr("id", "program"+index.toString());
 
+        //table of summary of the results
+        display_summary_results(programs[index], $div);
+
         //table of courses with their results
         var $table = create_results_table($div);
         fill_table_results($table, programs[index]);
 
-        //table of summary of the results
-        display_summary_results(programs[index], $div);
-
+        //mention explanation
         display_mention_explanation(programs[index], $div);
     });
     $frag.appendTo($global_div);
 }
 
 function display_mention_explanation(program, $parent) {
-    var $div= createJQObject("<div/>", {}, program.mention_explanation,$parent);
+    var attributes_p = {"class": "bg-info"}
+
+    var $div= createJQObjectNoText("<div/>", {}, $parent);
+    var $p = createJQObject("<p/>",attributes_p, program.mention_explanation, $div);
+
 }
 
 /*
