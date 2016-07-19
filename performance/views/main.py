@@ -39,14 +39,38 @@ def home(request):
     """
     # Fetch the student academic results.
     stud = find_by_user(request.user)
-    document = mdl.student_scores.select_where_global_id_is(stud.registration_id)
-    print(str(document))
-    return render(request, "performance_home.html", {"student": stud, "doc": document})
+    query_result = mdl.student_scores.select_where_global_id_is(stud.registration_id)
+    list_student_programs = get_student_programs_list(query_result)
+    return render(request, "performance_home.html", {"student": stud,
+                                                     "programs": list_student_programs})
 
 
 @login_required
 @user_passes_test(is_student)
-def result_by_year_and_program(request):
+def result_by_year_and_program(request, anac, program_id):
     stud = find_by_user(request.user)
-    document = mdl.student_scores.fetch_document(stud.registration_id)
-    return render(request, "performance_result.html", {"results": document})
+    document = mdl.student_scores.select_where_global_id_is(stud.registration_id)
+    document = document.get_single_result()
+    return render(request, "performance_result.html", {"results": document["student_results"]})
+
+
+def get_student_programs_list(query_result):
+    """
+    Get the list of programs for a student.
+    This list contains info for each program which are:
+    academic year and anac, program acronym, title and id.
+    :param query_result: a n1ql query object
+    :return: a list of dictionaries
+    """
+    l = []
+    for row in query_result:
+        d = {}
+        academic_year = row["student_results"]["academic_years"][0]
+        program = academic_year["programs"][0]
+        d["year"] =  academic_year["year"]
+        d["anac"] = academic_year["anac"]
+        d["acronym"] = program["acronym"]
+        d["title"] = program["title"]
+        d["program_id"] = program["program_id"]
+        l.append(d)
+    return l

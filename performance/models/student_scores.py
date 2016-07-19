@@ -74,7 +74,6 @@ def select_where_global_id_is(global_id):
     :param global_id: a string
     :return: result of query
     """
-    query_string = "SELECT global_id, academic_years[0].year, academic_years[0].programs[0].acronym," \
-                   "academic_years[0].programs[0].title FROM `student_results` WHERE global_id=$1"
+    query_string = "SELECT * FROM `student_results` WHERE global_id=$1"
     query = N1QLQuery(query_string, global_id)
     return cb.n1ql_query(query)

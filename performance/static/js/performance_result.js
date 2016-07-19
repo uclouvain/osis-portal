@@ -160,14 +160,22 @@ function results_json_to_array(program) {
       course_result.push(course.title);
       course_result.push(course.credits);
       course_result.push("Inscr");
-      course_result.push(course.exams[0].score);
-      course_result.push(course.exams[1].score);
-      course_result.push(course.exams[2].score);
+      course_result.push(course_score_to_string(course.exams[0]));
+      course_result.push(course_score_to_string(course.exams[1]));
+      course_result.push(course_score_to_string(course.exams[2]));
       course_result.push("Crédit");
 
       array_results.push(course_result);
   });
   return array_results;
+}
+
+function course_score_to_string(exam){
+    var score = exam.score;
+    if (exam.status_exam == "-"){
+        return score;
+    }
+    return score + exam.status_exam;
 }
 
 /**************** SUMMARY OF STUDENT RESULTS *************/

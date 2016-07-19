@@ -44,12 +44,41 @@
             <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
             <script>
                 $(document).ready(function() {
-                    var results = {{ results.value|safe }};
+                    var results = {{ results|safe }};
                     display_results( results, "#div_results");
                 });
             </script>
             {% endif %}
          </div>
+        <div class="row">
+            <div class="center-block">
+                <table class="table table-condensed">
+                    <tr>
+                       <th>Légende</th>
+                    </tr>
+                    <tr>
+                        <td>P   examen partiel</td>
+                        <td>T   note résultant d'un test</td>
+                    </tr>
+                    <tr>
+                        <td>I	Première inscription</td>
+                        <td>TV	Evaluation satisfaisante (la note ne compte pas)</td>
+                    </tr>
+                    <tr>
+                        <td>Y	Deuxième inscription</td>
+                        <td>W	Evaluation non satisfaisante (la note ne compte pas)</td>
+                    </tr>
+                    <tr>
+                        <td>R,J	Report de note</td>
+                        <td>EPM	Cours reporté (Epreuve modifiée)</td>
+                    </tr>
+                    <tr>
+                        <td>B	Crédit (Bologne)</td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

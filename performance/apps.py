@@ -45,8 +45,8 @@ def key_from_json(json):
     :return: a string key
     """
     global_id = json["global_id"]
-    academic_year = json["academic_years"][0]["year"]
-    program = json["academic_years"][0]["programs"][0]["acronym"]
+    academic_year = json["academic_years"][0]["anac"]
+    program = json["academic_years"][0]["programs"][0]["program_id"]
     key = "" + global_id + "_" + academic_year + "_" + program
     return key
 

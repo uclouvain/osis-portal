@@ -28,5 +28,6 @@ from performance.views import main
 
 urlpatterns = [
     url(r'^$', main.home, name='performance_home'),
-    url(r'^result/$', main.result_by_year_and_program, name='performance_result'),
+    url(r'^result/(?P<anac>[0-9]{4})/(?P<program_id>[0-9]+)/$',
+        main.result_by_year_and_program, name='performance_result'),
 ]

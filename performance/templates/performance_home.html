@@ -52,10 +52,10 @@
                         <th>Sigle</th>
                         <th>Année d'études</th>
                     </tr>
-                    {% for row in doc %}
+                    {% for row in programs %}
                     <tr>
                         <td>{{row.year}}</td>
-                        <td>{{row.acronym}}</td>
+                        <td><a href="{% url 'performance_result' anac=row.anac program_id=row.program_id%}">{{row.acronym}}</a></td>
                         <td>{{row.title}}</td>
                     </tr>
                     {% endfor %}
