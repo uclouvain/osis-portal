@@ -9,3 +9,21 @@ msgstr "Aucun résultats à afficher."
 
 msgid "performance"
 msgstr "Performance"
+
+msgid "last_name"
+msgstr "Nom"
+
+msgid "first_name"
+msgstr "Prénom"
+
+msgid "matricule_number"
+msgstr "Numéro de matricule"
+
+msgid "year"
+msgstr "Année"
+
+msgid "acronym"
+msgstr "Sigle"
+
+msgid "program"
+msgstr "Année d'étude"

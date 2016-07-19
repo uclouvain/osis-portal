@@ -9,3 +9,21 @@ msgstr "No results to show."
 
 msgid "performance"
 msgstr "Performance"
+
+msgid "last_name"
+msgstr "Last name"
+
+msgid "first_name"
+msgstr "First name"
+
+msgid "matricule_number"
+msgstr "Matricule number"
+
+msgid "year"
+msgstr "Year"
+
+msgid "acronym"
+msgstr "Acronym"
+
+msgid "program"
+msgstr "Program"
