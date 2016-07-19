@@ -23,5 +23,34 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.dispatch.dispatcher import receiver
+from base.models.person import find_by_global_id, find_by_user, Person
 
-default_app_config = 'base.apps.BaseConfig'
+try:
+    from osis_louvain_auth.authentication.shibboleth_auth import user_updated_signal, user_created_signal
+
+    @receiver([user_updated_signal, user_created_signal])
+    def update_person_from_user(sender, **kwargs):
+        user = kwargs.get('user')
+        user_infos = kwargs.get('user_infos')
+        person = find_by_global_id(user_infos.get('USER_FGS'))
+        if not person:
+            person = find_by_user(user)
+        if not person:
+            person = Person(user=user,
+                            global_id=user_infos.get('USER_FGS'),
+                            first_name=user_infos.get('USER_FIRST_NAME'),
+                            last_name=user_infos.get('USER_LAST_NAME'),
+                            email=user_infos.get('USER_EMAIL'))
+        else:
+            person.user = user
+            person.first_name = user.first_name
+            person.last_name = user.last_name
+            person.email = user.email
+            person.global_id = user_infos.get('USER_FGS')
+        person.save()
+        return person
+
+except Exception:
+    pass
+
