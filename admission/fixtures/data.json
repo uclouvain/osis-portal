@@ -371,9 +371,9 @@
   {"model": "reference.educationtype", "fields": {"type":"QUALIFICATION","name" :"Enseignement professionnel+Examen de maturité" ,"adhoc" : "False" }},
 
 
-  {"model": "reference.admissionexamtype", "fields": {"name" :"Examen d'admission aux études universitaires de 1er cycle" ,"adhoc" : "False" }},
-  {"model": "reference.admissionexamtype", "fields": {"name" :"Examen de maturité(ou d'aptitude) de la Communauté française de Belgique" ,"adhoc" : "False" }},
-  {"model": "reference.admissionexamtype", "fields": {"name" :"Examen spécial d'admission aux études universitaires de 1er cycle de l'ingénieur (ingénieur civil)" ,"adhoc" : "False" }},
+  {"model": "admission.admissionexamtype", "fields": {"name" :"Examen d'admission aux études universitaires de 1er cycle" ,"adhoc" : "False" }},
+  {"model": "admission.admissionexamtype", "fields": {"name" :"Examen de maturité(ou d'aptitude) de la Communauté française de Belgique" ,"adhoc" : "False" }},
+  {"model": "admission.admissionexamtype", "fields": {"name" :"Examen spécial d'admission aux études universitaires de 1er cycle de l'ingénieur (ingénieur civil)" ,"adhoc" : "False" }},
 
 
 
