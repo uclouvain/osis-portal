@@ -35,19 +35,22 @@ function fillStudentInfo(studentJson) {
 function fillSessionSummaryTable(studentJson) {
   var program = studentJson.academic_years[0].programs[0];
 
-  fillRowTotalECTS(program);
+  fillRowTotalECTSInscription(program);
   fillRowMean(program);
   fillRowMention(program);
 }
 
-function fillRowTotalECTS(programJson) {
+function fillRowTotalECTSInscription(programJson) {
   var totalECTS = programJson.total_ECTS;
+  var janvInscription = programJson.results[0].insc;
+  var juinInscription = programJson.results[1].insc;
+  var septInscription = programJson.results[2].insc;
 
   var $frag = $(document.createDocumentFragment());
   createJQObject("<td/>", {}, totalECTS, $frag);
-  createJQObject("<td/>", {}, "-", $frag);
-  createJQObject("<td/>", {}, "-", $frag);
-  createJQObject("<td/>", {}, "-", $frag);
+  createJQObject("<td/>", {}, janvInscription, $frag);
+  createJQObject("<td/>", {}, juinInscription, $frag);
+  createJQObject("<td/>", {}, septInscription, $frag);
   $frag.appendTo($("#summary_ects"));
 }
 
