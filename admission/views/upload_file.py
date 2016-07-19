@@ -37,6 +37,9 @@ def upload_file(request):
             file = form.save()
             file.size = file.file.size
             file.file_name = request.FILES['file'].name
+            file_type = form.cleaned_data["file"]
+            content_type = file_type.content_type
+            file.content_type = content_type
             file.save()
             return redirect('new_file')
         else:
@@ -57,7 +60,7 @@ def upload_file(request):
 def download(request, pk):
     document = get_object_or_404(DocumentFile, pk=pk)
     filename = document.file_name
-    response = HttpResponse(document.file, content_type='text/plain')
+    response = HttpResponse(document.file, content_type=document.content_type)
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
 
     return response

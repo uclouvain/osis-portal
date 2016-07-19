@@ -36,7 +36,6 @@
         {% csrf_token %}
         {% include "uploading/upload_file_form.html" %}
         <input type="hidden" name="description" value='LETTER_MOTIVATION' />
-        <input type="hidden" name="content_type" value='APPLICATION_PDF' />
         <button type="submit" class="save btn btn-default" onclick="return confirm('{% trans 'new_file_confirmation_message' %}')">Save</button>
       </form>
     </div>
