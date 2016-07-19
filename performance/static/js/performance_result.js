@@ -105,11 +105,11 @@ function addRowCourse(courseJson, $row) {
   var acronym = courseJson.acronym;
   var title = courseJson.title;
   var ects = courseJson.credits;
-  var inscr = "Inscr";
+  var inscr = inscrToString(courseJson.insc);
   var janv = examScoreToString(courseJson.exams[0]);
   var juin = examScoreToString(courseJson.exams[1]);
   var sept = examScoreToString(courseJson.exams[2]);
-  var credit = "Crédits";
+  var credit = creditToString(courseJson.credit_report);
 
   createJQObject("<td/>", {}, acronym, $row);
   createJQObject("<td/>", {}, title, $row);
@@ -127,6 +127,20 @@ function examScoreToString(examJson) {
     return score;
   }
   return score + examJson.status_exam;
+}
+
+function inscrToString(inscr) {
+  if (inscr == "I") {
+    return "Inscr";
+  }
+  return "-";
+}
+
+function creditToString(creditReport) {
+  if (creditReport == "K") {
+    return "Crédit";
+  }
+  return "-";
 }
 
 /***************************** MENTION EXPLANATION PARAGRAPH ************/
