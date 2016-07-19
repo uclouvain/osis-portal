@@ -23,7 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
+from django.http import *
 from osis_common.forms import UploadDocumentFileForm
 from osis_common.models.document_file import DocumentFile
 
@@ -45,10 +46,19 @@ def upload_file(request):
                                                      'documents': documents})
     else:
         form = UploadDocumentFileForm(initial={'storage_duration': 0,
-                                               'physical_extension': "none",
                                                'document_type': "admission",
                                                'user': request.user})
         return render(request, 'new_file.html', {'form': form,
                                                  'content_type_choices': DocumentFile.CONTENT_TYPE_CHOICES,
                                                  'description_choices': DocumentFile.DESCRIPTION_CHOICES,
                                                  'documents': documents})
+
+
+def download(request, pk):
+    document = get_object_or_404(DocumentFile, pk=pk)
+    filename = document.file_name
+    response = HttpResponse(document.file, content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+
+    return response
+

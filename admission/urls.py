@@ -89,6 +89,6 @@ urlpatterns = [
     url(r'^admission/application/accounting/update/$', accounting.accounting_update, name='accounting_update'),
 
     url(r'^upload/$', upload_file.upload_file, name='new_file'),
-
+    url(r'^upload/download/(?P<pk>[0-9]+)$', upload_file.download, name='download'),
 
 ]
