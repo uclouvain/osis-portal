@@ -42,7 +42,13 @@ function fillSessionSummaryTable(studentJson) {
 
 function fillRowTotalECTS(programJson) {
   var totalECTS = programJson.total_ECTS;
-  createJQObject("<td/>", {}, totalECTS, $("#summary_ects"));
+
+  var $frag = $(document.createDocumentFragment());
+  createJQObject("<td/>", {}, totalECTS, $frag);
+  createJQObject("<td/>", {}, "-", $frag);
+  createJQObject("<td/>", {}, "-", $frag);
+  createJQObject("<td/>", {}, "-", $frag);
+  $frag.appendTo($("#summary_ects"));
 }
 
 function fillRowMean(programJson) {

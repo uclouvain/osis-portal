@@ -28,7 +28,7 @@
 
 
 {% block content %}
-<div class="page-header">
+<div class="page-header hidden-print">
     <h2>{% trans 'performance' %}</h2>
 </div>
 
@@ -41,21 +41,27 @@
         {% else %}
         <div class="row container-fluid">
             <!-- Student information's-->
-            <div class="row col-md-3">
-                <p><b>{% trans 'last_name' %} {% trans 'first_name' %}</b></p>
-                <p><b>{% trans 'academic_year' %}</b></p>
-                <p><b>{% trans 'program' %}</b></p>
-            </div>
-            <div class="row col-md-9">
-                <p id="student_name"></p>
-                <p id="academic_year"></p>
-                <p id="program_title"></p>
+            <div class="pull-left table-responsive">
+              <table class="table table-condensed borderless">
+                <tr>
+                  <td style="border-top: none !important;"><b>{% trans 'last_name' %} {% trans 'first_name' %}</b></td>
+                  <td style="border-top: none !important;" id="student_name"></td>
+                </tr>
+                <tr>
+                  <td style="border-top: none !important;"><b>{% trans 'academic_year' %}</b></td>
+                  <td style="border-top: none !important;" id="academic_year"></td>
+                </tr>
+                <tr>
+                  <td style="border-top: none !important;"><b>{% trans 'program' %}</b></td>
+                  <td style="border-top: none !important;" id="program_title"></td>
+                </tr>
+              </table>
             </div>
         </div>
         <div class="row container-fluid">
             <!-- Student sessions summary-->
             <div class="pull-right table-responsive">
-                <table class="table table-condensed table-borderless">
+                <table class="table table-condensed table-borderless table-striped">
                     <tr>
                         <th></th>
                         <th>ECTS</th>
@@ -79,7 +85,7 @@
         <div class="row container-fluid">
             <!-- Student courses results -->
             <div class="table-responsive ">
-                <table class="table table-stripped table-hover table-bordered" id="table_courses">
+                <table class="table table-striped table-hover table-bordered" id="table_courses">
                     <tr>
                         <th>Cours</th>
                         <th>Intitulé</th>
@@ -99,31 +105,33 @@
         </div>
         <!-- Legend explaining letters signification -->
         <div class="row container-fluid">
-            <table class="table table-condensed table-borderless">
-                <tr>
-                    <th>Légende</th>
-                </tr>
-                <tr>
-                    <td>P examen partiel</td>
-                    <td>T note résultant d'un test</td>
-                </tr>
-                <tr>
-                    <td>I Première inscription</td>
-                    <td>TV Evaluation satisfaisante (la note ne compte pas)</td>
-                </tr>
-                <tr>
-                    <td>Y Deuxième inscription</td>
-                    <td>W Evaluation non satisfaisante (la note ne compte pas)</td>
-                </tr>
-                <tr>
-                    <td>R,J Report de note</td>
-                    <td>EPM Cours reporté (Epreuve modifiée)</td>
-                </tr>
-                <tr>
-                    <td>B Crédit (Bologne)</td>
-                    <td></td>
-                </tr>
-            </table>
+            <div class="col-md-6 table-responsive">
+                <table class="table table-condensed table-borderless">
+                    <tr>
+                        <th style="border-top: none !important;">Légende</th>
+                    </tr>
+                    <tr>
+                        <td>P examen partiel</td>
+                        <td>T note résultant d'un test</td>
+                    </tr>
+                    <tr>
+                        <td style="border-top: none !important;">I Première inscription</td>
+                        <td style="border-top: none !important;">TV Evaluation satisfaisante (la note ne compte pas)</td>
+                    </tr>
+                    <tr>
+                        <td style="border-top: none !important;">Y Deuxième inscription</td>
+                        <td style="border-top: none !important;">W Evaluation non satisfaisante (la note ne compte pas)</td>
+                    </tr>
+                    <tr>
+                        <td style="border-top: none !important;">R,J Report de note</td>
+                        <td style="border-top: none !important;">EPM Cours reporté (Epreuve modifiée)</td>
+                    </tr>
+                    <tr>
+                        <td style="border-top: none !important;">B Crédit (Bologne)</td>
+                        <td style="border-top: none !important;"></td>
+                    </tr>
+                </table>
+            </div>
         </div>
         <div class = "row container-fluid">
             <p class="text-warning">
