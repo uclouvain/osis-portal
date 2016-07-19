@@ -129,11 +129,11 @@
                             <div>
                                 <label class="radio-inline">
                                     <input type="radio" id="rd_gender_male" name="gender" value="MALE"
-                                           {% if person.gender = "MALE" %} checked {% endif %}> Masculin
+                                           {% if applicant.gender = "MALE" %} checked {% endif %}> Masculin
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" id="rd_gender_female" name="gender" value="FEMALE"
-                                           {% if person.gender = "FEMALE" %} checked {% endif %}> Féminin
+                                           {% if applicant.gender = "FEMALE" %} checked {% endif %}> Féminin
                                 </label>
                             </div>
                             <font class="error">{{ applicant_form.gender.errors|striptags }}</font>
@@ -142,22 +142,22 @@
                         <div class="col-md-3">
                             <label>{%trans 'civil_status'%} *</label>
                             <select class="form-control" id="slt_civil_status" name="civil_status">
-                                <option value="SINGLE" {% if person.civil_status = "SINGLE" %}selected{%endif%}>
+                                <option value="SINGLE" {% if applicant.civil_status = "SINGLE" %}selected{%endif%}>
                                     {%trans 'single'%}
                                 </option>
-                                <option value="COHABITANT" {% if person.civil_status = "COHABITANT" %}selected{%endif%}>
+                                <option value="COHABITANT" {% if applicant.civil_status = "COHABITANT" %}selected{%endif%}>
                                     {%trans 'cohabitant'%}
                                 </option>
-                                <option value="MARRIED" {% if person.civil_status = "MARRIED" %} selected {%endif%}>
+                                <option value="MARRIED" {% if applicant.civil_status = "MARRIED" %} selected {%endif%}>
                                     {%trans 'married'%}
                                 </option>
-                                <option value="SEPARATED" {% if person.civil_status = "SEPARATED" %}selected{%endif%}>
+                                <option value="SEPARATED" {% if applicant.civil_status = "SEPARATED" %}selected{%endif%}>
                                     {%trans 'separated'%}
                                 </option>
-                                <option value="DIVORCED" {% if person.civil_status = "DIVORCED" %}selected{%endif%}>
+                                <option value="DIVORCED" {% if applicant.civil_status = "DIVORCED" %}selected{%endif%}>
                                     {%trans 'divorced'%}
                                 </option>
-                                <option value="WIDOWED" {% if person.civil_status = "WIDOWED" %}selected{%endif%}>
+                                <option value="WIDOWED" {% if applicant.civil_status = "WIDOWED" %}selected{%endif%}>
                                     {%trans 'widow'%}
                                 </option>
                             </select>
