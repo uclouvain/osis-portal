@@ -36,10 +36,10 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
+        {% if not results %}
+        <p>{% trans 'no_results' %}</p>
+        {% else %}
         <div id="div_results">
-            {% if not results %}
-            <p>{% trans 'no_results' %}</p>
-            {% else %}
             <script src="{% static 'js/performance_result.js' %}"></script>
             <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
             <script>
@@ -48,8 +48,8 @@
                     display_results( results, "#div_results");
                 });
 
+
             </script>
-            {% endif %}
         </div>
         <div class="center-block">
             <table class="table table-condensed table-borderless">
@@ -79,6 +79,7 @@
             </table>
         </div>
         <p class="text-warning">Attention : à partir de juin 2009, la moyenne est exprimée sur un maximum de 20. </p>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
