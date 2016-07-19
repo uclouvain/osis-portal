@@ -44,7 +44,6 @@ def home(request):
     return render(request, "performance_home.html", {"student": stud,
                                                      "programs": list_student_programs})
 
-
 @login_required
 @user_passes_test(is_student)
 def result_by_year_and_program(request, anac, program_id):
@@ -52,7 +51,6 @@ def result_by_year_and_program(request, anac, program_id):
     query_result = mdl.student_scores.select_where_global_id_is(stud.registration_id)
     document = filter_by_anac_and_program_id(query_result, anac, program_id)
     return render(request, "performance_result.html", {"results": document})
-
 
 def get_student_programs_list(query_result):
     """
@@ -74,7 +72,6 @@ def get_student_programs_list(query_result):
         d["program_id"] = program["program_id"]
         l.append(d)
     return l
-
 
 def filter_by_anac_and_program_id(query_result, anac, program_id):
     """

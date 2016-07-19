@@ -46,7 +46,6 @@ cb = connect_db()
 # cb.bucket_manager().create_n1ql_primary_index(ignore_exists=True)
 # cb.bucket_manager().create_n1ql_index('index_global_id', fields=['global_id'])
 
-
 def fetch_document(document_id):
     """
     Fetch the document having id (key) "document_id" from the bucket "cb".
@@ -58,7 +57,6 @@ def fetch_document(document_id):
     except NotFoundError:
         return None
 
-
 def insert_or_update_document(key, data):
     """
     Insert a new document if the key passed in parameter doesn't exist in CouchDB.
@@ -66,7 +64,6 @@ def insert_or_update_document(key, data):
     :param data: The document (JSON) to insert/update in Couchbase
     """
     cb.set(key, data)
-
 
 def select_where_global_id_is(global_id):
     """

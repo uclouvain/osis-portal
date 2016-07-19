@@ -50,7 +50,6 @@ def key_from_json(json):
     key = "" + global_id + "_" + academic_year + "_" + program
     return key
 
-
 def insert_or_update(json_data):
     """
         Insert the records in CouchBase. If the records already exist, then the method makes an update.
