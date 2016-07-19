@@ -30,4 +30,7 @@ class BaseConfig(AppConfig):
     name = 'base'
 
     def ready(self):
-        from base.models.signals import update_person_from_user
+        try:
+            from base.models.signals import update_person_from_user
+        except ImportError:
+            pass
