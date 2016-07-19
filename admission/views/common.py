@@ -261,7 +261,7 @@ def profile(request):
         institution_name = None
 
     assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
-    applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_person(applicant.id)
+    applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
 
     return render(request, "profile.html", {'applicant': applicant,
                                             'applicant_form': applicant_form,
