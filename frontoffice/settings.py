@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'osis_common',
     'reference',
     'base',
     'admission',
@@ -114,7 +115,7 @@ DATABASES = {
 }
 
 
-COUCHBASE_CONNECTION_STRING='couchbase://localhost/score_encoding'
+COUCHBASE_CONNECTION_STRING='couchbase://localhost/'
 COUCHBASE_PASSWORD=''
 
 # Password validation

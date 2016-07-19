@@ -30,10 +30,14 @@ from base import models as mdl_base
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
+from base.models.student import is_student
+
 
 @login_required
 def home(request):
-    return render(request, "dashboard.html", {})
+    # Adapt layout depending on the type of user (student, professor)
+    student = is_student(request.user)
+    return render(request, "dashboard.html", {"is_student": student})
 
 
 @login_required
