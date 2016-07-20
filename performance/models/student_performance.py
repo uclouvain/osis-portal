@@ -26,6 +26,7 @@
 from couchbase.bucket import Bucket, NotFoundError, N1QLQuery
 from couchbase.exceptions import CouchbaseError
 from django.conf import settings
+import re
 
 # Helper functions to interact (connection, fetch, upsert) with the CouchBase bucket containing
 # student academic results.
@@ -89,7 +90,31 @@ def key_from_json(json):
     """
     global_id = json["global_id"]
     academic_year = json["academic_years"][0]["anac"]
-    # TODO remove special characters for the acronym
-    program = json["academic_years"][0]["programs"][0]["acronym"]
-    key = "" + global_id + "_" + academic_year + "_" + program
+    program_acronym = format_acronym(json["academic_years"][0]["programs"][0]["acronym"])
+    key = "" + global_id + "_" + academic_year + "_" + program_acronym
     return key
+
+def format_acronym(program_acronym):
+    """
+    Format the program acronym by removing all non alphanumeric characters and
+    by lowering all characters case.
+    :param program_acronym: a string
+    :return: a formatted program acronym
+    """
+    lower_case_program_acronym = program_acronym.lower()
+
+    return alpha_numeric_only(lower_case_program_acronym)
+
+def alpha_numeric_only(s):
+    """
+    Return the string obtained by removing all non alphanumeric characters
+    from the stirng "s".
+    Ex: SINF2MS\G -> SINFMSG
+        alpha_numeric -> alphanumeric
+    :param s: a string
+    :return: a alphanumeric only version of s
+    """
+    # Matches all non alphanumeric strings
+    pattern = re.compile('[\W_]+')
+
+    return pattern.sub('', s)

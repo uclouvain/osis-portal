@@ -55,7 +55,7 @@
                     {% for row in programs %}
                     <tr>
                         <td>{{row.year}}</td>
-                        <td><a href="{% url 'performance_result' anac=row.anac program_acronym=row.acronym%}">{{row.acronym}}</a></td>
+                        <td><a href="{% url 'performance_result' anac=row.anac program_acronym=row.formatted_acronym%}">{{row.acronym}}</a></td>
                         <td>{{row.title}}</td>
                     </tr>
                     {% endfor %}

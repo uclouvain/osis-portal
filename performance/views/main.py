@@ -68,6 +68,7 @@ def get_student_programs_list(query_result):
         d["year"] =  academic_year["year"]
         d["anac"] = academic_year["anac"]
         d["acronym"] = program["acronym"]
+        d["formatted_acronym"] = mdl.student_performance.format_acronym(program["acronym"])
         d["title"] = program["title"]
         d["program_id"] = program["program_id"]
         l.append(d)
@@ -85,7 +86,9 @@ def filter_by_anac_and_program_acronym(query_result, anac, program_acronym):
     for row in query_result:
         academic_year = row["performance"]["academic_years"][0]
         program = academic_year["programs"][0]
-        if academic_year["anac"] == anac and program["acronym"] == program_acronym:
+        if academic_year["anac"] == anac and \
+                        mdl.student_performance.format_acronym(program["acronym"]) \
+                        == mdl.student_performance.format_acronym(program_acronym):
             return row["performance"]
     return None
 
