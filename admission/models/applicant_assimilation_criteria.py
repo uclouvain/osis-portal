@@ -23,10 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from reference.models import assimilation_criteria
-from reference.models import country
-from reference.models import domain
-from reference.models import education_institution
-from reference.models import education_type
-from reference.models import grade_type
-from reference.models import language
+from django.db import models
+from django.contrib import admin
+
+
+class ApplicantAssimilationCriteriaAdmin(admin.ModelAdmin):
+    list_display = ('applicant', 'criteria')
+
+
+class ApplicantAssimilationCriteria(models.Model):
+    applicant = models.ForeignKey('Applicant')
+    criteria = models.ForeignKey('reference.AssimilationCriteria')
+
+
+def find_by_applicant(applicant):
+    return ApplicantAssimilationCriteria.objects.filter(applicant=applicant)
+
+
+def find_by_criteria(criteria):
+    return ApplicantAssimilationCriteria.objects.get(criteria=criteria)

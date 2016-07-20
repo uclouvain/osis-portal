@@ -23,26 +23,36 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
-from django.contrib import admin
+from couchbase.bucket import Bucket, NotFoundError
+from couchbase.exceptions import CouchbaseError
+from django.conf import settings
 
 
-class PersonAssimilationCriteriaAdmin(admin.ModelAdmin):
-    list_display = ('person', 'criteria')
+def connect_db():
+    bucket_name = "performance"
+    if settings.COUCHBASE_PASSWORD:
+        cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name, password=settings.COUCHBASE_PASSWORD)
+    else:
+        cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name)
+    return cb
+
+cb = connect_db()
 
 
-class PersonAssimilationCriteria(models.Model):
-    person = models.ForeignKey('Applicant')
-    criteria = models.ForeignKey('reference.AssimilationCriteria')
+def get_document(global_id):
+    try:
+        return cb.get(global_id)
+    except NotFoundError:
+        return None
 
 
-def find_by_person(a_person):
-    return PersonAssimilationCriteria.objects.filter(person=a_person)
-
-
-def find_by_criteria(criteria_id):
-    return PersonAssimilationCriteria.objects.get(pk=criteria_id)
-
-
-def find_by_person_criteria(person_id, criteria_id):
-    return PersonAssimilationCriteria.objects.filter(person=person_id, criteria=criteria_id)
+def insert_or_update_document(key, data):
+    """
+    Insert a new document if the key passed in parameter doesn't exist in CouchDB.
+    :param key: The key of the document
+    :param data: The document (JSON) to insert/update in Couchbase
+    """
+    try:
+        cb.set(key, data)
+    except CouchbaseError as err:
+        print('CouchBase error:', err)

@@ -219,11 +219,11 @@ def profile(request):
                     criteria_id = key[22:]
                     criteria = mdl_ref.assimilation_criteria.find_by_id(criteria_id)
                     if criteria:
-                        person_assimilation_criteria = mdl.person_assimilation_criteria.PersonAssimilationCriteria()
-                        person_assimilation_criteria.criteria = criteria
-                        person_assimilation_criteria.person = applicant
+                        applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria()
+                        applicant_assimilation_criteria.criteria = criteria
+                        applicant_assimilation_criteria.applicant = applicant
                         if applicant_form.is_valid():
-                            person_assimilation_criteria.save()
+                            applicant_assimilation_criteria.save()
 
         if applicant_form.is_valid():
             if person_contact_address:
@@ -261,13 +261,13 @@ def profile(request):
         institution_name = None
 
     assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
-    person_assimilation_criteria = mdl.person_assimilation_criteria.find_by_person(applicant.id)
+    applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
 
     return render(request, "profile.html", {'applicant': applicant,
                                             'applicant_form': applicant_form,
                                             'countries': countries,
                                             'assimilationCriteria': assimilation_criteria,
-                                            'personAssimilationCriteria': person_assimilation_criteria,
+                                            'applicant_assimilation_criteria': applicant_assimilation_criteria,
                                             'person_legal_address': person_legal_address,
                                             'person_contact_address': person_contact_address,
                                             'same_addresses': same_addresses,

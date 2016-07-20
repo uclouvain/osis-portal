@@ -23,32 +23,34 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from couchbase.bucket import Bucket, NotFoundError
-from django.conf import settings
+from django.dispatch.dispatcher import receiver
+from base.models.person import find_by_global_id, find_by_user, Person
 
+try:
+    from osis_louvain_auth.authentication.shibboleth_auth import user_updated_signal, user_created_signal
 
-def connect_db():
-    bucket_name = "student_results"
-    if settings.COUCHBASE_PASSWORD:
-        cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name, password=settings.COUCHBASE_PASSWORD)
-    else:
-        cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name)
-    return cb
+    @receiver([user_updated_signal, user_created_signal])
+    def update_person_from_user(sender, **kwargs):
+        user = kwargs.get('user')
+        user_infos = kwargs.get('user_infos')
+        person = find_by_global_id(user_infos.get('USER_FGS'))
+        if not person:
+            person = find_by_user(user)
+        if not person:
+            person = Person(user=user,
+                            global_id=user_infos.get('USER_FGS'),
+                            first_name=user_infos.get('USER_FIRST_NAME'),
+                            last_name=user_infos.get('USER_LAST_NAME'),
+                            email=user_infos.get('USER_EMAIL'))
+        else:
+            person.user = user
+            person.first_name = user.first_name
+            person.last_name = user.last_name
+            person.email = user.email
+            person.global_id = user_infos.get('USER_FGS')
+        person.save()
+        return person
 
-cb = connect_db()
+except Exception:
+    pass
 
-
-def get_document(global_id):
-    try:
-        return cb.get(global_id)
-    except NotFoundError:
-        return None
-
-
-def insert_or_update_document(key, data):
-    """
-    Insert a new document if the key passed in parameter doesn't exist in CouchDB.
-    :param key: The key of the document
-    :param data: The document (JSON) to insert/update in Couchbase
-    """
-    cb.set(key, data)
