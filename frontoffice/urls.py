@@ -31,7 +31,8 @@ urlpatterns = [
     url(r'^admission/', include('admission.urls')),
     url(r'^dashboard/', include('dashboard.urls')),
     url(r'^catalog/', include('catalog.urls')),
-    url(r'^performance/', include('performance.urls'))
+    url(r'^performance/', include('performance.urls')),
+    url(r'^dissertation/', include('dissertation.urls'))
 ]
 
 try:

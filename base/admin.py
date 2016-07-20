@@ -31,3 +31,4 @@ admin.site.register(person.Person,
                     person.BasePersonAdmin)
 admin.site.register(student.Student,
                     student.StudentAdmin)
+
