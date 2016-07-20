@@ -23,13 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from rest_framework import serializers
-from admission import models as mdl
 from django.http import HttpResponse
+from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
-from django.views.decorators.csrf import csrf_exempt
 from reference import models as mdl_reference
-from django.core.serializers.python import Serializer
 
 
 class JSONResponse(HttpResponse):
@@ -41,14 +38,14 @@ class JSONResponse(HttpResponse):
 
 class DomainSerializer(serializers.ModelSerializer):
     class Meta:
-        model = mdl.domain.Domain
+        model = mdl_reference.domain.Domain
         fields = ('id', 'name')
 
 
 def find_subdomains(request):
     domain = request.GET['domain']
     if domain and domain != "-":
-        subdomains = mdl.domain.find_subdomains_by_domain_id(int(domain))
+        subdomains = mdl_reference.domain.find_subdomains_by_domain_id(int(domain))
         serializer = DomainSerializer(subdomains, many=True)
         return JSONResponse(serializer.data)
     return None

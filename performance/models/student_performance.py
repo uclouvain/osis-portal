@@ -24,10 +24,14 @@
 #
 ##############################################################################
 from couchbase.bucket import Bucket, NotFoundError, N1QLQuery
+from couchbase.exceptions import CouchbaseError
 from django.conf import settings
 
 # Helper functions to interact (connection, fetch, upsert) with the CouchBase bucket containing
 # student academic results.
+
+
+bucket_name = "performance"
 
 
 def connect_db():
@@ -35,7 +39,6 @@ def connect_db():
     Connect to the bucket "bucket_name" located on the server at address "COUCHBASE_CONNECTION_STRING"
     :return: the bucket
     """
-    bucket_name = "student_results"
     if settings.COUCHBASE_PASSWORD:
         cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name, password=settings.COUCHBASE_PASSWORD)
     else:
@@ -63,7 +66,10 @@ def insert_or_update_document(key, data):
     :param key: The key of the document
     :param data: The document (JSON) to insert/update in Couchbase
     """
-    cb.set(key, data)
+    try:
+        cb.set(key, data)
+    except CouchbaseError:
+        raise
 
 def select_where_global_id_is(global_id):
     """
@@ -71,6 +77,6 @@ def select_where_global_id_is(global_id):
     :param global_id: a string
     :return: result of query
     """
-    query_string = "SELECT * FROM `student_results` WHERE global_id=$1"
+    query_string = "SELECT * FROM " + bucket_name + " WHERE global_id=$1"
     query = N1QLQuery(query_string, global_id)
     return cb.n1ql_query(query)

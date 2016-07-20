@@ -39,7 +39,7 @@ def home(request):
     """
     # Fetch the student academic results.
     stud = find_by_user(request.user)
-    query_result = mdl.student_scores.select_where_global_id_is(stud.registration_id)
+    query_result = mdl.student_performance.select_where_global_id_is(stud.registration_id)
     list_student_programs = get_student_programs_list(query_result)
     return render(request, "performance_home.html", {"student": stud,
                                                      "programs": list_student_programs})
@@ -48,7 +48,7 @@ def home(request):
 @user_passes_test(is_student)
 def result_by_year_and_program(request, anac, program_id):
     stud = find_by_user(request.user)
-    query_result = mdl.student_scores.select_where_global_id_is(stud.registration_id)
+    query_result = mdl.student_performance.select_where_global_id_is(stud.registration_id)
     document = filter_by_anac_and_program_id(query_result, anac, program_id)
     return render(request, "performance_result.html", {"results": document})
 
@@ -63,7 +63,7 @@ def get_student_programs_list(query_result):
     l = []
     for row in query_result:
         d = {}
-        academic_year = row["student_results"]["academic_years"][0]
+        academic_year = row["performance"]["academic_years"][0]
         program = academic_year["programs"][0]
         d["year"] =  academic_year["year"]
         d["anac"] = academic_year["anac"]
@@ -83,8 +83,9 @@ def filter_by_anac_and_program_id(query_result, anac, program_id):
     :return: a json document
     """
     for row in query_result:
-        academic_year = row["student_results"]["academic_years"][0]
+        academic_year = row["performance"]["academic_years"][0]
         program = academic_year["programs"][0]
         if academic_year["anac"] == anac and program["program_id"] == program_id:
-            return row["student_results"]
+            return row["performance"]
     return None
+
