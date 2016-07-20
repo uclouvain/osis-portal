@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-############################################################################
+##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -23,17 +22,37 @@
 #    at the root of the source code of this program.  If not,
 #    see http://www.gnu.org/licenses/.
 #
-############################################################################
-
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required, user_passes_test
-from base.models.student import is_student, find_by_user
-from performance import models as mdl
+##############################################################################
+from couchbase.bucket import Bucket, NotFoundError
+from couchbase.exceptions import CouchbaseError
+from django.conf import settings
 
 
-@login_required
-@user_passes_test(is_student)
-def home(request):
-    stud = find_by_user(request.user)
-    document = mdl.student_performance.get_document(stud.registration_id)
-    return render(request, "performance_home.html", {"data": document})
+def connect_db():
+    bucket_name = "performance"
+    if settings.COUCHBASE_PASSWORD:
+        cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name, password=settings.COUCHBASE_PASSWORD)
+    else:
+        cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name)
+    return cb
+
+cb = connect_db()
+
+
+def get_document(global_id):
+    try:
+        return cb.get(global_id)
+    except NotFoundError:
+        return None
+
+
+def insert_or_update_document(key, data):
+    """
+    Insert a new document if the key passed in parameter doesn't exist in CouchDB.
+    :param key: The key of the document
+    :param data: The document (JSON) to insert/update in Couchbase
+    """
+    try:
+        cb.set(key, data)
+    except CouchbaseError as err:
+        print('CouchBase error:', err)
