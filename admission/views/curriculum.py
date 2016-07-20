@@ -34,6 +34,8 @@ from django.utils.translation import ugettext_lazy as _
 from admission import models as mdl
 from admission.views import common
 from reference import models as mdl_reference
+from admission.views import demande_validation
+from admission.views import tabs
 
 
 def save(request):
@@ -126,7 +128,13 @@ def save(request):
                                                "current_academic_year": mdl.academic_year.current_academic_year()})
 
 
-def update(request):
+def update(request, application_id=None):
+    first = True
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
+        first = False
+    else:
+        application = mdl.application.init_application(request.user)
     curricula = []
     message = None
     applicant = mdl.applicant.find_by_user(request.user)
@@ -168,6 +176,7 @@ def update(request):
         return common.home(request)
     else:
         universities_cities, universities = populate_dropdown_list(curricula)
+        tab_status = tabs.init(request)
         return render(request, "home.html",
                       {"curricula": curricula,
                        "local_universities_french": local_universities_french,
@@ -181,7 +190,24 @@ def update(request):
                        "languages": mdl_reference.language.find_languages(),
                        "current_academic_year": mdl.academic_year.current_academic_year(),
                        "tab_active": 3,
-                       "first": True})
+                       "first": first,
+                       "application": application,                       
+                       "validated_profil": demande_validation.validate_profil(applicant),
+                       "validated_diploma": demande_validation.validate_diploma(application),
+                       "validated_curriculum": demande_validation.validate_curriculum(application),
+                       "validated_application": demande_validation.validate_application(application),
+                       "validated_accounting": demande_validation.validate_accounting(),
+                       "validated_sociological": demande_validation.validate_sociological(),
+                       "validated_attachments": demande_validation.validate_attachments(),
+                       "validated_submission": demande_validation.validate_submission(),
+                       'tab_profile': tab_status['tab_profile'],
+                     'tab_applications': tab_status['tab_applications'],
+                     'tab_diploma': tab_status['tab_diploma'],
+                     'tab_curriculum': tab_status['tab_curriculum'],
+                     'tab_accounting': tab_status['tab_accounting'],
+                     'tab_sociological': tab_status['tab_sociological'],
+                     'tab_attachments': tab_status['tab_attachments'],
+                     'tab_submission': tab_status['tab_submission']})
 
 
 def validate_fields_form(request, duplicate_year_origin):

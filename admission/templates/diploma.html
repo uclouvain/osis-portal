@@ -306,16 +306,16 @@
     <div>
         <a id="lnk_previous_step"
            class="btn btn-default"
-           href="{% url 'applications'%}"
-           onclick="save('form_questions');"
+           href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications'%}{%endif%}"
+           onclick="save('form_secondary_education');"
            title="{% trans 'demandes'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-            {%trans 'previous_step'%}</a>
+            {%trans 'previous_step'%} : {%trans 'offer_choice'%}</a>
         <a id="lnk_next_step"
            class="btn btn-default"
-           href="{% url 'curriculum_update'%}"
+           href="{%if application.id%}{% url 'curriculum_update' application.id%}{%else%}{% url 'curriculum_update'%}{%endif%}"
            onclick="save('form_secondary_education');"
            title="{% trans 'curriculum'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            {%trans 'next_step'%}</a>
+            {%trans 'next_step'%} : {%trans 'curriculum'%}</a>
     </div>
 
 </form>

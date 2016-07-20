@@ -59,9 +59,6 @@ function offer_selection_display(){
     if ($("input[name='grade_choice']:checked").length > 0){
        radio_button_value = $('input[name="grade_choice"]:checked').val();
     }
-    else{
-       return False;
-    }
 
     $("#pnl_offers").find("table")
       .remove()

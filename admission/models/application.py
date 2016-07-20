@@ -99,5 +99,5 @@ def find_first_by_user(user):
 def init_application(user):
     person_application = applicant.Applicant.objects.get(user=user)
     application = Application()
-    application.person = person_application
+    application.applicant = person_application
     return application

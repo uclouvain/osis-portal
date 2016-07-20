@@ -26,6 +26,13 @@
 {% endcomment %}
 
     <form method="post" action="{% url 'profile' %}" id="form_profile">
+        <div class="row">
+            <div class="btn-toolbar pull-right" id="steps_toolbar" role="toolbar">
+                <div class="btn-group" role="group" data-toggle="buttons">
+                    <button type="button" class="btn btn-default" id="step_down">{%trans 'offer_choice'%}<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></button>
+                </div>
+            </div>
+        </div>
         {% csrf_token %}
         {% if applicant_form.errors %}
         <font class="error">{% if applicant_form.errors %}{% trans 'errors_warning'%}{%endif%}</font>
@@ -104,6 +111,7 @@
                     <div class="col-md-3">
                         <label>{%trans 'nationality'%} *</label>
                         <select class="form-control" id="slt_nationality" name="nationality">
+                            <option value=""/>
                             {% for country in countries%}
                             <option value="{{country.id}}"
                                     {% if country.id = applicant.nationality.id %} selected {%endif %}>
@@ -278,6 +286,7 @@
                     <div class="col-md-4">
                         <label>{% trans 'country'%} *</label>
                         <select class="form-control" id="slt_legal_adr_country" name="legal_adr_country">
+                            <option value=""/>
                             {% for country in countries%}
                             <option value="{{country.id}}"
                                     {%if country.id = person_legal_address.country.id%}selected {%endif%}>
@@ -366,6 +375,7 @@
                         <div class="col-md-4">
                             <label>{% trans 'country'%} *</label>
                             <select class="form-control" id="slt_contact_adr_country" name="contact_adr_country">
+                                <option value=""/>
                                 {% for country in countries%}
                                 <option value="{{country.id}}"
                                         {%if country.id = person_contact_address.country.id%} selected {%endif%}>
@@ -450,12 +460,14 @@
             </div>
         </div>
         <div>
-            <a id="lnk_next_step"
+            <span id="txt_message_error_profile"
+                   class="alert alert-warning"
+                   style="visibility:hidden;display:none;"></span><br>
+            <a id="lnk_profil_next_step"
                class="btn btn-default"
-               {%if tab_active == 5 %}disabled{%endif%}
-               href="{% url 'applications' %}"
-               onclick="save('form_profile');}"
+               href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"
                title="{% trans 'demandes'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-                {%trans 'next_step'%}</a>
+                {%trans 'next_step'%} : {%trans 'profile'%}</a>
+
         </div>
     </form>

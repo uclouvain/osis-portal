@@ -33,11 +33,9 @@
     <div>
         <a id="lnk_previous_step"
            class="btn btn-default"
-           {%if tab_active == 0 %}disabled{%endif%}
-           href="{% url 'attachments'%}"
-               onclick="save('form_submission');"
+           href="{%if application.id%}{% url 'attachments' application.id %}{%else%}{% url 'attachments'%}{%endif%}"
+           onclick="save('form_submission');"
            title="{% trans 'attachments'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-            {%trans 'previous_step'%}</a>
-
+            {%trans 'previous_step'%} : {% trans 'attachments'%} </a>
     </div>
 {% endblock %}

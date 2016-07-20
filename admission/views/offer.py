@@ -111,6 +111,7 @@ def selection_offer(request, offer_id):
 
 
 def demande_update(request, application_id=None):
+    print('demande_update')
     offers = None
     if application_id:
         application = mdl.application.find_by_id(application_id)
@@ -119,14 +120,14 @@ def demande_update(request, application_id=None):
     grade_choices = mdl_reference.grade_type.GRADE_CHOICES
     an_applicant= mdl.applicant.find_by_user(request.user)
     secondary_education = mdl.secondary_education.find_by_person(an_applicant)
-    return render(request, "offer_selection.html",
+    return render(request, "home.html",
                   {"gradetypes":             mdl_reference.grade_type.find_all(),
                    "domains":                mdl.domain.find_all_domains(),
                    "offers":                 offers,
                    "offer":                  None,
                    "application":            application,
                    "grade_choices":          grade_choices,
-                   'tab_active':             31,
+                   'tab_active':             0,
                    "tab_demande_active":     0,
                    "display_admission_exam": extra_information(request, application),
                    "validated_extra":        validated_extra(secondary_education, application)})

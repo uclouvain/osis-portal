@@ -35,6 +35,8 @@ from django.utils.translation import ugettext_lazy as _
 from admission import models as mdl
 from admission.forms import ApplicantForm
 from reference import models as mdl_ref
+from admission.views import demande_validation
+from admission.views import tabs
 
 
 @login_required
@@ -47,15 +49,33 @@ def home(request):
             translation.activate(user_language)
             request.session[translation.LANGUAGE_SESSION_KEY] = user_language
         applications = mdl.application.find_by_user(request.user)
-        return render(request, "home.html", {'applications': applications, "tab_active": 0})
+        if applications:
+            return render(request, "applications.html", {'applications': applications})
+        else:
+            tab_status = tabs.init(request)
+            return render(request, "home.html", {'applications': applications,
+                                                 "tab_active": 0,
+                                                 "first": True,
+                                                 "countries": mdl_ref.country.find_all(),
+                                                 'tab_profile': tab_status['tab_profile'],
+                                                 'tab_applications': tab_status['tab_applications'],
+                                                 'tab_diploma': tab_status['tab_diploma'],
+                                                 'tab_curriculum': tab_status['tab_curriculum'],
+                                                 'tab_accounting': tab_status['tab_accounting'],
+                                                 'tab_sociological': tab_status['tab_sociological'],
+                                                 'tab_attachments': tab_status['tab_attachments'],
+                                                 'tab_submission': tab_status['tab_submission'],
+                                                 'main_status': 0})
+
     else:
         return profile(request)
 
 
-def profile(request, message_success=None):
+def profile(request, application_id=None, message_success=None):
+    print('profile')
+    tab_status = tabs.init(request)
     if request.method == 'POST':
         applicant_form = ApplicantForm(data=request.POST)
-
         applicant = mdl.applicant.find_by_user(request.user)
         person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
 
@@ -225,6 +245,8 @@ def profile(request, message_success=None):
                         if applicant_form.is_valid():
                             person_assimilation_criteria.save()
 
+
+        message_success = 'ok'
         if applicant_form.is_valid():
             if person_contact_address:
                 person_contact_address.save()
@@ -232,15 +254,6 @@ def profile(request, message_success=None):
             applicant.user.save()
             request.user = applicant.user  # Otherwise it was not refreshed while going back to home page
             applicant.save()
-            if 'save_up' in request.POST or 'save_down' in request.POST:
-                message_success = 'ok'
-                if message_success:
-                    return HttpResponseRedirect(reverse('profile', kwargs={'message_success': message_success}))
-                else:
-                    return HttpResponseRedirect(reverse('profile'))
-            else:
-                if 'next_step_up' in request.POST or 'next_step_down' in request.POST:
-                    return HttpResponseRedirect(reverse('applications'))
         else:
             message_success = None
     else:
@@ -268,9 +281,15 @@ def profile(request, message_success=None):
 
     assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
     person_assimilation_criteria = mdl.person_assimilation_criteria.find_by_person(applicant.id)
-
+    application = None
+    first = True
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
+        if application:
+            first = False
+    else:
+        tab_status = tabs.init(request)
     # validated are not ready yet, to be achieved in another issue - Leila
-
     return render(request, "home.html", {'applicant': applicant,
                                          'applicant_form': applicant_form,
                                          'countries': countries,
@@ -283,13 +302,24 @@ def profile(request, message_success=None):
                                          'institution': institution_name,
                                          "message_success": message_success,
                                          'tab_active': 0,
-                                         'validated_profil': False,
-                                         'validated_diploma': False,
-                                         'validated_curriculum': False,
-                                         'validated_applications': False,
-                                         'validated_demande': False,
-                                         'validated_accounting': False,
-                                         "first": True})
+                                         'validated_profil': demande_validation.validate_profil(applicant),
+                                         'validated_diploma': demande_validation.validate_diploma(application),
+                                         'validated_curriculum': demande_validation.validate_curriculum(application),
+                                         'validated_application': demande_validation.validate_application(application),
+                                         'validated_accounting': demande_validation.validate_accounting(),
+                                         'validated_sociological': demande_validation.validate_sociological(),
+                                         'validated_attachments': demande_validation.validate_attachments(),
+                                         'validated_submission': demande_validation.validate_submission(),
+                                         'first': first,
+                                         'application': application,
+                                         'tab_profile': tab_status['tab_profile'],
+                                         'tab_applications': tab_status['tab_applications'],
+                                         'tab_diploma': tab_status['tab_diploma'],
+                                         'tab_curriculum': tab_status['tab_curriculum'],
+                                         'tab_accounting': tab_status['tab_accounting'],
+                                         'tab_sociological': tab_status['tab_sociological'],
+                                         'tab_attachments': tab_status['tab_attachments'],
+                                         'tab_submission': tab_status['tab_submission']})
 
 
 @login_required
@@ -299,7 +329,6 @@ def home_retour(request):
 
 
 def extra_information(request, application):
-    a_person = mdl.applicant.find_by_user(request.user)
     try:
         if application.offer_year:
             admission_exam_offer_yr = mdl.admission_exam_offer_year.find_by_offer_year(application.offer_year)

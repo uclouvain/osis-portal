@@ -25,3 +25,10 @@ body {
     cursor: default;
     opacity: 0.6;
 }
+.validated{
+    color: green;
+}
+
+.not-validated{
+    color: orange;
+}

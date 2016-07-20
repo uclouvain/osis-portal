@@ -35,16 +35,24 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import login
 from admission.forms import AccountingForm
+from admission.views import demande_validation
+from admission.views import tabs
 
 
-def accounting(request):
+def accounting(request, application_id=None):
+    print('accounting')
+    first = True
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
+        first = False
+    else:
+        application = mdl.application.init_application(request.user)
     academic_yr = mdl.academic_year.current_academic_year()
     previous_academic_year = mdl.academic_year.find_by_year(academic_yr.year-1)
     sport_affiliation_amount = 0
     culture_affiliation_amount = 0
     solidary_affiliation_amount = 0
-    application = mdl.application.find_first_by_user(request.user)
-
+    applicant = mdl.applicant.find_by_user(request.user)
     return render(request, "home.html", {"academic_year": academic_yr,
                                          "previous_academic_year":      previous_academic_year,
                                          "sport_affiliation_amount":    sport_affiliation_amount,
@@ -54,24 +62,40 @@ def accounting(request):
                                          "debts_check":                 debts_check(application),
                                          "reduction_possible":          reduction_possible(application),
                                          "third_cycle":                 third_cycle(application),
-                                         "tab_active": 4,
-                                         "first": True})
+                                         "tab_active":                  4,
+                                         "first":                       first,
+                                         "application":                 application,                                         
+                                         "validated_profil": demande_validation.validate_profil(applicant),
+                                         "validated_diploma": demande_validation.validate_diploma(application),
+                                         "validated_curriculum": demande_validation.validate_curriculum(application),
+                                         "validated_application": demande_validation.validate_application(application),
+                                         "validated_accounting": demande_validation.validate_accounting(),
+                                         "validated_sociological": demande_validation.validate_sociological(),
+                                         "validated_attachments": demande_validation.validate_attachments(),
+                                         "validated_submission": demande_validation.validate_submission(),})
 
 
-def accounting_update(request):
+def accounting_update(request, application_id=None):
+    print('accounting_update', application_id)
     academic_yr = mdl.academic_year.current_academic_year()
     previous_academic_year = mdl.academic_year.find_by_year(academic_yr.year-1)
     sport_affiliation_amount = 0
     culture_affiliation_amount = 0
     solidary_affiliation_amount = 0
+    accounting_form = None
+    if request.method == 'POST':
+        accounting_form = AccountingForm(data=request.POST)
+    first = True
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
+        first = False
+    else:
+        application = mdl.application.init_application(request.user)
+    application = populate_application(request, application)
 
-    accounting_form = AccountingForm(data=request.POST)
-    application = populate_application(request)
-
-    if accounting_form.is_valid():
-        application.save()
-
-    return render(request, "accounting.html", {"academic_year": academic_yr,
+    application.save()
+    tab_status = tabs.init(request)
+    return render(request, "home.html", {"academic_year": academic_yr,
                                                "previous_academic_year":      previous_academic_year,
                                                "sport_affiliation_amount":    sport_affiliation_amount,
                                                "culture_affiliation_amount":  culture_affiliation_amount,
@@ -80,14 +104,22 @@ def accounting_update(request):
                                                "form":                        accounting_form,
                                                "debts_check":                 debts_check(application),
                                                "reduction_possible":          reduction_possible(application),
-                                               "third_cycle":                 third_cycle(application)})
+                                               "third_cycle":                 third_cycle(application),
+                                         "tab_active":                  4,
+                                         "first":                       first,
+                                         "application":                 application,
+                                         'tab_profile': tab_status['tab_profile'],
+                                         'tab_applications': tab_status['tab_applications'],
+                                         'tab_diploma': tab_status['tab_diploma'],
+                                         'tab_curriculum': tab_status['tab_curriculum'],
+                                         'tab_accounting': tab_status['tab_accounting'],
+                                         'tab_sociological': tab_status['tab_sociological'],
+                                         'tab_attachments': tab_status['tab_attachments'],
+                                         'tab_submission': tab_status['tab_submission']})
 
 
-def populate_application(request):
-    if request.POST.get('application_id') is None:
-        application = mdl.application.Application()
-    else:
-        application = mdl.application.find_by_id(int(request.POST.get('application_id')))
+def populate_application(request, application):
+
     application.study_grant = False
     application.study_grant_number = None
     application.deduction_children = False
@@ -126,6 +158,7 @@ def populate_application(request):
 
 
 def debts_check(application):
+    print('debts_check', application.id)
     if application:
         academic_yr = mdl.academic_year.current_academic_year()
         previous_academic_year = mdl.academic_year.find_by_year(academic_yr.year-1)

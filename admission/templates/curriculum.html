@@ -253,16 +253,16 @@
         <a id="lnk_previous_step"
            class="btn btn-default"
            {%if tab_active == 0 %}disabled{%endif%}
-           href="{% url 'diploma_update'%"
+           href="{%if application.id%}{% url 'diploma_update' application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
            onclick="save('form_curriculum');"
            title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-            {%trans 'previous_step'%}</a>
+            {%trans 'previous_step'%} : {%trans 'tab_diplomas'%}</a>
         <a id="lnk_next_step"
            class="btn btn-default"
-           href="{% url 'accounting'%}"
+           href="{%if application.id%}{% url 'accounting' application.id%}{%else%}{% url 'accounting'%}{%endif%}"
            onclick="save('form_curriculum');"
            title="{% trans 'accounting'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            {%trans 'next_step'%}</a>
+            {%trans 'next_step'%} : {%trans 'accounting'%}</a>
     </div>
 </form>
 {% endblock %}

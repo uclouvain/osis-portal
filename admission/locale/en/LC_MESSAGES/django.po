@@ -1145,3 +1145,13 @@ msgstr "Confirmed"
 
 msgid "offer_choice"
 msgstr "Offer choice"
+
+msgid "change_offer"
+msgstr "Change offer choice"
+
+msgid "mandatory_field_next_step"
+msgstr "Mandatory field before going to the next step"
+
+msgid "prerequisites"
+msgstr "Prerequisites"
+

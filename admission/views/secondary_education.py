@@ -31,6 +31,8 @@ from django.utils.translation import ugettext_lazy as _
 from admission import models as mdl
 from admission.views.common import home
 from reference import models as mdl_reference
+from admission.views import demande_validation
+from admission.views import tabs
 
 ALERT_MANDATORY_FIELD = _('mandatory_field')
 
@@ -270,6 +272,7 @@ def curriculum_save(request, application_id):
 
 
 def diploma_save(request):
+    print('diploma_save')
     next_step = False
     previous_step = False
     save_step = False
@@ -343,8 +346,14 @@ def diploma_save(request):
     return render(request, "diploma.html", data)
 
 
-def diploma_update(request):
-    application = mdl.application.find_first_by_user(request.user)
+def diploma_update(request, application_id=None):
+    print('diploma_update',application_id)
+    first = True
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
+        first = False
+    else:
+        application = mdl.application.init_application(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
     other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
     recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
@@ -356,6 +365,7 @@ def diploma_update(request):
     professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
     countries = mdl_reference.country.find_excluding("BE")
     academic_years = mdl.academic_year.find_academic_years()
+    tab_status = tabs.init(request)
     data = {"application":                  application,
             "academic_years":               academic_years,
             "secondary_education":          secondary_education,
@@ -369,8 +379,24 @@ def diploma_update(request):
             "education_type_qualification": education_type_qualification,
             "current_academic_year":        mdl.academic_year.current_academic_year(),
             "local_language_exam_needed":   is_local_language_exam_needed(request.user),
-            'tab_active': 2,
-            "first": True}
+            'tab_active':                   2,
+            "first":                        first,
+            "validated_profil":             demande_validation.validate_profil(applicant),
+            "validated_diploma":            demande_validation.validate_diploma(application),
+            "validated_curriculum":         demande_validation.validate_curriculum(application),
+            "validated_application":        demande_validation.validate_application(application),
+            "validated_accounting":         demande_validation.validate_accounting(),
+            "validated_sociological":       demande_validation.validate_sociological(),
+            "validated_attachments":        demande_validation.validate_attachments(),
+            "validated_submission":         demande_validation.validate_submission(),
+            'tab_profile': tab_status['tab_profile'],
+             'tab_applications': tab_status['tab_applications'],
+             'tab_diploma': tab_status['tab_diploma'],
+             'tab_curriculum': tab_status['tab_curriculum'],
+             'tab_accounting': tab_status['tab_accounting'],
+             'tab_sociological': tab_status['tab_sociological'],
+             'tab_attachments': tab_status['tab_attachments'],
+             'tab_submission': tab_status['tab_submission']}
 
     # merge 2 dictionaries
     data.update(get_secondary_education_exams_data(secondary_education))
