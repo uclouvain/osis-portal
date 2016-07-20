@@ -36,6 +36,7 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
+        <!-- Student info -->
         <div class="row col-md-3">
             <p><b>{% trans 'last_name' %} {% trans 'first_name' %}</b></p>
             <p><b>{% trans 'matricule_number' %}</b></p>
@@ -44,7 +45,11 @@
             <p>{{ student.person.last_name}} {{ student.person.first_name }}</p>
             <p>{{ student.person.global_id }}</p>
         </div>
+        <!-- Student list of programs -->
         <div class="row col-md-12">
+            {% if not programs %}
+            <p class="text-warning"> Vous n'avez pas encore les résultats de vos études. </p>
+            {% else %}
             <div class="table-responsive">
                 <table id="table_academic_years" class="table table-condensed table-hover">
                     <tr>
@@ -61,6 +66,7 @@
                     {% endfor %}
                 </table>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>
