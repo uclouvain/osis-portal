@@ -23,19 +23,4 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
-from django.conf.urls import url, include
 
-urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^admission/', include('admission.urls')),
-    url(r'^dashboard/', include('dashboard.urls')),
-    url(r'^catalog/', include('catalog.urls')),
-    url(r'^performance/', include('performance.urls')),
-    url(r'^dissertation/', include('dissertation.urls'))
-]
-
-try:
-    from frontoffice.server_urls import *
-except ImportError:
-    pass
