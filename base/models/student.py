@@ -85,8 +85,12 @@ def find_by_person(a_person):
         return None
 
 
-def is_student(user):
-    person = model_person.find_by_user(user)
-    if find_by_person(person):
+def find_by_user(a_user):
+    person = model_person.find_by_user(a_user)
+    return find_by_person(person)
+
+
+def is_student(a_user):
+    if find_by_user(a_user):
         return True
     return False
