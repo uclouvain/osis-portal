@@ -27,12 +27,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import *
 from osis_common.forms import UploadDocumentFileForm
-from osis_common.models.document_file import DocumentFile, find_by_document_type
+from osis_common import models as mdl
 
 
 @login_required
 def upload_file(request):
-    documents = find_by_document_type(document_type="admission", user=request.user)
+    documents = mdl.document_file.search(document_type="admission", user=request.user)
     if request.method == "POST":
         form = UploadDocumentFileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -46,22 +46,22 @@ def upload_file(request):
             return redirect('new_file')
         else:
             return render(request, 'new_file.html', {'form': form,
-                                                     'content_type_choices': DocumentFile.CONTENT_TYPE_CHOICES,
-                                                     'description_choices': DocumentFile.DESCRIPTION_CHOICES,
+                                                     'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
+                                                     'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
                                                      'documents': documents})
     else:
         form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                                'document_type': "admission",
                                                'user': request.user})
         return render(request, 'new_file.html', {'form': form,
-                                                 'content_type_choices': DocumentFile.CONTENT_TYPE_CHOICES,
-                                                 'description_choices': DocumentFile.DESCRIPTION_CHOICES,
+                                                 'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
+                                                 'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
                                                  'documents': documents})
 
 
 @login_required
 def download(request, pk):
-    document = get_object_or_404(DocumentFile, pk=pk)
+    document = get_object_or_404(mdl.document_file.DocumentFile, pk=pk)
     filename = document.file_name
     response = HttpResponse(document.file, content_type=document.content_type)
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
