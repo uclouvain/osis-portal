@@ -34,9 +34,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
 from admission import models as mdl
-from reference import models as reference_mdl
 from admission.forms import NewAccountForm, AccountForm, NewPasswordForm
 from admission.utils import send_mail
+from reference import models as reference_mdl
 
 
 @login_required
@@ -243,7 +243,7 @@ def offer_selection(request):
     application = mdl.application.find_by_user(request.user)
     return render(request, "offer_selection.html",
                           {"gradetypes":  reference_mdl.grade_type.find_all(),
-                           "domains":     mdl.domain.find_all(),
+                           "domains":     reference_mdl.domain.find_all(),
                            "offers":      offers,
                            "offer":       None,
                            "application": application})
@@ -259,12 +259,12 @@ def refresh_offer_selection(request):
         offer_type = request.POST['doctorate_type']
 
     domain_id = request.POST.get('domain')
-    domain = get_object_or_404(mdl.domain.Domain, pk=domain_id)
+    domain = get_object_or_404(reference_mdl.domain.Domain, pk=domain_id)
     offers = mdl.offer_year.find_by_domain_grade(domain, offer_type)
     grade = get_object_or_404(reference_mdl.grade_type.GradeType, pk=offer_type)
     return render(request, "offer_selection.html",
                           {"gradetypes":  reference_mdl.grade_type.find_all(),
-                           "domains":     mdl.domain.find_all(),
+                           "domains":     reference_mdl.domain.find_all(),
                            "offers":      offers,
                            "offer_type":  grade,
                            "domain":      domain})
@@ -288,7 +288,7 @@ def _get_domain(request):
     domain_id = request.POST.get('domain')
     domain = None
     if domain_id:
-        domain = get_object_or_404(mdl.domain.Domain, pk=domain_id)
+        domain = get_object_or_404(reference_mdl.domain.Domain, pk=domain_id)
     return domain
 
 
@@ -315,7 +315,7 @@ def save_offer_selection(request):
 
     return render(request, "offer_selection.html",
                           {"gradetypes":  reference_mdl.grade_type.find_all(),
-                           "domains":     mdl.domain.find_all(),
+                           "domains":     reference_mdl.domain.find_all(),
                            "offers":      None,
                            "offer_type":  None,
                            "domain":      mdl})
@@ -329,7 +329,7 @@ def selection_offer(request, offer_id):
 
     return render(request, "offer_selection.html",
                           {"gradetypes":  reference_mdl.grade_type.find_all(),
-                           "domains":     mdl.domain.find_all(),
+                           "domains":     reference_mdl.domain.find_all(),
                            "offers":      None,
                            "offer":       offer_year,
                            "offer_type":  grade,
