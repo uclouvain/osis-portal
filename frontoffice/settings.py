@@ -185,10 +185,5 @@ LOGO_INSTITUTION_URL = os.path.join(BASE_DIR, "admission/static/img/logo_institu
 
 try:
     from frontoffice.server_settings import *
-
-    try:
-        INSTALLED_APPS = INSTALLED_APPS + SERVER_APPS
-    except NameError:
-        pass
 except ImportError:
     pass
