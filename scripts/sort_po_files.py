@@ -26,6 +26,7 @@
 ##############################################################################
 # Sort the "filename_to_be_sorted" located in "dir_path".
 # The file to be sorted must be a ".po" file used in django for translation.
+# Call the script with:  python -c 'import sort_po_files; sort_po_files.sort_and_replace()'
 
 import os
 
@@ -53,7 +54,7 @@ def sort_po_file(relative_dir_path):
         list_keys.sort()
 
     with open(relative_dir_path+filename_sorted, "w") as new_f:
-        header_to_file(header, new_f);
+        header_to_file(header, new_f)
         dic_to_file(list_keys, d, new_f)
 
 
@@ -85,7 +86,7 @@ def dic_to_file(key_order, d, f):
     """
     for key in key_order:
         f.write(key_keyword + "\t" + key)
-        f.write(value_keyword + "\t" +d[key])
+        f.write(value_keyword + "\t" + d[key])
         f.write("\n")
 
 
@@ -165,5 +166,7 @@ def msg_after_prefix(s, prefix):
 
 # *********************** SORT AND REPLACE FILE *******************************
 
-sort_po_file(dir_path)
-replace_file(dir_path + filename_to_be_sorted, dir_path + filename_sorted)
+
+def sort_and_replace():
+    sort_po_file(dir_path)
+    replace_file(dir_path + filename_to_be_sorted, dir_path + filename_sorted)
