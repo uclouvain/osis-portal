@@ -7,7 +7,6 @@ django-jenkins==0.18.1
 django-localflavor==1.3
 djangorestframework==3.3.2
 jdcal==1.2
-osis-common==0.1
 pika==0.10.0
 Pillow==3.3.0
 psycopg2==2.6.1
