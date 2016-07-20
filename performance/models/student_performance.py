@@ -80,3 +80,16 @@ def select_where_global_id_is(global_id):
     query_string = "SELECT * FROM " + bucket_name + " WHERE global_id=$1"
     query = N1QLQuery(query_string, global_id)
     return cb.n1ql_query(query)
+
+def key_from_json(json):
+    """
+    Return a key for the json
+    :param json: a json object
+    :return: a string key
+    """
+    global_id = json["global_id"]
+    academic_year = json["academic_years"][0]["anac"]
+    # TODO remove special characters for the acronym
+    program = json["academic_years"][0]["programs"][0]["acronym"]
+    key = "" + global_id + "_" + academic_year + "_" + program
+    return key

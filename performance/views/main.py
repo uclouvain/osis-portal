@@ -46,10 +46,10 @@ def home(request):
 
 @login_required
 @user_passes_test(is_student)
-def result_by_year_and_program(request, anac, program_id):
+def result_by_year_and_program(request, anac, program_acronym):
     stud = find_by_user(request.user)
     query_result = mdl.student_performance.select_where_global_id_is(stud.registration_id)
-    document = filter_by_anac_and_program_id(query_result, anac, program_id)
+    document = filter_by_anac_and_program_acronym(query_result, anac, program_acronym)
     return render(request, "performance_result.html", {"results": document})
 
 def get_student_programs_list(query_result):
@@ -73,7 +73,7 @@ def get_student_programs_list(query_result):
         l.append(d)
     return l
 
-def filter_by_anac_and_program_id(query_result, anac, program_id):
+def filter_by_anac_and_program_acronym(query_result, anac, program_acronym):
     """
     Return the document which have anac equals to "anac" and program id
     equals to "program_id"
@@ -85,7 +85,7 @@ def filter_by_anac_and_program_id(query_result, anac, program_id):
     for row in query_result:
         academic_year = row["performance"]["academic_years"][0]
         program = academic_year["programs"][0]
-        if academic_year["anac"] == anac and program["program_id"] == program_id:
+        if academic_year["anac"] == anac and program["acronym"] == program_acronym:
             return row["performance"]
     return None
 
