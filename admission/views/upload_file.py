@@ -64,4 +64,3 @@ def download(request, pk):
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
 
     return response
-
