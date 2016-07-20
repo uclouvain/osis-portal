@@ -1,1 +1,1 @@
-from performance.models import student_scores
+from performance.models import student_performance
