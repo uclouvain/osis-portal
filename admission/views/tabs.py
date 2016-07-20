@@ -23,12 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from datetime import datetime
-
-from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 from admission import models as mdl
@@ -36,8 +30,6 @@ from admission.views import demande_validation
 
 
 def init(request):
-    print('init')
-
     tabs = {"tab_profile": True,
             "tab_applications": True,
             "tab_diploma": True,
@@ -60,7 +52,7 @@ def init(request):
 
 
 def get_tabs_status(request):
-    print('get_tabs_status')
+
     tabs = {"tab_profile": True,
             "tab_applications": True,
             "tab_diploma": False,

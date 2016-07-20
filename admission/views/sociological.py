@@ -51,10 +51,11 @@ def update(request, application_id=None):
                    'validated_attachments':  demande_validation.validate_attachments(),
                    'validated_submission':   demande_validation.validate_submission(),
                    'tab_profile': tab_status['tab_profile'],
-                                         'tab_applications': tab_status['tab_applications'],
-                                         'tab_diploma': tab_status['tab_diploma'],
-                                         'tab_curriculum': tab_status['tab_curriculum'],
-                                         'tab_accounting': tab_status['tab_accounting'],
-                                         'tab_sociological': tab_status['tab_sociological'],
-                                         'tab_attachments': tab_status['tab_attachments'],
-                                         'tab_submission': tab_status['tab_submission']})
+                   'tab_applications': tab_status['tab_applications'],
+                   'tab_diploma': tab_status['tab_diploma'],
+                   'tab_curriculum': tab_status['tab_curriculum'],
+                   'tab_accounting': tab_status['tab_accounting'],
+                   'tab_sociological': tab_status['tab_sociological'],
+                   'tab_attachments': tab_status['tab_attachments'],
+                   'tab_submission': tab_status['tab_submission'],
+                   'applications': mdl.application.find_by_user(request.user)})

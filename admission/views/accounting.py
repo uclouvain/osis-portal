@@ -53,6 +53,7 @@ def accounting(request, application_id=None):
     culture_affiliation_amount = 0
     solidary_affiliation_amount = 0
     applicant = mdl.applicant.find_by_user(request.user)
+    tab_status = tabs.init(request)
     return render(request, "home.html", {"academic_year": academic_yr,
                                          "previous_academic_year":      previous_academic_year,
                                          "sport_affiliation_amount":    sport_affiliation_amount,
@@ -64,7 +65,7 @@ def accounting(request, application_id=None):
                                          "third_cycle":                 third_cycle(application),
                                          "tab_active":                  4,
                                          "first":                       first,
-                                         "application":                 application,                                         
+                                         "applications":                mdl.application.find_by_user(request.user),
                                          "validated_profil": demande_validation.validate_profil(applicant),
                                          "validated_diploma": demande_validation.validate_diploma(application),
                                          "validated_curriculum": demande_validation.validate_curriculum(application),
@@ -72,7 +73,15 @@ def accounting(request, application_id=None):
                                          "validated_accounting": demande_validation.validate_accounting(),
                                          "validated_sociological": demande_validation.validate_sociological(),
                                          "validated_attachments": demande_validation.validate_attachments(),
-                                         "validated_submission": demande_validation.validate_submission(),})
+                                         "validated_submission": demande_validation.validate_submission(),
+                                         'tab_profile': tab_status['tab_profile'],
+                                         'tab_applications': tab_status['tab_applications'],
+                                         'tab_diploma': tab_status['tab_diploma'],
+                                         'tab_curriculum': tab_status['tab_curriculum'],
+                                         'tab_accounting': tab_status['tab_accounting'],
+                                         'tab_sociological': tab_status['tab_sociological'],
+                                         'tab_attachments': tab_status['tab_attachments'],
+                                         'tab_submission': tab_status['tab_submission']})
 
 
 def accounting_update(request, application_id=None):
@@ -96,26 +105,26 @@ def accounting_update(request, application_id=None):
     application.save()
     tab_status = tabs.init(request)
     return render(request, "home.html", {"academic_year": academic_yr,
-                                               "previous_academic_year":      previous_academic_year,
-                                               "sport_affiliation_amount":    sport_affiliation_amount,
-                                               "culture_affiliation_amount":  culture_affiliation_amount,
-                                               "solidary_affiliation_amount": solidary_affiliation_amount,
-                                               "application":                 application,
-                                               "form":                        accounting_form,
-                                               "debts_check":                 debts_check(application),
-                                               "reduction_possible":          reduction_possible(application),
-                                               "third_cycle":                 third_cycle(application),
+                                         "previous_academic_year":      previous_academic_year,
+                                         "sport_affiliation_amount":    sport_affiliation_amount,
+                                         "culture_affiliation_amount":  culture_affiliation_amount,
+                                         "solidary_affiliation_amount": solidary_affiliation_amount,
+                                         "application":                 application,
+                                         "form":                        accounting_form,
+                                         "debts_check":                 debts_check(application),
+                                         "reduction_possible":          reduction_possible(application),
+                                         "third_cycle":                 third_cycle(application),
                                          "tab_active":                  4,
                                          "first":                       first,
-                                         "application":                 application,
-                                         'tab_profile': tab_status['tab_profile'],
-                                         'tab_applications': tab_status['tab_applications'],
-                                         'tab_diploma': tab_status['tab_diploma'],
-                                         'tab_curriculum': tab_status['tab_curriculum'],
-                                         'tab_accounting': tab_status['tab_accounting'],
-                                         'tab_sociological': tab_status['tab_sociological'],
-                                         'tab_attachments': tab_status['tab_attachments'],
-                                         'tab_submission': tab_status['tab_submission']})
+                                         "applications": mdl.application.find_by_user(request.user),
+                                         "tab_profile": tab_status['tab_profile'],
+                                         "tab_applications": tab_status['tab_applications'],
+                                         "tab_diploma": tab_status['tab_diploma'],
+                                         "tab_curriculum": tab_status['tab_curriculum'],
+                                         "tab_accounting": tab_status['tab_accounting'],
+                                         "tab_sociological": tab_status['tab_sociological'],
+                                         "tab_attachments": tab_status['tab_attachments'],
+                                         "tab_submission": tab_status['tab_submission']})
 
 
 def populate_application(request, application):

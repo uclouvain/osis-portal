@@ -50,7 +50,14 @@ def home(request):
             request.session[translation.LANGUAGE_SESSION_KEY] = user_language
         applications = mdl.application.find_by_user(request.user)
         if applications:
-            return render(request, "applications.html", {'applications': applications})
+            applicant_form = ApplicantForm()
+            person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
+            person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
+            return render(request, "applications.html", {'applications': applications,
+                                                         'applicant': applicant,
+                                                         'applicant_form': applicant_form,
+                                                         'person_legal_address': person_legal_address,
+                                                         'person_contact_address': person_contact_address,})
         else:
             tab_status = tabs.init(request)
             return render(request, "home.html", {'applications': applications,
@@ -72,7 +79,6 @@ def home(request):
 
 
 def profile(request, application_id=None, message_success=None):
-    print('profile')
     tab_status = tabs.init(request)
     if request.method == 'POST':
         applicant_form = ApplicantForm(data=request.POST)
@@ -245,7 +251,6 @@ def profile(request, application_id=None, message_success=None):
                         if applicant_form.is_valid():
                             person_assimilation_criteria.save()
 
-
         message_success = 'ok'
         if applicant_form.is_valid():
             if person_contact_address:
@@ -319,7 +324,8 @@ def profile(request, application_id=None, message_success=None):
                                          'tab_accounting': tab_status['tab_accounting'],
                                          'tab_sociological': tab_status['tab_sociological'],
                                          'tab_attachments': tab_status['tab_attachments'],
-                                         'tab_submission': tab_status['tab_submission']})
+                                         'tab_submission': tab_status['tab_submission'],
+                                         'applications': mdl.application.find_by_user(request.user)})
 
 
 @login_required

@@ -35,6 +35,7 @@
 {% block script %}
 <script >
 $(document).ready(function() {
+
     if ($('#hdn_application_id').val()){
         $('#slt_offer_type option').each(function(){
             if($(this).attr('value')==$('#hdn_application_grade').val()){

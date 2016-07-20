@@ -29,6 +29,21 @@
 
 
 <form id="form_sociological_survey">
+    <div>
+        <a id="lnk_previous_step_up"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'accounting' application.id%}{%else%}{% url 'accounting'%}{%endif%}"
+           onclick="save('form_sociological_survey')"
+           title="{% trans 'accounting'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%} : {%trans 'accounting'%}</a>
+        <a id="lnk_next_step_up"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'attachments' application.id%}{%else%}{% url 'attachments'%}{%endif%}"
+           onclick="save('form_sociological_survey');"
+           title="{% trans 'attachments'%}}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            {%trans 'next_step'%} : {%trans 'attachments'%}</a>
+    </div>
+
     <br>
     <label>{% trans 'brother_sister_number'%}</label>
     <input class="form-control" id="txt_brother_sister" name="brother_sister" maxlength="2">

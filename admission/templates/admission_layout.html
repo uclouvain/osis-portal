@@ -69,7 +69,9 @@
                             {%else%}
                                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
                             {%endif%}
-                            &nbsp;&nbsp;{%trans 'offer_choice'%}</a>
+                            &nbsp;&nbsp;{%trans 'offer_choice'%}                     {%if application.offer_year %}
+                    ({{application.offer_year.acronym}})
+                    {%endif%}</a>
                     {%else%}
                         <a class="not-active"
                            id="lnk_application_tab">
@@ -78,8 +80,12 @@
                             {%else%}
                                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
                             {%endif%}
-                            &nbsp;&nbsp;{%trans 'offer_choice'%}</a>
+                            &nbsp;&nbsp;{%trans 'offer_choice'%}                     {%if application.offer_year %}
+                    ({{application.offer_year.acronym}})
+                    {%endif%}</a>
+
                     {%endif%}
+
                 </li>
                 <li class="{%if tab_active == 2 %}active{%endif%}" >
                     <a href="{%if tab_diploma%}{%if application.id %}{% url 'diploma_update' application.id%}{%else%}{% url 'diploma_update'%}{%endif%}{%endif%}"
@@ -208,6 +214,9 @@
         $('#rdb_admission_exam_result_middle').prop( "checked", false);
         $('#rdb_admission_exam_result_high').prop( "checked", false);
         populate_exam_admin();
+        if($("#hdn_application_offer_year_id").val()){
+            display_dynamic_form($("#hdn_application_offer_year_id").val());
+        }
     });
 
     function save(form_to_submit){
@@ -229,27 +238,37 @@
         return true;
     });
 
-
-    $(function() {
-        var original_position = $("#steps_toolbar").offset();
-        $('#steps_toolbar').css({
-            top: 75,
-            left: original_position.left
-        });
-
-        $('#steps_toolbar').affix({
-            offset: {
-                top: (original_position.top - 75)
-            }
-        });
-
-        $(window).resize(function() {
-            var original_position = $("#steps_toolbar").offset();
-            $('#steps_toolbar').css({
-                top: 75,
-                left: original_position.left
-            });
-        });
+    $("#lnk_profil_next_step_up").click(function() {
+        $('#txt_message_error_profile_up').css('visibility', 'hidden').css('display','none');
+        if ($("#slt_nationality").prop('selectedIndex') < 0
+            || $("#slt_legal_adr_country").prop('selectedIndex') < 0){
+            $("#txt_message_error_profile_up").text('Avant de pouvoir accéder à l\'étape suivante vous devez encoder au minimum, votre nationalité et votre pays de résidence');
+            $('#txt_message_error_profile_up').css('visibility', 'visible').css('display','block');
+            return false;
+        }
+        $('#hdn_tab_applications_status').val('True');
+        save('form_profile');
+        return true;
     });
+
+    $("#lnk_application_tab").click(function() {
+           if ($('#hdn_application_id').val()){
+                $('#slt_offer_type option').each(function(){
+                    if($(this).attr('value')==$('#hdn_application_grade').val()){
+                        $(this).prop('selected', true);
+                    }
+                });
+                $('#slt_domain option').each(function(){
+                    if($(this).attr('value')==$('#hdn_application_domain_id').val()){
+                        $(this).prop('selected', true);
+                    }
+                });
+               //TODO : les donnnées s'affichent puis elles disparaissent.... LV
+
+
+            }
+
+    });
+
     </script>
 {% endblock %}

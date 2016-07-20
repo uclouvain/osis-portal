@@ -26,14 +26,16 @@
 {% endcomment %}
 
     <form method="post" action="{% url 'profile' %}" id="form_profile">
-        <div class="row">
-            <div class="btn-toolbar pull-right" id="steps_toolbar" role="toolbar">
-                <div class="btn-group" role="group" data-toggle="buttons">
-                    <button type="button" class="btn btn-default" id="step_down">{%trans 'offer_choice'%}<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></button>
-                </div>
-            </div>
-        </div>
         {% csrf_token %}
+        <span id="txt_message_error_profile_up"
+               class="alert alert-warning"
+               style="visibility:hidden;display:none;"></span><br>
+        <a id="lnk_profil_next_step_up"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"
+           title="{% trans 'demandes'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            {%trans 'next_step'%} : {%trans 'offer_choice'%}</a>
+        <br>
         {% if applicant_form.errors %}
         <font class="error">{% if applicant_form.errors %}{% trans 'errors_warning'%}{%endif%}</font>
         <br>
@@ -460,14 +462,14 @@
             </div>
         </div>
         <div>
-            <span id="txt_message_error_profile"
-                   class="alert alert-warning"
-                   style="visibility:hidden;display:none;"></span><br>
-            <a id="lnk_profil_next_step"
-               class="btn btn-default"
-               href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"
-               title="{% trans 'demandes'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-                {%trans 'next_step'%} : {%trans 'profile'%}</a>
+        <span id="txt_message_error_profile"
+               class="alert alert-warning"
+               style="visibility:hidden;display:none;"></span><br>
+        <a id="lnk_profil_next_step"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"
+           title="{% trans 'demandes'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            {%trans 'next_step'%} : {%trans 'offer_choice'%}</a>
 
         </div>
     </form>

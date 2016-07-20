@@ -275,7 +275,7 @@ def diploma_save(request):
     print('diploma_save')
     next_step = False
     previous_step = False
-    save_step = False
+    save_step = True
     validation_messages = {}
     academic_years = mdl.academic_year.find_academic_years()
     if request.POST:
@@ -284,10 +284,7 @@ def diploma_save(request):
         else:
             if 'bt_previous_step_up' in request.POST or 'bt_previous_step_down' in request.POST:
                 previous_step = True
-            else:
-                if 'bt_save_up' in request.POST or 'bt_save_down' in request.POST:
-                    save_step = True
-    save_step = True
+
     application = mdl.application.find_first_by_user(request.user)
     other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
     recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
@@ -347,7 +344,6 @@ def diploma_save(request):
 
 
 def diploma_update(request, application_id=None):
-    print('diploma_update',application_id)
     first = True
     if application_id:
         application = mdl.application.find_by_id(application_id)
@@ -390,13 +386,14 @@ def diploma_update(request, application_id=None):
             "validated_attachments":        demande_validation.validate_attachments(),
             "validated_submission":         demande_validation.validate_submission(),
             'tab_profile': tab_status['tab_profile'],
-             'tab_applications': tab_status['tab_applications'],
-             'tab_diploma': tab_status['tab_diploma'],
-             'tab_curriculum': tab_status['tab_curriculum'],
-             'tab_accounting': tab_status['tab_accounting'],
-             'tab_sociological': tab_status['tab_sociological'],
-             'tab_attachments': tab_status['tab_attachments'],
-             'tab_submission': tab_status['tab_submission']}
+            'tab_applications': tab_status['tab_applications'],
+            'tab_diploma': tab_status['tab_diploma'],
+            'tab_curriculum': tab_status['tab_curriculum'],
+            'tab_accounting': tab_status['tab_accounting'],
+            'tab_sociological': tab_status['tab_sociological'],
+            'tab_attachments': tab_status['tab_attachments'],
+            'tab_submission': tab_status['tab_submission'],
+            'applications': mdl.application.find_by_user(request.user)}
 
     # merge 2 dictionaries
     data.update(get_secondary_education_exams_data(secondary_education))
