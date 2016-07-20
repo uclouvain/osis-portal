@@ -194,8 +194,8 @@
                                             <input type="radio" id="assimilation_criteria_{{forloop.counter}}_true"
                                                    name="assimilation_criteria_{{criteria.id}}"
                                                    value="true"
-                                                   {% for personCriteria in personAssimilationCriteria %}
-                                                     {% if personCriteria.criteria.id == criteria.id %} checked {% endif %}
+                                                   {% for applicant_criteria in applicant_assimilation_criteria %}
+                                                     {% if applicant_criteria.criteria.id == criteria.id %} checked {% endif %}
                                                    {% endfor %}
                                             > {% trans 'yes' %}
                                         </label>
