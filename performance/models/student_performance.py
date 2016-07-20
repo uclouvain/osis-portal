@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from couchbase.bucket import Bucket, NotFoundError
+from couchbase.exceptions import CouchbaseError
 from django.conf import settings
 
 
@@ -51,4 +52,7 @@ def insert_or_update_document(key, data):
     :param key: The key of the document
     :param data: The document (JSON) to insert/update in Couchbase
     """
-    cb.set(key, data)
+    try:
+        cb.set(key, data)
+    except CouchbaseError as err:
+        print('CouchBase error:', err)
