@@ -44,6 +44,6 @@ def insert_or_update(json_data):
     """
     data = json.loads(json_data.decode("utf-8"))
     key = mdl.student_performance.key_from_json(data)
-    mdl.student_performance.insert_or_update_document(key, data)
+    mdl.student_performance.save_document(key, data)
 
 

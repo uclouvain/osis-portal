@@ -61,7 +61,7 @@ def fetch_document(document_id):
     except NotFoundError:
         return None
 
-def insert_or_update_document(key, data):
+def save_document(key, data):
     """
     Insert a new document if the key passed in parameter doesn't exist in CouchDB.
     :param key: The key of the document

@@ -153,6 +153,29 @@ function fillMentionExplanation(studentJson) {
   $("#paragraph_mention_explanation").text(mentionExplanation);
 }
 
+/***************************** UTILITY FUNCTIONS TEMPLATE ***************/
+
+
+/*
+ * Format the program acronym for the url by lowering the cases of all characters
+ * and removing the non alpha numeric characters.
+ * programAcronym: a string
+ */
+function formatAcronym(programAcronym) {
+    var lowerCaseProgramAcronym = programAcronym.toLowerCase();
+    return onlyAlphaNumeric(lowerCaseProgramAcronym);
+}
+
+
+/*
+ * Return the string obtained by removing all non alphanumeric characters from s
+ * s: a string
+ */
+function onlyAlphaNumeric(s) {
+    var pattern = /[\W_]/g; // Regexp consisting of all non alphanumeric characters.
+    return s.replace(pattern ,"");
+}
+
 /***************************** UTILITY FUNCTIONS ***********************/
 
 /*
