@@ -23,7 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.dispatch.dispatcher import receiver
+from django.contrib.auth.models import Group
+from django.dispatch.dispatcher import receiver, Signal
+from base.models import student
 from base.models.person import find_by_global_id, find_by_user, Person
 
 try:
@@ -42,15 +44,27 @@ try:
                             first_name=user_infos.get('USER_FIRST_NAME'),
                             last_name=user_infos.get('USER_LAST_NAME'),
                             email=user_infos.get('USER_EMAIL'))
+            person.save()
+            add_person_to_group(person)
+            person_created.send(sender=None, person=person)
         else:
             person.user = user
             person.first_name = user.first_name
             person.last_name = user.last_name
             person.email = user.email
             person.global_id = user_infos.get('USER_FGS')
-        person.save()
+            person.save()
         return person
 
 except Exception:
     pass
 
+
+person_created = Signal(providing_args=['person'])
+
+def add_person_to_group(person):
+    # Check Student
+    if student.find_by_person(person):
+        student_group = Group.objects.get(name='students')
+        person.user.groups.add(student_group)
+    # TODO Check Tutor

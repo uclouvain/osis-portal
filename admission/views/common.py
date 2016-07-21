@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from datetime import datetime
+from django.conf import settings
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -37,7 +38,7 @@ from admission.forms import ApplicantForm
 from reference import models as mdl_ref
 
 
-@login_required
+@login_required(login_url=settings.ADMISSION_LOGIN_URL)
 def home(request):
     applicant = mdl.applicant.find_by_user(request.user)
 
@@ -47,7 +48,7 @@ def home(request):
             translation.activate(user_language)
             request.session[translation.LANGUAGE_SESSION_KEY] = user_language
         applications = mdl.application.find_by_user(request.user)
-        return render(request, "home.html", {'applications': applications})
+        return render(request, "admission_home.html", {'applications': applications})
     else:
         return profile(request)
 
@@ -251,7 +252,7 @@ def profile(request):
             if applicant.registration_id or applicant.last_academic_year:
                 previous_enrollment = True
         else:
-            return HttpResponseRedirect('/admission/logout/?next=/admission')
+            return HttpResponseRedirect('/admission/logout')
 
     countries = mdl_ref.country.find_all()
     props = mdl.properties.find_by_key('INSTITUTION')
@@ -275,7 +276,8 @@ def profile(request):
                                             'institution': institution_name})
 
 
-@login_required
+@login_required(login_url=settings.ADMISSION_LOGIN_URL)
 def home_retour(request):
     applications = mdl.application.find_by_user(request.user)
-    return render(request, "home.html", {'applications': applications, 'message_info': _('msg_info_saved')})
+    return render(request, "admission_home.html", {'applications': applications, 'message_info': _('msg_info_saved')})
+

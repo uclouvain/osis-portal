@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-############################################################################
+##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -23,17 +22,14 @@
 #    at the root of the source code of this program.  If not,
 #    see http://www.gnu.org/licenses/.
 #
-############################################################################
-
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
-from base.models.student import is_student, find_by_user
-from performance import models as mdl
+##############################################################################
+from django import shortcuts
+from django.template.context import RequestContext
 
 
-@login_required
-@permission_required('base.is_student', raise_exception=True)
-def home(request):
-    stud = find_by_user(request.user)
-    document = mdl.student_performance.get_document(stud.registration_id)
-    return render(request, "performance_home.html", {"data": document})
+def render(request, template, values={}):
+    return shortcuts.render(request, template, values, RequestContext(request))
+
+
+def render_to_response(request, template, values={}):
+    return shortcuts.render_to_response(template, values, RequestContext(request))

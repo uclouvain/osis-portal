@@ -1,4 +1,4 @@
-{% extends "dashboard_layout.html" %}
+{% extends "layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -39,14 +39,13 @@
                 <h4 class="media-heading"><a href="{% url 'scores_encoding' %}" id="lnk_score_encoding">{% trans 'scores_encoding' %}</a></h4>
                 <p>{% trans 'desc_lnk_scores_encoding' %}</p>
             </div>
-            {% if is_student %}
+        {% if 'performance' in installed_apps and perms.base.is_student %}
             <div class="col-md-1"><i class="fa fa-line-chart " style="font-size: 400%; color: #6699FF;"></i></div>
             <div class="col-md-5">
                 <h4 class="media-heading"><a href="{% url 'performance_home'  %}" id="lnk_performance">{% trans 'performance' %}</a></h4>
                 <p>{% trans 'desc_lnk_performance' %}</p>
             </div>
-
-            {% endif %}
+        {% endif %}
         </div>
     </div>
 </div>
