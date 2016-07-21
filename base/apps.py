@@ -31,6 +31,6 @@ class BaseConfig(AppConfig):
 
     def ready(self):
         try:
-            from .models.signals import update_person_from_user
+            from .models.signals import update_person_from_user, add_to_students_group
         except ImportError:
             pass

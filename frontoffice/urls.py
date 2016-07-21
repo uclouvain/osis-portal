@@ -51,8 +51,3 @@ handler500 = 'base.views.common.server_error'
 admin.site.site_header = 'Osis-studies'
 admin.site.site_title  = 'Osis-studies'
 admin.site.index_title = 'Louvain'
-
-try:
-    from frontoffice.server_urls import *
-except ImportError:
-    pass

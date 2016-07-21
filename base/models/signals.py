@@ -24,9 +24,13 @@
 #
 ##############################################################################
 from django.contrib.auth.models import Group
+from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver, Signal
 from base.models import student
 from base.models.person import find_by_global_id, find_by_user, Person
+from base.models.student import Student
+
+person_created = Signal(providing_args=['person'])
 
 try:
     from osis_louvain_auth.authentication.shibboleth_auth import user_updated_signal, user_created_signal
@@ -45,7 +49,7 @@ try:
                             last_name=user_infos.get('USER_LAST_NAME'),
                             email=user_infos.get('USER_EMAIL'))
             person.save()
-            add_person_to_group(person)
+            __add_person_to_group(person)
             person_created.send(sender=None, person=person)
         else:
             person.user = user
@@ -60,11 +64,18 @@ except Exception:
     pass
 
 
-person_created = Signal(providing_args=['person'])
+@receiver(post_save, sender=Student)
+def add_to_students_group(sender, instance, **kwargs):
+    if kwargs.get('created', True) and instance.person.user:
+        students_group = Group.objects.get(name='students')
+        instance.person.user.groups.add(students_group)
 
-def add_person_to_group(person):
+
+
+def __add_person_to_group(person):
     # Check Student
     if student.find_by_person(person):
         student_group = Group.objects.get(name='students')
         person.user.groups.add(student_group)
     # TODO Check Tutor
+
