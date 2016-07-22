@@ -1,4 +1,4 @@
-{% extends "dashboard_layout.html" %}
+{% extends "layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -64,19 +64,19 @@
                 <table class="table table-condensed table-borderless table-striped">
                     <tr>
                         <th></th>
-                        <th>ECTS</th>
-                        <th>Janv.</th>
-                        <th>Juin</th>
-                        <th>Sept.</th>
+                        <th>{% trans 'ects' %}</th>
+                        <th>{% trans 'jan' %}</th>
+                        <th>{% trans 'june' %}</th>
+                        <th>{% trans 'sept' %}</th>
                     </tr>
                     <tr id="summary_ects">
-                        <td><strong>Total ECTS / Inscription</strong></td>
+                        <td><strong>{% trans 'total_ects_inscription' %}</strong></td>
                     </tr>
                     <tr id="summary_mean">
-                        <td><strong>Moyenne</strong></td>
+                        <td><strong>{% trans 'mean' %}</strong></td>
                     </tr>
                     <tr id="summary_mention">
-                        <td><strong>Mention</strong></td>
+                        <td><strong>{% trans 'mention' %}</strong></td>
                     </tr>
 
                 </table>
@@ -87,14 +87,14 @@
             <div class="table-responsive ">
                 <table class="table table-striped table-hover table-bordered" id="table_courses">
                     <tr>
-                        <th>Cours</th>
-                        <th>Intitulé</th>
-                        <th>ECTS</th>
-                        <th>Inscr.</th>
-                        <th>Janv.</th>
-                        <th>Juin</th>
-                        <th>Sept.</th>
-                        <th>Crédit</th>
+                        <th>{% trans 'course' %}</th>
+                        <th>{% trans 'title' %}</th>
+                        <th>{% trans 'ects' %}</th>
+                        <th>{% trans 'inscr' %}</th>
+                        <th>{% trans 'jan' %}</th>
+                        <th>{% trans 'june' %}</th>
+                        <th>{% trans 'sept' %}</th>
+                        <th>{% trans 'credits' %}</th>
                     </tr>
                 </table>
             </div>
@@ -111,23 +111,23 @@
                         <th style="border-top: none !important;">Légende</th>
                     </tr>
                     <tr>
-                        <td>P examen partiel</td>
-                        <td>T note résultant d'un test</td>
+                        <td>{% trans 'explanation_P'%}P examen partiel</td>
+                        <td>{% trans 'explanation_T'%}T note résultant d'un test</td>
                     </tr>
                     <tr>
-                        <td style="border-top: none !important;">I Première inscription</td>
-                        <td style="border-top: none !important;">TV Evaluation satisfaisante (la note ne compte pas)</td>
+                        <td style="border-top: none !important;">{% trans 'explanation_I'%}I Première inscription</td>
+                        <td style="border-top: none !important;">{% trans 'explanation_TV'%}TV Evaluation satisfaisante (la note ne compte pas)</td>
                     </tr>
                     <tr>
-                        <td style="border-top: none !important;">Y Deuxième inscription</td>
-                        <td style="border-top: none !important;">W Evaluation non satisfaisante (la note ne compte pas)</td>
+                        <td style="border-top: none !important;">{% trans 'explanation_Y'%}Y Deuxième inscription</td>
+                        <td style="border-top: none !important;">{% trans 'explanation_W'%}W Evaluation non satisfaisante (la note ne compte pas)</td>
                     </tr>
                     <tr>
-                        <td style="border-top: none !important;">R,J Report de note</td>
-                        <td style="border-top: none !important;">EPM Cours reporté (Epreuve modifiée)</td>
+                        <td style="border-top: none !important;">{% trans 'explanation_RJ'%}R,J Report de note</td>
+                        <td style="border-top: none !important;">{% trans 'explanation_EPM'%}EPM Cours reporté (Epreuve modifiée)</td>
                     </tr>
                     <tr>
-                        <td style="border-top: none !important;">B Crédit (Bologne)</td>
+                        <td style="border-top: none !important;">{% trans 'explanation_B'%}B Crédit (Bologne)</td>
                         <td style="border-top: none !important;"></td>
                     </tr>
                 </table>
@@ -135,7 +135,7 @@
         </div>
         <div class = "row container-fluid">
             <p class="text-warning">
-                Attention : à partir de juin 2009, la moyenne est exprimée sur un maximum de 20.
+                {% trans 'text_mean_exprimed_for_20' %}
             </p>
         </div>
         <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
