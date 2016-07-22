@@ -24,7 +24,8 @@
 #
 ##############################################################################
 from couchbase.bucket import Bucket, NotFoundError, N1QLQuery
-from couchbase.exceptions import CouchbaseError
+from couchbase.exceptions import CouchbaseError, BucketNotFoundError, AuthError
+
 from django.conf import settings
 import re
 
@@ -40,11 +41,15 @@ def connect_db():
     Connect to the bucket "bucket_name" located on the server at address "COUCHBASE_CONNECTION_STRING"
     :return: the bucket
     """
-    if settings.COUCHBASE_PASSWORD:
-        cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name, password=settings.COUCHBASE_PASSWORD)
-    else:
-        cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name)
-    return cb
+    bucket_name = "performance"
+    try:
+        if settings.COUCHBASE_PASSWORD:
+            cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name, password=settings.COUCHBASE_PASSWORD)
+        else:
+            cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name)
+        return cb
+    except (BucketNotFoundError, AuthError):
+        return None
 
 cb = connect_db()
 # cb.bucket_manager().create_n1ql_primary_index(ignore_exists=True)
@@ -56,6 +61,8 @@ def fetch_document(document_id):
     :param document_id: The key of the document
     :return: the document if exists, None if not.
     """
+    if not cb:
+        return None
     try:
         return cb.get(document_id)
     except NotFoundError:
@@ -67,6 +74,8 @@ def save_document(key, data):
     :param key: The key of the document
     :param data: The document (JSON) to insert/update in Couchbase
     """
+    if not cb:
+        return None
     try:
         cb.set(key, data)
     except CouchbaseError:
