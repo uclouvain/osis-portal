@@ -24,22 +24,27 @@
 #
 ##############################################################################
 from couchbase.bucket import Bucket, NotFoundError
-from couchbase.exceptions import CouchbaseError
+from couchbase.exceptions import CouchbaseError, BucketNotFoundError, AuthError
 from django.conf import settings
 
 
 def connect_db():
     bucket_name = "performance"
-    if settings.COUCHBASE_PASSWORD:
-        cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name, password=settings.COUCHBASE_PASSWORD)
-    else:
-        cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name)
-    return cb
+    try:
+        if settings.COUCHBASE_PASSWORD:
+            cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name, password=settings.COUCHBASE_PASSWORD)
+        else:
+            cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name)
+        return cb
+    except (BucketNotFoundError, AuthError):
+        return None
 
 cb = connect_db()
 
 
 def get_document(global_id):
+    if not cb:
+        return None
     try:
         return cb.get(global_id)
     except NotFoundError:
@@ -52,6 +57,8 @@ def insert_or_update_document(key, data):
     :param key: The key of the document
     :param data: The document (JSON) to insert/update in Couchbase
     """
+    if not cb:
+        return None
     try:
         cb.set(key, data)
     except CouchbaseError as err:
