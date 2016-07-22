@@ -37,37 +37,43 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <!-- Student info -->
-        <div class="row col-md-3">
-            <p><b>{% trans 'last_name' %} {% trans 'first_name' %}</b></p>
-            <p><b>{% trans 'matricule_number' %}</b></p>
-        </div>
-        <div class="row col-md-9">
-            <p>{{ student.person.last_name}} {{ student.person.first_name }}</p>
-            <p>{{ student.registration_id }}</p>
-        </div>
-        <!-- Student list of programs -->
-        <div class="row col-md-12">
-            {% if not programs %}
-            <p class="text-warning"> Vous n'avez pas encore les résultats de vos études. </p>
-            {% else %}
-            <div class="table-responsive">
-                <table id="table_academic_years" class="table table-condensed table-hover">
-                    <tr>
-                        <th>{% trans 'year' %}</th>
-                        <th>{% trans 'acronym' %}</th>
-                        <th>{% trans 'program' %}</th>
-                    </tr>
-                    {% for row in programs %}
-                    <tr>
-                        <td>{{row.year}}</td>
-                        <td><a href="{% url 'performance_result' anac=row.anac program_acronym=row.formatted_acronym%}">{{row.acronym}}</a></td>
-                        <td>{{row.title}}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
+        <div class="row">
+            <div class="col-md-3">
+                <p><b>{% trans 'last_name' %}, {% trans 'first_name' %}:</b></p>
             </div>
-            {% endif %}
+            <div class="col-md-9">
+                <p>{{ student.person.last_name}}, {{ student.person.first_name }}</p>
+            </div>
         </div>
+        <div class="row">
+            <div class="col-md-3">
+                <p><b>{% trans 'matricule_number' %}:</b></p>
+            </div>
+            <div class="col-md-9">
+                <p>{{ student.registration_id }}</p>
+            </div>
+        </div>
+
+        <!-- Student list of programs -->
+        {% if not programs %}
+            <p class="text-warning"> Vous n'avez pas encore les résultats de vos études. </p>
+        {% endif %}
     </div>
+    {% if programs %}
+        <table id="table_academic_years" class="table table-hover">
+            <tr>
+                <th>{% trans 'year' %}</th>
+                <th>{% trans 'acronym' %}</th>
+                <th>{% trans 'program' %}</th>
+            </tr>
+            {% for row in programs %}
+            <tr>
+                <td>{{row.year}}</td>
+                <td><a href="{% url 'performance_result' anac=row.anac program_acronym=row.formatted_acronym%}">{{row.acronym}}</a></td>
+                <td>{{row.title}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
 </div>
 {% endblock %}

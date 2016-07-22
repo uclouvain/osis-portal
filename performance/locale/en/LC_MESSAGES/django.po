@@ -91,7 +91,7 @@ msgstr "I - first inscription"
 msgid "explanation_TV"
 msgstr "TV - Evaluation satisfactory (score doesn't count)"
 
-msgid "explanation_y"
+msgid "explanation_Y"
 msgstr "Y - Second inscription"
 
 msgid "explanation_W"
