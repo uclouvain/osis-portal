@@ -26,12 +26,12 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block demande_tabs %}
+
 <form method="post" action="{% url 'save_offer_selection' %}" id="form_questions" name="form_questions">
      {% csrf_token %}
     {% include "demande_offer.html" %}
 </form>
-{% endblock %}
+
 {% block script %}
 <script >
 $(document).ready(function() {

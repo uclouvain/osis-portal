@@ -119,9 +119,9 @@ def demande_update(request, application_id=None):
     grade_choices = mdl_reference.grade_type.GRADE_CHOICES
     an_applicant = mdl.applicant.find_by_user(request.user)
     secondary_education = mdl.secondary_education.find_by_person(an_applicant)
-    return render(request, "home.html",
+    return render(request, "admission_home.html",
                   {"gradetypes":             mdl_reference.grade_type.find_all(),
-                   "domains":                mdl.domain.find_all_domains(),
+                   "domains":                mdl_reference.domain.find_all_domains(),
                    "offers":                 offers,
                    "offer":                  None,
                    "application":            application,

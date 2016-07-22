@@ -461,12 +461,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+
         <div>
         <span id="txt_message_error_profile"
                class="alert alert-warning"
                style="visibility:hidden;display:none;"></span><br>
-        {% if tab_active >= 0%}
+        {% if tab_active ==  0%}
             <a id="lnk_profil_next_step"
                class="btn btn-default"
                href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"

@@ -36,7 +36,7 @@ def update(request, application_id=None):
         application = mdl.application.init_application(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
     tab_status = tabs.init(request)
-    return render(request, "home.html",
+    return render(request, "admission_home.html",
                   {'tab_active':             5,
                    'application':            application,
                    'validated_profil':       demande_validation.validate_profil(applicant),

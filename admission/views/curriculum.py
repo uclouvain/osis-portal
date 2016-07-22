@@ -142,9 +142,10 @@ def update(request, application_id=None):
     year_secondary = None
     year = current_academic_year - 5
     if secondary_education is None:
-        return common.home(request)
-    if secondary_education and secondary_education.diploma is True and secondary_education.academic_year:
-        year_secondary = secondary_education.academic_year.year
+        pass
+    else:
+        if secondary_education and secondary_education.diploma is True and secondary_education.academic_year:
+            year_secondary = secondary_education.academic_year.year
 
     if admission:
         if secondary_education and secondary_education.diploma is True:

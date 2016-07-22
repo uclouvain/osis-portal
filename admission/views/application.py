@@ -43,9 +43,9 @@ from admission.views import tabs
 def application_update(request, application_id):
     application = mdl.application.find_by_id(application_id)
     return render(request, "offer_selection.html",
-                           {"offers":      None,
-                            "offer":       application.offer_year,
-                            "application": application})
+                  {"offers": None,
+                   "offer": application.offer_year,
+                   "application": application})
 
 
 def profile_confirmed(request):
@@ -146,28 +146,30 @@ def save_application_offer(request):
                         answer.value = option.value
                         answer.save()
 
-    return render(request, "home.html", {'tab_active': 0,
-                                         'application': application,
-                                         'validated_profil': demande_validation.validate_profil(applicant),
-                                         'validated_diploma': demande_validation.validate_diploma(application),
-                                         'validated_curriculum': demande_validation.validate_curriculum(application),
-                                         'validated_application': demande_validation.validate_application(application),
-                                         'validated_accounting': demande_validation.validate_accounting(),
-                                         'validated_sociological': demande_validation.validate_sociological(),
-                                         'validated_attachments': demande_validation.validate_attachments(),
-                                         'validated_submission': demande_validation.validate_submission()})
+    return render(request, "admission_home.html", {'tab_active': 0,
+                                                   'application': application,
+                                                   'validated_profil': demande_validation.validate_profil(applicant),
+                                                   'validated_diploma': demande_validation.validate_diploma(
+                                                       application),
+                                                   'validated_curriculum': demande_validation.validate_curriculum(
+                                                       application),
+                                                   'validated_application': demande_validation.validate_application(
+                                                       application),
+                                                   'validated_accounting': demande_validation.validate_accounting(),
+                                                   'validated_sociological': demande_validation.validate_sociological(),
+                                                   'validated_attachments': demande_validation.validate_attachments(),
+                                                   'validated_submission': demande_validation.validate_submission()})
 
 
 def application_view(request, application_id):
     application = mdl.application.find_by_id(application_id)
     answers = mdl.answer.find_by_application(application_id)
     return render(request, "application.html",
-                           {"application": application,
-                            "answers": answers})
+                  {"application": application,
+                   "answers": answers})
 
 
 def applications(request, application_id=None):
-
     tab_status = tabs.init(request)
     application_list = mdl.application.find_by_user(request.user)
     if application_id:
@@ -175,28 +177,32 @@ def applications(request, application_id=None):
     else:
         application = mdl.application.init_application(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
-    return render(request, "home.html", {"applications": application_list,
-                                         "grade_choices": mdl_reference.grade_type.GRADE_CHOICES,
-                                         "domains": mdl.domain.find_all_domains(),
-                                         'tab_active': 1,
-                                         "application": application,                                         
-                                         "validated_profil": demande_validation.validate_profil(applicant),
-                                         "validated_diploma": demande_validation.validate_diploma(application),
-                                         "validated_curriculum": demande_validation.validate_curriculum(application),
-                                         "validated_application": demande_validation.validate_application(application),
-                                         "validated_accounting": demande_validation.validate_accounting(),
-                                         "validated_sociological": demande_validation.validate_sociological(),
-                                         "validated_attachments": demande_validation.validate_attachments(),
-                                         "validated_submission": demande_validation.validate_submission(),
-                                         'tab_profile': tab_status['tab_profile'],
-                                         'tab_applications': tab_status['tab_applications'],
-                                         'tab_diploma': tab_status['tab_diploma'],
-                                         'tab_curriculum': tab_status['tab_curriculum'],
-                                         'tab_accounting': tab_status['tab_accounting'],
-                                         'tab_sociological': tab_status['tab_sociological'],
-                                         'tab_attachments': tab_status['tab_attachments'],
-                                         'tab_submission': tab_status['tab_submission'],
-                                         "local_language_exam_needed": is_local_language_exam_needed(request.user)})
+    return render(request, "admission_home.html", {"applications": application_list,
+                                                   "grade_choices": mdl_reference.grade_type.GRADE_CHOICES,
+                                                   "domains": mdl_reference.domain.find_all_domains(),
+                                                   'tab_active': 1,
+                                                   "application": application,
+                                                   "validated_profil": demande_validation.validate_profil(applicant),
+                                                   "validated_diploma": demande_validation.validate_diploma(
+                                                       application),
+                                                   "validated_curriculum": demande_validation.validate_curriculum(
+                                                       application),
+                                                   "validated_application": demande_validation.validate_application(
+                                                       application),
+                                                   "validated_accounting": demande_validation.validate_accounting(),
+                                                   "validated_sociological": demande_validation.validate_sociological(),
+                                                   "validated_attachments": demande_validation.validate_attachments(),
+                                                   "validated_submission": demande_validation.validate_submission(),
+                                                   'tab_profile': tab_status['tab_profile'],
+                                                   'tab_applications': tab_status['tab_applications'],
+                                                   'tab_diploma': tab_status['tab_diploma'],
+                                                   'tab_curriculum': tab_status['tab_curriculum'],
+                                                   'tab_accounting': tab_status['tab_accounting'],
+                                                   'tab_sociological': tab_status['tab_sociological'],
+                                                   'tab_attachments': tab_status['tab_attachments'],
+                                                   'tab_submission': tab_status['tab_submission'],
+                                                   "local_language_exam_needed": is_local_language_exam_needed(
+                                                       request.user)})
 
 
 def submission(request, application_id=None):
@@ -205,8 +211,8 @@ def submission(request, application_id=None):
     else:
         application = mdl.application.init_application(request.user)
     tab_status = tabs.init(request)
-    return render(request, "home.html",
-                  {'application':            application,
+    return render(request, "admission_home.html",
+                  {'application': application,
                    'display_admission_exam': extra_information(request, application),
                    'tab_active': 7,
                    'tab_profile': tab_status['tab_profile'],
@@ -232,20 +238,23 @@ def change_application_offer(request, application_id=None):
     application.save()
     application_list = mdl.application.find_by_user(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
-    return render(request, "home.html", {'applications': application_list,
-                                         "grade_choices": mdl_reference.grade_type.GRADE_CHOICES,
-                                         "domains": mdl.domain.find_all_domains(),
-                                         'tab_active': 1,
-                                         "first": True,
-                                         "application": application,
-                                         "validated_profil": demande_validation.validate_profil(applicant),
-                                         "validated_diploma": demande_validation.validate_diploma(application),
-                                         "validated_curriculum": demande_validation.validate_curriculum(application),
-                                         "validated_application": demande_validation.validate_application(application),
-                                         "validated_accounting": demande_validation.validate_accounting(),
-                                         "validated_sociological": demande_validation.validate_sociological(),
-                                         "validated_attachments": demande_validation.validate_attachments(),
-                                         "validated_submission": demande_validation.validate_submission()})
+    return render(request, "admission_home.html", {'applications': application_list,
+                                                   "grade_choices": mdl_reference.grade_type.GRADE_CHOICES,
+                                                   "domains": mdl_reference.domain.find_all_domains(),
+                                                   'tab_active': 1,
+                                                   "first": True,
+                                                   "application": application,
+                                                   "validated_profil": demande_validation.validate_profil(applicant),
+                                                   "validated_diploma": demande_validation.validate_diploma(
+                                                       application),
+                                                   "validated_curriculum": demande_validation.validate_curriculum(
+                                                       application),
+                                                   "validated_application": demande_validation.validate_application(
+                                                       application),
+                                                   "validated_accounting": demande_validation.validate_accounting(),
+                                                   "validated_sociological": demande_validation.validate_sociological(),
+                                                   "validated_attachments": demande_validation.validate_attachments(),
+                                                   "validated_submission": demande_validation.validate_submission()})
 
 
 def is_local_language_exam_needed(user):
@@ -253,8 +262,8 @@ def is_local_language_exam_needed(user):
     applications_list = mdl.application.find_by_user(user)
     for application in applications_list:
         if application.offer_year.grade_type.grade == 'BACHELOR' or \
-            application.offer_year.grade_type.grade == 'MASTER' or \
-                application.offer_year.grade_type.grade == 'TRAINING_CERTIFICATE':
+                        application.offer_year.grade_type.grade == 'MASTER' or \
+                        application.offer_year.grade_type.grade == 'TRAINING_CERTIFICATE':
             local_language_exam_needed = True
             break
     return local_language_exam_needed

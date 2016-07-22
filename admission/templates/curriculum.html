@@ -27,8 +27,6 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block content %}
-
 <form method="post" action="{% url 'curriculum' %}">
     {% csrf_token %}
     <div>
@@ -278,4 +276,3 @@
             {%trans 'next_step'%} : {%trans 'accounting'%}</a>
     </div>
 </form>
-{% endblock %}

@@ -1,4 +1,4 @@
-{% extends "admission_layout.html" %}
+{% extends "application_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -40,7 +40,7 @@
             {% include "diploma.html" %}
         </div>
         <div id="tab_curriculum" class="tab-pane fade {% if tab_active == 3 %} in active{%endif%}">
-             {% include "curriculum.html" %}
+            {% include "curriculum.html" %}
         </div>
         <div id="tab_accounting" class="tab-pane fade {% if tab_active == 4 %} in active{%endif%}">
              {% include "accounting.html" %}

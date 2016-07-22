@@ -26,7 +26,6 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block content %}
 <br>
 
 <form method="post" action="{% url 'accounting_update'%}" id="form_accounting">
@@ -319,17 +318,16 @@
         </div>
     </div>
 
-        <a id="lnk_previous_step"
-           class="btn btn-default"
-           href="{%if application.id%}{% url 'curriculum_update' application.id%}{%else%}{% url 'curriculum_update'%}{{%endif%}"
-           onclick="save('form_accounting');"
-           title="{% trans 'curriculum'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-            {%trans 'previous_step'%} : {%trans 'curriculum'%}</a>
-        <a id="lnk_next_step"
-           class="btn btn-default"
-           href="{%if application.id%}{% url 'sociological_survey' application.id %}{%else%}{% url 'sociological_survey' %}{%endif%}"
-           onclick="save('form_accounting');"
-           title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            {%trans 'next_step'%} : {%trans 'sociological_survey'%}</a>
+    <a id="lnk_previous_step"
+       class="btn btn-default"
+       href="{%if application.id%}{% url 'curriculum_update' application.id%}{%else%}{% url 'curriculum_update'%}{{%endif%}"
+       onclick="save('form_accounting');"
+       title="{% trans 'curriculum'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+        {%trans 'previous_step'%} : {%trans 'curriculum'%}</a>
+    <a id="lnk_next_step"
+       class="btn btn-default"
+       href="{%if application.id%}{% url 'sociological_survey' application.id %}{%else%}{% url 'sociological_survey' %}{%endif%}"
+       onclick="save('form_accounting');"
+       title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+        {%trans 'next_step'%} : {%trans 'sociological_survey'%}</a>
 </form>
-{% endblock %}

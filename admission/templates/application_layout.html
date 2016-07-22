@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "admission_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -28,7 +28,6 @@
 {% block style %}
 <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker3.min.css' %}" type='text/css'>
 <link rel="stylesheet" href="{% static 'css/nav-wizard.bootstrap.css' %}" type='text/css'>
-
 {% endblock %}
 {% block content %}
     <h2>{{ request.user.first_name }} {{ request.user.last_name }}</h2>
@@ -99,6 +98,7 @@
                         &nbsp;&nbsp;{%trans 'prerequisites'%}</a>
                 </li>
                 <li class="{%if tab_active == 3 %}active{%endif%}">
+
                     <a href="{%if tab_curriculum%}{%if application.id %}{% url 'curriculum_update' application.id%}{%else%}{% url 'curriculum_update' %}{%endif%}{%endif%}"
                        id="lnk_curriculum_tab"
                        class="{%if tab_curriculum%}{%else%}not-active{%endif%}" >
@@ -177,6 +177,7 @@
                     <h5>{% trans 'mandatory_asterisk'%}</h5>
                     {%endif%}
                     {% block admission_tabs %}
+
                     {% endblock %}
                 </div>
             </div>
@@ -190,13 +191,11 @@
 {% block script %}
     <script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
     <script>
-
     $(document).ready(function() {
         if($("#slt_nationality").val()){
             $.ajax({
                 url: "/admission/country?nationality=" + $("#slt_nationality").val()
             }).then(function(data) {
-
                 if (data.european_union) {
                     $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
                 }else{
@@ -218,13 +217,10 @@
             display_dynamic_form($("#hdn_application_offer_year_id").val());
         }
     });
-
     function save(form_to_submit){
         id = 'form#' + form_to_submit;
         $(id).submit();
-
     }
-
     $("#lnk_profil_next_step").click(function() {
         $('#txt_message_error_profile').css('visibility', 'hidden').css('display','none');
         if ($("#slt_nationality").prop('selectedIndex') < 0
@@ -237,7 +233,6 @@
         save('form_profile');
         return true;
     });
-
     $("#lnk_profil_next_step_up").click(function() {
         $('#txt_message_error_profile_up').css('visibility', 'hidden').css('display','none');
         if ($("#slt_nationality").prop('selectedIndex') < 0
@@ -250,7 +245,6 @@
         save('form_profile');
         return true;
     });
-
     $("#lnk_application_tab").click(function() {
            if ($('#hdn_application_id').val()){
                 $('#slt_offer_type option').each(function(){
@@ -264,11 +258,7 @@
                     }
                 });
                //TODO : les donnnées s'affichent puis elles disparaissent.... LV
-
-
             }
-
     });
-
     </script>
 {% endblock %}

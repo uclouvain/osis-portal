@@ -63,18 +63,18 @@ def home(request):
         else:
             tab_status = tabs.init(request)
             return render(request, "admission_home.html", {'applications': applications,
-                                                 "tab_active": 0,
-                                                 "first": True,
-                                                 "countries": mdl_ref.country.find_all(),
-                                                 'tab_profile': tab_status['tab_profile'],
-                                                 'tab_applications': tab_status['tab_applications'],
-                                                 'tab_diploma': tab_status['tab_diploma'],
-                                                 'tab_curriculum': tab_status['tab_curriculum'],
-                                                 'tab_accounting': tab_status['tab_accounting'],
-                                                 'tab_sociological': tab_status['tab_sociological'],
-                                                 'tab_attachments': tab_status['tab_attachments'],
-                                                 'tab_submission': tab_status['tab_submission'],
-                                                 'main_status': 0})
+                                                           "tab_active": 0,
+                                                           "first": True,
+                                                           "countries": mdl_ref.country.find_all(),
+                                                           'tab_profile': tab_status['tab_profile'],
+                                                           'tab_applications': tab_status['tab_applications'],
+                                                           'tab_diploma': tab_status['tab_diploma'],
+                                                           'tab_curriculum': tab_status['tab_curriculum'],
+                                                           'tab_accounting': tab_status['tab_accounting'],
+                                                           'tab_sociological': tab_status['tab_sociological'],
+                                                           'tab_attachments': tab_status['tab_attachments'],
+                                                           'tab_submission': tab_status['tab_submission'],
+                                                           'main_status': 0})
 
     else:
         return profile(request)
@@ -247,7 +247,8 @@ def profile(request, application_id=None, message_success=None):
                     criteria_id = key[22:]
                     criteria = mdl_ref.assimilation_criteria.find_by_id(criteria_id)
                     if criteria:
-                        applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria()
+                        applicant_assimilation_criteria = \
+                            mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria()
                         applicant_assimilation_criteria.criteria = criteria
                         applicant_assimilation_criteria.applicant = applicant
                         if applicant_form.is_valid():
@@ -287,7 +288,7 @@ def profile(request, application_id=None, message_success=None):
         institution_name = None
 
     assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
-    applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_person(applicant.id)
+    applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
     application = None
     if application_id:
         application = mdl.application.find_by_id(application_id)
@@ -295,42 +296,44 @@ def profile(request, application_id=None, message_success=None):
         tab_status = tabs.init(request)
     # validated are not ready yet, to be achieved in another issue - Leila
     return render(request, "admission_home.html", {'applicant': applicant,
-                                         'applicant_form': applicant_form,
-                                         'countries': countries,
-                                         'assimilationCriteria': assimilation_criteria,
-                                         'personAssimilationCriteria': applicant_assimilation_criteria,
-                                         'person_legal_address': person_legal_address,
-                                         'person_contact_address': person_contact_address,
-                                         'same_addresses': same_addresses,
-                                         'previous_enrollment': previous_enrollment,
-                                         'institution': institution_name,
-                                         "message_success": message_success,
-                                         'tab_active': 0,
-                                         'validated_profil': demande_validation.validate_profil(applicant),
-                                         'validated_diploma': demande_validation.validate_diploma(application),
-                                         'validated_curriculum': demande_validation.validate_curriculum(application),
-                                         'validated_application': demande_validation.validate_application(application),
-                                         'validated_accounting': demande_validation.validate_accounting(),
-                                         'validated_sociological': demande_validation.validate_sociological(),
-                                         'validated_attachments': demande_validation.validate_attachments(),
-                                         'validated_submission': demande_validation.validate_submission(),
-                                         'application': application,
-                                         'tab_profile': tab_status['tab_profile'],
-                                         'tab_applications': tab_status['tab_applications'],
-                                         'tab_diploma': tab_status['tab_diploma'],
-                                         'tab_curriculum': tab_status['tab_curriculum'],
-                                         'tab_accounting': tab_status['tab_accounting'],
-                                         'tab_sociological': tab_status['tab_sociological'],
-                                         'tab_attachments': tab_status['tab_attachments'],
-                                         'tab_submission': tab_status['tab_submission'],
-                                         'applications': mdl.application.find_by_user(request.user)})
+                                                   'applicant_form': applicant_form,
+                                                   'countries': countries,
+                                                   'assimilationCriteria': assimilation_criteria,
+                                                   'personAssimilationCriteria': applicant_assimilation_criteria,
+                                                   'person_legal_address': person_legal_address,
+                                                   'person_contact_address': person_contact_address,
+                                                   'same_addresses': same_addresses,
+                                                   'previous_enrollment': previous_enrollment,
+                                                   'institution': institution_name,
+                                                   "message_success": message_success,
+                                                   'tab_active': 0,
+                                                   'validated_profil': demande_validation.validate_profil(applicant),
+                                                   'validated_diploma': demande_validation.validate_diploma(
+                                                       application),
+                                                   'validated_curriculum': demande_validation.validate_curriculum(
+                                                       application),
+                                                   'validated_application': demande_validation.validate_application(
+                                                       application),
+                                                   'validated_accounting': demande_validation.validate_accounting(),
+                                                   'validated_sociological': demande_validation.validate_sociological(),
+                                                   'validated_attachments': demande_validation.validate_attachments(),
+                                                   'validated_submission': demande_validation.validate_submission(),
+                                                   'application': application,
+                                                   'tab_profile': tab_status['tab_profile'],
+                                                   'tab_applications': tab_status['tab_applications'],
+                                                   'tab_diploma': tab_status['tab_diploma'],
+                                                   'tab_curriculum': tab_status['tab_curriculum'],
+                                                   'tab_accounting': tab_status['tab_accounting'],
+                                                   'tab_sociological': tab_status['tab_sociological'],
+                                                   'tab_attachments': tab_status['tab_attachments'],
+                                                   'tab_submission': tab_status['tab_submission'],
+                                                   'applications': mdl.application.find_by_user(request.user)})
 
 
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
 def home_retour(request):
     applications = mdl.application.find_by_user(request.user)
     return render(request, "admission_home.html", {'applications': applications, 'message_info': _('msg_info_saved')})
-
 
 
 def extra_information(request, application):
