@@ -35,5 +35,7 @@ from performance import models as mdl
 @permission_required('base.is_student', raise_exception=True)
 def home(request):
     stud = find_by_user(request.user)
-    document = mdl.student_performance.get_document(stud.registration_id)
+    document = None
+    if stud:
+        document = mdl.student_performance.get_document(stud.registration_id)
     return render(request, "performance_home.html", {"data": document})
