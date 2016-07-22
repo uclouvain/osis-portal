@@ -43,6 +43,8 @@ if 'catalog' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^catalog/', include('catalog.urls')), )
 if 'performance' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^performance/', include('performance.urls')), )
+    if 'dissertation' in settings.INSTALLED_APPS:
+        urlpatterns = urlpatterns + (url(r'^dissertation/', include('dissertation.urls')),)
 
 handler404 = 'base.views.common.page_not_found'
 handler403 = 'base.views.common.access_denied'
