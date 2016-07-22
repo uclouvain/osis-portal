@@ -104,4 +104,4 @@ msgid "explanation_EPM"
 msgstr "EPM Course reported (Epreuve modifiée)"
 
 msgid "explanation_B"
-msgstr "TV Credit (Bologne)"
+msgstr "B Credit (Bologne)"

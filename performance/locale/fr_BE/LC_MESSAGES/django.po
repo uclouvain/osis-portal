@@ -82,4 +82,29 @@ msgstr "Crédits"
 msgid "text_mean_exprimed_for_20"
 msgstr "Attention : à partir de juin 2009, la moyenne est exprimée sur un maximum de 20."
 
+msgid "explanation_P"
+msgstr "P examen partiel"
 
+msgid "explanation_T"
+msgstr "T note résultant d'un test"
+
+msgid "explanation_I"
+msgstr "I Première inscription"
+
+msgid "explanation_TV"
+msgstr "TV Evaluation satisfaisante (la note ne compte pas)"
+
+msgid "explanation_y"
+msgstr "Y Deuxième inscription"
+
+msgid "explanation_W"
+msgstr "W Evaluation non satisfaisante (la note ne compte pas)"
+
+msgid "explanation_RJ"
+msgstr "R,J Report de note"
+
+msgid "explanation_EPM"
+msgstr "EPM Cours reporté (Epreuve modifiée)"
+
+msgid "explanation_B"
+msgstr "B Crédit (Bologne)"
