@@ -49,7 +49,6 @@ try:
                             last_name=user_infos.get('USER_LAST_NAME'),
                             email=user_infos.get('USER_EMAIL'))
             person.save()
-            __add_person_to_group(person)
             person_created.send(sender=None, person=person)
         else:
             person.user = user
@@ -58,6 +57,7 @@ try:
             person.email = user.email
             person.global_id = user_infos.get('USER_FGS')
             person.save()
+        __add_person_to_group(person)
         return person
 
 except Exception:
@@ -72,11 +72,11 @@ def add_to_students_group(sender, instance, **kwargs):
             instance.person.user.groups.add(students_group)
 
 
-
 def __add_person_to_group(person):
     # Check Student
     if student.find_by_person(person):
         student_group = Group.objects.get(name='students')
-        person.user.groups.add(student_group)
+        if student_group not in person.user.groups:
+            person.user.groups.add(student_group)
     # TODO Check Tutor
 
