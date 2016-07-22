@@ -40,11 +40,8 @@ from admission.views import tabs
 
 
 def accounting(request, application_id=None):
-    print('accounting')
-    first = True
     if application_id:
         application = mdl.application.find_by_id(application_id)
-        first = False
     else:
         application = mdl.application.init_application(request.user)
     academic_yr = mdl.academic_year.current_academic_year()
@@ -64,7 +61,6 @@ def accounting(request, application_id=None):
                                          "reduction_possible":          reduction_possible(application),
                                          "third_cycle":                 third_cycle(application),
                                          "tab_active":                  4,
-                                         "first":                       first,
                                          "applications":                mdl.application.find_by_user(request.user),
                                          "validated_profil": demande_validation.validate_profil(applicant),
                                          "validated_diploma": demande_validation.validate_diploma(application),
@@ -85,7 +81,6 @@ def accounting(request, application_id=None):
 
 
 def accounting_update(request, application_id=None):
-    print('accounting_update', application_id)
     academic_yr = mdl.academic_year.current_academic_year()
     previous_academic_year = mdl.academic_year.find_by_year(academic_yr.year-1)
     sport_affiliation_amount = 0
@@ -94,10 +89,9 @@ def accounting_update(request, application_id=None):
     accounting_form = None
     if request.method == 'POST':
         accounting_form = AccountingForm(data=request.POST)
-    first = True
+
     if application_id:
         application = mdl.application.find_by_id(application_id)
-        first = False
     else:
         application = mdl.application.init_application(request.user)
     application = populate_application(request, application)
@@ -115,7 +109,6 @@ def accounting_update(request, application_id=None):
                                          "reduction_possible":          reduction_possible(application),
                                          "third_cycle":                 third_cycle(application),
                                          "tab_active":                  4,
-                                         "first":                       first,
                                          "applications": mdl.application.find_by_user(request.user),
                                          "tab_profile": tab_status['tab_profile'],
                                          "tab_applications": tab_status['tab_applications'],
@@ -167,7 +160,6 @@ def populate_application(request, application):
 
 
 def debts_check(application):
-    print('debts_check', application.id)
     if application:
         academic_yr = mdl.academic_year.current_academic_year()
         previous_academic_year = mdl.academic_year.find_by_year(academic_yr.year-1)

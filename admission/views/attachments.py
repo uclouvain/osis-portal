@@ -30,16 +30,14 @@ from admission.views import tabs
 
 
 def update(request, application_id=None):
-    first = True
+
     if application_id:
         application = mdl.application.find_by_id(application_id)
-        first = False
     else:
         application = mdl.application.init_application(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
     tab_status = tabs.init(request)
     return render(request, "home.html", {'tab_active': 6,
-                                         "first": first,
                                          "application": application,                                         
                                          "validated_profil": demande_validation.validate_profil(applicant),
                                          "validated_diploma": demande_validation.validate_diploma(application),

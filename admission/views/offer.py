@@ -111,14 +111,13 @@ def selection_offer(request, offer_id):
 
 
 def demande_update(request, application_id=None):
-    print('demande_update')
     offers = None
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
         application = mdl.application.init_application(request.user)
     grade_choices = mdl_reference.grade_type.GRADE_CHOICES
-    an_applicant= mdl.applicant.find_by_user(request.user)
+    an_applicant = mdl.applicant.find_by_user(request.user)
     secondary_education = mdl.secondary_education.find_by_person(an_applicant)
     return render(request, "home.html",
                   {"gradetypes":             mdl_reference.grade_type.find_all(),

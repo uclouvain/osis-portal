@@ -272,7 +272,6 @@ def curriculum_save(request, application_id):
 
 
 def diploma_save(request):
-    print('diploma_save')
     next_step = False
     previous_step = False
     save_step = True
@@ -309,7 +308,6 @@ def diploma_save(request):
         is_valid, validation_messages, secondary_education = validate_fields_form(request,
                                                                                   secondary_education,
                                                                                   next_step)
-
         secondary_education = populate_secondary_education(request, secondary_education)
         secondary_education.save()
         message_success = _('msg_info_saved')
@@ -344,10 +342,8 @@ def diploma_save(request):
 
 
 def diploma_update(request, application_id=None):
-    first = True
     if application_id:
         application = mdl.application.find_by_id(application_id)
-        first = False
     else:
         application = mdl.application.init_application(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
@@ -376,7 +372,6 @@ def diploma_update(request, application_id=None):
             "current_academic_year":        mdl.academic_year.current_academic_year(),
             "local_language_exam_needed":   is_local_language_exam_needed(request.user),
             'tab_active':                   2,
-            "first":                        first,
             "validated_profil":             demande_validation.validate_profil(applicant),
             "validated_diploma":            demande_validation.validate_diploma(application),
             "validated_curriculum":         demande_validation.validate_curriculum(application),

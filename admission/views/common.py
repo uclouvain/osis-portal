@@ -57,7 +57,8 @@ def home(request):
                                                          'applicant': applicant,
                                                          'applicant_form': applicant_form,
                                                          'person_legal_address': person_legal_address,
-                                                         'person_contact_address': person_contact_address,})
+                                                         'person_contact_address': person_contact_address,
+                                                         "tab_active": -1})
         else:
             tab_status = tabs.init(request)
             return render(request, "home.html", {'applications': applications,
@@ -287,11 +288,8 @@ def profile(request, application_id=None, message_success=None):
     assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
     person_assimilation_criteria = mdl.person_assimilation_criteria.find_by_person(applicant.id)
     application = None
-    first = True
     if application_id:
         application = mdl.application.find_by_id(application_id)
-        if application:
-            first = False
     else:
         tab_status = tabs.init(request)
     # validated are not ready yet, to be achieved in another issue - Leila
@@ -315,7 +313,6 @@ def profile(request, application_id=None, message_success=None):
                                          'validated_sociological': demande_validation.validate_sociological(),
                                          'validated_attachments': demande_validation.validate_attachments(),
                                          'validated_submission': demande_validation.validate_submission(),
-                                         'first': first,
                                          'application': application,
                                          'tab_profile': tab_status['tab_profile'],
                                          'tab_applications': tab_status['tab_applications'],

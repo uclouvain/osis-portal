@@ -1155,3 +1155,6 @@ msgstr "Mandatory field before going to the next step"
 msgid "prerequisites"
 msgstr "Prerequisites"
 
+msgid "back_demandes_list"
+msgstr "Back to demandes list"
+

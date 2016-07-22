@@ -53,18 +53,18 @@ def profile_confirmed(request):
 
 
 def save_application_offer(request):
+    application = None
     if request.method == 'POST':
         offer_year = None
         offer_year_id = request.POST.get('offer_year_id')
 
         application_id = request.POST.get('application_id')
-        first = True
+
         if application_id == 'None':
             application_id = None
         if application_id:
             application = get_object_or_404(mdl.application.Application, pk=application_id)
             secondary_education = mdl.secondary_education.find_by_person(application.applicant)
-            first = False
         else:
             application = mdl.application.init_application(request.user)
             person_application = mdl.applicant.find_by_user(request.user)
@@ -114,7 +114,6 @@ def save_application_offer(request):
             application.raffle_number = request.POST.get('txt_offer_lottery')
 
         application.save()
-        print('application i d', application.id)
         # answer_question_
         for key, value in request.POST.items():
             if "txt_answer_question_" in key:
@@ -148,7 +147,6 @@ def save_application_offer(request):
                         answer.save()
 
     return render(request, "home.html", {'tab_active': 0,
-                                         'first': first,
                                          'application': application,
                                          'validated_profil': demande_validation.validate_profil(applicant),
                                          'validated_diploma': demande_validation.validate_diploma(application),
@@ -169,15 +167,11 @@ def application_view(request, application_id):
 
 
 def applications(request, application_id=None):
-    print('applications')
-    if request.method == 'POST':
-        print('applications', request.POST.get('tab_profile_status'))
+
     tab_status = tabs.init(request)
     application_list = mdl.application.find_by_user(request.user)
-    first = True
     if application_id:
         application = mdl.application.find_by_id(application_id)
-        first = False
     else:
         application = mdl.application.init_application(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
@@ -185,7 +179,6 @@ def applications(request, application_id=None):
                                          "grade_choices": mdl_reference.grade_type.GRADE_CHOICES,
                                          "domains": mdl.domain.find_all_domains(),
                                          'tab_active': 1,
-                                         "first": first,
                                          "application": application,                                         
                                          "validated_profil": demande_validation.validate_profil(applicant),
                                          "validated_diploma": demande_validation.validate_diploma(application),
@@ -203,7 +196,7 @@ def applications(request, application_id=None):
                                          'tab_sociological': tab_status['tab_sociological'],
                                          'tab_attachments': tab_status['tab_attachments'],
                                          'tab_submission': tab_status['tab_submission'],
-                                         "local_language_exam_needed":   is_local_language_exam_needed(request.user)})
+                                         "local_language_exam_needed": is_local_language_exam_needed(request.user)})
 
 
 def submission(request, application_id=None):
@@ -234,7 +227,6 @@ def application_delete(request, application_id):
 
 
 def change_application_offer(request, application_id=None):
-    print('change_application_offer')
     application = mdl.application.find_by_id(application_id)
     # application.offer_year = None  # Ici on ne peut pas mettre None
     application.save()

@@ -28,6 +28,9 @@ from django.utils.translation import ugettext_lazy as _
 from admission import models as mdl
 from admission.views import demande_validation
 
+# Not really useful for the moment, but I think it could be useful when we will work on the enabled/disabled tab for
+# the admission.  LV
+
 
 def init(request):
     tabs = {"tab_profile": True,
@@ -64,6 +67,5 @@ def get_tabs_status(request):
     applicant = mdl.applicant.find_by_user(request.user)
     if not demande_validation.validate_profil(applicant):
         tabs['tab_applications'] = False
-
 
     return tabs

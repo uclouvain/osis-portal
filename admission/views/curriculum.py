@@ -129,10 +129,8 @@ def save(request):
 
 
 def update(request, application_id=None):
-    first = True
     if application_id:
         application = mdl.application.find_by_id(application_id)
-        first = False
     else:
         application = mdl.application.init_application(request.user)
     curricula = []
@@ -190,7 +188,6 @@ def update(request, application_id=None):
                        "languages": mdl_reference.language.find_languages(),
                        "current_academic_year": mdl.academic_year.current_academic_year(),
                        "tab_active": 3,
-                       "first": first,
                        "application": application,                       
                        "validated_profil": demande_validation.validate_profil(applicant),
                        "validated_diploma": demande_validation.validate_diploma(application),
