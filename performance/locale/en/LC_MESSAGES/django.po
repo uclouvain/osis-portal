@@ -23,13 +23,13 @@ msgid "performance"
 msgstr "Performance"
 
 msgid "last_name"
-msgstr "Last name"
+msgstr "Last Name"
 
 msgid "first_name"
-msgstr "First name"
+msgstr "First Name"
 
 msgid "matricule_number"
-msgstr "Matricule number"
+msgstr "Registration Number"
 
 msgid "year"
 msgstr "Year"
@@ -56,7 +56,7 @@ msgid "sept"
 msgstr "Sept."
 
 msgid "total_ects_inscription"
-msgstr "Total ECTS / Inscription"
+msgstr "Total ECTS / Enrollment"
 
 msgid "mean"
 msgstr "Mean"
@@ -77,31 +77,31 @@ msgid "credits"
 msgstr "Credits"
 
 msgid "text_mean_exprimed_for_20"
-msgstr "Attention : beginning june 2009, the score is exprimed to a maximum of 20."
+msgstr "Attention : From June 2009, the score is expressed to a maximum of 20."
 
 msgid "explanation_P"
-msgstr "P partial examination"
+msgstr "P - partial examination"
 
 msgid "explanation_T"
-msgstr "T score of a test"
+msgstr "T - score of a test"
 
 msgid "explanation_I"
-msgstr "I first inscription"
+msgstr "I - first inscription"
 
 msgid "explanation_TV"
-msgstr "TV Evaluation satisfactory (score doesn't count)"
+msgstr "TV - Evaluation satisfactory (score doesn't count)"
 
 msgid "explanation_y"
-msgstr "Y Second inscription"
+msgstr "Y - Second inscription"
 
 msgid "explanation_W"
-msgstr "W Evaluation not satisfactory (score doesn't count)"
+msgstr "W - Evaluation not satisfactory (score doesn't count)"
 
 msgid "explanation_RJ"
-msgstr "R,J score reported"
+msgstr "R,J - score reported"
 
 msgid "explanation_EPM"
-msgstr "EPM Course reported (Epreuve modifiée)"
+msgstr "EPM - Course reported (Epreuve modifiée)"
 
 msgid "explanation_B"
-msgstr "B Credit (Bologne)"
+msgstr "B - Credit (Bologne)"

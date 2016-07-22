@@ -32,7 +32,7 @@ msgid "first_name"
 msgstr "Prénom"
 
 msgid "matricule_number"
-msgstr "Numéro de matricule"
+msgstr "Matricule"
 
 msgid "year"
 msgstr "Année"
@@ -41,10 +41,7 @@ msgid "acronym"
 msgstr "Sigle"
 
 msgid "program"
-msgstr "Année d'étude"
-
-msgid "no_results"
-msgstr "Aucun résultats à afficher."
+msgstr "Programme"
 
 msgid "ects"
 msgstr "ECTS"
@@ -83,28 +80,28 @@ msgid "text_mean_exprimed_for_20"
 msgstr "Attention : à partir de juin 2009, la moyenne est exprimée sur un maximum de 20."
 
 msgid "explanation_P"
-msgstr "P examen partiel"
+msgstr "P - examen partiel"
 
 msgid "explanation_T"
-msgstr "T note résultant d'un test"
+msgstr "T - note résultant d'un test"
 
 msgid "explanation_I"
-msgstr "I Première inscription"
+msgstr "I - Première inscription"
 
 msgid "explanation_TV"
-msgstr "TV Evaluation satisfaisante (la note ne compte pas)"
+msgstr "TV - Evaluation satisfaisante (la note ne compte pas)"
 
 msgid "explanation_y"
-msgstr "Y Deuxième inscription"
+msgstr "Y - Deuxième inscription"
 
 msgid "explanation_W"
-msgstr "W Evaluation non satisfaisante (la note ne compte pas)"
+msgstr "W - Evaluation non satisfaisante (la note ne compte pas)"
 
 msgid "explanation_RJ"
-msgstr "R,J Report de note"
+msgstr "R,J - Report de note"
 
 msgid "explanation_EPM"
-msgstr "EPM Cours reporté (Epreuve modifiée)"
+msgstr "EPM - Cours reporté (Epreuve modifiée)"
 
 msgid "explanation_B"
-msgstr "B Crédit (Bologne)"
+msgstr "B - Crédit (Bologne)"
