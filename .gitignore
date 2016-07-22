@@ -2,6 +2,10 @@ venv/
 *.pyc
 .idea/
 admission/tests/sent_mails/
+base/tests/sent_mails/
 *.mo
 
 /osis-portal.iml
+/cover.pdf
+/output.pdf
+/test.pdf

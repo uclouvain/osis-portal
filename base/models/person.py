@@ -26,7 +26,7 @@
 
 from django.db import models
 from django.contrib import admin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
@@ -77,6 +77,13 @@ class Person(models.Model):
             last_name = self.last_name + ","
 
         return u"%s %s %s" % (last_name.upper(), first_name, middle_name)
+
+    class Meta:
+        permissions = (
+            ("is_tutor", "Is tutor"),
+            ("is_student", "Is student"),
+            ("is_administrator", "Is administrator"),
+        )
 
 
 def find_by_id(person_id):

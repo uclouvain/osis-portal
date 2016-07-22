@@ -26,13 +26,13 @@
 ############################################################################
 
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
 from base.models.student import is_student, find_by_user
 from performance import models as mdl
 
 
 @login_required
-@user_passes_test(is_student)
+@permission_required('base.is_student', raise_exception=True)
 def home(request):
     """
     Display the academic results of the student.
