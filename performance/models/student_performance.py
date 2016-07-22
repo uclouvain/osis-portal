@@ -81,14 +81,14 @@ def save_document(key, data):
     except CouchbaseError:
         raise
 
-def select_where_global_id_is(global_id):
+def select_where_registration_id_is(registration_id):
     """
     Query the bucket for all documents where the global_id is equal to "global_id".
     :param global_id: a string
     :return: result of query
     """
-    query_string = "SELECT * FROM " + bucket_name + " WHERE global_id=$1"
-    query = N1QLQuery(query_string, global_id)
+    query_string = "SELECT * FROM " + bucket_name + " WHERE registration_id=$1"
+    query = N1QLQuery(query_string, registration_id)
     return cb.n1ql_query(query)
 
 def key_from_json(json):
@@ -97,10 +97,10 @@ def key_from_json(json):
     :param json: a json object
     :return: a string key
     """
-    global_id = json["global_id"]
+    registration_id = json["registration_id"]
     academic_year = json["academic_years"][0]["anac"]
     program_acronym = format_acronym(json["academic_years"][0]["programs"][0]["acronym"])
-    key = "" + global_id + "_" + academic_year + "_" + program_acronym
+    key = "" + registration_id + "_" + academic_year + "_" + program_acronym
     return key
 
 def format_acronym(program_acronym):

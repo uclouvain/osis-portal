@@ -33,7 +33,7 @@ class CouchBasePerformanceTest(TestCase):
 
     def test_document_creation(self):
         document = {
-            "global_id": "64641200",
+            "registration_id": "64641200",
             "first_name": "Eddy",
             "last_name": "Ndizera",
             "academic_years": [
