@@ -68,7 +68,8 @@ except Exception:
 def add_to_students_group(sender, instance, **kwargs):
     if kwargs.get('created', True) and instance.person.user:
         students_group = Group.objects.get(name='students')
-        instance.person.user.groups.add(students_group)
+        if instance.person.user:
+            instance.person.user.groups.add(students_group)
 
 
 
