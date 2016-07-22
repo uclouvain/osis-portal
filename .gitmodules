@@ -1,0 +1,3 @@
+[submodule "osis_common"]
+	path = osis_common
+	url = git@github.com:uclouvain/osis-common.git

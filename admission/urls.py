@@ -56,8 +56,8 @@ urlpatterns = [
 
     url(r'^levels/$', level.find_by_type),
 
-    url(r'^login/$', identification.login_admission, name='login'),
-    url(r'^logout/$', logout, name='logout'),
+    url(r'^login/$', identification.login_admission, name='admission_login'),
+    url(r'^logout/$', identification.logout_admission, name='admission_logout'),
 
     url(r'^offers/$', offer.search),
     url(r'^offer/$', offer.find_by_id),

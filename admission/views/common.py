@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from datetime import datetime
+from django.conf import settings
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -39,7 +40,7 @@ from admission.views import demande_validation
 from admission.views import tabs
 
 
-@login_required
+@login_required(login_url=settings.ADMISSION_LOGIN_URL)
 def home(request):
     applicant = mdl.applicant.find_by_user(request.user)
 
@@ -61,7 +62,7 @@ def home(request):
                                                          "tab_active": -1})
         else:
             tab_status = tabs.init(request)
-            return render(request, "home.html", {'applications': applications,
+            return render(request, "admission_home.html", {'applications': applications,
                                                  "tab_active": 0,
                                                  "first": True,
                                                  "countries": mdl_ref.country.find_all(),
@@ -246,11 +247,11 @@ def profile(request, application_id=None, message_success=None):
                     criteria_id = key[22:]
                     criteria = mdl_ref.assimilation_criteria.find_by_id(criteria_id)
                     if criteria:
-                        person_assimilation_criteria = mdl.person_assimilation_criteria.PersonAssimilationCriteria()
-                        person_assimilation_criteria.criteria = criteria
-                        person_assimilation_criteria.person = applicant
+                        applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria()
+                        applicant_assimilation_criteria.criteria = criteria
+                        applicant_assimilation_criteria.applicant = applicant
                         if applicant_form.is_valid():
-                            person_assimilation_criteria.save()
+                            applicant_assimilation_criteria.save()
 
         message_success = 'ok'
         if applicant_form.is_valid():
@@ -276,7 +277,7 @@ def profile(request, application_id=None, message_success=None):
             if applicant.registration_id or applicant.last_academic_year:
                 previous_enrollment = True
         else:
-            return HttpResponseRedirect('/admission/logout/?next=/admission')
+            return HttpResponseRedirect('/admission/logout')
 
     countries = mdl_ref.country.find_all()
     props = mdl.properties.find_by_key('INSTITUTION')
@@ -286,18 +287,18 @@ def profile(request, application_id=None, message_success=None):
         institution_name = None
 
     assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
-    person_assimilation_criteria = mdl.person_assimilation_criteria.find_by_person(applicant.id)
+    applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_person(applicant.id)
     application = None
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
         tab_status = tabs.init(request)
     # validated are not ready yet, to be achieved in another issue - Leila
-    return render(request, "home.html", {'applicant': applicant,
+    return render(request, "admission_home.html", {'applicant': applicant,
                                          'applicant_form': applicant_form,
                                          'countries': countries,
                                          'assimilationCriteria': assimilation_criteria,
-                                         'personAssimilationCriteria': person_assimilation_criteria,
+                                         'personAssimilationCriteria': applicant_assimilation_criteria,
                                          'person_legal_address': person_legal_address,
                                          'person_contact_address': person_contact_address,
                                          'same_addresses': same_addresses,
@@ -325,10 +326,11 @@ def profile(request, application_id=None, message_success=None):
                                          'applications': mdl.application.find_by_user(request.user)})
 
 
-@login_required
+@login_required(login_url=settings.ADMISSION_LOGIN_URL)
 def home_retour(request):
     applications = mdl.application.find_by_user(request.user)
-    return render(request, "home.html", {'applications': applications, 'message_info': _('msg_info_saved')})
+    return render(request, "admission_home.html", {'applications': applications, 'message_info': _('msg_info_saved')})
+
 
 
 def extra_information(request, application):

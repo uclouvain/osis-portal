@@ -1,4 +1,3 @@
-{% extends "layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -25,250 +24,111 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
-{% block style %}
-<link rel="stylesheet" href="{% static 'css/bootstrap-datepicker3.min.css' %}" type='text/css'>
-<link rel="stylesheet" href="{% static 'css/nav-wizard.bootstrap.css' %}" type='text/css'>
 
-{% endblock %}
-{% block content %}
-    <h2>{{ request.user.first_name }} {{ request.user.last_name }}</h2>
-    <span>
-        La procédure de demande d'inscription en ligne est divisée en plusieurs onglets. La demande d'inscription ne
-        pourra être validée que lorsque tous les onglets auront valablement été complétés. Les couleurs
-        <font class="validated">verte </font>
-        ou <font class="not-validated">orange</font>
-        vous rappellent l'état d'avancement de votre demande d'inscription que vous pouvez d'ailleurs arrêter et
-        reprendre à tout moment.
-    </span>
-    <br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Inscription en ligne</title>
 
-    <br>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"/>
+    <link rel="icon" href="{% static 'img/favicon.ico' %}"/>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}"/>
+    {% block style %}
+    {% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'home' %}" id="lnk_home">
+                    <img src="{% static 'img/logo_institution.jpg' %}" style="margin-top: -10px;"></a>
+            </div>
 
-    <div class="row">
-        <div class="col-md-2">
-            {% if applications%}<a href="{%url 'home'%}">{% trans 'back_demandes_list'%}</a>{%endif%}
-            <br>
-            <br>
-            <ul class="nav nav-pills nav-stacked">
-                <li class="{%if tab_active == 0 %}active{%endif%}">
-                    <a href="{%if application.id%}{% url 'profile' application.id%}{%else%}{% url 'profile' %}{%endif%}"
-                       id="lnk_profile_tab">
-                        {% if validated_profil %}
-                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                        {%else%}
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                        {%endif%}
-                        &nbsp;&nbsp;{%trans 'profile'%}</a>
-                </li>
-                <li class="{%if tab_active == 1 %}active{%endif%}">
-                    {%if tab_applications%}
-                        <a href="{%if application.id%}{% url 'applications' application.id%}{%else%}{% url 'applications' %}{%endif%}"
-                           id="lnk_application_tab">
-                            {% if validated_application %}
-                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                            {%else%}
-                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                            {%endif%}
-                            &nbsp;&nbsp;{%trans 'offer_choice'%}                     {%if application.offer_year %}
-                    ({{application.offer_year.acronym}})
-                    {%endif%}</a>
-                    {%else%}
-                        <a class="not-active"
-                           id="lnk_application_tab">
-                            {% if validated_application %}
-                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                            {%else%}
-                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                            {%endif%}
-                            &nbsp;&nbsp;{%trans 'offer_choice'%}                     {%if application.offer_year %}
-                    ({{application.offer_year.acronym}})
-                    {%endif%}</a>
-
-                    {%endif%}
-
-                </li>
-                <li class="{%if tab_active == 2 %}active{%endif%}" >
-                    <a href="{%if tab_diploma%}{%if application.id %}{% url 'diploma_update' application.id%}{%else%}{% url 'diploma_update'%}{%endif%}{%endif%}"
-                       id="lnk_diploma_tab"
-                       class="{%if tab_diploma%}{%else%}not-active{%endif%}">
-                        {% if validated_diploma %}
-                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                        {%else%}
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                        {%endif%}
-                        &nbsp;&nbsp;{%trans 'prerequisites'%}</a>
-                </li>
-                <li class="{%if tab_active == 3 %}active{%endif%}">
-                    <a href="{%if tab_curriculum%}{%if application.id %}{% url 'curriculum_update' application.id%}{%else%}{% url 'curriculum_update' %}{%endif%}{%endif%}"
-                       id="lnk_curriculum_tab"
-                       class="{%if tab_curriculum%}{%else%}not-active{%endif%}" >
-                        {% if validated_curriculum %}
-                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                        {%else%}
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                        {%endif%}
-                        &nbsp;&nbsp;{%trans 'curriculum'%}</a>
-                </li>
-                <li class="{%if tab_active == 4 %}active{%endif%}">
-                        <a href="{%if tab_accounting%}{%if  application.id%}{% url 'accounting_update' application.id%}{%else%}{% url 'accounting_update' %}{%endif%}{%endif%}"
-                           id="lnk_accounting_tab"
-                           class="{%if tab_accounting%}{%else%}not-active{%endif%}" >
-                        {% if validated_accounting %}
-                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                        {%else%}
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                        {%endif%}
-                            &nbsp;&nbsp;{%trans 'accounting'%}</a>
-                </li>
-                <li class="{%if tab_active == 5 %}active{%endif%}">
-                    {%if tab_sociological%}
-                    <a href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey' %}{%endif%}"
-                       id="lnk_sociological_tab">
-                        {% if validated_sociological %}
-                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                        {%else%}
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                        {%endif%}
-                        &nbsp;&nbsp;{%trans 'sociological_survey'%}</a>
-                    {%else%}
-                    <a class="not-active"
-                       id="lnk_sociological_tab">
-                        {% if validated_sociological %}
-                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                        {%else%}
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                        {%endif%}
-                        &nbsp;&nbsp;{%trans 'sociological_survey'%}</a>
-
-                    {%endif%}
-                </li>
-                <li class="{%if tab_active == 6 %}active{%endif%}">
-                        <a href="{%if tab_attachments%}{%if application.id%}{% url 'attachments' application.id %}{%else%}{% url 'attachments' %}{%endif%}{%endif%}"
-                           id="lnk_attachments_tab"
-                           {%if tab_attachments%}{%else%}class="not-active"{%endif%}>
-                            {% if validated_attachments %}
-                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                            {%else%}
-                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                            {%endif%}
-                            &nbsp;&nbsp;{%trans 'attachments'%}</a>
-                </li>
-                <li class="{%if tab_active == 7 %}active{%endif%}">
-                        <a href="{%if tab_submission%}{%if application.id%}{% url 'submission' application.id %}{%else%}{% url 'submission' %}{%endif%}{%endif%}"
-                           id="lnk_submission_tab"
-                           {%if tab_submission%}{%else%}class="not-active"{%endif%}>
-                            {% if validated_submission %}
-                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                            {%else%}
-                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                            {%endif%}
-                            &nbsp;&nbsp;{%trans 'submission'%}</a>
-                </li>
-            </ul>
-        </div>
-        <div class="col-md-10">
-            {%if tab_demande_active >= 0 and tab_demande_active < 3 and application.offer_year%}
-                <h4>{{application.offer_year.title}}</h4>
-            {%endif%}
-
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    {%if tab_active != 4 %}
-                    <h5>{% trans 'mandatory_asterisk'%}</h5>
-                    {%endif%}
-                    {% block admission_tabs %}
-                    {% endblock %}
-                </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <h2 class="navbar-text" style="padding-top:6px">{% trans 'institution_identification' %}</h2>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if request.user.is_authenticated %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false" id="bt_user">
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                            {{ request.user.first_name }}
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'admission_logout' %}?next=/admission" id="lnk_logout">
+                                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                                Logout</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
+    </nav>
+
+    <div class="container">
+        {% if message_info%}
+            <div id="message_info" class="alert alert-success">{{message_info}}</div>
+        {%endif%}
+        {% block content %}
+        {% endblock %}
+        <br>
+        <br>
+    </div>
+    <hr>
+
+    <div class="container">
+        <p class="navbar-text pull-left"></p>
+        <p class="navbar-text pull-right"><span class="glyphicon glyphicon-copyright-mark"></span> 2016 <a
+                href="http://www.uclouvain.be" target="_blank" id="lnk_ucl">Université catholique de Louvain</a></p>
     </div>
 
-    <br>
-
-{% endblock %}
-
-{% block script %}
-    <script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
-    <script>
-
-    $(document).ready(function() {
-        if($("#slt_nationality").val()){
-            $.ajax({
-                url: "/admission/country?nationality=" + $("#slt_nationality").val()
-            }).then(function(data) {
-
-                if (data.european_union) {
-                    $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
-                }else{
-                    $('#pnl_assimilation_criteria').css('visibility', 'visible').css('display','block');
-                }
+    <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/osis-portal.js' %}"></script>
+    <script src="{% static 'js/secondary_education.js' %}"></script>
+    <script src="{% static 'js/accounting.js' %}"></script>
+    {% block script %}
+        <script type="text/javascript">
+        // To avoid cut and paste on the email fields
+        $(document).ready(function () {
+            $('#id_email_new').bind('paste', function (e) {
+                e.preventDefault();
             });
-        }
-        $('#txt_admission_exam_date').val('');
-        $('#txt_admission_exam_institution').val('');
-        $('[id^="rdb_admission_exam_type_"]').prop( "checked", false);
-        $('#txt_admission_exam_type_other').val('');
-        $('#txt_admission_exam_type_other').prop( "disabled", true);
-        $('#chb_admission_exam_type').prop( "checked", false);
-        $('#rdb_admission_exam_result_low').prop( "checked", false);
-        $('#rdb_admission_exam_result_middle').prop( "checked", false);
-        $('#rdb_admission_exam_result_high').prop( "checked", false);
-        populate_exam_admin();
-        if($("#hdn_application_offer_year_id").val()){
-            display_dynamic_form($("#hdn_application_offer_year_id").val());
-        }
-    });
+            $('#id_email_new_confirm').bind('paste', function (e) {
+                e.preventDefault();
+            });
+        });
+        // To avoid cut and paste on the password fields
+        $(document).ready(function () {
+            $('#id_password_new').bind('paste', function (e) {
+                e.preventDefault();
+            });
+            $('#id_password_new_confirm').bind('paste', function (e) {
+                e.preventDefault();
+            });
+        });
+        //If information message is on the screen it will disappear after 5s
+        $(document).ready(function () {
+            $('#message_info').fadeOut(5000);
+        });
 
-    function save(form_to_submit){
-        id = 'form#' + form_to_submit;
-        $(id).submit();
-
-    }
-
-    $("#lnk_profil_next_step").click(function() {
-        $('#txt_message_error_profile').css('visibility', 'hidden').css('display','none');
-        if ($("#slt_nationality").prop('selectedIndex') < 0
-            || $("#slt_legal_adr_country").prop('selectedIndex') < 0){
-            $("#txt_message_error_profile").text('Avant de pouvoir accéder à l\'étape suivante vous devez encoder au minimum, votre nationalité et votre pays de résidence');
-            $('#txt_message_error_profile').css('visibility', 'visible').css('display','block');
-            return false;
-        }
-        $('#hdn_tab_applications_status').val('True');
-        save('form_profile');
-        return true;
-    });
-
-    $("#lnk_profil_next_step_up").click(function() {
-        $('#txt_message_error_profile_up').css('visibility', 'hidden').css('display','none');
-        if ($("#slt_nationality").prop('selectedIndex') < 0
-            || $("#slt_legal_adr_country").prop('selectedIndex') < 0){
-            $("#txt_message_error_profile_up").text('Avant de pouvoir accéder à l\'étape suivante vous devez encoder au minimum, votre nationalité et votre pays de résidence');
-            $('#txt_message_error_profile_up').css('visibility', 'visible').css('display','block');
-            return false;
-        }
-        $('#hdn_tab_applications_status').val('True');
-        save('form_profile');
-        return true;
-    });
-
-    $("#lnk_application_tab").click(function() {
-           if ($('#hdn_application_id').val()){
-                $('#slt_offer_type option').each(function(){
-                    if($(this).attr('value')==$('#hdn_application_grade').val()){
-                        $(this).prop('selected', true);
-                    }
-                });
-                $('#slt_domain option').each(function(){
-                    if($(this).attr('value')==$('#hdn_application_domain_id').val()){
-                        $(this).prop('selected', true);
-                    }
-                });
-               //TODO : les donnnées s'affichent puis elles disparaissent.... LV
-
-
-            }
-
-    });
-
-    </script>
-{% endblock %}
+        </script>
+    {% endblock %}
+</body>
+</html>

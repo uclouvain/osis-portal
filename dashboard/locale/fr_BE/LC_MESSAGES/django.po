@@ -34,6 +34,9 @@ msgstr "Date de délibération"
 msgid "desc_lnk_scores_encoding"
 msgstr "Imprimez les feuilles des notes pour encoder les notes de vos étudiants."
 
+msgid "desc_lnk_performance"
+msgstr "Résultats de l'étudiant."
+
 msgid "done_at"
 msgstr "Fait à"
 

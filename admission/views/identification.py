@@ -26,19 +26,19 @@
 import uuid
 from random import randint
 
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.views import login
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 
 from admission import models as mdl
-from reference import models as reference_mdl
 from admission.forms import NewAccountForm, NewPasswordForm, AccessAccountForm
 from admission.utils import send_mail
+from reference import models as reference_mdl
 
 
 def home_error(request, message, form):
@@ -49,7 +49,7 @@ def home_error(request, message, form):
     sum = number1 + number2
     while number3 > sum:
         number3 = randint(1, 20)
-    return render(request, "home.html", {'number1': number1,
+    return render(request, "admission_home.html", {'number1': number1,
                                          'number2': number2,
                                          'number3': number3,
                                          'form_new': form_new,
@@ -258,7 +258,7 @@ def login_admission(request, *args, **kwargs):
         if user is None:
             extra_context['message'] = _('msg_error_username_password_not_matching')
 
-    return login(request, *args, extra_context=extra_context, **kwargs)
+    return login(request, *args, extra_context=extra_context, template_name='registration/admission_login.html', **kwargs)
 
 
 def login_admission_error(request, *args, **kwargs):
@@ -268,13 +268,18 @@ def login_admission_error(request, *args, **kwargs):
     extra_context['form_new'] = form_new
 
 
+def logout_admission(request):
+    logout(request)
+    return redirect('admission')
+
+
 def offer_selection(request):
     offers = None
     application = mdl.application.find_by_user(request.user)
     grade_choices = reference_mdl.grade_type.GRADE_CHOICES
     return render(request, "offer_selection.html",
                           {"gradetypes":    reference_mdl.grade_type.find_all(),
-                           "domains":       mdl.domain.find_all_domains(),
+                           "domains":       reference_mdl.domain.find_all_domains(),
                            "offers":        offers,
                            "offer":         None,
                            "application":   application,
@@ -299,7 +304,7 @@ def _get_domain(request):
     domain_id = request.POST.get('domain')
     domain = None
     if domain_id:
-        domain = get_object_or_404(mdl.domain.Domain, pk=domain_id)
+        domain = get_object_or_404(reference_mdl.domain.Domain, pk=domain_id)
     return domain
 
 
@@ -325,7 +330,7 @@ def save_offer_selection(request):
 
     return render(request, "offer_selection.html",
                   {"gradetypes": reference_mdl.grade_type.find_all(),
-                   "domains": mdl.domain.find_all_domains(),
+                   "domains": reference_mdl.domain.find_all_domains(),
                    "offers": None,
                    "offer_type": None,
                    "domain": mdl})
@@ -346,16 +351,8 @@ def selection_offer(request, offer_id):
 
     return render(request, "offer_selection.html",
                   {"gradetypes": reference_mdl.grade_type.find_all(),
-                   "domains": mdl.domain.find_all_domains(),
+                   "domains": reference_mdl.domain.find_all_domains(),
                    "offers": None,
                    "offer": offer_year,
                    "offer_type": grade,
                    "domain": domain})
-
-
-def application_update(request, application_id):
-    application = mdl.application.find_by_id(application_id)
-    return render(request, "offer_selection.html",
-                  {"offers": None,
-                   "offer": application.offer_year,
-                   "application": application})

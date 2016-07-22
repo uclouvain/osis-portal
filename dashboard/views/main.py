@@ -24,21 +24,24 @@
 #
 ##############################################################################
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from .score_encoding import print_scores
 from base import models as mdl_base
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
+from base.views import layout
+
 
 @login_required
 def home(request):
-    return render(request, "dashboard.html", {})
+    # Adapt layout depending on the type of user (student, professor)
+    return layout.render(request, "dashboard.html")
 
 
 @login_required
 def score_encoding(request):
-    return render(request, "score_encoding.html", {})
+    return layout.render(request, "score_encoding.html", {})
 
 
 @login_required

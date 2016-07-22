@@ -78,8 +78,8 @@ def save(request):
                           {"curricula": curricula,
                            "local_universities_french": local_universities_french,
                            "local_universities_dutch": local_universities_dutch,
-                           "domains": mdl.domain.find_all_domains(),
-                           "subdomains": mdl.domain.find_all_subdomains(),
+                           "domains": mdl_reference.domain.find_all_domains(),
+                           "subdomains": mdl_reference.domain.find_all_subdomains(),
                            "grade_types": mdl_reference.grade_type.find_all(),
                            "validation_messages": validation_messages,
                            "message_success": message_success,
@@ -116,8 +116,8 @@ def save(request):
     return render(request, "curriculum.html", {"curricula": curricula,
                                                "local_universities_french": local_universities_french,
                                                "local_universities_dutch": local_universities_dutch,
-                                               "domains": mdl.domain.find_all_domains(),
-                                               "subdomains": mdl.domain.find_all_subdomains(),
+                                               "domains": mdl_reference.domain.find_all_domains(),
+                                               "subdomains": mdl_reference.domain.find_all_subdomains(),
                                                "grade_types": mdl_reference.grade_type.find_all(),
                                                "universities_countries": mdl_reference.education_institution.find_countries(),
                                                "validation_messages": validation_messages,
@@ -175,12 +175,12 @@ def update(request, application_id=None):
     else:
         universities_cities, universities = populate_dropdown_list(curricula)
         tab_status = tabs.init(request)
-        return render(request, "home.html",
+        return render(request, "admission_home.html",
                       {"curricula": curricula,
                        "local_universities_french": local_universities_french,
                        "local_universities_dutch": local_universities_dutch,
-                       "domains": mdl.domain.find_all_domains(),
-                       "subdomains": mdl.domain.find_all_subdomains(),
+                       "domains": mdl_reference.domain.find_all_domains(),
+                       "subdomains": mdl_reference.domain.find_all_subdomains(),
                        "grade_types": mdl_reference.grade_type.find_all(),
                        "universities_countries": mdl_reference.education_institution.find_countries(),
                        "universities_cities": universities_cities,
@@ -188,7 +188,7 @@ def update(request, application_id=None):
                        "languages": mdl_reference.language.find_languages(),
                        "current_academic_year": mdl.academic_year.current_academic_year(),
                        "tab_active": 3,
-                       "application": application,                       
+                       "application": application,
                        "validated_profil": demande_validation.validate_profil(applicant),
                        "validated_diploma": demande_validation.validate_diploma(application),
                        "validated_curriculum": demande_validation.validate_curriculum(application),
@@ -340,7 +340,7 @@ def validate_belgian_fields_form(curriculum, curriculum_year, validation_message
             validation_messages['domain_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
         else:
-            domain = mdl.domain.find_by_id(int(data_dict['domain']))
+            domain = mdl_reference.domain.find_by_id(int(data_dict['domain']))
             curriculum.domain = domain
             if domain.sub_domains:
                 if data_dict['subdomain'] is None \
@@ -348,7 +348,7 @@ def validate_belgian_fields_form(curriculum, curriculum_year, validation_message
                     validation_messages['subdomain_%s' % curriculum_year] = _('mandatory_field')
                     is_valid = False
                 else:
-                    sub_domain = mdl.domain.find_by_id(int(data_dict['subdomain']))
+                    sub_domain = mdl_reference.domain.find_by_id(int(data_dict['subdomain']))
                     curriculum.sub_domain = sub_domain
 
         if data_dict['corresponds_to_domain'] == "false":
@@ -401,7 +401,7 @@ def validate_belgian_fields_form(curriculum, curriculum_year, validation_message
             validation_messages['domain_non_university_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
         else:
-            domain = mdl.domain.find_by_id(int(data_dict['domain_non_university']))
+            domain = mdl_reference.domain.find_by_id(int(data_dict['domain_non_university']))
             curriculum.domain = domain
         if data_dict['grade_type_no_university'] is None \
                 or data_dict['grade_type_no_university'] == '-':
@@ -601,7 +601,7 @@ def validate_foreign_university_fields_form(curriculum,
         validation_messages['domain_foreign_%s' % curriculum_year] = _('mandatory_field')
         is_valid = False
     else:
-        domain = mdl.domain.find_by_id(int(data_dict['domain_foreign']))
+        domain = mdl_reference.domain.find_by_id(int(data_dict['domain_foreign']))
         curriculum.domain = domain
         if domain.sub_domains:
             if data_dict['subdomain_foreign'] is None \
@@ -609,7 +609,7 @@ def validate_foreign_university_fields_form(curriculum,
                 validation_messages['subdomain_foreign_%s' % curriculum_year] = _('mandatory_field')
                 is_valid = False
             else:
-                sub_domain = mdl.domain.find_by_id(int(data_dict['subdomain_foreign']))
+                sub_domain = mdl_reference.domain.find_by_id(int(data_dict['subdomain_foreign']))
                 curriculum.sub_domain = sub_domain
 
     if data_dict['grade_type_foreign'] is None \
