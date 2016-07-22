@@ -19,7 +19,7 @@ function fillStudentInfo(studentJson) {
   var lastName = studentJson.last_name;
   var academicYear = studentJson.academic_years[0].year;
   var programTitle = studentJson.academic_years[0].programs[0].title;
-  $("#student_name").text(lastName + " " + firstName);
+  $("#student_name").text(lastName + ", " + firstName);
   $("#academic_year").text(academicYear);
   $("#program_title").text(programTitle);
 }

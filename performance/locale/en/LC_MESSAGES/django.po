@@ -105,3 +105,6 @@ msgstr "EPM - Course reported (Epreuve modifiée)"
 
 msgid "explanation_B"
 msgstr "B - Credit (Bologne)"
+
+msgid "legend"
+msgstr "Legend"

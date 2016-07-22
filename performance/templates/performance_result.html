@@ -39,29 +39,36 @@
         {% if not results %}
         <p>{% trans 'no_results' %}</p>
         {% else %}
-        <div class="row container-fluid">
             <!-- Student information's-->
-            <div class="pull-left table-responsive">
-              <table class="table table-condensed borderless">
-                <tr>
-                  <td style="border-top: none !important;"><b>{% trans 'last_name' %} {% trans 'first_name' %}</b></td>
-                  <td style="border-top: none !important;" id="student_name"></td>
-                </tr>
-                <tr>
-                  <td style="border-top: none !important;"><b>{% trans 'academic_year' %}</b></td>
-                  <td style="border-top: none !important;" id="academic_year"></td>
-                </tr>
-                <tr>
-                  <td style="border-top: none !important;"><b>{% trans 'program' %}</b></td>
-                  <td style="border-top: none !important;" id="program_title"></td>
-                </tr>
-              </table>
+        <div class="row">
+            <div class="col-md-3">
+                <p><b>{% trans 'last_name' %}, {% trans 'first_name' %}:</b></p>
+            </div>
+            <div class="col-md-9">
+                <p id="student_name"></p>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-3">
+                <p><b>{% trans 'academic_year' %}:</b></p>
+            </div>
+            <div class="col-md-9">
+                <p id="academic_year"></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <p><b>{% trans 'program' %}:</b></p>
+            </div>
+            <div class="col-md-9">
+                <p id="program_title"></p>
+            </div>
+        </div>
+
         <div class="row container-fluid">
             <!-- Student sessions summary-->
             <div class="pull-right table-responsive">
-                <table class="table table-condensed table-borderless table-striped">
+                <table class="table table-condensed table-striped">
                     <tr>
                         <th></th>
                         <th>{% trans 'ects' %}</th>
@@ -82,6 +89,7 @@
                 </table>
             </div>
         </div>
+
         <div class="row container-fluid">
             <!-- Student courses results -->
             <div class="table-responsive ">
@@ -99,40 +107,56 @@
                 </table>
             </div>
         </div>
+
         <!-- Text explaining the mention attributed for the session. -->
         <div class="row center-block">
           <p class="bg-info" id="paragraph_mention_explanation"></p>
         </div>
+
         <!-- Legend explaining letters signification -->
-        <div class="row container-fluid">
-            <div class="col-md-6 table-responsive">
-                <table class="table table-condensed table-borderless">
-                    <tr>
-                        <th style="border-top: none !important;">Légende</th>
-                    </tr>
-                    <tr>
-                        <td>{% trans 'explanation_P'%}</td>
-                        <td>{% trans 'explanation_T'%}</td>
-                    </tr>
-                    <tr>
-                        <td style="border-top: none !important;">{% trans 'explanation_I'%}</td>
-                        <td style="border-top: none !important;">{% trans 'explanation_TV'%}</td>
-                    </tr>
-                    <tr>
-                        <td style="border-top: none !important;">{% trans 'explanation_Y'%}</td>
-                        <td style="border-top: none !important;">{% trans 'explanation_W'%}</td>
-                    </tr>
-                    <tr>
-                        <td style="border-top: none !important;">{% trans 'explanation_RJ'%}</td>
-                        <td style="border-top: none !important;">{% trans 'explanation_EPM'%}</td>
-                    </tr>
-                    <tr>
-                        <td style="border-top: none !important;">{% trans 'explanation_B'%}</td>
-                        <td style="border-top: none !important;"></td>
-                    </tr>
-                </table>
+        <div class="row">
+            <div class="col-md-6">
+                <p><b>{% trans 'legend'%}</b></p>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p>{% trans 'explanation_P'%}</p>
+            </div>
+            <div class="col-md-6">
+                <p>{% trans 'explanation_T'%}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p>{% trans 'explanation_I'%}</p>
+            </div>
+            <div class="col-md-6">
+                <p>{% trans 'explanation_TV'%}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p>{% trans 'explanation_Y'%}</p>
+            </div>
+            <div class="col-md-6">
+                <p>{% trans 'explanation_W'%}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p>{% trans 'explanation_RJ'%}</p>
+            </div>
+            <div class="col-md-6">
+                <p>{% trans 'explanation_EPM'%}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p>{% trans 'explanation_B'%}</p>
+            </div>
+        </div>
+
         <div class = "row container-fluid">
             <p class="text-warning">
                 {% trans 'text_mean_exprimed_for_20' %}
