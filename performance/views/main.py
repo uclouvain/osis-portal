@@ -39,7 +39,7 @@ def home(request):
     """
     # Fetch the student academic results.
     stud = find_by_user(request.user)
-    query_result = mdl.student_performance.select_where_global_id_is(stud.registration_id)
+    query_result = mdl.student_performance.select_where_registration_id_is(stud.registration_id)
     list_student_programs = get_student_programs_list(query_result)
     return render(request, "performance_home.html", {"student": stud,
                                                      "programs": list_student_programs})
@@ -48,7 +48,7 @@ def home(request):
 @user_passes_test(is_student)
 def result_by_year_and_program(request, anac, program_acronym):
     stud = find_by_user(request.user)
-    query_result = mdl.student_performance.select_where_global_id_is(stud.registration_id)
+    query_result = mdl.student_performance.select_where_registration_id_is(stud.registration_id)
     document = filter_by_anac_and_program_acronym(query_result, anac, program_acronym)
     return render(request, "performance_result.html", {"results": document})
 
