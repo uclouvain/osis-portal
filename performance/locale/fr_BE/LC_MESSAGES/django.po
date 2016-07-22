@@ -4,6 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
+
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -17,5 +18,27 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+
+msgid "no_results"
+msgstr "Aucun résultats à afficher."
+
 msgid "performance"
-msgstr "performance"
+msgstr "Performance"
+
+msgid "last_name"
+msgstr "Nom"
+
+msgid "first_name"
+msgstr "Prénom"
+
+msgid "matricule_number"
+msgstr "Numéro de matricule"
+
+msgid "year"
+msgstr "Année"
+
+msgid "acronym"
+msgstr "Sigle"
+
+msgid "program"
+msgstr "Année d'étude"

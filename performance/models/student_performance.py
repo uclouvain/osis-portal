@@ -23,13 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from couchbase.bucket import Bucket, NotFoundError
+from couchbase.bucket import Bucket, NotFoundError, N1QLQuery
 from couchbase.exceptions import CouchbaseError
 from django.conf import settings
 
+# Helper functions to interact (connection, fetch, upsert) with the CouchBase bucket containing
+# student academic results.
+
+
+bucket_name = "performance"
+
 
 def connect_db():
-    bucket_name = "performance"
+    """
+    Connect to the bucket "bucket_name" located on the server at address "COUCHBASE_CONNECTION_STRING"
+    :return: the bucket
+    """
     if settings.COUCHBASE_PASSWORD:
         cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name, password=settings.COUCHBASE_PASSWORD)
     else:
@@ -37,14 +46,19 @@ def connect_db():
     return cb
 
 cb = connect_db()
+# cb.bucket_manager().create_n1ql_primary_index(ignore_exists=True)
+# cb.bucket_manager().create_n1ql_index('index_global_id', fields=['global_id'])
 
-
-def get_document(global_id):
+def fetch_document(document_id):
+    """
+    Fetch the document having id (key) "document_id" from the bucket "cb".
+    :param document_id: The key of the document
+    :return: the document if exists, None if not.
+    """
     try:
-        return cb.get(global_id)
+        return cb.get(document_id)
     except NotFoundError:
         return None
-
 
 def insert_or_update_document(key, data):
     """
@@ -54,5 +68,15 @@ def insert_or_update_document(key, data):
     """
     try:
         cb.set(key, data)
-    except CouchbaseError as err:
-        print('CouchBase error:', err)
+    except CouchbaseError:
+        raise
+
+def select_where_global_id_is(global_id):
+    """
+    Query the bucket for all documents where the global_id is equal to "global_id".
+    :param global_id: a string
+    :return: result of query
+    """
+    query_string = "SELECT * FROM " + bucket_name + " WHERE global_id=$1"
+    query = N1QLQuery(query_string, global_id)
+    return cb.n1ql_query(query)
