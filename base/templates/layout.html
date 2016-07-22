@@ -44,26 +44,28 @@
     {% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="{% url 'dashboard_home' %}" id="lnk_home">
-                    <img src="{% static 'img/logo_institution.jpg' %}" style="margin-top: -10px;"></a>
-            </div>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            {% if 'dashboard' in installed_apps %}
+            <a class="navbar-brand" href="{% url 'dashboard_home' %}" id="lnk_home">
+                <img src="{% static 'img/logo_institution.jpg' %}" style="margin-top: -10px;"></a>
+            {% endif %}
+        </div>
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <h2 class="navbar-text" style="padding-top:6px">{% trans 'institution_identification' %}</h2>
-                <ul class="nav navbar-nav navbar-right">
-                    {% if request.user.is_authenticated %}
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <h2 class="navbar-text" style="padding-top:6px">{% trans 'institution_identification' %}</h2>
+            <ul class="nav navbar-nav navbar-right">
+                {% if request.user.is_authenticated %}
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false" id="bt_user">
@@ -71,36 +73,36 @@
                             {{ request.user.first_name }}
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url 'logout' %}?next=/admission" id="lnk_logout">
+                            <li><a href="{% url 'logout' %}" id="lnk_logout">
                                 <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                                 Logout</a></li>
                         </ul>
                     </li>
-                    {% endif %}
-                </ul>
-            </div>
+                {% endif %}
+            </ul>
         </div>
-    </nav>
+    </div>
 </nav>
-    <div class="container">
-        {% block content %}
-        {% endblock %}
-        <br>
-        <br>
-    </div>
-    <hr>
+</nav>
+<div class="container">
+    {% block content %}
+    {% endblock %}
+    <br>
+    <br>
+</div>
+<hr>
 
-    <div class="container">
-        <p class="navbar-text pull-left"></p>
-        <p class="navbar-text pull-right"><span class="glyphicon glyphicon-copyright-mark"></span> 2016 <a
-                href="http://www.uclouvain.be" target="_blank" id="lnk_ucl">Université catholique de Louvain</a></p>
-    </div>
+<div class="container">
+    <p class="navbar-text pull-left"></p>
+    <p class="navbar-text pull-right"><span class="glyphicon glyphicon-copyright-mark"></span> 2016 <a
+            href="http://www.uclouvain.be" target="_blank" id="lnk_ucl">Université catholique de Louvain</a></p>
+</div>
 
-    <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/osis-portal.js' %}"></script>
-    {% block script %}
-        <script type="text/javascript">
+<script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/osis-portal.js' %}"></script>
+{% block script %}
+    <script type="text/javascript">
         // To avoid cut and paste on the email fields
         $(document).ready(function () {
             $('#id_email_new').bind('paste', function (e) {
@@ -119,7 +121,7 @@
                 e.preventDefault();
             });
         });
-        </script>
-    {% endblock %}
+    </script>
+{% endblock %}
 </body>
 </html>

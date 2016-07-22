@@ -146,7 +146,7 @@ def update(request):
     year = current_academic_year - 5
     if secondary_education is None:
         applications = mdl.application.find_by_user(request.user)
-        return render(request, "home.html",
+        return render(request, "admission_home.html",
                       {'applications': applications, 'message_warning': _('msg_warning_curriculum')})
     if secondary_education and secondary_education.diploma is True:
         year_secondary = secondary_education.academic_year.year

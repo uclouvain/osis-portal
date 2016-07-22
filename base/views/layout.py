@@ -23,14 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.apps import AppConfig
+from django import shortcuts
+from django.template.context import RequestContext
 
 
-class BaseConfig(AppConfig):
-    name = 'base'
+def render(request, template, values={}):
+    return shortcuts.render(request, template, values, RequestContext(request))
 
-    def ready(self):
-        try:
-            from .models.signals import update_person_from_user, add_to_students_group
-        except ImportError:
-            pass
+
+def render_to_response(request, template, values={}):
+    return shortcuts.render_to_response(template, values, RequestContext(request))
