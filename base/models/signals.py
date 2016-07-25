@@ -26,9 +26,10 @@
 from django.contrib.auth.models import Group
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver, Signal
-from base.models import student
+from base.models import student, tutor
 from base.models.person import find_by_global_id, find_by_user, Person
 from base.models.student import Student
+from base.models.tutor import Tutor
 
 person_created = Signal(providing_args=['person'])
 
@@ -60,18 +61,35 @@ except Exception:
 @receiver(post_save, sender=Student)
 def add_to_students_group(sender, instance, **kwargs):
     if kwargs.get('created', True) and instance.person.user:
-        students_group = Group.objects.get(name='students')
-        if instance.person.user:
-            instance.person.user.groups.add(students_group)
+        assign_group(instance.person, "students")
+
+
+@receiver(post_save, sender=Tutor)
+def add_to_tutors_group(sender, instance, **kwargs):
+    if kwargs.get('created', True) and instance.person.user:
+        assign_group(instance.person, "tutors")
 
 
 def __add_person_to_group(person):
     # Check Student
     if student.find_by_person(person):
-        student_group = Group.objects.get(name='students')
-        if not person.user.groups.filter(name='students').exists():
-            person.user.groups.add(student_group)
-    # TODO Check Tutor
+        assign_group(person, "students")
+    # Check tutor
+    if tutor.find_by_person(person):
+        assign_group(person, "tutors")
+
+
+def assign_group(person, group_name):
+    """
+    Assign the "person" to the group named "group_name"
+    :param person: != none, an object person
+    :param group_name: a string of a legit group
+    :return: nothing
+    """
+    group = Group.objects.get(name=group_name)
+    if person.user and \
+            not person.user.groups.filter(name=group_name).exists():
+        person.user.groups.add(group)
 
 
 def __create_update_person(user, person, user_infos):
