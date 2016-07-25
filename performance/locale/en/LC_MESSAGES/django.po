@@ -4,6 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
+
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -17,5 +18,93 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+
 msgid "performance"
-msgstr "performance"
+msgstr "Performance"
+
+msgid "last_name"
+msgstr "Last Name"
+
+msgid "first_name"
+msgstr "First Name"
+
+msgid "matricule_number"
+msgstr "Registration Number"
+
+msgid "year"
+msgstr "Year"
+
+msgid "acronym"
+msgstr "Acronym"
+
+msgid "program"
+msgstr "Program"
+
+msgid "no_results"
+msgstr "No results to show."
+
+msgid "ects"
+msgstr "ECTS"
+
+msgid "jan"
+msgstr "Jan."
+
+msgid "june"
+msgstr "June"
+
+msgid "sept"
+msgstr "Sept."
+
+msgid "total_ects_inscription"
+msgstr "Total ECTS / Enrollment"
+
+msgid "mean"
+msgstr "Mean"
+
+msgid "mention"
+msgstr "Mention"
+
+msgid "course"
+msgstr "Course"
+
+msgid "title"
+msgstr "Title"
+
+msgid "inscr"
+msgstr "Inscr."
+
+msgid "credits"
+msgstr "Credits"
+
+msgid "text_mean_exprimed_for_20"
+msgstr "Attention : From June 2009, the score is expressed to a maximum of 20."
+
+msgid "explanation_P"
+msgstr "P - partial examination"
+
+msgid "explanation_T"
+msgstr "T - score of a test"
+
+msgid "explanation_I"
+msgstr "I - first inscription"
+
+msgid "explanation_TV"
+msgstr "TV - Evaluation satisfactory (score doesn't count)"
+
+msgid "explanation_Y"
+msgstr "Y - Second inscription"
+
+msgid "explanation_W"
+msgstr "W - Evaluation not satisfactory (score doesn't count)"
+
+msgid "explanation_RJ"
+msgstr "R,J - score reported"
+
+msgid "explanation_EPM"
+msgstr "EPM - Course reported (Epreuve modifiée)"
+
+msgid "explanation_B"
+msgstr "B - Credit (Bologne)"
+
+msgid "legend"
+msgstr "Legend"

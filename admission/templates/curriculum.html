@@ -1,4 +1,3 @@
-{% extends "admission_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 {% load message %}
@@ -28,22 +27,23 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block content %}
-
 <form method="post" action="{% url 'curriculum' %}">
     {% csrf_token %}
     <div>
-        <button type="submit" id="bt_previous_step_up" name="bt_previous_step_up" class="btn btn-default"
-                title="{%trans 'previous_step' %}">
-            <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-            {%trans 'previous_step'%}</button>
-        <button type="submit" id="bt_save_up" name="bt_save_up" class="btn btn-default"
-                title="{%trans 'save'%}"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-            {%trans 'save'%}</button>
-        <button type="submit" id="bt_next_step_up" name="bt_next_step_up" class="btn btn-default"
-                title="{%trans 'next_step'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            {%trans 'next_step'%}</button>
-        <br>
+        <a id="lnk_previous_step_up"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'diploma_update' application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
+           onclick="save('form_curriculum');"
+           title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%} : {%trans 'prerequisites'%}</a>
+        <a id="lnk_next_step_up"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'accounting' application.id%}{%else%}{% url 'accounting'%}{%endif%}"
+           onclick="save('form_curriculum');"
+           title="{% trans 'accounting'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            {%trans 'next_step'%} : {%trans 'accounting'%}</a>
+    </div>
+    <div>
         {%if message_success%}
             <br>
             <font class="alert alert-success" role="alert" style="margin-left:5px;">
@@ -255,20 +255,24 @@
         </div>
     {%endfor%}
     <div>
-        <button type="submit" id="bt_previous_step_down" class="btn btn-default" role="button"
-                title="{%trans 'previous_step'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-            {%trans 'previous_step'%}</button>
-        <button type="submit" id="bt_save_down" name="bt_save_down" class="btn btn-default" role="button"
-                title="{%trans 'save'%}"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-            {%trans 'save'%}</button>
-        <button type="submit" id="bt_next_step_down" name="bt_next_step_down" class="btn btn-default" role="button"
-                title="{%trans 'next_step'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            {%trans 'next_step'%}</button>
         {%if message_success%}
             <br><br>
             <font class="alert alert-success" role="alert" style="margin-left:5px;">{{ message_success}}</font>
             <br><br>
         {% endif %}
     </div>
+    <div>
+        <a id="lnk_previous_step"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'diploma_update' application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
+           onclick="save('form_curriculum');"
+           title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%} : {%trans 'prerequisites'%}</a>
+        <a id="lnk_next_step"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'accounting' application.id%}{%else%}{% url 'accounting'%}{%endif%}"
+           onclick="save('form_curriculum');"
+           title="{% trans 'accounting'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            {%trans 'next_step'%} : {%trans 'accounting'%}</a>
+    </div>
 </form>
-{% endblock %}

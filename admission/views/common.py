@@ -36,6 +36,8 @@ from django.utils.translation import ugettext_lazy as _
 from admission import models as mdl
 from admission.forms import ApplicantForm
 from reference import models as mdl_ref
+from admission.views import demande_validation
+from admission.views import tabs
 
 
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
@@ -48,15 +50,40 @@ def home(request):
             translation.activate(user_language)
             request.session[translation.LANGUAGE_SESSION_KEY] = user_language
         applications = mdl.application.find_by_user(request.user)
-        return render(request, "admission_home.html", {'applications': applications})
+        if applications:
+            applicant_form = ApplicantForm()
+            person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
+            person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
+            return render(request, "applications.html", {'applications': applications,
+                                                         'applicant': applicant,
+                                                         'applicant_form': applicant_form,
+                                                         'person_legal_address': person_legal_address,
+                                                         'person_contact_address': person_contact_address,
+                                                         "tab_active": -1})
+        else:
+            tab_status = tabs.init(request)
+            return render(request, "admission_home.html", {'applications': applications,
+                                                           "tab_active": 0,
+                                                           "first": True,
+                                                           "countries": mdl_ref.country.find_all(),
+                                                           'tab_profile': tab_status['tab_profile'],
+                                                           'tab_applications': tab_status['tab_applications'],
+                                                           'tab_diploma': tab_status['tab_diploma'],
+                                                           'tab_curriculum': tab_status['tab_curriculum'],
+                                                           'tab_accounting': tab_status['tab_accounting'],
+                                                           'tab_sociological': tab_status['tab_sociological'],
+                                                           'tab_attachments': tab_status['tab_attachments'],
+                                                           'tab_submission': tab_status['tab_submission'],
+                                                           'main_status': 0})
+
     else:
         return profile(request)
 
 
-def profile(request):
+def profile(request, application_id=None, message_success=None):
+    tab_status = tabs.init(request)
     if request.method == 'POST':
         applicant_form = ApplicantForm(data=request.POST)
-
         applicant = mdl.applicant.find_by_user(request.user)
         person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
 
@@ -156,7 +183,7 @@ def profile(request):
             person_legal_address.country = country
         else:
             applicant_form.errors['legal_adr_country'] = _('mandatory_field')
-            #person_legal_address.country = None
+            # person_legal_address.country = None
         if request.POST.get('same_contact_legal_addr') == "false":
             person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
             if person_contact_address is None:
@@ -220,24 +247,23 @@ def profile(request):
                     criteria_id = key[22:]
                     criteria = mdl_ref.assimilation_criteria.find_by_id(criteria_id)
                     if criteria:
-                        applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria()
+                        applicant_assimilation_criteria = \
+                            mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria()
                         applicant_assimilation_criteria.criteria = criteria
                         applicant_assimilation_criteria.applicant = applicant
                         if applicant_form.is_valid():
                             applicant_assimilation_criteria.save()
 
+        message_success = 'ok'
         if applicant_form.is_valid():
             if person_contact_address:
                 person_contact_address.save()
             person_legal_address.save()
             applicant.user.save()
-            request.user = applicant.user # Otherwise it was not refreshed while going back to home page
+            request.user = applicant.user  # Otherwise it was not refreshed while going back to home page
             applicant.save()
-            if 'save_up' in request.POST or 'save_down' in request.POST:
-                return home_retour(request)
-            else:
-                if 'next_step_up' in request.POST or 'next_step_down' in request.POST:
-                    return HttpResponseRedirect(reverse('curriculum_update'))
+        else:
+            message_success = None
     else:
         applicant = mdl.applicant.find_by_user(request.user)
         applicant_form = ApplicantForm()
@@ -263,17 +289,45 @@ def profile(request):
 
     assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
     applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
-
-    return render(request, "profile.html", {'applicant': applicant,
-                                            'applicant_form': applicant_form,
-                                            'countries': countries,
-                                            'assimilationCriteria': assimilation_criteria,
-                                            'applicant_assimilation_criteria': applicant_assimilation_criteria,
-                                            'person_legal_address': person_legal_address,
-                                            'person_contact_address': person_contact_address,
-                                            'same_addresses': same_addresses,
-                                            'previous_enrollment': previous_enrollment,
-                                            'institution': institution_name})
+    application = None
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
+    else:
+        tab_status = tabs.init(request)
+    # validated are not ready yet, to be achieved in another issue - Leila
+    return render(request, "admission_home.html", {'applicant': applicant,
+                                                   'applicant_form': applicant_form,
+                                                   'countries': countries,
+                                                   'assimilationCriteria': assimilation_criteria,
+                                                   'personAssimilationCriteria': applicant_assimilation_criteria,
+                                                   'person_legal_address': person_legal_address,
+                                                   'person_contact_address': person_contact_address,
+                                                   'same_addresses': same_addresses,
+                                                   'previous_enrollment': previous_enrollment,
+                                                   'institution': institution_name,
+                                                   "message_success": message_success,
+                                                   'tab_active': 0,
+                                                   'validated_profil': demande_validation.validate_profil(applicant),
+                                                   'validated_diploma': demande_validation.validate_diploma(
+                                                       application),
+                                                   'validated_curriculum': demande_validation.validate_curriculum(
+                                                       application),
+                                                   'validated_application': demande_validation.validate_application(
+                                                       application),
+                                                   'validated_accounting': demande_validation.validate_accounting(),
+                                                   'validated_sociological': demande_validation.validate_sociological(),
+                                                   'validated_attachments': demande_validation.validate_attachments(),
+                                                   'validated_submission': demande_validation.validate_submission(),
+                                                   'application': application,
+                                                   'tab_profile': tab_status['tab_profile'],
+                                                   'tab_applications': tab_status['tab_applications'],
+                                                   'tab_diploma': tab_status['tab_diploma'],
+                                                   'tab_curriculum': tab_status['tab_curriculum'],
+                                                   'tab_accounting': tab_status['tab_accounting'],
+                                                   'tab_sociological': tab_status['tab_sociological'],
+                                                   'tab_attachments': tab_status['tab_attachments'],
+                                                   'tab_submission': tab_status['tab_submission'],
+                                                   'applications': mdl.application.find_by_user(request.user)})
 
 
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
@@ -281,3 +335,29 @@ def home_retour(request):
     applications = mdl.application.find_by_user(request.user)
     return render(request, "admission_home.html", {'applications': applications, 'message_info': _('msg_info_saved')})
 
+
+def extra_information(request, application):
+    try:
+        if application.offer_year:
+            admission_exam_offer_yr = mdl.admission_exam_offer_year.find_by_offer_year(application.offer_year)
+            if admission_exam_offer_yr:
+                return True
+        return False
+    except:  # RelatedObjectDoesNotExist
+        return False
+
+
+def validated_extra(secondary_education, application):
+    if secondary_education:
+        try:
+            if application.offer_year:
+                admission_exam_offer_yr = mdl.admission_exam_offer_year.find_by_offer_year(application.offer_year)
+                if secondary_education.admission_exam_type == admission_exam_offer_yr.admission_exam_type \
+                        and secondary_education.admission_exam and secondary_education.admission_exam_date \
+                        and secondary_education.admission_exam_institution \
+                        and secondary_education.admission_exam_result:
+                    return True
+        except:
+            return True
+
+    return False
