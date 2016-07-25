@@ -1,4 +1,4 @@
-{% extends "admission_layout.html" %}
+{% extends "demande_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -26,269 +26,26 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block content %}
-<div class="panel panel-default">
-    <div class="panel-body">
 
-            <br>
-            {% trans 'instruction_offer_selection_part1' %}
-            <br>
-            {% trans 'instruction_offer_selection_part2' %}
-                <a href="http://www.uclouvain.be/programme-etudes-2015.html" target="_blank">{% trans 'study_programs' %}</a>
-            <br>
-            <br>
-            <label>{% trans 'question_study_type'%}</label>
-            <select class="form-control" id="slt_offer_type" name="type" >
-                <option value="" selected>...</option>
-            {% for grade_choice in grade_choices %}
-                 <option value="{{grade_choice.0}}" >{{grade_choice.1}}</option>
-            {% endfor %}
-            </select>
-            <br>
+<form method="post" action="{% url 'save_offer_selection' %}" id="form_questions" name="form_questions">
+     {% csrf_token %}
+    {% include "demande_offer.html" %}
+</form>
 
-            <div id="pnl_grade_choices">
-                <label><br></label>
-            </div>
+{% block script %}
+<script >
+$(document).ready(function() {
 
-            <br>
-            <div class="row">
-                <div class="col-md-4">
-                    <label>{% trans 'question_study_domain'%}</label>
-                    <select class="form-control" id="slt_domain" name="domain" style="width:500px;">
-                        <option value=""></option>
-                        {% for d in domains %}
-                        {% if d == domain %}
-                        <option value="{{ d.id }}" selected>{{ d }}</option>
-                        {% else %}
-                        <option value="{{ d.id }}">{{ d }}</option>
-                        {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-8">
-                    <br>
-                </div>
-            </div>
-
-            <br>
-            <div id="pnl_offers">
-            </div>
-
-            {% if message%}
-            <div>
-                <br>
-                <div class="row">
-                </div>
-            </div>
-            {% endif %}
-
-        <form method="post" action="{% url 'save_offer_selection' %}" id="form_questions" name="form_questions">
-            <input type="hidden" id="txt_offer_year_id" name="offer_year_id" value="{{offer.id}}"/>
-            <input type="hidden" id="txt_application_id" name="application_id" value="{{ application.id }}"/>
-            {% csrf_token %}
-            <br>
-
-            <!--Static questions :-->
-            <div id="pnl_static_questions">
-                <div id="pnl_offer_belgiandegree" style="visibility:hidden;display:none;">
-
-                    <div class="row">
-                        <div class="col-md-8">
-                            <label>{% trans 'question_belgian_diploma' %}?</label>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div>
-                                <label class="radio-inline">
-                                    <input type="radio" id="rdb_offer_belgiandegree_true" name="rdb_offer_belgiandegree"
-                                           value="true"
-                                           {% if application.national_degree %}checked{%endif%}
-                                    > {% trans 'yes'%}
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" id="rdb_offer_belgiandegree_false" name="rdb_offer_belgiandegree"
-                                           value="false"
-                                           {% if application.national_degree %}{%else%}checked{%endif%}
-                                    > {% trans 'no'%}
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="pnl_offer_vae" style="visibility:hidden;display:none;">
-
-                    <div class="row">
-                        <div class="col-md-8">
-                            <label>{% trans 'question_vae'%} ?</label>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div>
-                                <label class="radio-inline">
-                                    <input type="radio" id="rdb_offer_vae_true" name="rdb_offer_vae" value="true"
-                                           {% if application.valuation_possible %}checked{%endif%}
-                                    > {% trans 'yes'%}
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" id="rdb_offer_vae_false" name="rdb_offer_vae" value="false"
-                                           {% if application.valuation_possible %}{%else%}checked{%endif%}
-                                    > {% trans 'no'%}
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="pnl_offer_samestudies" style="visibility:hidden;display:none;">
-
-                    <div class="row">
-                        <div class="col-md-8">
-                            <label>{% trans 'question_same_studies'%} ?</label>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div>
-                                <label class="radio-inline">
-                                    <input type="radio" id="rdb_offer_samestudies_true" name="rdb_offer_samestudies"
-                                           value="true"
-                                           {% if application.started_similar_studies %}checked{%endif%}
-                                    > {% trans 'yes'%}
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" id="rdb_offer_samestudies_false" name="rdb_offer_samestudies"
-                                           value="false"
-                                           {% if application.started_similar_studies %}{%else%}checked{%endif%}
-                                    > {% trans 'no'%}
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="pnl_offer_valuecredits" style="visibility:hidden;display:none;">
-
-                    <div class="row">
-                        <div class="col-md-8">
-                            <label>{% trans 'question_credits_valorisation'%} ?</label>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div>
-                                <label class="radio-inline">
-                                    <input type="radio" id="rdb_offer_valuecredits_true" name="rdb_offer_valuecredits"
-                                           value="true"
-                                           {% if application.credits_to_value %}checked{%endif%}
-                                    > {% trans 'yes'%}
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" id="rdb_offer_valuecredits_false" name="rdb_offer_valuecredits"
-                                           value="false"
-                                           {% if application.credits_to_value %}{%else%}checked{%endif%}
-                                    > {% trans 'no'%}
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="pnl_offer_sameprogram" style="visibility:hidden;display:none;">
-
-                    <div class="row">
-                        <div class="col-md-8">
-                            <label>{% trans 'question_same_program'%} ?</label>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div>
-                                <label class="radio-inline">
-                                    <input type="radio" id="rdb_offer_sameprogram_true" name="rdb_offer_sameprogram"
-                                           value="true"
-                                           {% if application.applied_to_sameprogram %}checked{%endif%}
-                                    > {% trans 'yes'%}
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" id="rdb_offer_sameprogram_false" name="rdb_offer_sameprogram"
-                                           value="false"
-                                           {% if application.applied_to_sameprogram %}{%else%}checked{%endif%}
-                                    > {% trans 'no'%}
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="pnl_offer_resident" style="visibility:hidden;display:none;">
-
-                    <div class="row">
-                        <div class="col-md-8">
-                            <label>{% trans 'question_resident'%} ?</label>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div>
-                                <label class="radio-inline">
-                                    <input type="radio" id="rdb_offer_resident_true" name="rdb_offer_resident" value="true"
-                                           {% if application.resident %}checked{%endif%}
-                                    > {% trans 'yes'%}
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" id="rdb_offer_resident_false" name="rdb_offer_resident" value="false"
-                                           {% if application.resident %}{%else%}checked{%endif%}
-                                    >  {% trans 'no'%}
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    if ($('#hdn_application_id').val()){
+        $('#slt_offer_type option').each(function(){
+            if($(this).attr('value')==$('#hdn_application_grade').val()){
+                $(this).prop('selected', true);
+            }
+        });
+        $('#slt_offer_type').trigger('change');
 
 
-                <div id="pnl_offer_lottery" style="visibility:hidden;display:none;">
-
-                    <div class="row">
-                        <div class="col-md-8">
-                            <label>{% trans 'question_raffle_number'%} : </label>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div>
-                                <input class="form-control" id="txt_offer_lottery" name="txt_offer_lottery"
-                                       value="{{application.raffle_number  | default_if_none:'' }}" maxlength="50">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!--Dynamic questions :-->
-
-            <div id="pnl_questions"></div>
-            <br>
-            <div class="row">
-                <div class="col-md-2">
-
-                </div>
-                <div class="col-md-2">
-
-                </div>
-                <div class="col-md-2">
-                </div>
-                <div class="col-md-2">
-
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" id="bt_save" class="btn" role="button" name="save"
-                            title="{% trans 'save'%}" disabled>
-                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> {% trans 'save'%}
-                    </button>
-                </div>
-                <div class="col-md-2">
-
-                </div>
-            </div>
-        </form>
-
-    </div>
-</div>
+    }
+});
+</script>
 {% endblock %}
-

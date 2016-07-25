@@ -1,4 +1,3 @@
-{% extends "admission_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -25,70 +24,75 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
-{% block style %}
-<link rel="stylesheet" href="{% static 'css/bootstrap-datepicker3.min.css' %}" type='text/css'>
-{% endblock %}
-{% block content %}
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        <h2 class="error">{% trans 'complete_profile_instruction'%}</h2>
-        <h5>{% trans 'mandatory_asterisk'%}</h5>
-        <form method="post" action="{% url 'profile' %}">
-            {% csrf_token %}
-            <font class="error">{% if applicant_form.errors %}{% trans 'errors_warning'%}{%endif%}</font>
+    <form method="post" action="{% url 'profile' %}" id="form_profile">
+        {% csrf_token %}
+        <span id="txt_message_error_profile_up"
+               class="alert alert-warning"
+               style="visibility:hidden;display:none;"></span><br>
+        {% if tab_active >= 0%}
+            <a id="lnk_profil_next_step_up"
+               class="btn btn-default"
+               href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"
+               title="{% trans 'demandes'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+                {%trans 'next_step'%} : {%trans 'offer_choice'%}</a>
             <br>
-            <br>
-            <button type="submit" id="bt_submit_profile" class="btn btn-primary" role="button" name="save_up"
-                    title="{% trans 'save'%}">
-                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> {% trans 'save'%}
-            </button>
-            <button type="submit" id="bt_submit_next_step" class="btn btn-default" role="button" name="next_step_up"
-                    title="{% trans 'next_step'%}">
-                <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>{% trans 'next_step'%}
-            </button>
-            <br>
-            <br>
-            <div class="panel panel-default">
-                <div class="panel-heading">{% trans 'identification' %}</div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                        </div>
-                        <div class="col-md-6">
-                        </div>
+        {%endif%}
+
+        {% if applicant_form.errors %}
+        <font class="error">{% if applicant_form.errors %}{% trans 'errors_warning'%}{%endif%}</font>
+        <br>
+        {%endif%}
+        {%if message_success and message_success == 'ok'%}
+            <br><br>
+            <div>
+                <font class="alert alert-success" role="alert" style="margin-left:5px;">
+                    {% trans 'msg_info_saved'%}
+                </font>
+                </div>
+        {% endif %}
+        <br>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">{% trans 'identification' %}</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
                     </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label>{%trans 'lastname'%} *</label>
-                            <input class="form-control" id="txt_last_name" name="last_name"
-                                   value="{{ applicant.user.last_name  | default_if_none:'' }}" maxlength="255">
-                            (ex: Van der Elst)
-                            <font class="error">{{ applicant_form.last_name.errors|striptags }}</font>
-                        </div>
-                        <div class="col-md-4">
-                            <label>{%trans 'firstname'%} *</label>
-                            <input class="form-control" id="txt_first_name" name="first_name"
-                                   value="{{ applicant.user.first_name  | default_if_none:'' }}" maxlength="255">
-                            (ex: Frédéric <span style="text-decoration: line-through;">frederic FREDERIC</span>)
-                            <font class="error">{{ applicant_form.first_name.errors|striptags }}</font>
-                        </div>
-                        <div class="col-md-4">
-                            <label>{%trans 'middle_name'%}</label>
-                            <input class="form-control" id="txt_middle_name" name="middle_name"
-                                   value="{{ applicant.middle_name  | default_if_none:'' }}" maxlength="50">
-                            (ex: Pierre, Paul, Jacques  <span style="text-decoration: line-through;">pierre, paul,
-                             JACQUES</span>)
-                        </div>
+                    <div class="col-md-6">
                     </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label>{%trans 'birth_day'%} *</label>
-                            <input type="text" class="form-control" id="txt_birth_date" name="birth_date"
-                                   value="{{ applicant.birth_date  | default_if_none:'' | date:"d/m/Y" }}">
-                            (format : {% trans 'format_date'%})
-                            <font class="error">{{ applicant_form.birth_date.errors|striptags }}</font>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>{%trans 'lastname'%} *</label>
+                        <input class="form-control" id="txt_last_name" name="last_name"
+                               value="{{ applicant.user.last_name  | default_if_none:'' }}" maxlength="255">
+                        (ex: Van der Elst)
+                        <font class="error">{{ applicant_form.last_name.errors|striptags }}</font>
+                    </div>
+                    <div class="col-md-4">
+                        <label>{%trans 'firstname'%} *</label>
+                        <input class="form-control" id="txt_first_name" name="first_name"
+                               value="{{ applicant.user.first_name  | default_if_none:'' }}" maxlength="255">
+                        (ex: Frédéric <span style="text-decoration: line-through;">frederic FREDERIC</span>)
+                        <font class="error">{{ applicant_form.first_name.errors|striptags }}</font>
+                    </div>
+                    <div class="col-md-4">
+                        <label>{%trans 'middle_name'%}</label>
+                        <input class="form-control" id="txt_middle_name" name="middle_name"
+                               value="{{ applicant.middle_name  | default_if_none:'' }}" maxlength="50">
+                        (ex: Pierre, Paul, Jacques  <span style="text-decoration: line-through;">pierre, paul,
+                         JACQUES</span>)
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>{%trans 'birth_day'%} *</label>
+                        <input type="text" class="form-control" id="txt_birth_date" name="birth_date"
+                               value="{{ applicant.birth_date  | default_if_none:'' | date:"d/m/Y" }}">
+                        (format : {% trans 'format_date'%})
+                        <font class="error">{{ applicant_form.birth_date.errors|striptags }}</font>
 
                         </div>
                         <div class="col-md-4">
@@ -138,50 +142,50 @@
                             </div>
                             <font class="error">{{ applicant_form.gender.errors|striptags }}</font>
 
-                        </div>
-                        <div class="col-md-3">
-                            <label>{%trans 'civil_status'%} *</label>
-                            <select class="form-control" id="slt_civil_status" name="civil_status">
-                                <option value="SINGLE" {% if person.civil_status = "SINGLE" %}selected{%endif%}>
-                                    {%trans 'single'%}
-                                </option>
-                                <option value="COHABITANT" {% if person.civil_status = "COHABITANT" %}selected{%endif%}>
-                                    {%trans 'cohabitant'%}
-                                </option>
-                                <option value="MARRIED" {% if person.civil_status = "MARRIED" %} selected {%endif%}>
-                                    {%trans 'married'%}
-                                </option>
-                                <option value="SEPARATED" {% if person.civil_status = "SEPARATED" %}selected{%endif%}>
-                                    {%trans 'separated'%}
-                                </option>
-                                <option value="DIVORCED" {% if person.civil_status = "DIVORCED" %}selected{%endif%}>
-                                    {%trans 'divorced'%}
-                                </option>
-                                <option value="WIDOWED" {% if person.civil_status = "WIDOWED" %}selected{%endif%}>
-                                    {%trans 'widow'%}
-                                </option>
-                            </select>
-                            <font class="error">{{ applicant_form.civil_status.errors|striptags }}</font>
-                        </div>
-                        <div class="col-md-3">
-                            <label>{%trans 'children'%}</label>
-                            <input class="form-control" id="txt_number_children" name="number_children"
-                                   value="{{ applicant.number_children | default_if_none:''}}">
-                            <font class="error">{{ applicant_form.number_children.errors|striptags }}</font>
-                        </div>
-                        <div class="col-md-3">
-                            <label>{%trans 'spouse_name'%}</label>
-                            <input class="form-control" id="txt_spouse_name" name="spouse_name"
-                                   value="{{ applicant.spouse_name | default_if_none:''}}" maxlength="50">
-                        </div>
                     </div>
+                    <div class="col-md-3">
+                        <label>{%trans 'civil_status'%} *</label>
+                        <select class="form-control" id="slt_civil_status" name="civil_status">
+                            <option value="SINGLE" {% if applicant.civil_status = "SINGLE" %}selected{%endif%}>
+                                {%trans 'single'%}
+                            </option>
+                            <option value="COHABITANT" {% if applicant.civil_status = "COHABITANT" %}selected{%endif%}>
+                                {%trans 'cohabitant'%}
+                            </option>
+                            <option value="MARRIED" {% if applicant.civil_status = "MARRIED" %} selected {%endif%}>
+                                {%trans 'married'%}
+                            </option>
+                            <option value="SEPARATED" {% if applicant.civil_status = "SEPARATED" %}selected{%endif%}>
+                                {%trans 'separated'%}
+                            </option>
+                            <option value="DIVORCED" {% if applicant.civil_status = "DIVORCED" %}selected{%endif%}>
+                                {%trans 'divorced'%}
+                            </option>
+                            <option value="WIDOWED" {% if applicant.civil_status = "WIDOWED" %}selected{%endif%}>
+                                {%trans 'widow'%}
+                            </option>
+                        </select>
+                        <font class="error">{{ applicant_form.civil_status.errors|striptags }}</font>
+                    </div>
+                    <div class="col-md-3">
+                        <label>{%trans 'children'%}</label>
+                        <input class="form-control" id="txt_number_children" name="number_children"
+                               value="{{ applicant.number_children | default_if_none:''}}">
+                        <font class="error">{{ applicant_form.number_children.errors|striptags }}</font>
+                    </div>
+                    <div class="col-md-3">
+                        <label>{%trans 'spouse_name'%}</label>
+                        <input class="form-control" id="txt_spouse_name" name="spouse_name"
+                               value="{{ applicant.spouse_name | default_if_none:''}}" maxlength="50">
+                    </div>
+                </div>
 
-                    <div id="pnl_assimilation_criteria"
-                         style="visibility:hidden;display:none;">
-                        <br>
-                        {% trans 'criteria_question'%} :
-                        <ol>
-                            {% for criteria in assimilationCriteria %}
+                <div id="pnl_assimilation_criteria"
+                     style="visibility:hidden;display:none;">
+                    <br>
+                    {% trans 'criteria_question'%} :
+                    <ol>
+                        {% for criteria in assimilationCriteria %}
 
                             <div class="row">
                                 <div class="col-md-8">
@@ -458,37 +462,16 @@
                 </div>
             </div>
 
-            <button type="submit" id="bt_profile" class="btn btn-primary" role="button" name="save_down"
-                    title="{% trans 'save'%}">
-                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> {% trans 'save'%}
-            </button>
-
-            <button type="submit" id="bt_next_step" class="btn btn-default" role="button" name="next_step_down"
-                    title="{% trans 'next_step'%}">
-                <span class="glyphicon glyphicon-forward" aria-hidden="true"></span> {% trans 'next_step'%}
-            </button>
-
-        </form>
-    </div>
-</div>
-
-{% endblock %}
-{% block script %}
-<script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
-<script>
-
-
-$(document).ready(function() {
-    $.ajax({
-        url: "/admission/country?nationality=" + $("#slt_nationality").val()
-    }).then(function(data) {
-
-        if (data.european_union) {
-            $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
-        }else{
-            $('#pnl_assimilation_criteria').css('visibility', 'visible').css('display','block');
-        }
-    });
-});
-</script>
-{% endblock %}
+        <div>
+        <span id="txt_message_error_profile"
+               class="alert alert-warning"
+               style="visibility:hidden;display:none;"></span><br>
+        {% if tab_active ==  0%}
+            <a id="lnk_profil_next_step"
+               class="btn btn-default"
+               href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"
+               title="{% trans 'demandes'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+                {%trans 'next_step'%} : {%trans 'offer_choice'%}</a>
+        {%endif%}
+        </div>
+    </form>
