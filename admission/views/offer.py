@@ -29,7 +29,8 @@ from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
 
 from admission import models as mdl
-from reference import models as reference_mdl
+from reference import models as mdl_reference
+from admission.views.common import extra_information, validated_extra
 
 
 class JSONResponse(HttpResponse):
@@ -42,7 +43,7 @@ class JSONResponse(HttpResponse):
 class OfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = mdl.offer_year.OfferYear
-        fields = ('id', 'acronym','title', 'title_international','grade_type','subject_to_quota')
+        fields = ('id', 'acronym', 'title', 'title_international', 'grade_type', 'subject_to_quota')
 
 
 def search(request):
@@ -63,18 +64,18 @@ def find_by_id(request):
 def offer_selection(request):
     offers = None
     application = mdl.application.find_by_user(request.user)
-    grade_choices = reference_mdl.grade_type.GRADE_CHOICES
+    grade_choices = mdl_reference.grade_type.GRADE_CHOICES
     return render(request, "offer_selection.html",
-                          {"gradetypes":  reference_mdl.grade_type.find_all(),
-                           "domains":     reference_mdl.domain.find_all_domains(),
-                           "offers":      offers,
-                           "offer":       None,
-                           "application": application,
-                           "grade_choices": grade_choices})
+                  {"gradetypes":  mdl_reference.grade_type.find_all(),
+                   "domains":     mdl_reference.domain.find_all_domains(),
+                   "offers":      offers,
+                   "offer":       None,
+                   "application": application,
+                   "grade_choices": grade_choices})
 
 
 def _get_offer_type(request):
-    offer_type=None
+    offer_type = None
 
     if request.POST.get('bachelor_type'):
         offer_type = request.POST['bachelor_type']
@@ -83,7 +84,7 @@ def _get_offer_type(request):
     if request.POST.get('doctorate_type'):
         offer_type = request.POST['doctorate_type']
     if offer_type:
-        return get_object_or_404(reference_mdl.grade_type.GradeType, pk=offer_type)
+        return get_object_or_404(mdl_reference.grade_type.GradeType, pk=offer_type)
     return None
 
 
@@ -91,7 +92,7 @@ def _get_domain(request):
     domain_id = request.POST.get('domain')
     domain = None
     if domain_id:
-        domain = get_object_or_404(reference_mdl.domain.Domain, pk=domain_id)
+        domain = get_object_or_404(mdl_reference.domain.Domain, pk=domain_id)
     return domain
 
 
@@ -101,9 +102,31 @@ def selection_offer(request, offer_id):
     domain = _get_domain(request)
 
     return render(request, "offer_selection.html",
-                           {"gradetypes":  reference_mdl.grade_type.find_all(),
-                            "domains":     reference_mdl.domain.find_all_domains(),
+                           {"gradetypes":  mdl_reference.grade_type.find_all(),
+                            "domains":     mdl_reference.domain.find_all_domains(),
                             "offers":      None,
                             "offer":       offer_year,
                             "offer_type":  grade,
                             "domain":      domain})
+
+
+def demande_update(request, application_id=None):
+    offers = None
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
+    else:
+        application = mdl.application.init_application(request.user)
+    grade_choices = mdl_reference.grade_type.GRADE_CHOICES
+    an_applicant = mdl.applicant.find_by_user(request.user)
+    secondary_education = mdl.secondary_education.find_by_person(an_applicant)
+    return render(request, "admission_home.html",
+                  {"gradetypes":             mdl_reference.grade_type.find_all(),
+                   "domains":                mdl_reference.domain.find_all_domains(),
+                   "offers":                 offers,
+                   "offer":                  None,
+                   "application":            application,
+                   "grade_choices":          grade_choices,
+                   'tab_active':             0,
+                   "tab_demande_active":     0,
+                   "display_admission_exam": extra_information(request, application),
+                   "validated_extra":        validated_extra(secondary_education, application)})

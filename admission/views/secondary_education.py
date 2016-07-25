@@ -31,6 +31,8 @@ from django.utils.translation import ugettext_lazy as _
 from admission import models as mdl
 from admission.views.common import home
 from reference import models as mdl_reference
+from admission.views import demande_validation
+from admission.views import tabs
 
 ALERT_MANDATORY_FIELD = _('mandatory_field')
 
@@ -272,7 +274,7 @@ def curriculum_save(request, application_id):
 def diploma_save(request):
     next_step = False
     previous_step = False
-    save_step = False
+    save_step = True
     validation_messages = {}
     academic_years = mdl.academic_year.find_academic_years()
     if request.POST:
@@ -281,9 +283,6 @@ def diploma_save(request):
         else:
             if 'bt_previous_step_up' in request.POST or 'bt_previous_step_down' in request.POST:
                 previous_step = True
-            else:
-                if 'bt_save_up' in request.POST or 'bt_save_down' in request.POST:
-                    save_step = True
 
     application = mdl.application.find_first_by_user(request.user)
     other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
@@ -309,7 +308,6 @@ def diploma_save(request):
         is_valid, validation_messages, secondary_education = validate_fields_form(request,
                                                                                   secondary_education,
                                                                                   next_step)
-
         secondary_education = populate_secondary_education(request, secondary_education)
         secondary_education.save()
         message_success = _('msg_info_saved')
@@ -343,8 +341,11 @@ def diploma_save(request):
     return render(request, "diploma.html", data)
 
 
-def diploma_update(request):
-    application = mdl.application.find_first_by_user(request.user)
+def diploma_update(request, application_id=None):
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
+    else:
+        application = mdl.application.init_application(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
     other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
     recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
@@ -356,6 +357,7 @@ def diploma_update(request):
     professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
     countries = mdl_reference.country.find_excluding("BE")
     academic_years = mdl.academic_year.find_academic_years()
+    tab_status = tabs.init(request)
     data = {"application":                  application,
             "academic_years":               academic_years,
             "secondary_education":          secondary_education,
@@ -368,11 +370,29 @@ def diploma_update(request):
             "education_type_transition":    education_type_transition,
             "education_type_qualification": education_type_qualification,
             "current_academic_year":        mdl.academic_year.current_academic_year(),
-            "local_language_exam_needed":   is_local_language_exam_needed(request.user)}
+            "local_language_exam_needed":   is_local_language_exam_needed(request.user),
+            'tab_active':                   2,
+            "validated_profil":             demande_validation.validate_profil(applicant),
+            "validated_diploma":            demande_validation.validate_diploma(application),
+            "validated_curriculum":         demande_validation.validate_curriculum(application),
+            "validated_application":        demande_validation.validate_application(application),
+            "validated_accounting":         demande_validation.validate_accounting(),
+            "validated_sociological":       demande_validation.validate_sociological(),
+            "validated_attachments":        demande_validation.validate_attachments(),
+            "validated_submission":         demande_validation.validate_submission(),
+            'tab_profile': tab_status['tab_profile'],
+            'tab_applications': tab_status['tab_applications'],
+            'tab_diploma': tab_status['tab_diploma'],
+            'tab_curriculum': tab_status['tab_curriculum'],
+            'tab_accounting': tab_status['tab_accounting'],
+            'tab_sociological': tab_status['tab_sociological'],
+            'tab_attachments': tab_status['tab_attachments'],
+            'tab_submission': tab_status['tab_submission'],
+            'applications': mdl.application.find_by_user(request.user)}
 
     # merge 2 dictionaries
     data.update(get_secondary_education_exams_data(secondary_education))
-    return render(request, "diploma.html", data)
+    return render(request, "admission_home.html", data)
 
 
 def validate_professional_exam(request, is_valid, validation_messages, secondary_education):
@@ -556,7 +576,7 @@ def populate_secondary_education(request, secondary_education):
                     secondary_education.result = request.POST.get('foreign_result')
                     secondary_education.national = False
             if request.POST.get('other_school') == "on":
-                existing_institution= mdl_reference.education_institution\
+                existing_institution = mdl_reference.education_institution\
                     .find_by_name_city_postal_code(request.POST.get('CESS_other_school_name'),
                                                    request.POST.get('CESS_other_school_city'),
                                                    request.POST.get('CESS_other_school_postal_code'),

@@ -1,4 +1,3 @@
-{% extends "admission_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -26,170 +25,257 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block content %}
-<div class="row">
-    {% trans 'welcome' %}
-</div>
-<br>
-<div class="row">
-    {% trans 'account_needed'%}
-</div>
-<br>
-<div class="row">
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">{% trans 'account_already_created'%}</div>
-            <div class="panel-body">
-                {% trans 'mail_account_activation' %}
-                <br>{% trans 'connection_possible' %}
-                <form action="{% url 'admission_login' %}" method="post" class="form" role="form" autocomplete="off">
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="id_username">{%trans 'mail'%}</label>
-                            <input id="id_username" maxlength="254" name="username" type="text" class="form-control"
-                                   placeholder="{%trans 'mail'%}" required="true">
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Inscription en ligne</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+
+    <!-- Custom Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}" type="text/css">
+
+    <!-- Plugin CSS -->
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}" type="text/css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/creative.css' %}" type="text/css">
+</head>
+
+<body id="page-top">
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">
+                  <img src="{% static 'img/logo_ucl.png' %}" style="border: 2px solid #ddd; border-radius: 4px; display: inline-block; float: left;">
+                  <span>&nbsp;&nbsp; Université catholique de Louvain</span>
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a class="page-scroll" href="#about">Programme d'études</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#services">Règlement</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#portfolio">L'université</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#contact">Contactez nous</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header>
+        <div class="header-content">
+            <div class="header-content-inner">
+                <h1>L'inscription en ligne<br>~ 2016 - 2017~</h1>
+                <hr>
+                <a href="#about" class="btn btn-primary btn-xl page-scroll">S'inscrire</a>
+            </div>
+        </div>
+    </header>
+
+    <section id="about">
+        <div class="container">
+            <p>{% trans 'welcome' %}</p>
+            <p>{% trans 'account_needed'%}</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{% trans 'account_already_created'%}</div>
+                        <div class="panel-body">
+                            {% trans 'mail_account_activation' %}
+                            <br>{% trans 'connection_possible' %}
+                            <form action="{% url 'login' %}" method="post" class="form" role="form" autocomplete="off">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="id_username">{%trans 'mail'%}</label>
+                                        <input id="id_username" maxlength="254" name="username" type="text" class="form-control"
+                                               placeholder="{%trans 'mail'%}" required="true">
+                                    </div>
+                                    <div class="col-md-6"></div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="id_password">{%trans 'password_label'%}</label>
+                                        <input id="id_password" name="password" type="password" class="form-control"
+                                               placeholder="{%trans 'password'%}" required="true">
+                                    </div>
+                                    <div class="col-md-6"></div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                     <input type="hidden" name="next" value="{{ next }}" />
+                                     <label>&nbsp;</label>
+                                     <button type="submit" id="post_login_btn" class="btn btn-default" role="button"
+                                            title="{% trans 'validate'%}">
+                                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  {% trans 'validate'%}
+                                     </button>
+                                </div>
+                                {% if message %}
+                                <br>
+                                    <div class="row">
+                                      <font class="error" id="msg_message_error">{{ message }}</font>
+                                    </div>
+                                {%endif%}
+                            </form>
+                            <br>
+                            <div class="row">
+                                <label>&nbsp;</label>
+                                <a href="{% url 'new_password_request' %}">{% trans 'question_password_forgotten' %}</a>
+                            </div>
                         </div>
-                        <div class="col-md-6"></div>
                     </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="id_password">{%trans 'password_label'%}</label>
-                            <input id="id_password" name="password" type="password" class="form-control"
-                                   placeholder="{%trans 'password'%}" required="true">
+                </div>
+
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{% trans 'no_account_yet' %}</div>
+                        <div class="panel-body">
+                            <form  method="post" action="{% url 'new_user' %}" autocomplete="off">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ number1 }}" name="number1" />
+                                <input type="hidden" value="{{ number2 }}" name="number2" />
+                                <input type="hidden" value="{{ number3 }}" name="number3" />
+
+                            {% trans 'account_creation' %}<b>{% trans 'all_mandatory_fields' %}</b>
+                            <br><br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>{% trans 'firstname'%}</label>
+                                    <input class="form-control" id="txt_first_name_new" name="first_name_new" required="true"
+                                           value="{{first_name_new| default_if_none:''}}"><br>
+                                    <p class="text-muted">(ex : Frédéric <label style="text-decoration: line-through;" >frederic FREDERIC</label>)</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>{% trans 'lastname'%}</label>
+                                    <input class="form-control" id="txt_last_name_new" name="last_name_new"  required="true"
+                                           value="{{last_name_new| default_if_none:''}}"><br>
+                                    <p class="text-muted">(ex : Van der Elst / Vanderelst <label style="text-decoration: line-through;" > VANDERELST</label>)</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>{% trans 'mail'%}</label>
+                                    <input class="form-control" id="txt_email_new" name="email_new" required="true"
+                                           value="{{email_new| default_if_none:''}}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label>{% trans 'confirm_email'%}</label>
+                                    <input class="form-control" id="txt_email_new_confirm" name="email_new_confirm"  required="true"
+                                           value="{{email_new_confirm| default_if_none:''}}">
+                                </div>
+                            </div>
+                            {% if form_new.email_new_confirm.errors%}
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <font class="error" id="msg_email_new_confirm_errors">{{ form_new.email_new_confirm.errors|striptags }}</font>
+                                    </div>
+                                </div>
+                            {%endif%}
+                            <br>
+                            <div class="row" >
+                                <div class="col-md-6">
+                                    <label>{% trans 'choose_new_password'%}</label>
+                                    <input type="password" class="form-control" id="txt_password_new" name="password_new"
+                                           required="true"
+                                           value="{{password_new| default_if_none:''}}">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label>{% trans 'confirm_password'%}</label>
+                                    <input type="password" class="form-control" id="txt_password_new_confirm" name="password_new_confirm"  required="true">
+                                </div>
+                            </div>
+                            {% if form_new.password_new.errors%}
+                                <br>
+                                <div class="row">
+                                    <font class="error" id="msg_password_new_errors">{{ form_new.password_new.errors|striptags }}</font>
+                                </div>
+                            {%endif%}
+                            {% if form_new.password_new_confirm.errors%}
+                                <br>
+                                <div class="row">
+                                    <font class="error" id="msg_password_new_confirm_errors">{{ form_new.password_new_confirm.errors|striptags }}</font>
+                                </div>
+                            {%endif%}
+                            <br>
+                            <div class="row">
+                                <div style="margin-left:15px;">{% trans 'captcha'%}</div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-3">
+                                        {{ number1 }} + {{ number2 }} - {{ number3}} =
+                                </div>
+                                <div class="col-md-5">
+                                    <input type="text" class="form-control" id="txt_verification" name="verification" required="true">
+                                    <font class="error" id="msg_verification_errors">{{ form_new.verification.errors|striptags }}</font>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <label>&nbsp;</label>
+                                <button type="submit" id="bt_submit_user_create" class="btn btn-default" role="button"
+                                        title="{% trans 'help_new_account'%}">
+                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  {% trans 'validate'%}
+                                </button>
+                            </div>
+                            </form>
                         </div>
-                        <div class="col-md-6"></div>
+
                     </div>
-                    <br>
-                    <div class="row">
-                         <input type="hidden" name="next" value="{{ next }}" />
-                         <label>&nbsp;</label>
-                         <button type="submit" id="post_login_btn" class="btn btn-primary" role="button"
-                                title="{% trans 'validate'%}">
-                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  {% trans 'validate'%}
-                         </button>
-                    </div>
-                    {% if message %}
-                    <br>
-                        <div class="row">
-                          <font class="error" id="msg_message_error">{{ message }}</font>
-                        </div>
-                    {%endif%}
-                </form>
-                <br>
-                <div class="row">
-                    <label>&nbsp;</label>
-                    <a href="{% url 'new_password_request' %}">{% trans 'question_password_forgotten' %}</a>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">{% trans 'no_account_yet' %}</div>
-            <div class="panel-body">
-                <form  method="post" action="{% url 'new_user' %}" autocomplete="off">
-                    {% csrf_token %}
-                    <input type="hidden" value="{{ number1 }}" name="number1" />
-                    <input type="hidden" value="{{ number2 }}" name="number2" />
-                    <input type="hidden" value="{{ number3 }}" name="number3" />
+    <!-- jQuery -->
+    <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
 
-                {% trans 'account_creation' %}<b>{% trans 'all_mandatory_fields' %}</b>
-                <br><br>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>{% trans 'firstname'%}</label>
-                        <input class="form-control" id="txt_first_name_new" name="first_name_new" required="true"
-                               value="{{first_name_new| default_if_none:''}}"><br>
-                        <p class="text-muted">(ex : Frédéric <label style="text-decoration: line-through;" >frederic FREDERIC</label>)</p>
-                    </div>
-                    <div class="col-md-6">
-                        <label>{% trans 'lastname'%}</label>
-                        <input class="form-control" id="txt_last_name_new" name="last_name_new"  required="true"
-                               value="{{last_name_new| default_if_none:''}}"><br>
-                        <p class="text-muted">(ex : Van der Elst / Vanderelst <label style="text-decoration: line-through;" > VANDERELST</label>)</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>{% trans 'mail'%}</label>
-                        <input class="form-control" id="txt_email_new" name="email_new" required="true"
-                               value="{{email_new| default_if_none:''}}">
-                    </div>
-                    <div class="col-md-6">
-                        <label>{% trans 'confirm_email'%}</label>
-                        <input class="form-control" id="txt_email_new_confirm" name="email_new_confirm"  required="true"
-                               value="{{email_new_confirm| default_if_none:''}}">
-                    </div>
-                </div>
-                {% if form_new.email_new_confirm.errors%}
-                    <br>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <font class="error" id="msg_email_new_confirm_errors">{{ form_new.email_new_confirm.errors|striptags }}</font>
-                        </div>
-                    </div>
-                {%endif%}
-                <br>
-                <div class="row" >
-                    <div class="col-md-6">
-                         <label>{% trans 'choose_new_password'%}</label>
-                        <input type="password" class="form-control" id="txt_password_new" name="password_new"
-                               required="true"
-                               value="{{password_new| default_if_none:''}}">
-                    </div>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
 
-                    <div class="col-md-6">
-                        <label>{% trans 'confirm_password'%}</label>
-                        <input type="password" class="form-control" id="txt_password_new_confirm" name="password_new_confirm"  required="true">
-                    </div>
-                </div>
-                {% if form_new.password_new.errors%}
-                    <br>
-                    <div class="row">
-                        <font class="error" id="msg_password_new_errors">{{ form_new.password_new.errors|striptags }}</font>
-                    </div>
-                {%endif%}
-                {% if form_new.password_new_confirm.errors%}
-                    <br>
-                    <div class="row">
-                        <font class="error" id="msg_password_new_confirm_errors">{{ form_new.password_new_confirm.errors|striptags }}</font>
-                    </div>
-                {%endif%}
-                <br>
-                <div class="row">
-                    <div style="margin-left:15px;">{% trans 'captcha'%}</div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-md-3">
-                            {{ number1 }} + {{ number2 }} - {{ number3}} =
-                    </div>
-                    <div class="col-md-5">
-                        <input type="text" class="form-control" id="txt_verification" name="verification" required="true">
-                        <font class="error" id="msg_verification_errors">{{ form_new.verification.errors|striptags }}</font>
-                    </div>
-                    <div class="col-md-4">
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <label>&nbsp;</label>
-                    <button type="submit" id="bt_submit_user_create" class="btn btn-primary" role="button"
-                            title="{% trans 'help_new_account'%}">
-                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  {% trans 'validate'%}
-                    </button>
-                </div>
-                </form>
-            </div>
+    <!-- Plugin JavaScript -->
+    <script src="{% static 'js/scrollreveal.min.js' %}"></script>
+    <script src="{% static 'js/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'js/jquery.fittext.js' %}"></script>
+    <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
 
-        </div>
-    </div>
-</div>
+    <!-- Custom Theme JavaScript -->
+    <script src="{% static 'js/creative.js' %}"></script>
 
-</div>
-</div>
+</body>
 
-{% endblock %}
+</html>
