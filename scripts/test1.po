@@ -1,0 +1,1039 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-05-03 08:56+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "admission"
+msgstr "admission"
+
+msgid "inscription"
+msgstr "Rnrollment"
+
+msgid "bachelor"
+msgstr "Bachelor"
+
+msgid "master"
+msgstr "Master"
+
+msgid "ph_d"
+msgstr "Ph.d."
+
+msgid "teacher_training_certificate"
+msgstr "Teacher training certificate"
+
+msgid "certificate"
+msgstr "certificate"
+
+msgid "plain"
+msgstr "Plan"
+
+msgid "plain_and_html"
+msgstr "Plain and HTML"
+
+msgid "female"
+msgstr "Female"
+
+msgid "male"
+msgstr "Male"
+
+msgid "married"
+msgstr "Married"
+
+msgid "single"
+msgstr "Single"
+
+msgid "widowed"
+msgstr "Widowed"
+
+msgid "divorced"
+msgstr "Divorced"
+
+msgid "separated"
+msgstr "Separated"
+
+msgid "cohabitant"
+msgstr "Cohabitant"
+
+msgid "unknown"
+msgstr "Unknown"
+
+msgid "legal"
+msgstr "Légal"
+
+msgid "contact"
+msgstr "Contact"
+
+msgid "label"
+msgstr "Label"
+
+msgid "short_input_text"
+msgstr "Short input text"
+
+msgid "long_input_text"
+msgstr "Long input text"
+
+msgid "radio_button"
+msgstr "Radio button"
+
+msgid "checkbox"
+msgstr "checkbox"
+
+msgid "dropdown_list"
+msgstr "Dropdown list"
+
+msgid "upload_button"
+msgstr "Upload button"
+
+msgid "download_link"
+msgstr "Download link"
+
+msgid "http_link"
+msgstr "HTTP link"
+
+msgid "yes"
+msgstr "Yes"
+
+msgid "no"
+msgstr "No"
+
+msgid "demanded"
+msgstr "Demanded"
+
+#: templates/diploma.html:197 templates/diploma.html.py:198
+#: templates/diploma.html:315 templates/diploma.html.py:316
+msgid "previous_step"
+msgstr "Previous step"
+
+#: templates/diploma.html:200 templates/diploma.html.py:201
+#: templates/diploma.html:318 templates/diploma.html.py:319
+msgid "save"
+msgstr "Save"
+
+#: templates/diploma.html:203 templates/diploma.html.py:204
+#: templates/diploma.html:321 templates/diploma.html.py:322
+msgid "next_step"
+msgstr "Next step"
+
+#: templates/diploma.html:210
+msgid "errors"
+msgstr "error(s)"
+
+msgid "secondary_education"
+msgstr "Secondary education"
+
+msgid "question_get_diploma"
+msgstr "Did you get or will you get this year a secondary education diploma?"
+
+msgid "label_secondary_education"
+msgstr ""
+"The secondary education diploma is needed to begin advanced studies (university studies, graduate,...).  Ex : CESS, Bachelor, Maturity exams, Gymnasiales Studies, collegial Studies, High Shool, ...)"
+
+msgid "pnl_academic_year_which_year"
+msgstr "Please mention the academic year of graduating from high school"
+
+msgid "academic_year"
+msgstr "Academic year"
+
+msgid "pnl_academic_year_secondary_education"
+msgstr "You have made your secondary education"
+
+msgid "in_belgium"
+msgstr "In Belgium"
+
+msgid "not_in_belgium"
+msgstr "Not in Belgium"
+
+msgid "file"
+msgstr "File"
+
+msgid "choose_file"
+msgstr "Choose a file"
+
+msgid "cancel"
+msgstr "Cancel"
+
+msgid "admission_exam"
+msgstr "Admission exam"
+
+msgid "question_admission_exam"
+msgstr "Did you enrol or do you plan to enrol for an entry exam?"
+
+msgid "question_date_session"
+msgstr "Please mention if you have changed of orientation during your studies."
+
+msgid "question_institution_name"
+msgstr "At which institute (name)?"
+
+msgid "question_exam_type"
+msgstr "What type of exam?"
+
+msgid "question_other_exam_type"
+msgstr "Other type of exam"
+
+msgid "specify_name"
+msgstr "To specify"
+
+msgid "which_result"
+msgstr "Which result did you get?"
+
+msgid "low_result"
+msgstr "Less than 65%"
+
+msgid "middle_result"
+msgstr "Between 65 and 75%"
+
+msgid "high_result"
+msgstr "More than 75%"
+
+msgid "add_enrollment_file"
+msgstr "Please add a copy of your certificate or a proof of your enrollment to "
+
+msgid "click_to_add"
+msgstr "Click here to add file"
+
+msgid "international_diploma_question"
+msgstr "What diploma did you get (or will you get) ?"
+
+msgid "baccalaureat_national"
+msgstr "National Bachelor (or government diploma, ...)"
+
+msgid "baccalaureat_european"
+msgstr "European Bachelor (Schola Europaea)"
+
+msgid "baccalaureat_international"
+msgstr "International Bachelor (IBO)"
+
+msgid "awarding_country"
+msgstr "Awarding country"
+
+
+msgid "linguistic_regime"
+msgstr "Linguistic regime"
+
+msgid "other_linguistic_regime"
+msgstr "If other linguistic regime, please clarify"
+
+msgid "equivalence_question"
+msgstr "Has this diploma been subject to a decision of equivalence provided by the French-speaking community of Belgium ?"
+
+msgid "file_equivalence_instructions"
+msgstr ""
+"In case you are in possession of a recto-verso copy of the final equivalence "
+"decision, provided by the Ministry of the French-speaking Community of "
+"Belgium. In case you should not own this kind of document, you MUST enter a "
+"request for equivalence while strictly respecting the guidelines determined "
+"by "
+
+msgid "file_equivalence_btn"
+msgstr "Please add the final equivalence decision file"
+
+msgid "result"
+msgstr "Result"
+
+msgid "file_copy_add_instruction"
+msgstr "Please add the copy of "
+
+msgid "file_copy_help_instruction"
+msgstr ""
+"Please add a recto-verso copy.  If you have the recto-verso copy in one file "
+"please add it."
+
+msgid "original_of"
+msgstr "Original of"
+
+msgid "high_school_diploma"
+msgstr "High school diploma"
+
+msgid "recto"
+msgstr "recto"
+
+msgid "verso"
+msgstr "verso"
+
+msgid "high_school_diploma_transcript"
+msgstr "High school transcript"
+
+msgid "high_school_diplome_translation"
+msgstr "A translation of your high school diploma by a sworn translator"
+
+msgid "local_language_exam"
+msgstr "Exam for Proficiency of the French Language"
+
+msgid "question_local_language_exam"
+msgstr "Did you enrol or do you plan to enrol for this exam ?"
+
+msgid "further_information"
+msgstr "Further information"
+
+msgid "succeed_result"
+msgstr "Succeed"
+
+msgid "failed"
+msgstr "Failed"
+
+msgid "demanded_result"
+msgstr "Ongoing enrolment for the mentioned session"
+
+msgid "add_success_proof_file"
+msgstr "Please add certificate of achievement or a proof of your enrollment"
+
+msgid "institution"
+msgstr "Institution"
+
+msgid "institution_identification"
+msgstr "Université catholique de Louvain"
+
+msgid "which_community"
+msgstr "Please mention the community where you went to high school."
+
+msgid "french_belgian_community"
+msgstr "French-speaking Community of Belgium"
+
+msgid "dutch_belgian_community"
+msgstr "Dutch-speaking Community of Belgium"
+
+msgid "german_belgian_community"
+msgstr "German-speaking Community of Belgium"
+
+msgid "institution_cess_question"
+msgstr ""
+"What is the name of the educational institute that has provided to you a "
+"certificate of upper-secundary  education (C.E.S.S.) ?"
+
+msgid "institution_cess_help"
+msgstr ""
+"In order to help you at this matter, we propose you to perform a search "
+"based on the location or postal code."
+
+msgid "by_city"
+msgstr "By city"
+
+msgid "by_postal_code"
+msgstr "By postal code"
+
+msgid "institution_not_found"
+msgstr ""
+"In case you could not find your institute in the list, please mention it "
+"below."
+
+msgid "other_institution"
+msgstr "Other institution"
+
+msgid "institution_name"
+msgstr "Institution name"
+
+msgid "city"
+msgstr "City"
+
+msgid "postal_code"
+msgstr "Postal code"
+
+msgid "which_type_education"
+msgstr "What type of education did (do) you follow?"
+
+msgid "educational_transition"
+msgstr "Educational transition"
+
+msgid "educational_qualification"
+msgstr "Educational qualification"
+
+msgid "other_education"
+msgstr "Secondary education"
+
+msgid "to_specify"
+msgstr "To specify"
+
+msgid "daes"
+msgstr "DAES"
+
+msgid "daes_question"
+msgstr ""
+"Given you finished your studies at the latest in 1993, did you obtain a "
+"Belgian qualification diploma to get access to higher education studies "
+"(DAES) ?"
+
+msgid "path"
+msgstr "Path"
+
+msgid "path_repetition"
+msgstr "Path repetition"
+
+msgid "question_path_reorientation"
+msgstr "Please mention if you have changed of orientation during your studies."
+
+msgid "copy_add"
+msgstr "Please add a copy of "
+
+msgid "recto_verso_copy"
+msgstr "Please a recto-verso copy.  If you have the recto-verso in a same file, please add it twice"
+
+msgid "transcript"
+msgstr "Transcript"
+
+msgid "professional_experiences"
+msgstr "Professional experiences"
+
+msgid "question_professional_experience"
+msgstr "Did you enrol or do you plan to enrol for this exam with the purpose of valorisation of the professional achievements and experience (VAE)?"
+
+msgid "vae_information"
+msgstr "Further information"
+
+msgid "question_institution_name_nice"
+msgstr "At which institute (name)?"
+
+msgid "add_professional_exam_file"
+msgstr "Please add a copy of your certificate or a proof of your exam enrollment."
+
+msgid "your_diplomas"
+msgstr "Your diplomas"
+
+msgid "update_secondary_education"
+msgstr "Update diplomas/secondary education"
+
+msgid "french"
+msgstr "French"
+
+msgid "english"
+msgstr "English"
+
+msgid "mandatory_field"
+msgstr "Mandatory field"
+
+msgid "msg_info_saved"
+msgstr "Data saved"
+
+msgid "msg_error_other_education_type"
+msgstr "Please specify the other education type."
+
+msgid "msg_error_education_type"
+msgstr "Please specify the education type."
+
+msgid "msg_error_international_diploma"
+msgstr "Please specify the diploma you have been awarded."
+
+msgid "msg_other_language_diploma"
+msgstr "If other linguistic regime, please clarify."
+
+msgid "msg_language_diploma"
+msgstr "Please clarify the linguistic regime."
+
+msgid "msg_school_name"
+msgstr "Please mention the name of  the institute where you were."
+
+msgid "msg_error_school_belgian_community"
+msgstr "Please mention the community of the school where you went to high school."
+
+msgid "msg_error_next_step_impossible"
+msgstr ""
+ "Impossible to go to the next step. You must have at least answered 'Yes' to one of the following questions : "
+
+msgid "identification"
+msgstr "Identification"
+
+msgid "your_profile"
+msgstr "Your profille"
+
+msgid "update_profile"
+msgstr "Update profile"
+
+msgid "name"
+msgstr "Nom"
+
+msgid "lastname"
+msgstr "Lastname"
+
+msgid "firstname"
+msgstr "Firstname"
+
+msgid "middle_name"
+msgstr "Middle name(s)"
+
+msgid "birth_day"
+msgstr "Birthday"
+
+msgid "birth_place"
+msgstr "Birth place"
+
+msgid "birth_country"
+msgstr "Birth country"
+
+msgid "nationality"
+msgstr "Nationality"
+
+msgid "gender"
+msgstr "Gender"
+
+msgid "civil_status"
+msgstr "Civil status"
+
+msgid "children"
+msgstr "Number of children"
+
+msgid "spouse_name"
+msgstr "Spouse complete name"
+
+msgid "id_card"
+msgstr "Identity card"
+
+msgid "question_identity"
+msgstr "Please mention at least one identity number."
+
+msgid "legal_residence"
+msgstr "Legal residence"
+
+msgid "street"
+msgstr "Street"
+
+msgid "number"
+msgstr "Number"
+
+msgid "place"
+msgstr "Complement"
+
+msgid "postal_address"
+msgstr "Postal address"
+
+msgid "question_address"
+msgstr "Is the contact address identical to your resident address? "
+
+msgid "mobile"
+msgstr "Mobile"
+
+msgid "other_phone"
+msgstr "Other phone"
+
+msgid "mail"
+msgstr "Email"
+
+msgid "question_previous_enrollment"
+msgstr "Have you previously been registered at :"
+
+msgid "question_registration_number"
+msgstr "What is your registration number ?"
+
+msgid "question_year_last_registration"
+msgstr "What is your last registration year at : "
+
+msgid "msg_error_username_password_not_matching"
+msgstr "Your username and password didn't match. Please try again."
+
+msgid "password"
+msgstr "Password"
+
+msgid "validate"
+msgstr "Validate"
+
+msgid "question_password_forgotten"
+msgstr "Password forgotten?"
+
+msgid "no_account_yet"
+msgstr "If you do not yet have an account"
+
+msgid "welcome"
+msgstr "Welcome to the Online Enrolment at the Université catholique de Louvain"
+
+msgid "account_needed"
+msgstr "In order to enter your enrolment request online, you need an access account."
+
+msgid "account_already_created"
+msgstr "If you already have requested creation of this account"
+
+msgid "mail_account_activation"
+msgstr ""
+ "You have received by e-mail, a confirmation of account and activity creation, by clicking on the activation link."
+
+msgid "connection_possible"
+msgstr ""
+ "You can as from now connect to the request enrolment thanks to your e-mail address and  the password you previously "
+ "selected."
+
+msgid "account_creation"
+msgstr "Please create this account, composed of a private e-mail address and a password."
+
+msgid "all_mandatory_fields"
+msgstr "All fields are mandatory"
+
+msgid "confirm_email"
+msgstr "Confirm mail"
+
+msgid "confirm_password"
+msgstr "Confirm password"
+
+msgid "different_emails"
+msgstr "The emails encoded are different"
+
+msgid "different_passwords"
+msgstr "The passwords encoded are different"
+
+
+msgid "password_too_short"
+msgstr "This password is too short. It must contain at least 8 characters."
+
+msgid "invalid_email"
+msgstr "Please indicate a valid email."
+
+msgid "numeric_field"
+msgstr "Please indicate a numeric value."
+
+msgid "captcha"
+msgstr "Please type in the result of the following expression."
+
+msgid "help_new_account"
+msgstr "Create a new account"
+
+msgid "password_label"
+msgstr "Password"
+
+msgid "changing_password"
+msgstr "Changing password"
+
+msgid "changing_password_instruction"
+msgstr "Please enter your e-mail address. You will receive a link, allowing you to change your password."
+
+msgid "changing_password_action"
+msgstr "Request to change password"
+
+msgid "confirmation"
+msgstr "Confirmation"
+
+msgid "info_password_changed"
+msgstr "Hello, your password has been modified!"
+
+msgid "login"
+msgstr "Login"
+
+msgid "new_password_instruction"
+msgstr "Please indicate your new password"
+
+msgid "choose_new_password"
+msgstr "Choose a password"
+
+msgid "help_validate_new_password"
+msgstr "New password validation"
+
+msgid "activation_link_not_valid"
+msgstr "Activation link invalid!"
+
+msgid "activation_mail_sent"
+msgstr "An activation message has been sent to your email account."
+
+msgid "activation_instruction"
+msgstr "Please check your email new et clic on the link to indicate a new password."
+
+msgid "curriculum_instruction"
+msgstr ""
+  "Please complete below for each year mentioned  what were your activities.  Every study year (successful or "
+  "unsuccessful) or activity has to be completed"
+
+msgid "curriculum_instruction_warning"
+msgstr ""
+ "ATTENTION, en cas de cumul d'études supérieures et d'activités lors de la même année académique, veuillez n'indiquer "
+ "que les études entreprises."
+
+msgid "curriculum_instruction_duplicate"
+msgstr ""
+ "Please use, if needed, the 'Duplicate' button for a study course of several years within the same institute."
+
+msgid "path_type"
+msgstr "Path type"
+
+msgid "education_community"
+msgstr "Community of education"
+
+msgid "university"
+msgstr "University"
+
+msgid "domain"
+msgstr "Domain"
+
+msgid "grade_type"
+msgstr "Type d'étude"
+
+msgid "question_year_diploma"
+msgstr "Did you obtain your diploma for that year?"
+
+msgid "obtained_result"
+msgstr "Obtained result"
+
+msgid "no_result"
+msgstr "No result"
+
+msgid "credits_enrolled"
+msgstr "Number of enrolled credits"
+
+msgid "credits_acquired"
+msgstr "Number of acquired credits"
+
+msgid "your_requests"
+msgstr "Your requests"
+
+msgid "curriculum"
+msgstr "Curriculum"
+
+msgid "update_curriculum"
+msgstr "Update your curriculum"
+
+msgid "national_university"
+msgstr "Belgian university"
+
+msgid "foreign_university"
+msgstr "Foreign university"
+
+msgid "high_national_non_university"
+msgstr "Belgian higher non-university education"
+
+msgid "high_foreign_non_university"
+msgstr "Foreign higher non-university education"
+
+msgid "other"
+msgstr "Other"
+
+msgid "internship"
+msgstr "Internship"
+
+msgid "volunteering"
+msgstr "Volunteering"
+
+msgid "unemployment"
+msgstr "Unemployment"
+
+msgid "duplicate"
+msgstr "Duplicate"
+
+msgid "duplicate_help"
+msgstr "Duplicate the year's data to "
+
+msgid "show_detail"
+msgstr "Show detail"
+
+msgid "hide_detail"
+msgstr "Hide detail"
+
+msgid "diploma"
+msgstr "Diploma"
+
+msgid "credits_too_high"
+msgstr "Credits shouldn't be more than 75"
+
+msgid "credits_negative"
+msgstr "Credits must be positive"
+
+msgid "subdomain"
+msgstr "Subdomain"
+
+msgid "question_domain_title"
+msgstr "Domain, subdomain, and grade type corresponds to your studies"
+
+msgid "data_duplicated"
+msgstr "Data duplicated"
+
+msgid "country"
+msgstr "Country"
+
+msgid "university_country"
+msgstr "University country"
+
+msgid "university_name"
+msgstr "University name"
+
+msgid "complete_profile_instruction"
+msgstr "Please complete your profile"
+
+msgid "mandatory_asterisk"
+msgstr "All fields marked with a * are mandatory."
+
+msgid "errors_warning"
+msgstr "There are errors"
+
+msgid "criteria_question"
+msgstr "Are you in one of these situations"
+
+msgid "wrong_date"
+msgstr "Wrong date "
+
+msgid "succeeded"
+msgstr "Succeeded"
+
+msgid "national_registry_number"
+msgstr "National registry number"
+
+msgid "identity_card_number"
+msgstr "Identity card number"
+
+msgid "passport_number"
+msgstr "Passport number"
+
+msgid "question_domain"
+msgstr "Domain, subdomain, and grade type corresponds to your studies"
+
+msgid "invalid_date"
+msgstr "Invalid date"
+
+msgid "invalid_year"
+msgstr "Invalid year"
+
+msgid "format_date"
+msgstr "dd/mm/yyyy"
+
+msgid "specify_locality"
+msgstr "In case you could not find the locality in the list, please mention it below."
+
+msgid "specify_university_name"
+msgstr "In case you could not find your university in the list, please mention it below."
+
+msgid "mandatory_university_name"
+msgstr "Please mention an university's name."
+
+msgid "specify"
+msgstr "Specify"
+
+msgid "files_translated"
+msgstr "A translation by a sworn translator"
+
+msgid "establishment"
+msgstr "Establishment"
+
+msgid "higher_non_university"
+msgstr "Higher non university"
+
+msgid "study_systems"
+msgstr "Study systems"
+
+msgid "social_advancement"
+msgstr "Social advancement"
+
+msgid "full_exercise"
+msgstr "Full exercise"
+
+msgid "undefined"
+msgstr "Undefined"
+
+msgid "institution_country"
+msgstr "Institution country"
+
+msgid "institution_mandatory"
+msgstr "Please mention the name of the institute where you were"
+
+msgid "activity_type"
+msgstr "Activity type"
+
+msgid "question_activity_place"
+msgstr "Where?"
+
+msgid "question_activity"
+msgstr "What kind of activity?"
+
+msgid "onem_needed"
+msgstr "Veuillez joindre l'attestation de l'ONEM stipulant qui n'a pas bénificier d'une dégoration l'autorisation de poursuivre des études"
+
+msgid "job"
+msgstr "Job"
+
+msgid "illness"
+msgstr "Illness"
+
+msgid "msg_info_duplicated"
+msgstr "Data duplicated"
+
+msgid "msg_info_not_duplicated"
+msgstr "Data not duplicated"
+
+msgid "msg_warning_curriculum"
+msgstr "Please mention your secondary education and diplomas informations, before encoding the curricula."
+
+msgid "instruction_offer_selection_part1"
+msgstr ""
+"In order to make you choice, please start by selecting a grade type(sub-grade type) and next select a study type. "
+"Next, select the required study and confirm your choice.<br/>In order to help you, you can"
+
+msgid "instruction_offer_selection_part2"
+msgstr "In order to help you, you can consult the study programs : "
+
+msgid "study_programs"
+msgstr "study programs"
+
+msgid "question_study_type"
+msgstr "Please select a study type"
+
+msgid "question_study_domain"
+msgstr "Please select a study domain"
+
+msgid "question_belgian_diploma"
+msgstr "Is your diploma, a belgian one"
+
+msgid "question_vae"
+msgstr ""
+"Souhaitez-vous accéder au programme sur base de la valorisation des savoirs et  compétences acquis par expérience "
+"professionnelle (VAE)"
+
+msgid "question_same_studies"
+msgstr "Did you already start the same studies in another institution"
+
+msgid "question_credits_valorisation"
+msgstr "Would you like to take advantage of credits for these studies"
+
+msgid "question_same_program"
+msgstr "Are you already enrolled to the same program in an institution of the French community"
+
+msgid "question_resident"
+msgstr "Are you resident"
+
+msgid "question_raffle_number"
+msgstr "Please mention the number given be the enrolment service"
+
+msgid "other_education_type"
+msgstr "Other education type"
+
+msgid "table_contents"
+msgstr "Table of contents"
+
+msgid "documents"
+msgstr "Documents"
+
+msgid "ucl_denom_location"
+msgstr "Université catholique de Louvain"
+
+msgid "reduction"
+msgstr "Reduction"
+
+msgid "question_study_grant"
+msgstr "Do you have a study grant request?"
+
+msgid "reduction_enrolment_fees"
+msgstr "Reduction of the enrolment fees"
+
+msgid "study_grant_number"
+msgstr "In case of a request for a study grant, please mention the pending file number"
+
+msgid "unknow_number_yet"
+msgstr "In case you do not know this number yet, you can always provide us this information later on."
+
+msgid "additional_information"
+msgstr "For all additional information"
+
+msgid "french_community_grant"
+msgstr "study grant French-speaking community"
+
+msgid "institution_help_center"
+msgstr "the UCL help center"
+
+msgid "other_study_grant"
+msgstr "Do you benefit from a study grant provided by another institute?"
+
+msgid "other_study_grant_address"
+msgstr "If affirmative, please provide the name and address of the organisation"
+
+msgid "debts"
+msgstr "Debts"
+
+msgid "add_file_no_debts"
+msgstr ""
+ "Please add a certificate stating the absence of debts with regards to the institution attended during "
+ "the academic year"
+
+msgid "add"
+msgstr "Add"
+
+msgid "sport_affiliation"
+msgstr "Affiliation sports activities"
+
+msgid "sport_affiliation_lln"
+msgstr ""
+ "Would you like to participate to sports activities organised at the site of Louvain-la-Neuve and Brussels Woluwe?"
+
+msgid "sport_affiliation_lln_cost_part1"
+msgstr ""
+ "In case this is affirmative, the cost of "
+
+msgid "sport_affiliation_lln_cost_part2"
+msgstr ""
+ " will be added to your enrolment rights."
+
+msgid "sport_affiliation_lln_information"
+msgstr "Information on sports at Louvain-la-Neuve and Brussels-Woluwe"
+
+msgid "culture_card"
+msgstr "Culture card"
+
+msgid "question_culture_card"
+msgstr "Would you like to receive the culture card?"
+
+msgid "additional_info_culture_card"
+msgstr "Additional information on the culture card"
+
+msgid "solidarity_card"
+msgstr "Solidarity Card"
+
+msgid "question_solidarity_card"
+msgstr "Would you like to receive the solidarity card?"
+
+
+msgid "additional_info_solidarity_card"
+msgstr "Additional information on the solidarity card"
+
+msgid "bank_account"
+msgstr "Bank account"
+
+msgid "belgian_bank_account"
+msgstr ""
+ "If you are belgian banking account holder,  you can encode your contact details so that we can proceed to a "
+ "possible repayment."
+
+msgid "belgian_bank_account_precision"
+msgstr "For the IBAN and BIC/SWIFT code, please encode only alphanumerics characters (neither space, nor dash)."
+
+msgid "iban_number"
+msgstr "Account number (IBAN)"
+
+msgid "bic_number"
+msgstr "BIC/SWIFT Code"
+
+msgid "bank_account_holder_firstname"
+msgstr "Holder's first name of the bank account"
+
+msgid "bank_account_holder_name"
+msgstr "Holder's name of the bank account"
+
+msgid "general_notice"
+msgstr "Notice  : "
+
+msgid "language"
+msgstr "Language"
+
+msgid "professional"
+msgstr "Professional"
+
+msgid "general_reduction_notice"
+msgstr ""
+ "d'autres types de réduction existent à l'UCL.  Elles nécessitent l'introduction d'un dossier particulier.  "
+ "Informations"
+
+msgid "there_are"
+msgstr "There are "
+
+msgid "question_reduction_children"
+msgstr "Avez-vous une demande de réduction 'Enfant du personnel UCL ou du Lycée Martin V'?"
+
+msgid "or"
+msgstr "or"
+
+msgid "add_file_children_deduction"
+msgstr "Veuillez joindre l'attestation officelle pour bénéficier de cette réduction"
+
+msgid "title_no_debts"
+msgstr "Certificate stating the absence of debts"
