@@ -26,8 +26,6 @@
 from django.apps import AppConfig
 from frontoffice.queue import callbacks, queue
 
-
-
 class BaseConfig(AppConfig):
     name = 'base'
     queue_name = 'osis_base'
@@ -36,6 +34,6 @@ class BaseConfig(AppConfig):
         try:
             from .models.signals import update_person_after_user_creation, \
                 update_person_after_user_update, add_to_students_group
-            queue.listen_queue(self.queue_name, callbacks.insert_or_update)
         except ImportError:
             pass
+        queue.listen_queue(self.queue_name, callbacks.insert_or_update)
