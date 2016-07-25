@@ -535,6 +535,43 @@ function national_community_display(){
 
 }
 
+function populate_exam_admin(){
+    $('#pnl_admission_exam').css('visibility', 'visible').css('display','block');
+    if($('#hdn_secondary_education_admission_exam').val() == 'True'){
+        $('#rdb_admission_exam_true').prop( "checked", true);
+    }else{
+        $('#rdb_admission_exam_false').prop( "checked", true);
+    }
+    if($('#hdn_secondary_education_admission_exam_date').val() != ''){
+        $('#txt_admission_exam_date').val($('#hdn_secondary_education_admission_exam_date').val() );
+    }
+    if($('#hdn_secondary_education_admission_exam_institution').val() != ''){
+        $('#txt_admission_exam_institution').val($('#hdn_secondary_education_admission_exam_institution').val());
+    }
+    if($('#hdn_secondary_education_admission_exam_type_adhoc').val()=='True'){
+        $('#chb_admission_exam_type').prop( "checked", true);
+        $('#txt_admission_exam_type_other').val($('#hdn_secondary_education_admission_exam_type_name').val() );
+        $('#txt_admission_exam_type_other').prop( "disabled", false);
 
+    }else{
+        if($('#hdn_secondary_education_admission_exam_type_id')){
+            $('#rdb_admission_exam_type_'+$('#hdn_secondary_education_admission_exam_type_id').val()).prop( "checked", true);
+        }
+    }
+    if($('#hdn_secondary_education_admission_exam_type_name').val()=="OTHER_EXAM"){
+        $('#txt_admission_exam_type_other').prop( "disabled", false);
+        $('#chb_admission_exam_type').prop( "checked", true);
+    }
+
+    if($('#hdn_secondary_education_admission_exam_type_name').val()=="LOW"){
+        $('#rdb_admission_exam_result_low').prop( "checked", true);
+    }
+    if($('#hdn_secondary_education_admission_exam_type_name').val()=="MIDDLE"){
+        $('#rdb_admission_exam_result_middle').prop( "checked", true);
+    }
+    if($('#hdn_secondary_education_admission_exam_type_name').val()=="HIGH"){
+        $('#rdb_admission_exam_result_high').prop( "checked", true);
+    }
+}
 
 

@@ -34,34 +34,26 @@ from django.utils.translation import ugettext_lazy as _
 from admission import models as mdl
 from admission.views import common
 from reference import models as mdl_reference
+from admission.views import demande_validation
+from admission.views import tabs
 
 
 def save(request):
-    next_step = False
-    previous_step = False
     save_step = False
     duplicate = False
     duplicate_year_origin = None
     validation_messages = {}
-    if request.POST:
-        if 'bt_next_step_up' in request.POST or 'bt_next_step_down' in request.POST:
-            next_step = True
-        else:
-            if 'bt_previous_step_up' in request.POST or 'bt_previous_step_down' in request.POST:
-                previous_step = True
-            else:
-                if 'bt_save_up' in request.POST or 'bt_save_down' in request.POST:
-                    save_step = True
-                else:
-                    key = 'bt_duplicate_'
-                    for k, v in request.POST.items():
-                        if k.startswith(key):
-                            duplicate = True
-                            duplicate_year_origin = int(k.replace(key, ''))
-                            break
 
-    if previous_step:
-        return HttpResponseRedirect(reverse('home'))
+    key = 'bt_duplicate_'
+    for k, v in request.POST.items():
+        if k.startswith(key):
+            duplicate = True
+            duplicate_year_origin = int(k.replace(key, ''))
+            break
+    if duplicate:
+        pass
+    else:
+        save_step = True
 
     message_success = None
     # Get the data in bd for dropdown list
@@ -73,9 +65,10 @@ def save(request):
     universities_cities = []
     universities = []
 
-    if save_step or next_step or duplicate:
+    if save_step or duplicate:
         is_valid, validation_messages, curricula, universities_cities, universities, duplication_possible \
             = validate_fields_form(request, duplicate_year_origin)
+        is_valid = True  # a modifier avec issue 180
         if is_valid:
             message_success = _('msg_info_saved')
             for curriculum in curricula:
@@ -108,17 +101,17 @@ def save(request):
     current_academic_year = mdl.academic_year.current_academic_year().year
 
     year = first_academic_year_for_cv
-
-    while year < current_academic_year:
-        academic_year = mdl.academic_year.find_by_year(year)
-        curriculum = mdl.curriculum.find_by_academic_year(academic_year)
-        if curriculum is None:
-            # add cv empty cv's for the year if it's needed
-            curriculum = mdl.curriculum.Curriculum()
-            curriculum.person = applicant
-            curriculum.academic_year = academic_year
-        curricula.append(curriculum)
-        year += 1
+    if year:
+        while year < current_academic_year:
+            academic_year = mdl.academic_year.find_by_year(year)
+            curriculum = mdl.curriculum.find_by_academic_year(academic_year)
+            if curriculum is None:
+                # add cv empty cv's for the year if it's needed
+                curriculum = mdl.curriculum.Curriculum()
+                curriculum.person = applicant
+                curriculum.academic_year = academic_year
+            curricula.append(curriculum)
+            year += 1
 
     return render(request, "curriculum.html", {"curricula": curricula,
                                                "local_universities_french": local_universities_french,
@@ -135,7 +128,11 @@ def save(request):
                                                "current_academic_year": mdl.academic_year.current_academic_year()})
 
 
-def update(request):
+def update(request, application_id=None):
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
+    else:
+        application = mdl.application.init_application(request.user)
     curricula = []
     message = None
     applicant = mdl.applicant.find_by_user(request.user)
@@ -145,11 +142,10 @@ def update(request):
     year_secondary = None
     year = current_academic_year - 5
     if secondary_education is None:
-        applications = mdl.application.find_by_user(request.user)
-        return render(request, "admission_home.html",
-                      {'applications': applications, 'message_warning': _('msg_warning_curriculum')})
-    if secondary_education and secondary_education.diploma is True:
-        year_secondary = secondary_education.academic_year.year
+        pass
+    else:
+        if secondary_education and secondary_education.diploma is True and secondary_education.academic_year:
+            year_secondary = secondary_education.academic_year.year
 
     if admission:
         if secondary_education and secondary_education.diploma is True:
@@ -175,12 +171,12 @@ def update(request):
 
     local_universities_dutch = mdl_reference.education_institution \
         .find_by_institution_type_national_community('UNIVERSITY', 'DUTCH', False)
-
     if message:
         return common.home(request)
     else:
         universities_cities, universities = populate_dropdown_list(curricula)
-        return render(request, "curriculum.html",
+        tab_status = tabs.init(request)
+        return render(request, "admission_home.html",
                       {"curricula": curricula,
                        "local_universities_french": local_universities_french,
                        "local_universities_dutch": local_universities_dutch,
@@ -191,7 +187,26 @@ def update(request):
                        "universities_cities": universities_cities,
                        "universities": universities,
                        "languages": mdl_reference.language.find_languages(),
-                       "current_academic_year": mdl.academic_year.current_academic_year()})
+                       "current_academic_year": mdl.academic_year.current_academic_year(),
+                       "tab_active": 3,
+                       "application": application,
+                       "validated_profil": demande_validation.validate_profil(applicant),
+                       "validated_diploma": demande_validation.validate_diploma(application),
+                       "validated_curriculum": demande_validation.validate_curriculum(application),
+                       "validated_application": demande_validation.validate_application(application),
+                       "validated_accounting": demande_validation.validate_accounting(),
+                       "validated_sociological": demande_validation.validate_sociological(),
+                       "validated_attachments": demande_validation.validate_attachments(),
+                       "validated_submission": demande_validation.validate_submission(),
+                       'tab_profile': tab_status['tab_profile'],
+                       'tab_applications': tab_status['tab_applications'],
+                       'tab_diploma': tab_status['tab_diploma'],
+                       'tab_curriculum': tab_status['tab_curriculum'],
+                       'tab_accounting': tab_status['tab_accounting'],
+                       'tab_sociological': tab_status['tab_sociological'],
+                       'tab_attachments': tab_status['tab_attachments'],
+                       'tab_submission': tab_status['tab_submission'],
+                       'applications': mdl.application.find_by_user(request.user)})
 
 
 def validate_fields_form(request, duplicate_year_origin):

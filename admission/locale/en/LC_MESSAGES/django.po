@@ -1037,3 +1037,124 @@ msgstr "Veuillez joindre l'attestation officelle pour bénéficier de cette réd
 
 msgid "title_no_debts"
 msgstr "Certificate stating the absence of debts"
+
+msgid "question"
+msgstr "Question"
+
+msgid "answer"
+msgstr "Answer"
+
+msgid "applications_list"
+msgstr "Yours applications"
+
+msgid "new_demand"
+msgstr "Encode a new application demand"
+
+msgid "tab_diplomas"
+msgstr "Diplomas and certificates"
+
+msgid "profile"
+msgstr "Profile"
+
+msgid "demandes"
+msgstr "Demandes"
+
+msgid "accounting"
+msgstr "Accounting"
+
+msgid "sociological_survey"
+msgstr "Sociological survey"
+
+msgid "demande"
+msgstr "Demande"
+
+msgid "submission"
+msgstr "Submission"
+
+msgid "reference_number"
+msgstr "Reference number"
+
+msgid "creation"
+msgstr "Creation"
+
+msgid "requested_study"
+msgstr "Requested study"
+
+msgid "residence_country"
+msgstr "Residence country"
+
+msgid "brother_sister_number"
+msgstr "Number of brothers and sisters?"
+
+msgid "father"
+msgstr "Father"
+
+msgid "mother"
+msgstr "Mother"
+
+msgid "student"
+msgstr "Student"
+
+msgid "conjoint"
+msgstr "Conjoint"
+
+msgid "grandfather_profession"
+msgstr "Grandfather (profession)"
+
+msgid "deceased_female"
+msgstr "Deceased"
+
+msgid "deceased_male"
+msgstr "Deceased"
+
+msgid "paternal"
+msgstr "Paternal"
+
+msgid "maternal"
+msgstr "Maternal"
+
+msgid "profession"
+msgstr "Profession"
+
+msgid "study"
+msgstr "Study"
+
+msgid "professional_activity"
+msgstr "Professional activity"
+
+msgid "attachments"
+msgstr "Attachments"
+
+msgid "further_information_required"
+msgstr "Further information required"
+
+msgid "for_curriculum"
+msgstr "For curriculum"
+
+msgid "to_submit"
+msgstr "To submit"
+
+msgid "submitted"
+msgstr "Submitted"
+
+msgid "canceled"
+msgstr "Canceled"
+
+msgid "confirmed"
+msgstr "Confirmed"
+
+msgid "offer_choice"
+msgstr "Offer choice"
+
+msgid "change_offer"
+msgstr "Change offer choice"
+
+msgid "mandatory_field_next_step"
+msgstr "Mandatory field before going to the next step"
+
+msgid "prerequisites"
+msgstr "Prerequisites"
+
+msgid "back_demandes_list"
+msgstr "Back to demandes list"
+

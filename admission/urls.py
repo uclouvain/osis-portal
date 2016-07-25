@@ -44,8 +44,8 @@ urlpatterns = [
     url(r'^admission/application/([0-9]+)/$', application.application_update, name='application_update'),
     url(r'^admission/application/diploma/save/$', secondary_education.diploma_save, name='diploma'),
     url(r'^admission/curriculum/save/$', curriculum.save, name='curriculum'),
-    url(r'^admission/curriculum/update/$', curriculum.update, name='curriculum_update'),
-    url(r'^admission/application/diploma/update/$', secondary_education.diploma_update, name='diploma_update'),
+    url(r'^admission/curriculum/update/(?:/([0-9]+))?/$', curriculum.update, name='curriculum_update'),
+    url(r'^admission/diploma/update/(?:/([0-9]+))?/$', secondary_education.diploma_update, name='diploma_update'),
     url(r'^admission/offer/$', offer.offer_selection, name='offer_selection'),
     url(r'^admission/offer/save/$', application.save_application_offer, name='save_offer_selection'),
     url(r'^admission/offer/application/([0-9]+)/$', offer.selection_offer, name='selection_offer'),
@@ -63,7 +63,7 @@ urlpatterns = [
 
     url(r'^options/$', option.find_by_offer),
 
-    url(r'^profile/$', common.profile, name='profile'),
+    url(r'^profile/(?:/([0-9]+))?/$', common.profile, name='profile'),
     url(r'^profile_confirmed/$', application.profile_confirmed, name='profile_confirmed'),
 
     url(r'^questions/$', question.find_by_offer),
@@ -84,8 +84,18 @@ urlpatterns = [
     url(r'^institution_postal_codes/$', education_institution.find_postal_codes_by_type),
     url(r'^institutions/$', education_institution.find_institution_by_city_postal_code_type),
 
-    url(r'^admission/application/accounting/$', accounting.accounting, name='accounting'),
-    url(r'^admission/application/accounting/update/$', accounting.accounting_update, name='accounting_update'),
+    url(r'^application/accounting/(?:/([0-9]+))?/$', accounting.accounting, name='accounting'),
+    url(r'^admission/accounting/update/(?:/([0-9]+))?/$', accounting.accounting_update, name='accounting_update'),
+    url(r'^applications/(?:/([0-9]+))?/$', application.applications, name='applications'),
+    url(r'^sociological/(?:/([0-9]+))?/$', sociological.update, name='sociological_survey'),
+    url(r'^attachments/(?:/([0-9]+))?/$', attachments.update, name='attachments'),
+    url(r'^admission/demande/(?:/([0-9]+))?/$', offer.demande_update, name='demande_update'),
+    url(r'^admission/application/submission/(?:/([0-9]+))?/$', application.submission, name='submission'),
+    url(r'^admission/application/delete/([0-9]+)/$', application.application_delete, name='application_delete'),
+    url(r'^admission/offer_change/([0-9]+)/$', application.change_application_offer, name='change_application_offer'),
+
+
+
 
     url(r'^upload/$', upload_file.upload_file, name='new_file'),
     url(r'^upload/download/(?P<pk>[0-9]+)$', upload_file.download, name='download'),
