@@ -1,0 +1,167 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+
+{% block content %}
+<div class="page-header hidden-print">
+    <h2>{% trans 'performance' %}</h2>
+</div>
+
+{% include "template_messages.html" %}
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        {% if not results %}
+        <p>{% trans 'no_results' %}</p>
+        {% else %}
+            <!-- Student information's-->
+        <div class="row">
+            <div class="col-md-3">
+                <p><b>{% trans 'last_name' %}, {% trans 'first_name' %}:</b></p>
+            </div>
+            <div class="col-md-9">
+                <p id="student_name"></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <p><b>{% trans 'academic_year' %}:</b></p>
+            </div>
+            <div class="col-md-9">
+                <p id="academic_year"></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <p><b>{% trans 'program' %}:</b></p>
+            </div>
+            <div class="col-md-9">
+                <p id="program_title"></p>
+            </div>
+        </div>
+        <hr>
+        <div class="row container-fluid">
+            <!-- Student sessions summary-->
+            <div class="pull-right">
+                <table class="table table-striped">
+                    <tr>
+                        <th></th>
+                        <th>{% trans 'ects' %}</th>
+                        <th>{% trans 'jan' %}</th>
+                        <th>{% trans 'june' %}</th>
+                        <th>{% trans 'sept' %}</th>
+                    </tr>
+                    <tr id="summary_ects">
+                        <td><strong>{% trans 'total_ects_inscription' %}</strong></td>
+                    </tr>
+                    <tr id="summary_mean">
+                        <td><strong>{% trans 'mean' %} *</strong></td>
+                    </tr>
+                    <tr id="summary_mention">
+                        <td><strong>{% trans 'mention' %}</strong></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <table class="table table-striped table-hover table-bordered" id="table_courses">
+            <tr>
+                <th>{% trans 'course' %}</th>
+                <th>{% trans 'title' %}</th>
+                <th>{% trans 'ects' %}</th>
+                <th>{% trans 'inscr' %}</th>
+                <th>{% trans 'jan' %} *</th>
+                <th>{% trans 'june' %} *</th>
+                <th>{% trans 'sept' %} *</th>
+                <th>{% trans 'credits' %}</th>
+            </tr>
+        </table>
+
+        <small class="text-warning pull-right">* {% trans 'text_mean_exprimed_for_20' %}</small>
+
+        <!-- Text explaining the mention attributed for the session. -->
+        <div class="row center-block">
+          <p class="bg-info" id="paragraph_mention_explanation"></p>
+        </div>
+
+        <!-- Legend explaining letters signification -->
+        <div class="row">
+            <div class="col-md-6">
+                <p><b>{% trans 'legend'%}</b></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p>{% trans 'explanation_P'%}</p>
+            </div>
+            <div class="col-md-6">
+                <p>{% trans 'explanation_T'%}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p>{% trans 'explanation_I'%}</p>
+            </div>
+            <div class="col-md-6">
+                <p>{% trans 'explanation_TV'%}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p>{% trans 'explanation_Y'%}</p>
+            </div>
+            <div class="col-md-6">
+                <p>{% trans 'explanation_W'%}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p>{% trans 'explanation_RJ'%}</p>
+            </div>
+            <div class="col-md-6">
+                <p>{% trans 'explanation_EPM'%}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p>{% trans 'explanation_B'%}</p>
+            </div>
+        </div>
+
+        <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+        <script src="{% static 'js/performance_result.js' %}"></script>
+        <script type="text/javascript">
+          $( document ).ready(function() {
+            var studentJson = {{ results|safe }};
+            fillPage(studentJson);
+          });
+        </script>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

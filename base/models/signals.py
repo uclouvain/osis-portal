@@ -35,30 +35,23 @@ person_created = Signal(providing_args=['person'])
 try:
     from osis_louvain_auth.authentication.shibboleth_auth import user_updated_signal, user_created_signal
 
-    @receiver([user_updated_signal, user_created_signal])
-    def update_person_from_user(sender, **kwargs):
+    @receiver(user_created_signal)
+    def update_person_after_user_creation(sender, **kwargs):
         user = kwargs.get('user')
         user_infos = kwargs.get('user_infos')
         person = find_by_global_id(user_infos.get('USER_FGS'))
-        if not person:
-            person = find_by_user(user)
-        if not person:
-            person = Person(user=user,
-                            global_id=user_infos.get('USER_FGS'),
-                            first_name=user_infos.get('USER_FIRST_NAME'),
-                            last_name=user_infos.get('USER_LAST_NAME'),
-                            email=user_infos.get('USER_EMAIL'))
-            person.save()
-            __add_person_to_group(person)
-            person_created.send(sender=None, person=person)
-        else:
-            person.user = user
-            person.first_name = user.first_name
-            person.last_name = user.last_name
-            person.email = user.email
-            person.global_id = user_infos.get('USER_FGS')
-            person.save()
+        person = __create_update_person(user, person, user_infos)
+        __add_person_to_group(person)
         return person
+
+    @receiver(user_updated_signal)
+    def update_person_after_user_update(sender, **kwargs):
+        user = kwargs.get('user')
+        user_infos = kwargs.get('user_infos')
+        person = find_by_global_id(user_infos.get('USER_FGS'))
+        person = __create_update_person(user, person, user_infos)
+        return person
+
 
 except Exception:
     pass
@@ -68,14 +61,35 @@ except Exception:
 def add_to_students_group(sender, instance, **kwargs):
     if kwargs.get('created', True) and instance.person.user:
         students_group = Group.objects.get(name='students')
-        instance.person.user.groups.add(students_group)
-
+        if instance.person.user:
+            instance.person.user.groups.add(students_group)
 
 
 def __add_person_to_group(person):
     # Check Student
     if student.find_by_person(person):
         student_group = Group.objects.get(name='students')
-        person.user.groups.add(student_group)
+        if not person.user.groups.filter(name='students').exists():
+            person.user.groups.add(student_group)
     # TODO Check Tutor
 
+
+def __create_update_person(user, person, user_infos):
+    if not person:
+        person = find_by_user(user)
+    if not person:
+        person = Person(user=user,
+                        global_id=user_infos.get('USER_FGS'),
+                        first_name=user_infos.get('USER_FIRST_NAME'),
+                        last_name=user_infos.get('USER_LAST_NAME'),
+                        email=user_infos.get('USER_EMAIL'))
+        person.save()
+        person_created.send(sender=None, person=person)
+    else:
+        person.user = user
+        person.first_name = user.first_name
+        person.last_name = user.last_name
+        person.email = user.email
+        person.global_id = user_infos.get('USER_FGS')
+        person.save()
+    return person

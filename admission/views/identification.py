@@ -123,7 +123,7 @@ def new_user(request):
         extra_context['email_new']=form_new['email_new'].value()
         extra_context['email_new_confirm']=form_new['email_new_confirm'].value()
         extra_context['password_new']=form_new['password_new'].value()
-        return login(request, extra_context=extra_context)
+        return login(request, extra_context=extra_context,template_name='registration/admission_login.html')
 
 
 def activation_mail(request, user_id):
