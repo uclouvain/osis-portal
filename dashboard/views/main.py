@@ -40,11 +40,13 @@ def home(request):
 
 
 @login_required
+@permission_required('base.is_tutor', raise_exception=True)
 def score_encoding(request):
     return layout.render(request, "score_encoding.html", {})
 
 
 @login_required
+@permission_required('base.is_tutor', raise_exception=True)
 def download_papersheet(request):
     print("Inside dowload_papersheet()")
     person = mdl_base.person.find_by_user(request.user)
