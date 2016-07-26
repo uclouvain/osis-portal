@@ -73,5 +73,5 @@ class SecondaryEducation(models.Model):
     international_equivalence = models.CharField(max_length=20, choices=EQUIVALENCE_TYPE, blank=True, null=True)
 
 
-def find_by_person(a_person):
-    return SecondaryEducation.objects.filter(person=a_person).first()
+def find_by_person(an_applicant):
+    return SecondaryEducation.objects.filter(person=an_applicant).first()

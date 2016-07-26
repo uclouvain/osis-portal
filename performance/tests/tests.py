@@ -33,7 +33,7 @@ class CouchBasePerformanceTest(TestCase):
 
     def test_document_creation(self):
         document = {
-            "global_id": "64641200",
+            "registration_id": "64641200",
             "first_name": "Eddy",
             "last_name": "Ndizera",
             "academic_years": [
@@ -101,7 +101,7 @@ class CouchBasePerformanceTest(TestCase):
         }
 
         document_id = "64641200-2015-SINF2MSG"
-        student_performance.insert_or_update_document(document_id, document)
+        student_performance.save_document(document_id, document)
 
-        persisted_document = student_performance.get_document(document_id)
+        persisted_document = student_performance.fetch_document(document_id)
         self.assertEqual(document, persisted_document.value, "The document is different from the persisted document.")

@@ -115,25 +115,25 @@ class PdfTest(TestCase):
 class SendMailTest(TestCase):
 
     def setUp(self):
-        # Every test needs access to the request factory.
         self.factory = RequestFactory()
         self.user = User.objects.create_user(
             username='jacob', email='jacob@gmail.com', password='top_secret')
         applicant.Applicant.objects.create(user=self.user, gender="MALE")
         call_command("loaddata", "message_templates.json", verbosity=0)
 
-
     def test_send_mail_activation(self):
-        # Create an instance of a GET request.
-        request = self.factory.get('application/accounting/')
-        # Recall that middleware are not supported. You can simulate a
-        # logged-in user by setting request.user manually.
 
+        request = self.factory.get('application/accounting/')
         request.user = self.user
-        #request.user = AnonymousUser()
-        activation_code="uuu"
+        activation_code = "uuu"
         an_applicant = applicant.Applicant.objects.get(user=request.user)
 
-        self.assertIsNotNone(send_mail.send_mail_activation(request, activation_code, an_applicant, 'account_activation_bidon'))
-        self.assertIsNone(send_mail.send_mail_activation(request, activation_code, an_applicant, 'account_activation'))
+        self.assertIsNotNone(send_mail.send_mail_activation(request,
+                                                            activation_code,
+                                                            an_applicant,
+                                                            'account_activation_bidon'))
+        self.assertIsNone(send_mail.send_mail_activation(request,
+                                                         activation_code,
+                                                         an_applicant,
+                                                         'account_activation'))
 

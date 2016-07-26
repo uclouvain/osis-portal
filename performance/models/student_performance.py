@@ -23,12 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from couchbase.bucket import Bucket, NotFoundError
+from couchbase.bucket import Bucket, NotFoundError, N1QLQuery
 from couchbase.exceptions import CouchbaseError, BucketNotFoundError, AuthError
+
 from django.conf import settings
+import re
+
+# Helper functions to interact (connection, fetch, upsert) with the CouchBase bucket containing
+# student academic results.
+
+
+bucket_name = "performance"
 
 
 def connect_db():
+    """
+    Connect to the bucket "bucket_name" located on the server at address "COUCHBASE_CONNECTION_STRING"
+    :return: the bucket
+    """
     bucket_name = "performance"
     try:
         if settings.COUCHBASE_PASSWORD:
@@ -40,18 +52,23 @@ def connect_db():
         return None
 
 cb = connect_db()
+# cb.bucket_manager().create_n1ql_primary_index(ignore_exists=True)
+# cb.bucket_manager().create_n1ql_index('index_global_id', fields=['global_id'])
 
-
-def get_document(global_id):
+def fetch_document(document_id):
+    """
+    Fetch the document having id (key) "document_id" from the bucket "cb".
+    :param document_id: The key of the document
+    :return: the document if exists, None if not.
+    """
     if not cb:
         return None
     try:
-        return cb.get(global_id)
+        return cb.get(document_id)
     except NotFoundError:
         return None
 
-
-def insert_or_update_document(key, data):
+def save_document(key, data):
     """
     Insert a new document if the key passed in parameter doesn't exist in CouchDB.
     :param key: The key of the document
@@ -61,5 +78,52 @@ def insert_or_update_document(key, data):
         return None
     try:
         cb.set(key, data)
-    except CouchbaseError as err:
-        print('CouchBase error:', err)
+    except CouchbaseError:
+        raise
+
+def select_where_registration_id_is(registration_id):
+    """
+    Query the bucket for all documents where the global_id is equal to "global_id".
+    :param global_id: a string
+    :return: result of query
+    """
+    query_string = "SELECT * FROM " + bucket_name + " WHERE registration_id=$1"
+    query = N1QLQuery(query_string, registration_id)
+    return cb.n1ql_query(query)
+
+def key_from_json(json):
+    """
+    Return a key for the json
+    :param json: a json object
+    :return: a string key
+    """
+    registration_id = json["registration_id"]
+    academic_year = json["academic_years"][0]["anac"]
+    program_acronym = format_acronym(json["academic_years"][0]["programs"][0]["acronym"])
+    key = "" + registration_id + "_" + academic_year + "_" + program_acronym
+    return key
+
+def format_acronym(program_acronym):
+    """
+    Format the program acronym by removing all non alphanumeric characters and
+    by lowering all characters case.
+    :param program_acronym: a string
+    :return: a formatted program acronym
+    """
+    lower_case_program_acronym = program_acronym.lower()
+
+    return alpha_numeric_only(lower_case_program_acronym)
+
+def alpha_numeric_only(s):
+    """
+    Return the string obtained by removing all non alphanumeric characters
+    from the stirng "s".
+    Ex: SINF2MS\G -> SINFMSG
+        alpha_numeric -> alphanumeric
+    :param s: a string
+    :return: a alphanumeric only version of s
+    """
+    # Matches all non alphanumeric strings
+    pattern = re.compile('[\W_]+')
+
+    return pattern.sub('', s)

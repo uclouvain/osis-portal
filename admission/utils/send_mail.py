@@ -97,16 +97,19 @@ def send_mail_activation(request, activation_code, applicant, template_reference
 
 
 def new_password(request, activation_code, email):
-    activation_link = request.scheme + "://" + request.get_host() + "/admission/admission/new_password_form/"+ activation_code
+    activation_link = request.scheme \
+                      + "://" + request.get_host() \
+                      + "/admission/admission/new_password_form/" \
+                      + activation_code
     subject = 'UCL - Votre code d\'activation pour la modification du mot de passe de votre compte.'
     html_message = ''.join([
         EMAIL_HEADER,
         str('<p>Bonjour, </p>'),
         str('<br><br>'),
-        str('Pour modifier votre mot de passe merci de cliquer sur le lien suivant :<br><br>' ),
-        str('<a href="%s">%s</a>') % (activation_link,activation_link),
+        str('Pour modifier votre mot de passe merci de cliquer sur le lien suivant :<br><br>'),
+        str('<a href="%s">%s</a>') % (activation_link, activation_link),
         str('<br><br>'),
-        str('Le service des inscription de l\'UCL<br><br>' ),
+        str('Le service des inscription de l\'UCL<br><br>'),
         str('<a href=\'http://www.uclouvain.be/inscriptionenligne\'>http://www.uclouvain.be/inscriptionenligne</a>'),
         EMAIL_SIGNATURE,
         EMAIL_FOOTER
@@ -117,11 +120,15 @@ def new_password(request, activation_code, email):
         str('Pour modifier votre mot de passe merci de cliquer sur le lien suivant :\n\n'),
         str(activation_link),
         str('\n'),
-        str('Le service des inscription de l\'UCL\n\n' ),
+        str('Le service des inscription de l\'UCL\n\n'),
         str('http://www.uclouvain.be/inscriptionenligne')
     ])
 
-    send_mail(subject=subject,message=message,recipient_list=[email],html_message=html_message,from_email=DEFAULT_FROM_EMAIL)
+    send_mail(subject=subject,
+              message=message,
+              recipient_list=[email],
+              html_message=html_message,
+              from_email=DEFAULT_FROM_EMAIL)
 
 EMAIL_HEADER = """
 <html>
@@ -168,13 +175,13 @@ def map_persons_by_languages(persons):
             lang_dict[settings.LANGUAGE_CODE].append(person)
     return lang_dict
 
-def send(persons, reference=None, **kwargs):
+
+def send(persons, **kwargs):
     """
     Send the message :
     - by mail if person.mail exists
     Save the message in message_history table
     :param persons List of the persons to send the message
-    :param reference business reference of the message
     :param kwargs List of arguments used by the django send_mail method.
     The recipient_list argument is taken form the persons list.
     """

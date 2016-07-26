@@ -1,4 +1,3 @@
-{% extends "admission_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 {% load message %}
@@ -27,7 +26,6 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block content %}
 <br>
 
 <form method="post" action="{% url 'accounting_update'%}" id="form_accounting">
@@ -45,10 +43,20 @@
     <input type="hidden"
            value="{{application.study_grant}}"
            id="hdn_study_grant"/>
-    <button type="submit" id="bt_save_up" class="btn btn-default"
-        title="{%trans 'save'%}"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-    {%trans 'save'%}</button>
-    <br>
+    <div>
+        <a id="lnk_previous_step_up"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'curriculum_update' application.id%}{%else%}{% url 'curriculum_update'%}{%endif%}"
+           onclick="save('form_accounting');"
+           title="{% trans 'curriculum'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%} : {%trans 'curriculum'%}</a>
+        <a id="lnk_next_step_up"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'sociological_survey' application.id %}{%else%}{% url 'sociological_survey' %}{%endif%}"
+           onclick="save('form_accounting');"
+           title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            {%trans 'next_step'%} : {%trans 'sociological_survey'%}</a>
+    </div>
     <br>
     {%if form.errors%}
         <br>
@@ -310,8 +318,16 @@
         </div>
     </div>
 
-    <button type="submit" id="bt_save_down"class="btn btn-default"
-        title="{%trans 'save'%}"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-    {%trans 'save'%}</button>
+    <a id="lnk_previous_step"
+       class="btn btn-default"
+       href="{%if application.id%}{% url 'curriculum_update' application.id%}{%else%}{% url 'curriculum_update'%}{{%endif%}"
+       onclick="save('form_accounting');"
+       title="{% trans 'curriculum'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+        {%trans 'previous_step'%} : {%trans 'curriculum'%}</a>
+    <a id="lnk_next_step"
+       class="btn btn-default"
+       href="{%if application.id%}{% url 'sociological_survey' application.id %}{%else%}{% url 'sociological_survey' %}{%endif%}"
+       onclick="save('form_accounting');"
+       title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+        {%trans 'next_step'%} : {%trans 'sociological_survey'%}</a>
 </form>
-{% endblock %}
