@@ -25,7 +25,7 @@
 ##############################################################################
 from django.conf.urls import url
 from admission.views import application, common, identification, offer, level, question, option, country, curriculum, \
-    education_institution, language, domain, secondary_education, accounting, upload_file
+    education_institution, language, domain, secondary_education, accounting, upload_file, sociological, attachments
 
 
 urlpatterns = [

@@ -28,17 +28,18 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.http import *
 from osis_common.forms import UploadDocumentFileForm
 from osis_common import models as mdl
+from admission import settings as adm_settings
 
 
 @login_required
 def upload_file(request):
-    documents = mdl.document_file.search(document_type="admission", user=request.user)
+    documents = mdl.document_file.search(document_type=adm_settings.DOCUMENT_TYPE, user=request.user)
     if request.method == "POST":
         form = UploadDocumentFileForm(request.POST, request.FILES)
         if form.is_valid():
             file = form.save()
             file.size = file.file.size
-            file.file_name = request.FILES['file'].name
+            file.file_name = ''.join([adm_settings.DOCUMENT_SUBFOLDER,request.FILES['file'].name])
             file_type = form.cleaned_data["file"]
             content_type = file_type.content_type
             file.content_type = content_type
