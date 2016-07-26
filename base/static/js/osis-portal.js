@@ -1277,6 +1277,7 @@ function reset_chb(elt_name){
 }
 
 function display_dynamic_form(offer_year_id){
+    alert("test")
     set_pnl_questions_empty();
 
     $.ajax({
