@@ -102,7 +102,7 @@ def new_user(request):
         applicant.user = user
         applicant.save()
         # send an activation email
-        send_mail.send_mail_activation(request, str(applicant.activation_code), form_new['email_new'].value())
+        send_mail.send_mail_activation(request, str(applicant.activation_code), applicant)
         user_id = user.id
         return HttpResponseRedirect(reverse('account_confirm', args=(user_id,)))
     else:
@@ -137,7 +137,7 @@ def activation_mail(request, user_id):
         user = User.objects.get(pk=user_id)
         applicant = mdl.applicant.find_by_user(user)
         if applicant:
-            send_mail.send_mail_activation(request, str(applicant.activation_code), user.email)
+            send_mail.send_mail_activation(request, str(applicant.activation_code), applicant)
             return HttpResponseRedirect(reverse('admission'))
         else:
             return HttpResponseRedirect(reverse('admission'))

@@ -106,3 +106,21 @@ class PdfTest(TestCase):
         image_file = ASSETS_PATH + "gif_2625_2154.GIF"
         self.assertIsNone(pdf_utils.resize_image(image_file))
 
+
+class SendMailTest(TestCase):
+
+    def setUp(self):
+        # Every test needs access to the request factory.
+        self.factory = RequestFactory()
+        self.user = User.objects.create_user(
+            username='jacob', email='jacob@gmail.com', password='top_secret')
+
+    def test_accounting(self):
+        # Create an instance of a GET request.
+        # Recall that middleware are not supported. You can simulate a
+        # logged-in user by setting request.user manually.
+        request.user = self.user
+        #request.user = AnonymousUser()
+        activation_code="uuu"
+
+        message = send_mail_activation(request,activation_code, applicant)

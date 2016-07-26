@@ -1037,3 +1037,6 @@ msgstr "Veuillez joindre l'attestation officelle pour bénéficier de cette réd
 
 msgid "title_no_debts"
 msgstr "Certificate stating the absence of debts"
+
+msgid "template_error"
+msgstr "No message was sent : the message template {} does not exist."
