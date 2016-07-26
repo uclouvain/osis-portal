@@ -39,23 +39,34 @@ from django.utils import translation, timezone
 from html import unescape
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext as _
+from admission import models as mdl
 
 
-def send_mail_activation(request,activation_code, applicant):
+def send_mail_activation(request, activation_code, applicant, template_reference):
+
     sent_error_message = None
-    template = message_template_mdl.find_by_reference('account_activation_txt')
-    txt_message_templates = {template.language: template}
-    template = message_template_mdl.find_by_reference('account_activation_html')
-    html_message_templates = {template.language: template}
+    template = message_template_mdl.find_by_reference(template_reference + '_txt')
+    txt_message_templates = None
+    html_message_templates = None
+    if template:
+        txt_message_templates = {template.language: template}
+
+    template = message_template_mdl.find_by_reference(template_reference + '_html')
+    if template:
+        html_message_templates = {template.language: template}
 
     if not html_message_templates:
-        sent_error_message = _('template_error').format('account_activation_html')
+        sent_error_message = _('template_error').format(template_reference)
     else:
-
+        activation_link = request.scheme + "://" \
+                          + request.get_host() \
+                          + "/admission/admission/user/" \
+                          + activation_code \
+                          + "/activation"
         data = {
-            'title': 'madame',
-            'academic_year': '2015-2016',
-            'activation_link': 'llien',
+            'title': title(applicant.gender),
+            'academic_year': mdl.academic_year.current_academic_year(),
+            'activation_link': activation_link,
             'signature': render_to_string('email/html_email_signature.html', {
                 'logo_mail_signature_url': LOGO_EMAIL_SIGNATURE_URL,
                 'logo_osis_url': LOGO_OSIS_URL})
@@ -83,44 +94,6 @@ def send_mail_activation(request,activation_code, applicant):
                          html_message=html_message,
                          from_email=DEFAULT_FROM_EMAIL)
     return sent_error_message
-
-
-def send_mail_activation_old(request, activation_code, email):
-    """
-    Send an email to user after  subscription to osis-portal.  Email needed for the subscription activation
-    :param request:
-    :param activation_code:
-    :param email:
-    """
-    activation_link = request.scheme + "://" + request.get_host() + "/admission/admission/user/" +activation_code+ "/activation"
-
-    subject = 'UCL - Votre code d\'activation de compte.'
-    html_message = ''.join([
-        EMAIL_HEADER,
-        str('<p>Bonjour, </p>'),
-        str('<br><br>'),
-        str('<p>Vous venez d\'introduire une demande de création d\'un compte pour accéder à la demande d\'inscription '
-            'en ligne 2015-2016 de l\'Université catholique de Louvain, ce dont nous vous remercions </p><br>'),
-        str('Pour activer ce compte, veuillez cliquer sur le lien suivant :<br><br>' ),
-        str('<a href="%s">%s</a>') % (activation_link,activation_link),
-        str('<br><br>' ),
-        str('Le service des inscription de l\'UCL<br><br>' ),
-        str('<a href=\'http://www.uclouvain.be/inscriptionenligne\'>http://www.uclouvain.be/inscriptionenligne</a>'),
-        EMAIL_SIGNATURE,
-        EMAIL_FOOTER
-    ])
-    message = ''.join([
-        str('Bonjour, \n'),
-        str('Vous venez d\'introduire une demande de création d\'un compte pour accéder à la demande d\'inscription '
-            'en ligne 2015-2016 de l\'Université catholique de Louvain, ce dont nous vous remercions .\n\n'),
-        str('Pour activer ce compte, veuillez cliquer sur le lien suivant :\n\n'),
-        str(activation_link),
-        str('\n\n'),
-        str('Le service des inscription de l\'UCL\n\n' ),
-        str('http://www.uclouvain.be/inscriptionenligne')
-    ])
-
-    send_mail(subject=subject,message=message,recipient_list=[email],html_message=html_message,from_email=DEFAULT_FROM_EMAIL)
 
 
 def new_password(request, activation_code, email):
@@ -212,3 +185,11 @@ def send(persons, reference=None, **kwargs):
                 recipient_list.append(person.user.email)
 
         send_mail(recipient_list=recipient_list, **kwargs)
+
+
+def title(gender):
+    if gender == "MALE":
+        return _('mister')
+    if gender == "FEMALE":
+        return _('miss')
+    return _('miss') + ", " + _('mister')

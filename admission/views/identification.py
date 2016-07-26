@@ -40,6 +40,8 @@ from admission.forms import NewAccountForm, NewPasswordForm, AccessAccountForm
 from admission.utils import send_mail
 from reference import models as reference_mdl
 
+TEMPLATE_MSG_ACTIVATION ="account_activation"
+
 
 def home_error(request, message, form):
     form_new = NewAccountForm()
@@ -102,7 +104,7 @@ def new_user(request):
         applicant.user = user
         applicant.save()
         # send an activation email
-        send_mail.send_mail_activation(request, str(applicant.activation_code), applicant)
+        send_mail.send_mail_activation(request, str(applicant.activation_code), applicant, TEMPLATE_MSG_ACTIVATION)
         user_id = user.id
         return HttpResponseRedirect(reverse('account_confirm', args=(user_id,)))
     else:
@@ -137,7 +139,7 @@ def activation_mail(request, user_id):
         user = User.objects.get(pk=user_id)
         applicant = mdl.applicant.find_by_user(user)
         if applicant:
-            send_mail.send_mail_activation(request, str(applicant.activation_code), applicant)
+            send_mail.send_mail_activation(request, str(applicant.activation_code), applicant, TEMPLATE_MSG_ACTIVATION)
             return HttpResponseRedirect(reverse('admission'))
         else:
             return HttpResponseRedirect(reverse('admission'))

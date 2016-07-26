@@ -1049,3 +1049,9 @@ msgstr "Attestation stipulant l'absence de dettes"
 
 msgid "template_error"
 msgstr "Aucun message n'a été envoyé : le modèle de message {} n'existe pas."
+
+msgid "mister"
+msgstr "Monsieur"
+
+msgid "miss"
+msgstr "Madame"
