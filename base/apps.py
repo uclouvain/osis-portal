@@ -24,10 +24,11 @@
 #
 ##############################################################################
 from django.apps import AppConfig
-
+from frontoffice.queue import callbacks, queue
 
 class BaseConfig(AppConfig):
     name = 'base'
+    queue_name = 'osis_base'
 
     def ready(self):
         try:
@@ -35,3 +36,4 @@ class BaseConfig(AppConfig):
                 update_person_after_user_update, add_to_students_group
         except ImportError:
             pass
+        queue.listen_queue(self.queue_name, callbacks.insert_or_update)

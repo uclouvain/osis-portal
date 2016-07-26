@@ -23,13 +23,45 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models import *
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 from django.contrib import admin
+from base.models import person
 
 
-admin.site.register(person.Person,
-                    person.BasePersonAdmin)
-admin.site.register(student.Student,
-                    student.StudentAdmin)
-admin.site.register(tutor.Tutor,
-                    tutor.TutorAdmin)
+class TutorAdmin(admin.ModelAdmin):
+    list_display = ('person', 'changed')
+    fieldsets = ((None, {'fields': ('person',)}),)
+    raw_id_fields = ('person', )
+    search_fields = ['person__first_name', 'person__last_name']
+
+
+class Tutor(models.Model):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
+    changed = models.DateTimeField(null=True)
+    person = models.OneToOneField('Person')
+
+    def __str__(self):
+        return u"%s" % self.person
+
+
+def find_by_person(a_person):
+    try:
+        tutor = Tutor.objects.get(person=a_person)
+        return tutor
+    except ObjectDoesNotExist:
+        return None
+
+
+def find_by_user(a_user):
+    try:
+        pers = person.find_by_user(a_user)
+        tutor = Tutor.objects.get(person=pers)
+        return tutor
+    except ObjectDoesNotExist:
+        return None
+
+def is_tutor(a_user):
+    if find_by_user(a_user):
+        return True
+    return False
