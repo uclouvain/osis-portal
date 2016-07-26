@@ -60,6 +60,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'localflavor',
     'performance',
+    'dissertation',
 )
 
 MIDDLEWARE_CLASSES = (
