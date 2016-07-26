@@ -160,8 +160,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_ROOT = 'os.path.join(BASE_DIR, "uploads")'
 
-UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
 CONTENT_TYPES = ['application/csv', 'application/doc', 'application/pdf', 'application/xls', 'application/xml',
                  'application/zip', 'image/jpeg', 'image/gif', 'image/png', 'text/html', 'text/plain']
 MAX_UPLOAD_SIZE = 5242880
