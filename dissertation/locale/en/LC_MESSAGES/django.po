@@ -17,11 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "dissertation"
-msgstr "Dissertation"
+msgid "application_dissertation"
+msgstr "Dissertation management"
+
+msgid "manager"
+msgstr "Course manager"
 
 msgid "professor"
 msgstr "Professor"
 
-msgid "manager"
-msgstr "Course manager"
