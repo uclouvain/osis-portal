@@ -40,9 +40,9 @@ from admission.views import demande_validation
 from admission.views import tabs
 from osis_common import models as mdl_osis_common
 
+
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
 def home(request):
-    print('hom')
     applicant = mdl.applicant.find_by_user(request.user)
 
     if applicant and applicant.gender:
@@ -51,10 +51,11 @@ def home(request):
             translation.activate(user_language)
             request.session[translation.LANGUAGE_SESSION_KEY] = user_language
         applications = mdl.application.find_by_user(request.user)
+        person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
+        person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
         if applications:
             applicant_form = ApplicantForm()
-            person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
-            person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
+
             return render(request, "applications.html", {'applications': applications,
                                                          'applicant': applicant,
                                                          'applicant_form': applicant_form,
@@ -63,15 +64,11 @@ def home(request):
                                                          "tab_active": -1})
         else:
             tab_status = tabs.init(request)
-            pictures = mdl_osis_common.document_file.search(None, request.user, 'ID_PICTURE')
-            picture = None
-            if pictures:
-                picture = pictures[0]
-            print(settings.FILES_URL)
             return render(request, "admission_home.html", {'applications': applications,
-                                                           "tab_active": 0,
-                                                           "first": True,
-                                                           "countries": mdl_ref.country.find_all(),
+                                                           'applicant': applicant,
+                                                           'tab_active': 0,
+                                                           'first': True,
+                                                           'countries': mdl_ref.country.find_all(),
                                                            'tab_profile': tab_status['tab_profile'],
                                                            'tab_applications': tab_status['tab_applications'],
                                                            'tab_diploma': tab_status['tab_diploma'],
@@ -81,8 +78,9 @@ def home(request):
                                                            'tab_attachments': tab_status['tab_attachments'],
                                                            'tab_submission': tab_status['tab_submission'],
                                                            'main_status': 0,
-                                                           'FILES_URL': settings.FILES_URL,
-                                                           'picture': picture})
+                                                           'picture': get_picture_id(request.user),
+                                                           'person_legal_address': person_legal_address,
+                                                           'person_contact_address': person_contact_address,})
 
     else:
         return profile(request)
@@ -262,16 +260,15 @@ def profile(request, application_id=None, message_success=None):
                         if applicant_form.is_valid():
                             applicant_assimilation_criteria.save()
 
-        message_success = 'ok'
-        if applicant_form.is_valid():
-            if person_contact_address:
-                person_contact_address.save()
-            person_legal_address.save()
-            applicant.user.save()
-            request.user = applicant.user  # Otherwise it was not refreshed while going back to home page
-            applicant.save()
-        else:
-            message_success = None
+        message_success = None
+
+        if person_contact_address:
+            person_contact_address.save()
+        person_legal_address.save()
+        applicant.user.save()
+        request.user = applicant.user  # Otherwise it was not refreshed while going back to home page
+        applicant.save()
+
     else:
         applicant = mdl.applicant.find_by_user(request.user)
         applicant_form = ApplicantForm()
@@ -303,6 +300,8 @@ def profile(request, application_id=None, message_success=None):
     else:
         tab_status = tabs.init(request)
     # validated are not ready yet, to be achieved in another issue - Leila
+    person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
+    person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
     return render(request, "admission_home.html", {'applicant': applicant,
                                                    'applicant_form': applicant_form,
                                                    'countries': countries,
@@ -335,7 +334,10 @@ def profile(request, application_id=None, message_success=None):
                                                    'tab_sociological': tab_status['tab_sociological'],
                                                    'tab_attachments': tab_status['tab_attachments'],
                                                    'tab_submission': tab_status['tab_submission'],
-                                                   'applications': mdl.application.find_by_user(request.user)})
+                                                   'applications': mdl.application.find_by_user(request.user),
+                                                   'picture': get_picture_id(request.user),
+                                                   'person_legal_address': person_legal_address,
+                                                   'person_contact_address': person_contact_address})
 
 
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
@@ -369,3 +371,13 @@ def validated_extra(secondary_education, application):
             return True
 
     return False
+
+
+def get_picture_id(user):
+    pictures = mdl_osis_common.document_file.search(None, user, 'ID_PICTURE')
+    if pictures:
+        picture = pictures.reverse()[0]
+        if picture.is_image_content():
+            return '/admission' + picture.file.url
+
+    return None

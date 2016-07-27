@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load static %}
 {% load i18n %}
 
 {% comment "License" %}
@@ -72,18 +73,46 @@
                         <font class="error">{{ applicant_form.last_name.errors|striptags }}</font>
                     </div>
                     <div class="col-md-4">
+                        <div class="row">
                         <label>{%trans 'firstname'%} *</label>
                         <input class="form-control" id="txt_first_name" name="first_name"
                                value="{{ applicant.user.first_name  | default_if_none:'' }}" maxlength="255">
                         (ex: Frédéric <span style="text-decoration: line-through;">frederic FREDERIC</span>)
                         <font class="error">{{ applicant_form.first_name.errors|striptags }}</font>
+                        </div>
+                        <div class="row">
+                            <label>{%trans 'middle_name'%}</label>
+                            <input class="form-control" id="txt_middle_name" name="middle_name"
+                                   value="{{ applicant.middle_name  | default_if_none:'' }}" maxlength="50">
+                            (ex: Pierre, Paul, Jacques  <span style="text-decoration: line-through;">pierre, paul,
+                             JACQUES</span>)
+                        </div>
                     </div>
                     <div class="col-md-4">
-                        <label>{%trans 'middle_name'%}</label>
-                        <input class="form-control" id="txt_middle_name" name="middle_name"
-                               value="{{ applicant.middle_name  | default_if_none:'' }}" maxlength="50">
-                        (ex: Pierre, Paul, Jacques  <span style="text-decoration: line-through;">pierre, paul,
-                         JACQUES</span>)
+                        <div class="row">
+                            <div class="col-md-5">
+                            <label>{%trans 'id_picture'%}</label>
+                            <div >
+                                {% if picture %}
+                                    <img src="{% static picture%} " width="100px" height="100px"
+                                         id="lnk_modify_picture"
+                                         style="cursor:pointer;"
+                                         title="{% trans 'change_picture'%}"
+                                    >
+                                {%else%}
+                                    <div style="width:100px;height:100px;">
+                                        <input type="button" value="{% trans 'id_picture_add'%}"
+                                               id="lnk_redirect_picture"
+                                               style="width:100px;height:100px;white-space:normal ;word-wrap:break-word;float: left;"
+                                               class="glyphicon glyphicon-step-backward">
+                                    </div>
+                                {%endif%}
+                            </div>
+                            </div>
+                            <div class="col-md-1">
+
+                                </div>
+                        </div>
                     </div>
                 </div>
                 <br>
@@ -134,11 +163,11 @@
                             <div>
                                 <label class="radio-inline">
                                     <input type="radio" id="rd_gender_male" name="gender" value="MALE"
-                                           {% if person.gender = "MALE" %} checked {% endif %}> Masculin
+                                           {% if applicant.gender = "MALE" %} checked {% endif %}> Masculin
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" id="rd_gender_female" name="gender" value="FEMALE"
-                                           {% if person.gender = "FEMALE" %} checked {% endif %}> Féminin
+                                           {% if applicant.gender = "FEMALE" %} checked {% endif %}> Féminin
                                 </label>
                             </div>
                             <font class="error">{{ applicant_form.gender.errors|striptags }}</font>
@@ -181,31 +210,6 @@
                     </div>
                 </div>
                 <br>
-                <div class="row">
-                    <div class="col-md-5">
-                        <label>{%trans 'picture'%} *</label>
-                        {{picture.file_name}}
-                        {{picture.file.url}}
-                        {{FILES_URL}}
-                        {% if picture %}
-                            <img scr="{{FILES_URL}}{{picture.url}}" width="200px" height="200px">
-                        <img scr="{{FILES_URL}}{{picture.file_name}}" width="200px" height="200px">
-                         <img scr="{{FILES_URL}}{{picture.file_name}}" width="200px" height="200px">
-  <img src="../files/im1.jpg">
-                          <img src="files/im1.jpg">
-                          <img src="/files/im1.jpg">
-                        <img src="/im1.jpg">
-                        <img src="../files/im1.jpg">
-                        <img src=".../files/im1.jpg">
-                        {%endif%}
-
-                    </div>
-                    <div class="col-md-1">
-
-                        <input type="button" value="+"  id="lnk_redirect_picture">
-                    </div>
-                </div>
-
                 <div id="pnl_assimilation_criteria"
                      style="visibility:hidden;display:none;">
                     <br>

@@ -29,19 +29,18 @@ from django.http import *
 from osis_common.forms import UploadDocumentFileForm
 from osis_common import models as mdl
 from admission.views import common
+from admission import settings as adm_settings
 
 
 @login_required
 def upload_file(request):
-    print('upload_file')
-    documents = mdl.document_file.search(document_type="admission", user=request.user)
     description = 'LETTER_MOTIVATION'
-
+    documents = mdl.document_file.search(document_type=adm_settings.DOCUMENT_TYPE, user=request.user)
     if request.method == "POST":
-        print('post')
+
         if request.POST['description']:
             description = request.POST['description']
-        print(description)
+
         form = UploadDocumentFileForm(request.POST, request.FILES)
         if form.is_valid():
             file = form.save()
@@ -51,8 +50,6 @@ def upload_file(request):
             content_type = file_type.content_type
             file.content_type = content_type
             file.save()
-            print('ici')
-
             if description == 'ID_PICTURE':
                 return common.home(request)
             else:
@@ -64,7 +61,6 @@ def upload_file(request):
                                                      'description': description,
                                                      'documents': documents})
     else:
-        print('get')
         form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                                'document_type': "admission",
                                                'user': request.user})
@@ -86,55 +82,32 @@ def download(request, pk):
 
 
 def upload_file_description(request):
-    print('upload_file_description')
-    description = None
+    """
+    To display the scree to upload id_picture
+    :param request:
+    :return:
+    """
+    documents = mdl.document_file.search(document_type=None,
+                                         user=request.user,
+                                         description="ID_PICTURE")
 
-
-    documents = None
-    #
-    # if request.method == "POST":
-    #     print('post')
-    #     description = request.POST['description']
-    #
-    #     form = UploadDocumentFileForm(request.POST, request.FILES)
-    #     if form.is_valid():
-    #         file = form.save()
-    #         file.size = file.file.size
-    #         file.file_name = request.FILES['file'].name
-    #         file_type = form.cleaned_data["file"]
-    #         content_type = file_type.content_type
-    #         file.content_type = content_type
-    #         file.save()
-    #         return redirect('new_file')
-    #     else:
-    #         return render(request, 'new_file.html', {'form': form,
-    #                                                  'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
-    #                                                  'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
-    #                                                  'description': description,
-    #                                                  'documents': documents})
-    # else:
-    #     print('get')
-    # description = request.GET['description']
-    print('kk')
     description = request.POST['description']
-    print(description)
     form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                            'document_type': "admission",
                                            'user': request.user})
     return render(request, 'new_document.html', {'form': form,
-                                             'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
-                                             'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
-                                             'description': description,
-                                             'documents': documents})
+                                                 'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
+                                                 'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
+                                                 'description': description,
+                                                 'documents': documents})
 
 
 @login_required
 def upload_document(request):
-    print('upload_document')
-    documents = mdl.document_file.search(document_type="admission", user=request.user)
+    documents = mdl.document_file.search(document_type=None, user=request.user, description=None)
 
     if request.method == "POST":
-        print('post')
+        description = None
         if request.POST['description']:
             description = request.POST['description']
         form = UploadDocumentFileForm(request.POST, request.FILES)
@@ -156,4 +129,3 @@ def upload_document(request):
                                                          'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
                                                          'description': description,
                                                          'documents': documents})
-

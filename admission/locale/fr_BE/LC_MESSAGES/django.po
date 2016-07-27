@@ -1166,3 +1166,12 @@ msgstr "Pré-requis"
 
 msgid "back_demandes_list"
 msgstr "Retour à la liste des demandes"
+
+msgid "id_picture"
+msgstr "Photo d'identité"
+
+msgid "id_picture_add"
+msgstr "Cliquez ici pour ajouter une photo"
+
+msgid "change_picture"
+msgstr "Changer la photo"

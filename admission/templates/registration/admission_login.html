@@ -112,7 +112,7 @@
                         <div class="panel-body">
                             {% trans 'mail_account_activation' %}
                             <br>{% trans 'connection_possible' %}
-                            <form action="{% url 'login' %}" method="post" class="form" role="form" autocomplete="off">
+                            <form action="{% url 'admission_login' %}" method="post" class="form" role="form" autocomplete="off">
                                 {% csrf_token %}
                                 <div class="row">
                                     <div class="col-md-6">

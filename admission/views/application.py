@@ -1,4 +1,5 @@
 ##############################################################################
+##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -158,7 +159,8 @@ def save_application_offer(request):
                                                    'validated_accounting': demande_validation.validate_accounting(),
                                                    'validated_sociological': demande_validation.validate_sociological(),
                                                    'validated_attachments': demande_validation.validate_attachments(),
-                                                   'validated_submission': demande_validation.validate_submission()})
+                                                   'validated_submission': demande_validation.validate_submission(),
+                                                   'picture': common.get_picture_id(request.user)})
 
 
 def application_view(request, application_id):

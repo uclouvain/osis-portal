@@ -30,7 +30,7 @@ from rest_framework.renderers import JSONRenderer
 
 from admission import models as mdl
 from reference import models as mdl_reference
-from admission.views.common import extra_information, validated_extra
+from admission.views.common import extra_information, validated_extra, get_picture_id
 
 
 class JSONResponse(HttpResponse):
@@ -119,6 +119,8 @@ def demande_update(request, application_id=None):
     grade_choices = mdl_reference.grade_type.GRADE_CHOICES
     an_applicant = mdl.applicant.find_by_user(request.user)
     secondary_education = mdl.secondary_education.find_by_person(an_applicant)
+    person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
+    person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
     return render(request, "admission_home.html",
                   {"gradetypes":             mdl_reference.grade_type.find_all(),
                    "domains":                mdl_reference.domain.find_all_domains(),
@@ -129,4 +131,7 @@ def demande_update(request, application_id=None):
                    'tab_active':             0,
                    "tab_demande_active":     0,
                    "display_admission_exam": extra_information(request, application),
-                   "validated_extra":        validated_extra(secondary_education, application)})
+                   "validated_extra":        validated_extra(secondary_education, application),
+                   "picture": get_picture_id(request.user),
+                   'person_legal_address': person_legal_address,
+                   'person_contact_address': person_contact_address})

@@ -27,13 +27,16 @@ from django.conf import settings
 from django.contrib import admin
 from django.conf.urls import url, include
 from base.views import common
+from django.conf.urls.static import static
 
 urlpatterns = (
     url(r'^admin/', admin.site.urls),
     url(r'^login/$', common.login, name='login'),
     url(r'^logout/$', common.log_out, name='logout'),
     url(r'^logged_out/$', common.logged_out, name='logged_out'),
+
 )
+
 
 if 'admission' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^admission/', include('admission.urls')), )
@@ -43,6 +46,9 @@ if 'catalog' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^catalog/', include('catalog.urls')), )
 if 'performance' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^performance/', include('performance.urls')), )
+if 'dissertation' in settings.INSTALLED_APPS:
+    urlpatterns = urlpatterns + (url(r'^dissertation/', include('dissertation.urls')),)
+
 
 handler404 = 'base.views.common.page_not_found'
 handler403 = 'base.views.common.access_denied'

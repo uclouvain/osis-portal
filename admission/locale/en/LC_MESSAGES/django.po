@@ -1158,3 +1158,12 @@ msgstr "Prerequisites"
 msgid "back_demandes_list"
 msgstr "Back to demandes list"
 
+msgid "id_picture"
+msgstr "Identity picture"
+
+msgid "id_picture_add"
+msgstr "Click here to add a picture"
+
+msgid "change_picture"
+msgstr "Modify the picture"
+
