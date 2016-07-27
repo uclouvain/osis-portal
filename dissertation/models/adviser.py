@@ -34,8 +34,8 @@ class AdviserAdmin(admin.ModelAdmin):
 
 class Adviser(models.Model):
     TYPES_CHOICES = (
-        ('PRF', _('Professor')),
-        ('MGR', _('Manager')),
+        ('PRF', _('professor')),
+        ('MGR', _('manager')),
     )
 
     person = models.OneToOneField('base.Person', on_delete=models.CASCADE)

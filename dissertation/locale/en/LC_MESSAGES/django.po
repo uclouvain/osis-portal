@@ -19,3 +19,9 @@ msgstr ""
 
 msgid "dissertation"
 msgstr "Dissertation"
+
+msgid "professor"
+msgstr "Professor"
+
+msgid "manager"
+msgstr "Course manager"

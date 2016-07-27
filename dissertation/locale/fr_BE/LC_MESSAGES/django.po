@@ -20,3 +20,10 @@ msgstr ""
 msgid "dissertation"
 msgstr "Mémoire"
 
+msgid "professor"
+msgstr "Professeur"
+
+msgid "manager"
+msgstr "Gestionnaire de cours"
+
+
