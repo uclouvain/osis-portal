@@ -24,7 +24,9 @@
 #
 ##############################################################################
 from django.apps import AppConfig
-from frontoffice.queue import callbacks, queue
+from frontoffice.queue import queue
+import json
+
 
 class BaseConfig(AppConfig):
     name = 'base'
@@ -36,4 +38,54 @@ class BaseConfig(AppConfig):
                 update_person_after_user_update, add_to_students_group
         except ImportError:
             pass
-        queue.listen_queue(self.queue_name, callbacks.insert_or_update)
+        queue.listen_queue(self.queue_name, insert)
+
+
+def insert(json_data):
+    """
+    Insert the records in PostGreSQL.
+    """
+    # Import must be inside the method because django isn't loaded at the launch of the application
+    from base import models as mdl_base
+
+    data = json.loads(json_data.decode("utf-8"))
+
+    class_str = data['model_class_str']
+    model_class = map_string_to_model_class(class_str)
+
+    records = json.loads(data['records'])
+    if model_class == mdl_base.student.Student:
+        mdl_base.person.deserialize_persons_data(records['persons'], save_model_object)
+        mdl_base.student.deserialize_students_data(records['students'], save_model_object)
+
+
+def save_model_object(model_object):
+    """
+    Save a model object. If it already exists in the database, do nothing.
+    :param model_object: a model object
+    :param model_class: the model class of the object
+    :return:
+    """
+    print(model_object)
+    pk = model_object.object.pk
+    if model_object.object.__class__.objects.filter(pk=pk).exists():
+        return
+    model_object.save()
+
+
+def map_string_to_model_class(class_str):
+    """
+    Map a string to the corresponding model class
+    :param class_str: a string corresponding to a mode class
+    :return: a model class
+    """
+    # Import must be inside the method because django isn't loaded at the launch of the application
+    from reference import models as mdl_ref
+    from base import models as mdl_base
+    map_classes = {
+        'reference.Country': mdl_ref.country.Country,
+        'admission.Domain': mdl_ref.domain.Domain,
+        'base.Tutor': mdl_base.tutor.Tutor,
+        'base.Student': mdl_base.student.Student
+    }
+    return map_classes[class_str]
