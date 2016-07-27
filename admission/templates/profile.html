@@ -104,7 +104,7 @@
                                         <input type="button" value="{% trans 'id_picture_add'%}"
                                                id="lnk_redirect_picture"
                                                style="width:100px;height:100px;white-space:normal ;word-wrap:break-word;float: left;"
-                                               class="glyphicon glyphicon-step-backward">
+                                               class=" glyphicon glyphicon-plus">
                                     </div>
                                 {%endif%}
                             </div>
@@ -250,7 +250,22 @@
             <div class="panel panel-default">
                 <div class="panel-heading">{%trans 'id_card'%}</div>
                 <div class="panel-body">
-                    {%trans 'question_identity'%}
+                    <div class="row">
+                        <div class="col-md-11">
+                            {%trans 'question_identity'%}
+                        </div>
+                        <div class="col-md-1">
+                            <div>
+                                <input type="button" value="{% trans 'id_add'%}"
+                                       id="lnk_id_documents"
+                                       style="width:100px;height:100px;white-space:normal ;word-wrap:break-word;float: left;"
+                                       class=" glyphicon glyphicon-plus">
+                                {% if id_document%}
+                                <a href="{% url 'download' pk=id_document.pk %}" target="_blank">{{ id_document.file_name }}
+                                {%endif%}
+                            </div>
+                        </div>
+                    </div>
                     <br>
                     <br>
                     <div class="row">

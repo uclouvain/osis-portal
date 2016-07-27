@@ -1175,3 +1175,9 @@ msgstr "Cliquez ici pour ajouter une photo"
 
 msgid "change_picture"
 msgstr "Changer la photo"
+
+msgid "id_add"
+msgstr "Cliquez ici pour ajouter votre pièce d'identité"
+
+msgid "id_documents"
+msgstr "Pièce d'identité"

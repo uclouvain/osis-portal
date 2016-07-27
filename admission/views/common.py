@@ -79,6 +79,7 @@ def home(request):
                                                            'tab_submission': tab_status['tab_submission'],
                                                            'main_status': 0,
                                                            'picture': get_picture_id(request.user),
+                                                           'id_document': get_id_document(request.user),
                                                            'person_legal_address': person_legal_address,
                                                            'person_contact_address': person_contact_address,})
 
@@ -381,3 +382,12 @@ def get_picture_id(user):
             return '/admission' + picture.file.url
 
     return None
+
+
+def get_id_document(user):
+    pictures = mdl_osis_common.document_file.search(None, user, 'ID_CARD')
+    if pictures:
+        return pictures.reverse()[0]
+
+    return None
+

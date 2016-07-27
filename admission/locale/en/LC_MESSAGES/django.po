@@ -1167,3 +1167,8 @@ msgstr "Click here to add a picture"
 msgid "change_picture"
 msgstr "Modify the picture"
 
+msgid "id_add"
+msgstr "Click here to add a id documents"
+
+msgid "id_documents"
+msgstr "Id documents"

@@ -50,7 +50,7 @@ def upload_file(request):
             content_type = file_type.content_type
             file.content_type = content_type
             file.save()
-            if description == 'ID_PICTURE':
+            if description == 'ID_PICTURE' or description == 'ID_CARD':
                 return common.home(request)
             else:
                 return redirect('new_file')

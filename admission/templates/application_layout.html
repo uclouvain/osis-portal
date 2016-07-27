@@ -262,16 +262,25 @@
     });
 
     $("#lnk_picture").click(function() {
-        $('#hdn_description').val('ID_PICTURE');
+
         save('form_profile');
     });
 
     $("#lnk_redirect_picture").click(function() {
+         $('#hdn_description').val('ID_PICTURE');
          $('#lnk_picture').trigger('click');
     });
     $("#lnk_modify_picture").click(function() {
+        $('#hdn_description').val('ID_PICTURE');
          $('#lnk_picture').trigger('click');
     });
+    $("#lnk_id_documents").click(function() {
+        alert('kk1');
+        $('#hdn_description').val('ID_CARD');
+        $('#lnk_picture').trigger('click');
+    });
+
+
 
     </script>
 {% endblock %}
