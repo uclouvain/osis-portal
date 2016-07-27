@@ -43,6 +43,7 @@ class LevelSerializer(serializers.ModelSerializer):
 
 
 def find_by_type(request):
+    print('lll')
     type = request.GET['type']
 
     levels = reference_mdl.grade_type.find_by_grade(type)

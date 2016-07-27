@@ -260,5 +260,27 @@
                //TODO : les donnnées s'affichent puis elles disparaissent.... LV
             }
     });
+    $("#lnk_picture2").click(function() {
+        $('#hdn_description').val('ID_PICTURE');
+
+        $.ajax({
+            url: "/admission/upload/description?description=" + $('#hdn_description').val(),
+            type: 'GET',
+            success: function(response){
+                alert('kk');
+            }
+          });
+        return true;
+    });
+
+    $("#lnk_picture").click(function() {
+        $('#hdn_description').val('ID_PICTURE');
+        //save('form_upload_profile');
+    });
+
+    $("#lnk_redirect_picture").click(function() {
+         $('#lnk_picture').trigger('click');
+    });
+
     </script>
 {% endblock %}

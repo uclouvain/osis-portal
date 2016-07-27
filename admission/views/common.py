@@ -38,10 +38,11 @@ from admission.forms import ApplicantForm
 from reference import models as mdl_ref
 from admission.views import demande_validation
 from admission.views import tabs
-
+from osis_common import models as mdl_osis_common
 
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
 def home(request):
+    print('hom')
     applicant = mdl.applicant.find_by_user(request.user)
 
     if applicant and applicant.gender:
@@ -62,6 +63,11 @@ def home(request):
                                                          "tab_active": -1})
         else:
             tab_status = tabs.init(request)
+            pictures = mdl_osis_common.document_file.search(None, request.user, 'ID_PICTURE')
+            picture = None
+            if pictures:
+                picture = pictures[0]
+            print(settings.FILES_URL)
             return render(request, "admission_home.html", {'applications': applications,
                                                            "tab_active": 0,
                                                            "first": True,
@@ -74,7 +80,9 @@ def home(request):
                                                            'tab_sociological': tab_status['tab_sociological'],
                                                            'tab_attachments': tab_status['tab_attachments'],
                                                            'tab_submission': tab_status['tab_submission'],
-                                                           'main_status': 0})
+                                                           'main_status': 0,
+                                                           'FILES_URL': settings.FILES_URL,
+                                                           'picture': picture})
 
     else:
         return profile(request)

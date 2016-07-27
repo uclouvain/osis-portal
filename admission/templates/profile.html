@@ -27,6 +27,7 @@
 
     <form method="post" action="{% url 'profile' %}" id="form_profile">
         {% csrf_token %}
+
         <span id="txt_message_error_profile_up"
                class="alert alert-warning"
                style="visibility:hidden;display:none;"></span><br>
@@ -177,6 +178,31 @@
                         <label>{%trans 'spouse_name'%}</label>
                         <input class="form-control" id="txt_spouse_name" name="spouse_name"
                                value="{{ applicant.spouse_name | default_if_none:''}}" maxlength="50">
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>{%trans 'picture'%} *</label>
+                        {{picture.file_name}}
+                        {{picture.file.url}}
+                        {{FILES_URL}}
+                        {% if picture %}
+                            <img scr="{{FILES_URL}}{{picture.url}}" width="200px" height="200px">
+                        <img scr="{{FILES_URL}}{{picture.file_name}}" width="200px" height="200px">
+                         <img scr="{{FILES_URL}}{{picture.file_name}}" width="200px" height="200px">
+  <img src="../files/im1.jpg">
+                          <img src="files/im1.jpg">
+                          <img src="/files/im1.jpg">
+                        <img src="/im1.jpg">
+                        <img src="../files/im1.jpg">
+                        <img src=".../files/im1.jpg">
+                        {%endif%}
+
+                    </div>
+                    <div class="col-md-1">
+
+                        <input type="button" value="+"  id="lnk_redirect_picture">
                     </div>
                 </div>
 
@@ -474,4 +500,12 @@
                 {%trans 'next_step'%} : {%trans 'offer_choice'%}</a>
         {%endif%}
         </div>
+    </form>
+    <form method="post"
+          action="{% url 'upload_file_description' %}"
+          id="form_upload_profile"
+          style="visibility:hidden;display:none;">
+        {% csrf_token %}
+        <input type="text" name="description" value="" id="hdn_description"/>
+        <input type="submit" value="+"  id="lnk_picture">
     </form>

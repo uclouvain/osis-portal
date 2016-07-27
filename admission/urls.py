@@ -25,7 +25,7 @@
 ##############################################################################
 from django.conf.urls import url
 from admission.views import application, common, identification, offer, level, question, option, country, curriculum, \
-    education_institution, language, domain, secondary_education, accounting, upload_file
+    education_institution, language, domain, secondary_education, accounting, upload_file, sociological, attachments
 
 
 urlpatterns = [
@@ -99,5 +99,7 @@ urlpatterns = [
 
     url(r'^upload/$', upload_file.upload_file, name='new_file'),
     url(r'^upload/download/(?P<pk>[0-9]+)$', upload_file.download, name='download'),
+    url(r'^upload/description/$', upload_file.upload_file_description, name="upload_file_description"),
+    url(r'^upload/$', upload_file.upload_document, name='upload_document'),
 
 ]

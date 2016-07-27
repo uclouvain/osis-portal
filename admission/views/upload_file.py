@@ -28,12 +28,20 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.http import *
 from osis_common.forms import UploadDocumentFileForm
 from osis_common import models as mdl
+from admission.views import common
 
 
 @login_required
 def upload_file(request):
+    print('upload_file')
     documents = mdl.document_file.search(document_type="admission", user=request.user)
+    description = 'LETTER_MOTIVATION'
+
     if request.method == "POST":
+        print('post')
+        if request.POST['description']:
+            description = request.POST['description']
+        print(description)
         form = UploadDocumentFileForm(request.POST, request.FILES)
         if form.is_valid():
             file = form.save()
@@ -43,19 +51,27 @@ def upload_file(request):
             content_type = file_type.content_type
             file.content_type = content_type
             file.save()
-            return redirect('new_file')
+            print('ici')
+
+            if description == 'ID_PICTURE':
+                return common.home(request)
+            else:
+                return redirect('new_file')
         else:
             return render(request, 'new_file.html', {'form': form,
                                                      'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
                                                      'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
+                                                     'description': description,
                                                      'documents': documents})
     else:
+        print('get')
         form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                                'document_type': "admission",
                                                'user': request.user})
         return render(request, 'new_file.html', {'form': form,
                                                  'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
                                                  'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
+                                                 'description': description,
                                                  'documents': documents})
 
 
@@ -67,3 +83,77 @@ def download(request, pk):
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
 
     return response
+
+
+def upload_file_description(request):
+    print('upload_file_description')
+    description = None
+
+
+    documents = None
+    #
+    # if request.method == "POST":
+    #     print('post')
+    #     description = request.POST['description']
+    #
+    #     form = UploadDocumentFileForm(request.POST, request.FILES)
+    #     if form.is_valid():
+    #         file = form.save()
+    #         file.size = file.file.size
+    #         file.file_name = request.FILES['file'].name
+    #         file_type = form.cleaned_data["file"]
+    #         content_type = file_type.content_type
+    #         file.content_type = content_type
+    #         file.save()
+    #         return redirect('new_file')
+    #     else:
+    #         return render(request, 'new_file.html', {'form': form,
+    #                                                  'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
+    #                                                  'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
+    #                                                  'description': description,
+    #                                                  'documents': documents})
+    # else:
+    #     print('get')
+    # description = request.GET['description']
+    print('kk')
+    description = request.POST['description']
+    print(description)
+    form = UploadDocumentFileForm(initial={'storage_duration': 0,
+                                           'document_type': "admission",
+                                           'user': request.user})
+    return render(request, 'new_document.html', {'form': form,
+                                             'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
+                                             'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
+                                             'description': description,
+                                             'documents': documents})
+
+
+@login_required
+def upload_document(request):
+    print('upload_document')
+    documents = mdl.document_file.search(document_type="admission", user=request.user)
+
+    if request.method == "POST":
+        print('post')
+        if request.POST['description']:
+            description = request.POST['description']
+        form = UploadDocumentFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            file = form.save()
+            file.size = file.file.size
+            file.file_name = request.FILES['file'].name
+            file_type = form.cleaned_data["file"]
+            content_type = file_type.content_type
+            file.content_type = content_type
+            file.save()
+            return redirect('new_file')
+        else:
+            if description == mdl.document_file.DESCRIPTION_CHOICES['ID_PICTURE']:
+                return common.home(request)
+            else:
+                return render(request, 'new_file.html', {'form': form,
+                                                         'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
+                                                         'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
+                                                         'description': description,
+                                                         'documents': documents})
+
