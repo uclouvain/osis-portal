@@ -105,15 +105,3 @@ def change_language(user, new_language):
 
 def find_by_global_id(global_id):
     return Person.objects.filter(global_id=global_id).first()
-
-
-def deserialize_persons_data(data, function_to_apply):
-    """
-    Deserialize persons data (see django serialization for the format).
-    Json encoding is used.
-    :param data: data to be deserialized
-    :param function_to_apply: function to apply on the person objects
-    :return:
-    """
-    for deserialized_person in serializers.deserialize("json", data):
-        function_to_apply(deserialized_person)

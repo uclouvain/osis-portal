@@ -95,15 +95,3 @@ def is_student(a_user):
     if find_by_user(a_user):
         return True
     return False
-
-
-def deserialize_students_data(data, function_to_apply):
-    """
-    Deserialize students data (see django serialization for the format).
-    Json encoding is used.
-    :param data: data to be deserialized
-    :param function_to_apply: function to apply on the students objects
-    :return:
-    """
-    for deserialized_student in serializers.deserialize("json", data):
-        function_to_apply(deserialized_student)

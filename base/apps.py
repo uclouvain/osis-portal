@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from django.apps import AppConfig
+from django.core import serializers
 from frontoffice.queue import queue
 import json
 
@@ -55,11 +56,23 @@ def insert(json_data):
 
     records = json.loads(data['records'])
     if model_class == mdl_base.student.Student:
-        mdl_base.person.deserialize_persons_data(records['persons'], save_model_object)
-        mdl_base.student.deserialize_students_data(records['students'], save_model_object)
+        deserialize_model_data(records['persons'], save_model_object)
+        deserialize_model_data(records['students'], save_model_object)
     elif model_class == mdl_base.tutor.Tutor:
-        mdl_base.person.deserialize_persons_data(records['persons'], save_model_object)
-        mdl_base.student.deserialize_students_data(records['tutors'], save_model_object)
+        deserialize_model_data(records['persons'], save_model_object)
+        deserialize_model_data(records['tutors'], save_model_object)
+
+
+def deserialize_model_data(data, function_to_apply):
+    """
+    Deserialize data (see django serialization for the format).
+    Json encoding is used.
+    :param data: data to be deserialized
+    :param function_to_apply: function to apply on the model objects
+    :return:
+    """
+    for deserialized_object in serializers.deserialize("json", data):
+        function_to_apply(deserialized_object)
 
 
 def save_model_object(model_object):
@@ -69,7 +82,6 @@ def save_model_object(model_object):
     :param model_class: the model class of the object
     :return:
     """
-    print(model_object)
     pk = model_object.object.pk
     if model_object.object.__class__.objects.filter(pk=pk).exists():
         return
@@ -92,4 +104,4 @@ def map_string_to_model_class(class_str):
         'base.Tutor': mdl_base.tutor.Tutor,
         'base.Student': mdl_base.student.Student
     }
-    return map_classes.get(key=class_str, default=None)
+    return map_classes.get(class_str)
