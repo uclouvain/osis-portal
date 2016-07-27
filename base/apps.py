@@ -57,6 +57,9 @@ def insert(json_data):
     if model_class == mdl_base.student.Student:
         mdl_base.person.deserialize_persons_data(records['persons'], save_model_object)
         mdl_base.student.deserialize_students_data(records['students'], save_model_object)
+    elif model_class == mdl_base.tutor.Tutor:
+        mdl_base.person.deserialize_persons_data(records['persons'], save_model_object)
+        mdl_base.student.deserialize_students_data(records['tutors'], save_model_object)
 
 
 def save_model_object(model_object):
@@ -75,7 +78,8 @@ def save_model_object(model_object):
 
 def map_string_to_model_class(class_str):
     """
-    Map a string to the corresponding model class
+    Map a string to the corresponding model class.
+    Returns None if the string cannot be mapped.
     :param class_str: a string corresponding to a mode class
     :return: a model class
     """
@@ -88,4 +92,4 @@ def map_string_to_model_class(class_str):
         'base.Tutor': mdl_base.tutor.Tutor,
         'base.Student': mdl_base.student.Student
     }
-    return map_classes[class_str]
+    return map_classes.get(key=class_str, default=None)
