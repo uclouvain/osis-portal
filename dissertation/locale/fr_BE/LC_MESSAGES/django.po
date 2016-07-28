@@ -23,6 +23,9 @@ msgstr "Gestion des mémoires"
 msgid "case_study"
 msgstr "Cas d'étude"
 
+msgid "copromotor"
+msgstr "Co-promoteur"
+
 msgid "domain"
 msgstr "Domaine"
 
@@ -41,8 +44,14 @@ msgstr "Possible"
 msgid "professor"
 msgstr "Professeur"
 
+msgid "promotor"
+msgstr "Promoteur"
+
 msgid "question"
 msgstr "Question"
+
+msgid "reader"
+msgstr "Lecteur"
 
 msgid "required"
 msgstr "Requis"

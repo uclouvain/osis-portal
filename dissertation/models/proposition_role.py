@@ -30,8 +30,8 @@ from django.utils.translation import ugettext_lazy as _
 
 class PropositionRole(models.Model):
     STATUS_CHOICES = (
-        ('PROMOTEUR', _('pro')),
-        ('CO_PROMOTEUR', _('copro')),
+        ('PROMOTEUR', _('promotor')),
+        ('CO_PROMOTEUR', _('copromotor')),
         ('READER', _('reader')),
     )
 

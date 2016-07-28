@@ -23,6 +23,9 @@ msgstr "Dissertation management"
 msgid "case_study"
 msgstr "Case Study"
 
+msgid "copromotor"
+msgstr "Co-promotor"
+
 msgid "domain"
 msgstr "Domain"
 
@@ -41,8 +44,14 @@ msgstr "Possible"
 msgid "professor"
 msgstr "Professor"
 
+msgid "promotor"
+msgstr "Promotor"
+
 msgid "question"
 msgstr "Question"
+
+msgid "reader"
+msgstr "Reader"
 
 msgid "required"
 msgstr "Required"
