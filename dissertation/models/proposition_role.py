@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -24,7 +24,21 @@
 #
 ##############################################################################
 
-from dissertation.models import adviser
-from dissertation.models import offer_proposition
-from dissertation.models import proposition_dissertation
-from dissertation.models import proposition_role
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
+
+
+class PropositionRole(models.Model):
+    STATUS_CHOICES = (
+        ('PROMOTEUR', _('pro')),
+        ('CO_PROMOTEUR', _('copro')),
+        ('READER', _('reader')),
+    )
+
+    status = models.CharField(max_length=12, choices=STATUS_CHOICES, default="PROMOTEUR")
+    adviser = models.ForeignKey('Adviser')
+    proposition_dissertation = models.ForeignKey('PropositionDissertation')
+
+    def __str__(self):
+        return u"%s %s" % (self.status if self.status else "",
+                           self.adviser if self.adviser else "")
