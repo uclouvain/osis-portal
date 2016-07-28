@@ -25,6 +25,7 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
 from base.models import person as model_person
 
