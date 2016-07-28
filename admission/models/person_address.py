@@ -37,7 +37,7 @@ class PersonAddress(models.Model):
     ADDRESS_TYPE = (('LEGAL', _('Legal')),
                     ('CONTACT', _('Contact')))
 
-    person = models.ForeignKey('Person')
+    person = models.ForeignKey('Applicant')
     type = models.CharField(max_length=20, choices=ADDRESS_TYPE)
     street = models.CharField(max_length=255)
     number = models.CharField(max_length=6)

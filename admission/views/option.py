@@ -37,7 +37,6 @@ class JSONResponse(HttpResponse):
         super(JSONResponse, self).__init__(content, **kwargs)
 
 
-@csrf_exempt
 def find_by_offer(request):
     offer_yr_id = request.GET['offer']
 

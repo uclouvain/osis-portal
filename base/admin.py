@@ -27,5 +27,9 @@ from base.models import *
 from django.contrib import admin
 
 
-admin.site.register(person.BasePerson,
+admin.site.register(person.Person,
                     person.BasePersonAdmin)
+admin.site.register(student.Student,
+                    student.StudentAdmin)
+admin.site.register(tutor.Tutor,
+                    tutor.TutorAdmin)

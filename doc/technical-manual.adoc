@@ -54,7 +54,7 @@ cloning the repository:
 
     $ mkdir -p ~/python/projects/osis
     $ cd ~/python/projects/osis
-    $ git clone git@github.com:uclouvain/osis.git
+    $ git clone git@github.com:uclouvain/osis-portal.git
 
 Next, we add some personal information in the local Git installation to make
 sure you are well identified in all commits:
@@ -142,7 +142,7 @@ server:
 If the url starts with `https://` then you are using `https` instead of `ssh`.
 In this case, you should change the url to the ssh one:
 
-    $ git remote set-url origin git@github.com:uclouvain/osis.git
+    $ git remote set-url origin git@github.com:uclouvain/osis-portal.git
 
 The automatic authentication should work after that.
 
@@ -188,12 +188,25 @@ to PostgreSQL:
 [[installing-couchbase]]
 === Installing CouchBase
 
+Access http://www.couchbase.com[CouchBase website] and download CouchBase
+Community Edition 4.0. To install it, execute:
+
+    $ sudo dpkg -i couchbase-server-community_4.0.0-ubuntu14.04_amd64.deb
+
+After the installation process, access http://localhost:8091 to configure the local
+instance. Just accept all default values for development purposes. Then, install
+the libraries used by Python to connect to CouchBase:
+
     $ wget http://packages.couchbase.com/clients/c/libcouchbase-2.5.7_ubuntu1404_amd64.tar
     $ tar -xf libcouchbase-2.5.7_ubuntu1404_amd64.tar
     $ cd libcouchbase-2.5.7_ubuntu1404_amd64
     $ sudo dpkg -i libcouchbase2-core_2.5.7-1_amd64.deb
     $ sudo dpkg -i libcouchbase2-bin_2.5.7-1_amd64.deb
     $ sudo dpkg -i libcouchbase-dev_2.5.7-1_amd64.deb
+
+The following buckets should be created:
+
+- score_encoding
 
 [[installing-django]]
 === Installing and Configuring Django
@@ -215,7 +228,7 @@ The repository `osis` is a Django application. We already cloned that when
 installing git. At that point we executed the following commands:
 
     $ cd ~/python/projects/osis
-    $ git clone git@github.com:uclouvain/osis.git
+    $ git clone git@github.com:uclouvain/osis-portal.git
 
 Install the Python virtual environment and other system dependencies:
 

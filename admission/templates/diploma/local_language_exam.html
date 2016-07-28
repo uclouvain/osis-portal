@@ -1,7 +1,6 @@
 {% load dictionnary %}
 {% load i18n %}
-<div class="panel panel-default" id="pnl_local_exam"
-         style="{% if local_language_exam_needed %}visibility:visible;display:block; {%else%}visibility:hidden;display:none;{%endif%}">
+<div class="panel panel-default" id="pnl_local_exam">
     <div class="panel-heading"> {% trans 'local_language_exam' %} *</div>
     <div class="panel-body">
         <div class="row">
@@ -13,16 +12,14 @@
                          name="local_language_exam"
                          id="rdb_local_language_exam_true"
                          value="true"
-                         onclick="display('pnl_local_exam_detail',true);"
-                         {%if secondary_education.local_language_exam = True %}checked{%endif%}> {% trans 'yes' %}
+                         onclick="display('pnl_local_exam_detail',true);"> {% trans 'yes' %}
                 </label>
                 <label class="radio-inline">
                   <input type="radio"
                          name="local_language_exam"
                          id="rdb_local_language_exam_false"
                          value="false"
-                         onclick="display('pnl_local_exam_detail',false);"
-                         {%if secondary_education.local_language_exam = False %}checked{%endif%}> {% trans 'no' %}
+                         onclick="display('pnl_local_exam_detail',false);"> {% trans 'no' %}
                 </label>
                 <br>
                 <br>
@@ -35,13 +32,14 @@
             </div>
         </div>
         <div id="pnl_local_exam_detail"
-             style="{%if secondary_education.local_language_exam = True %}visibility:visible;display:display;{%else%}visibility:hidden;display:none;{%endif%}">
+             style="{%if local_language_exam %}visibility:visible;display:display;{%else%}visibility:hidden;display:none;{%endif%}">
             <div class="form-inline">
                 <br>
                 <label>{% trans 'question_date_session' %} *</label>
-                <input class="form-control" id="txt_local_language_exam_date"
+                <input class="form-control"
+                       id="txt_local_language_exam_date"
                        name="local_language_exam_date"
-                       value="{{secondary_education.local_language_exam_date | default_if_none:''|date:"j/m/Y"}}">
+                       value="{{local_language_exam.exam_date | default_if_none:''|date:"j/m/Y"}}">
                 <br>
                 {%if validation_messages and validation_messages|get_item:'local_language_exam_date'%}
                     <br>
@@ -54,7 +52,7 @@
                     <input class="form-control"
                            id="txt_local_language_exam_institution"
                            name="local_language_exam_institution"
-                           value="{{ secondary_education.local_language_exam_institution | default_if_none:''}}">
+                           value="{{ local_language_exam.institution | default_if_none:''}}">
                     <br>
                 </div>
                 {%if validation_messages and validation_messages|get_item:'local_language_exam_institution'%}
@@ -74,7 +72,7 @@
                      name="local_language_exam_result"
                      id="rdb_local_exam_session_succeed"
                      value="SUCCEED"
-                     {%if secondary_education.local_language_exam_result = 'SUCCEED'%}checked{%endif%}>
+                     {%if local_language_exam.result = 'SUCCEED'%}checked{%endif%}>
                 {% trans 'succeed_result' %}
             </label>
             <label class="radio-inline">
@@ -82,7 +80,7 @@
                      name="local_language_exam_result"
                      id="rdb_local_exam_session_failed"
                      value="FAILED"
-                     {%if secondary_education.local_language_exam_result = 'FAILED'%}checked{%endif%}>
+                     {%if local_language_exam.result = 'FAILED'%}checked{%endif%}>
                 {% trans 'failed' %}
             </label>
             <label class="radio-inline">
@@ -90,7 +88,7 @@
                      name="local_language_exam_result"
                      id="rdb_local_exam_enrollment_enrollment_in_progress"
                      value="ENROLLMENT_IN_PROGRESS"
-                     {%if secondary_education.local_language_exam_result = 'ENROLLMENT_IN_PROGRESS'%}checked{%endif%}>
+                     {%if local_language_exam.result = 'ENROLLMENT_IN_PROGRESS'%}checked{%endif%}>
                {% trans 'demanded_result' %}
             </label>
             <br>

@@ -51,13 +51,16 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'osis_common',
     'reference',
     'base',
     'admission',
-    'catalog',
     'enrollments',
     'dashboard',
-    'rest_framework'
+    'rest_framework',
+    'localflavor',
+    'performance',
+    'dissertation',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -71,6 +74,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
 )
+
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -93,6 +97,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'base.views.common.installed_applications_context_processor',
             ],
         },
     },
@@ -112,7 +117,7 @@ DATABASES = {
 }
 
 
-COUCHBASE_CONNECTION_STRING='couchbase://localhost/score_encoding'
+COUCHBASE_CONNECTION_STRING='couchbase://localhost/'
 COUCHBASE_PASSWORD=''
 
 # Password validation
@@ -156,18 +161,20 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
+MEDIA_URL = '/media/'
+
+CONTENT_TYPES = ['application/csv', 'application/doc', 'application/pdf', 'application/xls', 'application/xml',
+                 'application/zip', 'image/jpeg', 'image/gif', 'image/png', 'text/html', 'text/plain']
+MAX_UPLOAD_SIZE = 5242880
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, "admission/tests/sent_mails")
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "base/tests/sent_mails")
 
 DEFAULT_FROM_EMAIL = 'osis@localhost.be'
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
-
-LOGIN_URL = reverse_lazy('login')
-LOGOUT_URL = reverse_lazy('logout')
-LOGIN_REDIRECT_URL = '/admission/'
 
 QUEUE_URL = 'localhost'
 QUEUE_USER = 'guest'
@@ -175,17 +182,20 @@ QUEUE_PASSWORD = 'guest'
 QUEUE_PORT = 5672
 QUEUE_CONTEXT_ROOT = '/'
 
+LOGIN_URL=reverse_lazy('login')
+OVERRIDED_LOGOUT_URL=''
+OVERRIDED_LOGIN_URL=''
+
 # This has to be replaced by the actual url where you institution logo can be found.
 # Ex : LOGO_INSTITUTION_URL = 'https://www.google.be/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'
 # A relative URL will work on local , but not out of the box on the servers.
-LOGO_INSTITUTION_URL = os.path.join(BASE_DIR, "admission/static/img/logo_institution.jpg")
+LOGO_INSTITUTION_URL = os.path.join(BASE_DIR, "base/static/img/logo_institution.jpg")
 
 try:
     from frontoffice.server_settings import *
-
-    try:
-        INSTALLED_APPS = INSTALLED_APPS + SERVER_APPS
-    except NameError:
-        pass
 except ImportError:
     pass
+
+if 'admission' in INSTALLED_APPS:
+    ADMISSION_LOGIN_URL=reverse_lazy('admission_login')
+    ADMISSION_LOGIN_REDIRECT_URL=reverse_lazy('admission')

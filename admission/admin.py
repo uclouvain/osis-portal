@@ -24,56 +24,56 @@
 #
 ##############################################################################
 from django.contrib import admin
+
 from admission.models import *
-from admission.models import assimilation_criteria, person_assimilation_criteria
-
-admin.site.register(person.Person,
-                    person.PersonAdmin)
-
-admin.site.register(grade_type.GradeType,
-                    grade_type.GradeTypeAdmin)
-
-admin.site.register(domain.Domain,
-                    domain.DomainAdmin)
 
 admin.site.register(academic_year.AcademicYear,
                     academic_year.AcademicYearAdmin)
 
-admin.site.register(offer_year.OfferYear,
-                    offer_year.OfferYearAdmin)
-
-admin.site.register(offer_year_calendar.OfferYearCalendar,
-                    offer_year_calendar.OfferYearCalendarAdmin)
-
-admin.site.register(application.Application,
-                    application.ApplicationAdmin)
-
-admin.site.register(assimilation_criteria.AssimilationCriteria,
-                    assimilation_criteria.AssimilationCriteriaAdmin)
-
-admin.site.register(form.Form,
-                    form.FormAdmin)
-
-admin.site.register(question.Question,
-                    question.QuestionAdmin)
-
-admin.site.register(option.Option,
-                    option.OptionAdmin)
+admin.site.register(admission_exam_type.AdmissionExamType,
+                    admission_exam_type.AdmissionExamTypeAdmin)
 
 admin.site.register(answer.Answer,
                     answer.AnswerAdmin)
 
+admin.site.register(applicant.Applicant,
+                    applicant.ApplicantAdmin)
+
+admin.site.register(applicant_assimilation_criteria.ApplicantAssimilationCriteria,
+                    applicant_assimilation_criteria.ApplicantAssimilationCriteriaAdmin)
+
+admin.site.register(application.Application,
+                    application.ApplicationAdmin)
+
+admin.site.register(application_assimilation_criteria.ApplicationAssimilationCriteria,
+                    application_assimilation_criteria.ApplicationAssimilationCriteriaAdmin)
+
+admin.site.register(curriculum.Curriculum,
+                    curriculum.CurriculumAdmin)
+
+admin.site.register(form.Form,
+                    form.FormAdmin)
+
+admin.site.register(message_template.MessageTemplate,
+                    message_template.MessageTemplateAdmin)
+
+admin.site.register(offer_year.OfferYear,
+                    offer_year.OfferYearAdmin)
+
+admin.site.register(option.Option,
+                    option.OptionAdmin)
+
 admin.site.register(person_address.PersonAddress,
                     person_address.PersonAddressAdmin)
-
-admin.site.register(person_assimilation_criteria.PersonAssimilationCriteria,
-                    person_assimilation_criteria.PersonAssimilationCriteriaAdmin)
 
 admin.site.register(properties.Properties,
                     properties.PropertiesAdmin)
 
+admin.site.register(question.Question,
+                    question.QuestionAdmin)
+
 admin.site.register(secondary_education.SecondaryEducation,
                     secondary_education.SecondaryEducationAdmin)
 
-admin.site.register(curriculum.Curriculum,
-                    curriculum.CurriculumAdmin)
+admin.site.register(secondary_education_exam.SecondaryEducationExam,
+                    secondary_education_exam.SecondaryEducationExamAdmin)

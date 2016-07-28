@@ -34,10 +34,12 @@ def insert_or_update(json_data):
     data = json.loads(json_data.decode("utf-8"))
     # Import must be inside the method because django isn't loaded at the launch of the application
     from reference import models as mdl_ref
-    from admission import models as mdl_adm
+    from base import models as mdl_base
     map_classes = {
-        'reference.Country': mdl_ref.Country,
-        'admission.Domain': mdl_adm.domain.Domain,
+        'reference.Country': mdl_ref.country.Country,
+        'admission.Domain': mdl_ref.domain.Domain,
+        'base.Tutor': mdl_base.tutor.Tutor,
+        'base.Student': mdl_base.student.Student
     }
     cls_str = data['model_class_str']
     model_class = map_classes[cls_str]
