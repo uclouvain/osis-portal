@@ -24,4 +24,5 @@
 #
 ##############################################################################
 
+from dissertation.models import adviser
 from dissertation.models import offer_proposition
