@@ -24,4 +24,4 @@
 #
 ##############################################################################
 
-
+from dissertation.models import offer_proposition
