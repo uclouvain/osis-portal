@@ -24,6 +24,7 @@
 #
 ##############################################################################
 
+from django.core import serializers
 import json
 
 
@@ -37,13 +38,15 @@ def insert_or_update(json_data):
     from base import models as mdl_base
     map_classes = {
         'reference.Country': mdl_ref.country.Country,
-        'admission.Domain': mdl_ref.domain.Domain,
+        'reference.Domain': mdl_ref.domain.Domain,
+        'reference.EducationInstitution': mdl_ref.education_institution.EducationInstitution,
+        'reference.Language': mdl_ref.language.Language,
         'base.Tutor': mdl_base.tutor.Tutor,
         'base.Student': mdl_base.student.Student
     }
     cls_str = data['model_class_str']
     model_class = map_classes[cls_str]
     records = data['records']
-    # ids = [obj['id'] for obj in records]
-    for record in records :
-        obj, created = model_class.objects.update_or_create(defaults=record, **{'id' : record['id']})
+    for instance in serializers.deserialize('json', records):
+        instance.save()
+
