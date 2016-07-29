@@ -17,23 +17,47 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "accepted_by_commission"
+msgstr "Accepted by commission"
+
+msgid "accepted_by_director"
+msgstr "Accepted by promoter"
+
+msgid "accepted_by_first_year_evaluation"
+msgstr "Accepted by first year evaluation"
+
 msgid "application_dissertation"
 msgstr "Dissertation management"
 
 msgid "case_study"
 msgstr "Case Study"
 
-msgid "copromotor"
-msgstr "Co-promotor"
+msgid "copromoter"
+msgstr "Co-promoter"
+
+msgid "defended"
+msgstr "Defended"
 
 msgid "domain"
 msgstr "Domain"
 
+msgid "draft"
+msgstr "Draft"
+
+msgid "ended"
+msgstr "End"
+
+msgid "ended_los"
+msgstr "Reported"
+
+msgid "ended_win"
+msgstr "Win"
+
 msgid "forbidden"
 msgstr "Forbidden"
 
-msgid "litterature_review"
-msgstr "Litterature Review"
+msgid "literature_review"
+msgstr "Literature Review"
 
 msgid "manager"
 msgstr "Course manager"
@@ -44,8 +68,8 @@ msgstr "Possible"
 msgid "professor"
 msgstr "Professor"
 
-msgid "promotor"
-msgstr "Promotor"
+msgid "promoter"
+msgstr "Promoter"
 
 msgid "question"
 msgstr "Question"
@@ -53,11 +77,35 @@ msgstr "Question"
 msgid "reader"
 msgstr "Reader"
 
+msgid "refused_by_commission"
+msgstr "Refused by commission"
+
+msgid "refused_by_director"
+msgstr "Refused by promoter"
+
+msgid "refused_by_first_year_evaluation"
+msgstr "Refused by first year evaluation"
+
 msgid "required"
 msgstr "Required"
 
+msgid "submitted_to_commission"
+msgstr "Submitted to commission"
+
+msgid "submitted_to_director"
+msgstr "Submitted to promoter"
+
+msgid "submitted_to_first_year_evaluation"
+msgstr "Submitted to first year evaluation "
+
 msgid "theme"
 msgstr "Theme"
+
+msgid "to_be_defended"
+msgstr "To be received defended"
+
+msgid "to_be_received"
+msgstr "To be received"
 
 msgid "work"
 msgstr "Work"
