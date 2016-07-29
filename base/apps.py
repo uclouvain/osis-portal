@@ -82,10 +82,29 @@ def save_model_object(model_object):
     :param model_class: the model class of the object
     :return:
     """
-    pk = model_object.object.pk
-    if model_object.object.__class__.objects.filter(pk=pk).exists():
+    if object_exists(model_object):
         return
     model_object.save()
+
+
+def object_exists(model_object):
+    """
+    Check if a model_object already exists.
+    :param model_object: an instance of a model
+    :return: true if the object already exists
+    """
+    from base.models import student, tutor, person
+
+    if model_object.object.__class__ == person.Person:
+        global_id = model_object.object.global_id
+        return model_object.object.__class__.objects.filter(global_id=global_id).exists()
+    elif model_object.object.__class__ == student.Student:
+        registration_id = model_object.object.registration_id
+        return model_object.object.__class__.objects.filter(registration_id=registration_id).exists()
+    elif model_object.object.__class__ == tutor.Tutor:
+        external_id = model_object.object.external_id
+        return model_object.object.__class__.objects.filter(external_id=external_id).exists()
+    return True
 
 
 def map_string_to_model_class(class_str):
