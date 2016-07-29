@@ -118,9 +118,9 @@ def map_string_to_model_class(class_str):
     from reference import models as mdl_ref
     from base import models as mdl_base
     map_classes = {
-        'reference.Country': mdl_ref.country.Country,
-        'admission.Domain': mdl_ref.domain.Domain,
-        'base.Tutor': mdl_base.tutor.Tutor,
-        'base.Student': mdl_base.student.Student
+        'reference.country.Country': mdl_ref.country.Country,
+        'reference.domain.Domain': mdl_ref.domain.Domain,
+        'base.tutor.Tutor': mdl_base.tutor.Tutor,
+        'base.student.Student': mdl_base.student.Student
     }
     return map_classes.get(class_str)
