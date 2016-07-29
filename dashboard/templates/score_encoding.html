@@ -1,4 +1,4 @@
-{% extends "dashboard_layout.html" %}
+{% extends "layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -35,7 +35,7 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <a class="btn btn-primary" href="{% url 'scores_download' %}">Download</a>
+        <a class="btn btn-primary" href="{% url 'scores_download' %}">{% trans 'get_my_scores_sheets' %}</a>
     </div>
 </div>
 {% endblock %}

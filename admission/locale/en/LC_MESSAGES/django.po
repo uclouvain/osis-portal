@@ -737,13 +737,19 @@ msgid "subdomain"
 msgstr "Subdomain"
 
 msgid "question_domain_title"
-msgstr "Mention your studies title"
+msgstr "Domain, subdomain, and grade type corresponds to your studies"
 
 msgid "data_duplicated"
 msgstr "Data duplicated"
 
 msgid "country"
 msgstr "Country"
+
+msgid "university_country"
+msgstr "University country"
+
+msgid "university_name"
+msgstr "University name"
 
 msgid "complete_profile_instruction"
 msgstr "Please complete your profile"
@@ -774,3 +780,381 @@ msgstr "Passport number"
 
 msgid "question_domain"
 msgstr "Domain, subdomain, and grade type corresponds to your studies"
+
+msgid "invalid_date"
+msgstr "Invalid date"
+
+msgid "invalid_year"
+msgstr "Invalid year"
+
+msgid "format_date"
+msgstr "dd/mm/yyyy"
+
+msgid "specify_locality"
+msgstr "In case you could not find the locality in the list, please mention it below."
+
+msgid "specify_university_name"
+msgstr "In case you could not find your university in the list, please mention it below."
+
+msgid "mandatory_university_name"
+msgstr "Please mention an university's name."
+
+msgid "specify"
+msgstr "Specify"
+
+msgid "files_translated"
+msgstr "A translation by a sworn translator"
+
+msgid "establishment"
+msgstr "Establishment"
+
+msgid "higher_non_university"
+msgstr "Higher non university"
+
+msgid "study_systems"
+msgstr "Study systems"
+
+msgid "social_advancement"
+msgstr "Social advancement"
+
+msgid "full_exercise"
+msgstr "Full exercise"
+
+msgid "undefined"
+msgstr "Undefined"
+
+msgid "institution_country"
+msgstr "Institution country"
+
+msgid "institution_mandatory"
+msgstr "Please mention the name of the institute where you were"
+
+msgid "activity_type"
+msgstr "Activity type"
+
+msgid "question_activity_place"
+msgstr "Where?"
+
+msgid "question_activity"
+msgstr "What kind of activity?"
+
+msgid "onem_needed"
+msgstr "Veuillez joindre l'attestation de l'ONEM stipulant qui n'a pas bénificier d'une dégoration l'autorisation de poursuivre des études"
+
+msgid "job"
+msgstr "Job"
+
+msgid "illness"
+msgstr "Illness"
+
+msgid "msg_info_duplicated"
+msgstr "Data duplicated"
+
+msgid "msg_info_not_duplicated"
+msgstr "Data not duplicated"
+
+msgid "msg_warning_curriculum"
+msgstr "Please mention your secondary education and diplomas informations, before encoding the curricula."
+
+msgid "instruction_offer_selection_part1"
+msgstr ""
+"In order to make you choice, please start by selecting a grade type(sub-grade type) and next select a study type. "
+"Next, select the required study and confirm your choice.<br/>In order to help you, you can"
+
+msgid "instruction_offer_selection_part2"
+msgstr "In order to help you, you can consult the study programs : "
+
+msgid "study_programs"
+msgstr "study programs"
+
+msgid "question_study_type"
+msgstr "Please select a study type"
+
+msgid "question_study_domain"
+msgstr "Please select a study domain"
+
+msgid "question_belgian_diploma"
+msgstr "Is your diploma, a belgian one"
+
+msgid "question_vae"
+msgstr ""
+"Souhaitez-vous accéder au programme sur base de la valorisation des savoirs et  compétences acquis par expérience "
+"professionnelle (VAE)"
+
+msgid "question_same_studies"
+msgstr "Did you already start the same studies in another institution"
+
+msgid "question_credits_valorisation"
+msgstr "Would you like to take advantage of credits for these studies"
+
+msgid "question_same_program"
+msgstr "Are you already enrolled to the same program in an institution of the French community"
+
+msgid "question_resident"
+msgstr "Are you resident"
+
+msgid "question_raffle_number"
+msgstr "Please mention the number given be the enrolment service"
+
+msgid "other_education_type"
+msgstr "Other education type"
+
+msgid "table_contents"
+msgstr "Table of contents"
+
+msgid "documents"
+msgstr "Documents"
+
+msgid "ucl_denom_location"
+msgstr "Université catholique de Louvain"
+
+msgid "reduction"
+msgstr "Reduction"
+
+msgid "question_study_grant"
+msgstr "Do you have a study grant request?"
+
+msgid "reduction_enrolment_fees"
+msgstr "Reduction of the enrolment fees"
+
+msgid "study_grant_number"
+msgstr "In case of a request for a study grant, please mention the pending file number"
+
+msgid "unknow_number_yet"
+msgstr "In case you do not know this number yet, you can always provide us this information later on."
+
+msgid "additional_information"
+msgstr "For all additional information"
+
+msgid "french_community_grant"
+msgstr "study grant French-speaking community"
+
+msgid "institution_help_center"
+msgstr "the UCL help center"
+
+msgid "other_study_grant"
+msgstr "Do you benefit from a study grant provided by another institute?"
+
+msgid "other_study_grant_address"
+msgstr "If affirmative, please provide the name and address of the organisation"
+
+msgid "debts"
+msgstr "Debts"
+
+msgid "add_file_no_debts"
+msgstr ""
+ "Please add a certificate stating the absence of debts with regards to the institution attended during "
+ "the academic year"
+
+msgid "add"
+msgstr "Add"
+
+msgid "sport_affiliation"
+msgstr "Affiliation sports activities"
+
+msgid "sport_affiliation_lln"
+msgstr ""
+ "Would you like to participate to sports activities organised at the site of Louvain-la-Neuve and Brussels Woluwe?"
+
+msgid "sport_affiliation_lln_cost_part1"
+msgstr ""
+ "In case this is affirmative, the cost of "
+
+msgid "sport_affiliation_lln_cost_part2"
+msgstr ""
+ " will be added to your enrolment rights."
+
+msgid "sport_affiliation_lln_information"
+msgstr "Information on sports at Louvain-la-Neuve and Brussels-Woluwe"
+
+msgid "culture_card"
+msgstr "Culture card"
+
+msgid "question_culture_card"
+msgstr "Would you like to receive the culture card?"
+
+msgid "additional_info_culture_card"
+msgstr "Additional information on the culture card"
+
+msgid "solidarity_card"
+msgstr "Solidarity Card"
+
+msgid "question_solidarity_card"
+msgstr "Would you like to receive the solidarity card?"
+
+
+msgid "additional_info_solidarity_card"
+msgstr "Additional information on the solidarity card"
+
+msgid "bank_account"
+msgstr "Bank account"
+
+msgid "belgian_bank_account"
+msgstr ""
+ "If you are belgian banking account holder,  you can encode your contact details so that we can proceed to a "
+ "possible repayment."
+
+msgid "belgian_bank_account_precision"
+msgstr "For the IBAN and BIC/SWIFT code, please encode only alphanumerics characters (neither space, nor dash)."
+
+msgid "iban_number"
+msgstr "Account number (IBAN)"
+
+msgid "bic_number"
+msgstr "BIC/SWIFT Code"
+
+msgid "bank_account_holder_firstname"
+msgstr "Holder's first name of the bank account"
+
+msgid "bank_account_holder_name"
+msgstr "Holder's name of the bank account"
+
+msgid "general_notice"
+msgstr "Notice  : "
+
+msgid "language"
+msgstr "Language"
+
+msgid "professional"
+msgstr "Professional"
+
+msgid "general_reduction_notice"
+msgstr ""
+ "d'autres types de réduction existent à l'UCL.  Elles nécessitent l'introduction d'un dossier particulier.  "
+ "Informations"
+
+msgid "there_are"
+msgstr "There are "
+
+msgid "question_reduction_children"
+msgstr "Avez-vous une demande de réduction 'Enfant du personnel UCL ou du Lycée Martin V'?"
+
+msgid "or"
+msgstr "or"
+
+msgid "add_file_children_deduction"
+msgstr "Veuillez joindre l'attestation officelle pour bénéficier de cette réduction"
+
+msgid "title_no_debts"
+msgstr "Certificate stating the absence of debts"
+
+msgid "question"
+msgstr "Question"
+
+msgid "answer"
+msgstr "Answer"
+
+msgid "applications_list"
+msgstr "Yours applications"
+
+msgid "new_demand"
+msgstr "Encode a new application demand"
+
+msgid "tab_diplomas"
+msgstr "Diplomas and certificates"
+
+msgid "profile"
+msgstr "Profile"
+
+msgid "demandes"
+msgstr "Demandes"
+
+msgid "accounting"
+msgstr "Accounting"
+
+msgid "sociological_survey"
+msgstr "Sociological survey"
+
+msgid "demande"
+msgstr "Demande"
+
+msgid "submission"
+msgstr "Submission"
+
+msgid "reference_number"
+msgstr "Reference number"
+
+msgid "creation"
+msgstr "Creation"
+
+msgid "requested_study"
+msgstr "Requested study"
+
+msgid "residence_country"
+msgstr "Residence country"
+
+msgid "brother_sister_number"
+msgstr "Number of brothers and sisters?"
+
+msgid "father"
+msgstr "Father"
+
+msgid "mother"
+msgstr "Mother"
+
+msgid "student"
+msgstr "Student"
+
+msgid "conjoint"
+msgstr "Conjoint"
+
+msgid "grandfather_profession"
+msgstr "Grandfather (profession)"
+
+msgid "deceased_female"
+msgstr "Deceased"
+
+msgid "deceased_male"
+msgstr "Deceased"
+
+msgid "paternal"
+msgstr "Paternal"
+
+msgid "maternal"
+msgstr "Maternal"
+
+msgid "profession"
+msgstr "Profession"
+
+msgid "study"
+msgstr "Study"
+
+msgid "professional_activity"
+msgstr "Professional activity"
+
+msgid "attachments"
+msgstr "Attachments"
+
+msgid "further_information_required"
+msgstr "Further information required"
+
+msgid "for_curriculum"
+msgstr "For curriculum"
+
+msgid "to_submit"
+msgstr "To submit"
+
+msgid "submitted"
+msgstr "Submitted"
+
+msgid "canceled"
+msgstr "Canceled"
+
+msgid "confirmed"
+msgstr "Confirmed"
+
+msgid "offer_choice"
+msgstr "Offer choice"
+
+msgid "change_offer"
+msgstr "Change offer choice"
+
+msgid "mandatory_field_next_step"
+msgstr "Mandatory field before going to the next step"
+
+msgid "prerequisites"
+msgstr "Prerequisites"
+
+msgid "back_demandes_list"
+msgstr "Back to demandes list"
+

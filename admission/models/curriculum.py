@@ -29,6 +29,7 @@ from django.utils.translation import ugettext_lazy as _
 from .secondary_education import NATIONAL_COMMUNITY_TYPES
 from django.core.exceptions import ObjectDoesNotExist
 
+
 class CurriculumAdmin(admin.ModelAdmin):
     list_display = ('person', 'path_type')
 
@@ -48,7 +49,7 @@ class Curriculum(models.Model):
                    ('NO_RESULT', _('no_result')))
 
     ACTIVITY_TYPES = (
-            ('JOB', _('Job')),
+            ('JOB', _('job')),
             ('INTERNSHIP', _('internship')),
             ('VOLUNTEERING', _('volunteering')),
             ('UNEMPLOYMENT', _('unemployment')),
@@ -56,15 +57,27 @@ class Curriculum(models.Model):
             ('OTHER', _('other')),
             )
 
-    person = models.ForeignKey('Person')
+    GRADE_TYPE_NO_UNIVERSITY = (
+        ('HIGHER_NON_UNIVERSITY', _('higher_non_university')),
+        ('BACHELOR', _('bachelor')),
+        ('MASTER', _('master')),
+        ('OTHER', _('other'))
+    )
+
+    STUDY_SYSTEM = (
+        ('SOCIAL_ADVANCEMENT', _('social_advancement')),
+        ('FULL_EXERCISE', _('full_exercise'))
+    )
+    person = models.ForeignKey('Applicant')
     academic_year = models.ForeignKey('AcademicYear')
     path_type = models.CharField(max_length=25, choices=PATH_TYPES)
     national_education = models.CharField(max_length=20, choices=NATIONAL_COMMUNITY_TYPES, blank=True, null=True)
     language = models.ForeignKey('reference.Language', blank=True, null=True)
     national_institution = models.ForeignKey('reference.EducationInstitution', blank=True, null=True)
-    domain = models.ForeignKey('Domain', blank=True, null=True, related_name='Curriculum_domain')
-    sub_domain = models.ForeignKey('Domain', blank=True, null=True, related_name='Curriculum_sub_domain')
-    grade_type = models.ForeignKey('GradeType', blank=True, null=True)
+    domain = models.ForeignKey('reference.Domain', blank=True, null=True, related_name='Curriculum_domain')
+    sub_domain = models.ForeignKey('reference.Domain', blank=True, null=True, related_name='Curriculum_sub_domain')
+    grade_type = models.ForeignKey('reference.GradeType', blank=True, null=True)
+    grade_type_no_university = models.CharField(max_length=25, choices=GRADE_TYPE_NO_UNIVERSITY, blank=True, null=True)
     result = models.CharField(max_length=20, choices=RESULT_TYPE, blank=True, null=True)
     credits_enrolled = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     credits_obtained = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
@@ -73,6 +86,7 @@ class Curriculum(models.Model):
     activity_type = models.CharField(max_length=255, choices=ACTIVITY_TYPES, blank=True, null=True)
     activity = models.CharField(max_length=255, blank=True, null=True)
     activity_place = models.CharField(max_length=255, blank=True, null=True)
+    study_system = models.CharField(max_length=25, choices=STUDY_SYSTEM, blank=True, null=True)
 
 
 def find_by_id(an_id):
@@ -92,3 +106,12 @@ def find_user(a_person):
 
 def find_by_person_year(a_person, year):
     return Curriculum.objects.filter(person=a_person, academic_year__year=year).first()
+
+
+def find_belgian_french(a_person, an_academic_year):
+    path_types = ['LOCAL_UNIVERSITY', 'LOCAL_HIGH_EDUCATION']
+    return Curriculum.objects.filter(person=a_person,
+                                     path_type__in=path_types,
+                                     academic_year=an_academic_year,
+                                     national_education='FRENCH',
+                                     national_institution__country__iso_code='BE')

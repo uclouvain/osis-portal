@@ -26,6 +26,8 @@
 from django import forms
 from django.core.validators import MinValueValidator
 from django.utils.translation import ugettext_lazy as _
+from admission.validators import date_validator
+from localflavor.generic.forms import BICFormField, IBANFormField
 
 
 class NewAccountForm(forms.Form):
@@ -108,14 +110,15 @@ class NewPasswordForm(forms.Form):
         return data.strip()
 
 
-class PersonForm(forms.Form):
+class ApplicantForm(forms.Form):
     GENDER_CHOICES=(
             ('MALE', 'MALE'),
             ('FEMALE', 'FEMALE'))
     last_name               = forms.CharField(required=True)
     first_name              = forms.CharField(required=True)
     birth_date              = forms.DateField(required=True, input_formats=['%d/%m/%Y'],
-                                              widget=forms.DateInput(format='%d/%m/%Y'))
+                                              widget=forms.DateInput(format='%d/%m/%Y'),
+                                              validators=[date_validator.validate_birth_date])
     birth_place             = forms.CharField(required=True)
     birth_country           = forms.CharField(required=True)
     gender                  = forms.ChoiceField(choices=GENDER_CHOICES, required=True)
@@ -135,14 +138,15 @@ class PersonForm(forms.Form):
     contact_adr_country     = forms.CharField(required=False)
     additional_email        = forms.EmailField(required=True)
     previous_enrollment     = forms.CharField(required=False)
-    register_number         = forms.CharField(required=False)
-    ucl_last_year           = forms.IntegerField(required=False)
+    registration_id         = forms.CharField(required=False)
+    last_academic_year      = forms.IntegerField(required=False)
 
     def __init__(self, *args, **kwargs):
-        super(PersonForm, self).__init__(*args, **kwargs)
+        super(ApplicantForm, self).__init__(*args, **kwargs)
         self.fields['last_name'].error_messages = {'required': _('mandatory_field')}
         self.fields['first_name'].error_messages = {'required': _('mandatory_field')}
-        self.fields['birth_date'].error_messages = {'required': _('mandatory_field')}
+        self.fields['birth_date'].error_messages = {'required': _('mandatory_field'),
+                                                    'invalid': _('invalid_date')}
         self.fields['birth_place'].error_messages = {'required': _('mandatory_field')}
         self.fields['birth_country'].error_messages = {'required': _('mandatory_field')}
         self.fields['gender'].error_messages = {'required': _('mandatory_field')}
@@ -157,7 +161,7 @@ class PersonForm(forms.Form):
         self.fields['additional_email'].error_messages = {'required': _('mandatory_field')}
 
     def clean(self):
-        cleaned_data = super(PersonForm, self).clean()
+        cleaned_data = super(ApplicantForm, self).clean()
         same_contact_legal_addr = cleaned_data.get("same_contact_legal_addr")
 
         if same_contact_legal_addr == "false":
@@ -185,15 +189,15 @@ class PersonForm(forms.Form):
         previous_enrollment = cleaned_data.get("previous_enrollment")
 
         if previous_enrollment == 'true':
-            register_number = cleaned_data.get("register_number")
+            registration_id = cleaned_data.get("registration_id")
 
-            if register_number is None or len(register_number) <= 0:
-                self.errors['register_number'] = _('mandatory_field')
+            if registration_id is None or len(registration_id) <= 0:
+                self.errors['registration_id'] = _('mandatory_field')
 
-            ucl_last_year = cleaned_data.get("ucl_last_year")
+            last_academic_year = cleaned_data.get("last_academic_year")
 
-            if ucl_last_year is None or ucl_last_year <= 0:
-                self.errors['ucl_last_year'] = _('numeric_field')
+            if last_academic_year is None or last_academic_year <= 0:
+                self.errors['last_academic_year'] = _('numeric_field')
 
         return cleaned_data
 
@@ -209,3 +213,21 @@ class AccessAccountForm(forms.Form):
         if data is None or len(data) == 0:
             self.errors['email'] = _('mandatory_field')
         return data.strip()
+
+
+class AccountingForm(forms.Form):
+    scholarship = forms.BooleanField()
+    scholarship_organization = forms.CharField()
+    bank_account_iban = IBANFormField()
+    bank_account_bic = BICFormField()
+
+    def __init__(self, *args, **kwargs):
+        super(AccountingForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super(AccountingForm, self).clean()
+        data = cleaned_data.get('scholarship_organization')
+        data_scholarship = cleaned_data.get('scholarship')
+        if data_scholarship and (data is None or len(data) == 0):
+            self.errors['scholarship_organization'] = _('mandatory_field')
+        return cleaned_data

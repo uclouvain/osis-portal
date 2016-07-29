@@ -1,0 +1,35 @@
+body {
+    padding-top: 120px;
+    font-family: 'Armata', sans-serif;
+}
+.error {
+  color:red;
+}
+
+.description {
+  color:grey;
+  font-style: italic;
+  font-weight: normal;
+}
+
+.navbar-nav > li > a {
+    padding-top:45px !important;
+    padding-bottom:5px !important;
+}
+
+.navbar {
+    min-height:85px !important
+}
+
+.not-active {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.6;
+}
+.validated{
+    color: green;
+}
+
+.not-validated{
+    color: orange;
+}

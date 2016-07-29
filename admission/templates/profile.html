@@ -1,4 +1,3 @@
-{% extends "layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -25,76 +24,82 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
-{% block style %}
-<link rel="stylesheet" href="{% static 'css/bootstrap-datepicker3.min.css' %}" type='text/css'>
-{% endblock %}
-{% block content %}
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        <h2 class="error">{% trans 'complete_profile_instruction'%}</h2>
-        <h5>{% trans 'mandatory_asterisk'%}</h5>
-        <form method="post" action="{% url 'profile' %}">
-            {% csrf_token %}
-            <font class="error">{% if person_form.errors %}{% trans 'errors_warning'%}{%endif%}</font>
+    <form method="post" action="{% url 'profile' %}" id="form_profile">
+        {% csrf_token %}
+        <span id="txt_message_error_profile_up"
+               class="alert alert-warning"
+               style="visibility:hidden;display:none;"></span><br>
+        {% if tab_active >= 0%}
+            <a id="lnk_profil_next_step_up"
+               class="btn btn-default"
+               href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"
+               title="{% trans 'demandes'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+                {%trans 'next_step'%} : {%trans 'offer_choice'%}</a>
             <br>
-            <br>
-            <button type="submit" id="bt_submit_profile" class="btn btn-primary" role="button" name="save"
-                    title="{% trans 'save'%}">
-                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> {% trans 'save'%}
-            </button>
-            <button type="submit" id="bt_submit_next_step" class="btn btn-default" role="button" name="next_step"
-                    title="{% trans 'next_step'%}">
-                <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>{% trans 'next_step'%}
-            </button>
-            <br>
-            <br>
-            <div class="panel panel-default">
-                <div class="panel-heading">{% trans 'identification' %}</div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                        </div>
-                        <div class="col-md-6">
-                        </div>
+        {%endif%}
+
+        {% if applicant_form.errors %}
+        <font class="error">{% if applicant_form.errors %}{% trans 'errors_warning'%}{%endif%}</font>
+        <br>
+        {%endif%}
+        {%if message_success and message_success == 'ok'%}
+            <br><br>
+            <div>
+                <font class="alert alert-success" role="alert" style="margin-left:5px;">
+                    {% trans 'msg_info_saved'%}
+                </font>
+                </div>
+        {% endif %}
+        <br>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">{% trans 'identification' %}</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
                     </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label>{%trans 'lastname'%} *</label>
-                            <input class="form-control" id="txt_last_name" name="last_name"
-                                   value="{{ person.user.last_name  | default_if_none:'' }}" maxlength="255">
-                            (ex: Van der Elst)
-                            <font class="error">{{ person_form.last_name.errors|striptags }}</font>
-                        </div>
-                        <div class="col-md-4">
-                            <label>{%trans 'firstname'%} *</label>
-                            <input class="form-control" id="txt_first_name" name="first_name"
-                                   value="{{ person.user.first_name  | default_if_none:'' }}" maxlength="255">
-                            (ex: Frédéric <span style="text-decoration: line-through;">frederic FREDERIC</span>)
-                            <font class="error">{{ person_form.first_name.errors|striptags }}</font>
-                        </div>
-                        <div class="col-md-4">
-                            <label>{%trans 'middle_name'%}</label>
-                            <input class="form-control" id="txt_middle_name" name="middle_name"
-                                   value="{{ person.middle_name  | default_if_none:'' }}" maxlength="50">
-                            (ex: Pierre, Paul, Jacques  <span style="text-decoration: line-through;">pierre, paul,
-                             JACQUES</span>)
-                        </div>
+                    <div class="col-md-6">
                     </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label>{%trans 'birth_day'%} *</label>
-                            <input type="text" class="form-control" id="txt_birth_date" name="birth_date"
-                                   value="{{ person.birth_date  | default_if_none:'' | date:"d/m/Y" }}">
-                            <font class="error">{{ person_form.birth_date.errors|striptags }}</font>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>{%trans 'lastname'%} *</label>
+                        <input class="form-control" id="txt_last_name" name="last_name"
+                               value="{{ applicant.user.last_name  | default_if_none:'' }}" maxlength="255">
+                        (ex: Van der Elst)
+                        <font class="error">{{ applicant_form.last_name.errors|striptags }}</font>
+                    </div>
+                    <div class="col-md-4">
+                        <label>{%trans 'firstname'%} *</label>
+                        <input class="form-control" id="txt_first_name" name="first_name"
+                               value="{{ applicant.user.first_name  | default_if_none:'' }}" maxlength="255">
+                        (ex: Frédéric <span style="text-decoration: line-through;">frederic FREDERIC</span>)
+                        <font class="error">{{ applicant_form.first_name.errors|striptags }}</font>
+                    </div>
+                    <div class="col-md-4">
+                        <label>{%trans 'middle_name'%}</label>
+                        <input class="form-control" id="txt_middle_name" name="middle_name"
+                               value="{{ applicant.middle_name  | default_if_none:'' }}" maxlength="50">
+                        (ex: Pierre, Paul, Jacques  <span style="text-decoration: line-through;">pierre, paul,
+                         JACQUES</span>)
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>{%trans 'birth_day'%} *</label>
+                        <input type="text" class="form-control" id="txt_birth_date" name="birth_date"
+                               value="{{ applicant.birth_date  | default_if_none:'' | date:"d/m/Y" }}">
+                        (format : {% trans 'format_date'%})
+                        <font class="error">{{ applicant_form.birth_date.errors|striptags }}</font>
 
                         </div>
                         <div class="col-md-4">
                             <label>{%trans 'birth_place'%} *</label>
                             <input class="form-control" id="txt_birth_place" name="birth_place"
-                                   value="{{ person.birth_place | default_if_none:''}}" maxlength="255">
-                            <font class="error">{{ person_form.birth_place.errors|striptags}}</font>
+                                   value="{{ applicant.birth_place | default_if_none:''}}" maxlength="255">
+                            <font class="error">{{ applicant_form.birth_place.errors|striptags}}</font>
 
                         </div>
                         <div class="col-md-3">
@@ -102,23 +107,23 @@
                             <select class="form-control" id="slt_birth_country" name="birth_country">
                                 {% for country in countries%}
                                 <option value="{{country.id}}"
-                                    {%if country.id = person.birth_country.id %} selected {% endif %}>{{ country}}
+                                    {%if country.id = applicant.birth_country.id %} selected {% endif %}>{{ country}}
                                 </option>
                                 {% endfor %}
                             </select>
-                            <font class="error">{{ person_form.birth_country.errors|striptags }}</font>
+                            <font class="error">{{ applicant_form.birth_country.errors|striptags }}</font>
                         </div>
                         <div class="col-md-3">
                             <label>{%trans 'nationality'%} *</label>
                             <select class="form-control" id="slt_nationality" name="nationality">
                                 {% for country in countries%}
                                 <option value="{{country.id}}"
-                                        {% if country.id = person.nationality.id %} selected {%endif %}>
+                                        {% if country.id = applicant.nationality.id %} selected {%endif %}>
                                         {{ country.name }}
                                 </option>
                                 {% endfor %}
                             </select>
-                            <font class="error">{{ person_form.nationality.errors|striptags }}</font>
+                            <font class="error">{{ applicant_form.nationality.errors|striptags }}</font>
                         </div>
                     </div>
                     <br>
@@ -135,52 +140,52 @@
                                            {% if person.gender = "FEMALE" %} checked {% endif %}> Féminin
                                 </label>
                             </div>
-                            <font class="error">{{ person_form.gender.errors|striptags }}</font>
+                            <font class="error">{{ applicant_form.gender.errors|striptags }}</font>
 
-                        </div>
-                        <div class="col-md-3">
-                            <label>{%trans 'civil_status'%} *</label>
-                            <select class="form-control" id="slt_civil_status" name="civil_status">
-                                <option value="SINGLE" {% if person.civil_status = "SINGLE" %}selected{%endif%}>
-                                    {%trans 'single'%}
-                                </option>
-                                <option value="COHABITANT" {% if person.civil_status = "COHABITANT" %}selected{%endif%}>
-                                    {%trans 'cohabitant'%}
-                                </option>
-                                <option value="MARRIED" {% if person.civil_status = "MARRIED" %} selected {%endif%}>
-                                    {%trans 'married'%}
-                                </option>
-                                <option value="SEPARATED" {% if person.civil_status = "SEPARATED" %}selected{%endif%}>
-                                    {%trans 'separated'%}
-                                </option>
-                                <option value="DIVORCED" {% if person.civil_status = "DIVORCED" %}selected{%endif%}>
-                                    {%trans 'divorced'%}
-                                </option>
-                                <option value="WIDOWED" {% if person.civil_status = "WIDOWED" %}selected{%endif%}>
-                                    {%trans 'widow'%}
-                                </option>
-                            </select>
-                            <font class="error">{{ person_form.civil_status.errors|striptags }}</font>
-                        </div>
-                        <div class="col-md-3">
-                            <label>{%trans 'children'%}</label>
-                            <input class="form-control" id="txt_number_children" name="number_children"
-                                   value="{{ person.number_children | default_if_none:''}}">
-                            <font class="error">{{ person_form.number_children.errors|striptags }}</font>
-                        </div>
-                        <div class="col-md-3">
-                            <label>{%trans 'spouse_name'%}</label>
-                            <input class="form-control" id="txt_spouse_name" name="spouse_name"
-                                   value="{{ person.spouse_name | default_if_none:''}}" maxlength="50">
-                        </div>
                     </div>
+                    <div class="col-md-3">
+                        <label>{%trans 'civil_status'%} *</label>
+                        <select class="form-control" id="slt_civil_status" name="civil_status">
+                            <option value="SINGLE" {% if applicant.civil_status = "SINGLE" %}selected{%endif%}>
+                                {%trans 'single'%}
+                            </option>
+                            <option value="COHABITANT" {% if applicant.civil_status = "COHABITANT" %}selected{%endif%}>
+                                {%trans 'cohabitant'%}
+                            </option>
+                            <option value="MARRIED" {% if applicant.civil_status = "MARRIED" %} selected {%endif%}>
+                                {%trans 'married'%}
+                            </option>
+                            <option value="SEPARATED" {% if applicant.civil_status = "SEPARATED" %}selected{%endif%}>
+                                {%trans 'separated'%}
+                            </option>
+                            <option value="DIVORCED" {% if applicant.civil_status = "DIVORCED" %}selected{%endif%}>
+                                {%trans 'divorced'%}
+                            </option>
+                            <option value="WIDOWED" {% if applicant.civil_status = "WIDOWED" %}selected{%endif%}>
+                                {%trans 'widow'%}
+                            </option>
+                        </select>
+                        <font class="error">{{ applicant_form.civil_status.errors|striptags }}</font>
+                    </div>
+                    <div class="col-md-3">
+                        <label>{%trans 'children'%}</label>
+                        <input class="form-control" id="txt_number_children" name="number_children"
+                               value="{{ applicant.number_children | default_if_none:''}}">
+                        <font class="error">{{ applicant_form.number_children.errors|striptags }}</font>
+                    </div>
+                    <div class="col-md-3">
+                        <label>{%trans 'spouse_name'%}</label>
+                        <input class="form-control" id="txt_spouse_name" name="spouse_name"
+                               value="{{ applicant.spouse_name | default_if_none:''}}" maxlength="50">
+                    </div>
+                </div>
 
-                    <div id="pnl_assimilation_criteria"
-                         style="visibility:hidden;display:none;">
-                        <br>
-                        {% trans 'criteria_question'%} :
-                        <ol>
-                            {% for criteria in assimilationCriteria %}
+                <div id="pnl_assimilation_criteria"
+                     style="visibility:hidden;display:none;">
+                    <br>
+                    {% trans 'criteria_question'%} :
+                    <ol>
+                        {% for criteria in assimilationCriteria %}
 
                             <div class="row">
                                 <div class="col-md-8">
@@ -193,16 +198,16 @@
                                             <input type="radio" id="assimilation_criteria_{{forloop.counter}}_true"
                                                    name="assimilation_criteria_{{criteria.id}}"
                                                    value="true"
-                                                   {% for personCriteria in personAssimilationCriteria %}
-                                                     {% if personCriteria.criteria.id == criteria.id %} checked {% endif %}
+                                                   {% for applicant_criteria in applicant_assimilation_criteria %}
+                                                     {% if applicant_criteria.criteria.id == criteria.id %} checked {% endif %}
                                                    {% endfor %}
-                                            > oui
+                                            > {% trans 'yes' %}
                                         </label>
                                         <label class="radio-inline">
                                             <input type="radio" id="assimilation_criteria_{{forloop.counter}}_false"
                                                    name="assimilation_criteria_{{criteria.id}}"
                                                    value="false"
-                                            > Non
+                                            > {% trans 'no' %}
                                         </label>
                                     </div>
                                 </div>
@@ -222,17 +227,17 @@
                         <div class="col-md-4">
                             <label>{% trans 'national_registry_number'%}</label>
                             <input class="form-control" id="txt_national_id" name="national_id"
-                                   value="{{ person.national_id | default_if_none:''}}">
+                                   value="{{ applicant.national_id | default_if_none:''}}">
                         </div>
                         <div class="col-md-4">
                             <label>{% trans 'identity_card_number'%}</label>
                             <input class="form-control" id="txt_id_card_number" name="id_card_number"
-                                   value="{{ person.id_card_number | default_if_none:''}}">
+                                   value="{{ applicant.id_card_number | default_if_none:''}}">
                         </div>
                         <div class="col-md-4">
                             <label>{% trans 'passport_number'%}</label>
                             <input class="form-control" id="txt_passport_number" name="passport_number"
-                                   value="{{ person.passport_number | default_if_none:''}}">
+                                   value="{{ applicant.passport_number | default_if_none:''}}">
                         </div>
                     </div>
 
@@ -249,14 +254,14 @@
                                    value="{{ person_legal_address.street | default_if_none:''}}"
                                    maxlength="255">
                             (ex: Avenue Louis Braille, Rue de la Loi, Place de l'Université)
-                            <font class="error">{{ person_form.legal_adr_street.errors|striptags }}</font>
+                            <font class="error">{{ applicant_form.legal_adr_street.errors|striptags }}</font>
                         </div>
                         <div class="col-md-2">
                             <label>{% trans 'number'%} *</label>
                             <input class="form-control" id="txt_legal_adr_number" name="legal_adr_number"
                                    value="{{ person_legal_address.number | default_if_none:''}}"
                                    maxlength="6">
-                            <font class="error">{{ person_form.legal_adr_number.errors|striptags }}</font>
+                            <font class="error">{{ applicant_form.legal_adr_number.errors|striptags }}</font>
                         </div>
                         <div class="col-md-4">
                             <label>{% trans 'place'%}</label>
@@ -273,14 +278,14 @@
                                    value="{{ person_legal_address.postal_code | default_if_none:''}}"
                                    maxlength="20">
                             (ex: 1348)
-                            <font class="error">{{ person_form.legal_adr_postal_code.errors|striptags }}</font>
+                            <font class="error">{{ applicant_form.legal_adr_postal_code.errors|striptags }}</font>
                         </div>
                         <div class="col-md-6">
                             <label>{% trans 'city'%} *</label>
                             <input class="form-control" id="txt_legal_adr_city" name="legal_adr_city"
                                    value="{{ person_legal_address.city | default_if_none:''}}"
                                    maxlength="255">
-                            <font class="error">{{ person_form.legal_adr_city.errors|striptags }}</font>
+                            <font class="error">{{ applicant_form.legal_adr_city.errors|striptags }}</font>
                         </div>
                         <div class="col-md-4">
                             <label>{% trans 'country'%} *</label>
@@ -292,7 +297,7 @@
                                 </option>
                                 {% endfor %}
                             </select>
-                            <font class="error">{{ person_form.legal_adr_country.errors|striptags }}</font>
+                            <font class="error">{{ applicant_form.legal_adr_country.errors|striptags }}</font>
                         </div>
                     </div>
 
@@ -313,14 +318,14 @@
                                     <input type="radio" id="rd_same_contact_legal_addr_true"
                                            name="same_contact_legal_addr" value="true"
                                            onclick="display('pnl_contact_address',false);"
-                                           {% if same_addresses %}checked{%endif%}> Oui
+                                           {% if same_addresses %}checked{%endif%}> {% trans 'yes' %}
 
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" id="rd_same_contact_legal_addr_false"
                                            name="same_contact_legal_addr" value="false"
                                            onclick="display('pnl_contact_address',true);"
-                                           {% if same_addresses %}{%else%}checked{%endif%}> Non
+                                           {% if same_addresses %}{%else%}checked{%endif%}> {% trans 'no' %}
                                 </label>
                             </div>
                         </div>
@@ -335,14 +340,14 @@
                                        value="{{ person_contact_address.street | default_if_none:''}}"
                                        maxlength="255">
                                 (ex: Avenue Louis Braille, Rue de la Loi, Place de l'Université)
-                                <font class="error">{{ person_form.contact_adr_street.errors|striptags }}</font>
+                                <font class="error">{{ applicant_form.contact_adr_street.errors|striptags }}</font>
                             </div>
                             <div class="col-md-2">
                                 <label>{% trans 'number'%} *</label>
                                 <input class="form-control" id="txt_contact_adr_number" name="contact_adr_number"
                                        value="{{ person_contact_address.number | default_if_none:''}}"
                                        maxlength="6">
-                                <font class="error">{{ person_form.contact_adr_number.errors|striptags }}</font>
+                                <font class="error">{{ applicant_form.contact_adr_number.errors|striptags }}</font>
                             </div>
                             <div class="col-md-4">
                                 <label>{% trans 'place'%}</label>
@@ -361,14 +366,14 @@
                                        value="{{ person_contact_address.postal_code | default_if_none:''}}"
                                        maxlength="20">
                                 (ex: 1348)
-                                <font class="error">{{ person_form.contact_adr_postal_code.errors|striptags }}</font>
+                                <font class="error">{{ applicant_form.contact_adr_postal_code.errors|striptags }}</font>
                             </div>
                             <div class="col-md-6">
                                 <label>{% trans 'city'%} *</label>
                                 <input class="form-control" id="txt_contact_adr_city" name="contact_adr_city"
                                        value="{{ person_contact_address.city | default_if_none:''}}"
                                        maxlength="255">
-                                <font class="error">{{ person_form.contact_adr_city.errors|striptags }}</font>
+                                <font class="error">{{ applicant_form.contact_adr_city.errors|striptags }}</font>
                             </div>
                             <div class="col-md-4">
                                 <label>{% trans 'country'%} *</label>
@@ -380,7 +385,7 @@
                                     </option>
                                     {% endfor %}
                                 </select>
-                                <font class="error">{{ person_form.contact_adr_country.errors|striptags }}</font>
+                                <font class="error">{{ applicant_form.contact_adr_country.errors|striptags }}</font>
                             </div>
                         </div>
                     </div>
@@ -394,21 +399,21 @@
                         <div class="col-md-3">
                             <label>{% trans 'mobile'%}</label>
                             <input class="form-control" id="txt_phone_mobile" name="phone_mobile"
-                                   value="{{ person.phone_mobile | default_if_none:''}}"
+                                   value="{{ applicant.phone_mobile | default_if_none:''}}"
                                    maxlength="30">
                             (ex: +32 490 00 00 00)
                         </div>
                         <div class="col-md-3">
                             <label>{% trans 'other_phone'%}</label>
                             <input class="form-control" id="txt_phone" name="phone"
-                                   value="{{ person.phone | default_if_none:''}}" maxlength="30">
+                                   value="{{ applicant.phone | default_if_none:''}}" maxlength="30">
                             (ex: +32 10 47 21 72)
                         </div>
                         <div class="col-md-3">
                             <label>{% trans 'mail' %} *</label>
                             <input class="form-control" id="txt_additional_email" name="additional_email"
-                                   value="{{ person.additional_email| default_if_none:''}}" maxlength="255">
-                            <font class="error">{{ person_form.additional_email.errors|striptags }}</font>
+                                   value="{{ applicant.additional_email| default_if_none:''}}" maxlength="255">
+                            <font class="error">{{ applicant_form.additional_email.errors|striptags }}</font>
                         </div>
                     </div>
                 </div>
@@ -440,57 +445,33 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <label>{% trans 'question_registration_number'%} *</label>
-                                <input class="form-control" id="txt_register_number" name="register_number"
-                                       value="{{ person.register_number| default_if_none:''}}">
+                                <input class="form-control" id="txt_registration_id" name="registration_id"
+                                       value="{{ applicant.registration_id| default_if_none:''}}">
                                 (ex: 1058-13-00)
-                                <font class="error">{{ person_form.register_number.errors|striptags }}</font>
+                                <font class="error">{{ applicant_form.registration_id.errors|striptags }}</font>
                             </div>
                             <div class="col-md-8">
                                 <label>{% trans 'question_year_last_registration'%} {{institution}}? *</label>
                                 <br>
-                                <input id="txt_ucl_last_year" name="ucl_last_year" size="10"
-                                       value="{{ person.ucl_last_year| default_if_none:''}}" maxlength="9">
-                                <br><font class="error">{{ person_form.ucl_last_year.errors|striptags }}</font>
+                                <input id="txt_last_academic_year" name="last_academic_year" size="10"
+                                       value="{{ applicant.last_academic_year| default_if_none:''}}" maxlength="9">
+                                <br><font class="error">{{ applicant_form.last_academic_year.errors|striptags }}</font>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <button type="submit" id="bt_profile" class="btn btn-primary" role="button" name="save_down"
-                    title="{% trans 'save'%}">
-                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> {% trans 'save'%}
-            </button>
-
-            <button type="submit" id="bt_next_step" class="btn btn-default" role="button" name="next_step_down"
-                    title="{% trans 'next_step'%}">
-                <span class="glyphicon glyphicon-forward" aria-hidden="true"></span> {% trans 'next_step'%}
-            </button>
-
-        </form>
-    </div>
-</div>
-
-{% endblock %}
-{% block script %}
-<script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
-<script>
-$("#txt_birth_date").datepicker({
-    format: "dd/mm/yyyy",
-    autoclose: true,
-    orientation: "bottom auto"
-});
-
-$(document).ready(function() {
-    $.ajax({
-        url: "/admission/country?nationality=" + $("#slt_nationality").val();
-    }).then(function(data) {
-
-    if (data.european_union) {
-        $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
-    }else{
-        $('#pnl_assimilation_criteria').css('visibility', 'visible').css('display','block');
-    }
-});
-</script>
-{% endblock %}
+        <div>
+        <span id="txt_message_error_profile"
+               class="alert alert-warning"
+               style="visibility:hidden;display:none;"></span><br>
+        {% if tab_active ==  0%}
+            <a id="lnk_profil_next_step"
+               class="btn btn-default"
+               href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"
+               title="{% trans 'demandes'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+                {%trans 'next_step'%} : {%trans 'offer_choice'%}</a>
+        {%endif%}
+        </div>
+    </form>

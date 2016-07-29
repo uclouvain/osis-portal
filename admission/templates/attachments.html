@@ -1,0 +1,59 @@
+{% load staticfiles %}
+{% load i18n %}
+{% load message %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+<form id="form_attachments">
+    <div>
+        <a id="lnk_previous_step_up"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey'%}{%endif%}"
+           onclick="save('form_attachments');"
+           title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%} : {% trans 'sociological_survey'%}</a>
+        <a id="lnk_next_step_up"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'submission' application.id%}{%else%}{% url 'submission'%}{%endif%}"
+           onclick="save('form_attachments');"
+           title="{% trans 'submission'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            {%trans 'next_step'%} : {%trans 'submission'%}</a>
+    </div>
+    <h3>En construction, formulaire de pièces jointes</h3>
+    <div>
+        <a id="lnk_previous_step"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey'%}{%endif%}"
+           onclick="save('form_attachments');"
+           title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%} : {% trans 'sociological_survey'%}</a>
+        <a id="lnk_next_step"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'submission' application.id%}{%else%}{% url 'submission'%}{%endif%}"
+           onclick="save('form_attachments');"
+           title="{% trans 'submission'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            {%trans 'next_step'%} : {%trans 'submission'%}</a>
+    </div>
+</form>
