@@ -19,3 +19,46 @@ msgstr ""
 
 msgid "application_dissertation"
 msgstr "Dissertation management"
+
+msgid "case_study"
+msgstr "Case Study"
+
+msgid "copromotor"
+msgstr "Co-promotor"
+
+msgid "domain"
+msgstr "Domain"
+
+msgid "forbidden"
+msgstr "Forbidden"
+
+msgid "litterature_review"
+msgstr "Litterature Review"
+
+msgid "manager"
+msgstr "Course manager"
+
+msgid "possible"
+msgstr "Possible"
+
+msgid "professor"
+msgstr "Professor"
+
+msgid "promotor"
+msgstr "Promotor"
+
+msgid "question"
+msgstr "Question"
+
+msgid "reader"
+msgstr "Reader"
+
+msgid "required"
+msgstr "Required"
+
+msgid "theme"
+msgstr "Theme"
+
+msgid "work"
+msgstr "Work"
+
