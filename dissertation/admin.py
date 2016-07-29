@@ -28,6 +28,7 @@ from django.contrib import admin
 from dissertation.models import *
 
 admin.site.register(adviser.Adviser, adviser.AdviserAdmin)
+admin.site.register(dissertation.Dissertation, dissertation.DissertationAdmin)
 admin.site.register(offer_proposition.OfferProposition)
 admin.site.register(proposition_dissertation.PropositionDissertation)
 admin.site.register(proposition_role.PropositionRole)

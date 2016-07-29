@@ -30,7 +30,6 @@ class Migration(migrations.Migration):
                 ('person', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='base.Person')),
             ],
         ),
-
         migrations.CreateModel(
             name='OfferProposition',
             fields=[
@@ -49,7 +48,6 @@ class Migration(migrations.Migration):
                                                  to='admission.OfferYear')),
             ],
         ),
-
         migrations.CreateModel(
             name='PropositionDissertation',
             fields=[
@@ -76,15 +74,48 @@ class Migration(migrations.Migration):
                              'title'],
             },
         ),
-
         migrations.CreateModel(
             name='PropositionRole',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('status',
-                 models.CharField(choices=[('PROMOTEUR', 'pro'), ('CO_PROMOTEUR', 'copro'), ('READER', 'reader')],
+                 models.CharField(choices=[('PROMOTEUR', 'promotor'), ('CO_PROMOTEUR', 'copromotor'), ('READER', 'reader')],
                                   default='PROMOTEUR', max_length=12)),
                 ('adviser', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='dissertation.Adviser')),
+                ('proposition_dissertation', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                                               to='dissertation.PropositionDissertation')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Dissertation',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('title', models.CharField(max_length=200)),
+                ('status', models.CharField(choices=[('DRAFT', 'draft'), ('DIR_SUBMIT', 'submitted_to_director'),
+                                                     ('DIR_OK', 'accepted_by_director'),
+                                                     ('DIR_KO', 'refused_by_director'),
+                                                     ('COM_SUBMIT', 'submitted_to_commission'),
+                                                     ('COM_OK', 'accepted_by_commission'),
+                                                     ('COM_KO', 'refused_by_commission'),
+                                                     ('EVA_SUBMIT', 'submitted_to_first_year_evaluation'),
+                                                     ('EVA_OK', 'accepted_by_first_year_evaluation'),
+                                                     ('EVA_KO', 'refused_by_first_year_evaluation'),
+                                                     ('TO_RECEIVE', 'to_be_received'), ('TO_DEFEND', 'to_be_defended'),
+                                                     ('DEFENDED', 'defended'), ('ENDED', 'ended'),
+                                                     ('ENDED_WIN', 'ended_win'), ('ENDED_LOS', 'ended_los')],
+                                            default='DRAFT', max_length=12)),
+                ('defend_periode', models.CharField(
+                    choices=[('UNDEFINED', 'undefined'), ('JANUARY', 'january'), ('JUNE', 'june'),
+                             ('SEPTEMBER', 'september')], default='UNDEFINED', max_length=12)),
+                ('description', models.TextField(blank=True, null=True)),
+                ('active', models.BooleanField(default=True)),
+                ('creation_date', models.DateTimeField(auto_now_add=True)),
+                ('modification_date', models.DateTimeField(auto_now=True)),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='base.Student')),
+                ('defend_year', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                                  to='admission.AcademicYear')),
+                ('offer_year_start',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='admission.OfferYear')),
                 ('proposition_dissertation', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
                                                                to='dissertation.PropositionDissertation')),
             ],
