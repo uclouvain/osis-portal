@@ -101,6 +101,7 @@ def object_exists(model_object):
     elif model_object.object.__class__ == student.Student:
         registration_id = model_object.object.registration_id
         return model_object.object.__class__.objects.filter(registration_id=registration_id).exists()
+    # TODO need to use natural key
     elif model_object.object.__class__ == tutor.Tutor:
         external_id = model_object.object.external_id
         return model_object.object.__class__.objects.filter(external_id=external_id).exists()
