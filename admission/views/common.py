@@ -81,7 +81,7 @@ def home(request):
                                                            'picture': get_picture_id(request.user),
                                                            'id_document': get_id_document(request.user),
                                                            'person_legal_address': person_legal_address,
-                                                           'person_contact_address': person_contact_address,})
+                                                           'person_contact_address': person_contact_address})
 
     else:
         return profile(request)

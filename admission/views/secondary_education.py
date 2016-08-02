@@ -388,7 +388,9 @@ def diploma_update(request, application_id=None):
             'tab_sociological': tab_status['tab_sociological'],
             'tab_attachments': tab_status['tab_attachments'],
             'tab_submission': tab_status['tab_submission'],
-            'applications': mdl.application.find_by_user(request.user)}
+            'applications': mdl.application.find_by_user(request.user),
+            'national_diploma_verso': mdl.admission_document_file.search(applicant,'NATIONAL_DIPLOMA_VERSO'),
+            'national_diploma_recto': mdl.admission_document_file.search(applicant,'NATIONAL_DIPLOMA_RECTO')}
 
     # merge 2 dictionaries
     data.update(get_secondary_education_exams_data(secondary_education))

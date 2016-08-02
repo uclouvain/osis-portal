@@ -311,7 +311,13 @@
             {%trans 'next_step'%} : {%trans 'curriculum'%}</a>
     </div>
 </form>
-
+    <form method="post"
+          action="{% url 'upload_file_description' %}"
+          id="form_upload_national_diploma">
+        {% csrf_token %}
+        <input type="text" name="description" id="hdn_description_diploma"/>
+        <input type="submit" id="btn_documents_upload_verso">
+    </form>
   <script>
 	var selDiv = "";
 

@@ -533,6 +533,6 @@
           id="form_upload_profile"
           style="visibility:hidden;display:none;">
         {% csrf_token %}
-        <input type="text" name="description" value="" id="hdn_description"/>
+        <input type="hidden" name="description" value="" id="hdn_description"/>
         <input type="submit" value="+"  id="lnk_picture">
     </form>

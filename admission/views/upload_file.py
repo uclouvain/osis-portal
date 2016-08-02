@@ -29,12 +29,13 @@ from django.http import *
 from osis_common.forms import UploadDocumentFileForm
 from osis_common import models as mdl
 from admission.views import common
+from admission.views import secondary_education
 from admission import settings as adm_settings
+from admission import models as mdl_admission
 
 
 @login_required
 def upload_file(request):
-
     description = 'LETTER_MOTIVATION'
     documents = mdl.document_file.search(document_type=adm_settings.DOCUMENT_TYPE, user=request.user)
     if request.method == "POST":
@@ -44,13 +45,19 @@ def upload_file(request):
 
         form = UploadDocumentFileForm(request.POST, request.FILES)
         if form.is_valid():
-            if description == 'ID_PICTURE' or description == 'ID_CARD':
+            applicant = mdl_admission.applicant.find_by_user(request.user)
+            if description == 'NATIONAL_DIPLOMA_VERSO' or description == 'NATIONAL_DIPLOMA_RECTO':
+                documents = mdl_admission.admission_document_file.search(applicant, description)
+                for document in documents:
+                    document.delete()
+            if description == 'ID_PICTURE' or description == 'ID_CARD' or description == 'NATIONAL_DIPLOMA_VERSO' or description == 'NATIONAL_DIPLOMA_RECTO':
                 # Delete older file with the same description
                 documents = mdl.document_file.search(document_type=None,
                                                      user=request.user,
                                                      description=description)
                 for document in documents:
                     document.delete()
+
 
             file = form.save()
             file.size = file.file.size
@@ -59,10 +66,20 @@ def upload_file(request):
             content_type = file_type.content_type
             file.content_type = content_type
             file.save()
+
+            if description == 'NATIONAL_DIPLOMA_VERSO' or description == 'NATIONAL_DIPLOMA_RECTO':
+                adm_doc_file = mdl_admission.admission_document_file.AdmissionDocumentFile()
+                adm_doc_file.applicant = applicant
+                adm_doc_file.document_file = file
+                adm_doc_file.save()
+
             if description == 'ID_PICTURE' or description == 'ID_CARD':
                 return common.home(request)
             else:
-                return redirect('new_document')
+                if description == 'NATIONAL_DIPLOMA_VERSO' or description == 'NATIONAL_DIPLOMA_RECTO':
+                    return secondary_education.diploma_update(request)
+                else:
+                    return redirect('new_document')
         else:
             return render(request, 'new_document.html', {'form': form,
                                                      'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
@@ -96,11 +113,12 @@ def upload_file_description(request):
     :param request:
     :return:
     """
-    documents = mdl.document_file.search(document_type=None,
-                                         user=request.user,
-                                         description="ID_PICTURE")
+
 
     description = request.POST['description']
+    documents = mdl.document_file.search(document_type=None,
+                                         user=request.user,
+                                         description=description)
     form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                            'document_type': "admission",
                                            'user': request.user})

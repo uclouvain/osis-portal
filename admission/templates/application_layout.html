@@ -286,6 +286,20 @@
         $('#hdn_description').val('ID_CARD');
         $('#lnk_picture').trigger('click');
     });
+    $("#btn_documents_upload_verso").click(function() {
+        save('form_secondary_education');
+    });
+
+    $("#bt_upload_file_sec_diploma_verso").click(function() {
+        $('#hdn_description_diploma').val('NATIONAL_DIPLOMA_VERSO');
+        $('#btn_documents_upload_verso').trigger('click');
+    });
+
+    $("#bt_upload_file_sec_diploma_recto").click(function() {
+        $('#hdn_description_diploma').val('NATIONAL_DIPLOMA_RECTO');
+        $('#btn_documents_upload_verso').trigger('click');
+    });
+
 
 
     </script>

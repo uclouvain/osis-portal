@@ -34,7 +34,12 @@
         {% if description == 'ID_CARD'%}
             {% trans 'id_documents' %}
         {% endif %}
-
+        {% if description == 'NATIONAL_DIPLOMA_VERSO'%}
+            {% trans 'high_school_diploma'%} - {% trans 'verso'%}
+        {% endif %}
+        {% if description == 'NATIONAL_DIPLOMA_RECTO'%}
+            {% trans 'high_school_diploma' %} - {% trans 'recto'%}
+        {% endif %}
     </h2>
   </div>
   <div class="panel panel-default">
@@ -44,10 +49,16 @@
         {% include "uploading/upload_file_form.html" %}
         <input type="hidden" name="description" value='{{ description }}' />
         <button type="submit" class="save btn btn-default" onclick="return confirm('{% trans 'new_file_confirmation_message' %}')">{% trans 'save' %}</button>
-        <a href="{% url 'home'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>
+        {% if description == 'ID_PICTURE' or description == 'ID_CARD'%}
+            <a href="{% url 'home'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>
+        {% else %}
+          {% if description == 'NATIONAL_DIPLOMA_VERSO' or  description == 'NATIONAL_DIPLOMA_RECTO' %}
+          <a href="{% url 'diploma_update'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>
+          {% endif %}
+        {% endif %}
       </form>
     </div>
   </div>
-
+{% include "uploading/upload_file_list.html" %}
 {% endblock %}
 
