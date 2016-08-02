@@ -1193,3 +1193,6 @@ msgstr "Pas d'aperçu disponible sur un fichier qui n'est pas de type image(gif,
 
 msgid "new_file_confirmation_message"
 msgstr "Etes-vous sûre de vouloir uploader ce fichier?"
+
+msgid "msg_error_size_and_content"
+msgstr "Fichier trop volumineux, ou d'un mauvais type"

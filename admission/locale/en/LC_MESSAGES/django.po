@@ -1185,4 +1185,8 @@ msgstr "No preview available on a non image file"
 msgid "new_file_confirmation_message"
 msgstr "Are you sure you want to upload this file?"
 
+msgid "msg_error_size_and_content"
+msgstr "File too big or bad content"
+
+
 
