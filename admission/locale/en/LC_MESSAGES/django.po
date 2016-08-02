@@ -1182,3 +1182,7 @@ msgstr "Id document"
 msgid "no_preview"
 msgstr "No preview available on a non image file"
 
+msgid "new_file_confirmation_message"
+msgstr "Are you sure you want to upload this file?"
+
+

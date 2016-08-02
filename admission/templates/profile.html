@@ -90,28 +90,25 @@
                                 <div >
                                     {% if picture %}
                                         {% if ".jpg" in picture|lower or ".jpeg" in picture|lower or ".gif" in picture|lower or ".png" in picture|lower%}
-                                            <img src="{% static picture%}" width="120px" height="120px"
+                                            <img src="{% static picture%}" width="120px"
                                                  id="lnk_modify_picture"
                                                  style="cursor:pointer;"
-                                                 title="{% trans 'change_picture'%}"
-                                            >
+                                                 title="{% trans 'change_picture'%}">
                                         {%else%}
                                             <button type="button"
                                                    id="btn_modify_picture"
                                                    class="glyphicon glyphicon-pencil"
                                                    title="{% trans 'change_picture'%}"
-                                            >&nbsp;&nbsp;{% trans 'change_picture'%}</button>
+                                            ></button>
                                             <br><br>
                                             <span style="font-size:x-small;color:#808080">({% trans 'no_preview'%})</span>
                                         {%endif%}
 
                                     {%else%}
-                                        <div style="width:100px;height:100px;">
-                                            <input type="button" value="{% trans 'id_picture_add'%}"
-                                                   id="lnk_redirect_picture"
-                                                   style="width:100px;height:100px;white-space:normal ;word-wrap:break-word;float: left;"
-                                                   class=" glyphicon glyphicon-plus">
-                                        </div>
+                                            <button type="button"
+                                                    id="lnk_redirect_picture" title="{% trans 'id_picture_add'%}"
+                                                   class="btn glyphicon glyphicon-plus"></button>
+
                                     {%endif%}
                                 </div>
                             </div>
@@ -252,72 +249,51 @@
             <div class="panel panel-default">
                 <div class="panel-heading">{%trans 'id_card'%}</div>
                 <div class="panel-body">
-                    <div class="row"> {%trans 'question_identity'%}</div>
-                    <br>
+                    {%trans 'question_identity'%}
+                    <br><br>
                     <div class="row">
                         <div class="col-md-8">
-                            <div class="row">
-                                    <label>{% trans 'national_registry_number'%}</label>
-                                    <input class="form-control" id="txt_national_id" name="national_id"
-                                           value="{{ applicant.national_id | default_if_none:''}}">
-
-
-                            </div>
-                            <div class="row">
-
-                                    <label>{% trans 'identity_card_number'%}</label>
-                                    <input class="form-control" id="txt_id_card_number" name="id_card_number"
-                                           value="{{ applicant.id_card_number | default_if_none:''}}">
-
-
-                            </div>
-                            <div class="row">
-
-                                    <label>{% trans 'passport_number'%}</label>
-                                    <input class="form-control" id="txt_passport_number" name="passport_number"
-                                           value="{{ applicant.passport_number | default_if_none:''}}">
-
-                            </div>
-
+                            <label>{% trans 'national_registry_number'%}</label>
+                            <br>
+                            <input class="form-control" id="txt_national_id" name="national_id"
+                                   value="{{ applicant.national_id | default_if_none:''}}">
+                            <label>{% trans 'identity_card_number'%}</label>
+                            <input class="form-control" id="txt_id_card_number" name="id_card_number"
+                                   value="{{ applicant.id_card_number | default_if_none:''}}">
+                            <label>{% trans 'passport_number'%}</label>
+                            <input class="form-control" id="txt_passport_number" name="passport_number"
+                                   value="{{ applicant.passport_number | default_if_none:''}}">
                         </div>
                         <div class="col-md-4">
-                                                <div class="row">
-<div class="col-md-2"></div>
-                            <div class="col-md-10">
-                                <label>{%trans 'id_document'%}</label>
-                                {% if id_document %}
-                                    {% if ".jpg" in id_document|lower or ".jpeg" in id_document|lower or ".gif" in id_document|lower or ".png" in id_document|lower%}
-                                        <img src="{% static id_document %} " width="120px" height="120px"
-                                             id="lnk_modify_id_document"
-                                             style="cursor:pointer;"
-                                             title="{% trans 'change_document'%}"
-                                        >
+                            <div class="row">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-10">
+                                    <label>{%trans 'id_document'%}</label>
+                                    {% if id_document %}
+                                        {% if ".jpg" in id_document|lower or ".jpeg" in id_document|lower or ".gif" in id_document|lower or ".png" in id_document|lower%}
+                                            <img src="{% static id_document %} " width="120px"
+                                                 id="lnk_modify_id_document"
+                                                 style="cursor:pointer;"
+                                                 title="{% trans 'change_document'%}">
+                                        {%else%}
+                                            <button type="button"
+                                                   id="btn_modify_id_document"
+                                                   class="glyphicon glyphicon-pencil"
+                                                   title="{% trans 'change_document'%}"
+                                            ></button>
+                                            <br><br><span style="font-size:x-small;color:#808080">({% trans 'no_preview'%})</span>
+                                        {%endif%}
                                     {%else%}
-                                        <button type="button"
+                                        <br>
+                                        <button type="button" title="{% trans 'id_add'%}"
                                                id="btn_modify_id_document"
-                                               class="glyphicon glyphicon-pencil"
-                                               title="{% trans 'change_document'%}"
-                                        >&nbsp;&nbsp;{% trans 'change_document'%}</button>
-                                        <br><br><span style="font-size:x-small;color:#808080">({% trans 'no_preview'%})</span>
+                                               class="btn glyphicon glyphicon-plus" ></button>
                                     {%endif%}
-                                {%else%}
-                                    <input type="button" value="{% trans 'id_add'%}"
-                                           id="lnk_id_documents"
-                                           style="width:100px;height:100px;white-space:normal ;word-wrap:break-word;float: left;"
-                                           class="glyphicon glyphicon-plus" >
-                                {%endif%}
-
+                                </div>
                             </div>
-
-                    </div>
                         </div>
-
                     </div>
-
                     <br>
-                    <br>
-
-
                 </div>
             </div>
 

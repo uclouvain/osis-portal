@@ -1190,3 +1190,6 @@ msgstr "Document d'identité"
 
 msgid "no_preview"
 msgstr "Pas d'aperçu disponible sur un fichier qui n'est pas de type image(gif, png, jpg,...)"
+
+msgid "new_file_confirmation_message"
+msgstr "Etes-vous sûre de vouloir uploader ce fichier?"

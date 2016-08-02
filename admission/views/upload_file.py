@@ -44,7 +44,6 @@ def upload_file(request):
 
         form = UploadDocumentFileForm(request.POST, request.FILES)
         if form.is_valid():
-            print('upload_file')
             if description == 'ID_PICTURE' or description == 'ID_CARD':
                 # Delete older file with the same description
                 documents = mdl.document_file.search(document_type=None,
@@ -63,9 +62,9 @@ def upload_file(request):
             if description == 'ID_PICTURE' or description == 'ID_CARD':
                 return common.home(request)
             else:
-                return redirect('new_file')
+                return redirect('new_document')
         else:
-            return render(request, 'new_file.html', {'form': form,
+            return render(request, 'new_document.html', {'form': form,
                                                      'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
                                                      'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
                                                      'description': description,
@@ -74,7 +73,7 @@ def upload_file(request):
         form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                                'document_type': "admission",
                                                'user': request.user})
-        return render(request, 'new_file.html', {'form': form,
+        return render(request, 'new_document.html', {'form': form,
                                                  'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
                                                  'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
                                                  'description': description,
@@ -122,7 +121,6 @@ def upload_document(request):
             description = request.POST['description']
         form = UploadDocumentFileForm(request.POST, request.FILES)
         if form.is_valid():
-            print('upload_document')
             file = form.save()
             file.size = file.file.size
             file.file_name = request.FILES['file'].name
@@ -130,12 +128,12 @@ def upload_document(request):
             content_type = file_type.content_type
             file.content_type = content_type
             file.save()
-            return redirect('new_file')
+            return redirect('new_document')
         else:
             if description == mdl.document_file.DESCRIPTION_CHOICES['ID_PICTURE']:
                 return common.home(request)
             else:
-                return render(request, 'new_file.html', {'form': form,
+                return render(request, 'new_document.html', {'form': form,
                                                          'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
                                                          'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
                                                          'description': description,

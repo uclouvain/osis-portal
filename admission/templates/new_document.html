@@ -43,7 +43,8 @@
         {% csrf_token %}
         {% include "uploading/upload_file_form.html" %}
         <input type="hidden" name="description" value='{{ description }}' />
-        <button type="submit" class="save btn btn-default" onclick="return confirm('{% trans 'new_file_confirmation_message' %}')">Save</button>
+        <button type="submit" class="save btn btn-default" onclick="return confirm('{% trans 'new_file_confirmation_message' %}')">{% trans 'save' %}</button>
+        <a href="{% url 'home'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>
       </form>
     </div>
   </div>
