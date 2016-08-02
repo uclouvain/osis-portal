@@ -1181,3 +1181,12 @@ msgstr "Cliquez ici pour ajouter votre pièce d'identité"
 
 msgid "id_documents"
 msgstr "Pièce d'identité"
+
+msgid "change_document"
+msgstr "Changer le document d'identité"
+
+msgid "id_document"
+msgstr "Document d'identité"
+
+msgid "no_preview"
+msgstr "Pas d'aperçu disponible sur un fichier qui n'est pas de type image(gif, png, jpg,...)"

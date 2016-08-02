@@ -34,6 +34,7 @@ from admission import settings as adm_settings
 
 @login_required
 def upload_file(request):
+
     description = 'LETTER_MOTIVATION'
     documents = mdl.document_file.search(document_type=adm_settings.DOCUMENT_TYPE, user=request.user)
     if request.method == "POST":
@@ -43,6 +44,15 @@ def upload_file(request):
 
         form = UploadDocumentFileForm(request.POST, request.FILES)
         if form.is_valid():
+            print('upload_file')
+            if description == 'ID_PICTURE' or description == 'ID_CARD':
+                # Delete older file with the same description
+                documents = mdl.document_file.search(document_type=None,
+                                                     user=request.user,
+                                                     description=description)
+                for document in documents:
+                    document.delete()
+
             file = form.save()
             file.size = file.file.size
             file.file_name = request.FILES['file'].name
@@ -112,6 +122,7 @@ def upload_document(request):
             description = request.POST['description']
         form = UploadDocumentFileForm(request.POST, request.FILES)
         if form.is_valid():
+            print('upload_document')
             file = form.save()
             file.size = file.file.size
             file.file_name = request.FILES['file'].name

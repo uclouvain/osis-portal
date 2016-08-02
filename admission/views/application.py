@@ -160,7 +160,8 @@ def save_application_offer(request):
                                                    'validated_sociological': demande_validation.validate_sociological(),
                                                    'validated_attachments': demande_validation.validate_attachments(),
                                                    'validated_submission': demande_validation.validate_submission(),
-                                                   'picture': common.get_picture_id(request.user)})
+                                                   'picture': common.get_picture_id(request.user),
+                                                   "id_document": common.get_id_document(request.user)})
 
 
 def application_view(request, application_id):

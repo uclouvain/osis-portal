@@ -337,6 +337,7 @@ def profile(request, application_id=None, message_success=None):
                                                    'tab_submission': tab_status['tab_submission'],
                                                    'applications': mdl.application.find_by_user(request.user),
                                                    'picture': get_picture_id(request.user),
+                                                   'id_document': get_id_document(request.user),
                                                    'person_legal_address': person_legal_address,
                                                    'person_contact_address': person_contact_address})
 
@@ -378,8 +379,7 @@ def get_picture_id(user):
     pictures = mdl_osis_common.document_file.search(None, user, 'ID_PICTURE')
     if pictures:
         picture = pictures.reverse()[0]
-        if picture.is_image_content():
-            return '/admission' + picture.file.url
+        return '/admission' + picture.file.url
 
     return None
 
@@ -387,7 +387,7 @@ def get_picture_id(user):
 def get_id_document(user):
     pictures = mdl_osis_common.document_file.search(None, user, 'ID_CARD')
     if pictures:
-        return pictures.reverse()[0]
+        return '/admission' +  pictures.reverse()[0].file.url
 
     return None
 

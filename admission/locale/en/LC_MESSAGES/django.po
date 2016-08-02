@@ -1172,3 +1172,13 @@ msgstr "Click here to add a id documents"
 
 msgid "id_documents"
 msgstr "Id documents"
+
+msgid "change_document"
+msgstr "Modify the document"
+
+msgid "id_document"
+msgstr "Id document"
+
+msgid "no_preview"
+msgstr "No preview available on a non image file"
+

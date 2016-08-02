@@ -164,6 +164,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
 MEDIA_URL = '/media/'
+
 CONTENT_TYPES = ['application/csv', 'application/doc', 'application/pdf', 'application/xls', 'application/xml',
                  'application/zip', 'image/jpeg', 'image/gif', 'image/png', 'text/html', 'text/plain']
 MAX_UPLOAD_SIZE = 5242880

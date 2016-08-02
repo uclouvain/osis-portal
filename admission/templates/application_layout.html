@@ -262,7 +262,6 @@
     });
 
     $("#lnk_picture").click(function() {
-
         save('form_profile');
     });
 
@@ -274,12 +273,19 @@
         $('#hdn_description').val('ID_PICTURE');
          $('#lnk_picture').trigger('click');
     });
-    $("#lnk_id_documents").click(function() {
-        alert('kk1');
+    $("#btn_modify_picture").click(function() {
+        $('#hdn_description').val('ID_PICTURE');
+         $('#lnk_picture').trigger('click');
+    });
+
+    $("#lnk_modify_id_document").click(function() {
         $('#hdn_description').val('ID_CARD');
         $('#lnk_picture').trigger('click');
     });
-
+    $("#btn_modify_id_document").click(function() {
+        $('#hdn_description').val('ID_CARD');
+        $('#lnk_picture').trigger('click');
+    });
 
 
     </script>
