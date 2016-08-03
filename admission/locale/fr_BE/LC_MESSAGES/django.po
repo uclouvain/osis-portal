@@ -398,9 +398,8 @@ msgid "question_institution_name_nice"
 msgstr "Nom de l'établissement"
 
 msgid "add_professional_exam_file"
-msgstr "Veuillez joindre une copie de votre certificat ou une preuve d'inscription à l'examen"
-"Veuillez joindre une copie de votre certificat ou une preuve d'inscription à "
-"l'examen"
+msgstr ""
+"Veuillez joindre une copie de votre certificat ou une preuve d'inscription à l'examen"
 
 msgid "your_diplomas"
 msgstr "Vos diplômes"
@@ -1202,3 +1201,24 @@ msgstr "Modifier"
 
 msgid "file_name"
 msgstr "Nom de fichier"
+
+msgid "scores_transcript"
+msgstr "Feuille de notes"
+
+msgid "translated"
+msgstr "traduit"
+
+msgid "high_school_scores_transcript"
+msgstr "Relevé de notes pour votre dernière année d'études secondaires"
+
+msgid "description"
+msgstr "Description"
+
+msgid "file_equivalence"
+msgstr "Décision d'équivalence"
+
+msgid "file_equivalence_btn_modify"
+msgstr "Modifier le document de décision d'équivalence"
+
+msgid "admission_exam_certificate_document"
+msgstr "Copie de votre certificat ou une preuve d'inscription à l'examen"

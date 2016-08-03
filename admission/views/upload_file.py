@@ -36,7 +36,7 @@ from admission import models as mdl_admission
 
 @login_required
 def upload_file(request):
-    description = 'LETTER_MOTIVATION'
+    description = None
     documents = mdl.document_file.search(document_type=adm_settings.DOCUMENT_TYPE, user=request.user)
     if request.method == "POST":
 
@@ -45,19 +45,31 @@ def upload_file(request):
 
         form = UploadDocumentFileForm(request.POST, request.FILES)
         if form.is_valid():
+            curriculum_uploads =['NATIONAL_DIPLOMA_RECTO',
+                                 'NATIONAL_DIPLOMA_VERSO',
+                                 'INTERNATIONAL_DIPLOMA_RECTO',
+                                 'INTERNATIONAL_DIPLOMA_VERSO',
+                                 'TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO',
+                                 'TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO',
+                                 'HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO',
+                                 'HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO',
+                                 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO',
+                                 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO',
+                                 'EQUIVALENCE',
+                                 'ADMISSION_EXAM_CERTIFICATE',
+                                 'PROFESSIONAL_EXAM_CERTIFICATE']
             applicant = mdl_admission.applicant.find_by_user(request.user)
-            if description == 'NATIONAL_DIPLOMA_VERSO' or description == 'NATIONAL_DIPLOMA_RECTO':
+            if description in curriculum_uploads:
                 documents = mdl_admission.admission_document_file.search(applicant, description)
                 for document in documents:
                     document.delete()
-            if description == 'ID_PICTURE' or description == 'ID_CARD' or description == 'NATIONAL_DIPLOMA_VERSO' or description == 'NATIONAL_DIPLOMA_RECTO':
+            if description == 'ID_PICTURE' or description == 'ID_CARD' or description in curriculum_uploads:
                 # Delete older file with the same description
                 documents = mdl.document_file.search(document_type=None,
                                                      user=request.user,
                                                      description=description)
                 for document in documents:
                     document.delete()
-
 
             file = form.save()
             file.size = file.file.size
@@ -67,7 +79,7 @@ def upload_file(request):
             file.content_type = content_type
             file.save()
 
-            if description == 'NATIONAL_DIPLOMA_VERSO' or description == 'NATIONAL_DIPLOMA_RECTO':
+            if description in curriculum_uploads:
                 adm_doc_file = mdl_admission.admission_document_file.AdmissionDocumentFile()
                 adm_doc_file.applicant = applicant
                 adm_doc_file.document_file = file
@@ -76,16 +88,20 @@ def upload_file(request):
             if description == 'ID_PICTURE' or description == 'ID_CARD':
                 return common.home(request)
             else:
-                if description == 'NATIONAL_DIPLOMA_VERSO' or description == 'NATIONAL_DIPLOMA_RECTO':
+                if description in curriculum_uploads:
                     return secondary_education.diploma_update(request)
                 else:
                     return redirect('new_document')
         else:
-            return render(request, 'new_document.html', {'form': form,
-                                                     'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
-                                                     'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
-                                                     'description': description,
-                                                     'documents': documents})
+            documents = mdl.document_file.search(document_type=None,
+                                                 user=request.user,
+                                                 description=description)
+            return render(request, 'new_document.html', {
+                'form': form,
+                'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
+                'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
+                'description': description,
+                'documents': documents})
     else:
         form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                                'document_type': "admission",
@@ -113,7 +129,6 @@ def upload_file_description(request):
     :param request:
     :return:
     """
-
 
     description = request.POST['description']
     documents = mdl.document_file.search(document_type=None,

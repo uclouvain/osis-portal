@@ -1194,3 +1194,23 @@ msgstr "Modify"
 msgid "file_name"
 msgstr "Filename"
 
+msgid "scores_transcript"
+msgstr "Scores transcript"
+
+msgid "translated"
+msgstr "translated"
+
+msgid "high_school_scores_transcript"
+msgstr "Last High school scores transcript"
+
+msgid "description"
+msgstr "Description"
+
+msgid "file_equivalence"
+msgstr "Equivalence decision file"
+
+msgid "file_equivalence_btn_modify"
+msgstr "Modify the final equivalence decision file"
+
+msgid "admission_exam_certificate_document"
+msgstr "Copy of your certificate or a proof of your enrollment"

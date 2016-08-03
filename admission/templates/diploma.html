@@ -313,10 +313,11 @@
 </form>
     <form method="post"
           action="{% url 'upload_file_description' %}"
-          id="form_upload_national_diploma">
+          id="form_upload_diploma"
+          style="visibility:hidden;display:none;">
         {% csrf_token %}
         <input type="text" name="description" id="hdn_description_diploma"/>
-        <input type="submit" id="btn_documents_upload_verso">
+        <input type="submit" id="btn_documents_upload_diploma">
     </form>
   <script>
 	var selDiv = "";

@@ -286,21 +286,71 @@
         $('#hdn_description').val('ID_CARD');
         $('#lnk_picture').trigger('click');
     });
-    $("#btn_documents_upload_verso").click(function() {
+    $("#btn_documents_upload_diploma").click(function() {
         save('form_secondary_education');
     });
 
+    // national diploma recto and verso
     $("#bt_upload_file_sec_diploma_verso").click(function() {
         $('#hdn_description_diploma').val('NATIONAL_DIPLOMA_VERSO');
-        $('#btn_documents_upload_verso').trigger('click');
+        $('#btn_documents_upload_diploma').trigger('click');
     });
 
     $("#bt_upload_file_sec_diploma_recto").click(function() {
         $('#hdn_description_diploma').val('NATIONAL_DIPLOMA_RECTO');
-        $('#btn_documents_upload_verso').trigger('click');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+    // international diploma
+    $("#bt_diploma_verso").click(function() {
+        $('#hdn_description_diploma').val('INTERNATIONAL_DIPLOMA_VERSO');
+        $('#btn_documents_upload_diploma').trigger('click');
     });
 
+    $("#bt_diploma_recto").click(function() {
+        $('#hdn_description_diploma').val('INTERNATIONAL_DIPLOMA_RECTO');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
 
+    $("#bt_diploma_translation_verso").click(function() {
+        $('#hdn_description_diploma').val('TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+
+    $("#bt_diploma_translation_recto").click(function() {
+        $('#hdn_description_diploma').val('TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+
+    // Scores transcript
+    $("#bt_note_sheet_recto").click(function() {
+        $('#hdn_description_diploma').val('HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+    $("#bt_note_sheet_verso").click(function() {
+        $('#hdn_description_diploma').val('HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+
+    $("#bt_note_sheet_translation_recto").click(function() {
+        $('#hdn_description_diploma').val('TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+    $("#bt_note_sheet_translation_verso").click(function() {
+        $('#hdn_description_diploma').val('TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+    $("#bt_file_equivalence").click(function() {
+        $('#hdn_description_diploma').val('EQUIVALENCE');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+    $("#bt_admission_exam_file").click(function() {
+        $('#hdn_description_diploma').val('ADMISSION_EXAM_CERTIFICATE');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+    $("#bt_upload_professional_exam_file").click(function() {
+        $('#hdn_description_diploma').val('PROFESSIONAL_EXAM_CERTIFICATE');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
 
     </script>
 {% endblock %}
