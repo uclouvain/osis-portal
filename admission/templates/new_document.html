@@ -44,10 +44,12 @@
         {% include "uploading/upload_file_form.html" %}
         <input type="hidden" name="description" value='{{ description }}' />
         <button type="submit" class="save btn btn-default" onclick="return confirm('{% trans 'new_file_confirmation_message' %}')">{% trans 'save' %}</button>
-        <a href="{% url 'home'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>
+        {% if description == 'ID_PICTURE' or description == 'ID_CARD'%}
+            <a href="{% url 'home'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>
+        {%endif%}
       </form>
     </div>
   </div>
-
+{% include "uploaded_file_list.html" %}
 {% endblock %}
 
