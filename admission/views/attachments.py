@@ -27,6 +27,8 @@ from django.shortcuts import render
 from admission import models as mdl
 from admission.views import demande_validation
 from admission.views import tabs
+from osis_common.forms import UploadDocumentFileForm
+from django.forms import formset_factory
 
 
 def update(request, application_id=None):
@@ -37,6 +39,9 @@ def update(request, application_id=None):
         application = mdl.application.init_application(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
     tab_status = tabs.init(request)
+
+    formset_documents = formset_factory(UploadDocumentFileForm, extra=5, max_num=5)
+
     return render(request, "admission_home.html", {
         "tab_active": 6,
         "application": application,
@@ -56,4 +61,7 @@ def update(request, application_id=None):
         "tab_sociological": tab_status['tab_sociological'],
         "tab_attachments": tab_status['tab_attachments'],
         "tab_submission": tab_status['tab_submission'],
-        "applications": mdl.application.find_by_user(request.user)})
+        "applications": mdl.application.find_by_user(request.user),
+        "formset_documents": formset_documents})
+
+
