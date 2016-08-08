@@ -42,9 +42,22 @@
             {%trans 'next_step'%} : {%trans 'submission'%}</a>
     </div>
 
-    <table class="table table-striped">
-        {{ formset_documents }}
-    </table>
+    {{ formset_documents.management_form }}
+    {% for form in formset_documents %}
+    <div class="row">
+        <div class="form_group col-md-4">
+            {{ form.file.errors }}
+            <label for="{{ form.file.id_for_label }}">{% trans 'file' %}:</label>
+            <input type="file">
+        </div>
+        <div class="form_group col-md-2">
+            {{ form.description.errors}}
+            <label for="{{ form.description.id_for_label }}">{% trans 'description' %}:</label>
+            {{ form.description}}
+        </div>
+    </div>
+    <br>
+    {% endfor %}
 
     <div>
         <a id="lnk_previous_step"
