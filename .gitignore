@@ -11,3 +11,5 @@ base/tests/sent_mails/
 /test.pdf
 /uploads/
 /os.path.join(BASE_DIR, "uploads")/
+
+*.iml
