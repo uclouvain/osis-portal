@@ -41,6 +41,11 @@ class BasePersonAdmin(admin.ModelAdmin):
     raw_id_fields = ('user',)
 
 
+class PersonManager(models.Manager):
+    def get_by_natural_key(self, global_id):
+        return self.get(global_id=global_id)
+
+
 class Person(models.Model):
     GENDER_CHOICES = (
         ('F', _('female')),
