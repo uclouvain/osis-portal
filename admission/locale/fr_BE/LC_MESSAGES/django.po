@@ -1162,7 +1162,7 @@ msgid "mandatory_field_next_step"
 msgstr "Champ obligatoire avant de passer à l'étape suivante"
 
 msgid "prerequisites"
-msgstr "Pré-requis"
+msgstr "Prérequis"
 
 msgid "back_demandes_list"
 msgstr "Retour à la liste des demandes"
