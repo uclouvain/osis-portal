@@ -39,8 +39,10 @@ def home(request):
     """
     # Fetch the student academic results.
     stud = find_by_user(request.user)
-    query_result = mdl.student_performance.select_where_registration_id_is(stud.registration_id)
-    list_student_programs = get_student_programs_list(query_result)
+    list_student_programs = None
+    if stud:
+        query_result = mdl.student_performance.select_where_registration_id_is(stud.registration_id)
+        list_student_programs = get_student_programs_list(query_result)
     return render(request, "performance_home.html", {"student": stud,
                                                      "programs": list_student_programs})
 

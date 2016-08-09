@@ -23,6 +23,3 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models import person
-from base.models import student
-from base.models import tutor

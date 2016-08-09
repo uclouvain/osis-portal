@@ -62,7 +62,7 @@ def login(request):
                 translation.activate(user_language)
                 request.session[translation.LANGUAGE_SESSION_KEY] = user_language
     elif settings.OVERRIDED_LOGIN_URL:
-        return redirect(settings.OVERRIDED_CURRENT_URL)
+        return redirect(settings.OVERRIDED_LOGIN_URL)
     return django_login(request)
 
 

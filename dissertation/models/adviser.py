@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -24,26 +24,36 @@
 #
 ##############################################################################
 
-import json
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
+from django.contrib import admin
 
 
-def insert_or_update(json_data):
-    """
-    Insert the records in PostGreSQL. If the records already exist, then the method makes an update.
-    """
-    data = json.loads(json_data.decode("utf-8"))
-    # Import must be inside the method because django isn't loaded at the launch of the application
-    from reference import models as mdl_ref
-    from base import models as mdl_base
-    map_classes = {
-        'reference.country.Country': mdl_ref.country.Country,
-        'reference.domain.Domain': mdl_ref.domain.Domain,
-        'base.tutor.Tutor': mdl_base.tutor.Tutor,
-        'base.student.Student': mdl_base.student.Student
-    }
-    cls_str = data['model_class_str']
-    model_class = map_classes[cls_str]
-    records = data['records']
-    # ids = [obj['id'] for obj in records]
-    for record in records :
-        obj, created = model_class.objects.update_or_create(defaults=record, **{'id' : record['id']})
+class AdviserAdmin(admin.ModelAdmin):
+    list_display = ('person', 'type')
+
+
+class Adviser(models.Model):
+    TYPES_CHOICES = (
+        ('PRF', _('professor')),
+        ('MGR', _('manager')),
+    )
+
+    person = models.OneToOneField('base.Person', on_delete=models.CASCADE)
+    type = models.CharField(max_length=3, choices=TYPES_CHOICES, default='PRF')
+    available_by_email = models.BooleanField(default=False)
+    available_by_phone = models.BooleanField(default=False)
+    available_at_office = models.BooleanField(default=False)
+    comment = models.TextField(default='', blank=True)
+
+    def __str__(self):
+        first_name = ""
+        middle_name = ""
+        last_name = ""
+        if self.person.first_name:
+            first_name = self.person.first_name
+        if self.person.middle_name:
+            middle_name = self.person.middle_name
+        if self.person.last_name:
+            last_name = self.person.last_name + ","
+        return u"%s %s %s" % (last_name.upper(), first_name, middle_name)

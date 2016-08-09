@@ -302,7 +302,7 @@ def validate_fields_form(request, duplicate_year_origin):
 
 
 def is_admission(applicant, secondary_education):
-    if applicant.nationality.european_union:
+    if applicant.nationality and applicant.nationality.european_union:
         if secondary_education and secondary_education.national is True:
             return False
     return True

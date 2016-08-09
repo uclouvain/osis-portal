@@ -9,3 +9,5 @@ base/tests/sent_mails/
 /cover.pdf
 /output.pdf
 /test.pdf
+/uploads/
+*.iml

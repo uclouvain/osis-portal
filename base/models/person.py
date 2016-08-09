@@ -26,6 +26,7 @@
 
 from django.db import models
 from django.contrib import admin
+from django.core import serializers
 from django.contrib.auth.models import User, Group
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
@@ -38,6 +39,11 @@ class BasePersonAdmin(admin.ModelAdmin):
     fieldsets = ((None, {'fields': ('user', 'global_id', 'national_id', 'gender', 'first_name', 'middle_name',
                                     'last_name', 'email', 'phone', 'phone_mobile', 'language')}),)
     raw_id_fields = ('user',)
+
+
+class PersonManager(models.Manager):
+    def get_by_natural_key(self, global_id):
+        return self.get(global_id=global_id)
 
 
 class Person(models.Model):

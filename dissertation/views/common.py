@@ -23,6 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models import person
-from base.models import student
-from base.models import tutor
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+
+@login_required
+def home(request):
+    return render(request, 'dissertation.html')
