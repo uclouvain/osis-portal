@@ -49,9 +49,10 @@ def upload_file(request):
         if form.is_valid():
             if description == 'ID_PICTURE' or description == 'ID_CARD':
                 # Delete older file with the same description
-                documents = mdl_osis_common.document_file.search(document_type=None,
-                                                     user=request.user,
-                                                     description=description)
+                documents = mdl_osis_common.document_file.search(
+                    document_type=None,
+                    user=request.user,
+                    description=description)
                 for document in documents:
                     document.delete()
 
@@ -125,18 +126,19 @@ def upload_file_description(request):
     :return:
     """
     documents = mdl_osis_common.document_file.search(document_type=None,
-                                         user=request.user,
-                                         description="ID_PICTURE")
+                                                     user=request.user,
+                                                     description="ID_PICTURE")
 
     description = request.POST['description']
     form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                            'document_type': "admission",
                                            'user': request.user})
-    return render(request, 'new_document.html', {'form': form,
-                                                 'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
-                                                 'description_choices': mdl_osis_common.document_file.DESCRIPTION_CHOICES,
-                                                 'description': description,
-                                                 'documents': documents})
+    return render(request, 'new_document.html', {
+        'form': form,
+        'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
+        'description_choices': mdl_osis_common.document_file.DESCRIPTION_CHOICES,
+        'description': description,
+        'documents': documents})
 
 
 @login_required
