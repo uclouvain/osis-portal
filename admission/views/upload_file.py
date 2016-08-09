@@ -64,20 +64,22 @@ def upload_file(request):
             else:
                 return redirect('new_document')
         else:
-            return render(request, 'new_document.html', {'form': form,
-                                                     'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
-                                                     'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
-                                                     'description': description,
-                                                     'documents': documents})
+            return render(request, 'new_document.html', {
+                'form': form,
+                'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
+                'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
+                'description': description,
+                'documents': documents})
     else:
         form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                                'document_type': "admission",
                                                'user': request.user})
-        return render(request, 'new_document.html', {'form': form,
-                                                 'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
-                                                 'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
-                                                 'description': description,
-                                                 'documents': documents})
+        return render(request, 'new_document.html', {
+            'form': form,
+            'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
+            'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
+            'description': description,
+            'documents': documents})
 
 
 @login_required
@@ -133,8 +135,9 @@ def upload_document(request):
             if description == mdl.document_file.DESCRIPTION_CHOICES['ID_PICTURE']:
                 return common.home(request)
             else:
-                return render(request, 'new_document.html', {'form': form,
-                                                         'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
-                                                         'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
-                                                         'description': description,
-                                                         'documents': documents})
+                return render(request, 'new_document.html', {
+                    'form': form,
+                    'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
+                    'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
+                    'description': description,
+                    'documents': documents})

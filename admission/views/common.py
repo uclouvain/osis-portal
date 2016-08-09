@@ -81,7 +81,7 @@ def home(request):
                                                            'picture': get_picture_id(request.user),
                                                            'id_document': get_id_document(request.user),
                                                            'person_legal_address': person_legal_address,
-                                                           'person_contact_address': person_contact_address,})
+                                                           'person_contact_address': person_contact_address})
 
     else:
         return profile(request)
@@ -274,7 +274,6 @@ def profile(request, application_id=None, message_success=None):
         applicant = mdl.applicant.find_by_user(request.user)
         applicant_form = ApplicantForm()
         if applicant:
-            person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
             person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
             same_addresses = True
             if person_contact_address:
@@ -337,9 +336,7 @@ def profile(request, application_id=None, message_success=None):
                                                    'tab_submission': tab_status['tab_submission'],
                                                    'applications': mdl.application.find_by_user(request.user),
                                                    'picture': get_picture_id(request.user),
-                                                   'id_document': get_id_document(request.user),
-                                                   'person_legal_address': person_legal_address,
-                                                   'person_contact_address': person_contact_address})
+                                                   'id_document': get_id_document(request.user)})
 
 
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
@@ -379,7 +376,7 @@ def get_picture_id(user):
     pictures = mdl_osis_common.document_file.search(None, user, 'ID_PICTURE')
     if pictures:
         picture = pictures.reverse()[0]
-        return '/admission' + picture.file.url
+        return ''.join(('/admission', picture.file.url))
 
     return None
 
@@ -387,7 +384,7 @@ def get_picture_id(user):
 def get_id_document(user):
     pictures = mdl_osis_common.document_file.search(None, user, 'ID_CARD')
     if pictures:
-        return '/admission' +  pictures.reverse()[0].file.url
+        return ''.join(('/admission', pictures.reverse()[0].file.url))
 
     return None
 
