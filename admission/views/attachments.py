@@ -28,6 +28,7 @@ from admission import models as mdl
 from admission.views import demande_validation
 from admission.views import tabs
 from osis_common.forms import UploadDocumentFileForm
+from osis_common.models.document_file import DocumentFile
 from django.forms import formset_factory
 
 
@@ -35,9 +36,9 @@ def update(request, application_id=None):
     UploadDocumentFileFormSet = formset_factory(UploadDocumentFileForm, extra=0, max_num=5)
     if request.method == "POST":
         document_formset = UploadDocumentFileFormSet(request.POST, request.FILES)
-        print(document_formset)
         if document_formset.is_valid():
-            print("Success")
+            for document in document_formset:
+                save_document_for_attachment(document, request.user)
         else:
             print("failure")
 
@@ -75,4 +76,26 @@ def update(request, application_id=None):
         "applications": mdl.application.find_by_user(request.user),
         "document_formset": document_formset})
 
+
+def save_document_for_attachment(document, user):
+    """
+    Save a document from a form.
+    :param document: an UploadDocumentForm
+    :param user: the current user
+    :return:
+    """
+    file_name = document.cleaned_data['file_name']
+    file = document.cleaned_data['file']
+    description = document.cleaned_data['description']
+    # Never trust a user. They could change the user value, document type, etc.
+    storage_duration = 0
+    document_type = "admission_attachments"
+    content_type = file.content_type
+    size = file.size
+
+    doc_file = DocumentFile(file_name=file_name, file=file,
+                            description=description, storage_duration=storage_duration,
+                            document_type=document_type, content_type=content_type,
+                            size=size, user=user)
+    doc_file.save()
 
