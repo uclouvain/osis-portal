@@ -60,7 +60,7 @@ def insert(json_data):
         deserialize_model_data(records['students'], save_model_object)
     elif model_class == mdl_base.tutor.Tutor:
         deserialize_model_data(records['persons'], save_model_object)
-        deserialize_model_data(records['tutors'], save_model_object)
+        deserialize_tutor_data(records['tutors'], save_tutor_object)
 
 
 def deserialize_model_data(data, function_to_apply):
@@ -75,11 +75,26 @@ def deserialize_model_data(data, function_to_apply):
         function_to_apply(deserialized_object)
 
 
+# Needs to implement it because tutor needs global_id of the person linked to it.
+def deserialize_tutor_data(data, function_to_apply):
+    """
+    Deserialize data (see django serialization for the format).
+    Json encoding is used.
+    :param data: data to be deserialized
+    :param function_to_apply: function to apply on the model objects
+    :return:
+    """
+    json_data = json.loads(data)
+    i = 0
+    for deserialized_object in serializers.deserialize("json", data):
+        function_to_apply(deserialized_object, json_data[0]['fields']['person'])
+        i += 1
+
+
 def save_model_object(model_object):
     """
     Save a model object. If it already exists in the database, do nothing.
     :param model_object: a model object
-    :param model_class: the model class of the object
     :return:
     """
     if object_exists(model_object):
@@ -93,7 +108,7 @@ def object_exists(model_object):
     :param model_object: an instance of a model
     :return: true if the object already exists
     """
-    from base.models import student, tutor, person
+    from base.models import student, person
 
     if model_object.object.__class__ == person.Person:
         global_id = model_object.object.global_id
@@ -101,10 +116,21 @@ def object_exists(model_object):
     elif model_object.object.__class__ == student.Student:
         registration_id = model_object.object.registration_id
         return model_object.object.__class__.objects.filter(registration_id=registration_id).exists()
-    elif model_object.object.__class__ == tutor.Tutor:
-        external_id = model_object.object.external_id
-        return model_object.object.__class__.objects.filter(external_id=external_id).exists()
     return True
+
+
+# Needs to implement it because tutor needs global_id of the person linked to it.
+def save_tutor_object(tutor_object, person_global_id):
+    """
+    Save a tutor object. If it already exists in the database, do nothing.
+    :param tutor_object: a tutor object
+    :param person_global_id: global id of the person linked to that person
+    :return:
+    """
+    from base.models import tutor
+    if tutor.Tutor.objects.filter(person__global_id=person_global_id).exists():
+        return
+    tutor_object.save()
 
 
 def map_string_to_model_class(class_str):
