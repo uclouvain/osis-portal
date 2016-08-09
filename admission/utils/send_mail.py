@@ -32,7 +32,8 @@ from django.core.mail import send_mail
 from frontoffice.settings import DEFAULT_FROM_EMAIL
 from django.template import Template, Context
 from django.template.loader import render_to_string
-from admission.models import message_template as message_template_mdl
+from osis_common.models import message_template as message_template_mdl
+from osis_common.models import message_history as message_history_mdl
 from frontoffice.settings import DEFAULT_FROM_EMAIL, LOGO_OSIS_URL, LOGO_EMAIL_SIGNATURE_URL
 from frontoffice import settings
 from django.utils import translation, timezone
@@ -43,18 +44,12 @@ from admission import models as mdl
 
 
 def send_mail_activation(request, activation_code, applicant, template_reference):
-
     sent_error_message = None
-    template = message_template_mdl.find_by_reference(template_reference + '_txt')
-    txt_message_templates = None
-    html_message_templates = None
-    if template:
-        txt_message_templates = {template.language: template}
 
-    template = message_template_mdl.find_by_reference(template_reference + '_html')
-    if template:
-        html_message_templates = {template.language: template}
-
+    txt_message_templates = {template.language: template for template in
+                             list(message_template_mdl.find_by_reference('{0}_txt'.format(template_reference)))}
+    html_message_templates = {template.language: template for template in
+                              list(message_template_mdl.find_by_reference('{0}_html'.format(template_reference)))}
     if not html_message_templates:
         sent_error_message = _('template_error').format(template_reference)
     else:
@@ -71,7 +66,7 @@ def send_mail_activation(request, activation_code, applicant, template_reference
                 'logo_mail_signature_url': LOGO_EMAIL_SIGNATURE_URL,
                 'logo_osis_url': LOGO_OSIS_URL})
         }
-        persons = [applicant]
+        applicants = [applicant]
         dest_by_lang = map_persons_by_languages(persons)
         for lang_code, person in dest_by_lang.items():
                 if lang_code in html_message_templates:
@@ -88,11 +83,12 @@ def send_mail_activation(request, activation_code, applicant, template_reference
                     subject = html_message_template.subject
 
                     txt_message = Template(txt_message_template.template).render(Context(data))
-                    send(persons=persons,
-                         subject=unescape(strip_tags(subject)),
-                         message=unescape(strip_tags(txt_message)),
-                         html_message=html_message,
-                         from_email=DEFAULT_FROM_EMAIL)
+                    send_and_save(applicants=applicants,
+                                  reference=template_reference,
+                                  subject=unescape(strip_tags(subject)),
+                                  message=unescape(strip_tags(txt_message)),
+                                  html_message=html_message,
+                                  from_email=DEFAULT_FROM_EMAIL)
     return sent_error_message
 
 
@@ -176,21 +172,30 @@ def map_persons_by_languages(persons):
     return lang_dict
 
 
-def send(persons, **kwargs):
+def send_and_save(applicants, reference=None, **kwargs):
     """
     Send the message :
     - by mail if person.mail exists
     Save the message in message_history table
-    :param persons List of the persons to send the message
+    :param applicants List of the applicants to send the message
+    :param reference reference of the message template used
     :param kwargs List of arguments used by the django send_mail method.
     The recipient_list argument is taken form the persons list.
     """
     recipient_list = []
-    if persons:
-        for person in persons:
-            if person.user.email:
-                recipient_list.append(person.user.email)
-
+    if applicants:
+        for applicant in applicants:
+            if applicant.user.email:
+                recipient_list.append(applicant.user.email)
+            message_history = message_history_mdl.MessageHistory(
+                receiver_id=applicant.id,
+                reference=reference,
+                subject=kwargs.get('subject'),
+                content_txt=kwargs.get('message'),
+                content_html=kwargs.get('html_message'),
+                sent=timezone.now() if applicant.user.email else None
+            )
+            message_history.save()
         send_mail(recipient_list=recipient_list, **kwargs)
 
 

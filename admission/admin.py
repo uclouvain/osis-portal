@@ -54,9 +54,6 @@ admin.site.register(curriculum.Curriculum,
 admin.site.register(form.Form,
                     form.FormAdmin)
 
-admin.site.register(message_template.MessageTemplate,
-                    message_template.MessageTemplateAdmin)
-
 admin.site.register(offer_year.OfferYear,
                     offer_year.OfferYearAdmin)
 
