@@ -1166,3 +1166,33 @@ msgstr "Pré-requis"
 
 msgid "back_demandes_list"
 msgstr "Retour à la liste des demandes"
+
+msgid "id_picture"
+msgstr "Photo d'identité"
+
+msgid "id_picture_add"
+msgstr "Cliquez ici pour ajouter une photo"
+
+msgid "change_picture"
+msgstr "Changer la photo"
+
+msgid "id_add"
+msgstr "Cliquez ici pour ajouter votre pièce d'identité"
+
+msgid "id_documents"
+msgstr "Pièce d'identité"
+
+msgid "change_document"
+msgstr "Changer le document d'identité"
+
+msgid "id_document"
+msgstr "Document d'identité"
+
+msgid "no_preview"
+msgstr "Pas d'aperçu disponible sur un fichier qui n'est pas de type image(gif, png, jpg,...)"
+
+msgid "new_file_confirmation_message"
+msgstr "Etes-vous sûre de vouloir uploader ce fichier?"
+
+msgid "msg_error_size_and_content"
+msgstr "Fichier trop volumineux, ou d'un mauvais type"
