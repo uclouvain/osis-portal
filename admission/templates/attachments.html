@@ -26,7 +26,7 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<form id="form_attachments">
+<form id="form_attachments" method="POST" enctype="multipart/form-data">
     <div>
         <a id="lnk_previous_step_up"
            class="btn btn-default"
@@ -42,24 +42,49 @@
             {%trans 'next_step'%} : {%trans 'submission'%}</a>
     </div>
 
-    {{ formset_documents.management_form }}
-    {% for form in formset_documents %}
-    <div class="row">
-        <div class="form_group col-md-4">
-            {{ form.file.errors }}
-            <label for="{{ form.file.id_for_label }}">{% trans 'file' %}:</label>
-            <input type="file">
+
+
+     <div id="div_document_forms">
+         <br>
+        {% csrf_token %}
+        {{ document_formset.management_form }}
+        {% for form in document_formset %}
+        <div class="row">
+            <div class="form_group col-md-4">
+                {{ form.file_name.errors }}
+                <label for="{{ form.file_name.id_for_label }}">{% trans 'filename' %}:</label>
+                <input id="{{ form.file_name.id_for_label }}" name="{{ form.file_name.html_name }}"  type="text" class="form-control">
+            </div>
+            <div class="form_group col-md-4">
+                {{ form.file.errors }}
+                <label for="{{ form.file.id_for_label }}">{% trans 'file' %}:</label>
+                <input id="{{ form.file.id_for_label }}" name="{{ form.file.html_name }}" type="file">
+            </div>
+            <div class="form_group col-md-2">
+                {{ form.description.errors}}
+                <label for="{{ form.description.id_for_label }}">{% trans 'description' %}:</label>
+                {{ form.description}}
+            </div>
+            {{ form.content_type }}
+            {{ form.user }}
+            {{ form.storage_duration }}
+            {{ form.document_type }}
+            {{ form.size }}
         </div>
-        <div class="form_group col-md-2">
-            {{ form.description.errors}}
-            <label for="{{ form.description.id_for_label }}">{% trans 'description' %}:</label>
-            {{ form.description}}
-        </div>
-    </div>
+        {% endfor %}
+        <br>
+     </div>
+
     <br>
-    {% endfor %}
+
+    <button id="button_add_form"  type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    </button>
+
+
 
     <div>
+        <br>
         <a id="lnk_previous_step"
            class="btn btn-default"
            href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey'%}{%endif%}"
@@ -74,3 +99,4 @@
             {%trans 'next_step'%} : {%trans 'submission'%}</a>
     </div>
 </form>
+

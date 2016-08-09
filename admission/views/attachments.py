@@ -32,6 +32,14 @@ from django.forms import formset_factory
 
 
 def update(request, application_id=None):
+    UploadDocumentFileFormSet = formset_factory(UploadDocumentFileForm, extra=0, max_num=5)
+    if request.method == "POST":
+        document_formset = UploadDocumentFileFormSet(request.POST, request.FILES)
+        print(document_formset)
+        if document_formset.is_valid():
+            print("Success")
+        else:
+            print("failure")
 
     if application_id:
         application = mdl.application.find_by_id(application_id)
@@ -40,7 +48,10 @@ def update(request, application_id=None):
     applicant = mdl.applicant.find_by_user(request.user)
     tab_status = tabs.init(request)
 
-    formset_documents = formset_factory(UploadDocumentFileForm, extra=5, max_num=5)
+    document_formset = UploadDocumentFileFormSet(initial=[{'storage_duration': 0,
+                                                           'document_type': "admission_attachments",
+                                                           'user': request.user}
+                                                          ])
 
     return render(request, "admission_home.html", {
         "tab_active": 6,
@@ -62,6 +73,6 @@ def update(request, application_id=None):
         "tab_attachments": tab_status['tab_attachments'],
         "tab_submission": tab_status['tab_submission'],
         "applications": mdl.application.find_by_user(request.user),
-        "formset_documents": formset_documents})
+        "document_formset": document_formset})
 
 
