@@ -49,7 +49,7 @@
         {% csrf_token %}
         {{ document_formset.management_form }}
         {% for form in document_formset %}
-        <div class="row">
+        <div class="row" id="form_0">
             <div class="form_group col-md-4">
                 {{ form.file_name.errors }}
                 <label for="{{ form.file_name.id_for_label }}">{% trans 'filename' %}:</label>
@@ -70,6 +70,9 @@
             {{ form.storage_duration }}
             {{ form.document_type }}
             {{ form.size }}
+            <button id="button_remove_form_0"  type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </button>
         </div>
         {% endfor %}
         <br>

@@ -40,7 +40,7 @@ def update(request, application_id=None):
             for document in document_formset:
                 save_document_for_attachment(document, request.user)
         else:
-            print("failure")
+            pass
 
     if application_id:
         application = mdl.application.find_by_id(application_id)
@@ -80,14 +80,15 @@ def update(request, application_id=None):
 def save_document_for_attachment(document, user):
     """
     Save a document from a form.
-    :param document: an UploadDocumentForm
+    :param document: an UploadDocumentForm received from a POST request.
     :param user: the current user
     :return:
     """
     file_name = document.cleaned_data['file_name']
     file = document.cleaned_data['file']
     description = document.cleaned_data['description']
-    # Never trust a user. They could change the user value, document type, etc.
+    # Never trust a user. They could change the hidden input values.
+    # Ex: user, document_type, storage_duration, etc.
     storage_duration = 0
     document_type = "admission_attachments"
     content_type = file.content_type

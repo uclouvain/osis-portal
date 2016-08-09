@@ -5,6 +5,12 @@ $(document).ready(function(){
     $("#button_add_form").click(function(){
         createDocumentForm();
     });
+
+    //Remove the div having as id "form_0"
+    $("#button_remove_form_0").click(function(){
+        $("#form_0").remove();
+        numberDocForms--;
+    });
 });
 
 
@@ -13,7 +19,9 @@ $(document).ready(function(){
  * "div_document_forms".
  */
 function createDocumentForm(){
-    var $divForm = createJQObjectNoParentNoText("<div/>", {"class": "row"})
+    var divFormId = "form_".concat(numberDocForms.toString())
+    var $divForm = createJQObjectNoParentNoText("<div/>", {"id": divFormId,
+                                                           "class": "row"})
 
     // Visible inputs
     appendFileNameInput($divForm);
@@ -25,6 +33,7 @@ function createDocumentForm(){
     appendStorageDurationInput($divForm);
     appendDocumentTypeInput($divForm);
     appendSizeInput($divForm);
+    appendRemoveButton($divForm);
 
     $divForm.appendTo($("#div_document_forms"));
     numberDocForms++;
@@ -196,6 +205,19 @@ function appendSizeInput($parentForm){
     var $input = createJQObjectNoText("<input/>", {"id": labelFor,
                                              "name": inputName,
                                              "type": "hidden"}, $parentForm);
+}
+
+
+function appendRemoveButton($parentForm){
+    var $buttonRemove = createJQObjectNoText("<button/>", {"type": "button",
+                                                            "class": "btn btn-default"}, $parentForm);
+    var $span = createJQObjectNoText("<span/>", {"class": "glyphicon glyphicon-remove",
+                                           "aria-hidden": "true"}, $buttonRemove);
+    var divFormId = "#form_".concat(numberDocForms.toString());
+    $buttonRemove.click(function(){
+        $(divFormId).remove();
+        numberDocForms--;
+    });
 }
 
 
