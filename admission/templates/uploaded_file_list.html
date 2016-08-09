@@ -1,4 +1,3 @@
-{% extends "layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -17,7 +16,7 @@
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * but WITHOUT ANY WARRANTY; without even the implied warranty ofj
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
@@ -26,20 +25,17 @@
  * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block content %}
-  <div class="page-header">
-    <h2>{% trans 'new_file' %}</h2>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <form method="POST" class="post-form" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% include "uploading/upload_file_form.html" %}
-        <input type="hidden" name="description" value='LETTER_MOTIVATION' />
-        <button type="submit" class="save btn btn-default" onclick="return confirm('{% trans 'new_file_confirmation_message' %}')">Save</button>
-      </form>
+{% for document in documents %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-2 col-lg-offset-1" style="text-align:right">
+                    <label>{% trans 'file_name' %}</label>
+                </div>
+                <div class="col-md-4">
+                    <a href="{% url 'download' pk=document.pk %}">{{ document.file_name }}</a>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  {% include "uploading/upload_file_list.html" %}
-{% endblock %}
-
+{% endfor %}

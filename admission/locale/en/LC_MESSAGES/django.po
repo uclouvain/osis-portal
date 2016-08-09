@@ -1158,3 +1158,35 @@ msgstr "Prerequisites"
 msgid "back_demandes_list"
 msgstr "Back to demandes list"
 
+msgid "id_picture"
+msgstr "Identity picture"
+
+msgid "id_picture_add"
+msgstr "Click here to add a picture"
+
+msgid "change_picture"
+msgstr "Modify the picture"
+
+msgid "id_add"
+msgstr "Click here to add a id documents"
+
+msgid "id_documents"
+msgstr "Id documents"
+
+msgid "change_document"
+msgstr "Modify the document"
+
+msgid "id_document"
+msgstr "Id document"
+
+msgid "no_preview"
+msgstr "No preview available on a non image file"
+
+msgid "new_file_confirmation_message"
+msgstr "Are you sure you want to upload this file?"
+
+msgid "msg_error_size_and_content"
+msgstr "File too big or bad content"
+
+
+

@@ -23,5 +23,5 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+from dissertation.models import adviser
 
