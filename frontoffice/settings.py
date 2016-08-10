@@ -202,3 +202,6 @@ except ImportError:
 if 'admission' in INSTALLED_APPS:
     ADMISSION_LOGIN_URL=reverse_lazy('admission_login')
     ADMISSION_LOGIN_REDIRECT_URL=reverse_lazy('admission')
+
+LOGO_EMAIL_SIGNATURE_URL = ''
+LOGO_OSIS_URL = ''
