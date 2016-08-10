@@ -27,14 +27,14 @@ from django.conf import settings
 from django.contrib import admin
 from django.conf.urls import url, include
 from base.views import common
-from django.conf.urls.static import static
 
 urlpatterns = (
-    url(r'^admin/', admin.site.urls),
+    url(r'^'+settings.ADMIN_URL, admin.site.urls),
+    url(r'', include('base.urls')),
     url(r'^login/$', common.login, name='login'),
     url(r'^logout/$', common.log_out, name='logout'),
     url(r'^logged_out/$', common.logged_out, name='logged_out'),
-
+    url(r'^403/$', common.access_denied, name="error_403"),
 )
 
 
