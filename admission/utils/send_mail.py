@@ -41,55 +41,32 @@ from html import unescape
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext as _
 from admission import models as mdl
+from osis_common.messaging import send_message
 
 
 def send_mail_activation(request, activation_code, applicant, template_reference):
-    sent_error_message = None
-
-    txt_message_templates = {template.language: template for template in
-                             list(message_template_mdl.find_by_reference('{0}_txt'.format(template_reference)))}
-    html_message_templates = {template.language: template for template in
-                              list(message_template_mdl.find_by_reference('{0}_html'.format(template_reference)))}
-    if not html_message_templates:
-        sent_error_message = _('template_error').format(template_reference)
-    else:
-        activation_link = request.scheme + "://" \
-                          + request.get_host() \
-                          + "/admission/admission/user/" \
-                          + activation_code \
-                          + "/activation"
-        data = {
-            'title': title(applicant.gender),
+    message_content = {}
+    message_content['html_template_ref'] = '{0}_html'.format(template_reference)
+    message_content['txt_template_ref'] = '{0}_txt'.format(template_reference)
+    receivers = []
+    receiver = {'receiver_email': applicant.user.email,
+                'receiver_id': applicant.id}
+    receivers.append(receiver)
+    message_content['receivers'] = receivers
+    activation_link = "{0}://{1}/admission/admission/user/{2}/activation".format(request.scheme,
+                                                                                 request.get_host(),
+                                                                                 activation_code)
+    data = {'title': title(applicant.gender),
             'academic_year': mdl.academic_year.current_academic_year(),
             'activation_link': activation_link,
-            'signature': render_to_string('email/html_email_signature.html', {
-                'logo_mail_signature_url': LOGO_EMAIL_SIGNATURE_URL,
-                'logo_osis_url': LOGO_OSIS_URL})
-        }
-        applicants = [applicant]
-        dest_by_lang = map_persons_by_languages(persons)
-        for lang_code, person in dest_by_lang.items():
-                if lang_code in html_message_templates:
-                    html_message_template = html_message_templates.get(lang_code)
-                else:
-                    html_message_template = html_message_templates.get(settings.LANGUAGE_CODE)
-                if lang_code in txt_message_templates:
-                    txt_message_template = txt_message_templates.get(lang_code)
-                else:
-                    txt_message_template = txt_message_templates.get(settings.LANGUAGE_CODE)
-                with translation.override(lang_code):
+            'signature': render_to_string('email/html_email_signature.html',
+                                          {'logo_mail_signature_url': LOGO_EMAIL_SIGNATURE_URL,
+                                           'logo_osis_url': LOGO_OSIS_URL})
+            }
 
-                    html_message = Template(html_message_template.template).render(Context(data))
-                    subject = html_message_template.subject
+    message_content['template_base_data'] = data
 
-                    txt_message = Template(txt_message_template.template).render(Context(data))
-                    send_and_save(applicants=applicants,
-                                  reference=template_reference,
-                                  subject=unescape(strip_tags(subject)),
-                                  message=unescape(strip_tags(txt_message)),
-                                  html_message=html_message,
-                                  from_email=DEFAULT_FROM_EMAIL)
-    return sent_error_message
+    return send_message.send_messages(message_content)
 
 
 def new_password(request, activation_code, email):
@@ -155,48 +132,6 @@ EMAIL_FOOTER = """
     </body>
 </html>
 """
-
-
-def map_persons_by_languages(persons):
-    """
-    Convert a list of persons into a dictionnary langage_code: list_of_emails ,
-    according to the language of the person.
-    :param persons the list of persons we want to map
-    """
-    lang_dict = {lang[0]: [] for lang in settings.LANGUAGES}
-    for person in persons:
-        if person.language in lang_dict.keys():
-            lang_dict[person.language].append(person)
-        else:
-            lang_dict[settings.LANGUAGE_CODE].append(person)
-    return lang_dict
-
-
-def send_and_save(applicants, reference=None, **kwargs):
-    """
-    Send the message :
-    - by mail if person.mail exists
-    Save the message in message_history table
-    :param applicants List of the applicants to send the message
-    :param reference reference of the message template used
-    :param kwargs List of arguments used by the django send_mail method.
-    The recipient_list argument is taken form the persons list.
-    """
-    recipient_list = []
-    if applicants:
-        for applicant in applicants:
-            if applicant.user.email:
-                recipient_list.append(applicant.user.email)
-            message_history = message_history_mdl.MessageHistory(
-                receiver_id=applicant.id,
-                reference=reference,
-                subject=kwargs.get('subject'),
-                content_txt=kwargs.get('message'),
-                content_html=kwargs.get('html_message'),
-                sent=timezone.now() if applicant.user.email else None
-            )
-            message_history.save()
-        send_mail(recipient_list=recipient_list, **kwargs)
 
 
 def title(gender):
