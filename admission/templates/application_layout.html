@@ -291,6 +291,11 @@
                 return false;
             }
         }
+        if($("#hdn_tab_active").val()=="1"){
+            if (! valid_offer()){
+                return false;
+            }
+        }
         return true;
     }
 
@@ -333,5 +338,45 @@
             return false;
         }
     });
+    $("#lnk_profile_tab").click(function() {
+        if($("#hdn_tab_active").val()=="1"){
+        }else{
+            if (! valid()){
+                return false;
+            }
+        }
+    });
+
+    function valid_offer(){
+        if ($("#txt_offer_year_id").val()==''
+            || ($('#rdb_offer_belgiandegree_true').prop("checked") == "false" && $('#rdb_offer_belgiandegree_false').prop("checked") == "false") ){
+            $("#txt_message_error_offer_up").text('Avant de pouvoir accéder à l\'étape suivante vous devez sélectionner au minimum une offre et indiquer si vous disposez d\'un diplôme belge');
+            $('#txt_message_error_offer_up').css('visibility', 'visible').css('display','block');
+            $("#txt_message_error_offer_down").text('Avant de pouvoir accéder à l\'étape suivante vous devez sélectionner au minimum une offre et indiquer si vous disposez d\'un diplôme belge');
+            $('#txt_message_error_offer_down').css('visibility', 'visible').css('display','block');
+            return false;
+        }
+        return true;
+    }
+
+    $("#lnk_next_step_up").click(function() {
+       return offer_steps();
+    });
+
+    $("#lnk_next_step").click(function() {
+        return offer_steps();
+    });
+
+    function offer_steps(){
+        $('#txt_message_error_offer_up').css('visibility', 'hidden').css('display','none');
+        $('#txt_message_error_offer_down').css('visibility', 'hidden').css('display','none');
+        if (! valid()){
+            return false;
+        }
+        $('#hdn_tab_applications_status').val('True');
+        save('form_questions');
+        return true;
+
+    }
     </script>
 {% endblock %}
