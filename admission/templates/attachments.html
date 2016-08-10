@@ -48,9 +48,11 @@
     <div class="row">
         <div class="col-md-4"><strong>Filename:</strong> <a href="{{ attachment.file.url }}">{{ attachment.file_name }}</a></div>
         <div class="col-md-4"><strong>Description:</strong> {{ attachment.description }}</div>
-        <button type="button" class="btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-        </button>
+        <a href="{% url 'remove_attachment' attachment.pk %}">
+            <button type="button" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </button>
+        </a>
     </div>
     {% endfor %}
 

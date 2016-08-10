@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from admission import models as mdl
 from admission.views import demande_validation
 from admission.views import tabs
@@ -38,8 +38,7 @@ def update(request, application_id=None):
         document_formset = UploadDocumentFileFormSet(request.POST, request.FILES)
         if document_formset.is_valid():
             for document in document_formset:
-                pass
-                # save_document_from_form(document, request.user)
+                save_document_from_form(document, request.user)
         else:
             pass
 
@@ -75,6 +74,18 @@ def update(request, application_id=None):
         "applications": mdl.application.find_by_user(request.user),
         "document_formset": document_formset,
         "attachments": past_attachments})
+
+
+def remove_attachment(request, attachment_pk):
+    """
+    View used to remove previous attachments.
+    """
+    attachment_to_remove = DocumentFile.objects.get(pk=attachment_pk)
+    # Security reasons as another user could delete files form other users.
+    if attachment_to_remove.user == request.user \
+            and attachment_to_remove.document_type == "admission_attachments":
+        attachment_to_remove.delete()
+    return redirect(update)
 
 
 def list_attachments(user):
