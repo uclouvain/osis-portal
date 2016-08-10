@@ -146,6 +146,7 @@
                         <div class="col-md-3">
                             <label>{%trans 'nationality'%} *</label>
                             <select class="form-control" id="slt_nationality" name="nationality">
+                                <option value="-1">-</option>
                                 {% for country in countries%}
                                 <option value="{{country.id}}"
                                         {% if country.id = applicant.nationality.id %} selected {%endif %}>
@@ -343,6 +344,7 @@
                         <div class="col-md-4">
                             <label>{% trans 'country'%} *</label>
                             <select class="form-control" id="slt_legal_adr_country" name="legal_adr_country">
+                                <option value="-1">-</option>
                                 {% for country in countries%}
                                 <option value="{{country.id}}"
                                         {%if country.id = person_legal_address.country.id%}selected {%endif%}>
