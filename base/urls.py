@@ -23,29 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.conf import settings
+from django.conf.urls import url
+from base.views import administration
 
-from couchbase import Couchbase
-from pprint import pprint
-import json
-import logging
-
-logger = logging.getLogger(__name__)
-
-
-def couchbase_insert(json_datas):
-    cb = Couchbase.connect(bucket='default')
-    data = json.loads(json_datas.decode("utf-8"))
-    key = "{0}-{1}".format(
-        data['id'],
-        data['name'].replace(' ', '_').lower()
-    )
-    logger.info('inserting datas in couchDB...')
-    cb.set(key, data)
-    logger.info('Done.')
-    logger.info('getting datas just inserted in couchDB...')
-    result = cb.get(key)
-    pprint(result.value, indent=4)
-    logger.info('Done.')
-    logger.info('deleting datas just inserted in couchDB...')
-    cb.delete(key)
-    logger.info('Done.')
+urlpatterns = [
+    url(r'^'+settings.ADMIN_URL+'data/$', administration.data, name='data'),
+]

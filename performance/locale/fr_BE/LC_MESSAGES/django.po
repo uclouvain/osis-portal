@@ -108,3 +108,6 @@ msgstr "B - Crédit (Bologne)"
 
 msgid "legend"
 msgstr "Légende"
+
+msgid "performance_results"
+msgstr "Résultats"
