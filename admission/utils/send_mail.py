@@ -59,7 +59,7 @@ def send_mail_activation(request, activation_code, applicant, template_reference
     data = {'title': title(applicant.gender),
             'academic_year': mdl.academic_year.current_academic_year(),
             'activation_link': activation_link,
-            'signature': render_to_string('email/html_email_signature.html',
+            'signature': render_to_string('messaging/html_email_signature.html',
                                           {'logo_mail_signature_url': LOGO_EMAIL_SIGNATURE_URL,
                                            'logo_osis_url': LOGO_OSIS_URL})
             }
