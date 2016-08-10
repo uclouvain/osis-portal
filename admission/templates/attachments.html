@@ -43,38 +43,22 @@
     </div>
 
 
+    {% for attachment in attachments %}
+    <br>
+    <div class="row">
+        <div class="col-md-4"><strong>Filename:</strong> <a href="{{ attachment.file.url }}">{{ attachment.file_name }}</a></div>
+        <div class="col-md-4"><strong>Description:</strong> {{ attachment.description }}</div>
+        <button type="button" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+    </div>
+    {% endfor %}
+
 
      <div id="div_document_forms">
          <br>
         {% csrf_token %}
         {{ document_formset.management_form }}
-        {% for form in document_formset %}
-        <div class="row" id="form_0">
-            <div class="form_group col-md-4">
-                {{ form.file_name.errors }}
-                <label for="{{ form.file_name.id_for_label }}">{% trans 'filename' %}:</label>
-                <input id="{{ form.file_name.id_for_label }}" name="{{ form.file_name.html_name }}"  type="text" class="form-control">
-            </div>
-            <div class="form_group col-md-4">
-                {{ form.file.errors }}
-                <label for="{{ form.file.id_for_label }}">{% trans 'file' %}:</label>
-                <input id="{{ form.file.id_for_label }}" name="{{ form.file.html_name }}" type="file">
-            </div>
-            <div class="form_group col-md-2">
-                {{ form.description.errors}}
-                <label for="{{ form.description.id_for_label }}">{% trans 'description' %}:</label>
-                {{ form.description}}
-            </div>
-            {{ form.content_type }}
-            {{ form.user }}
-            {{ form.storage_duration }}
-            {{ form.document_type }}
-            {{ form.size }}
-            <button id="button_remove_form_0"  type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-            </button>
-        </div>
-        {% endfor %}
         <br>
      </div>
 

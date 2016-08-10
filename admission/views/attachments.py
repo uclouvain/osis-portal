@@ -38,7 +38,8 @@ def update(request, application_id=None):
         document_formset = UploadDocumentFileFormSet(request.POST, request.FILES)
         if document_formset.is_valid():
             for document in document_formset:
-                save_document_for_attachment(document, request.user)
+                pass
+                # save_document_from_form(document, request.user)
         else:
             pass
 
@@ -49,10 +50,8 @@ def update(request, application_id=None):
     applicant = mdl.applicant.find_by_user(request.user)
     tab_status = tabs.init(request)
 
-    document_formset = UploadDocumentFileFormSet(initial=[{'storage_duration': 0,
-                                                           'document_type': "admission_attachments",
-                                                           'user': request.user}
-                                                          ])
+    document_formset = UploadDocumentFileFormSet()
+    past_attachments = list_attachments(request.user)
 
     return render(request, "admission_home.html", {
         "tab_active": 6,
@@ -74,12 +73,25 @@ def update(request, application_id=None):
         "tab_attachments": tab_status['tab_attachments'],
         "tab_submission": tab_status['tab_submission'],
         "applications": mdl.application.find_by_user(request.user),
-        "document_formset": document_formset})
+        "document_formset": document_formset,
+        "attachments": past_attachments})
 
 
-def save_document_for_attachment(document, user):
+def list_attachments(user):
     """
-    Save a document from a form.
+    Returns the list of all the attachments uploaded by the user.
+    :param user: the current user in session.
+    :return: an array of dictionnary
+    """
+    uploaded_attachments = DocumentFile.objects.filter(user=user,
+                                                       document_type="admission_attachments")
+
+    return list(uploaded_attachments)
+
+
+def save_document_from_form(document, user):
+    """
+    Save a document (attachment) from a form.
     :param document: an UploadDocumentForm received from a POST request.
     :param user: the current user
     :return:

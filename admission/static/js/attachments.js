@@ -1,15 +1,9 @@
-var numberDocForms = 1; // Global variable to keep track of the number of document forms already created.
+var numberDocForms = 0; // Global variable to keep track of the number of document forms already created.
 
 $(document).ready(function(){
     // Adds a form when performing a click on the plus button.
     $("#button_add_form").click(function(){
         createDocumentForm();
-    });
-
-    //Remove the div having as id "form_0"
-    $("#button_remove_form_0").click(function(){
-        $("#form_0").remove();
-        numberDocForms--;
     });
 });
 
