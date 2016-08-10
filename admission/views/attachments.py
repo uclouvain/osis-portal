@@ -33,9 +33,18 @@ from django.forms import formset_factory
 
 
 def update(request, application_id=None):
-    UploadDocumentFileFormSet = formset_factory(UploadDocumentFileForm, extra=0, max_num=5)
+    past_attachments = list_attachments(request.user)
+
+    # Limit the number of attachments uploaded in total to
+    # "max_num_attachments".
+    max_num_attachments = 5
+    num_attachments_uploaded = len(past_attachments)
+    attachments_available = max_num_attachments - num_attachments_uploaded
+
+    UploadDocumentFileFormSet = formset_factory(UploadDocumentFileForm, extra=0, max_num=attachments_available)
     if request.method == "POST":
         document_formset = UploadDocumentFileFormSet(request.POST, request.FILES)
+        print(document_formset)
         if document_formset.is_valid():
             for document in document_formset:
                 save_document_from_form(document, request.user)
@@ -50,7 +59,6 @@ def update(request, application_id=None):
     tab_status = tabs.init(request)
 
     document_formset = UploadDocumentFileFormSet()
-    past_attachments = list_attachments(request.user)
 
     return render(request, "admission_home.html", {
         "tab_active": 6,

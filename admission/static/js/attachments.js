@@ -1,21 +1,72 @@
-var numberDocForms = 0; // Global variable to keep track of the number of document forms already created.
+var nextIdDocForm = 0; // Global variable to keep track of the number of document forms already created.
+var maxNumberForms = 5; // Default value
+
 
 $(document).ready(function(){
+    maxNumberForms = $("#id_form-MAX_NUM_FORMS").attr("value").toString();
+    disablePlusButton();  // In case if the user has already uploaded the maximum number of attachments.
+    disableMinusButton(); // By default should be disabled
     // Adds a form when performing a click on the plus button.
     $("#button_add_form").click(function(){
         createDocumentForm();
+        incrementNextIdDocForm();
+    });
+    //Remove the last form when performing a click on the minus button
+    $("#button_remove_form").click(function(){
+        decrementNextIdDocForm();
+        var divFormId = "#form_".concat(nextIdDocForm.toString());
+        $(divFormId).remove();
     });
 });
 
+
+
+// Functions used to activate and deactivate the plus and minus button.
+function incrementNextIdDocForm(){
+    nextIdDocForm++;
+    disablePlusButton();
+    activateMinusButton();
+}
+
+function decrementNextIdDocForm(){
+    nextIdDocForm--;
+    activatePlusButton();
+    disableMinusButton();
+}
+
+
+function disablePlusButton(){
+    if(nextIdDocForm >= maxNumberForms){
+        $("#button_add_form").prop("disabled", true);
+    }
+}
+
+function disableMinusButton(){
+    if(nextIdDocForm <= 0){
+        $("#button_remove_form").prop("disabled", true);
+    }
+}
+
+function activatePlusButton(){
+    if(nextIdDocForm < maxNumberForms){
+        $("#button_add_form").prop("disabled", false);
+    }
+}
+
+function activateMinusButton(){
+    if(nextIdDocForm > 0){
+        $("#button_remove_form").prop("disabled", false);
+    }
+}
 
 /*
  * Creates a document form and appends it to the div having as id
  * "div_document_forms".
  */
 function createDocumentForm(){
-    var divFormId = "form_".concat(numberDocForms.toString())
+    var divFormId = "form_".concat(nextIdDocForm.toString());
     var $divForm = createJQObjectNoParentNoText("<div/>", {"id": divFormId,
-                                                           "class": "row"})
+                                                           "class": "row"});
 
     // Visible inputs
     appendFileNameInput($divForm);
@@ -27,11 +78,10 @@ function createDocumentForm(){
     appendStorageDurationInput($divForm);
     appendDocumentTypeInput($divForm);
     appendSizeInput($divForm);
-    appendRemoveButton($divForm);
 
     $divForm.appendTo($("#div_document_forms"));
-    numberDocForms++;
-    $("#id_form-TOTAL_FORMS").attr("value", numberDocForms.toString());
+    var totalForms = nextIdDocForm+1
+    $("#id_form-TOTAL_FORMS").attr("value", totalForms.toString());
 }
 
 
@@ -45,12 +95,12 @@ function appendFileNameInput($parentForm){
     // A label for attribute is of the form "id_form-0-file_name" for example.
     var labelForPrefix = "id_form-";
     var labelForSuffix = "-file_name";
-    var labelFor = labelForPrefix.concat(numberDocForms.toString(), labelForSuffix);
+    var labelFor = labelForPrefix.concat(nextIdDocForm.toString(), labelForSuffix);
     var $label = createJQObject("<label/>", {"for": labelFor}, "Filename", $divInput);
 
     var inputNamePrefix = "form-";
     var inputNameSuffix = "-file_name";
-    var inputName = inputNamePrefix.concat(numberDocForms.toString(), inputNameSuffix);
+    var inputName = inputNamePrefix.concat(nextIdDocForm.toString(), inputNameSuffix);
     var $input = createJQObjectNoText("<input/>", {"id": labelFor,
                                              "name": inputName,
                                              "type": "text",
@@ -67,12 +117,12 @@ function appendFileInput($parentForm){
     // A label for attribute is of the form "id_form-0-file" for example.
     var labelForPrefix = "id_form-";
     var labelForSuffix = "-file";
-    var labelFor = labelForPrefix.concat(numberDocForms.toString(), labelForSuffix);
+    var labelFor = labelForPrefix.concat(nextIdDocForm.toString(), labelForSuffix);
     var $label = createJQObject("<label/>", {"for": labelFor}, "File", $divInput);
 
     var inputNamePrefix = "form-";
     var inputNameSuffix = "-file";
-    var inputName = inputNamePrefix.concat(numberDocForms.toString(), inputNameSuffix);
+    var inputName = inputNamePrefix.concat(nextIdDocForm.toString(), inputNameSuffix);
     var $input = createJQObjectNoText("<input/>", {"id": labelFor,
                                              "name": inputName,
                                              "type": "file"}, $divInput);
@@ -88,12 +138,12 @@ function appendDescriptionInput($parentForm){
     // A label for attribute is of the form "id_form-0-description" for example.
     var labelForPrefix = "id_form-";
     var labelForSuffix = "-description";
-    var labelFor = labelForPrefix.concat(numberDocForms.toString(), labelForSuffix);
+    var labelFor = labelForPrefix.concat(nextIdDocForm.toString(), labelForSuffix);
     var $label = createJQObject("<label/>", {"for": labelFor}, "Description", $divInput);
 
     var selectNamePrefix = "form-";
     var selectNameSuffix = "-description";
-    var selectName = selectNamePrefix.concat(numberDocForms.toString(), selectNameSuffix);
+    var selectName = selectNamePrefix.concat(nextIdDocForm.toString(), selectNameSuffix);
     var $select = createJQObjectNoText("<select/>", {"id": labelFor,
                                              "name": selectName}, $divInput);
 
@@ -111,11 +161,11 @@ function appendContentTypeInput($parentForm){
     // A label for attribute is of the form "id_form-0-content_type" for example.
     var labelForPrefix = "id_form-";
     var labelForSuffix = "-content_type";
-    var labelFor = labelForPrefix.concat(numberDocForms.toString(), labelForSuffix);
+    var labelFor = labelForPrefix.concat(nextIdDocForm.toString(), labelForSuffix);
 
     var inputNamePrefix = "form-";
     var inputNameSuffix = "-content_type";
-    var inputName = inputNamePrefix.concat(numberDocForms.toString(), inputNameSuffix);
+    var inputName = inputNamePrefix.concat(nextIdDocForm.toString(), inputNameSuffix);
     var $input = createJQObjectNoText("<input/>", {"id": labelFor,
                                              "name": inputName,
                                              "type": "hidden",
@@ -131,11 +181,11 @@ function appendUserInput($parentForm){
     // A label for attribute is of the form "id_form-0-user" for example.
     var labelForPrefix = "id_form-";
     var labelForSuffix = "-user";
-    var labelFor = labelForPrefix.concat(numberDocForms.toString(), labelForSuffix);
+    var labelFor = labelForPrefix.concat(nextIdDocForm.toString(), labelForSuffix);
 
     var inputNamePrefix = "form-";
     var inputNameSuffix = "-user";
-    var inputName = inputNamePrefix.concat(numberDocForms.toString(), inputNameSuffix);
+    var inputName = inputNamePrefix.concat(nextIdDocForm.toString(), inputNameSuffix);
     var $input = createJQObjectNoText("<input/>", {"id": labelFor,
                                              "name": inputName,
                                              "type": "hidden",
@@ -150,11 +200,11 @@ function appendStorageDurationInput($parentForm){
     // A label for attribute is of the form "id_form-0-storage_duration" for example.
     var labelForPrefix = "id_form-";
     var labelForSuffix = "-storage_duration";
-    var labelFor = labelForPrefix.concat(numberDocForms.toString(), labelForSuffix);
+    var labelFor = labelForPrefix.concat(nextIdDocForm.toString(), labelForSuffix);
 
     var inputNamePrefix = "form-";
     var inputNameSuffix = "-storage_duration";
-    var inputName = inputNamePrefix.concat(numberDocForms.toString(), inputNameSuffix);
+    var inputName = inputNamePrefix.concat(nextIdDocForm.toString(), inputNameSuffix);
     var $input = createJQObjectNoText("<input/>", {"id": labelFor,
                                              "name": inputName,
                                              "type": "hidden",
@@ -170,11 +220,11 @@ function appendDocumentTypeInput($parentForm){
     // A label for attribute is of the form "id_form-0-document_type" for example.
     var labelForPrefix = "id_form-";
     var labelForSuffix = "-document_type";
-    var labelFor = labelForPrefix.concat(numberDocForms.toString(), labelForSuffix);
+    var labelFor = labelForPrefix.concat(nextIdDocForm.toString(), labelForSuffix);
 
     var inputNamePrefix = "form-";
     var inputNameSuffix = "-document_type";
-    var inputName = inputNamePrefix.concat(numberDocForms.toString(), inputNameSuffix);
+    var inputName = inputNamePrefix.concat(nextIdDocForm.toString(), inputNameSuffix);
     var $input = createJQObjectNoText("<input/>", {"id": labelFor,
                                              "name": inputName,
                                              "type": "hidden",
@@ -191,11 +241,11 @@ function appendSizeInput($parentForm){
     // A label for attribute is of the form "id_form-0-size" for example.
     var labelForPrefix = "id_form-";
     var labelForSuffix = "-size";
-    var labelFor = labelForPrefix.concat(numberDocForms.toString(), labelForSuffix);
+    var labelFor = labelForPrefix.concat(nextIdDocForm.toString(), labelForSuffix);
 
     var inputNamePrefix = "form-";
     var inputNameSuffix = "-size";
-    var inputName = inputNamePrefix.concat(numberDocForms.toString(), inputNameSuffix);
+    var inputName = inputNamePrefix.concat(nextIdDocForm.toString(), inputNameSuffix);
     var $input = createJQObjectNoText("<input/>", {"id": labelFor,
                                              "name": inputName,
                                              "type": "hidden"}, $parentForm);
@@ -207,10 +257,10 @@ function appendRemoveButton($parentForm){
                                                             "class": "btn btn-default"}, $parentForm);
     var $span = createJQObjectNoText("<span/>", {"class": "glyphicon glyphicon-remove",
                                            "aria-hidden": "true"}, $buttonRemove);
-    var divFormId = "#form_".concat(numberDocForms.toString());
+    var divFormId = "#form_".concat(nextIdDocForm.toString());
     $buttonRemove.click(function(){
         $(divFormId).remove();
-        numberDocForms--;
+        nextIdDocForm--;
     });
 }
 
