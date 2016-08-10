@@ -42,23 +42,35 @@
             {%trans 'next_step'%} : {%trans 'submission'%}</a>
     </div>
 
+    <br/>
+
+    <div class="row">
+        <div class="col-md-4"><strong>{% trans 'filename' %}</strong></div>
+        <div class="col-md-4"><strong>{% trans 'file' %}</strong></div>
+        <div class="col-md-4"><strong>{% trans 'description' %}</strong></div>
+    </div>
 
     {% for attachment in attachments %}
     <br>
     <div class="row">
-        <div class="col-md-4"><strong>Filename:</strong> <a href="{{ attachment.file.url }}">{{ attachment.file_name }}</a></div>
-        <div class="col-md-4"><strong>Description:</strong> {{ attachment.description }}</div>
+        <div class="col-md-4">{{ attachment.file_name }}</div>
+        <div class="col-md-4">
+            <a href="{{ attachment.file.url }}">
+                <span class="glyphicon glyphicon-open-file"></span>
+            </a> </div>
+        <div class="col-md-2">
+            {{ attachment.description }}
+        </div>
         <a href="{% url 'remove_attachment' attachment.pk %}">
             <button type="button" class="btn btn-default btn-sm">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
             </button>
         </a>
+
     </div>
     {% endfor %}
 
-
      <div id="div_document_forms">
-         <br>
         {% csrf_token %}
         {{ document_formset.management_form }}
         <br>

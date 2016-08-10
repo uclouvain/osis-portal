@@ -1188,5 +1188,8 @@ msgstr "Are you sure you want to upload this file?"
 msgid "msg_error_size_and_content"
 msgstr "File too big or bad content"
 
+msgid "filename"
+msgstr "Filename"
 
-
+msgid "description"
+msgstr "Description"

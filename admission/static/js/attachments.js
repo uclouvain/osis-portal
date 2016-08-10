@@ -80,6 +80,7 @@ function createDocumentForm(){
     appendSizeInput($divForm);
 
     $divForm.appendTo($("#div_document_forms"));
+    createJQObjectNoText("<br/>", {}, $("#div_document_forms"));
     var totalForms = nextIdDocForm+1
     $("#id_form-TOTAL_FORMS").attr("value", totalForms.toString());
 }
@@ -96,7 +97,7 @@ function appendFileNameInput($parentForm){
     var labelForPrefix = "id_form-";
     var labelForSuffix = "-file_name";
     var labelFor = labelForPrefix.concat(nextIdDocForm.toString(), labelForSuffix);
-    var $label = createJQObject("<label/>", {"for": labelFor}, "Filename", $divInput);
+    //var $label = createJQObject("<label/>", {"for": labelFor}, "Filename", $divInput);
 
     var inputNamePrefix = "form-";
     var inputNameSuffix = "-file_name";
@@ -118,7 +119,7 @@ function appendFileInput($parentForm){
     var labelForPrefix = "id_form-";
     var labelForSuffix = "-file";
     var labelFor = labelForPrefix.concat(nextIdDocForm.toString(), labelForSuffix);
-    var $label = createJQObject("<label/>", {"for": labelFor}, "File", $divInput);
+    //var $label = createJQObject("<label/>", {"for": labelFor}, "File", $divInput);
 
     var inputNamePrefix = "form-";
     var inputNameSuffix = "-file";
@@ -139,7 +140,7 @@ function appendDescriptionInput($parentForm){
     var labelForPrefix = "id_form-";
     var labelForSuffix = "-description";
     var labelFor = labelForPrefix.concat(nextIdDocForm.toString(), labelForSuffix);
-    var $label = createJQObject("<label/>", {"for": labelFor}, "Description", $divInput);
+    //var $label = createJQObject("<label/>", {"for": labelFor}, "Description", $divInput);
 
     var selectNamePrefix = "form-";
     var selectNameSuffix = "-description";
