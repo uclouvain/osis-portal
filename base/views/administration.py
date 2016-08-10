@@ -23,29 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-from couchbase import Couchbase
-from pprint import pprint
-import json
-import logging
-
-logger = logging.getLogger(__name__)
+from django.contrib.auth.decorators import login_required, user_passes_test
+from base.views import layout
 
 
-def couchbase_insert(json_datas):
-    cb = Couchbase.connect(bucket='default')
-    data = json.loads(json_datas.decode("utf-8"))
-    key = "{0}-{1}".format(
-        data['id'],
-        data['name'].replace(' ', '_').lower()
-    )
-    logger.info('inserting datas in couchDB...')
-    cb.set(key, data)
-    logger.info('Done.')
-    logger.info('getting datas just inserted in couchDB...')
-    result = cb.get(key)
-    pprint(result.value, indent=4)
-    logger.info('Done.')
-    logger.info('deleting datas just inserted in couchDB...')
-    cb.delete(key)
-    logger.info('Done.')
+@login_required
+@user_passes_test(lambda u: u.is_staff and u.has_perm('base.is_administrator'), login_url='/403/', redirect_field_name=None)
+def data(request):
+    return layout.render(request, 'admin/data.html')

@@ -26,6 +26,13 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
+                                                                aria-hidden="true"></span></a></li>
+    </ol>
+{% endblock %}
+
 {% block content %}
 <div class="page-header">
     <h2>{% trans 'dashboard' %}</h2>
