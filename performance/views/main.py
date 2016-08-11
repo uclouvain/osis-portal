@@ -59,6 +59,8 @@ def result_by_year_and_program(request, anac, program_acronym):
 
 
 @login_required
+@user_passes_test(lambda u: u.has_perm("base.is_faculty_administrator") or u.has_perm('base.is_administrator'),
+                  login_url='/403/', redirect_field_name=None)
 def select_student(request):
     """
     View to select a student to visualize his/her results.
@@ -74,6 +76,8 @@ def select_student(request):
 
 
 @login_required
+@user_passes_test(lambda u: u.has_perm("base.is_faculty_administrator") or u.has_perm('base.is_administrator'),
+                  login_url='/403/', redirect_field_name=None)
 def student_programs(request, registration_id):
     """
     View to visualize a particular student list of academic programs.
@@ -92,6 +96,8 @@ def student_programs(request, registration_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.has_perm("base.is_faculty_administrator") or u.has_perm('base.is_administrator'),
+                  login_url='/403/', redirect_field_name=None)
 def student_result(request, registration_id, anac, program_acronym):
     """
     View to visualize a particular student program courses result.
