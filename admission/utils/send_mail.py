@@ -30,57 +30,59 @@ Utility files for mail sending
 from django.core.mail import send_mail
 
 from frontoffice.settings import DEFAULT_FROM_EMAIL
+from django.template import Template, Context
+from django.template.loader import render_to_string
+from osis_common.models import message_template as message_template_mdl
+from osis_common.models import message_history as message_history_mdl
+from frontoffice.settings import DEFAULT_FROM_EMAIL, LOGO_OSIS_URL, LOGO_EMAIL_SIGNATURE_URL
+from frontoffice import settings
+from django.utils import translation, timezone
+from html import unescape
+from django.utils.html import strip_tags
+from django.utils.translation import ugettext as _
+from admission import models as mdl
+from osis_common.messaging import send_message
 
 
-def send_mail_activation(request, activation_code, email):
-    """
-    Send an email to user after  subscription to osis-portal.  Email needed for the subscription activation
-    :param request:
-    :param activation_code:
-    :param email:
-    """
-    activation_link = request.scheme + "://" + request.get_host() + "/admission/admission/user/" +activation_code+ "/activation"
+def send_mail_activation(request, activation_code, applicant, template_reference):
+    message_content = {}
+    message_content['html_template_ref'] = '{0}_html'.format(template_reference)
+    message_content['txt_template_ref'] = '{0}_txt'.format(template_reference)
+    receivers = []
+    receiver = {'receiver_email': applicant.user.email,
+                'receiver_id': applicant.id}
+    receivers.append(receiver)
+    message_content['receivers'] = receivers
+    activation_link = "{0}://{1}/admission/admission/user/{2}/activation".format(request.scheme,
+                                                                                 request.get_host(),
+                                                                                 activation_code)
+    data = {'title': title(applicant.gender),
+            'academic_year': mdl.academic_year.current_academic_year(),
+            'activation_link': activation_link,
+            'signature': render_to_string('messaging/html_email_signature.html',
+                                          {'logo_mail_signature_url': LOGO_EMAIL_SIGNATURE_URL,
+                                           'logo_osis_url': LOGO_OSIS_URL})
+            }
 
-    subject = 'UCL - Votre code d\'activation de compte.'
-    html_message = ''.join([
-        EMAIL_HEADER,
-        str('<p>Bonjour, </p>'),
-        str('<br><br>'),
-        str('<p>Vous venez d\'introduire une demande de création d\'un compte pour accéder à la demande d\'inscription '
-            'en ligne 2015-2016 de l\'Université catholique de Louvain, ce dont nous vous remercions </p><br>'),
-        str('Pour activer ce compte, veuillez cliquer sur le lien suivant :<br><br>' ),
-        str('<a href="%s">%s</a>') % (activation_link,activation_link),
-        str('<br><br>' ),
-        str('Le service des inscription de l\'UCL<br><br>' ),
-        str('<a href=\'http://www.uclouvain.be/inscriptionenligne\'>http://www.uclouvain.be/inscriptionenligne</a>'),
-        EMAIL_SIGNATURE,
-        EMAIL_FOOTER
-    ])
-    message = ''.join([
-        str('Bonjour, \n'),
-        str('Vous venez d\'introduire une demande de création d\'un compte pour accéder à la demande d\'inscription '
-            'en ligne 2015-2016 de l\'Université catholique de Louvain, ce dont nous vous remercions .\n\n'),
-        str('Pour activer ce compte, veuillez cliquer sur le lien suivant :\n\n'),
-        str(activation_link),
-        str('\n\n'),
-        str('Le service des inscription de l\'UCL\n\n' ),
-        str('http://www.uclouvain.be/inscriptionenligne')
-    ])
+    message_content['template_base_data'] = data
 
-    send_mail(subject=subject,message=message,recipient_list=[email],html_message=html_message,from_email=DEFAULT_FROM_EMAIL)
+    return send_message.send_messages(message_content)
 
 
 def new_password(request, activation_code, email):
-    activation_link = request.scheme + "://" + request.get_host() + "/admission/admission/new_password_form/"+ activation_code
+    activation_link = request.scheme \
+                      + "://" + request.get_host() \
+                      + "/admission/admission/new_password_form/" \
+                      + activation_code
     subject = 'UCL - Votre code d\'activation pour la modification du mot de passe de votre compte.'
     html_message = ''.join([
         EMAIL_HEADER,
         str('<p>Bonjour, </p>'),
         str('<br><br>'),
-        str('Pour modifier votre mot de passe merci de cliquer sur le lien suivant :<br><br>' ),
-        str('<a href="%s">%s</a>') % (activation_link,activation_link),
+        str('Pour modifier votre mot de passe merci de cliquer sur le lien suivant :<br><br>'),
+        str('<a href="%s">%s</a>') % (activation_link, activation_link),
         str('<br><br>'),
-        str('Le service des inscription de l\'UCL<br><br>' ),
+        str('Le service des inscription de l\'UCL<br><br>'),
         str('<a href=\'http://www.uclouvain.be/inscriptionenligne\'>http://www.uclouvain.be/inscriptionenligne</a>'),
         EMAIL_SIGNATURE,
         EMAIL_FOOTER
@@ -91,11 +93,15 @@ def new_password(request, activation_code, email):
         str('Pour modifier votre mot de passe merci de cliquer sur le lien suivant :\n\n'),
         str(activation_link),
         str('\n'),
-        str('Le service des inscription de l\'UCL\n\n' ),
+        str('Le service des inscription de l\'UCL\n\n'),
         str('http://www.uclouvain.be/inscriptionenligne')
     ])
 
-    send_mail(subject=subject,message=message,recipient_list=[email],html_message=html_message,from_email=DEFAULT_FROM_EMAIL)
+    send_mail(subject=subject,
+              message=message,
+              recipient_list=[email],
+              html_message=html_message,
+              from_email=DEFAULT_FROM_EMAIL)
 
 EMAIL_HEADER = """
 <html>
@@ -126,3 +132,11 @@ EMAIL_FOOTER = """
     </body>
 </html>
 """
+
+
+def title(gender):
+    if gender == "MALE":
+        return _('mister')
+    if gender == "FEMALE":
+        return _('miss')
+    return _('miss') + ", " + _('mister')

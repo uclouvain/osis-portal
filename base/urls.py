@@ -23,20 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models import academic_year
-from admission.models import admission_exam_type
-from admission.models import answer
-from admission.models import applicant
-from admission.models import applicant_assimilation_criteria
-from admission.models import application
-from admission.models import curriculum
-from admission.models import form
-from admission.models import offer_year
-from admission.models import option
-from admission.models import person_address
-from admission.models import properties
-from admission.models import question
-from admission.models import secondary_education
-from admission.models import secondary_education_exam
-from admission.models import supported_languages
+from django.conf import settings
+from django.conf.urls import url
+from base.views import administration
 
+urlpatterns = [
+    url(r'^'+settings.ADMIN_URL+'data/$', administration.data, name='data'),
+]
