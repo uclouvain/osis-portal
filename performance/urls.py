@@ -33,6 +33,6 @@ urlpatterns = [
     url(r'^select_student/$', main.select_student, name='performance_select_student'),
     url(r'^student_programs/(?P<registration_id>[0-9]+)/$', main.student_programs, name='performance_student_programs'),
     url(r'^student_result/(?P<registration_id>[0-9]+)/(?P<anac>[0-9]{4})/(?P<program_acronym>[0-9a-z]+)/$',
-        main.student_result, name='performance_student_results'),
+        main.student_result, name='performance_student_result'),
 ]
 

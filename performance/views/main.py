@@ -77,6 +77,7 @@ def select_student(request):
 def student_programs(request, registration_id):
     """
     View to visualize a particular student list of academic programs.
+    !!! Should only be open for staff having the rights.
     """
     try:
         stud = Student.objects.get(registration_id=registration_id)
@@ -86,6 +87,7 @@ def student_programs(request, registration_id):
     list_student_programs = fetch_student_programs_list(stud)
 
     return render(request, "performance_home.html", {"student": stud,
+                                                     "is_admin": True,
                                                      "programs": list_student_programs})
 
 
@@ -93,6 +95,7 @@ def student_programs(request, registration_id):
 def student_result(request, registration_id, anac, program_acronym):
     """
     View to visualize a particular student program courses result.
+    !!! Should only be open for staff having the rights.
     """
     try:
         stud = Student.objects.get(registration_id=registration_id)
@@ -103,6 +106,9 @@ def student_result(request, registration_id, anac, program_acronym):
     document = filter_by_anac_and_program_acronym(query_result, anac, program_acronym)
 
     return render(request, "performance_result.html", {"results": document})
+
+
+# *************************** UTILITY FUNCTIONS
 
 
 def fetch_student_programs_list(stud):

@@ -77,7 +77,17 @@
             {% for row in programs %}
             <tr>
                 <td>{{row.year}}</td>
-                <td><a href="{% url 'performance_result' anac=row.anac program_acronym=row.formatted_acronym%}">{{row.acronym}}</a></td>
+                <td>
+                    {% if is_admin %}
+                    <a href="{% url 'performance_student_result' registration_id=student.registration_id anac=row.anac program_acronym=row.formatted_acronym %}">
+                        {{row.acronym}}
+                    </a>
+                    {% else %}
+                    <a href="{% url 'performance_result' anac=row.anac program_acronym=row.formatted_acronym%}">
+                        {{row.acronym}}
+                    </a>
+                    {% endif %}
+                </td>
                 <td>{{row.title}}</td>
             </tr>
             {% endfor %}
