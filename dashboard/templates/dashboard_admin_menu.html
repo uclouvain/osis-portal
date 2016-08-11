@@ -1,6 +1,6 @@
-{% extends "admin/administration_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
+
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
 * designed to manage the core business of higher education institutions,
@@ -26,27 +26,8 @@
 {% endcomment %}
 
 
-{% block breadcrumb %}
-        <li class="active">{% trans 'data' %}</li>
-{% endblock %}
-
-{% block content %}
-    <div class="page-header">
-        <h2>{% trans 'data' %}</h2>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            {% if request.user.is_staff %}
-                <div class="row">
-                    <div class="col-md-1"><i class="fa fa-cubes" style="font-size: 400%; color: #6699FF;"></i></div>
-                    <div class="col-md-5">
-                        <h4 class="media-heading"><a href="{% url 'admin:index' %}" id="lnk_data_management" target="_blank">
-                            {% trans 'data_management'%}</a></h4>
-                        <p>{% trans 'desc_lnk_data_management' %}</p>
-                    </div>
-                </div>
-                <br>
-            {% endif %}
-        </div>
-    </div>
-{% endblock %}
+{% if 'performance'  in installed_apps and perms.base.is_faculty_administrator %}
+    <li><a href="{% url 'performance_administration' %}" role="button" id="bt_faculty_administration">
+        <span class="glyphicon glyphicon-tower" aria-hidden="true"></span>
+        {% trans 'performance_administration' %}</a></li>
+{% endif %}

@@ -25,7 +25,6 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
 from base.models import person as model_person
 
@@ -45,9 +44,13 @@ class Student(models.Model):
         return u"%s (%s)" % (self.person, self.registration_id)
 
 
-def find_by(registration_id=None, person_name=None, person_username=None, person_first_name=None, full_registration = None):
+def find_by_registration_id(registration_id):
+    return Student.objects.get(registration_id=registration_id)
+
+
+def search(registration_id=None, person_name=None, person_username=None, person_first_name=None, full_registration = None):
     """
-    Find students by optional arguments. At least one argument should be informed
+    Search students by optional arguments. At least one argument should be informed
     otherwise it returns empty.
     """
     has_criteria = False

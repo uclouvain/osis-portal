@@ -23,20 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
-from django.conf.urls import url
-from performance.views import main
+from django import forms
+from base.models import student as std_model
+from django.utils.translation import ugettext_lazy as _
 
-urlpatterns = [
-    url(r'^$', main.home, name='performance_home'),
+class RegistrationIdForm(forms.Form):
+    registration_id = forms.IntegerField()
 
-    url(r'^administration/$', main.performance_administration, name='performance_administration'),
-    url(r'^administration/select_student/$', main.select_student, name='performance_select_student'),
-
-    url(r'^result/(?P<anac>[0-9]{4})/(?P<program_acronym>[0-9a-z]+)/$',
-        main.result_by_year_and_program, name='performance_result'),
-    url(r'^student_programs/(?P<registration_id>[0-9]+)/$', main.student_programs, name='performance_student_programs'),
-    url(r'^student_result/(?P<registration_id>[0-9]+)/(?P<anac>[0-9]{4})/(?P<program_acronym>[0-9a-z]+)/$',
-        main.student_result, name='performance_student_result'),
-]
-
+    def clean(self):
+        cleaned_data = super(RegistrationIdForm, self).clean()
+        registration_id = cleaned_data.get('registration_id')
+        if registration_id:
+            try:
+                std_model.find_by_registration_id(registration_id)
+            except std_model.Student.DoesNotExist:
+                self.add_error('registration_id', _('no_student_with_this_registration_id'))
