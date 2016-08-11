@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "dashboard_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -27,11 +27,7 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <ol class="breadcrumb">
-        <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
-                                                                          aria-hidden="true"></span></a></li>
         <li class="active">{% trans 'performance' %}</li>
-    </ol>
 {% endblock %}
 
 
@@ -78,14 +74,14 @@
             <tr>
                 <td>{{row.year}}</td>
                 <td>
-                    {% if is_admin %}
-                    <a href="{% url 'performance_student_result' registration_id=student.registration_id anac=row.anac program_acronym=row.formatted_acronym %}">
-                        {{row.acronym}}
-                    </a>
+                    {% if perms.base.is_faculty_administrator %}
+                        <a href="{% url 'performance_student_result' registration_id=student.registration_id anac=row.anac program_acronym=row.formatted_acronym %}">
+                            {{row.acronym}}
+                        </a>
                     {% else %}
-                    <a href="{% url 'performance_result' anac=row.anac program_acronym=row.formatted_acronym%}">
-                        {{row.acronym}}
-                    </a>
+                        <a href="{% url 'performance_result' anac=row.anac program_acronym=row.formatted_acronym%}">
+                            {{row.acronym}}
+                        </a>
                     {% endif %}
                 </td>
                 <td>{{row.title}}</td>

@@ -25,13 +25,14 @@
 #
 ############################################################################
 
+
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist
-from base.models.student import is_student, find_by_user, Student
+from base.models.student import find_by_user, Student
 from performance import models as mdl
 from performance.forms import RegistrationIdForm
-
+from base.views import layout
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
@@ -42,12 +43,17 @@ def home(request):
     stud = find_by_user(request.user)
     list_student_programs = fetch_student_programs_list(stud)
 
-    return render(request, "performance_home.html", {"student": stud,
+    return layout.render(request, "performance_home.html", {"student": stud,
                                                      "programs": list_student_programs})
 
 
 @login_required
-@user_passes_test(is_student)
+@permission_required('base.is_faculty_administrator', raise_exception=True)
+def performance_administration(request):
+    return layout.render(request, 'admin/performance_administration.html')
+
+@login_required
+@permission_required('base.is_student', raise_exception=True)
 def result_by_year_and_program(request, anac, program_acronym):
     """
     Display the student result for a particular year and program.
@@ -55,12 +61,11 @@ def result_by_year_and_program(request, anac, program_acronym):
     stud = find_by_user(request.user)
     query_result = mdl.student_performance.select_where_registration_id_is(stud.registration_id)
     document = filter_by_anac_and_program_acronym(query_result, anac, program_acronym)
-    return render(request, "performance_result.html", {"results": document})
+    return layout.render(request, "performance_result.html", {"results": document})
 
 
 @login_required
-@user_passes_test(lambda u: u.has_perm("base.is_faculty_administrator") or u.has_perm('base.is_administrator'),
-                  login_url='/403/', redirect_field_name=None)
+@permission_required('base.is_faculty_administrator', raise_exception=True)
 def select_student(request):
     """
     View to select a student to visualize his/her results.
@@ -71,13 +76,13 @@ def select_student(request):
         if form.is_valid():
             registration_id = form.cleaned_data['registration_id']
             return redirect(student_programs, registration_id=registration_id)
-    form = RegistrationIdForm()
-    return render(request, "performance_select_student.html", {"form": form})
+    else:
+        form = RegistrationIdForm()
+    return layout.render(request, "admin/performance_select_student.html", {"form": form})
 
 
 @login_required
-@user_passes_test(lambda u: u.has_perm("base.is_faculty_administrator") or u.has_perm('base.is_administrator'),
-                  login_url='/403/', redirect_field_name=None)
+@permission_required('base.is_faculty_administrator', raise_exception=True)
 def student_programs(request, registration_id):
     """
     View to visualize a particular student list of academic programs.
@@ -90,14 +95,12 @@ def student_programs(request, registration_id):
 
     list_student_programs = fetch_student_programs_list(stud)
 
-    return render(request, "performance_home.html", {"student": stud,
-                                                     "is_admin": True,
+    return layout.render(request, "performance_home.html", {"student": stud,
                                                      "programs": list_student_programs})
 
 
 @login_required
-@user_passes_test(lambda u: u.has_perm("base.is_faculty_administrator") or u.has_perm('base.is_administrator'),
-                  login_url='/403/', redirect_field_name=None)
+@permission_required('base.is_faculty_administrator', raise_exception=True)
 def student_result(request, registration_id, anac, program_acronym):
     """
     View to visualize a particular student program courses result.
@@ -111,7 +114,7 @@ def student_result(request, registration_id, anac, program_acronym):
     query_result = mdl.student_performance.select_where_registration_id_is(stud.registration_id)
     document = filter_by_anac_and_program_acronym(query_result, anac, program_acronym)
 
-    return render(request, "performance_result.html", {"results": document})
+    return layout.render(request, "performance_result.html", {"results": document})
 
 
 # *************************** UTILITY FUNCTIONS
@@ -170,4 +173,3 @@ def filter_by_anac_and_program_acronym(query_result, anac, program_acronym):
                         == mdl.student_performance.format_acronym(program_acronym):
             return row["performance"]
     return None
-

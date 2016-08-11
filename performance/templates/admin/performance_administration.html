@@ -1,7 +1,6 @@
-{% extends "layout.html" %}
+{% extends "admin/administration_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
-
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
 * designed to manage the core business of higher education institutions,
@@ -26,33 +25,25 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
+
 {% block breadcrumb %}
-    <ol class="breadcrumb">
-        <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
-                                                                          aria-hidden="true"></span></a></li>
-        <li class="active">{% trans 'performance' %}</li>
-    </ol>
+    <li class="active">{% trans 'performance_administration' %}</li>
 {% endblock %}
 
-
 {% block content %}
-<div class="page-header">
-    <h2>{% trans 'performance' %}</h2>
-</div>
-
-{% include "template_messages.html" %}
-
-<div class="panel panel-default">
-    <div class="panel-body">
-        <form action="{% url 'performance_select_student' %}" class="form-inline" name="select_student" method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                {{ form.registration_id.errors }}
-                <label for="{{ form.registration_id.id_for_label }}">{% trans 'student_registration_id' %}</label>
-                <input id="{{ form.registration_id.id_for_label }}" name="{{ form.registration_id.html_name}}" class= "form-control" type="text" placeholder="Ex : 64641200">
-            </div>
-            <button type="submit" class="btn btn-default">{% trans 'search_student_results' %}</button>
-        </form>
+    <div class="panel panel-default">
+        <div class="panel-body">
+                <div class="row">
+                    {% if perms.base.is_faculty_administrator %}
+                        <div class="col-md-1"><i class="fa fa-line-chart" style="font-size: 400%; color: #6699FF;"></i></div>
+                        <div class="col-md-5">
+                            <h4 class="media-heading"><a href="{% url 'performance_select_student' %}" id="lnk_performance" target="_blank">
+                                {% trans 'performance'%}</a></h4>
+                            <p>{% trans 'desc_lnk_performance' %}</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <br>
+        </div>
     </div>
-</div>
 {% endblock %}

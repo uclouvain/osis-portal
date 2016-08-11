@@ -24,7 +24,17 @@
 #
 ##############################################################################
 from django import forms
-
+from base.models import student as std_model
+from django.utils.translation import ugettext_lazy as _
 
 class RegistrationIdForm(forms.Form):
     registration_id = forms.IntegerField()
+
+    def clean(self):
+        cleaned_data = super(RegistrationIdForm, self).clean()
+        registration_id = cleaned_data.get('registration_id')
+        if registration_id:
+            try:
+                std_model.find_by_registration_id(registration_id)
+            except std_model.Student.DoesNotExist:
+                self.add_error('registration_id', _('no_student_with_this_registration_id'))
