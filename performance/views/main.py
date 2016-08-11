@@ -25,10 +25,12 @@
 #
 ############################################################################
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
-from base.models.student import is_student, find_by_user
+from django.core.exceptions import ObjectDoesNotExist
+from base.models.student import is_student, find_by_user, Student
 from performance import models as mdl
+from performance.forms import RegistrationIdForm
 
 
 @login_required
@@ -62,13 +64,35 @@ def select_student(request):
     View to select a student to visualize his/her results.
     !!! Should only be open for staff having the rights.
     """
-    return render(request, "performance_select_student.html")
+    if request.method == "POST":
+        form = RegistrationIdForm(request.POST)
+        if form.is_valid():
+            registration_id = form.cleaned_data['registration_id']
+            return redirect(student_programs, registration_id=registration_id)
+    form = RegistrationIdForm()
+    return render(request, "performance_select_student.html", {"form": form})
+
+
+@login_required
+def student_programs(request, registration_id):
+    """
+    View to visualize a particular student list of academic programs.
+    """
+    try:
+        stud = Student.objects.get(registration_id=registration_id)
+    except ObjectDoesNotExist:
+        stud = None
+
+    list_student_programs = fetch_student_programs_list(stud)
+
+    return render(request, "performance_home.html", {"student": stud,
+                                                     "programs": list_student_programs})
 
 
 def fetch_student_programs_list(stud):
     """
     Fetch the student programs of the student "stud"
-    :param stud: a user object
+    :param stud: a student object
     :return: a list of dictionnary (see query_result_to_list for the format)
     """
     list_student_programs = None
@@ -104,10 +128,10 @@ def query_result_to_list(query_result):
 def filter_by_anac_and_program_acronym(query_result, anac, program_acronym):
     """
     Return the document which have anac equals to "anac" and program id
-    equals to "program_id"
+    equals to "program_id" from the query_results.
     :param query_result: a n1ql query object
     :param anac: a string
-    :param program_id: a string
+    :param program_acronym: a string
     :return: a json document
     """
     for row in query_result:

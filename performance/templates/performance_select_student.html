@@ -44,7 +44,15 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-
+        <form action="{% url 'performance_select_student' %}" class="form-inline" name="select_student" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.registration_id.errors }}
+                <label for="{{ form.registration_id.id_for_label }}">{% trans 'student_registration_id' %}</label>
+                <input id="{{ form.registration_id.id_for_label }}" name="{{ form.registration_id.html_name}}" class= "form-control" type="text" placeholder="Ex : 64641200">
+            </div>
+            <button type="submit" class="btn btn-default">{% trans 'search_student_results' %}</button>
+        </form>
     </div>
 </div>
 {% endblock %}

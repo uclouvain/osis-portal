@@ -23,14 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
-from performance.views import main
+from django import forms
 
-urlpatterns = [
-    url(r'^$', main.home, name='performance_home'),
-    url(r'^result/(?P<anac>[0-9]{4})/(?P<program_acronym>[0-9a-z]+)/$',
-        main.result_by_year_and_program, name='performance_result'),
-    url(r'^select_student/$', main.select_student, name='performance_select_student'),
-    url(r'^student_programs/(?P<registration_id>[0-9]+)/$', main.student_programs, name='performance_student_programs'),
-]
 
+class RegistrationIdForm(forms.Form):
+    registration_id = forms.IntegerField()
