@@ -30,5 +30,6 @@ urlpatterns = [
     url(r'^$', main.home, name='performance_home'),
     url(r'^result/(?P<anac>[0-9]{4})/(?P<program_acronym>[0-9a-z]+)/$',
         main.result_by_year_and_program, name='performance_result'),
+    url(r'^select_student/$', main.select_student, name='performance_select_student'),
 ]
 

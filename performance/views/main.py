@@ -35,30 +35,54 @@ from performance import models as mdl
 @permission_required('base.is_student', raise_exception=True)
 def home(request):
     """
-    Display the academic results of the student.
+    Display the academic programs of the student.
     """
-    # Fetch the student academic results.
     stud = find_by_user(request.user)
-    list_student_programs = None
-    if stud:
-        query_result = mdl.student_performance.select_where_registration_id_is(stud.registration_id)
-        list_student_programs = get_student_programs_list(query_result)
+    list_student_programs = fetch_student_programs_list(stud)
+
     return render(request, "performance_home.html", {"student": stud,
                                                      "programs": list_student_programs})
+
 
 @login_required
 @user_passes_test(is_student)
 def result_by_year_and_program(request, anac, program_acronym):
+    """
+    Display the student result for a particular year and program.
+    """
     stud = find_by_user(request.user)
     query_result = mdl.student_performance.select_where_registration_id_is(stud.registration_id)
     document = filter_by_anac_and_program_acronym(query_result, anac, program_acronym)
     return render(request, "performance_result.html", {"results": document})
 
-def get_student_programs_list(query_result):
+
+@login_required
+def select_student(request):
     """
-    Get the list of programs for a student.
-    This list contains info for each program which are:
-    academic year and anac, program acronym, title and id.
+    View to select a student to visualize his/her results.
+    !!! Should only be open for staff having the rights.
+    """
+    return render(request, "performance_select_student.html")
+
+
+def fetch_student_programs_list(stud):
+    """
+    Fetch the student programs of the student "stud"
+    :param stud: a user object
+    :return: a list of dictionnary (see query_result_to_list for the format)
+    """
+    list_student_programs = None
+
+    if stud:
+        query_result = mdl.student_performance.select_where_registration_id_is(stud.registration_id)
+        list_student_programs = query_result_to_list(query_result)
+    return list_student_programs
+
+
+def query_result_to_list(query_result):
+    """
+    Parse the query result (a select all on the bucket performance),
+    to a list of dictonnary.
     :param query_result: a n1ql query object
     :return: a list of dictionaries
     """
@@ -75,6 +99,7 @@ def get_student_programs_list(query_result):
         d["program_id"] = program["program_id"]
         l.append(d)
     return l
+
 
 def filter_by_anac_and_program_acronym(query_result, anac, program_acronym):
     """
