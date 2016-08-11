@@ -1193,3 +1193,12 @@ msgstr "Filename"
 
 msgid "description"
 msgstr "Description"
+
+msgid "template_error"
+msgstr "No message was sent : the message template {} does not exist."
+
+msgid "mister"
+msgstr "Mister"
+
+msgid "miss"
+msgstr "Miss"
