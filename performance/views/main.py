@@ -89,6 +89,22 @@ def student_programs(request, registration_id):
                                                      "programs": list_student_programs})
 
 
+@login_required
+def student_result(request, registration_id, anac, program_acronym):
+    """
+    View to visualize a particular student program courses result.
+    """
+    try:
+        stud = Student.objects.get(registration_id=registration_id)
+    except ObjectDoesNotExist:
+        stud = None
+
+    query_result = mdl.student_performance.select_where_registration_id_is(stud.registration_id)
+    document = filter_by_anac_and_program_acronym(query_result, anac, program_acronym)
+
+    return render(request, "performance_result.html", {"results": document})
+
+
 def fetch_student_programs_list(stud):
     """
     Fetch the student programs of the student "stud"
