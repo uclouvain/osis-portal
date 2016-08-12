@@ -1188,9 +1188,11 @@ msgstr "Are you sure you want to upload this file?"
 msgid "msg_error_size_and_content"
 msgstr "File too big or bad content"
 
+msgid "filename"
+msgstr "Filename"
 
-
-
+msgid "description"
+msgstr "Description"
 
 msgid "template_error"
 msgstr "No message was sent : the message template {} does not exist."

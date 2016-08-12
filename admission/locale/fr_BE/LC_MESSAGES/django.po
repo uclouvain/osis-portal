@@ -1205,3 +1205,9 @@ msgstr "Etes-vous sûre de vouloir uploader ce fichier?"
 
 msgid "msg_error_size_and_content"
 msgstr "Fichier trop volumineux, ou d'un mauvais type"
+
+msgid "filename"
+msgstr "Nom de fichier"
+
+msgid "description"
+msgstr "Description"
