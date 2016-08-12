@@ -1167,6 +1167,15 @@ msgstr "Pré-requis"
 msgid "back_demandes_list"
 msgstr "Retour à la liste des demandes"
 
+
+msgid "template_error"
+msgstr "Aucun message n'a été envoyé : le modèle de message {} n'existe pas."
+
+msgid "mister"
+msgstr "Monsieur"
+
+msgid "miss"
+msgstr "Madame"
 msgid "id_picture"
 msgstr "Photo d'identité"
 
