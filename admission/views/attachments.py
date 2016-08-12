@@ -24,9 +24,10 @@
 #
 ##############################################################################
 from django.shortcuts import render, redirect
+from django.core.exceptions import ObjectDoesNotExist
 from admission import models as mdl
-from admission.views import demande_validation
-from admission.views import tabs
+from admission.views import demande_validation, tabs
+from admission.forms import RemoveAttachmentForm
 from osis_common.forms import UploadDocumentFileForm
 from osis_common.models.document_file import DocumentFile
 from django.forms import formset_factory
@@ -44,12 +45,9 @@ def update(request, application_id=None):
     UploadDocumentFileFormSet = formset_factory(UploadDocumentFileForm, extra=0, max_num=attachments_available)
     if request.method == "POST":
         document_formset = UploadDocumentFileFormSet(request.POST, request.FILES)
-        print(document_formset)
         if document_formset.is_valid():
             for document in document_formset:
                 save_document_from_form(document, request.user)
-        else:
-            pass
 
     if application_id:
         application = mdl.application.find_by_id(application_id)
@@ -59,7 +57,7 @@ def update(request, application_id=None):
     tab_status = tabs.init(request)
 
     document_formset = UploadDocumentFileFormSet()
-
+    remove_attachment_form = RemoveAttachmentForm()
     return render(request, "admission_home.html", {
         "tab_active": 6,
         "application": application,
@@ -81,19 +79,34 @@ def update(request, application_id=None):
         "tab_submission": tab_status['tab_submission'],
         "applications": mdl.application.find_by_user(request.user),
         "document_formset": document_formset,
-        "attachments": past_attachments})
+        "attachments": past_attachments,
+        "removeAttachmentForm": remove_attachment_form})
 
 
-def remove_attachment(request, attachment_pk):
+def remove_attachment(request):
     """
     View used to remove previous attachments.
     """
-    attachment_to_remove = DocumentFile.objects.get(pk=attachment_pk)
-    # Security reasons as another user could delete files form other users.
-    if attachment_to_remove.user == request.user \
-            and attachment_to_remove.document_type == "admission_attachments":
-        attachment_to_remove.delete()
+    if request.method == "POST":
+        form = RemoveAttachmentForm(request.POST)
+        if form.is_valid():
+            attachment_pk = form.cleaned_data['attachment_id']
+            # form is valid ensure that there is a document having that pk value
+            attachment_to_remove = DocumentFile.objects.get(pk=attachment_pk)
+            safe_document_removal(request.user, "admission_attachments", attachment_to_remove)
     return redirect(update)
+
+
+def safe_document_removal(user, document_type, document):
+    """
+    Safely remove a document by ensuring that the user is the one
+    that owns the file and the document_type is the correct one.
+    :param user: a User object
+    :param document_type: a string
+    :return:
+    """
+    if document.user == user and document.document_type == document_type:
+        document.delete()
 
 
 def list_attachments(user):
