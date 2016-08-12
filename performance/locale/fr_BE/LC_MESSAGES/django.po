@@ -111,3 +111,15 @@ msgstr "Légende"
 
 msgid "performance_results"
 msgstr "Résultats"
+
+msgid "student_performance"
+msgstr "Performances d'un étudiant"
+
+msgid "registration_id"
+msgstr "Noma"
+
+msgid "performance_administration"
+msgstr "Administration de performance"
+
+msgid "no_student_with_this_registration_id"
+msgstr "Aucun étudiant avec ce noma!"

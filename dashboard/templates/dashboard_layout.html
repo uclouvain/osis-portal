@@ -1,4 +1,4 @@
-{% extends "dashboard_layout.html" %}
+{% extends "layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -26,29 +26,15 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block content %}
-<div class="page-header">
-    <h2>{% trans 'dashboard' %}</h2>
-</div>
+{% block breadcrumb_area %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
+                                                                          aria-hidden="true"></span></a></li>
+        {% block breadcrumb %}
+        {% endblock %}
+    </ol>
+{% endblock %}
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        <div class="row">
-        {% if perms.base.is_tutor %}
-            <div class="col-md-1"><i class="fa fa-hashtag" style="font-size: 400%; color: #6699FF;"></i></div>
-            <div class="col-md-5">
-                <h4 class="media-heading"><a href="{% url 'scores_encoding' %}" id="lnk_score_encoding">{% trans 'scores_encoding' %}</a></h4>
-                <p>{% trans 'desc_lnk_scores_encoding' %}</p>
-            </div>
-        {% endif %}
-        {% if 'performance' in installed_apps and perms.base.is_student %}
-            <div class="col-md-1"><i class="fa fa-line-chart " style="font-size: 400%; color: #6699FF;"></i></div>
-            <div class="col-md-5">
-                <h4 class="media-heading"><a href="{% url 'performance_home'  %}" id="lnk_performance">{% trans 'performance' %}</a></h4>
-                <p>{% trans 'desc_lnk_performance' %}</p>
-            </div>
-        {% endif %}
-        </div>
-    </div>
-</div>
+{% block dashboard_admin_menu %}
+
 {% endblock %}
