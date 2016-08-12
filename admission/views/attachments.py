@@ -35,14 +35,9 @@ from django.forms import formset_factory
 
 def update(request, application_id=None):
     past_attachments = list_attachments(request.user)
-
-    # Limit the number of attachments uploaded in total to
-    # "max_num_attachments".
-    max_num_attachments = 5
-    num_attachments_uploaded = len(past_attachments)
-    attachments_available = max_num_attachments - num_attachments_uploaded
-
+    attachments_available = attachments_left_available(len(past_attachments))
     UploadDocumentFileFormSet = formset_factory(UploadDocumentFileForm, extra=0, max_num=attachments_available)
+
     if request.method == "POST":
         document_formset = UploadDocumentFileFormSet(request.POST, request.FILES)
         if document_formset.is_valid():
@@ -119,6 +114,17 @@ def list_attachments(user):
                                                        document_type="admission_attachments")
 
     return list(uploaded_attachments)
+
+
+def attachments_left_available(number_attachments_uploaded):
+    """
+    Compute the number of attachments left that the user can upload.
+    :param number_attachments_uploaded: number of attachments already uploaded
+    :return: slot available
+    """
+    max_num_attachments = 5
+    num_attachments_uploaded = number_attachments_uploaded
+    return max_num_attachments - num_attachments_uploaded
 
 
 def save_document_from_form(document, user):
