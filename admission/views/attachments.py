@@ -43,15 +43,17 @@ def update(request, application_id=None):
         if document_formset.is_valid():
             for document in document_formset:
                 save_document_from_form(document, request.user)
+    elif request.method == "GET":
+        document_formset = UploadDocumentFileFormSet()
 
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
         application = mdl.application.init_application(request.user)
+
     applicant = mdl.applicant.find_by_user(request.user)
     tab_status = tabs.init(request)
 
-    document_formset = UploadDocumentFileFormSet()
     remove_attachment_form = RemoveAttachmentForm()
     return render(request, "admission_home.html", {
         "tab_active": 6,
