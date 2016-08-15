@@ -28,7 +28,7 @@ from django.contrib import admin
 
 
 admin.site.register(person.Person,
-                    person.BasePersonAdmin)
+                    person.PersonAdmin)
 admin.site.register(student.Student,
                     student.StudentAdmin)
 admin.site.register(tutor.Tutor,
