@@ -26,7 +26,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.contrib import admin
-from base.models import person
+from base.models import person as model_person
 
 
 class TutorAdmin(admin.ModelAdmin):
@@ -36,7 +36,15 @@ class TutorAdmin(admin.ModelAdmin):
     search_fields = ['person__first_name', 'person__last_name']
 
 
+class TutorManager(models.Manager):
+    def get_by_natural_key(self, global_id):
+        return self.get(person__global_id=global_id)
+
+
 class Tutor(models.Model):
+
+    objects = TutorManager()
+
     external_id = models.CharField(max_length=100, blank=True, null=True)
     changed = models.DateTimeField(null=True)
     person = models.OneToOneField('Person')
@@ -44,6 +52,19 @@ class Tutor(models.Model):
     def __str__(self):
         return u"%s" % self.person
 
+    def save_from_osis_migration(self):
+        try:
+            find_by_person_global_id(self.person.global_id)
+        except Tutor.DoesNotExist:
+            person = model_person.find_by_global_id(self.person.global_id)
+            self.person = person
+            self.pk = None
+            self.save()
+
+    def natural_key(self):
+        return (self.person.global_id, )
+
+    natural_key.dependencies = ['base.person']
 
 def find_by_person(a_person):
     try:
@@ -55,7 +76,7 @@ def find_by_person(a_person):
 
 def find_by_user(a_user):
     try:
-        pers = person.find_by_user(a_user)
+        pers = model_person.find_by_user(a_user)
         tutor = Tutor.objects.get(person=pers)
         return tutor
     except ObjectDoesNotExist:
@@ -65,3 +86,7 @@ def is_tutor(a_user):
     if find_by_user(a_user):
         return True
     return False
+
+
+def find_by_person_global_id(global_id):
+    return Tutor.objects.get(person__global_id=global_id)
