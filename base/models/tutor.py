@@ -23,10 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import logging
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.contrib import admin
 from base.models import person as model_person
+
+logger = logging.getLogger(__name__)
 
 
 class TutorAdmin(admin.ModelAdmin):
@@ -54,8 +57,14 @@ class Tutor(models.Model):
 
     def save_from_osis_migration(self):
         try:
-            find_by_person_global_id(self.person.global_id)
+            tutor = find_by_person_global_id(self.person.global_id)
+            person = model_person.find_by_global_id(self.person.global_id)
+            if tutor.person.id != person.id:
+                logger.info(''.join(['Update tutor with person : ', self.person.global_id]))
+                tutor.person = person
+                tutor.save()
         except Tutor.DoesNotExist:
+            logger.info(''.join(['New Tutor with person : ', self.person.global_id]))
             person = model_person.find_by_global_id(self.person.global_id)
             self.person = person
             self.pk = None

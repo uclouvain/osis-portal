@@ -23,12 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import logging
 
 from django.db import models
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+
+logger = logging.getLogger(__name__)
 
 
 class PersonAdmin(admin.ModelAdmin):
@@ -88,12 +91,12 @@ class Person(models.Model):
 
     def save_from_osis_migration(self):
         if not find_by_global_id(self.global_id):
-            self.pk=None
+            logger.info(''.join(['New person : ', self.global_id]))
+            self.pk = None
             self.save()
 
     def natural_key(self):
         return (self.global_id, )
-
 
     class Meta:
         permissions = (
