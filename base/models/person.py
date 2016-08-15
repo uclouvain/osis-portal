@@ -89,7 +89,7 @@ class Person(models.Model):
 
     def save_from_osis_migration(self):
         if not find_by_global_id(self.global_id):
-            self.id=None
+            self.pk=None
             self.save()
 
     def natural_key(self):
