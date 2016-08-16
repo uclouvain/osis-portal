@@ -167,11 +167,11 @@ def profile(request, application_id=None, message_success=None):
         if request.POST['legal_adr_street']:
             person_legal_address.street = request.POST['legal_adr_street']
         else:
-            person_legal_address.street = None
+            person_legal_address.street = ''
         if request.POST['legal_adr_number']:
             person_legal_address.number = request.POST['legal_adr_number']
         else:
-            person_legal_address.number = None
+            person_legal_address.number = ''
         if request.POST['legal_adr_complement']:
             person_legal_address.complement = request.POST['legal_adr_complement']
         else:
@@ -179,11 +179,13 @@ def profile(request, application_id=None, message_success=None):
         if request.POST['legal_adr_postal_code']:
             person_legal_address.postal_code = request.POST['legal_adr_postal_code']
         else:
-            person_legal_address.postal_code = None
+            person_legal_address.postal_code = ''
         if request.POST['legal_adr_city']:
             person_legal_address.city = request.POST['legal_adr_city']
         else:
-            person_legal_address.city = None
+            person_legal_address.city = ''
+        if request.POST.get('legal_adr_country'):
+            person_legal_address.city = ''
         if request.POST.get('legal_adr_country') and not request.POST.get('legal_adr_country') == "-1":
             country_id = request.POST['legal_adr_country']
             country = mdl_ref.country.find_by_id(country_id)

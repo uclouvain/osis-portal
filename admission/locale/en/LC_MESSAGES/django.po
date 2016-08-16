@@ -294,9 +294,6 @@ msgstr "Please add certificate of achievement or a proof of your enrollment"
 msgid "institution"
 msgstr "Institution"
 
-msgid "institution_identification"
-msgstr "Université catholique de Louvain"
-
 msgid "which_community"
 msgstr "Please mention the community where you went to high school."
 
@@ -1188,5 +1185,17 @@ msgstr "Are you sure you want to upload this file?"
 msgid "msg_error_size_and_content"
 msgstr "File too big or bad content"
 
+msgid "filename"
+msgstr "Filename"
 
+msgid "description"
+msgstr "Description"
 
+msgid "template_error"
+msgstr "No message was sent : the message template {} does not exist."
+
+msgid "mister"
+msgstr "Mister"
+
+msgid "miss"
+msgstr "Miss"

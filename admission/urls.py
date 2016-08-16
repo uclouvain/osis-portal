@@ -94,6 +94,8 @@ urlpatterns = [
     url(r'^applications/(?:([0-9]+)/)?$', application.applications, name='applications'),
     url(r'^sociological/(?:([0-9]+)/)?$', sociological.update, name='sociological_survey'),
     url(r'^attachments/(?:([0-9]+)/)?$', attachments.update, name='attachments'),
+    url(r'^attachments/remove_attachment/$',
+        attachments.remove_attachment, name='remove_attachment'),
     url(r'^admission/demande/(?:([0-9]+)/)?$', offer.demande_update, name='demande_update'),
     url(r'^admission/application/submission/(?:([0-9]+)/)?$', application.submission, name='submission'),
     url(r'^admission/application/delete/([0-9]+)/$', application.application_delete, name='application_delete'),
