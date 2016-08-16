@@ -25,12 +25,13 @@
 ##############################################################################
 import logging
 from django.apps import AppConfig
+from django.conf import settings
 from django.core import serializers
 from django.core.serializers.base import DeserializationError
 from frontoffice.queue import queue
 import json
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 class BaseConfig(AppConfig):
     name = 'base'
@@ -78,7 +79,7 @@ def deserialize_model_data(data, function_to_apply):
         for deserialized_object in serializers.deserialize("json", data):
             function_to_apply(deserialized_object)
     except Exception as e:
-        logger.error(''.join(["Erreur de deserialisation : ", data]))
+        logger.error(''.join(['Erreur de deserialisation : ', data]))
         raise e
 
 

@@ -23,10 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import logging
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.contrib import admin
 from base.models import person as model_person
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 class TutorAdmin(admin.ModelAdmin):
@@ -54,12 +58,21 @@ class Tutor(models.Model):
 
     def save_from_osis_migration(self):
         try:
-            find_by_person_global_id(self.person.global_id)
+            tutor = find_by_person_global_id(self.person.global_id)
+            person = model_person.find_by_global_id(self.person.global_id)
+            if person and tutor.person.id != person.id:
+                logger.info(''.join(['Update tutor with person : ', self.person.global_id]))
+                tutor.person = person
+                tutor.save()
         except Tutor.DoesNotExist:
             person = model_person.find_by_global_id(self.person.global_id)
-            self.person = person
-            self.pk = None
-            self.save()
+            if person:
+                logger.info(''.join(['New Tutor with person : ', self.person.global_id]))
+                self.person = person
+                self.pk = None
+                self.save()
+            else:
+                logger.error(''.join(['Not migrating tutor without person - ext_id : ', self.external_id]))
 
     def natural_key(self):
         return (self.person.global_id, )
@@ -89,4 +102,4 @@ def is_tutor(a_user):
 
 
 def find_by_person_global_id(global_id):
-    return Tutor.objects.get(person__global_id=global_id)
+    return Tutor.objects.get(person__global_id=global_id) if global_id is not None else None

@@ -28,8 +28,9 @@ from couchbase import Couchbase
 from pprint import pprint
 import json
 import logging
+from django.conf import settings
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 def couchbase_insert(json_datas):
