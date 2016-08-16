@@ -129,6 +129,9 @@ function examScoreToString(examJson) {
   if (examJson.status_exam == "-") {
     return score;
   }
+  else if(score == "-") {
+    return examJson.status_exam;
+  }
   return score + examJson.status_exam;
 }
 
@@ -150,7 +153,7 @@ function creditToString(creditReport) {
 
 function fillMentionExplanation(studentJson) {
   var mentionExplanation = studentJson.academic_years[0].programs[0].mention_explanation;
-  $("#paragraph_mention_explanation").text(mentionExplanation);
+  $("#paragraph_mention_explanation").html(mentionExplanation);
 }
 
 /***************************** UTILITY FUNCTIONS TEMPLATE ***************/

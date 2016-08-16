@@ -42,6 +42,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+ADMIN_URL = 'admin/'
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -97,6 +99,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
                 'base.views.common.installed_applications_context_processor',
             ],
         },
@@ -116,6 +119,36 @@ DATABASES = {
     },
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(asctime)s %(levelname)s %(module)s %(process)d %(thread)d %(message)s',
+            'datefmt': '%d-%m-%Y %H:%M:%S'
+        },
+        'simple': {
+            'format': '%(asctime)s %(levelname)s %(message)s',
+            'datefmt': '%d-%m-%Y %H:%M:%S'
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            'level':'INFO',
+        },
+    },
+    'loggers': {
+        'default': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        }
+    },
+}
+
+DEFAULT_LOGGER = 'default'
 
 COUCHBASE_CONNECTION_STRING='couchbase://localhost/'
 COUCHBASE_PASSWORD=''
@@ -199,3 +232,6 @@ except ImportError:
 if 'admission' in INSTALLED_APPS:
     ADMISSION_LOGIN_URL=reverse_lazy('admission_login')
     ADMISSION_LOGIN_REDIRECT_URL=reverse_lazy('admission')
+
+LOGO_EMAIL_SIGNATURE_URL = ''
+LOGO_OSIS_URL = ''

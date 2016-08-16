@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "dashboard_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -25,6 +25,10 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
+
+{% block breadcrumb %}
+        <li class="active">{% trans 'performance' %}</li>
+{% endblock %}
 
 
 {% block content %}
@@ -69,7 +73,17 @@
             {% for row in programs %}
             <tr>
                 <td>{{row.year}}</td>
-                <td><a href="{% url 'performance_result' anac=row.anac program_acronym=row.formatted_acronym%}">{{row.acronym}}</a></td>
+                <td>
+                    {% if perms.base.is_faculty_administrator %}
+                        <a href="{% url 'performance_student_result' registration_id=student.registration_id anac=row.anac program_acronym=row.formatted_acronym %}">
+                            {{row.acronym}}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'performance_result' anac=row.anac program_acronym=row.formatted_acronym%}">
+                            {{row.acronym}}
+                        </a>
+                    {% endif %}
+                </td>
                 <td>{{row.title}}</td>
             </tr>
             {% endfor %}

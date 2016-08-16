@@ -16,11 +16,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "ABSENCE_JUSTIFIED"
+msgstr "Justified absence"
+
+msgid "ABSENCE_UNJUSTIFIED"
+msgstr "Unjustified Absence"
+
 msgid "absent_pdf_legend"
 msgstr "A=Absent"
 
 msgid "academic_year"
 msgstr "Academic year"
+
+msgid "CHEATING"
+msgstr "Cheating"
 
 msgid "cheating_pdf_legend"
 msgstr "T=Cheating"
@@ -45,6 +54,9 @@ msgstr "Fax"
 
 msgid "firstname"
 msgstr "Firstname"
+
+msgid "get_my_scores_sheets"
+msgstr "Get my scores' sheets"
 
 msgid "in_accordance_to_regulation"
 msgstr "In accordance to regulation's rules 104, 109 and 111, available in the following link"
@@ -87,6 +99,9 @@ msgstr "Registration number"
 
 msgid "return_doc_to_administrator"
 msgstr "Please return this document to the administrative office before %s."
+
+msgid "SCORE_MISSING"
+msgstr "Score missing"
 
 msgid "scores_encoding"
 msgstr "Scores Encoding"
