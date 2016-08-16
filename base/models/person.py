@@ -104,6 +104,7 @@ class Person(models.Model):
         elif not find_by_global_id(self.global_id):
             logger.debug(''.join(['New person : ', self.global_id]))
             self.pk = None
+            self.id = None
             self.save()
 
     def natural_key(self):
