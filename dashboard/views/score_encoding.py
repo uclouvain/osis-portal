@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from couchbase.exceptions import ValueFormatError
+from django.conf import settings
 from osis_common.document import paper_sheet
 from dashboard import models as mdl
 from frontoffice.queue.queue import ScoresSheetClient
@@ -32,7 +33,7 @@ import json
 import logging
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 def get_score_sheet(global_id):

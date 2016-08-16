@@ -23,10 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import logging
+from django.conf import settings
 from django.db import models
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from base.models import person as model_person
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 class StudentAdmin(admin.ModelAdmin):
@@ -38,7 +42,10 @@ class StudentAdmin(admin.ModelAdmin):
 
 class StudentManager(models.Manager):
     def get_by_natural_key(self, global_id, registration_id):
-        return self.get(registration_id=registration_id, person__global_id=global_id)
+        if not global_id:
+            return self.get(registration_id=registration_id)
+        else:
+            return self.get(registration_id=registration_id, person__global_id=global_id)
 
 
 class Student(models.Model):
@@ -58,13 +65,21 @@ class Student(models.Model):
 
     def save_from_osis_migration(self):
         try:
-            find_by_registration_id(self.registration_id)
+            student = find_by_registration_id(self.registration_id)
+            person = model_person.find_by_global_id(self.person.global_id)
+            if person and student.person.id != person.id:
+                logger.info(''.join(['Update student ', self.registration_id, ' set person : ', self.person.global_id]))
+                student.person = person
+                student.save()
         except Student.DoesNotExist:
             person = model_person.find_by_global_id(self.person.global_id)
-            self.person = person
-            self.pk = None
-            self.save()
-
+            if person :
+                logger.info(''.join(['New student ', self.registration_id, ' person : ', self.person.global_id]))
+                self.person = person
+                self.pk = None
+                self.save()
+            else:
+                logger.error(''.join(['Not migrating student without person : ', self.registration_id]))
 
 
 def find_by_registration_id(registration_id):

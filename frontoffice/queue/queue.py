@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.conf import settings
 
 import pika
 import uuid
@@ -30,7 +31,7 @@ from frontoffice.settings import QUEUE_URL, QUEUE_USER, QUEUE_PASSWORD, QUEUE_PO
 import threading
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 class ScoresSheetClient(object):
