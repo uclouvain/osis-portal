@@ -45,7 +45,7 @@ class PersonAdmin(admin.ModelAdmin):
 
 class PersonManager(models.Manager):
     def get_by_natural_key(self, global_id):
-        if not global_id:
+        if not global_id or global_id == 'None' or global_id == 'Null':
             logger.debug('Serialization of Person without global_id')
             return Person()
         try:
