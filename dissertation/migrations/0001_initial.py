@@ -140,4 +140,11 @@ class Migration(migrations.Migration):
                  models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='dissertation.Dissertation')),
             ],
         ),
+        migrations.AlterField(
+            model_name='propositionrole',
+            name='status',
+            field=models.CharField(
+                choices=[('PROMOTEUR', 'promotor'), ('CO_PROMOTEUR', 'copromotor'), ('READER', 'reader')],
+                default='PROMOTEUR', max_length=12),
+        ),
     ]
