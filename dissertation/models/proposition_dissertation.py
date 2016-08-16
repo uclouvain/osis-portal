@@ -36,7 +36,7 @@ class PropositionDissertationAdmin(admin.ModelAdmin):
 
 class PropositionDissertation(models.Model):
     TYPES_CHOICES = (
-        ('RDL', _('litterature_review')),
+        ('RDL', _('literature_review')),
         ('EDC', _('case_study')),
         )
 
