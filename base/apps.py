@@ -23,11 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import logging
 from django.apps import AppConfig
 from django.core import serializers
+from django.core.serializers.base import DeserializationError
 from frontoffice.queue import queue
 import json
 
+logger = logging.getLogger(__name__)
 
 class BaseConfig(AppConfig):
     name = 'base'
@@ -71,40 +74,39 @@ def deserialize_model_data(data, function_to_apply):
     :param function_to_apply: function to apply on the model objects
     :return:
     """
+    try:
+        for deserialized_object in serializers.deserialize("json", data):
+            function_to_apply(deserialized_object)
+    except Exception as e:
+        logger.error(''.join(["Erreur de deserialisation : ", data]))
+        raise e
+
+
+# Needs to implement it because tutor needs global_id of the person linked to it.
+def deserialize_tutor_data(data, function_to_apply):
+    """
+    Deserialize data (see django serialization for the format).
+    Json encoding is used.
+    :param data: data to be deserialized
+    :param function_to_apply: function to apply on the model objects
+    :return:
+    """
+    json_data = json.loads(data)
+    i = 0
     for deserialized_object in serializers.deserialize("json", data):
-        function_to_apply(deserialized_object)
+        function_to_apply(deserialized_object, json_data[0]['fields']['person'])
+        i += 1
 
 
 def save_model_object(model_object):
     """
     Save a model object. If it already exists in the database, do nothing.
     :param model_object: a model object
-    :param model_class: the model class of the object
     :return:
     """
-    if object_exists(model_object):
-        return
-    model_object.save()
+    model_object.object.save_from_osis_migration()
 
 
-def object_exists(model_object):
-    """
-    Check if a model_object already exists.
-    :param model_object: an instance of a model
-    :return: true if the object already exists
-    """
-    from base.models import student, tutor, person
-
-    if model_object.object.__class__ == person.Person:
-        global_id = model_object.object.global_id
-        return model_object.object.__class__.objects.filter(global_id=global_id).exists()
-    elif model_object.object.__class__ == student.Student:
-        registration_id = model_object.object.registration_id
-        return model_object.object.__class__.objects.filter(registration_id=registration_id).exists()
-    elif model_object.object.__class__ == tutor.Tutor:
-        external_id = model_object.object.external_id
-        return model_object.object.__class__.objects.filter(external_id=external_id).exists()
-    return True
 
 
 def map_string_to_model_class(class_str):
@@ -118,9 +120,9 @@ def map_string_to_model_class(class_str):
     from reference import models as mdl_ref
     from base import models as mdl_base
     map_classes = {
-        'reference.Country': mdl_ref.country.Country,
-        'admission.Domain': mdl_ref.domain.Domain,
-        'base.Tutor': mdl_base.tutor.Tutor,
-        'base.Student': mdl_base.student.Student
+        'reference.country.Country': mdl_ref.country.Country,
+        'reference.domain.Domain': mdl_ref.domain.Domain,
+        'base.tutor.Tutor': mdl_base.tutor.Tutor,
+        'base.student.Student': mdl_base.student.Student
     }
     return map_classes.get(class_str)

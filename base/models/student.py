@@ -25,7 +25,6 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
 from base.models import person as model_person
 
@@ -37,17 +36,44 @@ class StudentAdmin(admin.ModelAdmin):
     search_fields = ['person__first_name', 'person__last_name', 'registration_id']
 
 
+class StudentManager(models.Manager):
+    def get_by_natural_key(self, global_id, registration_id):
+        return self.get(registration_id=registration_id, person__global_id=global_id)
+
+
 class Student(models.Model):
+
+    objects = StudentManager()
+
     registration_id = models.CharField(max_length=10, unique=True)
     person = models.ForeignKey('Person')
 
     def __str__(self):
         return u"%s (%s)" % (self.person, self.registration_id)
 
+    def natural_key(self):
+        return (self.registration_id, self.person.global_id)
 
-def find_by(registration_id=None, person_name=None, person_username=None, person_first_name=None, full_registration = None):
+    natural_key.dependencies = ['base.person']
+
+    def save_from_osis_migration(self):
+        try:
+            find_by_registration_id(self.registration_id)
+        except Student.DoesNotExist:
+            person = model_person.find_by_global_id(self.person.global_id)
+            self.person = person
+            self.pk = None
+            self.save()
+
+
+
+def find_by_registration_id(registration_id):
+    return Student.objects.get(registration_id=registration_id)
+
+
+def search(registration_id=None, person_name=None, person_username=None, person_first_name=None, full_registration = None):
     """
-    Find students by optional arguments. At least one argument should be informed
+    Search students by optional arguments. At least one argument should be informed
     otherwise it returns empty.
     """
     has_criteria = False

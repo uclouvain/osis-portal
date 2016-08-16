@@ -29,10 +29,8 @@ from admission.models import answer
 from admission.models import applicant
 from admission.models import applicant_assimilation_criteria
 from admission.models import application
-from admission.models import application_assimilation_criteria
 from admission.models import curriculum
 from admission.models import form
-from admission.models import message_template
 from admission.models import offer_year
 from admission.models import option
 from admission.models import person_address
