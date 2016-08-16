@@ -23,12 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.conf import settings
 from django.conf.urls import url
 from performance.views import main
 
 urlpatterns = [
     url(r'^$', main.home, name='performance_home'),
+
+    url(r'^administration/$', main.performance_administration, name='performance_administration'),
+    url(r'^administration/select_student/$', main.select_student, name='performance_select_student'),
+
     url(r'^result/(?P<anac>[0-9]{4})/(?P<program_acronym>[0-9a-z]+)/$',
         main.result_by_year_and_program, name='performance_result'),
+    url(r'^student_programs/(?P<registration_id>[0-9]+)/$', main.student_programs, name='performance_student_programs'),
+    url(r'^student_result/(?P<registration_id>[0-9]+)/(?P<anac>[0-9]{4})/(?P<program_acronym>[0-9a-z]+)/$',
+        main.student_result, name='performance_student_result'),
 ]
 

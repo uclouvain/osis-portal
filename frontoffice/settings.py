@@ -42,6 +42,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+ADMIN_URL = 'admin/'
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -97,6 +99,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
                 'base.views.common.installed_applications_context_processor',
             ],
         },
@@ -199,3 +202,6 @@ except ImportError:
 if 'admission' in INSTALLED_APPS:
     ADMISSION_LOGIN_URL=reverse_lazy('admission_login')
     ADMISSION_LOGIN_REDIRECT_URL=reverse_lazy('admission')
+
+LOGO_EMAIL_SIGNATURE_URL = ''
+LOGO_OSIS_URL = ''

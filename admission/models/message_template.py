@@ -50,5 +50,8 @@ class MessageTemplate(models.Model):
 
 
 def find_by_reference(reference):
-    message_template = MessageTemplate.objects.get(reference=reference)
-    return message_template
+    try:
+        message_template = MessageTemplate.objects.get(reference=reference)
+        return message_template
+    except:
+        return None

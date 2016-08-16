@@ -1,7 +1,6 @@
-{% extends "dashboard_layout.html" %}
+{% extends "admin/administration_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
-
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
 * designed to manage the core business of higher education institutions,
@@ -26,29 +25,25 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block content %}
-<div class="page-header">
-    <h2>{% trans 'dashboard' %}</h2>
-</div>
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        <div class="row">
-        {% if perms.base.is_tutor %}
-            <div class="col-md-1"><i class="fa fa-hashtag" style="font-size: 400%; color: #6699FF;"></i></div>
-            <div class="col-md-5">
-                <h4 class="media-heading"><a href="{% url 'scores_encoding' %}" id="lnk_score_encoding">{% trans 'scores_encoding' %}</a></h4>
-                <p>{% trans 'desc_lnk_scores_encoding' %}</p>
-            </div>
-        {% endif %}
-        {% if 'performance' in installed_apps and perms.base.is_student %}
-            <div class="col-md-1"><i class="fa fa-line-chart " style="font-size: 400%; color: #6699FF;"></i></div>
-            <div class="col-md-5">
-                <h4 class="media-heading"><a href="{% url 'performance_home'  %}" id="lnk_performance">{% trans 'performance' %}</a></h4>
-                <p>{% trans 'desc_lnk_performance' %}</p>
-            </div>
-        {% endif %}
+{% block breadcrumb %}
+    <li class="active">{% trans 'performance_administration' %}</li>
+{% endblock %}
+
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+                <div class="row">
+                    {% if perms.base.is_faculty_administrator %}
+                        <div class="col-md-1"><i class="fa fa-line-chart" style="font-size: 400%; color: #6699FF;"></i></div>
+                        <div class="col-md-5">
+                            <h4 class="media-heading"><a href="{% url 'performance_select_student' %}" id="lnk_performance" target="_blank">
+                                {% trans 'performance'%}</a></h4>
+                            <p>{% trans 'desc_lnk_performance' %}</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <br>
         </div>
     </div>
-</div>
 {% endblock %}

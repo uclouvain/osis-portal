@@ -26,13 +26,12 @@
 
 from django.db import models
 from django.contrib import admin
-from django.core import serializers
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 
-class BasePersonAdmin(admin.ModelAdmin):
+class PersonAdmin(admin.ModelAdmin):
     list_display = ('first_name' , 'middle_name', 'last_name', 'username', 'email', 'gender', 'global_id', 'national_id',
                     'changed')
     search_fields = ['first_name', 'middle_name', 'last_name', 'user__username', 'email']
@@ -41,7 +40,15 @@ class BasePersonAdmin(admin.ModelAdmin):
     raw_id_fields = ('user',)
 
 
+class PersonManager(models.Manager):
+    def get_by_natural_key(self, global_id):
+        return self.get(global_id=global_id)
+
+
 class Person(models.Model):
+
+    objects = PersonManager()
+
     GENDER_CHOICES = (
         ('F', _('female')),
         ('M', _('male')),
@@ -79,11 +86,22 @@ class Person(models.Model):
 
         return u"%s %s %s" % (last_name.upper(), first_name, middle_name)
 
+    def save_from_osis_migration(self):
+        if not find_by_global_id(self.global_id):
+            self.pk=None
+            self.save()
+
+    def natural_key(self):
+        return (self.global_id, )
+
+
     class Meta:
         permissions = (
             ("is_tutor", "Is tutor"),
             ("is_student", "Is student"),
             ("is_administrator", "Is administrator"),
+            ("is_faculty_administrator", "Is faculty administrator"),
+            ("can_access_administration", "Can access administration"),
         )
 
 
@@ -105,3 +123,4 @@ def change_language(user, new_language):
 
 def find_by_global_id(global_id):
     return Person.objects.filter(global_id=global_id).first()
+

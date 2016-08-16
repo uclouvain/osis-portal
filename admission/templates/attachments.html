@@ -26,23 +26,83 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<form id="form_attachments">
-    <div>
-        <a id="lnk_previous_step_up"
-           class="btn btn-default"
-           href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey'%}{%endif%}"
-           onclick="save('form_attachments');"
-           title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-            {%trans 'previous_step'%} : {% trans 'sociological_survey'%}</a>
-        <a id="lnk_next_step_up"
-           class="btn btn-default"
-           href="{%if application.id%}{% url 'submission' application.id%}{%else%}{% url 'submission'%}{%endif%}"
-           onclick="save('form_attachments');"
-           title="{% trans 'submission'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            {%trans 'next_step'%} : {%trans 'submission'%}</a>
+
+<div>
+    <a id="lnk_previous_step_up"
+       class="btn btn-default"
+       href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey'%}{%endif%}"
+       onclick="save('form_attachments');"
+       title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+        {%trans 'previous_step'%} : {% trans 'sociological_survey'%}</a>
+    <a id="lnk_next_step_up"
+       class="btn btn-default"
+       href="{%if application.id%}{% url 'submission' application.id%}{%else%}{% url 'submission'%}{%endif%}"
+       onclick="save('form_attachments');"
+       title="{% trans 'submission'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+        {%trans 'next_step'%} : {%trans 'submission'%}</a>
+</div>
+
+<br/>
+
+<div class="row">
+    <div class="col-md-4"><strong>{% trans 'filename' %}</strong></div>
+    <div class="col-md-4"><strong>{% trans 'file' %}</strong></div>
+    <div class="col-md-4"><strong>{% trans 'description' %}</strong></div>
+</div>
+
+{% for attachment in attachments %}
+<br>
+<div class="row">
+    <div class="col-md-4">{{ attachment.file_name }}</div>
+    <div class="col-md-4">
+        <a href="{{ attachment.file.url }}">
+            <span class="glyphicon glyphicon-open-file"></span>
+        </a> </div>
+    <div class="col-md-2">
+        {{ attachment.description }}
     </div>
-    <h3>En construction, formulaire de pièces jointes</h3>
+    <form action="{% url 'remove_attachment' %}" name="remove_attachment_{{attachment.pk}}" method="post">
+        {% csrf_token %}
+        {% if removeAttachmentForm.errors %}
+        <div class="alert alert-danger" role="alert">
+            <ul style="list-style-type: none">
+                {% for field in removeAttachmentForm %}
+                {% for error in field.errors %}
+                <li>{{ error | escape }}</li>
+                {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        <input name="attachment_id" class="form-control" type="hidden" value="{{ attachment.pk }}">
+        <button type="submit" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+    </form>
+</div>
+{% endfor %}
+
+<form id="form_attachments" method="POST" enctype="multipart/form-data">
+
+    <div id="div_document_forms">
+        {% csrf_token %}
+        {{ document_formset.management_form }}
+        <br>
+    </div>
+
+    <br>
+
+    <button id="button_add_form"  type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    </button>
+
+    <button id="button_remove_form"  type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+    </button>
+
+
     <div>
+        <br>
         <a id="lnk_previous_step"
            class="btn btn-default"
            href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey'%}{%endif%}"
@@ -57,3 +117,4 @@
             {%trans 'next_step'%} : {%trans 'submission'%}</a>
     </div>
 </form>
+

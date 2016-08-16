@@ -23,29 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from reference import models as reference_mdl
-from django.http import HttpResponse
-from rest_framework import serializers
-from rest_framework.renderers import JSONRenderer
+from django.contrib.auth.decorators import login_required, user_passes_test
+from base.views import layout
 
 
-class JSONResponse(HttpResponse):
-    def __init__(self, data, **kwargs):
-        content = JSONRenderer().render(data)
-        kwargs['content_type'] = 'application/json'
-        super(JSONResponse, self).__init__(content, **kwargs)
-
-
-class LevelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = reference_mdl.grade_type.GradeType
-        fields = ('id', 'name', 'grade')
-
-
-def find_by_type(request):
-    type = request.GET['type']
-
-    levels = reference_mdl.grade_type.find_by_grade(type)
-    serializer = LevelSerializer(levels, many=True)
-
-    return JSONResponse(serializer.data)
+@login_required
+@user_passes_test(lambda u: u.is_staff and u.has_perm('base.is_administrator'), login_url='/403/', redirect_field_name=None)
+def data(request):
+    return layout.render(request, 'admin/data.html')

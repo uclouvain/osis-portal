@@ -27,7 +27,7 @@ from django.conf import settings
 
 from django.contrib.auth.views import login as django_login
 from django.contrib.auth import authenticate, logout
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.utils import translation
 from base.views import layout
 from base.models import person as person_mdl
@@ -62,7 +62,7 @@ def login(request):
                 translation.activate(user_language)
                 request.session[translation.LANGUAGE_SESSION_KEY] = user_language
     elif settings.OVERRIDED_LOGIN_URL:
-        return redirect(settings.OVERRIDED_LOGIN_URL)
+        return redirect(settings.OVERRIDED_CURRENT_URL)
     return django_login(request)
 
 

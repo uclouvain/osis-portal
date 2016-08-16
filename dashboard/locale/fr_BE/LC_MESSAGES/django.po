@@ -16,11 +16,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "ABSENCE_JUSTIFIED"
+msgstr "Absence justifiée"
+
+msgid "ABSENCE_UNJUSTIFIED"
+msgstr "Absence injustifiée"
+
 msgid "absent_pdf_legend"
 msgstr "A=Absent"
 
 msgid "academic_year"
 msgstr "Année académique"
+
+msgid "CHEATING"
+msgstr "Tricherie"
 
 msgid "cheating_pdf_legend"
 msgstr "T=Tricherie"
@@ -45,6 +54,9 @@ msgstr "Fax"
 
 msgid "firstname"
 msgstr "Prénom"
+
+msgid "get_my_scores_sheets"
+msgstr "Obtenir mes feuilles de notes"
 
 msgid "in_accordance_to_regulation"
 msgstr "Conformément aux articles 104, 109 et 111 RGEE (Règlement Général des Examens) disponible au lien suivant"
@@ -87,6 +99,9 @@ msgstr "Noma"
 
 msgid "return_doc_to_administrator"
 msgstr "Veuillez envoyer ce formulaire au secrétariat de l'entité gestionnaire avant le %s."
+
+msgid "SCORE_MISSING"
+msgstr "Note manquante"
 
 msgid "scores_encoding"
 msgstr "Encodage des notes"
