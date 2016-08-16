@@ -120,4 +120,11 @@ class Migration(migrations.Migration):
                                                                to='dissertation.PropositionDissertation')),
             ],
         ),
+        migrations.AlterField(
+            model_name='propositionrole',
+            name='status',
+            field=models.CharField(
+                choices=[('PROMOTEUR', 'promotor'), ('CO_PROMOTEUR', 'copromotor'), ('READER', 'reader')],
+                default='PROMOTEUR', max_length=12),
+        ),
     ]
