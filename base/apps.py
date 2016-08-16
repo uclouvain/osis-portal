@@ -79,7 +79,8 @@ def deserialize_model_data(data, function_to_apply):
         for deserialized_object in serializers.deserialize("json", data):
                 function_to_apply(deserialized_object)
     except Exception as e:
-        logger.error(''.join(['Erreur de deserialisation : ', str(e)]))
+        logger.error(''.join(['Erreur de deserialisation de : ', str(data)]))
+        logger.error(''.join(['Exeption : ', str(e)]))
         pass
 
 
