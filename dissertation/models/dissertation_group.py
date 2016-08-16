@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -24,10 +24,12 @@
 #
 ##############################################################################
 
-from dissertation.models import adviser
-from dissertation.models import dissertation
-from dissertation.models import dissertation_group
-from dissertation.models import dissertation_role
-from dissertation.models import offer_proposition
-from dissertation.models import proposition_dissertation
-from dissertation.models import proposition_role
+from django.db import models
+from . import dissertation
+
+
+class DissertationGroup(models.Model):
+    dissertation = models.ForeignKey(dissertation.Dissertation)
+
+    def __str__(self):
+        return self.dissertation.title
