@@ -66,7 +66,7 @@ class Student(models.Model):
         try:
             return (self.registration_id, self.person.global_id)
         except ObjectDoesNotExist:
-            logger.error(''.join(['Serialization of student without person : ', self.registration_id]))
+            logger.debug(''.join(['Serialization of student without person : ', self.registration_id]))
             return (self.registration_id, '')
 
     natural_key.dependencies = ['base.person']
@@ -76,23 +76,23 @@ class Student(models.Model):
             student = find_by_registration_id(self.registration_id)
             person = model_person.find_by_global_id(self.person.global_id)
             if person and student.person.id != person.id:
-                logger.info(''.join(['Update student ', self.registration_id, ' set person : ', self.person.global_id]))
+                logger.debug(''.join(['Update student ', self.registration_id, ' set person : ', self.person.global_id]))
                 student.person = person
                 student.save()
         except Student.DoesNotExist:
             try:
                 person = model_person.find_by_global_id(self.person.global_id)
                 if person:
-                    logger.info(''.join(['New student ', self.registration_id, ' person : ', self.person.global_id]))
+                    logger.debug(''.join(['New student ', self.registration_id, ' person : ', self.person.global_id]))
                     self.person = person
                     self.pk = None
                     self.save()
                 else:
-                    logger.error(''.join(['Not migrating student without person : ', self.registration_id]))
+                    logger.warning(''.join(['Not migrating student without person : ', self.registration_id]))
             except ObjectDoesNotExist:
-                logger.error(''.join(['Not migrating student without person : ', self.registration_id]))
+                logger.warning(''.join(['Not migrating student without person : ', self.registration_id]))
         except ObjectDoesNotExist:
-            logger.error(''.join(['Not migrating student without person : ', self.registration_id]))
+            logger.warning(''.join(['Not migrating student without person : ', self.registration_id]))
 
 
 def find_by_registration_id(registration_id):

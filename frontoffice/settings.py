@@ -136,11 +136,16 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
-            'level':'INFO',
+            'level':'DEBUG',
         },
     },
     'loggers': {
         'default': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django': {
             'handlers': ['console'],
             'level': 'INFO',
             'propagate': True,
