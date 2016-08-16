@@ -146,7 +146,6 @@ def save_application_offer(request):
                         answer.option = option
                         answer.value = option.value
                         answer.save()
-
     return render(request, "admission_home.html", {'tab_active': 0,
                                                    'application': application,
                                                    'validated_profil': demande_validation.validate_profil(applicant),

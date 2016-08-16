@@ -160,6 +160,9 @@
     <input type="hidden"
            id="hdn_application_offer_year_id"
            value="{{application.offer_year.id| default_if_none:''}}" >
+    <input type="text"
+           id="hdn_application_id"
+           value="iiii{{application.id| default_if_none:''}}ppppppppppppppp" >
     {% csrf_token %}
     <div>
         <a id="lnk_previous_step_up"
@@ -312,11 +315,12 @@
     </div>
 </form>
     <form method="post"
-          action="{% url 'upload_file_description' %}"
+          action="{%url 'upload_file_description' %}"
           id="form_upload_diploma"
           style="visibility:hidden;display:none;">
         {% csrf_token %}
         <input type="text" name="description" id="hdn_description_diploma"/>
+        <input type="hidden" name="application_id" value='{{ application.id | default_if_none:''}}' />
         <input type="submit" id="btn_documents_upload_diploma">
     </form>
   <script>

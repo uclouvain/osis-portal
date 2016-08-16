@@ -23,28 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
 from django.db import models
 from django.contrib import admin
-from django.contrib.auth.models import User
 
 
-class AdmissionDocumentFile(models.Model):
-    applicant = models.ForeignKey('Applicant')
-    document_file = models.ForeignKey('osis_common.documentFile')
+class DocumentTypeAssimilationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'adhoc')
 
 
-def search(applicant=None, description=None):
-    out = None
-    queryset = AdmissionDocumentFile.objects.order_by('document_file__creation_date')
-    if applicant:
-        queryset = queryset.filter(applicant=applicant)
-    if description:
-        queryset = queryset.filter(document_file__description=description)
-    if applicant or description:
-        out = queryset
-    return out
-
-
-
+class DocumentTypeAssimilation(models.Model):
+    assimilation_criteria = models.ForeignKey('reference.AssimilationCriteria')
+    document_type = models.CharField(max_length=50)
 

@@ -389,31 +389,33 @@ def diploma_update(request, application_id=None):
             'tab_attachments': tab_status['tab_attachments'],
             'tab_submission': tab_status['tab_submission'],
             'applications': mdl.application.find_by_user(request.user),
-            'national_diploma_verso': mdl.admission_document_file.search(applicant, 'NATIONAL_DIPLOMA_VERSO'),
-            'national_diploma_recto': mdl.admission_document_file.search(applicant, 'NATIONAL_DIPLOMA_RECTO'),
-            'international_diploma_verso': mdl.admission_document_file.search(applicant, 'INTERNATIONAL_DIPLOMA_VERSO'),
-            'international_diploma_recto': mdl.admission_document_file.search(applicant, 'INTERNATIONAL_DIPLOMA_RECTO'),
+            'national_diploma_verso': mdl.application_document_file.search(application, 'NATIONAL_DIPLOMA_VERSO'),
+            'national_diploma_recto': mdl.application_document_file.search(application, 'NATIONAL_DIPLOMA_RECTO'),
+            'international_diploma_verso': mdl.application_document_file.search(application, 'INTERNATIONAL_DIPLOMA_VERSO'),
+            'international_diploma_recto': mdl.application_document_file.search(application, 'INTERNATIONAL_DIPLOMA_RECTO'),
             'translated_international_diploma_verso':
-                mdl.admission_document_file.search(applicant, 'TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO'),
+                mdl.application_document_file.search(application, 'TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO'),
             'translated_international_diploma_recto':
-                mdl.admission_document_file.search(applicant, 'TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO'),
+                mdl.application_document_file.search(application, 'TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO'),
             'high_school_scores_transcript_recto':
-                mdl.admission_document_file.search(applicant, 'HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO'),
+                mdl.application_document_file.search(application, 'HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO'),
             'high_school_scores_transcript_verso':
-                mdl.admission_document_file.search(applicant, 'HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO'),
+                mdl.application_document_file.search(application, 'HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO'),
             'translated_high_school_scores_transcript_recto':
-                mdl.admission_document_file.search(applicant, 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO'),
+                mdl.application_document_file.search(application, 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO'),
             'translated_high_school_scores_transcript_verso':
-                mdl.admission_document_file.search(applicant, 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO'),
+                mdl.application_document_file.search(application, 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO'),
             'equivalence_file':
-                mdl.admission_document_file.search(applicant, 'EQUIVALENCE'),
+                mdl.application_document_file.search(application, 'EQUIVALENCE'),
             'admission_exam_file':
-                mdl.admission_document_file.search(applicant, 'ADMISSION_EXAM_CERTIFICATE'),
+                mdl.application_document_file.search(application, 'ADMISSION_EXAM_CERTIFICATE'),
             'professional_exam_file':
-                mdl.admission_document_file.search(applicant, 'PROFESSIONAL_EXAM_CERTIFICATE')}
+                mdl.application_document_file.search(application, 'PROFESSIONAL_EXAM_CERTIFICATE')}
 
     # merge 2 dictionaries
     data.update(get_secondary_education_exams_data(secondary_education))
+    print('diplome update')
+    print(application.id)
     return render(request, "admission_home.html", data)
 
 

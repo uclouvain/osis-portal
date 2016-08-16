@@ -82,6 +82,7 @@
         {% csrf_token %}
         {% include "uploading/upload_file_form.html" %}
         <input type="hidden" name="description" value='{{ description }}' />
+        <input type="text" name="application_id" value='{{ application.id | default_if_none:''}}' />
         <button type="submit" class="save btn btn-default" onclick="return confirm('{% trans 'new_file_confirmation_message' %}')">{% trans 'save' %}</button>
         {% if description == 'ID_PICTURE' or description == 'ID_CARD'%}
             <a href="{% url 'home'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>

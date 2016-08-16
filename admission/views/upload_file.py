@@ -32,6 +32,7 @@ from admission.views import common
 from admission.views import secondary_education
 from admission import settings as adm_settings
 from admission import models as mdl_admission
+from admission.models import document_type
 
 
 @login_required
@@ -39,10 +40,12 @@ def upload_file(request):
     description = None
     documents = mdl.document_file.search(document_type=adm_settings.DOCUMENT_TYPE, user=request.user)
     if request.method == "POST":
-
+        application = None
         if request.POST['description']:
             description = request.POST['description']
-
+        if request.POST['application_id']:
+            application_id = request.POST['application_id']
+            application = mdl.application.find_by_id(application_id)
         form = UploadDocumentFileForm(request.POST, request.FILES)
         if form.is_valid():
             curriculum_uploads =['NATIONAL_DIPLOMA_RECTO',
@@ -60,7 +63,7 @@ def upload_file(request):
                                  'PROFESSIONAL_EXAM_CERTIFICATE']
             applicant = mdl_admission.applicant.find_by_user(request.user)
             if description in curriculum_uploads:
-                documents = mdl_admission.admission_document_file.search(applicant, description)
+                documents = mdl_admission.application_document_file.search(application, description)
                 for document in documents:
                     document.delete()
             if description == 'ID_PICTURE' or description == 'ID_CARD' or description in curriculum_uploads:
@@ -80,8 +83,8 @@ def upload_file(request):
             file.save()
 
             if description in curriculum_uploads:
-                adm_doc_file = mdl_admission.admission_document_file.AdmissionDocumentFile()
-                adm_doc_file.applicant = applicant
+                adm_doc_file = mdl_admission.application_document_file.ApplicationDocumentFile()
+                adm_doc_file.application = applicant
                 adm_doc_file.document_file = file
                 adm_doc_file.save()
 
@@ -131,17 +134,20 @@ def upload_file_description(request):
     """
 
     description = request.POST['description']
+    application_id = request.POST['application_id']
     documents = mdl.document_file.search(document_type=None,
                                          user=request.user,
                                          description=description)
     form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                            'document_type': "admission",
                                            'user': request.user})
+    application = mdl.application.find_by_id(application_id)
     return render(request, 'new_document.html', {'form': form,
                                                  'content_type_choices': mdl.document_file.CONTENT_TYPE_CHOICES,
                                                  'description_choices': mdl.document_file.DESCRIPTION_CHOICES,
                                                  'description': description,
-                                                 'documents': documents})
+                                                 'documents': documents,
+                                                 'application': application})
 
 
 @login_required

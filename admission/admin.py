@@ -33,7 +33,7 @@ admin.site.register(academic_year.AcademicYear,
 admin.site.register(admission_exam_type.AdmissionExamType,
                     admission_exam_type.AdmissionExamTypeAdmin)
 
-admin.site.register(admission_document_file.AdmissionDocumentFile)
+admin.site.register(application_document_file.ApplicationDocumentFile)
 
 admin.site.register(answer.Answer,
                     answer.AnswerAdmin)

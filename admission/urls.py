@@ -105,4 +105,5 @@ urlpatterns = [
     url(r'^upload/$', upload_file.upload_document, name='upload_document'),
 
 
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
