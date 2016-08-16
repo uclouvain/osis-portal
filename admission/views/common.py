@@ -385,6 +385,4 @@ def get_id_document(user):
     pictures = mdl_osis_common.document_file.search(None, user, 'ID_CARD')
     if pictures:
         return ''.join(('/admission', pictures.reverse()[0].file.url))
-
     return None
-

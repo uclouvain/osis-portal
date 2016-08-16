@@ -302,7 +302,7 @@
     function valid_profile(){
         if (($("#slt_nationality").prop('selectedIndex') < 0
             || $("#slt_legal_adr_country").prop('selectedIndex') < 0) || ($("#slt_nationality").val()=='-1' || $("#slt_legal_adr_country").val()=='-1')){
-            $("#txt_message_error_profile_up").text('Avant de pouvoir accéder à l\'étape suivante vous devez encoder au minimum, votre nationalité et votre pays de résidence');
+            $("#txt_message_error_profile_up").text(gettext('msg_next_profil'));
             $('#txt_message_error_profile_up').css('visibility', 'visible').css('display','block');
             return false;
         }
@@ -350,9 +350,9 @@
     function valid_offer(){
         if ($("#txt_offer_year_id").val()==''
             || ($('#rdb_offer_belgiandegree_true').prop("checked") == "false" && $('#rdb_offer_belgiandegree_false').prop("checked") == "false") ){
-            $("#txt_message_error_offer_up").text('Avant de pouvoir accéder à l\'étape suivante vous devez sélectionner au minimum une offre et indiquer si vous disposez d\'un diplôme belge');
+            $("#txt_message_error_offer_up").text(gettext('msg_next_offer'));
             $('#txt_message_error_offer_up').css('visibility', 'visible').css('display','block');
-            $("#txt_message_error_offer_down").text('Avant de pouvoir accéder à l\'étape suivante vous devez sélectionner au minimum une offre et indiquer si vous disposez d\'un diplôme belge');
+            $("#txt_message_error_offer_down").text(gettext('msg_next_offer'));
             $('#txt_message_error_offer_down').css('visibility', 'visible').css('display','block');
             return false;
         }

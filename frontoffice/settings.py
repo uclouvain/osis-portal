@@ -61,6 +61,8 @@ INSTALLED_APPS = (
     'localflavor',
     'performance',
     'dissertation',
+    'statici18n',
+
 )
 
 MIDDLEWARE_CLASSES = (
@@ -200,3 +202,7 @@ except ImportError:
 if 'admission' in INSTALLED_APPS:
     ADMISSION_LOGIN_URL=reverse_lazy('admission_login')
     ADMISSION_LOGIN_REDIRECT_URL=reverse_lazy('admission')
+
+LOCALE_PATHS = (
+    "/admission/locale",
+)
