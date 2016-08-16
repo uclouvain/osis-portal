@@ -25,12 +25,13 @@
 ##############################################################################
 import logging
 from django.apps import AppConfig
+from django.conf import settings
 from django.core import serializers
 from django.core.serializers.base import DeserializationError
 from frontoffice.queue import queue
 import json
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 class BaseConfig(AppConfig):
     name = 'base'

@@ -24,12 +24,13 @@
 #
 ##############################################################################
 import logging
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.contrib import admin
 from base.models import person as model_person
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 class TutorAdmin(admin.ModelAdmin):

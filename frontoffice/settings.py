@@ -119,6 +119,34 @@ DATABASES = {
     },
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(asctime)s %(levelname)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(asctime)s %(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            'level':'INFO',
+        },
+    },
+    'loggers': {
+        'default': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        }
+    },
+}
+
+DEFAULT_LOGGER = 'default'
 
 COUCHBASE_CONNECTION_STRING='couchbase://localhost/'
 COUCHBASE_PASSWORD=''

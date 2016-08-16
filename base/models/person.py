@@ -31,7 +31,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 class PersonAdmin(admin.ModelAdmin):
