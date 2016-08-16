@@ -124,10 +124,12 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '%(asctime)s %(levelname)s %(module)s %(process)d %(thread)d %(message)s'
+            'format': '%(asctime)s %(levelname)s %(module)s %(process)d %(thread)d %(message)s',
+            'datefmt': '%d-%m-%Y %H:%M:%S'
         },
         'simple': {
-            'format': '%(asctime)s %(levelname)s %(message)s'
+            'format': '%(asctime)s %(levelname)s %(message)s',
+            'datefmt': '%d-%m-%Y %H:%M:%S'
         },
     },
     'handlers': {
