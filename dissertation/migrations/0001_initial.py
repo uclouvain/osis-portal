@@ -120,4 +120,16 @@ class Migration(migrations.Migration):
                                                                to='dissertation.PropositionDissertation')),
             ],
         ),
+        migrations.CreateModel(
+            name='DissertationRole',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('status', models.CharField(
+                    choices=[('PROMOTEUR', 'promotor'), ('CO_PROMOTEUR', 'copromotor'), ('READER', 'reader')],
+                    max_length=12)),
+                ('adviser', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='dissertation.Adviser')),
+                ('dissertation',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='dissertation.Dissertation')),
+            ],
+        ),
     ]
