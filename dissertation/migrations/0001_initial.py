@@ -63,7 +63,7 @@ class Migration(migrations.Migration):
                     default='DOMAIN', max_length=12)),
                 ('max_number_student', models.IntegerField()),
                 ('title', models.CharField(max_length=200)),
-                ('type', models.CharField(choices=[('RDL', 'litterature_review'), ('EDC', 'case_study')], default='RDL',
+                ('type', models.CharField(choices=[('RDL', 'literature_review'), ('EDC', 'case_study')], default='RDL',
                                           max_length=12)),
                 ('visibility', models.BooleanField(default=True)),
                 ('active', models.BooleanField(default=True)),
