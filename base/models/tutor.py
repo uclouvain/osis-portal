@@ -60,16 +60,19 @@ class Tutor(models.Model):
         try:
             tutor = find_by_person_global_id(self.person.global_id)
             person = model_person.find_by_global_id(self.person.global_id)
-            if tutor.person.id != person.id:
+            if person and tutor.person.id != person.id:
                 logger.info(''.join(['Update tutor with person : ', self.person.global_id]))
                 tutor.person = person
                 tutor.save()
         except Tutor.DoesNotExist:
-            logger.info(''.join(['New Tutor with person : ', self.person.global_id]))
             person = model_person.find_by_global_id(self.person.global_id)
-            self.person = person
-            self.pk = None
-            self.save()
+            if person:
+                logger.info(''.join(['New Tutor with person : ', self.person.global_id]))
+                self.person = person
+                self.pk = None
+                self.save()
+            else:
+                logger.error(''.join(['Not migrating tutor without person - ext_id : ', self.external_id]))
 
     def natural_key(self):
         return (self.person.global_id, )
@@ -99,4 +102,4 @@ def is_tutor(a_user):
 
 
 def find_by_person_global_id(global_id):
-    return Tutor.objects.get(person__global_id=global_id)
+    return Tutor.objects.get(person__global_id=global_id) if global_id is not None else None
