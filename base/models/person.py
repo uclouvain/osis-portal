@@ -50,6 +50,12 @@ class PersonManager(models.Manager):
         except Person.MultipleObjectsReturned:
             logger.warning(''.join(['Multiple person during deserialization for globalId : ', global_id]))
             return self.filter(global_id=global_id).first()
+        except Person.DoesNotExist:
+            # If the person have no global_id or not in the table
+            # Has to be managed in function
+            # TO-DO : find a beter way to uniquely define person between osis and osis-portal
+            logger.warning(''.join(['Unknown person during deserialization for globalId : ', global_id]))
+            return Person()
 
 
 class Person(models.Model):
