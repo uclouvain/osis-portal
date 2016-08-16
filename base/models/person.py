@@ -46,7 +46,7 @@ class PersonAdmin(admin.ModelAdmin):
 class PersonManager(models.Manager):
     def get_by_natural_key(self, global_id):
         if not global_id:
-            logger.warning('Serialization of Person without global_id')
+            logger.debug('Serialization of Person without global_id')
             return Person()
         try:
             return self.get(global_id=global_id)
@@ -100,9 +100,9 @@ class Person(models.Model):
 
     def save_from_osis_migration(self):
         if not self.global_id:
-            logger.error(''.join(['Not migrating person without global id : ', self.first_name, ' - ', self.last_name]))
+            logger.warning(''.join(['Not migrating person without global id : ', self.first_name, ' - ', self.last_name]))
         elif not find_by_global_id(self.global_id):
-            logger.info(''.join(['New person : ', self.global_id]))
+            logger.debug(''.join(['New person : ', self.global_id]))
             self.pk = None
             self.save()
 

@@ -65,29 +65,29 @@ class Tutor(models.Model):
             tutor = find_by_person_global_id(self.person.global_id)
             person = model_person.find_by_global_id(self.person.global_id)
             if person and tutor.person.id != person.id:
-                logger.info(''.join(['Update tutor with person : ', self.person.global_id]))
+                logger.debug(''.join(['Update tutor with person : ', self.person.global_id]))
                 tutor.person = person
                 tutor.save()
         except Tutor.DoesNotExist:
             try:
                 person = model_person.find_by_global_id(self.person.global_id)
                 if person:
-                    logger.info(''.join(['New Tutor with person : ', self.person.global_id]))
+                    logger.debug(''.join(['New Tutor with person : ', self.person.global_id]))
                     self.person = person
                     self.pk = None
                     self.save()
                 else:
-                    logger.error(''.join(['Not migrating tutor without person - ext_id : ', self.external_id if self.external_id else 'None']))
+                    logger.warning(''.join(['Not migrating tutor without person - ext_id : ', self.external_id if self.external_id else 'None']))
             except ObjectDoesNotExist:
-                logger.error(''.join(['Not migrating tutor without person - ext_id : ', self.external_id if self.external_id else 'None']))
+                logger.warning(''.join(['Not migrating tutor without person - ext_id : ', self.external_id if self.external_id else 'None']))
         except ObjectDoesNotExist:
-            logger.error(''.join(['Not migrating tutor without person - ext_id : ', self.external_id if self.external_id else 'None']))
+            logger.warning(''.join(['Not migrating tutor without person - ext_id : ', self.external_id if self.external_id else 'None']))
 
     def natural_key(self):
         try:
             return (self.person.global_id, )
         except ObjectDoesNotExist:
-            logger.error('Serialization of tutor without person ')
+            logger.debug('Serialization of tutor without person ')
             return ('', )
 
     natural_key.dependencies = ['base.person']
