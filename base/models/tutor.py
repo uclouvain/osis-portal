@@ -42,7 +42,11 @@ class TutorAdmin(admin.ModelAdmin):
 
 class TutorManager(models.Manager):
     def get_by_natural_key(self, global_id):
-        return self.get(person__global_id=global_id)
+        try:
+            return self.get(person__global_id=global_id)
+        except ObjectDoesNotExist:
+            return Tutor()
+
 
 
 class Tutor(models.Model):
@@ -65,19 +69,29 @@ class Tutor(models.Model):
                 tutor.person = person
                 tutor.save()
         except Tutor.DoesNotExist:
-            person = model_person.find_by_global_id(self.person.global_id)
-            if person:
-                logger.info(''.join(['New Tutor with person : ', self.person.global_id]))
-                self.person = person
-                self.pk = None
-                self.save()
-            else:
-                logger.error(''.join(['Not migrating tutor without person - ext_id : ', self.external_id]))
+            try:
+                person = model_person.find_by_global_id(self.person.global_id)
+                if person:
+                    logger.info(''.join(['New Tutor with person : ', self.person.global_id]))
+                    self.person = person
+                    self.pk = None
+                    self.save()
+                else:
+                    logger.error(''.join(['Not migrating tutor without person - ext_id : ', self.external_id if self.external_id else 'None']))
+            except ObjectDoesNotExist:
+                logger.error(''.join(['Not migrating tutor without person - ext_id : ', self.external_id if self.external_id else 'None']))
+        except ObjectDoesNotExist:
+            logger.error(''.join(['Not migrating tutor without person - ext_id : ', self.external_id if self.external_id else 'None']))
 
     def natural_key(self):
-        return (self.person.global_id, )
+        try:
+            return (self.person.global_id, )
+        except ObjectDoesNotExist:
+            logger.error('Serialization of tutor without person ')
+            return ('', )
 
     natural_key.dependencies = ['base.person']
+
 
 def find_by_person(a_person):
     try:
@@ -94,6 +108,7 @@ def find_by_user(a_user):
         return tutor
     except ObjectDoesNotExist:
         return None
+
 
 def is_tutor(a_user):
     if find_by_user(a_user):
