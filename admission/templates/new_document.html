@@ -34,6 +34,45 @@
         {% if description == 'ID_CARD'%}
             {% trans 'id_documents' %}
         {% endif %}
+        {% if description == 'NATIONAL_DIPLOMA_VERSO'%}
+            {% trans 'high_school_diploma'%} - {% trans 'verso'%}
+        {% endif %}
+        {% if description == 'NATIONAL_DIPLOMA_RECTO'%}
+            {% trans 'high_school_diploma' %} - {% trans 'recto'%}
+        {% endif %}
+        {% if description == 'INTERNATIONAL_DIPLOMA_VERSO'%}
+            {% trans 'high_school_diploma'%} - {% trans 'verso'%}
+        {% endif %}
+        {% if description == 'INTERNATIONAL_DIPLOMA_RECTO'%}
+            {% trans 'high_school_diploma' %} - {% trans 'recto'%}
+        {% endif %}
+        {% if description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO'%}
+            {% trans 'high_school_diploma'%} {% trans 'translated' %} - {% trans 'verso'%}
+        {% endif %}
+        {% if description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO'%}
+            {% trans 'high_school_diploma' %} {% trans 'translated' %} - {% trans 'recto'%}
+        {% endif %}
+        {% if description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO'%}
+            {% trans 'high_school_scores_transcript'%} - {% trans 'verso'%}
+        {% endif %}
+        {% if description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO'%}
+            {% trans 'high_school_scores_transcript' %} - {% trans 'recto'%}
+        {% endif %}
+        {% if description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO'%}
+            {% trans 'high_school_scores_transcript'%} {% trans 'translated' %} - {% trans 'verso'%}
+        {% endif %}
+        {% if description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO'%}
+            {% trans 'high_school_scores_transcript' %} {% trans 'translated' %} - {% trans 'recto'%}
+        {% endif %}
+        {% if description == 'EQUIVALENCE'%}
+            {% trans 'file_equivalence' %}
+        {% endif %}
+        {% if description == 'ADMISSION_EXAM_CERTIFICATE'%}
+            {% trans 'admission_exam_certificate_document' %}
+        {% endif %}
+        {% if description == 'PROFESSIONAL_EXAM_CERTIFICATE'%}
+            {% trans 'admission_exam_certificate_document' %}
+        {% endif %}
 
     </h2>
   </div>
@@ -43,10 +82,15 @@
         {% csrf_token %}
         {% include "uploading/upload_file_form.html" %}
         <input type="hidden" name="description" value='{{ description }}' />
+        <input type="hidden" name="application_id" value='{{ application.id | default_if_none:''}}' />
         <button type="submit" class="save btn btn-default" onclick="return confirm('{% trans 'new_file_confirmation_message' %}')">{% trans 'save' %}</button>
         {% if description == 'ID_PICTURE' or description == 'ID_CARD'%}
             <a href="{% url 'home'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>
-        {%endif%}
+        {% else %}
+          {% if description == 'NATIONAL_DIPLOMA_VERSO' or  description == 'NATIONAL_DIPLOMA_RECTO' or  description == 'INTERNATIONAL_DIPLOMA_RECTO' or  description == 'INTERNATIONAL_DIPLOMA_VERSO' or  description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO' or  description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO' or  description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO' or  description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO' or  description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO' or  description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO' or  description == 'EQUIVALENCE' or description == 'ADMISSION_EXAM_CERTIFICATE' or description == 'PROFESSIONAL_EXAM_CERTIFICATE'%}
+          <a href="{% url 'diploma_update'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>
+          {% endif %}
+        {% endif %}
       </form>
     </div>
   </div>

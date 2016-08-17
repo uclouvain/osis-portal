@@ -294,6 +294,9 @@ msgstr "Please add certificate of achievement or a proof of your enrollment"
 msgid "institution"
 msgstr "Institution"
 
+msgid "institution_identification"
+msgstr "Université catholique de Louvain"
+
 msgid "which_community"
 msgstr "Please mention the community where you went to high school."
 
@@ -1187,9 +1190,14 @@ msgstr "File too big or bad content"
 
 msgid "filename"
 msgstr "Filename"
+msgid "modify"
+msgstr "Modify"
 
 msgid "description"
 msgstr "Description"
+
+msgid "file_name"
+msgstr "Filename"
 
 msgid "template_error"
 msgstr "No message was sent : the message template {} does not exist."
@@ -1199,3 +1207,20 @@ msgstr "Mister"
 
 msgid "miss"
 msgstr "Miss"
+msgid "scores_transcript"
+msgstr "Scores transcript"
+
+msgid "translated"
+msgstr "translated"
+
+msgid "high_school_scores_transcript"
+msgstr "Last High school scores transcript"
+
+msgid "file_equivalence"
+msgstr "Equivalence decision file"
+
+msgid "file_equivalence_btn_modify"
+msgstr "Modify the final equivalence decision file"
+
+msgid "admission_exam_certificate_document"
+msgstr "Copy of your certificate or a proof of your enrollment"

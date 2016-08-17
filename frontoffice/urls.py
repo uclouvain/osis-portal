@@ -28,6 +28,12 @@ from django.contrib import admin
 from django.conf.urls import url, include
 from base.views import common
 
+
+js_info_dict = {
+    'domain': 'djangojs',
+    'packages': ('admission',),
+}
+
 urlpatterns = (
     url(r'^'+settings.ADMIN_URL, admin.site.urls),
     url(r'', include('base.urls')),
@@ -35,6 +41,7 @@ urlpatterns = (
     url(r'^logout/$', common.log_out, name='logout'),
     url(r'^logged_out/$', common.logged_out, name='logged_out'),
     url(r'^403/$', common.access_denied, name="error_403"),
+    url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict, name='javascript-catalog'),
 )
 
 
