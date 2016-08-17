@@ -17,9 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "test"
-msgstr "test-en"
-
 msgid "msg_next_offer"
 msgstr "Before going to the next step you have to select at least one offer and mention if you obtained a belgian diploma"
 

@@ -21,38 +21,8 @@ $("#slt_offer_type").change(function() {
 
     $('#bt_save').prop("disabled",true);
     var i=0;
-    $.ajax({
-        url: "/admission/levels?type=" + $("#slt_offer_type").val()
-      }).then(function(data) {
 
-        if(data.length >0){
-        $.each(data, function(key, value) {
-            if(data.length == 1){
-                $('#pnl_grade_choices').append($("<label></label>").attr("class", "radio-inline")
-                                                                   .attr("style","visibility:hidden;display:none;")
-                                                                   .append($("<input>").attr("type","radio")
-                                                                      .attr("name","grade_choice")
-                                                                      .attr("value",value.id )
-                                                                      .attr("id","grade_choice_"+value.id)
-                                                                      .attr("onchange","offer_selection_display()")
-                                                                      .attr("style","visibility:hidden;display:none;")
-                                                                      .attr("checked","checked"))
-                                          .append(value.name));
-                                          offer_selection_display();
-
-            }else{
-          $('#pnl_grade_choices').append($("<label></label>").attr("class", "radio-inline")
-                                      .append($("<input>").attr("type","radio")
-                                                                  .attr("name","grade_choice")
-                                                                  .attr("value",value.id )
-                                                                  .attr("id","grade_choice_"+value.id)
-                                                                  .attr("onchange","offer_selection_display()")
-                                                                  .attr("style","visibility:visible;display:block;"))
-                                      .append(value.name));
-            }
-        });
-        }
-      });
+    ajax_grade_choice('');
 
 });
 
@@ -67,36 +37,13 @@ function offer_selection_display(){
        radio_button_value = $('input[name="grade_choice"]:checked').val();
     }
 
-    $("#pnl_offers").find("table")
-      .remove()
-      .end()
-    set_pnl_questions_empty();
+
     //Cancel the previous selection
     document.getElementById("txt_offer_year_id").value = "";
 
     $('#bt_save').prop("disabled",true);
+    ajax_offers(radio_button_value, '');
 
-    var i=0;
-    $.ajax({
-        url: "/admission/offers?level=" + radio_button_value +"&domain="+$("#slt_domain").val()
-
-      }).then(function(data) {
-      var table_size=data.length;
-      if(data.length >0){
-        $('#pnl_grade_choices').append($("<table><tr><td></td></tr></table>"));
-        var trHTML = '<table class="table table-striped table-hover">';
-        trHTML += '<thead><th colspan=\'3\'><label>Cliquez sur votre choix d\'études</label></th></thead>';
-        $.each(data, function(key, value) {
-            id_str = "offer_row_" + i;
-
-            onclick_str = "onclick=\'selection("+ i +", "+table_size+", " + value.id +")\'"
-            trHTML += "<tr id=\'" +  id_str + "\' "+ onclick_str +"><td><input type=\'radio\' name=\'offer_YearSel\' id=\'offer_sel_"+i+"\'></td><td>"+ value.acronym + "</td><td>" + value.title + "</td></tr>";
-            i++;
-        });
-        trHTML += '</table>'
-        $('#pnl_offers').append(trHTML);
-        }
-      });
 }
 
 function selection(row_number, offers_length, offer_year_id){
@@ -130,30 +77,8 @@ function selection(row_number, offers_length, offer_year_id){
         document.getElementById("offer_sel_" + row_number).checked = true;
     }
     display_dynamic_form(offer_year_id);
-       $.ajax({
-        url: "/admission/offer?offer=" + offer_year_id
-       }).then(function(data) {
+    ajax_static_questions(offer_year_id,'','','');
 
-        init_static_questions();
-//            alert(data.subject_to_quota);
-//            alert(data.grade_type);
-        if (data.subject_to_quota){
-            $('#pnl_offer_sameprogram').css('visibility', 'visible').css('display','block');
-            $('#pnl_offer_sameprogram').find('input').prop('required', true);
-
-          }else{
-
-            $('#pnl_offer_belgiandegree').css('visibility', 'visible').css('display','block');
-            $('#pnl_offer_belgiandegree').find('input').prop('required', true);
-
-            //// BACHELOR grade_type must have fixed values
-            if (data.grade_type==1) {
-                $('#pnl_offer_samestudies').css('visibility', 'visible').css('display','block');
-                $('#pnl_offer_samestudies').find('input').prop('required', true);
-            }
-        }
-
-        });
 
     }
 
@@ -1476,4 +1401,154 @@ function display_dynamic_form(offer_year_id){
 
 
 }
+function ajax_grade_choice(grade_choice){
 
+    $.ajax({
+        url: "/admission/levels?type=" + $("#slt_offer_type").val()
+      }).then(function(data) {
+
+        if(data.length >0){
+        $.each(data, function(key, value) {
+            if(data.length == 1){
+                $('#pnl_grade_choices').append($("<label></label>").attr("class", "radio-inline")
+                                                                   .attr("style","visibility:hidden;display:none;")
+                                                                   .append($("<input>").attr("type","radio")
+                                                                      .attr("name","grade_choice")
+                                                                      .attr("value",value.id )
+                                                                      .attr("id","grade_choice_"+value.id)
+                                                                      .attr("onchange","offer_selection_display()")
+                                                                      .attr("style","visibility:hidden;display:none;")
+                                                                      .attr("checked","checked"))
+                                          .append(value.name));
+                                          if(grade_choice==''){
+                                            offer_selection_display();
+                                          }
+
+            }else{
+                var chk='';
+
+                if(grade_choice == value.id){
+                  $('#pnl_grade_choices').append($("<label></label>").attr("class", "radio-inline")
+                                              .append($("<input>").attr("type","radio")
+                                                                          .attr("name","grade_choice")
+                                                                          .attr("value",value.id )
+                                                                          .attr("id","grade_choice_"+value.id)
+                                                                          .attr("onchange","offer_selection_display()")
+                                                                          .attr("style","visibility:visible;display:block;")
+                                                                          .attr("checked","checked"))
+                                              .append(value.name));
+
+                }else{
+                  $('#pnl_grade_choices').append($("<label></label>").attr("class", "radio-inline")
+                                              .append($("<input>").attr("type","radio")
+                                                                          .attr("name","grade_choice")
+                                                                          .attr("value",value.id )
+                                                                          .attr("id","grade_choice_"+value.id)
+                                                                          .attr("onchange","offer_selection_display()")
+                                                                          .attr("style","visibility:visible;display:block;"))
+                                              .append(value.name));
+
+                }
+             }
+        });
+        }
+      });
+}
+
+function ajax_offers(radio_button_value, offer_year_id){
+
+    // Remove the offers
+    $("#pnl_offers").find("table")
+        .remove()
+        .end()
+    set_pnl_questions_empty();
+
+    var i=0;
+    $.ajax({
+        url: "/admission/offers?level=" + radio_button_value +"&domain="+$("#slt_domain").val()
+
+      }).then(function(data) {
+      var table_size=data.length;
+      if(data.length >0){
+        $('#pnl_grade_choices').append($("<table><tr><td></td></tr></table>"));
+        var trHTML = '<table class="table table-striped table-hover">';
+        trHTML += '<thead><th colspan=\'3\'><label>Cliquez sur votre choix d\'études</label></th></thead>';
+        $.each(data, function(key, value) {
+            id_str = "offer_row_" + i;
+
+            onclick_str = "onclick=\'selection("+ i +", "+table_size+", " + value.id +")\'"
+            var chk='';
+            if (offer_year_id==''){
+
+            }else{
+                if(offer_year_id == value.id){
+                    chk = ' checked=\'checked\' ';
+                }
+                $('#txt_offer_year_id').val(offer_year_id);
+            }
+            trHTML += "<tr id=\'" +  id_str + "\' "+ onclick_str +"><td><input type=\'radio\' name=\'offer_YearSel\' id=\'offer_sel_"+i+"\' "+chk+"></td><td>"+ value.acronym + "</td><td>" + value.title + "</td></tr>";
+            i++;
+        });
+        trHTML += '</table>'
+        $('#pnl_offers').append(trHTML);
+        }
+      });
+}
+
+function ajax_static_questions(offer_year_id, sameprogram, belgiandegree, samestudies) {
+   $.ajax({
+    url: "/admission/offer?offer=" + offer_year_id
+   }).then(function(data) {
+
+    init_static_questions();
+//            alert(data.subject_to_quota);
+//            alert(data.grade_type);
+    if (data.subject_to_quota){
+
+        $('#pnl_offer_sameprogram').css('visibility', 'visible').css('display','block');
+        $('#pnl_offer_sameprogram').find('input').prop('required', true);
+
+      }else{
+
+        $('#pnl_offer_belgiandegree').css('visibility', 'visible').css('display','block');
+        $('#pnl_offer_belgiandegree').find('input').prop('required', true);
+
+        //// BACHELOR grade_type must have fixed values
+        if (data.grade_type==1) {
+            $('#pnl_offer_samestudies').css('visibility', 'visible').css('display','block');
+            $('#pnl_offer_samestudies').find('input').prop('required', true);
+        }
+    }
+
+    if(sameprogram=='True'){
+        $('#rdb_offer_valuecredits_true').find('input').prop('checked', true);
+        $('#rdb_offer_valuecredits_true').trigger('click');
+    }else{
+        if(sameprogram=='False'){
+            $('#rdb_offer_valuecredits_false').find('input').prop('checked', false);
+            $('#rdb_offer_valuecredits_false').trigger('click');
+        }
+    }
+    if(belgiandegree=='True'){
+        $('#rdb_offer_belgiandegree_true').attr('checked', 'checked');
+        $('#rdb_offer_belgiandegree_true').trigger('click');
+
+    }else{
+        if(belgiandegree=='False'){
+            $('#rdb_offer_belgiandegree_false').prop('checked', false);
+            $('#rdb_offer_belgiandegree_false').trigger('click');
+        }
+    }
+
+    if(samestudies=='True'){
+        $('#rdb_offer_samestudies_true').find('input').prop('checked', true);
+        $('#rdb_offer_samestudies_true').trigger('click');
+    }else{
+        if(sameprogram=='False'){
+            $('#rdb_offer_samestudies_false').find('input').prop('checked', false);
+            $('#rdb_offer_samestudies_false').trigger('click');
+        }
+    }
+
+    });
+}

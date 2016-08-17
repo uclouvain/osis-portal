@@ -34,7 +34,8 @@ from localflavor.generic.countries.sepa import IBAN_SEPA_COUNTRIES
 
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = ('applicant', 'offer_year', 'creation_date', 'application_type')
-    fieldsets = ((None, {'fields': ('applicant', 'offer_year', 'application_type')}),)
+    fieldsets = ((None, {'fields': ('applicant', 'offer_year', 'application_type', 'applied_to_sameprogram',
+                                    'national_degree')}),)
 
 
 class Application(models.Model):

@@ -42,7 +42,9 @@
     <br>
 
     <br>
-    <input type="hidden" id="hdn_tab_active" value="{{tab_active}}">
+    <input type="hidden" id="hdn_tab_active" value="{{tab_active}}" title="active tab">
+
+    <input type="hidden" value="{{application.id | default_if_none:''}}" id="hdn_current_application_id" name="application_id" title="application_id" >
     <div class="row">
         <div class="col-md-2">
             {% if applications%}<a href="{%url 'home'%}">{% trans 'back_demandes_list'%}</a>{%endif%}
@@ -190,7 +192,6 @@
 
 {% block script %}
     <script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
-    <script src="{% static 'js/attachments.js' %}"></script>
     <script>
     $(document).ready(function() {
         if($("#slt_nationality").val()){
@@ -216,6 +217,15 @@
         populate_exam_admin();
         if($("#hdn_application_offer_year_id").val()){
             display_dynamic_form($("#hdn_application_offer_year_id").val());
+        }
+        if($('#hdn_current_application_id').val()==''){
+
+        }else{
+            $('#txt_offer_year_id').val($('#hdn_application_offer_year_id').val())
+            $('#slt_offer_type').val($('#hdn_application_grade').val())
+            display_known_offer($('#hdn_application_offer_year_id').val());
+
+
         }
     });
     function save(form_to_submit){
@@ -285,6 +295,9 @@
         $('#hdn_description').val('ID_CARD');
         $('#lnk_picture').trigger('click');
     });
+    $("#btn_documents_upload_diploma").click(function() {
+        save('form_secondary_education');
+    });
     $("#txt_birth_date").blur(function() {
         var value = $("#txt_birth_date").val();
         $("#msg_error_birth_date").find("label").remove();
@@ -327,6 +340,67 @@
         return true;
     }
 
+    // national diploma recto and verso
+    $("#bt_upload_file_sec_diploma_verso").click(function() {
+        $('#hdn_description_diploma').val('NATIONAL_DIPLOMA_VERSO');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+
+    $("#bt_upload_file_sec_diploma_recto").click(function() {
+        $('#hdn_description_diploma').val('NATIONAL_DIPLOMA_RECTO');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+    // international diploma
+    $("#bt_diploma_verso").click(function() {
+        $('#hdn_description_diploma').val('INTERNATIONAL_DIPLOMA_VERSO');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+
+    $("#bt_diploma_recto").click(function() {
+        $('#hdn_description_diploma').val('INTERNATIONAL_DIPLOMA_RECTO');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+
+    $("#bt_diploma_translation_verso").click(function() {
+        $('#hdn_description_diploma').val('TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+
+    $("#bt_diploma_translation_recto").click(function() {
+        $('#hdn_description_diploma').val('TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+
+    // Scores transcript
+    $("#bt_note_sheet_recto").click(function() {
+        $('#hdn_description_diploma').val('HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+    $("#bt_note_sheet_verso").click(function() {
+        $('#hdn_description_diploma').val('HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+
+    $("#bt_note_sheet_translation_recto").click(function() {
+        $('#hdn_description_diploma').val('TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+    $("#bt_note_sheet_translation_verso").click(function() {
+        $('#hdn_description_diploma').val('TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+    $("#bt_file_equivalence").click(function() {
+        $('#hdn_description_diploma').val('EQUIVALENCE');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+    $("#bt_admission_exam_file").click(function() {
+        $('#hdn_description_diploma').val('ADMISSION_EXAM_CERTIFICATE');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
+    $("#bt_upload_professional_exam_file").click(function() {
+        $('#hdn_description_diploma').val('PROFESSIONAL_EXAM_CERTIFICATE');
+        $('#btn_documents_upload_diploma').trigger('click');
+    });
     function valid(){
         if($("#hdn_tab_active").val()=="0"){
             if (! valid_profile()){
@@ -340,7 +414,6 @@
         }
         return true;
     }
-
     function valid_profile(){
         if (($("#slt_nationality").prop('selectedIndex') < 0
             || $("#slt_legal_adr_country").prop('selectedIndex') < 0) || ($("#slt_nationality").val()=='-1' || $("#slt_legal_adr_country").val()=='-1')){
@@ -388,7 +461,6 @@
             }
         }
     });
-
     function valid_offer(){
         if ($("#txt_offer_year_id").val()==''
             || ($('#rdb_offer_belgiandegree_true').prop("checked") == "false" && $('#rdb_offer_belgiandegree_false').prop("checked") == "false") ){
@@ -401,14 +473,18 @@
         return true;
     }
 
-    $("#lnk_next_step_up").click(function() {
+    $("#lnk_next_offer_step_up").click(function() {
        return offer_steps();
     });
-
-    $("#lnk_next_step").click(function() {
+    $("#lnk_next_offer_step").click(function() {
         return offer_steps();
     });
-
+    $("#lnk_previous_offer_step_up").click(function() {
+       return offer_steps();
+    });
+    $("#lnk_previous_offer_step").click(function() {
+        return offer_steps();
+    });
     function offer_steps(){
         $('#txt_message_error_offer_up').css('visibility', 'hidden').css('display','none');
         $('#txt_message_error_offer_down').css('visibility', 'hidden').css('display','none');
@@ -418,6 +494,14 @@
         $('#hdn_tab_applications_status').val('True');
         save('form_questions');
         return true;
+    }
+
+    function display_known_offer(offer_year_id){
+        ajax_grade_choice($('#hdn_application_grade_type_id').val());
+        $('#slt_domain').val($('#hdn_application_domain_id').val());
+        ajax_offers($('#hdn_application_grade_type_id').val(),$('#hdn_application_offer_year_id').val());
+        display_dynamic_form(offer_year_id);
+        ajax_static_questions(offer_year_id,$('#hdn_applied_to_sameprogram').val(),$('#hdn_belgian_degree').val(),$('#hdn_started_samestudies').val());
 
     }
     </script>

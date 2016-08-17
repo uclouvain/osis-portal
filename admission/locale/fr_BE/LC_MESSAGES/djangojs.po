@@ -17,9 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "test"
-msgstr "test-fr"
-
 msgid "msg_next_offer"
 msgstr ""
 "Avant de pouvoir accéder à l'étape suivante vous devez sélectionner au minimum une offre et indiquer si vous disposez d'un diplôme belge"
