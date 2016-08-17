@@ -63,6 +63,7 @@ INSTALLED_APPS = (
     'localflavor',
     'performance',
     'dissertation',
+    'statici18n',
     'ckeditor',
 )
 
@@ -241,6 +242,10 @@ if 'admission' in INSTALLED_APPS:
 
 LOGO_EMAIL_SIGNATURE_URL = ''
 LOGO_OSIS_URL = ''
+
+LOCALE_PATHS = (
+    "/admission/locale",
+)
 
 CKEDITOR_CONFIGS = {
     'default': {

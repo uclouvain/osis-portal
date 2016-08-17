@@ -42,7 +42,7 @@
     <br>
 
     <br>
-
+    <input type="hidden" id="hdn_tab_active" value="{{tab_active}}">
     <div class="row">
         <div class="col-md-2">
             {% if applications%}<a href="{%url 'home'%}">{% trans 'back_demandes_list'%}</a>{%endif%}
@@ -222,12 +222,10 @@
         id = 'form#' + form_to_submit;
         $(id).submit();
     }
+
     $("#lnk_profil_next_step").click(function() {
         $('#txt_message_error_profile').css('visibility', 'hidden').css('display','none');
-        if ($("#slt_nationality").prop('selectedIndex') < 0
-            || $("#slt_legal_adr_country").prop('selectedIndex') < 0){
-            $("#txt_message_error_profile").text('Avant de pouvoir accéder à l\'étape suivante vous devez encoder au minimum, votre nationalité et votre pays de résidence');
-            $('#txt_message_error_profile').css('visibility', 'visible').css('display','block');
+        if (! valid()){
             return false;
         }
         $('#hdn_tab_applications_status').val('True');
@@ -236,10 +234,7 @@
     });
     $("#lnk_profil_next_step_up").click(function() {
         $('#txt_message_error_profile_up').css('visibility', 'hidden').css('display','none');
-        if ($("#slt_nationality").prop('selectedIndex') < 0
-            || $("#slt_legal_adr_country").prop('selectedIndex') < 0){
-            $("#txt_message_error_profile_up").text('Avant de pouvoir accéder à l\'étape suivante vous devez encoder au minimum, votre nationalité et votre pays de résidence');
-            $('#txt_message_error_profile_up').css('visibility', 'visible').css('display','block');
+        if (! valid()){
             return false;
         }
         $('#hdn_tab_applications_status').val('True');
@@ -247,19 +242,22 @@
         return true;
     });
     $("#lnk_application_tab").click(function() {
-           if ($('#hdn_application_id').val()){
-                $('#slt_offer_type option').each(function(){
-                    if($(this).attr('value')==$('#hdn_application_grade').val()){
-                        $(this).prop('selected', true);
-                    }
-                });
-                $('#slt_domain option').each(function(){
-                    if($(this).attr('value')==$('#hdn_application_domain_id').val()){
-                        $(this).prop('selected', true);
-                    }
-                });
-               //TODO : les donnnées s'affichent puis elles disparaissent.... LV
-            }
+        if(! valid()){
+            return false;
+        }
+        if ($('#hdn_application_id').val()){
+            $('#slt_offer_type option').each(function(){
+                if($(this).attr('value')==$('#hdn_application_grade').val()){
+                    $(this).prop('selected', true);
+                }
+            });
+            $('#slt_domain option').each(function(){
+                if($(this).attr('value')==$('#hdn_application_domain_id').val()){
+                    $(this).prop('selected', true);
+                }
+            });
+           //TODO : les donnnées s'affichent puis elles disparaissent.... LV
+        }
     });
 
     $("#lnk_picture").click(function() {
@@ -328,6 +326,98 @@
         return true;
     }
 
+    function valid(){
+        if($("#hdn_tab_active").val()=="0"){
+            if (! valid_profile()){
+                return false;
+            }
+        }
+        if($("#hdn_tab_active").val()=="1"){
+            if (! valid_offer()){
+                return false;
+            }
+        }
+        return true;
+    }
 
+    function valid_profile(){
+        if (($("#slt_nationality").prop('selectedIndex') < 0
+            || $("#slt_legal_adr_country").prop('selectedIndex') < 0) || ($("#slt_nationality").val()=='-1' || $("#slt_legal_adr_country").val()=='-1')){
+            $("#txt_message_error_profile_up").text(gettext('msg_next_profil'));
+            $('#txt_message_error_profile_up').css('visibility', 'visible').css('display','block');
+            return false;
+        }
+        return true;
+    }
+    $("#lnk_diploma_tab").click(function() {
+        if (! valid()){
+            return false;
+        }
+    });
+    $("#lnk_curriculum_tab").click(function() {
+        if (! valid()){
+            return false;
+        }
+    });
+    $("#lnk_accounting_tab").click(function() {
+        if (! valid()){
+            return false;
+        }
+    });
+    $("#lnk_sociological_tab").click(function() {
+        if (! valid()){
+            return false;
+        }
+    });
+    $("#lnk_attachments_tab").click(function() {
+        if (! valid()){
+            return false;
+        }
+    });
+    $("#lnk_submission_tab").click(function() {
+        if (! valid()){
+            return false;
+        }
+    });
+    $("#lnk_profile_tab").click(function() {
+        if($("#hdn_tab_active").val()=="1"){
+        }else{
+            if (! valid()){
+                return false;
+            }
+        }
+    });
+
+    function valid_offer(){
+        if ($("#txt_offer_year_id").val()==''
+            || ($('#rdb_offer_belgiandegree_true').prop("checked") == "false" && $('#rdb_offer_belgiandegree_false').prop("checked") == "false") ){
+            $("#txt_message_error_offer_up").text(gettext('msg_next_offer'));
+            $('#txt_message_error_offer_up').css('visibility', 'visible').css('display','block');
+            $("#txt_message_error_offer_down").text(gettext('msg_next_offer'));
+            $('#txt_message_error_offer_down').css('visibility', 'visible').css('display','block');
+            return false;
+        }
+        return true;
+    }
+
+    $("#lnk_next_step_up").click(function() {
+       return offer_steps();
+    });
+
+    $("#lnk_next_step").click(function() {
+        return offer_steps();
+    });
+
+    function offer_steps(){
+        $('#txt_message_error_offer_up').css('visibility', 'hidden').css('display','none');
+        $('#txt_message_error_offer_down').css('visibility', 'hidden').css('display','none');
+        if (! valid()){
+            return false;
+        }
+        $('#hdn_tab_applications_status').val('True');
+        save('form_questions');
+        return true;
+
+    }
     </script>
 {% endblock %}
