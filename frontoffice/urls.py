@@ -27,6 +27,14 @@ from django.conf import settings
 from django.contrib import admin
 from django.conf.urls import url, include
 from base.views import common
+from django.conf.urls.static import static
+from django.views.i18n import javascript_catalog
+
+
+js_info_dict = {
+    'domain': 'djangojs',
+    'packages': ('admission',),
+}
 
 
 js_info_dict = {
