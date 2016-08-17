@@ -28,7 +28,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from base import models as mdl
 from base.views import layout
-from dissertation.models import proposition_dissertation, dissertation
+from dissertation.models import proposition_dissertation, proposition_role, dissertation
 
 
 @login_required
@@ -36,7 +36,9 @@ def proposition_dissertations(request):
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
     subjects = proposition_dissertation.search_all()
-    return layout.render(request, 'proposition_dissertations.html', {'subjects': subjects, 'student': student})
+    return layout.render(request, 'proposition_dissertations.html',
+                         {'student': student,
+                          'subjects': subjects})
 
 
 @login_required
@@ -46,11 +48,16 @@ def proposition_dissertation_detail(request, pk):
     student = mdl.student.find_by_person(person)
     using = dissertation.count_by_proposition(subject)
     percent = using * 100 / subject.max_number_student
+    count_proposition_role = proposition_role.count_by_proposition(subject)
+    if count_proposition_role < 1:
+        proposition_role.add('PROMOTEUR', subject.author, subject)
+    proposition_roles = proposition_role.search_by_proposition(subject)
     return layout.render(request, 'proposition_dissertation_detail.html',
-                         {'subject': subject,
+                         {'percent': round(percent, 2),
+                          'proposition_roles': proposition_roles,
+                          'subject': subject,
                           'student': student,
-                          'using': using,
-                          'percent': round(percent, 2)})
+                          'using': using})
 
 
 @login_required
@@ -58,4 +65,6 @@ def proposition_dissertations_search(request):
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
     subjects = proposition_dissertation.search(terms=request.GET['search'], active=True, visibility=True)
-    return layout.render(request, "proposition_dissertations.html", {'subjects': subjects, 'student': student})
+    return layout.render(request, "proposition_dissertations.html",
+                         {'student': student,
+                          'subjects': subjects})

@@ -34,7 +34,106 @@
 </ol>
 <div class="panel panel-default">
     <div class="panel-body">
-
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans 'proposition_dissertation_informations' %}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'author' %}</label>
+                    </div>
+                    <div class="col-md-9">
+                        {{ subject.author }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'title' %}</label>
+                    </div>
+                    <div class="col-md-9">
+                        {{ subject.title }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'offer_propositions' %}</label>
+                    </div>
+                    <div class="col-md-9">
+                        {% for offer_proposition in subject.offer_proposition.all %}
+                            <span class="label label-default">{{ offer_proposition }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'level' %}</label>
+                    </div>
+                    <div class="col-md-9" style="text-align: justify">
+                        {{ subject.get_level_display  }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'type' %}</label>
+                    </div>
+                    <div class="col-md-9" style="text-align: justify">
+                        {{ subject.get_type_display }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'collaboration' %}</label>
+                    </div>
+                    <div class="col-md-9" style="text-align: justify">
+                        {{ subject.get_collaboration_display }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'max_students_number' %}</label>
+                    </div>
+                    <div class="col-md-9" style="text-align: justify">
+                        {{ subject.max_number_student }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'taken_places' %}</label>
+                    </div>
+                    <div class="col-md-9" style="text-align: justify">
+                        {{ using }} {% trans 'of' %} {{ subject.max_number_student }} ({{ percent }}{% trans '%'%})
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'description' %}</label>
+                    </div>
+                    <div class="col-md-9" style="text-align: justify">
+                        {{ subject.description|linebreaks }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans 'proposition_dissertation_jury' %}</h3>
+            </div>
+            <div class="panel-body">
+                {% for proposition_role in proposition_roles %}
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>
+                            {{ proposition_role.get_status_display }}
+                        </label>
+                    </div>
+                    <div class="col-md-4">
+                        {{ proposition_role.adviser }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

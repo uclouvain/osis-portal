@@ -35,7 +35,10 @@ msgstr "Auteur"
 msgid "case_study"
 msgstr "Cas d'étude"
 
-msgid "copromoter"
+msgid "collaboration"
+msgstr "Collaboration"
+
+msgid "copromotor"
 msgstr "Co-promoteur"
 
 msgid "defended"
@@ -43,6 +46,9 @@ msgstr "Défendu"
 
 msgid "domain"
 msgstr "Domaine"
+
+msgid "description"
+msgstr "Description"
 
 msgid "desc_lnk_propositions_dissertations"
 msgstr "Liste des sujets disponibles"
@@ -60,7 +66,10 @@ msgid "ended_win"
 msgstr "Réussi"
 
 msgid "forbidden"
-msgstr "Interdit"
+msgstr "Interdite"
+
+msgid "level"
+msgstr "Niveau"
 
 msgid "literature_review"
 msgstr "Revue Litéraire"
@@ -83,8 +92,14 @@ msgstr "Possible"
 msgid "professor"
 msgstr "Professeur"
 
-msgid "promoter"
+msgid "promotor"
 msgstr "Promoteur"
+
+msgid "proposition_dissertation_informations"
+msgstr "Informations du sujet"
+
+msgid "proposition_dissertation_jury"
+msgstr "Jury proposé"
 
 msgid "question"
 msgstr "Question"
@@ -118,6 +133,12 @@ msgstr "Soumis au promoteur"
 
 msgid "submitted_to_first_year_evaluation"
 msgstr "Soumis à l'évaluation de première année"
+
+msgid "taken_places"
+msgstr "Intérêt"
+
+msgid "type"
+msgstr "Type"
 
 msgid "title"
 msgstr "Titre"
