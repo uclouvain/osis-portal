@@ -136,3 +136,7 @@ def demande_update(request, application_id=None):
                    "id_document": get_id_document(request.user),
                    'person_legal_address': person_legal_address,
                    'person_contact_address': person_contact_address})
+
+
+
+
