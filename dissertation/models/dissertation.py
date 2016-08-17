@@ -79,3 +79,10 @@ class Dissertation(models.Model):
 
     def __str__(self):
         return self.title
+
+
+def count_by_proposition(subject):
+    return Dissertation.objects.filter(active=True)\
+                               .filter(proposition_dissertation=subject)\
+                               .exclude(status='DRAFT')\
+                               .count()

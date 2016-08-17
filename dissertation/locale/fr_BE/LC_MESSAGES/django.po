@@ -29,6 +29,9 @@ msgstr "Validation de première année validée"
 msgid "application_dissertation"
 msgstr "Gestion des mémoires"
 
+msgid "author"
+msgstr "Auteur"
+
 msgid "case_study"
 msgstr "Cas d'étude"
 
@@ -40,6 +43,9 @@ msgstr "Défendu"
 
 msgid "domain"
 msgstr "Domaine"
+
+msgid "desc_lnk_propositions_dissertations"
+msgstr "Liste des sujets disponibles"
 
 msgid "draft"
 msgstr "Brouillon"
@@ -61,6 +67,15 @@ msgstr "Revue Litéraire"
 
 msgid "manager"
 msgstr "Gestionnaire de cours"
+
+msgid "max_students_number"
+msgstr "Nombre maximum d'étudiant"
+
+msgid "no_result"
+msgstr "Aucun résultat trouvé"
+
+msgid "offer_propositions"
+msgstr "Programmes de cours"
 
 msgid "possible"
 msgstr "Possible"
@@ -89,6 +104,12 @@ msgstr "Validation de première année ratée"
 msgid "required"
 msgstr "Requis"
 
+msgid "search"
+msgstr "Recherche"
+
+msgid "subjects_list"
+msgstr "Liste des sujets"
+
 msgid "submitted_to_commission"
 msgstr "Soumis à la commission"
 
@@ -97,6 +118,9 @@ msgstr "Soumis au promoteur"
 
 msgid "submitted_to_first_year_evaluation"
 msgstr "Soumis à l'évaluation de première année"
+
+msgid "title"
+msgstr "Titre"
 
 msgid "theme"
 msgstr "Theme"

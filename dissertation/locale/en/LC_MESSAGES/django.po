@@ -29,6 +29,9 @@ msgstr "Accepted by first year evaluation"
 msgid "application_dissertation"
 msgstr "Dissertation management"
 
+msgid "author"
+msgstr "Author"
+
 msgid "case_study"
 msgstr "Case Study"
 
@@ -40,6 +43,9 @@ msgstr "Defended"
 
 msgid "domain"
 msgstr "Domain"
+
+msgid "desc_lnk_propositions_dissertations"
+msgstr "List of available subjects"
 
 msgid "draft"
 msgstr "Draft"
@@ -61,6 +67,15 @@ msgstr "Literature Review"
 
 msgid "manager"
 msgstr "Course manager"
+
+msgid "max_students_number"
+msgstr "Maximum number of student"
+
+msgid "no_result"
+msgstr "No result"
+
+msgid "offer_propositions"
+msgstr "Offer"
 
 msgid "possible"
 msgstr "Possible"
@@ -89,6 +104,12 @@ msgstr "Refused by first year evaluation"
 msgid "required"
 msgstr "Required"
 
+msgid "search"
+msgstr "Search"
+
+msgid "subjects_list"
+msgstr "Subject List"
+
 msgid "submitted_to_commission"
 msgstr "Submitted to commission"
 
@@ -97,6 +118,9 @@ msgstr "Submitted to promoter"
 
 msgid "submitted_to_first_year_evaluation"
 msgstr "Submitted to first year evaluation "
+
+msgid "title"
+msgstr "Title"
 
 msgid "theme"
 msgstr "Theme"

@@ -25,9 +25,15 @@
 ##############################################################################
 
 from django.conf.urls import url
-from dissertation.views import common
+from dissertation.views import common, proposition_dissertation
 
 
 urlpatterns = [
     url(r'^$', common.home, name='dissertation'),
+    url(r'^proposition_dissertations/$', proposition_dissertation.proposition_dissertations,
+        name='proposition_dissertations'),
+    url(r'^proposition_dissertation_detail/(?P<pk>[0-9]+)/$', proposition_dissertation.proposition_dissertation_detail,
+        name='proposition_dissertation_detail'),
+    url(r'^proposition_dissertations_search$', proposition_dissertation.proposition_dissertations_search,
+        name='proposition_dissertations_search'),
 ]

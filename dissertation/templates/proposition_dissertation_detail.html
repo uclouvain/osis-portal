@@ -1,4 +1,4 @@
-{% extends "application_layout.html" %}
+{% extends "layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -27,21 +27,14 @@
 {% endcomment %}
 
 {% block content %}
-<div class="page-header">
-    <h2>{% trans 'application_dissertation' %}</h2>
-</div>
+<ol class="breadcrumb">
+    <li><a href="{% url 'dissertation' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+    <li><a href="{% url 'proposition_dissertations' %}" id="lnk_proposition_dissertations">{% trans 'subjects_list' %}</a></li>
+    <li class="active">{{ subject.title }}</li>
+</ol>
 <div class="panel panel-default">
     <div class="panel-body">
-        <div class="row">
-            <div class="col-md-5">
-                <h4 class="media-heading">
-                    <a href="{% url 'proposition_dissertations' %}" id="lnk_proposition_dissertations" >
-                        {% trans 'subjects_list' %}
-                    </a>
-                </h4>
-                <p>{% trans 'desc_lnk_propositions_dissertations' %}</p>
-            </div>
-        </div>
+
     </div>
 </div>
 {% endblock %}
