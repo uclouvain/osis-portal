@@ -31,7 +31,6 @@ $("#slt_domain").change(function() {
 });
 
 function offer_selection_display(){
-    alert('offer_selection_display');
     var radio_button_value;
 
     if ($("input[name='grade_choice']:checked").length > 0){
@@ -48,7 +47,6 @@ function offer_selection_display(){
 }
 
 function selection(row_number, offers_length, offer_year_id){
-alert('sel');
     var elt = "offer_row_" + row_number;
     var cpt = 0;
     var already_selected =new Boolean(false);
