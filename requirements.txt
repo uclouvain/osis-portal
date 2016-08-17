@@ -2,6 +2,7 @@ couchbase==2.0.7
 Django==1.9
 django-bootstrap3==7.0.1
 django-localflavor==1.3
+django-statici18n==1.1.5
 djangorestframework==3.3.2
 jdcal==1.2
 pika==0.10.0

@@ -25,9 +25,11 @@
 ##############################################################################
 from django import forms
 from django.core.validators import MinValueValidator
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 from admission.validators import date_validator
 from localflavor.generic.forms import BICFormField, IBANFormField
+from osis_common.models.document_file import DocumentFile
 
 
 class NewAccountForm(forms.Form):
@@ -231,3 +233,16 @@ class AccountingForm(forms.Form):
         if data_scholarship and (data is None or len(data) == 0):
             self.errors['scholarship_organization'] = _('mandatory_field')
         return cleaned_data
+
+
+class RemoveAttachmentForm(forms.Form):
+    attachment_id = forms.IntegerField(min_value=0)
+
+    def clean(self):
+        cleaned_data = super(RemoveAttachmentForm, self).clean()
+        attachment_id = cleaned_data.get('attachment_id')
+        if attachment_id:
+            try:
+                DocumentFile.objects.get(pk=attachment_id)
+            except ObjectDoesNotExist:
+                self.add_error('attachment_id', _('attachment_does_not_exist'))

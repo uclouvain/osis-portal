@@ -25,3 +25,15 @@ msgstr "Page not found"
 
 msgid "server_error"
 msgstr "A server error occured."
+
+msgid "administration"
+msgstr "Administration"
+
+msgid "data"
+msgstr "Data"
+
+msgid "data_management"
+msgstr "Data management"
+
+msgid "desc_lnk_data_management"
+msgstr "Management of data by entity"

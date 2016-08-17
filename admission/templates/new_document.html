@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+ * OSIS stands for Open Student Information System. It's an application
+ * designed to manage the core business of higher education institutions,
+ * such as universities, faculties, institutes and professional schools.
+ * The core business involves the administration of students, teachers,
+ * courses, programs and so on.
+ *
+ * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * A copy of this license - GNU General Public License - is available
+ * at the root of the source code of this program.  If not,
+ * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block content %}
+  <div class="page-header">
+    <h2>{% if description == 'ID_PICTURE'%}
+            {% trans 'id_picture' %}
+        {% endif %}
+        {% if description == 'ID_CARD'%}
+            {% trans 'id_documents' %}
+        {% endif %}
+        {% if description == 'NATIONAL_DIPLOMA_VERSO'%}
+            {% trans 'high_school_diploma'%} - {% trans 'verso'%}
+        {% endif %}
+        {% if description == 'NATIONAL_DIPLOMA_RECTO'%}
+            {% trans 'high_school_diploma' %} - {% trans 'recto'%}
+        {% endif %}
+        {% if description == 'INTERNATIONAL_DIPLOMA_VERSO'%}
+            {% trans 'high_school_diploma'%} - {% trans 'verso'%}
+        {% endif %}
+        {% if description == 'INTERNATIONAL_DIPLOMA_RECTO'%}
+            {% trans 'high_school_diploma' %} - {% trans 'recto'%}
+        {% endif %}
+        {% if description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO'%}
+            {% trans 'high_school_diploma'%} {% trans 'translated' %} - {% trans 'verso'%}
+        {% endif %}
+        {% if description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO'%}
+            {% trans 'high_school_diploma' %} {% trans 'translated' %} - {% trans 'recto'%}
+        {% endif %}
+        {% if description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO'%}
+            {% trans 'high_school_scores_transcript'%} - {% trans 'verso'%}
+        {% endif %}
+        {% if description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO'%}
+            {% trans 'high_school_scores_transcript' %} - {% trans 'recto'%}
+        {% endif %}
+        {% if description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO'%}
+            {% trans 'high_school_scores_transcript'%} {% trans 'translated' %} - {% trans 'verso'%}
+        {% endif %}
+        {% if description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO'%}
+            {% trans 'high_school_scores_transcript' %} {% trans 'translated' %} - {% trans 'recto'%}
+        {% endif %}
+        {% if description == 'EQUIVALENCE'%}
+            {% trans 'file_equivalence' %}
+        {% endif %}
+        {% if description == 'ADMISSION_EXAM_CERTIFICATE'%}
+            {% trans 'admission_exam_certificate_document' %}
+        {% endif %}
+        {% if description == 'PROFESSIONAL_EXAM_CERTIFICATE'%}
+            {% trans 'admission_exam_certificate_document' %}
+        {% endif %}
+
+    </h2>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <form method="POST" class="post-form" enctype="multipart/form-data" action="{% url 'upload_document' %}">
+        {% csrf_token %}
+        {% include "uploading/upload_file_form.html" %}
+        <input type="hidden" name="description" value='{{ description }}' />
+        <input type="hidden" name="application_id" value='{{ application.id | default_if_none:''}}' />
+        <button type="submit" class="save btn btn-default" onclick="return confirm('{% trans 'new_file_confirmation_message' %}')">{% trans 'save' %}</button>
+        {% if description == 'ID_PICTURE' or description == 'ID_CARD'%}
+            <a href="{% url 'home'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>
+        {% else %}
+          {% if description == 'NATIONAL_DIPLOMA_VERSO' or  description == 'NATIONAL_DIPLOMA_RECTO' or  description == 'INTERNATIONAL_DIPLOMA_RECTO' or  description == 'INTERNATIONAL_DIPLOMA_VERSO' or  description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO' or  description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO' or  description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO' or  description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO' or  description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO' or  description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO' or  description == 'EQUIVALENCE' or description == 'ADMISSION_EXAM_CERTIFICATE' or description == 'PROFESSIONAL_EXAM_CERTIFICATE'%}
+          <a href="{% url 'diploma_update'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>
+          {% endif %}
+        {% endif %}
+      </form>
+    </div>
+  </div>
+{% include "uploaded_file_list.html" %}
+{% endblock %}
+

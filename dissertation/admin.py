@@ -24,3 +24,7 @@
 #
 ##############################################################################
 
+from django.contrib import admin
+from dissertation.models import *
+
+admin.site.register(adviser.Adviser, adviser.AdviserAdmin)

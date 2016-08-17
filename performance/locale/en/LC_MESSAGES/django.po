@@ -108,3 +108,18 @@ msgstr "B - Credit (Bologne)"
 
 msgid "legend"
 msgstr "Legend"
+
+msgid "performance_results"
+msgstr "Performance results"
+
+msgid "student_performance"
+msgstr "Performances of a student"
+
+msgid "registration_id"
+msgstr "Registration Id"
+
+msgid "performance_administration"
+msgstr "Performance administration"
+
+msgid "no_student_with_this_registration_id"
+msgstr "No student with this registration id"

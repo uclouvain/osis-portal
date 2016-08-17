@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, permission_required
 from .score_encoding import print_scores
 from base import models as mdl_base
