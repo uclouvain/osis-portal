@@ -146,7 +146,7 @@ def profile(request, application_id=None, message_success=None):
             applicant.spouse_name = request.POST['spouse_name']
         else:
             applicant.spouse_name = None
-        if request.POST.get('nationality'):
+        if request.POST.get('nationality') and not request.POST.get('nationality') == "-1":
             country_id = request.POST['nationality']
             country = mdl_ref.country.find_by_id(country_id)
             applicant.nationality = country
@@ -185,6 +185,8 @@ def profile(request, application_id=None, message_success=None):
         else:
             person_legal_address.city = ''
         if request.POST.get('legal_adr_country'):
+            person_legal_address.city = ''
+        if request.POST.get('legal_adr_country') and not request.POST.get('legal_adr_country') == "-1":
             country_id = request.POST['legal_adr_country']
             country = mdl_ref.country.find_by_id(country_id)
             person_legal_address.country = country
@@ -385,6 +387,4 @@ def get_id_document(user):
     pictures = mdl_osis_common.document_file.search(None, user, 'ID_CARD')
     if pictures:
         return ''.join(('/admission', pictures.reverse()[0].file.url))
-
     return None
-

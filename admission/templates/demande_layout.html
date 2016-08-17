@@ -36,17 +36,18 @@
     <input type="hidden" value="{{application.belgian_degree}}" id="hdn_belgian_degree">
     <input type="hidden" value="{{application.started_samestudies}}" id="hdn_started_samestudies">
     <input type="hidden" value="{{application.applied_to_sameprogram}}" id="hdn_applied_to_sameprogram">
+    <span id="txt_message_error_offer_up"
+           class="alert alert-warning"
+           style="visibility:hidden;display:none;"></span><br>
     <div>
         <a id="lnk_previous_step_up"
            class="btn btn-default"
            href="{%if application.id%}{% url 'profile' application.id%}{%else%}{% url 'profile'%}{%endif%}"
-           onclick="save('form_questions');"
            title="{% trans 'profile'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
             {%trans 'previous_step'%} : {%trans 'profile'%}</a>
         <a id="lnk_next_step_up"
            class="btn btn-default"
            href="{%if application.id%}{% url 'diploma_update' application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
-           onclick="save('form_questions');"
            title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
             {%trans 'next_step'%} : {%trans 'tab_diplomas'%}</a>
     </div>
@@ -310,17 +311,19 @@
     {% include "diploma/local_language_exam.html" %}
 
 </form>
+    <span id="txt_message_error_offer_down"
+           class="alert alert-warning"
+           style="visibility:hidden;display:none;"></span><br>
+
 <div>
     <a id="lnk_previous_step"
        class="btn btn-default"
        href="{%if application.id%}{% url 'profile' application.id%}{%else%}{% url 'profile'%}{%endif%}"
-       onclick="save('form_questions');"
        title="{% trans 'profile'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
         {%trans 'previous_step'%} : {%trans 'profile'%}</a>
     <a id="lnk_next_step"
        class="btn btn-default"
        href="{%if application.id%}{% url 'diploma_update' application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
-       onclick="save('form_questions');"
        title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
         {%trans 'next_step'%} : {%trans 'tab_diplomas'%}</a>
 </div>
