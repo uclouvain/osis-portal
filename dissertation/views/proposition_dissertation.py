@@ -36,7 +36,7 @@ def proposition_dissertations(request):
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
     subjects = proposition_dissertation.search_all()
-    return layout.render(request, 'proposition_dissertations.html',
+    return layout.render(request, 'proposition_dissertations_list.html',
                          {'student': student,
                           'subjects': subjects})
 
@@ -65,6 +65,6 @@ def proposition_dissertations_search(request):
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
     subjects = proposition_dissertation.search(terms=request.GET['search'], active=True, visibility=True)
-    return layout.render(request, "proposition_dissertations.html",
+    return layout.render(request, "proposition_dissertations_list.html",
                          {'student': student,
                           'subjects': subjects})
