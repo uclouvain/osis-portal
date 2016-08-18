@@ -44,14 +44,29 @@ msgstr "Co-promoter"
 msgid "defended"
 msgstr "Defended"
 
+msgid "defend_periode"
+msgstr "Defend period"
+
+msgid "defend_year"
+msgstr "Defend year"
+
 msgid "domain"
 msgstr "Domain"
 
 msgid "description"
 msgstr "Description"
 
+msgid "desc_lnk_dissertations"
+msgstr "List of my projects dissertation"
+
 msgid "desc_lnk_propositions_dissertations"
 msgstr "List of available subjects"
+
+msgid "dissertation_informations"
+msgstr "Dissertation informations"
+
+msgid "dissertation_jury"
+msgstr "Jury"
 
 msgid "draft"
 msgstr "Draft"
@@ -79,6 +94,9 @@ msgstr "Course manager"
 
 msgid "max_students_number"
 msgstr "Maximum number of student"
+
+msgid "memories_list"
+msgstr "Dissertation List"
 
 msgid "no_result"
 msgstr "No result"

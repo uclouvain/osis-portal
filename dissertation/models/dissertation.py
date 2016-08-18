@@ -101,5 +101,6 @@ def search(terms, author=None):
     return queryset
 
 
-def search_all():
-    return Dissertation.objects.all()
+def search_by_user(user):
+    return Dissertation.objects.filter(author=user)
+

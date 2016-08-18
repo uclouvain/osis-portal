@@ -48,7 +48,7 @@
         </form>
         <br>
         <div>
-            {% if memories|length == 0 %}
+            {% if dissertations|length == 0 %}
                 <br>
                 <label class="alert alert-info" style="margin-left:10%;width:80%;text-align:center;">{% trans 'no_result' %}</label>
             {% else %}
@@ -59,42 +59,42 @@
                         <td style="text-align: center">{% trans 'status'%}</td>
                         <td style="text-align: center">{% trans 'offer_propositions'%}</td>
                     </tr>
-                  {% for memory in memories %}
+                  {% for dissertation in dissertations %}
 <tr>
-                        <td style="text-align: center">{{ memory.title }}</td>
-                        <td style="text-align: center">{{ memory.author }}</td>
+                        <td style="text-align: center"><a href="{% url 'dissertation_detail' pk=dissertation.pk %}">{{ dissertation.title }}</a></td>
+                        <td style="text-align: center">{{ dissertation.author }}</td>
                         <td style="text-align: center">
-                            {% if memory.status == 'DRAFT' %}
-                            <span class="label label-default">{{ memory.status }}</span>
-                            {% elif memory.status == 'DIR_SUBMIT' %}
-                            <span class="label label-primary">{{ memory.status }}</span>
-                            {% elif memory.status == 'DIR_OK' %}
-                            <span class="label label-success">{{ memory.status }}</span>
-                            {% elif memory.status == 'DIR_KO' %}
-                            <span class="label label-danger">{{ memory.status }}</span>
-                            {% elif memory.status == 'COM_SUBMIT' %}
-                            <span class="label label-primary">{{ memory.status }}</span>
-                            {% elif memory.status == 'COM_OK' %}
-                            <span class="label label-default">{{ memory.status }}</span>
-                            {% elif memory.status == 'COM_KO' %}
-                            <span class="label label-default">{{ memory.status }}</span>
-                            {% elif memory.status == 'EVA_SUBMIT' %}
-                            <span class="label label-default">{{ memory.status }}</span>
-                            {% elif memory.status == 'EVA_OK' %}
-                            <span class="label label-default">{{ memory.status }}</span>
-                            {% elif memory.status == 'EVA_KO' %}
-                            <span class="label label-default">{{ memory.status }}</span>
-                            {% elif memory.status == 'TO_RECEIVE' %}
-                            <span class="label label-default">{{ memory.status }}</span>
-                            {% elif memory.status == 'TO_DEFEND' %}
-                            <span class="label label-default">{{ memory.status }}</span>
-                            {% elif memory.status == 'DEFENDED' %}
-                            <span class="label label-default">{{ memory.status }}</span>
-                            {% elif memory.status == 'ENDED' %}
-                            <span class="label label-default">{{ memory.status }}</span>
+                            {% if dissertation.status == 'DRAFT' %}
+                            <span class="label label-default">{{ dissertation.status }}</span>
+                            {% elif dissertation.status == 'DIR_SUBMIT' %}
+                            <span class="label label-primary">{{ dissertation.status }}</span>
+                            {% elif dissertation.status == 'DIR_OK' %}
+                            <span class="label label-success">{{ dissertation.status }}</span>
+                            {% elif dissertation.status == 'DIR_KO' %}
+                            <span class="label label-danger">{{ dissertation.status }}</span>
+                            {% elif dissertation.status == 'COM_SUBMIT' %}
+                            <span class="label label-primary">{{ dissertation.status }}</span>
+                            {% elif dissertation.status == 'COM_OK' %}
+                            <span class="label label-default">{{ dissertation.status }}</span>
+                            {% elif dissertation.status == 'COM_KO' %}
+                            <span class="label label-default">{{ dissertation.status }}</span>
+                            {% elif dissertation.status == 'EVA_SUBMIT' %}
+                            <span class="label label-default">{{ dissertation.status }}</span>
+                            {% elif dissertation.status == 'EVA_OK' %}
+                            <span class="label label-default">{{ dissertation.status }}</span>
+                            {% elif dissertation.status == 'EVA_KO' %}
+                            <span class="label label-default">{{ dissertation.status }}</span>
+                            {% elif dissertation.status == 'TO_RECEIVE' %}
+                            <span class="label label-default">{{ dissertation.status }}</span>
+                            {% elif dissertation.status == 'TO_DEFEND' %}
+                            <span class="label label-default">{{ dissertation.status }}</span>
+                            {% elif dissertation.status == 'DEFENDED' %}
+                            <span class="label label-default">{{ dissertation.status }}</span>
+                            {% elif dissertation.status == 'ENDED' %}
+                            <span class="label label-default">{{ dissertation.status }}</span>
                             {% endif %}
                         </td>
-                        <td style="text-align: center">{{ memory.offer_year_start }}</td>
+                        <td style="text-align: center">{{ dissertation.offer_year_start }}</td>
                       </tr>
                   {% endfor %}
                 </table>

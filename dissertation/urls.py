@@ -33,6 +33,8 @@ urlpatterns = [
 
     url(r'^dissertations/$', dissertation.dissertations,
         name='dissertations'),
+    url(r'^dissertation_detail/(?P<pk>[0-9]+)/$', dissertation.dissertation_detail,
+        name='dissertation_detail'),
     url(r'^dissertations_search$', dissertation.dissertations_search,
         name='dissertations_search'),
 

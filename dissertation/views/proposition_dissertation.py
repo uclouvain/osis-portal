@@ -38,7 +38,7 @@ def proposition_dissertations(request):
     subjects = proposition_dissertation.search_all()
     return layout.render(request, 'proposition_dissertations_list.html',
                          {'student': student,
-                          'subjects': subjects})
+                          'proposition_dissertations': subjects})
 
 
 @login_required
@@ -55,7 +55,7 @@ def proposition_dissertation_detail(request, pk):
     return layout.render(request, 'proposition_dissertation_detail.html',
                          {'percent': round(percent, 2),
                           'proposition_roles': proposition_roles,
-                          'subject': subject,
+                          'proposition_dissertation': subject,
                           'student': student,
                           'using': using})
 
@@ -67,4 +67,4 @@ def proposition_dissertations_search(request):
     subjects = proposition_dissertation.search(terms=request.GET['search'], active=True, visibility=True)
     return layout.render(request, "proposition_dissertations_list.html",
                          {'student': student,
-                          'subjects': subjects})
+                          'proposition_dissertations': subjects})
