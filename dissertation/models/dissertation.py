@@ -81,12 +81,42 @@ class Dissertation(models.Model):
     def __str__(self):
         return self.title
 
+    def deactivate(self):
+        self.active = False
+        self.save()
+
+    def set_status(self, status):
+        self.status = status
+        self.save()
+
+    def go_forward(self):
+        next_status = get_next_status(self, "go_forward")
+        self.set_status(next_status)
+
+    def accept(self):
+        next_status = get_next_status(self, "accept")
+        self.set_status(next_status)
+
+    def refuse(self):
+        next_status = get_next_status(self, "refuse")
+        self.set_status(next_status)
+
 
 def count_by_proposition(subject):
     return Dissertation.objects.filter(active=True)\
                                .filter(proposition_dissertation=subject)\
                                .exclude(status='DRAFT')\
                                .count()
+
+
+def get_next_status(memory, operation):
+    if operation == "go_forward":
+        if memory.status == 'DRAFT' or memory.status == 'DIR_KO':
+            return 'DIR_SUBMIT'
+        else:
+            return memory.status
+    else:
+        return memory.status
 
 
 def search(terms, author=None):

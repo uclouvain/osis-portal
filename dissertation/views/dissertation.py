@@ -28,7 +28,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from base import models as mdl
 from base.views import layout
-from dissertation.models import dissertation, dissertation_role, proposition_role
+from dissertation.models import dissertation, dissertation_role, dissertation_update, proposition_role
+from dissertation.forms import DissertationUpdateForm
 
 
 @login_required
@@ -39,6 +40,13 @@ def dissertations(request):
     return layout.render(request, 'dissertations_list.html',
                          {'student': student,
                           'dissertations': memories})
+
+
+@login_required
+def dissertation_delete(request, pk):
+    memory = get_object_or_404(dissertation.Dissertation, pk=pk)
+    memory.deactivate()
+    dissertation_update.add(request, memory, memory.status, justification="manager_set_active_false ")
 
 
 @login_required
@@ -75,3 +83,22 @@ def dissertations_search(request):
     return layout.render(request, "dissertations_list.html",
                          {'student': student,
                           'dissertations': memories})
+
+
+@login_required
+def dissertation_to_dir_submit(request, pk):
+    memory = get_object_or_404(dissertation.Dissertation, pk=pk)
+    old_status = memory.status
+    new_status = dissertation.get_next_status(memory, "go_forward")
+    if request.method == "POST":
+        form = DissertationUpdateForm(request.POST)
+        if form.is_valid():
+            memory.go_forward()
+            data = form.cleaned_data
+            justification = data['justification']
+            dissertation_update.add(request, memory, old_status, justification=justification)
+            return redirect('dissertation_detail', pk=pk)
+    else:
+        form = DissertationUpdateForm()
+    return layout.render(request, 'dissertation_add_justification.html',
+                         {'form': form, 'dissertation': memory, "old_status": old_status, "new_status": new_status})

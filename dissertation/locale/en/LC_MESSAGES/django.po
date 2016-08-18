@@ -41,6 +41,9 @@ msgstr "Collaboration"
 msgid "copromotor"
 msgstr "Co-promoter"
 
+msgid "current_status"
+msgstr "Current status"
+
 msgid "defended"
 msgstr "Defended"
 
@@ -50,8 +53,8 @@ msgstr "Defend period"
 msgid "defend_year"
 msgstr "Defend year"
 
-msgid "domain"
-msgstr "Domain"
+msgid "delete"
+msgstr "Delete"
 
 msgid "description"
 msgstr "Description"
@@ -62,11 +65,17 @@ msgstr "List of my projects dissertation"
 msgid "desc_lnk_propositions_dissertations"
 msgstr "List of available subjects"
 
+msgid "dir_submit"
+msgstr "Submit"
+
 msgid "dissertation_informations"
 msgstr "Dissertation informations"
 
 msgid "dissertation_jury"
 msgstr "Jury"
+
+msgid "domain"
+msgstr "Domain"
 
 msgid "draft"
 msgstr "Draft"
@@ -83,6 +92,9 @@ msgstr "Win"
 msgid "forbidden"
 msgstr "Forbidden"
 
+msgid "justification_confirmation_message"
+msgstr "Confirm justification"
+
 msgid "level"
 msgstr "Level"
 
@@ -98,11 +110,17 @@ msgstr "Maximum number of student"
 msgid "memories_list"
 msgstr "Dissertation List"
 
+msgid "next_status"
+msgstr "Next status"
+
 msgid "no_result"
 msgstr "No result"
 
 msgid "offer_propositions"
 msgstr "Offer"
+
+msgid "optional"
+msgstr "Optional"
 
 msgid "possible"
 msgstr "Possible"
@@ -172,6 +190,9 @@ msgstr "To be received defended"
 
 msgid "to_be_received"
 msgstr "To be received"
+
+msgid "to_dir_submit_confirmation_message"
+msgstr "Warning : you will submit the draft memorandum to the promotor. Are you sure you want to continue ?"
 
 msgid "work"
 msgstr "Work"

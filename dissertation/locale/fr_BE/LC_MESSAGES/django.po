@@ -41,6 +41,9 @@ msgstr "Collaboration"
 msgid "copromotor"
 msgstr "Co-promoteur"
 
+msgid "current_status"
+msgstr "Statut actuel"
+
 msgid "defended"
 msgstr "Défendu"
 
@@ -50,8 +53,8 @@ msgstr "Période de défense"
 msgid "defend_year"
 msgstr "Année de défense"
 
-msgid "domain"
-msgstr "Domaine"
+msgid "delete"
+msgstr "Supprimer"
 
 msgid "description"
 msgstr "Description"
@@ -62,11 +65,17 @@ msgstr "Liste de mes projets de mémoire"
 msgid "desc_lnk_propositions_dissertations"
 msgstr "Liste des sujets disponibles"
 
+msgid "dir_submit"
+msgstr "Soumettre"
+
 msgid "dissertation_informations"
 msgstr "Dissertation informations"
 
 msgid "dissertation_jury"
 msgstr "Jury"
+
+msgid "domain"
+msgstr "Domaine"
 
 msgid "draft"
 msgstr "Brouillon"
@@ -83,6 +92,9 @@ msgstr "Réussi"
 msgid "forbidden"
 msgstr "Interdite"
 
+msgid "justification_confirmation_message"
+msgstr "Confirmer la justification"
+
 msgid "level"
 msgstr "Niveau"
 
@@ -98,11 +110,17 @@ msgstr "Nombre maximum d'étudiant"
 msgid "memories_list"
 msgstr "Liste de mes mémoires"
 
+msgid "next_status"
+msgstr "Nouveau statut"
+
 msgid "no_result"
 msgstr "Aucun résultat trouvé"
 
 msgid "offer_propositions"
 msgstr "Programmes de cours"
+
+msgid "optional"
+msgstr "Facultatif"
 
 msgid "possible"
 msgstr "Possible"
@@ -172,6 +190,9 @@ msgstr "En attente de défense"
 
 msgid "to_be_received"
 msgstr "En attente de réception"
+
+msgid "to_dir_submit_confirmation_message"
+msgstr "Attention : vous allez soumettre ce projet de mémoire au promoteur. Êtes-vous certain de vouloir continuer ?"
 
 msgid "work"
 msgstr "Travail"
