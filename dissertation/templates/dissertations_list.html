@@ -33,7 +33,73 @@
 </ol>
 <div class="panel panel-default">
     <div class="panel-body">
-
+        <form method="get" action="{% url 'dissertations_search'%}">
+            <div class="row">
+                <div class="col-md-5 col-lg-offset-6">
+                    <input class="form-control" id="txt_search" placeholder="{% trans 'search' %}" name="search"
+                           value="{{ request.GET.search }}">
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" id="bt_submit_dissertation_search" class="btn btn-primary" role="button"
+                            title="{% trans 'search_dissertation' %}"><span class="glyphicon glyphicon-search"
+                            aria-hidden="true"></span></button>
+                </div>
+            </div>
+        </form>
+        <br>
+        <div>
+            {% if memories|length == 0 %}
+                <br>
+                <label class="alert alert-info" style="margin-left:10%;width:80%;text-align:center;">{% trans 'no_result' %}</label>
+            {% else %}
+                <table class="table table-hover">
+                    <tr>
+                        <td style="text-align: center">{% trans 'title'%}</td>
+                        <td style="text-align: center">{% trans 'author'%}</td>
+                        <td style="text-align: center">{% trans 'status'%}</td>
+                        <td style="text-align: center">{% trans 'offer_propositions'%}</td>
+                    </tr>
+                  {% for memory in memories %}
+<tr>
+                        <td style="text-align: center">{{ memory.title }}</td>
+                        <td style="text-align: center">{{ memory.author }}</td>
+                        <td style="text-align: center">
+                            {% if memory.status == 'DRAFT' %}
+                            <span class="label label-default">{{ memory.status }}</span>
+                            {% elif memory.status == 'DIR_SUBMIT' %}
+                            <span class="label label-primary">{{ memory.status }}</span>
+                            {% elif memory.status == 'DIR_OK' %}
+                            <span class="label label-success">{{ memory.status }}</span>
+                            {% elif memory.status == 'DIR_KO' %}
+                            <span class="label label-danger">{{ memory.status }}</span>
+                            {% elif memory.status == 'COM_SUBMIT' %}
+                            <span class="label label-primary">{{ memory.status }}</span>
+                            {% elif memory.status == 'COM_OK' %}
+                            <span class="label label-default">{{ memory.status }}</span>
+                            {% elif memory.status == 'COM_KO' %}
+                            <span class="label label-default">{{ memory.status }}</span>
+                            {% elif memory.status == 'EVA_SUBMIT' %}
+                            <span class="label label-default">{{ memory.status }}</span>
+                            {% elif memory.status == 'EVA_OK' %}
+                            <span class="label label-default">{{ memory.status }}</span>
+                            {% elif memory.status == 'EVA_KO' %}
+                            <span class="label label-default">{{ memory.status }}</span>
+                            {% elif memory.status == 'TO_RECEIVE' %}
+                            <span class="label label-default">{{ memory.status }}</span>
+                            {% elif memory.status == 'TO_DEFEND' %}
+                            <span class="label label-default">{{ memory.status }}</span>
+                            {% elif memory.status == 'DEFENDED' %}
+                            <span class="label label-default">{{ memory.status }}</span>
+                            {% elif memory.status == 'ENDED' %}
+                            <span class="label label-default">{{ memory.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: center">{{ memory.offer_year_start }}</td>
+                      </tr>
+                  {% endfor %}
+                </table>
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}

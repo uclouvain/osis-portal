@@ -38,3 +38,13 @@ def dissertations(request):
     return layout.render(request, 'dissertations_list.html',
                          {'student': student,
                           'memories': memories})
+
+
+@login_required
+def dissertations_search(request):
+    person = mdl.person.find_by_user(request.user)
+    student = mdl.student.find_by_person(person)
+    memories = dissertation.search(terms=request.GET['search'], author=student)
+    return layout.render(request, "dissertations_list.html",
+                         {'student': student,
+                          'memories': memories})

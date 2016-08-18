@@ -122,6 +122,9 @@ msgstr "Required"
 msgid "search"
 msgstr "Search"
 
+msgid "status"
+msgstr "Status"
+
 msgid "subjects_list"
 msgstr "Subject List"
 

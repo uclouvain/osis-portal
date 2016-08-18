@@ -33,6 +33,8 @@ urlpatterns = [
 
     url(r'^dissertations/$', dissertation.dissertations,
         name='dissertations'),
+    url(r'^dissertations_search$', dissertation.dissertations_search,
+        name='dissertations_search'),
 
     url(r'^proposition_dissertations/$', proposition_dissertation.proposition_dissertations,
         name='proposition_dissertations'),
