@@ -28,7 +28,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from base import models as mdl
 from base.views import layout
-from dissertation.models import proposition_dissertation, proposition_role, dissertation
+from dissertation.models import dissertation, proposition_dissertation, proposition_role
 
 
 @login_required

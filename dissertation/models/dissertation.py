@@ -86,3 +86,7 @@ def count_by_proposition(subject):
                                .filter(proposition_dissertation=subject)\
                                .exclude(status='DRAFT')\
                                .count()
+
+
+def search_all():
+    return Dissertation.objects.all()

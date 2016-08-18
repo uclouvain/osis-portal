@@ -24,6 +24,17 @@
 #
 ##############################################################################
 
-from dissertation.views import common
-from dissertation.views import dissertation
-from dissertation.views import proposition_dissertation
+from django.contrib.auth.decorators import login_required
+from base import models as mdl
+from base.views import layout
+from dissertation.models import dissertation
+
+
+@login_required
+def dissertations(request):
+    person = mdl.person.find_by_user(request.user)
+    student = mdl.student.find_by_person(person)
+    memories = dissertation.search_all()
+    return layout.render(request, 'dissertations_list.html',
+                         {'student': student,
+                          'memories': memories})
