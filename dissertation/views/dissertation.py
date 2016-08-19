@@ -88,6 +88,16 @@ def dissertation_history(request, pk):
 
 
 @login_required
+def dissertation_new(request):
+    person = mdl.person.find_by_user(request.user)
+    student = mdl.student.find_by_person(person)
+    memories = dissertation.search_by_user(student)
+    return layout.render(request, 'dissertations_list.html',
+                         {'dissertations': memories,
+                          'student': student})
+
+
+@login_required
 def dissertations_search(request):
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
