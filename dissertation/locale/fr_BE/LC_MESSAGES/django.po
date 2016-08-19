@@ -17,22 +17,46 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "accepted_by_commission"
+msgstr "Accepté par la commission"
+
+msgid "accepted_by_director"
+msgstr "Accepté par le promoteur"
+
+msgid "accepted_by_first_year_evaluation"
+msgstr "Validation de première année validée"
+
 msgid "application_dissertation"
 msgstr "Gestion des mémoires"
 
 msgid "case_study"
 msgstr "Cas d'étude"
 
-msgid "copromotor"
+msgid "copromoter"
 msgstr "Co-promoteur"
+
+msgid "defended"
+msgstr "Défendu"
 
 msgid "domain"
 msgstr "Domaine"
 
+msgid "draft"
+msgstr "Brouillon"
+
+msgid "ended"
+msgstr "Terminé"
+
+msgid "ended_los"
+msgstr "Reporté"
+
+msgid "ended_win"
+msgstr "Réussi"
+
 msgid "forbidden"
 msgstr "Interdit"
 
-msgid "litterature_review"
+msgid "literature_review"
 msgstr "Revue Litéraire"
 
 msgid "manager"
@@ -44,7 +68,7 @@ msgstr "Possible"
 msgid "professor"
 msgstr "Professeur"
 
-msgid "promotor"
+msgid "promoter"
 msgstr "Promoteur"
 
 msgid "question"
@@ -53,11 +77,35 @@ msgstr "Question"
 msgid "reader"
 msgstr "Lecteur"
 
+msgid "refused_by_commission"
+msgstr "Refusé par la commission"
+
+msgid "refused_by_director"
+msgstr "Refusé par le promoteur"
+
+msgid "refused_by_first_year_evaluation"
+msgstr "Validation de première année ratée"
+
 msgid "required"
 msgstr "Requis"
 
+msgid "submitted_to_commission"
+msgstr "Soumis à la commission"
+
+msgid "submitted_to_director"
+msgstr "Soumis au promoteur"
+
+msgid "submitted_to_first_year_evaluation"
+msgstr "Soumis à l'évaluation de première année"
+
 msgid "theme"
 msgstr "Theme"
+
+msgid "to_be_defended"
+msgstr "En attente de défense"
+
+msgid "to_be_received"
+msgstr "En attente de réception"
 
 msgid "work"
 msgstr "Travail"

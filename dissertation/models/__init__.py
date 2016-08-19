@@ -25,6 +25,7 @@
 ##############################################################################
 
 from dissertation.models import adviser
+from dissertation.models import dissertation
 from dissertation.models import offer_proposition
 from dissertation.models import proposition_dissertation
 from dissertation.models import proposition_role
