@@ -32,6 +32,14 @@
     <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'memories_list' %}</a></li>
     <li class="active">{{ dissertation.title }}</li>
 </ol>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#">{% trans 'dissertation' %}</a></li>
+    <li>
+        <a href="{% url 'dissertation_history' pk=dissertation.pk %}">
+            {% trans 'dissertation_history' %}
+        </a>
+    </li>
+</ul>
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="panel panel-default">
@@ -95,7 +103,7 @@
                         {% else %}
                         <span class="label label-default">
                         {% endif %}
-                            {{ dissertation.status }}
+                            {{ dissertation.get_status_display }}
                         </span>
                     </div>
                 </div>
@@ -104,7 +112,7 @@
                       <label>{% trans 'defend_periode' %}</label>
                   </div>
                   <div class="col-md-9">
-                      {{ dissertation.defend_periode }}
+                      {{ dissertation.get_defend_periode_display }}
                   </div>
                 </div>
                 <div class="row">
@@ -140,9 +148,6 @@
                   </div>
                 </div>
                 {% endfor %}
-                {% if count_dissertation_role < 4 %}
-                <br>
-                {% endif %}
             </div>
         </div>
         <div class="panel panel-default">

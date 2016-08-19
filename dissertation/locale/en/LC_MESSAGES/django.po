@@ -35,6 +35,9 @@ msgstr "Author"
 msgid "case_study"
 msgstr "Case Study"
 
+msgid "change"
+msgstr "Change"
+
 msgid "collaboration"
 msgstr "Collaboration"
 
@@ -43,6 +46,9 @@ msgstr "Co-promoter"
 
 msgid "current_status"
 msgstr "Current status"
+
+msgid "date"
+msgstr "Date"
 
 msgid "defended"
 msgstr "Defended"
@@ -68,6 +74,12 @@ msgstr "List of available subjects"
 msgid "dir_submit"
 msgstr "Submit"
 
+msgid "dissertation"
+msgstr "Dissertation"
+
+msgid "dissertation_history"
+msgstr "Dissertation history"
+
 msgid "dissertation_informations"
 msgstr "Dissertation informations"
 
@@ -91,6 +103,15 @@ msgstr "Win"
 
 msgid "forbidden"
 msgstr "Forbidden"
+
+msgid "history"
+msgstr "History"
+
+msgid "january"
+msgstr "January"
+
+msgid "june"
+msgstr "June"
 
 msgid "justification_confirmation_message"
 msgstr "Confirm justification"
@@ -121,6 +142,9 @@ msgstr "Offer"
 
 msgid "optional"
 msgstr "Optional"
+
+msgid "person"
+msgstr "Person"
 
 msgid "possible"
 msgstr "Possible"
@@ -157,6 +181,9 @@ msgstr "Required"
 
 msgid "search"
 msgstr "Search"
+
+msgid "september"
+msgstr "September"
 
 msgid "status"
 msgstr "Status"

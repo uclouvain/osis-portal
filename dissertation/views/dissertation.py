@@ -76,6 +76,15 @@ def dissertation_detail(request, pk):
 
 
 @login_required
+def dissertation_history(request, pk):
+    memory = get_object_or_404(dissertation.Dissertation, pk=pk)
+    dissertation_updates = dissertation_update.search_by_dissertation(memory)
+    return layout.render(request, 'dissertation_history.html',
+                         {'dissertation': memory,
+                          'dissertation_updates': dissertation_updates})
+
+
+@login_required
 def dissertations_search(request):
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)

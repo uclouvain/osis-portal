@@ -37,6 +37,8 @@ urlpatterns = [
         name='dissertation_delete'),
     url(r'^dissertation_detail/(?P<pk>[0-9]+)/$', dissertation.dissertation_detail,
         name='dissertation_detail'),
+    url(r'^dissertation_history/(?P<pk>[0-9]+)$', dissertation.dissertation_history,
+        name='dissertation_history'),
     url(r'^dissertations_search$', dissertation.dissertations_search,
         name='dissertations_search'),
     url(r'^dissertation_to_dir_submit/(?P<pk>[0-9]+)$', dissertation.dissertation_to_dir_submit,
