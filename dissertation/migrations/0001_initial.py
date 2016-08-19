@@ -121,6 +121,14 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='DissertationGroup',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('dissertation',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='dissertation.Dissertation')),
+            ],
+        ),
+        migrations.CreateModel(
             name='DissertationRole',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
