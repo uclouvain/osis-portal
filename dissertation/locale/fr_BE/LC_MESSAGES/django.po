@@ -35,11 +35,20 @@ msgstr "Auteur"
 msgid "case_study"
 msgstr "Cas d'étude"
 
+msgid "change"
+msgstr "Changement"
+
 msgid "collaboration"
 msgstr "Collaboration"
 
 msgid "copromotor"
 msgstr "Co-promoteur"
+
+msgid "current_status"
+msgstr "Statut actuel"
+
+msgid "date"
+msgstr "Date"
 
 msgid "defended"
 msgstr "Défendu"
@@ -50,8 +59,8 @@ msgstr "Période de défense"
 msgid "defend_year"
 msgstr "Année de défense"
 
-msgid "domain"
-msgstr "Domaine"
+msgid "delete"
+msgstr "Supprimer"
 
 msgid "description"
 msgstr "Description"
@@ -62,11 +71,23 @@ msgstr "Liste de mes projets de mémoire"
 msgid "desc_lnk_propositions_dissertations"
 msgstr "Liste des sujets disponibles"
 
+msgid "dir_submit"
+msgstr "Soumettre"
+
+msgid "dissertation"
+msgstr "Mémoire"
+
+msgid "dissertation_history"
+msgstr "Historique du mémoire"
+
 msgid "dissertation_informations"
-msgstr "Dissertation informations"
+msgstr "Informations du mémoire"
 
 msgid "dissertation_jury"
 msgstr "Jury"
+
+msgid "domain"
+msgstr "Domaine"
 
 msgid "draft"
 msgstr "Brouillon"
@@ -83,6 +104,18 @@ msgstr "Réussi"
 msgid "forbidden"
 msgstr "Interdite"
 
+msgid "history"
+msgstr "Historique"
+
+msgid "january"
+msgstr "Janvier"
+
+msgid "june"
+msgstr "Juin"
+
+msgid "justification_confirmation_message"
+msgstr "Confirmer la justification"
+
 msgid "level"
 msgstr "Niveau"
 
@@ -98,11 +131,20 @@ msgstr "Nombre maximum d'étudiant"
 msgid "memories_list"
 msgstr "Liste de mes mémoires"
 
+msgid "next_status"
+msgstr "Nouveau statut"
+
 msgid "no_result"
 msgstr "Aucun résultat trouvé"
 
 msgid "offer_propositions"
 msgstr "Programmes de cours"
+
+msgid "optional"
+msgstr "Facultatif"
+
+msgid "person"
+msgstr "Personne"
 
 msgid "possible"
 msgstr "Possible"
@@ -140,6 +182,9 @@ msgstr "Requis"
 msgid "search"
 msgstr "Recherche"
 
+msgid "september"
+msgstr "Septembre"
+
 msgid "status"
 msgstr "Statut"
 
@@ -172,6 +217,9 @@ msgstr "En attente de défense"
 
 msgid "to_be_received"
 msgstr "En attente de réception"
+
+msgid "to_dir_submit_confirmation_message"
+msgstr "Attention : vous allez soumettre ce projet de mémoire au promoteur. Êtes-vous certain de vouloir continuer ?"
 
 msgid "work"
 msgstr "Travail"

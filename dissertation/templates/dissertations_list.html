@@ -65,33 +65,33 @@
                         <td style="text-align: center">{{ dissertation.author }}</td>
                         <td style="text-align: center">
                             {% if dissertation.status == 'DRAFT' %}
-                            <span class="label label-default">{{ dissertation.status }}</span>
+                            <span class="label label-default">{{ dissertation.get_status_display }}</span>
                             {% elif dissertation.status == 'DIR_SUBMIT' %}
-                            <span class="label label-primary">{{ dissertation.status }}</span>
+                            <span class="label label-primary">{{ dissertation.get_status_display }}</span>
                             {% elif dissertation.status == 'DIR_OK' %}
-                            <span class="label label-success">{{ dissertation.status }}</span>
+                            <span class="label label-success">{{ dissertation.get_status_display }}</span>
                             {% elif dissertation.status == 'DIR_KO' %}
-                            <span class="label label-danger">{{ dissertation.status }}</span>
+                            <span class="label label-danger">{{ dissertation.get_status_display }}</span>
                             {% elif dissertation.status == 'COM_SUBMIT' %}
-                            <span class="label label-primary">{{ dissertation.status }}</span>
+                            <span class="label label-primary">{{ dissertation.get_status_display }}</span>
                             {% elif dissertation.status == 'COM_OK' %}
-                            <span class="label label-default">{{ dissertation.status }}</span>
+                            <span class="label label-default">{{ dissertation.get_status_display }}</span>
                             {% elif dissertation.status == 'COM_KO' %}
-                            <span class="label label-default">{{ dissertation.status }}</span>
+                            <span class="label label-default">{{ dissertation.get_status_display }}</span>
                             {% elif dissertation.status == 'EVA_SUBMIT' %}
-                            <span class="label label-default">{{ dissertation.status }}</span>
+                            <span class="label label-default">{{ dissertation.get_status_display }}</span>
                             {% elif dissertation.status == 'EVA_OK' %}
-                            <span class="label label-default">{{ dissertation.status }}</span>
+                            <span class="label label-default">{{ dissertation.get_status_display }}</span>
                             {% elif dissertation.status == 'EVA_KO' %}
-                            <span class="label label-default">{{ dissertation.status }}</span>
+                            <span class="label label-default">{{ dissertation.get_status_display }}</span>
                             {% elif dissertation.status == 'TO_RECEIVE' %}
-                            <span class="label label-default">{{ dissertation.status }}</span>
+                            <span class="label label-default">{{ dissertation.get_status_display }}</span>
                             {% elif dissertation.status == 'TO_DEFEND' %}
-                            <span class="label label-default">{{ dissertation.status }}</span>
+                            <span class="label label-default">{{ dissertation.get_status_display }}</span>
                             {% elif dissertation.status == 'DEFENDED' %}
-                            <span class="label label-default">{{ dissertation.status }}</span>
+                            <span class="label label-default">{{ dissertation.get_status_display }}</span>
                             {% elif dissertation.status == 'ENDED' %}
-                            <span class="label label-default">{{ dissertation.status }}</span>
+                            <span class="label label-default">{{ dissertation.get_status_display }}</span>
                             {% endif %}
                         </td>
                         <td style="text-align: center">{{ dissertation.offer_year_start }}</td>

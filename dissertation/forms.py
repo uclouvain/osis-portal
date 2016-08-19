@@ -23,3 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+
+from django.forms import ModelForm
+from dissertation.models.dissertation_update import DissertationUpdate
+
+
+class DissertationUpdateForm(ModelForm):
+    class Meta:
+        model = DissertationUpdate
+        fields = ('justification',)
