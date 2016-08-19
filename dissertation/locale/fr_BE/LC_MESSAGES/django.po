@@ -180,7 +180,7 @@ msgid "required"
 msgstr "Requis"
 
 msgid "search"
-msgstr "Recherche"
+msgstr "Rechercher"
 
 msgid "september"
 msgstr "Septembre"

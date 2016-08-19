@@ -38,8 +38,8 @@ def dissertations(request):
     student = mdl.student.find_by_person(person)
     memories = dissertation.search_by_user(student)
     return layout.render(request, 'dissertations_list.html',
-                         {'student': student,
-                          'dissertations': memories})
+                         {'dissertations': memories,
+                          'student': student})
 
 
 @login_required
@@ -47,6 +47,7 @@ def dissertation_delete(request, pk):
     memory = get_object_or_404(dissertation.Dissertation, pk=pk)
     memory.deactivate()
     dissertation_update.add(request, memory, memory.status, justification="manager_set_active_false ")
+    return redirect('dissertations')
 
 
 @login_required
@@ -54,6 +55,7 @@ def dissertation_detail(request, pk):
     memory = get_object_or_404(dissertation.Dissertation, pk=pk)
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
+    count = dissertation.count_submit_by_user(student)
     if memory.author != student:
         return redirect('dissertations')
     else:
@@ -69,10 +71,11 @@ def dissertation_detail(request, pk):
                     dissertation_role.add(role.status, role.adviser, memory)
         dissertation_roles = dissertation_role.search_by_dissertation(memory)
         return layout.render(request, 'dissertation_detail.html',
-                             {'dissertation': memory,
-                              'student': student,
+                             {'count': count,
+                              'count_dissertation_role': count_dissertation_role,
+                              'dissertation': memory,
                               'dissertation_roles': dissertation_roles,
-                              'count_dissertation_role': count_dissertation_role})
+                              'student': student})
 
 
 @login_required
@@ -82,6 +85,16 @@ def dissertation_history(request, pk):
     return layout.render(request, 'dissertation_history.html',
                          {'dissertation': memory,
                           'dissertation_updates': dissertation_updates})
+
+
+@login_required
+def dissertation_new(request):
+    person = mdl.person.find_by_user(request.user)
+    student = mdl.student.find_by_person(person)
+    memories = dissertation.search_by_user(student)
+    return layout.render(request, 'dissertations_list.html',
+                         {'dissertations': memories,
+                          'student': student})
 
 
 @login_required
