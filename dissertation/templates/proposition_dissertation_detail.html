@@ -30,7 +30,7 @@
 <ol class="breadcrumb">
     <li><a href="{% url 'dissertation' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
     <li><a href="{% url 'proposition_dissertations' %}" id="lnk_proposition_dissertations">{% trans 'subjects_list' %}</a></li>
-    <li class="active">{{ subject.title }}</li>
+    <li class="active">{{ proposition_dissertation.title }}</li>
 </ol>
 <div class="panel panel-default">
     <div class="panel-body">
@@ -44,7 +44,7 @@
                         <label>{% trans 'author' %}</label>
                     </div>
                     <div class="col-md-9">
-                        {{ subject.author }}
+                        {{ proposition_dissertation.author }}
                     </div>
                 </div>
                 <div class="row">
@@ -52,7 +52,7 @@
                         <label>{% trans 'title' %}</label>
                     </div>
                     <div class="col-md-9">
-                        {{ subject.title }}
+                        {{ proposition_dissertation.title }}
                     </div>
                 </div>
                 <div class="row">
@@ -60,7 +60,7 @@
                         <label>{% trans 'offer_propositions' %}</label>
                     </div>
                     <div class="col-md-9">
-                        {% for offer_proposition in subject.offer_proposition.all %}
+                        {% for offer_proposition in proposition_dissertation.offer_proposition.all %}
                             <span class="label label-default">{{ offer_proposition }}</span>
                         {% endfor %}
                     </div>
@@ -70,7 +70,7 @@
                         <label>{% trans 'level' %}</label>
                     </div>
                     <div class="col-md-9" style="text-align: justify">
-                        {{ subject.get_level_display  }}
+                        {{ proposition_dissertation.get_level_display  }}
                     </div>
                 </div>
                 <div class="row">
@@ -78,7 +78,7 @@
                         <label>{% trans 'type' %}</label>
                     </div>
                     <div class="col-md-9" style="text-align: justify">
-                        {{ subject.get_type_display }}
+                        {{ proposition_dissertation.get_type_display }}
                     </div>
                 </div>
                 <div class="row">
@@ -86,7 +86,7 @@
                         <label>{% trans 'collaboration' %}</label>
                     </div>
                     <div class="col-md-9" style="text-align: justify">
-                        {{ subject.get_collaboration_display }}
+                        {{ proposition_dissertation.get_collaboration_display }}
                     </div>
                 </div>
                 <div class="row">
@@ -94,7 +94,7 @@
                         <label>{% trans 'max_students_number' %}</label>
                     </div>
                     <div class="col-md-9" style="text-align: justify">
-                        {{ subject.max_number_student }}
+                        {{ proposition_dissertation.max_number_student }}
                     </div>
                 </div>
                 <div class="row">
@@ -102,7 +102,7 @@
                         <label>{% trans 'taken_places' %}</label>
                     </div>
                     <div class="col-md-9" style="text-align: justify">
-                        {{ using }} {% trans 'of' %} {{ subject.max_number_student }} ({{ percent }}{% trans '%'%})
+                        {{ using }} {% trans 'of' %} {{ proposition_dissertation.max_number_student }} ({{ percent }}{% trans '%'%})
                     </div>
                 </div>
                 <div class="row">
@@ -110,7 +110,7 @@
                         <label>{% trans 'description' %}</label>
                     </div>
                     <div class="col-md-9" style="text-align: justify">
-                        {{ subject.description|linebreaks }}
+                        {{ proposition_dissertation.description|linebreaks }}
                     </div>
                 </div>
             </div>

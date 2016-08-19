@@ -48,7 +48,7 @@
         </form>
         <br>
         <div>
-            {% if subjects|length == 0 %}
+            {% if proposition_dissertations|length == 0 %}
                 <br>
                 <label class="alert alert-info" style="margin-left:10%;width:80%;text-align:center;">{% trans 'no_result' %}</label>
             {% else %}
@@ -59,12 +59,12 @@
                         <td style="text-align: center">{% trans 'offer_propositions'%}</td>
                         <td style="text-align: center">{% trans 'max_students_number'%}</td>
                     </tr>
-                  {% for subject in subjects %}
+                  {% for proposition_dissertation in proposition_dissertations %}
                     <tr>
-                        <td style="text-align: center"><a href="{% url 'proposition_dissertation_detail' pk=subject.pk %}">{{ subject.title }}</a></td>
-                        <td style="text-align: center">{{ subject.author }}</td>
-                        <td style="text-align: center">{% for offer_proposition in subject.offer_proposition.all %}<span class="label label-default">{{ offer_proposition }}</span> {% endfor %}</td>
-                        <td style="text-align: center">{{ subject.max_number_student }}</td>
+                        <td style="text-align: center"><a href="{% url 'proposition_dissertation_detail' pk=proposition_dissertation.pk %}">{{ proposition_dissertation.title }}</a></td>
+                        <td style="text-align: center">{{ proposition_dissertation.author }}</td>
+                        <td style="text-align: center">{% for offer_proposition in proposition_dissertation.offer_proposition.all %}<span class="label label-default">{{ offer_proposition }}</span> {% endfor %}</td>
+                        <td style="text-align: center">{{ proposition_dissertation.max_number_student }}</td>
                     </tr>
                   {% endfor %}
                 </table>

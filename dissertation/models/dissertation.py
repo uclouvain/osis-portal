@@ -26,6 +26,7 @@
 
 from django.contrib import admin
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from admission.models import offer_year, academic_year
 from base.models import student
@@ -86,3 +87,20 @@ def count_by_proposition(subject):
                                .filter(proposition_dissertation=subject)\
                                .exclude(status='DRAFT')\
                                .count()
+
+
+def search(terms, author=None):
+    queryset = Dissertation.objects.all()
+    if terms:
+        queryset = queryset.filter(
+            Q(title__icontains=terms) |
+            Q(description__icontains=terms)
+        )
+    queryset = queryset.filter(author=author)
+    queryset = queryset.distinct()
+    return queryset
+
+
+def search_by_user(user):
+    return Dissertation.objects.filter(author=user)
+

@@ -25,46 +25,50 @@
 ##############################################################################
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from base import models as mdl
 from base.views import layout
-from dissertation.models import dissertation, proposition_dissertation, proposition_role
+from dissertation.models import dissertation, dissertation_role, proposition_role
 
 
 @login_required
-def proposition_dissertations(request):
+def dissertations(request):
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
-    subjects = proposition_dissertation.search_all()
-    return layout.render(request, 'proposition_dissertations_list.html',
+    memories = dissertation.search_by_user(student)
+    return layout.render(request, 'dissertations_list.html',
                          {'student': student,
-                          'proposition_dissertations': subjects})
+                          'dissertations': memories})
 
 
 @login_required
-def proposition_dissertation_detail(request, pk):
-    subject = get_object_or_404(proposition_dissertation.PropositionDissertation, pk=pk)
+def dissertation_detail(request, pk):
+    memory = get_object_or_404(dissertation.Dissertation, pk=pk)
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
-    using = dissertation.count_by_proposition(subject)
-    percent = using * 100 / subject.max_number_student
-    count_proposition_role = proposition_role.count_by_proposition(subject)
-    if count_proposition_role < 1:
-        proposition_role.add('PROMOTEUR', subject.author, subject)
-    proposition_roles = proposition_role.search_by_proposition(subject)
-    return layout.render(request, 'proposition_dissertation_detail.html',
-                         {'percent': round(percent, 2),
-                          'proposition_roles': proposition_roles,
-                          'proposition_dissertation': subject,
+    count_dissertation_role = dissertation_role.count_by_dissertation(memory)
+    count_proposition_role = proposition_role.count_by_dissertation(memory)
+    proposition_roles = proposition_role.search_by_dissertation(memory)
+    if count_proposition_role == 0:
+        if count_dissertation_role == 0:
+            dissertation_role.add('PROMOTEUR', memory.proposition_dissertation.author, memory)
+    else:
+        if count_dissertation_role == 0:
+            for role in proposition_roles:
+                dissertation_role.add(role.status, role.adviser, memory)
+    dissertation_roles = dissertation_role.search_by_dissertation(memory)
+    return layout.render(request, 'dissertation_detail.html',
+                         {'dissertation': memory,
                           'student': student,
-                          'using': using})
+                          'dissertation_roles': dissertation_roles,
+                          'count_dissertation_role': count_dissertation_role})
 
 
 @login_required
-def proposition_dissertations_search(request):
+def dissertations_search(request):
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
-    subjects = proposition_dissertation.search(terms=request.GET['search'], active=True, visibility=True)
-    return layout.render(request, "proposition_dissertations_list.html",
+    memories = dissertation.search(terms=request.GET['search'], author=student)
+    return layout.render(request, "dissertations_list.html",
                          {'student': student,
-                          'proposition_dissertations': subjects})
+                          'dissertations': memories})

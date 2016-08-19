@@ -41,3 +41,25 @@ class DissertationRole(models.Model):
 
     def __str__(self):
         return u"%s %s" % (self.status if self.status else "", self.adviser if self.adviser else "")
+
+
+def add(status, adviser, dissertation):
+    if count_by_status_student_dissertation(status, adviser, dissertation) == 0:
+        role = DissertationRole(status=status, adviser=adviser, dissertation=dissertation)
+        role.save()
+
+
+def count_by_dissertation(dissertation):
+    return DissertationRole.objects.filter(dissertation=dissertation).count()
+
+
+def count_by_status_student_dissertation(status, adviser, dissertation):
+    return DissertationRole.objects.filter(adviser=adviser)\
+        .filter(status=status)\
+        .filter(dissertation=dissertation)\
+        .count()
+
+
+def search_by_dissertation(dissertation):
+    return DissertationRole.objects.filter(dissertation=dissertation).order_by('pk')
+

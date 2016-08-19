@@ -44,14 +44,29 @@ msgstr "Co-promoteur"
 msgid "defended"
 msgstr "Défendu"
 
+msgid "defend_periode"
+msgstr "Période de défense"
+
+msgid "defend_year"
+msgstr "Année de défense"
+
 msgid "domain"
 msgstr "Domaine"
 
 msgid "description"
 msgstr "Description"
 
+msgid "desc_lnk_dissertations"
+msgstr "Liste de mes projets de mémoire"
+
 msgid "desc_lnk_propositions_dissertations"
 msgstr "Liste des sujets disponibles"
+
+msgid "dissertation_informations"
+msgstr "Dissertation informations"
+
+msgid "dissertation_jury"
+msgstr "Jury"
 
 msgid "draft"
 msgstr "Brouillon"
@@ -79,6 +94,9 @@ msgstr "Gestionnaire de cours"
 
 msgid "max_students_number"
 msgstr "Nombre maximum d'étudiant"
+
+msgid "memories_list"
+msgstr "Liste de mes mémoires"
 
 msgid "no_result"
 msgstr "Aucun résultat trouvé"
@@ -121,6 +139,9 @@ msgstr "Requis"
 
 msgid "search"
 msgstr "Recherche"
+
+msgid "status"
+msgstr "Statut"
 
 msgid "subjects_list"
 msgstr "Liste des sujets"

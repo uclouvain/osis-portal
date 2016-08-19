@@ -50,6 +50,10 @@ def add(status, adviser, proposition_dissertation):
         role.save()
 
 
+def count_by_dissertation(dissertation):
+    return PropositionRole.objects.filter(proposition_dissertation=dissertation.proposition_dissertation).count()
+
+
 def count_by_proposition(subject):
     return PropositionRole.objects.filter(proposition_dissertation=subject).count()
 
@@ -59,6 +63,10 @@ def count_by_status_adviser_proposition(status, adviser, proposition_dissertatio
         .filter(status=status)\
         .filter(adviser=adviser)\
         .count()
+
+
+def search_by_dissertation(dissertation):
+    return PropositionRole.objects.filter(proposition_dissertation=dissertation.proposition_dissertation)
 
 
 def search_by_proposition(subject):

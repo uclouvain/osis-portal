@@ -23,4 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+
 from dissertation.views import common
+from dissertation.views import dissertation
+from dissertation.views import proposition_dissertation
