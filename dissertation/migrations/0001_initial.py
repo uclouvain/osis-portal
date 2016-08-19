@@ -49,4 +49,31 @@ class Migration(migrations.Migration):
                                                  to='admission.OfferYear')),
             ],
         ),
+
+        migrations.CreateModel(
+            name='PropositionDissertation',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('collaboration', models.CharField(
+                    choices=[('POSSIBLE', 'possible'), ('REQUIRED', 'required'), ('FORBIDDEN', 'forbidden')],
+                    default='FORBIDDEN', max_length=12)),
+                ('description', models.TextField(blank=True, null=True)),
+                ('level', models.CharField(
+                    choices=[('DOMAIN', 'domain'), ('WORK', 'work'), ('QUESTION', 'question'), ('THEME', 'theme')],
+                    default='DOMAIN', max_length=12)),
+                ('max_number_student', models.IntegerField()),
+                ('title', models.CharField(max_length=200)),
+                ('type', models.CharField(choices=[('RDL', 'literature_review'), ('EDC', 'case_study')], default='RDL',
+                                          max_length=12)),
+                ('visibility', models.BooleanField(default=True)),
+                ('active', models.BooleanField(default=True)),
+                ('created_date', models.DateTimeField(default=django.utils.timezone.now)),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='dissertation.Adviser')),
+                ('offer_proposition', models.ManyToManyField(to='dissertation.OfferProposition')),
+            ],
+            options={
+                'ordering': ['author__person__last_name', 'author__person__middle_name', 'author__person__first_name',
+                             'title'],
+            },
+        ),
     ]
