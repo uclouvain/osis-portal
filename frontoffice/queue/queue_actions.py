@@ -28,8 +28,9 @@ from couchbase import Couchbase
 from pprint import pprint
 import json
 import logging
+from django.conf import settings
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 def couchbase_insert(json_datas):
@@ -39,13 +40,13 @@ def couchbase_insert(json_datas):
         data['id'],
         data['name'].replace(' ', '_').lower()
     )
-    logger.info('inserting datas in couchDB...')
+    logger.debug('inserting datas in couchDB...')
     cb.set(key, data)
-    logger.info('Done.')
-    logger.info('getting datas just inserted in couchDB...')
+    logger.debug('Done.')
+    logger.debug('getting datas just inserted in couchDB...')
     result = cb.get(key)
     pprint(result.value, indent=4)
-    logger.info('Done.')
-    logger.info('deleting datas just inserted in couchDB...')
+    logger.debug('Done.')
+    logger.debug('deleting datas just inserted in couchDB...')
     cb.delete(key)
-    logger.info('Done.')
+    logger.debug('Done.')

@@ -77,7 +77,7 @@ $('document').ready(function(){
         $('#rdb_foreign_result_low').prop( "checked", false);
         $('#rdb_foreign_result_middle').prop( "checked", false);
         $('#rdb_foreign_result_high').prop( "checked", false);
-
+        $('#pnl_translation').css('visibility', 'hidden').css('display','none');
         //profressional
         $('#rdb_professional_experience_true').prop( "checked", false);
         $('#rdb_professional_experience_false').prop( "checked", false);
@@ -478,8 +478,12 @@ function display_foreign_secondary(){
             $(this).prop('selected', true);
         }
     });
+
     if( $('#hdn_secondary_education_international_diploma_language_recognized').val() == 'False'){
         $('#chb_other_language_regime').prop( "checked", true);
+        $('#pnl_translation').css('visibility', 'visible').css('display','block');
+    }else{
+        $('#pnl_translation').css('visibility', 'hidden').css('display','none');
     }
 
     $('#slt_other_language_diploma').prop("selectedIndex",0);
