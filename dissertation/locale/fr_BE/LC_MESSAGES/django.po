@@ -20,10 +20,46 @@ msgstr ""
 msgid "application_dissertation"
 msgstr "Gestion des mémoires"
 
+msgid "case_study"
+msgstr "Cas d'étude"
+
+msgid "copromotor"
+msgstr "Co-promoteur"
+
+msgid "domain"
+msgstr "Domaine"
+
+msgid "forbidden"
+msgstr "Interdit"
+
+msgid "litterature_review"
+msgstr "Revue Litéraire"
+
 msgid "manager"
 msgstr "Gestionnaire de cours"
 
+msgid "possible"
+msgstr "Possible"
+
 msgid "professor"
 msgstr "Professeur"
+
+msgid "promotor"
+msgstr "Promoteur"
+
+msgid "question"
+msgstr "Question"
+
+msgid "reader"
+msgstr "Lecteur"
+
+msgid "required"
+msgstr "Requis"
+
+msgid "theme"
+msgstr "Theme"
+
+msgid "work"
+msgstr "Travail"
 
 
