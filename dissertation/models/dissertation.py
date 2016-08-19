@@ -109,6 +109,10 @@ def count_by_proposition(subject):
                                .count()
 
 
+def count_submit_by_user(user):
+    return Dissertation.objects.filter(author=user).exclude(status='DRAFT').exclude(status='DIR_KO').count()
+
+
 def get_next_status(memory, operation):
     if operation == "go_forward":
         if memory.status == 'DRAFT' or memory.status == 'DIR_KO':
@@ -132,5 +136,5 @@ def search(terms, author=None):
 
 
 def search_by_user(user):
-    return Dissertation.objects.filter(author=user)
+    return Dissertation.objects.filter(author=user).exclude(active=False)
 
