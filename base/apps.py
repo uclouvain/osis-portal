@@ -77,26 +77,11 @@ def deserialize_model_data(data, function_to_apply):
     """
     try:
         for deserialized_object in serializers.deserialize("json", data):
-            function_to_apply(deserialized_object)
+                function_to_apply(deserialized_object)
     except Exception as e:
-        logger.error(''.join(['Erreur de deserialisation : ', data]))
-        raise e
-
-
-# Needs to implement it because tutor needs global_id of the person linked to it.
-def deserialize_tutor_data(data, function_to_apply):
-    """
-    Deserialize data (see django serialization for the format).
-    Json encoding is used.
-    :param data: data to be deserialized
-    :param function_to_apply: function to apply on the model objects
-    :return:
-    """
-    json_data = json.loads(data)
-    i = 0
-    for deserialized_object in serializers.deserialize("json", data):
-        function_to_apply(deserialized_object, json_data[0]['fields']['person'])
-        i += 1
+        logger.error(''.join(['Erreur de deserialisation de : ', str(data)]))
+        logger.error(''.join(['Exeption : ', str(e)]))
+        pass
 
 
 def save_model_object(model_object):
@@ -106,8 +91,6 @@ def save_model_object(model_object):
     :return:
     """
     model_object.object.save_from_osis_migration()
-
-
 
 
 def map_string_to_model_class(class_str):

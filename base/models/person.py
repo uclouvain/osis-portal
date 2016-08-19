@@ -35,7 +35,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 class PersonAdmin(admin.ModelAdmin):
-    list_display = ('first_name' , 'middle_name', 'last_name', 'username', 'email', 'gender', 'global_id', 'national_id',
+    list_display = ('first_name', 'middle_name', 'last_name', 'username', 'email', 'gender', 'global_id', 'national_id',
                     'changed')
     search_fields = ['first_name', 'middle_name', 'last_name', 'user__username', 'email']
     fieldsets = ((None, {'fields': ('user', 'global_id', 'national_id', 'gender', 'first_name', 'middle_name',
@@ -45,16 +45,15 @@ class PersonAdmin(admin.ModelAdmin):
 
 class PersonManager(models.Manager):
     def get_by_natural_key(self, global_id):
-        try :
+        if not global_id or global_id == 'None' or global_id == 'Null':
+            logger.debug('Serialization of Person without global_id')
+            return Person()
+        try:
             return self.get(global_id=global_id)
         except Person.MultipleObjectsReturned:
             logger.warning(''.join(['Multiple person during deserialization for globalId : ', global_id]))
             return self.filter(global_id=global_id).first()
         except Person.DoesNotExist:
-            # If the person have no global_id or not in the table
-            # Has to be managed in function
-            # TO-DO : find a beter way to uniquely define person between osis and osis-portal
-            logger.warning(''.join(['Unknown person during deserialization for globalId : ', global_id]))
             return Person()
 
 
@@ -90,21 +89,22 @@ class Person(models.Model):
         first_name = ""
         middle_name = ""
         last_name = ""
-        if self.first_name :
+        if self.first_name:
             first_name = self.first_name
-        if self.middle_name :
+        if self.middle_name:
             middle_name = self.middle_name
-        if self.last_name :
+        if self.last_name:
             last_name = self.last_name + ","
 
         return u"%s %s %s" % (last_name.upper(), first_name, middle_name)
 
     def save_from_osis_migration(self):
         if not self.global_id:
-            logger.error(''.join(['Not migrating person without global id : ', self.first_name, ' - ',self.last_name]))
+            logger.warning(''.join(['Not migrating person without global id : ', self.first_name, ' - ', self.last_name]))
         elif not find_by_global_id(self.global_id):
-            logger.info(''.join(['New person : ', self.global_id]))
+            logger.debug(''.join(['New person : ', self.global_id]))
             self.pk = None
+            self.id = None
             self.save()
 
     def natural_key(self):

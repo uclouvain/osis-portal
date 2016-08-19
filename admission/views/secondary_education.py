@@ -33,6 +33,8 @@ from admission.views.common import home
 from reference import models as mdl_reference
 from admission.views import demande_validation
 from admission.views import tabs
+from admission.models.enums import document_type
+
 
 ALERT_MANDATORY_FIELD = _('mandatory_field')
 
@@ -388,10 +390,40 @@ def diploma_update(request, application_id=None):
             'tab_sociological': tab_status['tab_sociological'],
             'tab_attachments': tab_status['tab_attachments'],
             'tab_submission': tab_status['tab_submission'],
-            'applications': mdl.application.find_by_user(request.user)}
+            'applications': mdl.application.find_by_user(request.user),
+            'national_diploma_verso': mdl.application_document_file.search(application,
+                                                                           document_type.NATIONAL_DIPLOMA_VERSO),
+            'national_diploma_recto': mdl.application_document_file.search(application,
+                                                                           document_type.NATIONAL_DIPLOMA_RECTO),
+            'international_diploma_verso':
+                mdl.application_document_file.search(application, document_type.INTERNATIONAL_DIPLOMA_VERSO),
+            'international_diploma_recto':
+                mdl.application_document_file.search(application, document_type.INTERNATIONAL_DIPLOMA_RECTO),
+            'translated_international_diploma_verso':
+                mdl.application_document_file.search(application, document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO),
+            'translated_international_diploma_recto':
+                mdl.application_document_file.search(application, document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO),
+            'high_school_scores_transcript_recto':
+                mdl.application_document_file.search(application, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO),
+            'high_school_scores_transcript_verso':
+                mdl.application_document_file.search(application, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO),
+            'translated_high_school_scores_transcript_recto':
+                mdl.application_document_file.search(application,
+                                                     document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO),
+            'translated_high_school_scores_transcript_verso':
+                mdl.application_document_file.search(application,
+                                                     document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO),
+            'equivalence_file':
+                mdl.application_document_file.search(application, document_type.EQUIVALENCE),
+            'admission_exam_file':
+                mdl.application_document_file.search(application, document_type.ADMISSION_EXAM_CERTIFICATE),
+            'professional_exam_file':
+                mdl.application_document_file.search(application, document_type.PROFESSIONAL_EXAM_CERTIFICATE)}
 
     # merge 2 dictionaries
     data.update(get_secondary_education_exams_data(secondary_education))
+
+    print(application.id)
     return render(request, "admission_home.html", data)
 
 
@@ -661,7 +693,6 @@ def populate_secondary_education(request, secondary_education):
             international_diploma_country = mdl_reference.country\
                 .find_by_id(int(request.POST.get('international_diploma_country')))
             secondary_education.international_diploma_country = international_diploma_country
-
         if request.POST.get('other_language_regime') \
             and request.POST.get('other_language_regime') == "on" \
                 and request.POST.get('other_language_regime') != "-":
@@ -670,8 +701,12 @@ def populate_secondary_education(request, secondary_education):
         else:
             if request.POST.get('international_diploma_language') \
                     and request.POST.get('international_diploma_language') != "-":
-                secondary_education.international_diploma_language = mdl_reference.language\
-                    .find_by_id(int(request.POST.get('international_diploma_language')))
+                language_int = request.POST.get('international_diploma_language')
+                if language_int == 'None':
+                    language_int = None
+                if language_int:
+                    secondary_education.international_diploma_language = mdl_reference.language\
+                        .find_by_id(int(language_int))
 
         secondary_education.international_equivalence = request.POST.get('international_equivalence')
 
