@@ -26,6 +26,7 @@
 
 from django.contrib import admin
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -80,3 +81,26 @@ class PropositionDissertation(models.Model):
 
     class Meta:
         ordering = ["author__person__last_name", "author__person__middle_name", "author__person__first_name", "title"]
+
+
+def search(terms, active=None, visibility=None):
+    queryset = PropositionDissertation.objects.all()
+    if terms:
+        queryset = queryset.filter(
+            Q(title__icontains=terms) |
+            Q(description__icontains=terms) |
+            Q(author__person__first_name__icontains=terms) |
+            Q(author__person__middle_name__icontains=terms) |
+            Q(author__person__last_name__icontains=terms) |
+            Q(offer_proposition__acronym__icontains=terms)
+        )
+    if active:
+        queryset = queryset.filter(active=active)
+    elif visibility:
+        queryset = queryset.filter(visibility=visibility)
+    queryset = queryset.distinct()
+    return queryset
+
+
+def search_all():
+    return PropositionDissertation.objects.filter(active=True, visibility=True)

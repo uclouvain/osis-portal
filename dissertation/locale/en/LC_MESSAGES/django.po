@@ -29,10 +29,16 @@ msgstr "Accepted by first year evaluation"
 msgid "application_dissertation"
 msgstr "Dissertation management"
 
+msgid "author"
+msgstr "Author"
+
 msgid "case_study"
 msgstr "Case Study"
 
-msgid "copromoter"
+msgid "collaboration"
+msgstr "Collaboration"
+
+msgid "copromotor"
 msgstr "Co-promoter"
 
 msgid "defended"
@@ -40,6 +46,12 @@ msgstr "Defended"
 
 msgid "domain"
 msgstr "Domain"
+
+msgid "description"
+msgstr "Description"
+
+msgid "desc_lnk_propositions_dissertations"
+msgstr "List of available subjects"
 
 msgid "draft"
 msgstr "Draft"
@@ -56,11 +68,23 @@ msgstr "Win"
 msgid "forbidden"
 msgstr "Forbidden"
 
+msgid "level"
+msgstr "Level"
+
 msgid "literature_review"
 msgstr "Literature Review"
 
 msgid "manager"
 msgstr "Course manager"
+
+msgid "max_students_number"
+msgstr "Maximum number of student"
+
+msgid "no_result"
+msgstr "No result"
+
+msgid "offer_propositions"
+msgstr "Offer"
 
 msgid "possible"
 msgstr "Possible"
@@ -68,8 +92,14 @@ msgstr "Possible"
 msgid "professor"
 msgstr "Professor"
 
-msgid "promoter"
+msgid "promotor"
 msgstr "Promoter"
+
+msgid "proposition_dissertation_informations"
+msgstr "Subject informations"
+
+msgid "proposition_dissertation_jury"
+msgstr "Suggested jury"
 
 msgid "question"
 msgstr "Question"
@@ -89,6 +119,12 @@ msgstr "Refused by first year evaluation"
 msgid "required"
 msgstr "Required"
 
+msgid "search"
+msgstr "Search"
+
+msgid "subjects_list"
+msgstr "Subject List"
+
 msgid "submitted_to_commission"
 msgstr "Submitted to commission"
 
@@ -97,6 +133,15 @@ msgstr "Submitted to promoter"
 
 msgid "submitted_to_first_year_evaluation"
 msgstr "Submitted to first year evaluation "
+
+msgid "taken_places"
+msgstr "Interest"
+
+msgid "type"
+msgstr "Type"
+
+msgid "title"
+msgstr "Title"
 
 msgid "theme"
 msgstr "Theme"
