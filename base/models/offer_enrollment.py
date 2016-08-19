@@ -23,8 +23,33 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models import offer
-from base.models import offer_enrollment
-from base.models import person
-from base.models import student
-from base.models import tutor
+from django.db import models
+from django.contrib import admin
+from admission.models.offer_year import OfferYear
+
+
+class OfferEnrollmentAdmin(admin.ModelAdmin):
+    list_display = ('offer_year', 'student', 'date_enrollment', 'changed')
+    fieldsets = ((None, {'fields': ('offer_year','student','date_enrollment')}),)
+    raw_id_fields = ('offer_year', 'student')
+    search_fields = ['offer_year__acronym', 'student__person__first_name', 'student__person__last_name']
+
+
+class OfferEnrollment(models.Model):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
+    changed = models.DateTimeField(null=True)
+    date_enrollment = models.DateField()
+    offer_year = models.ForeignKey(OfferYear)
+    student = models.ForeignKey('Student')
+
+    def __str__(self):
+        return u"%s - %s" % (self.student, self.offer_year)
+
+
+def find_by_student(a_student):
+    enrollments = OfferEnrollment.objects.filter(student=a_student)
+    return enrollments
+
+
+def find_by_student_offer(a_student,offer_year):
+    return OfferEnrollment.objects.filter(student=a_student, offer_year=offer_year)
