@@ -25,43 +25,22 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-from base.models.offer import Offer
 
 
-class OfferYearAdmin(admin.ModelAdmin):
-    list_display = ('acronym', 'title', 'academic_year', 'domain', 'grade_type','subject_to_quota')
-    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'domain', 'grade_type','subject_to_quota')}),)
+class OfferAdmin(admin.ModelAdmin):
+    list_display = ('title', 'changed')
+    fieldsets = ((None, {'fields': ('title',)}),)
+    search_fields = ['title']
 
 
-class OfferYear(models.Model):
+class Offer(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    academic_year = models.ForeignKey('AcademicYear')
-    acronym = models.CharField(max_length=15)
+    changed = models.DateTimeField(null=True)
     title = models.CharField(max_length=255)
-    title_international = models.CharField(max_length=255, blank=True, null=True)
-    domain = models.ForeignKey('reference.Domain')
-    grade_type = models.ForeignKey('reference.GradeType', blank=True, null=True, db_index=True)
-    subject_to_quota = models.BooleanField(default=False)
-    offer = models.ForeignKey(Offer)
 
     def __str__(self):
-        return u"%s - %s" % (self.academic_year, self.acronym)
+        return self.title
 
 
-def find_by_id(offer_year_id):
-    return OfferYear.objects.get(pk=offer_year_id)
-
-
-def find_all():
-    return OfferYear.objects.all().order_by("acronym")
-
-
-def search(level=None, domain=None):
-    if level and domain:
-        return OfferYear.objects.filter(grade_type=level, domain=domain).order_by("acronym")
-    else:
-        return None
-
-
-def find_by_domain_grade(domain, grade):
-    return OfferYear.objects.filter(domain=domain, grade_type=grade).order_by("acronym")
+def find_by_id(offer_id):
+    return Offer.objects.get(pk=offer_id)
