@@ -23,5 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from dissertation.models import adviser
 
+from dissertation.models import adviser
+from dissertation.models import offer_proposition
