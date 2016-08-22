@@ -25,6 +25,7 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from base.models import offer_enrollment
 
 
 class OfferAdmin(admin.ModelAdmin):
@@ -44,3 +45,8 @@ class Offer(models.Model):
 
 def find_by_id(offer_id):
     return Offer.objects.get(pk=offer_id)
+
+
+def find_by_student(student):
+    offer_ids = offer_enrollment.find_by_student(student).values('offer_year__offer_id')
+    return Offer.objects.filter(pk__in=offer_ids)
