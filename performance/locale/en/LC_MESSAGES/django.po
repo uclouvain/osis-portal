@@ -4,8 +4,8 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
-msgid	 ""
-msgstr	 ""
+msgid ""
+msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-05-03 08:56+0200\n"
@@ -17,96 +17,95 @@ msgstr	 ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid	 "acronym"
-msgstr	 "Acronym"
+msgid "acronym"
+msgstr "Acronym"
 
-msgid	 "course"
-msgstr	 "Course"
+msgid "course"
+msgstr "Course"
 
-msgid	 "credits"
-msgstr	 "Credits"
+msgid "credits"
+msgstr "Credits"
 
-msgid	 "ects"
-msgstr	 "ECTS"
+msgid "ects"
+msgstr "ECTS"
 
-msgid	 "explanation_B"
-msgstr	 "B - Credit (Bologne)"
+msgid "explanation_B"
+msgstr "B - Credit (Bologne)"
 
-msgid	 "explanation_EPM"
-msgstr	 "EPM - Course reported (Epreuve modifiée)"
+msgid "explanation_EPM"
+msgstr "EPM - Course reported (Epreuve modifiée)"
 
-msgid	 "explanation_I"
-msgstr	 "I - first inscription"
+msgid "explanation_I"
+msgstr "I - first inscription"
 
-msgid	 "explanation_P"
-msgstr	 "P - partial examination"
+msgid "explanation_P"
+msgstr "P - partial examination"
 
-msgid	 "explanation_RJ"
-msgstr	 "R,J - score reported"
+msgid "explanation_RJ"
+msgstr "R,J - score reported"
 
-msgid	 "explanation_T"
-msgstr	 "T - score of a test"
+msgid "explanation_T"
+msgstr "T - score of a test"
 
-msgid	 "explanation_TV"
-msgstr	 "TV - Evaluation satisfactory (score doesn't count)"
+msgid "explanation_TV"
+msgstr "TV - Evaluation satisfactory (score doesn't count)"
 
-msgid	 "explanation_W"
-msgstr	 "W - Evaluation not satisfactory (score doesn't count)"
+msgid "explanation_W"
+msgstr "W - Evaluation not satisfactory (score doesn't count)"
 
-msgid	 "explanation_Y"
-msgstr	 "Y - Second inscription"
+msgid "explanation_Y"
+msgstr "Y - Second inscription"
 
-msgid	 "first_name"
-msgstr	 "First Name"
+msgid "first_name"
+msgstr "First Name"
 
-msgid	 "inscr"
-msgstr	 "Inscr."
+msgid "inscr"
+msgstr "Inscr."
 
-msgid	 "jan"
-msgstr	 "Jan."
+msgid "jan"
+msgstr "Jan."
 
-msgid	 "june"
-msgstr	 "June"
+msgid "june"
+msgstr "June"
 
-msgid	 "last_name"
-msgstr	 "Last Name"
+msgid "last_name"
+msgstr "Last Name"
 
-msgid	 "legend"
-msgstr	 "Legend"
+msgid "legend"
+msgstr "Legend"
 
-msgid	 "matricule_number"
-msgstr	 "Registration Number"
+msgid "matricule_number"
+msgstr "Registration Number"
 
-msgid	 "mean"
-msgstr	 "Mean"
+msgid "mean"
+msgstr "Mean"
 
-msgid	 "mention"
-msgstr	 "Mention"
+msgid "mention"
+msgstr "Mention"
 
-msgid	 "no_results"
-msgstr	 "No results to show."
+msgid "no_results"
+msgstr "No results to show."
 
-msgid	 "performance"
-msgstr	 "Performance"
+msgid "performance"
+msgstr "Performance"
 
-msgid	 "performance_results"
-msgstr	 "Performance results"
+msgid "performance_results"
+msgstr "Performance results"
 
-msgid	 "program"
-msgstr	 "Program"
+msgid "program"
+msgstr "Program"
 
-msgid	 "sept"
-msgstr	 "Sept."
+msgid "sept"
+msgstr "Sept."
 
-msgid	 "text_mean_exprimed_for_20"
-msgstr	 "Attention : From June 2009, the score is expressed to a maximum of 20."
+msgid "text_mean_exprimed_for_20"
+msgstr "Attention : From June 2009, the score is expressed to a maximum of 20."
 
-msgid	 "title"
-msgstr	 "Title"
+msgid "title"
+msgstr "Title"
 
-msgid	 "total_ects_inscription"
-msgstr	 "Total ECTS / Enrollment"
+msgid "total_ects_inscription"
+msgstr "Total ECTS / Enrollment"
 
-msgid	 "year"
-msgstr	 "Year"
-
+msgid "year"
+msgstr "Year"

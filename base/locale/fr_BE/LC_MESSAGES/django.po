@@ -16,24 +16,24 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-msgid	 "acces_denied"
-msgstr	 "Accès refusé!"
 
-msgid	 "administration"
-msgstr	 "Administration"
+msgid "acces_denied"
+msgstr "Accès refusé!"
 
-msgid	 "data"
-msgstr	 "Données"
+msgid "administration"
+msgstr "Administration"
 
-msgid	 "data_management"
-msgstr	 "Gestion des données"
+msgid "data"
+msgstr "Données"
 
-msgid	 "desc_lnk_data_management"
-msgstr	 "Gestion des données par entité du métier"
+msgid "data_management"
+msgstr "Gestion des données"
 
-msgid	 "page_not_found"
-msgstr	 "Page inexistante"
+msgid "desc_lnk_data_management"
+msgstr "Gestion des données par entité du métier"
 
-msgid	 "server_error"
-msgstr	 "Une erreur innatendue s'est produite"
+msgid "page_not_found"
+msgstr "Page inexistante"
 
+msgid "server_error"
+msgstr "Une erreur innatendue s'est produite"
