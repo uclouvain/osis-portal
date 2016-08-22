@@ -44,6 +44,9 @@ msgstr "Collaboration"
 msgid "copromotor"
 msgstr "Co-promoteur"
 
+msgid "create_dissertation"
+msgstr "Créer mémoire"
+
 msgid "current_status"
 msgstr "Statut actuel"
 
@@ -76,6 +79,9 @@ msgstr "Soumettre"
 
 msgid "dissertation"
 msgstr "Mémoire"
+
+msgid "dissertation_confirmation_message"
+msgstr "Confirmer le mémoire"
 
 msgid "dissertation_history"
 msgstr "Historique du mémoire"
@@ -140,6 +146,9 @@ msgstr "Aucun résultat trouvé"
 msgid "offer_propositions"
 msgstr "Programmes de cours"
 
+msgid "offer_year_start"
+msgstr "Programme de cours de départ du mémoire"
+
 msgid "optional"
 msgstr "Facultatif"
 
@@ -154,6 +163,9 @@ msgstr "Professeur"
 
 msgid "promotor"
 msgstr "Promoteur"
+
+msgid "proposition_dissertation"
+msgstr "Sujet"
 
 msgid "proposition_dissertation_informations"
 msgstr "Informations du sujet"

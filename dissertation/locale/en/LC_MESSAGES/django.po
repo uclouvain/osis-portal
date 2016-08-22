@@ -44,6 +44,9 @@ msgstr "Collaboration"
 msgid "copromotor"
 msgstr "Co-promoter"
 
+msgid "create_dissertation"
+msgstr "Create dissertation"
+
 msgid "current_status"
 msgstr "Current status"
 
@@ -76,6 +79,9 @@ msgstr "Submit"
 
 msgid "dissertation"
 msgstr "Dissertation"
+
+msgid "dissertation_confirmation_message"
+msgstr "Confirm dissertation"
 
 msgid "dissertation_history"
 msgstr "Dissertation history"
@@ -140,6 +146,9 @@ msgstr "No result"
 msgid "offer_propositions"
 msgstr "Offer"
 
+msgid "offer_year_start"
+msgstr "Offer year start"
+
 msgid "optional"
 msgstr "Optional"
 
@@ -154,6 +163,9 @@ msgstr "Professor"
 
 msgid "promotor"
 msgstr "Promoter"
+
+msgid "proposition_dissertation"
+msgstr "Subject"
 
 msgid "proposition_dissertation_informations"
 msgstr "Subject informations"

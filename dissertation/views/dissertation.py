@@ -100,8 +100,9 @@ def dissertation_new(request):
             form.save()
             return redirect('dissertations')
         else:
-            form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offer(offers)
+            form.fields["defend_year"].queryset = academic_year.find_last_academic_years()
             form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
+            form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offer(offers)
     else:
         form = DissertationForm(initial={'active': True, 'author': student})
         form.fields["defend_year"].queryset = academic_year.find_last_academic_years()
