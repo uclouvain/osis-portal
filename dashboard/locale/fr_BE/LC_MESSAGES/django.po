@@ -22,14 +22,17 @@ msgstr "Absence justifiée"
 msgid "ABSENCE_UNJUSTIFIED"
 msgstr "Absence injustifiée"
 
+msgid "CHEATING"
+msgstr "Tricherie"
+
+msgid "SCORE_MISSING"
+msgstr "Note manquante"
+
 msgid "absent_pdf_legend"
 msgstr "A=Absent"
 
 msgid "academic_year"
 msgstr "Année académique"
-
-msgid "CHEATING"
-msgstr "Tricherie"
 
 msgid "cheating_pdf_legend"
 msgstr "T=Tricherie"
@@ -40,11 +43,11 @@ msgstr "Tableau de bord"
 msgid "deliberation_date"
 msgstr "Date de délibération"
 
-msgid "desc_lnk_scores_encoding"
-msgstr "Imprimez les feuilles des notes pour encoder les notes de vos étudiants."
-
 msgid "desc_lnk_performance"
 msgstr "Résultats de l'étudiant."
+
+msgid "desc_lnk_scores_encoding"
+msgstr "Imprimez les feuilles des notes pour encoder les notes de vos étudiants."
 
 msgid "done_at"
 msgstr "Fait à"
@@ -79,11 +82,11 @@ msgstr "Responsable du cours"
 msgid "link_to_RGEE"
 msgstr "https://www.uclouvain.be/enseignement-reglements.html"
 
-msgid "none"
-msgstr "Aucun"
-
 msgid "no_score_to_encode"
 msgstr "Vous n'avez aucune note à encoder. Vous n'avez donc pas de PDF disponible."
+
+msgid "none"
+msgstr "Aucun"
 
 msgid "numbered_score"
 msgstr "Note chiffrée"
@@ -100,17 +103,14 @@ msgstr "Noma"
 msgid "return_doc_to_administrator"
 msgstr "Veuillez envoyer ce formulaire au secrétariat de l'entité gestionnaire avant le %s."
 
-msgid "SCORE_MISSING"
-msgstr "Note manquante"
-
-msgid "scores_encoding"
-msgstr "Encodage des notes"
-
 msgid "score_legend"
 msgstr "Légende pour le champ 'Note chiffrée': %s (0=Cote de présence)"
 
 msgid "score_missing_pdf_legend"
 msgstr "?=Note manquante"
+
+msgid "scores_encoding"
+msgstr "Encodage des notes"
 
 msgid "scores_sheet"
 msgstr "Feuille des notes"

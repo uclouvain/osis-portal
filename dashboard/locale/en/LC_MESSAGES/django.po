@@ -22,14 +22,17 @@ msgstr "Justified absence"
 msgid "ABSENCE_UNJUSTIFIED"
 msgstr "Unjustified Absence"
 
+msgid "CHEATING"
+msgstr "Cheating"
+
+msgid "SCORE_MISSING"
+msgstr "Score missing"
+
 msgid "absent_pdf_legend"
 msgstr "A=Absent"
 
 msgid "academic_year"
 msgstr "Academic year"
-
-msgid "CHEATING"
-msgstr "Cheating"
 
 msgid "cheating_pdf_legend"
 msgstr "T=Cheating"
@@ -40,11 +43,11 @@ msgstr "Dashboard"
 msgid "deliberation_date"
 msgstr "Deliberation date"
 
-msgid "desc_lnk_scores_encoding"
-msgstr "Print the papersheet to encode the scores of your students."
-
 msgid "desc_lnk_performance"
 msgstr "Show the student results."
+
+msgid "desc_lnk_scores_encoding"
+msgstr "Print the papersheet to encode the scores of your students."
 
 msgid "done_at"
 msgstr "Done at"
@@ -79,11 +82,11 @@ msgstr "Learning unit's responsible"
 msgid "link_to_RGEE"
 msgstr "https://www.uclouvain.be/enseignement-reglements.html"
 
-msgid "none"
-msgstr "None"
-
 msgid "no_score_to_encode"
 msgstr "There are no scores to encode. So there's no PDF available."
+
+msgid "none"
+msgstr "None"
 
 msgid "numbered_score"
 msgstr "Numbered scores"
@@ -100,17 +103,14 @@ msgstr "Registration number"
 msgid "return_doc_to_administrator"
 msgstr "Please return this document to the administrative office before %s."
 
-msgid "SCORE_MISSING"
-msgstr "Score missing"
-
-msgid "scores_encoding"
-msgstr "Scores Encoding"
-
 msgid "score_legend"
 msgstr "Score legend: %s (0=Score of presence)"
 
 msgid "score_missing_pdf_legend"
 msgstr "?=Score missing"
+
+msgid "scores_encoding"
+msgstr "Scores Encoding"
 
 msgid "scores_sheet"
 msgstr "Scores Sheet"
