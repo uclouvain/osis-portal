@@ -44,30 +44,18 @@
         <p>{% trans 'no_results' %}</p>
         {% else %}
             <!-- Student information's-->
-        <div class="col-md-4">
-            <div class="col-md-12">
-                <p><b>{% trans 'last_name' %}, {% trans 'first_name' %}:</b></p>
+        <div class="row">
+            <div class="col-md-3" id="student_name">
+                <label><b>{% trans 'last_name' %}, {% trans 'first_name' %}</b></label>
             </div>
-            <div class="col-md-12">
-                <p id="student_name"></p>
+            <div class="col-md-3" id="academic_year">
+                <label><b>{% trans 'academic_year' %}</b></label>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="col-md-12">
-                <p><b>{% trans 'academic_year' %}:</b></p>
-            </div>
-            <div class="col-md-12">
-                <p id="academic_year"></p>
+            <div class="col-md-6" id="program_title">
+                <label><b>{% trans 'program' %}</b></label>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="col-md-12">
-                <p><b>{% trans 'program' %}:</b></p>
-            </div>
-            <div class="col-md-12">
-                <p id="program_title"></p>
-            </div>
-        </div>
+
         <hr>
         <div class="row container-fluid">
             <!-- Student sessions summary-->
