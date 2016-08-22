@@ -40,7 +40,7 @@ urlpatterns = [
     url(r'^dissertation_history/(?P<pk>[0-9]+)$', dissertation.dissertation_history,
         name='dissertation_history'),
     url(r'^dissertation_new$', dissertation.dissertation_new,
-        name='dissertation_new$'),
+        name='dissertation_new'),
     url(r'^dissertations_search$', dissertation.dissertations_search,
         name='dissertations_search'),
     url(r'^dissertation_to_dir_submit/(?P<pk>[0-9]+)$', dissertation.dissertation_to_dir_submit,
