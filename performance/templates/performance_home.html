@@ -55,7 +55,9 @@
         </div>
         <!-- Student list of programs -->
         {% if not programs %}
-            <p class="text-warning"> Vous n'avez pas encore les résultats de vos études. </p>
+        <br>
+        <br>
+        <p class="text-warning"> {% trans 'dont_have_the_score_yet' %} </p>
         {% endif %}
     </div>
     {% if programs %}
