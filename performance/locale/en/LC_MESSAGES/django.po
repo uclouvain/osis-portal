@@ -26,6 +26,9 @@ msgstr "Course"
 msgid "credits"
 msgstr "Credits"
 
+msgid "dont_have_the_score_yet"
+msgstr "The score are yet to be published."
+
 msgid "ects"
 msgstr "ECTS"
 
