@@ -16,24 +16,24 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+msgid	 "acces_denied"
+msgstr	 "Access denied"
 
-msgid "acces_denied"
-msgstr "Access denied"
+msgid	 "administration"
+msgstr	 "Administration"
 
-msgid "page_not_found"
-msgstr "Page not found"
+msgid	 "data"
+msgstr	 "Data"
 
-msgid "server_error"
-msgstr "A server error occured."
+msgid	 "data_management"
+msgstr	 "Data management"
 
-msgid "administration"
-msgstr "Administration"
+msgid	 "desc_lnk_data_management"
+msgstr	 "Management of data by entity"
 
-msgid "data"
-msgstr "Data"
+msgid	 "page_not_found"
+msgstr	 "Page not found"
 
-msgid "data_management"
-msgstr "Data management"
+msgid	 "server_error"
+msgstr	 "A server error occured."
 
-msgid "desc_lnk_data_management"
-msgstr "Management of data by entity"

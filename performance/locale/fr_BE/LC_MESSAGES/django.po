@@ -4,9 +4,8 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
-
-msgid ""
-msgstr ""
+msgid	 ""
+msgstr	 ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-05-03 08:56+0200\n"
@@ -18,96 +17,96 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid	 "acronym"
+msgstr	 "Sigle"
 
-msgid "no_results"
-msgstr "Aucun résultats à afficher."
+msgid	 "course"
+msgstr	 "Cours"
 
-msgid "performance"
-msgstr "Performance"
+msgid	 "credits"
+msgstr	 "Crédits"
 
-msgid "last_name"
-msgstr "Nom"
+msgid	 "ects"
+msgstr	 "ECTS"
 
-msgid "first_name"
-msgstr "Prénom"
+msgid	 "explanation_B"
+msgstr	 "B - Crédit (Bologne)"
 
-msgid "matricule_number"
-msgstr "Matricule"
+msgid	 "explanation_EPM"
+msgstr	 "EPM - Cours reporté (Epreuve modifiée)"
 
-msgid "year"
-msgstr "Année"
+msgid	 "explanation_I"
+msgstr	 "I - Première inscription"
 
-msgid "acronym"
-msgstr "Sigle"
+msgid	 "explanation_P"
+msgstr	 "P - examen partiel"
 
-msgid "program"
-msgstr "Programme"
+msgid	 "explanation_RJ"
+msgstr	 "R,J - Report de note"
 
-msgid "ects"
-msgstr "ECTS"
+msgid	 "explanation_T"
+msgstr	 "T - note résultant d'un test"
 
-msgid "jan"
-msgstr "Jan."
+msgid	 "explanation_TV"
+msgstr	 "TV - Evaluation satisfaisante (la note ne compte pas)"
 
-msgid "june"
-msgstr "Juin"
+msgid	 "explanation_W"
+msgstr	 "W - Evaluation non satisfaisante (la note ne compte pas)"
 
-msgid "sept"
-msgstr "Sept."
+msgid	 "explanation_y"
+msgstr	 "Y - Deuxième inscription"
 
-msgid "total_ects_inscription"
-msgstr "Total ECTS / Inscription"
+msgid	 "first_name"
+msgstr	 "Prénom"
 
-msgid "mean"
-msgstr "Moyenne"
+msgid	 "inscr"
+msgstr	 "Inscr."
 
-msgid "mention"
-msgstr "Mention"
+msgid	 "jan"
+msgstr	 "Jan."
 
-msgid "course"
-msgstr "Cours"
+msgid	 "june"
+msgstr	 "Juin"
 
-msgid "title"
-msgstr "Titre"
+msgid	 "last_name"
+msgstr	 "Nom"
 
-msgid "inscr"
-msgstr "Inscr."
+msgid	 "legend"
+msgstr	 "Légende"
 
-msgid "credits"
-msgstr "Crédits"
+msgid	 "matricule_number"
+msgstr	 "Matricule"
 
-msgid "text_mean_exprimed_for_20"
-msgstr "Attention : à partir de juin 2009, la moyenne est exprimée sur un maximum de 20."
+msgid	 "mean"
+msgstr	 "Moyenne"
 
-msgid "explanation_P"
-msgstr "P - examen partiel"
+msgid	 "mention"
+msgstr	 "Mention"
 
-msgid "explanation_T"
-msgstr "T - note résultant d'un test"
+msgid	 "no_results"
+msgstr	 "Aucun résultats à afficher."
 
-msgid "explanation_I"
-msgstr "I - Première inscription"
+msgid	 "performance"
+msgstr	 "Performance"
 
-msgid "explanation_TV"
-msgstr "TV - Evaluation satisfaisante (la note ne compte pas)"
+msgid	 "performance_results"
+msgstr	 "Résultats"
 
-msgid "explanation_y"
-msgstr "Y - Deuxième inscription"
+msgid	 "program"
+msgstr	 "Programme"
 
-msgid "explanation_W"
-msgstr "W - Evaluation non satisfaisante (la note ne compte pas)"
+msgid	 "sept"
+msgstr	 "Sept."
 
-msgid "explanation_RJ"
-msgstr "R,J - Report de note"
+msgid	 "text_mean_exprimed_for_20"
+msgstr	 "Attention : à partir de juin 2009, la moyenne est exprimée sur un maximum de 20."
 
-msgid "explanation_EPM"
-msgstr "EPM - Cours reporté (Epreuve modifiée)"
+msgid	 "title"
+msgstr	 "Titre"
 
-msgid "explanation_B"
-msgstr "B - Crédit (Bologne)"
+msgid	 "total_ects_inscription"
+msgstr	 "Total ECTS / Inscription"
 
-msgid "legend"
-msgstr "Légende"
+msgid	 "year"
+msgstr	 "Année"
 
-msgid "performance_results"
-msgstr "Résultats"

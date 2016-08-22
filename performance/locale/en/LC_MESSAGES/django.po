@@ -4,9 +4,8 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
-
-msgid ""
-msgstr ""
+msgid	 ""
+msgstr	 ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-05-03 08:56+0200\n"
@@ -18,96 +17,96 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid	 "acronym"
+msgstr	 "Acronym"
 
-msgid "performance"
-msgstr "Performance"
+msgid	 "course"
+msgstr	 "Course"
 
-msgid "last_name"
-msgstr "Last Name"
+msgid	 "credits"
+msgstr	 "Credits"
 
-msgid "first_name"
-msgstr "First Name"
+msgid	 "ects"
+msgstr	 "ECTS"
 
-msgid "matricule_number"
-msgstr "Registration Number"
+msgid	 "explanation_B"
+msgstr	 "B - Credit (Bologne)"
 
-msgid "year"
-msgstr "Year"
+msgid	 "explanation_EPM"
+msgstr	 "EPM - Course reported (Epreuve modifiée)"
 
-msgid "acronym"
-msgstr "Acronym"
+msgid	 "explanation_I"
+msgstr	 "I - first inscription"
 
-msgid "program"
-msgstr "Program"
+msgid	 "explanation_P"
+msgstr	 "P - partial examination"
 
-msgid "no_results"
-msgstr "No results to show."
+msgid	 "explanation_RJ"
+msgstr	 "R,J - score reported"
 
-msgid "ects"
-msgstr "ECTS"
+msgid	 "explanation_T"
+msgstr	 "T - score of a test"
 
-msgid "jan"
-msgstr "Jan."
+msgid	 "explanation_TV"
+msgstr	 "TV - Evaluation satisfactory (score doesn't count)"
 
-msgid "june"
-msgstr "June"
+msgid	 "explanation_W"
+msgstr	 "W - Evaluation not satisfactory (score doesn't count)"
 
-msgid "sept"
-msgstr "Sept."
+msgid	 "explanation_Y"
+msgstr	 "Y - Second inscription"
 
-msgid "total_ects_inscription"
-msgstr "Total ECTS / Enrollment"
+msgid	 "first_name"
+msgstr	 "First Name"
 
-msgid "mean"
-msgstr "Mean"
+msgid	 "inscr"
+msgstr	 "Inscr."
 
-msgid "mention"
-msgstr "Mention"
+msgid	 "jan"
+msgstr	 "Jan."
 
-msgid "course"
-msgstr "Course"
+msgid	 "june"
+msgstr	 "June"
 
-msgid "title"
-msgstr "Title"
+msgid	 "last_name"
+msgstr	 "Last Name"
 
-msgid "inscr"
-msgstr "Inscr."
+msgid	 "legend"
+msgstr	 "Legend"
 
-msgid "credits"
-msgstr "Credits"
+msgid	 "matricule_number"
+msgstr	 "Registration Number"
 
-msgid "text_mean_exprimed_for_20"
-msgstr "Attention : From June 2009, the score is expressed to a maximum of 20."
+msgid	 "mean"
+msgstr	 "Mean"
 
-msgid "explanation_P"
-msgstr "P - partial examination"
+msgid	 "mention"
+msgstr	 "Mention"
 
-msgid "explanation_T"
-msgstr "T - score of a test"
+msgid	 "no_results"
+msgstr	 "No results to show."
 
-msgid "explanation_I"
-msgstr "I - first inscription"
+msgid	 "performance"
+msgstr	 "Performance"
 
-msgid "explanation_TV"
-msgstr "TV - Evaluation satisfactory (score doesn't count)"
+msgid	 "performance_results"
+msgstr	 "Performance results"
 
-msgid "explanation_Y"
-msgstr "Y - Second inscription"
+msgid	 "program"
+msgstr	 "Program"
 
-msgid "explanation_W"
-msgstr "W - Evaluation not satisfactory (score doesn't count)"
+msgid	 "sept"
+msgstr	 "Sept."
 
-msgid "explanation_RJ"
-msgstr "R,J - score reported"
+msgid	 "text_mean_exprimed_for_20"
+msgstr	 "Attention : From June 2009, the score is expressed to a maximum of 20."
 
-msgid "explanation_EPM"
-msgstr "EPM - Course reported (Epreuve modifiée)"
+msgid	 "title"
+msgstr	 "Title"
 
-msgid "explanation_B"
-msgstr "B - Credit (Bologne)"
+msgid	 "total_ects_inscription"
+msgstr	 "Total ECTS / Enrollment"
 
-msgid "legend"
-msgstr "Legend"
+msgid	 "year"
+msgstr	 "Year"
 
-msgid "performance_results"
-msgstr "Performance results"
