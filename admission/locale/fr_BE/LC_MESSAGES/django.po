@@ -62,9 +62,8 @@ msgstr ""
  "l'année académique"
 
 msgid "add_professional_exam_file"
-msgstr "Veuillez joindre une copie de votre certificat ou une preuve d'inscription à l'examen"
-"Veuillez joindre une copie de votre certificat ou une preuve d'inscription à "
-"l'examen"
+msgstr ""
+"Veuillez joindre une copie de votre certificat ou une preuve d'inscription à l'examen"
 
 msgid "add_success_proof_file"
 msgstr "Veuillez joindre l'attestation de réussite ou la preuve d'inscription"
@@ -83,6 +82,9 @@ msgstr "Admission"
 
 msgid "admission_exam"
 msgstr "Examen d'admission"
+
+msgid "admission_exam_certificate_document"
+msgstr "Copie de votre certificat ou une preuve d'inscription à l'examen"
 
 msgid "affiliation_cost_part1"
 msgstr ""
@@ -317,6 +319,9 @@ msgstr "En cours d'inscription à la session mentionnée "
 msgid "demandes"
 msgstr "Demandes"
 
+msgid "description"
+msgstr "Description"
+
 msgid "different_emails"
 msgstr "Les 2 emails introduit sont différents"
 
@@ -394,8 +399,14 @@ msgstr ""
 "Vous devez fournir une copie recto-verso.  Si vous avez le recto-verso dans "
 "le même fichier, veuillez le joindre."
 
+msgid "file_equivalence"
+msgstr "Décision d'équivalence"
+
 msgid "file_equivalence_btn"
 msgstr "Veuillez joindre la décision d'équivalence"
+
+msgid "file_equivalence_btn_modify"
+msgstr "Modifier le document de décision d'équivalence"
 
 msgid "file_equivalence_instructions"
 msgstr ""
@@ -404,6 +415,12 @@ msgstr ""
 "française de Belgique. Si vous ne la possédez pas, une demande d'équivalence "
 "DOIT être introduite en respectant strictement les consignes indiquées par "
 "la "
+
+msgid "file_name"
+msgstr "Nom de fichier"
+
+msgid "filename"
+msgstr "Nom de fichier"
 
 msgid "files_translated"
 msgstr "Traduction par un traducteur"
@@ -484,6 +501,9 @@ msgstr "Relevé de notes des études secondaires"
 
 msgid "high_school_diplome_translation"
 msgstr "Traduction par un traducteur-juré"
+
+msgid "high_school_scores_transcript"
+msgstr "Relevé de notes pour votre dernière année d'études secondaires"
 
 msgid "higher_non_university"
 msgstr "Supérieur Non-Universitaire"
@@ -673,6 +693,9 @@ msgstr "Monsieur"
 msgid "mobile"
 msgstr "GSM"
 
+msgid "modify"
+msgstr "Modifier"
+
 msgid "mother"
 msgstr "Mère"
 
@@ -854,7 +877,7 @@ msgid "postal_code"
 msgstr "Par code postal"
 
 msgid "prerequisites"
-msgstr "Pré-requis"
+msgstr "Prérequis"
 
 msgid "previous_step"
 msgstr "Etape précédente"
@@ -1015,6 +1038,9 @@ msgstr "Résultat"
 msgid "save"
 msgstr "Sauvegarder"
 
+msgid "scores_transcript"
+msgstr "Feuille de notes"
+
 msgid "secondary_education"
 msgstr "Etudes secondaires"
 
@@ -1123,6 +1149,9 @@ msgstr "A soumettre"
 
 msgid "transcript"
 msgstr "Relevé de notes"
+
+msgid "translated"
+msgstr "traduit"
 
 msgid "ucl_denom_location"
 msgstr "Université catholique de Louvain"

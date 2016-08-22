@@ -28,8 +28,11 @@ from admission.views import application, common, identification, offer, level, q
     education_institution, language, domain, secondary_education, accounting, upload_file, sociological, attachments
 from django.conf.urls.static import static
 from django.conf import settings
+from django.views.i18n import javascript_catalog
 
-
+js_info_dict = {
+    'packages': ('admission', )
+}
 urlpatterns = [
     url(r'^$', common.home, name='home'),
     url(r'^admission/$', common.home, name='admission'),
@@ -91,18 +94,17 @@ urlpatterns = [
     url(r'^applications/(?:([0-9]+)/)?$', application.applications, name='applications'),
     url(r'^sociological/(?:([0-9]+)/)?$', sociological.update, name='sociological_survey'),
     url(r'^attachments/(?:([0-9]+)/)?$', attachments.update, name='attachments'),
+    url(r'^attachments/remove_attachment/$',
+        attachments.remove_attachment, name='remove_attachment'),
     url(r'^admission/demande/(?:([0-9]+)/)?$', offer.demande_update, name='demande_update'),
     url(r'^admission/application/submission/(?:([0-9]+)/)?$', application.submission, name='submission'),
     url(r'^admission/application/delete/([0-9]+)/$', application.application_delete, name='application_delete'),
     url(r'^admission/offer_change/([0-9]+)/$', application.change_application_offer, name='change_application_offer'),
 
-
-
-
     url(r'^upload/$', upload_file.upload_file, name='new_document'),
     url(r'^upload/download/(?P<pk>[0-9]+)$', upload_file.download, name='download'),
     url(r'^upload/description/$', upload_file.upload_file_description, name="upload_file_description"),
     url(r'^upload/$', upload_file.upload_document, name='upload_document'),
-
+    url(r'^jsi18n/', 'django.views.i18n.javascript_catalog', js_info_dict)
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

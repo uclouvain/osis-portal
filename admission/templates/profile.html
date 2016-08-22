@@ -122,8 +122,7 @@
                         <input type="text" class="form-control" id="txt_birth_date" name="birth_date"
                                value="{{ applicant.birth_date  | default_if_none:'' | date:"d/m/Y" }}">
                         (format : {% trans 'format_date'%})
-                        <font class="error">{{ applicant_form.birth_date.errors|striptags }}</font>
-
+                        <font class="error" id="msg_error_birth_date">{{ applicant_form.birth_date.errors|striptags }}</font>
                         </div>
                         <div class="col-md-4">
                             <label>{%trans 'birth_place'%} *</label>
@@ -146,6 +145,7 @@
                         <div class="col-md-3">
                             <label>{%trans 'nationality'%} *</label>
                             <select class="form-control" id="slt_nationality" name="nationality">
+                                <option value="-1">-</option>
                                 {% for country in countries%}
                                 <option value="{{country.id}}"
                                         {% if country.id = applicant.nationality.id %} selected {%endif %}>
@@ -343,6 +343,7 @@
                         <div class="col-md-4">
                             <label>{% trans 'country'%} *</label>
                             <select class="form-control" id="slt_legal_adr_country" name="legal_adr_country">
+                                <option value="-1">-</option>
                                 {% for country in countries%}
                                 <option value="{{country.id}}"
                                         {%if country.id = person_legal_address.country.id%}selected {%endif%}>
@@ -533,6 +534,7 @@
           id="form_upload_profile"
           style="visibility:hidden;display:none;">
         {% csrf_token %}
-        <input type="text" name="description" value="" id="hdn_description"/>
+        <input type="hidden" name="description" value="" id="hdn_description"/>
+        <input type="hidden" name="application_id" value='{{ application.id | default_if_none:''}}' />
         <input type="submit" value="+"  id="lnk_picture">
     </form>

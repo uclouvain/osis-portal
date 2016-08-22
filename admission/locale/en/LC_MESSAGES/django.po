@@ -79,6 +79,9 @@ msgstr "admission"
 msgid "admission_exam"
 msgstr "Admission exam"
 
+msgid "admission_exam_certificate_document"
+msgstr "Copy of your certificate or a proof of your enrollment"
+
 msgid "all_mandatory_fields"
 msgstr "All fields are mandatory"
 
@@ -306,6 +309,9 @@ msgstr "Ongoing enrolment for the mentioned session"
 msgid "demandes"
 msgstr "Demandes"
 
+msgid "description"
+msgstr "Description"
+
 msgid "different_emails"
 msgstr "The emails encoded are different"
 
@@ -383,8 +389,14 @@ msgstr ""
 "Please add a recto-verso copy.  If you have the recto-verso copy in one file "
 "please add it."
 
+msgid "file_equivalence"
+msgstr "Equivalence decision file"
+
 msgid "file_equivalence_btn"
 msgstr "Please add the final equivalence decision file"
+
+msgid "file_equivalence_btn_modify"
+msgstr "Modify the final equivalence decision file"
 
 msgid "file_equivalence_instructions"
 msgstr ""
@@ -393,6 +405,12 @@ msgstr ""
 "Belgium. In case you should not own this kind of document, you MUST enter a "
 "request for equivalence while strictly respecting the guidelines determined "
 "by "
+
+msgid "file_name"
+msgstr "Filename"
+
+msgid "filename"
+msgstr "Filename"
 
 msgid "files_translated"
 msgstr "A translation by a sworn translator"
@@ -473,6 +491,9 @@ msgstr "High school transcript"
 
 msgid "high_school_diplome_translation"
 msgstr "A translation of your high school diploma by a sworn translator"
+
+msgid "high_school_scores_transcript"
+msgstr "Last High school scores transcript"
 
 msgid "higher_non_university"
 msgstr "Higher non university"
@@ -657,6 +678,9 @@ msgstr "Mister"
 
 msgid "mobile"
 msgstr "Mobile"
+
+msgid "modify"
+msgstr "Modify"
 
 msgid "mother"
 msgstr "Mother"
@@ -999,6 +1023,9 @@ msgstr "Save"
 #: templates/diploma.html:203 templates/diploma.html.py:204
 #: templates/diploma.html:321 templates/diploma.html.py:322
 
+msgid "scores_transcript"
+msgstr "Scores transcript"
+
 msgid "secondary_education"
 msgstr "Secondary education"
 
@@ -1115,6 +1142,9 @@ msgstr "To submit"
 
 msgid "transcript"
 msgstr "Transcript"
+
+msgid "translated"
+msgstr "translated"
 
 msgid "ucl_denom_location"
 msgstr "Université catholique de Louvain"

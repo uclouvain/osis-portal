@@ -24,35 +24,58 @@
 #
 ##############################################################################
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render, redirect
 from django.http import *
-from osis_common.forms import UploadDocumentFileForm
-from osis_common import models as mdl_osis_common
-from admission.views import common
-from admission import settings as adm_settings
-from admission.views import tabs
+from django.shortcuts import get_object_or_404, render, redirect
+
 from admission import models as mdl
+from admission import settings as adm_settings
+from admission.models.enums import document_type
+from admission.views import common
+from admission.views import tabs
+from osis_common import models as mdl_osis_common
+from osis_common.forms import UploadDocumentFileForm
 from reference import models as mdl_ref
+from django.core.urlresolvers import reverse
 
 
 @login_required
 def upload_file(request):
 
-    description = 'LETTER_MOTIVATION'
-    documents = mdl_osis_common.document_file.search(document_type=adm_settings.DOCUMENT_TYPE, user=request.user)
+    description = None
+    documents = mdl_osis_common.document_file.search(description=description, user=request.user)
     if request.method == "POST":
-
+        application = None
         if request.POST['description']:
             description = request.POST['description']
-
+        if request.POST['application_id']:
+            application_id = request.POST['application_id']
+            application = mdl.application.find_by_id(application_id)
         form = UploadDocumentFileForm(request.POST, request.FILES)
         if form.is_valid():
-            if description == 'ID_PICTURE' or description == 'ID_CARD':
+
+            curriculum_uploads = [document_type.NATIONAL_DIPLOMA_RECTO,
+                                  document_type.NATIONAL_DIPLOMA_VERSO,
+                                  document_type.INTERNATIONAL_DIPLOMA_RECTO,
+                                  document_type.INTERNATIONAL_DIPLOMA_VERSO,
+                                  document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO,
+                                  document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO,
+                                  document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
+                                  document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
+                                  document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
+                                  document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
+                                  document_type.EQUIVALENCE,
+                                  document_type.ADMISSION_EXAM_CERTIFICATE,
+                                  document_type.PROFESSIONAL_EXAM_CERTIFICATE]
+
+            if description in curriculum_uploads:
+                documents = mdl.application_document_file.search(application, description)
+                for document in documents:
+                    document.delete()
+            if description == document_type.ID_PICTURE \
+                    or description == document_type.ID_CARD \
+                    or description in curriculum_uploads:
                 # Delete older file with the same description
-                documents = mdl_osis_common.document_file.search(
-                    document_type=None,
-                    user=request.user,
-                    description=description)
+                documents = mdl_osis_common.document_file.search(user=request.user, description=description)
                 for document in documents:
                     document.delete()
 
@@ -63,7 +86,14 @@ def upload_file(request):
             content_type = file_type.content_type
             file.content_type = content_type
             file.save()
-            if description == 'ID_PICTURE' or description == 'ID_CARD':
+
+            if description in curriculum_uploads:
+                adm_doc_file = mdl.application_document_file.ApplicationDocumentFile()
+                adm_doc_file.application = application
+                adm_doc_file.document_file = file
+                adm_doc_file.save()
+
+            if description == document_type.ID_PICTURE or description == document_type.ID_CARD:
                 tab_status = tabs.init(request)
                 applicant = mdl.applicant.find_by_user(request.user)
                 applications = mdl.application.find_by_user(request.user)
@@ -89,12 +119,18 @@ def upload_file(request):
                     'person_legal_address': person_legal_address,
                     'person_contact_address': person_contact_address})
             else:
-                return redirect('new_document')
+                if description in curriculum_uploads:
+                    return HttpResponseRedirect(reverse('diploma_update', args=(application.id,)))
+                else:
+                    return redirect('new_document')
         else:
+            documents = mdl.document_file.search(document_type=None,
+                                                 user=request.user,
+                                                 description=description)
             return render(request, 'new_document.html', {
                 'form': form,
-                'content_type_choices': mdl_osis_commondocument_file.CONTENT_TYPE_CHOICES,
-                'description_choices': mdl_osis_common.document_file.DESCRIPTION_CHOICES,
+                'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
+                'description_choices': mdl.enums.document_type.DOCUMENT_TYPE_CHOICES,
                 'description': description,
                 'documents': documents})
     else:
@@ -104,7 +140,7 @@ def upload_file(request):
         return render(request, 'new_document.html', {
             'form': form,
             'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
-            'description_choices': mdl_osis_common.document_file.DESCRIPTION_CHOICES,
+            'description_choices': mdl.enums.document_type.DOCUMENT_TYPE_CHOICES,
             'description': description,
             'documents': documents})
 
@@ -125,25 +161,32 @@ def upload_file_description(request):
     :param request:
     :return:
     """
-    documents = mdl_osis_common.document_file.search(document_type=None,
-                                                     user=request.user,
-                                                     description="ID_PICTURE")
 
     description = request.POST['description']
+    application_id = request.POST['application_id']
+    if not application_id.isdigit():
+        application_id = None
+
+    documents = mdl_osis_common.document_file.search(user=request.user, description=description)
     form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                            'document_type': "admission",
                                            'user': request.user})
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
+    else:
+        application = None
     return render(request, 'new_document.html', {
         'form': form,
         'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
-        'description_choices': mdl_osis_common.document_file.DESCRIPTION_CHOICES,
+        'description_choices': mdl.enums.document_type.DOCUMENT_TYPE_CHOICES,
         'description': description,
-        'documents': documents})
+        'documents': documents,
+        'application': application})
 
 
 @login_required
 def upload_document(request):
-    documents = mdl_osis_common.document_file.search(document_type=None, user=request.user, description=None)
+    documents = mdl_osis_common.document_file.search(user=request.user, description=None)
 
     if request.method == "POST":
         description = None
@@ -160,7 +203,7 @@ def upload_document(request):
             file.save()
             return redirect('new_document')
         else:
-            if description == mdl_osis_common.document_file.DESCRIPTION_CHOICES['ID_PICTURE']:
+            if description == mdl_osis_common.document_file.DESCRIPTION_CHOICES[document_type.ID_PICTURE]:
                 return common.home(request)
             else:
                 return render(request, 'new_document.html', {

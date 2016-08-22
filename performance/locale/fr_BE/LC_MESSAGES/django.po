@@ -86,8 +86,14 @@ msgstr "Mention"
 msgid "no_results"
 msgstr "Aucun résultats à afficher."
 
+msgid "no_student_with_this_registration_id"
+msgstr "Aucun étudiant avec ce noma!"
+
 msgid "performance"
 msgstr "Performance"
+
+msgid "performance_administration"
+msgstr "Administration de performance"
 
 msgid "performance_results"
 msgstr "Résultats"
@@ -95,8 +101,14 @@ msgstr "Résultats"
 msgid "program"
 msgstr "Programme"
 
+msgid "registration_id"
+msgstr "Noma"
+
 msgid "sept"
 msgstr "Sept."
+
+msgid "student_performance"
+msgstr "Performances d'un étudiant"
 
 msgid "text_mean_exprimed_for_20"
 msgstr "Attention : à partir de juin 2009, la moyenne est exprimée sur un maximum de 20."
