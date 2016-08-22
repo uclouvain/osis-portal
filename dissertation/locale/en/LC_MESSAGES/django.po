@@ -50,26 +50,26 @@ msgstr "Current status"
 msgid "date"
 msgstr "Date"
 
-msgid "defended"
-msgstr "Defended"
-
 msgid "defend_periode"
 msgstr "Defend period"
 
 msgid "defend_year"
 msgstr "Defend year"
 
+msgid "defended"
+msgstr "Defended"
+
 msgid "delete"
 msgstr "Delete"
-
-msgid "description"
-msgstr "Description"
 
 msgid "desc_lnk_dissertations"
 msgstr "List of my projects dissertation"
 
 msgid "desc_lnk_propositions_dissertations"
 msgstr "List of available subjects"
+
+msgid "description"
+msgstr "Description"
 
 msgid "dir_submit"
 msgstr "Submit"
@@ -203,14 +203,11 @@ msgstr "Submitted to first year evaluation "
 msgid "taken_places"
 msgstr "Interest"
 
-msgid "type"
-msgstr "Type"
+msgid "theme"
+msgstr "Theme"
 
 msgid "title"
 msgstr "Title"
-
-msgid "theme"
-msgstr "Theme"
 
 msgid "to_be_defended"
 msgstr "To be received defended"
@@ -221,6 +218,8 @@ msgstr "To be received"
 msgid "to_dir_submit_confirmation_message"
 msgstr "Warning : you will submit the draft memorandum to the promotor. Are you sure you want to continue ?"
 
+msgid "type"
+msgstr "Type"
+
 msgid "work"
 msgstr "Work"
-
