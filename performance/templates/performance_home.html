@@ -41,19 +41,19 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <!-- Student info -->
-        <div class="row">
-            <div class="col-md-3">
+        <div class="col-md-6">
+            <div class="col-md-12">
                 <p><b>{% trans 'last_name' %}, {% trans 'first_name' %}:</b></p>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-12">
                 <p>{{ student.person.last_name}}, {{ student.person.first_name }}</p>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-3">
+        <div class="col-md-6">
+            <div class="col-md-12">
                 <p><b>{% trans 'matricule_number' %}:</b></p>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-12">
                 <p>{{ student.registration_id }}</p>
             </div>
         </div>
