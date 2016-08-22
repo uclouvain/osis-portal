@@ -42,22 +42,17 @@
     <div class="panel-body">
         <!-- Student info -->
         <div class="row">
-            <div class="col-md-3">
-                <p><b>{% trans 'last_name' %}, {% trans 'first_name' %}:</b></p>
+            <div class="col-md-6">
+                <label>{% trans 'last_name' %}, {% trans 'first_name' %}</label>
+                <br>
+                {{ student.person.last_name}}, {{ student.person.first_name }}
             </div>
-            <div class="col-md-9">
-                <p>{{ student.person.last_name}}, {{ student.person.first_name }}</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3">
-                <p><b>{% trans 'matricule_number' %}:</b></p>
-            </div>
-            <div class="col-md-9">
-                <p>{{ student.registration_id }}</p>
+            <div class="col-md-6">
+                <label>{% trans 'matricule_number' %}</label>
+                <br>
+                {{ student.registration_id }}
             </div>
         </div>
-
         <!-- Student list of programs -->
         {% if not programs %}
             <p class="text-warning"> Vous n'avez pas encore les résultats de vos études. </p>
