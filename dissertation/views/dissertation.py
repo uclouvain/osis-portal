@@ -81,6 +81,32 @@ def dissertation_detail(request, pk):
 
 
 @login_required
+def dissertation_edit(request, pk):
+    memory = get_object_or_404(dissertation.Dissertation, pk=pk)
+    person = mdl.person.find_by_user(request.user)
+    student = mdl.student.find_by_person(person)
+    offers = mdl.offer.find_by_student(student)
+    if request.method == "POST":
+        form = DissertationForm(request.POST, instance=memory)
+        if form.is_valid():
+            memory = form.save()
+            return redirect('dissertation_detail', pk=memory.pk)
+        else:
+            form.fields["defend_year"].queryset = academic_year.find_last_academic_years()
+            form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
+            form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offer(offers)
+    else:
+        form = DissertationForm(instance=memory)
+        form.fields["defend_year"].queryset = academic_year.find_last_academic_years()
+        form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
+        form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offer(offers)
+
+    return layout.render(request, 'dissertation_form.html',
+                         {'form': form,
+                          'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
+
+
+@login_required
 def dissertation_history(request, pk):
     memory = get_object_or_404(dissertation.Dissertation, pk=pk)
     dissertation_updates = dissertation_update.search_by_dissertation(memory)
@@ -108,7 +134,7 @@ def dissertation_new(request):
         form.fields["defend_year"].queryset = academic_year.find_last_academic_years()
         form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
         form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offer(offers)
-    return layout.render(request, 'dissertation_new.html',
+    return layout.render(request, 'dissertation_form.html',
                          {'form': form,
                           'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
 

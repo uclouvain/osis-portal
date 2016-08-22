@@ -209,6 +209,9 @@
         </div>
         <div class="row">
             <div class="col-md-12">
+                <a class="btn btn-default btn-primary"
+                   href="{% url 'dissertation_edit' pk=dissertation.pk %}">
+                    <span class="glyphicon glyphicon-edit"></span> {% trans 'edit_dissertation' %}</a>
                 {% if dissertation.status == 'DRAFT' or dissertation.status == 'DIR_KO' %}
                 <a class="btn btn-default btn-danger"
                    href="{% url 'dissertation_delete' pk=dissertation.pk %}"
