@@ -98,6 +98,9 @@ msgstr "Domain"
 msgid "draft"
 msgstr "Draft"
 
+msgid "edit"
+msgstr "Edit"
+
 msgid "ended"
 msgstr "End"
 

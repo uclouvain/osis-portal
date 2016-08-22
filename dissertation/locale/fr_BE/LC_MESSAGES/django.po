@@ -98,6 +98,9 @@ msgstr "Domaine"
 msgid "draft"
 msgstr "Brouillon"
 
+msgid "edit"
+msgstr "Editer"
+
 msgid "ended"
 msgstr "Terminé"
 
