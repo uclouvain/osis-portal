@@ -80,8 +80,8 @@ DOCUMENT_TYPE_CHOICES = ((ID_CARD, 'identity_card', '', ''),
                          (EQUIVALENCE, 'equivalence', '', ''),
                          (ADMISSION_EXAM_CERTIFICATE, 'admission_exam_certificate', '', ''),
                          (PROFESSIONAL_EXAM_CERTIFICATE, 'professional_exam_certificate', '', ''),
-                         (RESIDENT_LONG_DURATION, '', '', ''),
-                         (ID_FOREIGN_UNLIMITED, '', '', ''),
+                         (RESIDENT_LONG_DURATION, 'resident_long_duration', '', ''),
+                         (ID_FOREIGN_UNLIMITED, 'id_foreign_unilimited', '', ''),
                          (ATTACHMENT_26, '', '', ''),
                          (REFUGEE_CARD, '', '', ''),
                          (FAMILY_COMPOSITION, '', '', ''),
@@ -98,4 +98,9 @@ DOCUMENT_TYPE_CHOICES = ((ID_CARD, 'identity_card', '', ''),
                          (SCHOLARSHIP_CFWB, '', '', ''),
                          (SCHOLARSHIP_DEVELOPMENT_COOPERATION, '', '', ''))
 
+
+def find(document_type):
+    for l in DOCUMENT_TYPE_CHOICES:
+        if document_type in l:
+            return l
 

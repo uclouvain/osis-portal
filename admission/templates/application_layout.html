@@ -509,24 +509,50 @@
     //***************************
     $( "input[name^='assimilation_criteria_']" ).click(function(event) {
         //One of the criteria has been checked as true or false
-        alert('j');
-        /*$("#pnl_assimilation_criteria").find("input")
-            .remove()
-            .end()*/
         var target = $(event.target);
         var id = target.attr("id");
 
+
+        if(id.endsWith("_false")){
+            var criteria = id.replace('assimilation_criteria_','');
+            criteria = criteria.replace('_false','');
+            $('#criterias_sel option').each(function(){
+                if($(this).attr('value')== criteria){
+                    $(this).remove();
+                    $("#pnl_criteria_"+criteria).css('visibility', 'hidden').css('display','none');
+                }
+            });
+        }
         if(id.endsWith("_true")){
-            criteria = id.replace('assimilation_criteria_true_','');
+            var criteria = id.replace('assimilation_criteria_','');
+            criteria = criteria.replace('_true','');
+            $('#criterias_sel').append($("<option></option").attr("value",""+criteria).append(gettext('criteria')+criteria));
+            var id_sel_criteria = "criterias";
 
             $.ajax({
                 url: "/admission/criteria_document?criteria=" + criteria
 
               }).then(function(data) {
 
-                  if(data.length >0){
+                  if(data.length > 0){
+                    if($("#pnl_criteria_"+criteria).length > 0){
+                        //If it's already existing
+                        $("#pnl_criteria_"+criteria).css('visibility', 'visible').css('display','block');
+                    }else{
 
-                    }
+                        $('#pnl_assimilation_criteria').append($("<div></div>").attr("id","pnl_criteria_"+criteria).attr("style","visibility:hidden;display:none;"));
+                        $.each(data, function(key, value) {
+                            $("#pnl_criteria_"+criteria).append($("<label></label>")
+                           .append($("<input>").attr("type","checkbox")
+                                                      .attr("name","criteria_doc_id_"+criteria)
+                                                      .attr("id","chb_criteria_doc_id_"+criteria + "_" + value.name))
+                           .append("&nbsp;&nbsp;"+value.name));
+
+                           $("#pnl_criteria_"+criteria).append("<br/>")
+                        });
+                   }
+
+                  }
               });
         }else{
         //alert('f');
@@ -536,6 +562,30 @@
 
 
     });
+
+    $("#criterias_sel").change(function(event) {
+        var target = $(event.target);
+        var id = target.attr("id");
+        //alert($('#'+id).val());
+        $( "div[id^='pnl_criteria_']" ).css('visibility', 'hidden').css('display','none');
+        $('#pnl_criteria_'+$('#'+id).val()).css('visibility', 'visible').css('display','block');
+
+    });
+
+    $("#btn_load_assimilation_doc").click(function() {
+        alert('kckcklc');
+        var criteria_number = $("#criterias_sel").val();
+        alert(criteria_number);
+
+        $( "input[id^='chb_criteria_doc_id_']" ).each(function() {
+            if($(this).is(':checked')){
+
+            }
+        });
+        //alert("criteria_doc_id_" + criteria_number
+
+    });
+
     //***************************
     //Assimilation criteria - end
     //***************************

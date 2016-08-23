@@ -23,3 +23,6 @@ msgstr "Before going to the next step you have to select at least one offer and 
 msgid "msg_next_profil"
 msgstr ""
 "Before going to the next step you have to mention you nationality and the country where you live"
+
+msgid "criteria"
+msgstr "Criteria"

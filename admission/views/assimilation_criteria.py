@@ -26,6 +26,8 @@
 from django.http import HttpResponse
 from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
+from admission.models.enums import document_type
+import json
 
 
 class JSONResponse(HttpResponse):
@@ -34,9 +36,37 @@ class JSONResponse(HttpResponse):
         kwargs['content_type'] = 'application/json'
         super(JSONResponse, self).__init__(content, **kwargs)
 
-def find_by_criteria(request):
-    print('find_by_criteria')
-    criteria = request.GET['criteria']
-    serializer = None
 
-    return JSONResponse(None)
+class AssimilationDocSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=200)
+
+
+def find_by_criteria(request):
+    criteria = request.GET['criteria']
+    list_document_type = []
+
+    if criteria == "1":
+        assimilation_doc = AssimilationDoc()
+        assimilation_doc.name = "RESIDENT_LONG_DURATION"
+        list_document_type.append(assimilation_doc)
+        assimilation_doc = AssimilationDoc()
+        assimilation_doc.name = "ID_FOREIGN_UNLIMITED"
+        list_document_type.append(assimilation_doc)
+    if criteria == "2":
+        assimilation_doc = AssimilationDoc()
+        assimilation_doc.name = "ATTACHMENT_26"
+        list_document_type.append(assimilation_doc)
+        assimilation_doc = AssimilationDoc()
+        assimilation_doc.name = "REFUGEE_CARD"
+        list_document_type.append(assimilation_doc)
+
+    serializer = AssimilationDocSerializer(list_document_type, many=True)
+
+    return JSONResponse(serializer.data)
+
+
+class AssimilationDoc(object):
+    name = None
+
+    def __init__(self):
+        self.name = None

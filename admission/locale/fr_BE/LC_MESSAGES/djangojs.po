@@ -24,3 +24,6 @@ msgstr ""
 msgid "msg_next_profil"
 msgstr ""
 "Avant de pouvoir accéder à l'étape suivante vous devez encoder au minimum, votre nationalité et votre pays de résidence"
+
+msgid "criteria"
+msgstr "Critère"
