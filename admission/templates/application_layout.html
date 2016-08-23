@@ -504,5 +504,40 @@
         ajax_static_questions(offer_year_id,$('#hdn_applied_to_sameprogram').val(),$('#hdn_belgian_degree').val(),$('#hdn_started_samestudies').val());
 
     }
+    //***************************
+    //Assimilation criteria
+    //***************************
+    $( "input[name^='assimilation_criteria_']" ).click(function(event) {
+        //One of the criteria has been checked as true or false
+        alert('j');
+        /*$("#pnl_assimilation_criteria").find("input")
+            .remove()
+            .end()*/
+        var target = $(event.target);
+        var id = target.attr("id");
+
+        if(id.endsWith("_true")){
+            criteria = id.replace('assimilation_criteria_true_','');
+
+            $.ajax({
+                url: "/admission/criteria_document?criteria=" + criteria
+
+              }).then(function(data) {
+
+                  if(data.length >0){
+
+                    }
+              });
+        }else{
+        //alert('f');
+        }
+
+
+
+
+    });
+    //***************************
+    //Assimilation criteria - end
+    //***************************
     </script>
 {% endblock %}
