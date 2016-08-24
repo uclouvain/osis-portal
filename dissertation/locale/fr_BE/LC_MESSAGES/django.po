@@ -44,8 +44,8 @@ msgstr "Collaboration"
 msgid "copromotor"
 msgstr "Co-promoteur"
 
-msgid "create_dissertation"
-msgstr "Créer mémoire"
+msgid "create"
+msgstr "Créer"
 
 msgid "current_status"
 msgstr "Statut actuel"
@@ -129,7 +129,7 @@ msgid "level"
 msgstr "Niveau"
 
 msgid "literature_review"
-msgstr "Revue Litéraire"
+msgstr "Revue Littéraire"
 
 msgid "manager"
 msgstr "Gestionnaire de cours"

@@ -44,8 +44,8 @@ msgstr "Collaboration"
 msgid "copromotor"
 msgstr "Co-promoter"
 
-msgid "create_dissertation"
-msgstr "Create dissertation"
+msgid "create"
+msgstr "Create"
 
 msgid "current_status"
 msgstr "Current status"

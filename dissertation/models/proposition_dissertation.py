@@ -77,7 +77,7 @@ class PropositionDissertation(models.Model):
         if self.author.person.last_name:
             last_name = self.author.person.last_name + ","
         author = u"%s %s %s" % (last_name.upper(), first_name, middle_name)
-        return str(self.title)+" - "+author
+        return author+" - "+str(self.title)
 
     class Meta:
         ordering = ["author__person__last_name", "author__person__middle_name", "author__person__first_name", "title"]
