@@ -1,0 +1,23 @@
+[
+  {
+    "model": "admission.professionalactivity",
+    "pk": 1,
+    "fields": {
+      "name": "Oui, à temps plein"
+    }
+  },
+  {
+    "model": "admission.professionalactivity",
+    "pk": 2,
+    "fields": {
+      "name": "Oui, à temps partiel"
+    }
+  },
+  {
+    "model": "admission.professionalactivity",
+    "pk": 3,
+    "fields": {
+      "name": "Non"
+    }
+  }
+]
