@@ -27,9 +27,17 @@ from django.shortcuts import render
 from admission import models as mdl
 from admission.views import demande_validation
 from admission.views import tabs
+from admission.forms import SociologicalSurveyForm
 
 
 def update(request, application_id=None):
+    if request.method == "POST":
+        sociological_form = SociologicalSurveyForm(request.POST)
+        if sociological_form.is_valid():
+            print("Is valid")
+    else:
+        sociological_form = SociologicalSurveyForm()
+        pass
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
@@ -55,4 +63,5 @@ def update(request, application_id=None):
                    'tab_sociological': tab_status['tab_sociological'],
                    'tab_attachments': tab_status['tab_attachments'],
                    'tab_submission': tab_status['tab_submission'],
-                   'applications': mdl.application.find_by_user(request.user)})
+                   'applications': mdl.application.find_by_user(request.user),
+                   'sociological_form': sociological_form})

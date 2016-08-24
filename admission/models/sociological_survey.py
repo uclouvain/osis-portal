@@ -28,24 +28,31 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
 
+class SociologicalSurveyExamAdmin(admin.ModelAdmin):
+    pass
+
+
 class SociologicalSurvey(models.Model):
     person = models.ForeignKey('Applicant')
 
     number_brothers_sisters = models.IntegerField(default=0)
 
     father_is_deceased = models.BooleanField(default=False)
-    father_education = models.ForeignKey('Education', blank=True, null=True)
-    father_profession = models.ForeignKey('Profession', blank=True, null=True)
+    father_education = models.ForeignKey('Education', blank=True, null=True, related_name="father_education")
+    father_profession = models.ForeignKey('Profession', blank=True, null=True, related_name="father_profession")
 
     mother_is_deceased = models.BooleanField(default=False)
-    mother_education = models.ForeignKey('Education', blank=True, null=True)
-    mother_profession = models.ForeignKey('Profession', blank=True, null=True)
+    mother_education = models.ForeignKey('Education', blank=True, null=True, related_name="mother_education")
+    mother_profession = models.ForeignKey('Profession', blank=True, null=True, related_name="mother_profession")
 
-    student_professional_activity = models.ForeignKey('ProfessionalActivity')
-    student_profession = models.ForeignKey('Profession')
+    student_professional_activity = models.ForeignKey('ProfessionalActivity', related_name="student_activity")
+    student_profession = models.ForeignKey('Profession', related_name="student_profession")
 
-    conjoint_professional_activity = models.ForeignKey('ProfessionalActivity', blank=True, null=True)
-    conjoint_profession = models.ForeignKey('Profession', blank=True, null=True)
+    conjoint_professional_activity = models.ForeignKey('ProfessionalActivity', blank=True, null=True,
+                                                       related_name='conjoint_activity')
+    conjoint_profession = models.ForeignKey('Profession', blank=True, null=True, related_name="conjoint_profession")
 
-    paternal_grandfather_profession = models.ForeignKey('Profession', blank=True, null=True)
-    maternal_grandfather_profession = models.ForeignKey('Profession', blank=True, null=True)
+    paternal_grandfather_profession = models.ForeignKey('Profession', blank=True, null=True,
+                                                        related_name='paternal_grandfather_profession')
+    maternal_grandfather_profession = models.ForeignKey('Profession', blank=True, null=True,
+                                                        related_name="maternal_grandfather_profession")

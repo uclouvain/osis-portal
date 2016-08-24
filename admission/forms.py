@@ -28,6 +28,7 @@ from django.core.validators import MinValueValidator
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 from admission.validators import date_validator
+from admission.models.sociological_survey import SociologicalSurvey
 from localflavor.generic.forms import BICFormField, IBANFormField
 from osis_common.models.document_file import DocumentFile
 
@@ -246,3 +247,9 @@ class RemoveAttachmentForm(forms.Form):
                 DocumentFile.objects.get(pk=attachment_id)
             except ObjectDoesNotExist:
                 self.add_error('attachment_id', _('attachment_does_not_exist'))
+
+
+class SociologicalSurveyForm(forms.ModelForm):
+    class Meta:
+        model = SociologicalSurvey
+        exclude = ['person']

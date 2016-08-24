@@ -28,6 +28,10 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
 
+class Professiondmin(admin.ModelAdmin):
+    pass
+
+
 class Profession(models.Model):
     name = models.CharField(max_length=255)
 
