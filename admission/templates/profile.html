@@ -210,8 +210,7 @@
                     </div>
                 </div>
                 <br>
-                <div id="pnl_assimilation_criteria"
-                     style="visibility:hidden;display:none;">
+                <div id="pnl_assimilation_criteria">
                     <br>
                     {% trans 'criteria_question'%} :
                     <ol>
@@ -226,6 +225,7 @@
                                         <label class="radio-inline">
                                             <input type="radio" id="assimilation_criteria_{{forloop.counter}}_true"
                                                    name="assimilation_criteria_{{criteria.id}}"
+                                                   class="radio_assimilation_criteria"
                                                    value="true"
                                                    {% for applicant_criteria in applicant_assimilation_criteria %}
                                                      {% if applicant_criteria.criteria.id == criteria.id %} checked {% endif %}
@@ -244,16 +244,43 @@
                             {% endfor %}
                         </ol>
                     <br>
-                    Fournir obligatoirement une attestation pour au moins une des assimilations que vous avez choisies.
+                    <label>Fournir obligatoirement une attestation pour au moins une des assimilations que vous avez choisies.</label>
                     <br>
-                    <select id="criterias_sel">
-                        <option>-</option>
+                    {% for criteria in assimilationCriteria %}
 
-                    </select>
-                    <button type="button"
-                            id="btn_load_assimilation_doc"
-                            class="glyphicon glyphicon-plus"
-                            title="{% trans 'change_picture'%}"></button>
+                        <div id="pnl_criteria_{{forloop.counter}}">
+                            <table>
+                                {% if forloop.counter==1%}
+                                <tr><td>{% trans 'criteria'%} {{forloop.counter}}</td></tr>
+                                {%else%}
+                                <tr><td>{% trans 'criteria'%} {{forloop.counter}}</td></tr>
+                                {%endif%}
+                            </table>
+                            <div class="col-md-8">
+                                <li>{{criteria}}</li>
+                            </div>
+                            <div class="col-md-4">
+                                <div>
+                                    <label class="radio-inline">
+                                        <input type="radio" id="assimilation_criteria_{{forloop.counter}}_true"
+                                               name="assimilation_criteria_{{criteria.id}}"
+                                               class="radio_assimilation_criteria"
+                                               value="true"
+                                               {% for applicant_criteria in applicant_assimilation_criteria %}
+                                                 {% if applicant_criteria.criteria.id == criteria.id %} checked {% endif %}
+                                               {% endfor %}
+                                        > {% trans 'yes' %}
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" id="assimilation_criteria_{{forloop.counter}}_false"
+                                               name="assimilation_criteria_{{criteria.id}}"
+                                               value="false"
+                                        > {% trans 'no' %}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
                     <br>
                     </div>
                 </div>

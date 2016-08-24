@@ -73,7 +73,9 @@
         {% if description == 'PROFESSIONAL_EXAM_CERTIFICATE'%}
             {% trans 'admission_exam_certificate_document' %}
         {% endif %}
-
+        {% if description == 'RESIDENT_LONG_DURATION' or description == 'ID_FOREIGN_UNLIMITED' or  description == 'ATTACHMENT_26' or  description == 'REFUGEE_CARD' or  description == 'FAMILY_COMPOSITION' or  description == 'BIRTH_CERTIFICATE' or  description == 'RESIDENT_CERTIFICATE' or  description == 'STATELESS_CERTIFICATE' or  description == 'FOREIGN_INSCRIPTION_CERTIFICATE' or  description == 'SUBSIDIARY_PROTECTION_DECISION' or  description == 'RESIDENCE_PERMIT' or  description == 'PAYCHECK' or  description == 'CPAS' or  description == 'TUTORSHIP_CERTIFICATE' or  description == 'OTHER' or  description == 'SCHOLARSHIP_CFWB' or  description == 'SCHOLARSHIP_DEVELOPMENT_COOPERATION'%}
+            {{ description }}
+        {% endif %}
     </h2>
   </div>
   <div class="panel panel-default">
@@ -87,8 +89,11 @@
         {% if description == 'ID_PICTURE' or description == 'ID_CARD'%}
             <a href="{% url 'home'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>
         {% else %}
-          {% if description == 'NATIONAL_DIPLOMA_VERSO' or  description == 'NATIONAL_DIPLOMA_RECTO' or  description == 'INTERNATIONAL_DIPLOMA_RECTO' or  description == 'INTERNATIONAL_DIPLOMA_VERSO' or  description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO' or  description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO' or  description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO' or  description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO' or  description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO' or  description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO' or  description == 'EQUIVALENCE' or description == 'ADMISSION_EXAM_CERTIFICATE' or description == 'PROFESSIONAL_EXAM_CERTIFICATE'%}
+          {% if description == 'NATIONAL_DIPLOMA_VERSO' or description == 'NATIONAL_DIPLOMA_RECTO' or description == 'INTERNATIONAL_DIPLOMA_RECTO' or description == 'INTERNATIONAL_DIPLOMA_VERSO' or description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO' or  description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO' or  description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO' or  description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO' or  description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO' or  description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO' or  description == 'EQUIVALENCE' or description == 'ADMISSION_EXAM_CERTIFICATE' or description == 'PROFESSIONAL_EXAM_CERTIFICATE'%}
           <a href="{% url 'diploma_update'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>
+          {% endif %}
+          {% if description == 'RESIDENT_LONG_DURATION' or description == 'ID_FOREIGN_UNLIMITED' or  description == 'ATTACHMENT_26' or  description == 'REFUGEE_CARD' or  description == 'FAMILY_COMPOSITION' or  description == 'BIRTH_CERTIFICATE' or  description == 'RESIDENT_CERTIFICATE' or  description == 'STATELESS_CERTIFICATE' or  description == 'FOREIGN_INSCRIPTION_CERTIFICATE' or  description == 'SUBSIDIARY_PROTECTION_DECISION' or  description == 'RESIDENCE_PERMIT' or  description == 'PAYCHECK' or  description == 'CPAS' or  description == 'TUTORSHIP_CERTIFICATE' or  description == 'OTHER' or  description == 'SCHOLARSHIP_CFWB' or  description == 'SCHOLARSHIP_DEVELOPMENT_COOPERATION'%}
+            <a href="{% url 'home'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>
           {% endif %}
         {% endif %}
       </form>

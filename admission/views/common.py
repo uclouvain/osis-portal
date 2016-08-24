@@ -261,8 +261,7 @@ def profile(request, application_id=None, message_success=None):
                             mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria()
                         applicant_assimilation_criteria.criteria = criteria
                         applicant_assimilation_criteria.applicant = applicant
-                        if applicant_form.is_valid():
-                            applicant_assimilation_criteria.save()
+                        applicant_assimilation_criteria.save()
 
         message_success = None
 
@@ -297,6 +296,8 @@ def profile(request, application_id=None, message_success=None):
 
     assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
     applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
+    print('applicant_assimilation_criteria')
+    print(applicant_assimilation_criteria)
     application = None
     if application_id:
         application = mdl.application.find_by_id(application_id)
@@ -309,7 +310,7 @@ def profile(request, application_id=None, message_success=None):
                                                    'applicant_form': applicant_form,
                                                    'countries': countries,
                                                    'assimilationCriteria': assimilation_criteria,
-                                                   'personAssimilationCriteria': applicant_assimilation_criteria,
+                                                   'applicant_assimilation_criteria': applicant_assimilation_criteria,
                                                    'person_legal_address': person_legal_address,
                                                    'person_contact_address': person_contact_address,
                                                    'same_addresses': same_addresses,
@@ -386,6 +387,13 @@ def get_picture_id(user):
 
 def get_id_document(user):
     pictures = mdl_osis_common.document_file.search(user, document_type.ID_CARD)
+    if pictures:
+        return ''.join(('/admission', pictures.reverse()[0].file.url))
+    return None
+
+
+def get_document_assimilation(user, document_type):
+    pictures = mdl_osis_common.document_file.search(user, document_type)
     if pictures:
         return ''.join(('/admission', pictures.reverse()[0].file.url))
     return None

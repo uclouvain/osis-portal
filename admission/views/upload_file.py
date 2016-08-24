@@ -66,6 +66,23 @@ def upload_file(request):
                                   document_type.EQUIVALENCE,
                                   document_type.ADMISSION_EXAM_CERTIFICATE,
                                   document_type.PROFESSIONAL_EXAM_CERTIFICATE]
+            assimilation_uploads = [document_type.RESIDENT_LONG_DURATION,
+                                    document_type.ID_FOREIGN_UNLIMITED,
+                                    document_type.ATTACHMENT_26,
+                                    document_type.REFUGEE_CARD,
+                                    document_type.FAMILY_COMPOSITION,
+                                    document_type.BIRTH_CERTIFICATE,
+                                    document_type.RESIDENT_CERTIFICATE,
+                                    document_type.STATELESS_CERTIFICATE,
+                                    document_type.FOREIGN_INSCRIPTION_CERTIFICATE,
+                                    document_type.SUBSIDIARY_PROTECTION_DECISION,
+                                    document_type.RESIDENCE_PERMIT,
+                                    document_type.PAYCHECK,
+                                    document_type.CPAS,
+                                    document_type.TUTORSHIP_CERTIFICATE,
+                                    document_type.OTHER,
+                                    document_type.SCHOLARSHIP_CFWB,
+                                    document_type.SCHOLARSHIP_DEVELOPMENT_COOPERATION]
 
             if description in curriculum_uploads:
                 documents = mdl.application_document_file.search(application, description)
@@ -73,7 +90,8 @@ def upload_file(request):
                     document.delete()
             if description == document_type.ID_PICTURE \
                     or description == document_type.ID_CARD \
-                    or description in curriculum_uploads:
+                    or description in curriculum_uploads \
+                    or description in assimilation_uploads:
                 # Delete older file with the same description
                 documents = mdl_osis_common.document_file.search(user=request.user, description=description)
                 for document in documents:
@@ -93,12 +111,14 @@ def upload_file(request):
                 adm_doc_file.document_file = file
                 adm_doc_file.save()
 
-            if description == document_type.ID_PICTURE or description == document_type.ID_CARD:
+            if (description == document_type.ID_PICTURE or description == document_type.ID_CARD) or \
+                            description in assimilation_uploads:
                 tab_status = tabs.init(request)
                 applicant = mdl.applicant.find_by_user(request.user)
                 applications = mdl.application.find_by_user(request.user)
                 person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
                 person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
+
                 return render(request, "admission_home.html", {
                     'applications': applications,
                     'applicant': applicant,
@@ -117,7 +137,24 @@ def upload_file(request):
                     'picture': common.get_picture_id(request.user),
                     'id_document': common.get_id_document(request.user),
                     'person_legal_address': person_legal_address,
-                    'person_contact_address': person_contact_address})
+                    'person_contact_address': person_contact_address,
+                    'resident_long_duration' : common.get_document_assimilation(request.user,'RESIDENT_LONG_DURATION'),
+                    'id_foreign_unlimited': common.get_document_assimilation(request.user,'ID_FOREIGN_UNLIMITED'),
+                    'attachment_26': common.get_document_assimilation(request.user,'ATTACHMENT_26'),
+                    'refugee_card': common.get_document_assimilation(request.user,'REFUGEE_CARD'),
+                    'family_composition': common.get_document_assimilation(request.user,'FAMILY_COMPOSITION'),
+                    'birth_certificate': common.get_document_assimilation(request.user,'BIRTH_CERTIFICATE'),
+                    'resident_certificate': common.get_document_assimilation(request.user,'RESIDENT_CERTIFICATE'),
+                    'stateless_certificate': common.get_document_assimilation(request.user,'STATELESS_CERTIFICATE'),
+                    'foreign_inscription_certificate': common.get_document_assimilation(request.user,'FOREIGN_INSCRIPTION_CERTIFICATE'),
+                    'subsidiary_protection_decision': common.get_document_assimilation(request.user,'SUBSIDIARY_PROTECTION_DECISION'),
+                    'residence_permit': common.get_document_assimilation(request.user,'RESIDENCE_PERMIT'),
+                    'paycheck': common.get_document_assimilation(request.user,'PAYCHECK'),
+                    'cpas': common.get_document_assimilation(request.user,document_type.CPAS),
+                    'tutorship_certificate': common.get_document_assimilation(request.user,document_type.TUTORSHIP_CERTIFICATE),
+                    'other': common.get_document_assimilation(request.user,document_type.OTHER),
+                    'scholarship_cfwb': common.get_document_assimilation(request.user,document_type.SCHOLARSHIP_CFWB),
+                    'scholarship_development_cooperation': common.get_document_assimilation(request.user, document_type.SCHOLARSHIP_DEVELOPMENT_COOPERATION)})
             else:
                 if description in curriculum_uploads:
                     return HttpResponseRedirect(reverse('diploma_update', args=(application.id,)))
