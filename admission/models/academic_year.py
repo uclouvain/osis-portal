@@ -25,6 +25,8 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from django.utils import timezone
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class AcademicYearAdmin(admin.ModelAdmin):
@@ -34,9 +36,9 @@ class AcademicYearAdmin(admin.ModelAdmin):
 
 class AcademicYear(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    year        = models.IntegerField()
-    start_date  = models.DateField(blank=True, null=True)
-    end_date    = models.DateField(blank=True, null=True)
+    year = models.IntegerField()
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
 
     @property
     def name(self):
@@ -44,3 +46,32 @@ class AcademicYear(models.Model):
 
     def __str__(self):
         return u"%s-%s" % (self.year, self.year + 1)
+
+
+def next_academic_year(self):
+    next_year = self.year + 1
+    return AcademicYear.objects.filter(year=next_year)
+
+
+def find_academic_years():
+    return AcademicYear.objects.all().order_by('year')
+
+
+def current_academic_year():
+    academic_yr = AcademicYear.objects.filter(start_date__lte=timezone.now()) \
+                                      .filter(end_date__gte=timezone.now()).first()
+    if academic_yr:
+        return academic_yr
+    else:
+        return None
+
+
+def find_by_id(id):
+    return AcademicYear.objects.get(pk=id)
+
+
+def find_by_year(a_year):
+    try:
+        return AcademicYear.objects.get(year=a_year)
+    except ObjectDoesNotExist:
+        return None

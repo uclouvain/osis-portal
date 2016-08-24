@@ -1,0 +1,278 @@
+{% load staticfiles %}
+{% load i18n %}
+{% load message %}
+{% load math %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+<form method="post" action="{% url 'curriculum' %}">
+    {% csrf_token %}
+    <div>
+        <a id="lnk_previous_step_up"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'diploma_update' application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
+           onclick="save('form_curriculum');"
+           title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%} : {%trans 'prerequisites'%}</a>
+        <a id="lnk_next_step_up"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'accounting' application.id%}{%else%}{% url 'accounting'%}{%endif%}"
+           onclick="save('form_curriculum');"
+           title="{% trans 'accounting'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            {%trans 'next_step'%} : {%trans 'accounting'%}</a>
+    </div>
+    <div>
+        {%if message_success%}
+            <br>
+            <font class="alert alert-success" role="alert" style="margin-left:5px;">
+                {{message_success}}
+            </font>
+        {% endif %}
+    </div>
+    <br>
+    {% trans 'curriculum_instruction' %}
+    <br>
+    <br>
+    {% trans 'curriculum_instruction_warning' %}
+    <br>
+    <br>
+    {% trans 'curriculum_instruction_duplicate' %}
+    <br>
+    <br>
+    <input type="hidden"
+           id="hdn_current_academic_year"
+           value="{{current_academic_year.year}}" >
+    {% for curriculum in curricula %}
+        <input type="hidden"
+               id="hdn_original_academic_year_{{curriculum.academic_year.year}}"
+               name="original_academic_year_{{curriculum.academic_year.year}}"
+               value="{{curriculum.academic_year.year}}" >
+        <input type="hidden"
+               id="hdn_original_path_type_{{curriculum.academic_year.year}}"
+               name="original_path_type_{{curriculum.academic_year.year}}"
+               value="{{curriculum.path_type}}" >
+        <input type="hidden"
+               id="hdn_original_national_education_{{curriculum.academic_year.year}}"
+               name="original_national_education_{{curriculum.academic_year.year}}"
+               value="{{curriculum.national_education | default_if_none:''}}" >
+        <input type="hidden"
+               id="hdn_original_language_id_{{curriculum.academic_year.year}}"
+               name="original_language_id_{{curriculum.academic_year.year}}"
+               value="{{curriculum.language.id}}" >
+        <input type="hidden"
+               id="hdn_original_language_recognized_{{curriculum.academic_year.year}}"
+               name="original_language_recognized_{{curriculum.academic_year.year}}"
+               value="{{curriculum.language.recognized}}" >
+        <input type="hidden"
+               id="hdn_original_national_institution_id_{{curriculum.academic_year.year}}"
+               name="original_national_institution_id_{{curriculum.academic_year.year}}"
+               value="{{curriculum.national_institution.id}}" >
+        <input type="hidden"
+               id="hdn_original_national_institution_adhoc_{{curriculum.academic_year.year}}"
+               name="original_national_institution_adhoc_{{curriculum.academic_year.year}}"
+               value="{{curriculum.national_institution.adhoc}}" >
+        <input type="hidden"
+               id="hdn_original_national_institution_city_{{curriculum.academic_year.year}}"
+               name="original_national_institution_city_{{curriculum.academic_year.year}}"
+               value="{{curriculum.national_institution.city}}" >
+        <input type="hidden"
+               id="hdn_original_national_institution_country_id_{{curriculum.academic_year.year}}"
+               name="original_national_institution_country_id_{{curriculum.academic_year.year}}"
+               value="{{curriculum.national_institution.country.id}}" >
+        <input type="hidden"
+               id="hdn_original_national_institution_name_{{curriculum.academic_year.year}}"
+               name="original_national_institution_name_{{curriculum.academic_year.year}}"
+               value="{{curriculum.national_institution.name}}" >
+        <input type="hidden"
+               id="hdn_original_domain_id_{{curriculum.academic_year.year}}"
+               name="original_domain_id_{{curriculum.academic_year.year}}"
+               value="{{curriculum.domain.id}}" >
+        <input type="hidden"
+               id="hdn_original_sub_domain_id_{{curriculum.academic_year.year}}"
+               value="{{curriculum.sub_domain.id}}" >
+        <input type="hidden"
+               id="hdn_original_grade_type_id_{{curriculum.academic_year.year}}"
+               name="original_grade_type_id_{{curriculum.academic_year.year}}"
+               value="{{curriculum.grade_type.id}}" >
+        <input type="hidden"
+               id="hdn_original_grade_type_no_university_{{curriculum.academic_year.year}}"
+               name="original_grade_type_no_university_{{curriculum.academic_year.year}}"
+               value="{{curriculum.grade_type_no_university}}" >
+        <input type="hidden"
+               id="hdn_original_result_{{curriculum.academic_year.year}}"
+               name="original_result_{{curriculum.academic_year.year}}"
+               value="{{curriculum.result}}" >
+        <input type="hidden"
+               id="hdn_original_credits_enrolled_{{curriculum.academic_year.year}}"
+               name="original_credits_enrolled_{{curriculum.academic_year.year}}"
+               value="{{curriculum.credits_enrolled | default_if_none:''}}" >
+        <input type="hidden"
+               id="hdn_original_credits_obtained_{{curriculum.academic_year.year}}"
+               name="original_credits_obtained_{{curriculum.academic_year.year}}"
+               value="{{curriculum.credits_obtained | default_if_none:''}}" >
+        <input type="hidden"
+               id="hdn_original_diploma_{{curriculum.academic_year.year}}"
+               name="original_diploma_{{curriculum.academic_year.year}}"
+               value="{{curriculum.diploma}}" >
+        <input type="hidden"
+               id="hdn_original_diploma_title_{{curriculum.academic_year.year}}"
+               name="original_diploma_title_{{curriculum.academic_year.year}}"
+               value="{{curriculum.diploma_title | default_if_none:''}}" >
+        <input type="hidden"
+               id="hdn_original_activity_type_{{curriculum.academic_year.year}}"
+               name="original_activity_type_{{curriculum.academic_year.year}}"
+               value="{{curriculum.activity_type}}" >
+        <input type="hidden"
+               id="hdn_original_activity_{{curriculum.academic_year.year}}"
+               name="original_activity_{{curriculum.academic_year.year}}"
+               value="{{curriculum.activity | default_if_none:''}}" >
+        <input type="hidden"
+               id="hdn_original_activity_place_{{curriculum.academic_year.year}}"
+               name="original_activity_place_{{curriculum.academic_year.year}}"
+               value="{{curriculum.activity_place | default_if_none:''}}" >
+        <input type="hidden"
+               id="hdn_original_study_system_{{curriculum.academic_year.year}}"
+               name="original_study_system_{{curriculum.academic_year.year}}"
+               value="{{curriculum.study_system}}" >
+
+        {% pnl_national_education__message_error validation_messages year=curriculum.academic_year.year as pnl_national_detail_error%}
+        {% pnl_foreign_education_message_error validation_messages year=curriculum.academic_year.year as pnl_foreign_detail_error %}
+        {% pnl_other_message_error validation_messages year=curriculum.academic_year.year as pnl_other_error %}
+
+        <div class="panel panel-default"
+             id="pnl_curriculum_id_{{curriculum.academic_year.year}}">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>{{curriculum.academic_year}} *</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label style="visibility:hidden;display:none;"
+                               id="message_success_{{curriculum.academic_year.year}}"
+                               class="label label-success">{% trans 'data_duplicated'%}
+                        </label>
+                    </div>
+                    <div class="col-md-2">
+                        {%if not forloop.last%}
+                            <button type="submit" class="btn btn-default"
+                                    title="{% trans 'duplicate_help'%} {{curriculum.academic_year.year|add:1 }}-{{curriculum.academic_year.year|add:2 }}"
+                                    id="bt_duplicate_{{curriculum.academic_year.year}}"
+                                    name="bt_duplicate_{{curriculum.academic_year.year}}"
+                                    data-toggle="tooltip" data-placement="bottom" >
+                                    <span class="glyphicon glyphicon-paste" aria-hidden="true"></span>
+                                    {% trans 'duplicate'%}
+                            </button>
+                        {%endif%}
+                    </div>
+                    <div class="col-md-1">
+                           <button type="button"
+                                   class="btn btn-default"
+                                   title="{% trans 'show_detail'%}"
+                                   id="bt_show_data_{{curriculum.academic_year.year}}"
+                                   onclick="display('pnl_detail_{{curriculum.academic_year.year}}',true);display('bt_hide_data_{{curriculum.academic_year.year}}',true);display('bt_show_data_{{curriculum.academic_year.year}}',false);"
+                                   data-toggle="tooltip"
+                                   data-placement="bottom"
+                                   style="{%if pnl_national_detail_error%}visibility:hidden;display:none;{%else%}visibility:visible;display:block;{%endif%}">
+                                   <span class="glyphicon glyphicon-chevron-down"></span>
+                           </button>
+                           <button type="button"
+                                   class="btn btn-default"
+                                   title="{% trans 'hide_detail'%}"
+                                   id="bt_hide_data_{{curriculum.academic_year.year}}"
+                                   onclick="display('pnl_detail_{{curriculum.academic_year.year}}',false);display('bt_hide_data_{{curriculum.academic_year.year}}',false);display('bt_show_data_{{curriculum.academic_year.year}}',true)"
+                                   data-toggle="tooltip"
+                                   data-placement="bottom"
+                                   style="{%if pnl_national_detail_error%}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+                                   <span class="glyphicon glyphicon-chevron-up"></span>
+                           </button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body"
+                 id="pnl_detail_{{curriculum.academic_year.year}}"
+                 style="{%if pnl_national_detail_error or  pnl_foreign_detail_error%}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+                <input type="hidden" id="hdn_curriculum_year_{{curriculum.academic_year.year}}" name="curriculum_year_{{curriculum.academic_year.year}}" value="{{curriculum.academic_year.year}}">
+                <label> {% trans 'path_type'%} *</label>
+                <br>
+                <label class="radio-inline">
+                    <input type="radio"
+                           name="path_type_{{curriculum.academic_year.year}}"
+                           id="rdb_path_type_local_university_{{curriculum.academic_year.year}}"
+                           value="LOCAL_UNIVERSITY" > {% trans 'national_university'%}
+                </label>
+                <label class="radio-inline">
+                    <input type="radio"
+                           name="path_type_{{curriculum.academic_year.year}}"
+                           id="rdb_path_type_foreign_university_{{curriculum.academic_year.year}}"
+                           value="FOREIGN_UNIVERSITY"> {% trans 'foreign_university'%}
+                </label>
+                <label class="radio-inline">
+                    <input type="radio"
+                           name="path_type_{{curriculum.academic_year.year}}"
+                           id="rdb_path_type_local_high_non_university_{{curriculum.academic_year.year}}"
+                           value="LOCAL_HIGH_EDUCATION"> {% trans 'high_national_non_university'%}
+                </label>
+                <label class="radio-inline">
+                    <input type="radio"
+                           name="path_type_{{curriculum.academic_year.year}}"
+                           id="rdb_path_type_high_foreign_non_university_{{curriculum.academic_year.year}}"
+                           value="FOREIGN_HIGH_EDUCATION"> {% trans 'high_foreign_non_university'%}
+                </label>
+                <label class="radio-inline">
+                    <input type="radio"
+                           name="path_type_{{curriculum.academic_year.year}}"
+                           id="rdb_path_type_other_{{curriculum.academic_year.year}}"
+                           value="ANOTHER_ACTIVITY" > {% trans 'other'%}
+                </label>
+                {% message_error validation_messages year=curriculum.academic_year.year|lower param='path_type' as path_type_msg %}
+                {%if path_type_msg%}<font class="error" style="margin-left:5px;">{{path_type_msg}}</font>{%endif%}
+                {% include "curriculum/national.html" %}
+                {% include "curriculum/foreign.html" %}
+                {% include "curriculum/other.html" %}
+              </div>
+        </div>
+    {%endfor%}
+    <div>
+        {%if message_success%}
+            <br><br>
+            <font class="alert alert-success" role="alert" style="margin-left:5px;">{{ message_success}}</font>
+            <br><br>
+        {% endif %}
+    </div>
+    <div>
+        <a id="lnk_previous_step"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'diploma_update' application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
+           onclick="save('form_curriculum');"
+           title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%} : {%trans 'prerequisites'%}</a>
+        <a id="lnk_next_step"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'accounting' application.id%}{%else%}{% url 'accounting'%}{%endif%}"
+           onclick="save('form_curriculum');"
+           title="{% trans 'accounting'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            {%trans 'next_step'%} : {%trans 'accounting'%}</a>
+    </div>
+</form>

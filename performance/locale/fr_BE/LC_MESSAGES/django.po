@@ -1,0 +1,126 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-05-03 08:56+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "acronym"
+msgstr "Sigle"
+
+msgid "course"
+msgstr "Cours"
+
+msgid "credits"
+msgstr "Crédits"
+
+msgid "dont_have_the_score_yet"
+msgstr "Vous n'avez pas encore les résultats de vos études."
+
+msgid "ects"
+msgstr "ECTS"
+
+msgid "explanation_B"
+msgstr "B - Crédit (Bologne)"
+
+msgid "explanation_EPM"
+msgstr "EPM - Cours reporté (Epreuve modifiée)"
+
+msgid "explanation_I"
+msgstr "I - Première inscription"
+
+msgid "explanation_P"
+msgstr "P - examen partiel"
+
+msgid "explanation_RJ"
+msgstr "R,J - Report de note"
+
+msgid "explanation_T"
+msgstr "T - note résultant d'un test"
+
+msgid "explanation_TV"
+msgstr "TV - Evaluation satisfaisante (la note ne compte pas)"
+
+msgid "explanation_W"
+msgstr "W - Evaluation non satisfaisante (la note ne compte pas)"
+
+msgid "explanation_y"
+msgstr "Y - Deuxième inscription"
+
+msgid "first_name"
+msgstr "Prénom"
+
+msgid "inscr"
+msgstr "Inscr."
+
+msgid "jan"
+msgstr "Jan."
+
+msgid "june"
+msgstr "Juin"
+
+msgid "last_name"
+msgstr "Nom"
+
+msgid "legend"
+msgstr "Légende"
+
+msgid "matricule_number"
+msgstr "Matricule"
+
+msgid "mean"
+msgstr "Moyenne"
+
+msgid "mention"
+msgstr "Mention"
+
+msgid "no_results"
+msgstr "Aucun résultats à afficher."
+
+msgid "no_student_with_this_registration_id"
+msgstr "Aucun étudiant avec ce noma!"
+
+msgid "performance"
+msgstr "Performance"
+
+msgid "performance_administration"
+msgstr "Administration de performance"
+
+msgid "performance_results"
+msgstr "Résultats"
+
+msgid "program"
+msgstr "Programme"
+
+msgid "registration_id"
+msgstr "Noma"
+
+msgid "sept"
+msgstr "Sept."
+
+msgid "student_performance"
+msgstr "Performances d'un étudiant"
+
+msgid "text_mean_exprimed_for_20"
+msgstr "Attention : à partir de juin 2009, la moyenne est exprimée sur un maximum de 20."
+
+msgid "title"
+msgstr "Titre"
+
+msgid "total_ects_inscription"
+msgstr "Total ECTS / Inscription"
+
+msgid "year"
+msgstr "Année"

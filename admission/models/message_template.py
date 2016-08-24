@@ -35,9 +35,9 @@ class MessageTemplateAdmin(admin.ModelAdmin):
 
 
 class MessageTemplate(models.Model):
-    FORMAT_CHOICES = (('PLAIN', _('Plain')),
-                      ('HTML', 'HTML'),
-                      ('PLAIN_HTML', _('Plain and HTML')))
+    FORMAT_CHOICES = (('PLAIN', _('plain')),
+                      ('HTML', 'html'),
+                      ('PLAIN_HTML', _('plain_and_html')))
 
     reference = models.CharField(max_length=50, unique=True)
     subject   = models.CharField(max_length=255)
@@ -50,5 +50,8 @@ class MessageTemplate(models.Model):
 
 
 def find_by_reference(reference):
-    message_template = MessageTemplate.objects.get(reference=reference)
-    return message_template
+    try:
+        message_template = MessageTemplate.objects.get(reference=reference)
+        return message_template
+    except:
+        return None

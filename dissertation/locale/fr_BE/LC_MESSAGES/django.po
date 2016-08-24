@@ -1,0 +1,225 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-05-03 08:56+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "accepted_by_commission"
+msgstr "Accepté par la commission"
+
+msgid "accepted_by_director"
+msgstr "Accepté par le promoteur"
+
+msgid "accepted_by_first_year_evaluation"
+msgstr "Validation de première année validée"
+
+msgid "application_dissertation"
+msgstr "Gestion des mémoires"
+
+msgid "author"
+msgstr "Auteur"
+
+msgid "case_study"
+msgstr "Cas d'étude"
+
+msgid "change"
+msgstr "Changement"
+
+msgid "collaboration"
+msgstr "Collaboration"
+
+msgid "copromotor"
+msgstr "Co-promoteur"
+
+msgid "current_status"
+msgstr "Statut actuel"
+
+msgid "date"
+msgstr "Date"
+
+msgid "defend_periode"
+msgstr "Période de défense"
+
+msgid "defend_year"
+msgstr "Année de défense"
+
+msgid "defended"
+msgstr "Défendu"
+
+msgid "delete"
+msgstr "Supprimer"
+
+msgid "desc_lnk_dissertations"
+msgstr "Liste de mes projets de mémoire"
+
+msgid "desc_lnk_propositions_dissertations"
+msgstr "Liste des sujets disponibles"
+
+msgid "description"
+msgstr "Description"
+
+msgid "dir_submit"
+msgstr "Soumettre"
+
+msgid "dissertation"
+msgstr "Mémoire"
+
+msgid "dissertation_history"
+msgstr "Historique du mémoire"
+
+msgid "dissertation_informations"
+msgstr "Informations du mémoire"
+
+msgid "dissertation_jury"
+msgstr "Jury"
+
+msgid "domain"
+msgstr "Domaine"
+
+msgid "draft"
+msgstr "Brouillon"
+
+msgid "ended"
+msgstr "Terminé"
+
+msgid "ended_los"
+msgstr "Reporté"
+
+msgid "ended_win"
+msgstr "Réussi"
+
+msgid "forbidden"
+msgstr "Interdite"
+
+msgid "history"
+msgstr "Historique"
+
+msgid "january"
+msgstr "Janvier"
+
+msgid "june"
+msgstr "Juin"
+
+msgid "justification_confirmation_message"
+msgstr "Confirmer la justification"
+
+msgid "level"
+msgstr "Niveau"
+
+msgid "literature_review"
+msgstr "Revue Litéraire"
+
+msgid "manager"
+msgstr "Gestionnaire de cours"
+
+msgid "max_students_number"
+msgstr "Nombre maximum d'étudiant"
+
+msgid "memories_list"
+msgstr "Liste de mes mémoires"
+
+msgid "next_status"
+msgstr "Nouveau statut"
+
+msgid "no_result"
+msgstr "Aucun résultat trouvé"
+
+msgid "offer_propositions"
+msgstr "Programmes de cours"
+
+msgid "optional"
+msgstr "Facultatif"
+
+msgid "person"
+msgstr "Personne"
+
+msgid "possible"
+msgstr "Possible"
+
+msgid "professor"
+msgstr "Professeur"
+
+msgid "promotor"
+msgstr "Promoteur"
+
+msgid "proposition_dissertation_informations"
+msgstr "Informations du sujet"
+
+msgid "proposition_dissertation_jury"
+msgstr "Jury proposé"
+
+msgid "question"
+msgstr "Question"
+
+msgid "reader"
+msgstr "Lecteur"
+
+msgid "refused_by_commission"
+msgstr "Refusé par la commission"
+
+msgid "refused_by_director"
+msgstr "Refusé par le promoteur"
+
+msgid "refused_by_first_year_evaluation"
+msgstr "Validation de première année ratée"
+
+msgid "required"
+msgstr "Requis"
+
+msgid "search"
+msgstr "Rechercher"
+
+msgid "september"
+msgstr "Septembre"
+
+msgid "status"
+msgstr "Statut"
+
+msgid "subjects_list"
+msgstr "Liste des sujets"
+
+msgid "submitted_to_commission"
+msgstr "Soumis à la commission"
+
+msgid "submitted_to_director"
+msgstr "Soumis au promoteur"
+
+msgid "submitted_to_first_year_evaluation"
+msgstr "Soumis à l'évaluation de première année"
+
+msgid "taken_places"
+msgstr "Intérêt"
+
+msgid "theme"
+msgstr "Theme"
+
+msgid "title"
+msgstr "Titre"
+
+msgid "to_be_defended"
+msgstr "En attente de défense"
+
+msgid "to_be_received"
+msgstr "En attente de réception"
+
+msgid "to_dir_submit_confirmation_message"
+msgstr "Attention : vous allez soumettre ce projet de mémoire au promoteur. Êtes-vous certain de vouloir continuer ?"
+
+msgid "type"
+msgstr "Type"
+
+msgid "work"
+msgstr "Travail"

@@ -23,35 +23,52 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.conf import settings
 from django.contrib import admin
 from django.conf.urls import url, include
-from django.contrib.auth.models import User
-from rest_framework import serializers, viewsets, routers
+from base.views import common
+from django.conf.urls.static import static
+from django.views.i18n import javascript_catalog
 
 
-# Serializers define the API representation.
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ('url', 'username', 'email', 'is_staff')
+js_info_dict = {
+    'domain': 'djangojs',
+    'packages': ('admission',),
+}
 
 
-# ViewSets define the view behavior.
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+js_info_dict = {
+    'domain': 'djangojs',
+    'packages': ('admission',),
+}
+
+urlpatterns = (
+    url(r'^'+settings.ADMIN_URL, admin.site.urls),
+    url(r'', include('base.urls')),
+    url(r'^login/$', common.login, name='login'),
+    url(r'^logout/$', common.log_out, name='logout'),
+    url(r'^logged_out/$', common.logged_out, name='logged_out'),
+    url(r'^403/$', common.access_denied, name="error_403"),
+    url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict, name='javascript-catalog'),
+)
 
 
-# Routers provide a way of automatically determining the URL conf.
-router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
+if 'admission' in settings.INSTALLED_APPS:
+    urlpatterns = urlpatterns + (url(r'^admission/', include('admission.urls')), )
+if 'dashboard' in settings.INSTALLED_APPS:
+    urlpatterns = urlpatterns + (url(r'^dashboard/', include('dashboard.urls')), )
+if 'catalog' in settings.INSTALLED_APPS:
+    urlpatterns = urlpatterns + (url(r'^catalog/', include('catalog.urls')), )
+if 'performance' in settings.INSTALLED_APPS:
+    urlpatterns = urlpatterns + (url(r'^performance/', include('performance.urls')), )
+if 'dissertation' in settings.INSTALLED_APPS:
+    urlpatterns = urlpatterns + (url(r'^dissertation/', include('dissertation.urls')),)
 
 
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
-urlpatterns = [
-    url(r'^', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^admin/', admin.site.urls),
-    url(r'^admission/', include('admission.urls')),
-]
+handler404 = 'base.views.common.page_not_found'
+handler403 = 'base.views.common.access_denied'
+handler500 = 'base.views.common.server_error'
+
+admin.site.site_header = 'Osis-studies'
+admin.site.site_title  = 'Osis-studies'
+admin.site.index_title = 'Louvain'

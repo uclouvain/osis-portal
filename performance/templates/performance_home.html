@@ -1,0 +1,90 @@
+{% extends "dashboard_layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block breadcrumb %}
+        <li class="active">{% trans 'performance' %}</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="page-header">
+    <h2>{% trans 'performance' %}</h2>
+</div>
+
+{% include "template_messages.html" %}
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <!-- Student info -->
+        <div class="row">
+            <div class="col-md-6">
+                <label>{% trans 'last_name' %}, {% trans 'first_name' %}</label>
+                <br>
+                {{ student.person.last_name}}, {{ student.person.first_name }}
+            </div>
+            <div class="col-md-6">
+                <label>{% trans 'matricule_number' %}</label>
+                <br>
+                {{ student.registration_id }}
+            </div>
+        </div>
+        <!-- Student list of programs -->
+        {% if not programs %}
+        <br>
+        <br>
+        <p class="text-warning"> {% trans 'dont_have_the_score_yet' %} </p>
+        {% endif %}
+    </div>
+    {% if programs %}
+        <table id="table_academic_years" class="table table-hover">
+            <tr>
+                <th>{% trans 'year' %}</th>
+                <th>{% trans 'acronym' %}</th>
+                <th>{% trans 'program' %}</th>
+            </tr>
+            {% for row in programs %}
+            <tr>
+                <td>{{row.year}}</td>
+                <td>
+                    {% if perms.base.is_faculty_administrator %}
+                        <a href="{% url 'performance_student_result' registration_id=student.registration_id anac=row.anac program_acronym=row.formatted_acronym %}">
+                            {{row.acronym}}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'performance_result' anac=row.anac program_acronym=row.formatted_acronym%}">
+                            {{row.acronym}}
+                        </a>
+                    {% endif %}
+                </td>
+                <td>{{row.title}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+</div>
+{% endblock %}

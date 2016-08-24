@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block breadcrumb_area %}
+    <ol class="breadcrumb">
+        <li>{% trans 'administration' %}</li>
+        {% block breadcrumb %}
+        {% endblock %}
+    </ol>
+{% endblock %}

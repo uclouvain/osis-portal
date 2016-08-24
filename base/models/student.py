@@ -1,0 +1,151 @@
+##############################################################################
+#
+#    OSIS stands for Open Student Information System. It's an application
+#    designed to manage the core business of higher education institutions,
+#    such as universities, faculties, institutes and professional schools.
+#    The core business involves the administration of students, teachers,
+#    courses, programs and so on.
+#
+#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    A copy of this license - GNU General Public License - is available
+#    at the root of the source code of this program.  If not,
+#    see http://www.gnu.org/licenses/.
+#
+##############################################################################
+import logging
+from django.conf import settings
+from django.db import models
+from django.contrib import admin
+from django.core.exceptions import ObjectDoesNotExist
+from base.models import person as model_person
+from base.models.person import Person
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
+
+
+class StudentAdmin(admin.ModelAdmin):
+    list_display = ('person', 'registration_id')
+    fieldsets = ((None, {'fields': ('registration_id', 'person')}),)
+    raw_id_fields = ('person', )
+    search_fields = ['person__first_name', 'person__last_name', 'registration_id']
+
+
+class StudentManager(models.Manager):
+    def get_by_natural_key(self, global_id, registration_id):
+        try:
+            if not global_id:
+                return self.get(registration_id=registration_id)
+            else:
+                return self.get(registration_id=registration_id, person__global_id=global_id)
+        except ObjectDoesNotExist:
+            return Student()
+
+
+class Student(models.Model):
+
+    objects = StudentManager()
+
+    registration_id = models.CharField(max_length=10, unique=True)
+    person = models.ForeignKey('Person')
+
+    def __str__(self):
+        return u"%s (%s)" % (self.person, self.registration_id)
+
+    def natural_key(self):
+        try:
+            return (self.registration_id, self.person.global_id)
+        except ObjectDoesNotExist:
+            logger.debug(''.join(['Serialization of student without person : ', self.registration_id]))
+            return (self.registration_id, '')
+
+    natural_key.dependencies = ['base.person']
+
+    def save_from_osis_migration(self):
+        try:
+            student = find_by_registration_id(self.registration_id)
+            person = model_person.find_by_global_id(self.person.global_id)
+            if person and student.person.id != person.id:
+                logger.debug(''.join(['Update student ', self.registration_id, ' set person : ', self.person.global_id]))
+                student.person = person
+                student.save()
+        except Student.DoesNotExist:
+            try:
+                person = model_person.find_by_global_id(self.person.global_id)
+                if person:
+                    logger.debug(''.join(['New student ', self.registration_id, ' person : ', self.person.global_id]))
+                    self.person = person
+                    self.pk = None
+                    self.save()
+                else:
+                    logger.warning(''.join(['Not migrating student without person : ', self.registration_id]))
+            except ObjectDoesNotExist:
+                logger.warning(''.join(['Not migrating student without person : ', self.registration_id]))
+        except ObjectDoesNotExist:
+            logger.warning(''.join(['Not migrating student without person : ', self.registration_id]))
+
+
+def find_by_registration_id(registration_id):
+    return Student.objects.get(registration_id=registration_id)
+
+
+def search(registration_id=None, person_name=None, person_username=None, person_first_name=None, full_registration=None):
+    """
+    Search students by optional arguments. At least one argument should be informed
+    otherwise it returns empty.
+    """
+    has_criteria = False
+    queryset = Student.objects
+
+    if registration_id:
+        if full_registration:
+            queryset = queryset.filter(registration_id=registration_id)
+        else:
+            queryset = queryset.filter(registration_id__icontains=registration_id)
+        has_criteria = True
+
+    if person_name:
+        queryset = queryset.filter(person__last_name__icontains=person_name)
+        has_criteria = True
+
+    if person_username:
+        queryset = queryset.filter(person__user=person_username)
+        has_criteria = True
+
+    if person_first_name:
+        queryset = queryset.filter(person__first_name__icontains=person_first_name)
+        has_criteria = True
+
+    if has_criteria:
+        return queryset
+    else:
+        return None
+
+
+def find_by_person(a_person):
+    try:
+        student = Student.objects.get(person=a_person)
+        return student
+    except ObjectDoesNotExist:
+        return None
+
+
+def find_by_user(a_user):
+    person = model_person.find_by_user(a_user)
+    return find_by_person(person)
+
+
+def is_student(a_user):
+    if find_by_user(a_user):
+        return True
+    return False

@@ -1,0 +1,109 @@
+{% load dictionnary %}
+{% load i18n %}
+<div class="panel panel-default" id="pnl_local_exam">
+    <div class="panel-heading"> {% trans 'local_language_exam' %} *</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <label>{% trans 'question_local_language_exam' %} *</label>
+                <br>
+                <label class="radio-inline">
+                  <input type="radio"
+                         name="local_language_exam"
+                         id="rdb_local_language_exam_true"
+                         value="true"
+                         onclick="display('pnl_local_exam_detail',true);"> {% trans 'yes' %}
+                </label>
+                <label class="radio-inline">
+                  <input type="radio"
+                         name="local_language_exam"
+                         id="rdb_local_language_exam_false"
+                         value="false"
+                         onclick="display('pnl_local_exam_detail',false);"> {% trans 'no' %}
+                </label>
+                <br>
+                <br>
+                {%if validation_messages and validation_messages|get_item:'local_language_exam'%}
+                    <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'local_language_exam'}}</font><br>
+                {% endif %}
+                {% if professional_exam_link %}
+                    {% trans 'further_information' %} : <a target="_blank" href="http://www.uclouvain.be/204100.html">{{professional_exam_link.value}}</a>
+                {%endif%}
+            </div>
+        </div>
+        <div id="pnl_local_exam_detail"
+             style="{%if local_language_exam %}visibility:visible;display:display;{%else%}visibility:hidden;display:none;{%endif%}">
+            <div class="form-inline">
+                <br>
+                <label>{% trans 'question_date_session' %} *</label>
+                <input class="form-control"
+                       id="txt_local_language_exam_date"
+                       name="local_language_exam_date"
+                       value="{{local_language_exam.exam_date | default_if_none:''|date:"j/m/Y"}}">
+                <br>
+                {%if validation_messages and validation_messages|get_item:'local_language_exam_date'%}
+                    <br>
+                    <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'local_language_exam_date'}}</font>
+                    <br>
+                {% endif %}
+                <br>
+                <div class="form-group">
+                    <label>{% trans 'question_institution_name' %} *</label>
+                    <input class="form-control"
+                           id="txt_local_language_exam_institution"
+                           name="local_language_exam_institution"
+                           value="{{ local_language_exam.institution | default_if_none:''}}">
+                    <br>
+                </div>
+                {%if validation_messages and validation_messages|get_item:'local_language_exam_institution'%}
+                    <br>
+                    <font class="error" style="margin-left:5px;">
+                        {{ validation_messages|get_item:'local_language_exam_institution'}}
+                    </font>
+                    <br>
+                {% endif %}
+            </div>
+            <br>
+            <br>
+            <label>{% trans 'result' %} *</label>
+            <br>
+            <label class="radio-inline">
+              <input type="radio"
+                     name="local_language_exam_result"
+                     id="rdb_local_exam_session_succeed"
+                     value="SUCCEED"
+                     {%if local_language_exam.result = 'SUCCEED'%}checked{%endif%}>
+                {% trans 'succeed_result' %}
+            </label>
+            <label class="radio-inline">
+              <input type="radio"
+                     name="local_language_exam_result"
+                     id="rdb_local_exam_session_failed"
+                     value="FAILED"
+                     {%if local_language_exam.result = 'FAILED'%}checked{%endif%}>
+                {% trans 'failed' %}
+            </label>
+            <label class="radio-inline">
+              <input type="radio"
+                     name="local_language_exam_result"
+                     id="rdb_local_exam_enrollment_enrollment_in_progress"
+                     value="ENROLLMENT_IN_PROGRESS"
+                     {%if local_language_exam.result = 'ENROLLMENT_IN_PROGRESS'%}checked{%endif%}>
+               {% trans 'demanded_result' %}
+            </label>
+            <br>
+            {%if validation_messages and validation_messages|get_item:'local_language_exam_result'%}
+                <br>
+                <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'local_language_exam_result'}}</font>
+                <br>
+            {% endif %}
+            <br>
+
+            <button type="button" class="btn btn-default" data-toggle="modal"
+                    data-target="#pnl_upload_file_modal"
+                    title="Veuillez joindre l'attestation de réussite ou la preuve d'inscription" id="bt_upload_file_enrollment_proof">
+                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'add_success_proof_file' %}
+            </button>
+        </div>
+    </div>
+</div>

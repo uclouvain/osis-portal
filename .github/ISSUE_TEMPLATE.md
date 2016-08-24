@@ -1,5 +1,3 @@
-User Story
-
 **En tant que** [rôle d'utilisateur]
 
 **Je veux** [le but]

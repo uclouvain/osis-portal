@@ -1,6 +1,6 @@
-{% extends "layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
+{% load message %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -26,121 +26,141 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block content %}
 
-&nbsp;&nbsp;&nbsp;&nbsp;
-<br><br><br><br>
-<div class="panel panel-default">
-    <div class="panel-body">
-        <form class="form-inline">
-            <div class="form-group">
-                {% trans 'sociological_survey'%}
-                <input class="form-control" id="txt_brother_sister" name="brother_sister"
-                       maxlength="2">
-            </div>
-            <br>
-            <label><h3>{% trans 'father'%}</h3></label>
-            <br>
-            <div class="form-group">
-                <label>&nbsp;&nbsp;&nbsp;{% trans 'deceased_male'%} : </label>
-                <input type="checkbox" id="chb_deceased_father" name="deceased_father">
-            </div>
-            <div class="form-group">
-                <label>{% trans 'study'%} : </label>
-                <select name="father_study" id="slt_father_study" class="form-control" >
-                    <option value=""></option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>{% trans 'profession'%} : </label>
-                <select name="father_profession" id="slt_father_profession" class="form-control" >
-                    <option value=""></option>
-                </select>
-            </div>
-            <br>
-            <label><h3>{% trans 'mother'%}</h3></label>
-            <br>
-            <div class="form-group">
-                <label>&nbsp;&nbsp;&nbsp;{% trans 'deceased_female'%} : </label>
-                <input type="checkbox" id="chb_deceased_mother" name="deceased_mother">
-            </div>
-            <div class="form-group">
-                <label>{% trans 'study'%} : </label>
-                <select name="mother_study" id="slt_mother_study" class="form-control" >
-                    <option value=""></option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>{% trans 'profession'%} : </label>
-                <select name="mother_study"
-                        id="slt_mother_profession"
-                        class="form-control" >
-                    <option value=""></option>
-                </select>
-            </div>
-
-            <br>
-            <label><h3>{% trans 'student'%}</h3></label>
-            <br>
-            <div class="form-group">
-                <label>&nbsp;&nbsp;&nbsp;{% trans 'professional_activity'%} : </label>
-                <select name="student_professional_activity"
-                        id="slt_student_professional_activity"
-                        class="form-control" >
-                    <option value=""></option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>{% trans 'profession'%}  : </label>
-                <select name="student_profession"
-                        id="slt_student_profession"
-                        class="form-control" >
-                    <option value=""></option>
-                </select>
-            </div>
-
-            <br>
-            <label><h3>{% trans 'conjoint'%}</h3></label>
-            <br>
-            <div class="form-group">
-                <label>&nbsp;&nbsp;&nbsp;{% trans 'professional_activity'%} : </label>
-                <select name="conjoint_professional_activity"
-                        id="slt_conjoint_professional_activity"
-                        class="form-control" >
-                    <option value=""></option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>{% trans 'professional'%} : </label>
-                <select name="conjoint_profession" id="slt_conjoint_profession" class="form-control" >
-                    <option value=""></option>
-                </select>
-            </div>
-
-
-            <br>
-            <label><h3>Grand-père (profession)</h3></label>
-            <br>
-            <div class="form-group">
-                <label>&nbsp;&nbsp;&nbsp;{% trans 'paternal'%} : </label>
-                <select name="paternal_grandfather_profession"
-                        id="slt_paternal_grandfather_profession"
-                        class="form-control" >
-                    <option value=""></option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>{% trans 'maternal'%} :</label>
-                <select name="maternal_grandfather_profession"
-                        id="slt_maternal_grandfather_profession"
-                        class="form-control" >
-                    <option value=""></option>
-                </select>
-            </div>
-        </form>
-
-
+<form id="form_sociological_survey">
+    <div>
+        <a id="lnk_previous_step_up"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'accounting' application.id%}{%else%}{% url 'accounting'%}{%endif%}"
+           onclick="save('form_sociological_survey')"
+           title="{% trans 'accounting'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%} : {%trans 'accounting'%}</a>
+        <a id="lnk_next_step_up"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'attachments' application.id%}{%else%}{% url 'attachments'%}{%endif%}"
+           onclick="save('form_sociological_survey');"
+           title="{% trans 'attachments'%}}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            {%trans 'next_step'%} : {%trans 'attachments'%}</a>
     </div>
-</div>
-{% endblock %}
 
+    <br>
+    <label>{% trans 'brother_sister_number'%}</label>
+    <input class="form-control" id="txt_brother_sister" name="brother_sister" maxlength="2">
+    <br>
+    <div class="row">
+        <div class="col-md-6">
+             <label>{% trans 'father'%}</label>
+        </div>
+        <div class="col-md-6">
+            <label>{% trans 'mother'%}</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>{% trans 'deceased_male'%} : </label>
+            <input type="checkbox" id="chb_deceased_father" name="deceased_father">
+        </div>
+        <div class="col-md-6">
+            <label>{% trans 'deceased_female'%} : </label>
+            <input type="checkbox" id="chb_deceased_mother" name="deceased_mother">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>{% trans 'study'%} : </label>
+            <select name="father_study" id="slt_father_study" class="form-control" >
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label>{% trans 'study'%} : </label>
+            <select name="mother_study" id="slt_mother_study" class="form-control" >
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <label>{% trans 'profession'%} : </label>
+            <select name="father_profession" id="slt_father_profession" class="form-control" >
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label>{% trans 'profession'%} : </label>
+            <select name="mother_study"
+                    id="slt_mother_profession"
+                    class="form-control" >
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+    <br>
+    <label>{% trans 'student'%}</label>
+    <br>
+    <div class="form-group">
+        <label>{% trans 'professional_activity'%} : </label>
+        <select name="student_professional_activity"
+                id="slt_student_professional_activity"
+                class="form-control" >
+            <option value=""></option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>{% trans 'profession'%}  : </label>
+        <select name="student_profession"
+                id="slt_student_profession"
+                class="form-control" >
+            <option value=""></option>
+        </select>
+    </div>
+    <label>{% trans 'conjoint'%}</label>
+    <br>
+    <div class="form-group">
+        <label>{% trans 'professional_activity'%} : </label>
+        <select name="conjoint_professional_activity"
+                id="slt_conjoint_professional_activity"
+                class="form-control" >
+            <option value=""></option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>{% trans 'professional'%} : </label>
+        <select name="conjoint_profession" id="slt_conjoint_profession" class="form-control" >
+            <option value=""></option>
+        </select>
+    </div>
+    <label>Grand-père (profession)</label>
+    <br>
+    <div class="form-group">
+        <label>{% trans 'paternal'%} : </label>
+        <select name="paternal_grandfather_profession"
+                id="slt_paternal_grandfather_profession"
+                class="form-control" >
+            <option value=""></option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>{% trans 'maternal'%} :</label>
+        <select name="maternal_grandfather_profession"
+                id="slt_maternal_grandfather_profession"
+                class="form-control" >
+            <option value=""></option>
+        </select>
+    </div>
+    <div>
+        <a id="lnk_previous_step"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'accounting' application.id%}{%else%}{% url 'accounting'%}{%endif%}"
+           onclick="save('form_sociological_survey')"
+           title="{% trans 'accounting'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%} : {%trans 'accounting'%}</a>
+        <a id="lnk_next_step"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'attachments' application.id%}{%else%}{% url 'attachments'%}{%endif%}"
+           onclick="save('form_sociological_survey');"
+           title="{% trans 'attachments'%}}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            {%trans 'next_step'%} : {%trans 'attachments'%}</a>
+    </div>
+</form>

@@ -26,42 +26,79 @@
 from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User
-from admission.models import person
+from django.core.exceptions import ObjectDoesNotExist
+from admission.models import applicant
+from localflavor.generic.models import IBANField, BICField
+from localflavor.generic.countries.sepa import IBAN_SEPA_COUNTRIES
 
 
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('offer_year', 'person')
-    fieldsets = ((None, {'fields': ('offer_year', 'person')}),)
+    list_display = ('applicant', 'offer_year', 'creation_date', 'application_type')
+    fieldsets = ((None, {'fields': ('applicant', 'offer_year', 'application_type', 'applied_to_sameprogram',
+                                    'national_degree')}),)
 
 
 class Application(models.Model):
-    APPLICATION_TYPE = (('ADMISSION', _('Admission')),
-                        ('INSCRIPTION', _('Inscription')))
+    APPLICATION_TYPE = (('ADMISSION', _('admission')),
+                        ('INSCRIPTION', _('inscription')))
 
-    person = models.ForeignKey('Person')
+    applicant = models.ForeignKey('Applicant')
     offer_year = models.ForeignKey('OfferYear')
     creation_date = models.DateTimeField(auto_now=True)
     application_type = models.CharField(max_length=20, choices=APPLICATION_TYPE)
-    doctorate = models.BooleanField(default=False)
+    national_degree = models.NullBooleanField(default=None)
+    valuation_possible = models.NullBooleanField(default=None)
+    started_similar_studies = models.NullBooleanField(default=None)
+    credits_to_value = models.NullBooleanField(default=None)
+    applied_to_sameprogram = models.NullBooleanField(default=None)
+    resident = models.NullBooleanField(default=None)
+    raffle_number = models.CharField(max_length=50, blank=True, null=True)
+    study_grant = models.BooleanField(default=False)
+    study_grant_number = models.CharField(max_length=50, blank=True, null=True)
+    deduction_children = models.BooleanField(default=False)
+    scholarship = models.BooleanField(default=False)
+    scholarship_organization = models.TextField(blank=True, null=True)
+    sport_membership = models.BooleanField(default=False)
+    culture_membership = models.BooleanField(default=False)
+    solidarity_membership = models.BooleanField(default=False)
+    bank_account_iban = IBANField(include_countries=IBAN_SEPA_COUNTRIES, blank=True, null=True)
+    bank_account_bic = BICField(blank=True, null=True)
+    bank_account_name = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return u"%s" % (self.offer_year)
+        return u"%s" % self.offer_year
 
 
 def find_by_user(user):
-    person_application = person.Person.objects.get(user=user)
-    if person_application:
-        applications = Application.objects.filter(person=person_application)
-        return applications
+    try:
+        applic = applicant.Applicant.objects.get(user=user)
 
-    return None
+        if applic:
+            return Application.objects.filter(applicant=applic)
+        else:
+            return None
+    except ObjectDoesNotExist:
+        return None
 
 
 def find_by_id(application_id):
     return Application.objects.get(pk=application_id)
 
 
+def find_first_by_user(user):
+    try:
+        person_application = applicant.Applicant.objects.get(user=user)
+
+        if person_application:
+            return Application.objects.filter(applicant=person_application).first()
+        else:
+            return None
+    except ObjectDoesNotExist:
+        return None
 
 
-
+def init_application(user):
+    person_application = applicant.Applicant.objects.get(user=user)
+    application = Application()
+    application.applicant = person_application
+    return application
