@@ -73,8 +73,10 @@
         {% if description == 'PROFESSIONAL_EXAM_CERTIFICATE'%}
             {% trans 'admission_exam_certificate_document' %}
         {% endif %}
-        {% if description == 'RESIDENT_LONG_DURATION' or description == 'ID_FOREIGN_UNLIMITED' or  description == 'ATTACHMENT_26' or  description == 'REFUGEE_CARD' or  description == 'FAMILY_COMPOSITION' or  description == 'BIRTH_CERTIFICATE' or  description == 'RESIDENT_CERTIFICATE' or  description == 'STATELESS_CERTIFICATE' or  description == 'FOREIGN_INSCRIPTION_CERTIFICATE' or  description == 'SUBSIDIARY_PROTECTION_DECISION' or  description == 'RESIDENCE_PERMIT' or  description == 'PAYCHECK' or  description == 'CPAS' or  description == 'TUTORSHIP_CERTIFICATE' or  description == 'OTHER' or  description == 'SCHOLARSHIP_CFWB' or  description == 'SCHOLARSHIP_DEVELOPMENT_COOPERATION'%}
-            {{ description }}
+        {% if description == 'RESIDENT_LONG_DURATION' or description == 'ID_FOREIGN_UNLIMITED' or  description == 'ATTACHMENT_26' or  description == 'REFUGEE_CARD' or  description == 'FAMILY_COMPOSITION' or  description == 'BIRTH_CERTIFICATE' or  description == 'RESIDENT_CERTIFICATE' or  description == 'STATELESS_CERTIFICATE' or  description == 'FOREIGN_INSCRIPTION_CERTIFICATE' or  description == 'SUBSIDIARY_PROTECTION_DECISION' or  description == 'RESIDENCE_PERMIT' or  description == 'PAYCHECK' or  description == 'CPAS' or  description == 'TUTORSHIP_CERTIFICATE' or  description == 'OTHER' or  description == 'SCHOLARSHIP_CFWB' or  description == 'SCHOLARSHIP_DEVELOPMENT_COOPERATION'%}         
+            {% with document_description=description|slugify %}
+                {% trans document_description %}
+            {% endwith %}
         {% endif %}
     </h2>
   </div>

@@ -210,13 +210,28 @@ def upload_document(request):
             file.save()
             return redirect('new_document')
         else:
-            if description == mdl_osis_common.document_file.DESCRIPTION_CHOICES[document_type.ID_PICTURE]:
+            if description == mdl.enums.document_type.DOCUMENT_TYPE_CHOICES[document_type.ID_PICTURE]:
                 # return common.home(request)
                 return HttpResponseRedirect(reverse('home', ))
             else:
                 return render(request, 'new_document.html', {
                     'form': form,
                     'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
-                    'description_choices': mdl_osis_common.document_file.DESCRIPTION_CHOICES,
+                    'description_choices': mdl.enums.document_type.DOCUMENT_TYPE_CHOICES,
                     'description': description,
                     'documents': documents})
+
+
+@login_required
+def delete(request, pk):
+    document = get_object_or_404(mdl_osis_common.document_file.DocumentFile, pk=pk)
+    if document:
+        description = document.description
+        document.delete()
+        documents = mdl_osis_common.document_file.search(user=request.user, description=description)
+
+        return render(request, 'new_document.html', {
+            'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
+            'description_choices': mdl.enums.document_type.DOCUMENT_TYPE_CHOICES,
+            'description': description,
+            'documents': documents})

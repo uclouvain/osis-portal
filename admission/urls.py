@@ -109,6 +109,7 @@ urlpatterns = [
     url(r'^jsi18n/', 'django.views.i18n.javascript_catalog', js_info_dict),
 
     url(r'^criteria_document/$', assimilation_criteria.find_by_criteria),
+    url(r'^upload/delete/(?P<pk>[0-9]+)$', upload_file.delete, name='delete'),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

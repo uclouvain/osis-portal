@@ -98,7 +98,7 @@
                                         {%else%}
                                             <button type="button"
                                                    id="btn_modify_picture"
-                                                   class="glyphicon glyphicon-pencil"
+                                                   class="btn glyphicon glyphicon-ok-circle"
                                                    title="{% trans 'change_picture'%}"
                                             ></button>
                                             <br><br>
@@ -108,7 +108,7 @@
                                     {%else%}
                                             <button type="button"
                                                     id="lnk_redirect_picture" title="{% trans 'id_picture_add'%}"
-                                                    class="btn glyphicon glyphicon-plus"></button>
+                                                    class="btn glyphicon glyphicon-upload"></button>
 
                                     {%endif%}
                                 </div>
@@ -253,29 +253,35 @@
                             <div {% if assimilation_basic_documents|table_display:criteria_div.id%}class="panel panel-default" {%endif%}>
 
                             {% if assimilation_basic_documents|table_display:criteria_div.id%}
-                            <div class="panel-heading">{% trans 'criteria'%} {{ criteria_div.id}}</div>
-                            <div class="panel-body"></div>
-                            <table class="table table-bordered table-condensed" style="margin-top:-30px;">
-                                {%endif%}
+                                <div class="panel-heading"><h4><strong>{% trans 'criteria'%} {{ criteria_div.id}}</strong></h4></div>
+                                <div class="panel-body"></div>
+                                <!--It's normal that the table is outside of the body.  It's for a better display -->
+                                <table class="table table-bordered table-condensed" style="margin-top:-30px;">
+                            {%endif%}
                             {%for doc in assimilation_basic_documents%}
                                 {% if doc.criteria_id == criteria_div.id %}
                                     {%if doc.first%}
                                         <tr>
-                                            <td width="5%"></td>
-                                            <td width="95%">
-                                                <table class="table">
+                                            <td>
+                                                <table>
+
                                                     {% for d in doc.descriptions%}
+
                                                         <tr>
-                                                            <td width="75%">{% with document_description=d|slugify %}
-                                                                                {% trans document_description %}
-                                                                            {% endwith %}
-                                                            </td>
-                                                            <td width="25%">
+                                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                                            <td>
                                                                 <button type="button"
                                                                         id="btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}"
                                                                         title="{{assimilation_documents_existing|button_title:d }}"
-                                                                        class="{{assimilation_documents_existing|button_class:d }}"></button>
+                                                                        class="{{assimilation_documents_existing|button_class:d }}"
+                                                                        style="margin-bottom:5px;">&nbsp;Upload</button>
                                                             </td>
+                                                            <td>&nbsp;&nbsp;</td>
+                                                            <td>{% with document_description=d|slugify %}
+                                                                                {% trans document_description %}
+                                                                            {% endwith %}
+                                                            </td>
+
                                                         </tr>
                                                     {%endfor%}
                                                 </table>
@@ -283,21 +289,25 @@
 
                                         </tr>
                                     {%else%}
-                                        <tr><td width="5%">{% trans 'or' as and_upper%} {{and_upper| upper}}</td>
-                                            <td width="95%">
-                                                <table class="table">
+                                    <tr><td colspan="2">&nbsp;&nbsp;{% trans 'or' as and_upper%} {{and_upper| upper}}</td></tr>
+                                        <tr>
+                                            <td>
+                                                <table >
                                                     {% for d in doc.descriptions%}
                                                         <tr >
-                                                            <td width="75%">{% with document_description=d|slugify %}
-                                                                                {% trans document_description %}
-                                                                            {% endwith %}
-                                                            </td>
-                                                            <td width="25%">
+                                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                                            <td>
                                                                 <button type="button"
                                                                         id="btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}"
                                                                         title="{{assimilation_documents_existing|button_title:d }}"
-                                                                        class="{{assimilation_documents_existing|button_class:d }}"></button>
+                                                                        class="{{assimilation_documents_existing|button_class:d }}" style="margin-bottom:5px;">&nbsp;Upload</button>
                                                             </td>
+                                                            <td>&nbsp;&nbsp;</td>
+                                                            <td >{% with document_description=d|slugify %}
+                                                                                {% trans document_description %}
+                                                                            {% endwith %}
+                                                            </td>
+
                                                         </tr>
                                                     {%endfor%}
                                                 </table>
@@ -309,7 +319,7 @@
                             {%endfor%}
                             {% if assimilation_basic_documents|table_display:criteria_div.id%}
                             </table>
-
+                            <br>
                             {%endif%}
                                 </div>
                         </div>
@@ -349,16 +359,17 @@
                                         {%else%}
                                             <button type="button"
                                                    id="btn_modify_id_document"
-                                                   class="glyphicon glyphicon-pencil"
+                                                   class="btn glyphicon glyphicon-ok-circle"
                                                    title="{% trans 'change_document'%}"
                                             ></button>
                                             <br><br><span style="font-size:x-small;color:#808080">({% trans 'no_preview'%})</span>
                                         {%endif%}
                                     {%else%}
                                         <br>
-                                        <button type="button" title="{% trans 'id_add'%}"
-                                               id="btn_modify_id_document"
-                                               class="btn glyphicon glyphicon-plus" ></button>
+                                        <button type="button"
+                                                title="{% trans 'id_add'%}"
+                                                id="btn_modify_id_document"
+                                                class="btn glyphicon glyphicon-upload" ></button>
                                     {%endif%}
                                 </div>
                             </div>

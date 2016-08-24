@@ -35,6 +35,9 @@
                 <div class="col-md-4">
                     <a href="{% url 'download' pk=document.pk %}">{{ document.file_name }}</a>
                 </div>
+                <div class="col-md-2">
+                    <a href="{% url 'delete' pk=document.pk %}" class="btn"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                </div>
             </div>
         </div>
     </div>
