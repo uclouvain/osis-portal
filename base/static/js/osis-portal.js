@@ -134,13 +134,11 @@ function disabled_reset_field_txt(id, state){
 }
 
 $("#slt_nationality").change(function() {
-alert('kkkkk');
    $.ajax({
        url: "/admission/country?nationality=" + $("#slt_nationality").val()
      }).then(function(data) {
 
         if (data.european_union) {
-        alert('i1');
               $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
         }else{
               $('#pnl_assimilation_criteria').css('visibility', 'visible').css('display','block');
@@ -889,7 +887,6 @@ $('document').ready(function(){
     if(cpt==1){
         $('#pnl_detail_'+first_year).css('visibility', 'visible').css('display','block');
     }
-    alert('kk osis-porta');
 
 });
 

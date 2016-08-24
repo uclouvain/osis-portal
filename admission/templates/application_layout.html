@@ -194,30 +194,18 @@
     <script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
     <script>
     $(document).ready(function() {
-        alert('kk ready adm');
-        if($("#slt_nationality").val()){
-            $.ajax({
-                url: "/admission/country?nationality=" + $("#slt_nationality").val()
-            }).then(function(data) {
-                if (data.european_union) {
-                    $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
-                }else{
-                    $('#pnl_assimilation_criteria').css('visibility', 'visible').css('display','block');
-if ($('#assimilation_criteria_1_true').is(':checked')){
-alert('ppppppppp');
-}
-                    $('#input[id^="assimilation_criteria_"]').each(function(elt) {
-                    alert('kk');
-                        if ($('#assimilation_criteria_1_true').is(':checked')){
-                            alert('kk');
-                        }
 
-                    });
+       $.ajax({
+           url: "/admission/country?nationality=" + $("#slt_nationality").val()
+         }).then(function(data) {
 
+            if (data.european_union) {
+                  $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
+            }else{
+                  $('#pnl_assimilation_criteria').css('visibility', 'visible').css('display','block');
+            }
+         });
 
-                }
-            });
-        }
         $('#txt_admission_exam_date').val('');
         $('#txt_admission_exam_institution').val('');
         $('[id^="rdb_admission_exam_type_"]').prop( "checked", false);
@@ -536,36 +524,8 @@ alert('ppppppppp');
             criteria = criteria.replace('_true','');
 
             var id_sel_criteria = "criterias";
+            $("#pnl_criteria_"+criteria).css('visibility', 'visible').css('display','block');
 
-            $.ajax({
-                url: "/admission/criteria_document?criteria=" + criteria
-
-              }).then(function(data) {
-
-                  if(data.length > 0){
-                    if($("#pnl_criteria_"+criteria).length > 0){
-                        //If it's already existing
-                        $("#pnl_criteria_"+criteria).css('visibility', 'visible').css('display','block');
-                    }else{
-                        $('#pnl_assimilation_criteria').append($("<div></div>").attr("id","pnl_criteria_"+criteria).attr("style","visibility:hidden;display:none;"));
-                        $("#pnl_criteria_"+criteria).append($("<table class=\'table\' id =\'tb_criteria_docs_"+ criteria+"\'></table>"));
-                        var i = 0;
-                        $.each(data, function(key, value) {
-                            var btn = '<button type=\'button\' id=\'btn_load_assimilation_doc_'+ criteria+'_id_' + value.name+ '\' class=\'glyphicon glyphicon-plus class_upload_assimilation\'></button>';
-                           if (i == 0){
-                                $('#tb_criteria_docs_'+criteria).last().append('<tr><td width=\'25%\'>'+ gettext('criteria') +' ' + criteria + '</td><td width=\'50%\'>'+ value.name+'<input type=\'hidden\' value=\''+ value.name+'\'/></td><td width=\'25%\'>'+ btn +'</td></tr>');
-                           }else{
-                                $('#tb_criteria_docs_'+criteria).last().append('<tr><td width=\'25%\'></td><td width=\'50%\'>'+ value.name+'<input type=\'hidden\' value=\'dd\'/></td><td width=\'25%\'>'+ btn +'</td></tr>');
-                           }
-                           i++;
-
-
-                        });
-                    }
-
-
-                  }
-              });
         }
     });
 

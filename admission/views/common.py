@@ -36,7 +36,7 @@ from django.utils.translation import ugettext_lazy as _
 from admission import models as mdl
 from admission.forms import ApplicantForm
 from reference import models as mdl_ref
-from admission.views import demande_validation
+from admission.views import demande_validation, assimilation_criteria as assimilation_criteria_view
 from admission.views import tabs
 from osis_common import models as mdl_osis_common
 from admission.models.enums import document_type
@@ -65,24 +65,31 @@ def home(request):
                                                          "tab_active": -1})
         else:
             tab_status = tabs.init(request)
-            return render(request, "admission_home.html", {'applications': applications,
-                                                           'applicant': applicant,
-                                                           'tab_active': 0,
-                                                           'first': True,
-                                                           'countries': mdl_ref.country.find_all(),
-                                                           'tab_profile': tab_status['tab_profile'],
-                                                           'tab_applications': tab_status['tab_applications'],
-                                                           'tab_diploma': tab_status['tab_diploma'],
-                                                           'tab_curriculum': tab_status['tab_curriculum'],
-                                                           'tab_accounting': tab_status['tab_accounting'],
-                                                           'tab_sociological': tab_status['tab_sociological'],
-                                                           'tab_attachments': tab_status['tab_attachments'],
-                                                           'tab_submission': tab_status['tab_submission'],
-                                                           'main_status': 0,
-                                                           'picture': get_picture_id(request.user),
-                                                           'id_document': get_id_document(request.user),
-                                                           'person_legal_address': person_legal_address,
-                                                           'person_contact_address': person_contact_address})
+            assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
+            applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
+            return render(request, "admission_home.html", {
+                'applications': applications,
+                'applicant': applicant,
+                'tab_active': 0,
+                'first': True,
+                'countries': mdl_ref.country.find_all(),
+                'tab_profile': tab_status['tab_profile'],
+                'tab_applications': tab_status['tab_applications'],
+                'tab_diploma': tab_status['tab_diploma'],
+                'tab_curriculum': tab_status['tab_curriculum'],
+                'tab_accounting': tab_status['tab_accounting'],
+                'tab_sociological': tab_status['tab_sociological'],
+                'tab_attachments': tab_status['tab_attachments'],
+                'tab_submission': tab_status['tab_submission'],
+                'main_status': 0,
+                'picture': get_picture_id(request.user),
+                'id_document': get_id_document(request.user),
+                'person_legal_address': person_legal_address,
+                'person_contact_address': person_contact_address,
+                'assimilationCriteria': assimilation_criteria,
+                'applicant_assimilation_criteria': applicant_assimilation_criteria,
+                'assimilation_basic_documents': assimilation_criteria_view.find_assimilation_basic_documents(),
+                'assimilation_documents_existing': get_assimilation_documents_existing(request.user)})
 
     else:
         return profile(request)
@@ -296,8 +303,6 @@ def profile(request, application_id=None, message_success=None):
 
     assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
     applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
-    print('applicant_assimilation_criteria')
-    print(applicant_assimilation_criteria)
     application = None
     if application_id:
         application = mdl.application.find_by_id(application_id)
@@ -306,41 +311,41 @@ def profile(request, application_id=None, message_success=None):
     # validated are not ready yet, to be achieved in another issue - Leila
     person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
     person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
-    return render(request, "admission_home.html", {'applicant': applicant,
-                                                   'applicant_form': applicant_form,
-                                                   'countries': countries,
-                                                   'assimilationCriteria': assimilation_criteria,
-                                                   'applicant_assimilation_criteria': applicant_assimilation_criteria,
-                                                   'person_legal_address': person_legal_address,
-                                                   'person_contact_address': person_contact_address,
-                                                   'same_addresses': same_addresses,
-                                                   'previous_enrollment': previous_enrollment,
-                                                   'institution': institution_name,
-                                                   "message_success": message_success,
-                                                   'tab_active': 0,
-                                                   'validated_profil': demande_validation.validate_profil(applicant),
-                                                   'validated_diploma': demande_validation.validate_diploma(
-                                                       application),
-                                                   'validated_curriculum': demande_validation.validate_curriculum(
-                                                       application),
-                                                   'validated_application': demande_validation.validate_application(
-                                                       application),
-                                                   'validated_accounting': demande_validation.validate_accounting(),
-                                                   'validated_sociological': demande_validation.validate_sociological(),
-                                                   'validated_attachments': demande_validation.validate_attachments(),
-                                                   'validated_submission': demande_validation.validate_submission(),
-                                                   'application': application,
-                                                   'tab_profile': tab_status['tab_profile'],
-                                                   'tab_applications': tab_status['tab_applications'],
-                                                   'tab_diploma': tab_status['tab_diploma'],
-                                                   'tab_curriculum': tab_status['tab_curriculum'],
-                                                   'tab_accounting': tab_status['tab_accounting'],
-                                                   'tab_sociological': tab_status['tab_sociological'],
-                                                   'tab_attachments': tab_status['tab_attachments'],
-                                                   'tab_submission': tab_status['tab_submission'],
-                                                   'applications': mdl.application.find_by_user(request.user),
-                                                   'picture': get_picture_id(request.user),
-                                                   'id_document': get_id_document(request.user)})
+    return render(request, "admission_home.html", {
+        'applicant': applicant,
+        'applicant_form': applicant_form,
+        'countries': countries,
+        'assimilationCriteria': assimilation_criteria,
+        'applicant_assimilation_criteria': applicant_assimilation_criteria,
+        'person_legal_address': person_legal_address,
+        'person_contact_address': person_contact_address,
+        'same_addresses': same_addresses,
+        'previous_enrollment': previous_enrollment,
+        'institution': institution_name,
+        "message_success": message_success,
+        'tab_active': 0,
+        'validated_profil': demande_validation.validate_profil(applicant),
+        'validated_diploma': demande_validation.validate_diploma(application),
+        'validated_curriculum': demande_validation.validate_curriculum(application),
+        'validated_application': demande_validation.validate_application(application),
+        'validated_accounting': demande_validation.validate_accounting(),
+        'validated_sociological': demande_validation.validate_sociological(),
+        'validated_attachments': demande_validation.validate_attachments(),
+        'validated_submission': demande_validation.validate_submission(),
+        'application': application,
+        'tab_profile': tab_status['tab_profile'],
+        'tab_applications': tab_status['tab_applications'],
+        'tab_diploma': tab_status['tab_diploma'],
+        'tab_curriculum': tab_status['tab_curriculum'],
+        'tab_accounting': tab_status['tab_accounting'],
+        'tab_sociological': tab_status['tab_sociological'],
+        'tab_attachments': tab_status['tab_attachments'],
+        'tab_submission': tab_status['tab_submission'],
+        'applications': mdl.application.find_by_user(request.user),
+        'picture': get_picture_id(request.user),
+        'id_document': get_id_document(request.user),
+        'assimilation_basic_documents': assimilation_criteria_view.find_assimilation_basic_documents(),
+        'assimilation_documents_existing': get_assimilation_documents_existing(request.user)})
 
 
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
@@ -397,3 +402,17 @@ def get_document_assimilation(user, document_type):
     if pictures:
         return ''.join(('/admission', pictures.reverse()[0].file.url))
     return None
+
+
+def get_assimilation_documents_existing(user):
+    print('get_assimilation_documents_existing')
+    assimilation_basic_documents = assimilation_criteria_view.find_list_assimilation_basic_documents()
+    docs = []
+    for document_type in assimilation_basic_documents:
+        pictures = mdl_osis_common.document_file.search(user, document_type)
+        if pictures:
+            docs.extend(pictures)
+    for f in docs:
+        print(f.description)
+
+    return docs

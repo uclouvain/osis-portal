@@ -30,8 +30,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from admission import models as mdl
 from admission import settings as adm_settings
 from admission.models.enums import document_type
-from admission.views import common
-from admission.views import tabs
+from admission.views import common, tabs, assimilation_criteria as assimilation_criteria_view
 from osis_common import models as mdl_osis_common
 from osis_common.forms import UploadDocumentFileForm
 from reference import models as mdl_ref
@@ -66,23 +65,7 @@ def upload_file(request):
                                   document_type.EQUIVALENCE,
                                   document_type.ADMISSION_EXAM_CERTIFICATE,
                                   document_type.PROFESSIONAL_EXAM_CERTIFICATE]
-            assimilation_uploads = [document_type.RESIDENT_LONG_DURATION,
-                                    document_type.ID_FOREIGN_UNLIMITED,
-                                    document_type.ATTACHMENT_26,
-                                    document_type.REFUGEE_CARD,
-                                    document_type.FAMILY_COMPOSITION,
-                                    document_type.BIRTH_CERTIFICATE,
-                                    document_type.RESIDENT_CERTIFICATE,
-                                    document_type.STATELESS_CERTIFICATE,
-                                    document_type.FOREIGN_INSCRIPTION_CERTIFICATE,
-                                    document_type.SUBSIDIARY_PROTECTION_DECISION,
-                                    document_type.RESIDENCE_PERMIT,
-                                    document_type.PAYCHECK,
-                                    document_type.CPAS,
-                                    document_type.TUTORSHIP_CERTIFICATE,
-                                    document_type.OTHER,
-                                    document_type.SCHOLARSHIP_CFWB,
-                                    document_type.SCHOLARSHIP_DEVELOPMENT_COOPERATION]
+            assimilation_uploads = assimilation_criteria_view.find_list_assimilation_basic_documents()
 
             if description in curriculum_uploads:
                 documents = mdl.application_document_file.search(application, description)
@@ -118,6 +101,8 @@ def upload_file(request):
                 applications = mdl.application.find_by_user(request.user)
                 person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
                 person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
+                assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
+                applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
 
                 return render(request, "admission_home.html", {
                     'applications': applications,
@@ -138,32 +123,17 @@ def upload_file(request):
                     'id_document': common.get_id_document(request.user),
                     'person_legal_address': person_legal_address,
                     'person_contact_address': person_contact_address,
-                    'resident_long_duration' : common.get_document_assimilation(request.user,'RESIDENT_LONG_DURATION'),
-                    'id_foreign_unlimited': common.get_document_assimilation(request.user,'ID_FOREIGN_UNLIMITED'),
-                    'attachment_26': common.get_document_assimilation(request.user,'ATTACHMENT_26'),
-                    'refugee_card': common.get_document_assimilation(request.user,'REFUGEE_CARD'),
-                    'family_composition': common.get_document_assimilation(request.user,'FAMILY_COMPOSITION'),
-                    'birth_certificate': common.get_document_assimilation(request.user,'BIRTH_CERTIFICATE'),
-                    'resident_certificate': common.get_document_assimilation(request.user,'RESIDENT_CERTIFICATE'),
-                    'stateless_certificate': common.get_document_assimilation(request.user,'STATELESS_CERTIFICATE'),
-                    'foreign_inscription_certificate': common.get_document_assimilation(request.user,'FOREIGN_INSCRIPTION_CERTIFICATE'),
-                    'subsidiary_protection_decision': common.get_document_assimilation(request.user,'SUBSIDIARY_PROTECTION_DECISION'),
-                    'residence_permit': common.get_document_assimilation(request.user,'RESIDENCE_PERMIT'),
-                    'paycheck': common.get_document_assimilation(request.user,'PAYCHECK'),
-                    'cpas': common.get_document_assimilation(request.user,document_type.CPAS),
-                    'tutorship_certificate': common.get_document_assimilation(request.user,document_type.TUTORSHIP_CERTIFICATE),
-                    'other': common.get_document_assimilation(request.user,document_type.OTHER),
-                    'scholarship_cfwb': common.get_document_assimilation(request.user,document_type.SCHOLARSHIP_CFWB),
-                    'scholarship_development_cooperation': common.get_document_assimilation(request.user, document_type.SCHOLARSHIP_DEVELOPMENT_COOPERATION)})
+                    'assimilationCriteria': assimilation_criteria,
+                    'applicant_assimilation_criteria': applicant_assimilation_criteria,
+                    'assimilation_basic_documents': assimilation_criteria_view.find_assimilation_basic_documents(),
+                    'assimilation_documents_existing': common.get_assimilation_documents_existing(request.user)})
             else:
                 if description in curriculum_uploads:
                     return HttpResponseRedirect(reverse('diploma_update', args=(application.id,)))
                 else:
                     return redirect('new_document')
         else:
-            documents = mdl.document_file.search(document_type=None,
-                                                 user=request.user,
-                                                 description=description)
+            documents = mdl_osis_common.document_file.search(user=request.user, description=description)
             return render(request, 'new_document.html', {
                 'form': form,
                 'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
@@ -241,7 +211,8 @@ def upload_document(request):
             return redirect('new_document')
         else:
             if description == mdl_osis_common.document_file.DESCRIPTION_CHOICES[document_type.ID_PICTURE]:
-                return common.home(request)
+                # return common.home(request)
+                return HttpResponseRedirect(reverse('home', ))
             else:
                 return render(request, 'new_document.html', {
                     'form': form,

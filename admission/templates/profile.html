@@ -1,6 +1,7 @@
 {% load staticfiles %}
 {% load static %}
 {% load i18n %}
+{% load assimilation %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -107,7 +108,7 @@
                                     {%else%}
                                             <button type="button"
                                                     id="lnk_redirect_picture" title="{% trans 'id_picture_add'%}"
-                                                   class="btn glyphicon glyphicon-plus"></button>
+                                                    class="btn glyphicon glyphicon-plus"></button>
 
                                     {%endif%}
                                 </div>
@@ -246,42 +247,73 @@
                     <br>
                     <label>Fournir obligatoirement une attestation pour au moins une des assimilations que vous avez choisies.</label>
                     <br>
-                    {% for criteria in assimilationCriteria %}
+                    {% for criteria_div in assimilationCriteria %}
+                        <div id="pnl_criteria_{{forloop.counter}}"
+                             {{applicant_assimilation_criteria|div_visibility:criteria_div.id }}  >
+                            <div {% if assimilation_basic_documents|table_display:criteria_div.id%}class="panel panel-default" {%endif%}>
 
-                        <div id="pnl_criteria_{{forloop.counter}}">
-                            <table>
-                                {% if forloop.counter==1%}
-                                <tr><td>{% trans 'criteria'%} {{forloop.counter}}</td></tr>
-                                {%else%}
-                                <tr><td>{% trans 'criteria'%} {{forloop.counter}}</td></tr>
+                            {% if assimilation_basic_documents|table_display:criteria_div.id%}
+                            <div class="panel-heading">{% trans 'criteria'%} {{ criteria_div.id}}</div>
+                            <div class="panel-body"></div>
+                            <table class="table table-bordered table-condensed" style="margin-top:-30px;">
                                 {%endif%}
+                            {%for doc in assimilation_basic_documents%}
+                                {% if doc.criteria_id == criteria_div.id %}
+                                    {%if doc.first%}
+                                        <tr>
+                                            <td width="5%"></td>
+                                            <td width="95%">
+                                                <table class="table">
+                                                    {% for d in doc.descriptions%}
+                                                        <tr>
+                                                            <td width="75%">{% with document_description=d|slugify %}
+                                                                                {% trans document_description %}
+                                                                            {% endwith %}
+                                                            </td>
+                                                            <td width="25%">
+                                                                <button type="button"
+                                                                        id="btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}"
+                                                                        title="{{assimilation_documents_existing|button_title:d }}"
+                                                                        class="{{assimilation_documents_existing|button_class:d }}"></button>
+                                                            </td>
+                                                        </tr>
+                                                    {%endfor%}
+                                                </table>
+                                            </td>
+
+                                        </tr>
+                                    {%else%}
+                                        <tr><td width="5%">{% trans 'or' as and_upper%} {{and_upper| upper}}</td>
+                                            <td width="95%">
+                                                <table class="table">
+                                                    {% for d in doc.descriptions%}
+                                                        <tr >
+                                                            <td width="75%">{% with document_description=d|slugify %}
+                                                                                {% trans document_description %}
+                                                                            {% endwith %}
+                                                            </td>
+                                                            <td width="25%">
+                                                                <button type="button"
+                                                                        id="btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}"
+                                                                        title="{{assimilation_documents_existing|button_title:d }}"
+                                                                        class="{{assimilation_documents_existing|button_class:d }}"></button>
+                                                            </td>
+                                                        </tr>
+                                                    {%endfor%}
+                                                </table>
+
+                                            </td>
+                                        </tr>
+                                    {%endif%}
+                                {%endif%}
+                            {%endfor%}
+                            {% if assimilation_basic_documents|table_display:criteria_div.id%}
                             </table>
-                            <div class="col-md-8">
-                                <li>{{criteria}}</li>
-                            </div>
-                            <div class="col-md-4">
-                                <div>
-                                    <label class="radio-inline">
-                                        <input type="radio" id="assimilation_criteria_{{forloop.counter}}_true"
-                                               name="assimilation_criteria_{{criteria.id}}"
-                                               class="radio_assimilation_criteria"
-                                               value="true"
-                                               {% for applicant_criteria in applicant_assimilation_criteria %}
-                                                 {% if applicant_criteria.criteria.id == criteria.id %} checked {% endif %}
-                                               {% endfor %}
-                                        > {% trans 'yes' %}
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" id="assimilation_criteria_{{forloop.counter}}_false"
-                                               name="assimilation_criteria_{{criteria.id}}"
-                                               value="false"
-                                        > {% trans 'no' %}
-                                    </label>
+
+                            {%endif%}
                                 </div>
-                            </div>
                         </div>
                         {% endfor %}
-                    <br>
                     </div>
                 </div>
             </div>
