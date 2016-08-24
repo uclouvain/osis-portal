@@ -94,15 +94,15 @@ def remove_attachment(request):
     return redirect(update)
 
 
-def safe_document_removal(user, document_type, document):
+def safe_document_removal(user, application_name, document):
     """
     Safely remove a document by ensuring that the user is the one
-    that owns the file and the document_type is the correct one.
+    that owns the file and the application_name is the correct one.
     :param user: a User object
-    :param document_type: a string
+    :param application_name: a string
     :return:
     """
-    if document.user == user and document.document_type == document_type:
+    if document.user == user and document.application_name == application_name:
         document.delete()
 
 
@@ -113,7 +113,7 @@ def list_attachments(user):
     :return: an array of dictionnary
     """
     uploaded_attachments = DocumentFile.objects.filter(user=user,
-                                                       document_type="admission_attachments")
+                                                       application_name="admission_attachments")
 
     return list(uploaded_attachments)
 
@@ -140,15 +140,15 @@ def save_document_from_form(document, user):
     file = document.cleaned_data['file']
     description = document.cleaned_data['description']
     # Never trust a user. They could change the hidden input values.
-    # Ex: user, document_type, storage_duration, etc.
+    # Ex: user, application_name, storage_duration, etc.
     storage_duration = 0
-    document_type = "admission_attachments"
+    application_name = "admission_attachments"
     content_type = file.content_type
     size = file.size
 
     doc_file = DocumentFile(file_name=file_name, file=file,
                             description=description, storage_duration=storage_duration,
-                            document_type=document_type, content_type=content_type,
+                            application_name=application_name, content_type=content_type,
                             size=size, user=user)
     doc_file.save()
 

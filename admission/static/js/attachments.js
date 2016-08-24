@@ -16,6 +16,7 @@ $(document).ready(function(){
         decrementNextIdDocForm();
         var divFormId = "#form_".concat(nextIdDocForm.toString());
         $(divFormId).remove();
+        $("#id_form-TOTAL_FORMS").attr("value", nextIdDocForm.toString());
     });
 });
 
@@ -81,7 +82,7 @@ function createDocumentForm(){
 
     $divForm.appendTo($("#div_document_forms"));
     createJQObjectNoText("<br/>", {}, $("#div_document_forms"));
-    var totalForms = nextIdDocForm+1
+    var totalForms = nextIdDocForm+1;
     $("#id_form-TOTAL_FORMS").attr("value", totalForms.toString());
 }
 
@@ -214,17 +215,17 @@ function appendStorageDurationInput($parentForm){
 
 
 /*
- * Appends an input for the "document_type" to a form.
+ * Appends an input for the "application_name" to a form.
  * $parentForm: a JQuery object representing a form.
  */
 function appendDocumentTypeInput($parentForm){
-    // A label for attribute is of the form "id_form-0-document_type" for example.
+    // A label for attribute is of the form "id_form-0-application_name" for example.
     var labelForPrefix = "id_form-";
-    var labelForSuffix = "-document_type";
+    var labelForSuffix = "-application_name";
     var labelFor = labelForPrefix.concat(nextIdDocForm.toString(), labelForSuffix);
 
     var inputNamePrefix = "form-";
-    var inputNameSuffix = "-document_type";
+    var inputNameSuffix = "-application_name";
     var inputName = inputNamePrefix.concat(nextIdDocForm.toString(), inputNameSuffix);
     var $input = createJQObjectNoText("<input/>", {"id": labelFor,
                                              "name": inputName,
