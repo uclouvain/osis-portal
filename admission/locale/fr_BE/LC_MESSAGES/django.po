@@ -1287,3 +1287,6 @@ msgstr "Attestation de bourse délivrée par la CFWB ou la Coopération au déve
 
 msgid "scholarship_development_cooperation"
 msgstr "scholarship_development_cooperation"
+
+msgid "criteria"
+msgstr "Critère"
