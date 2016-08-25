@@ -33,7 +33,7 @@ class SociologicalSurveyExamAdmin(admin.ModelAdmin):
 
 
 class SociologicalSurvey(models.Model):
-    person = models.ForeignKey('Applicant')
+    applicant = models.OneToOneField('Applicant', on_delete=models.CASCADE, primary_key=True)
 
     number_brothers_sisters = models.IntegerField(default=0)
 

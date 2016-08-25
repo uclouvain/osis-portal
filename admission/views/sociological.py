@@ -24,25 +24,31 @@
 #
 ##############################################################################
 from django.shortcuts import render
+from django.core.exceptions import ObjectDoesNotExist
 from admission import models as mdl
 from admission.views import demande_validation
 from admission.views import tabs
 from admission.forms import SociologicalSurveyForm
+from admission.models.sociological_survey import SociologicalSurvey
 
 
 def update(request, application_id=None):
+    applicant = mdl.applicant.find_by_user(request.user)
     if request.method == "POST":
         sociological_form = SociologicalSurveyForm(request.POST)
         if sociological_form.is_valid():
-            print("Is valid")
+            save_sociological_form(sociological_form, request.user)
     else:
-        sociological_form = SociologicalSurveyForm()
-        pass
+        try:    # Prefill the form if the user already filled it.
+            u = SociologicalSurvey.objects.get(applicant=applicant)
+            sociological_form = SociologicalSurveyForm(instance=u)
+        except ObjectDoesNotExist:
+            sociological_form = SociologicalSurveyForm()
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
         application = mdl.application.init_application(request.user)
-    applicant = mdl.applicant.find_by_user(request.user)
+    print(sociological_form)
     tab_status = tabs.init(request)
     return render(request, "admission_home.html",
                   {'tab_active':             5,
@@ -65,3 +71,40 @@ def update(request, application_id=None):
                    'tab_submission': tab_status['tab_submission'],
                    'applications': mdl.application.find_by_user(request.user),
                    'sociological_form': sociological_form})
+
+
+def save_sociological_form(sociological_form, user):
+    """
+    Save a sociological form.
+    The form must have passed the is_valid check.
+    :param sociological_form: a form of type SociologicalForm
+    :param user: the current user
+    :return:
+    """
+    applicant = mdl.applicant.find_by_user(user)
+    number_brothers_sisters = sociological_form.cleaned_data['number_brothers_sisters']
+    father_is_deceased = sociological_form.cleaned_data['father_is_deceased']
+    father_education = sociological_form.cleaned_data['father_education']
+    father_profession = sociological_form.cleaned_data['father_profession']
+    mother_is_deceased = sociological_form.cleaned_data['mother_is_deceased']
+    mother_education = sociological_form.cleaned_data['mother_education']
+    mother_profession = sociological_form.cleaned_data['mother_profession']
+    student_professional_activity = sociological_form.cleaned_data['student_professional_activity']
+    student_profession = sociological_form.cleaned_data['student_profession']
+    conjoint_professional_activity = sociological_form.cleaned_data['conjoint_professional_activity']
+    conjoint_profession = sociological_form.cleaned_data['conjoint_profession']
+    paternal_grandfather_profession = sociological_form.cleaned_data['paternal_grandfather_profession']
+    maternal_grandfather_profession = sociological_form.cleaned_data['maternal_grandfather_profession']
+
+    sociological_survey = SociologicalSurvey(applicant=applicant,
+                                             number_brothers_sisters=number_brothers_sisters,
+                                             father_is_deceased=father_is_deceased, father_education=father_education,
+                                             father_profession=father_profession, mother_is_deceased=mother_is_deceased,
+                                             mother_education=mother_education, mother_profession=mother_profession,
+                                             student_professional_activity=student_professional_activity,
+                                             student_profession=student_profession,
+                                             conjoint_professional_activity=conjoint_professional_activity,
+                                             conjoint_profession=conjoint_profession,
+                                             paternal_grandfather_profession=paternal_grandfather_profession,
+                                             maternal_grandfather_profession=maternal_grandfather_profession)
+    sociological_survey.save()  # Will update or create depending if a record exist with the same applicant

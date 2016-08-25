@@ -252,4 +252,4 @@ class RemoveAttachmentForm(forms.Form):
 class SociologicalSurveyForm(forms.ModelForm):
     class Meta:
         model = SociologicalSurvey
-        exclude = ['person']
+        exclude = ['applicant']
