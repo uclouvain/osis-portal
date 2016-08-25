@@ -77,7 +77,7 @@ def save_document(key, data):
     if not cb:
         return None
     try:
-        cb.set(key, data)
+        cb.upsert(key, data)
     except CouchbaseError:
         raise
 
