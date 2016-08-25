@@ -23,6 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+"""
+Model containig types of professional activity.
+This includes: full-time, part-time and no professional activity.
+"""
 from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _

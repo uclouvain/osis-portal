@@ -23,6 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+"""
+Model containing the type of education of a person.
+This could be: primary school, university, ...
+"""
 from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _

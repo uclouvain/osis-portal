@@ -23,6 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+"""
+Model containing the sociological background of an applicant.
+This contains informations on the numbers of sisters and brothers,
+father and mother's profession and so on.
+"""
 from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _

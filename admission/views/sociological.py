@@ -33,7 +33,11 @@ from admission.models.sociological_survey import SociologicalSurvey
 
 
 def update(request, application_id=None):
+    """
+    Sociological survey of an applicant.
+    """
     applicant = mdl.applicant.find_by_user(request.user)
+
     if request.method == "POST":
         sociological_form = SociologicalSurveyForm(request.POST)
         if sociological_form.is_valid():
@@ -44,11 +48,12 @@ def update(request, application_id=None):
             sociological_form = SociologicalSurveyForm(instance=u)
         except ObjectDoesNotExist:
             sociological_form = SociologicalSurveyForm()
+
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
         application = mdl.application.init_application(request.user)
-    print(sociological_form)
+
     tab_status = tabs.init(request)
     return render(request, "admission_home.html",
                   {'tab_active':             5,
