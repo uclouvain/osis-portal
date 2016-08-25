@@ -48,6 +48,8 @@
     {% csrf_token %}
     {% if sociological_form.errors %}
     <div class="alert alert-danger" role="alert">
+        Vous n'avez pas rempli tout les champs obligatoires ou les champs
+        sont incorrectes.
         <ul style="list-style-type: none">
             {% for field in sociological_form %}
             {% for error in field.errors %}
