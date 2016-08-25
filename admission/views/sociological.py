@@ -23,13 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from admission import models as mdl
 from admission.views import demande_validation
 from admission.views import tabs
 from admission.forms import SociologicalSurveyForm
 from admission.models.sociological_survey import SociologicalSurvey
+from admission.views import attachments, accounting
 
 
 def update(request, application_id=None):
@@ -42,8 +43,8 @@ def update(request, application_id=None):
         sociological_form = SociologicalSurveyForm(request.POST)
         if sociological_form.is_valid():
             save_sociological_form(sociological_form, request.user)
-            next_tab = request.POST.get('next_tab', 5) #TODO check value
-
+            next_tab = request.POST.get('next_tab', 'next')
+            return redirect_to_next_tab(next_tab)
     else:
         try:    # Prefill the form if the user already filled it.
             u = SociologicalSurvey.objects.get(applicant=applicant)
@@ -115,3 +116,17 @@ def save_sociological_form(sociological_form, user):
                                              paternal_grandfather_profession=paternal_grandfather_profession,
                                              maternal_grandfather_profession=maternal_grandfather_profession)
     sociological_survey.save()  # Will update or create depending if a record exist with the same applicant
+
+
+def redirect_to_next_tab(next_tab):
+    """
+    Redirect to the next or previous page.
+    The next page is the "attachments" one and
+    the previous is the "accounting" one.
+    :param next_tab: a string equals to previous or next
+    :return: redirect to another page
+    """
+    if next_tab == "previous":
+        return redirect(accounting.accounting_update)
+    return redirect(attachments.update)
+
