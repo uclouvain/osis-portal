@@ -37,11 +37,13 @@ def update(request, application_id=None):
     Sociological survey of an applicant.
     """
     applicant = mdl.applicant.find_by_user(request.user)
-
+    next_tab = 5
     if request.method == "POST":
         sociological_form = SociologicalSurveyForm(request.POST)
         if sociological_form.is_valid():
             save_sociological_form(sociological_form, request.user)
+            next_tab = request.POST.get('next_tab', 5) #TODO check value
+
     else:
         try:    # Prefill the form if the user already filled it.
             u = SociologicalSurvey.objects.get(applicant=applicant)
@@ -56,7 +58,7 @@ def update(request, application_id=None):
 
     tab_status = tabs.init(request)
     return render(request, "admission_home.html",
-                  {'tab_active':             5,
+                  {'tab_active':             next_tab,
                    'application':            application,
                    'validated_profil':       demande_validation.validate_profil(applicant),
                    'validated_diploma':      demande_validation.validate_diploma(application),
