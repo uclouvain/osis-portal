@@ -57,7 +57,7 @@
 <div class="row">
     <div class="col-md-4">{{ attachment.file_name }}</div>
     <div class="col-md-4">
-        <a href="{{ attachment.file.url }}">
+        <a href="{% url 'download' attachment.pk %}">
             <span class="glyphicon glyphicon-open-file"></span>
         </a> </div>
     <div class="col-md-2">
