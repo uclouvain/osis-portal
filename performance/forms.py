@@ -28,7 +28,7 @@ from base.models import student as std_model
 from django.utils.translation import ugettext_lazy as _
 
 class RegistrationIdForm(forms.Form):
-    registration_id = forms.IntegerField()
+    registration_id = forms.CharField()
 
     def clean(self):
         cleaned_data = super(RegistrationIdForm, self).clean()

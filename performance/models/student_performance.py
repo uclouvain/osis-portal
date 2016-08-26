@@ -23,8 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import logging
+import time
 from couchbase.bucket import Bucket, NotFoundError, N1QLQuery
-from couchbase.exceptions import CouchbaseError, BucketNotFoundError, AuthError
+from couchbase.exceptions import CouchbaseError, BucketNotFoundError, AuthError, TemporaryFailError
 
 from django.conf import settings
 import re
@@ -35,6 +37,7 @@ import re
 
 bucket_name = "performance"
 
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 def connect_db():
     """
@@ -77,9 +80,17 @@ def save_document(key, data):
     if not cb:
         return None
     try:
-        cb.set(key, data)
-    except CouchbaseError:
-        raise
+        cb.upsert(key, data)
+    except TemporaryFailError as te:
+        try:
+            logger.warning(''.join(["TemporaryFailError updating/inserting ", key,
+                                    " in couchbase, waiting 1 s and retry: \n", str(te)]))
+            time.sleep(1)
+            cb.upsert(key,data)
+        except CouchbaseError as ce:
+            logger.error(''.join(["Error updating/inserting ", key, " in couchbase : \n", str(ce)]))
+    except CouchbaseError as ce:
+        logger.error(''.join(["Error updating/inserting ", key, " in couchbase : \n", str(ce)]))
 
 def select_where_registration_id_is(registration_id):
     """

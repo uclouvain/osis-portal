@@ -212,9 +212,10 @@ class ExampleConsumer(object):
         """
         self._channel = None
         if self._closing:
+            logger.warning('Closing connection without retry')
             self._connection.ioloop.stop()
         else:
-            logger.debug('Connection closed, reopening in 5 seconds: (%s) %s' % (reply_code, reply_text))
+            logger.warning('Connection closed, reopening in 5 seconds: (%s) %s' % (reply_code, reply_text))
             self._connection.add_timeout(5, self.reconnect)
 
     def reconnect(self):
