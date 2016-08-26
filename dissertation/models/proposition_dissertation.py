@@ -99,8 +99,9 @@ def search(terms, active=None, visibility=None):
     elif visibility:
         queryset = queryset.filter(visibility=visibility)
     queryset = queryset.distinct()
-    return queryset
+    return querysets
 
 
 def search_by_offer(offers):
-    return PropositionDissertation.objects.filter(active=True, visibility=True, offer_proposition__offer__in=offers)
+    return PropositionDissertation.objects.filter(active=True, visibility=True, offer_proposition__offer__in=offers)\
+        .distinct()
