@@ -32,13 +32,11 @@ from admission.models import applicant_assimilation_criteria
 from admission.models import application
 from admission.models import curriculum
 from admission.models import document_type_assimilation
-from admission.models import education
 from admission.models import form
 from admission.models import offer_year
 from admission.models import option
 from admission.models import person_address
 from admission.models import profession
-from admission.models import professional_activity
 from admission.models import properties
 from admission.models import question
 from admission.models import secondary_education

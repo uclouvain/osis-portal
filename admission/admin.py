@@ -50,9 +50,6 @@ admin.site.register(application.Application,
 admin.site.register(curriculum.Curriculum,
                     curriculum.CurriculumAdmin)
 
-admin.site.register(education.Education,
-                    education.EducationAdmin)
-
 admin.site.register(form.Form,
                     form.FormAdmin)
 
@@ -67,9 +64,6 @@ admin.site.register(person_address.PersonAddress,
 
 admin.site.register(profession.Profession,
                     profession.Professiondmin)
-
-admin.site.register(professional_activity.ProfessionalActivity,
-                    professional_activity.ProfessionalActivityAdmin)
 
 admin.site.register(properties.Properties,
                     properties.PropertiesAdmin)
