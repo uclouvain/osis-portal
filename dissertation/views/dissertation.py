@@ -29,9 +29,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from base import models as mdl
 from base.views import layout
-from dissertation.models import dissertation, dissertation_role, dissertation_update, proposition_dissertation,\
-    proposition_role
-from dissertation.forms import DissertationForm, DissertationUpdateForm
+from dissertation.models import dissertation, dissertation_role, dissertation_update, offer_proposition, \
+    proposition_dissertation, proposition_role
+from dissertation.forms import DissertationForm, DissertationTitleForm, DissertationUpdateForm
+from django.utils import timezone
 
 
 @login_required
@@ -58,6 +59,12 @@ def dissertation_detail(request, pk):
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
     count = dissertation.count_submit_by_user(student)
+    off = memory.offer_year_start.offer
+    offer_pro = offer_proposition.search_by_offer(off)
+    if offer_pro.start_edit_title < timezone.now().date() < offer_pro.end_edit_title:
+        check_edit = True
+    else:
+        check_edit = False
     if memory.author != student:
         return redirect('dissertations')
     else:
@@ -73,7 +80,8 @@ def dissertation_detail(request, pk):
                     dissertation_role.add(role.status, role.adviser, memory)
         dissertation_roles = dissertation_role.search_by_dissertation(memory)
         return layout.render(request, 'dissertation_detail.html',
-                             {'count': count,
+                             {'check_edit': check_edit,
+                              'count': count,
                               'count_dissertation_role': count_dissertation_role,
                               'dissertation': memory,
                               'dissertation_roles': dissertation_roles,
@@ -86,24 +94,45 @@ def dissertation_edit(request, pk):
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
     offers = mdl.offer.find_by_student(student)
-    if request.method == "POST":
-        form = DissertationForm(request.POST, instance=memory)
-        if form.is_valid():
-            memory = form.save()
-            return redirect('dissertation_detail', pk=memory.pk)
-        else:
-            form.fields["defend_year"].queryset = academic_year.find_last_academic_years()
-            form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
-            form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offer(offers)
+    off = memory.offer_year_start.offer
+    offer_pro = offer_proposition.search_by_offer(off)
+    if offer_pro.start_edit_title < timezone.now().date() < offer_pro.end_edit_title:
+        check_edit = True
     else:
-        form = DissertationForm(instance=memory)
-        form.fields["defend_year"].queryset = academic_year.find_last_academic_years()
-        form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
-        form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offer(offers)
-
-    return layout.render(request, 'dissertation_form.html',
-                         {'form': form,
-                          'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
+        check_edit = False
+    if memory.author == student:
+        if memory.status == 'DRAFT' or memory.status == 'DIR_KO':
+            if request.method == "POST":
+                form = DissertationForm(request.POST, instance=memory)
+                if form.is_valid():
+                    memory = form.save()
+                    return redirect('dissertation_detail', pk=memory.pk)
+                else:
+                    form.fields["defend_year"].queryset = academic_year.find_last_academic_years()
+                    form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
+                    form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offer(offers)
+            else:
+                form = DissertationForm(instance=memory)
+                form.fields["defend_year"].queryset = academic_year.find_last_academic_years()
+                form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
+                form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offer(offers)
+            return layout.render(request, 'dissertation_form.html',
+                                 {'form': form,
+                                  'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
+        else:
+            if check_edit:
+                if request.method == "POST":
+                    form = DissertationTitleForm(request.POST, instance=memory)
+                    if form.is_valid():
+                        memory = form.save()
+                        return redirect('dissertation_detail', pk=memory.pk)
+                else:
+                    form = DissertationTitleForm(instance=memory)
+                return layout.render(request, 'dissertation_title_form.html', {'form': form})
+            else:
+                return redirect('dissertation_detail', pk=memory.pk)
+    else:
+        return redirect('dissertations')
 
 
 @login_required

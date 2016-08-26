@@ -48,3 +48,7 @@ class OfferProposition(models.Model):
 
     def __str__(self):
         return self.acronym
+
+
+def search_by_offer(off):
+    return OfferProposition.objects.get(offer=off)

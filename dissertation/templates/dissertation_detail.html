@@ -225,6 +225,10 @@
                         <span class="glyphicon glyphicon-circle-arrow-right"
                               aria-hidden="true"></span> {% trans 'dir_submit'%}</a>
                     {% endif %}
+                {% elif check_edit == True %}
+                <a class="btn btn-default btn-primary"
+                   href="{% url 'dissertation_edit' pk=dissertation.pk %}">
+                    <span class="glyphicon glyphicon-edit"></span> {% trans 'edit' %}</a>
                 {% endif %}
             </div>
         </div>
