@@ -1,6 +1,6 @@
 var nextIdDocForm = 0; // Global variable to keep track of the number of document forms already created.
 var maxNumberForms = 5; // Default value
-
+var choices = []; // list for description choices
 
 $(document).ready(function(){
     maxNumberForms = $("#id_form-MAX_NUM_FORMS").attr("value").toString();
@@ -116,7 +116,7 @@ function appendFileInput($parentForm){
  * Appends an input for the "description" to a form.
  * $parentForm: a JQuery object representing a form.
  */
-function appendDescriptionInput($parentForm){
+function appendDescriptionInput($parentForm) {
     var $divInput = createJQObjectNoText("<div/>", {"class": "form_group col-md-2"}, $parentForm);
 
     // A label for attribute is of the form "id_form-0-description" for example.
@@ -128,14 +128,14 @@ function appendDescriptionInput($parentForm){
     var selectNamePrefix = "form-";
     var selectNameSuffix = "-description";
     var selectName = selectNamePrefix.concat(nextIdDocForm.toString(), selectNameSuffix);
-    var $select = createJQObjectNoText("<select/>", {"id": labelFor,
-        "name": selectName, "class": "form-control"}, $divInput);
-
-    var $option1 = createJQObject("<option/>", {"value": "ID_CARD"}, "identity_card", $select);
-    var $option2 = createJQObject("<option/>", {"value": "LETTER_MOTIVATION"}, "letter_motivation", $select);
-    var $option2 = createJQObject("<option/>", {"value": "ID_PICTURE"}, "id_picture", $select);
+    var $select = createJQObjectNoText("<select/>", {
+        "id": labelFor,
+        "name": selectName, "class": "form-control"
+    }, $divInput);
+    $.each(choices, function (index, item) {
+        var $option = createJQObject("<option/>", {"value": item}, item, $select);
+    });
 }
-
 
 /*
  * Appends an input for the "content_type" to a form.

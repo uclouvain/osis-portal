@@ -55,6 +55,7 @@ def update(request, application_id=None):
     tab_status = tabs.init(request)
 
     remove_attachment_form = RemoveAttachmentForm()
+    list_choices = ["ID_CARD", "ID_PCITURE", "LETTER_MOTIVATION"]  # To replace with correct list of choices
     return render(request, "admission_home.html", {
         "tab_active": 6,
         "application": application,
@@ -77,7 +78,8 @@ def update(request, application_id=None):
         "applications": mdl.application.find_by_user(request.user),
         "document_formset": document_formset,
         "attachments": past_attachments,
-        "removeAttachmentForm": remove_attachment_form})
+        "removeAttachmentForm": remove_attachment_form,
+        "list_choices": list_choices})
 
 
 def remove_attachment(request):
