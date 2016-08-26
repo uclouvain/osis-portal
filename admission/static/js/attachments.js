@@ -129,7 +129,7 @@ function appendDescriptionInput($parentForm){
     var selectNameSuffix = "-description";
     var selectName = selectNamePrefix.concat(nextIdDocForm.toString(), selectNameSuffix);
     var $select = createJQObjectNoText("<select/>", {"id": labelFor,
-        "name": selectName}, $divInput);
+        "name": selectName, "class": "form-control"}, $divInput);
 
     var $option1 = createJQObject("<option/>", {"value": "ID_CARD"}, "identity_card", $select);
     var $option2 = createJQObject("<option/>", {"value": "LETTER_MOTIVATION"}, "letter_motivation", $select);
