@@ -99,7 +99,7 @@ def search(terms, active=None, visibility=None):
     elif visibility:
         queryset = queryset.filter(visibility=visibility)
     queryset = queryset.distinct()
-    return querysets
+    return queryset
 
 
 def search_by_offer(offers):
