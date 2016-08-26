@@ -51,7 +51,7 @@ class SociologicalSurvey(models.Model):
     mother_profession = models.ForeignKey('Profession', blank=True, null=True, related_name="mother_profession")
 
     student_professional_activity = models.ForeignKey('ProfessionalActivity', related_name="student_activity")
-    student_profession = models.ForeignKey('Profession', related_name="student_profession")
+    student_profession = models.ForeignKey('Profession', blank=True, null=True, related_name="student_profession")
 
     conjoint_professional_activity = models.ForeignKey('ProfessionalActivity', blank=True, null=True,
                                                        related_name='conjoint_activity')
