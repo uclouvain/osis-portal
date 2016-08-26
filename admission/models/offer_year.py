@@ -42,7 +42,7 @@ class OfferYear(models.Model):
     domain = models.ForeignKey('reference.Domain')
     grade_type = models.ForeignKey('reference.GradeType', blank=True, null=True, db_index=True)
     subject_to_quota = models.BooleanField(default=False)
-    offer = models.ForeignKey(Offer)
+    offer = models.ForeignKey(Offer, blank=True, null=True)
 
     def __str__(self):
         return u"%s - %s" % (self.academic_year, self.acronym)

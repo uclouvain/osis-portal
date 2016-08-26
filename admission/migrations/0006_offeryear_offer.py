@@ -20,4 +20,10 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(default='', on_delete=django.db.models.deletion.CASCADE, to='base.Offer'),
             preserve_default=False,
         ),
+        migrations.AlterField(
+            model_name='offeryear',
+            name='offer',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    to='base.Offer'),
+        ),
     ]
