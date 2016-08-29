@@ -48,8 +48,51 @@ def insert_or_update(json_data):
     cls_str = data['model_class_str']
     model_class = map_classes[cls_str]
     records = data['records']
-    for instance in serializers.deserialize('json', records):
-        instance.save()
+    if model_class == mdl_base.tutor.Tutor or model_class == mdl_base.student.Student:  # Special case
+        for instance in serializers.deserialize('json', records):
+            instance.save()
+    else:
+        for record in records:
+            create_or_update(model_class, record)
+
+
+def create_or_update(model_class, record):
+    """
+    Create or update the database based on the record.
+    :param model_class: a model
+    :param record: a dictionary where each key is a field of the model
+    :return: the created obj
+    """
+    list_fields = get_model_fields(model_class)
+    new_record = remove_inexistent_field(list_fields, record)
+    external_id = new_record.get('external_id', None)
+
+    if external_id is None:  # then object was not created created on osis-portal
+        id = new_record.pop('id')  # !! should never update id value
+        new_record['external_id'] = id
+        obj, created = model_class.objects.update_or_create(external_id=id,
+                                                            defaults=new_record)
+
+    else:                   # the object was originaly created on osis-portal
+        external_id = new_record.pop('external_id')
+        del new_record['id']  # !! should never update id value
+        obj, created = model_class.objects.update_or_create(id=external_id,
+                                                            defaults=new_record)  # should always do an update
+    return obj
+
+
+def remove_inexistent_field(list_fields, record):
+    """
+    Remove all the fields that are inexistent from the record.
+    :param list_fields: a list of string where each string corresponds to a model field
+    :param record: a dictionary where each key correspond to a field name
+    :return: a modified record
+    """
+    record_copy = record.copy()
+    for key in record.keys():
+        if key not in list_fields:
+            del record_copy[key]
+    return record_copy
 
 
 def get_model_fields(model_class):
@@ -60,6 +103,3 @@ def get_model_fields(model_class):
     """
     list_records = [field.name for field in model_class._meta.fields]
     return list_records
-
-
-

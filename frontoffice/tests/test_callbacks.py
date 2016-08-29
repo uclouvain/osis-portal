@@ -45,4 +45,28 @@ class TestCallbacks(SimpleTestCase):
         list_actual = callbacks.get_model_fields(OfferYear)
         self.assertListEqual(list_expected, list_actual)
 
+    def create_or_update_no_foreign_key(self):
+        # Test for model reference.country.Country
+
+        # Test with no external_id
+        record_expected = {"id": 1, "name": "Belgique", "european_union": "True", "iso_code": "BE",
+                           "nationality": "belge"}
+        obj = callbacks.create_or_update(Country, record_expected)
+        del record_expected["id"]
+        record_actual = {"name": obj.name, "european_union": obj.european_union, "iso_code": obj.iso_code,
+                         "nationality": obj.nationality}
+
+        self.assertDictEqual(record_expected, record_actual)
+
+        # Test with external_id set
+        record_expected["id"] = obj.id
+        record_expected["name"] = "France"
+        record_update = {"external_id": obj.id, "name": record_expected["name"]}
+        obj = callbacks.create_or_update(Country, record_update)
+        record_actual = {"name": obj.name, "european_union": obj.european_union, "iso_code": obj.iso_code,
+                         "nationality": obj.nationality}
+
+        self.assertDictEqual(record_expected, record_actual)
+
+
 
