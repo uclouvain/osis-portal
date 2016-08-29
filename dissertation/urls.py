@@ -25,9 +25,31 @@
 ##############################################################################
 
 from django.conf.urls import url
-from dissertation.views import common
+from dissertation.views import common, dissertation, proposition_dissertation
 
 
 urlpatterns = [
     url(r'^$', common.home, name='dissertation'),
+
+    url(r'^dissertations/$', dissertation.dissertations,
+        name='dissertations'),
+    url(r'^dissertation_delete/(?P<pk>[0-9]+)$', dissertation.dissertation_delete,
+        name='dissertation_delete'),
+    url(r'^dissertation_detail/(?P<pk>[0-9]+)/$', dissertation.dissertation_detail,
+        name='dissertation_detail'),
+    url(r'^dissertation_history/(?P<pk>[0-9]+)$', dissertation.dissertation_history,
+        name='dissertation_history'),
+    url(r'^dissertation_new$', dissertation.dissertation_new,
+        name='dissertation_new$'),
+    url(r'^dissertations_search$', dissertation.dissertations_search,
+        name='dissertations_search'),
+    url(r'^dissertation_to_dir_submit/(?P<pk>[0-9]+)$', dissertation.dissertation_to_dir_submit,
+        name='dissertation_to_dir_submit'),
+
+    url(r'^proposition_dissertations/$', proposition_dissertation.proposition_dissertations,
+        name='proposition_dissertations'),
+    url(r'^proposition_dissertation_detail/(?P<pk>[0-9]+)/$', proposition_dissertation.proposition_dissertation_detail,
+        name='proposition_dissertation_detail'),
+    url(r'^proposition_dissertations_search$', proposition_dissertation.proposition_dissertations_search,
+        name='proposition_dissertations_search'),
 ]

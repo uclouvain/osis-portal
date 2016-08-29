@@ -1,0 +1,139 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+ * OSIS stands for Open Student Information System. It's an application
+ * designed to manage the core business of higher education institutions,
+ * such as universities, faculties, institutes and professional schools.
+ * The core business involves the administration of students, teachers,
+ * courses, programs and so on.
+ *
+ * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * A copy of this license - GNU General Public License - is available
+ * at the root of the source code of this program.  If not,
+ * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block content %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'dissertation' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+    <li><a href="{% url 'proposition_dissertations' %}" id="lnk_proposition_dissertations">{% trans 'subjects_list' %}</a></li>
+    <li class="active">{{ proposition_dissertation.title }}</li>
+</ol>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans 'proposition_dissertation_informations' %}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'author' %}</label>
+                    </div>
+                    <div class="col-md-9">
+                        {{ proposition_dissertation.author }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'title' %}</label>
+                    </div>
+                    <div class="col-md-9">
+                        {{ proposition_dissertation.title }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'offer_propositions' %}</label>
+                    </div>
+                    <div class="col-md-9">
+                        {% for offer_proposition in proposition_dissertation.offer_proposition.all %}
+                            <span class="label label-default">{{ offer_proposition }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'level' %}</label>
+                    </div>
+                    <div class="col-md-9" style="text-align: justify">
+                        {{ proposition_dissertation.get_level_display  }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'type' %}</label>
+                    </div>
+                    <div class="col-md-9" style="text-align: justify">
+                        {{ proposition_dissertation.get_type_display }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'collaboration' %}</label>
+                    </div>
+                    <div class="col-md-9" style="text-align: justify">
+                        {{ proposition_dissertation.get_collaboration_display }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'max_students_number' %}</label>
+                    </div>
+                    <div class="col-md-9" style="text-align: justify">
+                        {{ proposition_dissertation.max_number_student }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'taken_places' %}</label>
+                    </div>
+                    <div class="col-md-9" style="text-align: justify">
+                        {{ using }} {% trans 'of' %} {{ proposition_dissertation.max_number_student }} ({{ percent }}{% trans '%'%})
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'description' %}</label>
+                    </div>
+                    <div class="col-md-9" style="text-align: justify">
+                        {{ proposition_dissertation.description|linebreaks }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans 'proposition_dissertation_jury' %}</h3>
+            </div>
+            <div class="panel-body">
+                {% for proposition_role in proposition_roles %}
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>
+                            {{ proposition_role.get_status_display }}
+                        </label>
+                    </div>
+                    <div class="col-md-4">
+                        {{ proposition_role.adviser }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from base.models import offer
+from base.models import offer_enrollment
 from base.models import person
 from base.models import student
 from base.models import tutor
