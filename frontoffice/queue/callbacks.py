@@ -64,7 +64,7 @@ def create_or_update(model_class, record):
     :return: the created obj
     """
     list_fields = get_model_fields(model_class)
-    new_record = remove_inexistent_field(list_fields, record)
+    new_record = remove_non_existent_fields(list_fields, record)
     external_id = new_record.get('external_id', None)
 
     if external_id is None:  # then object was not created created on osis-portal
@@ -81,7 +81,7 @@ def create_or_update(model_class, record):
     return obj
 
 
-def remove_inexistent_field(list_fields, record):
+def remove_non_existent_fields(list_fields, record):
     """
     Remove all the fields that are inexistent from the record.
     :param list_fields: a list of string where each string corresponds to a model field

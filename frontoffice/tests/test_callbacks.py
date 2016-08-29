@@ -45,6 +45,28 @@ class TestCallbacks(SimpleTestCase):
         list_actual = callbacks.get_model_fields(OfferYear)
         self.assertListEqual(list_expected, list_actual)
 
+    def test_remove_non_existent_fields(self):
+        list_fields = ["name", "id", "year", "isEuropean"]
+
+        # All fields are present
+        record = {"name": "MyName", "id": 42, "year": 2015, "isEuropean": False, "toRemove": True,
+                  "nonExistent": 45}
+
+        record_expected = {"name": "MyName", "id": 42, "year": 2015, "isEuropean": False}
+        record_actual = callbacks.remove_non_existent_fields(list_fields, record)
+
+        self.assertDictEqual(record_expected, record_actual)
+
+        # Some field are missing (id and year)
+        record = {"name": "MyName", "isEuropean": False, "toRemove": True,
+                  "nonExistent": 45}
+
+        record_expected = {"name": "MyName", "isEuropean": False}
+        record_actual = callbacks.remove_non_existent_fields(list_fields, record)
+
+        self.assertDictEqual(record_expected, record_actual)
+
+
     def create_or_update_no_foreign_key(self):
         # Test for model reference.country.Country
 
