@@ -68,9 +68,9 @@ def create_or_update(model_class, record):
     external_id = new_record.get('external_id', None)
 
     if external_id is None:  # then object was not created created on osis-portal
-        id = new_record.pop('id')  # !! should never update id value
-        new_record['external_id'] = id
-        obj, created = model_class.objects.update_or_create(external_id=id,
+        received_id = new_record.pop('id')  # !! should never update id value
+        new_record['external_id'] = received_id
+        obj, created = model_class.objects.update_or_create(external_id=received_id,
                                                             defaults=new_record)
 
     else:                   # the object was originaly created on osis-portal

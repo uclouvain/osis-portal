@@ -66,7 +66,6 @@ class TestCallbacks(SimpleTestCase):
 
         self.assertDictEqual(record_expected, record_actual)
 
-
     def create_or_update_no_foreign_key(self):
         # Test for model reference.country.Country
 
@@ -89,6 +88,3 @@ class TestCallbacks(SimpleTestCase):
                          "nationality": obj.nationality}
 
         self.assertDictEqual(record_expected, record_actual)
-
-
-
