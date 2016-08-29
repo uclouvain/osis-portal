@@ -51,3 +51,15 @@ def insert_or_update(json_data):
     for instance in serializers.deserialize('json', records):
         instance.save()
 
+
+def get_model_fields(model_class):
+    """
+    Return a list of fields for a given model class.
+    :param model_class: a django model
+    :return: a list of string where each string corresponds to a model field
+    """
+    list_records = [field.name for field in model_class._meta.fields]
+    return list_records
+
+
+
