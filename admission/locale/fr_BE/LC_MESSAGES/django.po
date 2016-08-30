@@ -1290,3 +1290,7 @@ msgstr "scholarship_development_cooperation"
 
 msgid "criteria"
 msgstr "Critère"
+
+
+msgid "help_pnl_selectedfiles"
+msgstr "Veuillez sélectionner un fichier"

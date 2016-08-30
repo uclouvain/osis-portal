@@ -27,3 +27,6 @@ msgstr ""
 
 msgid "criteria"
 msgstr "Critère"
+
+msgid "id_picture"
+msgstr "Identity picture"

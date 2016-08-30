@@ -277,7 +277,7 @@
 
     $("#lnk_redirect_picture").click(function() {
          $('#hdn_description').val('ID_PICTURE');
-         $('#lnk_picture').trigger('click');
+         $('#lbl_description_label').text(gettext('ID_PICTURE'));
     });
     $("#lnk_modify_picture").click(function() {
         $('#hdn_description').val('ID_PICTURE');
@@ -285,7 +285,9 @@
     });
     $("#btn_modify_picture").click(function() {
         $('#hdn_description').val('ID_PICTURE');
-         $('#lnk_picture').trigger('click');
+        $('#lbl_description_label').text(gettext('ID_PICTURE'));
+
+        //$('#lnk_picture').trigger('click');
     });
 
     $("#lnk_modify_id_document").click(function() {

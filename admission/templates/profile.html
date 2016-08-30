@@ -92,15 +92,21 @@
                                     {% if picture %}
                                         {% if ".jpg" in picture|lower or ".jpeg" in picture|lower or ".gif" in picture|lower or ".png" in picture|lower%}
                                             <img src="{% static picture%}" width="120px"
-                                                 id="lnk_modify_picture"
                                                  style="cursor:pointer;"
                                                  title="{% trans 'change_picture'%}">
+                                                 <button type="button"
+                                                   id="btn_modify_picture"
+                                                   class="btn"
+                                                   title="{% trans 'change_picture'%}"
+                                                   data-toggle="modal" data-target="#pnl_upload_documents"
+                                            ><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> </button>
                                         {%else%}
                                             <button type="button"
                                                    id="btn_modify_picture"
-                                                   class="btn glyphicon glyphicon-ok-circle"
+                                                   class="btn"
                                                    title="{% trans 'change_picture'%}"
-                                            ></button>
+                                                   data-toggle="modal" data-target="#pnl_upload_documents"
+                                            ><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> </button>
                                             <br><br>
                                             <span style="font-size:x-small;color:#808080">({% trans 'no_preview'%})</span>
                                         {%endif%}
@@ -108,7 +114,8 @@
                                     {%else%}
                                             <button type="button"
                                                     id="lnk_redirect_picture" title="{% trans 'id_picture_add'%}"
-                                                    class="btn glyphicon glyphicon-upload"></button>
+                                                    class="btn glyphicon glyphicon-upload"
+                                                    data-toggle="modal" data-target="#pnl_upload_documents"></button>
 
                                     {%endif%}
                                 </div>
@@ -610,13 +617,14 @@
                 {%trans 'next_step'%} : {%trans 'offer_choice'%}</a>
         {%endif%}
         </div>
+        <button type="button" data-toggle="modal" data-target="#pnl_upload_documents">test</button>
     </form>
     <form method="post"
           action="{% url 'upload_file_description' %}"
           id="form_upload_profile"
           style="visibility:hidden;display:none;">
         {% csrf_token %}
-        <input type="hidden" name="description" value="" id="hdn_description"/>
-        <input type="hidden" name="application_id" value='{{ application.id | default_if_none:''}}' />
+
         <input type="submit" value="+"  id="lnk_picture">
     </form>
+

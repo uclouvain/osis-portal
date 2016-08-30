@@ -1,4 +1,3 @@
-{% extends "layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -26,9 +25,18 @@
  * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block content %}
-  <div class="page-header">
-    <h2>{% if description == 'ID_PICTURE'%}
+<!-- UploadFile modal -->
+<div class="modal fade" id="pnl_upload_documents"
+     tabindex="-1" role="dialog" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" enctype="multipart/form-data" action="{% url 'upload_document' %}">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="bt_close_upload_score_modal"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="uploadScroresLabel">
+                    <label id="lbl_description_label"></label>
+        {% if description == 'ID_PICTURE'%}
             {% trans 'id_picture' %}
         {% endif %}
         {% if description == 'ID_CARD'%}
@@ -73,34 +81,26 @@
         {% if description == 'PROFESSIONAL_EXAM_CERTIFICATE'%}
             {% trans 'admission_exam_certificate_document' %}
         {% endif %}
-        {% if description == 'RESIDENT_LONG_DURATION' or description == 'ID_FOREIGN_UNLIMITED' or  description == 'ATTACHMENT_26' or  description == 'REFUGEE_CARD' or  description == 'FAMILY_COMPOSITION' or  description == 'BIRTH_CERTIFICATE' or  description == 'RESIDENT_CERTIFICATE' or  description == 'STATELESS_CERTIFICATE' or  description == 'FOREIGN_INSCRIPTION_CERTIFICATE' or  description == 'SUBSIDIARY_PROTECTION_DECISION' or  description == 'RESIDENCE_PERMIT' or  description == 'PAYCHECK' or  description == 'CPAS' or  description == 'TUTORSHIP_CERTIFICATE' or  description == 'OTHER' or  description == 'SCHOLARSHIP_CFWB' or  description == 'SCHOLARSHIP_DEVELOPMENT_COOPERATION'%}         
+        {% if description == 'RESIDENT_LONG_DURATION' or description == 'ID_FOREIGN_UNLIMITED' or  description == 'ATTACHMENT_26' or  description == 'REFUGEE_CARD' or  description == 'FAMILY_COMPOSITION' or  description == 'BIRTH_CERTIFICATE' or  description == 'RESIDENT_CERTIFICATE' or  description == 'STATELESS_CERTIFICATE' or  description == 'FOREIGN_INSCRIPTION_CERTIFICATE' or  description == 'SUBSIDIARY_PROTECTION_DECISION' or  description == 'RESIDENCE_PERMIT' or  description == 'PAYCHECK' or  description == 'CPAS' or  description == 'TUTORSHIP_CERTIFICATE' or  description == 'OTHER' or  description == 'SCHOLARSHIP_CFWB' or  description == 'SCHOLARSHIP_DEVELOPMENT_COOPERATION'%}
             {% with document_description=description|slugify %}
                 {% trans document_description %}
             {% endwith %}
         {% endif %}
-    </h2>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <form method="POST" class="post-form" enctype="multipart/form-data" action="{% url 'upload_document' %}">
-        {% csrf_token %}
-        {% include "uploading/upload_file_form.html" %}
-        <input type="hidden" name="description" value='{{ description }}' />
-        <input type="hidden" name="application_id" value='{{ application.id | default_if_none:''}}' />
-        <button type="submit" class="save btn btn-default" onclick="return confirm('{% trans 'new_file_confirmation_message' %}')">{% trans 'save' %}</button>
-        {% if description == 'ID_PICTURE' or description == 'ID_CARD'%}
-            <a href="{% url 'home'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>
-        {% else %}
-          {% if description == 'NATIONAL_DIPLOMA_VERSO' or description == 'NATIONAL_DIPLOMA_RECTO' or description == 'INTERNATIONAL_DIPLOMA_RECTO' or description == 'INTERNATIONAL_DIPLOMA_VERSO' or description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO' or  description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO' or  description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO' or  description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO' or  description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO' or  description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO' or  description == 'EQUIVALENCE' or description == 'ADMISSION_EXAM_CERTIFICATE' or description == 'PROFESSIONAL_EXAM_CERTIFICATE'%}
-          <a href="{% url 'diploma_update'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>
-          {% endif %}
-          {% if description == 'RESIDENT_LONG_DURATION' or description == 'ID_FOREIGN_UNLIMITED' or  description == 'ATTACHMENT_26' or  description == 'REFUGEE_CARD' or  description == 'FAMILY_COMPOSITION' or  description == 'BIRTH_CERTIFICATE' or  description == 'RESIDENT_CERTIFICATE' or  description == 'STATELESS_CERTIFICATE' or  description == 'FOREIGN_INSCRIPTION_CERTIFICATE' or  description == 'SUBSIDIARY_PROTECTION_DECISION' or  description == 'RESIDENCE_PERMIT' or  description == 'PAYCHECK' or  description == 'CPAS' or  description == 'TUTORSHIP_CERTIFICATE' or  description == 'OTHER' or  description == 'SCHOLARSHIP_CFWB' or  description == 'SCHOLARSHIP_DEVELOPMENT_COOPERATION'%}
-            <a href="{% url 'home'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>
-          {% endif %}
-        {% endif %}
-      </form>
+
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    {% include "uploading/upload_file_form.html" %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="bt_cancel_upload_score_modal">{% trans 'cancel' %}</button>
+                    <input type="submit" class="btn btn-primary" value="{% trans 'save'%}" onclick="document.getElementById('files').style.visibility='visible'" id="bt_submit_upload_score_modal"/>
+                    <input type="text" name="description" value="" id="hdn_description"/>
+
+                    <input type="text" name="application_id" value='{{ application.id | default_if_none:''}}' />
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
-{% include "uploaded_file_list.html" %}
-{% endblock %}
+</div>
 

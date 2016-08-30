@@ -35,11 +35,13 @@ from osis_common import models as mdl_osis_common
 from osis_common.forms import UploadDocumentFileForm
 from reference import models as mdl_ref
 from django.core.urlresolvers import reverse
+from django.forms import formset_factory
+
 
 
 @login_required
 def upload_file(request):
-
+    print('upload_file')
     description = None
     documents = mdl_osis_common.document_file.search(description=description, user=request.user)
     if request.method == "POST":
@@ -49,9 +51,11 @@ def upload_file(request):
         if request.POST['application_id']:
             application_id = request.POST['application_id']
             application = mdl.application.find_by_id(application_id)
-        form = UploadDocumentFileForm(request.POST, request.FILES)
-        if form.is_valid():
-
+        UploadDocumentFileFormSet = formset_factory(UploadDocumentFileForm, extra=0, max_num=1)
+        document_formset = UploadDocumentFileFormSet(request.POST, request.FILES)
+        if document_formset.is_valid():
+            for document in document_formset:
+                save_document_from_form(document, request.user)
             curriculum_uploads = [document_type.NATIONAL_DIPLOMA_RECTO,
                                   document_type.NATIONAL_DIPLOMA_VERSO,
                                   document_type.INTERNATIONAL_DIPLOMA_RECTO,
@@ -80,12 +84,15 @@ def upload_file(request):
                 for document in documents:
                     document.delete()
 
-            file = form.save()
+            file = form.save(commit=False)
             file.size = file.file.size
             file.file_name = request.FILES['file'].name
             file_type = form.cleaned_data["file"]
             content_type = file_type.content_type
             file.content_type = content_type
+            file.storage_duration = 3366
+            file.user = request.user
+            file.application_name = 'admission'
             file.save()
 
             if description in curriculum_uploads:

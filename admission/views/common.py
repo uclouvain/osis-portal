@@ -40,6 +40,8 @@ from admission.views import demande_validation, assimilation_criteria as assimil
 from admission.views import tabs
 from osis_common import models as mdl_osis_common
 from admission.models.enums import document_type
+from osis_common.forms import UploadDocumentFileForm
+from django.forms import formset_factory
 
 
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
@@ -311,6 +313,8 @@ def profile(request, application_id=None, message_success=None):
     # validated are not ready yet, to be achieved in another issue - Leila
     person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
     person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
+    UploadDocumentFileFormSet = formset_factory(UploadDocumentFileForm, extra=0, max_num=1)
+    document_formset = UploadDocumentFileFormSet()
     return render(request, "admission_home.html", {
         'applicant': applicant,
         'applicant_form': applicant_form,
@@ -345,7 +349,8 @@ def profile(request, application_id=None, message_success=None):
         'picture': get_picture_id(request.user),
         'id_document': get_id_document(request.user),
         'assimilation_basic_documents': assimilation_criteria_view.find_assimilation_basic_documents(),
-        'assimilation_documents_existing': get_assimilation_documents_existing(request.user)})
+        'assimilation_documents_existing': get_assimilation_documents_existing(request.user),
+        'document_formset': document_formset,})
 
 
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
