@@ -31,24 +31,30 @@
     <input type="hidden" value="{{application.id | default_if_none:''}}" id="hdn_application_id">
     <input type="hidden" value="{{application.offer_year.grade_type.grade}}" id="hdn_application_grade">
     <input type="hidden" value="{{application.offer_year.grade_type.id}}" id="hdn_application_grade_type_id">
-    <input type="hidden" value="{{application.offer_year.domain.id}}" id="hdn_application_domain_id">
+    <input type="hidden" value="{{application.offer_year.domain.id}}" id="hdn_application_domain_id" title="dom">
     <input type="hidden" value="{{application.offer_year.id}}" id="hdn_application_offer_year_id" name="hdn_application_offer_year_id">
-    <input type="hidden" value="{{application.belgian_degree}}" id="hdn_belgian_degree">
+    <input type="hidden" value="{{application.national_degree}}" id="hdn_belgian_degree">
     <input type="hidden" value="{{application.started_samestudies}}" id="hdn_started_samestudies">
     <input type="hidden" value="{{application.applied_to_sameprogram}}" id="hdn_applied_to_sameprogram">
+    <input type="hidden" value="" id="hdn_next_tab" name="next_tab" title="Next tab" >
+    <span id="txt_message_error_offer_up"
+           class="alert alert-warning"
+           style="visibility:hidden;display:none;"></span><br>
+
     <div>
-        <a id="lnk_previous_step_up"
+        <a id="lnk_previous_offer_step_up"
            class="btn btn-default"
            href="{%if application.id%}{% url 'profile' application.id%}{%else%}{% url 'profile'%}{%endif%}"
-           onclick="save('form_questions');"
+           onclick="$('#hdn_next_tab').val('0');"
            title="{% trans 'profile'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
             {%trans 'previous_step'%} : {%trans 'profile'%}</a>
-        <a id="lnk_next_step_up"
+        <a id="lnk_next_offer_step_up"
            class="btn btn-default"
-           href="{%if application.id%}{% url 'diploma_update' application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
-           onclick="save('form_questions');"
-           title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+           onclick="$('#hdn_next_tab').val('2');"
+           title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"
+           href="#"></span>
             {%trans 'next_step'%} : {%trans 'tab_diplomas'%}</a>
+
     </div>
     <br>
     {% trans 'instruction_offer_selection_part1' %}
@@ -310,17 +316,21 @@
     {% include "diploma/local_language_exam.html" %}
 
 </form>
+    <span id="txt_message_error_offer_down"
+           class="alert alert-warning"
+           style="visibility:hidden;display:none;"></span><br>
+
 <div>
-    <a id="lnk_previous_step"
+    <a id="lnk_previous_offer_step"
        class="btn btn-default"
-       href="{%if application.id%}{% url 'profile' application.id%}{%else%}{% url 'profile'%}{%endif%}"
-       onclick="save('form_questions');"
+       href="#"
+       onclick="$('#hdn_next_tab').val('0');"
        title="{% trans 'profile'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
         {%trans 'previous_step'%} : {%trans 'profile'%}</a>
-    <a id="lnk_next_step"
+    <a id="lnk_next_offer_step"
        class="btn btn-default"
-       href="{%if application.id%}{% url 'diploma_update' application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
-       onclick="save('form_questions');"
+       href="#"
+       onclick="$('#hdn_next_tab').val('2');"
        title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
         {%trans 'next_step'%} : {%trans 'tab_diplomas'%}</a>
 </div>

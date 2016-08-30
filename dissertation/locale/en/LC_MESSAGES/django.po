@@ -17,5 +17,209 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "accepted_by_commission"
+msgstr "Accepted by commission"
+
+msgid "accepted_by_director"
+msgstr "Accepted by promoter"
+
+msgid "accepted_by_first_year_evaluation"
+msgstr "Accepted by first year evaluation"
+
 msgid "application_dissertation"
 msgstr "Dissertation management"
+
+msgid "author"
+msgstr "Author"
+
+msgid "case_study"
+msgstr "Case Study"
+
+msgid "change"
+msgstr "Change"
+
+msgid "collaboration"
+msgstr "Collaboration"
+
+msgid "copromotor"
+msgstr "Co-promoter"
+
+msgid "current_status"
+msgstr "Current status"
+
+msgid "date"
+msgstr "Date"
+
+msgid "defend_periode"
+msgstr "Defend period"
+
+msgid "defend_year"
+msgstr "Defend year"
+
+msgid "defended"
+msgstr "Defended"
+
+msgid "delete"
+msgstr "Delete"
+
+msgid "desc_lnk_dissertations"
+msgstr "List of my projects dissertation"
+
+msgid "desc_lnk_propositions_dissertations"
+msgstr "List of available subjects"
+
+msgid "description"
+msgstr "Description"
+
+msgid "dir_submit"
+msgstr "Submit"
+
+msgid "dissertation"
+msgstr "Dissertation"
+
+msgid "dissertation_history"
+msgstr "Dissertation history"
+
+msgid "dissertation_informations"
+msgstr "Dissertation informations"
+
+msgid "dissertation_jury"
+msgstr "Jury"
+
+msgid "domain"
+msgstr "Domain"
+
+msgid "draft"
+msgstr "Draft"
+
+msgid "ended"
+msgstr "End"
+
+msgid "ended_los"
+msgstr "Reported"
+
+msgid "ended_win"
+msgstr "Win"
+
+msgid "forbidden"
+msgstr "Forbidden"
+
+msgid "history"
+msgstr "History"
+
+msgid "january"
+msgstr "January"
+
+msgid "june"
+msgstr "June"
+
+msgid "justification_confirmation_message"
+msgstr "Confirm justification"
+
+msgid "level"
+msgstr "Level"
+
+msgid "literature_review"
+msgstr "Literature Review"
+
+msgid "manager"
+msgstr "Course manager"
+
+msgid "max_students_number"
+msgstr "Maximum number of student"
+
+msgid "memories_list"
+msgstr "Dissertation List"
+
+msgid "next_status"
+msgstr "Next status"
+
+msgid "no_result"
+msgstr "No result"
+
+msgid "offer_propositions"
+msgstr "Offer"
+
+msgid "optional"
+msgstr "Optional"
+
+msgid "person"
+msgstr "Person"
+
+msgid "possible"
+msgstr "Possible"
+
+msgid "professor"
+msgstr "Professor"
+
+msgid "promotor"
+msgstr "Promoter"
+
+msgid "proposition_dissertation_informations"
+msgstr "Subject informations"
+
+msgid "proposition_dissertation_jury"
+msgstr "Suggested jury"
+
+msgid "question"
+msgstr "Question"
+
+msgid "reader"
+msgstr "Reader"
+
+msgid "refused_by_commission"
+msgstr "Refused by commission"
+
+msgid "refused_by_director"
+msgstr "Refused by promoter"
+
+msgid "refused_by_first_year_evaluation"
+msgstr "Refused by first year evaluation"
+
+msgid "required"
+msgstr "Required"
+
+msgid "search"
+msgstr "Search"
+
+msgid "september"
+msgstr "September"
+
+msgid "status"
+msgstr "Status"
+
+msgid "subjects_list"
+msgstr "Subject List"
+
+msgid "submitted_to_commission"
+msgstr "Submitted to commission"
+
+msgid "submitted_to_director"
+msgstr "Submitted to promoter"
+
+msgid "submitted_to_first_year_evaluation"
+msgstr "Submitted to first year evaluation "
+
+msgid "taken_places"
+msgstr "Interest"
+
+msgid "theme"
+msgstr "Theme"
+
+msgid "title"
+msgstr "Title"
+
+msgid "to_be_defended"
+msgstr "To be received defended"
+
+msgid "to_be_received"
+msgstr "To be received"
+
+msgid "to_dir_submit_confirmation_message"
+msgstr "Warning : you will submit the draft memorandum to the promotor. Are you sure you want to continue ?"
+
+msgid "type"
+msgstr "Type"
+
+msgid "work"
+msgstr "Work"

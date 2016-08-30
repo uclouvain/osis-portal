@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "dashboard_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -26,6 +26,10 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
+{% block breadcrumb %}
+        <li><a id="lnk_home_dashboard" href="{% url 'performance_home' %}">{% trans 'performance' %}</a></li>
+        <li class="active">{% trans 'performance_results' %}</li>
+{% endblock %}
 
 {% block content %}
 <div class="page-header hidden-print">
@@ -41,29 +45,17 @@
         {% else %}
             <!-- Student information's-->
         <div class="row">
-            <div class="col-md-3">
-                <p><b>{% trans 'last_name' %}, {% trans 'first_name' %}:</b></p>
+            <div class="col-md-3" id="student_name">
+                <label><b>{% trans 'last_name' %}, {% trans 'first_name' %}</b></label>
             </div>
-            <div class="col-md-9">
-                <p id="student_name"></p>
+            <div class="col-md-3" id="academic_year">
+                <label><b>{% trans 'academic_year' %}</b></label>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3">
-                <p><b>{% trans 'academic_year' %}:</b></p>
-            </div>
-            <div class="col-md-9">
-                <p id="academic_year"></p>
+            <div class="col-md-6" id="program_title">
+                <label><b>{% trans 'program' %}</b></label>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-3">
-                <p><b>{% trans 'program' %}:</b></p>
-            </div>
-            <div class="col-md-9">
-                <p id="program_title"></p>
-            </div>
-        </div>
+
         <hr>
         <div class="row container-fluid">
             <!-- Student sessions summary-->

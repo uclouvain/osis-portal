@@ -33,6 +33,8 @@ admin.site.register(academic_year.AcademicYear,
 admin.site.register(admission_exam_type.AdmissionExamType,
                     admission_exam_type.AdmissionExamTypeAdmin)
 
+admin.site.register(application_document_file.ApplicationDocumentFile)
+
 admin.site.register(answer.Answer,
                     answer.AnswerAdmin)
 
@@ -45,17 +47,11 @@ admin.site.register(applicant_assimilation_criteria.ApplicantAssimilationCriteri
 admin.site.register(application.Application,
                     application.ApplicationAdmin)
 
-admin.site.register(application_assimilation_criteria.ApplicationAssimilationCriteria,
-                    application_assimilation_criteria.ApplicationAssimilationCriteriaAdmin)
-
 admin.site.register(curriculum.Curriculum,
                     curriculum.CurriculumAdmin)
 
 admin.site.register(form.Form,
                     form.FormAdmin)
-
-admin.site.register(message_template.MessageTemplate,
-                    message_template.MessageTemplateAdmin)
 
 admin.site.register(offer_year.OfferYear,
                     offer_year.OfferYearAdmin)

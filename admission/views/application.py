@@ -1,4 +1,5 @@
 ##############################################################################
+##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -28,7 +29,7 @@ from django.shortcuts import render, get_object_or_404
 from reference import models as mdl_reference
 
 from datetime import datetime
-from admission.views.common import home
+from admission.views.common import home, get_picture_id, get_id_document
 from functools import cmp_to_key
 import locale
 from django.utils.translation import ugettext_lazy as _
@@ -53,8 +54,11 @@ def profile_confirmed(request):
 
 
 def save_application_offer(request):
+    next_tab = None
     application = None
     if request.method == 'POST':
+        next_tab = request.POST.get('next_tab')
+        print('next_tab', next_tab)
         offer_year = None
         offer_year_id = request.POST.get('offer_year_id')
 
@@ -72,7 +76,7 @@ def save_application_offer(request):
             secondary_education = mdl.secondary_education.SecondaryEducation()
             secondary_education.applicant = application.applicant
 
-        if secondary_education.academic_year is None:
+        if secondary_education and secondary_education.academic_year is None:
             secondary_education.academic_year = mdl.academic_year.current_academic_year()
 
         if offer_year_id:
@@ -145,20 +149,49 @@ def save_application_offer(request):
                         answer.option = option
                         answer.value = option.value
                         answer.save()
+    applicant = mdl.applicant.find_by_user(request.user)
 
-    return render(request, "admission_home.html", {'tab_active': 0,
-                                                   'application': application,
-                                                   'validated_profil': demande_validation.validate_profil(applicant),
-                                                   'validated_diploma': demande_validation.validate_diploma(
-                                                       application),
-                                                   'validated_curriculum': demande_validation.validate_curriculum(
-                                                       application),
-                                                   'validated_application': demande_validation.validate_application(
-                                                       application),
-                                                   'validated_accounting': demande_validation.validate_accounting(),
-                                                   'validated_sociological': demande_validation.validate_sociological(),
-                                                   'validated_attachments': demande_validation.validate_attachments(),
-                                                   'validated_submission': demande_validation.validate_submission()})
+    if next_tab == "0":
+        return HttpResponseRedirect(reverse('profile', args=(application.id,)))
+
+    if next_tab == "1":
+        return HttpResponseRedirect(reverse('applications', args=(application.id,)))
+
+    if next_tab == "2":
+        return HttpResponseRedirect(reverse('diploma_update', args=(application.id,)))
+
+    if next_tab == "3":
+        return HttpResponseRedirect(reverse('curriculum_update', args=(application.id,)))
+
+    if next_tab == "4":
+        return HttpResponseRedirect(reverse('accounting_update', args=(application.id,)))
+
+    if next_tab == "5":
+        return HttpResponseRedirect(reverse('sociological_survey', args=(application.id,)))
+
+    if next_tab == "6":
+        return HttpResponseRedirect(reverse('attachments', args=(application.id,)))
+
+    if next_tab == "7":
+        return HttpResponseRedirect(reverse('submission', args=(application.id,)))
+
+    return render(request, "admission_home.html", {
+        'tab_active': next_tab,
+        'application': application,
+        'validated_profil': demande_validation.validate_profil(applicant),
+        'validated_diploma': demande_validation.validate_diploma(
+           application),
+        'validated_curriculum': demande_validation.validate_curriculum(
+           application),
+        'validated_application': demande_validation.validate_application(
+           application),
+        'validated_accounting': demande_validation.validate_accounting(),
+        'validated_sociological': demande_validation.validate_sociological(),
+        'validated_attachments': demande_validation.validate_attachments(),
+        'validated_submission': demande_validation.validate_submission(),
+        'picture': get_picture_id(request.user),
+        'id_document': get_id_document(request.user),
+        'applicant': applicant})
 
 
 def application_view(request, application_id):

@@ -4,7 +4,6 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
-
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -18,33 +17,53 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "acronym"
+msgstr "Sigle"
 
-msgid "no_results"
-msgstr "Aucun résultats à afficher."
+msgid "course"
+msgstr "Cours"
 
-msgid "performance"
-msgstr "Performance"
+msgid "credits"
+msgstr "Crédits"
 
-msgid "last_name"
-msgstr "Nom"
+msgid "dont_have_the_score_yet"
+msgstr "Vous n'avez pas encore les résultats de vos études."
+
+msgid "ects"
+msgstr "ECTS"
+
+msgid "explanation_B"
+msgstr "B - Crédit (Bologne)"
+
+msgid "explanation_EPM"
+msgstr "EPM - Cours reporté (Epreuve modifiée)"
+
+msgid "explanation_I"
+msgstr "I - Première inscription"
+
+msgid "explanation_P"
+msgstr "P - examen partiel"
+
+msgid "explanation_RJ"
+msgstr "R,J - Report de note"
+
+msgid "explanation_T"
+msgstr "T - note résultant d'un test"
+
+msgid "explanation_TV"
+msgstr "TV - Evaluation satisfaisante (la note ne compte pas)"
+
+msgid "explanation_W"
+msgstr "W - Evaluation non satisfaisante (la note ne compte pas)"
+
+msgid "explanation_y"
+msgstr "Y - Deuxième inscription"
 
 msgid "first_name"
 msgstr "Prénom"
 
-msgid "matricule_number"
-msgstr "Matricule"
-
-msgid "year"
-msgstr "Année"
-
-msgid "acronym"
-msgstr "Sigle"
-
-msgid "program"
-msgstr "Programme"
-
-msgid "ects"
-msgstr "ECTS"
+msgid "inscr"
+msgstr "Inscr."
 
 msgid "jan"
 msgstr "Jan."
@@ -52,11 +71,14 @@ msgstr "Jan."
 msgid "june"
 msgstr "Juin"
 
-msgid "sept"
-msgstr "Sept."
+msgid "last_name"
+msgstr "Nom"
 
-msgid "total_ects_inscription"
-msgstr "Total ECTS / Inscription"
+msgid "legend"
+msgstr "Légende"
+
+msgid "matricule_number"
+msgstr "Matricule"
 
 msgid "mean"
 msgstr "Moyenne"
@@ -64,47 +86,41 @@ msgstr "Moyenne"
 msgid "mention"
 msgstr "Mention"
 
-msgid "course"
-msgstr "Cours"
+msgid "no_results"
+msgstr "Aucun résultats à afficher."
 
-msgid "title"
-msgstr "Titre"
+msgid "no_student_with_this_registration_id"
+msgstr "Aucun étudiant avec ce noma!"
 
-msgid "inscr"
-msgstr "Inscr."
+msgid "performance"
+msgstr "Performance"
 
-msgid "credits"
-msgstr "Crédits"
+msgid "performance_administration"
+msgstr "Administration de performance"
+
+msgid "performance_results"
+msgstr "Résultats"
+
+msgid "program"
+msgstr "Programme"
+
+msgid "registration_id"
+msgstr "Noma"
+
+msgid "sept"
+msgstr "Sept."
+
+msgid "student_performance"
+msgstr "Performances d'un étudiant"
 
 msgid "text_mean_exprimed_for_20"
 msgstr "Attention : à partir de juin 2009, la moyenne est exprimée sur un maximum de 20."
 
-msgid "explanation_P"
-msgstr "P - examen partiel"
+msgid "title"
+msgstr "Titre"
 
-msgid "explanation_T"
-msgstr "T - note résultant d'un test"
+msgid "total_ects_inscription"
+msgstr "Total ECTS / Inscription"
 
-msgid "explanation_I"
-msgstr "I - Première inscription"
-
-msgid "explanation_TV"
-msgstr "TV - Evaluation satisfaisante (la note ne compte pas)"
-
-msgid "explanation_y"
-msgstr "Y - Deuxième inscription"
-
-msgid "explanation_W"
-msgstr "W - Evaluation non satisfaisante (la note ne compte pas)"
-
-msgid "explanation_RJ"
-msgstr "R,J - Report de note"
-
-msgid "explanation_EPM"
-msgstr "EPM - Cours reporté (Epreuve modifiée)"
-
-msgid "explanation_B"
-msgstr "B - Crédit (Bologne)"
-
-msgid "legend"
-msgstr "Légende"
+msgid "year"
+msgstr "Année"

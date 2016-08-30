@@ -42,6 +42,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+ADMIN_URL = 'admin/'
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -61,6 +63,8 @@ INSTALLED_APPS = (
     'localflavor',
     'performance',
     'dissertation',
+    'statici18n',
+    'ckeditor',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -97,6 +101,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
                 'base.views.common.installed_applications_context_processor',
             ],
         },
@@ -116,6 +121,41 @@ DATABASES = {
     },
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(asctime)s %(levelname)s %(module)s %(process)d %(thread)d %(message)s',
+            'datefmt': '%d-%m-%Y %H:%M:%S'
+        },
+        'simple': {
+            'format': '%(asctime)s %(levelname)s %(message)s',
+            'datefmt': '%d-%m-%Y %H:%M:%S'
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            'level':'DEBUG',
+        },
+    },
+    'loggers': {
+        'default': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        }
+    },
+}
+
+DEFAULT_LOGGER = 'default'
 
 COUCHBASE_CONNECTION_STRING='couchbase://localhost/'
 COUCHBASE_PASSWORD=''
@@ -190,6 +230,37 @@ OVERRIDED_LOGIN_URL=''
 # Ex : LOGO_INSTITUTION_URL = 'https://www.google.be/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'
 # A relative URL will work on local , but not out of the box on the servers.
 LOGO_INSTITUTION_URL = os.path.join(BASE_DIR, "base/static/img/logo_institution.jpg")
+
+LOGO_EMAIL_SIGNATURE_URL = ''
+LOGO_OSIS_URL = ''
+
+LOCALE_PATHS = (
+    "/admission/locale",
+)
+
+EMAIL_PRODUCTION_SENDING = False
+COMMON_EMAIL_RECEIVER = 'osis@localhost.org'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            {'name': 'basicstyles', 'items': ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat']},
+            {'name': 'links', 'items': ['Link']},
+            {'name': 'styles', 'items': ['Styles', 'Format', 'Font', 'FontSize', 'Source']},
+            {'name': 'colors', 'items': ['TextColor', 'BGColor']},
+            '/',
+            {'name': 'insert', 'items': ['Table']},
+            {'name': 'paragraph',
+             'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-',
+                       'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
+            {'name': 'forms',
+             'items': ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton',
+                       'HiddenField']},
+            {'name': 'about', 'items': ['About']},
+        ],
+    },
+}
 
 try:
     from frontoffice.server_settings import *

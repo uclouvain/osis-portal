@@ -23,11 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import logging
 from django.apps import AppConfig
+from django.conf import settings
 from django.core import serializers
+from django.core.serializers.base import DeserializationError
 from frontoffice.queue import queue
 import json
 
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 class BaseConfig(AppConfig):
     name = 'base'
@@ -71,40 +75,22 @@ def deserialize_model_data(data, function_to_apply):
     :param function_to_apply: function to apply on the model objects
     :return:
     """
-    for deserialized_object in serializers.deserialize("json", data):
-        function_to_apply(deserialized_object)
+    try:
+        for deserialized_object in serializers.deserialize("json", data):
+                function_to_apply(deserialized_object)
+    except Exception as e:
+        logger.error(''.join(['Erreur de deserialisation de : ', str(data)]))
+        logger.error(''.join(['Exeption : ', str(e)]))
+        pass
 
 
 def save_model_object(model_object):
     """
     Save a model object. If it already exists in the database, do nothing.
     :param model_object: a model object
-    :param model_class: the model class of the object
     :return:
     """
-    if object_exists(model_object):
-        return
-    model_object.save()
-
-
-def object_exists(model_object):
-    """
-    Check if a model_object already exists.
-    :param model_object: an instance of a model
-    :return: true if the object already exists
-    """
-    from base.models import student, tutor, person
-
-    if model_object.object.__class__ == person.Person:
-        global_id = model_object.object.global_id
-        return model_object.object.__class__.objects.filter(global_id=global_id).exists()
-    elif model_object.object.__class__ == student.Student:
-        registration_id = model_object.object.registration_id
-        return model_object.object.__class__.objects.filter(registration_id=registration_id).exists()
-    elif model_object.object.__class__ == tutor.Tutor:
-        external_id = model_object.object.external_id
-        return model_object.object.__class__.objects.filter(external_id=external_id).exists()
-    return True
+    model_object.object.save_from_osis_migration()
 
 
 def map_string_to_model_class(class_str):

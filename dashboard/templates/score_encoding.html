@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "dashboard_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -25,6 +25,10 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
+
+{% block breadcrumb %}
+        <li class="active">{% trans 'scores_encoding' %}</li>
+{% endblock %}
 
 {% block content %}
 <div class="page-header">

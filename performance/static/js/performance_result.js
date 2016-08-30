@@ -19,9 +19,12 @@ function fillStudentInfo(studentJson) {
   var lastName = studentJson.last_name;
   var academicYear = studentJson.academic_years[0].year;
   var programTitle = studentJson.academic_years[0].programs[0].title;
-  $("#student_name").text(lastName + ", " + firstName);
-  $("#academic_year").text(academicYear);
-  $("#program_title").text(programTitle);
+  $("#student_name").append("<br>");
+  $("#student_name").append(lastName + ", " + firstName);
+  $("#academic_year").append("<br>");
+  $("#academic_year").append(academicYear);
+  $("#program_title").append("<br>");
+  $("#program_title").append(programTitle);
 }
 
 /********************** STUDENT SESSIONS SUMMARY ***********************/
@@ -129,6 +132,9 @@ function examScoreToString(examJson) {
   if (examJson.status_exam == "-") {
     return score;
   }
+  else if(score == "-") {
+    return examJson.status_exam;
+  }
   return score + examJson.status_exam;
 }
 
@@ -150,7 +156,7 @@ function creditToString(creditReport) {
 
 function fillMentionExplanation(studentJson) {
   var mentionExplanation = studentJson.academic_years[0].programs[0].mention_explanation;
-  $("#paragraph_mention_explanation").text(mentionExplanation);
+  $("#paragraph_mention_explanation").html(mentionExplanation);
 }
 
 /***************************** UTILITY FUNCTIONS TEMPLATE ***************/
