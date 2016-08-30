@@ -29,7 +29,8 @@ from django.contrib import admin
 
 class OfferYearAdmin(admin.ModelAdmin):
     list_display = ('acronym', 'title', 'academic_year', 'domain', 'grade_type','subject_to_quota')
-    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'domain', 'grade_type','subject_to_quota')}),)
+    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international',
+                                    'domain', 'grade_type','subject_to_quota')}),)
 
 
 class OfferYear(models.Model):
@@ -41,7 +42,7 @@ class OfferYear(models.Model):
     domain = models.ForeignKey('reference.Domain')
     grade_type = models.ForeignKey('reference.GradeType', blank=True, null=True, db_index=True)
     subject_to_quota = models.BooleanField(default=False)
-    offer = models.ForeignKey('base.Offer')
+    offer = models.ForeignKey('base.Offer', blank=True, null=True)
 
     def __str__(self):
         return u"%s - %s" % (self.academic_year, self.acronym)
