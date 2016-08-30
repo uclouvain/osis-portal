@@ -146,6 +146,9 @@ msgstr "Nouveau statut"
 msgid "no_result"
 msgstr "Aucun résultat trouvé"
 
+msgid "offer_proposition"
+msgstr "Programme de cours"
+
 msgid "offer_propositions"
 msgstr "Programmes de cours"
 
