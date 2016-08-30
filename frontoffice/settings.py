@@ -267,3 +267,7 @@ CKEDITOR_CONFIGS = {
         ],
     },
 }
+
+ENVIRONMENT = 'local'
+COMMON_EMAIL_RECEIVER = 'osis@localhost.org'
+PRODUCTION_ENVIRONNMENTS = ()
