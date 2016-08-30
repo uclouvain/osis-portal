@@ -103,16 +103,28 @@
   {"model": "reference.domain", "pk": 24, "fields": {"name" :"Théâtre et arts de la parole" }},
   {"model": "reference.domain", "pk": 25,"fields": { "name" :"Théologie" }},
 
-  {"model": "admission.offeryear", "fields": {"acronym" :"VETE11BA","title" : "Première année de bachelier en médecine vétérinaire", "title_international" : "","academic_year" : 1, "domain" : 1 ,"grade_type" : 1 }},
-  {"model": "admission.offeryear", "fields": {"acronym" :"FSA11BA","title" : "Première année de bachelier en sciences de l'ingénieur, orientation ingénieur civil", "title_international" : "","academic_year" : 1 , "domain" : 1 ,"grade_type" : 1}},
-  {"model": "admission.offeryear", "fields": {"acronym" :"SINF11BA","title" : "Première année de bachelier en sciences informatiques", "title_international" : "","academic_year" : 1 , "domain" : 1 ,"grade_type" : 1}},
-  {"model": "admission.offeryear", "fields": {"acronym" :"CRIM2MS","title" : "Master [120] en criminologie, à finalité spécialisée", "title_international" : "Master [120] in Criminology, Professional Focus","academic_year" : 1, "domain" : 1  ,"grade_type" : 3}},
-  {"model": "admission.offeryear", "fields": {"acronym" :"FOPA2MS","title" : "Master [120] en sciences de l'éducation, à finalité spécialisée (horaire décalé)", "title_international" : "Master [120] in Education, Professional Focus (shift schedule)","academic_year" : 1 , "domain" : 2 ,"grade_type" : 3}},
-  {"model": "admission.offeryear", "fields": {"acronym" :"MSP9CE","title" : "Certificat universitaire de formation médicale spécialisée partielle", "title_international" : "","academic_year" : 1, "domain" : 2,"grade_type" : 9}},
-  {"model": "admission.offeryear", "fields": {"acronym" :"CARD2MC","title" : "Master de spécialisation en cardiologie", "title_international" : "Advanced Master in Cardiology","academic_year" : 1 , "domain" : 3,"grade_type" : 5}},
-  {"model": "admission.offeryear", "fields": {"acronym" :"DERM2MC","title" : "Master de spécialisation en dermato-vénéréologie", "title_international" : "Advanced Master in Dermatology-Venereology","academic_year" : 1 , "domain" : 3,"grade_type" : 5}},
-  {"model": "admission.offeryear", "fields": {"acronym" :"ORTO2MC","title" : "Master de spécialisation en chirurgie orthopédique", "title_international" : "Advanced Master in Orthopaedic Surgery","academic_year" : 1, "domain" : 4,"grade_type" : 5}},
-  {"model": "admission.offeryear", "fields": {"acronym" :"PHYS11BA","title" : "Première année de bachelier en sciences physiques", "title_international" : "","academic_year" : 1, "domain" : 5,"grade_type" : 1}},
+  {"model": "base.offer", "pk": 1, "fields": { "external_id": null, "changed": "2016-03-04T22:38:39.964Z", "title": "Bachelier en médecine vétérinaire" }},
+  {"model": "base.offer", "pk": 2, "fields": { "external_id": null, "changed": "2016-03-04T22:38:39.964Z", "title": "Bachelier en sciences de l'ingénieur, orientation ingénieur civil" }},
+  {"model": "base.offer", "pk": 3, "fields": { "external_id": null, "changed": "2016-03-04T22:38:39.964Z", "title": "Bachelier sciences informatiques" }},
+  {"model": "base.offer", "pk": 4, "fields": { "external_id": null, "changed": "2016-03-04T22:38:39.964Z", "title": "Master [120] en criminologie, à finalité spécialisée" }},
+  {"model": "base.offer", "pk": 5, "fields": { "external_id": null, "changed": "2016-03-04T22:38:39.964Z", "title": "Master [120] en sciences de l'éducation, à finalité spécialisée (horaire décalé)" }},
+  {"model": "base.offer", "pk": 6, "fields": { "external_id": null, "changed": "2016-03-04T22:38:39.964Z", "title": "Certificat universitaire de formation médicale spécialisée partielle" }},
+  {"model": "base.offer", "pk": 7, "fields": { "external_id": null, "changed": "2016-03-04T22:38:39.964Z", "title": "Master de spécialisation en cardiologie" }},
+  {"model": "base.offer", "pk": 8, "fields": { "external_id": null, "changed": "2016-03-04T22:38:39.964Z", "title": "Master de spécialisation en dermato-vénéréologie" }},
+  {"model": "base.offer", "pk": 9, "fields": { "external_id": null, "changed": "2016-03-04T22:38:39.964Z", "title": "Master de spécialisation en chirurgie orthopédique" }},
+  {"model": "base.offer", "pk": 10, "fields": { "external_id": null, "changed": "2016-03-04T22:38:39.964Z", "title": "Bachelier en sciences physiques" }},
+
+
+  {"model": "admission.offeryear", "fields": {"acronym" :"VETE11BA","title" : "Première année de bachelier en médecine vétérinaire", "title_international" : "","academic_year" : 1, "domain" : 1 ,"grade_type" : 1, "offer": 1}},
+  {"model": "admission.offeryear", "fields": {"acronym" :"FSA11BA","title" : "Première année de bachelier en sciences de l'ingénieur, orientation ingénieur civil", "title_international" : "","academic_year" : 1 , "domain" : 1 ,"grade_type" : 1, "offer": 2}},
+  {"model": "admission.offeryear", "fields": {"acronym" :"SINF11BA","title" : "Première année de bachelier en sciences informatiques", "title_international" : "","academic_year" : 1 , "domain" : 1 ,"grade_type" : 1, "offer": 3}},
+  {"model": "admission.offeryear", "fields": {"acronym" :"CRIM2MS","title" : "Master [120] en criminologie, à finalité spécialisée", "title_international" : "Master [120] in Criminology, Professional Focus","academic_year" : 1, "domain" : 1  ,"grade_type" : 3, "offer": 4}},
+  {"model": "admission.offeryear", "fields": {"acronym" :"FOPA2MS","title" : "Master [120] en sciences de l'éducation, à finalité spécialisée (horaire décalé)", "title_international" : "Master [120] in Education, Professional Focus (shift schedule)","academic_year" : 1 , "domain" : 2 ,"grade_type" : 3, "offer": 5}},
+  {"model": "admission.offeryear", "fields": {"acronym" :"MSP9CE","title" : "Certificat universitaire de formation médicale spécialisée partielle", "title_international" : "","academic_year" : 1, "domain" : 2,"grade_type" : 9, "offer": 6}},
+  {"model": "admission.offeryear", "fields": {"acronym" :"CARD2MC","title" : "Master de spécialisation en cardiologie", "title_international" : "Advanced Master in Cardiology","academic_year" : 1 , "domain" : 3,"grade_type" : 5, "offer": 7}},
+  {"model": "admission.offeryear", "fields": {"acronym" :"DERM2MC","title" : "Master de spécialisation en dermato-vénéréologie", "title_international" : "Advanced Master in Dermatology-Venereology","academic_year" : 1 , "domain" : 3,"grade_type" : 5, "offer": 8}},
+  {"model": "admission.offeryear", "fields": {"acronym" :"ORTO2MC","title" : "Master de spécialisation en chirurgie orthopédique", "title_international" : "Advanced Master in Orthopaedic Surgery","academic_year" : 1, "domain" : 4,"grade_type" : 5, "offer": 9}},
+  {"model": "admission.offeryear", "fields": {"acronym" :"PHYS11BA","title" : "Première année de bachelier en sciences physiques", "title_international" : "","academic_year" : 1, "domain" : 5,"grade_type" : 1, "offer": 10}},
 
 
 

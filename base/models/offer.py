@@ -23,7 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.db import models
+from django.contrib import admin
 
-from dissertation.views import common
-from dissertation.views import dissertation
-from dissertation.views import proposition_dissertation
+
+class OfferAdmin(admin.ModelAdmin):
+    list_display = ('title', 'changed')
+    fieldsets = ((None, {'fields': ('title',)}),)
+    search_fields = ['title']
+
+
+class Offer(models.Model):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
+    changed = models.DateTimeField(null=True)
+    title = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.title
+
+
+def find_by_id(offer_id):
+    return Offer.objects.get(pk=offer_id)

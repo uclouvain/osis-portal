@@ -25,40 +25,40 @@
 ##############################################################################
 
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
-from django.contrib import admin
+from base import models as mdl
+from dissertation.models import dissertation
+
+JUSTIFICATION_LINK = "_set_to_"
 
 
-class AdviserAdmin(admin.ModelAdmin):
-    list_display = ('person', 'type')
+class DissertationUpdate(models.Model):
 
-
-class Adviser(models.Model):
-    TYPES_CHOICES = (
-        ('PRF', _('professor')),
-        ('MGR', _('manager')),
-    )
-
-    person = models.OneToOneField('base.Person', on_delete=models.CASCADE)
-    type = models.CharField(max_length=3, choices=TYPES_CHOICES, default='PRF')
-    available_by_email = models.BooleanField(default=False)
-    available_by_phone = models.BooleanField(default=False)
-    available_at_office = models.BooleanField(default=False)
-    comment = models.TextField(default='', blank=True)
+    status_from = models.CharField(max_length=12, choices=dissertation.STATUS_CHOICES, default='DRAFT')
+    status_to = models.CharField(max_length=12, choices=dissertation.STATUS_CHOICES, default='DRAFT')
+    created = models.DateTimeField(auto_now_add=True)
+    justification = models.TextField(default='')
+    person = models.ForeignKey('base.Person')
+    dissertation = models.ForeignKey(dissertation.Dissertation)
 
     def __str__(self):
-        first_name = ""
-        middle_name = ""
-        last_name = ""
-        if self.person.first_name:
-            first_name = self.person.first_name
-        if self.person.middle_name:
-            middle_name = self.person.middle_name
-        if self.person.last_name:
-            last_name = self.person.last_name + ","
-        return u"%s %s %s" % (last_name.upper(), first_name, middle_name)
+        desc = "%s / %s >> %s / %s" % (self.dissertation.title, self.status_from, self.status_to, str(self.created))
+        return desc
 
 
-def search_by_person(a_person):
-    adviser = Adviser.objects.get(person=a_person)
-    return adviser
+def search_by_dissertation(memory):
+    return DissertationUpdate.objects.filter(dissertation=memory).order_by('created')
+
+
+def add(request, memory, old_status, justification=None):
+    person = mdl.person.find_by_user(request.user)
+    update = DissertationUpdate()
+    update.status_from = old_status
+    update.status_to = memory.status
+    if justification:
+        update.justification = justification
+    else:
+        update.justification = "%s%s%s" % (person, JUSTIFICATION_LINK, memory.status)
+    update.person = person
+    update.dissertation = memory
+    update.save()
+

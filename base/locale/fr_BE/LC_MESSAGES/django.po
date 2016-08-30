@@ -20,12 +20,6 @@ msgstr ""
 msgid "acces_denied"
 msgstr "Accès refusé!"
 
-msgid "page_not_found"
-msgstr "Page inexistante"
-
-msgid "server_error"
-msgstr "Une erreur innatendue s'est produite"
-
 msgid "administration"
 msgstr "Administration"
 
@@ -37,3 +31,9 @@ msgstr "Gestion des données"
 
 msgid "desc_lnk_data_management"
 msgstr "Gestion des données par entité du métier"
+
+msgid "page_not_found"
+msgstr "Page inexistante"
+
+msgid "server_error"
+msgstr "Une erreur innatendue s'est produite"

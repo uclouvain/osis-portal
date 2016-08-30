@@ -41,8 +41,8 @@ def div_visibility(applicant_assimilation_criteria, criteria_id):
 def button_class(assimilation_documents_existing, document_description):
     for d in assimilation_documents_existing:
         if d.description == document_description:
-            return "btn glyphicon glyphicon-ok-circle class_upload_assimilation"
-    return "btn glyphicon glyphicon-upload class_upload_assimilation"
+            return "glyphicon glyphicon-ok-circle class_upload_assimilation"
+    return "glyphicon glyphicon-upload class_upload_assimilation"
 
 
 @register.filter

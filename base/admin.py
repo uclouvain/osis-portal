@@ -27,6 +27,10 @@ from base.models import *
 from django.contrib import admin
 
 
+admin.site.register(offer.Offer,
+                    offer.OfferAdmin)
+admin.site.register(offer_enrollment.OfferEnrollment,
+                    offer_enrollment.OfferEnrollmentAdmin)
 admin.site.register(person.Person,
                     person.PersonAdmin)
 admin.site.register(student.Student,

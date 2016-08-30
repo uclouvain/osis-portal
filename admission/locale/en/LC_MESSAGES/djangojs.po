@@ -29,3 +29,54 @@ msgstr "Criteria"
 
 msgid "id_picture"
 msgstr "Identity picture"
+
+msgid "id_card"
+msgstr "Identity card"
+
+msgid "resident_long_duration"
+msgstr "resident_long_duration"
+
+msgid "id_foreign_unlimited"
+msgstr "id_foreign_unlimited"
+
+msgid "attachment_26"
+msgstr "attachment_26"
+
+msgid "refugee_card"
+msgstr "refugee_card"
+
+msgid "family_composition"
+msgstr "family_composition"
+
+msgid "birth_certificate"
+msgstr "birth_certificate"
+
+msgid "resident_certificate"
+msgstr "resident_certificate"
+
+msgid "stateless_certificate"
+msgstr "stateless_certificate"
+
+msgid "foreign_inscription_certificate"
+msgstr "foreign_inscription_certificate"
+
+msgid "subsidiary_protection_decision"
+msgstr "subsidiary_protection_decision"
+
+msgid "residence_permit"
+msgstr "residence_permit"
+
+msgid "paycheck"
+msgstr "paycheck"
+
+msgid "cpas"
+msgstr "cpas"
+
+msgid "tutorship_certificate"
+msgstr "tutorship_certificate"
+
+msgid "scholarship_cfwb"
+msgstr "scholarship_cfwb"
+
+msgid "scholarship_development_cooperation"
+msgstr "scholarship_development_cooperation"

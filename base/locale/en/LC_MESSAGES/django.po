@@ -20,12 +20,6 @@ msgstr ""
 msgid "acces_denied"
 msgstr "Access denied"
 
-msgid "page_not_found"
-msgstr "Page not found"
-
-msgid "server_error"
-msgstr "A server error occured."
-
 msgid "administration"
 msgstr "Administration"
 
@@ -37,3 +31,9 @@ msgstr "Data management"
 
 msgid "desc_lnk_data_management"
 msgstr "Management of data by entity"
+
+msgid "page_not_found"
+msgstr "Page not found"
+
+msgid "server_error"
+msgstr "A server error occured."

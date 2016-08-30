@@ -26,39 +26,40 @@
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.contrib import admin
 
 
-class AdviserAdmin(admin.ModelAdmin):
-    list_display = ('person', 'type')
-
-
-class Adviser(models.Model):
-    TYPES_CHOICES = (
-        ('PRF', _('professor')),
-        ('MGR', _('manager')),
+class DissertationRole(models.Model):
+    STATUS_CHOICES = (
+        ('PROMOTEUR', _('promotor')),
+        ('CO_PROMOTEUR', _('copromotor')),
+        ('READER', _('reader')),
     )
 
-    person = models.OneToOneField('base.Person', on_delete=models.CASCADE)
-    type = models.CharField(max_length=3, choices=TYPES_CHOICES, default='PRF')
-    available_by_email = models.BooleanField(default=False)
-    available_by_phone = models.BooleanField(default=False)
-    available_at_office = models.BooleanField(default=False)
-    comment = models.TextField(default='', blank=True)
+    status = models.CharField(max_length=12, choices=STATUS_CHOICES)
+    adviser = models.ForeignKey('Adviser')
+    dissertation = models.ForeignKey('Dissertation')
 
     def __str__(self):
-        first_name = ""
-        middle_name = ""
-        last_name = ""
-        if self.person.first_name:
-            first_name = self.person.first_name
-        if self.person.middle_name:
-            middle_name = self.person.middle_name
-        if self.person.last_name:
-            last_name = self.person.last_name + ","
-        return u"%s %s %s" % (last_name.upper(), first_name, middle_name)
+        return u"%s %s" % (self.status if self.status else "", self.adviser if self.adviser else "")
 
 
-def search_by_person(a_person):
-    adviser = Adviser.objects.get(person=a_person)
-    return adviser
+def add(status, adviser, dissertation):
+    if count_by_status_student_dissertation(status, adviser, dissertation) == 0:
+        role = DissertationRole(status=status, adviser=adviser, dissertation=dissertation)
+        role.save()
+
+
+def count_by_dissertation(dissertation):
+    return DissertationRole.objects.filter(dissertation=dissertation).count()
+
+
+def count_by_status_student_dissertation(status, adviser, dissertation):
+    return DissertationRole.objects.filter(adviser=adviser)\
+        .filter(status=status)\
+        .filter(dissertation=dissertation)\
+        .count()
+
+
+def search_by_dissertation(dissertation):
+    return DissertationRole.objects.filter(dissertation=dissertation).order_by('pk')
+

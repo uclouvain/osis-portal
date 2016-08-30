@@ -277,26 +277,23 @@
 
     $("#lnk_redirect_picture").click(function() {
          $('#hdn_description').val('ID_PICTURE');
-         $('#lbl_description_label').text(gettext('ID_PICTURE'));
+         $('#lbl_description_label').text(gettext('ID_PICTURE'.toLowerCase()));
     });
     $("#lnk_modify_picture").click(function() {
         $('#hdn_description').val('ID_PICTURE');
-         $('#lnk_picture').trigger('click');
     });
     $("#btn_modify_picture").click(function() {
         $('#hdn_description').val('ID_PICTURE');
-        $('#lbl_description_label').text(gettext('ID_PICTURE'));
-
-        //$('#lnk_picture').trigger('click');
+        $('#lbl_description_label').text(gettext('ID_PICTURE'.toLowerCase()));
     });
 
     $("#lnk_modify_id_document").click(function() {
         $('#hdn_description').val('ID_CARD');
-        $('#lnk_picture').trigger('click');
+        $('#lbl_description_label').text(gettext('ID_CARD'.toLowerCase()));
     });
     $("#btn_modify_id_document").click(function() {
         $('#hdn_description').val('ID_CARD');
-        $('#lnk_picture').trigger('click');
+        $('#lbl_description_label').text(gettext('ID_CARD'.toLowerCase()));
     });
     $("#btn_documents_upload_diploma").click(function() {
         save('form_secondary_education');
@@ -542,9 +539,33 @@
             var pos = id.indexOf('_id_')
             var description = id.substring(pos+4)
             $('#hdn_description').val(description);
-            $('#lnk_picture').trigger('click');
-          }
-       }
+            $('#lbl_description_label').text(gettext(description.toLowerCase()));
+            // To clear the div
+            $("#pnl_existing_files").html('')
+            $("#pnl_existing_files").find("a")
+                .remove()
+                .end()
+            //
+            $.ajax({
+                url: "/admission/document?description=" + description
+
+              }).then(function(data) {
+
+                if(data.length > 0 ){
+                    $('#pnl_existing_files').append("<br>");
+                    $('#pnl_existing_files').append('Existing file :');
+                    $.each(data, function(key, value) {
+                        $('#pnl_existing_files').append("<br>");
+                        $('#pnl_existing_files').append($("<a></a>").attr("href", "upload/download/"+value.id+"")
+                                                                    .attr("target","_blank")
+                                                                    .append(value.file_name));
+
+                    });
+                }
+              });
+
+            }
+        }
     });
 
 

@@ -161,6 +161,7 @@ class ApplicantForm(forms.Form):
         self.fields['legal_adr_country'].error_messages = {'required': _('mandatory_field')}
         self.fields['same_contact_legal_addr'].error_messages = {'required': _('mandatory_field')}
         self.fields['additional_email'].error_messages = {'required': _('mandatory_field')}
+        self._initial_data = self.__dict__.copy()
 
     def clean(self):
         cleaned_data = super(ApplicantForm, self).clean()
@@ -202,6 +203,8 @@ class ApplicantForm(forms.Form):
                 self.errors['last_academic_year'] = _('numeric_field')
 
         return cleaned_data
+
+
 
 
 class AccessAccountForm(forms.Form):

@@ -35,69 +35,25 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="bt_close_upload_score_modal"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="uploadScroresLabel">
-                    <label id="lbl_description_label"></label>
-        {% if description == 'ID_PICTURE'%}
-            {% trans 'id_picture' %}
-        {% endif %}
-        {% if description == 'ID_CARD'%}
-            {% trans 'id_documents' %}
-        {% endif %}
-        {% if description == 'NATIONAL_DIPLOMA_VERSO'%}
-            {% trans 'high_school_diploma'%} - {% trans 'verso'%}
-        {% endif %}
-        {% if description == 'NATIONAL_DIPLOMA_RECTO'%}
-            {% trans 'high_school_diploma' %} - {% trans 'recto'%}
-        {% endif %}
-        {% if description == 'INTERNATIONAL_DIPLOMA_VERSO'%}
-            {% trans 'high_school_diploma'%} - {% trans 'verso'%}
-        {% endif %}
-        {% if description == 'INTERNATIONAL_DIPLOMA_RECTO'%}
-            {% trans 'high_school_diploma' %} - {% trans 'recto'%}
-        {% endif %}
-        {% if description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO'%}
-            {% trans 'high_school_diploma'%} {% trans 'translated' %} - {% trans 'verso'%}
-        {% endif %}
-        {% if description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO'%}
-            {% trans 'high_school_diploma' %} {% trans 'translated' %} - {% trans 'recto'%}
-        {% endif %}
-        {% if description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO'%}
-            {% trans 'high_school_scores_transcript'%} - {% trans 'verso'%}
-        {% endif %}
-        {% if description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO'%}
-            {% trans 'high_school_scores_transcript' %} - {% trans 'recto'%}
-        {% endif %}
-        {% if description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO'%}
-            {% trans 'high_school_scores_transcript'%} {% trans 'translated' %} - {% trans 'verso'%}
-        {% endif %}
-        {% if description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO'%}
-            {% trans 'high_school_scores_transcript' %} {% trans 'translated' %} - {% trans 'recto'%}
-        {% endif %}
-        {% if description == 'EQUIVALENCE'%}
-            {% trans 'file_equivalence' %}
-        {% endif %}
-        {% if description == 'ADMISSION_EXAM_CERTIFICATE'%}
-            {% trans 'admission_exam_certificate_document' %}
-        {% endif %}
-        {% if description == 'PROFESSIONAL_EXAM_CERTIFICATE'%}
-            {% trans 'admission_exam_certificate_document' %}
-        {% endif %}
-        {% if description == 'RESIDENT_LONG_DURATION' or description == 'ID_FOREIGN_UNLIMITED' or  description == 'ATTACHMENT_26' or  description == 'REFUGEE_CARD' or  description == 'FAMILY_COMPOSITION' or  description == 'BIRTH_CERTIFICATE' or  description == 'RESIDENT_CERTIFICATE' or  description == 'STATELESS_CERTIFICATE' or  description == 'FOREIGN_INSCRIPTION_CERTIFICATE' or  description == 'SUBSIDIARY_PROTECTION_DECISION' or  description == 'RESIDENCE_PERMIT' or  description == 'PAYCHECK' or  description == 'CPAS' or  description == 'TUTORSHIP_CERTIFICATE' or  description == 'OTHER' or  description == 'SCHOLARSHIP_CFWB' or  description == 'SCHOLARSHIP_DEVELOPMENT_COOPERATION'%}
-            {% with document_description=description|slugify %}
-                {% trans document_description %}
-            {% endwith %}
-        {% endif %}
-
+                        <label id="lbl_description_label"></label>
                     </h4>
                 </div>
                 <div class="modal-body">
                     {% include "uploading/upload_file_form.html" %}
+                    {% for document in assimilation_documents_existing%}
+                        {% if display_link%}
+                            <a href="{% url 'download' pk=document.pk %}">{{ document.file_name }}</a>
+                        {%endif%}
+                    {%endfor%}
+
+                    <div id="pnl_existing_files"></div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal" id="bt_cancel_upload_score_modal">{% trans 'cancel' %}</button>
                     <input type="submit" class="btn btn-primary" value="{% trans 'save'%}" onclick="document.getElementById('files').style.visibility='visible'" id="bt_submit_upload_score_modal"/>
-                    <input type="text" name="description" value="" id="hdn_description"/>
-
-                    <input type="text" name="application_id" value='{{ application.id | default_if_none:''}}' />
+                    <input type="hidden" name="description" value="" id="hdn_description"/>
+                    <input type="hidden" name="application_id" value='{{ application.id | default_if_none:''}}' />
                 </div>
             </form>
         </div>

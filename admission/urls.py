@@ -110,6 +110,6 @@ urlpatterns = [
 
     url(r'^criteria_document/$', assimilation_criteria.find_by_criteria),
     url(r'^upload/delete/(?P<pk>[0-9]+)$', upload_file.delete, name='delete'),
-
+    url(r'^document/$', upload_file.find_by_description),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
