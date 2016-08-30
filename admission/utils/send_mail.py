@@ -96,10 +96,13 @@ def new_password(request, activation_code, email):
         str('Le service des inscription de l\'UCL\n\n'),
         str('http://www.uclouvain.be/inscriptionenligne')
     ])
-
+    if settings.ENVIRONMENT not in settings.PRODUCTION_ENVIRONNMENTS:
+        receiver = settings.COMMON_EMAIL_RECEIVER
+    else:
+        receiver = email
     send_mail(subject=subject,
               message=message,
-              recipient_list=[email],
+              recipient_list=[receiver],
               html_message=html_message,
               from_email=DEFAULT_FROM_EMAIL)
 
