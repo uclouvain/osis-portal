@@ -27,7 +27,7 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-    <form method="post" action="{% url 'profile' %}" id="form_profile">
+    <form method="post" action="{% url 'profile' %}" id="form_profile" enctype="multipart/form-data".>
         {% csrf_token %}
 
         <span id="txt_message_error_profile_up"
@@ -91,15 +91,11 @@
                                 <div >
                                     {% if picture %}
                                         {% if ".jpg" in picture|lower or ".jpeg" in picture|lower or ".gif" in picture|lower or ".png" in picture|lower%}
-                                            <img src="{% static picture%}"
-                                                 width="120px"
-                                                 title="{% trans 'change_picture'%}"
-                                                 id="img_modify_picture">
-                                                 <button type="button"
-                                                   id="btn_modify_picture"
-                                                   class="btn"
-                                                   title="{% trans 'change_picture'%}"
-                                                   data-toggle="modal" data-target="#pnl_upload_documents"
+                                             <button type="button"
+                                               id="btn_modify_picture"
+                                               class="btn"
+                                               title="{% trans 'change_picture'%}"
+                                               data-toggle="modal" data-target="#pnl_upload_documents"
                                             ><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> </button>
                                         {%else%}
                                             <button type="button"
@@ -258,7 +254,7 @@
                     {% for criteria_div in assimilationCriteria %}
                         <div id="pnl_criteria_{{forloop.counter}}"
                              {{applicant_assimilation_criteria|div_visibility:criteria_div.id }}  >
-                            <div {% if assimilation_basic_documents|table_display:criteria_div.id%}class="panel panel-default" {%endif%}>
+                            <div {% if assimilation_basic_documents|table_display:criteria_div.id%} class="panel panel-default" {%endif%}>
 
                             {% if assimilation_basic_documents|table_display:criteria_div.id%}
                                 <div class="panel-heading"><h4><strong>{% trans 'criteria'%} {{ criteria_div.id}}</strong></h4></div>
@@ -361,16 +357,11 @@
                                     <label>{%trans 'id_document'%}</label><br>
                                     {% if id_document %}
                                         {% if ".jpg" in id_document|lower or ".jpeg" in id_document|lower or ".gif" in id_document|lower or ".png" in id_document|lower%}
-                                            <img src="{% static id_document %} "
-                                                 width="120px"
-                                                 id="img_modify_id_document"
-                                                 title="{% trans 'change_document'%}"
-                                                 data-toggle="modal" data-target="#pnl_upload_documents">
-                                                <button type="button"
-                                                   id="lnk_modify_id_document"
-                                                   class="btn"
-                                                   title="{% trans 'change_document'%}"
-                                                   data-toggle="modal" data-target="#pnl_upload_documents"
+                                            <button type="button"
+                                               id="lnk_modify_id_document"
+                                               class="btn"
+                                               title="{% trans 'change_document'%}"
+                                               data-toggle="modal" data-target="#pnl_upload_documents"
                                             ><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> </button>
                                         {%else%}
                                             <button type="button"
@@ -628,7 +619,7 @@
                 {%trans 'next_step'%} : {%trans 'offer_choice'%}</a>
         {%endif%}
         </div>
-        <button type="button" data-toggle="modal" data-target="#pnl_upload_documents">test</button>
+        <div id="pnl_uploaded_files"></div>
     </form>
     <form method="post"
           action="{% url 'upload_file_description' %}"

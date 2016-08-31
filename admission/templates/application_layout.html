@@ -572,5 +572,37 @@
     //***************************
     //Assimilation criteria - end
     //***************************
+    $("#txt_file").on("change", function(){
+       var file = this.files[0],
+       fileName = file.name,
+       fileSize = file.size;
+       $("#hdn_filename").val(fileName)
+
+    });
+
+    $("#bt_upload_document").click(function(event) {
+      var target = $(event.target);
+      var id = target.attr("id");
+      //Clear existing fields
+      $('#hdn_file_'+$("#txt_file").val()).remove();
+      $('#hdn_file_name_'+$("#hdn_description").val()).remove();
+      $('#hdn_file_description_'+$("#hdn_description").val()).remove();
+      //
+      $('#pnl_uploaded_files').append("<br>");
+      input = jQuery('<input name="uploaded_file_name_'+$("#hdn_description").val()+'" id="hdn_file_name_'+$("#hdn_description").val()+'" type="text" value="'+$("#hdn_filename").val()+'">');
+      $('#pnl_uploaded_files').append(input);
+      input = jQuery('<input name="uploaded_file_description_'+$("#hdn_description").val()+'" id="hdn_file_description_'+$("#hdn_description").val()+'" type="hidden" value="'+$("#hdn_description").val()+'">');
+      $('#pnl_uploaded_files').append(input);
+      //input = jQuery('<input name="uploaded_file_'+$("#hdn_description").val()+'" id="hdn_file_'+$("#hdn_description").val()+'" type="file" value="'+$('#hdn_file_'+$("#txt_file").val())+'">');
+      clone_file = $("#txt_file").clone();
+      var id_file = 'hdn_uploaded_file_' + $("#hdn_description").val();
+      var name_file = 'uploaded_file_'+ $("#hdn_description").val();
+      clone_file.attr('id',id_file);
+      clone_file.attr('name',name_file);
+      $('#pnl_uploaded_files').append('dddd1');
+      $('#pnl_uploaded_files').append(clone_file);
+      $('#pnl_uploaded_files').append('dddd');
+       return true;
+    });
     </script>
 {% endblock %}

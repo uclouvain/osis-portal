@@ -41,7 +41,6 @@ from rest_framework.renderers import JSONRenderer
 
 @login_required
 def upload_file(request):
-    print('upload_file')
     description = None
     documents = mdl_osis_common.document_file.search(description=description, user=request.user)
     if request.method == "POST":
@@ -53,8 +52,6 @@ def upload_file(request):
             application = mdl.application.find_by_id(application_id)
 
         document_formset = UploadDocumentFileForm(request.POST, request.FILES)
-        valide_form = True
-        print(document_formset.errors['content_type'])
 
         if document_formset.validate() is None:
             curriculum_uploads = [document_type.NATIONAL_DIPLOMA_RECTO,

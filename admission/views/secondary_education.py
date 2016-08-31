@@ -423,7 +423,6 @@ def diploma_update(request, application_id=None):
     # merge 2 dictionaries
     data.update(get_secondary_education_exams_data(secondary_education))
 
-    print(application.id)
     return render(request, "admission_home.html", data)
 
 
