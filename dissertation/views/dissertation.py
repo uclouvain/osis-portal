@@ -31,7 +31,7 @@ from base import models as mdl
 from base.views import layout
 from dissertation.models import dissertation, dissertation_role, dissertation_update, offer_proposition, \
     proposition_dissertation, proposition_role
-from dissertation.forms import DissertationForm, DissertationTitleForm, DissertationUpdateForm
+from dissertation.forms import DissertationForm, DissertationRoleForm, DissertationTitleForm, DissertationUpdateForm
 from django.utils import timezone
 
 
@@ -78,6 +78,7 @@ def dissertation_detail(request, pk):
         return redirect('dissertations')
     else:
         count_dissertation_role = dissertation_role.count_by_dissertation(memory)
+        count_reader = dissertation_role.count_reader_by_dissertation(memory)
         count_proposition_role = proposition_role.count_by_dissertation(memory)
         proposition_roles = proposition_role.search_by_dissertation(memory)
         if count_proposition_role == 0:
@@ -91,6 +92,7 @@ def dissertation_detail(request, pk):
         return layout.render(request, 'dissertation_detail.html',
                              {'check_edit': check_edit,
                               'count': count,
+                              'count_reader': count_reader,
                               'count_dissertation_role': count_dissertation_role,
                               'dissertation': memory,
                               'dissertation_roles': dissertation_roles,
@@ -151,6 +153,37 @@ def dissertation_history(request, pk):
     return layout.render(request, 'dissertation_history.html',
                          {'dissertation': memory,
                           'dissertation_updates': dissertation_updates})
+
+
+@login_required
+def dissertation_jury_edit(request, pk):
+    role = get_object_or_404(dissertation_role.DissertationRole, pk=pk)
+    if request.method == "POST":
+        form = DissertationRoleForm(request.POST, instance=role)
+        if form.is_valid():
+            form.save()
+            return redirect('dissertation_detail', pk=role.dissertation.pk)
+    else:
+        form = DissertationRoleForm(instance=role)
+    return layout.render(request, 'dissertation_reader_edit.html', {'form': form})
+
+
+@login_required
+def dissertation_jury_new(request, pk):
+    memory = get_object_or_404(dissertation.Dissertation, pk=pk)
+    count_dissertation_role = dissertation_role.count_by_dissertation(memory)
+    count_reader = dissertation_role.count_reader_by_dissertation(memory)
+    if count_dissertation_role < 5 and count_reader < 3:
+        if request.method == "POST":
+            form = DissertationRoleForm(request.POST)
+            if form.is_valid():
+                form.save()
+            return redirect('dissertation_detail', pk=memory.pk)
+        else:
+            form = DissertationRoleForm(initial={'status': "READER", 'dissertation': memory})
+            return layout.render(request, 'dissertation_reader_edit.html', {'form': form, 'memory': memory})
+    else:
+        return redirect('dissertation_detail', pk=memory.pk)
 
 
 @login_required

@@ -26,8 +26,9 @@
 
 from django import forms
 from django.forms import ModelForm
-from dissertation.models.dissertation_update import DissertationUpdate
 from dissertation.models.dissertation import Dissertation
+from dissertation.models.dissertation_update import DissertationUpdate
+from dissertation.models.dissertation_role import DissertationRole
 
 
 class DissertationForm(ModelForm):
@@ -36,6 +37,14 @@ class DissertationForm(ModelForm):
         fields = ('title', 'author', 'offer_year_start', 'proposition_dissertation', 'description', 'defend_year',
                   'defend_periode')
         widgets = {'author': forms.HiddenInput()}
+
+
+class DissertationRoleForm(ModelForm):
+    class Meta:
+        model = DissertationRole
+        fields = ('dissertation', 'status', 'adviser')
+        widgets = {'dissertation': forms.HiddenInput(),
+                   'status': forms.HiddenInput()}
 
 
 class DissertationTitleForm(ModelForm):
