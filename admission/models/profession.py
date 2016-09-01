@@ -32,7 +32,6 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
 
-
 class Profession(models.Model):
     name = models.CharField(max_length=255)
 

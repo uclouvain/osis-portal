@@ -26,12 +26,12 @@
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from admission import models as mdl
+from admission.models.enums import document_type
 from admission.views import demande_validation, tabs
 from admission.forms import RemoveAttachmentForm
 from osis_common.forms import UploadDocumentFileForm
 from osis_common.models.document_file import DocumentFile
 from django.forms import formset_factory
-
 
 def update(request, application_id=None):
     past_attachments = list_attachments(request.user)
@@ -55,7 +55,7 @@ def update(request, application_id=None):
     tab_status = tabs.init(request)
 
     remove_attachment_form = RemoveAttachmentForm()
-    list_choices = ["ID_CARD", "ID_PCITURE", "LETTER_MOTIVATION"]  # To replace with correct list of choices
+    list_choices = [x[1] for x in document_type.DOCUMENT_TYPE_CHOICES]
     return render(request, "admission_home.html", {
         "tab_active": 6,
         "application": application,
