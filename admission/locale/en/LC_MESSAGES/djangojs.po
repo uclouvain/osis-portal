@@ -80,3 +80,6 @@ msgstr "scholarship_cfwb"
 
 msgid "scholarship_development_cooperation"
 msgstr "scholarship_development_cooperation"
+
+msgid "change_document"
+msgstr "Modify the document"

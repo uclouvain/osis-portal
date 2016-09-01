@@ -271,10 +271,6 @@
         }
     });
 
-    $("#lnk_picture").click(function() {
-        save('form_profile');
-    });
-
     $("#lnk_redirect_picture").click(function() {
          $('#hdn_description').val('ID_PICTURE');
          $('#lbl_description_label').text(gettext('ID_PICTURE'.toLowerCase()));
@@ -282,22 +278,25 @@
     $("#lnk_modify_picture").click(function() {
         $('#hdn_description').val('ID_PICTURE');
     });
-    $("#btn_modify_picture").click(function() {
-        $('#hdn_description').val('ID_PICTURE');
-        $('#lbl_description_label').text(gettext('ID_PICTURE'.toLowerCase()));
+    $("#btn_modify_picture").click(function(event) {
+        var target = $(event.target);
+        update_description('ID_PICTURE', target);
+
     });
 
     $("#lnk_modify_id_document").click(function() {
         $('#hdn_description').val('ID_CARD');
         $('#lbl_description_label').text(gettext('ID_CARD'.toLowerCase()));
     });
-    $("#btn_modify_id_document").click(function() {
-        $('#hdn_description').val('ID_CARD');
-        $('#lbl_description_label').text(gettext('ID_CARD'.toLowerCase()));
+    $("#btn_modify_id_document").click(function(event) {
+        var target = $(event.target);
+        update_description('ID_CARD',target);
+
     });
     $("#btn_documents_upload_diploma").click(function() {
         save('form_secondary_education');
     });
+
     $("#txt_birth_date").blur(function() {
         var value = $("#txt_birth_date").val();
         $("#msg_error_birth_date").find("label").remove();
@@ -529,7 +528,6 @@
     });
 
     $(document).bind('click', function (e) {
-
        var target = $(e.target);
        if (target.is('.class_upload_assimilation')) {
           e.preventDefault(); // if you want to cancel the event flow
@@ -538,8 +536,7 @@
             //upload for assimilation
             var pos = id.indexOf('_id_')
             var description = id.substring(pos+4)
-            $('#hdn_description').val(description);
-            $('#lbl_description_label').text(gettext(description.toLowerCase()));
+            update_description(description, target);
             // To clear the div
             $("#pnl_existing_files").html('')
             $("#pnl_existing_files").find("a")
@@ -572,6 +569,16 @@
     //***************************
     //Assimilation criteria - end
     //***************************
+    //***************************
+    //File upload
+    //***************************
+    function update_description(description, elt){
+        $('#hdn_description').val(description);
+        $('#lbl_description_label').text(gettext(description.toLowerCase()));
+        $('#txt_file').val('');
+        $('#hdn_pushed').val(elt.attr("id"));
+    }
+
     $("#txt_file").on("change", function(){
        var file = this.files[0],
        fileName = file.name,
@@ -583,26 +590,53 @@
     $("#bt_upload_document").click(function(event) {
       var target = $(event.target);
       var id = target.attr("id");
+      var description = $("#hdn_description").val();
       //Clear existing fields
       $('#hdn_file_'+$("#txt_file").val()).remove();
-      $('#hdn_file_name_'+$("#hdn_description").val()).remove();
-      $('#hdn_file_description_'+$("#hdn_description").val()).remove();
+      $('#hdn_file_name_'+description).remove();
+      $('#hdn_file_description_'+description).remove();
       //
       $('#pnl_uploaded_files').append("<br>");
-      input = jQuery('<input name="uploaded_file_name_'+$("#hdn_description").val()+'" id="hdn_file_name_'+$("#hdn_description").val()+'" type="text" value="'+$("#hdn_filename").val()+'">');
+      input = jQuery('<input name="uploaded_file_name_'+description+'" id="hdn_file_name_'+description+'" type="text" value="'+$("#hdn_filename").val()+'">');
       $('#pnl_uploaded_files').append(input);
-      input = jQuery('<input name="uploaded_file_description_'+$("#hdn_description").val()+'" id="hdn_file_description_'+$("#hdn_description").val()+'" type="hidden" value="'+$("#hdn_description").val()+'">');
+      input = jQuery('<input name="uploaded_file_description_'+description+'" id="hdn_file_description_'+description+'" type="hidden" value="'+description+'">');
       $('#pnl_uploaded_files').append(input);
-      //input = jQuery('<input name="uploaded_file_'+$("#hdn_description").val()+'" id="hdn_file_'+$("#hdn_description").val()+'" type="file" value="'+$('#hdn_file_'+$("#txt_file").val())+'">');
       clone_file = $("#txt_file").clone();
-      var id_file = 'hdn_uploaded_file_' + $("#hdn_description").val();
-      var name_file = 'uploaded_file_'+ $("#hdn_description").val();
+
+      var id_file = '#fil_uploaded_file_' + description;
+      //clear existing field
+      $(id_file).remove();
+      //
+      var name_file = 'uploaded_file_'+ description;
       clone_file.attr('id',id_file);
       clone_file.attr('name',name_file);
-      $('#pnl_uploaded_files').append('dddd1');
       $('#pnl_uploaded_files').append(clone_file);
-      $('#pnl_uploaded_files').append('dddd');
-       return true;
+      //change bouton detail
+      if(description == 'ID_PICTURE'){
+        $('#btn_modify_picture').attr('title', gettext('change_document'));
+        $('#spn_modify_picture').attr('class', 'glyphicon glyphicon-ok-circle');
+      }
+      if(description == 'ID_CARD'){
+        $('#btn_modify_id_document').attr('title', gettext('change_document'));
+        $('#spn_modify_id_document').attr('class', 'glyphicon glyphicon-ok-circle');
+      }
+      var btn_pushed_val = $('#hdn_pushed').val();
+      if(btn_pushed_val.startsWith('btn_load_assimilation_doc_')){
+
+        $('#'+btn_pushed_val).attr('title', gettext('change_document'));
+        $('#spn_'+btn_pushed_val).attr('class', 'glyphicon glyphicon-ok-circle');
+      }
+
+      return true;
     });
+    /*    not ready yet leila
+    function delete_file(document_id) {
+        var description = $('#hdn_description').val();
+        input = jQuery('<input name="deleted_file_name_'+description+'" id="hdn_deleted_file_name_'+description+'" type="text" value="'+document_id+'">');
+        $('#pnl_deleted_files').append(input);
+    };*/
+    //***************************
+    //File upload - end
+    //***************************
     </script>
 {% endblock %}

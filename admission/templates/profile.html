@@ -2,7 +2,6 @@
 {% load static %}
 {% load i18n %}
 {% load assimilation %}
-
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
 * designed to manage the core business of higher education institutions,
@@ -90,31 +89,24 @@
                                 <label>{%trans 'id_picture'%}</label>
                                 <div >
                                     {% if picture %}
-                                        {% if ".jpg" in picture|lower or ".jpeg" in picture|lower or ".gif" in picture|lower or ".png" in picture|lower%}
-                                             <button type="button"
-                                               id="btn_modify_picture"
-                                               class="btn"
-                                               title="{% trans 'change_picture'%}"
-                                               data-toggle="modal" data-target="#pnl_upload_documents"
-                                            ><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> </button>
-                                        {%else%}
-                                            <button type="button"
-                                                   id="btn_modify_picture"
-                                                   class="btn"
-                                                   title="{% trans 'change_picture'%}"
-                                                   data-toggle="modal" data-target="#pnl_upload_documents"
-                                            ><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> </button>
-                                            <br><br>
-                                            <span style="font-size:x-small;color:#808080">({% trans 'no_preview'%})</span>
-                                        {%endif%}
+                                         <button type="button"
+                                           id="btn_modify_picture"
+                                           class="btn"
+                                           title="{% trans 'change_picture'%}"
+                                           data-toggle="modal" data-target="#pnl_upload_documents">
+                                             <span class="glyphicon glyphicon-ok-circle" aria-hidden="true" id="spn_modify_picture">&nbsp;Upload</span>
+                                         </button>
 
                                     {%else%}
-                                            <button type="button"
-                                                    id="lnk_redirect_picture" title="{% trans 'id_picture_add'%}"
-                                                    class="btn glyphicon glyphicon-upload"
-                                                    data-toggle="modal" data-target="#pnl_upload_documents"></button>
-
+                                         <button type="button"
+                                           id="btn_modify_picture"
+                                           class="btn"
+                                           title="{% trans 'add_picture'%}"
+                                           data-toggle="modal" data-target="#pnl_upload_documents">
+                                             <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_modify_picture">&nbsp;Upload</span>
+                                         </button>
                                     {%endif%}
+
                                 </div>
                             </div>
                         </div>
@@ -275,10 +267,14 @@
                                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                                             <td>
                                                                 <button type="button"
-                                                                        class="btn btn-default class_upload_assimilation"
+                                                                        class="btn class_upload_assimilation"
                                                                         id="btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}"
                                                                         title="{{assimilation_documents_existing|button_title:d }}"
-                                                                        data-toggle="modal" data-target="#pnl_upload_documents"><span class="{{assimilation_documents_existing|button_class:d }}">&nbsp;Upload</span></button>
+                                                                        data-toggle="modal"
+                                                                        data-target="#pnl_upload_documents">
+                                                                    <span class="{{assimilation_documents_existing|button_class:d }}"
+                                                                          id="spn_btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}">&nbsp;Upload</span>
+                                                                </button>
                                                             </td>
                                                             <td>&nbsp;&nbsp;</td>
                                                             <td>{% with document_description=d|slugify %}
@@ -302,11 +298,16 @@
                                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                                             <td>
                                                                 <button type="button"
-                                                                        class="btn btn-default class_upload_assimilation"
+                                                                        class="btn class_upload_assimilation"
                                                                         id="btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}"
                                                                         title="{{assimilation_documents_existing|button_title:d }}"
                                                                         style="margin-bottom:5px;"
-                                                                        data-toggle="modal" data-target="#pnl_upload_documents"><span class="{{assimilation_documents_existing|button_class:d }}">&nbsp;Upload</span></button>
+                                                                        data-toggle="modal"
+                                                                        data-target="#pnl_upload_documents">
+                                                                    <span class="{{assimilation_documents_existing|button_class:d }}"
+                                                                          id="spn_btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}">&nbsp;Upload
+                                                                    </span>
+                                                                </button>
                                                             </td>
                                                             <td>&nbsp;&nbsp;</td>
                                                             <td >{% with document_description=d|slugify %}
@@ -356,29 +357,23 @@
                                 <div class="col-md-10">
                                     <label>{%trans 'id_document'%}</label><br>
                                     {% if id_document %}
-                                        {% if ".jpg" in id_document|lower or ".jpeg" in id_document|lower or ".gif" in id_document|lower or ".png" in id_document|lower%}
                                             <button type="button"
-                                               id="lnk_modify_id_document"
-                                               class="btn"
-                                               title="{% trans 'change_document'%}"
-                                               data-toggle="modal" data-target="#pnl_upload_documents"
-                                            ><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> </button>
-                                        {%else%}
-                                            <button type="button"
-                                                   id="btn_modify_id_document"
-                                                   class="btn glyphicon glyphicon-ok-circle"
-                                                   title="{% trans 'change_document'%}"
-                                                   data-toggle="modal" data-target="#pnl_upload_documents"
-                                            ></button>
-                                            <br><br><span style="font-size:x-small;color:#808080">({% trans 'no_preview'%})</span>
-                                        {%endif%}
+                                                    id="lnk_modify_id_document"
+                                                    class="btn"
+                                                    title="{% trans 'change_document'%}"
+                                                    data-toggle="modal"
+                                                    data-target="#pnl_upload_documents">
+                                                <span class="glyphicon glyphicon-ok-circle" aria-hidden="true" id="spn_modify_id_document">&nbsp;Upload</span>
+                                            </button>
+
                                     {%else%}
-                                        <br>
                                         <button type="button"
                                                 title="{% trans 'id_add'%}"
                                                 id="btn_modify_id_document"
-                                                class="btn glyphicon glyphicon-upload"
-                                                data-toggle="modal" data-target="#pnl_upload_documents"></button>
+                                                class="btn"
+                                                data-toggle="modal" data-target="#pnl_upload_documents">
+                                            <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_modify_id_document">&nbsp;Upload</span>
+                                        </button>
                                     {%endif%}
                                 </div>
                             </div>
@@ -619,14 +614,9 @@
                 {%trans 'next_step'%} : {%trans 'offer_choice'%}</a>
         {%endif%}
         </div>
-        <div id="pnl_uploaded_files"></div>
+        <div id="pnl_uploaded_files" style="visibility:hidden;display:none;"></div>
+        <div id="pnl_deleted_files" style="visibility:hidden;display:none;"></div>
+        <input type="text" id="hdn_pushed" />
     </form>
-    <form method="post"
-          action="{% url 'upload_file_description' %}"
-          id="form_upload_profile"
-          style="visibility:hidden;display:none;">
-        {% csrf_token %}
 
-        <input type="submit" value="+"  id="lnk_picture">
-    </form>
 

@@ -1234,9 +1234,6 @@ msgstr "Votre profil"
 msgid "your_requests"
 msgstr "Vos demandes"
 
-msgid "admission_exam_certificate_document"
-msgstr "Copie de votre certificat ou une preuve d'inscription à l'examen"
-
 msgid "add_document"
 msgstr "Cliquez ici pour ajouter un document"
 
@@ -1294,6 +1291,8 @@ msgstr "scholarship_development_cooperation"
 msgid "criteria"
 msgstr "Critère"
 
-
 msgid "help_pnl_selectedfiles"
 msgstr "Veuillez sélectionner un fichier"
+
+msgid "upload"
+msgstr "Upload"

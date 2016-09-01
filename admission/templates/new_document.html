@@ -43,6 +43,13 @@
                     {% for document in assimilation_documents_existing%}
                         {% if display_link%}
                             <a href="{% url 'download' pk=document.pk %}">{{ document.file_name }}</a>
+                            <!-- Not ready yet Leila
+                            <button type="button" class="btn"
+                                    id="btn_delete_doc"
+                                    title="{% trans 'delete_document'%}"
+                                    onclick="delete_file({{document.pk}})">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>-->
                         {%endif%}
                     {%endfor%}
 
@@ -53,10 +60,11 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal" id="bt_cancel_upload_score_modal">{% trans 'cancel' %}</button>
                     <input type="button" class="btn btn-primary" value="{% trans 'save'%}" data-dismiss="modal"
                            id="bt_upload_document"/>
-                    <input type="text" name="description" value="" id="hdn_description"/>
+                    <input type="hidden" name="description" value="" id="hdn_description"/>
                     <input type="hidden" name="application_id" value='{{ application.id | default_if_none:''}}' />
-                    <input type="text" id="hdn_filename" />
-                    <input type="hidden" id="hdn_criteria"/>
+                    <input type="hidden" id="hdn_filename" />
+
+
                 </div>
 
         </div>

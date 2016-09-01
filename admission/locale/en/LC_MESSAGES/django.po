@@ -1283,3 +1283,6 @@ msgstr "Criteria"
 
 msgid "help_pnl_selectedfiles"
 msgstr "Please select a file"
+
+msgid "upload"
+msgstr "Upload"
