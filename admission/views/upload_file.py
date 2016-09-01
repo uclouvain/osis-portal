@@ -89,8 +89,8 @@ def upload_file(request):
                 adm_doc_file.document_file = file
                 adm_doc_file.save()
 
-            if (description == document_type.ID_PICTURE or description == document_type.ID_CARD) or \
-                            description in assimilation_uploads:
+            if (description == document_type.ID_PICTURE or description == document_type.ID_CARD) \
+                    or description in assimilation_uploads:
                 tab_status = tabs.init(request)
                 applicant = mdl.applicant.find_by_user(request.user)
                 applications = mdl.application.find_by_user(request.user)
@@ -236,7 +236,7 @@ def save_document_from_form(document, request):
     """
     Save a document (attachment) from a form.
     :param document: an UploadDocumentForm received from a POST request.
-    :param user: the current user
+    :param request:
     :return:
     """
     file_name = request.FILES['file'].name
@@ -275,7 +275,7 @@ class DocumentFileSerializer(serializers.ModelSerializer):
 def find_by_description(request):
     description = request.GET['description']
     documents = mdl_osis_common.document_file.search(request.user, description)
-    last_documents=[]
+    last_documents = []
     if documents:
         last_document = documents.reverse()[0]
         last_documents = [last_document]
