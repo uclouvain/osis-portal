@@ -34,7 +34,7 @@ from admission.models.enums import education, professional_activity
 
 
 class SociologicalSurveyExamAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('applicant', 'student_professional_activity', 'student_profession')
 
 
 class SociologicalSurvey(models.Model):

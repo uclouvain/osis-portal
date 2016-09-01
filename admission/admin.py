@@ -62,8 +62,7 @@ admin.site.register(option.Option,
 admin.site.register(person_address.PersonAddress,
                     person_address.PersonAddressAdmin)
 
-admin.site.register(profession.Profession,
-                    profession.Professiondmin)
+admin.site.register(profession.Profession)
 
 admin.site.register(properties.Properties,
                     properties.PropertiesAdmin)
