@@ -33,7 +33,7 @@ from django.contrib import admin
 from admission.models.enums import education, professional_activity
 
 
-class SociologicalSurveyExamAdmin(admin.ModelAdmin):
+class SociologicalSurveyAdmin(admin.ModelAdmin):
     list_display = ('applicant', 'student_professional_activity', 'student_profession')
 
 

@@ -291,138 +291,51 @@ function decrementIdOfDocForm($divDocForm, currentIdNumber){
     decrementStorageDurationId($divDocForm, currentIdNumber);
     decrementDocumentTypeId($divDocForm, currentIdNumber);
     decrementSizeId($divDocForm, currentIdNumber);
-    modifyButtonRemoveBehaviour($divDocForm, currentIdNumber);
+    modifyButtonRemoveBehaviour($divDocForm);
 }
 
 // decrement file name id
 function decrementFileName($divDocForm, currentIdNumber){
-    var labelForPrefix = "id_form-";
-    var labelForSuffix = "-file_name";
-    var labelFor = labelForPrefix.concat(currentIdNumber.toString(), labelForSuffix);
-    var newLabelFor = labelForPrefix.concat((currentIdNumber-1).toString(), labelForSuffix);
-
-    var inputNamePrefix = "form-";
-    var inputNameSuffix = "-file_name";
-    var newInputName = inputNamePrefix.concat((currentIdNumber-1).toString(), inputNameSuffix);
-
-    $divDocForm.find("#".concat(labelFor)).attr({"id" : newLabelFor,
-        "name": newInputName});
+    decrement($divDocForm, currentIdNumber, "-file_name");
 }
 
 // decrement file id
 function decrementFile($divDocForm, currentIdNumber) {
-    // A label for attribute is of the form "id_form-0-file" for example.
-    var labelForPrefix = "id_form-";
-    var labelForSuffix = "-file";
-    var labelFor = labelForPrefix.concat(currentIdNumber.toString(), labelForSuffix);
-    var newLabelFor = labelForPrefix.concat((currentIdNumber-1).toString(), labelForSuffix);
-
-    var inputNamePrefix = "form-";
-    var inputNameSuffix = "-file";
-    var newInputName = inputNamePrefix.concat((currentIdNumber-1).toString(), inputNameSuffix);
-
-    $divDocForm.find("#".concat(labelFor)).attr({"id" : newLabelFor,
-        "name": newInputName});
+    decrement($divDocForm, currentIdNumber, "-file");
 }
 
 // decrement user id
 function decrementUserId($divDocForm, currentIdNumber){
-    // A label for attribute is of the form "id_form-0-user" for example.
-    var labelForPrefix = "id_form-";
-    var labelForSuffix = "-user";
-    var labelFor = labelForPrefix.concat(currentIdNumber.toString(), labelForSuffix);
-    var newLabelFor = labelForPrefix.concat((currentIdNumber-1).toString(), labelForSuffix);
-
-    var inputNamePrefix = "form-";
-    var inputNameSuffix = "-user";
-    var newInputName = inputNamePrefix.concat((currentIdNumber-1).toString(), inputNameSuffix);
-
-    $divDocForm.find("#".concat(labelFor)).attr({"id" : newLabelFor,
-        "name": newInputName});
+   decrement($divDocForm, currentIdNumber, "-user");
 }
 
 // decrement description id
 function decrementDescriptionId($divDocForm, currentIdNumber){
-    // A label for attribute is of the form "id_form-0-description" for example.
-    var labelForPrefix = "id_form-";
-    var labelForSuffix = "-description";
-    var labelFor = labelForPrefix.concat(currentIdNumber.toString(), labelForSuffix);
-    var newLabelFor = labelForPrefix.concat((currentIdNumber-1).toString(), labelForSuffix);
-
-    var selectNamePrefix = "form-";
-    var selectNameSuffix = "-description";
-    var newSelectName = selectNamePrefix.concat((currentIdNumber-1).toString(), selectNameSuffix);
-
-    $divDocForm.find("#".concat(labelFor)).attr({"id" : newLabelFor,
-        "name": newSelectName});
+    decrement($divDocForm, currentIdNumber, "-description");
 }
 
 // decrement content type id
 function decrementContentTypeId($divDocForm, currentIdNumber){
-    // A label for attribute is of the form "id_form-0-content_type" for example.
-    var labelForPrefix = "id_form-";
-    var labelForSuffix = "-content_type";
-    var labelFor = labelForPrefix.concat(currentIdNumber.toString(), labelForSuffix);
-    var newLabelFor = labelForPrefix.concat((currentIdNumber-1).toString(), labelForSuffix);
-
-    var inputNamePrefix = "form-";
-    var inputNameSuffix = "-content_type";
-    var newInputName = inputNamePrefix.concat((currentIdNumber-1).toString(), inputNameSuffix);
-
-    $divDocForm.find("#".concat(labelFor)).attr({"id" : newLabelFor,
-        "name": newInputName});
+   decrement($divDocForm, currentIdNumber, "-content_type");
 }
 
 // decrement storage duration id
 function decrementStorageDurationId($divDocForm, currentIdNumber){
-    // A label for attribute is of the form "id_form-0-storage_duration" for example.
-    var labelForPrefix = "id_form-";
-    var labelForSuffix = "-storage_duration";
-    var labelFor = labelForPrefix.concat(currentIdNumber.toString(), labelForSuffix);
-    var newLabelFor = labelForPrefix.concat((currentIdNumber-1).toString(), labelForSuffix);
-
-    var inputNamePrefix = "form-";
-    var inputNameSuffix = "-storage_duration";
-    var newInputName = inputNamePrefix.concat((currentIdNumber-1).toString(), inputNameSuffix);
-
-    $divDocForm.find("#".concat(labelFor)).attr({"id" : newLabelFor,
-        "name": newInputName});
+    decrement($divDocForm, currentIdNumber, "-storage_duration")
 }
 
 // decrement application name id
 function decrementDocumentTypeId($divDocForm, currentIdNumber){
-    // A label for attribute is of the form "id_form-0-application_name" for example.
-    var labelForPrefix = "id_form-";
-    var labelForSuffix = "-application_name";
-    var labelFor = labelForPrefix.concat(currentIdNumber.toString(), labelForSuffix);
-    var newLabelFor = labelForPrefix.concat((currentIdNumber-1).toString(), labelForSuffix);
-
-    var inputNamePrefix = "form-";
-    var inputNameSuffix = "-application_name";
-    var newInputName = inputNamePrefix.concat((currentIdNumber-1).toString(), inputNameSuffix);
-
-    $divDocForm.find("#".concat(labelFor)).attr({"id" : newLabelFor,
-        "name": newInputName});
+    decrement($divDocForm, currentIdNumber, "-application_name");
 }
 
 // decrement application name id
 function decrementSizeId($divDocForm, currentIdNumber){
-    // A label for attribute is of the form "id_form-0-size" for example.
-    var labelForPrefix = "id_form-";
-    var labelForSuffix = "-size";
-    var labelFor = labelForPrefix.concat(currentIdNumber.toString(), labelForSuffix);
-    var newLabelFor = labelForPrefix.concat((currentIdNumber-1).toString(), labelForSuffix);
-
-    var inputNamePrefix = "form-";
-    var inputNameSuffix = "-size";
-    var newInputName = inputNamePrefix.concat((currentIdNumber-1).toString(), inputNameSuffix);
-
-    $divDocForm.find("#".concat(labelFor)).attr({"id" : newLabelFor,
-        "name": newInputName});
+    decrement($divDocForm, currentIdNumber, "-size");
 }
 
 // Modify the remove button so that it removed the correct upload form
-function modifyButtonRemoveBehaviour($divDocForm, currentIdNumber){
+function modifyButtonRemoveBehaviour($divDocForm){
     var $buttonRemove = $divDocForm.find("button");
     var divFormId = $divDocForm;
     $buttonRemove.off();
@@ -433,6 +346,20 @@ function modifyButtonRemoveBehaviour($divDocForm, currentIdNumber){
         decrementNextIdDocForm();
         reorderFormsId(idNumber);
     });
+}
+
+// Decrement the id and name of an input
+function decrement($divDocForm, currentIdNumber, suffix){
+     // A label for attribute is of the form "id_form-0-suffix" for example.
+    var labelForPrefix = "id_form-";
+    var labelFor = labelForPrefix.concat(currentIdNumber.toString(), suffix);
+    var newLabelFor = labelForPrefix.concat((currentIdNumber-1).toString(), suffix);
+
+    var inputNamePrefix = "form-";
+    var newInputName = inputNamePrefix.concat((currentIdNumber-1).toString(), suffix);
+
+    $divDocForm.find("#".concat(labelFor)).attr({"id" : newLabelFor,
+        "name": newInputName});
 }
 
 /*

@@ -77,4 +77,4 @@ admin.site.register(secondary_education_exam.SecondaryEducationExam,
                     secondary_education_exam.SecondaryEducationExamAdmin)
 
 admin.site.register(sociological_survey.SociologicalSurvey,
-                    sociological_survey.SociologicalSurveyExamAdmin)
+                    sociological_survey.SociologicalSurveyAdmin)
