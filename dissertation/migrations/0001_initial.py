@@ -203,4 +203,8 @@ class Migration(migrations.Migration):
             name='start_jury_visibility',
             field=models.DateField(default=django.utils.timezone.now),
         ),
+        migrations.RemoveField(
+            model_name='offerproposition',
+            name='readers_visibility_date_for_students',
+        ),
     ]

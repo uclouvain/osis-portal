@@ -26,6 +26,9 @@ msgstr "Accepté par le promoteur"
 msgid "accepted_by_first_year_evaluation"
 msgstr "Validation de première année validée"
 
+msgid "add_reader"
+msgstr "Ajouter un lecteur"
+
 msgid "application_dissertation"
 msgstr "Gestion des mémoires"
 

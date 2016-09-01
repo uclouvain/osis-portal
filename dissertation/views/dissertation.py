@@ -77,26 +77,42 @@ def dissertation_detail(request, pk):
     if memory.author != student:
         return redirect('dissertations')
     else:
-        count_dissertation_role = dissertation_role.count_by_dissertation(memory)
-        count_reader = dissertation_role.count_reader_by_dissertation(memory)
-        count_proposition_role = proposition_role.count_by_dissertation(memory)
-        proposition_roles = proposition_role.search_by_dissertation(memory)
-        if count_proposition_role == 0:
-            if count_dissertation_role == 0:
-                dissertation_role.add('PROMOTEUR', memory.proposition_dissertation.author, memory)
+        if offer_pro.start_jury_visibility < timezone.now().date() < offer_pro.end_jury_visibility:
+            jury_visibility = True
+            if offer_pro.student_can_manage_readers:
+                manage_readers = True
+            else:
+                manage_readers = False
+            count_dissertation_role = dissertation_role.count_by_dissertation(memory)
+            count_reader = dissertation_role.count_reader_by_dissertation(memory)
+            count_proposition_role = proposition_role.count_by_dissertation(memory)
+            proposition_roles = proposition_role.search_by_dissertation(memory)
+            if count_proposition_role == 0:
+                if count_dissertation_role == 0:
+                    dissertation_role.add('PROMOTEUR', memory.proposition_dissertation.author, memory)
+            else:
+                if count_dissertation_role == 0:
+                    for role in proposition_roles:
+                        dissertation_role.add(role.status, role.adviser, memory)
+            dissertation_roles = dissertation_role.search_by_dissertation(memory)
+            return layout.render(request, 'dissertation_detail.html',
+                                 {'check_edit': check_edit,
+                                  'count': count,
+                                  'count_reader': count_reader,
+                                  'count_dissertation_role': count_dissertation_role,
+                                  'dissertation': memory,
+                                  'dissertation_roles': dissertation_roles,
+                                  'jury_visibility': jury_visibility,
+                                  'manage_readers': manage_readers,
+                                  'student': student})
         else:
-            if count_dissertation_role == 0:
-                for role in proposition_roles:
-                    dissertation_role.add(role.status, role.adviser, memory)
-        dissertation_roles = dissertation_role.search_by_dissertation(memory)
-        return layout.render(request, 'dissertation_detail.html',
-                             {'check_edit': check_edit,
-                              'count': count,
-                              'count_reader': count_reader,
-                              'count_dissertation_role': count_dissertation_role,
-                              'dissertation': memory,
-                              'dissertation_roles': dissertation_roles,
-                              'student': student})
+            jury_visibility = False
+            return layout.render(request, 'dissertation_detail.html',
+                                 {'check_edit': check_edit,
+                                  'count': count,
+                                  'dissertation': memory,
+                                  'jury_visibility': jury_visibility,
+                                  'student': student})
 
 
 @login_required
