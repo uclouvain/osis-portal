@@ -376,6 +376,9 @@ msgstr "erreur(s)"
 msgid "errors_warning"
 msgstr "Attention il y a des erreurs."
 
+msgid "error_with_form"
+msgstr "Vous n'avez pas rempli tout les champs obligatoires ou les champs sont incorrects."
+
 msgid "establishment"
 msgstr "Etablissement"
 
@@ -387,6 +390,9 @@ msgstr "Père"
 
 msgid "female"
 msgstr "Féminin"
+
+msgid "field_is_required"
+msgstr "Champ requis"
 
 msgid "file"
 msgstr "Fichier"

@@ -29,6 +29,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 from admission.validators import date_validator
 from admission.models.sociological_survey import SociologicalSurvey
+from admission.models.enums import professional_activity
 from localflavor.generic.forms import BICFormField, IBANFormField
 from osis_common.models.document_file import DocumentFile
 
@@ -253,3 +254,27 @@ class SociologicalSurveyForm(forms.ModelForm):
     class Meta:
         model = SociologicalSurvey
         exclude = ['applicant']
+
+    def clean(self):
+        cleaned_data = super(SociologicalSurveyForm, self).clean()
+
+        #  The user must filled either both or neither professional activity and profession
+        student_professional_activity = cleaned_data.get('student_professional_activity')
+        student_profession = cleaned_data.get('student_profession')
+
+        if student_profession is None and student_professional_activity is not None:
+            if student_professional_activity != professional_activity.NO_PROFESSION:
+                self.add_error('student_profession', _('field_is_required'))
+        if student_profession is not None and student_professional_activity is None:
+            self.add_error('student_professional_activity', _('field_is_required'))
+
+        conjoint_professional_activity = cleaned_data.get('conjoint_professional_activity')
+        conjoint_profession = cleaned_data.get('conjoint_profession')
+
+        if conjoint_profession is None and conjoint_professional_activity is not None:
+            if conjoint_professional_activity != professional_activity.NO_PROFESSION:
+                self.add_error('conjoint_profession', _('field_is_required'))
+        if conjoint_profession is not None and conjoint_professional_activity is None:
+            self.add_error('conjoint_professional_activity', _('field_is_required'))
+
+        return cleaned_data

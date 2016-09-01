@@ -366,6 +366,9 @@ msgstr "error(s)"
 msgid "errors_warning"
 msgstr "There are errors"
 
+msgid "error_with_form"
+msgstr "You didn't filled all the forms or the fields are incorrect."
+
 msgid "establishment"
 msgstr "Establishment"
 
@@ -377,6 +380,9 @@ msgstr "Father"
 
 msgid "female"
 msgstr "Female"
+
+msgid "field_is_required"
+msgstr "Field is required."
 
 msgid "file"
 msgstr "File"

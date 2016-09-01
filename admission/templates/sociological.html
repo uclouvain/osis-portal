@@ -48,8 +48,7 @@
     {% csrf_token %}
     {% if sociological_form.errors %}
     <div class="alert alert-danger" role="alert">
-        Vous n'avez pas rempli tout les champs obligatoires ou les champs
-        sont incorrectes.
+        {% trans 'error_with_form' %}
     </div>
     {% endif %}
 
@@ -80,7 +79,7 @@
         <div class="col-md-12">
             <label>{% trans 'father'%}</label>
         </div>
-        <div class="col-md-3 form-group">
+        <div class="col-md-2 form-group">
             {% if sociological_form.father_is_deceased.value %}
             <input type="checkbox" id="father_is_deceased" name="father_is_deceased" checked>
             {% else %}
@@ -88,7 +87,7 @@
             {% endif %}
             <label>{% trans 'deceased_male'%}</label>
         </div>
-        <div class="col-md-5 form-group">
+        <div class="col-md-3 form-group">
             <label>{% trans 'study'%}</label>
             <select name="father_education" id="father_education" class="form-control" >
                 {% for choice in sociological_form.father_education.field.choices %}
@@ -105,7 +104,7 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="col-md-4 form-group">
+        <div class="col-md-7 form-group">
             <label>{% trans 'profession'%}</label>
             <select name="father_profession" id="father_profession" class="form-control" >
                 {% for choice in sociological_form.father_profession.field.choices %}
@@ -127,7 +126,7 @@
         <div class="col-md-12">
             <label>{% trans 'mother'%}</label>
         </div>
-        <div class="col-md-3 form-group">
+        <div class="col-md-2 form-group">
             {% if sociological_form.mother_is_deceased.value %}
             <input type="checkbox" id="mother_is_deceased" name="mother_is_deceased" checked>
             {% else %}
@@ -135,7 +134,7 @@
             {% endif %}
             <label>{% trans 'deceased_female'%}</label>
         </div>
-        <div class="col-md-5 form-group">
+        <div class="col-md-3 form-group">
             <label>{% trans 'study'%}</label>
             <select name="mother_education" id="mother_education" class="form-control" >
                 {% for choice in sociological_form.mother_education.field.choices %}
@@ -150,7 +149,7 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="col-md-4 form-group">
+        <div class="col-md-7 form-group">
             <label>{% trans 'profession'%}</label>
             <select name="mother_profession" id="mother_profession" class="form-control" >
                 {% for choice in sociological_form.mother_profession.field.choices %}
@@ -172,7 +171,7 @@
         <div class="col-md-12">
             <label>{% trans 'student'%}</label>
         </div>
-        <div class="col-md-6 form-group {% if sociological_form.student_professional_activity.errors %}has-error{%endif%}">
+        <div class="col-md-5 form-group {% if sociological_form.student_professional_activity.errors %}has-error{%endif%}">
             <label>{% trans 'professional_activity'%}</label>
             <select name="student_professional_activity"
                     id="student_professional_activity"
@@ -198,7 +197,7 @@
             </span>
             {% endif %}
         </div>
-        <div class="col-md-6 form-group">
+        <div class="col-md-7 form-group">
             <label>{% trans 'profession'%}</label>
             <select name="student_profession"
                     id="student_profession"
@@ -231,7 +230,7 @@
         <div class="col-md-12">
             <label>{% trans 'conjoint'%}</label>
         </div>
-        <div class="col-md-6 form-group">
+        <div class="col-md-5 form-group">
             <label>{% trans 'professional_activity'%}</label>
             <select name="conjoint_professional_activity"
                     id="conjoint_professional_activity"
@@ -248,7 +247,7 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="col-md-6 form-group">
+        <div class="col-md-7 form-group">
             <label>{% trans 'profession'%}</label>
             <select name="conjoint_profession"
                     id="conjoint_profession"
@@ -273,7 +272,7 @@
         <div class="col-md-12">
             <label>{% trans 'grandfather_profession' %}</label>
         </div>
-        <div class="col-md-6 form-group">
+        <div class="col-md-5 form-group">
             <label>{% trans 'paternal'%}</label>
             <select name="paternal_grandfather_profession"
                     id="paternal_grandfather_profession"
@@ -290,7 +289,7 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="col-md-6 form-group">
+        <div class="col-md-7 form-group">
             <label>{% trans 'maternal'%}</label>
             <select name="maternal_grandfather_profession"
                     id="maternal_grandfather_profession"
