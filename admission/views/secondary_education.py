@@ -29,7 +29,7 @@ from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 
 from admission import models as mdl
-from admission.views.common import home
+from admission.views.common import home, documents_upload
 from reference import models as mdl_reference
 from admission.views import demande_validation
 from admission.views import tabs
@@ -313,6 +313,9 @@ def diploma_save(request):
         secondary_education = populate_secondary_education(request, secondary_education)
         secondary_education.save()
         message_success = _('msg_info_saved')
+        # Save documents
+        documents_upload(request)
+        #
         if next_step:
             return render(request, "curriculum.html", {"application":         application,
                                                        "message_success":     message_success})
@@ -719,4 +722,3 @@ def populate_secondary_education(request, secondary_education):
         secondary_education.academic_year = academic_year
 
     return secondary_education
-

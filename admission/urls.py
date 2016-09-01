@@ -102,7 +102,6 @@ urlpatterns = [
     url(r'^admission/application/delete/([0-9]+)/$', application.application_delete, name='application_delete'),
     url(r'^admission/offer_change/([0-9]+)/$', application.change_application_offer, name='change_application_offer'),
 
-    url(r'^upload/$', upload_file.upload_file, name='new_document'),
     url(r'^upload/download/(?P<pk>[0-9]+)$', upload_file.download, name='download'),
     url(r'^upload/description/$', upload_file.upload_file_description, name="upload_file_description"),
     url(r'^upload/$', upload_file.upload_document, name='upload_document'),

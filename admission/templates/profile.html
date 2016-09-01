@@ -26,7 +26,7 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-    <form method="post" action="{% url 'profile' %}" id="form_profile" enctype="multipart/form-data".>
+    <form method="post" action="{% url 'profile' %}" id="form_profile" enctype="multipart/form-data">
         {% csrf_token %}
 
         <span id="txt_message_error_profile_up"
@@ -614,9 +614,7 @@
                 {%trans 'next_step'%} : {%trans 'offer_choice'%}</a>
         {%endif%}
         </div>
-        <div id="pnl_uploaded_files" style="visibility:hidden;display:none;"></div>
-        <div id="pnl_deleted_files" style="visibility:hidden;display:none;"></div>
-        <input type="text" id="hdn_pushed" />
+        <div id="pnl_files"><div id="pnl_uploaded_files" style="visibility:hidden;display:none;" ></div></div>
     </form>
 
 

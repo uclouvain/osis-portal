@@ -258,7 +258,7 @@ def profile(request, application_id=None, message_success=None):
             applicant.registration_id = None
             applicant.last_academic_year = None
             previous_enrollment = False
-        assimilation_uploads = assimilation_criteria_view.find_list_assimilation_basic_documents()
+
 
         for key in request.POST:
 
@@ -272,38 +272,7 @@ def profile(request, application_id=None, message_success=None):
                         applicant_assimilation_criteria.criteria = criteria
                         applicant_assimilation_criteria.applicant = applicant
                         applicant_assimilation_criteria.save()
-            if key[0:26] == "uploaded_file_description_":
-                if request.POST[key]:
-                    file_description = key[26:]
-                    if request.POST["uploaded_file_name_"+file_description]:
-                        fn = request.POST["uploaded_file_name_"+file_description]
-                        # print(file_description + " / " + request.POST["uploaded_file_name_"+file_description])
-                       # file = request.POST["uploaded_file_"+file_description]
-                        file = request.FILES["uploaded_file_"+file_description]
-                        if file_description == document_type.ID_PICTURE \
-                            or file_description == document_type.ID_CARD \
-                            or file_description in assimilation_uploads:
-                            # Delete older file with the same description
-                            documents = mdl_osis_common.document_file.search(user=request.user, description=file_description)
-                            for document in documents:
-                                document.delete()
-
-
-                            # Never trust a user. They could change the hidden input values.
-                            # Ex: user, document_type, storage_duration, etc.
-                            storage_duration = 0
-                            content_type = file.content_type
-                            size = file.size
-
-                            doc_file = mdl_osis_common.document_file.DocumentFile(file_name=fn,
-                                                                                  file=file,
-                                                                                  description=file_description,
-                                                                                  storage_duration=storage_duration,
-                                                                                  application_name='admission',
-                                                                                  content_type=content_type,
-                                                                                  size=size,
-                                                                                  user=request.user)
-                            doc_file.save()
+        documents_upload(request)
 
 
         message_success = None
@@ -452,3 +421,65 @@ def get_assimilation_documents_existing(user):
             docs.extend(pictures)
 
     return docs
+
+
+def documents_upload(request):
+    assimilation_uploads = assimilation_criteria_view.find_list_assimilation_basic_documents()
+    prerequisites_uploads = [document_type.NATIONAL_DIPLOMA_RECTO,
+                             document_type.NATIONAL_DIPLOMA_VERSO,
+                             document_type.INTERNATIONAL_DIPLOMA_RECTO,
+                             document_type.INTERNATIONAL_DIPLOMA_VERSO,
+                             document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO,
+                             document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO,
+                             document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
+                             document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
+                             document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
+                             document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
+                             document_type.EQUIVALENCE,
+                             document_type.ADMISSION_EXAM_CERTIFICATE,
+                             document_type.PROFESSIONAL_EXAM_CERTIFICATE]
+    application = None
+
+    if request.POST.get('application_id'):
+        application_id = request.POST['application_id']
+        application = mdl.application.find_by_id(application_id)
+    for key in request.POST:
+        if key[0:26] == "uploaded_file_description_":
+            if request.POST[key]:
+                file_description = key[26:]
+                if request.POST["uploaded_file_name_"+file_description]:
+                    fn = request.POST["uploaded_file_name_"+file_description]
+                    file = request.FILES["uploaded_file_"+file_description]
+                    if file_description in prerequisites_uploads:
+                        documents = mdl.application_document_file.search(application, file_description)
+                        for document in documents:
+                            document.delete()
+
+                    if file_description == document_type.ID_PICTURE \
+                        or file_description == document_type.ID_CARD \
+                        or file_description in prerequisites_uploads \
+                        or file_description in assimilation_uploads:
+                        # Delete older file with the same description
+                        documents = mdl_osis_common.document_file.search(user=request.user, description=file_description)
+                        for document in documents:
+                            document.delete()
+
+                        storage_duration = 0
+                        content_type = file.content_type
+                        size = file.size
+
+                        doc_file = mdl_osis_common.document_file.DocumentFile(file_name=fn,
+                                                                              file=file,
+                                                                              description=file_description,
+                                                                              storage_duration=storage_duration,
+                                                                              application_name='admission',
+                                                                              content_type=content_type,
+                                                                              size=size,
+                                                                              user=request.user)
+                        doc_file.save()
+                        if file_description in prerequisites_uploads:
+                            adm_doc_file = mdl.application_document_file.ApplicationDocumentFile()
+                            adm_doc_file.application = application
+                            adm_doc_file.document_file = doc_file
+                            adm_doc_file.save()
+                            print(adm_doc_file.id)

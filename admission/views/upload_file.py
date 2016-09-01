@@ -40,114 +40,6 @@ from rest_framework.renderers import JSONRenderer
 
 
 @login_required
-def upload_file(request):
-    description = None
-    documents = mdl_osis_common.document_file.search(description=description, user=request.user)
-    if request.method == "POST":
-        application = None
-        if request.POST['description']:
-            description = request.POST['description']
-        if request.POST['application_id']:
-            application_id = request.POST['application_id']
-            application = mdl.application.find_by_id(application_id)
-
-        document_formset = UploadDocumentFileForm(request.POST, request.FILES)
-
-        if document_formset.validate() is None:
-            curriculum_uploads = [document_type.NATIONAL_DIPLOMA_RECTO,
-                                  document_type.NATIONAL_DIPLOMA_VERSO,
-                                  document_type.INTERNATIONAL_DIPLOMA_RECTO,
-                                  document_type.INTERNATIONAL_DIPLOMA_VERSO,
-                                  document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO,
-                                  document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO,
-                                  document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
-                                  document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
-                                  document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
-                                  document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
-                                  document_type.EQUIVALENCE,
-                                  document_type.ADMISSION_EXAM_CERTIFICATE,
-                                  document_type.PROFESSIONAL_EXAM_CERTIFICATE]
-            assimilation_uploads = assimilation_criteria_view.find_list_assimilation_basic_documents()
-
-            if description in curriculum_uploads:
-                documents = mdl.application_document_file.search(application, description)
-                for document in documents:
-                    document.delete()
-            if description == document_type.ID_PICTURE \
-                    or description == document_type.ID_CARD \
-                    or description in curriculum_uploads \
-                    or description in assimilation_uploads:
-                # Delete older file with the same description
-                documents = mdl_osis_common.document_file.search(user=request.user, description=description)
-                for document in documents:
-                    document.delete()
-
-            save_document_from_form(document_formset, request)
-            if description in curriculum_uploads:
-                adm_doc_file = mdl.application_document_file.ApplicationDocumentFile()
-                adm_doc_file.application = application
-                adm_doc_file.document_file = file
-                adm_doc_file.save()
-
-            if (description == document_type.ID_PICTURE or description == document_type.ID_CARD) \
-                    or description in assimilation_uploads:
-                tab_status = tabs.init(request)
-                applicant = mdl.applicant.find_by_user(request.user)
-                applications = mdl.application.find_by_user(request.user)
-                person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
-                person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
-                assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
-                applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
-
-                return render(request, "admission_home.html", {
-                    'applications': applications,
-                    'applicant': applicant,
-                    'tab_active': 0,
-                    'first': True,
-                    'countries': mdl_ref.country.find_all(),
-                    'tab_profile': tab_status['tab_profile'],
-                    'tab_applications': tab_status['tab_applications'],
-                    'tab_diploma': tab_status['tab_diploma'],
-                    'tab_curriculum': tab_status['tab_curriculum'],
-                    'tab_accounting': tab_status['tab_accounting'],
-                    'tab_sociological': tab_status['tab_sociological'],
-                    'tab_attachments': tab_status['tab_attachments'],
-                    'tab_submission': tab_status['tab_submission'],
-                    'main_status': 0,
-                    'picture': common.get_picture_id(request.user),
-                    'id_document': common.get_id_document(request.user),
-                    'person_legal_address': person_legal_address,
-                    'person_contact_address': person_contact_address,
-                    'assimilationCriteria': assimilation_criteria,
-                    'applicant_assimilation_criteria': applicant_assimilation_criteria,
-                    'assimilation_basic_documents': assimilation_criteria_view.find_assimilation_basic_documents(),
-                    'assimilation_documents_existing': common.get_assimilation_documents_existing(request.user)})
-            else:
-                if description in curriculum_uploads:
-                    return HttpResponseRedirect(reverse('diploma_update', args=(application.id,)))
-                else:
-                    return redirect('new_document')
-        else:
-            documents = mdl_osis_common.document_file.search(user=request.user, description=description)
-            return render(request, 'new_document.html', {
-                'form': document_formset,
-                'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
-                'description_choices': mdl.enums.document_type.DOCUMENT_TYPE_CHOICES,
-                'description': description,
-                'documents': documents})
-    else:
-        form = UploadDocumentFileForm(initial={'storage_duration': 0,
-                                               'document_type': "admission",
-                                               'user': request.user})
-        return render(request, 'new_document.html', {
-            'form': form,
-            'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
-            'description_choices': mdl.enums.document_type.DOCUMENT_TYPE_CHOICES,
-            'description': description,
-            'documents': documents})
-
-
-@login_required
 def download(request, pk):
     document = get_object_or_404(mdl_osis_common.document_file.DocumentFile, pk=pk)
     filename = document.file_name
@@ -157,6 +49,7 @@ def download(request, pk):
     return response
 
 
+@login_required
 def upload_file_description(request):
     """
     To display the scree to upload id_picture
