@@ -27,24 +27,21 @@
 """
 Utility files for mail sending
 """
-from django.core.mail import send_mail
+import logging
 
-from frontoffice.settings import DEFAULT_FROM_EMAIL
-from django.template import Template, Context
+from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from osis_common.models import message_template as message_template_mdl
-from osis_common.models import message_history as message_history_mdl
+from django.utils.translation import ugettext as _
+
 from frontoffice.settings import DEFAULT_FROM_EMAIL, LOGO_OSIS_URL, LOGO_EMAIL_SIGNATURE_URL
 from frontoffice import settings
-from django.utils import translation, timezone
-from html import unescape
-from django.utils.html import strip_tags
-from django.utils.translation import ugettext as _
 from admission import models as mdl
 from osis_common.messaging import send_message
 
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 def send_mail_activation(request, activation_code, applicant, template_reference):
+    logger.info('Sending mail activation to : {} '.format(applicant.user.email))
     message_content = {}
     message_content['html_template_ref'] = '{0}_html'.format(template_reference)
     message_content['txt_template_ref'] = '{0}_txt'.format(template_reference)
@@ -70,6 +67,7 @@ def send_mail_activation(request, activation_code, applicant, template_reference
 
 
 def new_password(request, activation_code, email):
+    logger.info('Sending new password to : {} '.format(email))
     activation_link = request.scheme \
                       + "://" + request.get_host() \
                       + "/admission/admission/new_password_form/" \
@@ -96,10 +94,13 @@ def new_password(request, activation_code, email):
         str('Le service des inscription de l\'UCL\n\n'),
         str('http://www.uclouvain.be/inscriptionenligne')
     ])
-
+    if not settings.EMAIL_PRODUCTION_SENDING:
+        receiver = settings.COMMON_EMAIL_RECEIVER
+    else:
+        receiver = email
     send_mail(subject=subject,
               message=message,
-              recipient_list=[email],
+              recipient_list=[receiver],
               html_message=html_message,
               from_email=DEFAULT_FROM_EMAIL)
 
