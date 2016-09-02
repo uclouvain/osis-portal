@@ -55,7 +55,12 @@ STATELESS_CERTIFICATE = 'STATELESS_CERTIFICATE'
 FOREIGN_INSCRIPTION_CERTIFICATE = 'FOREIGN_INSCRIPTION_CERTIFICATE'
 SUBSIDIARY_PROTECTION_DECISION = 'SUBSIDIARY_PROTECTION_DECISION'
 RESIDENCE_PERMIT = 'RESIDENCE_PERMIT'
-PAYCHECK = 'PAYCHECK'
+PAYCHECK_1 = 'PAYCHECK_1'
+PAYCHECK_2 = 'PAYCHECK_2'
+PAYCHECK_3 = 'PAYCHECK_3'
+PAYCHECK_4 = 'PAYCHECK_4'
+PAYCHECK_5 = 'PAYCHECK_5'
+PAYCHECK_6 = 'PAYCHECK_6'
 CPAS = 'CPAS'
 TUTORSHIP_CERTIFICATE = 'TUTORSHIP_CERTIFICATE'
 OTHER = 'OTHER'
@@ -91,7 +96,12 @@ DOCUMENT_TYPE_CHOICES = ((ID_CARD, 'identity_card', '', ''),
                          (FOREIGN_INSCRIPTION_CERTIFICATE, _('foreign_inscription_certificate'), '', ''),
                          (SUBSIDIARY_PROTECTION_DECISION, _('subsidiary_protection_decision'), '', ''),
                          (RESIDENCE_PERMIT, _('residence_permit'), '', ''),
-                         (PAYCHECK, _('paycheck'), '', ''),
+                         (PAYCHECK_1, _('paycheck_1'), '', ''),
+                         (PAYCHECK_2, _('paycheck_2'), '', ''),
+                         (PAYCHECK_3, _('paycheck_3'), '', ''),
+                         (PAYCHECK_4, _('paycheck_4'), '', ''),
+                         (PAYCHECK_5, _('paycheck_5'), '', ''),
+                         (PAYCHECK_6, _('paycheck_6'), '', ''),
                          (CPAS, _('cpas'), '', ''),
                          (TUTORSHIP_CERTIFICATE, _('tutorship_certificate'), '', ''),
                          (OTHER, _('other'), '', ''),

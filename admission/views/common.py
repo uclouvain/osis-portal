@@ -259,9 +259,7 @@ def profile(request, application_id=None, message_success=None):
             applicant.last_academic_year = None
             previous_enrollment = False
 
-
         for key in request.POST:
-
             if key[0:22] == "assimilation_criteria_":
                 if request.POST[key] == "true":
                     criteria_id = key[22:]
@@ -273,7 +271,6 @@ def profile(request, application_id=None, message_success=None):
                         applicant_assimilation_criteria.applicant = applicant
                         applicant_assimilation_criteria.save()
         documents_upload(request)
-
 
         message_success = None
 
@@ -405,8 +402,8 @@ def get_id_document(user):
     return None
 
 
-def get_document_assimilation(user, document_type):
-    pictures = mdl_osis_common.document_file.search(user, document_type)
+def get_document_assimilation(user, description):
+    pictures = mdl_osis_common.document_file.search(user, description)
     if pictures:
         return ''.join(('/admission', pictures.reverse()[0].file.url))
     return None
@@ -415,8 +412,8 @@ def get_document_assimilation(user, document_type):
 def get_assimilation_documents_existing(user):
     assimilation_basic_documents = assimilation_criteria_view.find_list_assimilation_basic_documents()
     docs = []
-    for document_type in assimilation_basic_documents:
-        pictures = mdl_osis_common.document_file.search(user, document_type)
+    for document_type_description in assimilation_basic_documents:
+        pictures = mdl_osis_common.document_file.search(user, document_type_description)
         if pictures:
             docs.extend(pictures)
 
@@ -460,7 +457,8 @@ def documents_upload(request):
                         or file_description in prerequisites_uploads \
                         or file_description in assimilation_uploads:
                         # Delete older file with the same description
-                        documents = mdl_osis_common.document_file.search(user=request.user, description=file_description)
+                        documents = mdl_osis_common.document_file.search(user=request.user,
+                                                                         description=file_description)
                         for document in documents:
                             document.delete()
 
@@ -482,4 +480,3 @@ def documents_upload(request):
                             adm_doc_file.application = application
                             adm_doc_file.document_file = doc_file
                             adm_doc_file.save()
-                            print(adm_doc_file.id)

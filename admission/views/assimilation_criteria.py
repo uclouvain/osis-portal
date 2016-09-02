@@ -119,6 +119,11 @@ def find_assimilation_basic_documents():
     list_document_type = []
     list_document_type = criteria1(list_document_type)
     list_document_type = criteria2(list_document_type)
+    list_document_type = criteria3(list_document_type)
+    list_document_type = criteria4(list_document_type)
+    list_document_type = criteria5(list_document_type)
+    list_document_type = criteria6(list_document_type)
+    list_document_type = criteria7(list_document_type)
 
     return list_document_type
 
@@ -147,7 +152,12 @@ def find_list_assimilation_basic_documents():
             document_type.FOREIGN_INSCRIPTION_CERTIFICATE,
             document_type.SUBSIDIARY_PROTECTION_DECISION,
             document_type.RESIDENCE_PERMIT,
-            document_type.PAYCHECK,
+            document_type.PAYCHECK_1,
+            document_type.PAYCHECK_2,
+            document_type.PAYCHECK_3,
+            document_type.PAYCHECK_4,
+            document_type.PAYCHECK_5,
+            document_type.PAYCHECK_6,
             document_type.CPAS,
             document_type.TUTORSHIP_CERTIFICATE,
             document_type.OTHER,
@@ -158,46 +168,28 @@ def find_list_assimilation_basic_documents():
 
 def criteria3(list_document_type):
     assimilation_doc = AssimilationDoc()
-    assimilation_doc.criteria_id = 2
-    assimilation_doc.descriptions = [document_type.ATTACHMENT_26]
+    assimilation_doc.criteria_id = 3
     assimilation_doc.first = True
+    assimilation_doc.descriptions = [document_type.FAMILY_COMPOSITION,
+                                     document_type.PAYCHECK_1, document_type.PAYCHECK_2,
+                                     document_type.PAYCHECK_3, document_type.PAYCHECK_4,
+                                     document_type.PAYCHECK_5, document_type.PAYCHECK_6, document_type.ID_CARD]
     list_document_type.append(assimilation_doc)
     assimilation_doc = AssimilationDoc()
-    assimilation_doc.criteria_id = 2
-    assimilation_doc.descriptions = [document_type.REFUGEE_CARD,
-                                     document_type.FAMILY_COMPOSITION,
-                                     document_type.BIRTH_CERTIFICATE]
+    assimilation_doc.criteria_id = 3
+    assimilation_doc.descriptions = [document_type.RESIDENT_CERTIFICATE,
+                                     document_type.PAYCHECK_1, document_type.PAYCHECK_2,
+                                     document_type.PAYCHECK_3, document_type.PAYCHECK_4,
+                                     document_type.PAYCHECK_5, document_type.PAYCHECK_6, document_type.ID_CARD]
     list_document_type.append(assimilation_doc)
-    #
-    assimilation_doc = AssimilationDoc()
-    assimilation_doc.criteria_id = 2
-    assimilation_doc.descriptions = [document_type.REFUGEE_CARD,
-                                     document_type.RESIDENT_CERTIFICATE,
-                                     document_type.BIRTH_CERTIFICATE]
-    list_document_type.append(assimilation_doc)
-    #
-    assimilation_doc = AssimilationDoc()
-    assimilation_doc.criteria_id = 2
-    assimilation_doc.descriptions = [document_type.FOREIGN_INSCRIPTION_CERTIFICATE,
-                                     document_type.SUBSIDIARY_PROTECTION_DECISION,
-                                     document_type.RESIDENCE_PERMIT]
-    list_document_type.append(assimilation_doc)
-    #
-    assimilation_doc = AssimilationDoc()
-    assimilation_doc.criteria_id = 2
-    assimilation_doc.descriptions = [document_type.STATELESS_CERTIFICATE, ]
-    list_document_type.append(assimilation_doc)
-    return list_document_type
-
-
-def criteria3(list_document_type):
     return list_document_type
 
 
 def criteria4(list_document_type):
     assimilation_doc = AssimilationDoc()
     assimilation_doc.criteria_id = 4
-    assimilation_doc.descriptions = [document_type.CPAS,]
+    assimilation_doc.first = True
+    assimilation_doc.descriptions = [document_type.CPAS]
     list_document_type.append(assimilation_doc)
     return list_document_type
 
@@ -205,6 +197,7 @@ def criteria4(list_document_type):
 def criteria5(list_document_type):
     assimilation_doc = AssimilationDoc()
     assimilation_doc.criteria_id = 5
+    assimilation_doc.first = True
     assimilation_doc.descriptions = [document_type.ID_CARD, document_type.TUTORSHIP_CERTIFICATE]
     list_document_type.append(assimilation_doc)
     return list_document_type
@@ -213,6 +206,7 @@ def criteria5(list_document_type):
 def criteria6(list_document_type):
     assimilation_doc = AssimilationDoc()
     assimilation_doc.criteria_id = 6
+    assimilation_doc.first = True
     assimilation_doc.descriptions = [document_type.SCHOLARSHIP_CFWB, document_type.TUTORSHIP_CERTIFICATE]
     list_document_type.append(assimilation_doc)
     return list_document_type
@@ -221,7 +215,8 @@ def criteria6(list_document_type):
 def criteria7(list_document_type):
     assimilation_doc = AssimilationDoc()
     assimilation_doc.criteria_id = 7
-    assimilation_doc.descriptions = [document_type.RESIDENT_LONG_DURATION,]
+    assimilation_doc.first = True
+    assimilation_doc.descriptions = [document_type.RESIDENT_LONG_DURATION]
     list_document_type.append(assimilation_doc)
     return list_document_type
 

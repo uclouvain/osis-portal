@@ -117,7 +117,7 @@
                     <div class="col-md-2">
                         <label>{%trans 'birth_day'%} *</label>
                         <input type="text" class="form-control" id="txt_birth_date" name="birth_date"
-                               value="{{ applicant.birth_date  | default_if_none:'' | date:"d/m/Y" }}">
+                               value="{{ applicant.birth_date  | default_if_none:'' | date:'d/m/Y' }}">
                         (format : {% trans 'format_date'%})
                         <font class="error" id="msg_error_birth_date">{{ applicant_form.birth_date.errors|striptags }}</font>
                         </div>
@@ -233,6 +233,7 @@
                                             <input type="radio" id="assimilation_criteria_{{forloop.counter}}_false"
                                                    name="assimilation_criteria_{{criteria.id}}"
                                                    value="false"
+                                                   {{applicant_assimilation_criteria|assimilation_criteria_radio:criteria.id }}
                                             > {% trans 'no' %}
                                         </label>
                                     </div>
@@ -241,7 +242,7 @@
 
                             <div class="row">
                                 <div id="pnl_criteria_{{criteria.id}}"
-                                     {{applicant_assimilation_criteria|div_visibility:criteria.id }} >
+                                     style="{{applicant_assimilation_criteria|div_visibility:criteria.id }}" >
                                     <br>
                                     <div {% if assimilation_basic_documents|table_display:criteria.id%} class="panel panel-default" {%endif%}>
 
@@ -321,10 +322,30 @@
                                         {%endif%}
                                     {%endfor%}
                                     {% if assimilation_basic_documents|table_display:criteria.id%}
+                                        {%if criteria.id == 5%}
+                                            <tr><td colspan="2">&nbsp;&nbsp;{% trans 'and' as and_upper%} {{and_upper| upper}}</td></tr>
+                                            <tr><td colspan="2">
+                                                <label>Documents demandés pour l’étudiant à adapter pour la personne concernée suivant le critère :</label>
+                                                <select id="slt_criteria_5" class="form-control" >
+                                                    <option value="">-</option>
+                                                    <option value="1">{% trans 'criteria' %} 1</option>
+                                                    <option value="2">{% trans 'criteria' %} 2</option>
+                                                    <option value="3">{% trans 'criteria' %} 3</option>
+                                                    <option value="4">{% trans 'criteria' %} 4</option>
+                                                </select><div id="pnl_other_criteria"></div>
+                                                <br>
+
+                                                </td>
+                                            </tr>
+
+                                            {%endif%}
                                     </table>
                                     <br>
                                     {%endif%}
                                         </div>
+
+
+
                                 </div>
                             </div>
                             {% endfor %}

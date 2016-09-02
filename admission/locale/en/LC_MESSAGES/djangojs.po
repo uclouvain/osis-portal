@@ -67,10 +67,10 @@ msgid "residence_permit"
 msgstr "residence_permit"
 
 msgid "paycheck"
-msgstr "paycheck"
+msgstr "Paycheck"
 
 msgid "cpas"
-msgstr "cpas"
+msgstr "CPAS"
 
 msgid "tutorship_certificate"
 msgstr "tutorship_certificate"
@@ -83,3 +83,24 @@ msgstr "scholarship_development_cooperation"
 
 msgid "change_document"
 msgstr "Modify the document"
+
+msgid "paycheck_1"
+msgstr "Paycheck 1"
+
+msgid "paycheck_2"
+msgstr "Paycheck 2"
+
+msgid "paycheck_3"
+msgstr "Paycheck 3"
+
+msgid "paycheck_4"
+msgstr "Paycheck 4"
+
+msgid "paycheck_5"
+msgstr "Paycheck 5"
+
+msgid "paycheck_6"
+msgstr "Paycheck 6"
+
+msgid "concerned_person"
+msgstr "for concerned person"

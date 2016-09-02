@@ -32,9 +32,9 @@ register = template.Library()
 @register.filter
 def div_visibility(applicant_assimilation_criteria, criteria_id):
     for applicant_criteria_div in applicant_assimilation_criteria:
-        if applicant_criteria_div.id == criteria_id:
-            return "style='visibility:visible;display:block"
-    return "style='visibility:visible;display:block"
+        if applicant_criteria_div.criteria.id == criteria_id:
+            return "visibility:visible;display:block;"
+    return "visibility:hidden;display:none;"
 
 
 @register.filter
@@ -59,4 +59,13 @@ def table_display(assimilation_basic_documents, criteria_id):
         if doc.criteria_id == criteria_id:
             return True
     return False
+
+
+@register.filter
+def assimilation_criteria_radio(applicant_assimilation_criteria, criteria_id):
+    for applicant_criteria_div in applicant_assimilation_criteria:
+        if applicant_criteria_div.criteria.id == criteria_id:
+            return " "
+    return "checked"
+
 
