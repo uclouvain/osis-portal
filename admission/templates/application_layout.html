@@ -648,6 +648,13 @@
       if(btn_pushed_val.startsWith('btn_load_assimilation_doc_') || btn_pushed_val.startsWith('bt_load_doc_')){
         $('#'+btn_pushed_val).attr('title', gettext('change_document'));
         $('#spn_'+btn_pushed_val).attr('class', 'glyphicon glyphicon-ok-circle');
+        //find other buttons concerned by the same document description
+        $('[id^="spn_btn_load_assimilation_doc_"]').each(function(){
+           if(($(this).attr("id")).indexOf('_'+ description) >0 ){
+                $(this).attr('title', gettext('change_document'));
+                $(this).attr('class', 'glyphicon glyphicon-ok-circle');
+           }
+        });
       }
 
       return true;
