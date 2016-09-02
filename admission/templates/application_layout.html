@@ -276,28 +276,14 @@
         }
     });
 
-    $("#lnk_redirect_picture").click(function() {
-         $('#hdn_description').val('ID_PICTURE');
-         $('#lbl_description_label').text(gettext('ID_PICTURE'.toLowerCase()));
-    });
-    $("#lnk_modify_picture").click(function() {
-        $('#hdn_description').val('ID_PICTURE');
-    });
     $("#btn_modify_picture").click(function(event) {
         update_description('ID_PICTURE', $(event.target));
-
+        display_existing_files('ID_PICTURE');
     });
 
-    $("#lnk_modify_id_document").click(function() {
-        $('#hdn_description').val('ID_CARD');
-        $('#lbl_description_label').text(gettext('ID_CARD'.toLowerCase()));
-    });
     $("#btn_modify_id_document").click(function(event) {
         update_description('ID_CARD',$(event.target));
-
-    });
-    $("#btn_documents_upload_diploma").click(function() {
-        save('form_secondary_education');
+        display_existing_files('ID_CARD');
     });
 
     $("#txt_birth_date").blur(function() {
@@ -545,29 +531,7 @@
             var pos = id.indexOf('_id_')
             var description = id.substring(pos+4)
             update_description(description, target);
-            // To clear the div
-            $("#pnl_existing_files").html('')
-            $("#pnl_existing_files").find("a")
-                .remove()
-                .end()
-            //
-            $.ajax({
-                url: "/admission/document?description=" + description
-
-              }).then(function(data) {
-
-                if(data.length > 0 ){
-                    $('#pnl_existing_files').append("<br>");
-                    $('#pnl_existing_files').append('Existing file :');
-                    $.each(data, function(key, value) {
-                        $('#pnl_existing_files').append("<br>");
-                        $('#pnl_existing_files').append($("<a></a>").attr("href", "upload/download/"+value.id+"")
-                                                                    .attr("target","_blank")
-                                                                    .append(value.file_name));
-
-                    });
-                }
-              });
+            display_existing_files(description)
 
             }
         }
@@ -670,5 +634,58 @@
     //***************************
     //File upload - end
     //***************************
+    function display_existing_files(description){
+        // To clear the div
+        $("#pnl_existing_files").html('')
+        $("#pnl_existing_files").find("a")
+            .remove()
+            .end()
+        //
+        $.ajax({
+            url: "/admission/document?description=" + description
+
+          }).then(function(data) {
+
+            if(data.length > 0 ){
+                $('#pnl_existing_files').append("<br>");
+                $('#pnl_existing_files').append('Existing file :');
+                $.each(data, function(key, value) {
+                    var url = build_url(value.id);
+                    $('#pnl_existing_files').append("<br>");
+                    $('#pnl_existing_files').append($("<a></a>").attr("href", url)
+                                                                .attr("target","_blank")
+                                                                .append(value.file_name));
+
+
+                });
+            }
+          });
+    }
+
+    function build_url(value){
+        /*Todo try to use django url directly in href - Leila*/
+        var loc = location.href;
+
+        var count = 0;
+        var pos = loc.indexOf('/admission/');
+
+        pos = pos + 12;
+        while ( pos != -1 ) {
+           count++;
+           pos = loc.indexOf( "/",pos + 1 );
+        }
+        count=count-1;
+        var url = "upload/download/"+value;
+        var cpt = 0;
+        while (cpt< count){
+            url = "../" + url
+            cpt=cpt+1;
+
+        }
+        return url;
+    }
+
+
+
     </script>
 {% endblock %}

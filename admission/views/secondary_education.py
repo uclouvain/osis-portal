@@ -692,8 +692,11 @@ def populate_secondary_education(request, secondary_education):
         secondary_education.international_diploma = request.POST.get('international_diploma')
         if request.POST.get('international_diploma_country') \
                 and request.POST.get('international_diploma_country') != "-":
-            international_diploma_country = mdl_reference.country\
-                .find_by_id(int(request.POST.get('international_diploma_country')))
+            country_id = request.POST.get('international_diploma_country')
+            international_diploma_country = None
+            if country_id and int(country_id) >= 0:
+                international_diploma_country = mdl_reference.country\
+                    .find_by_id(int(country_id))
             secondary_education.international_diploma_country = international_diploma_country
         if request.POST.get('other_language_regime') \
             and request.POST.get('other_language_regime') == "on" \

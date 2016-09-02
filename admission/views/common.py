@@ -135,7 +135,10 @@ def profile(request, application_id=None, message_success=None):
             applicant.birth_place = None
         if request.POST.get('birth_country'):
             birth_country_id = request.POST['birth_country']
-            birth_country = mdl_ref.country.find_by_id(birth_country_id)
+            if birth_country_id and int(birth_country_id) >= 0:
+                birth_country = mdl_ref.country.find_by_id(birth_country_id)
+            else:
+                birth_country = None
             applicant.birth_country = birth_country
         else:
             applicant.birth_country = None
@@ -157,7 +160,10 @@ def profile(request, application_id=None, message_success=None):
             applicant.spouse_name = None
         if request.POST.get('nationality') and not request.POST.get('nationality') == "-1":
             country_id = request.POST['nationality']
-            country = mdl_ref.country.find_by_id(country_id)
+            if country_id and int(country_id) >= 0:
+                country = mdl_ref.country.find_by_id(country_id)
+            else:
+                country = None
             applicant.nationality = country
         else:
             applicant.nationality = None
@@ -197,7 +203,9 @@ def profile(request, application_id=None, message_success=None):
             person_legal_address.city = ''
         if request.POST.get('legal_adr_country') and not request.POST.get('legal_adr_country') == "-1":
             country_id = request.POST['legal_adr_country']
-            country = mdl_ref.country.find_by_id(country_id)
+            country = None
+            if country_id and int(country_id) >= 0:
+                country = mdl_ref.country.find_by_id(country_id)
             person_legal_address.country = country
         else:
             applicant_form.errors['legal_adr_country'] = _('mandatory_field')
@@ -231,7 +239,9 @@ def profile(request, application_id=None, message_success=None):
                 person_contact_address.city = None
             if request.POST['contact_adr_country']:
                 country_id = request.POST['contact_adr_country']
-                country = mdl_ref.country.find_by_id(country_id)
+                country = None
+                if country_id and int(country_id) >= 0:
+                    country = mdl_ref.country.find_by_id(country_id)
                 person_contact_address.country = country
             else:
                 person_contact_address.country = None
@@ -263,13 +273,21 @@ def profile(request, application_id=None, message_success=None):
             if key[0:22] == "assimilation_criteria_":
                 if request.POST[key] == "true":
                     criteria_id = key[22:]
+                    # Delete other previous criteria encoded
+                    criterias = mdl.applicant_assimilation_criteria.find_by_applicant(applicant)
+                    for c in criterias:
+                        if c.criteria.id != int(criteria_id):
+                            c.delete()
+                    #
                     criteria = mdl_ref.assimilation_criteria.find_by_id(criteria_id)
                     if criteria:
-                        applicant_assimilation_criteria = \
-                            mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria()
-                        applicant_assimilation_criteria.criteria = criteria
-                        applicant_assimilation_criteria.applicant = applicant
-                        applicant_assimilation_criteria.save()
+                        applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.search(applicant, criteria)
+                        if not applicant_assimilation_criteria:
+                            applicant_assimilation_criteria = \
+                                mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria()
+                            applicant_assimilation_criteria.criteria = criteria
+                            applicant_assimilation_criteria.applicant = applicant
+                            applicant_assimilation_criteria.save()
         documents_upload(request)
 
         message_success = None
