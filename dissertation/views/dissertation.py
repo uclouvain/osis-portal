@@ -70,14 +70,14 @@ def dissertation_detail(request, pk):
     off = memory.offer_year_start.offer
     offer_pro = offer_proposition.search_by_offer(off)
     count = dissertation.count_submit_by_user(student, off)
-    if offer_pro.start_edit_title < timezone.now().date() < offer_pro.end_edit_title:
+    if offer_pro.start_edit_title <= timezone.now().date() <= offer_pro.end_edit_title:
         check_edit = True
     else:
         check_edit = False
     if memory.author != student:
         return redirect('dissertations')
     else:
-        if offer_pro.start_jury_visibility < timezone.now().date() < offer_pro.end_jury_visibility:
+        if offer_pro.start_jury_visibility <= timezone.now().date() <= offer_pro.end_jury_visibility:
             jury_visibility = True
             if offer_pro.student_can_manage_readers:
                 manage_readers = True
@@ -123,7 +123,7 @@ def dissertation_edit(request, pk):
     offers = mdl.offer.find_by_student(student)
     off = memory.offer_year_start.offer
     offer_pro = offer_proposition.search_by_offer(off)
-    if offer_pro.start_edit_title < timezone.now().date() < offer_pro.end_edit_title:
+    if offer_pro.start_edit_title <= timezone.now().date() <= offer_pro.end_edit_title:
         check_edit = True
     else:
         check_edit = False
