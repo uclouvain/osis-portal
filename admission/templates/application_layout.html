@@ -511,10 +511,23 @@
 
         }
         if(id.endsWith("_true")){
+            //Hide all pnl_criteria to let only one visible
+            $('[id^="pnl_criteria_"]').each(function(){
+                var target_pnl = $(this);
+                var id_pnl = target_pnl.attr("id");
+
+                var pos = id_pnl.indexOf('pnl_criteria_')
+                var criteria_id = id_pnl.substring(pos+13)
+
+                if ($('input[type=radio][name=assimilation_criteria_'+criteria_id+']:checked').attr('value') == 'true'){
+                   if(id != 'assimilation_criteria_'+criteria_id+'_true'){
+                        $('#assimilation_criteria_'+criteria_id+'_false').prop( "checked", true);
+                   }
+                }
+                $(this).css('visibility', 'hidden').css('display','none');
+            });
             var criteria = id.replace('assimilation_criteria_','');
             criteria = criteria.replace('_true','');
-
-            var id_sel_criteria = "criterias";
             $("#pnl_criteria_"+criteria).css('visibility', 'visible').css('display','block');
 
         }
