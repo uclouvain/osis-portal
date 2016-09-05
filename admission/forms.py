@@ -205,8 +205,6 @@ class ApplicantForm(forms.Form):
         return cleaned_data
 
 
-
-
 class AccessAccountForm(forms.Form):
     email = forms.EmailField(required=True)
 
