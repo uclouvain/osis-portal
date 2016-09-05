@@ -47,6 +47,8 @@ urlpatterns = [
         name='edit_reader'),
     url(r'^dissertation_new$', dissertation.dissertation_new,
         name='dissertation_new'),
+    url(r'^dissertation_reader_delete/(?P<pk>[0-9]+)$', dissertation.dissertation_reader_delete,
+        name='dissertation_reader_delete'),
     url(r'^dissertations_search$', dissertation.dissertations_search,
         name='dissertations_search'),
     url(r'^dissertation_to_dir_submit/(?P<pk>[0-9]+)$', dissertation.dissertation_to_dir_submit,
