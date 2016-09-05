@@ -83,7 +83,7 @@ def home(request):
                 'tab_attachments': tab_status['tab_attachments'],
                 'tab_submission': tab_status['tab_submission'],
                 'main_status': 0,
-
+                'picture': get_picture_id(request.user),
                 'id_document': get_id_document(request.user),
                 'person_legal_address': person_legal_address,
                 'person_contact_address': person_contact_address,
@@ -364,7 +364,7 @@ def profile(request, application_id=None, message_success=None):
         'tab_attachments': tab_status['tab_attachments'],
         'tab_submission': tab_status['tab_submission'],
         'applications': mdl.application.find_by_user(request.user),
-
+        'picture': get_picture_id(request.user),
         'id_document': get_id_document(request.user),
         'assimilation_basic_documents': assimilation_criteria_view.find_assimilation_basic_documents(),
         'assimilation_documents_existing': get_assimilation_documents_existing(request.user),

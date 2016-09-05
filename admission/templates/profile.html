@@ -91,7 +91,7 @@
                                     {% if picture %}
                                          <button type="button"
                                            id="btn_modify_picture"
-                                           class="btn"
+                                           class="btn btn-success"
                                            title="{% trans 'change_picture'%}"
                                            data-toggle="modal" data-target="#pnl_upload_documents">
                                              <span class="glyphicon glyphicon-ok-circle" aria-hidden="true" id="spn_modify_picture">&nbsp;Upload</span>
@@ -265,7 +265,7 @@
                                                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                                                     <td>
                                                                         <button type="button"
-                                                                                class="btn class_upload_assimilation"
+                                                                                class="{{assimilation_documents_existing|button_class_color:d }}"
                                                                                 id="btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}"
                                                                                 title="{{assimilation_documents_existing|button_title:d }}"
                                                                                 data-toggle="modal"
@@ -296,7 +296,7 @@
                                                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                                                     <td>
                                                                         <button type="button"
-                                                                                class="btn class_upload_assimilation"
+                                                                                class="{{assimilation_documents_existing|button_class_color:d }}"
                                                                                 id="btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}"
                                                                                 title="{{assimilation_documents_existing|button_title:d }}"
                                                                                 style="margin-bottom:5px;"
@@ -383,7 +383,7 @@
                                     {% if id_document %}
                                             <button type="button"
                                                     id="btn_modify_id_document"
-                                                    class="btn"
+                                                    class="btn btn-success"
                                                     title="{% trans 'change_document'%}"
                                                     data-toggle="modal"
                                                     data-target="#pnl_upload_documents">
