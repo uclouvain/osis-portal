@@ -29,14 +29,12 @@ from base.models import offer_enrollment
 
 
 class OfferAdmin(admin.ModelAdmin):
-    list_display = ('title', 'changed')
     fieldsets = ((None, {'fields': ('title',)}),)
     search_fields = ['title']
 
 
 class Offer(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    changed = models.DateTimeField(null=True)
     title = models.CharField(max_length=255)
 
     def __str__(self):
