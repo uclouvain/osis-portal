@@ -37,6 +37,7 @@ from reference import models as mdl_ref
 from django.core.urlresolvers import reverse
 from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
+from django.core.files.base import File as DjangoFile
 
 
 @login_required
@@ -111,7 +112,7 @@ def upload_document(request):
 
 
 @login_required
-def delete(request, pk):
+def delete_old(request, pk):
     document = get_object_or_404(mdl_osis_common.document_file.DocumentFile, pk=pk)
     if document:
         description = document.description
@@ -177,4 +178,72 @@ def find_by_description(request):
     return JSONResponse(serializer.data)
 
 
+def save_uploaded_file(request):
+    data = request.POST
+    application = None
 
+    if request.method == 'POST':
+        if request.POST.get('application_id'):
+            application = mdl.application.find_by_id(request.POST['application_id'])
+        file_selected = request.FILES['file']
+        file_s = file_selected
+        file_name = file_selected.name
+        content_type = file_selected.content_type
+        size = file_selected.size
+
+        description = data['description']
+        storage_duration = 0
+        curriculum_uploads = [document_type.NATIONAL_DIPLOMA_RECTO,
+                              document_type.NATIONAL_DIPLOMA_VERSO,
+                              document_type.INTERNATIONAL_DIPLOMA_RECTO,
+                              document_type.INTERNATIONAL_DIPLOMA_VERSO,
+                              document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO,
+                              document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO,
+                              document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
+                              document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
+                              document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
+                              document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
+                              document_type.EQUIVALENCE,
+                              document_type.ADMISSION_EXAM_CERTIFICATE,
+                              document_type.PROFESSIONAL_EXAM_CERTIFICATE]
+        assimilation_uploads = assimilation_criteria_view.find_list_assimilation_basic_documents()
+
+        if description in curriculum_uploads:
+            documents = mdl.application_document_file.search(application, description)
+            for document in documents:
+                document.delete()
+        if description == document_type.ID_PICTURE \
+                or description == document_type.ID_CARD \
+                or description in curriculum_uploads \
+                or description in assimilation_uploads:
+            # Delete older file with the same description
+            documents = mdl_osis_common.document_file.search(user=request.user, description=description)
+            for document in documents:
+                document.delete()
+
+        doc_file = mdl_osis_common.document_file.DocumentFile(file_name=file_name,
+                                                              file=file_s,
+                                                              description=description,
+                                                              storage_duration=storage_duration,
+                                                              application_name='admission',
+                                                              content_type=content_type,
+                                                              size=size,
+                                                              user=request.user)
+        doc_file.save()
+        if description in curriculum_uploads:
+            adm_doc_file = mdl.application_document_file.ApplicationDocumentFile()
+            adm_doc_file.application = application
+            adm_doc_file.document_file = doc_file
+            adm_doc_file.save()
+
+    return ''
+
+
+@login_required
+def delete_document_file(request):
+    pk = request.POST.get('document_file_id')
+    if pk:
+        document = get_object_or_404(mdl_osis_common.document_file.DocumentFile, pk=pk)
+        if document:
+            document.delete()
+    return ''

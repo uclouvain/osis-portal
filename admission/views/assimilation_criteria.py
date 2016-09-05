@@ -30,50 +30,26 @@ from admission.models.enums import document_type
 import json
 
 
-# class JSONResponse(HttpResponse):
-#     def __init__(self, data, **kwargs):
-#         content = JSONRenderer().render(data)
-#         kwargs['content_type'] = 'application/json'
-#         super(JSONResponse, self).__init__(content, **kwargs)
-#
-#
-# class AssimilationDocSerializer(serializers.Serializer):
-#     description = serializers.CharField(max_length=200)
-
-
 def find_by_criteria(request):
-    criteria = request.GET['criteria']
-    list_document_type = []
-    if criteria == "1":
-        list_document_type = criteria1(list_document_type)
-    if criteria == "2":
-        list_document_type = criteria2(list_document_type)
-    if criteria == "3":
-        list_document_type = criteria3(list_document_type)
-    if criteria == "4":
-        list_document_type = criteria4(list_document_type)
-    if criteria == "5":
-        list_document_type = criteria5(list_document_type)
-    if criteria == "6":
-        list_document_type = criteria6(list_document_type)
-    if criteria == "7":
-        list_document_type = criteria7(list_document_type)
+    criteria_param = request.GET['criteria']
+    criteria = int(criteria_param)
+    list_document_type = find_list_document_type_by_criteria(criteria)
     serializer = AssimilationDocSerializer(list_document_type, many=True)
 
     return JSONResponse(serializer.data)
 
 
 def criteria1(list_document_type):
-        assimilation_doc = AssimilationDoc()
-        assimilation_doc.criteria_id = 1
-        assimilation_doc.descriptions = [document_type.RESIDENT_LONG_DURATION]
-        assimilation_doc.first = True
-        list_document_type.append(assimilation_doc)
-        assimilation_doc = AssimilationDoc()
-        assimilation_doc.criteria_id = 1
-        assimilation_doc.descriptions = [document_type.ID_FOREIGN_UNLIMITED]
-        list_document_type.append(assimilation_doc)
-        return list_document_type
+    assimilation_doc = AssimilationDoc()
+    assimilation_doc.criteria_id = 1
+    assimilation_doc.descriptions = [document_type.RESIDENT_LONG_DURATION]
+    assimilation_doc.first = True
+    list_document_type.append(assimilation_doc)
+    assimilation_doc = AssimilationDoc()
+    assimilation_doc.criteria_id = 1
+    assimilation_doc.descriptions = [document_type.ID_FOREIGN_UNLIMITED]
+    list_document_type.append(assimilation_doc)
+    return list_document_type
 
 
 def criteria2(list_document_type):
@@ -221,5 +197,22 @@ def criteria7(list_document_type):
     return list_document_type
 
 
+def find_list_document_type_by_criteria(criteria):
+    list_document_type = []
+    if criteria == 1:
+        list_document_type = criteria1(list_document_type)
+    if criteria == 2:
+        list_document_type = criteria2(list_document_type)
+    if criteria == 3:
+        list_document_type = criteria3(list_document_type)
+    if criteria == 4:
+        list_document_type = criteria4(list_document_type)
+    if criteria == 5:
+        list_document_type = criteria5(list_document_type)
+    if criteria == 6:
+        list_document_type = criteria6(list_document_type)
+    if criteria == 7:
+        list_document_type = criteria7(list_document_type)
+    return list_document_type
 
 

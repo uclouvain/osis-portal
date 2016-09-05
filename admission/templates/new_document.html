@@ -25,49 +25,40 @@
  * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<!-- UploadFile modal -->
-<div class="modal fade" id="pnl_upload_documents"
-     tabindex="-1" role="dialog" >
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
+    <!-- UploadFile modal -->
+    <div class="modal fade" id="pnl_upload_documents"
+         tabindex="-1" role="dialog" >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="post" enctype="multipart/form-data" >
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="bt_close_upload_score_modal"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="uploadScroresLabel">
+                            <label id="lbl_description_label"></label>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        {% include "uploading/upload_file_form.html" %}
+                        {% for document in assimilation_documents_existing%}
+                            {% if display_link%}
+                                <a href="{% url 'download' pk=document.pk %}">{{ document.file_name }}</a>
+                            {%endif%}
+                        {%endfor%}
 
-                {% csrf_token %}
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="bt_close_upload_score_modal"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="uploadScroresLabel">
-                        <label id="lbl_description_label"></label>
-                    </h4>
-                </div>
-                <div class="modal-body">
-                    {% include "uploading/upload_file_form.html" %}
-                    {% for document in assimilation_documents_existing%}
-                        {% if display_link%}
-                            <a href="{% url 'download' pk=document.pk %}">{{ document.file_name }}</a>
-                            <!-- Not ready yet Leila
-                            <button type="button" class="btn"
-                                    id="btn_delete_doc"
-                                    title="{% trans 'delete_document'%}"
-                                    onclick="delete_file({{document.pk}})">
-                                <span class="glyphicon glyphicon-trash"></span>
-                            </button>-->
-                        {%endif%}
-                    {%endfor%}
+                        <div id="pnl_existing_files"></div>
 
-                    <div id="pnl_existing_files"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="bt_cancel_upload_score_modal">{% trans 'cancel' %}</button>
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" id="bt_cancel_upload_score_modal">{% trans 'cancel' %}</button>
-                    <input type="button" class="btn btn-primary" value="{% trans 'save'%}" data-dismiss="modal"
-                           id="bt_upload_document"/>
-                    <input type="hidden" name="description" value="" id="hdn_description"/>
-
-                    <input type="hidden" id="hdn_filename" />
-
-
-                </div>
-
+                        <input type="submit" class="btn btn-primary" value="{% trans 'save'%}" data-dismiss="modal"
+                               id="bt_upload_document"/>
+                        <input type="hidden" name="description" value="" id="hdn_description"/>
+                        <input type="hidden" id="hdn_filename" />
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 

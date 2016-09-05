@@ -83,7 +83,7 @@ def home(request):
                 'tab_attachments': tab_status['tab_attachments'],
                 'tab_submission': tab_status['tab_submission'],
                 'main_status': 0,
-                'picture': get_picture_id(request.user),
+
                 'id_document': get_id_document(request.user),
                 'person_legal_address': person_legal_address,
                 'person_contact_address': person_contact_address,
@@ -199,8 +199,7 @@ def profile(request, application_id=None, message_success=None):
             person_legal_address.city = request.POST['legal_adr_city']
         else:
             person_legal_address.city = ''
-        if request.POST.get('legal_adr_country'):
-            person_legal_address.city = ''
+
         if request.POST.get('legal_adr_country') and not request.POST.get('legal_adr_country') == "-1":
             country_id = request.POST['legal_adr_country']
             country = None
@@ -281,7 +280,8 @@ def profile(request, application_id=None, message_success=None):
                     #
                     criteria = mdl_ref.assimilation_criteria.find_by_id(criteria_id)
                     if criteria:
-                        applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.search(applicant, criteria)
+                        applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.search(applicant,
+                                                                                                     criteria)
                         if not applicant_assimilation_criteria:
                             applicant_assimilation_criteria = \
                                 mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria()
@@ -346,7 +346,7 @@ def profile(request, application_id=None, message_success=None):
         'institution': institution_name,
         "message_success": message_success,
         'tab_active': 0,
-        'validated_profil': demande_validation.validate_profil(applicant),
+        'validated_profil': demande_validation.validate_profil(applicant, application, request.user),
         'validated_diploma': demande_validation.validate_diploma(application),
         'validated_curriculum': demande_validation.validate_curriculum(application),
         'validated_application': demande_validation.validate_application(application),
@@ -364,7 +364,7 @@ def profile(request, application_id=None, message_success=None):
         'tab_attachments': tab_status['tab_attachments'],
         'tab_submission': tab_status['tab_submission'],
         'applications': mdl.application.find_by_user(request.user),
-        'picture': get_picture_id(request.user),
+
         'id_document': get_id_document(request.user),
         'assimilation_basic_documents': assimilation_criteria_view.find_assimilation_basic_documents(),
         'assimilation_documents_existing': get_assimilation_documents_existing(request.user),
@@ -473,7 +473,7 @@ def documents_upload(request):
                     if file_description == document_type.ID_PICTURE \
                         or file_description == document_type.ID_CARD \
                         or file_description in prerequisites_uploads \
-                        or file_description in assimilation_uploads:
+                            or file_description in assimilation_uploads:
                         # Delete older file with the same description
                         documents = mdl_osis_common.document_file.search(user=request.user,
                                                                          description=file_description)
