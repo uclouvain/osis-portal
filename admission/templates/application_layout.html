@@ -535,9 +535,7 @@
             var description = id.substring(pos+4)
             update_description(description, target);
             display_existing_files(description)
-
           }
-
         }
       if(id=='bt_delete_document_file'){
         e.preventDefault(); // if you want to cancel the event flow
@@ -633,6 +631,7 @@
     //File upload - end
     //***************************
     function display_existing_files(description){
+        alert(description);
         // To clear the div
         $("#pnl_existing_files").html('')
         $("#pnl_existing_files").find("a")
@@ -714,11 +713,12 @@
 
           return true;
     }
+
     function update_upload_btn_class(file, description){
           if(file != ''){
               if(description == 'ID_PICTURE'){
                 $('#btn_modify_picture').attr('title', gettext('change_document'));
-                $('#btn_modify_picture').attr('class', 'btn btn-success');
+                $('#btn_modify_picture').attr('class', 'btn btn-success ');
                 $('#spn_modify_picture').attr('class', 'glyphicon glyphicon-ok-circle');
 
               }
@@ -731,7 +731,7 @@
             $('[id$="'+description+'"]').each(function(){
                 if($(this).attr("id").startsWith('btn_load_assimilation_doc_')){
                     $(this).attr('title', gettext('change_document'));
-                    $(this).attr('class', 'btn btn-success');
+                    $(this).attr('class', 'btn btn-success class_upload_assimilation');
                     var spn_id = '#spn_' +$(this).attr("id");
                     $(spn_id).attr('class', 'glyphicon glyphicon-ok-circle');
                 }
