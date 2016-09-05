@@ -50,26 +50,26 @@ msgstr "Statut actuel"
 msgid "date"
 msgstr "Date"
 
-msgid "defended"
-msgstr "Défendu"
-
 msgid "defend_periode"
 msgstr "Période de défense"
 
 msgid "defend_year"
 msgstr "Année de défense"
 
+msgid "defended"
+msgstr "Défendu"
+
 msgid "delete"
 msgstr "Supprimer"
-
-msgid "description"
-msgstr "Description"
 
 msgid "desc_lnk_dissertations"
 msgstr "Liste de mes projets de mémoire"
 
 msgid "desc_lnk_propositions_dissertations"
 msgstr "Liste des sujets disponibles"
+
+msgid "description"
+msgstr "Description"
 
 msgid "dir_submit"
 msgstr "Soumettre"
@@ -203,14 +203,11 @@ msgstr "Soumis à l'évaluation de première année"
 msgid "taken_places"
 msgstr "Intérêt"
 
-msgid "type"
-msgstr "Type"
+msgid "theme"
+msgstr "Theme"
 
 msgid "title"
 msgstr "Titre"
-
-msgid "theme"
-msgstr "Theme"
 
 msgid "to_be_defended"
 msgstr "En attente de défense"
@@ -221,7 +218,8 @@ msgstr "En attente de réception"
 msgid "to_dir_submit_confirmation_message"
 msgstr "Attention : vous allez soumettre ce projet de mémoire au promoteur. Êtes-vous certain de vouloir continuer ?"
 
+msgid "type"
+msgstr "Type"
+
 msgid "work"
 msgstr "Travail"
-
-
