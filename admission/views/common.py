@@ -346,7 +346,7 @@ def profile(request, application_id=None, message_success=None):
         'institution': institution_name,
         "message_success": message_success,
         'tab_active': 0,
-        'validated_profil': demande_validation.validate_profil(applicant, application, request.user),
+        'validated_profil': demande_validation.validate_profil(applicant, request.user),
         'validated_diploma': demande_validation.validate_diploma(application),
         'validated_curriculum': demande_validation.validate_curriculum(application),
         'validated_application': demande_validation.validate_application(application),
