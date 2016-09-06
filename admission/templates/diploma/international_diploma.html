@@ -27,8 +27,8 @@
                onclick="display('pnl_equivalence',true);">&nbsp;&nbsp;{% trans 'baccalaureat_international' %}&nbsp;&nbsp;
          <img src="{% static 'img/ib-world-school.png' %}" height="50px">
          {%if validation_messages and validation_messages|get_item:'international_diploma'%}
-             <br><br><font class="error" style="margin-left:5px;">
-             {{ validation_messages|get_item:'international_diploma'}}</font>
+             <br><br><span class="error" style="margin-left:5px;">
+             {{ validation_messages|get_item:'international_diploma'}}</span>
          {% endif %}
          <br><br>
      </div>
@@ -80,7 +80,7 @@
      <div class="row">
          <div class="col-md-4"></div>
          <div class="col-md-8">
-            <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'language_regime'}}</font>
+            <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'language_regime'}}</span>
          </div>
      </div>
      {% endif %}
@@ -112,8 +112,8 @@
                    value="DEMANDED"
                    class="radio-inline">&nbsp;&nbsp;{% trans 'demanded' %}</label>
              {%if validation_messages and validation_messages|get_item:'international_equivalence'%}
-                 <br><br><font class="error" style="margin-left:5px;">
-                 {{ validation_messages|get_item:'international_equivalence'}}</font>
+                 <br><br><span class="error" style="margin-left:5px;">
+                 {{ validation_messages|get_item:'international_equivalence'}}</span>
              {% endif %}
          </div>
          <br><br>
@@ -162,7 +162,7 @@
                      id="rdb_foreign_result_high"
                      value="HIGH"> {% trans 'high_result'%}
             </label>
-            {%if validation_messages and validation_messages|get_item:'foreign_result'%}<br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'foreign_result'}}</font>{% endif %}
+            {%if validation_messages and validation_messages|get_item:'foreign_result'%}<br><span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'foreign_result'}}</span>{% endif %}
         </div>
     </div>
     <div class="panel panel-default">

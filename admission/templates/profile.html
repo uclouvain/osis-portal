@@ -42,15 +42,15 @@
         {%endif%}
 
         {% if applicant_form.errors %}
-        <font class="error">{% if applicant_form.errors %}{% trans 'errors_warning'%}{%endif%}</font>
+        <span class="error">{% if applicant_form.errors %}{% trans 'errors_warning'%}{%endif%}</span>
         <br>
         {%endif%}
         {%if message_success and message_success == 'ok'%}
             <br><br>
             <div>
-                <font class="alert alert-success" role="alert" style="margin-left:5px;">
+                <span class="alert alert-success" role="alert" style="margin-left:5px;">
                     {% trans 'msg_info_saved'%}
-                </font>
+                </span>
                 </div>
         {% endif %}
         <br>
@@ -64,7 +64,7 @@
                         <input class="form-control" id="txt_last_name" name="last_name"
                                value="{{ applicant.user.last_name  | default_if_none:'' }}" maxlength="255">
                         (ex: Van der Elst)
-                        <font class="error">{{ applicant_form.last_name.errors|striptags }}</font>
+                        <span class="error">{{ applicant_form.last_name.errors|striptags }}</span>
                     </div>
                     <div class="col-md-4">
                         <div class="row">
@@ -72,7 +72,7 @@
                         <input class="form-control" id="txt_first_name" name="first_name"
                                value="{{ applicant.user.first_name  | default_if_none:'' }}" maxlength="255">
                         (ex: Frédéric <span style="text-decoration: line-through;">frederic FREDERIC</span>)
-                        <font class="error">{{ applicant_form.first_name.errors|striptags }}</font>
+                        <span class="error">{{ applicant_form.first_name.errors|striptags }}</span>
                         </div>
                         <div class="row">
                             <label>{%trans 'middle_name'%}</label>
@@ -119,13 +119,13 @@
                         <input type="text" class="form-control" id="txt_birth_date" name="birth_date"
                                value="{{ applicant.birth_date  | default_if_none:'' | date:'d/m/Y' }}">
                         (format : {% trans 'format_date'%})
-                        <font class="error" id="msg_error_birth_date">{{ applicant_form.birth_date.errors|striptags }}</font>
+                        <span class="error" id="msg_error_birth_date">{{ applicant_form.birth_date.errors|striptags }}</span>
                         </div>
                         <div class="col-md-4">
                             <label>{%trans 'birth_place'%} *</label>
                             <input class="form-control" id="txt_birth_place" name="birth_place"
                                    value="{{ applicant.birth_place | default_if_none:''}}" maxlength="255">
-                            <font class="error">{{ applicant_form.birth_place.errors|striptags}}</font>
+                            <span class="error">{{ applicant_form.birth_place.errors|striptags}}</span>
 
                         </div>
                         <div class="col-md-3">
@@ -137,7 +137,7 @@
                                 </option>
                                 {% endfor %}
                             </select>
-                            <font class="error">{{ applicant_form.birth_country.errors|striptags }}</font>
+                            <span class="error">{{ applicant_form.birth_country.errors|striptags }}</span>
                         </div>
                         <div class="col-md-3">
                             <label>{%trans 'nationality'%} *</label>
@@ -150,7 +150,7 @@
                                 </option>
                                 {% endfor %}
                             </select>
-                            <font class="error">{{ applicant_form.nationality.errors|striptags }}</font>
+                            <span class="error">{{ applicant_form.nationality.errors|striptags }}</span>
                         </div>
                     </div>
                     <br>
@@ -167,7 +167,7 @@
                                            {% if applicant.gender = "FEMALE" %} checked {% endif %}> Féminin
                                 </label>
                             </div>
-                            <font class="error">{{ applicant_form.gender.errors|striptags }}</font>
+                            <span class="error">{{ applicant_form.gender.errors|striptags }}</span>
 
                     </div>
                     <div class="col-md-3">
@@ -192,13 +192,13 @@
                                 {%trans 'widow'%}
                             </option>
                         </select>
-                        <font class="error">{{ applicant_form.civil_status.errors|striptags }}</font>
+                        <span class="error">{{ applicant_form.civil_status.errors|striptags }}</span>
                     </div>
                     <div class="col-md-3">
                         <label>{%trans 'children'%}</label>
                         <input class="form-control" id="txt_number_children" name="number_children"
                                value="{{ applicant.number_children | default_if_none:''}}">
-                        <font class="error">{{ applicant_form.number_children.errors|striptags }}</font>
+                        <span class="error">{{ applicant_form.number_children.errors|striptags }}</span>
                     </div>
                     <div class="col-md-3">
                         <label>{%trans 'spouse_name'%}</label>
@@ -417,14 +417,14 @@
                                    value="{{ person_legal_address.street | default_if_none:''}}"
                                    maxlength="255">
                             (ex: Avenue Louis Braille, Rue de la Loi, Place de l'Université)
-                            <font class="error">{{ applicant_form.legal_adr_street.errors|striptags }}</font>
+                            <span class="error">{{ applicant_form.legal_adr_street.errors|striptags }}</span>
                         </div>
                         <div class="col-md-2">
                             <label>{% trans 'number'%} *</label>
                             <input class="form-control" id="txt_legal_adr_number" name="legal_adr_number"
                                    value="{{ person_legal_address.number | default_if_none:''}}"
                                    maxlength="6">
-                            <font class="error">{{ applicant_form.legal_adr_number.errors|striptags }}</font>
+                            <span class="error">{{ applicant_form.legal_adr_number.errors|striptags }}</span>
                         </div>
                         <div class="col-md-4">
                             <label>{% trans 'place'%}</label>
@@ -441,14 +441,14 @@
                                    value="{{ person_legal_address.postal_code | default_if_none:''}}"
                                    maxlength="20">
                             (ex: 1348)
-                            <font class="error">{{ applicant_form.legal_adr_postal_code.errors|striptags }}</font>
+                            <span class="error">{{ applicant_form.legal_adr_postal_code.errors|striptags }}</span>
                         </div>
                         <div class="col-md-6">
                             <label>{% trans 'city'%} *</label>
                             <input class="form-control" id="txt_legal_adr_city" name="legal_adr_city"
                                    value="{{ person_legal_address.city | default_if_none:''}}"
                                    maxlength="255">
-                            <font class="error">{{ applicant_form.legal_adr_city.errors|striptags }}</font>
+                            <span class="error">{{ applicant_form.legal_adr_city.errors|striptags }}</span>
                         </div>
                         <div class="col-md-4">
                             <label>{% trans 'country'%} *</label>
@@ -461,7 +461,7 @@
                                 </option>
                                 {% endfor %}
                             </select>
-                            <font class="error">{{ applicant_form.legal_adr_country.errors|striptags }}</font>
+                            <span class="error">{{ applicant_form.legal_adr_country.errors|striptags }}</span>
                         </div>
                     </div>
 
@@ -504,14 +504,14 @@
                                        value="{{ person_contact_address.street | default_if_none:''}}"
                                        maxlength="255">
                                 (ex: Avenue Louis Braille, Rue de la Loi, Place de l'Université)
-                                <font class="error">{{ applicant_form.contact_adr_street.errors|striptags }}</font>
+                                <span class="error">{{ applicant_form.contact_adr_street.errors|striptags }}</span>
                             </div>
                             <div class="col-md-2">
                                 <label>{% trans 'number'%} *</label>
                                 <input class="form-control" id="txt_contact_adr_number" name="contact_adr_number"
                                        value="{{ person_contact_address.number | default_if_none:''}}"
                                        maxlength="6">
-                                <font class="error">{{ applicant_form.contact_adr_number.errors|striptags }}</font>
+                                <span class="error">{{ applicant_form.contact_adr_number.errors|striptags }}</span>
                             </div>
                             <div class="col-md-4">
                                 <label>{% trans 'place'%}</label>
@@ -530,14 +530,14 @@
                                        value="{{ person_contact_address.postal_code | default_if_none:''}}"
                                        maxlength="20">
                                 (ex: 1348)
-                                <font class="error">{{ applicant_form.contact_adr_postal_code.errors|striptags }}</font>
+                                <span class="error">{{ applicant_form.contact_adr_postal_code.errors|striptags }}</span>
                             </div>
                             <div class="col-md-6">
                                 <label>{% trans 'city'%} *</label>
                                 <input class="form-control" id="txt_contact_adr_city" name="contact_adr_city"
                                        value="{{ person_contact_address.city | default_if_none:''}}"
                                        maxlength="255">
-                                <font class="error">{{ applicant_form.contact_adr_city.errors|striptags }}</font>
+                                <span class="error">{{ applicant_form.contact_adr_city.errors|striptags }}</span>
                             </div>
                             <div class="col-md-4">
                                 <label>{% trans 'country'%} *</label>
@@ -549,7 +549,7 @@
                                     </option>
                                     {% endfor %}
                                 </select>
-                                <font class="error">{{ applicant_form.contact_adr_country.errors|striptags }}</font>
+                                <span class="error">{{ applicant_form.contact_adr_country.errors|striptags }}</span>
                             </div>
                         </div>
                     </div>
@@ -577,7 +577,7 @@
                             <label>{% trans 'mail' %} *</label>
                             <input class="form-control" id="txt_additional_email" name="additional_email"
                                    value="{{ applicant.additional_email| default_if_none:''}}" maxlength="255">
-                            <font class="error">{{ applicant_form.additional_email.errors|striptags }}</font>
+                            <span class="error">{{ applicant_form.additional_email.errors|striptags }}</span>
                         </div>
                     </div>
                 </div>
@@ -612,14 +612,14 @@
                                 <input class="form-control" id="txt_registration_id" name="registration_id"
                                        value="{{ applicant.registration_id| default_if_none:''}}">
                                 (ex: 1058-13-00)
-                                <font class="error">{{ applicant_form.registration_id.errors|striptags }}</font>
+                                <span class="error">{{ applicant_form.registration_id.errors|striptags }}</span>
                             </div>
                             <div class="col-md-8">
                                 <label>{% trans 'question_year_last_registration'%} {{institution}}? *</label>
                                 <br>
                                 <input id="txt_last_academic_year" name="last_academic_year" size="10"
                                        value="{{ applicant.last_academic_year| default_if_none:''}}" maxlength="9">
-                                <br><font class="error">{{ applicant_form.last_academic_year.errors|striptags }}</font>
+                                <br><span class="error">{{ applicant_form.last_academic_year.errors|striptags }}</span>
                             </div>
                         </div>
                     </div>

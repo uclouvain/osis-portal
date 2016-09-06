@@ -185,16 +185,16 @@
         <br>
         {%if validation_messages%}
             <br>
-            <font class="error" role="alert" style="margin-left:5px;">
+            <span class="error" role="alert" style="margin-left:5px;">
                 Il y a {{ validation_messages|length}} {% trans 'errors'%}
-            </font>
+            </span>
             <br><br>
         {% endif %}
         {%if message_success%}
             <br>
-            <font class="alert alert-success" role="alert" style="margin-left:5px;">
+            <span class="alert alert-success" role="alert" style="margin-left:5px;">
                 {{message_success}}
-            </font>
+            </span>
             <br><br>
         {% endif %}
     </div>
@@ -226,7 +226,7 @@
                              onclick="display('pnl_academic_year',false);display('pnl_admission_exam',true);"> {% trans 'no'%}
                     </label>
                     {%if validation_messages and validation_messages|get_item:'diploma'%}
-                        <br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'diploma'}}</font>
+                        <br><span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'diploma'}}</span>
                     {% endif %}
                 </div>
             </div>
@@ -244,9 +244,9 @@
                             {% endfor %}
                     </select>
                     {%if validation_messages and validation_messages|get_item:'academic_year'%}
-                        <font class="error" style="margin-left:5px;">
+                        <span class="error" style="margin-left:5px;">
                             {{ validation_messages|get_item:'academic_year'}}
-                        </font>
+                        </span>
                     {% endif %}
                 </div>
                 <br><br>
@@ -267,9 +267,9 @@
                              onclick="display('pnl_belgian_detail',false);display('pnl_foreign_detail',true);"> {% trans 'not_in_belgium'%}
                     </label>
                     {%if validation_messages and validation_messages|get_item:'rdb_belgian_foreign'%}
-                        <font class="error" style="margin-left:5px;">
+                        <span class="error" style="margin-left:5px;">
                             {{ validation_messages|get_item:'rdb_belgian_foreign'}}
-                        </font>
+                        </span>
                     {% endif %}
                 </div>
                 <br>
@@ -282,21 +282,21 @@
     {% include "diploma/professional_exam.html" %}
     {%if validation_messages and validation_messages|get_item:'final'%}
         <br>
-        <font class="error" style="margin-left:5px;">
+        <span class="error" style="margin-left:5px;">
             {{ validation_messages|get_item:'final'}}<br>
             <ul>
                 <li>{{ validation_messages|get_item:'final1'}}</li>
                 <li>{{ validation_messages|get_item:'final2'}}</li>
                 <li>{{ validation_messages|get_item:'final3'}}</li>
             </ul>
-        </font>
+        </span>
         <br><br>
     {% endif %}
     <br>
     <div>
         {%if message_success%}
             <br><br>
-            <font class="alert alert-success" role="alert" style="margin-left:5px;">{{ message_success}}</font>
+            <span class="alert alert-success" role="alert" style="margin-left:5px;">{{ message_success}}</span>
             <br><br>
         {% endif %}
     </div>

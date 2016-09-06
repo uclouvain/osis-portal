@@ -33,8 +33,8 @@
     <span>
         La procédure de demande d'inscription en ligne est divisée en plusieurs onglets. La demande d'inscription ne
         pourra être validée que lorsque tous les onglets auront valablement été complétés. Les couleurs
-        <font class="validated">verte </font>
-        ou <font class="not-validated">orange</font>
+        <span class="validated">verte </span>
+        ou <span class="not-validated">orange</span>
         vous rappellent l'état d'avancement de votre demande d'inscription que vous pouvez d'ailleurs arrêter et
         reprendre à tout moment.
     </span>
@@ -625,7 +625,10 @@
             type: 'POST',
             data : data,
             processData: false,
-            contentType: false
+            contentType: false,
+            error: function(msg){
+               alert(msg);
+            }
         });
         update_upload_btn_class(file, description);
 
@@ -759,5 +762,9 @@
             });
         }
     }
+$( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
+alert('er');
+
+});
     </script>
 {% endblock %}
