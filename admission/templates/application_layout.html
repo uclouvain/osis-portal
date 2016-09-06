@@ -43,7 +43,7 @@
     <br>
     <input type="hidden" id="hdn_tab_active" value="{{tab_active}}" title="active tab">
 
-    <input type="hidden" value="{{application.id | default_if_none:''}}" id="hdn_current_application_id" name="application_id" title="application_id" >
+    <input type="text" value="{{application.id | default_if_none:''}}" id="hdn_current_application_id" name="application_id" title="application_id" >
     <div class="row">
         <div class="col-md-2">
             {% if applications%}<a href="{%url 'home'%}">{% trans 'back_demandes_list'%}</a>{%endif%}
@@ -326,56 +326,69 @@
     // national diploma recto and verso
     $("#bt_load_doc_NATIONAL_DIPLOMA_VERSO").click(function(event) {
         update_description('NATIONAL_DIPLOMA_VERSO',$(event.target));
+        display_existing_files('NATIONAL_DIPLOMA_VERSO');
     });
 
     $("#bt_load_doc_NATIONAL_DIPLOMA_RECTO").click(function(event) {
         update_description('NATIONAL_DIPLOMA_RECTO',$(event.target));
+        display_existing_files('NATIONAL_DIPLOMA_RECTO');
     });
 
     // international diploma
     $("#bt_load_doc_INTERNATIONAL_DIPLOMA_VERSO").click(function(event) {
         update_description('INTERNATIONAL_DIPLOMA_VERSO',$(event.target));
+        display_existing_files('INTERNATIONAL_DIPLOMA_VERSO');
     });
 
     $("#bt_load_doc_INTERNATIONAL_DIPLOMA_RECTO").click(function(event) {
         update_description('INTERNATIONAL_DIPLOMA_RECTO',$(event.target));
+        display_existing_files('INTERNATIONAL_DIPLOMA_RECTO');
     });
 
     $("#bt_load_doc_TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO").click(function(event) {
         update_description('TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO',$(event.target));
+        display_existing_files('TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO');
     });
 
     $("#bt_load_doc_TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO").click(function(event) {
         update_description('TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO',$(event.target));
+        display_existing_files('TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO');
     });
 
     // Scores transcript
     $("#bt_load_doc_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO").click(function(event) {
         update_description('HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO',$(event.target));
+        display_existing_files('HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO');
     });
 
     $("#bt_load_doc_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO").click(function(event) {
         update_description('HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO',$(event.target));
+        display_existing_files('HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO');
     });
 
     $("#bt_load_doc_TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO").click(function(event) {
         update_description('TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO',$(event.target));
+        display_existing_files('TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO');
     });
 
     $("#bt_load_doc_TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO").click(function(event) {
         update_description('TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO',$(event.target));
+        display_existing_files('TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO');
     });
 
     $("#bt_load_doc_EQUIVALENCE").click(function(event) {
         update_description('EQUIVALENCE',$(event.target));
+        display_existing_files('EQUIVALENCE');
     });
 
     $("#bt_load_doc_ADMISSION_EXAM_CERTIFICATE").click(function(event) {
         update_description('ADMISSION_EXAM_CERTIFICATE',$(event.target));
+        display_existing_files('ADMISSION_EXAM_CERTIFICATE');
     });
 
     $("#bt_load_doc_professional_exam_file").click(function(event) {
         update_description('PROFESSIONAL_EXAM_CERTIFICATE',$(event.target));
+        display_existing_files('PROFESSIONAL_EXAM_CERTIFICATE');
     });
 
     function valid(){
@@ -539,7 +552,7 @@
         if (target.is('.class_upload_assimilation')) {
             e.preventDefault(); // if you want to cancel the event flow
 
-            if(id.startsWith('btn_load_assimilation_doc_')){
+            if(id.startsWith('btn_load_assimilation_doc_') ){
                 //upload for assimilation
                 var pos = id.indexOf('_id_')
                 var description = id.substring(pos+4)
@@ -608,15 +621,16 @@
         $('#hdn_file_'+$("#txt_file").val()).remove();
         $('#hdn_file_name_'+description).remove();
         $('#hdn_file_description_'+description).remove();
-
-        var data = new FormData();
-        data.append('description', description);
-        data.append('storage_duration', 0);
-
-        data.append('filename', $("#txt_file").val());
         var fileSelect = document.getElementById('txt_file');
         var files = fileSelect.files;
         var file = files[0];
+        var data = new FormData();
+        data.append('description', description);
+        data.append('storage_duration', 0);
+        data.append('content_type',file.type);
+        data.append('filename', $("#txt_file").val());
+        data.append('application_id', $("#hdn_current_application_id").val());
+
 
         var accepted_types = ['application/csv',
                               'application/doc',
@@ -751,6 +765,7 @@
     }
 
     function update_upload_btn_class(file, description){
+
         if(file != ''){
             if(description == 'ID_PICTURE'){
                 $('#btn_modify_picture').attr('title', gettext('change_document'));
@@ -765,7 +780,7 @@
             }
 
             $('[id$="'+description+'"]').each(function(){
-                if($(this).attr("id").startsWith('btn_load_assimilation_doc_')){
+                if($(this).attr("id").startsWith('btn_load_assimilation_doc_') || $(this).attr("id").startsWith('bt_load_doc_')){
                     $(this).attr('title', gettext('change_document'));
                     $(this).attr('class', 'btn btn-success class_upload_assimilation');
                     var spn_id = '#spn_' +$(this).attr("id");

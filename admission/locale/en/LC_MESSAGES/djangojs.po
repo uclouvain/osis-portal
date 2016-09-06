@@ -114,3 +114,9 @@ msgstr "Please select a file"
 msgid "error_occured"
 msgstr "An error occured! The file hasn't been uploaded.  Restart your app"
 
+msgid "national_diploma_recto"
+msgstr "High school diploma - recto"
+
+msgid "national_diploma_verso"
+msgstr "High school diploma - verso"
+

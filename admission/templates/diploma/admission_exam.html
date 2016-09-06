@@ -133,12 +133,12 @@
             &nbsp;&nbsp;
              {%if admission_exam_file%}
                 <button type="button"
-                        class="btn btn-default"
+                        class="btn btn-success"
                         title="{% trans 'modify'%} {% trans 'admission_exam_certificate_document' %}"
                         id="bt_load_doc_ADMISSION_EXAM_CERTIFICATE"
                         data-toggle="modal" data-target="#pnl_upload_documents">
                         <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"
-                              id="spn_bt_load_doc_ADMISSION_EXAM_CERTIFICATE"></span>{% trans 'modify' %}
+                              id="spn_bt_load_doc_ADMISSION_EXAM_CERTIFICATE"></span> {% trans 'modify' %}
                 </button>
              {%else%}
                 <button type="button"
@@ -147,7 +147,7 @@
                         id="bt_load_doc_ADMISSION_EXAM_CERTIFICATE"
                         data-toggle="modal" data-target="#pnl_upload_documents">
                         <span class="glyphicon glyphicon-upload" aria-hidden="true"
-                              id="spn_bt_load_doc_ADMISSION_EXAM_CERTIFICATE"></span>{% trans 'add' %}
+                              id="spn_bt_load_doc_ADMISSION_EXAM_CERTIFICATE"></span> {% trans 'add' %}
                 </button>
              {%endif%}
         </div>

@@ -114,3 +114,9 @@ msgstr "Sélectionner un fichier"
 
 msgid "error_occured"
 msgstr "Attention le fichier n'a pas été sauvegardé!"
+
+msgid "national_diploma_recto"
+msgstr "Diplôme d'études secondaires - recto"
+
+msgid "national_diploma_verso"
+msgstr "Diplôme d'études secondaires - verso"
