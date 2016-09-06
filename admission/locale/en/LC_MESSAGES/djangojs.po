@@ -111,4 +111,6 @@ msgstr "Invalid content type"
 msgid "select_file"
 msgstr "Please select a file"
 
+msgid "error_occured"
+msgstr "An error occured! The file hasn't been uploaded.  Restart your app"
 

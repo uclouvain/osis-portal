@@ -111,3 +111,6 @@ msgstr "Type de fichier invalide"
 
 msgid "select_file"
 msgstr "Sélectionner un fichier"
+
+msgid "error_occured"
+msgstr "Attention le fichier n'a pas été sauvegardé!"

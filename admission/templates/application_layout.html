@@ -631,26 +631,6 @@
                               'text/html',
                               'text/plain'];
         if(file){
-            var ok = false;
-            $.ajax({url: "http://127.0.0.1:8000/admission",
-                    type: "HEAD",
-                    timeout:1000,
-                    statusCode: {
-                        400: function (response) {
-                            alert('status  400');
-                        },
-                        200: function (response) {
-                            alert('status 200');
-                        },
-
-                        0: function (response) {
-                            alert('status  0 ');
-                        },
-                        500: function (response) {
-                            alert('status  500 ');
-                        }
-                    }
-             });
             if ($.inArray(file.type,accepted_types) >= 0){
                 data.append('file', file);
                 $.ajax({
@@ -660,8 +640,15 @@
                     data : data,
                     processData: false,
                     contentType: false,
-                    error: function(xhr, statusText, errorThrown){alert('er'+xhr.status);},
-                    complete: function(xhr, statusText){alert('cp'+xhr.status);}
+                    complete: function(xhr, statusText){
+                        if(xhr.status=='0'){
+                            //problem occured
+                            $('#pnl_admission_error').remove();
+                            var msg_error = jQuery('<div class="alert alert-danger" id="pnl_admission_error">'+ gettext('error_occured')+'</span>');
+                            $('#pnl_admission_errors').append(msg_error);
+                            return false;
+                        }
+                    }
 
                 });
                 update_upload_btn_class(file, description);
@@ -809,15 +796,5 @@
         }
     }
 
-$(document).ajaxStart(function (e) {
-
-});
-
-$( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
-    alert(jqxhr.status);
-
-
-
-});
     </script>
 {% endblock %}

@@ -27,6 +27,7 @@
 {% endcomment %}
 
 {% block admission_tabs %}
+    <div id="pnl_admission_errors"></div>
     <div class="tab-content">
         <div id="tab_profile" class="tab-pane fade {% if tab_active == 0 %} in active{%endif%}">
             {% include "profile.html" %}
