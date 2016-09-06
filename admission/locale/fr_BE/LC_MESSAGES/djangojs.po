@@ -105,3 +105,9 @@ msgstr "Paycheck 6"
 
 msgid "concerned_person"
 msgstr "Pour la personne concernée"
+
+msgid "invalid_content_type"
+msgstr "Type de fichier invalide"
+
+msgid "select_file"
+msgstr "Sélectionner un fichier"

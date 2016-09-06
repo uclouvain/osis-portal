@@ -104,3 +104,11 @@ msgstr "Paycheck 6"
 
 msgid "concerned_person"
 msgstr "for concerned person"
+
+msgid "invalid_content_type"
+msgstr "Invalid content type"
+
+msgid "select_file"
+msgstr "Please select a file"
+
+
