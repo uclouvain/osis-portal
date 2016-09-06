@@ -43,7 +43,7 @@
     <br>
     <input type="hidden" id="hdn_tab_active" value="{{tab_active}}" title="active tab">
 
-    <input type="text" value="{{application.id | default_if_none:''}}" id="hdn_current_application_id" name="application_id" title="application_id" >
+    <input type="hidden" value="{{application.id | default_if_none:''}}" id="hdn_current_application_id" name="application_id" title="application_id" >
     <div class="row">
         <div class="col-md-2">
             {% if applications%}<a href="{%url 'home'%}">{% trans 'back_demandes_list'%}</a>{%endif%}
