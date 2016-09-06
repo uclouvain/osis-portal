@@ -118,13 +118,9 @@
                     </div>
                     {% if form_new.email_new_confirm.errors%}
                         <br>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <font class="error" id="msg_email_new_confirm_errors">{{ form_new.email_new_confirm.errors|striptags }}</font>
-                            </div>
-                        </div>
+                        <span class="error" id="msg_email_new_confirm_errors">{{ form_new.email_new_confirm.errors|striptags }}</span>
                     {%endif%}
-                    <br>
+                    <br><br>
                     <div class="row" >
                         <div class="col-md-6">
                             <label>{% trans 'choose_new_password'%}</label>
@@ -140,17 +136,13 @@
                     </div>
                     {% if form_new.password_new.errors%}
                         <br>
-                        <div class="row">
-                            <font class="error" id="msg_password_new_errors">{{ form_new.password_new.errors|striptags }}</font>
-                        </div>
+                        <span class="error" id="msg_password_new_errors">{{ form_new.password_new.errors|striptags }}</span>
                     {%endif%}
                     {% if form_new.password_new_confirm.errors%}
                         <br>
-                        <div class="row">
-                            <font class="error" id="msg_password_new_confirm_errors">{{ form_new.password_new_confirm.errors|striptags }}</font>
-                        </div>
+                        <span class="error" id="msg_password_new_confirm_errors">{{ form_new.password_new_confirm.errors|striptags }}</span>
                     {%endif%}
-                    <br>
+                    <br><br>
                     <div class="row">
                         <div style="margin-left:15px;">{% trans 'captcha'%}</div>
                     </div>
