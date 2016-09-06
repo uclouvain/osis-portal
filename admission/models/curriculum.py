@@ -26,7 +26,7 @@
 from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-from .secondary_education import NATIONAL_COMMUNITY_TYPES
+from reference.enums.education_institution_national_comunity import NATIONAL_COMMUNITY_TYPES
 from django.core.exceptions import ObjectDoesNotExist
 
 

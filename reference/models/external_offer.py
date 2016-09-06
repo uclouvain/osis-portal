@@ -23,28 +23,27 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
 from django.db import models
 from django.contrib import admin
 
 
-class AssimilationCriteriaAdmin(admin.ModelAdmin):
-    list_display = ('criteria', 'order')
-    fieldsets = ((None, {'fields': ('criteria', 'order')}),)
+class ExternalOfferAdmin(admin.ModelAdmin):
+    list_display = ('name', 'adhoc', 'domain', 'grade_type', 'offer_year', 'changed')
+    fieldsets = ((None, {'fields': ('name', 'adhoc', 'domain', 'grade_type', 'offer_year')}),)
+    ordering = ('name',)
+    search_fields = ['name']
 
 
-class AssimilationCriteria(models.Model):
+class ExternalOffer(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    criteria = models.CharField(max_length=255, unique=True)
-    order = models.IntegerField(blank=True, null=True)
+    changed = models.DateTimeField(null=True)
+    name = models.CharField(max_length=150, unique=True)
+    adhoc = models.BooleanField(default=True)  # If False == Official/validated, if True == Not Official/not validated
+    domain = models.ForeignKey('Domain', on_delete=models.CASCADE)
+    grade_type = models.ForeignKey('GradeType', on_delete=models.CASCADE)
+    offer_year = models.ForeignKey('admission.OfferYear', blank=True, null=True, on_delete=models.CASCADE) # Institution equivalence ("intern" offer)
+    national = models.BooleanField(default=False) # True if is Belgian else False
 
     def __str__(self):
-        return self.criteria
+        return self.name
 
-
-def find_criteria():
-    return AssimilationCriteria.objects.all().order_by("order")
-
-
-def find_by_id(criteria_id):
-    return AssimilationCriteria.objects.get(pk=criteria_id)

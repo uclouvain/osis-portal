@@ -25,17 +25,24 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from django.core import serializers
+from reference.enums import domain_type
 
 
 class DomainAdmin(admin.ModelAdmin):
-    list_display = ('name','parent')
-    fieldsets = ((None, {'fields': ('name',)}),)
+    list_display = ('name', 'parent', 'decree', 'type')
+    fieldsets = ((None, {'fields': ('name', 'parent', 'decree', 'type')}),)
+    search_fields = ['name']
 
 
 class Domain(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     name = models.CharField(max_length=255)
     parent = models.ForeignKey('self', null=True, blank=True)
+    decree = models.ForeignKey('Decree', null=True, blank=True)
+    type = models.CharField(max_length=50, choices=domain_type.TYPES, default=domain_type.UNKNOWN)
+    national = models.BooleanField(default=False) # True if is Belgian else False
+    reference = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -46,10 +53,6 @@ class Domain(models.Model):
         To find children
         """
         return Domain.objects.filter(parent=self)
-
-
-def find_all():
-    return Domain.objects.all()
 
 
 def find_by_id(an_id):

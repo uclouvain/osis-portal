@@ -35,6 +35,7 @@ class LanguageAdmin(admin.ModelAdmin):
 
 
 class Language(models.Model):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
     code = models.CharField(max_length=4, unique=True)
     name = models.CharField(max_length=80, unique=True)
     recognized = models.BooleanField(default=False)

@@ -24,27 +24,16 @@
 #
 ##############################################################################
 
-from django.db import models
-from django.contrib import admin
+MAIN = "MAIN"
+ACADEMIC_PARTNER = "ACADEMIC_PARTNER"
+INDUSTRIAL_PARTNER = "INDUSTRIAL_PARTNER"
+SERVICE_PARTNER = "SERVICE_PARTNER"
+COMMERCE_PARTNER = "COMMERCE_PARTNER"
+PUBLIC_PARTNER = "PUBLIC_PARTNER"
 
-
-class AssimilationCriteriaAdmin(admin.ModelAdmin):
-    list_display = ('criteria', 'order')
-    fieldsets = ((None, {'fields': ('criteria', 'order')}),)
-
-
-class AssimilationCriteria(models.Model):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    criteria = models.CharField(max_length=255, unique=True)
-    order = models.IntegerField(blank=True, null=True)
-
-    def __str__(self):
-        return self.criteria
-
-
-def find_criteria():
-    return AssimilationCriteria.objects.all().order_by("order")
-
-
-def find_by_id(criteria_id):
-    return AssimilationCriteria.objects.get(pk=criteria_id)
+TYPES = ((MAIN, MAIN),
+         (ACADEMIC_PARTNER, ACADEMIC_PARTNER),
+         (INDUSTRIAL_PARTNER, INDUSTRIAL_PARTNER),
+         (SERVICE_PARTNER, SERVICE_PARTNER),
+         (COMMERCE_PARTNER, COMMERCE_PARTNER),
+         (PUBLIC_PARTNER, PUBLIC_PARTNER))

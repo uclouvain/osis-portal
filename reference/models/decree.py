@@ -23,28 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
 from django.db import models
 from django.contrib import admin
+from django.core import serializers
 
 
-class AssimilationCriteriaAdmin(admin.ModelAdmin):
-    list_display = ('criteria', 'order')
-    fieldsets = ((None, {'fields': ('criteria', 'order')}),)
+class DecreeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'start_date', 'end_date')
+    fieldsets = ((None, {'fields': ('name', 'start_date', 'end_date')}),)
+    ordering = ('name',)
+    search_fields = ['name']
 
 
-class AssimilationCriteria(models.Model):
+class Decree(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    criteria = models.CharField(max_length=255, unique=True)
-    order = models.IntegerField(blank=True, null=True)
+    name = models.CharField(max_length=80, unique=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self.criteria
+        return self.name
 
-
-def find_criteria():
-    return AssimilationCriteria.objects.all().order_by("order")
-
-
-def find_by_id(criteria_id):
-    return AssimilationCriteria.objects.get(pk=criteria_id)

@@ -28,13 +28,14 @@ from django.contrib import admin
 
 
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'iso_code', 'nationality', 'european_union', 'dialing_code', 'cref_code')
+    list_display = ('external_id', 'name', 'iso_code', 'nationality', 'european_union', 'dialing_code', 'cref_code')
     fieldsets = ((None, {'fields': ('iso_code', 'name', 'nationality', 'european_union', 'dialing_code', 'cref_code')}),)
     ordering = ('name',)
     search_fields = ['name']
 
 
 class Country(models.Model):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
     iso_code = models.CharField(max_length=2, unique=True)
     name = models.CharField(max_length=80, unique=True)
     nationality = models.CharField(max_length=80, blank=True, null=True)

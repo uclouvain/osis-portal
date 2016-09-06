@@ -23,28 +23,50 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
 from django.db import models
 from django.contrib import admin
+from base.enums.organization_type import TYPES as ORGANIZATION_TYPES
 
 
-class AssimilationCriteriaAdmin(admin.ModelAdmin):
-    list_display = ('criteria', 'order')
-    fieldsets = ((None, {'fields': ('criteria', 'order')}),)
+class OrganizationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'acronym', 'website', 'reference', 'type')
+    fieldsets = ((None, {'fields': ('name', 'acronym', 'reference', 'website', 'type')}),)
+    search_fields = ['acronym']
 
 
-class AssimilationCriteria(models.Model):
+class Organization(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    criteria = models.CharField(max_length=255, unique=True)
-    order = models.IntegerField(blank=True, null=True)
+    name = models.CharField(max_length=255)
+    acronym = models.CharField(max_length=15)
+    website = models.URLField(max_length=255, blank=True, null=True)
+    reference = models.CharField(max_length=30, blank=True, null=True)
+    type = models.CharField(max_length=30, blank=True, null=True, choices=ORGANIZATION_TYPES, default='UNKNOWN')
 
     def __str__(self):
-        return self.criteria
+        return self.name
 
 
-def find_criteria():
-    return AssimilationCriteria.objects.all().order_by("order")
+def find_by_id(organization_id):
+    return Organization.objects.get(pk=organization_id)
 
 
-def find_by_id(criteria_id):
-    return AssimilationCriteria.objects.get(pk=criteria_id)
+def search(acronym=None, name=None, type=None, reference=None):
+    out = None
+    queryset = Organization.objects
+
+    if acronym:
+        queryset = queryset.filter(acronym=acronym)
+
+    if name:
+        queryset = queryset.filter(name=name)
+
+    if type:
+        queryset = queryset.filter(type=type)
+
+    if reference:
+        queryset = queryset.filter(reference=reference)
+
+    if acronym or name or type or reference:
+        out = queryset
+
+    return out

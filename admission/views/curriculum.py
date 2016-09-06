@@ -26,8 +26,6 @@
 import locale
 from functools import cmp_to_key
 
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 
@@ -36,6 +34,7 @@ from admission.views import common
 from reference import models as mdl_reference
 from admission.views import demande_validation
 from admission.views import tabs
+from reference.enums import education_institution_type, education_institution_national_comunity as national_cmunity_type
 
 
 def save(request):
@@ -58,10 +57,10 @@ def save(request):
     message_success = None
     # Get the data in bd for dropdown list
     local_universities_french = mdl_reference.education_institution \
-        .find_by_institution_type_national_community('UNIVERSITY', 'FRENCH', False)
+        .find_by_institution_type_national_community(education_institution_type.UNIVERSITY, national_cmunity_type.FRENCH, False)
 
     local_universities_dutch = mdl_reference.education_institution \
-        .find_by_institution_type_national_community('UNIVERSITY', 'DUTCH', False)
+        .find_by_institution_type_national_community(education_institution_type.UNIVERSITY, national_cmunity_type.DUTCH, False)
     universities_cities = []
     universities = []
 
@@ -167,10 +166,10 @@ def update(request, application_id=None):
             curricula.append(curriculum)
         year = year + 1
     local_universities_french = mdl_reference.education_institution \
-        .find_by_institution_type_national_community('UNIVERSITY', 'FRENCH', False)
+        .find_by_institution_type_national_community(education_institution_type.UNIVERSITY, national_cmunity_type.FRENCH, False)
 
     local_universities_dutch = mdl_reference.education_institution \
-        .find_by_institution_type_national_community('UNIVERSITY', 'DUTCH', False)
+        .find_by_institution_type_national_community(education_institution_type.UNIVERSITY, national_cmunity_type.DUTCH, False)
     if message:
         return common.home(request)
     else:

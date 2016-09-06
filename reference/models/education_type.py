@@ -34,8 +34,9 @@ class EducationTypeAdmin(admin.ModelAdmin):
 class EducationType(models.Model):
     EDUCATION_TYPE = (('TRANSITION','Transition'),
             ('QUALIFICATION','Qualification'),
-            ('ANOTHER','Autre'))
+            ('ANOTHER', 'Autre'))
 
+    external_id = models.CharField(max_length=100, blank=True, null=True)
     type = models.CharField(max_length=20, choices=EDUCATION_TYPE)
     name = models.CharField(max_length=100)
     adhoc = models.BooleanField(default=False)

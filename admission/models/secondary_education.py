@@ -26,13 +26,7 @@
 from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-
-
-NATIONAL_COMMUNITY_TYPES = (
-    ('FRENCH', 'Communauté française de Belgique'),
-    ('GERMAN', 'Communauté germanophone'),
-    ('DUTCH', 'Communauté flamande'),
-    )
+from reference.enums.education_institution_national_comunity import NATIONAL_COMMUNITY_TYPES
 
 
 class SecondaryEducationAdmin(admin.ModelAdmin):

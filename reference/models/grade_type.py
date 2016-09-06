@@ -25,6 +25,7 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from reference.enums import grade_type_coverage
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -37,14 +38,17 @@ GRADE_CHOICES = (
 
 
 class GradeTypeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'grade')
-    fieldsets = ((None, {'fields': ('name', 'grade')}),)
+    list_display = ('name', 'institutional_grade_type', 'coverage', 'adhoc', 'institutional')
+    fieldsets = ((None, {'fields': ('name', 'institutional_grade_type', 'coverage', 'adhoc', 'institutional')}),)
 
 
 class GradeType(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     name = models.CharField(max_length=255)
-    grade = models.CharField(max_length=20, choices=GRADE_CHOICES)
+    coverage = models.CharField(max_length=30, choices=grade_type_coverage.COVERAGES, default=grade_type_coverage.UNKNOWN)
+    adhoc = models.BooleanField(default=True)  # If False == Official/validated, if True == Not Official/not validated
+    institutional = models.BooleanField(default=False)  # True if the domain is in UCL else False
+    institutional_grade_type = models.ForeignKey('reference.InstitutionalGradeType', blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
