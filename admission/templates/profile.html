@@ -94,7 +94,7 @@
                                            class="btn btn-success"
                                            title="{% trans 'change_picture'%}"
                                            data-toggle="modal" data-target="#pnl_upload_documents">
-                                             <span class="glyphicon glyphicon-ok-circle" aria-hidden="true" id="spn_modify_picture">&nbsp;Upload</span>
+                                             <span class="glyphicon glyphicon-ok-circle" aria-hidden="true" id="spn_modify_picture"></span>&nbsp;Upload
                                          </button>
 
                                     {%else%}
@@ -103,7 +103,7 @@
                                            class="btn"
                                            title="{% trans 'add_picture'%}"
                                            data-toggle="modal" data-target="#pnl_upload_documents">
-                                             <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_modify_picture">&nbsp;Upload</span>
+                                             <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_modify_picture"></span>&nbsp;Upload
                                          </button>
                                     {%endif%}
 
@@ -269,7 +269,7 @@
                                                                                 data-toggle="modal"
                                                                                 data-target="#pnl_upload_documents">
                                                                             <span class="{{assimilation_documents_existing|button_class:d }}"
-                                                                                  id="spn_btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}">&nbsp;Upload{{cpt1}}</span>
+                                                                                  id="spn_btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}"></span>&nbsp;Upload
                                                                         </button>
                                                                     </td>
                                                                     <td>&nbsp;&nbsp;</td>
@@ -299,8 +299,8 @@
                                                                                 data-toggle="modal"
                                                                                 data-target="#pnl_upload_documents">
                                                                             <span class="{{assimilation_documents_existing|button_class:d }}"
-                                                                                  id="spn_btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}">&nbsp;Upload
-                                                                            </span>
+                                                                                  id="spn_btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}">
+                                                                            </span>&nbsp;Upload
                                                                         </button>
                                                                     </td>
                                                                     <td>&nbsp;&nbsp;</td>
@@ -376,7 +376,7 @@
                                                     title="{% trans 'change_document'%}"
                                                     data-toggle="modal"
                                                     data-target="#pnl_upload_documents">
-                                                <span class="glyphicon glyphicon-ok-circle" aria-hidden="true" id="spn_modify_id_document">&nbsp;Upload</span>
+                                                <span class="glyphicon glyphicon-ok-circle" aria-hidden="true" id="spn_modify_id_document"></span>&nbsp;Upload
                                             </button>
 
                                     {%else%}
@@ -385,7 +385,7 @@
                                                 id="btn_modify_id_document"
                                                 class="btn"
                                                 data-toggle="modal" data-target="#pnl_upload_documents">
-                                            <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_modify_id_document">&nbsp;Upload</span>
+                                            <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_modify_id_document"></span>&nbsp;Upload
                                         </button>
                                     {%endif%}
                                 </div>
@@ -530,6 +530,7 @@
                             <div class="col-md-4">
                                 <label>{% trans 'country'%} *</label>
                                 <select class="form-control" id="slt_contact_adr_country" name="contact_adr_country">
+                                    <option value="-1">-</option>
                                     {% for country in countries%}
                                     <option value="{{country.id}}"
                                             {%if country.id = person_contact_address.country.id%} selected {%endif%}>
