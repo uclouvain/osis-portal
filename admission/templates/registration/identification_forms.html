@@ -1,0 +1,182 @@
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+<h3>{% trans 'welcome' %}</h3>
+<p>{% trans 'account_needed'%}</p>
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">{% trans 'account_already_created'%}</h3></div>
+            <div class="panel-body">
+                {% trans 'mail_account_activation' %}
+                <br>{% trans 'connection_possible' %}
+                <form action="{% url 'admission_login' %}" method="post" class="form" role="form" autocomplete="off">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="id_username">{%trans 'mail'%}</label>
+                            <input id="id_username" maxlength="254" name="username" type="text" class="form-control"
+                                   placeholder="{%trans 'mail'%}" required="true">
+                        </div>
+                        <div class="col-md-6"></div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="id_password">{%trans 'password_label'%}</label>
+                            <input id="id_password" name="password" type="password" class="form-control"
+                                   placeholder="{%trans 'password'%}" required="true">
+                        </div>
+                        <div class="col-md-6"></div>
+                    </div>
+                    <br>
+                    <div class="row">
+                         <input type="hidden" name="next" value="{{ next }}" />
+                         <label>&nbsp;</label>
+                         <button type="submit" id="post_login_btn" class="btn btn-default" role="button"
+                                title="{% trans 'validate'%}">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  {% trans 'validate'%}
+                         </button>
+                    </div>
+                    {% if message %}
+                    <br>
+                        <div class="row">
+                          <font class="error" id="msg_message_error">{{ message }}</font>
+                        </div>
+                    {%endif%}
+                </form>
+                <br>
+                <div class="row">
+                    <label>&nbsp;</label>
+                    <a href="{% url 'new_password_request' %}">{% trans 'question_password_forgotten' %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">{% trans 'no_account_yet' %}</h3></div>
+            <div class="panel-body">
+                <form  method="post" action="{% url 'new_user' %}" autocomplete="off">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ number1 }}" name="number1" />
+                    <input type="hidden" value="{{ number2 }}" name="number2" />
+                    <input type="hidden" value="{{ number3 }}" name="number3" />
+
+                    {% trans 'account_creation' %} <b>{% trans 'all_mandatory_fields' %}.</b>
+                    <br><br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>{% trans 'firstname'%}</label>
+                            <input class="form-control" id="txt_first_name_new" name="first_name_new" required="true"
+                                   value="{{first_name_new| default_if_none:''}}">
+                            <p class="caption">(ex : Frédéric <label style="text-decoration: line-through;" >frederic FREDERIC</label>)</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label>{% trans 'lastname'%}</label>
+                            <input class="form-control" id="txt_last_name_new" name="last_name_new"  required="true"
+                                   value="{{last_name_new| default_if_none:''}}">
+                            <p class="caption">(ex : Van der Elst / Vanderelst <label style="text-decoration: line-through;" > VANDERELST</label>)</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>{% trans 'mail'%}</label>
+                            <input class="form-control" id="txt_email_new" name="email_new" required="true"
+                                   value="{{email_new| default_if_none:''}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label>{% trans 'confirm_email'%}</label>
+                            <input class="form-control" id="txt_email_new_confirm" name="email_new_confirm"  required="true"
+                                   value="{{email_new_confirm| default_if_none:''}}">
+                        </div>
+                    </div>
+                    {% if form_new.email_new_confirm.errors%}
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <font class="error" id="msg_email_new_confirm_errors">{{ form_new.email_new_confirm.errors|striptags }}</font>
+                            </div>
+                        </div>
+                    {%endif%}
+                    <br>
+                    <div class="row" >
+                        <div class="col-md-6">
+                            <label>{% trans 'choose_new_password'%}</label>
+                            <input type="password" class="form-control" id="txt_password_new" name="password_new"
+                                   required="true"
+                                   value="{{password_new| default_if_none:''}}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>{% trans 'confirm_password'%}</label>
+                            <input type="password" class="form-control" id="txt_password_new_confirm" name="password_new_confirm"  required="true">
+                        </div>
+                    </div>
+                    {% if form_new.password_new.errors%}
+                        <br>
+                        <div class="row">
+                            <font class="error" id="msg_password_new_errors">{{ form_new.password_new.errors|striptags }}</font>
+                        </div>
+                    {%endif%}
+                    {% if form_new.password_new_confirm.errors%}
+                        <br>
+                        <div class="row">
+                            <font class="error" id="msg_password_new_confirm_errors">{{ form_new.password_new_confirm.errors|striptags }}</font>
+                        </div>
+                    {%endif%}
+                    <br>
+                    <div class="row">
+                        <div style="margin-left:15px;">{% trans 'captcha'%}</div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-3">
+                                {{ number1 }} + {{ number2 }} - {{ number3}} =
+                        </div>
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" id="txt_verification" name="verification" required="true">
+                            <font class="error" id="msg_verification_errors">{{ form_new.verification.errors|striptags }}</font>
+                        </div>
+                        <div class="col-md-4">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <label>&nbsp;</label>
+                        <button type="submit" id="bt_submit_user_create" class="btn btn-default" role="button"
+                                title="{% trans 'help_new_account'%}">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  {% trans 'validate'%}
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
