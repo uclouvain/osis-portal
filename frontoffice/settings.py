@@ -231,21 +231,15 @@ OVERRIDED_LOGIN_URL=''
 # A relative URL will work on local , but not out of the box on the servers.
 LOGO_INSTITUTION_URL = os.path.join(BASE_DIR, "base/static/img/logo_institution.jpg")
 
-try:
-    from frontoffice.server_settings import *
-except ImportError:
-    pass
-
-if 'admission' in INSTALLED_APPS:
-    ADMISSION_LOGIN_URL=reverse_lazy('admission_login')
-    ADMISSION_LOGIN_REDIRECT_URL=reverse_lazy('admission')
-
 LOGO_EMAIL_SIGNATURE_URL = ''
 LOGO_OSIS_URL = ''
 
 LOCALE_PATHS = (
     "/admission/locale",
 )
+
+EMAIL_PRODUCTION_SENDING = False
+COMMON_EMAIL_RECEIVER = 'osis@localhost.org'
 
 CKEDITOR_CONFIGS = {
     'default': {
@@ -267,3 +261,12 @@ CKEDITOR_CONFIGS = {
         ],
     },
 }
+
+try:
+    from frontoffice.server_settings import *
+except ImportError:
+    pass
+
+if 'admission' in INSTALLED_APPS:
+    ADMISSION_LOGIN_URL=reverse_lazy('admission_login')
+    ADMISSION_LOGIN_REDIRECT_URL=reverse_lazy('admission')
