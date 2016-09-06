@@ -258,9 +258,7 @@
                                                 <tr>
                                                     <td>
                                                         <table>
-
                                                             {% for d in doc.descriptions%}
-
                                                                 <tr>
                                                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                                                     <td>
@@ -279,12 +277,10 @@
                                                                             {% trans document_description %}
                                                                         {% endwith %}
                                                                     </td>
-
                                                                 </tr>
                                                             {%endfor%}
                                                         </table>
                                                     </td>
-
                                                 </tr>
                                             {%else%}
                                             <tr><td colspan="2">&nbsp;&nbsp;{% trans 'or' as and_upper%} {{and_upper| upper}}</td></tr>
@@ -312,7 +308,6 @@
                                                                             {% trans document_description %}
                                                                          {% endwith %}
                                                                     </td>
-
                                                                 </tr>
                                                             {%endfor%}
                                                         </table>
@@ -334,26 +329,20 @@
                                                     <option value="4">{% trans 'criteria' %} 4</option>
                                                 </select><div id="pnl_other_criteria"></div>
                                                 <br>
-
                                                 </td>
                                             </tr>
-
                                             {%endif%}
                                     </table>
                                     <br>
                                     {%endif%}
-                                        </div>
-
-
-
+                                    </div>
                                 </div>
                             </div>
                             {% endfor %}
                         </ol>
-                    <br>
-                    <label>Fournir obligatoirement une attestation pour au moins une des assimilations que vous avez choisies.</label>
-                    <br>
-
+                        <br>
+                        <label>Fournir obligatoirement une attestation pour au moins une des assimilations que vous avez choisies.</label>
+                        <br>
                     </div>
                 </div>
             </div>
@@ -483,7 +472,6 @@
                                            name="same_contact_legal_addr" value="true"
                                            onclick="display('pnl_contact_address',false);"
                                            {% if same_addresses %}checked{%endif%}> {% trans 'yes' %}
-
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" id="rd_same_contact_legal_addr_false"
@@ -625,7 +613,6 @@
                     </div>
                 </div>
             </div>
-
         <div>
         <span id="txt_message_error_profile"
                class="alert alert-warning"
@@ -640,5 +627,3 @@
         </div>
         <div id="pnl_files"><div id="pnl_uploaded_files" style="visibility:hidden;display:none;" ></div></div>
     </form>
-
-

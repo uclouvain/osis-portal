@@ -29,7 +29,6 @@ from admission.views import application, common, identification, offer, level, q
     assimilation_criteria
 from django.conf.urls.static import static
 from django.conf import settings
-from django.views.i18n import javascript_catalog
 
 js_info_dict = {
     'packages': ('admission', )
@@ -111,7 +110,5 @@ urlpatterns = [
     url(r'^upload/delete/$', upload_file.delete_document_file, name='delete_document_file'),
     url(r'^document/$', upload_file.find_by_description),
     url(r'^upload/save/$', upload_file.save_uploaded_file, name="save_uploaded_file"),
-
-
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
