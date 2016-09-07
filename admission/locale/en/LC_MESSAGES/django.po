@@ -23,6 +23,9 @@ msgstr "Academic year"
 msgid "account_already_created"
 msgstr "If you already have requested creation of this account"
 
+msgid "account_created"
+msgstr "Your account was created!"
+
 msgid "account_creation"
 msgstr "Please create this account, composed of a private e-mail address and a password."
 
@@ -39,7 +42,7 @@ msgid "activation_link_not_valid"
 msgstr "Activation link invalid!"
 
 msgid "activation_mail_sent"
-msgstr "An activation message has been sent to your email account."
+msgstr "An activation message has been sent to your email."
 
 msgid "activity_type"
 msgstr "Activity type"
@@ -179,6 +182,9 @@ msgstr "Request to change password"
 
 msgid "changing_password_instruction"
 msgstr "Please enter your e-mail address. You will receive a link, allowing you to change your password."
+
+msgid "check_activation_email_sent"
+msgstr "Please, check your email box now and click on the link in the message we have sent to you to activate your account."
 
 msgid "checkbox"
 msgstr "checkbox"
@@ -498,6 +504,9 @@ msgstr "Last High school scores transcript"
 msgid "higher_non_university"
 msgstr "Higher non university"
 
+msgid "homepage"
+msgstr "Homepage"
+
 msgid "http_link"
 msgstr "HTTP link"
 
@@ -783,6 +792,9 @@ msgstr "Offer choice"
 msgid "onem_needed"
 msgstr "Veuillez joindre l'attestation de l'ONEM stipulant qui n'a pas bénificier d'une dégoration l'autorisation de poursuivre des études"
 
+msgid "online_enrollment"
+msgstr "Online Enrollment"
+
 msgid "or"
 msgstr "or"
 
@@ -1011,6 +1023,9 @@ msgstr "Reference number"
 
 msgid "requested_study"
 msgstr "Requested study"
+
+msgid "resend_activation_email"
+msgstr "Resend activation email"
 
 msgid "residence_country"
 msgstr "Residence country"
