@@ -201,7 +201,7 @@
                     <div class="col-md-3" style="text-align: right">
                         <label>{% trans 'description' %}</label>
                     </div>
-                    <div class="col-md-9" style="text-align: justify">
+                    <div class="col-md-9" style="text-align: left">
                         {{ dissertation.proposition_dissertation.description|linebreaks }}
                     </div>
                 </div>
@@ -209,10 +209,10 @@
         </div>
         <div class="row">
             <div class="col-md-12">
+                {% if dissertation.status == 'DRAFT' or dissertation.status == 'DIR_KO' %}
                 <a class="btn btn-default btn-primary"
                    href="{% url 'dissertation_edit' pk=dissertation.pk %}">
                     <span class="glyphicon glyphicon-edit"></span> {% trans 'edit' %}</a>
-                {% if dissertation.status == 'DRAFT' or dissertation.status == 'DIR_KO' %}
                 <a class="btn btn-default btn-danger"
                    href="{% url 'dissertation_delete' pk=dissertation.pk %}"
                    onclick="return confirm('{% trans 'delete_dissertation_confirmation_message' %}')">
@@ -225,6 +225,10 @@
                         <span class="glyphicon glyphicon-circle-arrow-right"
                               aria-hidden="true"></span> {% trans 'dir_submit'%}</a>
                     {% endif %}
+                {% elif check_edit == True %}
+                <a class="btn btn-default btn-primary"
+                   href="{% url 'dissertation_edit' pk=dissertation.pk %}">
+                    <span class="glyphicon glyphicon-edit"></span> {% trans 'edit' %}</a>
                 {% endif %}
             </div>
         </div>

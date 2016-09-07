@@ -41,6 +41,14 @@ class OfferProposition(models.Model):
     end_visibility_proposition = models.DateField(default=timezone.now)
     start_visibility_dissertation = models.DateField(default=timezone.now)
     end_visibility_dissertation = models.DateField(default=timezone.now)
+    start_jury_visibility = models.DateField(default=timezone.now)
+    end_jury_visibility = models.DateField(default=timezone.now)
+    start_edit_title = models.DateField(default=timezone.now)
+    end_edit_title = models.DateField(default=timezone.now)
 
     def __str__(self):
         return self.acronym
+
+
+def search_by_offer(off):
+    return OfferProposition.objects.get(offer=off)
