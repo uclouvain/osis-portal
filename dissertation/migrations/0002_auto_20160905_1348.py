@@ -10,13 +10,18 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('base', '0008_offer_offerenrollment'),
-        ('admission', '0005_applicationdocumentfile_documenttypeassimilation'),
+        ('dissertation', '0001_initial'),
     ]
 
     operations = [
+        migrations.RemoveField(
+            model_name='offerproposition',
+            name='offer_year',
+        ),
         migrations.AddField(
-            model_name='offeryear',
+            model_name='offerproposition',
             name='offer',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='base.Offer'),
+            field=models.ForeignKey(default='', on_delete=django.db.models.deletion.CASCADE, to='base.Offer'),
+            preserve_default=False,
         ),
     ]

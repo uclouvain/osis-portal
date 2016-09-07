@@ -44,7 +44,8 @@ class Migration(migrations.Migration):
                 ('end_visibility_proposition', models.DateField(default=django.utils.timezone.now)),
                 ('start_visibility_dissertation', models.DateField(default=django.utils.timezone.now)),
                 ('end_visibility_dissertation', models.DateField(default=django.utils.timezone.now)),
-                ('offer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='base.Offer')),
+                ('offer_year', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                                 to='admission.OfferYear')),
             ],
         ),
         migrations.CreateModel(
