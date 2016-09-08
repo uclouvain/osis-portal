@@ -399,7 +399,15 @@
   {"model": "reference.language", "pk":8, "fields": {"name" :"Russe", "code" : "ru", "recognized" : "False"}},
   {"model": "reference.language", "pk":9, "fields": {"name" :"Chinois", "code" : "zh", "recognized" : "False"}},
   {"model": "reference.language", "pk":10, "fields": {"name" :"Japonais", "code" : "ja", "recognized" : "False"}},
-  {"model": "reference.language", "pk":11, "fields": {"name" :"Vietnamien", "code" : "vi", "recognized" : "False"}}
+  {"model": "reference.language", "pk":11, "fields": {"name" :"Vietnamien", "code" : "vi", "recognized" : "False"}},
+
+  {"model": "reference.assimilationcriteria", "pk":1, "fields": {"criteria" :"Avez-vous une autorisation d’établissement ou vous êtes résident de longue durée ?", "order" : "1"}},
+  {"model": "reference.assimilationcriteria", "pk":2, "fields": {"criteria" :"Etes-vous réfugié, apatride ou bénéficiez- vous d’une protection subsidiaire ?", "order" : "2"}},
+  {"model": "reference.assimilationcriteria", "pk":3, "fields": {"criteria" :"Avez-vous une autorisation de séjour de plus de 3 mois et bénéficiez–vous de revenus professionnels ou de remplacement ?", "order" : "3"}},
+  {"model": "reference.assimilationcriteria", "pk":4, "fields": {"criteria" :"Etes-vous pris en charge par le CPAS, un home du CPAS ou désigné par le CPAS ?", "order" : "4"}},
+  {"model": "reference.assimilationcriteria", "pk":5, "fields": {"criteria" :"Votre père, mère, tuteur légal, conjoint ou cohabitant légal a-t-il la nationalité d’un pays d’un état membre de l’Union Européenne ou remplit- il une des conditions visées par les questions de 1 à 4 ", "order" : "5"}},
+  {"model": "reference.assimilationcriteria", "pk":6, "fields": {"criteria" :"Bénéficiez-vous d’une bourse visée à l’article 105 § 2 du décret du 7 novembre 2013 (CFWB ou la Coopération au développement)", "order" : "6"}},
+  {"model": "reference.assimilationcriteria", "pk":7, "fields": {"criteria" :"Etes-vous résident de longue durée en U.E. (hors Belgique) ?", "order" : "7"}}
 
 
 ]

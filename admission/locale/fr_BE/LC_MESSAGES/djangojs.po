@@ -24,3 +24,99 @@ msgstr ""
 msgid "msg_next_profil"
 msgstr ""
 "Avant de pouvoir accéder à l'étape suivante vous devez encoder au minimum, votre nationalité et votre pays de résidence"
+
+msgid "criteria"
+msgstr "Critère"
+
+msgid "id_picture"
+msgstr "Identity picture"
+
+msgid "id_card"
+msgstr "Identity card"
+
+msgid "resident_long_duration"
+msgstr "Carte de 'résident longue durée' (Carte D)"
+
+msgid "id_foreign_unlimited"
+msgstr "Carte d’identité des étrangers séjour illimité 'établissement' (Carte C)"
+
+msgid "attachment_26"
+msgstr "Annexe 26"
+
+msgid "refugee_card"
+msgstr "Carte de réfugié (Carte B)"
+
+msgid "family_composition"
+msgstr "Composition de ménage récente"
+
+msgid "birth_certificate"
+msgstr "Acte de naissance"
+
+msgid "resident_certificate"
+msgstr "Certificat de résidence récent "
+
+msgid "stateless_certificate"
+msgstr "Document officiel de la commune ou de l’Office des étrangers prouvant le statut d’apatride"
+
+msgid "foreign_inscription_certificate"
+msgstr "Certificat d’inscription au registre des étrangers d’une durée limitée d’un an renouvelable"
+
+msgid "subsidiary_protection_decision"
+msgstr "Décision de l’Office des étrangers attestant de la situation de la protection subsidiaire"
+
+msgid "residence_permit"
+msgstr "Permis de séjour de un an minimum"
+
+msgid "paycheck"
+msgstr "6 fiches de salaires sur les 12 mois précédant l’inscription prouvant que votre rémunération correspond à la moitié de la rémunération brute mensuelle moyenne minimum garantie fixée par le CNT (http://www.cnt-nar.be/CAO-CCT-BEDRAGEN/BEDRAGEN-2013-01-01.pdf )"
+
+msgid "cpas"
+msgstr "Attestation récente du CPAS"
+
+msgid "tutorship_certificate"
+msgstr "Attestation émanant de l’administration communale et la tutelle légale par un jugement de tutelle (NB : l’âge de la majorité peut varier suivant la nationalité) (Optionnel)"
+
+msgid "scholarship_cfwb"
+msgstr "Attestation de bourse délivrée par la CFWB ou la Coopération au développement "
+
+msgid "scholarship_development_cooperation"
+msgstr "scholarship_development_cooperation"
+
+msgid "change_document"
+msgstr "Changer le document"
+
+msgid "paycheck_1"
+msgstr "Paycheck 1"
+
+msgid "paycheck_2"
+msgstr "Paycheck 2"
+
+msgid "paycheck_3"
+msgstr "Paycheck 3"
+
+msgid "paycheck_4"
+msgstr "Paycheck 4"
+
+msgid "paycheck_5"
+msgstr "Paycheck 5"
+
+msgid "paycheck_6"
+msgstr "Paycheck 6"
+
+msgid "concerned_person"
+msgstr "Pour la personne concernée"
+
+msgid "invalid_content_type"
+msgstr "Type de fichier invalide"
+
+msgid "select_file"
+msgstr "Sélectionner un fichier"
+
+msgid "error_occured"
+msgstr "Attention le fichier n'a pas été sauvegardé!"
+
+msgid "national_diploma_recto"
+msgstr "Diplôme d'études secondaires - recto"
+
+msgid "national_diploma_verso"
+msgstr "Diplôme d'études secondaires - verso"

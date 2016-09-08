@@ -1238,3 +1238,84 @@ msgstr "Your profille"
 
 msgid "your_requests"
 msgstr "Your requests"
+
+msgid "add_document"
+msgstr "Add a document"
+
+msgid "precise_file"
+msgstr "Please select a file"
+
+msgid "resident_long_duration"
+msgstr "resident_long_duration"
+
+msgid "id_foreign_unlimited"
+msgstr "id_foreign_unlimited"
+
+msgid "attachment_26"
+msgstr "attachment_26"
+
+msgid "refugee_card"
+msgstr "refugee_card"
+
+msgid "family_composition"
+msgstr "family_composition"
+
+msgid "birth_certificate"
+msgstr "birth_certificate"
+
+msgid "resident_certificate"
+msgstr "resident_certificate"
+
+msgid "stateless_certificate"
+msgstr "stateless_certificate"
+
+msgid "foreign_inscription_certificate"
+msgstr "foreign_inscription_certificate"
+
+msgid "subsidiary_protection_decision"
+msgstr "subsidiary_protection_decision"
+
+msgid "residence_permit"
+msgstr "residence_permit"
+
+msgid "paycheck"
+msgstr "paycheck"
+
+msgid "cpas"
+msgstr "cpas"
+
+msgid "tutorship_certificate"
+msgstr "tutorship_certificate"
+
+msgid "scholarship_cfwb"
+msgstr "scholarship_cfwb"
+
+msgid "scholarship_development_cooperation"
+msgstr "scholarship_development_cooperation"
+
+msgid "criteria"
+msgstr "Criteria"
+
+msgid "help_pnl_selectedfiles"
+msgstr "Please select a file"
+
+msgid "upload"
+msgstr "Upload"
+
+msgid "paycheck_1"
+msgstr "1st paycheck"
+
+msgid "paycheck_2"
+msgstr "2nd paycheck"
+
+msgid "paycheck_3"
+msgstr "3rd paycheck"
+
+msgid "paycheck_4"
+msgstr "4th paycheck"
+
+msgid "paycheck_5"
+msgstr "5th paycheck"
+
+msgid "paycheck_6"
+msgstr "6th paycheck"

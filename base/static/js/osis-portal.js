@@ -219,7 +219,6 @@ $("#rdb_offer_resident_false").click(function() {
 
 
 function init_static_questions (){
-
    $("#pnl_static_questions").children().css('visibility', 'hidden').css('display','none');
    $('#pnl_static_questions').find('input[type=radio]:checked').removeAttr('checked');
    $('#pnl_static_questions').find('input').removeAttr('required');
