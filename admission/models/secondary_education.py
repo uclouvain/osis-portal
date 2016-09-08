@@ -52,7 +52,7 @@ class SecondaryEducation(models.Model):
 
     person = models.OneToOneField('Applicant')
     diploma = models.BooleanField(default=False)
-    academic_year = models.ForeignKey('AcademicYear', blank=True, null=True)
+    academic_year = models.ForeignKey('base.AcademicYear', blank=True, null=True)
     national = models.NullBooleanField(default=True)
     national_community = models.CharField(max_length=20, choices=NATIONAL_COMMUNITY_TYPES, blank=True, null=True)
     national_institution = models.ForeignKey('reference.EducationInstitution', blank=True, null=True)

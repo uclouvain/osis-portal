@@ -25,6 +25,7 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from base.models.serializable_model import SerializableModel
 
 
 class CampusAdmin(admin.ModelAdmin):
@@ -34,7 +35,7 @@ class CampusAdmin(admin.ModelAdmin):
     search_fields = ['name', 'organization__name']
 
 
-class Campus(models.Model):
+class Campus(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True)
     organization = models.ForeignKey('Organization')

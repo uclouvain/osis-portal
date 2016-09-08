@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -24,29 +24,25 @@
 #
 ##############################################################################
 
-from couchbase import Couchbase
-from pprint import pprint
-import json
-import logging
-from django.conf import settings
 
-logger = logging.getLogger(settings.DEFAULT_LOGGER)
+def change_contact_address(contact_address_required):
+    """
+    Change the value of the applicant contact address.
+    If the contact address is ot required, the function remove all information about the applicant contact adress.
+    :param contact_address_required: True if the contact address and the residence address of the applicant are different.
+                                     False if the applicant has only one address.
+    """
+    # To implement
+    if not contact_address_required:
+        # remove all info about the contact address
+        # To implement
+        pass
 
 
-def couchbase_insert(json_datas):
-    cb = Couchbase.connect(bucket='default')
-    data = json.loads(json_datas.decode("utf-8"))
-    key = "{0}-{1}".format(
-        data['id'],
-        data['name'].replace(' ', '_').lower()
-    )
-    logger.debug('inserting datas in couchDB...')
-    cb.set(key, data)
-    logger.debug('Done.')
-    logger.debug('getting datas just inserted in couchDB...')
-    result = cb.get(key)
-    pprint(result.value, indent=4)
-    logger.debug('Done.')
-    logger.debug('deleting datas just inserted in couchDB...')
-    cb.delete(key)
-    logger.debug('Done.')
+def change_already_registered_in_ucl(already_registered):
+    """
+    Change the value of the field 'registration_id' and 'last_academic_year' of the Applicant.
+    :param already_registered: True if the applicant was already registered in the UCL university in the past.
+    """
+
+

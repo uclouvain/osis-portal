@@ -28,8 +28,8 @@ from django.contrib import admin
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
-from admission.models import offer_year, academic_year
-from base.models import student
+
+from base.models import student, offer_year, academic_year
 from . import proposition_dissertation
 
 

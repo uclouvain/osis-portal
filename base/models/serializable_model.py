@@ -23,14 +23,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.apps import AppConfig
-from frontoffice.queue import callbacks, queue_listener
+from django.db import models
+import uuid
 
 
-class ReferenceConfig(AppConfig):
-    name = 'reference'
+class SerializableModelManager(models.Manager):
+    def get_by_natural_key(self, uuid):
+        return self.get(uuid=uuid)
 
-    def ready(self):
-        # if django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
-        # ===> This exception says that there is an error in the implementation of method ready(self) !!
-        queue_listener.listen_queue(self.name, callbacks.insert_or_update)
+
+class SerializableModel(models.Model):
+    objects = SerializableModelManager()
+
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, db_index=True)
+
+    def natural_key(self):
+        return [self.uuid]
+
+    def __str__(self):
+        return self.uuid
+
+    class Meta:
+        abstract = True

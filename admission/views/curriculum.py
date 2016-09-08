@@ -30,6 +30,7 @@ from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 
 from admission import models as mdl
+from base import models as mdl_base
 from admission.views import common
 from reference import models as mdl_reference
 from admission.views import demande_validation
@@ -85,7 +86,7 @@ def save(request):
                            "universities_cities": universities_cities,
                            "universities": universities,
                            "languages": mdl_reference.language.find_languages(),
-                           "current_academic_year": mdl.academic_year.current_academic_year()})
+                           "current_academic_year": mdl_base.academic_year.current_academic_year()})
 
     # Get the data in bd
     applicant = mdl.applicant.find_by_user(request.user)
@@ -97,12 +98,12 @@ def save(request):
         if secondary_education.academic_year:
             first_academic_year_for_cv = secondary_education.academic_year.year + 1
 
-    current_academic_year = mdl.academic_year.current_academic_year().year
+    current_academic_year = mdl_base.academic_year.current_academic_year().year
 
     year = first_academic_year_for_cv
     if year:
         while year < current_academic_year:
-            academic_year = mdl.academic_year.find_by_year(year)
+            academic_year = mdl_base.academic_year.find_by_year(year)
             curriculum = mdl.curriculum.find_by_academic_year(academic_year)
             if curriculum is None:
                 # add cv empty cv's for the year if it's needed
@@ -124,7 +125,7 @@ def save(request):
                                                "universities_cities": universities_cities,
                                                "universities": universities,
                                                "languages": mdl_reference.language.find_languages(),
-                                               "current_academic_year": mdl.academic_year.current_academic_year()})
+                                               "current_academic_year": mdl_base.academic_year.current_academic_year()})
 
 
 def update(request, application_id=None):
@@ -136,7 +137,7 @@ def update(request, application_id=None):
     message = None
     applicant = mdl.applicant.find_by_user(request.user)
     secondary_education = mdl.secondary_education.find_by_person(applicant)
-    current_academic_year = mdl.academic_year.current_academic_year().year
+    current_academic_year = mdl_base.academic_year.current_academic_year().year
     admission = is_admission(applicant, secondary_education)
     year_secondary = None
     year = current_academic_year - 5
@@ -154,7 +155,7 @@ def update(request, application_id=None):
         year = year_secondary + 1
 
     while year < current_academic_year:
-        academic_year = mdl.academic_year.find_by_year(year)
+        academic_year = mdl_base.academic_year.find_by_year(year)
         if academic_year:
             # find existing cv
             curriculum = mdl.curriculum.find_by_academic_year(academic_year)
@@ -186,7 +187,7 @@ def update(request, application_id=None):
                        "universities_cities": universities_cities,
                        "universities": universities,
                        "languages": mdl_reference.language.find_languages(),
-                       "current_academic_year": mdl.academic_year.current_academic_year(),
+                       "current_academic_year": mdl_base.academic_year.current_academic_year(),
                        "tab_active": 3,
                        "application": application,
                        "validated_profil": demande_validation.validate_profil(applicant),
@@ -237,7 +238,7 @@ def validate_fields_form(request, duplicate_year_origin):
                 data_dict_to_duplicate = data_dict.copy()
 
         # No need to validate the curriculum of the year which is going to be duplicated
-        academic_year = mdl.academic_year.find_by_year(curriculum_year)
+        academic_year = mdl_base.academic_year.find_by_year(curriculum_year)
         curriculum = mdl.curriculum.find_by_person_year(applicant, int(curriculum_year))
 
         if curriculum is None:

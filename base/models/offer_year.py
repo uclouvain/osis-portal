@@ -35,7 +35,7 @@ class OfferYearAdmin(admin.ModelAdmin):
 
 class OfferYear(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    academic_year = models.ForeignKey('AcademicYear')
+    academic_year = models.ForeignKey('base.AcademicYear')
     acronym = models.CharField(max_length=15)
     title = models.CharField(max_length=255)
     title_international = models.CharField(max_length=255, blank=True, null=True)

@@ -25,13 +25,14 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from base.models.serializable_model import SerializableModel
 
 
 class EducationTypeAdmin(admin.ModelAdmin):
     list_display = ('name', 'type', 'adhoc')
 
 
-class EducationType(models.Model):
+class EducationType(SerializableModel):
     EDUCATION_TYPE = (('TRANSITION','Transition'),
             ('QUALIFICATION','Qualification'),
             ('ANOTHER', 'Autre'))

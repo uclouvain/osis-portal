@@ -26,7 +26,8 @@
 
 from django.db import models
 from django.utils import timezone
-from admission.models import offer_year
+
+from base.models import offer_year
 
 
 class OfferProposition(models.Model):

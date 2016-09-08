@@ -28,7 +28,7 @@ from django.apps import AppConfig
 from django.conf import settings
 from django.core import serializers
 from django.core.serializers.base import DeserializationError
-from frontoffice.queue import queue
+from frontoffice.queue import queue_listener
 import json
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
@@ -43,7 +43,7 @@ class BaseConfig(AppConfig):
                 update_person_after_user_update, add_to_students_group
         except ImportError:
             pass
-        queue.listen_queue(self.queue_name, insert)
+        queue_listener.listen_queue(self.queue_name, insert)
 
 
 def insert(json_data):

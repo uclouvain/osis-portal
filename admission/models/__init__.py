@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models import academic_year
 from admission.models import admission_exam_type
 from admission.models import application_document_file
 from admission.models import answer
@@ -33,7 +32,6 @@ from admission.models import application
 from admission.models import curriculum
 from admission.models import document_type_assimilation
 from admission.models import form
-from admission.models import offer_year
 from admission.models import option
 from admission.models import person_address
 from admission.models import properties

@@ -29,6 +29,7 @@ from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 
 from admission import models as mdl
+from base import models as mdl_base
 from admission.views.common import home
 from reference import models as mdl_reference
 from admission.views import demande_validation
@@ -53,7 +54,7 @@ def validate_fields_form(request, secondary_education, next_step):
                 validation_messages['academic_year'] = ALERT_MANDATORY_FIELD
                 is_valid = False
             else:
-                academic_year = mdl.academic_year.find_by_id(int(request.POST.get('academic_year')))
+                academic_year = mdl_base.academic_year.find_by_id(int(request.POST.get('academic_year')))
                 secondary_education.academic_year = academic_year
             if request.POST.get('rdb_belgian_foreign') is None:
                 validation_messages['rdb_belgian_foreign'] = ALERT_MANDATORY_FIELD
@@ -255,7 +256,7 @@ def curriculum_save(request, application_id):
     education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
     education_type_qualification = mdl_reference.education_type.find_education_type_by_adhoc('QUALIFICATION', False)
     data = {"application":                  application,
-            "academic_years":               mdl.academic_year.find_academic_years(),
+            "academic_years":               mdl_base.academic_year.find_academic_years(),
             "secondary_education":          secondary_education,
             "countries":                    mdl_reference.country.find_excluding("BE"),
             "recognized_languages":         recognized_languages,
@@ -265,7 +266,7 @@ def curriculum_save(request, application_id):
             "professional_exam_link":       professional_exam_link,
             "education_type_transition":    education_type_transition,
             "education_type_qualification": education_type_qualification,
-            "current_academic_year":        mdl.academic_year.current_academic_year(),
+            "current_academic_year":        mdl_base.academic_year.current_academic_year(),
             "local_language_exam_needed":   is_local_language_exam_needed(request.user)}
 
     # merge 2 dictionaries
@@ -278,7 +279,7 @@ def diploma_save(request):
     previous_step = False
     save_step = True
     validation_messages = {}
-    academic_years = mdl.academic_year.find_academic_years()
+    academic_years = mdl_base.academic_year.find_academic_years()
     if request.POST:
         if 'bt_next_step_up' in request.POST or 'bt_next_step_down' in request.POST:
             next_step = True
@@ -297,7 +298,7 @@ def diploma_save(request):
     professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
     if secondary_education is None:
         secondary_education = mdl.secondary_education.SecondaryEducation()
-        secondary_education.academic_year = mdl.academic_year.current_academic_year()
+        secondary_education.academic_year = mdl_base.academic_year.current_academic_year()
         secondary_education.person = applicant
 
     education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
@@ -335,7 +336,7 @@ def diploma_save(request):
             "education_type_transition": education_type_transition,
             "education_type_qualification": education_type_qualification,
             "message_success": message_success,
-            "current_academic_year": mdl.academic_year.current_academic_year(),
+            "current_academic_year": mdl_base.academic_year.current_academic_year(),
             "local_language_exam_needed": local_language_exam_needed}
 
     # merge 2 dictionaries
@@ -358,7 +359,7 @@ def diploma_update(request, application_id=None):
     local_language_exam_link = mdl.properties.find_by_key('PROFESSIONAL_EXAM_LINK')
     professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
     countries = mdl_reference.country.find_excluding("BE")
-    academic_years = mdl.academic_year.find_academic_years()
+    academic_years = mdl_base.academic_year.find_academic_years()
     tab_status = tabs.init(request)
     data = {"application":                  application,
             "academic_years":               academic_years,
@@ -371,7 +372,7 @@ def diploma_update(request, application_id=None):
             "professional_exam_link":       professional_exam_link,
             "education_type_transition":    education_type_transition,
             "education_type_qualification": education_type_qualification,
-            "current_academic_year":        mdl.academic_year.current_academic_year(),
+            "current_academic_year":        mdl_base.academic_year.current_academic_year(),
             "local_language_exam_needed":   is_local_language_exam_needed(request.user),
             'tab_active':                   2,
             "validated_profil":             demande_validation.validate_profil(applicant),
@@ -594,7 +595,7 @@ def populate_secondary_education(request, secondary_education):
     if request.POST.get('diploma'):
         if request.POST.get('diploma') == 'true':
             if request.POST.get('academic_year'):
-                academic_year = mdl.academic_year.find_by_id(int(request.POST.get('academic_year')))
+                academic_year = mdl_base.academic_year.find_by_id(int(request.POST.get('academic_year')))
                 secondary_education.academic_year = academic_year
             secondary_education.diploma = True
             if request.POST.get('rdb_belgian_foreign'):
@@ -716,7 +717,7 @@ def populate_secondary_education(request, secondary_education):
             and (secondary_education.national is True or secondary_education.international_diploma is True):
         academic_year = None
         if request.POST.get('academic_year'):
-            academic_year = mdl.academic_year.find_by_id(int(request.POST.get('academic_year')))
+            academic_year = mdl_base.academic_year.find_by_id(int(request.POST.get('academic_year')))
         secondary_education.academic_year = academic_year
 
     return secondary_education

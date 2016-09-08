@@ -24,20 +24,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission import models as mdl
 from django.shortcuts import render, get_object_or_404
-from reference import models as mdl_reference
-
-from datetime import datetime
-from admission.views.common import home, get_picture_id, get_id_document
-from functools import cmp_to_key
-import locale
-from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+
+from admission import models as mdl
+from reference import models as mdl_reference
+from base import models as mdl_base
+from admission.views.common import get_picture_id, get_id_document
 from admission.views.common import extra_information
 from admission.views import demande_validation
-from admission.views import tabs
 from admission.views import tabs
 
 
@@ -77,10 +73,10 @@ def save_application_offer(request):
             secondary_education.applicant = application.applicant
 
         if secondary_education and secondary_education.academic_year is None:
-            secondary_education.academic_year = mdl.academic_year.current_academic_year()
+            secondary_education.academic_year = mdl_base.academic_year.current_academic_year()
 
         if offer_year_id:
-            offer_year = mdl.offer_year.find_by_id(offer_year_id)
+            offer_year = mdl_base.offer_year.find_by_id(offer_year_id)
 
         application.offer_year = offer_year
 

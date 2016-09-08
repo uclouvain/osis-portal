@@ -27,6 +27,9 @@ from base.models import *
 from django.contrib import admin
 
 
+admin.site.register(academic_year.AcademicYear,
+                    academic_year.AcademicYearAdmin)
+
 admin.site.register(campus.Campus,
                     campus.CampusAdmin)
 
@@ -35,6 +38,9 @@ admin.site.register(offer.Offer,
 
 admin.site.register(offer_enrollment.OfferEnrollment,
                     offer_enrollment.OfferEnrollmentAdmin)
+
+admin.site.register(offer_year.OfferYear,
+                    offer_year.OfferYearAdmin)
 
 admin.site.register(organization.Organization,
                     organization.OrganizationAdmin)

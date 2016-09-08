@@ -39,6 +39,7 @@ from admission import models as mdl
 from admission.forms import NewAccountForm, NewPasswordForm, AccessAccountForm
 from admission.utils import send_mail
 from reference import models as reference_mdl
+from base import models as mdl_base
 
 TEMPLATE_MSG_ACTIVATION ="account_activation"
 
@@ -325,7 +326,7 @@ def save_offer_selection(request):
             application.applicant = applicant
 
         if offer_year_id:
-            offer_year = mdl.offer_year.find_by_id(offer_year_id)
+            offer_year = mdl_base.offer_year.find_by_id(offer_year_id)
 
         application.offer_year = offer_year
         application.save()
@@ -347,7 +348,7 @@ def application_update(request, application_id):
 
 
 def selection_offer(request, offer_id):
-    offer_year = get_object_or_404(mdl.offer_year.OfferYear, pk=offer_id)
+    offer_year = get_object_or_404(mdl_base.offer_year.OfferYear, pk=offer_id)
     grade = _get_offer_type(request)
     domain = _get_domain(request)
 

@@ -26,6 +26,7 @@
 
 from django.db import models
 from django.contrib import admin
+from base.models.serializable_model import SerializableModel
 
 
 class AssimilationCriteriaAdmin(admin.ModelAdmin):
@@ -33,7 +34,7 @@ class AssimilationCriteriaAdmin(admin.ModelAdmin):
     fieldsets = ((None, {'fields': ('criteria', 'order')}),)
 
 
-class AssimilationCriteria(models.Model):
+class AssimilationCriteria(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     criteria = models.CharField(max_length=255, unique=True)
     order = models.IntegerField(blank=True, null=True)

@@ -23,17 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.models import User
-from admission.forms import NewAccountForm, AccountForm, NewPasswordForm
-from admission.utils import send_mail
-from random import randint
-from admission import models as mdl
+from django.shortcuts import render
 
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import login
+from admission import models as mdl
+from base import models as mdl_base
 from admission.forms import AccountingForm
 from admission.views import demande_validation
 from admission.views import tabs
@@ -44,8 +37,8 @@ def accounting(request, application_id=None):
         application = mdl.application.find_by_id(application_id)
     else:
         application = mdl.application.init_application(request.user)
-    academic_yr = mdl.academic_year.current_academic_year()
-    previous_academic_year = mdl.academic_year.find_by_year(academic_yr.year - 1)
+    academic_yr = mdl_base.academic_year.current_academic_year()
+    previous_academic_year = mdl_base.academic_year.find_by_year(academic_yr.year - 1)
     sport_affiliation_amount = 0
     culture_affiliation_amount = 0
     solidary_affiliation_amount = 0
@@ -82,8 +75,8 @@ def accounting(request, application_id=None):
 
 
 def accounting_update(request, application_id=None):
-    academic_yr = mdl.academic_year.current_academic_year()
-    previous_academic_year = mdl.academic_year.find_by_year(academic_yr.year - 1)
+    academic_yr = mdl_base.academic_year.current_academic_year()
+    previous_academic_year = mdl_base.academic_year.find_by_year(academic_yr.year - 1)
     sport_affiliation_amount = 0
     culture_affiliation_amount = 0
     solidary_affiliation_amount = 0
@@ -164,8 +157,8 @@ def populate_application(request, application):
 
 def debts_check(application):
     if application:
-        academic_yr = mdl.academic_year.current_academic_year()
-        previous_academic_year = mdl.academic_year.find_by_year(academic_yr.year - 1)
+        academic_yr = mdl_base.academic_year.current_academic_year()
+        previous_academic_year = mdl_base.academic_year.find_by_year(academic_yr.year - 1)
         secondary_curriculum = mdl.curriculum.find_belgian_french(application.applicant, previous_academic_year)
         if secondary_curriculum:
             return True

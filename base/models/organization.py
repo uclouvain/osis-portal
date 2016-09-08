@@ -26,6 +26,7 @@
 from django.db import models
 from django.contrib import admin
 from base.enums.organization_type import TYPES as ORGANIZATION_TYPES
+from base.models.serializable_model import SerializableModel
 
 
 class OrganizationAdmin(admin.ModelAdmin):
@@ -34,7 +35,7 @@ class OrganizationAdmin(admin.ModelAdmin):
     search_fields = ['acronym']
 
 
-class Organization(models.Model):
+class Organization(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     name = models.CharField(max_length=255)
     acronym = models.CharField(max_length=15)
