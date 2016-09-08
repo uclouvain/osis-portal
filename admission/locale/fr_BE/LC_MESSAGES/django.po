@@ -23,6 +23,9 @@ msgstr "Année académique"
 msgid "account_already_created"
 msgstr "Si vous avez déjà demandé la création de ce compte"
 
+msgid "account_created"
+msgstr "Votre compte a été crée!"
+
 msgid "account_creation"
 msgstr "Nous vous invitons à vous créer ce compte, composé d'une adresse mail privée et d'un mot de passe."
 
@@ -41,7 +44,7 @@ msgid "activation_link_not_valid"
 msgstr "Le lien n'est plus valide (ou pas valide)!"
 
 msgid "activation_mail_sent"
-msgstr "Un message a été envoyé sur votre adresse e-mail."
+msgstr "Un message d'activation a été envoyé sur votre adresse e-mail."
 
 msgid "activity_type"
 msgstr "Type d'activité"
@@ -192,6 +195,9 @@ msgstr "Demander changement de mot de passe"
 
 msgid "changing_password_instruction"
 msgstr "Veuillez encoder votre adresse e-mail. Vous recevrez un lien vous permettant de changer votre mot de passe"
+
+msgid "check_activation_email_sent"
+msgstr "Veuillez vérifier votre e-mail maintenant et cliquez sur le lien dans le message que vous avez reçu pour activé voutre compte."
 
 msgid "checkbox"
 msgstr "Case à cocher"
@@ -508,6 +514,9 @@ msgstr "Relevé de notes pour votre dernière année d'études secondaires"
 msgid "higher_non_university"
 msgstr "Supérieur Non-Universitaire"
 
+msgid "homepage"
+msgstr "Page d'accueil"
+
 msgid "http_link"
 msgstr "HTTP link"
 
@@ -798,6 +807,9 @@ msgstr "Choix de l'offre"
 msgid "onem_needed"
 msgstr "Veuillez joindre l'attestation de l'ONEM stipulant qui n'a pas bénificier d'une dégoration l'autorisation de poursuivre des études"
 
+msgid "online_enrollment"
+msgstr "Inscription en ligne"
+
 msgid "or"
 msgstr "ou"
 
@@ -1028,6 +1040,9 @@ msgstr "Numéro de dossier"
 
 msgid "requested_study"
 msgstr "Etude demandée"
+
+msgid "resend_activation_email"
+msgstr "Renvoyer l'email d'activation"
 
 msgid "residence_country"
 msgstr "Pays de résidence"

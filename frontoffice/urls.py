@@ -27,8 +27,6 @@ from django.conf import settings
 from django.contrib import admin
 from django.conf.urls import url, include
 from base.views import common
-from django.conf.urls.static import static
-from django.views.i18n import javascript_catalog
 
 
 js_info_dict = {
@@ -70,5 +68,5 @@ handler403 = 'base.views.common.access_denied'
 handler500 = 'base.views.common.server_error'
 
 admin.site.site_header = 'Osis-studies'
-admin.site.site_title  = 'Osis-studies'
+admin.site.site_title = 'Osis-studies'
 admin.site.index_title = 'Louvain'

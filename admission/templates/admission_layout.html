@@ -104,29 +104,28 @@
     <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
     {% block script %}
         <script type="text/javascript">
-        // To avoid cut and paste on the email fields
-        $(document).ready(function () {
-            $('#id_email_new').bind('paste', function (e) {
-                e.preventDefault();
+            // To avoid cut and paste on the email fields
+            $(document).ready(function () {
+                $('#id_email_new').bind('paste', function (e) {
+                    e.preventDefault();
+                });
+                $('#id_email_new_confirm').bind('paste', function (e) {
+                    e.preventDefault();
+                });
             });
-            $('#id_email_new_confirm').bind('paste', function (e) {
-                e.preventDefault();
+            // To avoid cut and paste on the password fields
+            $(document).ready(function () {
+                $('#id_password_new').bind('paste', function (e) {
+                    e.preventDefault();
+                });
+                $('#id_password_new_confirm').bind('paste', function (e) {
+                    e.preventDefault();
+                });
             });
-        });
-        // To avoid cut and paste on the password fields
-        $(document).ready(function () {
-            $('#id_password_new').bind('paste', function (e) {
-                e.preventDefault();
+            //If information message is on the screen it will disappear after 5s
+            $(document).ready(function () {
+                $('#message_info').fadeOut(5000);
             });
-            $('#id_password_new_confirm').bind('paste', function (e) {
-                e.preventDefault();
-            });
-        });
-        //If information message is on the screen it will disappear after 5s
-        $(document).ready(function () {
-            $('#message_info').fadeOut(5000);
-        });
-
         </script>
     {% endblock %}
 </body>
