@@ -29,6 +29,7 @@ from dissertation.models import dissertation
 from dissertation.models import dissertation_group
 from dissertation.models import dissertation_role
 from dissertation.models import dissertation_update
+from dissertation.models import models_signal
 from dissertation.models import offer_proposition
 from dissertation.models import proposition_dissertation
 from dissertation.models import proposition_role
