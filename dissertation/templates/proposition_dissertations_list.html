@@ -35,7 +35,7 @@
     <div class="panel-body">
         <form method="get" action="{% url 'proposition_dissertations_search'%}">
             <div class="row">
-                <div class="col-md-5 col-lg-offset-6">
+                <div class="col-md-11">
                     <input class="form-control" id="txt_search" placeholder="{% trans 'search' %}" name="search"
                            value="{{ request.GET.search }}">
                 </div>
@@ -56,16 +56,20 @@
                     <tr>
                         <td style="text-align: center">{% trans 'title'%}</td>
                         <td style="text-align: center">{% trans 'author'%}</td>
-                        <td style="text-align: center">{% trans 'offer_propositions'%}</td>
+                        <td style="text-align: center">{% trans 'offer_proposition'%}</td>
                         <td style="text-align: center">{% trans 'max_students_number'%}</td>
                     </tr>
                   {% for proposition_dissertation in proposition_dissertations %}
-                    <tr>
-                        <td style="text-align: center"><a href="{% url 'proposition_dissertation_detail' pk=proposition_dissertation.pk %}">{{ proposition_dissertation.title }}</a></td>
-                        <td style="text-align: center">{{ proposition_dissertation.author }}</td>
-                        <td style="text-align: center">{% for offer_proposition in proposition_dissertation.offer_proposition.all %}<span class="label label-default">{{ offer_proposition }}</span> {% endfor %}</td>
-                        <td style="text-align: center">{{ proposition_dissertation.max_number_student }}</td>
-                    </tr>
+                    {% for offer_proposition in proposition_dissertation.offer_proposition.all %}
+                        {% if offer_proposition.start_visibility_proposition <= date_now and offer_proposition.end_visibility_proposition >= date_now %}
+                            <tr>
+                                <td style="text-align: center"><a href="{% url 'proposition_dissertation_detail' pk=proposition_dissertation.pk %}">{{ proposition_dissertation.title }}</a></td>
+                                <td style="text-align: center">{{ proposition_dissertation.author }}</td>
+                                <td style="text-align: center"><span class="label label-default">{{ offer_proposition }}</span></td>
+                                <td style="text-align: center">{{ proposition_dissertation.max_number_student }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
                   {% endfor %}
                 </table>
             {% endif %}
