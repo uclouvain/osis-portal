@@ -41,7 +41,7 @@
             </label>
             {% message_error validation_messages year=curriculum.academic_year.year|lower param='activity_type' as activity_type_msg %}
             {%if activity_type%}
-            <font class="error">{{activity_type}}</font>
+            <span class="error">{{activity_type}}</span>
             {%endif%}
 
     <div class="row" id="pnl_activity_detail_{{curriculum.academic_year.year}}">
@@ -53,7 +53,7 @@
                    class="form-control" >
             {% message_error validation_messages year=curriculum.academic_year.year|lower param='activity' as activity_msg %}
             {%if activity_msg%}
-            <font class="error">{{activity_msg}}</font>
+            <span class="error">{{activity_msg}}</span>
             {%endif%}
         </div>
         <div class="col-md-6">
@@ -63,7 +63,7 @@
                    class="form-control" >
             {% message_error validation_messages year=curriculum.academic_year.year|lower param='activity_place' as activity_place_msg %}
             {%if activity_place_msg%}
-            <font class="error">{{activity_place_msg}}</font>
+            <span class="error">{{activity_place_msg}}</span>
             {%endif%}
         </div>
     </div>

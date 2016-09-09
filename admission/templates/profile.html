@@ -1,7 +1,7 @@
 {% load staticfiles %}
 {% load static %}
 {% load i18n %}
-
+{% load assimilation %}
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
 * designed to manage the core business of higher education institutions,
@@ -26,7 +26,7 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-    <form method="post" action="{% url 'profile' %}" id="form_profile">
+    <form method="post" action="{% url 'profile' %}" id="form_profile" enctype="multipart/form-data">
         {% csrf_token %}
 
         <span id="txt_message_error_profile_up"
@@ -42,15 +42,15 @@
         {%endif%}
 
         {% if applicant_form.errors %}
-        <font class="error">{% if applicant_form.errors %}{% trans 'errors_warning'%}{%endif%}</font>
+        <span class="error">{% if applicant_form.errors %}{% trans 'errors_warning'%}{%endif%}</span>
         <br>
         {%endif%}
         {%if message_success and message_success == 'ok'%}
             <br><br>
             <div>
-                <font class="alert alert-success" role="alert" style="margin-left:5px;">
+                <span class="alert alert-success" role="alert" style="margin-left:5px;">
                     {% trans 'msg_info_saved'%}
-                </font>
+                </span>
                 </div>
         {% endif %}
         <br>
@@ -64,7 +64,7 @@
                         <input class="form-control" id="txt_last_name" name="last_name"
                                value="{{ applicant.user.last_name  | default_if_none:'' }}" maxlength="255">
                         (ex: Van der Elst)
-                        <font class="error">{{ applicant_form.last_name.errors|striptags }}</font>
+                        <span class="error">{{ applicant_form.last_name.errors|striptags }}</span>
                     </div>
                     <div class="col-md-4">
                         <div class="row">
@@ -72,7 +72,7 @@
                         <input class="form-control" id="txt_first_name" name="first_name"
                                value="{{ applicant.user.first_name  | default_if_none:'' }}" maxlength="255">
                         (ex: Frédéric <span style="text-decoration: line-through;">frederic FREDERIC</span>)
-                        <font class="error">{{ applicant_form.first_name.errors|striptags }}</font>
+                        <span class="error">{{ applicant_form.first_name.errors|striptags }}</span>
                         </div>
                         <div class="row">
                             <label>{%trans 'middle_name'%}</label>
@@ -89,27 +89,24 @@
                                 <label>{%trans 'id_picture'%}</label>
                                 <div >
                                     {% if picture %}
-                                        {% if ".jpg" in picture|lower or ".jpeg" in picture|lower or ".gif" in picture|lower or ".png" in picture|lower%}
-                                            <img src="{% static picture%}" width="120px"
-                                                 id="lnk_modify_picture"
-                                                 style="cursor:pointer;"
-                                                 title="{% trans 'change_picture'%}">
-                                        {%else%}
-                                            <button type="button"
-                                                   id="btn_modify_picture"
-                                                   class="glyphicon glyphicon-pencil"
-                                                   title="{% trans 'change_picture'%}"
-                                            ></button>
-                                            <br><br>
-                                            <span style="font-size:x-small;color:#808080">({% trans 'no_preview'%})</span>
-                                        {%endif%}
+                                         <button type="button"
+                                           id="btn_modify_picture"
+                                           class="btn btn-success"
+                                           title="{% trans 'change_picture'%}"
+                                           data-toggle="modal" data-target="#pnl_upload_documents">
+                                             <span class="glyphicon glyphicon-ok-circle" aria-hidden="true" id="spn_modify_picture"></span>&nbsp;Upload
+                                         </button>
 
                                     {%else%}
-                                            <button type="button"
-                                                    id="lnk_redirect_picture" title="{% trans 'id_picture_add'%}"
-                                                   class="btn glyphicon glyphicon-plus"></button>
-
+                                         <button type="button"
+                                           id="btn_modify_picture"
+                                           class="btn"
+                                           title="{% trans 'add_picture'%}"
+                                           data-toggle="modal" data-target="#pnl_upload_documents">
+                                             <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_modify_picture"></span>&nbsp;Upload
+                                         </button>
                                     {%endif%}
+
                                 </div>
                             </div>
                         </div>
@@ -120,15 +117,15 @@
                     <div class="col-md-2">
                         <label>{%trans 'birth_day'%} *</label>
                         <input type="text" class="form-control" id="txt_birth_date" name="birth_date"
-                               value="{{ applicant.birth_date  | default_if_none:'' | date:"d/m/Y" }}">
+                               value="{{ applicant.birth_date  | default_if_none:'' | date:'d/m/Y' }}">
                         (format : {% trans 'format_date'%})
-                        <font class="error" id="msg_error_birth_date">{{ applicant_form.birth_date.errors|striptags }}</font>
+                        <span class="error" id="msg_error_birth_date">{{ applicant_form.birth_date.errors|striptags }}</span>
                         </div>
                         <div class="col-md-4">
                             <label>{%trans 'birth_place'%} *</label>
                             <input class="form-control" id="txt_birth_place" name="birth_place"
                                    value="{{ applicant.birth_place | default_if_none:''}}" maxlength="255">
-                            <font class="error">{{ applicant_form.birth_place.errors|striptags}}</font>
+                            <span class="error">{{ applicant_form.birth_place.errors|striptags}}</span>
 
                         </div>
                         <div class="col-md-3">
@@ -140,7 +137,7 @@
                                 </option>
                                 {% endfor %}
                             </select>
-                            <font class="error">{{ applicant_form.birth_country.errors|striptags }}</font>
+                            <span class="error">{{ applicant_form.birth_country.errors|striptags }}</span>
                         </div>
                         <div class="col-md-3">
                             <label>{%trans 'nationality'%} *</label>
@@ -153,7 +150,7 @@
                                 </option>
                                 {% endfor %}
                             </select>
-                            <font class="error">{{ applicant_form.nationality.errors|striptags }}</font>
+                            <span class="error">{{ applicant_form.nationality.errors|striptags }}</span>
                         </div>
                     </div>
                     <br>
@@ -170,7 +167,7 @@
                                            {% if applicant.gender = "FEMALE" %} checked {% endif %}> Féminin
                                 </label>
                             </div>
-                            <font class="error">{{ applicant_form.gender.errors|striptags }}</font>
+                            <span class="error">{{ applicant_form.gender.errors|striptags }}</span>
 
                     </div>
                     <div class="col-md-3">
@@ -195,13 +192,13 @@
                                 {%trans 'widow'%}
                             </option>
                         </select>
-                        <font class="error">{{ applicant_form.civil_status.errors|striptags }}</font>
+                        <span class="error">{{ applicant_form.civil_status.errors|striptags }}</span>
                     </div>
                     <div class="col-md-3">
                         <label>{%trans 'children'%}</label>
                         <input class="form-control" id="txt_number_children" name="number_children"
                                value="{{ applicant.number_children | default_if_none:''}}">
-                        <font class="error">{{ applicant_form.number_children.errors|striptags }}</font>
+                        <span class="error">{{ applicant_form.number_children.errors|striptags }}</span>
                     </div>
                     <div class="col-md-3">
                         <label>{%trans 'spouse_name'%}</label>
@@ -210,8 +207,7 @@
                     </div>
                 </div>
                 <br>
-                <div id="pnl_assimilation_criteria"
-                     style="visibility:hidden;display:none;">
+                <div id="pnl_assimilation_criteria">
                     <br>
                     {% trans 'criteria_question'%} :
                     <ol>
@@ -219,13 +215,14 @@
 
                             <div class="row">
                                 <div class="col-md-8">
-                                    <li>{{criteria}}</li>
+                                    <li>&nbsp;{{criteria.criteria}}</li>
                                 </div>
                                 <div class="col-md-4">
                                     <div>
                                         <label class="radio-inline">
                                             <input type="radio" id="assimilation_criteria_{{forloop.counter}}_true"
                                                    name="assimilation_criteria_{{criteria.id}}"
+                                                   class="radio_assimilation_criteria"
                                                    value="true"
                                                    {% for applicant_criteria in applicant_assimilation_criteria %}
                                                      {% if applicant_criteria.criteria.id == criteria.id %} checked {% endif %}
@@ -236,13 +233,116 @@
                                             <input type="radio" id="assimilation_criteria_{{forloop.counter}}_false"
                                                    name="assimilation_criteria_{{criteria.id}}"
                                                    value="false"
+                                                   {{applicant_assimilation_criteria|assimilation_criteria_radio:criteria.id }}
                                             > {% trans 'no' %}
                                         </label>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                <div id="pnl_criteria_{{criteria.id}}"
+                                     style="{{applicant_assimilation_criteria|div_visibility:criteria.id }}" >
+                                    <br>
+                                    <div {% if assimilation_basic_documents|table_display:criteria.id%} class="panel panel-default" {%endif%}>
+
+                                    {% if assimilation_basic_documents|table_display:criteria.id%}
+                                        <div class="panel-heading"><h4><strong>{% trans 'criteria'%} {{ criteria.id}}</strong></h4></div>
+                                        <div class="panel-body"></div>
+                                        <!--It's normal that the table is outside of the body.  It's for a better display -->
+                                        <table class="table table-bordered table-condensed" style="margin-top:-30px;">
+                                    {%endif%}
+                                    {%for doc in assimilation_basic_documents%}
+                                        {% if doc.criteria_id == criteria.id %}
+                                            {%if doc.first%}
+                                                <tr>
+                                                    <td>
+                                                        <table>
+                                                            {% for d in doc.descriptions%}
+                                                                <tr>
+                                                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                                                    <td>
+                                                                        <button type="button"
+                                                                                class="{{assimilation_documents_existing|button_class_color:d }}"
+                                                                                id="btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}"
+                                                                                title="{{assimilation_documents_existing|button_title:d }}"
+                                                                                data-toggle="modal"
+                                                                                data-target="#pnl_upload_documents">
+                                                                            <span class="{{assimilation_documents_existing|button_class:d }}"
+                                                                                  id="spn_btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}"></span>&nbsp;Upload
+                                                                        </button>
+                                                                    </td>
+                                                                    <td>&nbsp;&nbsp;</td>
+                                                                    <td>{% with document_description=d|slugify %}
+                                                                            {% trans document_description %}
+                                                                        {% endwith %}
+                                                                    </td>
+                                                                </tr>
+                                                            {%endfor%}
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            {%else%}
+                                            <tr><td colspan="2">&nbsp;&nbsp;{% trans 'or' as and_upper%} {{and_upper| upper}}</td></tr>
+                                                <tr>
+                                                    <td>
+                                                        <table >
+                                                            {% for d in doc.descriptions%}
+                                                                <tr >
+                                                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                                                    <td>
+                                                                        <button type="button"
+                                                                                class="{{assimilation_documents_existing|button_class_color:d }}"
+                                                                                id="btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}"
+                                                                                title="{{assimilation_documents_existing|button_title:d }}"
+                                                                                style="margin-bottom:5px;"
+                                                                                data-toggle="modal"
+                                                                                data-target="#pnl_upload_documents">
+                                                                            <span class="{{assimilation_documents_existing|button_class:d }}"
+                                                                                  id="spn_btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}">
+                                                                            </span>&nbsp;Upload
+                                                                        </button>
+                                                                    </td>
+                                                                    <td>&nbsp;&nbsp;</td>
+                                                                    <td >{% with document_description=d|slugify %}
+                                                                            {% trans document_description %}
+                                                                         {% endwith %}
+                                                                    </td>
+                                                                </tr>
+                                                            {%endfor%}
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            {%endif%}
+                                        {%endif%}
+                                    {%endfor%}
+                                    {% if assimilation_basic_documents|table_display:criteria.id%}
+                                        {%if criteria.id == 5%}
+                                            <tr><td colspan="2">&nbsp;&nbsp;{% trans 'and' as and_upper%} {{and_upper| upper}}</td></tr>
+                                            <tr><td colspan="2">
+                                                <label>Documents demandés pour l’étudiant à adapter pour la personne concernée suivant le critère :</label>
+                                                <select id="slt_criteria_5" class="form-control" >
+                                                    <option value="">-</option>
+                                                    <option value="1">{% trans 'criteria' %} 1</option>
+                                                    <option value="2">{% trans 'criteria' %} 2</option>
+                                                    <option value="3">{% trans 'criteria' %} 3</option>
+                                                    <option value="4">{% trans 'criteria' %} 4</option>
+                                                </select><div id="pnl_other_criteria"></div>
+                                                <br>
+                                                </td>
+                                            </tr>
+                                            {%endif%}
+                                    </table>
+                                    <br>
+                                    {%endif%}
+                                    </div>
+                                </div>
+                            </div>
                             {% endfor %}
                         </ol>
+                        <br>
+                        <label>Fournir obligatoirement une attestation pour au moins une des assimilations que vous avez choisies.</label>
+                        <br>
                     </div>
                 </div>
             </div>
@@ -270,24 +370,23 @@
                                 <div class="col-md-10">
                                     <label>{%trans 'id_document'%}</label><br>
                                     {% if id_document %}
-                                        {% if ".jpg" in id_document|lower or ".jpeg" in id_document|lower or ".gif" in id_document|lower or ".png" in id_document|lower%}
-                                            <img src="{% static id_document %} " width="120px"
-                                                 id="lnk_modify_id_document"
-                                                 style="cursor:pointer;"
-                                                 title="{% trans 'change_document'%}">
-                                        {%else%}
                                             <button type="button"
-                                                   id="btn_modify_id_document"
-                                                   class="glyphicon glyphicon-pencil"
-                                                   title="{% trans 'change_document'%}"
-                                            ></button>
-                                            <br><br><span style="font-size:x-small;color:#808080">({% trans 'no_preview'%})</span>
-                                        {%endif%}
+                                                    id="btn_modify_id_document"
+                                                    class="btn btn-success"
+                                                    title="{% trans 'change_document'%}"
+                                                    data-toggle="modal"
+                                                    data-target="#pnl_upload_documents">
+                                                <span class="glyphicon glyphicon-ok-circle" aria-hidden="true" id="spn_modify_id_document"></span>&nbsp;Upload
+                                            </button>
+
                                     {%else%}
-                                        <br>
-                                        <button type="button" title="{% trans 'id_add'%}"
-                                               id="btn_modify_id_document"
-                                               class="btn glyphicon glyphicon-plus" ></button>
+                                        <button type="button"
+                                                title="{% trans 'id_add'%}"
+                                                id="btn_modify_id_document"
+                                                class="btn"
+                                                data-toggle="modal" data-target="#pnl_upload_documents">
+                                            <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_modify_id_document"></span>&nbsp;Upload
+                                        </button>
                                     {%endif%}
                                 </div>
                             </div>
@@ -307,14 +406,14 @@
                                    value="{{ person_legal_address.street | default_if_none:''}}"
                                    maxlength="255">
                             (ex: Avenue Louis Braille, Rue de la Loi, Place de l'Université)
-                            <font class="error">{{ applicant_form.legal_adr_street.errors|striptags }}</font>
+                            <span class="error">{{ applicant_form.legal_adr_street.errors|striptags }}</span>
                         </div>
                         <div class="col-md-2">
                             <label>{% trans 'number'%} *</label>
                             <input class="form-control" id="txt_legal_adr_number" name="legal_adr_number"
                                    value="{{ person_legal_address.number | default_if_none:''}}"
                                    maxlength="6">
-                            <font class="error">{{ applicant_form.legal_adr_number.errors|striptags }}</font>
+                            <span class="error">{{ applicant_form.legal_adr_number.errors|striptags }}</span>
                         </div>
                         <div class="col-md-4">
                             <label>{% trans 'place'%}</label>
@@ -331,14 +430,14 @@
                                    value="{{ person_legal_address.postal_code | default_if_none:''}}"
                                    maxlength="20">
                             (ex: 1348)
-                            <font class="error">{{ applicant_form.legal_adr_postal_code.errors|striptags }}</font>
+                            <span class="error">{{ applicant_form.legal_adr_postal_code.errors|striptags }}</span>
                         </div>
                         <div class="col-md-6">
                             <label>{% trans 'city'%} *</label>
                             <input class="form-control" id="txt_legal_adr_city" name="legal_adr_city"
                                    value="{{ person_legal_address.city | default_if_none:''}}"
                                    maxlength="255">
-                            <font class="error">{{ applicant_form.legal_adr_city.errors|striptags }}</font>
+                            <span class="error">{{ applicant_form.legal_adr_city.errors|striptags }}</span>
                         </div>
                         <div class="col-md-4">
                             <label>{% trans 'country'%} *</label>
@@ -351,7 +450,7 @@
                                 </option>
                                 {% endfor %}
                             </select>
-                            <font class="error">{{ applicant_form.legal_adr_country.errors|striptags }}</font>
+                            <span class="error">{{ applicant_form.legal_adr_country.errors|striptags }}</span>
                         </div>
                     </div>
 
@@ -373,7 +472,6 @@
                                            name="same_contact_legal_addr" value="true"
                                            onclick="display('pnl_contact_address',false);"
                                            {% if same_addresses %}checked{%endif%}> {% trans 'yes' %}
-
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" id="rd_same_contact_legal_addr_false"
@@ -394,14 +492,14 @@
                                        value="{{ person_contact_address.street | default_if_none:''}}"
                                        maxlength="255">
                                 (ex: Avenue Louis Braille, Rue de la Loi, Place de l'Université)
-                                <font class="error">{{ applicant_form.contact_adr_street.errors|striptags }}</font>
+                                <span class="error">{{ applicant_form.contact_adr_street.errors|striptags }}</span>
                             </div>
                             <div class="col-md-2">
                                 <label>{% trans 'number'%} *</label>
                                 <input class="form-control" id="txt_contact_adr_number" name="contact_adr_number"
                                        value="{{ person_contact_address.number | default_if_none:''}}"
                                        maxlength="6">
-                                <font class="error">{{ applicant_form.contact_adr_number.errors|striptags }}</font>
+                                <span class="error">{{ applicant_form.contact_adr_number.errors|striptags }}</span>
                             </div>
                             <div class="col-md-4">
                                 <label>{% trans 'place'%}</label>
@@ -420,18 +518,19 @@
                                        value="{{ person_contact_address.postal_code | default_if_none:''}}"
                                        maxlength="20">
                                 (ex: 1348)
-                                <font class="error">{{ applicant_form.contact_adr_postal_code.errors|striptags }}</font>
+                                <span class="error">{{ applicant_form.contact_adr_postal_code.errors|striptags }}</span>
                             </div>
                             <div class="col-md-6">
                                 <label>{% trans 'city'%} *</label>
                                 <input class="form-control" id="txt_contact_adr_city" name="contact_adr_city"
                                        value="{{ person_contact_address.city | default_if_none:''}}"
                                        maxlength="255">
-                                <font class="error">{{ applicant_form.contact_adr_city.errors|striptags }}</font>
+                                <span class="error">{{ applicant_form.contact_adr_city.errors|striptags }}</span>
                             </div>
                             <div class="col-md-4">
                                 <label>{% trans 'country'%} *</label>
                                 <select class="form-control" id="slt_contact_adr_country" name="contact_adr_country">
+                                    <option value="-1">-</option>
                                     {% for country in countries%}
                                     <option value="{{country.id}}"
                                             {%if country.id = person_contact_address.country.id%} selected {%endif%}>
@@ -439,7 +538,7 @@
                                     </option>
                                     {% endfor %}
                                 </select>
-                                <font class="error">{{ applicant_form.contact_adr_country.errors|striptags }}</font>
+                                <span class="error">{{ applicant_form.contact_adr_country.errors|striptags }}</span>
                             </div>
                         </div>
                     </div>
@@ -467,7 +566,7 @@
                             <label>{% trans 'mail' %} *</label>
                             <input class="form-control" id="txt_additional_email" name="additional_email"
                                    value="{{ applicant.additional_email| default_if_none:''}}" maxlength="255">
-                            <font class="error">{{ applicant_form.additional_email.errors|striptags }}</font>
+                            <span class="error">{{ applicant_form.additional_email.errors|striptags }}</span>
                         </div>
                     </div>
                 </div>
@@ -502,20 +601,19 @@
                                 <input class="form-control" id="txt_registration_id" name="registration_id"
                                        value="{{ applicant.registration_id| default_if_none:''}}">
                                 (ex: 1058-13-00)
-                                <font class="error">{{ applicant_form.registration_id.errors|striptags }}</font>
+                                <span class="error">{{ applicant_form.registration_id.errors|striptags }}</span>
                             </div>
                             <div class="col-md-8">
                                 <label>{% trans 'question_year_last_registration'%} {{institution}}? *</label>
                                 <br>
                                 <input id="txt_last_academic_year" name="last_academic_year" size="10"
                                        value="{{ applicant.last_academic_year| default_if_none:''}}" maxlength="9">
-                                <br><font class="error">{{ applicant_form.last_academic_year.errors|striptags }}</font>
+                                <br><span class="error">{{ applicant_form.last_academic_year.errors|striptags }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         <div>
         <span id="txt_message_error_profile"
                class="alert alert-warning"
@@ -528,13 +626,5 @@
                 {%trans 'next_step'%} : {%trans 'offer_choice'%}</a>
         {%endif%}
         </div>
-    </form>
-    <form method="post"
-          action="{% url 'upload_file_description' %}"
-          id="form_upload_profile"
-          style="visibility:hidden;display:none;">
-        {% csrf_token %}
-        <input type="hidden" name="description" value="" id="hdn_description"/>
-        <input type="hidden" name="application_id" value='{{ application.id | default_if_none:''}}' />
-        <input type="submit" value="+"  id="lnk_picture">
+        <div id="pnl_files"><div id="pnl_uploaded_files" style="visibility:hidden;display:none;" ></div></div>
     </form>
