@@ -44,8 +44,8 @@ class Migration(migrations.Migration):
                 ('end_visibility_proposition', models.DateField(default=django.utils.timezone.now)),
                 ('start_visibility_dissertation', models.DateField(default=django.utils.timezone.now)),
                 ('end_visibility_dissertation', models.DateField(default=django.utils.timezone.now)),
-                ('offer_year', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
-                                                 to='admission.OfferYear')),
+                ('offer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                            to='base.Offer')),
             ],
         ),
         migrations.CreateModel(
@@ -183,25 +183,5 @@ class Migration(migrations.Migration):
             field=models.CharField(
                 choices=[('PROMOTEUR', 'promotor'), ('CO_PROMOTEUR', 'copromotor'), ('READER', 'reader')],
                 default='PROMOTEUR', max_length=12),
-        ),
-        migrations.AddField(
-            model_name='offerproposition',
-            name='end_edit_title',
-            field=models.DateField(default=django.utils.timezone.now),
-        ),
-        migrations.AddField(
-            model_name='offerproposition',
-            name='end_jury_visibility',
-            field=models.DateField(default=django.utils.timezone.now),
-        ),
-        migrations.AddField(
-            model_name='offerproposition',
-            name='start_edit_title',
-            field=models.DateField(default=django.utils.timezone.now),
-        ),
-        migrations.AddField(
-            model_name='offerproposition',
-            name='start_jury_visibility',
-            field=models.DateField(default=django.utils.timezone.now),
         ),
     ]

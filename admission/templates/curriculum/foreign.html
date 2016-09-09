@@ -54,12 +54,12 @@
         </div>
     </div>
     {% message_error validation_messages year=curriculum.academic_year.year|lower param='foreign_institution' as foreign_institution_msg%}
-    {%if foreign_institution_msg%}<font class="error" style="margin-left:5px;">{{foreign_institution_msg}}</font>{%endif%}
+    {%if foreign_institution_msg%}<span class="error" style="margin-left:5px;">{{foreign_institution_msg}}</span>{%endif%}
 
     <div class="row">
         <div class="col-md-3">
             {% message_error validation_messages year=curriculum.academic_year.year|lower param='foreign_institution_country' as foreign_institution_country_msg%}
-            {%if foreign_institution_country_msg %}<font class="error" style="margin-left:5px;">{{foreign_institution_country_msg}}</font>{%endif%}
+            {%if foreign_institution_country_msg %}<span class="error" style="margin-left:5px;">{{foreign_institution_country_msg}}</span>{%endif%}
         </div>
         <div class="col-md-4">
             <label>{% trans 'specify_locality'%}</label>
@@ -103,7 +103,7 @@
         </div>
         <div class="col-md-4">
             {% message_error validation_messages year=curriculum.academic_year.year|lower param='foreign_institution_city' as foreign_institution_city_msg%}
-            {% if foreign_institution_city_msg%}<font class="error" style="margin-left:5px;">{{foreign_institution_city_msg}}</font>{%endif%}
+            {% if foreign_institution_city_msg%}<span class="error" style="margin-left:5px;">{{foreign_institution_city_msg}}</span>{%endif%}
         </div>
         <div class="col-md-4">
         </div>
@@ -124,7 +124,7 @@
                     {% endfor %}
                 </select>
                 {% message_error validation_messages year=curriculum.academic_year.year|lower param='domain_foreign' as domain_foreign_msg%}
-                {%if domain_foreign_msg%}<font class="error" style="margin-left:5px;">{{domain_foreign_msg}}</font>{%endif%}
+                {%if domain_foreign_msg%}<span class="error" style="margin-left:5px;">{{domain_foreign_msg}}</span>{%endif%}
             </div>
         </div>
         <div class="col-md-5">
@@ -143,7 +143,7 @@
                         {% endfor %}
                     </select>
                     {% message_error validation_messages year=curriculum.academic_year.year|lower param='subdomain_foreign' as subdomain_foreign_msg%}
-                    {%if subdomain_foreign_msg%}<font class="error" style="margin-left:5px;">{{subdomain_foreign_msg}}</font>{%endif%}
+                    {%if subdomain_foreign_msg%}<span class="error" style="margin-left:5px;">{{subdomain_foreign_msg}}</span>{%endif%}
                 </div>
             </div>
         </div>
@@ -159,7 +159,7 @@
                     {% endfor %}
                 </select>
                 {% message_error validation_messages year=curriculum.academic_year.year|lower param='grade_type_foreign' as  grade_type_foreign_msg%}
-                {%if grade_type_foreign_msg%}<font class="error" style="margin-left:5px;">{{grade_type_foreign_msg}}</font>{%endif%}
+                {%if grade_type_foreign_msg%}<span class="error" style="margin-left:5px;">{{grade_type_foreign_msg}}</span>{%endif%}
             </div>
         </div>
     </div>
@@ -199,7 +199,7 @@
                 > {% trans 'no' %}
             </label>
             {% message_error validation_messages year=curriculum.academic_year.year|lower param='diploma' as diploma_msg%}
-            {%if diploma_msg%}<font class="error" style="margin-left:5px;">{{diploma_msg}}</font>{%endif%}
+            {%if diploma_msg%}<span class="error" style="margin-left:5px;">{{diploma_msg}}</span>{%endif%}
         </div>
     </div>
     <br>
@@ -234,7 +234,7 @@
                 > {% trans 'no' %}
             </label>
             {% message_error validation_messages year=curriculum.academic_year.year|lower param='diploma_foreign' as diploma_foreign_msg%}
-            {%if diploma_foreign_msg%}<font class="error" style="margin-left:5px;">{{diploma_foreign_msg}}</font>{%endif%}
+            {%if diploma_foreign_msg%}<span class="error" style="margin-left:5px;">{{diploma_foreign_msg}}</span>{%endif%}
 
         </div>
     </div>
@@ -269,7 +269,7 @@
                     {% trans 'no_result' %}
                 </label>
                 {% message_error validation_messages year=curriculum.academic_year.year|lower param='result' as result_msg%}
-                {%if result_msg%}<font class="error" style="margin-left:5px;">{{result_msg}}</font>{%endif%}
+                {%if result_msg%}<span class="error" style="margin-left:5px;">{{result_msg}}</span>{%endif%}
             </div>
         </div>
         <div class="col-md-3">
@@ -280,7 +280,7 @@
                    value="{{ curriculum.credits_enrolled | default_if_none:'' }}"
                    class="form-control">
             {% message_error validation_messages year=curriculum.academic_year.year|lower param='credits_enrolled_foreign' as credits_enrolled_foreign_msg %}
-            {%if credits_enrolled_foreign_msg%}<font class="error" style="margin-left:5px;">{{credits_enrolled_foreign_msg}}</font>{%endif%}
+            {%if credits_enrolled_foreign_msg%}<span class="error" style="margin-left:5px;">{{credits_enrolled_foreign_msg}}</span>{%endif%}
         </div>
         <div class="col-md-3">
             <label>{% trans 'credits_acquired' %}</label>
@@ -290,7 +290,7 @@
                    value="{{ curriculum.credits_obtained  | default_if_none:'' }}"
                    class="form-control">
             {% message_error validation_messages year=curriculum.academic_year.year|lower param='credits_obtained_foreign' as credits_obtained_foreign_msg%}
-            {%if credits_obtained_foreign_msg%}<font class="error" style="margin-left:5px;">{{credits_obtained_foreign_msg}}</font>{%endif%}
+            {%if credits_obtained_foreign_msg%}<span class="error" style="margin-left:5px;">{{credits_obtained_foreign_msg}}</span>{%endif%}
         </div>
     </div>
     <br>
