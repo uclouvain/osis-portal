@@ -38,19 +38,26 @@
             {% csrf_token %}
             <div class="row">
                 <div class="col-md-3 col-lg-offset-3">
-                    {{  form.author }}
+                    {{  form.status }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-lg-offset-3">
+                    {{  form.dissertation }}
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3 col-lg-offset-1" style="text-align:right">
-                    <label for="txt_title" {% if form.title.errors %} style="color:red;" {% endif %}>{% trans 'title' %}</label>
+                    <label for="txt_reader" {% if form.adviser.errors %} style="color:red;" {% endif %}>{% trans 'reader' %}</label>
                 </div>
                 <div class="col-md-5">
-                    <input class="form-control" id="txt_title"  name="title" style="text-align: center;margin:-6px;" value="{{ form.title.value | default_if_none:'' }}">
+                    <select class="form-control" id="txt_reader"  name="adviser" style="text-align: center;margin:-6px;">
+                        <option value={{ form.adviser }}
+                    </select>
                 </div>
             </div>
             <br>
-            <button type="submit" class="save btn btn-default" onclick="return confirm('{% trans 'dissertation_confirmation_message' %}')">Save</button>
+            <button type="submit" class="save btn btn-default">Save</button>
         </form>
     </div>
 </div>
