@@ -280,6 +280,30 @@ def profile(request, application_id=None, message_success=None):
                     #
                     criteria = mdl_ref.assimilation_criteria.find_by_id(criteria_id)
                     if criteria:
+                        assimilation_basic_documents = assimilation_criteria_view.\
+                            find_list_assimilation_basic_documents()
+                        list_document_type_needed = get_list_docs(criteria.id)
+                        list_document_type_needed.append(document_type.ID_CARD)
+
+                        if criteria.id == 5:
+                            if request.POST.get("slt_criteria_5") == "1":
+                                list_document_type_needed.extend(assimilation_criteria_view.
+                                                                 criteria1(list_document_type_needed))
+                            if request.POST.get("slt_criteria_5") == "2":
+                                list_document_type_needed.extend(assimilation_criteria_view.
+                                                                 criteria2(list_document_type_needed))
+                            if request.POST.get("slt_criteria_5") == "3":
+                                list_document_type_needed.extend(assimilation_criteria_view.
+                                                                 criteria3(list_document_type_needed))
+                            if request.POST.get("slt_criteria_5") == "4":
+                                list_document_type_needed.extend(assimilation_criteria_view.
+                                                                 criteria4(list_document_type_needed))
+                        for d in assimilation_basic_documents:
+                            if d not in list_document_type_needed:
+                                docs = mdl_osis_common.document_file.search(request.user, d)
+                                for d in docs:
+                                    # delete unnecessary documents
+                                    d.delete()
                         applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.search(applicant,
                                                                                                      criteria)
                         if not applicant_assimilation_criteria:
@@ -288,6 +312,7 @@ def profile(request, application_id=None, message_success=None):
                             applicant_assimilation_criteria.criteria = criteria
                             applicant_assimilation_criteria.applicant = applicant
                             applicant_assimilation_criteria.save()
+
         documents_upload(request)
 
         message_success = None
@@ -498,3 +523,27 @@ def documents_upload(request):
                             adm_doc_file.application = application
                             adm_doc_file.document_file = doc_file
                             adm_doc_file.save()
+
+
+def get_list_docs(criteria_id):
+    list_document_type = []
+    if criteria_id == 1:
+        list_document_type = assimilation_criteria_view.criteria1(list_document_type)
+    if criteria_id == 2:
+        list_document_type = assimilation_criteria_view.criteria2(list_document_type)
+    if criteria_id == 3:
+        list_document_type = assimilation_criteria_view.criteria3(list_document_type)
+    if criteria_id == 4:
+        list_document_type = assimilation_criteria_view.criteria4(list_document_type)
+    if criteria_id == 5:
+        list_document_type = assimilation_criteria_view.criteria5(list_document_type)
+    if criteria_id == 6:
+        list_document_type = assimilation_criteria_view.criteria6(list_document_type)
+    if criteria_id == 7:
+        list_document_type = assimilation_criteria_view.criteria7(list_document_type)
+    list_documents = []
+    for l in list_document_type:
+        for elt in l.descriptions:
+            if elt not in list_documents:
+                list_documents.append(elt)
+    return list_documents

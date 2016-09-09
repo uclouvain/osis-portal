@@ -35,15 +35,19 @@ from reference import models as mdl_reference
 from admission.views import demande_validation
 from admission.views import tabs
 from admission.models.enums import document_type
+from osis_common import models as mdl_osis_common
 
 
 ALERT_MANDATORY_FIELD = _('mandatory_field')
+PROFESSIONAL_TYPE = 'PROFESSIONAL'
+ADMISSION_EXAM_TYPE = 'ADMISSION'
 
 
 def validate_fields_form(request, secondary_education, next_step):
     validation_messages = {}
     is_valid = True
     academic_year = None
+    admission_exam = None
 
     if request.POST.get('diploma'):
         if request.POST.get('diploma') == 'true':
@@ -197,18 +201,20 @@ def validate_fields_form(request, secondary_education, next_step):
             if request.POST.get('diploma') == 'false':
                 secondary_education.diploma = False
 
-            is_valid, validation_messages, secondary_education = validate_admission_exam(request,
-                                                                                         is_valid,
-                                                                                         validation_messages,
-                                                                                         secondary_education)
+            is_valid, validation_messages, secondary_education, admission_exam = validate_admission_exam(
+                request,
+                is_valid,
+                validation_messages,
+                secondary_education)
     else:
         validation_messages['diploma'] = ALERT_MANDATORY_FIELD
         is_valid = False
 
-    is_valid, validation_messages, secondary_education = validate_professional_exam(request,
-                                                                                    is_valid,
-                                                                                    validation_messages,
-                                                                                    secondary_education)
+    is_valid, validation_messages, secondary_education, professional_exam = validate_professional_exam(
+        request,
+        is_valid,
+        validation_messages,
+        secondary_education)
     is_valid, validation_messages, secondary_education = validate_local_language_exam(request,
                                                                                       is_valid,
                                                                                       validation_messages,
@@ -224,17 +230,17 @@ def validate_fields_form(request, secondary_education, next_step):
         validation_messages['final3'] = "%s " % _('question_professional_experience')
         is_valid = False
 
-    return is_valid, validation_messages, secondary_education
+    return is_valid, validation_messages, secondary_education, professional_exam, admission_exam
 
 
 def get_secondary_education_exams_data(secondary_education):
     if secondary_education:
-        admission_exam = mdl.secondary_education_exam.search(secondary_education_id=secondary_education.id,
-                                                             type='ADMISSION')
-        professional_exam = mdl.secondary_education_exam.search(secondary_education_id=secondary_education.id,
-                                                                type='PROFESSIONAL')
-        local_language_exam = mdl.secondary_education_exam.search(secondary_education_id=secondary_education.id,
-                                                                  type='LANGUAGE')
+        admission_exam = mdl.secondary_education_exam.find_by_type(secondary_education_id=secondary_education.id,
+                                                                   type='ADMISSION')
+        professional_exam = mdl.secondary_education_exam.find_by_type(secondary_education_id=secondary_education.id,
+                                                                      type=PROFESSIONAL_TYPE)
+        local_language_exam = mdl.secondary_education_exam.find_by_type(secondary_education_id=secondary_education.id,
+                                                                        type='LANGUAGE')
         return {"admission_exam": admission_exam,
                 "professional_exam": professional_exam,
                 "local_language_exam": local_language_exam}
@@ -308,18 +314,22 @@ def diploma_save(request):
     message_success = None
     if next_step or previous_step or save_step:
         # Check if all the necessary fields have been filled
-        is_valid, validation_messages, secondary_education = validate_fields_form(request,
-                                                                                  secondary_education,
-                                                                                  next_step)
+        is_valid, validation_messages, secondary_education, professional_exam, admission_exam = validate_fields_form(
+            request,
+            secondary_education,
+            next_step)
         secondary_education = populate_secondary_education(request, secondary_education)
         secondary_education.save()
+        secondary_education_exam_update(secondary_education, PROFESSIONAL_TYPE, professional_exam)
+        secondary_education_exam_update(secondary_education, ADMISSION_EXAM_TYPE, admission_exam)
+
         message_success = _('msg_info_saved')
-        # Save documents
-        documents_upload(request)
+        # Check if documents need to be deleted
+        documents_update(request, secondary_education, application)
         #
         if next_step:
-            return render(request, "curriculum.html", {"application":         application,
-                                                       "message_success":     message_success})
+            return render(request, "curriculum.html", {"application": application,
+                                                       "message_success": message_success})
         else:
             if save_step:
                 countries = mdl_reference.country.find_excluding("BE")
@@ -418,11 +428,11 @@ def diploma_update(request, application_id=None):
                 mdl.application_document_file.search(application,
                                                      document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO),
             'equivalence_file':
-                mdl.application_document_file.search(application, document_type.EQUIVALENCE),
+                mdl.application_document_file.find_first(application, document_type.EQUIVALENCE),
             'admission_exam_file':
-                mdl.application_document_file.search(application, document_type.ADMISSION_EXAM_CERTIFICATE),
+                mdl.application_document_file.find_first(application, document_type.ADMISSION_EXAM_CERTIFICATE),
             'professional_exam_file':
-                mdl.application_document_file.search(application, document_type.PROFESSIONAL_EXAM_CERTIFICATE)}
+                mdl.application_document_file.find_first(application, document_type.PROFESSIONAL_EXAM_CERTIFICATE)}
 
     # merge 2 dictionaries
     data.update(get_secondary_education_exams_data(secondary_education))
@@ -431,13 +441,17 @@ def diploma_update(request, application_id=None):
 
 
 def validate_professional_exam(request, is_valid, validation_messages, secondary_education):
+    professional_exam = None
     if request.POST.get('professional_exam') is None:
         validation_messages['professional_exam'] = ALERT_MANDATORY_FIELD
         is_valid = False
     else:
         if request.POST.get('professional_exam') == 'true':
-            professional_exam = mdl.secondary_education_exam.SecondaryEducationExam()
-            professional_exam.type = 'PROFESSIONAL'
+            professional_exam = mdl.secondary_education_exam.find_by_type(secondary_education, PROFESSIONAL_TYPE)
+            if professional_exam is None:
+                professional_exam = mdl.secondary_education_exam.SecondaryEducationExam()
+                professional_exam.secondary_education = secondary_education
+            professional_exam.type = PROFESSIONAL_TYPE
             if request.POST.get('professional_exam_date') is None \
                     or len(request.POST.get('professional_exam_date').strip()) == 0:
                 validation_messages['professional_exam_date'] = ALERT_MANDATORY_FIELD
@@ -463,7 +477,7 @@ def validate_professional_exam(request, is_valid, validation_messages, secondary
                 is_valid = False
             else:
                 professional_exam.result = request.POST.get('professional_exam_result')
-    return is_valid, validation_messages, secondary_education
+    return is_valid, validation_messages, secondary_education, professional_exam
 
 
 def validate_local_language_exam(request, is_valid, validation_messages, secondary_education):
@@ -505,13 +519,17 @@ def validate_local_language_exam(request, is_valid, validation_messages, seconda
 
 
 def validate_admission_exam(request, is_valid, validation_messages, secondary_education):
+    admission_exam = None
     if request.POST.get('admission_exam') is None:
         validation_messages['admission_exam'] = ALERT_MANDATORY_FIELD
         is_valid = False
     else:
         if request.POST.get('admission_exam') == 'true':
-            admission_exam = mdl.secondary_education_exam.SecondaryEducationExam()
-            admission_exam.type = 'ADMISSION'
+            admission_exam = mdl.secondary_education_exam.find_by_type(secondary_education, ADMISSION_EXAM_TYPE)
+            if admission_exam is None:
+                admission_exam = mdl.secondary_education_exam.SecondaryEducationExam()
+                admission_exam.type = ADMISSION_EXAM_TYPE
+                admission_exam.secondary_education = secondary_education
 
             if request.POST.get('admission_exam_date') is None \
                     or len(request.POST.get('admission_exam_date').strip()) == 0:
@@ -546,12 +564,14 @@ def validate_admission_exam(request, is_valid, validation_messages, secondary_ed
                         new_admission_exam_type = mdl.admission_exam_type.AdmissionExamType()
                         new_admission_exam_type.adhoc = True
                         new_admission_exam_type.name = request.POST.get('admission_exam_type_other')
+                        new_admission_exam_type.save()
                         admission_exam.admission_exam_type = new_admission_exam_type
 
                 if request.POST.get('chb_admission_exam_type_other') == "on":
                     new_admission_exam_type = mdl.admission_exam_type.AdmissionExamType()
                     new_admission_exam_type.adhoc = True
                     new_admission_exam_type.name = request.POST.get('admission_exam_type_other')
+                    new_admission_exam_type.save()
                     admission_exam.admission_exam_type = new_admission_exam_type
                 else:
                     admission_exam_type_existing = mdl.admission_exam_type \
@@ -563,10 +583,8 @@ def validate_admission_exam(request, is_valid, validation_messages, secondary_ed
                 is_valid = False
             else:
                 admission_exam.result = request.POST.get('admission_exam_result')
-            secondary_education.admission_exam = admission_exam
-            admission_exam.save()
 
-    return is_valid, validation_messages, secondary_education
+    return is_valid, validation_messages, secondary_education, admission_exam
 
 
 def is_local_language_exam_needed(user):
@@ -694,6 +712,8 @@ def populate_secondary_education(request, secondary_education):
         if request.POST.get('international_diploma_country') \
                 and request.POST.get('international_diploma_country') != "-":
             country_id = request.POST.get('international_diploma_country')
+            if country_id == "-1":
+                country_id = None
             international_diploma_country = None
             if country_id and int(country_id) >= 0:
                 international_diploma_country = mdl_reference.country\
@@ -726,3 +746,42 @@ def populate_secondary_education(request, secondary_education):
         secondary_education.academic_year = academic_year
 
     return secondary_education
+
+
+def secondary_education_exam_update(secondary_education, type, secondary_education_exam):
+    if secondary_education_exam:
+        secondary_education_exam.save()
+    else:
+        # Delete if it exists
+        secondary_education_exam = mdl.secondary_education_exam.find_by_type(secondary_education, type)
+        if secondary_education_exam:
+            secondary_education_exam.delete()
+
+
+def documents_update(request, secondary_education, application):
+    list_unwanted_files=[]
+
+    if not secondary_education.diploma:
+        list_unwanted_files.append(document_type.NATIONAL_DIPLOMA_RECTO)
+        list_unwanted_files.append(document_type.NATIONAL_DIPLOMA_VERSO)
+        list_unwanted_files.append(document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
+        list_unwanted_files.append(document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO)
+    if not secondary_education.international_diploma:
+        list_unwanted_files.append(document_type.INTERNATIONAL_DIPLOMA_RECTO)
+        list_unwanted_files.append(document_type.INTERNATIONAL_DIPLOMA_VERSO)
+    if secondary_education.international_diploma_language is None or not secondary_education.international_diploma_language.recognized:
+        list_unwanted_files.append(document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO)
+        list_unwanted_files.append(document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO)
+        list_unwanted_files.append(document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
+        list_unwanted_files.append(document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO)
+    delete_documents(request, application, list_unwanted_files)
+
+
+def delete_documents(request, application, list_unwanted_files):
+    for file_description in list_unwanted_files:
+        documents = mdl_osis_common.document_file.search(request.user, file_description)
+        for document in documents:
+            documents_application = mdl.application_document_file.search(application, file_description)
+            for doc_application in documents_application:
+                doc_application.delete()
+            document.delete()

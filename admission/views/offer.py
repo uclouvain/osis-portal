@@ -50,8 +50,10 @@ class OfferSerializer(serializers.ModelSerializer):
 def search(request):
     level = request.GET['level']
     domain = request.GET['domain']
-    offers = mdl_base.offer_year.search(level, domain)
-    serializer = OfferSerializer(offers, many=True)
+    serializer = OfferSerializer([], many=True)
+    if level != 'undefined' and domain != 'undefined':
+        offers = mdl_base.offer_year.search(level, domain)
+        serializer = OfferSerializer(offers, many=True)
     return JSONResponse(serializer.data)
 
 

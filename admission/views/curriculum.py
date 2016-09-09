@@ -119,7 +119,8 @@ def save(request):
                                                "domains": mdl_reference.domain.find_all_domains(),
                                                "subdomains": mdl_reference.domain.find_all_subdomains(),
                                                "grade_types": mdl_reference.grade_type.find_all(),
-                                               "universities_countries": mdl_reference.education_institution.find_countries(),
+                                               "universities_countries": mdl_reference.education_institution.
+                  find_countries(),
                                                "validation_messages": validation_messages,
                                                "message_success": message_success,
                                                "universities_cities": universities_cities,
@@ -148,7 +149,7 @@ def update(request, application_id=None):
             year_secondary = secondary_education.academic_year.year
 
     if admission:
-        if secondary_education and secondary_education.diploma is True:
+        if secondary_education and secondary_education.diploma is True and secondary_education.academic_year:
             year = secondary_education.academic_year.year + 1
 
     if year_secondary and year < year_secondary:

@@ -34,9 +34,11 @@ from admission.models import document_type_assimilation
 from admission.models import form
 from admission.models import option
 from admission.models import person_address
+from admission.models import profession
 from admission.models import properties
 from admission.models import question
 from admission.models import secondary_education
 from admission.models import secondary_education_exam
+from admission.models import sociological_survey
 from admission.models import supported_languages
 

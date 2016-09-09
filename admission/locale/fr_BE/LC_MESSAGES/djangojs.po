@@ -23,7 +23,7 @@ msgstr ""
 
 msgid "msg_next_profil"
 msgstr ""
-"Avant de pouvoir accéder à l'étape suivante vous devez encoder au minimum, votre nationalité et votre pays de résidence"
+"Avant de pouvoir accéder à l'étape suivante vous devez encoder au minimum, votre nationalité et votre pays de domicile"
 
 msgid "criteria"
 msgstr "Critère"
@@ -120,3 +120,34 @@ msgstr "Diplôme d'études secondaires - recto"
 
 msgid "national_diploma_verso"
 msgstr "Diplôme d'études secondaires - verso"
+
+msgid "professional_exam_certificate"
+msgstr "Certificat ou preuve d'inscription à l'examen"
+
+msgid "admission_exam_certificate"
+msgstr "Certificat d'exament d'admission"
+
+msgid "high_school_scores_transcript_recto"
+msgstr "Relevé de notes des études secondaires - recto"
+
+msgid "high_school_scores_transcript_verso"
+msgstr "Relevé de notes des études secondaires - verso"
+
+msgid "translated_high_school_scores_transcript_recto"
+msgstr "Traduction relevé de notes des études secondaires - recto"
+
+msgid "translated_high_school_scores_transcript_verso"
+msgstr "Traduction relevé de notes des études secondaires - verso"
+
+msgid "international_diploma_recto"
+msgstr "Diplôme d'études secondaires - recto"
+
+msgid "international_diploma_verso"
+msgstr "Diplôme d'études secondaires - verso"
+
+msgid "translated_international_diploma_recto"
+msgstr "Traduction diplôme d'études secondaires - recto"
+
+msgid "translated_international_diploma_verso"
+msgstr "Traduction diplôme d'études secondaires - verso"
+

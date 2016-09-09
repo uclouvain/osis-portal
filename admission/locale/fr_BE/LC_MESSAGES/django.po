@@ -382,6 +382,9 @@ msgstr "erreur(s)"
 msgid "errors_warning"
 msgstr "Attention il y a des erreurs."
 
+msgid "error_with_form"
+msgstr "Vous n'avez pas rempli tout les champs obligatoires ou les champs sont incorrects."
+
 msgid "establishment"
 msgstr "Etablissement"
 
@@ -393,6 +396,9 @@ msgstr "Père"
 
 msgid "female"
 msgstr "Féminin"
+
+msgid "field_is_required"
+msgstr "Champ requis"
 
 msgid "file"
 msgstr "Fichier"
@@ -454,6 +460,9 @@ msgstr "allocations d'études de la Communauté française"
 
 msgid "full_exercise"
 msgstr "Plein exercice"
+
+msgid "FULL_TIME"
+msgstr "Oui, à temps plein"
 
 msgid "further_information"
 msgstr "Informations complémentaires"
@@ -786,6 +795,9 @@ msgstr "Si vous ne disposez pas encore de ce compte"
 msgid "no_preview"
 msgstr "Pas d'aperçu disponible sur un fichier qui n'est pas de type image(gif, png, jpg,...)"
 
+msgid "NO_PROFESSION"
+msgstr "Aucune profession"
+
 msgid "no_result"
 msgstr "Pas de résultat"
 
@@ -840,6 +852,9 @@ msgstr "Bénéficiez-vous d'une bourse d'études auprès d'un autre organisme?"
 msgid "other_study_grant_address"
 msgstr "Veuillez indiquer le nom et l'adresse de cet organisme"
 
+msgid "PART_TIME"
+msgstr "Oui, à temps partiel"
+
 msgid "passport_number"
 msgstr "Numéro de passeport"
 
@@ -893,6 +908,9 @@ msgstr "Prérequis"
 
 msgid "previous_step"
 msgstr "Etape précédente"
+
+msgid "PRIMARY"
+msgstr "Primaire"
 
 msgid "profession"
 msgstr "Profession"
@@ -1059,6 +1077,12 @@ msgstr "Feuille de notes"
 msgid "secondary_education"
 msgstr "Etudes secondaires"
 
+msgid "SECONDARY_INFERIOR"
+msgstr "Secondaire inférieur"
+
+msgid "SECONDARY_SUPERIOR"
+msgstr "Secondaire supérieur"
+
 msgid "separated"
 msgstr "Séparé(s)"
 
@@ -1138,6 +1162,9 @@ msgstr "Succès"
 msgid "succeeded"
 msgstr "Réussite"
 
+msgid "SUPERIOR_NON_UNIVERSITY"
+msgstr "Supérieur mais pas université"
+
 msgid "tab_diplomas"
 msgstr "Diplômes et certificats"
 
@@ -1180,6 +1207,9 @@ msgstr "Chômage"
 msgid "university"
 msgstr "Université"
 
+msgid "UNIVERSITY"
+msgstr "Université"
+
 msgid "university_country"
 msgstr "Pays de l'université"
 
@@ -1192,6 +1222,9 @@ msgstr ""
 
 msgid "unknown"
 msgstr "Inconnu "
+
+msgid "UNKNOWN"
+msgstr "Unknown"
 
 msgid "update_curriculum"
 msgstr "Modifier votre curriculum"
@@ -1222,14 +1255,14 @@ msgstr "Bienvenue sur la demande d'inscription en ligne de l'Université catholi
 
 msgid "which_community"
 msgstr ""
-"Dans quelle Communauté avez-vous suivi(ou suivez-vous) la dernière année de "
+"Dans quelle Communauté avez-vous suivi (ou suivez-vous) la dernière année de "
 "vos études"
 
 msgid "which_result"
 msgstr "Quel résultat avez-vous obtenu?"
 
 msgid "which_type_education"
-msgstr "Quel type d'enseignement avez-vous suivi(ou suivez-vous)?"
+msgstr "Quel type d'enseignement avez-vous suivi (ou suivez-vous)?"
 
 msgid "widowed"
 msgstr "Veuf(ve)"

@@ -24,37 +24,14 @@
 #
 ##############################################################################
 
-from django.db import models
-from django.contrib import admin
-from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 
+NO_PROFESSION = "NO_PROFESSION"
+PART_TIME = "PART_TIME"
+FULL_TIME = "FULL_TIME"
 
-class ApplicationDocumentFile(models.Model):
-    application = models.ForeignKey('Application')
-    document_file = models.ForeignKey('osis_common.documentFile')
-
-
-def search(application=None, description=None):
-    out = None
-    queryset = ApplicationDocumentFile.objects.order_by('document_file__creation_date')
-    if application:
-        queryset = queryset.filter(application=application)
-    if description:
-        queryset = queryset.filter(document_file__description=description)
-    if application or description:
-        out = queryset
-    return out
-
-
-def find_first(application=None, description=None):
-    results = search(application,description)
-    if results.exists():
-        return results[0]
-    return None
-
-
-def find_by_document(document_file):
-    return ApplicationDocumentFile.objects.filter(document_file=document_file)
-
-
-
+PROFESSIONAL_ACTIVITY_CHOICES = (
+    (NO_PROFESSION, _(NO_PROFESSION)),
+    (PART_TIME, _(PART_TIME)),
+    (FULL_TIME, _(FULL_TIME))
+)
