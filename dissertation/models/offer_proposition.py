@@ -33,7 +33,6 @@ class OfferProposition(models.Model):
     acronym = models.CharField(max_length=200)
     offer = models.ForeignKey(offer.Offer)
     student_can_manage_readers = models.BooleanField(default=True)
-    readers_visibility_date_for_students = models.BooleanField(default=False)
     adviser_can_suggest_reader = models.BooleanField(default=False)
     evaluation_first_year = models.BooleanField(default=False)
     validation_commission_exists = models.BooleanField(default=False)
@@ -41,6 +40,18 @@ class OfferProposition(models.Model):
     end_visibility_proposition = models.DateField(default=timezone.now)
     start_visibility_dissertation = models.DateField(default=timezone.now)
     end_visibility_dissertation = models.DateField(default=timezone.now)
+    start_jury_visibility = models.DateField(default=timezone.now)
+    end_jury_visibility = models.DateField(default=timezone.now)
+    start_edit_title = models.DateField(default=timezone.now)
+    end_edit_title = models.DateField(default=timezone.now)
 
     def __str__(self):
         return self.acronym
+
+
+def search_by_offer(off):
+    return OfferProposition.objects.get(offer=off)
+
+
+def search_by_offers(offers):
+    return OfferProposition.objects.filter(offer__in=offers)

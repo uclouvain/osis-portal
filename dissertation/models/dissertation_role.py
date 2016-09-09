@@ -53,6 +53,10 @@ def count_by_dissertation(dissertation):
     return DissertationRole.objects.filter(dissertation=dissertation).count()
 
 
+def count_reader_by_dissertation(dissertation):
+    return DissertationRole.objects.filter(dissertation=dissertation, status="READER").count()
+
+
 def count_by_status_student_dissertation(status, adviser, dissertation):
     return DissertationRole.objects.filter(adviser=adviser)\
         .filter(status=status)\

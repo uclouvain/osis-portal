@@ -41,7 +41,7 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-3" style="text-align: right">
-                        <label>{% trans 'author' %}</label>
+                        <label>{% trans 'promotor' %}</label>
                     </div>
                     <div class="col-md-9">
                         {{ proposition_dissertation.author }}
@@ -109,29 +109,10 @@
                     <div class="col-md-3" style="text-align: right">
                         <label>{% trans 'description' %}</label>
                     </div>
-                    <div class="col-md-9" style="text-align: justify">
+                    <div class="col-md-9" style="text-align: left">
                         {{ proposition_dissertation.description|linebreaks }}
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{% trans 'proposition_dissertation_jury' %}</h3>
-            </div>
-            <div class="panel-body">
-                {% for proposition_role in proposition_roles %}
-                <div class="row">
-                    <div class="col-md-3" style="text-align: right">
-                        <label>
-                            {{ proposition_role.get_status_display }}
-                        </label>
-                    </div>
-                    <div class="col-md-4">
-                        {{ proposition_role.adviser }}
-                    </div>
-                </div>
-                {% endfor %}
             </div>
         </div>
     </div>

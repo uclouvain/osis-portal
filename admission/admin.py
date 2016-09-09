@@ -62,6 +62,8 @@ admin.site.register(option.Option,
 admin.site.register(person_address.PersonAddress,
                     person_address.PersonAddressAdmin)
 
+admin.site.register(profession.Profession)
+
 admin.site.register(properties.Properties,
                     properties.PropertiesAdmin)
 
@@ -73,3 +75,6 @@ admin.site.register(secondary_education.SecondaryEducation,
 
 admin.site.register(secondary_education_exam.SecondaryEducationExam,
                     secondary_education_exam.SecondaryEducationExamAdmin)
+
+admin.site.register(sociological_survey.SociologicalSurvey,
+                    sociological_survey.SociologicalSurveyAdmin)
