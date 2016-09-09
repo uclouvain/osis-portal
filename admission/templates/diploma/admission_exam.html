@@ -24,7 +24,7 @@
                          onclick="display('pnl_admission_exam_detail',false);"> {% trans 'no' %}
                 </label>
                 {%if validation_messages and validation_messages|get_item:'admission_exam'%}
-                    <br><br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam'}}</font>
+                    <br><br><span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam'}}</span>
                 {% endif %}
             </div>
         </div>
@@ -38,7 +38,7 @@
                        name="admission_exam_date"
                        value="{{admission_exam.exam_date | default_if_none:''|date:"j/m/Y"}}">
                 {%if validation_messages and validation_messages|get_item:'admission_exam_date'%}
-                    <br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_date'}}</font>
+                    <br><span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_date'}}</span>
                 {% endif %}
                 <br>
                 <br>
@@ -48,7 +48,7 @@
                        name="admission_exam_institution">
 
                 {%if validation_messages and validation_messages|get_item:'admission_exam_institution'%}
-                    <br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_institution'}}</font>
+                    <br><span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_institution'}}</span>
                 {% endif %}
 
             </div>
@@ -98,7 +98,7 @@
 
             {%if validation_messages and validation_messages|get_item:'admission_exam_type'%}
                 <br>
-                <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_type'}}</font><br>
+                <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_type'}}</span><br>
             {% endif %}
             <br>
             <label>{% trans 'which_result' %} *</label>
@@ -126,22 +126,28 @@
             </label>
             <br>
             {%if validation_messages and validation_messages|get_item:'admission_exam_result'%}
-                <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_result'}}</font>
+                <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_result'}}</span>
             {% endif %}
             <br>
             <label> {% trans 'add_enrollment_file' %} </label>
             &nbsp;&nbsp;
              {%if admission_exam_file%}
-                <button type="button" class="btn btn-default"
+                <button type="button"
+                        class="btn btn-success"
                         title="{% trans 'modify'%} {% trans 'admission_exam_certificate_document' %}"
-                        id="bt_admission_exam_file">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> {% trans 'modify' %}
+                        id="bt_load_doc_ADMISSION_EXAM_CERTIFICATE"
+                        data-toggle="modal" data-target="#pnl_upload_documents">
+                        <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"
+                              id="spn_bt_load_doc_ADMISSION_EXAM_CERTIFICATE"></span> {% trans 'modify' %}
                 </button>
              {%else%}
-                <button type="button" class="btn btn-default"
+                <button type="button"
+                        class="btn btn-default"
                         title="{% trans 'add'%} {% trans 'admission_exam_certificate_document' %}"
-                        id="bt_admission_exam_file">
-                        <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'add' %}
+                        id="bt_load_doc_ADMISSION_EXAM_CERTIFICATE"
+                        data-toggle="modal" data-target="#pnl_upload_documents">
+                        <span class="glyphicon glyphicon-upload" aria-hidden="true"
+                              id="spn_bt_load_doc_ADMISSION_EXAM_CERTIFICATE"></span> {% trans 'add' %}
                 </button>
              {%endif%}
         </div>
