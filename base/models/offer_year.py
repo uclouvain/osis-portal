@@ -31,6 +31,9 @@ from base.models.offer import Offer
 class OfferYearAdmin(admin.ModelAdmin):
     list_display = ('acronym', 'title', 'academic_year', 'grade_type','subject_to_quota')
     fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'grade_type','subject_to_quota')}),)
+    list_display = ('acronym', 'title', 'academic_year', 'domain', 'grade_type','subject_to_quota')
+    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international',
+                                    'domain', 'grade_type','subject_to_quota')}),)
 
 
 class OfferYear(models.Model):
@@ -65,3 +68,7 @@ def search(level=None, domain=None):
 
 def find_by_domain_grade(domain, grade):
     return OfferYear.objects.filter(domain=domain, grade_type=grade).order_by("acronym")
+
+
+def find_by_offer(offers):
+    return OfferYear.objects.filter(offer__in=offers)

@@ -31,7 +31,7 @@ from base.models.serializable_model import SerializableModel
 
 
 class OfferEnrollmentAdmin(admin.ModelAdmin):
-    list_display = ('offer_year', 'student', 'date_enrollment', 'changed')
+    list_display = ('offer_year', 'student', 'date_enrollment')
     fieldsets = ((None, {'fields': ('offer_year','student','date_enrollment')}),)
     raw_id_fields = ('offer_year', 'student')
     search_fields = ['offer_year__acronym', 'student__person__first_name', 'student__person__last_name']
@@ -39,7 +39,6 @@ class OfferEnrollmentAdmin(admin.ModelAdmin):
 
 class OfferEnrollment(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    changed = models.DateTimeField(null=True)
     date_enrollment = models.DateField()
     offer_year = models.ForeignKey(OfferYear)
     student = models.ForeignKey('Student')
@@ -53,5 +52,5 @@ def find_by_student(a_student):
     return enrollments
 
 
-def find_by_student_offer(a_student,offer_year):
+def find_by_student_offer(a_student, offer_year):
     return OfferEnrollment.objects.filter(student=a_student, offer_year=offer_year)

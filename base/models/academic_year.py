@@ -58,6 +58,10 @@ def find_academic_years():
     return AcademicYear.objects.all().order_by('year')
 
 
+def find_last_academic_years():
+    return AcademicYear.objects.all().order_by('-year')[:2]
+
+
 def current_academic_year():
     academic_yr = AcademicYear.objects.filter(start_date__lte=timezone.now()) \
                                       .filter(end_date__gte=timezone.now()).first()
