@@ -23,24 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models import academic_year
-from admission.models import admission_exam_type
-from admission.models import application_document_file
-from admission.models import answer
-from admission.models import applicant
-from admission.models import applicant_assimilation_criteria
-from admission.models import application
-from admission.models import curriculum
-from admission.models import document_type_assimilation
-from admission.models import form
-from admission.models import offer_year
-from admission.models import option
-from admission.models import person_address
-from admission.models import profession
-from admission.models import properties
-from admission.models import question
-from admission.models import secondary_education
-from admission.models import secondary_education_exam
-from admission.models import sociological_survey
-from admission.models import supported_languages
 
+from django.utils.translation import ugettext_lazy as _
+
+NO_PROFESSION = "NO_PROFESSION"
+PART_TIME = "PART_TIME"
+FULL_TIME = "FULL_TIME"
+
+PROFESSIONAL_ACTIVITY_CHOICES = (
+    (NO_PROFESSION, _(NO_PROFESSION)),
+    (PART_TIME, _(PART_TIME)),
+    (FULL_TIME, _(FULL_TIME))
+)

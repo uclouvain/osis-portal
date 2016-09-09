@@ -372,6 +372,9 @@ msgstr "error(s)"
 msgid "errors_warning"
 msgstr "There are errors"
 
+msgid "error_with_form"
+msgstr "You didn't filled all the forms or the fields are incorrect."
+
 msgid "establishment"
 msgstr "Establishment"
 
@@ -383,6 +386,9 @@ msgstr "Father"
 
 msgid "female"
 msgstr "Female"
+
+msgid "field_is_required"
+msgstr "Field is required."
 
 msgid "file"
 msgstr "File"
@@ -444,6 +450,9 @@ msgstr "study grant French-speaking community"
 
 msgid "full_exercise"
 msgstr "Full exercise"
+
+msgid "FULL_TIME"
+msgstr "Yes, at full-time"
 
 msgid "further_information"
 msgstr "Further information"
@@ -760,7 +769,6 @@ msgstr "Please indicate your new password"
 
 msgid "next_step"
 msgstr "Next step"
-#: templates/diploma.html:210
 
 msgid "no"
 msgstr "No"
@@ -770,6 +778,9 @@ msgstr "If you do not yet have an account"
 
 msgid "no_preview"
 msgstr "No preview available on a non image file"
+
+msgid "NO_PROFESSION"
+msgstr "No profession"
 
 msgid "no_result"
 msgstr "No result"
@@ -825,6 +836,9 @@ msgstr "Do you benefit from a study grant provided by another institute?"
 msgid "other_study_grant_address"
 msgstr "If affirmative, please provide the name and address of the organisation"
 
+msgid "PART_TIME"
+msgstr "Yes, at part-time"
+
 msgid "passport_number"
 msgstr "Passport number"
 
@@ -878,8 +892,9 @@ msgstr "Prerequisites"
 
 msgid "previous_step"
 msgstr "Previous step"
-#: templates/diploma.html:200 templates/diploma.html.py:201
-#: templates/diploma.html:318 templates/diploma.html.py:319
+
+msgid "PRIMARY"
+msgstr "Primary"
 
 msgid "profession"
 msgstr "Profession"
@@ -1035,14 +1050,18 @@ msgstr "Result"
 
 msgid "save"
 msgstr "Save"
-#: templates/diploma.html:203 templates/diploma.html.py:204
-#: templates/diploma.html:321 templates/diploma.html.py:322
 
 msgid "scores_transcript"
 msgstr "Scores transcript"
 
 msgid "secondary_education"
 msgstr "Secondary education"
+
+msgid "SECONDARY_INFERIOR"
+msgstr "Secondary inferior"
+
+msgid "SECONDARY_SUPERIOR"
+msgstr "Secondary superior"
 
 msgid "separated"
 msgstr "Separated"
@@ -1131,6 +1150,9 @@ msgstr "Succeed"
 msgid "succeeded"
 msgstr "Succeeded"
 
+msgid "SUPERIOR_NON_UNIVERSITY"
+msgstr "Superior but not university"
+
 msgid "tab_diplomas"
 msgstr "Diplomas and certificates"
 
@@ -1173,6 +1195,9 @@ msgstr "Unemployment"
 msgid "university"
 msgstr "University"
 
+msgid "UNIVERSITY"
+msgstr "University"
+
 msgid "university_country"
 msgstr "University country"
 
@@ -1183,6 +1208,9 @@ msgid "unknow_number_yet"
 msgstr "In case you do not know this number yet, you can always provide us this information later on."
 
 msgid "unknown"
+msgstr "Unknown"
+
+msgid "UNKNOWN"
 msgstr "Unknown"
 
 msgid "update_curriculum"
