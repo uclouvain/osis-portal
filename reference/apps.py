@@ -29,8 +29,3 @@ from frontoffice.queue import callbacks, queue_listener
 
 class ReferenceConfig(AppConfig):
     name = 'reference'
-
-    def ready(self):
-        # if django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
-        # ===> This exception says that there is an error in the implementation of method ready(self) !!
-        queue_listener.listen_queue(self.name, callbacks.insert_or_update)

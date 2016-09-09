@@ -27,8 +27,8 @@ import logging
 from django.apps import AppConfig
 from django.conf import settings
 from django.core import serializers
-from django.core.serializers.base import DeserializationError
 from frontoffice.queue import queue_listener
+from frontoffice.queue import callbacks
 import json
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
@@ -36,6 +36,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 class BaseConfig(AppConfig):
     name = 'base'
     queue_name = 'osis_base'
+    queue_for_migration = 'osis_portal' # Data from Osis to insert/update in Osis-portal
 
     def ready(self):
         try:
@@ -43,7 +44,10 @@ class BaseConfig(AppConfig):
                 update_person_after_user_update, add_to_students_group
         except ImportError:
             pass
+        # if following exception is thrown ; django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
+        # ===> This exception says that there is an error anywhere in the implementation of method ready(self) !
         queue_listener.listen_queue(self.queue_name, insert)
+        queue_listener.listen_queue(self.queue_for_migration, callbacks.insert_or_update)
 
 
 def insert(json_data):

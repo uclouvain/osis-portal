@@ -25,6 +25,7 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from base.models.serializable_model import SerializableModel
 
 
 class OfferYearAdmin(admin.ModelAdmin):
@@ -32,7 +33,7 @@ class OfferYearAdmin(admin.ModelAdmin):
     fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'grade_type','subject_to_quota')}),)
 
 
-class OfferYear(models.Model):
+class OfferYear(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     academic_year = models.ForeignKey('base.AcademicYear')
     acronym = models.CharField(max_length=15)

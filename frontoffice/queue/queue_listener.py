@@ -388,8 +388,9 @@ class ExampleConsumer(object):
         :param str|unicode body: The message body
         """
         logger.debug(self._connection_parameters['queue_name'] + ' : Received message # %s from %s' % (basic_deliver.delivery_tag, properties.app_id))
-        self.acknowledge_message(basic_deliver.delivery_tag)
+        logger.debug('Executing callback function on the received message...')
         self.callback_func(body)
+        self.acknowledge_message(basic_deliver.delivery_tag)
 
     def acknowledge_message(self, delivery_tag):
         """Acknowledge the message delivery from RabbitMQ by sending a
