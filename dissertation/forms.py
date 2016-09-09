@@ -24,8 +24,24 @@
 #
 ##############################################################################
 
+from django import forms
 from django.forms import ModelForm
 from dissertation.models.dissertation_update import DissertationUpdate
+from dissertation.models.dissertation import Dissertation
+
+
+class DissertationForm(ModelForm):
+    class Meta:
+        model = Dissertation
+        fields = ('title', 'author', 'offer_year_start', 'proposition_dissertation', 'description', 'defend_year',
+                  'defend_periode')
+        widgets = {'author': forms.HiddenInput()}
+
+
+class DissertationTitleForm(ModelForm):
+    class Meta:
+        model = Dissertation
+        fields = ('title',)
 
 
 class DissertationUpdateForm(ModelForm):

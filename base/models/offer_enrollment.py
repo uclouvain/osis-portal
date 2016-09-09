@@ -50,5 +50,5 @@ def find_by_student(a_student):
     return enrollments
 
 
-def find_by_student_offer(a_student,offer_year):
+def find_by_student_offer(a_student, offer_year):
     return OfferEnrollment.objects.filter(student=a_student, offer_year=offer_year)
