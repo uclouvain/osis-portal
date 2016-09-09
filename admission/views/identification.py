@@ -62,8 +62,6 @@ def home_error(request, message, form):
 def new_user(request):
     """
     To create a new user for the admission
-    :param request:
-    :return:
     """
     form_new = NewAccountForm(data=request.POST)
     number1 = request.POST['number1']
@@ -108,8 +106,7 @@ def new_user(request):
         user_id = user.id
         return HttpResponseRedirect(reverse('account_confirm', args=(user_id,)))
     else:
-        extra_context = {}
-        extra_context['form_new'] = form_new
+        extra_context = {'form_new': form_new}
         number1 = randint(1, 20)
         extra_context['number1'] = number1
         number2 = randint(1, 20)
@@ -120,12 +117,12 @@ def new_user(request):
             number3 = randint(1, 20)
         extra_context['number3'] = number3
 
-        extra_context['first_name_new']=form_new['first_name_new'].value()
-        extra_context['last_name_new']=form_new['last_name_new'].value()
-        extra_context['email_new']=form_new['email_new'].value()
-        extra_context['email_new_confirm']=form_new['email_new_confirm'].value()
-        extra_context['password_new']=form_new['password_new'].value()
-        return login(request, extra_context=extra_context,template_name='registration/admission_login.html')
+        extra_context['first_name_new'] = form_new['first_name_new'].value()
+        extra_context['last_name_new'] = form_new['last_name_new'].value()
+        extra_context['email_new'] = form_new['email_new'].value()
+        extra_context['email_new_confirm'] = form_new['email_new_confirm'].value()
+        extra_context['password_new'] = form_new['password_new'].value()
+        return login(request, extra_context=extra_context, template_name='registration/admission_registration.html')
 
 
 def activation_mail(request, user_id):
@@ -140,7 +137,7 @@ def activation_mail(request, user_id):
         applicant = mdl.applicant.find_by_user(user)
         if applicant:
             send_mail.send_mail_activation(request, str(applicant.activation_code), applicant, TEMPLATE_MSG_ACTIVATION)
-            return HttpResponseRedirect(reverse('admission'))
+            return HttpResponseRedirect(reverse('account_confirm', args=(user_id,)))
         else:
             return HttpResponseRedirect(reverse('admission'))
     return HttpResponseRedirect(reverse('admission'))
@@ -344,17 +341,3 @@ def application_update(request, application_id):
                           {"offers":      None,
                            "offer":       application.offer_year,
                            "application": application})
-
-
-def selection_offer(request, offer_id):
-    offer_year = get_object_or_404(mdl.offer_year.OfferYear, pk=offer_id)
-    grade = _get_offer_type(request)
-    domain = _get_domain(request)
-
-    return render(request, "offer_selection.html",
-                  {"gradetypes": reference_mdl.grade_type.find_all(),
-                   "domains": reference_mdl.domain.find_all_domains(),
-                   "offers": None,
-                   "offer": offer_year,
-                   "offer_type": grade,
-                   "domain": domain})
