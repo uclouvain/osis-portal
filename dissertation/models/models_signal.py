@@ -23,13 +23,34 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from dissertation.models import adviser
-from dissertation.models import dissertation
-from dissertation.models import dissertation_group
-from dissertation.models import dissertation_role
-from dissertation.models import dissertation_update
-from dissertation.models import models_signal
-from dissertation.models import offer_proposition
-from dissertation.models import proposition_dissertation
-from dissertation.models import proposition_role
+import frontoffice.osis_migration as osis_migration
+import sys
+
+queue_name = 'dissertation_osis'
+
+
+@receiver(post_save, sender=adviser.Adviser)
+def on_post_save_dissertation(sender, **kwargs):
+    try:
+        instance = kwargs["instance"]
+        send_instance_to_osis(sender, instance)
+    except KeyError:
+        pass
+
+
+def send_instance_to_osis(model_class, instance):
+    """
+    Send the instance to osis-portal.
+    :param model_class: model class of the instance
+    :param instance: a model object
+    :return:
+    """
+    # Records contains the serialized instance.
+    mod = sys.modules[model_class.__module__]
+    # Need to put instance in a list.
+    records = mod.serialize_list([instance])
+    osis_migration.migrate_records(records=records, model_class=model_class, queue_name=queue_name)
+
