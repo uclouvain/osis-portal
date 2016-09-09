@@ -215,9 +215,7 @@
         $('#txt_admission_exam_type_other').val('');
         $('#txt_admission_exam_type_other').prop( "disabled", true);
         $('#chb_admission_exam_type').prop( "checked", false);
-        $('#rdb_admission_exam_result_low').prop( "checked", false);
-        $('#rdb_admission_exam_result_middle').prop( "checked", false);
-        $('#rdb_admission_exam_result_high').prop( "checked", false);
+
         populate_exam_admin();
         if($("#hdn_application_offer_year_id").val()){
             display_dynamic_form($("#hdn_application_offer_year_id").val());
@@ -320,6 +318,9 @@
             if (dtDay> 29 || (dtDay ==29 && !isleap)) {
                 return false;
             }
+        }
+        if (dtYear< 1900){
+            return false;
         }
         return true;
     }
