@@ -55,7 +55,12 @@ STATELESS_CERTIFICATE = 'STATELESS_CERTIFICATE'
 FOREIGN_INSCRIPTION_CERTIFICATE = 'FOREIGN_INSCRIPTION_CERTIFICATE'
 SUBSIDIARY_PROTECTION_DECISION = 'SUBSIDIARY_PROTECTION_DECISION'
 RESIDENCE_PERMIT = 'RESIDENCE_PERMIT'
-PAYCHECK = 'PAYCHECK'
+PAYCHECK_1 = 'PAYCHECK_1'
+PAYCHECK_2 = 'PAYCHECK_2'
+PAYCHECK_3 = 'PAYCHECK_3'
+PAYCHECK_4 = 'PAYCHECK_4'
+PAYCHECK_5 = 'PAYCHECK_5'
+PAYCHECK_6 = 'PAYCHECK_6'
 CPAS = 'CPAS'
 TUTORSHIP_CERTIFICATE = 'TUTORSHIP_CERTIFICATE'
 OTHER = 'OTHER'
@@ -80,22 +85,32 @@ DOCUMENT_TYPE_CHOICES = ((ID_CARD, 'identity_card', '', ''),
                          (EQUIVALENCE, 'equivalence', '', ''),
                          (ADMISSION_EXAM_CERTIFICATE, 'admission_exam_certificate', '', ''),
                          (PROFESSIONAL_EXAM_CERTIFICATE, 'professional_exam_certificate', '', ''),
-                         (RESIDENT_LONG_DURATION, '', '', ''),
-                         (ID_FOREIGN_UNLIMITED, '', '', ''),
-                         (ATTACHMENT_26, '', '', ''),
-                         (REFUGEE_CARD, '', '', ''),
-                         (FAMILY_COMPOSITION, '', '', ''),
-                         (BIRTH_CERTIFICATE, '', '', ''),
-                         (RESIDENT_CERTIFICATE, '', '', ''),
-                         (STATELESS_CERTIFICATE, '', '', ''),
-                         (FOREIGN_INSCRIPTION_CERTIFICATE, '', '', ''),
-                         (SUBSIDIARY_PROTECTION_DECISION, '', '', ''),
-                         (RESIDENCE_PERMIT, '', '', ''),
-                         (PAYCHECK, '', '', ''),
-                         (CPAS, '', '', ''),
-                         (TUTORSHIP_CERTIFICATE, '', '', ''),
-                         (OTHER, '', '', ''),  # Hang va vérifier la signification de "les documents demandés pour l’étudiant à adapter pour la personne concernée. "
-                         (SCHOLARSHIP_CFWB, '', '', ''),
-                         (SCHOLARSHIP_DEVELOPMENT_COOPERATION, '', '', ''))
+                         (RESIDENT_LONG_DURATION, _('resident_long_duration'), '', ''),
+                         (ID_FOREIGN_UNLIMITED, _('id_foreign_unlimited'), '', ''),
+                         (ATTACHMENT_26, _('attachment_26'), '', ''),
+                         (REFUGEE_CARD, _('refugee_card'), '', ''),
+                         (FAMILY_COMPOSITION, _('family_composition'), '', ''),
+                         (BIRTH_CERTIFICATE, _('birth_certificate'), '', ''),
+                         (RESIDENT_CERTIFICATE, _('resident_certificate'), '', ''),
+                         (STATELESS_CERTIFICATE, _('stateless_certificate'), '', ''),
+                         (FOREIGN_INSCRIPTION_CERTIFICATE, _('foreign_inscription_certificate'), '', ''),
+                         (SUBSIDIARY_PROTECTION_DECISION, _('subsidiary_protection_decision'), '', ''),
+                         (RESIDENCE_PERMIT, _('residence_permit'), '', ''),
+                         (PAYCHECK_1, _('paycheck_1'), '', ''),
+                         (PAYCHECK_2, _('paycheck_2'), '', ''),
+                         (PAYCHECK_3, _('paycheck_3'), '', ''),
+                         (PAYCHECK_4, _('paycheck_4'), '', ''),
+                         (PAYCHECK_5, _('paycheck_5'), '', ''),
+                         (PAYCHECK_6, _('paycheck_6'), '', ''),
+                         (CPAS, _('cpas'), '', ''),
+                         (TUTORSHIP_CERTIFICATE, _('tutorship_certificate'), '', ''),
+                         (OTHER, _('other'), '', ''),
+                         (SCHOLARSHIP_CFWB, _('scholarship_cfwb'), '', ''),
+                         (SCHOLARSHIP_DEVELOPMENT_COOPERATION, _('scholarship_development_cooperation'), '', ''))
 
+
+def find(document_type):
+    for l in DOCUMENT_TYPE_CHOICES:
+        if document_type in l:
+            return l
 

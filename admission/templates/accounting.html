@@ -60,9 +60,9 @@
     <br>
     {%if form.errors%}
         <br>
-        <font class="error" role="alert" style="margin-left:5px;">
+        <span class="error" role="alert" style="margin-left:5px;">
             {% trans 'there_are' %} {{ form.errors|length}} {% trans 'errors'%}
-        </font>
+        </span>
         <br><br>
     {% endif %}
     <div class="panel panel-default"
@@ -298,13 +298,13 @@
                 <div class="col-md-6">
                     {% if form.bank_account_iban.errors %}
                         <br>
-                        <font class="error">{{ form.bank_account_iban.errors   }}</font>
+                        <span class="error">{{ form.bank_account_iban.errors   }}</span>
                     {%endif%}
                 </div>
                  <div class="col-md-6">
                     {% if form.bank_account_bic.errors %}
                         <br>
-                        <font class="error">{{ form.bank_account_bic.errors   }}</font>
+                        <span class="error">{{ form.bank_account_bic.errors   }}</span>
                     {%endif%}
                 </div>
             </div>
