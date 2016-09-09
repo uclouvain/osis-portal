@@ -29,6 +29,7 @@ from django.shortcuts import get_object_or_404
 from base import models as mdl
 from base.views import layout
 from dissertation.models import dissertation, proposition_dissertation, proposition_role
+from django.utils import timezone
 
 
 @login_required
@@ -37,9 +38,11 @@ def proposition_dissertations(request):
     student = mdl.student.find_by_person(person)
     offers = mdl.offer.find_by_student(student)
     subjects = proposition_dissertation.search_by_offer(offers)
+    date_now = timezone.now().date()
     return layout.render(request, 'proposition_dissertations_list.html',
-                         {'student': student,
-                          'proposition_dissertations': subjects})
+                         {'date_now': date_now,
+                          'proposition_dissertations': subjects,
+                          'student': student})
 
 
 @login_required

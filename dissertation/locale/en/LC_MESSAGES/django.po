@@ -146,8 +146,11 @@ msgstr "Next status"
 msgid "no_result"
 msgstr "No result"
 
-msgid "offer_propositions"
+msgid "offer_proposition"
 msgstr "Offer"
+
+msgid "offer_propositions"
+msgstr "Offers"
 
 msgid "offer_year_start"
 msgstr "Offer year start"

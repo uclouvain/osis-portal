@@ -52,3 +52,5 @@ class OfferProposition(models.Model):
 
 def search_by_offer(off):
     return OfferProposition.objects.get(offer=off)
+
+
