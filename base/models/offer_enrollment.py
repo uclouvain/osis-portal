@@ -29,7 +29,7 @@ from admission.models.offer_year import OfferYear
 
 
 class OfferEnrollmentAdmin(admin.ModelAdmin):
-    list_display = ('offer_year', 'student', 'date_enrollment', 'changed')
+    list_display = ('offer_year', 'student', 'date_enrollment')
     fieldsets = ((None, {'fields': ('offer_year','student','date_enrollment')}),)
     raw_id_fields = ('offer_year', 'student')
     search_fields = ['offer_year__acronym', 'student__person__first_name', 'student__person__last_name']
@@ -37,7 +37,6 @@ class OfferEnrollmentAdmin(admin.ModelAdmin):
 
 class OfferEnrollment(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    changed = models.DateTimeField(null=True)
     date_enrollment = models.DateField()
     offer_year = models.ForeignKey(OfferYear)
     student = models.ForeignKey('Student')
