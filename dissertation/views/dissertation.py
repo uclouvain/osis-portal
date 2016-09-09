@@ -58,9 +58,9 @@ def dissertation_detail(request, pk):
     memory = get_object_or_404(dissertation.Dissertation, pk=pk)
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
-    count = dissertation.count_submit_by_user(student)
     off = memory.offer_year_start.offer
     offer_pro = offer_proposition.search_by_offer(off)
+    count = dissertation.count_submit_by_user(student, off)
     if offer_pro.start_edit_title < timezone.now().date() < offer_pro.end_edit_title:
         check_edit = True
     else:
