@@ -25,22 +25,6 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
-
 {% block content %}
-<div class="panel panel-default">
-    <div class="panel-body">
-        <h2>{% trans 'confirmation' %}</h2><br><br>
-        <h3>{% trans 'account_created' %}</h3><br><br>
-        {% trans 'activation_mail_sent' %}<br>
-        {% trans 'check_activation_email_sent' %}<br><br>
-        <form method="post" action="{% url 'activation_mail' user%}">
-            {% csrf_token %}
-            <button type="submit" id="bt_re_send_activation_email" class="btn btn-primary" role="button" title="Renvoi du mail d'activation">
-                <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> {% trans 'resend_activation_email' %}
-            </button>
-            <a href="{% url 'admission' %}" class="btn btn-default">{% trans 'homepage' %}</a>
-        </form>
-    </div>
-</div>
+    {% include 'registration/identification_forms.html' %}
 {% endblock %}
-

@@ -24,7 +24,7 @@
                 <br>
                 <br>
                 {%if validation_messages and validation_messages|get_item:'local_language_exam'%}
-                    <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'local_language_exam'}}</font><br>
+                    <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'local_language_exam'}}</span><br>
                 {% endif %}
                 {% if professional_exam_link %}
                     {% trans 'further_information' %} : <a target="_blank" href="http://www.uclouvain.be/204100.html">{{professional_exam_link.value}}</a>
@@ -43,7 +43,7 @@
                 <br>
                 {%if validation_messages and validation_messages|get_item:'local_language_exam_date'%}
                     <br>
-                    <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'local_language_exam_date'}}</font>
+                    <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'local_language_exam_date'}}</span>
                     <br>
                 {% endif %}
                 <br>
@@ -57,9 +57,9 @@
                 </div>
                 {%if validation_messages and validation_messages|get_item:'local_language_exam_institution'%}
                     <br>
-                    <font class="error" style="margin-left:5px;">
+                    <span class="error" style="margin-left:5px;">
                         {{ validation_messages|get_item:'local_language_exam_institution'}}
-                    </font>
+                    </span>
                     <br>
                 {% endif %}
             </div>
@@ -94,7 +94,7 @@
             <br>
             {%if validation_messages and validation_messages|get_item:'local_language_exam_result'%}
                 <br>
-                <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'local_language_exam_result'}}</font>
+                <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'local_language_exam_result'}}</span>
                 <br>
             {% endif %}
             <br>
