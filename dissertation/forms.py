@@ -38,6 +38,12 @@ class DissertationForm(ModelForm):
         widgets = {'author': forms.HiddenInput()}
 
 
+class DissertationTitleForm(ModelForm):
+    class Meta:
+        model = Dissertation
+        fields = ('title',)
+
+
 class DissertationUpdateForm(ModelForm):
     class Meta:
         model = DissertationUpdate
