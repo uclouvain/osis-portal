@@ -78,7 +78,7 @@ msgid "description"
 msgstr "Description"
 
 msgid "dir_submit"
-msgstr "Soumettre"
+msgstr "Soumettre au professeur"
 
 msgid "dissertation"
 msgstr "Mémoire"

@@ -194,6 +194,9 @@ def dissertation_jury_new(request, pk):
             form = DissertationRoleForm(request.POST)
             if form.is_valid():
                 form.save()
+                if memory.status != 'DRAFT':
+                    justification = "%s" % "add_reader"
+                    dissertation_update.add(request, memory, memory.status, justification=justification)
             return redirect('dissertation_detail', pk=memory.pk)
         else:
             form = DissertationRoleForm(initial={'status': "READER", 'dissertation': memory})
@@ -224,6 +227,17 @@ def dissertation_new(request):
     return layout.render(request, 'dissertation_form.html',
                          {'form': form,
                           'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
+
+
+@login_required
+def dissertation_reader_delete(request, pk):
+    dissert_role = get_object_or_404(dissertation_role.DissertationRole, pk=pk)
+    dissert = dissert_role.dissertation
+    if dissert.status == 'DRAFT':
+        justification = "%s %s" % ("delete_reader", str(dissert_role))
+        dissertation_update.add(request, dissert, dissert.status, justification=justification)
+        dissert_role.delete()
+    return redirect('dissertation_detail', pk=dissert.pk)
 
 
 @login_required
