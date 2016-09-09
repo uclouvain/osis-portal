@@ -54,3 +54,8 @@ def search_by_offer(off):
     return OfferProposition.objects.get(offer=off)
 
 
+def search_by_offers(offers):
+    return OfferProposition.objects.filter(offer__in=offers)
+
+
+

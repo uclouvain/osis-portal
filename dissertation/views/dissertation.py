@@ -39,10 +39,19 @@ from django.utils import timezone
 def dissertations(request):
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
+    offers = mdl.offer.find_by_student(student)
+    offer_propositions = offer_proposition.search_by_offers(offers)
     memories = dissertation.search_by_user(student)
+    date_now = timezone.now().date()
+    visibility = False
+    for offer_pro in offer_propositions:
+        if offer_pro.start_visibility_dissertation <= date_now <= offer_pro.end_visibility_dissertation:
+            visibility = True
     return layout.render(request, 'dissertations_list.html',
-                         {'dissertations': memories,
-                          'student': student})
+                         {'date_now': date_now,
+                          'dissertations': memories,
+                          'student': student,
+                          'visibility': visibility})
 
 
 @login_required
