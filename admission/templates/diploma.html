@@ -38,7 +38,7 @@
     <input type="hidden"
            id="hdn_secondary_education_national"
            name="secondary_education_national"
-           value="{{secondary_education.national}}" >
+           value="{{secondary_education.national | default_if_none:''}}" >
     <input type="hidden"
            id="hdn_secondary_education_national_community"
            value="{{secondary_education.national_community | default_if_none:''}}" >
@@ -148,7 +148,10 @@
     <input type="hidden"
            id="hdn_secondary_professional_exam"
            name="secondary_education_professional_exam"
-           value="{% if professional_exam %} true {% else %} false {% endif %}" >
+           value="{% if professional_exam %} True {% else %} False {% endif %}" >
+    <input type="hidden"
+           id="hdn_secondary_professional_exam_id"
+           value="{{professional_exam.id | default_if_none:''}}" >
     <input type="hidden"
            id="hdn_secondary_education_professional_exam_institution"
            name="secondary_education_professional_exam_institution"
@@ -180,7 +183,7 @@
            title="{% trans 'curriculum'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
             {%trans 'next_step'%} : {%trans 'curriculum'%}</a>
     </div>
-    <br>
+
     <div>
         <br>
         {%if validation_messages%}
@@ -449,6 +452,21 @@
             document.getElementById('slt_country').disabled=false;
             document.getElementById('pnl_translation').style="visibility:hidden;display:none;";
         }
+    }
+
+    function delete_document(description){
+        var data = new FormData();
+        data.append('description', description);
+        $.ajax({
+            url: "{% url 'delete_document_file' %}",
+            type: 'POST',
+            data : data,
+            processData: false,
+            contentType: false
+
+        });
+        update_upload_btn_class('',description);
+        return true;
     }
 
     </script>

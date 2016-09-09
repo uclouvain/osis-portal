@@ -1255,14 +1255,14 @@ msgstr "Bienvenue sur la demande d'inscription en ligne de l'Université catholi
 
 msgid "which_community"
 msgstr ""
-"Dans quelle Communauté avez-vous suivi(ou suivez-vous) la dernière année de "
+"Dans quelle Communauté avez-vous suivi (ou suivez-vous) la dernière année de "
 "vos études"
 
 msgid "which_result"
 msgstr "Quel résultat avez-vous obtenu?"
 
 msgid "which_type_education"
-msgstr "Quel type d'enseignement avez-vous suivi(ou suivez-vous)?"
+msgstr "Quel type d'enseignement avez-vous suivi (ou suivez-vous)?"
 
 msgid "widowed"
 msgstr "Veuf(ve)"

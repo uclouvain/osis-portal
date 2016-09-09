@@ -74,5 +74,5 @@ def button_class_color(assimilation_documents_existing, document_description):
     for d in assimilation_documents_existing:
         if d.description == document_description:
             return "btn btn-success class_upload_assimilation"
-    return "btn class_upload_assimilation"
+    return "btn btn-default class_upload_assimilation"
 

@@ -197,16 +197,17 @@
         if($('#hdn_tab_active').val()=='2'){
             $('#form_secondary_education').append( $('#pnl_files>div') );
         }
-
-        $.ajax({
-            url: "/admission/country?nationality=" + $("#slt_nationality").val()
-        }).then(function(data) {
-            if (data.european_union) {
-                $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
-            }else{
-                $('#pnl_assimilation_criteria').css('visibility', 'visible').css('display','block');
-            }
-        });
+        if($("#slt_nationality").val()!="-1"){
+            $.ajax({
+                url: "/admission/country?nationality=" + $("#slt_nationality").val()
+            }).then(function(data) {
+                if (data.european_union) {
+                    $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
+                }else{
+                    $('#pnl_assimilation_criteria').css('visibility', 'visible').css('display','block');
+                }
+            });
+        }
 
         $('#txt_admission_exam_date').val('');
         $('#txt_admission_exam_institution').val('');
@@ -386,7 +387,7 @@
         display_existing_files('ADMISSION_EXAM_CERTIFICATE');
     });
 
-    $("#bt_load_doc_professional_exam_file").click(function(event) {
+    $("#bt_load_doc_PROFESSIONAL_EXAM_CERTIFICATE").click(function(event) {
         update_description('PROFESSIONAL_EXAM_CERTIFICATE',$(event.target));
         display_existing_files('PROFESSIONAL_EXAM_CERTIFICATE');
     });
@@ -781,10 +782,12 @@
 
             $('[id$="'+description+'"]').each(function(){
                 if($(this).attr("id").startsWith('btn_load_assimilation_doc_') || $(this).attr("id").startsWith('bt_load_doc_')){
-                    $(this).attr('title', gettext('change_document'));
-                    $(this).attr('class', 'btn btn-success class_upload_assimilation');
-                    var spn_id = '#spn_' +$(this).attr("id");
-                    $(spn_id).attr('class', 'glyphicon glyphicon-ok-circle');
+                    if($(this).attr("id")=='bt_load_doc_'+description){
+                        $(this).attr('title', gettext('change_document'));
+                        $(this).attr('class', 'btn btn-success class_upload_assimilation');
+                        var spn_id = '#spn_' +$(this).attr("id");
+                        $(spn_id).attr('class', 'glyphicon glyphicon-ok-circle');
+                    }
                 }
             });
         } else {
@@ -801,11 +804,13 @@
             }
 
             $('[id$="'+description+'"]').each(function() {
-                if($(this).attr("id").startsWith('btn_load_assimilation_doc_')) {
-                    $(this).attr('title', gettext('add_document'));
-                    $(this).attr('class', 'btn');
-                    var spn_id = '#spn_' +$(this).attr("id");
-                    $(spn_id).attr('class', 'glyphicon glyphicon-upload');
+                if($(this).attr("id").startsWith('btn_load_assimilation_doc_') || $(this).attr("id").startsWith('bt_load_doc_')) {
+                    if($(this).attr("id")=='bt_load_doc_'+description){
+                        $(this).attr('title', gettext('add_document'));
+                        $(this).attr('class', 'btn');
+                        var spn_id = '#spn_' +$(this).attr("id");
+                        $(spn_id).attr('class', 'glyphicon glyphicon-upload');
+                    }
                 }
             });
         }

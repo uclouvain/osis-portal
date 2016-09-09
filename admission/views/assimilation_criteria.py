@@ -117,6 +117,7 @@ class AssimilationDoc(object):
 
 def find_list_assimilation_basic_documents():
         assimilation_uploads = [
+            document_type.ID_CARD,
             document_type.RESIDENT_LONG_DURATION,
             document_type.ID_FOREIGN_UNLIMITED,
             document_type.ATTACHMENT_26,

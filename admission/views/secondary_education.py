@@ -633,27 +633,28 @@ def populate_secondary_education(request, secondary_education):
                     national_institution = mdl_reference.education_institution\
                         .find_by_id(int(request.POST.get('school')))
                     secondary_education.national_institution = national_institution
-
-            if request.POST.get('chb_other_education') == 'on':
-                existing_education_type = mdl_reference.education_type\
-                    .find_by_name(request.POST.get('other_education_type'))
-                if existing_education_type:
-                    secondary_education.education_type = existing_education_type
+            if secondary_education.national_institution and secondary_education.national_institution == 'FRENCH':
+                if request.POST.get('chb_other_education') == 'on':
+                    existing_education_type = mdl_reference.education_type\
+                        .find_by_name(request.POST.get('other_education_type'))
+                    if existing_education_type:
+                        secondary_education.education_type = existing_education_type
+                    else:
+                        new_education_type = mdl_reference.education_type.EducationType()
+                        new_education_type.adhoc = True
+                        new_education_type.name = request.POST.get('other_education_type')
+                        new_education_type.type = 'ANOTHER'
+                        new_education_type.save()
+                        secondary_education.education_type = new_education_type
                 else:
-                    new_education_type = mdl_reference.education_type.EducationType()
-                    new_education_type.adhoc = True
-                    new_education_type.name = request.POST.get('other_education_type')
-                    new_education_type.type = 'ANOTHER'
-                    new_education_type.save()
-                    secondary_education.education_type = new_education_type
+                    if request.POST.get('rdb_education_transition_type'):
+                        secondary_education.education_type = mdl_reference.education_type\
+                            .find_by_id(int(request.POST.get('rdb_education_transition_type')))
+                    if request.POST.get('rdb_education_technic_type'):
+                        secondary_education.education_type = mdl_reference.education_type\
+                            .find_by_id(int(request.POST.get('rdb_education_technic_type')))
             else:
-                if request.POST.get('rdb_education_transition_type'):
-                    secondary_education.education_type = mdl_reference.education_type\
-                        .find_by_id(int(request.POST.get('rdb_education_transition_type')))
-                if request.POST.get('rdb_education_technic_type'):
-                    secondary_education.education_type = mdl_reference.education_type\
-                        .find_by_id(int(request.POST.get('rdb_education_technic_type')))
-
+                secondary_education.education_type = None
             if request.POST.get('dipl_acc_high_educ'):
                 if request.POST.get('dipl_acc_high_educ') == 'true':
                     secondary_education.dipl_acc_high_educ = True
