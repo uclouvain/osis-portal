@@ -35,19 +35,25 @@
     <div class="panel-body">
         <form method="get" action="{% url 'dissertations_search'%}">
             <div class="row">
-                <div class="col-md-6">
-                    <a href="{% url 'dissertations' %}" id="lnk_dissertation_new" class="btn btn-default"
-                       role="button" title="{% trans 'add_dissertation'%}"><span class="glyphicon glyphicon-plus"
-                       aria-hidden="true"></span> {% trans 'add_dissertation'%}</a>
-                </div>
-                <div class="col-md-5">
+                <div class="col-md-10">
                     <input class="form-control" id="txt_submit_search" placeholder="{% trans 'search' %}" name="search"
                            value="{{ request.GET.search }}">
                 </div>
                 <div class="col-md-1">
-                    <button type="submit" id="bt_submit_search" class="btn btn-primary" role="button"
-                            title="{% trans 'search' %}"><span class="glyphicon glyphicon-search"
-                            aria-hidden="true"></span></button>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="submit" id="bt_submit_search" class="btn btn-primary" role="button"
+                                    title="{% trans 'search' %}"><span class="glyphicon glyphicon-search"
+                                    aria-hidden="true"></span></button>
+                        </div>
+                        {% if visibility == True %}
+                            <div class="col-md-6">
+                                <a href="{% url 'dissertation_new' %}" id="lnk_dissertation_new" class="btn btn-default"
+                                   role="button" title="{% trans 'create'%}"><span class="glyphicon glyphicon-plus"
+                                   aria-hidden="true"></span></a>
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </form>
@@ -59,16 +65,16 @@
             {% else %}
                 <table class="table table-hover">
                     <tr>
-                        <td style="text-align: center">{% trans 'title'%}</td>
-                        <td style="text-align: center">{% trans 'author'%}</td>
-                        <td style="text-align: center">{% trans 'status'%}</td>
-                        <td style="text-align: center">{% trans 'offer_propositions'%}</td>
+                        <td>{% trans 'title'%}</td>
+                        <td>{% trans 'author'%}</td>
+                        <td>{% trans 'status'%}</td>
+                        <td>{% trans 'offer_propositions'%}</td>
                     </tr>
                   {% for dissertation in dissertations %}
                     <tr>
-                        <td style="text-align: center"><a href="{% url 'dissertation_detail' pk=dissertation.pk %}">{{ dissertation.title }}</a></td>
-                        <td style="text-align: center">{{ dissertation.author }}</td>
-                        <td style="text-align: center">
+                        <td><a href="{% url 'dissertation_detail' pk=dissertation.pk %}">{{ dissertation.title }}</a></td>
+                        <td>{{ dissertation.author }}</td>
+                        <td>
                             {% if dissertation.status == 'DRAFT' %}
                             <span class="label label-default">{{ dissertation.get_status_display }}</span>
                             {% elif dissertation.status == 'DIR_SUBMIT' %}
@@ -99,7 +105,7 @@
                             <span class="label label-default">{{ dissertation.get_status_display }}</span>
                             {% endif %}
                         </td>
-                        <td style="text-align: center">{{ dissertation.offer_year_start }}</td>
+                        <td>{{ dissertation.offer_year_start }}</td>
                       </tr>
                   {% endfor %}
                 </table>

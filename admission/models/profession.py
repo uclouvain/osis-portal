@@ -23,28 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+"""
+Model containing a profession.
+This can be executive, artist, worker and so on.
+"""
 from django.db import models
 from django.contrib import admin
-from base.models import offer_enrollment
+from django.utils.translation import ugettext_lazy as _
 
 
-class OfferAdmin(admin.ModelAdmin):
-    fieldsets = ((None, {'fields': ('title',)}),)
-    search_fields = ['title']
-
-
-class Offer(models.Model):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    title = models.CharField(max_length=255)
+class Profession(models.Model):
+    name = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.title
-
-
-def find_by_id(offer_id):
-    return Offer.objects.get(pk=offer_id)
-
-
-def find_by_student(student):
-    offer_ids = offer_enrollment.find_by_student(student).values('offer_year__offer_id')
-    return Offer.objects.filter(pk__in=offer_ids)
+        return u"%s" % self.name

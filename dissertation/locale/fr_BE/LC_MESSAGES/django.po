@@ -26,6 +26,9 @@ msgstr "Accepté par le promoteur"
 msgid "accepted_by_first_year_evaluation"
 msgstr "Validation de première année validée"
 
+msgid "add_reader"
+msgstr "Ajouter un lecteur"
+
 msgid "application_dissertation"
 msgstr "Gestion des mémoires"
 
@@ -43,6 +46,9 @@ msgstr "Collaboration"
 
 msgid "copromotor"
 msgstr "Co-promoteur"
+
+msgid "create"
+msgstr "Créer"
 
 msgid "current_status"
 msgstr "Statut actuel"
@@ -72,10 +78,13 @@ msgid "description"
 msgstr "Description"
 
 msgid "dir_submit"
-msgstr "Soumettre"
+msgstr "Soumettre au professeur"
 
 msgid "dissertation"
 msgstr "Mémoire"
+
+msgid "dissertation_confirmation_message"
+msgstr "Confirmer le mémoire"
 
 msgid "dissertation_history"
 msgstr "Historique du mémoire"
@@ -91,6 +100,9 @@ msgstr "Domaine"
 
 msgid "draft"
 msgstr "Brouillon"
+
+msgid "edit"
+msgstr "Editer"
 
 msgid "ended"
 msgstr "Terminé"
@@ -120,7 +132,7 @@ msgid "level"
 msgstr "Niveau"
 
 msgid "literature_review"
-msgstr "Revue Litéraire"
+msgstr "Revue Littéraire"
 
 msgid "manager"
 msgstr "Gestionnaire de cours"
@@ -137,8 +149,14 @@ msgstr "Nouveau statut"
 msgid "no_result"
 msgstr "Aucun résultat trouvé"
 
+msgid "offer_proposition"
+msgstr "Programme de cours"
+
 msgid "offer_propositions"
 msgstr "Programmes de cours"
+
+msgid "offer_year_start"
+msgstr "Programme de cours de départ du mémoire"
 
 msgid "optional"
 msgstr "Facultatif"
@@ -154,6 +172,9 @@ msgstr "Professeur"
 
 msgid "promotor"
 msgstr "Promoteur"
+
+msgid "proposition_dissertation"
+msgstr "Sujet"
 
 msgid "proposition_dissertation_informations"
 msgstr "Informations du sujet"

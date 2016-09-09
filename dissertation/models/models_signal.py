@@ -23,28 +23,34 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
-from django.contrib import admin
-from base.models import offer_enrollment
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from dissertation.models import adviser
+import frontoffice.osis_migration as osis_migration
+import sys
+
+queue_name = 'dissertation_osis'
 
 
-class OfferAdmin(admin.ModelAdmin):
-    fieldsets = ((None, {'fields': ('title',)}),)
-    search_fields = ['title']
+@receiver(post_save, sender=adviser.Adviser)
+def on_post_save_dissertation(sender, **kwargs):
+    try:
+        instance = kwargs["instance"]
+        send_instance_to_osis(sender, instance)
+    except KeyError:
+        pass
 
 
-class Offer(models.Model):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    title = models.CharField(max_length=255)
+def send_instance_to_osis(model_class, instance):
+    """
+    Send the instance to osis-portal.
+    :param model_class: model class of the instance
+    :param instance: a model object
+    :return:
+    """
+    # Records contains the serialized instance.
+    mod = sys.modules[model_class.__module__]
+    # Need to put instance in a list.
+    records = mod.serialize_list([instance])
+    osis_migration.migrate_records(records=records, model_class=model_class, queue_name=queue_name)
 
-    def __str__(self):
-        return self.title
-
-
-def find_by_id(offer_id):
-    return Offer.objects.get(pk=offer_id)
-
-
-def find_by_student(student):
-    offer_ids = offer_enrollment.find_by_student(student).values('offer_year__offer_id')
-    return Offer.objects.filter(pk__in=offer_ids)
