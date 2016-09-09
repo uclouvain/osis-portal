@@ -2,14 +2,24 @@ body {
     padding-top: 120px;
     font-family: 'Armata', sans-serif;
 }
-.error {
-  color:red;
+
+.caption {
+    font-size: small;
+    font-style: italic;
 }
 
 .description {
-  color:grey;
-  font-style: italic;
-  font-weight: normal;
+    color:grey;
+    font-style: italic;
+    font-weight: normal;
+}
+
+.error {
+    color:red;
+}
+
+.navbar {
+    min-height:85px !important
 }
 
 .navbar-nav > li > a {
@@ -17,19 +27,16 @@ body {
     padding-bottom:5px !important;
 }
 
-.navbar {
-    min-height:85px !important
-}
-
 .not-active {
     pointer-events: none;
     cursor: default;
     opacity: 0.6;
 }
-.validated{
+
+.validated {
     color: green;
 }
 
-.not-validated{
+.not-validated {
     color: orange;
 }

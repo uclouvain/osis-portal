@@ -23,6 +23,9 @@ msgstr "Academic year"
 msgid "account_already_created"
 msgstr "If you already have requested creation of this account"
 
+msgid "account_created"
+msgstr "Your account was created!"
+
 msgid "account_creation"
 msgstr "Please create this account, composed of a private e-mail address and a password."
 
@@ -39,7 +42,7 @@ msgid "activation_link_not_valid"
 msgstr "Activation link invalid!"
 
 msgid "activation_mail_sent"
-msgstr "An activation message has been sent to your email account."
+msgstr "An activation message has been sent to your email."
 
 msgid "activity_type"
 msgstr "Activity type"
@@ -179,6 +182,9 @@ msgstr "Request to change password"
 
 msgid "changing_password_instruction"
 msgstr "Please enter your e-mail address. You will receive a link, allowing you to change your password."
+
+msgid "check_activation_email_sent"
+msgstr "Please, check your email box now and click on the link in the message we have sent to you to activate your account."
 
 msgid "checkbox"
 msgstr "checkbox"
@@ -498,6 +504,9 @@ msgstr "Last High school scores transcript"
 msgid "higher_non_university"
 msgstr "Higher non university"
 
+msgid "homepage"
+msgstr "Homepage"
+
 msgid "http_link"
 msgstr "HTTP link"
 
@@ -783,6 +792,9 @@ msgstr "Offer choice"
 msgid "onem_needed"
 msgstr "Veuillez joindre l'attestation de l'ONEM stipulant qui n'a pas bénificier d'une dégoration l'autorisation de poursuivre des études"
 
+msgid "online_enrollment"
+msgstr "Online Enrollment"
+
 msgid "or"
 msgstr "or"
 
@@ -1012,6 +1024,9 @@ msgstr "Reference number"
 msgid "requested_study"
 msgstr "Requested study"
 
+msgid "resend_activation_email"
+msgstr "Resend activation email"
+
 msgid "residence_country"
 msgstr "Residence country"
 
@@ -1223,3 +1238,84 @@ msgstr "Your profille"
 
 msgid "your_requests"
 msgstr "Your requests"
+
+msgid "add_document"
+msgstr "Add a document"
+
+msgid "precise_file"
+msgstr "Please select a file"
+
+msgid "resident_long_duration"
+msgstr "resident_long_duration"
+
+msgid "id_foreign_unlimited"
+msgstr "id_foreign_unlimited"
+
+msgid "attachment_26"
+msgstr "attachment_26"
+
+msgid "refugee_card"
+msgstr "refugee_card"
+
+msgid "family_composition"
+msgstr "family_composition"
+
+msgid "birth_certificate"
+msgstr "birth_certificate"
+
+msgid "resident_certificate"
+msgstr "resident_certificate"
+
+msgid "stateless_certificate"
+msgstr "stateless_certificate"
+
+msgid "foreign_inscription_certificate"
+msgstr "foreign_inscription_certificate"
+
+msgid "subsidiary_protection_decision"
+msgstr "subsidiary_protection_decision"
+
+msgid "residence_permit"
+msgstr "residence_permit"
+
+msgid "paycheck"
+msgstr "paycheck"
+
+msgid "cpas"
+msgstr "cpas"
+
+msgid "tutorship_certificate"
+msgstr "tutorship_certificate"
+
+msgid "scholarship_cfwb"
+msgstr "scholarship_cfwb"
+
+msgid "scholarship_development_cooperation"
+msgstr "scholarship_development_cooperation"
+
+msgid "criteria"
+msgstr "Criteria"
+
+msgid "help_pnl_selectedfiles"
+msgstr "Please select a file"
+
+msgid "upload"
+msgstr "Upload"
+
+msgid "paycheck_1"
+msgstr "1st paycheck"
+
+msgid "paycheck_2"
+msgstr "2nd paycheck"
+
+msgid "paycheck_3"
+msgstr "3rd paycheck"
+
+msgid "paycheck_4"
+msgstr "4th paycheck"
+
+msgid "paycheck_5"
+msgstr "5th paycheck"
+
+msgid "paycheck_6"
+msgstr "6th paycheck"
