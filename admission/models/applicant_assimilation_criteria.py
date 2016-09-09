@@ -42,3 +42,15 @@ def find_by_applicant(applicant):
 
 def find_by_criteria(criteria):
     return ApplicantAssimilationCriteria.objects.get(criteria=criteria)
+
+
+def search(applicant=None, criteria=None):
+    out = None
+    queryset = ApplicantAssimilationCriteria.objects
+    if applicant:
+        queryset = queryset.filter(applicant=applicant)
+    if criteria:
+        queryset = queryset.filter(criteria=criteria)
+    if applicant or criteria:
+        out = queryset
+    return out

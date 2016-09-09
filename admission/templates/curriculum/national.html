@@ -24,7 +24,7 @@
             {%trans 'dutch_belgian_community'%}
         </label>
         {% message_error validation_messages year=curriculum.academic_year.year|lower param='national_education' as national_education_msg %}
-        {%if national_education_msg%}<br><font class="error" style="margin-left:5px;">{{national_education_msg}}</font>{%endif%}
+        {%if national_education_msg%}<br><span class="error" style="margin-left:5px;">{{national_education_msg}}</span>{%endif%}
     </div>
 
     <div id="pnl_national_detail_{{curriculum.academic_year.year}}">
@@ -42,7 +42,7 @@
                     {% endfor %}
                 </select>
                 {% message_error validation_messages year=curriculum.academic_year.year|lower param='national_institution_french' as national_institution_french_msg %}
-                {%if national_institution_french_msg%}<font class="error" style="margin-left:5px;">{{national_institution_french_msg}}</font>{%endif%}
+                {%if national_institution_french_msg%}<span class="error" style="margin-left:5px;">{{national_institution_french_msg}}</span>{%endif%}
                 <select class="form-control"
                         id="slt_dutch_universities_{{curriculum.academic_year.year}}"
                         name="national_institution_dutch_{{curriculum.academic_year.year}}">
@@ -54,7 +54,7 @@
                     {% endfor %}
                 </select>
                 {% message_error validation_messages year=curriculum.academic_year.year|lower param='national_institution_dutch' as national_institution_dutch_msg%}
-                {% if national_institution_dutch_msg%}<font class="error" style="margin-left:5px;">{{national_institution_dutch_msg}}</font>{%endif%}
+                {% if national_institution_dutch_msg%}<span class="error" style="margin-left:5px;">{{national_institution_dutch_msg}}</span>{%endif%}
             </div>
             <div class="row" id="pnl_domain_university_{{curriculum.academic_year.year}}">
                 <br>
@@ -72,7 +72,7 @@
                             {% endfor %}
                         </select>
                         {% message_error validation_messages year=curriculum.academic_year.year|lower param='domain' as domain_msg%}
-                        {%if domain_msg%}<font class="error" style="margin-left:5px;">{{domain_msg}}</font>{%endif%}
+                        {%if domain_msg%}<span class="error" style="margin-left:5px;">{{domain_msg}}</span>{%endif%}
                     </div>
                 </div>
                 <div class="col-md-5">
@@ -84,7 +84,7 @@
                                     name="subdomain_{{curriculum.academic_year.year}}">
                             </select>
                             {% message_error validation_messages year=curriculum.academic_year.year|lower param='subdomain' as subdomain_msg %}
-                            {%if subdomain_msg%}<font class="error" style="margin-left:5px;">{{subdomain_msg}}</font>{%endif%}
+                            {%if subdomain_msg%}<span class="error" style="margin-left:5px;">{{subdomain_msg}}</span>{%endif%}
                         </div>
                     </div>
                 </div>
@@ -102,7 +102,7 @@
                             {% endfor %}
                         </select>
                         {% message_error validation_messages year=curriculum.academic_year.year|lower param='grade_type' as grade_type_msg%}
-                        {%if grade_type_msg%}<font class="error" style="margin-left:5px;">{{grade_type_msg}}</font>{%endif%}
+                        {%if grade_type_msg%}<span class="error" style="margin-left:5px;">{{grade_type_msg}}</span>{%endif%}
                     </div>
                 </div>
             </div>
@@ -152,7 +152,7 @@
                 </div>
             </div>
             {% message_error validation_messages year=curriculum.academic_year.year|lower param='high_non_university_name' as high_non_university_name_msg%}
-            {%if high_non_university_name_msg%}<font class="error" style="margin-left:5px;">{{high_non_university_name_msg}}</font>{%endif%}
+            {%if high_non_university_name_msg%}<span class="error" style="margin-left:5px;">{{high_non_university_name_msg}}</span>{%endif%}
         </div>
         <br>
         <div class="row" id="pnl_domain_no_university_{{curriculum.academic_year.year}}">
@@ -168,7 +168,7 @@
                         {% endfor %}
                     </select>
                     {% message_error validation_messages year=curriculum.academic_year.year|lower param='domain_non_university' as domain_non_university_msg%}
-                    {%if domain_non_university_msg%}<font class="error" style="margin-left:5px;">{{domain_non_university_msg}}</font>{%endif%}
+                    {%if domain_non_university_msg%}<span class="error" style="margin-left:5px;">{{domain_non_university_msg}}</span>{%endif%}
                 </div>
             </div>
             <div class="col-md-3">
@@ -184,7 +184,7 @@
                         <option value="OTHER">{% trans 'other'%}</option>
                     </select>
                     {% message_error validation_messages year=curriculum.academic_year.year|lower param='grade_type_no_university' as grade_type_no_university_msg%}
-                    {%if grade_type_no_university_msg%}<font class="error" style="margin-left:5px;">{{grade_type_no_university_msg}}</font>{%endif%}
+                    {%if grade_type_no_university_msg%}<span class="error" style="margin-left:5px;">{{grade_type_no_university_msg}}</span>{%endif%}
                 </div>
             </div>
             <div class="col-md-5">
@@ -234,7 +234,7 @@
                     > {% trans 'no' %}
                 </label>
                 {% message_error validation_messages year=curriculum.academic_year.year|lower param='diploma' as diploma_msg%}
-                {%if diploma_msg%}<font class="error" style="margin-left:5px;">{{diploma_msg}}</font>{%endif%}
+                {%if diploma_msg%}<span class="error" style="margin-left:5px;">{{diploma_msg}}</span>{%endif%}
 
             </div>
         </div>
@@ -246,7 +246,7 @@
                   name="diploma_title_{{curriculum.academic_year.year}}"
                   value="{{ curriculum.diploma_title  | default_if_none:'' }}">
             {% message_error validation_messages year=curriculum.academic_year.year|lower param='diploma_title' as diploma_title_msg %}
-            {%if diploma_title_msg%}<font class="error" style="margin-left:5px;">{{diploma_title_msg}}</font>{%endif%}
+            {%if diploma_title_msg%}<span class="error" style="margin-left:5px;">{{diploma_title_msg}}</span>{%endif%}
         </div>
         <br>
         <div class="form-group">
@@ -268,7 +268,7 @@
                     > {% trans 'no' %}
                 </label>
                 {% message_error validation_messages year=curriculum.academic_year.year|lower param='diploma' as diploma_msg%}
-                {%if diploma_msg%}<font class="error" style="margin-left:5px;">{{diploma_msg}}</font>{%endif%}
+                {%if diploma_msg%}<span class="error" style="margin-left:5px;">{{diploma_msg}}</span>{%endif%}
             </div>
         </div>
         <br>
@@ -300,7 +300,7 @@
                         {% trans 'no_result' %}
                     </label>
                     {% message_error validation_messages year=curriculum.academic_year.year|lower param='result_national' as result_national_msg%}
-                    {%if result_national_msg%}<font class="error" style="margin-left:5px;">{{result_national_msg}}</font>{%endif%}
+                    {%if result_national_msg%}<span class="error" style="margin-left:5px;">{{result_national_msg}}</span>{%endif%}
                 </div>
             </div>
             <div class="col-md-3">
@@ -311,7 +311,7 @@
                        value="{{ curriculum.credits_enrolled | default_if_none:'' }}"
                        class="form-control">
                 {% message_error validation_messages year=curriculum.academic_year.year|lower param='credits_enrolled' as credits_enrolled_msg %}
-                {%if credits_enrolled_msg%}<font class="error" style="margin-left:5px;">{{credits_enrolled_msg}}</font>{%endif%}
+                {%if credits_enrolled_msg%}<span class="error" style="margin-left:5px;">{{credits_enrolled_msg}}</span>{%endif%}
             </div>
             <div class="col-md-3">
                 <label>{% trans 'credits_acquired' %}</label>
@@ -321,7 +321,7 @@
                        value="{{ curriculum.credits_obtained  | default_if_none:'' }}"
                        class="form-control">
                 {% message_error validation_messages year=curriculum.academic_year.year|lower param='credits_obtained' as credits_obtained_msg%}
-                {%if credits_obtained_msg%}<font class="error" style="margin-left:5px;">{{credits_obtained_msg}}</font>{%endif%}
+                {%if credits_obtained_msg%}<span class="error" style="margin-left:5px;">{{credits_obtained_msg}}</span>{%endif%}
             </div>
         </div>
         <br>
