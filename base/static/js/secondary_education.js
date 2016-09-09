@@ -3,7 +3,6 @@ $('document').ready(function(){
     if ($('#form_secondary_education')){
         $('#pnl_secondary_education_main').css('visibility', 'hidden').css('display','none');
         $('#pnl_academic_year').css('visibility', 'hidden').css('display','none');
-        $('#pnl_admission_exam').css('visibility', 'hidden').css('display','none');
 
         $('#rdb_diploma_true').prop( "checked", false);
         $('#rdb_diploma_false').prop( "checked", false);
@@ -40,6 +39,10 @@ $('document').ready(function(){
         $('#rdb_school_belgian_community_french').prop( "checked", false);
         $('#rdb_school_belgian_community_dutch').prop( "checked", false);
         $('#rdb_school_belgian_community_german').prop( "checked", false);
+
+        $('#rdb_school_belgian_community_french').prop( "disabled", true);
+        $('#rdb_school_belgian_community_dutch').prop( "disabled", true);
+        $('#rdb_school_belgian_community_german').prop( "disabled", true);
 
         $('#pnl_teaching_type').css('visibility', 'hidden').css('display','none');
         $('[id^="rdb_general_transition_"]').prop( "checked", false);
@@ -175,11 +178,11 @@ $('document').ready(function(){
                 }
             }
             //profession
-            if($('#hdn_secondary_professional_exam').val() == 'True'){
-                $('#rdb_professional_experience_true').prop( "checked", true);
+            if($('#hdn_secondary_professional_exam_id').val() == ''){
+                $('#rdb_professional_experience_false').prop( "checked", true);
 
             }else{
-                $('#rdb_professional_experience_false').prop( "checked", true);
+                $('#rdb_professional_experience_true').prop( "checked", true);
             }
             if($('#hdn_secondary_education_professional_exam_date').val() != ''){
                 $('#txt_professional_exam_date').val($('#hdn_secondary_education_professional_exam_date').val() )
@@ -287,6 +290,9 @@ function populate_secondary_institution(city_name,postal_code){
     $("#slt_schools").find("option")
         .remove()
        .end();
+    $("#slt_schools_community").find("option")
+        .remove()
+       .end();
 
     institution_id=$("#hdn_secondary_education_national_institution_id").val();
     if(institution_id==''){
@@ -297,12 +303,20 @@ function populate_secondary_institution(city_name,postal_code){
         url: "/admission/institutions?type=" + 'SECONDARY'+"&city=" + city_name + "&postal_code="+ postal_code
     }).then(function(data) {
           if(data.length >0){
-          $("<option></option>").attr("value","-").append("-").appendTo("#slt_schools");
+            $("<option></option>").attr("value","-").append("-").appendTo("#slt_schools");
+            $("<option></option>").attr("value","-").append("-").appendTo("#slt_schools_community");
+            $('#pnl_teaching_type').css('visibility', 'hidden').css('display','none');
+
             $.each(data, function(key, value) {
                 if(value.id == institution_id){
                     $("<option></option>").attr("value",value.id).prop('selected', true).append(value.name).appendTo("#slt_schools");
+                    $("<option></option>").attr("value",value.national_community).prop('selected', true).append(value.national_community).appendTo("#slt_schools_community");
+                    if(value.national_community=='FRENCH'){
+                        $('#pnl_teaching_type').css('visibility', 'visible').css('display','block');
+                    }
                 }else{
                     $("<option></option>").attr("value",value.id).append(value.name).appendTo("#slt_schools");
+                    $("<option></option>").attr("value",value.national_community).append(value.national_community).appendTo("#slt_schools_community");
                 }
             });
           }
@@ -481,6 +495,8 @@ function display_foreign_secondary(){
 
     if( $('#hdn_secondary_education_international_diploma_language_recognized').val() == 'False'){
         $('#chb_other_language_regime').prop( "checked", true);
+        $('#slt_other_language_diploma').prop( "disabled", false);
+        $('#slt_language_diploma').prop( "disabled", true);
         $('#pnl_translation').css('visibility', 'visible').css('display','block');
     }else{
         $('#pnl_translation').css('visibility', 'hidden').css('display','none');
@@ -513,6 +529,7 @@ function display_foreign_secondary(){
 }
 
 function national_community_display(){
+
     if($('#hdn_secondary_education_national_institution_national_community').val() == 'FRENCH'){
         $('#rdb_school_belgian_community_french').prop( "checked", true);
         $('#pnl_teaching_type').css('visibility', 'visible').css('display','block');
@@ -536,15 +553,32 @@ function national_community_display(){
     if($('#hdn_secondary_education_national_institution_national_community').val() == 'GERMAN'){
         $('#rdb_school_belgian_community_german').prop( "checked", true);
     }
+    if($('#hdn_secondary_education_national_institution_adhoc').val()=='False' || $('#hdn_secondary_education_national_institution_adhoc').val()==''){
+        $('#rdb_school_belgian_community_french').prop( "checked", false);
+        $('#rdb_school_belgian_community_dutch').prop( "checked", false);
+        $('#rdb_school_belgian_community_german').prop( "checked", false);
+        $('#rdb_school_belgian_community_french').prop( "disabled", true);
+        $('#rdb_school_belgian_community_dutch').prop( "disabled", true);
+        $('#rdb_school_belgian_community_german').prop( "disabled", true);
+    }else{
+        $('#rdb_school_belgian_community_french').prop( "disabled", false);
+        $('#rdb_school_belgian_community_dutch').prop( "disabled", false);
+        $('#rdb_school_belgian_community_german').prop( "disabled", false);
+    }
 
 }
 
 function populate_exam_admin(){
-    $('#pnl_admission_exam').css('visibility', 'visible').css('display','block');
+
     if($('#hdn_secondary_education_admission_exam').val() == 'True'){
         $('#rdb_admission_exam_true').prop( "checked", true);
+        $('#pnl_admission_exam').css('visibility', 'visible').css('display','block');
     }else{
         $('#rdb_admission_exam_false').prop( "checked", true);
+        $('#pnl_admission_exam').css('visibility', 'hidden').css('display','none');
+    }
+    if($('#hdn_diploma').val()=="False"){
+        $('#pnl_admission_exam').css('visibility', 'visible').css('display','block');
     }
     if($('#hdn_secondary_education_admission_exam_date').val() != ''){
         $('#txt_admission_exam_date').val($('#hdn_secondary_education_admission_exam_date').val() );
@@ -578,4 +612,26 @@ function populate_exam_admin(){
     }
 }
 
+$("#rdb_professional_experience_false").click(function() {
+    $('#txt_professional_exam_date').val('');
+    $('#txt_professional_exam_institution').val('');
+    $('#rdb_professional_exam_result_result_low').prop( "disabled", false);
+    $('#rdb_professional_exam_result_middle').prop( "disabled", false);
+    $('#rdb_professional_exam_result_high').prop( "disabled", false);
+    delete_document('PROFESSIONAL_EXAM_CERTIFICATE');
+});
 
+$("#chb_other_school").change(function() {
+    if ($('#chb_other_school').prop( "checked")){
+        $('#rdb_school_belgian_community_french').prop( "disabled", false);
+        $('#rdb_school_belgian_community_dutch').prop( "disabled", false);
+        $('#rdb_school_belgian_community_german').prop( "disabled", false);
+    }else{
+        $('#rdb_school_belgian_community_french').prop( "checked", false);
+        $('#rdb_school_belgian_community_dutch').prop( "checked", false);
+        $('#rdb_school_belgian_community_german').prop( "checked", false);
+        $('#rdb_school_belgian_community_french').prop( "disabled", true);
+        $('#rdb_school_belgian_community_dutch').prop( "disabled", true);
+        $('#rdb_school_belgian_community_german').prop( "disabled", true);
+    }
+});

@@ -42,7 +42,7 @@ class JSONResponse(HttpResponse):
 class EducationInstitutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = mdl_reference.education_institution.EducationInstitution
-        fields = ('id', 'name', 'postal_code', 'city', 'country')
+        fields = ('id', 'name', 'postal_code', 'city', 'country', 'national_community')
 
 
 def find_by_country(request):
