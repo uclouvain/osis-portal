@@ -341,17 +341,3 @@ def application_update(request, application_id):
                           {"offers":      None,
                            "offer":       application.offer_year,
                            "application": application})
-
-
-def selection_offer(request, offer_id):
-    offer_year = get_object_or_404(mdl.offer_year.OfferYear, pk=offer_id)
-    grade = _get_offer_type(request)
-    domain = _get_domain(request)
-
-    return render(request, "offer_selection.html",
-                  {"gradetypes": reference_mdl.grade_type.find_all(),
-                   "domains": reference_mdl.domain.find_all_domains(),
-                   "offers": None,
-                   "offer": offer_year,
-                   "offer_type": grade,
-                   "domain": domain})

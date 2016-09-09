@@ -31,7 +31,7 @@ from base.models import offer
 
 class OfferProposition(models.Model):
     acronym = models.CharField(max_length=200)
-    offer = models.ForeignKey(offer.Offer, blank=True, null=True)
+    offer = models.ForeignKey(offer.Offer)
     student_can_manage_readers = models.BooleanField(default=True)
     readers_visibility_date_for_students = models.BooleanField(default=False)
     adviser_can_suggest_reader = models.BooleanField(default=False)

@@ -9,7 +9,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('base', '0008_offer_offerenrollment'),
+        ('base', '0008_offer'),
         ('admission', '0005_applicationdocumentfile_documenttypeassimilation'),
     ]
 
