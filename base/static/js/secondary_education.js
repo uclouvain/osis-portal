@@ -133,7 +133,8 @@ $('document').ready(function(){
                 });
                 if($('#hdn_secondary_education_national').val() == 'True'){
                     display_belgian_secondary();
-                }else{
+                }
+                if($('#hdn_secondary_education_national').val() == 'False'){
                     display_foreign_secondary();
                 }
 
@@ -466,7 +467,7 @@ function display_belgian_secondary(){
 }
 
 function display_foreign_secondary(){
-    $('#rdb_foreign').prop( "checked", true);
+   $('#rdb_foreign').prop( "checked", true);
     $('#pnl_foreign_detail').css('visibility', 'visible').css('display','block');
 //foreign diploma
     if( $('#hdn_secondary_education_international_diploma').val() == 'NATIONAL'){

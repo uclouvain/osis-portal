@@ -38,7 +38,7 @@
     <input type="hidden"
            id="hdn_secondary_education_national"
            name="secondary_education_national"
-           value="{{secondary_education.national}}" >
+           value="{{secondary_education.national | default_if_none:''}}" >
     <input type="hidden"
            id="hdn_secondary_education_national_community"
            value="{{secondary_education.national_community | default_if_none:''}}" >
