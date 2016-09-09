@@ -139,8 +139,15 @@ msgid "translated_high_school_scores_transcript_verso"
 msgstr "Translated high school transcript - verso"
 
 msgid "international_diploma_recto"
-msgstr "Translated high school diploma - recto"
+msgstr "High school diploma - recto"
 
 msgid "international_diploma_verso"
+msgstr "High school diploma - verso"
+
+msgid "translated_international_diploma_recto"
+msgstr "Translated high school diploma - recto"
+
+msgid "translated_international_diploma_verso"
 msgstr "Translated high school diploma - verso"
+
 

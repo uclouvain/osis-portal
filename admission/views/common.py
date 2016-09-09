@@ -280,19 +280,24 @@ def profile(request, application_id=None, message_success=None):
                     #
                     criteria = mdl_ref.assimilation_criteria.find_by_id(criteria_id)
                     if criteria:
-                        assimilation_basic_documents = assimilation_criteria_view.find_list_assimilation_basic_documents()
+                        assimilation_basic_documents = assimilation_criteria_view.\
+                            find_list_assimilation_basic_documents()
                         list_document_type_needed = get_list_docs(criteria.id)
                         list_document_type_needed.append(document_type.ID_CARD)
 
                         if criteria.id == 5:
                             if request.POST.get("slt_criteria_5") == "1":
-                                list_document_type_needed.extend(assimilation_criteria_view.criteria1(list_document_type_needed))
+                                list_document_type_needed.extend(assimilation_criteria_view.
+                                                                 criteria1(list_document_type_needed))
                             if request.POST.get("slt_criteria_5") == "2":
-                                list_document_type_needed.extend(assimilation_criteria_view.criteria2(list_document_type_needed))
+                                list_document_type_needed.extend(assimilation_criteria_view.
+                                                                 criteria2(list_document_type_needed))
                             if request.POST.get("slt_criteria_5") == "3":
-                                list_document_type_needed.extend(assimilation_criteria_view.criteria3(list_document_type_needed))
+                                list_document_type_needed.extend(assimilation_criteria_view.
+                                                                 criteria3(list_document_type_needed))
                             if request.POST.get("slt_criteria_5") == "4":
-                                list_document_type_needed.extend(assimilation_criteria_view.criteria4(list_document_type_needed))
+                                list_document_type_needed.extend(assimilation_criteria_view.
+                                                                 criteria4(list_document_type_needed))
                         for d in assimilation_basic_documents:
                             if d not in list_document_type_needed:
                                 docs = mdl_osis_common.document_file.search(request.user, d)
