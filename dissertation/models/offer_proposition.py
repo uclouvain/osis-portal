@@ -27,12 +27,12 @@
 from django.db import models
 from django.utils import timezone
 
-from base.models import offer_year
+from base.models import offer
 
 
 class OfferProposition(models.Model):
     acronym = models.CharField(max_length=200)
-    offer_year = models.ForeignKey(offer_year.OfferYear)
+    offer = models.ForeignKey(offer.Offer)
     student_can_manage_readers = models.BooleanField(default=True)
     readers_visibility_date_for_students = models.BooleanField(default=False)
     adviser_can_suggest_reader = models.BooleanField(default=False)

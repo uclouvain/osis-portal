@@ -174,7 +174,7 @@ def save_application_offer(request):
     return render(request, "admission_home.html", {
         'tab_active': next_tab,
         'application': application,
-        'validated_profil': demande_validation.validate_profil(applicant),
+        'validated_profil': demande_validation.validate_profil(applicant, request.user),
         'validated_diploma': demande_validation.validate_diploma(
            application),
         'validated_curriculum': demande_validation.validate_curriculum(
@@ -211,7 +211,8 @@ def applications(request, application_id=None):
                                                    "domains": mdl_reference.domain.find_all_domains(),
                                                    'tab_active': 1,
                                                    "application": application,
-                                                   "validated_profil": demande_validation.validate_profil(applicant),
+                                                   "validated_profil": demande_validation.validate_profil(applicant,
+                                                                                                          request.user),
                                                    "validated_diploma": demande_validation.validate_diploma(
                                                        application),
                                                    "validated_curriculum": demande_validation.validate_curriculum(
@@ -273,7 +274,8 @@ def change_application_offer(request, application_id=None):
                                                    'tab_active': 1,
                                                    "first": True,
                                                    "application": application,
-                                                   "validated_profil": demande_validation.validate_profil(applicant),
+                                                   "validated_profil": demande_validation.validate_profil(applicant,
+                                                                                                          request.user),
                                                    "validated_diploma": demande_validation.validate_diploma(
                                                        application),
                                                    "validated_curriculum": demande_validation.validate_curriculum(

@@ -65,7 +65,7 @@ def get_tabs_status(request):
             "tab_attachments": False,
             "tab_submission": False}
     applicant = mdl.applicant.find_by_user(request.user)
-    if not demande_validation.validate_profil(applicant):
+    if not demande_validation.validate_profil(applicant, request.user):
         tabs['tab_applications'] = False
 
     return tabs

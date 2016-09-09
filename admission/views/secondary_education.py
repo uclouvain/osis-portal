@@ -30,7 +30,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from admission import models as mdl
 from base import models as mdl_base
-from admission.views.common import home
+from admission.views.common import home, documents_upload
 from reference import models as mdl_reference
 from admission.views import demande_validation
 from admission.views import tabs
@@ -314,6 +314,9 @@ def diploma_save(request):
         secondary_education = populate_secondary_education(request, secondary_education)
         secondary_education.save()
         message_success = _('msg_info_saved')
+        # Save documents
+        documents_upload(request)
+        #
         if next_step:
             return render(request, "curriculum.html", {"application":         application,
                                                        "message_success":     message_success})
@@ -375,7 +378,7 @@ def diploma_update(request, application_id=None):
             "current_academic_year":        mdl_base.academic_year.current_academic_year(),
             "local_language_exam_needed":   is_local_language_exam_needed(request.user),
             'tab_active':                   2,
-            "validated_profil":             demande_validation.validate_profil(applicant),
+            "validated_profil":             demande_validation.validate_profil(applicant, request.user),
             "validated_diploma":            demande_validation.validate_diploma(application),
             "validated_curriculum":         demande_validation.validate_curriculum(application),
             "validated_application":        demande_validation.validate_application(application),
@@ -424,7 +427,6 @@ def diploma_update(request, application_id=None):
     # merge 2 dictionaries
     data.update(get_secondary_education_exams_data(secondary_education))
 
-    print(application.id)
     return render(request, "admission_home.html", data)
 
 
@@ -691,8 +693,11 @@ def populate_secondary_education(request, secondary_education):
         secondary_education.international_diploma = request.POST.get('international_diploma')
         if request.POST.get('international_diploma_country') \
                 and request.POST.get('international_diploma_country') != "-":
-            international_diploma_country = mdl_reference.country\
-                .find_by_id(int(request.POST.get('international_diploma_country')))
+            country_id = request.POST.get('international_diploma_country')
+            international_diploma_country = None
+            if country_id and int(country_id) >= 0:
+                international_diploma_country = mdl_reference.country\
+                    .find_by_id(int(country_id))
             secondary_education.international_diploma_country = international_diploma_country
         if request.POST.get('other_language_regime') \
             and request.POST.get('other_language_regime') == "on" \
@@ -721,4 +726,3 @@ def populate_secondary_education(request, secondary_education):
         secondary_education.academic_year = academic_year
 
     return secondary_education
-
