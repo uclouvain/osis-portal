@@ -116,7 +116,7 @@
     <input type="hidden"
            id="hdn_secondary_education_admission_exam"
            name="secondary_education_admission_exam"
-           value="{% if admission_exam %} true {% else %} false {% endif %}" >
+           value="{% if admission_exam %}True{% else %}False{% endif %}" >
     <input type="hidden"
            id="hdn_secondary_education_admission_exam_date"
            name="secondary_education_admission_exam_date"
@@ -140,7 +140,7 @@
     <input type="hidden"
            id="hdn_secondary_education_admission_exam_result"
            name="secondary_education_admission_exam_result"
-           value="{{admission_exam.esult| default_if_none:''}}" >
+           value="{{admission_exam.result| default_if_none:''}}" >
     <input type="hidden"
            id="hdn_secondary_education_professional_exam_date"
            name="secondary_education_professional_exam_date"
@@ -148,7 +148,7 @@
     <input type="hidden"
            id="hdn_secondary_professional_exam"
            name="secondary_education_professional_exam"
-           value="{% if professional_exam %} True {% else %} False {% endif %}" >
+           value="{% if professional_exam %}True{% else %}False{% endif %}" >
     <input type="hidden"
            id="hdn_secondary_professional_exam_id"
            value="{{professional_exam.id | default_if_none:''}}" >

@@ -181,7 +181,6 @@ $('document').ready(function(){
             //profession
             if($('#hdn_secondary_professional_exam_id').val() == ''){
                 $('#rdb_professional_experience_false').prop( "checked", true);
-
             }else{
                 $('#rdb_professional_experience_true').prop( "checked", true);
             }
@@ -228,8 +227,18 @@ $('document').ready(function(){
                 }
 
             }
+            //admission_exam
+            if( $('#hdn_secondary_education_admission_exam_result').val() == 'LOW'){
 
+                $('#rdb_admission_exam_result_low').prop( "checked", true);
+            }
+            if( $('#hdn_secondary_education_admission_exam_result').val() == 'MIDDLE'){
+                $('#rdb_admission_exam_result_middle').prop( "checked", true);
+            }
 
+            if( $('#hdn_secondary_education_admission_exam_result').val() == 'HIGH'){
+                $('#rdb_admission_exam_result_high').prop( "checked", true);
+            }
         }
     }
 });
@@ -570,7 +579,6 @@ function national_community_display(){
 }
 
 function populate_exam_admin(){
-
     if($('#hdn_secondary_education_admission_exam').val() == 'True'){
         $('#rdb_admission_exam_true').prop( "checked", true);
         $('#pnl_admission_exam').css('visibility', 'visible').css('display','block');
