@@ -34,6 +34,7 @@ from reference import models as mdl_reference
 from admission.views import demande_validation
 from admission.views import tabs
 from admission.models.enums import document_type
+from osis_common import models as mdl_osis_common
 
 
 ALERT_MANDATORY_FIELD = _('mandatory_field')
@@ -312,6 +313,17 @@ def diploma_save(request):
                                                                                   next_step)
         secondary_education = populate_secondary_education(request, secondary_education)
         secondary_education.save()
+        # delete unnecessary documents
+        if secondary_education.international_diploma_language \
+                and secondary_education.international_diploma_language.recognized:
+            list_description = [document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
+                                document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
+                                document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO,
+                                document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO]
+            for description in list_description:
+                docs = mdl_osis_common.document_file.search(request.user, description)
+                for d in docs:
+                    d.delete()
         message_success = _('msg_info_saved')
         # Save documents
         documents_upload(request)

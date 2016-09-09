@@ -140,8 +140,14 @@ msgid "translated_high_school_scores_transcript_verso"
 msgstr "Traduction relevé de notes des études secondaires - verso"
 
 msgid "international_diploma_recto"
-msgstr "Traduction diplôme d'études secondaires - recto"
+msgstr "Diplôme d'études secondaires - recto"
 
 msgid "international_diploma_verso"
+msgstr "Diplôme d'études secondaires - verso"
+
+msgid "translated_international_diploma_recto"
+msgstr "Traduction diplôme d'études secondaires - recto"
+
+msgid "translated_international_diploma_verso"
 msgstr "Traduction diplôme d'études secondaires - verso"
 
