@@ -233,10 +233,10 @@ def dissertation_new(request):
 def dissertation_reader_delete(request, pk):
     dissert_role = get_object_or_404(dissertation_role.DissertationRole, pk=pk)
     dissert = dissert_role.dissertation
-    if dissert.status != 'DRAFT':
+    if dissert.status == 'DRAFT':
         justification = "%s %s" % ("delete_reader", str(dissert_role))
         dissertation_update.add(request, dissert, dissert.status, justification=justification)
-    dissert_role.delete()
+        dissert_role.delete()
     return redirect('dissertation_detail', pk=dissert.pk)
 
 

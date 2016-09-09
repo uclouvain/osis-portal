@@ -53,3 +53,4 @@ def send_instance_to_osis(model_class, instance):
     # Need to put instance in a list.
     records = mod.serialize_list([instance])
     osis_migration.migrate_records(records=records, model_class=model_class, queue_name=queue_name)
+

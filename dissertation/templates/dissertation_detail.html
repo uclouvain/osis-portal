@@ -158,7 +158,7 @@
                 <div class="panel-body">
                     {% for dissertation_role in dissertation_roles %}
                         <div class="row" style="margin: 10px;">
-                            {% if dissertation_role.status == "READER" and manage_readers == True %}
+                            {% if dissertation_role.status == "READER" and manage_readers == True and dissertation.status == 'DRAFT' %}
                                 <div class="col-md-3" style="text-align: right">
                                     <label>{{ dissertation_role.get_status_display }}</label>
                                 </div>
