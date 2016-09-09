@@ -133,39 +133,40 @@
                 </div>
             </div>
         </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{% trans 'dissertation_jury' %}</h3>
-            </div>
-            <div class="panel-body">
-                {% for dissertation_role in dissertation_roles %}
-                <div class="row">
-                  <div class="col-md-3" style="text-align: right">
-                      {% if dissertation_role.status == "READER" %}
-                        <label><a href="{% url 'edit_reader' pk=dissertation_role.pk %}">{{ dissertation_role.get_status_display }}</a></label>
-                      {% else %}
-                        <label>{{ dissertation_role.get_status_display }}</label>
-                      {% endif %}
-                  </div>
-                  <div class="col-md-4">
-                      {{ dissertation_role.adviser }}
-                  </div>
+        {% if jury_visibility %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{% trans 'dissertation_jury' %}</h3>
                 </div>
-                {% endfor %}
-                {% if count_dissertation_role < 4 and count_reader < 2 %}
-                <br>
-                <div class="row">
-                    <div class="col-md-5 pull-right">
-                        <a href="{% url 'add_reader' pk=dissertation.pk %}"
-                           id="lnk_add_reader" class="btn btn-default btn-sm"
-                           role="button" title="{% trans 'add_reader'%}"><span
-                                class="glyphicon glyphicon-plus"
-                                aria-hidden="true"></span> {% trans 'add_reader'%}</a>
-                    </div>
+                <div class="panel-body">
+                    {% for dissertation_role in dissertation_roles %}
+                        <div class="row">
+                          <div class="col-md-3" style="text-align: right">
+                              {% if dissertation_role.status == "READER" and manage_readers == True %}
+                                <label><a href="{% url 'edit_reader' pk=dissertation_role.pk %}">{{ dissertation_role.get_status_display }}</a></label>
+                              {% else %}
+                                <label>{{ dissertation_role.get_status_display }}</label>
+                              {% endif %}
+                          </div>
+                          <div class="col-md-4">
+                              {{ dissertation_role.adviser }}
+                          </div>
+                        </div>
+                    {% endfor %}
+                    {% if count_dissertation_role < 4 and count_reader < 2 and manage_readers == True %}
+                        <div class="row">
+                            <div class="col-md-5 pull-right">
+                                <a href="{% url 'add_reader' pk=dissertation.pk %}"
+                                   id="lnk_add_reader" class="btn btn-default btn-sm"
+                                   role="button" title="{% trans 'add_reader'%}"><span
+                                        class="glyphicon glyphicon-plus"
+                                        aria-hidden="true"></span> {% trans 'add_reader'%}</a>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
-                {% endif %}
             </div>
-        </div>
+        {% endif %}
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">{% trans 'proposition_dissertation_informations' %}</h3>

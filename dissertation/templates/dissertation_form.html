@@ -42,69 +42,60 @@
                 </div>
             </div>
             <div class="row">
-            <div class="col-md-3 col-lg-offset-1" style="text-align:right">
-                <label for="txt_title" {% if form.title.errors %} style="color:red;" {% endif %}>{% trans 'title' %}</label>
+                <div class="col-md-12">
+                    <div class="panel-group">
+                        <label for="txt_title" style="margin-left:-6px;" {% if form.title.errors %} style="color:red;" {% endif %}>{% trans 'title' %}</label>
+                        <input class="form-control" id="txt_title"  name="title" style="margin:-6px;" value="{{ form.title.value | default_if_none:'' }}">
+                    </div>
+                </div>
             </div>
-            <div class="col-md-5">
-                <input class="form-control" id="txt_title"  name="title" style="text-align: center;margin:-6px;" value="{{ form.title.value | default_if_none:'' }}">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel-group">
+                        <label for="txt_offer_year_start" style="margin-left:-6px;" {% if form.offer_year_start.errors %} style="color:red;" {% endif %}>{% trans 'offer_propositions' %}</label>
+                        <select class="form-control" id="txt_offer_year_start"  name="offer_year_start" style="margin:-6px;">
+                            <option value={{ form.offer_year_start }}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel-group">
+                        <label for="txt_proposition_dissertation" style="margin-left:-6px;" {% if form.proposition_dissertation.errors %} style="color:red;" {% endif %}>{% trans 'proposition_dissertation' %}</label>
+                        <select class="form-control" id="txt_proposition_dissertation"  name="proposition_dissertation" style="margin:-6px;">
+                            <option value={{ form.proposition_dissertation }}
+                        </select>
+                    </div>
+                </div>
             </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-3 col-lg-offset-1" style="text-align:right">
-                <label for="txt_offer_year_start" {% if form.offer_year_start.errors %} style="color:red;" {% endif %}>{% trans 'offer_propositions' %}</label>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel-group">
+                        <label for="txt_defend_periode" style="margin-left:-6px;" {% if form.defend_periode.errors %} style="color:red;" {% endif %}>{% trans 'defend_periode' %}</label>
+                        <select class="form-control" id="txt_defend_periode"  name="defend_periode" style="margin:-6px;">
+                            {% for defend_periode in defend_periode_choices %}
+                                <option value="{{ defend_periode.0 }}" {% if form.defend_periode.value == defend_periode.0 %}selected{% endif %}>{{ defend_periode.1}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel-group">
+                        <label for="txt_defend_year" {% if form.defend_year.errors %} style="color:red;margin-left:-6px;" {% else %} style="margin-left:-6px;" {% endif %}>{% trans 'defend_year' %}</label>
+                        <select class="form-control" id="txt_defend_year"  name="defend_year" style="margin:-6px;">
+                            <option value={{ form.defend_year }}
+                        </select>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-5">
-                <select class="form-control" id="txt_offer_year_start"  name="offer_year_start" style="text-align: center;margin:-6px;">
-                    <option value={{ form.offer_year_start }}
-                </select>
+            <div class="row {% if field.errors %}error{% endif %}">
+                <div class="col-md-12">
+                    <div class="panel-group">
+                        <label for="txt_description" style="margin-left:-6px;">{% trans 'description' %}</label>
+                        <textarea class="form-control" id="txt_description"  name="description" rows="10" style="margin:-6px;">{{ form.description.value | default_if_none:''}}</textarea>
+                    </div>
+                </div>
             </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-3 col-lg-offset-1" style="text-align:right">
-                <label for="txt_proposition_dissertation" {% if form.proposition_dissertation.errors %} style="color:red;" {% endif %}>{% trans 'proposition_dissertation' %}</label>
-            </div>
-            <div class="col-md-5">
-                <select class="form-control" id="txt_proposition_dissertation"  name="proposition_dissertation" style="text-align: center;margin:-6px;">
-                    <option value={{ form.proposition_dissertation }}
-                </select>
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-3 col-lg-offset-1" style="text-align:right">
-                <label for="txt_defend_periode" {% if form.defend_periode.errors %} style="color:red;" {% endif %}>{% trans 'defend_periode' %}</label>
-            </div>
-            <div class="col-md-5">
-                <select class="form-control" id="txt_defend_periode"  name="defend_periode" style="text-align: center;margin:-6px;">
-                    {% for defend_periode in defend_periode_choices %}
-                        <option value="{{ defend_periode.0 }}" {% if form.defend_periode.value == defend_periode.0 %}selected{% endif %}>{{ defend_periode.1}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-3 col-lg-offset-1" style="text-align:right">
-                <label for="txt_defend_year" {% if form.defend_year.errors %} style="color:red;" {% endif %}>{% trans 'defend_year' %}</label>
-            </div>
-            <div class="col-md-5">
-                <select class="form-control" id="txt_defend_year"  name="defend_year" style="text-align: center;margin:-6px;">
-                    <option value={{ form.defend_year }}
-                </select>
-            </div>
-        </div>
-        <br>
-        <div class="row {% if field.errors %}error{% endif %}">
-            <div class="col-md-3 col-lg-offset-1" style="text-align:right">
-                <label for="txt_description">{% trans 'description' %}</label>
-            </div>
-            <div class="col-md-8">
-                <textarea class="form-control" id="txt_description"  name="description" rows="10" style="margin:-6px;">{{ form.description.value | default_if_none:''}}</textarea>
-            </div>
-        </div>
-        <button type="submit" class="save btn btn-default" onclick="return confirm('{% trans 'dissertation_confirmation_message' %}')">Save</button>
+            <button type="submit" class="save btn btn-primary">Save</button>
       </form>
     </div>
   </div>

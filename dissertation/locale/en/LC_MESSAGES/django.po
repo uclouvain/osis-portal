@@ -26,6 +26,9 @@ msgstr "Accepted by promoter"
 msgid "accepted_by_first_year_evaluation"
 msgstr "Accepted by first year evaluation"
 
+msgid "add_reader"
+msgstr "Add a reader"
+
 msgid "application_dissertation"
 msgstr "Dissertation management"
 
