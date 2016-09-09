@@ -181,10 +181,12 @@ def find_by_description(request):
 def save_uploaded_file(request):
     data = request.POST
     application = None
+    applicant = None
 
     if request.method == 'POST':
         if request.POST.get('application_id'):
             application = mdl.application.find_by_id(request.POST['application_id'])
+            applicant = application.applicant
         file_selected = request.FILES['file']
         file_s = file_selected
         file_name = file_selected.name
@@ -193,28 +195,28 @@ def save_uploaded_file(request):
 
         description = data['description']
         storage_duration = 0
-        curriculum_uploads = [document_type.NATIONAL_DIPLOMA_RECTO,
-                              document_type.NATIONAL_DIPLOMA_VERSO,
-                              document_type.INTERNATIONAL_DIPLOMA_RECTO,
-                              document_type.INTERNATIONAL_DIPLOMA_VERSO,
-                              document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO,
-                              document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO,
-                              document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
-                              document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
-                              document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
-                              document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
-                              document_type.EQUIVALENCE,
-                              document_type.ADMISSION_EXAM_CERTIFICATE,
-                              document_type.PROFESSIONAL_EXAM_CERTIFICATE]
+        prerequis_uploads = [document_type.NATIONAL_DIPLOMA_RECTO,
+                             document_type.NATIONAL_DIPLOMA_VERSO,
+                             document_type.INTERNATIONAL_DIPLOMA_RECTO,
+                             document_type.INTERNATIONAL_DIPLOMA_VERSO,
+                             document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO,
+                             document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO,
+                             document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
+                             document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
+                             document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
+                             document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
+                             document_type.EQUIVALENCE,
+                             document_type.ADMISSION_EXAM_CERTIFICATE,
+                             document_type.PROFESSIONAL_EXAM_CERTIFICATE]
         assimilation_uploads = assimilation_criteria_view.find_list_assimilation_basic_documents()
 
-        if description in curriculum_uploads:
+        if description in prerequis_uploads:
             documents = mdl.application_document_file.search(application, description)
             for document in documents:
                 document.delete()
         if description == document_type.ID_PICTURE \
                 or description == document_type.ID_CARD \
-                or description in curriculum_uploads \
+                or description in prerequis_uploads \
                 or description in assimilation_uploads:
             # Delete older file with the same description
             documents = mdl_osis_common.document_file.search(user=request.user, description=description)
@@ -230,11 +232,27 @@ def save_uploaded_file(request):
                                                               size=size,
                                                               user=request.user)
         doc_file.save()
-        if description in curriculum_uploads:
+        if description in prerequis_uploads:
             adm_doc_file = mdl.application_document_file.ApplicationDocumentFile()
             adm_doc_file.application = application
             adm_doc_file.document_file = doc_file
             adm_doc_file.save()
+            if description == document_type.PROFESSIONAL_EXAM_CERTIFICATE:
+                secondary_education = mdl.secondary_education.find_by_person(applicant)
+                secondary_education_exam_type = 'PROFESSIONAL'
+                if secondary_education is None:
+                    secondary_education = mdl.secondary_education.SecondaryEducation()
+                    secondary_education.person = applicant
+                    secondary_education.save()
+
+                secondary_education_exams = mdl.secondary_education_exam.search(None,
+                                                                                secondary_education,
+                                                                                secondary_education_exam_type)
+                if not secondary_education_exams.exists():
+                    secondary_education_exam = mdl.secondary_education_exam.SecondaryEducationExam()
+                    secondary_education_exam.secondary_education = secondary_education
+                    secondary_education_exam.type = secondary_education_exam_type
+                    secondary_education_exam.save()
 
     return ''
 
@@ -245,5 +263,13 @@ def delete_document_file(request):
     if pk:
         document = get_object_or_404(mdl_osis_common.document_file.DocumentFile, pk=pk)
         if document:
+            document.delete()
+    else:
+        description = request.POST.get('description')
+        document = mdl_osis_common.document_file.search(request.user, description)
+        if document:
+            document_applicant = mdl.application_document_file.find_by_document(document)
+            if document_applicant:
+                document_applicant.delete()
             document.delete()
     return ''
