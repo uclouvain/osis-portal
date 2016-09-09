@@ -184,24 +184,4 @@ class Migration(migrations.Migration):
                 choices=[('PROMOTEUR', 'promotor'), ('CO_PROMOTEUR', 'copromotor'), ('READER', 'reader')],
                 default='PROMOTEUR', max_length=12),
         ),
-        migrations.AddField(
-            model_name='offerproposition',
-            name='end_edit_title',
-            field=models.DateField(default=django.utils.timezone.now),
-        ),
-        migrations.AddField(
-            model_name='offerproposition',
-            name='end_jury_visibility',
-            field=models.DateField(default=django.utils.timezone.now),
-        ),
-        migrations.AddField(
-            model_name='offerproposition',
-            name='start_edit_title',
-            field=models.DateField(default=django.utils.timezone.now),
-        ),
-        migrations.AddField(
-            model_name='offerproposition',
-            name='start_jury_visibility',
-            field=models.DateField(default=django.utils.timezone.now),
-        ),
     ]
