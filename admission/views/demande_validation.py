@@ -26,12 +26,14 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
 from admission import models as mdl
+from osis_common import models as mdl_common
 
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from admission.views import assimilation_criteria as assimilation_criteria_view
 
 
-def validate_profil(applicant):
+def validate_profil(applicant, user):
     if applicant.user.last_name is None \
         or applicant.user.first_name is None \
         or applicant.birth_date is None\
@@ -40,10 +42,10 @@ def validate_profil(applicant):
         or applicant.gender is None\
         or applicant.civil_status is None\
         or applicant.nationality is None \
-        or applicant.additional_email is None:
+            or applicant.additional_email is None:
         return False
     if (applicant.registration_id and applicant.last_academic_year is None) \
-        or (applicant.registration_id is None and applicant.last_academic_year):
+            or (applicant.registration_id is None and applicant.last_academic_year):
         return False
 
     applicant_legal_adress = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
@@ -56,13 +58,31 @@ def validate_profil(applicant):
                 or applicant_legal_adress.city is None \
                 or applicant_legal_adress.country is None:
             return False
+    if applicant.nationality:
+        applicant_assimilation_criterias = mdl.applicant_assimilation_criteria.find_by_applicant(applicant)
+        if not applicant_assimilation_criterias:
+            return False
+        else:
+            criteria_doc_ok = False
+            for applicant_assimilation_criteria in applicant_assimilation_criterias:
+                list_document_type = assimilation_criteria_view.\
+                    find_list_document_type_by_criteria(applicant_assimilation_criteria.criteria.id)
+                for l in list_document_type:
+                    nb_necessary_doc = len(list_document_type)
+                    nb_doc = 0
+                    for document_typ in l.descriptions:
+                        docs = mdl_common.document_file.search(user, document_typ)
+                        if docs:
+                            nb_doc = nb_doc+1
+                    if nb_necessary_doc == nb_doc:
+                        criteria_doc_ok = True
+                        break
+                if criteria_doc_ok:
+                    break
+            if not criteria_doc_ok:
+                return False
 
     return True
-
-
-def validate_application(application):
-    return False
-
 
 
 def validate_application(application):
