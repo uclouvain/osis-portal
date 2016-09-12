@@ -174,11 +174,7 @@
 
             <div class="panel panel-default">
                 <div class="panel-body">
-                    {%if tab_active != 4 %}
-                    <h5>{% trans 'mandatory_asterisk'%}</h5>
-                    {%endif%}
                     {% block admission_tabs %}
-
                     {% endblock %}
                 </div>
             </div>
@@ -225,6 +221,9 @@
             $('#slt_offer_type').val($('#hdn_application_grade').val())
             display_known_offer($('#hdn_application_offer_year_id').val());
         }
+        //If information message is on the screen it will disappear after 5s
+        $('#message_info').fadeOut(5000);
+
     });
 
     function save(form_to_submit){

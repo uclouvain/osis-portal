@@ -98,6 +98,7 @@ def home(request):
 
 def profile(request, application_id=None, message_success=None):
     tab_status = tabs.init(request)
+    message_info = None
     if request.method == 'POST':
         applicant_form = ApplicantForm(data=request.POST)
         applicant = mdl.applicant.find_by_user(request.user)
@@ -323,6 +324,7 @@ def profile(request, application_id=None, message_success=None):
         applicant.user.save()
         request.user = applicant.user  # Otherwise it was not refreshed while going back to home page
         applicant.save()
+        message_info = _('msg_info_saved')
 
     else:
         applicant = mdl.applicant.find_by_user(request.user)
@@ -393,7 +395,8 @@ def profile(request, application_id=None, message_success=None):
         'id_document': get_id_document(request.user),
         'assimilation_basic_documents': assimilation_criteria_view.find_assimilation_basic_documents(),
         'assimilation_documents_existing': get_assimilation_documents_existing(request.user),
-        'document_formset': document_formset})
+        'document_formset': document_formset,
+        'message_info': message_info})
 
 
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)

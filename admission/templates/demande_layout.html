@@ -37,23 +37,38 @@
     <input type="hidden" value="{{application.started_samestudies}}" id="hdn_started_samestudies">
     <input type="hidden" value="{{application.applied_to_sameprogram}}" id="hdn_applied_to_sameprogram">
     <input type="hidden" value="" id="hdn_next_tab" name="next_tab" title="Next tab" >
+    <div class="row">
+        <div class="col-md-8">
+            <h5>{% trans 'mandatory_asterisk'%}</h5>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" id="bt_submit_application" class="btn btn-default pull-right" role="button"
+                    title="{%trans 'save'%}">
+                <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+                {%trans 'save'%}
+            </button>
+        </div>
+    </div>
     <span id="txt_message_error_offer_up"
            class="alert alert-warning"
-           style="visibility:hidden;display:none;"></span><br>
-
-    <div>
-        <a id="lnk_previous_offer_step_up"
-           class="btn btn-default"
-           href="{%if application.id%}{% url 'profile' application.id%}{%else%}{% url 'profile'%}{%endif%}"
-           onclick="$('#hdn_next_tab').val('0');"
-           title="{% trans 'profile'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-            {%trans 'previous_step'%} : {%trans 'profile'%}</a>
-        <a id="lnk_next_offer_step_up"
-           class="btn btn-default"
-           onclick="$('#hdn_next_tab').val('2');"
-           title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"
-           href="#"></span>
-            {%trans 'next_step'%} : {%trans 'tab_diplomas'%}</a>
+           style="visibility:hidden;display:none;"></span>
+    <div class="row" style="margin-top:5px;">
+        <div class="col-md-6">
+            <a id="lnk_previous_offer_step_up"
+               class="btn btn-default"
+               href="{%if application.id%}{% url 'profile' application.id%}{%else%}{% url 'profile'%}{%endif%}"
+               onclick="$('#hdn_next_tab').val('0');"
+               title="{% trans 'profile'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+                {%trans 'previous_step'%} : {%trans 'profile'%}</a>
+        </div>
+        <div class="col-md-6">
+            <a id="lnk_next_offer_step_up"
+               class="btn btn-default pull-right"
+               onclick="$('#hdn_next_tab').val('2');"
+               title="{% trans 'diploma'%}">{%trans 'next_step'%} : {%trans 'tab_diplomas'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"
+               href="#"></span>
+                </a>
+        </div>
 
     </div>
     <br>
@@ -320,19 +335,23 @@
            class="alert alert-warning"
            style="visibility:hidden;display:none;"></span><br>
 
-<div>
-    <a id="lnk_previous_offer_step"
-       class="btn btn-default"
-       href="#"
-       onclick="$('#hdn_next_tab').val('0');"
-       title="{% trans 'profile'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-        {%trans 'previous_step'%} : {%trans 'profile'%}</a>
-    <a id="lnk_next_offer_step"
-       class="btn btn-default"
-       href="#"
-       onclick="$('#hdn_next_tab').val('2');"
-       title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-        {%trans 'next_step'%} : {%trans 'tab_diplomas'%}</a>
+<div class="row">
+    <div class="col-md-6">
+        <a id="lnk_previous_offer_step"
+           class="btn btn-default"
+           href="#"
+           onclick="$('#hdn_next_tab').val('0');"
+           title="{% trans 'profile'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%} : {%trans 'profile'%}</a>
+    </div>
+    <div class="col-md-6">
+        <a id="lnk_next_offer_step"
+           class="btn btn-default pull-right"
+           href="#"
+           onclick="$('#hdn_next_tab').val('2');"
+           title="{% trans 'diploma'%}">{%trans 'next_step'%} : {%trans 'tab_diplomas'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            </a>
+    </div>
 </div>
 {% endblock %}
 

@@ -81,7 +81,7 @@
 
     <div class="container">
         {% if message_info%}
-            <div id="message_info" class="alert alert-success">{{message_info}}</div>
+            <div id="message_info" class="alert alert-success">{{message_info| default_if_none:''}}</div>
         {%endif%}
         {% block content %}
         {% endblock %}

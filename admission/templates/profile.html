@@ -28,19 +28,33 @@
 
     <form method="post" action="{% url 'profile' %}" id="form_profile" enctype="multipart/form-data">
         {% csrf_token %}
-
+        <div class="row">
+            <div class="col-md-8">
+                <h5>{% trans 'mandatory_asterisk'%}</h5>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" id="bt_submit_profile"
+                        class="btn btn-default pull-right"
+                        role="button"
+                        title="{%trans 'save'%}">
+                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+                    {%trans 'save'%}
+                </button>
+            </div>
+        </div>
         <span id="txt_message_error_profile_up"
                class="alert alert-warning"
-               style="visibility:hidden;display:none;"></span><br>
-        {% if tab_active >= 0%}
-            <a id="lnk_profil_next_step_up"
-               class="btn btn-default"
-               href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"
-               title="{% trans 'demandes'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-                {%trans 'next_step'%} : {%trans 'offer_choice'%}</a>
-            <br>
-        {%endif%}
-
+               style="visibility:hidden;display:none;"></span>
+        <div class="row" style="margin-top:5px;">
+            <div class="col-md-6"></div>
+            <div class="col-md-6">
+                <a id="lnk_profil_next_step_up"
+                   class="btn btn-default pull-right"
+                   href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"
+                   title="{% trans 'demandes'%}">{%trans 'next_step'%} : {%trans 'offer_choice'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+                    </a>
+            </div>
+        </div>
         {% if applicant_form.errors %}
         <span class="error">{% if applicant_form.errors %}{% trans 'errors_warning'%}{%endif%}</span>
         <br>
@@ -196,7 +210,9 @@
                     </div>
                     <div class="col-md-3">
                         <label>{%trans 'children'%}</label>
-                        <input class="form-control" id="txt_number_children" name="number_children"
+                        <input type="number"
+                               min="0" max="15"
+                               class="form-control" id="txt_number_children" name="number_children"
                                value="{{ applicant.number_children | default_if_none:''}}">
                         <span class="error">{{ applicant_form.number_children.errors|striptags }}</span>
                     </div>
@@ -615,17 +631,20 @@
                     </div>
                 </div>
             </div>
-        <div>
+
         <span id="txt_message_error_profile"
                class="alert alert-warning"
                style="visibility:hidden;display:none;"></span><br>
-        {% if tab_active ==  0%}
-            <a id="lnk_profil_next_step"
-               class="btn btn-default"
-               href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"
-               title="{% trans 'demandes'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-                {%trans 'next_step'%} : {%trans 'offer_choice'%}</a>
-        {%endif%}
+        <div class="row">
+            <div class="col-md-6"></div>
+            <div class="col-md-6">
+                <a id="lnk_profil_next_step"
+                   class="btn btn-default pull-right"
+                   href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"
+                   title="{% trans 'demandes'%}">{%trans 'next_step'%} : {%trans 'offer_choice'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+                    </a>
+            </div>
+
         </div>
         <div id="pnl_files"><div id="pnl_uploaded_files" style="visibility:hidden;display:none;" ></div></div>
     </form>

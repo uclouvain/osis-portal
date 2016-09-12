@@ -27,22 +27,26 @@
 {% endcomment %}
 
 <form id="form_submission">
-    <div>
-        <a id="lnk_previous_step_up"
+    <div class="row">
+        <div class="col-md-6">
+            <a id="lnk_previous_step_up"
+               class="btn btn-default"
+               href="{%if application.id%}{% url 'attachments' application.id %}{%else%}{% url 'attachments'%}{%endif%}"
+               onclick="save('form_submission');"
+               title="{% trans 'attachments'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+                {%trans 'previous_step'%} : {% trans 'attachments'%} </a>
+        </div>
+    </div>
+    <br>
+    <h3>En construction, formulaire de submission</h3>
+</form>
+<div class="row">
+    <div class="col-md-6">
+        <a id="lnk_previous_step"
            class="btn btn-default"
            href="{%if application.id%}{% url 'attachments' application.id %}{%else%}{% url 'attachments'%}{%endif%}"
            onclick="save('form_submission');"
            title="{% trans 'attachments'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
             {%trans 'previous_step'%} : {% trans 'attachments'%} </a>
     </div>
-    <br>
-    <h3>En construction, formulaire de submission</h3>
-</form>
-<div>
-    <a id="lnk_previous_step"
-       class="btn btn-default"
-       href="{%if application.id%}{% url 'attachments' application.id %}{%else%}{% url 'attachments'%}{%endif%}"
-       onclick="save('form_submission');"
-       title="{% trans 'attachments'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-        {%trans 'previous_step'%} : {% trans 'attachments'%} </a>
 </div>
