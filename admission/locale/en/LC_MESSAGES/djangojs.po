@@ -182,3 +182,18 @@ msgstr "City required"
 
 msgid "invalid_email"
 msgstr "Please indicate a valid email."
+
+msgid "invalid_data"
+msgstr "Errors in the form"
+
+msgid "number_invalid"
+msgstr "Number invalid"
+
+msgid "previous_enrollment_required_year"
+msgstr "Please mention the last academic year"
+
+msgid "previous_enrollment_required_nb"
+msgstr "Please mention a registration number"
+
+msgid "errors_validation_warning"
+msgstr "Some errors prevent the tab validation"

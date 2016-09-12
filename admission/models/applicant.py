@@ -35,7 +35,7 @@ from django.conf import settings
 
 class ApplicantAdmin(admin.ModelAdmin):
     list_display = ('user', 'birth_date', 'gender')
-    fieldsets = ((None, {'fields': ('user', 'birth_date', 'gender', 'language')}),)
+    fieldsets = ((None, {'fields': ('user', 'birth_date', 'gender', 'language','nationality')}),)
 
 
 class Applicant(models.Model):

@@ -56,7 +56,7 @@
             </div>
         </div>
         {% if applicant_form.errors %}
-        <span class="error">{% if applicant_form.errors %}{% trans 'errors_warning'%}{%endif%}</span>
+        <span class="error">{% if applicant_form.errors %}{% trans 'errors_validation_warning'%}{%endif%}</span>
         <br>
         {%endif%}
         {%if message_success and message_success == 'ok'%}
@@ -210,17 +210,19 @@
                     </div>
                     <div class="col-md-3">
                         <label>{%trans 'children'%}</label>
-                        <input type="number"
-                               min="0" max="15"
-                               class="form-control" id="txt_number_children" name="number_children"
+                        <input class="form-control" id="txt_number_children" name="number_children"
                                value="{{ applicant.number_children | default_if_none:''}}">
-                        <span class="error">{{ applicant_form.number_children.errors|striptags }}</span>
+                        <span class="error" id="spn_number_children">{{ applicant_form.number_children.errors|striptags }}</span>
                     </div>
-                    <div class="col-md-3">
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
                         <label>{%trans 'spouse_name'%}</label>
                         <input class="form-control" id="txt_spouse_name" name="spouse_name"
                                value="{{ applicant.spouse_name | default_if_none:''}}" maxlength="50">
                     </div>
+
                 </div>
                 <br>
                 <div id="pnl_assimilation_criteria">
@@ -618,14 +620,14 @@
                                 <input class="form-control" id="txt_registration_id" name="registration_id"
                                        value="{{ applicant.registration_id| default_if_none:''}}">
                                 (ex: 1058-13-00)
-                                <span class="error">{{ applicant_form.registration_id.errors|striptags }}</span>
+                                <span class="error" id="spn_registration_id">{{ applicant_form.registration_id.errors|striptags }}</span>
                             </div>
                             <div class="col-md-8">
                                 <label>{% trans 'question_year_last_registration'%} {{institution}}? *</label>
                                 <br>
                                 <input id="txt_last_academic_year" name="last_academic_year" size="10"
                                        value="{{ applicant.last_academic_year| default_if_none:''}}" maxlength="9">
-                                <br><span class="error">{{ applicant_form.last_academic_year.errors|striptags }}</span>
+                                <br><span class="error" id="spn_last_academic_year">{{ applicant_form.last_academic_year.errors|striptags }}</span>
                             </div>
                         </div>
                     </div>

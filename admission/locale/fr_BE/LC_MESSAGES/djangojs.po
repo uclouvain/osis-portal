@@ -183,3 +183,15 @@ msgstr "Localité requise"
 
 msgid "invalid_email"
 msgstr "Merci d'encoder une adresse email correcte."
+
+msgid "invalid_data"
+msgstr "Attention il y a des erreurs"
+
+msgid "number_invalid"
+msgstr "Nombre invalide"
+
+msgid "previous_enrollment_required_year"
+msgstr "Merci de préciser la dernière année"
+
+msgid "previous_enrollment_required_nb"
+msgstr "Merci de préciser un numéro de matricule"

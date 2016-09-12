@@ -257,14 +257,21 @@ def profile(request, application_id=None, message_success=None):
             applicant.phone_mobile = request.POST['phone_mobile']
         if request.POST['phone']:
             applicant.phone = request.POST['phone']
+        else:
+            applicant.phone = None
         if request.POST['additional_email']:
             applicant.additional_email = request.POST['additional_email']
-
+        else:
+            applicant.additional_email = None
         if request.POST['previous_enrollment'] == "true":
             if request.POST['registration_id']:
                 applicant.registration_id = request.POST['registration_id']
+            else:
+                applicant.registration_id = None
             if request.POST['last_academic_year']:
                 applicant.last_academic_year = request.POST['last_academic_year']
+            else:
+                applicant.last_academic_year = None
             previous_enrollment = True
         else:
             applicant.registration_id = None
