@@ -28,9 +28,9 @@ from django.contrib import admin
 
 
 class OfferYearAdmin(admin.ModelAdmin):
-    list_display = ('acronym', 'title', 'academic_year', 'domain', 'grade_type','subject_to_quota')
-    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international',
-                                    'domain', 'grade_type','subject_to_quota')}),)
+    list_display = ('acronym', 'title', 'academic_year', 'domain', 'grade_type', 'subject_to_quota')
+    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'offer', 'title', 'title_international',
+                                    'domain', 'grade_type', 'subject_to_quota')}),)
 
 
 class OfferYear(models.Model):
