@@ -565,8 +565,9 @@
                         <div class="col-md-3">
                             <label>{% trans 'mail' %} *</label>
                             <input class="form-control" id="txt_additional_email" name="additional_email"
+                                   type="email"
                                    value="{{ applicant.additional_email| default_if_none:''}}" maxlength="255">
-                            <span class="error">{{ applicant_form.additional_email.errors|striptags }}</span>
+                            <span class="error" id="spn_additional_email">{{ applicant_form.additional_email.errors|striptags }}</span>
                         </div>
                     </div>
                 </div>

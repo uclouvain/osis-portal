@@ -152,31 +152,34 @@ msgid "translated_international_diploma_verso"
 msgstr "Traduction diplôme d'études secondaires - verso"
 
 msgid "contact_country"
-msgstr "Pays requis pour l'adresse de contact"
+msgstr "Pays requis"
 
 msgid "contact_street"
-msgstr "Rue requise pour l'adresse de contact"
+msgstr "Rue requise"
 
 msgid "contact_number"
-msgstr "Numéro requis pour l'adresse de contact"
+msgstr "Numéro requis"
 
 msgid "contact_postal_code"
-msgstr "Code postal requis pour l'adresse de contact"
+msgstr "Code postal requis"
 
 msgid "contact_city"
-msgstr "Localité requise pour l'adresse de contact"
+msgstr "Localité requise"
 
 msgid "legal_country"
-msgstr "Pays requis pour l'adresse légale"
+msgstr "Pays requis"
 
 msgid "legal_street"
-msgstr "Rue requise pour l'adresse légale"
+msgstr "Rue requise"
 
 msgid "legal_number"
-msgstr "Numéro requis pour l'adresse légale"
+msgstr "Numéro requis"
 
 msgid "legal_postal_code"
-msgstr "Code postal requis pour l'adresse légale"
+msgstr "Code postal requis"
 
 msgid "legal_city"
-msgstr "Localité requise pour l'adresse légale"
+msgstr "Localité requise"
+
+msgid "invalid_email"
+msgstr "Merci d'encoder une adresse email correcte."

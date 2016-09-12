@@ -349,14 +349,16 @@
         // clear error messages
         $('#spn_contact_adr_street').html('');
         $('#spn_contact_adr_number').html('');
-        $('#spn_contact_adr_postal_code').text('');
-        $('#spn_contact_adr_city').text('');
-        $('#spn_contact_adr_country').text('');      
+        $('#spn_contact_adr_postal_code').html('');
+        $('#spn_contact_adr_city').html('');
+        $('#spn_contact_adr_country').html('');
         $('#spn_legal_adr_street').html('');
         $('#spn_legal_adr_number').html('');
-        $('#spn_legal_adr_postal_code').text('');
-        $('#spn_legal_adr_city').text('');
-        $('#spn_legal_adr_country').text('');                
+        $('#spn_legal_adr_postal_code').html('');
+        $('#spn_legal_adr_city').html('');
+        $('#spn_legal_adr_country').html('');
+        $('#spn_additional_email').html('');
+
         var legal_valid = true;
         if($('#txt_legal_adr_street').val() == '' ){
             $('#spn_legal_adr_street').text(gettext('legal_street'));
@@ -404,6 +406,12 @@
                 contact_valid = false;
             }
             return contact_valid;
+        }
+        // email validation
+        var sEmail = $('#txt_additional_email').val();
+        if ($.trim(sEmail).length == 0 || validateEmail(sEmail) == false) {
+            $('#spn_additional_email').text(gettext('invalid_email'));
+            return false;
         }
         return true;
     }
@@ -813,6 +821,13 @@
             });
         }
     }
-
+    function validateEmail(sEmail) {
+        var filter = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+	    if (filter.test(sEmail)) {
+	        return true;
+	    }else {
+	        return false;
+	    }
+	}
     </script>
 {% endblock %}
