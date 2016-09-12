@@ -151,3 +151,32 @@ msgstr "Traduction diplôme d'études secondaires - recto"
 msgid "translated_international_diploma_verso"
 msgstr "Traduction diplôme d'études secondaires - verso"
 
+msgid "contact_country"
+msgstr "Pays requis pour l'adresse de contact"
+
+msgid "contact_street"
+msgstr "Rue requise pour l'adresse de contact"
+
+msgid "contact_number"
+msgstr "Numéro requis pour l'adresse de contact"
+
+msgid "contact_postal_code"
+msgstr "Code postal requis pour l'adresse de contact"
+
+msgid "contact_city"
+msgstr "Localité requise pour l'adresse de contact"
+
+msgid "legal_country"
+msgstr "Pays requis pour l'adresse légale"
+
+msgid "legal_street"
+msgstr "Rue requise pour l'adresse légale"
+
+msgid "legal_number"
+msgstr "Numéro requis pour l'adresse légale"
+
+msgid "legal_postal_code"
+msgstr "Code postal requis pour l'adresse légale"
+
+msgid "legal_city"
+msgstr "Localité requise pour l'adresse légale"

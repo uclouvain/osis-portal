@@ -346,6 +346,65 @@
             $('#txt_message_error_profile_up').css('visibility', 'visible').css('display','block');
             return false;
         }
+        // clear error messages
+        $('#spn_contact_adr_street').html('');
+        $('#spn_contact_adr_number').html('');
+        $('#spn_contact_adr_postal_code').text('');
+        $('#spn_contact_adr_city').text('');
+        $('#spn_contact_adr_country').text('');      
+        $('#spn_legal_adr_street').html('');
+        $('#spn_legal_adr_number').html('');
+        $('#spn_legal_adr_postal_code').text('');
+        $('#spn_legal_adr_city').text('');
+        $('#spn_legal_adr_country').text('');                
+        var legal_valid = true;
+        if($('#txt_legal_adr_street').val() == '' ){
+            $('#spn_legal_adr_street').text(gettext('legal_street'));
+            legal_valid = false;
+        }
+        if($('#txt_legal_adr_number').val() == '' ){
+            $('#spn_legal_adr_number').text(gettext('legal_number'));
+            legal_valid = false;
+        }
+        if($('#txt_legal_adr_postal_code').val() == '' ){
+            $('#spn_legal_adr_postal_code').text(gettext('legal_postal_code'));
+            legal_valid = false;
+        }
+        if($('#txt_legal_adr_city').val() == '' ){
+            $('#spn_legal_adr_city').text(gettext('legal_postal_code'));
+            legal_valid = false;
+        }
+        if($('#slt_legal_adr_country').prop('selectedIndex') <= 0 ){
+            $('#spn_legal_adr_country').text(gettext('legal_country'));
+            legal_valid = false;
+        }
+        if(legal_valid == false){
+            return legal_valid;
+        }
+        if($('#rd_same_contact_legal_addr_false').prop("checked")){
+            var contact_valid = true;
+            if($('#txt_contact_adr_street').val() == '' ){
+                $('#spn_contact_adr_street').text(gettext('contact_street'));
+                contact_valid = false;
+            }
+            if($('#txt_contact_adr_number').val() == '' ){
+                $('#spn_contact_adr_number').text(gettext('contact_number'));
+                contact_valid = false;
+            }
+            if($('#txt_contact_adr_postal_code').val() == '' ){
+                $('#spn_contact_adr_postal_code').text(gettext('contact_postal_code'));
+                contact_valid = false;
+            }
+            if($('#txt_contact_adr_city').val() == '' ){
+                $('#spn_contact_adr_city').text(gettext('contact_postal_code'));
+                contact_valid = false;
+            }
+            if($('#slt_contact_adr_country').prop('selectedIndex') <= 0 ){
+                $('#spn_contact_adr_country').text(gettext('contact_country'));
+                contact_valid = false;
+            }
+            return contact_valid;
+        }
         return true;
     }
 

@@ -245,10 +245,12 @@ def profile(request, application_id=None, message_success=None):
             else:
                 person_contact_address.country = None
             same_addresses = False
+            person_contact_address.save()
         else:
-            # Question que faire si true, mais qu'une adresse de contact existe déjà
-            person_contact_address = None
             same_addresses = True
+            person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
+            if person_contact_address:
+                person_contact_address.delete()
 
         if request.POST['phone_mobile']:
             applicant.phone_mobile = request.POST['phone_mobile']
@@ -317,8 +319,6 @@ def profile(request, application_id=None, message_success=None):
 
         message_success = None
 
-        if person_contact_address:
-            person_contact_address.save()
         person_legal_address.save()
         applicant.user.save()
         request.user = applicant.user  # Otherwise it was not refreshed while going back to home page
@@ -547,3 +547,5 @@ def get_list_docs(criteria_id):
             if elt not in list_documents:
                 list_documents.append(elt)
     return list_documents
+
+

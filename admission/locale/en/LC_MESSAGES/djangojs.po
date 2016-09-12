@@ -150,4 +150,33 @@ msgstr "Translated high school diploma - recto"
 msgid "translated_international_diploma_verso"
 msgstr "Translated high school diploma - verso"
 
+msgid "contact_country"
+msgstr "Country required for the contact address"
+
+msgid "contact_street"
+msgstr "Street required for the contact address"
+
+msgid "contact_number"
+msgstr "Number required for the contact address"
+
+msgid "contact_postal_code"
+msgstr "Zip code required for the contact address"
+
+msgid "contact_city"
+msgstr "City required for the contact address"
+
+msgid "legal_country"
+msgstr "Country required for the legal address"
+
+msgid "legal_street"
+msgstr "Street required for the legal address"
+
+msgid "legal_number"
+msgstr "Number required for the legal address"
+
+msgid "legal_postal_code"
+msgstr "Zip code required for the legal address"
+
+msgid "legal_city"
+msgstr "City required for the legal address"
 

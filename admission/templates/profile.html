@@ -406,14 +406,14 @@
                                    value="{{ person_legal_address.street | default_if_none:''}}"
                                    maxlength="255">
                             (ex: Avenue Louis Braille, Rue de la Loi, Place de l'Université)
-                            <span class="error">{{ applicant_form.legal_adr_street.errors|striptags }}</span>
+                            <span class="error" id="spn_legal_adr_street">{{ applicant_form.legal_adr_street.errors|striptags }}</span>
                         </div>
                         <div class="col-md-2">
                             <label>{% trans 'number'%} *</label>
                             <input class="form-control" id="txt_legal_adr_number" name="legal_adr_number"
                                    value="{{ person_legal_address.number | default_if_none:''}}"
                                    maxlength="6">
-                            <span class="error">{{ applicant_form.legal_adr_number.errors|striptags }}</span>
+                            <span class="error" id="spn_legal_adr_number">{{ applicant_form.legal_adr_number.errors|striptags }}</span>
                         </div>
                         <div class="col-md-4">
                             <label>{% trans 'place'%}</label>
@@ -430,14 +430,14 @@
                                    value="{{ person_legal_address.postal_code | default_if_none:''}}"
                                    maxlength="20">
                             (ex: 1348)
-                            <span class="error">{{ applicant_form.legal_adr_postal_code.errors|striptags }}</span>
+                            <span class="error" id="spn_legal_adr_postal_code">{{ applicant_form.legal_adr_postal_code.errors|striptags }}</span>
                         </div>
                         <div class="col-md-6">
                             <label>{% trans 'city'%} *</label>
                             <input class="form-control" id="txt_legal_adr_city" name="legal_adr_city"
                                    value="{{ person_legal_address.city | default_if_none:''}}"
                                    maxlength="255">
-                            <span class="error">{{ applicant_form.legal_adr_city.errors|striptags }}</span>
+                            <span class="error" id="spn_legal_adr_city">{{ applicant_form.legal_adr_city.errors|striptags }}</span>
                         </div>
                         <div class="col-md-4">
                             <label>{% trans 'country'%} *</label>
@@ -450,7 +450,7 @@
                                 </option>
                                 {% endfor %}
                             </select>
-                            <span class="error">{{ applicant_form.legal_adr_country.errors|striptags }}</span>
+                            <span class="error" id="spn_legal_adr_country">{{ applicant_form.legal_adr_country.errors|striptags }}</span>
                         </div>
                     </div>
 
@@ -492,14 +492,14 @@
                                        value="{{ person_contact_address.street | default_if_none:''}}"
                                        maxlength="255">
                                 (ex: Avenue Louis Braille, Rue de la Loi, Place de l'Université)
-                                <span class="error">{{ applicant_form.contact_adr_street.errors|striptags }}</span>
+                                <span class="error" id="spn_contact_adr_street">{{ applicant_form.contact_adr_street.errors|striptags }}</span>
                             </div>
                             <div class="col-md-2">
                                 <label>{% trans 'number'%} *</label>
                                 <input class="form-control" id="txt_contact_adr_number" name="contact_adr_number"
                                        value="{{ person_contact_address.number | default_if_none:''}}"
                                        maxlength="6">
-                                <span class="error">{{ applicant_form.contact_adr_number.errors|striptags }}</span>
+                                <span class="error" id="spn_contact_adr_number">{{ applicant_form.contact_adr_number.errors|striptags }}</span>
                             </div>
                             <div class="col-md-4">
                                 <label>{% trans 'place'%}</label>
@@ -518,14 +518,14 @@
                                        value="{{ person_contact_address.postal_code | default_if_none:''}}"
                                        maxlength="20">
                                 (ex: 1348)
-                                <span class="error">{{ applicant_form.contact_adr_postal_code.errors|striptags }}</span>
+                                <span class="error" id="spn_contact_adr_postal_code">{{ applicant_form.contact_adr_postal_code.errors|striptags }}</span>
                             </div>
                             <div class="col-md-6">
                                 <label>{% trans 'city'%} *</label>
                                 <input class="form-control" id="txt_contact_adr_city" name="contact_adr_city"
                                        value="{{ person_contact_address.city | default_if_none:''}}"
                                        maxlength="255">
-                                <span class="error">{{ applicant_form.contact_adr_city.errors|striptags }}</span>
+                                <span class="error" id="spn_contact_adr_city">{{ applicant_form.contact_adr_city.errors|striptags }}</span>
                             </div>
                             <div class="col-md-4">
                                 <label>{% trans 'country'%} *</label>
@@ -538,7 +538,7 @@
                                     </option>
                                     {% endfor %}
                                 </select>
-                                <span class="error">{{ applicant_form.contact_adr_country.errors|striptags }}</span>
+                                <span class="error" id="spn_contact_adr_country">{{ applicant_form.contact_adr_country.errors|striptags }}</span>
                             </div>
                         </div>
                     </div>
