@@ -115,6 +115,103 @@
                 </div>
             </div>
         </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans 'dissertation_jury' %}</h3>
+            </div>
+            <div class="panel-body">
+                {% for proposition_role in proposition_roles %}
+                    <div class="row" style="margin: 10px;">
+                        <div class="col-md-3" style="text-align: right">
+                            <label>{{ proposition_role.get_status_display }}</label>
+                        </div>
+                        <div class="col-md-2">
+                            {{ proposition_role.adviser }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Informations</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'promotor' %}</label>
+                    </div>
+                    <div class="col-md-4">
+                        <span>{{  proposition_dissertation.author.person.first_name }} {{ proposition_dissertation.author.person.last_name }}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'mail' %}</label>
+                    </div>
+                    <div class="col-md-4">
+                        {% if proposition_dissertation.author.available_by_email %}
+                            <span style="color:green">{{ proposition_dissertation.author.person.email }}</span>
+                        {% else %}
+                            <span style="color:#C0C0C0">({{ proposition_dissertation.author.person.email }})</span>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-1">
+                        {% if proposition_dissertation.author.available_by_email %}
+                            <span class="glyphicon glyphicon-ok" style="color:green"></span>
+                        {% else %}
+                            <span class="glyphicon glyphicon-remove" style="color:red"></span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'phone' %}</label>
+                    </div>
+                    <div class="col-md-4">
+                        {% if proposition_dissertation.author.available_by_phone %}
+                            <span style="color:green">{{ proposition_dissertation.author.person.phone }}</span>
+                        {% else %}
+                            <span style="color:#C0C0C0">({{ proposition_dissertation.author.person.phone }})</span>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-1">
+                        {% if proposition_dissertation.author.available_at_office %}
+                            <span class="glyphicon glyphicon-ok" style="color:green"></span>
+                        {% else %}
+                            <span class="glyphicon glyphicon-remove" style="color:red"></span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'mobile' %}</label>
+                    </div>
+                    <div class="col-md-4">
+                        {% if proposition_dissertation.author.available_by_phone %}
+                            <span style="color:green">{{ proposition_dissertation.author.person.phone_mobile }}</span>
+                        {% else %}
+                            <span style="color:#C0C0C0">({{ proposition_dissertation.author.person.phone_mobile }})</span>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-1">
+                        {% if proposition_dissertation.author.available_by_phone %}
+                            <span class="glyphicon glyphicon-ok" style="color:green"></span>
+                        {% else %}
+                            <span class="glyphicon glyphicon-remove" style="color:red"></span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'comment' %}</label>
+                    </div>
+                    <div class="col-md-9">
+                        {{ proposition_dissertation.author.comment|linebreaks }}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
