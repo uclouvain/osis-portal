@@ -66,4 +66,3 @@ def count_by_status_student_dissertation(status, adviser, dissertation):
 
 def search_by_dissertation(dissertation):
     return DissertationRole.objects.filter(dissertation=dissertation).order_by('pk')
-
