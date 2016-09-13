@@ -44,3 +44,23 @@ def find_by_application(application):
 
 def find_by_criteria(criteria):
     return ApplicationAssimilationCriteria.objects.get(criteria=criteria)
+
+
+def search(application=None, criteria=None):
+    out = None
+    queryset = ApplicationAssimilationCriteria.objects
+    if application:
+        queryset = queryset.filter(application=application)
+    if criteria:
+        queryset = queryset.filter(criteria=criteria)
+    if application or criteria:
+        out = queryset
+    return out
+
+
+def find_first(application=None, criteria=None):
+    results = search(application, criteria)
+    if results.exists():
+        return results[0]
+    return None
+

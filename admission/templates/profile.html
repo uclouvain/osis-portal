@@ -26,9 +26,8 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-    <form method="post" action="{% url 'profile' %}" id="form_profile" enctype="multipart/form-data">
+    <form method="post" action="{%if application.id%}{% url 'profile' application.id%}{%else%}{% url 'profile'%}{%endif%}" id="form_profile" enctype="multipart/form-data">
         {% csrf_token %}
-
         <span id="txt_message_error_profile_up"
                class="alert alert-warning"
                style="visibility:hidden;display:none;"></span><br>

@@ -211,7 +211,8 @@ def profile(request, application_id=None, message_success=None):
             person_legal_address.country = country
         else:
             applicant_form.errors['legal_adr_country'] = _('mandatory_field')
-            # person_legal_address.country = None
+        # person_legal_address.country = None
+        print('chec : ' , request.POST.get('same_contact_legal_addr'))
         if request.POST.get('same_contact_legal_addr') == "false":
             person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
             if person_contact_address is None:
@@ -244,8 +245,10 @@ def profile(request, application_id=None, message_success=None):
                 country = None
                 if country_id and int(country_id) >= 0:
                     country = mdl_ref.country.find_by_id(country_id)
-                person_contact_address.country = country
+                if country:
+                    person_contact_address.country = country
             else:
+                print('error')
                 person_contact_address.country = None
             same_addresses = False
         else:
@@ -275,6 +278,7 @@ def profile(request, application_id=None, message_success=None):
             if key[0:22] == "assimilation_criteria_":
                 if request.POST[key] == "true":
                     criteria_id = key[22:]
+                    print('criteria_id: ', criteria_id)
                     # Delete other previous criteria encoded
                     criterias = mdl.applicant_assimilation_criteria.find_by_applicant(applicant)
                     for c in criterias:
@@ -284,6 +288,7 @@ def profile(request, application_id=None, message_success=None):
                         criterias = mdl.application_assimilation_criteria.find_by_application(application)
                         for c in criterias:
                             if c.criteria.id != int(criteria_id):
+                                print('application_assimilation_criteria delete ', c.criteria.id)
                                 c.delete()
                     #
                     criteria = mdl_ref.assimilation_criteria.find_by_id(criteria_id)
@@ -322,12 +327,32 @@ def profile(request, application_id=None, message_success=None):
                             applicant_assimilation_criteria.additional_criteria = \
                                 define_additional_criteria(request.POST.get("criteria_5"))
                             applicant_assimilation_criteria.save()
+                            print('save1')
+
                         else:
                             applicant_assimilation_criteria.additional_criteria = \
                                 define_additional_criteria(request.POST.get("criteria_5"))
                             applicant_assimilation_criteria.save()
+                            print('save2')
 
-        documents_upload(request)
+                        # Update/create application_assimilation_criteria
+                        if application:
+                            application_assimilation_criteria = mdl.application_assimilation_criteria.find_first(application,
+                                                                                                             criteria)
+                            if application_assimilation_criteria is None:
+                                print('new ApplicationAssimilationCriteria')
+                                application_assimilation_criteria = \
+                                    mdl.application_assimilation_criteria.ApplicationAssimilationCriteria()
+                                application_assimilation_criteria.application = application
+                            else:
+                                print('update ApplicationAssimilationCriteria')
+                            application_assimilation_criteria.criteria = criteria
+                            if applicant_assimilation_criteria.additional_criteria:
+                                application_assimilation_criteria.additional_criteria = applicant_assimilation_criteria.additional_criteria
+                            print('save', application_assimilation_criteria)
+                            application_assimilation_criteria.save()
+
+        # documents_upload(request)
 
         message_success = None
 
@@ -362,7 +387,7 @@ def profile(request, application_id=None, message_success=None):
 
     assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
     applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
-    application = None
+
     if application:
         applicant_assimilation_criteria = mdl.application_assimilation_criteria.find_by_application(application)
     else:
