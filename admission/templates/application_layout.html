@@ -236,7 +236,7 @@
 
     $("#lnk_profil_next_step").click(function(e) {
         $('#txt_message_error_profile').css('visibility', 'hidden').css('display','none');
-        if (! valid(e)){
+        if (! valid()){
             return false;
         }
         $('#hdn_tab_applications_status').val('True');
@@ -245,7 +245,7 @@
     });
 
     $("#lnk_profil_next_step_up").click(function(e) {
-        if (! valid(e)){
+        if (! valid()){
             return false;
         }
         $('#hdn_tab_applications_status').val('True');
@@ -254,7 +254,7 @@
     });
 
     $("#lnk_application_tab").click(function(e) {
-        if(! valid(e)){
+        if(! valid()){
             return false;
         }
         if ($('#hdn_application_id').val()){
@@ -325,20 +325,18 @@
         return true;
     }
 
-    function valid(e){
+    function valid(){
         if($("#hdn_tab_active").val()=="0"){
             if (! valid_profile()){
                 if ($('#txt_message_error_profile_up').html() == ''){
                     $('#txt_message_error_profile_up').css('visibility', 'visible').css('display','block');
                     $('#txt_message_error_profile_up').text(gettext('invalid_data'));
                 }
-                e.preventDefault();
                 return false;
             }
         }
         if($("#hdn_tab_active").val()=="1"){
             if (! valid_offer()){
-                e.preventDefault();
                 return false;
             }
         }

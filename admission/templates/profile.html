@@ -45,16 +45,13 @@
         <span id="txt_message_error_profile_up"
                class="alert alert-warning"
                style="visibility:hidden;display:none;"></span>
-        <div class="row" style="margin-top:5px;">
-            <div class="col-md-6"></div>
-            <div class="col-md-6">
-                <a id="lnk_profil_next_step_up"
-                   class="btn btn-default pull-right"
-                   href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"
-                   title="{% trans 'demandes'%}">{%trans 'next_step'%} : {%trans 'offer_choice'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-                    </a>
-            </div>
-        </div>
+        <a id="lnk_profil_next_step_up"
+           class="btn btn-default pull-right"
+           style="margin-top:5px;"
+           href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"
+           title="{% trans 'demandes'%}">{%trans 'next_step'%} : {%trans 'offer_choice'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+        </a><br><br>
+
         {% if applicant_form.errors %}
         <span class="error">{% if applicant_form.errors %}{% trans 'errors_validation_warning'%}{%endif%}</span>
         <br>
@@ -182,48 +179,44 @@
                                 </label>
                             </div>
                             <span class="error">{{ applicant_form.gender.errors|striptags }}</span>
-
+                        </div>
+                        <div class="col-md-3">
+                            <label>{%trans 'civil_status'%} *</label>
+                            <select class="form-control" id="slt_civil_status" name="civil_status">
+                                <option value="SINGLE" {% if applicant.civil_status = "SINGLE" %}selected{%endif%}>
+                                    {%trans 'single'%}
+                                </option>
+                                <option value="COHABITANT" {% if applicant.civil_status = "COHABITANT" %}selected{%endif%}>
+                                    {%trans 'cohabitant'%}
+                                </option>
+                                <option value="MARRIED" {% if applicant.civil_status = "MARRIED" %} selected {%endif%}>
+                                    {%trans 'married'%}
+                                </option>
+                                <option value="SEPARATED" {% if applicant.civil_status = "SEPARATED" %}selected{%endif%}>
+                                    {%trans 'separated'%}
+                                </option>
+                                <option value="DIVORCED" {% if applicant.civil_status = "DIVORCED" %}selected{%endif%}>
+                                    {%trans 'divorced'%}
+                                </option>
+                                <option value="WIDOWED" {% if applicant.civil_status = "WIDOWED" %}selected{%endif%}>
+                                    {%trans 'widow'%}
+                                </option>
+                            </select>
+                            <span class="error">{{ applicant_form.civil_status.errors|striptags }}</span>
+                        </div>
+                        <div class="col-md-3">
+                            <label>{%trans 'children'%}</label>
+                            <input class="form-control" id="txt_number_children" name="number_children"
+                                   value="{{ applicant.number_children | default_if_none:''}}">
+                            <span class="error" id="spn_number_children">{{ applicant_form.number_children.errors|striptags }}</span>
+                        </div>
                     </div>
-                    <div class="col-md-3">
-                        <label>{%trans 'civil_status'%} *</label>
-                        <select class="form-control" id="slt_civil_status" name="civil_status">
-                            <option value="SINGLE" {% if applicant.civil_status = "SINGLE" %}selected{%endif%}>
-                                {%trans 'single'%}
-                            </option>
-                            <option value="COHABITANT" {% if applicant.civil_status = "COHABITANT" %}selected{%endif%}>
-                                {%trans 'cohabitant'%}
-                            </option>
-                            <option value="MARRIED" {% if applicant.civil_status = "MARRIED" %} selected {%endif%}>
-                                {%trans 'married'%}
-                            </option>
-                            <option value="SEPARATED" {% if applicant.civil_status = "SEPARATED" %}selected{%endif%}>
-                                {%trans 'separated'%}
-                            </option>
-                            <option value="DIVORCED" {% if applicant.civil_status = "DIVORCED" %}selected{%endif%}>
-                                {%trans 'divorced'%}
-                            </option>
-                            <option value="WIDOWED" {% if applicant.civil_status = "WIDOWED" %}selected{%endif%}>
-                                {%trans 'widow'%}
-                            </option>
-                        </select>
-                        <span class="error">{{ applicant_form.civil_status.errors|striptags }}</span>
-                    </div>
-                    <div class="col-md-3">
-                        <label>{%trans 'children'%}</label>
-                        <input class="form-control" id="txt_number_children" name="number_children"
-                               value="{{ applicant.number_children | default_if_none:''}}">
-                        <span class="error" id="spn_number_children">{{ applicant_form.number_children.errors|striptags }}</span>
-                    </div>
-                </div>
                 <br>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>{%trans 'spouse_name'%}</label>
-                        <input class="form-control" id="txt_spouse_name" name="spouse_name"
-                               value="{{ applicant.spouse_name | default_if_none:''}}" maxlength="50">
-                    </div>
 
-                </div>
+                <label>{%trans 'spouse_name'%}</label>
+                <input class="form-control" id="txt_spouse_name" name="spouse_name"
+                       value="{{ applicant.spouse_name | default_if_none:''}}" maxlength="50">
+                
                 <br>
                 <div id="pnl_assimilation_criteria">
                     <br>
@@ -637,16 +630,11 @@
         <span id="txt_message_error_profile"
                class="alert alert-warning"
                style="visibility:hidden;display:none;"></span><br>
-        <div class="row">
-            <div class="col-md-6"></div>
-            <div class="col-md-6">
-                <a id="lnk_profil_next_step"
-                   class="btn btn-default pull-right"
-                   href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"
-                   title="{% trans 'demandes'%}">{%trans 'next_step'%} : {%trans 'offer_choice'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-                    </a>
-            </div>
+        <a id="lnk_profil_next_step"
+           class="btn btn-default pull-right"
+           href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"
+           title="{% trans 'demandes'%}">{%trans 'next_step'%} : {%trans 'offer_choice'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+        </a>
 
-        </div>
         <div id="pnl_files"><div id="pnl_uploaded_files" style="visibility:hidden;display:none;" ></div></div>
     </form>
