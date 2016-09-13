@@ -138,4 +138,3 @@ def search(terms, author=None):
 
 def search_by_user(user):
     return Dissertation.objects.filter(author=user).exclude(active=False)
-
