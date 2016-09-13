@@ -81,7 +81,13 @@ def validate_profil(applicant, user):
                     break
             if not criteria_doc_ok:
                 return False
-
+    assimilation_criteria_list = mdl.applicant_assimilation_criteria.find_by_applicant(applicant)
+    for assimilation_criteria in assimilation_criteria_list:
+        docs_needed = assimilation_criteria_view.get_list_docs(assimilation_criteria.criteria.id)
+        for doc_needed in docs_needed:
+            doc = mdl_common.document_file.search(user, doc_needed)
+            if not doc.exists():
+                return False
     return True
 
 
