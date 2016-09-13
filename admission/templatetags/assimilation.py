@@ -63,10 +63,12 @@ def table_display(assimilation_basic_documents, criteria_id):
 
 @register.filter
 def assimilation_criteria_radio(applicant_assimilation_criteria, criteria_id):
-    for applicant_criteria_div in applicant_assimilation_criteria:
-        if applicant_criteria_div.criteria.id == criteria_id:
-            return " "
-    return "checked"
+    if applicant_assimilation_criteria.exists():
+        for applicant_criteria_div in applicant_assimilation_criteria:
+            if applicant_criteria_div.criteria.id == criteria_id:
+                return " "
+        return "checked"
+    return ""
 
 
 @register.filter

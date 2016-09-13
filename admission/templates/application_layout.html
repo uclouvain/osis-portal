@@ -341,9 +341,21 @@
     }
 
     function valid_profile(){
+        var message = "";
         if (($("#slt_nationality").prop('selectedIndex') < 0
             || $("#slt_legal_adr_country").prop('selectedIndex') < 0) || ($("#slt_nationality").val()=='-1' || $("#slt_legal_adr_country").val()=='-1')){
-            $("#txt_message_error_profile_up").text(gettext('msg_next_profil'));
+            message = gettext('msg_next_profil');
+        }
+        var cpt = 1;
+        while(cpt <=7){
+            if(! $("#assimilation_criteria_"+ cpt+"_true").prop('checked') && ! $("#assimilation_criteria_"+cpt+"_false").prop('checked') ){
+                message += gettext('msg_assimilation_criteria');
+                break;
+            }
+            cpt = cpt +1;
+        }
+        if(message != ''){
+            $("#txt_message_error_profile_up").text(message);
             $('#txt_message_error_profile_up').css('visibility', 'visible').css('display','block');
             return false;
         }

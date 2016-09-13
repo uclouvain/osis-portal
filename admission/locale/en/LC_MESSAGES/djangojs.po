@@ -150,4 +150,11 @@ msgstr "Translated high school diploma - recto"
 msgid "translated_international_diploma_verso"
 msgstr "Translated high school diploma - verso"
 
+msgid "msg_no_next_step"
+msgstr "Before going to the next step you have to : "
+
+msgid "msg_assimilation_criteria"
+msgstr "Mention a assimilation criteria, or mention if you don't correspond to any criteria."
+
+
 
