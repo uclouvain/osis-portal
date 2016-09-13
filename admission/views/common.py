@@ -313,7 +313,7 @@ def profile(request, application_id=None, message_success=None):
                                     # delete unnecessary documents
                                     d.delete()
                         applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_first(applicant,
-                                                                                                     criteria)
+                                                                                                         criteria)
                         if not applicant_assimilation_criteria:
                             applicant_assimilation_criteria = \
                                 mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria()
