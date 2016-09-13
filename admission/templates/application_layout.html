@@ -227,6 +227,7 @@
         //If information message is on the screen it will disappear after 5s
         $('#message_info').fadeOut(5000);
 
+        choices = {{ list_choices | safe }};
     });
 
     function save(form_to_submit){
