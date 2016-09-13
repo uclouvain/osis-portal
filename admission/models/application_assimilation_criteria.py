@@ -34,6 +34,8 @@ class ApplicationAssimilationCriteriaAdmin(admin.ModelAdmin):
 class ApplicationAssimilationCriteria(models.Model):
     application = models.ForeignKey('Application')
     criteria = models.ForeignKey('reference.AssimilationCriteria')
+    additional_criteria = models.ForeignKey('reference.AssimilationCriteria', blank=True, null=True,
+                                            related_name='application_additional_criteria')
 
 
 def find_by_application(application):

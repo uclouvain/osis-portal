@@ -321,12 +321,12 @@
                                             <tr><td colspan="2">&nbsp;&nbsp;{% trans 'and' as and_upper%} {{and_upper| upper}}</td></tr>
                                             <tr><td colspan="2">
                                                 <label>Documents demandés pour l’étudiant à adapter pour la personne concernée suivant le critère :</label>
-                                                <select id="slt_criteria_5" class="form-control" >
-                                                    <option value="">-</option>
-                                                    <option value="1">{% trans 'criteria' %} 1</option>
-                                                    <option value="2">{% trans 'criteria' %} 2</option>
-                                                    <option value="3">{% trans 'criteria' %} 3</option>
-                                                    <option value="4">{% trans 'criteria' %} 4</option>
+                                                <select id="slt_criteria_5" name="criteria_5"  class="form-control" >
+                                                    <option value="" >-</option>
+                                                    <option value="1" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:1 }}>{% trans 'criteria' %} 1</option>
+                                                    <option value="2" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:2 }} >{% trans 'criteria' %} 2</option>
+                                                    <option value="3" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:3 }}>{% trans 'criteria' %} 3</option>
+                                                    <option value="4" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:4 }} >{% trans 'criteria' %} 4</option>
                                                 </select><div id="pnl_other_criteria"></div>
                                                 <br>
                                                 </td>

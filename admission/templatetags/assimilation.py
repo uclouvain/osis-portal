@@ -76,3 +76,13 @@ def button_class_color(assimilation_documents_existing, document_description):
             return "btn btn-success class_upload_assimilation"
     return "btn btn-default class_upload_assimilation"
 
+
+@register.filter
+def assimilation_criteria_criteria5(applicant_assimilation_criteria, criteria_id):
+    for applicant_criteria_div in applicant_assimilation_criteria:
+
+        if applicant_criteria_div.criteria.id == 5:
+            if applicant_criteria_div.additional_criteria:
+                if applicant_criteria_div.additional_criteria.id == criteria_id:
+                    return "selected"
+    return ""
