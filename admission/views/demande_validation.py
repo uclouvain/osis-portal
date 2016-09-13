@@ -42,7 +42,8 @@ def validate_profil(applicant, user):
         or applicant.gender is None\
         or applicant.civil_status is None\
         or applicant.nationality is None \
-            or applicant.additional_email is None:
+        or applicant.additional_email is None \
+            or applicant.additional_email.strip() == '':
         return False
     if (applicant.registration_id and applicant.last_academic_year is None) \
             or (applicant.registration_id is None and applicant.last_academic_year):
@@ -58,7 +59,7 @@ def validate_profil(applicant, user):
                 or applicant_legal_adress.city is None \
                 or applicant_legal_adress.country is None:
             return False
-    if applicant.nationality:
+    if applicant.nationality and not applicant.nationality.european_union :
         applicant_assimilation_criterias = mdl.applicant_assimilation_criteria.find_by_applicant(applicant)
         if not applicant_assimilation_criterias:
             return False

@@ -81,7 +81,7 @@
 
     <div class="container">
         {% if message_info%}
-            <div id="message_info" class="alert alert-success">{{message_info}}</div>
+            <div id="message_info" class="alert alert-success">{{message_info| default_if_none:''}}</div>
         {%endif%}
         {% block content %}
         {% endblock %}
@@ -102,6 +102,7 @@
     <script src="{% static 'js/secondary_education.js' %}"></script>
     <script src="{% static 'js/accounting.js' %}"></script>
     <script src="{% static 'js/diploma.js' %}"></script>
+    <script src="{% static 'js/profile.js' %}"></script>
     <script src="{% static 'js/attachments.js' %}"></script>
 
     <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>

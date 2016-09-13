@@ -150,4 +150,50 @@ msgstr "Translated high school diploma - recto"
 msgid "translated_international_diploma_verso"
 msgstr "Translated high school diploma - verso"
 
+msgid "contact_country"
+msgstr "Country required"
 
+msgid "contact_street"
+msgstr "Street required"
+
+msgid "contact_number"
+msgstr "Number required"
+
+msgid "contact_postal_code"
+msgstr "Zip code required"
+
+msgid "contact_city"
+msgstr "City required"
+
+msgid "legal_country"
+msgstr "Country required"
+
+msgid "legal_street"
+msgstr "Street required"
+
+msgid "legal_number"
+msgstr "Number required"
+
+msgid "legal_postal_code"
+msgstr "Zip code"
+
+msgid "legal_city"
+msgstr "City required"
+
+msgid "invalid_email"
+msgstr "Please indicate a valid email."
+
+msgid "invalid_data"
+msgstr "Errors in the form"
+
+msgid "number_invalid"
+msgstr "Number invalid"
+
+msgid "previous_enrollment_required_year"
+msgstr "Please mention the last academic year"
+
+msgid "previous_enrollment_required_nb"
+msgstr "Please mention a registration number"
+
+msgid "errors_validation_warning"
+msgstr "Some errors prevent the tab validation"

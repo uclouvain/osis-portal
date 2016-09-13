@@ -1362,3 +1362,6 @@ msgstr "5ième fiche de salaire"
 
 msgid "paycheck_6"
 msgstr "6ième fiche de salaire"
+
+msgid "errors_validation_warning"
+msgstr "Il reste des erreurs qui empêche la validation de l'onglet"
