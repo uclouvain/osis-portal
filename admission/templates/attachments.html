@@ -132,14 +132,5 @@
         {%trans 'next_step'%} : {%trans 'submission'%}</a>
 </div>
 
-{% block script %}
-<script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
-<script src="{% static 'js/attachments.js' %}"></script>
-<script type="text/javascript">
-    $( document ).ready(function() {
-        choices = {{ list_choices|safe }};
-    });
-</script>
-{% endblock %}
 
 
