@@ -225,7 +225,11 @@
             $('#slt_offer_type').val($('#hdn_application_grade').val())
             display_known_offer($('#hdn_application_offer_year_id').val());
         }
+        {% if list_choices %}
         choices = {{ list_choices | safe }};
+        {%else%}
+        choices = []
+        {% endif%}
     });
 
     function save(form_to_submit){
