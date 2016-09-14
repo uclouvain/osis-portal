@@ -174,11 +174,7 @@
 
             <div class="panel panel-default">
                 <div class="panel-body">
-                    {%if tab_active != 4 %}
-                    <h5>{% trans 'mandatory_asterisk'%}</h5>
-                    {%endif%}
                     {% block admission_tabs %}
-
                     {% endblock %}
                 </div>
             </div>
@@ -197,14 +193,17 @@
         if($('#hdn_tab_active').val()=='2'){
             $('#form_secondary_education').append( $('#pnl_files>div') );
         }
+        $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
         if($("#slt_nationality").val()!="-1"){
             $.ajax({
                 url: "/admission/country?nationality=" + $("#slt_nationality").val()
             }).then(function(data) {
-                if (data.european_union) {
-                    $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
-                }else{
-                    $('#pnl_assimilation_criteria').css('visibility', 'visible').css('display','block');
+                if(data.length > 0 ){
+                    if (data.european_union) {
+                        $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
+                    }else{
+                        $('#pnl_assimilation_criteria').css('visibility', 'visible').css('display','block');
+                    }
                 }
             });
         }
@@ -226,6 +225,10 @@
             display_known_offer($('#hdn_application_offer_year_id').val());
         }
         $('#slt_criteria_5').trigger('change');
+        //If information message is on the screen it will disappear after 5s
+        $('#message_info').fadeOut(5000);
+
+        choices = {{ list_choices | safe }};
     });
 
     function save(form_to_submit){
@@ -233,19 +236,17 @@
         $(id).submit();
     }
 
-    $("#lnk_profil_next_step").click(function() {
+    $("#lnk_profil_next_step").click(function(e) {
         $('#txt_message_error_profile').css('visibility', 'hidden').css('display','none');
         if (! valid()){
             return false;
         }
         $('#hdn_tab_applications_status').val('True');
-
         save('form_profile');
         return true;
     });
 
-    $("#lnk_profil_next_step_up").click(function() {
-        $('#txt_message_error_profile_up').css('visibility', 'hidden').css('display','none');
+    $("#lnk_profil_next_step_up").click(function(e) {
         if (! valid()){
             return false;
         }
@@ -254,7 +255,7 @@
         return true;
     });
 
-    $("#lnk_application_tab").click(function() {
+    $("#lnk_application_tab").click(function(e) {
         if(! valid()){
             return false;
         }
@@ -329,6 +330,10 @@
     function valid(){
         if($("#hdn_tab_active").val()=="0"){
             if (! valid_profile()){
+                if ($('#txt_message_error_profile_up').html() == ''){
+                    $('#txt_message_error_profile_up').css('visibility', 'visible').css('display','block');
+                    $('#txt_message_error_profile_up').text(gettext('invalid_data'));
+                }
                 return false;
             }
         }
@@ -342,6 +347,60 @@
 
     function valid_profile(){
         var message = "";
+        $('#txt_message_error_profile_up').css('visibility', 'hidden').css('display','none');
+        $('#txt_message_error_profile_up').html('');
+        // clear error messages
+        $('#spn_number_children').html('');
+        $('#spn_last_academic_year').html('');
+        $('#spn_contact_adr_street').html('');
+        $('#spn_contact_adr_number').html('');
+        $('#spn_contact_adr_postal_code').html('');
+        $('#spn_contact_adr_city').html('');
+        $('#spn_contact_adr_country').html('');
+        $('#spn_legal_adr_street').html('');
+        $('#spn_legal_adr_number').html('');
+        $('#spn_legal_adr_postal_code').html('');
+        $('#spn_legal_adr_city').html('');
+        $('#spn_legal_adr_country').html('');
+        $('#spn_additional_email').html('');
+        $('#spn_registration_id').html('');
+        $('#spn_last_academic_year').html('');
+
+        if($('#txt_number_children').val() != ''){
+            if(! $.isNumeric( $('#txt_number_children').val())){
+                $('#spn_number_children').text(gettext('number_invalid'));
+                return false;
+            }else{
+                var nb_children = parseInt($('#txt_number_children').val());
+                if(nb_children < 0 || nb_children >20){
+                    $('#spn_number_children').text(gettext('number_invalid'));
+                    return false;
+                }
+            }
+        }
+        if( $('#rd_previous_enrollment_true').prop('checked')){
+            txt_registration_id
+            if($('#txt_registration_id').val() == ''){
+                $('#spn_registration_id').text(gettext('previous_enrollment_required_nb'));
+                return false;
+            }
+            if($('#txt_last_academic_year').val() == ''){
+                $('#spn_last_academic_year').text(gettext('previous_enrollment_required_year'));
+                return false;
+            }
+        }
+        if($('#txt_last_academic_year').val() != ''){
+            if(! $.isNumeric( $('#txt_last_academic_year').val())){
+                $('#spn_last_academic_year').text(gettext('number_invalid'));
+                return false;
+            }else{
+                var year = parseInt($('#txt_last_academic_year').val());
+                if(year < 1900 || year >3000){
+                    $('#spn_last_academic_year').text(gettext('number_invalid'));
+                    return false;
+                }
+            }
+        }
         if (($("#slt_nationality").prop('selectedIndex') < 0
             || $("#slt_legal_adr_country").prop('selectedIndex') < 0) || ($("#slt_nationality").val()=='-1' || $("#slt_legal_adr_country").val()=='-1')){
             message = gettext('msg_next_profil');
@@ -357,6 +416,63 @@
         if(message != ''){
             $("#txt_message_error_profile_up").text(message);
             $('#txt_message_error_profile_up').css('visibility', 'visible').css('display','block');
+            return false;
+        }
+
+        var legal_valid = true;
+        if($('#txt_legal_adr_street').val() == '' ){
+            $('#spn_legal_adr_street').text(gettext('legal_street'));
+            legal_valid = false;
+        }
+        if($('#txt_legal_adr_number').val() == '' ){
+            $('#spn_legal_adr_number').text(gettext('legal_number'));
+            legal_valid = false;
+        }
+        if($('#txt_legal_adr_postal_code').val() == '' ){
+            $('#spn_legal_adr_postal_code').text(gettext('legal_postal_code'));
+            legal_valid = false;
+        }
+        if($('#txt_legal_adr_city').val() == '' ){
+            $('#spn_legal_adr_city').text(gettext('legal_postal_code'));
+            legal_valid = false;
+        }
+        if($('#slt_legal_adr_country').prop('selectedIndex') <= 0 ){
+            $('#spn_legal_adr_country').text(gettext('legal_country'));
+            legal_valid = false;
+        }
+        if(legal_valid == false){
+            return legal_valid;
+        }
+        if($('#rd_same_contact_legal_addr_false').prop("checked")){
+            var contact_valid = true;
+            if($('#txt_contact_adr_street').val() == '' ){
+                $('#spn_contact_adr_street').text(gettext('contact_street'));
+                contact_valid = false;
+            }
+            if($('#txt_contact_adr_number').val() == '' ){
+                $('#spn_contact_adr_number').text(gettext('contact_number'));
+                contact_valid = false;
+            }
+            if($('#txt_contact_adr_postal_code').val() == '' ){
+                $('#spn_contact_adr_postal_code').text(gettext('contact_postal_code'));
+                contact_valid = false;
+            }
+            if($('#txt_contact_adr_city').val() == '' ){
+                $('#spn_contact_adr_city').text(gettext('contact_postal_code'));
+                contact_valid = false;
+            }
+            if($('#slt_contact_adr_country').prop('selectedIndex') <= 0 ){
+                $('#spn_contact_adr_country').text(gettext('contact_country'));
+                contact_valid = false;
+            }
+            if(contact_valid == false){
+                return contact_valid;
+            }
+        }
+        // email validation
+        var sEmail = $('#txt_additional_email').val();
+        if ($.trim(sEmail).length > 0 && validateEmail(sEmail) == false) {
+            $('#spn_additional_email').text(gettext('invalid_email'));
             return false;
         }
         return true;
@@ -767,6 +883,28 @@
             });
         }
     }
+
+    function validateEmail(sEmail) {
+        var filter = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+	    if (filter.test(sEmail)) {
+	        return true;
+	    }else {
+	        return false;
+	    }
+	}
+
+    $("#bt_submit_profile").click(function(e) {
+        $('#txt_message_error_profile').css('visibility', 'hidden').css('display','none');
+        if (! valid(e)){
+            return false;
+        }
+        return true;
+    });
+
+    $("#rd_previous_enrollment_false").click(function() {
+        $('#txt_registration_id').val('');
+        $('#txt_last_academic_year').val('');
+    });
 
     </script>
 {% endblock %}

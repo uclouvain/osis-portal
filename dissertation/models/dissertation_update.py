@@ -61,4 +61,3 @@ def add(request, memory, old_status, justification=None):
     update.person = person
     update.dissertation = memory
     update.save()
-

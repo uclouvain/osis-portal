@@ -158,3 +158,47 @@ msgid "msg_assimilation_criteria"
 msgstr "Précisez le critère d'assimilation auquel vous correspondez le mieux, ou si vous ne correspondez à aucun critère.  "
 
 
+msgid "contact_country"
+msgstr "Pays requis"
+
+msgid "contact_street"
+msgstr "Rue requise"
+
+msgid "contact_number"
+msgstr "Numéro requis"
+
+msgid "contact_postal_code"
+msgstr "Code postal requis"
+
+msgid "contact_city"
+msgstr "Localité requise"
+
+msgid "legal_country"
+msgstr "Pays requis"
+
+msgid "legal_street"
+msgstr "Rue requise"
+
+msgid "legal_number"
+msgstr "Numéro requis"
+
+msgid "legal_postal_code"
+msgstr "Code postal requis"
+
+msgid "legal_city"
+msgstr "Localité requise"
+
+msgid "invalid_email"
+msgstr "Merci d'encoder une adresse email correcte."
+
+msgid "invalid_data"
+msgstr "Attention il y a des erreurs"
+
+msgid "number_invalid"
+msgstr "Nombre invalide"
+
+msgid "previous_enrollment_required_year"
+msgstr "Merci de préciser la dernière année"
+
+msgid "previous_enrollment_required_nb"
+msgstr "Merci de préciser un numéro de matricule"
