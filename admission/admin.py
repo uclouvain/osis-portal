@@ -47,6 +47,9 @@ admin.site.register(applicant_assimilation_criteria.ApplicantAssimilationCriteri
 admin.site.register(application.Application,
                     application.ApplicationAdmin)
 
+admin.site.register(application_assimilation_criteria.ApplicationAssimilationCriteria,
+                    application_assimilation_criteria.ApplicationAssimilationCriteriaAdmin)
+
 admin.site.register(curriculum.Curriculum,
                     curriculum.CurriculumAdmin)
 

@@ -55,6 +55,7 @@ class PropositionDissertation(models.Model):
         )
 
     author = models.ForeignKey('Adviser')
+    creator = models.ForeignKey('base.Person', blank=True, null=True)
     collaboration = models.CharField(max_length=12, choices=COLLABORATION_CHOICES, default='FORBIDDEN')
     description = models.TextField(blank=True, null=True)
     level = models.CharField(max_length=12, choices=LEVELS_CHOICES, default='DOMAIN')
