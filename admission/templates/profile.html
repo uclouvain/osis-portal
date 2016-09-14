@@ -26,7 +26,7 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-    <form method="post" action="{% url 'profile' %}" id="form_profile" enctype="multipart/form-data">
+    <form method="post" action="{%if application.id%}{% url 'profile' application.id%}{%else%}{% url 'profile'%}{%endif%}" id="form_profile" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="row">
             <div class="col-md-8">
@@ -216,7 +216,7 @@
                 <label>{%trans 'spouse_name'%}</label>
                 <input class="form-control" id="txt_spouse_name" name="spouse_name"
                        value="{{ applicant.spouse_name | default_if_none:''}}" maxlength="50">
-                
+
                 <br>
                 <div id="pnl_assimilation_criteria">
                     <br>
@@ -332,12 +332,12 @@
                                             <tr><td colspan="2">&nbsp;&nbsp;{% trans 'and' as and_upper%} {{and_upper| upper}}</td></tr>
                                             <tr><td colspan="2">
                                                 <label>Documents demandés pour l’étudiant à adapter pour la personne concernée suivant le critère :</label>
-                                                <select id="slt_criteria_5" class="form-control" >
-                                                    <option value="">-</option>
-                                                    <option value="1">{% trans 'criteria' %} 1</option>
-                                                    <option value="2">{% trans 'criteria' %} 2</option>
-                                                    <option value="3">{% trans 'criteria' %} 3</option>
-                                                    <option value="4">{% trans 'criteria' %} 4</option>
+                                                <select id="slt_criteria_5" name="criteria_5"  class="form-control" >
+                                                    <option value="" >-</option>
+                                                    <option value="1" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:1 }}>{% trans 'criteria' %} 1</option>
+                                                    <option value="2" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:2 }} >{% trans 'criteria' %} 2</option>
+                                                    <option value="3" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:3 }}>{% trans 'criteria' %} 3</option>
+                                                    <option value="4" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:4 }} >{% trans 'criteria' %} 4</option>
                                                 </select><div id="pnl_other_criteria"></div>
                                                 <br>
                                                 </td>

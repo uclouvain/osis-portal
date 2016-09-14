@@ -217,3 +217,25 @@ def find_list_document_type_by_criteria(criteria):
     return list_document_type
 
 
+def get_list_docs(criteria_id):
+    list_document_type = []
+    if criteria_id == 1:
+        list_document_type = criteria1(list_document_type)
+    if criteria_id == 2:
+        list_document_type = criteria2(list_document_type)
+    if criteria_id == 3:
+        list_document_type = criteria3(list_document_type)
+    if criteria_id == 4:
+        list_document_type = criteria4(list_document_type)
+    if criteria_id == 5:
+        list_document_type = criteria5(list_document_type)
+    if criteria_id == 6:
+        list_document_type = criteria6(list_document_type)
+    if criteria_id == 7:
+        list_document_type = criteria7(list_document_type)
+    list_documents = []
+    for l in list_document_type:
+        for elt in l.descriptions:
+            if elt not in list_documents:
+                list_documents.append(elt)
+    return list_documents

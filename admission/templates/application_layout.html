@@ -224,6 +224,7 @@
             $('#slt_offer_type').val($('#hdn_application_grade').val())
             display_known_offer($('#hdn_application_offer_year_id').val());
         }
+        $('#slt_criteria_5').trigger('change');
         //If information message is on the screen it will disappear after 5s
         $('#message_info').fadeOut(5000);
 
@@ -345,6 +346,7 @@
     }
 
     function valid_profile(){
+        var message = "";
         $('#txt_message_error_profile_up').css('visibility', 'hidden').css('display','none');
         $('#txt_message_error_profile_up').html('');
         // clear error messages
@@ -401,7 +403,18 @@
         }
         if (($("#slt_nationality").prop('selectedIndex') < 0
             || $("#slt_legal_adr_country").prop('selectedIndex') < 0) || ($("#slt_nationality").val()=='-1' || $("#slt_legal_adr_country").val()=='-1')){
-            $("#txt_message_error_profile_up").text(gettext('msg_next_profil'));
+            message = gettext('msg_next_profil');
+        }
+        var cpt = 1;
+        while(cpt <=7){
+            if(! $("#assimilation_criteria_"+ cpt+"_true").prop('checked') && ! $("#assimilation_criteria_"+cpt+"_false").prop('checked') ){
+                message += gettext('msg_assimilation_criteria');
+                break;
+            }
+            cpt = cpt +1;
+        }
+        if(message != ''){
+            $("#txt_message_error_profile_up").text(message);
             $('#txt_message_error_profile_up').css('visibility', 'visible').css('display','block');
             return false;
         }
@@ -870,6 +883,7 @@
             });
         }
     }
+
     function validateEmail(sEmail) {
         var filter = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
 	    if (filter.test(sEmail)) {
