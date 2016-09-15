@@ -225,7 +225,11 @@
             $('#slt_offer_type').val($('#hdn_application_grade').val())
             display_known_offer($('#hdn_application_offer_year_id').val());
         }
-        choices = {{ list_choices | safe }};
+        {% if list_choices%}
+            choices = {{ list_choices | safe }};
+        {%else%}
+            choices = []
+        {%endif%}
     });
 
     function save(form_to_submit){
@@ -706,6 +710,16 @@
                 $('#btn_modify_picture').attr('title', gettext('change_document'));
                 $('#btn_modify_picture').attr('class', 'btn btn-success ');
                 $('#spn_modify_picture').attr('class', 'glyphicon glyphicon-ok-circle');
+                $('#img_picture').css('visibility', 'visible').css('display','block');
+                $.ajax({
+                    url: "/admission/picture?description="+description
+                }).then(function(data) {
+                    if(data){
+                        $('#img_picture').attr('src','/admission'+data.file);
+                    }else{
+                        $('#img_picture').css('visibility', 'hidden').css('display','none');
+                    }
+                });
             }
 
             if(description == 'ID_CARD'){
@@ -735,6 +749,8 @@
                 $('#btn_modify_picture').attr('title', gettext('add_document'));
                 $('#btn_modify_picture').attr('class', 'btn');
                 $('#spn_modify_picture').attr('class', 'glyphicon glyphicon-upload');
+                $('#img_picture').attr('src','');
+                $('#img_picture').css('visibility', 'hidden').css('display','none');
             }
 
             if(description == 'ID_CARD'){

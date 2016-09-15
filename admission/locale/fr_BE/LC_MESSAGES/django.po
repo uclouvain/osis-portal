@@ -1362,3 +1362,6 @@ msgstr "5ième fiche de salaire"
 
 msgid "paycheck_6"
 msgstr "6ième fiche de salaire"
+
+msgid "no_doc"
+msgstr "Pas de document"

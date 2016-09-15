@@ -232,7 +232,12 @@ def save_uploaded_file(request):
                                                               size=size,
                                                               user=request.user)
         doc_file.save()
-        if description in prerequis_uploads:
+        in_list = False
+        for d in prerequis_uploads:
+            if description == d[0]:
+                c = True
+                break
+        if in_list:
             adm_doc_file = mdl.application_document_file.ApplicationDocumentFile()
             adm_doc_file.application = application
             adm_doc_file.document_file = doc_file

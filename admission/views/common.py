@@ -41,6 +41,9 @@ from admission.views import tabs
 from osis_common import models as mdl_osis_common
 from admission.models.enums import document_type
 from osis_common.forms import UploadDocumentFileForm
+from django.http import HttpResponse
+from rest_framework.renderers import JSONRenderer
+from rest_framework import serializers
 
 
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
@@ -547,3 +550,28 @@ def get_list_docs(criteria_id):
             if elt not in list_documents:
                 list_documents.append(elt)
     return list_documents
+
+
+class JSONResponse(HttpResponse):
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
+
+
+class DocumentFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = mdl_osis_common.document_file.DocumentFile
+        fields = ('file', 'file_name')
+
+
+def get_picture(request):
+    description = request.GET['description']
+    pictures = mdl_osis_common.document_file.search(request.user, description)
+    if pictures.exists():
+        pic = pictures[0]
+    if pic:
+        serializer = DocumentFileSerializer(pic)
+        return JSONResponse(serializer.data)
+    return None
+
