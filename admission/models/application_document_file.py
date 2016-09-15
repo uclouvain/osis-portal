@@ -47,7 +47,7 @@ def search(application=None, description=None):
 
 
 def find_first(application=None, description=None):
-    results = search(application,description)
+    results = search(application, description)
     if results.exists():
         return results[0]
     return None

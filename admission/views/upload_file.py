@@ -235,7 +235,7 @@ def save_uploaded_file(request):
         in_list = False
         for d in prerequis_uploads:
             if description == d[0]:
-                c = True
+                in_list = True
                 break
         if in_list:
             adm_doc_file = mdl.application_document_file.ApplicationDocumentFile()
