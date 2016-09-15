@@ -137,12 +137,10 @@ $("#slt_nationality").change(function() {
    $.ajax({
        url: "/admission/country?nationality=" + $("#slt_nationality").val()
      }).then(function(data) {
-        if(data.length > 0 ){
-            if (data.european_union) {
-                  $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
-            }else{
-                  $('#pnl_assimilation_criteria').css('visibility', 'visible').css('display','block');
-            }
+        if (data.european_union) {
+              $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
+        }else{
+              $('#pnl_assimilation_criteria').css('visibility', 'visible').css('display','block');
         }
      });
  });
