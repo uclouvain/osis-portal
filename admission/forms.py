@@ -29,9 +29,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 from admission.validators import date_validator
 from admission.models.sociological_survey import SociologicalSurvey
-from admission.models.enums import professional_activity
+from admission.models.enums import professional_activity, education
 from localflavor.generic.forms import BICFormField, IBANFormField
 from osis_common.models.document_file import DocumentFile
+from admission.models import profession as profession_mdl
 
 
 class NewAccountForm(forms.Form):
@@ -255,6 +256,12 @@ class SociologicalSurveyForm(forms.ModelForm):
     class Meta:
         model = SociologicalSurvey
         exclude = ['applicant']
+
+    def __init__(self, *args, **kwargs):
+        super(SociologicalSurveyForm, self).__init__(*args, **kwargs)
+        self.professions = list(profession_mdl.Profession.objects.all())
+        self.proffessional_activities = professional_activity.PROFESSIONAL_ACTIVITY_CHOICES
+        self.education_types = education.EDUCATION_TYPE_CHOICES
 
     def clean(self):
         cleaned_data = super(SociologicalSurveyForm, self).clean()
