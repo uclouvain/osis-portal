@@ -97,7 +97,7 @@
                         <div class="row">
                             <div class="col-md-2"></div>
                             <div class="col-md-10">
-                                <label>{%trans 'id_picture'%}</label>
+
                                 <div >
                                     {% if picture %}
                                          <button type="button"
@@ -105,19 +105,23 @@
                                            class="btn btn-success"
                                            title="{% trans 'change_picture'%}"
                                            data-toggle="modal" data-target="#pnl_upload_documents">
-                                             <span class="glyphicon glyphicon-ok-circle" aria-hidden="true" id="spn_modify_picture"></span>&nbsp;Upload
+                                             <span class="glyphicon glyphicon-ok-circle" aria-hidden="true" id="spn_modify_picture"></span>&nbsp;{%trans 'id_picture'%} upload
                                          </button>
-
                                     {%else%}
                                          <button type="button"
                                            id="btn_modify_picture"
                                            class="btn"
                                            title="{% trans 'add_picture'%}"
                                            data-toggle="modal" data-target="#pnl_upload_documents">
-                                             <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_modify_picture"></span>&nbsp;Upload
+                                             <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_modify_picture"></span>&nbsp;{%trans 'id_picture'%} upload
                                          </button>
                                     {%endif%}
-
+                                    <br><br>
+                                    <img src="{%if picture%}{% static picture %}{%else%}{% static 'img/no_document.jpg' %}{%endif%}"
+                                         style="{%if picture%}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}"
+                                         id="img_picture"
+                                         width="120px"
+                                         title="{%if picture%}{% trans 'id_picture' %}{%else%}{% trans 'no_doc' %}{%endif%}"/>
                                 </div>
                             </div>
                         </div>
@@ -377,29 +381,24 @@
                         </div>
                         <div class="col-md-4">
                             <div class="row">
-                                <div class="col-md-2"></div>
-                                <div class="col-md-10">
-                                    <label>{%trans 'id_document'%}</label><br>
-                                    {% if id_document %}
-                                            <button type="button"
-                                                    id="btn_modify_id_document"
-                                                    class="btn btn-success"
-                                                    title="{% trans 'change_document'%}"
-                                                    data-toggle="modal"
-                                                    data-target="#pnl_upload_documents">
-                                                <span class="glyphicon glyphicon-ok-circle" aria-hidden="true" id="spn_modify_id_document"></span>&nbsp;Upload
-                                            </button>
-
-                                    {%else%}
+                                {% if id_document %}
                                         <button type="button"
-                                                title="{% trans 'id_add'%}"
                                                 id="btn_modify_id_document"
-                                                class="btn"
-                                                data-toggle="modal" data-target="#pnl_upload_documents">
-                                            <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_modify_id_document"></span>&nbsp;Upload
+                                                class="btn btn-success pull-right"
+                                                title="{% trans 'change_document'%}"
+                                                data-toggle="modal"
+                                                data-target="#pnl_upload_documents">
+                                            <span class="glyphicon glyphicon-ok-circle" aria-hidden="true" id="spn_modify_id_document"></span>&nbsp;{%trans 'id_document'%} upload
                                         </button>
-                                    {%endif%}
-                                </div>
+                                {%else%}
+                                    <button type="button"
+                                            title="{% trans 'id_add'%}"
+                                            id="btn_modify_id_document"
+                                            class="btn btn-default pull-right"
+                                            data-toggle="modal" data-target="#pnl_upload_documents">
+                                        <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_modify_id_document"></span>&nbsp;{%trans 'id_document'%} upload
+                                    </button>
+                                {%endif%}
                             </div>
                         </div>
                     </div>

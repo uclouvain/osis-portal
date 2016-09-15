@@ -110,5 +110,6 @@ urlpatterns = [
     url(r'^upload/delete/$', upload_file.delete_document_file, name='delete_document_file'),
     url(r'^document/$', upload_file.find_by_description),
     url(r'^upload/save/$', upload_file.save_uploaded_file, name="save_uploaded_file"),
+    url(r'^picture/$', common.get_picture),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

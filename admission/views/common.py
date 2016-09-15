@@ -41,6 +41,9 @@ from admission.views import tabs
 from osis_common import models as mdl_osis_common
 from admission.models.enums import document_type
 from osis_common.forms import UploadDocumentFileForm
+from django.http import HttpResponse
+from rest_framework.renderers import JSONRenderer
+from rest_framework import serializers
 
 
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
@@ -212,7 +215,7 @@ def profile(request, application_id=None, message_success=None):
             person_legal_address.country = country
         else:
             applicant_form.errors['legal_adr_country'] = _('mandatory_field')
-        # person_legal_address.country = None
+
         if request.POST.get('same_contact_legal_addr') == "false":
             person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
             if person_contact_address is None:
@@ -357,6 +360,8 @@ def profile(request, application_id=None, message_success=None):
 
         message_success = None
 
+        if person_contact_address:
+            person_contact_address.save()
         person_legal_address.save()
         applicant.user.save()
         request.user = applicant.user  # Otherwise it was not refreshed while going back to home page
@@ -569,3 +574,29 @@ def define_additional_criteria(criteria5):
         return mdl_ref.assimilation_criteria.find_by_id(int(criteria5))
     else:
         return None
+
+
+class JSONResponse(HttpResponse):
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
+
+
+class DocumentFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = mdl_osis_common.document_file.DocumentFile
+        fields = ('file', 'file_name')
+
+
+def get_picture(request):
+    description = request.GET['description']
+    pictures = mdl_osis_common.document_file.search(request.user, description)
+    pic = None
+    if pictures.exists():
+        pic = pictures[0]
+    if pic:
+        serializer = DocumentFileSerializer(pic)
+        return JSONResponse(serializer.data)
+    return None
+
