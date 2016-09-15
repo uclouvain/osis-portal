@@ -35,6 +35,8 @@ from admission.views import demande_validation
 from admission.views import tabs
 from admission.models.enums import document_type
 from osis_common import models as mdl_osis_common
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 
 ALERT_MANDATORY_FIELD = _('mandatory_field')
@@ -283,34 +285,24 @@ def diploma_save(request):
     next_step = False
     previous_step = False
     save_step = True
-    validation_messages = {}
-    academic_years = mdl.academic_year.find_academic_years()
     if request.POST:
         if 'bt_next_step_up' in request.POST or 'bt_next_step_down' in request.POST:
             next_step = True
         else:
             if 'bt_previous_step_up' in request.POST or 'bt_previous_step_down' in request.POST:
                 previous_step = True
+        if 'submit_diploma' in request.POST:
+            save_step = True
 
     application = mdl.application.find_first_by_user(request.user)
-    other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
-    recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
-    exam_types = mdl.admission_exam_type.find_all_by_adhoc(False)
     applicant = mdl.applicant.find_by_user(request.user)
     secondary_education = mdl.secondary_education.find_by_person(applicant)
 
-    local_language_exam_link = mdl.properties.find_by_key('PROFESSIONAL_EXAM_LINK')
-    professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
     if secondary_education is None:
         secondary_education = mdl.secondary_education.SecondaryEducation()
         secondary_education.academic_year = mdl.academic_year.current_academic_year()
         secondary_education.person = applicant
 
-    education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
-    education_type_qualification = mdl_reference.education_type.find_education_type_by_adhoc('QUALIFICATION', False)
-    local_language_exam_needed = is_local_language_exam_needed(request.user)
-    countries = None
-    message_success = None
     if next_step or previous_step or save_step:
         # Check if all the necessary fields have been filled
         is_valid, validation_messages, secondary_education, professional_exam, admission_exam = validate_fields_form(
@@ -327,33 +319,12 @@ def diploma_save(request):
         documents_update(request, secondary_education, application)
         #
         if next_step:
-            return render(request, "curriculum.html", {"application": application,
-                                                       "message_success": message_success})
+            return render(request, "curriculum.html", {"application": application, "message_success": message_success})
         else:
-            if save_step:
-                countries = mdl_reference.country.find_excluding("BE")
-            else:
-                if previous_step:
-                    return home(request)
-    data = {"application": application,
-            "validation_messages": validation_messages,
-            "academic_years": academic_years,
-            "secondary_education": secondary_education,
-            "countries": countries,
-            "recognized_languages": recognized_languages,
-            "languages": other_language_regime,
-            "exam_types": exam_types,
-            'local_language_exam_link': local_language_exam_link,
-            "professional_exam_link": professional_exam_link,
-            "education_type_transition": education_type_transition,
-            "education_type_qualification": education_type_qualification,
-            "message_success": message_success,
-            "current_academic_year": mdl.academic_year.current_academic_year(),
-            "local_language_exam_needed": local_language_exam_needed}
+            if previous_step:
+                return HttpResponseRedirect(reverse('home'))
 
-    # merge 2 dictionaries
-    data.update(get_secondary_education_exams_data(secondary_education))
-    return render(request, "diploma.html", data)
+    return HttpResponseRedirect(reverse('diploma_update', args=(application.id,)))
 
 
 def diploma_update(request, application_id=None):
@@ -404,9 +375,9 @@ def diploma_update(request, application_id=None):
             'tab_attachments': tab_status['tab_attachments'],
             'tab_submission': tab_status['tab_submission'],
             'applications': mdl.application.find_by_user(request.user),
-            'national_diploma_verso': mdl.application_document_file.search(application,
+            'national_diploma_verso': mdl.application_document_file.find_first(application,
                                                                            document_type.NATIONAL_DIPLOMA_VERSO),
-            'national_diploma_recto': mdl.application_document_file.search(application,
+            'national_diploma_recto': mdl.application_document_file.find_first(application,
                                                                            document_type.NATIONAL_DIPLOMA_RECTO),
             'international_diploma_verso':
                 mdl.application_document_file.search(application, document_type.INTERNATIONAL_DIPLOMA_VERSO),
