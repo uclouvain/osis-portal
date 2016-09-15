@@ -28,7 +28,7 @@ from django.contrib import admin
 
 
 class ApplicationAssimilationCriteriaAdmin(admin.ModelAdmin):
-    list_display = ('application', 'criteria')
+    list_display = ('application', 'criteria', 'selected')
 
 
 class ApplicationAssimilationCriteria(models.Model):
@@ -36,6 +36,7 @@ class ApplicationAssimilationCriteria(models.Model):
     criteria = models.ForeignKey('reference.AssimilationCriteria')
     additional_criteria = models.ForeignKey('reference.AssimilationCriteria', blank=True, null=True,
                                             related_name='application_additional_criteria')
+    selected = models.NullBooleanField(null=True, blank=True)
 
 
 def find_by_application(application):
@@ -64,3 +65,15 @@ def find_first(application=None, criteria=None):
         return results[0]
     return None
 
+
+def copy_from_applicant_assimilation_criteria(applicant_assimilation_criteria, application):
+    application_assimilation_criteria = ApplicationAssimilationCriteria()
+    application_assimilation_criteria.application = application
+    application_assimilation_criteria.criteria = applicant_assimilation_criteria.criteria
+    if applicant_assimilation_criteria.additional_criteria:
+        application_assimilation_criteria.additional_criteria = \
+            applicant_assimilation_criteria.additional_criteria
+    else:
+        applicant_assimilation_criteria.additional_criteria = None
+    application_assimilation_criteria.selected = applicant_assimilation_criteria.selected
+    application_assimilation_criteria.save()

@@ -917,9 +917,9 @@
 	    }
 	}
 
-    $("#bt_submit_profile").click(function(e) {
+    $("#bt_submit_profile").click(function() {
         $('#txt_message_error_profile').css('visibility', 'hidden').css('display','none');
-        if (! valid(e)){
+        if (! valid()){
             return false;
         }
         return true;

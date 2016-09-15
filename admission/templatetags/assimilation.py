@@ -33,7 +33,11 @@ register = template.Library()
 def div_visibility(applicant_assimilation_criteria, criteria_id):
     for applicant_criteria_div in applicant_assimilation_criteria:
         if applicant_criteria_div.criteria.id == criteria_id:
-            return "visibility:visible;display:block;"
+            if applicant_criteria_div.selected:
+                return "visibility:visible;display:block;"
+            else:
+                return "visibility:hidden;display:none;"
+
     return "visibility:hidden;display:none;"
 
 
@@ -66,7 +70,10 @@ def assimilation_criteria_radio(applicant_assimilation_criteria, criteria_id):
     if applicant_assimilation_criteria.exists():
         for applicant_criteria_div in applicant_assimilation_criteria:
             if applicant_criteria_div.criteria.id == criteria_id:
-                return " "
+                if not applicant_criteria_div.selected:
+                    return "checked"
+                else:
+                    return ""
         return "checked"
     return ""
 

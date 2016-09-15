@@ -28,7 +28,7 @@ from django.contrib import admin
 
 
 class ApplicantAssimilationCriteriaAdmin(admin.ModelAdmin):
-    list_display = ('applicant', 'criteria')
+    list_display = ('applicant', 'criteria', 'selected')
 
 
 class ApplicantAssimilationCriteria(models.Model):
@@ -36,6 +36,7 @@ class ApplicantAssimilationCriteria(models.Model):
     criteria = models.ForeignKey('reference.AssimilationCriteria')
     additional_criteria = models.ForeignKey('reference.AssimilationCriteria', blank=True, null=True,
                                             related_name='applicant_additional_criteria')
+    selected = models.NullBooleanField(null=True, blank=True)
 
 
 def find_by_applicant(applicant):

@@ -240,7 +240,7 @@
                                                    class="radio_assimilation_criteria"
                                                    value="true"
                                                    {% for applicant_criteria in applicant_assimilation_criteria %}
-                                                     {% if applicant_criteria.criteria.id == criteria.id %} checked {% endif %}
+                                                     {% if applicant_criteria.criteria.id == criteria.id and applicant_criteria.selected %} checked {% endif %}
                                                    {% endfor %}
                                             > {% trans 'yes' %}
                                         </label>
