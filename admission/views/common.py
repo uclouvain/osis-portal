@@ -629,10 +629,8 @@ def get_picture(request):
 def delete_previous_criteria(applicant, application):
     criteria_list = mdl.applicant_assimilation_criteria.find_by_applicant(applicant)
     for c in criteria_list:
-
         c.delete()
     if application:
         criteria_list = mdl.application_assimilation_criteria.find_by_application(application)
         for c in criteria_list:
-
             c.delete()

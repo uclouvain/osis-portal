@@ -74,6 +74,6 @@ def copy_from_applicant_assimilation_criteria(applicant_assimilation_criteria, a
         application_assimilation_criteria.additional_criteria = \
             applicant_assimilation_criteria.additional_criteria
     else:
-        applicant_assimilation_criteria.additional_criteria = None
+        application_assimilation_criteria.additional_criteria = None
     application_assimilation_criteria.selected = applicant_assimilation_criteria.selected
     application_assimilation_criteria.save()
