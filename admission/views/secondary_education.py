@@ -302,7 +302,7 @@ def diploma_save(request):
         secondary_education = mdl.secondary_education.SecondaryEducation()
         secondary_education.academic_year = mdl.academic_year.current_academic_year()
         secondary_education.person = applicant
-
+    saved = 0
     if next_step or previous_step or save_step:
         # Check if all the necessary fields have been filled
         is_valid, validation_messages, secondary_education, professional_exam, admission_exam = validate_fields_form(
@@ -316,7 +316,7 @@ def diploma_save(request):
 
         message_success = _('msg_info_saved')
         # Check if documents need to be deleted
-        documents_update(request, secondary_education, application)
+        documents_update(request, secondary_education, application, professional_exam, admission_exam)
         #
         if next_step:
             return render(request, "curriculum.html", {"application": application, "message_success": message_success})
@@ -324,10 +324,20 @@ def diploma_save(request):
             if previous_step:
                 return HttpResponseRedirect(reverse('home'))
 
-    return HttpResponseRedirect(reverse('diploma_update', args=(application.id,)))
+    return HttpResponseRedirect(reverse('diploma_update', args=(application.id, 1)))
 
 
-def diploma_update(request, application_id=None):
+def diploma_update(request, application_id=None, saved=None):
+    """
+    Called when prerequis and diplomas are displayed
+    :param request:
+    :param application_id:
+    :return:
+    """
+    if saved:
+        message_info = _('msg_info_saved')
+    else:
+        message_info = ""
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
@@ -402,7 +412,8 @@ def diploma_update(request, application_id=None):
             'admission_exam_file':
                 mdl.application_document_file.find_first(application, document_type.ADMISSION_EXAM_CERTIFICATE),
             'professional_exam_file':
-                mdl.application_document_file.find_first(application, document_type.PROFESSIONAL_EXAM_CERTIFICATE)}
+                mdl.application_document_file.find_first(application, document_type.PROFESSIONAL_EXAM_CERTIFICATE),
+            'message_info': message_info}
 
     # merge 2 dictionaries
     data.update(get_secondary_education_exams_data(secondary_education))
@@ -728,7 +739,7 @@ def secondary_education_exam_update(secondary_education, type, secondary_educati
             secondary_education_exam.delete()
 
 
-def documents_update(request, secondary_education, application):
+def documents_update(request, secondary_education, application, professional_exam, admission_exam):
     list_unwanted_files=[]
 
     if not secondary_education.diploma:
@@ -746,6 +757,10 @@ def documents_update(request, secondary_education, application):
         list_unwanted_files.append(document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO)
         list_unwanted_files.append(document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
         list_unwanted_files.append(document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO)
+    if professional_exam is None:
+        list_unwanted_files.append(document_type.PROFESSIONAL_EXAM_CERTIFICATE)
+    if admission_exam is None:
+        list_unwanted_files.append(document_type.ADMISSION_EXAM_CERTIFICATE)
     delete_documents(request, application, list_unwanted_files)
 
 
