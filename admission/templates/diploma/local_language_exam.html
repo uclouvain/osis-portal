@@ -99,11 +99,25 @@
             {% endif %}
             <br>
 
-            <button type="button" class="btn btn-default" data-toggle="modal"
-                    data-target="#pnl_upload_file_modal"
-                    title="Veuillez joindre l'attestation de réussite ou la preuve d'inscription" id="bt_upload_file_enrollment_proof">
-                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'add_success_proof_file' %}
-            </button>
+             {%if admission_exam_file%}
+                <button type="button"
+                        class="btn btn-success"
+                        title="{% trans 'modify'%} {% trans 'add_success_proof_file' %}"
+                        id="bt_load_doc_LANGUAGE_EXAM_CERTIFICATE"
+                        data-toggle="modal" data-target="#pnl_upload_documents">
+                        <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"
+                              id="spn_bt_load_doc_LANGUAGE_EXAM_CERTIFICATE"></span> {% trans 'modify' %}
+                </button>
+             {%else%}
+                <button type="button"
+                        class="btn btn-default"
+                        title="{% trans 'add'%} {% trans 'add_success_proof_file' %}"
+                        id="bt_load_doc_LANGUAGE_EXAM_CERTIFICATE"
+                        data-toggle="modal" data-target="#pnl_upload_documents">
+                        <span class="glyphicon glyphicon-upload" aria-hidden="true"
+                              id="spn_bt_load_doc_LANGUAGE_EXAM_CERTIFICATE"></span> {% trans 'add' %}
+                </button>
+             {%endif%}
         </div>
     </div>
 </div>

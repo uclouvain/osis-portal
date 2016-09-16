@@ -207,3 +207,6 @@ msgstr "Some errors prevent the tab validation"
 
 msgid "equivalence"
 msgstr "Equivalence"
+
+msgid "language_exam_certificate"
+msgstr "Language exam certificate"

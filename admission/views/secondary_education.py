@@ -302,7 +302,7 @@ def diploma_save(request):
         secondary_education = mdl.secondary_education.SecondaryEducation()
         secondary_education.academic_year = mdl.academic_year.current_academic_year()
         secondary_education.person = applicant
-    saved = 0
+
     if next_step or previous_step or save_step:
         # Check if all the necessary fields have been filled
         is_valid, validation_messages, secondary_education, professional_exam, admission_exam = validate_fields_form(
@@ -386,9 +386,9 @@ def diploma_update(request, application_id=None, saved=None):
             'tab_submission': tab_status['tab_submission'],
             'applications': mdl.application.find_by_user(request.user),
             'national_diploma_verso': mdl.application_document_file.find_first(application,
-                                                                           document_type.NATIONAL_DIPLOMA_VERSO),
+                                                                               document_type.NATIONAL_DIPLOMA_VERSO),
             'national_diploma_recto': mdl.application_document_file.find_first(application,
-                                                                           document_type.NATIONAL_DIPLOMA_RECTO),
+                                                                               document_type.NATIONAL_DIPLOMA_RECTO),
             'international_diploma_verso':
                 mdl.application_document_file.search(application, document_type.INTERNATIONAL_DIPLOMA_VERSO),
             'international_diploma_recto':
@@ -740,7 +740,7 @@ def secondary_education_exam_update(secondary_education, type, secondary_educati
 
 
 def documents_update(request, secondary_education, application, professional_exam, admission_exam):
-    list_unwanted_files=[]
+    list_unwanted_files = []
 
     if not secondary_education.diploma:
         list_unwanted_files.append(document_type.NATIONAL_DIPLOMA_RECTO)
@@ -750,9 +750,10 @@ def documents_update(request, secondary_education, application, professional_exa
     if not secondary_education.international_diploma:
         list_unwanted_files.append(document_type.INTERNATIONAL_DIPLOMA_RECTO)
         list_unwanted_files.append(document_type.INTERNATIONAL_DIPLOMA_VERSO)
-    if secondary_education.international_diploma is None or secondary_education.international_diploma !='INTERNATIONAL':
+    if secondary_education.international_diploma is None or secondary_education.international_diploma != 'INTERNATIONAL':
         list_unwanted_files.append(document_type.EQUIVALENCE)
-    if secondary_education.international_diploma_language is None or secondary_education.international_diploma_language.recognized:
+    if secondary_education.international_diploma_language is None \
+            or secondary_education.international_diploma_language.recognized:
         list_unwanted_files.append(document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO)
         list_unwanted_files.append(document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO)
         list_unwanted_files.append(document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)

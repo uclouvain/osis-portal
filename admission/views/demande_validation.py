@@ -39,6 +39,7 @@ ALERT_MANDATORY_FIELD = _('mandatory_field')
 ALERT_MANDATORY_FILE = _('mandatory_file')
 PROFESSIONAL_TYPE = 'PROFESSIONAL'
 ADMISSION_EXAM_TYPE = 'ADMISSION'
+LANGUAGE_EXAM_TYPE = 'LANGUE'
 
 
 def validate_profil(applicant, user):
@@ -242,7 +243,7 @@ def validate_diploma(application, applicant, user):
             validation_messages['PROFESSIONAL_EXAM_CERTIFICATE'] = ALERT_MANDATORY_FILE
             is_valid = False
     # language exam
-    language_exam = mdl.secondary_education_exam.find_by_type(secondary_education, LANGUAGE)
+    language_exam = mdl.secondary_education_exam.find_by_type(secondary_education, LANGUAGE_EXAM_TYPE)
     if language_exam:
         if language_exam.exam_date is None:
             validation_messages['language_exam_date'] = ALERT_MANDATORY_FIELD
