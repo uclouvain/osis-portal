@@ -37,6 +37,8 @@ from admission.models.enums import document_type
 
 ALERT_MANDATORY_FIELD = _('mandatory_field')
 ALERT_MANDATORY_FILE = _('mandatory_file')
+PROFESSIONAL_TYPE = 'PROFESSIONAL'
+ADMISSION_EXAM_TYPE = 'ADMISSION'
 
 
 def validate_profil(applicant, user):
@@ -65,7 +67,7 @@ def validate_profil(applicant, user):
                 or applicant_legal_adress.city is None \
                 or applicant_legal_adress.country is None:
             return False
-    if applicant.nationality and not applicant.nationality.european_union :
+    if applicant.nationality and not applicant.nationality.european_union:
         applicant_assimilation_criterias = mdl.applicant_assimilation_criteria.find_by_applicant(applicant)
         if not applicant_assimilation_criterias:
             return False
@@ -119,11 +121,11 @@ def validate_diploma(application, applicant, user):
                 is_valid = False
             else:
                 if secondary_education.national is True:
-                    if secondary_education.national_community  is None:
+                    if secondary_education.national_community is None:
                         validation_messages['belgian_community'] = ALERT_MANDATORY_FIELD
                         is_valid = False
                     else:
-                        if secondary_education.national_community  == 'FRENCH':
+                        if secondary_education.national_community == 'FRENCH':
                             # diploma of the French community
                             if secondary_education.academic_year.year < 1994:
                                 if secondary_education.dipl_acc_high_educ is None:
@@ -133,7 +135,7 @@ def validate_diploma(application, applicant, user):
                                     validation_messages['pnl_teaching_type'] = _('msg_error_other_education_type')
                                     is_valid = False
                         else:
-                            if secondary_education.national_community  == 'DUTCH':
+                            if secondary_education.national_community == 'DUTCH':
                                 # diploma of the Dutch community
                                 if secondary_education.academic_year.year < 1992:
                                     if secondary_education.dipl_acc_high_educ is None:
@@ -192,15 +194,37 @@ def validate_diploma(application, applicant, user):
                             if not doc.exists():
                                 validation_messages['INTERNATIONAL_DIPLOMA_VERSO'] = ALERT_MANDATORY_FILE
                                 is_valid = False
-                            doc = mdl_common.document_file.search(user, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
+                            doc = mdl_common.document_file.search(user,
+                                                                  document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
                             if not doc.exists():
                                 validation_messages['HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO'] = ALERT_MANDATORY_FILE
                                 is_valid = False
-                            doc = mdl_common.document_file.search(user, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO)
+                            doc = mdl_common.document_file.search(user,
+                                                                  document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO)
                             if not doc.exists():
                                 validation_messages['HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO'] = ALERT_MANDATORY_FILE
                                 is_valid = False
+    # admission exam validation
+    admission_exam = mdl.secondary_education_exam.find_by_type(secondary_education, ADMISSION_EXAM_TYPE)
+    if admission_exam:
+        if admission_exam.exam_date is None:
+            validation_messages['admission_exam_date'] = ALERT_MANDATORY_FIELD
+            is_valid = False
+        if admission_exam.institution is None:
+            validation_messages['admission_exam_institution'] = ALERT_MANDATORY_FIELD
+            is_valid = False
+        if admission_exam.admission_exam_type is None:
+            validation_messages['admission_exam_type'] = ALERT_MANDATORY_FIELD
+            is_valid = False
+        if admission_exam.result is None:
+            validation_messages['admission_exam_result'] = ALERT_MANDATORY_FIELD
+            is_valid = False
 
+        doc = mdl_common.document_file.search(user, document_type.ADMISSION_EXAM_CERTIFICATE)
+        if not doc.exists():
+            validation_messages['ADMISSION_EXAM_CERTIFICATE'] = ALERT_MANDATORY_FILE
+            is_valid = False
+    #
     for key, value in validation_messages.items():
         print("{} : {}.".format(key, value))
     return is_valid
