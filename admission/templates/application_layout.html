@@ -738,10 +738,11 @@
                             $('#pnl_admission_errors').append(msg_error);
                             return false;
                         }
+                        update_upload_btn_class(file, description);
                     }
 
                 });
-                update_upload_btn_class(file, description);
+                // update_upload_btn_class(file, description);
                 return true;
             }else{
                 display_existing_files(description);
