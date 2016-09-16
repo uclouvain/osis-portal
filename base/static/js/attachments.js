@@ -3,7 +3,7 @@ var maxNumberForms = 5; // Default value
 var choices = []; // list for description choices
 
 $(document).ready(function(){
-    maxNumberForms = $("#id_form-MAX_NUM_FORMS").attr("value").toString();
+    maxNumberForms = $("#id_form-MAX_NUM_FORMS").val();
     disablePlusButton();  // In case if the user has already uploaded the maximum number of attachments.
     // Adds a form when performing a click on the plus button.
     $("#button_add_form").click(function(){
