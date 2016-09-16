@@ -39,7 +39,7 @@ ALERT_MANDATORY_FIELD = _('mandatory_field')
 ALERT_MANDATORY_FILE = _('mandatory_file')
 PROFESSIONAL_TYPE = 'PROFESSIONAL'
 ADMISSION_EXAM_TYPE = 'ADMISSION'
-LANGUAGE_EXAM_TYPE = 'LANGUE'
+LANGUAGE_EXAM_TYPE = 'LANGUAGE'
 
 
 def validate_profil(applicant, user):
@@ -105,7 +105,7 @@ def validate_application(application):
     return False
 
 
-def validate_diploma(application, applicant, user):
+def validate_diploma(applicant, user):
     secondary_education = mdl.secondary_education.find_by_person(applicant)
     validation_messages = {}
     is_valid = True
@@ -260,8 +260,14 @@ def validate_diploma(application, applicant, user):
             validation_messages['LANGUAGE_EXAM_CERTIFICATE'] = ALERT_MANDATORY_FILE
             is_valid = False
     #
-    for key, value in validation_messages.items():
-        print("{} : {}.".format(key, value))
+    if secondary_education.diploma is not True \
+            and admission_exam is None \
+            and professional_exam is None \
+            and language_exam is None:
+            validation_messages['prerequisites'] = _('prerequisites_min_data')
+            is_valid = False
+    # for key, value in validation_messages.items():
+    #     print("{} : {}.".format(key, value))
     return is_valid
 
 
@@ -283,3 +289,15 @@ def validate_attachments():
 
 def validate_submission():
     return False
+
+
+def get_validation_status(application, applicant, user):
+    return {
+        "validated_profil":             validate_profil(applicant, user),
+        "validated_diploma":            validate_diploma(applicant, user),
+        "validated_curriculum":         validate_curriculum(application),
+        "validated_application":        validate_application(application),
+        "validated_accounting":         validate_accounting(),
+        "validated_sociological":       validate_sociological(),
+        "validated_attachments":        validate_attachments(),
+        "validated_submission":         validate_submission()}

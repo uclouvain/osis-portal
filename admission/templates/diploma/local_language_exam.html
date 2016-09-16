@@ -41,6 +41,7 @@
                        name="local_language_exam_date"
                        value="{{local_language_exam.exam_date | default_if_none:''|date:"j/m/Y"}}">
                 <br>
+                <span class="error" id="msg_error_local_language_exam_date"></span>
                 {%if validation_messages and validation_messages|get_item:'local_language_exam_date'%}
                     <br>
                     <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'local_language_exam_date'}}</span>
@@ -52,7 +53,7 @@
                     <input class="form-control"
                            id="txt_local_language_exam_institution"
                            name="local_language_exam_institution"
-                           value="{{ local_language_exam.institution | default_if_none:''}}">
+                           value="{{ local_language_exam.institution | default_if_none:'' }}">
                     <br>
                 </div>
                 {%if validation_messages and validation_messages|get_item:'local_language_exam_institution'%}
@@ -99,14 +100,14 @@
             {% endif %}
             <br>
 
-             {%if admission_exam_file%}
+             {%if language_exam_file %}
                 <button type="button"
                         class="btn btn-success"
                         title="{% trans 'modify'%} {% trans 'add_success_proof_file' %}"
                         id="bt_load_doc_LANGUAGE_EXAM_CERTIFICATE"
                         data-toggle="modal" data-target="#pnl_upload_documents">
                         <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"
-                              id="spn_bt_load_doc_LANGUAGE_EXAM_CERTIFICATE"></span> {% trans 'modify' %}
+                              id="spn_bt_load_doc_LANGUAGE_EXAM_CERTIFICATE"></span> {% trans 'add_success_proof_file' %} - {% trans 'modify' %}
                 </button>
              {%else%}
                 <button type="button"
@@ -115,7 +116,7 @@
                         id="bt_load_doc_LANGUAGE_EXAM_CERTIFICATE"
                         data-toggle="modal" data-target="#pnl_upload_documents">
                         <span class="glyphicon glyphicon-upload" aria-hidden="true"
-                              id="spn_bt_load_doc_LANGUAGE_EXAM_CERTIFICATE"></span> {% trans 'add' %}
+                              id="spn_bt_load_doc_LANGUAGE_EXAM_CERTIFICATE"></span> {% trans 'add_success_proof_file' %} - {% trans 'add' %}
                 </button>
              {%endif%}
         </div>

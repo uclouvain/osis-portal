@@ -198,24 +198,15 @@ def save_application_offer(request):
 
     if next_tab == "7":
         return HttpResponseRedirect(reverse('submission', args=(application.id,)))
-
-    return render(request, "admission_home.html", {
+    data = {
         'tab_active': next_tab,
         'application': application,
-        'validated_profil': demande_validation.validate_profil(applicant, request.user),
-        'validated_diploma': demande_validation.validate_diploma(
-           application, applicant, request.user),
-        'validated_curriculum': demande_validation.validate_curriculum(
-           application),
-        'validated_application': demande_validation.validate_application(
-           application),
-        'validated_accounting': demande_validation.validate_accounting(),
-        'validated_sociological': demande_validation.validate_sociological(),
-        'validated_attachments': demande_validation.validate_attachments(),
-        'validated_submission': demande_validation.validate_submission(),
         'picture': get_picture_id(request.user),
         'id_document': get_id_document(request.user),
-        'applicant': applicant})
+        'applicant': applicant
+    }
+    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    return render(request, "admission_home.html", data)
 
 
 def application_view(request, application_id):
@@ -234,33 +225,24 @@ def applications(request, application_id=None):
     else:
         application = mdl.application.init_application(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
-    return render(request, "admission_home.html", {"applications": application_list,
-                                                   "grade_choices": mdl_reference.grade_type.GRADE_CHOICES,
-                                                   "domains": mdl_reference.domain.find_all_domains(),
-                                                   'tab_active': 1,
-                                                   "application": application,
-                                                   "validated_profil": demande_validation.validate_profil(applicant,
-                                                                                                          request.user),
-                                                   "validated_diploma": demande_validation.validate_diploma(
-                                                       application, applicant, request.user),
-                                                   "validated_curriculum": demande_validation.validate_curriculum(
-                                                       application),
-                                                   "validated_application": demande_validation.validate_application(
-                                                       application),
-                                                   "validated_accounting": demande_validation.validate_accounting(),
-                                                   "validated_sociological": demande_validation.validate_sociological(),
-                                                   "validated_attachments": demande_validation.validate_attachments(),
-                                                   "validated_submission": demande_validation.validate_submission(),
-                                                   'tab_profile': tab_status['tab_profile'],
-                                                   'tab_applications': tab_status['tab_applications'],
-                                                   'tab_diploma': tab_status['tab_diploma'],
-                                                   'tab_curriculum': tab_status['tab_curriculum'],
-                                                   'tab_accounting': tab_status['tab_accounting'],
-                                                   'tab_sociological': tab_status['tab_sociological'],
-                                                   'tab_attachments': tab_status['tab_attachments'],
-                                                   'tab_submission': tab_status['tab_submission'],
-                                                   "local_language_exam_needed": is_local_language_exam_needed(
-                                                       request.user)})
+    data = {
+        'applications': application_list,
+        'grade_choices': mdl_reference.grade_type.GRADE_CHOICES,
+        'domains': mdl_reference.domain.find_all_domains(),
+        'tab_active': 1,
+        'application': application,
+        'tab_profile': tab_status['tab_profile'],
+        'tab_applications': tab_status['tab_applications'],
+        'tab_diploma': tab_status['tab_diploma'],
+        'tab_curriculum': tab_status['tab_curriculum'],
+        'tab_accounting': tab_status['tab_accounting'],
+        'tab_sociological': tab_status['tab_sociological'],
+        'tab_attachments': tab_status['tab_attachments'],
+        'tab_submission': tab_status['tab_submission'],
+        "local_language_exam_needed": is_local_language_exam_needed(request.user)
+    }
+    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    return render(request, "admission_home.html", data)
 
 
 def submission(request, application_id=None):
@@ -269,19 +251,23 @@ def submission(request, application_id=None):
     else:
         application = mdl.application.init_application(request.user)
     tab_status = tabs.init(request)
-    return render(request, "admission_home.html",
-                  {'application': application,
-                   'display_admission_exam': extra_information(request, application),
-                   'tab_active': 7,
-                   'tab_profile': tab_status['tab_profile'],
-                   'tab_applications': tab_status['tab_applications'],
-                   'tab_diploma': tab_status['tab_diploma'],
-                   'tab_curriculum': tab_status['tab_curriculum'],
-                   'tab_accounting': tab_status['tab_accounting'],
-                   'tab_sociological': tab_status['tab_sociological'],
-                   'tab_attachments': tab_status['tab_attachments'],
-                   'tab_submission': tab_status['tab_submission'],
-                   'applications': mdl.application.find_by_user(request.user)})
+    data = {
+        'application': application,
+        'display_admission_exam': extra_information(request, application),
+        'tab_active': 7,
+        'tab_profile': tab_status['tab_profile'],
+        'tab_applications': tab_status['tab_applications'],
+        'tab_diploma': tab_status['tab_diploma'],
+        'tab_curriculum': tab_status['tab_curriculum'],
+        'tab_accounting': tab_status['tab_accounting'],
+        'tab_sociological': tab_status['tab_sociological'],
+        'tab_attachments': tab_status['tab_attachments'],
+        'tab_submission': tab_status['tab_submission'],
+        'applications': mdl.application.find_by_user(request.user)
+    }
+    applicant = mdl.applicant.find_by_user(request.user)
+    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    return render(request, "admission_home.html", data)
 
 
 def application_delete(request, application_id):
@@ -296,24 +282,16 @@ def change_application_offer(request, application_id=None):
     application.save()
     application_list = mdl.application.find_by_user(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
-    return render(request, "admission_home.html", {'applications': application_list,
-                                                   "grade_choices": mdl_reference.grade_type.GRADE_CHOICES,
-                                                   "domains": mdl_reference.domain.find_all_domains(),
-                                                   'tab_active': 1,
-                                                   "first": True,
-                                                   "application": application,
-                                                   "validated_profil": demande_validation.validate_profil(applicant,
-                                                                                                          request.user),
-                                                   "validated_diploma": demande_validation.validate_diploma(
-                                                       application, applicant, request.user),
-                                                   "validated_curriculum": demande_validation.validate_curriculum(
-                                                       application),
-                                                   "validated_application": demande_validation.validate_application(
-                                                       application),
-                                                   "validated_accounting": demande_validation.validate_accounting(),
-                                                   "validated_sociological": demande_validation.validate_sociological(),
-                                                   "validated_attachments": demande_validation.validate_attachments(),
-                                                   "validated_submission": demande_validation.validate_submission()})
+    data = {
+        'applications': application_list,
+        'grade_choices': mdl_reference.grade_type.GRADE_CHOICES,
+        'domains': mdl_reference.domain.find_all_domains(),
+        'tab_active': 1,
+        'first': True,
+        'application': application,
+    }
+    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    return render(request, "admission_home.html", data)
 
 
 def is_local_language_exam_needed(user):

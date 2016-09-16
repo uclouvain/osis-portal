@@ -1374,3 +1374,6 @@ msgstr "Fichier obligatoire"
 
 msgid "equivalence"
 msgstr "Equivalence"
+
+msgid "prerequisites_min_data"
+msgstr "Vous devez au minimum avoir un diplôme d'études secondaire, un examen professionnel/d'admission/de langue française"

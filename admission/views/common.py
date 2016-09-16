@@ -344,8 +344,8 @@ def profile(request, application_id=None, message_success=None):
 
                         # Update/create application_assimilation_criteria
                         if application:
-                            application_assimilation_criteria = mdl.application_assimilation_criteria.find_first(application,
-                                                                                                             criteria)
+                            application_assimilation_criteria = mdl.application_assimilation_criteria.\
+                                find_first(application, criteria)
                             if application_assimilation_criteria is None:
                                 application_assimilation_criteria = \
                                     mdl.application_assimilation_criteria.ApplicationAssimilationCriteria()
@@ -353,7 +353,8 @@ def profile(request, application_id=None, message_success=None):
 
                             application_assimilation_criteria.criteria = criteria
                             if applicant_assimilation_criteria.additional_criteria:
-                                application_assimilation_criteria.additional_criteria = applicant_assimilation_criteria.additional_criteria
+                                application_assimilation_criteria.additional_criteria = \
+                                    applicant_assimilation_criteria.additional_criteria
                             application_assimilation_criteria.save()
 
         # documents_upload(request)
@@ -401,7 +402,7 @@ def profile(request, application_id=None, message_success=None):
     person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
 
     document_formset = UploadDocumentFileForm()
-    return render(request, "admission_home.html", {
+    data = {
         'applicant': applicant,
         'applicant_form': applicant_form,
         'countries': countries,
@@ -414,14 +415,6 @@ def profile(request, application_id=None, message_success=None):
         'institution': institution_name,
         "message_success": message_success,
         'tab_active': 0,
-        'validated_profil': demande_validation.validate_profil(applicant, request.user),
-        'validated_diploma': demande_validation.validate_diploma(application,applicant, request.user),
-        'validated_curriculum': demande_validation.validate_curriculum(application),
-        'validated_application': demande_validation.validate_application(application),
-        'validated_accounting': demande_validation.validate_accounting(),
-        'validated_sociological': demande_validation.validate_sociological(),
-        'validated_attachments': demande_validation.validate_attachments(),
-        'validated_submission': demande_validation.validate_submission(),
         'application': application,
         'tab_profile': tab_status['tab_profile'],
         'tab_applications': tab_status['tab_applications'],
@@ -437,7 +430,10 @@ def profile(request, application_id=None, message_success=None):
         'assimilation_basic_documents': assimilation_criteria_view.find_assimilation_basic_documents(),
         'assimilation_documents_existing': get_assimilation_documents_existing(request.user),
         'document_formset': document_formset,
-        'message_info': message_info})
+        'message_info': message_info
+    }
+    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    return render(request, "admission_home.html", data)
 
 
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
