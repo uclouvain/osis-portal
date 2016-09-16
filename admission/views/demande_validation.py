@@ -224,6 +224,23 @@ def validate_diploma(application, applicant, user):
         if not doc.exists():
             validation_messages['ADMISSION_EXAM_CERTIFICATE'] = ALERT_MANDATORY_FILE
             is_valid = False
+    # professional exam
+    professional_exam = mdl.secondary_education_exam.find_by_type(secondary_education, PROFESSIONAL_TYPE)
+    if professional_exam:
+        if professional_exam.exam_date is None:
+            validation_messages['professional_exam_date'] = ALERT_MANDATORY_FIELD
+            is_valid = False
+        if professional_exam.institution is None:
+            validation_messages['professional_exam_institution'] = ALERT_MANDATORY_FIELD
+            is_valid = False
+        if professional_exam.result is None:
+            validation_messages['professional_exam_result'] = ALERT_MANDATORY_FIELD
+            is_valid = False
+
+        doc = mdl_common.document_file.search(user, document_type.PROFESSIONAL_EXAM_CERTIFICATE)
+        if not doc.exists():
+            validation_messages['PROFESSIONAL_EXAM_CERTIFICATE'] = ALERT_MANDATORY_FILE
+            is_valid = False
     #
     for key, value in validation_messages.items():
         print("{} : {}.".format(key, value))
