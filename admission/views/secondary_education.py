@@ -369,7 +369,7 @@ def diploma_update(request, application_id=None, saved=None):
             "local_language_exam_needed":   is_local_language_exam_needed(request.user),
             'tab_active':                   2,
             "validated_profil":             demande_validation.validate_profil(applicant, request.user),
-            "validated_diploma":            demande_validation.validate_diploma(application),
+            "validated_diploma":            demande_validation.validate_diploma(application, applicant, request.user),
             "validated_curriculum":         demande_validation.validate_curriculum(application),
             "validated_application":        demande_validation.validate_application(application),
             "validated_accounting":         demande_validation.validate_accounting(),

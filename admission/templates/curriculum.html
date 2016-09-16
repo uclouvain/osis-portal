@@ -45,7 +45,7 @@
         <div class="col-md-6">
             <a id="lnk_previous_step_up"
                class="btn btn-default"
-               href="{%if application.id%}{% url 'diploma_update' application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
+               href="{%if application.id%}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
                onclick="save('form_curriculum');"
                title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
                 {%trans 'previous_step'%} : {%trans 'prerequisites'%}</a>
@@ -281,7 +281,7 @@
         <div class="col-md-6">
             <a id="lnk_previous_step"
                class="btn btn-default"
-               href="{%if application.id%}{% url 'diploma_update' application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
+               href="{%if application.id%}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
                onclick="save('form_curriculum');"
                title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
                 {%trans 'previous_step'%} : {%trans 'prerequisites'%}</a>

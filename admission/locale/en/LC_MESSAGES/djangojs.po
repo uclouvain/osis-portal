@@ -204,3 +204,6 @@ msgstr "Please mention a registration number"
 
 msgid "errors_validation_warning"
 msgstr "Some errors prevent the tab validation"
+
+msgid "equivalence"
+msgstr "Equivalence"

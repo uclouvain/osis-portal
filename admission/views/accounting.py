@@ -64,7 +64,7 @@ def accounting(request, application_id=None):
         "tab_active": 4,
         "applications": mdl.application.find_by_user(request.user),
         "validated_profil": demande_validation.validate_profil(applicant, request.user),
-        "validated_diploma": demande_validation.validate_diploma(application),
+        "validated_diploma": demande_validation.validate_diploma(application, applicant, request.user),
         "validated_curriculum": demande_validation.validate_curriculum(application),
         "validated_application": demande_validation.validate_application(application),
         "validated_accounting": demande_validation.validate_accounting(),

@@ -1368,3 +1368,9 @@ msgstr "Il reste des erreurs qui empêche la validation de l'onglet"
 
 msgid "no_doc"
 msgstr "Pas de document"
+
+msgid "mandatory_file"
+msgstr "Fichier obligatoire"
+
+msgid "equivalence"
+msgstr "Equivalence"

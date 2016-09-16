@@ -204,7 +204,7 @@ def save_application_offer(request):
         'application': application,
         'validated_profil': demande_validation.validate_profil(applicant, request.user),
         'validated_diploma': demande_validation.validate_diploma(
-           application),
+           application, applicant, request.user),
         'validated_curriculum': demande_validation.validate_curriculum(
            application),
         'validated_application': demande_validation.validate_application(
@@ -242,7 +242,7 @@ def applications(request, application_id=None):
                                                    "validated_profil": demande_validation.validate_profil(applicant,
                                                                                                           request.user),
                                                    "validated_diploma": demande_validation.validate_diploma(
-                                                       application),
+                                                       application, applicant, request.user),
                                                    "validated_curriculum": demande_validation.validate_curriculum(
                                                        application),
                                                    "validated_application": demande_validation.validate_application(
@@ -305,7 +305,7 @@ def change_application_offer(request, application_id=None):
                                                    "validated_profil": demande_validation.validate_profil(applicant,
                                                                                                           request.user),
                                                    "validated_diploma": demande_validation.validate_diploma(
-                                                       application),
+                                                       application, applicant, request.user),
                                                    "validated_curriculum": demande_validation.validate_curriculum(
                                                        application),
                                                    "validated_application": demande_validation.validate_application(

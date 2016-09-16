@@ -31,6 +31,12 @@ from osis_common import models as mdl_common
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from admission.views import assimilation_criteria as assimilation_criteria_view
+from django.utils.translation import ugettext_lazy as _
+from admission.models.enums import document_type
+
+
+ALERT_MANDATORY_FIELD = _('mandatory_field')
+ALERT_MANDATORY_FILE = _('mandatory_file')
 
 
 def validate_profil(applicant, user):
@@ -96,8 +102,108 @@ def validate_application(application):
     return False
 
 
-def validate_diploma(application):
-    return False
+def validate_diploma(application, applicant, user):
+    secondary_education = mdl.secondary_education.find_by_person(applicant)
+    validation_messages = {}
+    is_valid = True
+    if secondary_education:
+        if secondary_education.diploma is True:
+            if secondary_education.academic_year is None:
+                validation_messages['academic_year'] = ALERT_MANDATORY_FIELD
+                is_valid = False
+            if secondary_education.result is None:
+                validation_messages['result'] = ALERT_MANDATORY_FIELD
+                is_valid = False
+            if secondary_education.national is None:
+                validation_messages['rdb_belgian_foreign'] = ALERT_MANDATORY_FIELD
+                is_valid = False
+            else:
+                if secondary_education.national is True:
+                    if secondary_education.national_community  is None:
+                        validation_messages['belgian_community'] = ALERT_MANDATORY_FIELD
+                        is_valid = False
+                    else:
+                        if secondary_education.national_community  == 'FRENCH':
+                            # diploma of the French community
+                            if secondary_education.academic_year.year < 1994:
+                                if secondary_education.dipl_acc_high_educ is None:
+                                    validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
+                                    is_valid = False
+                            if secondary_education.education_type is None:
+                                    validation_messages['pnl_teaching_type'] = _('msg_error_other_education_type')
+                                    is_valid = False
+                        else:
+                            if secondary_education.national_community  == 'DUTCH':
+                                # diploma of the Dutch community
+                                if secondary_education.academic_year.year < 1992:
+                                    if secondary_education.dipl_acc_high_educ is None:
+                                        validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
+                                        is_valid = False
+                    if secondary_education.education_type == "FRENCH":
+                        if secondary_education.education_type is None:
+                            validation_messages['pnl_teaching_type'] = _('msg_error_education_type')
+                            is_valid = False
+
+                    if secondary_education.academic_year.year < 1994:
+                        if secondary_education.path_repetition is None:
+                            validation_messages['path_repetition'] = ALERT_MANDATORY_FIELD
+                            is_valid = False
+                        if secondary_education.path_orientation is None:
+                            validation_messages['path_reorientation'] = ALERT_MANDATORY_FIELD
+                            is_valid = False
+                    if secondary_education.national_institution is None:
+                        validation_messages['school'] = _('msg_school_name')
+                        is_valid = False
+                    doc = mdl_common.document_file.search(user, document_type.NATIONAL_DIPLOMA_RECTO)
+                    if not doc.exists():
+                        validation_messages['NATIONAL_DIPLOMA_RECTO'] = ALERT_MANDATORY_FILE
+                        is_valid = False
+                    doc = mdl_common.document_file.search(user, document_type.NATIONAL_DIPLOMA_VERSO)
+                    if not doc.exists():
+                        validation_messages['NATIONAL_DIPLOMA_VERSO'] = ALERT_MANDATORY_FILE
+                        is_valid = False
+
+                else:
+                    if secondary_education.national is False:
+                        if secondary_education.international_diploma is None:
+                            validation_messages['international_diploma'] = _('msg_error_international_diploma')
+                            is_valid = False
+                        else:
+                            if secondary_education.international_diploma == 'INTERNATIONAL':
+                                if secondary_education.international_equivalence is None:
+                                    validation_messages['international_equivalence'] = ALERT_MANDATORY_FIELD
+                                    is_valid = False
+                                else:
+                                    if secondary_education.international_equivalence == 'YES':
+                                        doc = mdl_common.document_file.search(user, document_type.EQUIVALENCE)
+                                        if not doc.exists():
+                                            validation_messages['EQUIVALENCE_FILE'] = ALERT_MANDATORY_FILE
+                                            is_valid = False
+
+                        if secondary_education.international_diploma_language is None:
+                            validation_messages['language_regime'] = _('msg_language_diploma')
+                            is_valid = False
+                        else:
+                            doc = mdl_common.document_file.search(user, document_type.INTERNATIONAL_DIPLOMA_RECTO)
+                            if not doc.exists():
+                                validation_messages['INTERNATIONAL_DIPLOMA_RECTO'] = ALERT_MANDATORY_FILE
+                                is_valid = False
+                            doc = mdl_common.document_file.search(user, document_type.INTERNATIONAL_DIPLOMA_VERSO)
+                            if not doc.exists():
+                                validation_messages['INTERNATIONAL_DIPLOMA_VERSO'] = ALERT_MANDATORY_FILE
+                                is_valid = False
+                            doc = mdl_common.document_file.search(user, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
+                            if not doc.exists():
+                                validation_messages['HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO'] = ALERT_MANDATORY_FILE
+                                is_valid = False
+                            doc = mdl_common.document_file.search(user, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO)
+                            if not doc.exists():
+                                validation_messages['HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO'] = ALERT_MANDATORY_FILE
+                                is_valid = False
+
+    for key, value in validation_messages.items():
+        print("{} : {}.".format(key, value))
+    return is_valid
 
 
 def validate_curriculum(application):
