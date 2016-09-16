@@ -739,7 +739,9 @@ def documents_update(request, secondary_education, application):
     if not secondary_education.international_diploma:
         list_unwanted_files.append(document_type.INTERNATIONAL_DIPLOMA_RECTO)
         list_unwanted_files.append(document_type.INTERNATIONAL_DIPLOMA_VERSO)
-    if secondary_education.international_diploma_language is None or not secondary_education.international_diploma_language.recognized:
+    if secondary_education.international_diploma is None or secondary_education.international_diploma !='INTERNATIONAL':
+        list_unwanted_files.append(document_type.EQUIVALENCE)
+    if secondary_education.international_diploma_language is None or secondary_education.international_diploma_language.recognized:
         list_unwanted_files.append(document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO)
         list_unwanted_files.append(document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO)
         list_unwanted_files.append(document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
