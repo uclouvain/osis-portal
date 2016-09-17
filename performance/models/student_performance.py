@@ -26,7 +26,8 @@
 import logging
 import time
 from couchbase.bucket import Bucket, NotFoundError, N1QLQuery
-from couchbase.exceptions import CouchbaseError, BucketNotFoundError, AuthError, TemporaryFailError
+from couchbase.exceptions import CouchbaseError, BucketNotFoundError, AuthError, TemporaryFailError, \
+    CouchbaseNetworkError, CouchbaseTransientError
 
 from django.conf import settings
 import re
@@ -51,7 +52,7 @@ def connect_db():
         else:
             cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name)
         return cb
-    except (BucketNotFoundError, AuthError):
+    except (BucketNotFoundError, AuthError, CouchbaseNetworkError, CouchbaseTransientError):
         return None
 
 cb = connect_db()

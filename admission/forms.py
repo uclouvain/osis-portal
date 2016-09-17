@@ -280,25 +280,23 @@ class SociologicalSurveyForm(forms.ModelForm):
         student_professional_activity = cleaned_data.get('student_professional_activity')
         student_profession = cleaned_data.get('student_profession')
 
-        if not student_profession \
-                and student_professional_activity is not None \
-                and student_professional_activity != professional_activity.NO_PROFESSION:
-            self.add_error('student_profession', _('field_is_required'))
-
-        if student_profession and (not student_professional_activity
-                                   or student_professional_activity == professional_activity.NO_PROFESSION):
-            self.add_error('student_professional_activity', _('field_is_required'))
+        if (not student_profession
+                and student_professional_activity is not None
+                and student_professional_activity != professional_activity.NO_PROFESSION) or \
+                (student_profession and (not student_professional_activity
+                                         or student_professional_activity == professional_activity.NO_PROFESSION)):
+            self.add_error('student_profession', _('profession_professionnal_activity_no_correspondance'))
+            self.add_error('student_professional_activity', '')
 
         conjoint_professional_activity = cleaned_data.get('conjoint_professional_activity')
         conjoint_profession = cleaned_data.get('conjoint_profession')
 
-        if not conjoint_profession \
-                and conjoint_professional_activity is not None \
-                and conjoint_professional_activity != professional_activity.NO_PROFESSION:
-            self.add_error('conjoint_profession', _('field_is_required'))
-
-        if conjoint_profession and (not conjoint_professional_activity
-                                    or conjoint_professional_activity == professional_activity.NO_PROFESSION):
-            self.add_error('conjoint_professional_activity', _('field_is_required'))
+        if (not conjoint_profession
+                and conjoint_professional_activity is not None
+                and conjoint_professional_activity != professional_activity.NO_PROFESSION) or \
+                (conjoint_profession and (not conjoint_professional_activity
+                                          or conjoint_professional_activity == professional_activity.NO_PROFESSION)):
+            self.add_error('conjoint_profession', _('profession_professionnal_activity_no_correspondance'))
+            self.add_error('conjoint_professional_activity', '')
 
         return cleaned_data

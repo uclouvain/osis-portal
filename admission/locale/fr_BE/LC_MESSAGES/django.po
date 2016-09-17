@@ -1368,3 +1368,6 @@ msgstr "Il reste des erreurs qui empêche la validation de l'onglet"
 
 msgid "no_doc"
 msgstr "Pas de document"
+
+msgid "profession_professionnal_activity_no_correspondance"
+msgstr "Inéquation entre la profession et l'activité professionnelle"
