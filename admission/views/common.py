@@ -611,7 +611,7 @@ class JSONResponse(HttpResponse):
 class DocumentFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = mdl_osis_common.document_file.DocumentFile
-        fields = ('file', 'file_name')
+        fields = ('file', 'file_name', 'content_type')
 
 
 def get_picture(request):

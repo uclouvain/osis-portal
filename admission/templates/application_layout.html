@@ -852,7 +852,12 @@
                     url: "/admission/picture?description="+description
                 }).then(function(data) {
                     if(data){
-                        $('#img_picture').attr('src','/admission'+data.file);
+                        if(data.content_type.startsWith('image')){
+                            $('#img_picture').attr('src','/admission'+data.file);
+                        }else{
+                           $('#img_picture').attr('src','');
+                           $('#img_picture').css('visibility', 'hidden').css('display','none');
+                        }
                     }else{
                         $('#img_picture').css('visibility', 'hidden').css('display','none');
                     }
