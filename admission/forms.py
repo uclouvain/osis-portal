@@ -33,7 +33,6 @@ from admission.models.enums import professional_activity, education
 from localflavor.generic.forms import BICFormField, IBANFormField
 from osis_common.models.document_file import DocumentFile
 from admission.models import profession as profession_mdl
-from performance.views.main import student_programs
 
 
 class NewAccountForm(forms.Form):
