@@ -88,7 +88,7 @@
 
                 </li>
                 <li class="{%if tab_active == 2 %}active{%endif%}" >
-                    <a href="{%if tab_diploma%}{%if application.id %}{% url 'diploma_update' application.id%}{%else%}{% url 'diploma_update'%}{%endif%}{%endif%}"
+                    <a href="{%if tab_diploma%}{%if application.id %}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}{%endif%}"
                        id="lnk_diploma_tab"
                        class="{%if tab_diploma%}{%else%}not-active{%endif%}">
                         {% if validated_diploma %}
@@ -738,10 +738,11 @@
                             $('#pnl_admission_errors').append(msg_error);
                             return false;
                         }
+                        update_upload_btn_class(file, description);
                     }
 
                 });
-                update_upload_btn_class(file, description);
+                // update_upload_btn_class(file, description);
                 return true;
             }else{
                 display_existing_files(description);

@@ -617,11 +617,9 @@ class DocumentFileSerializer(serializers.ModelSerializer):
 def get_picture(request):
     description = request.GET['description']
     pictures = mdl_osis_common.document_file.search(request.user, description)
-    pic = None
+
     if pictures.exists():
-        pic = pictures[0]
-    if pic:
-        serializer = DocumentFileSerializer(pic)
+        serializer = DocumentFileSerializer(pictures[0])
         return JSONResponse(serializer.data)
     return None
 
