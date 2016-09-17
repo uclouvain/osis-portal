@@ -107,7 +107,7 @@
             <select name="father_profession" id="father_profession" class="form-control" >
                 <option value="" {% if not sociological_form.father_profession %}selected{% endif %}>---------</option>
             {% for profession in sociological_form.professions %}
-                <option value="{{ profession.id }}" {% if profession.id == sociological_form.father_profession.value %} selected {% endif %}>{{ profession.name }}</option>
+                <option value="{{ profession.id }}" {% if profession.id == sociological_form.father_profession.value|add:0 %} selected {% endif %}>{{ profession.name }}</option>
             {% endfor %}
             </select>
         </div>
@@ -136,7 +136,7 @@
             <select name="mother_profession" id="mother_profession" class="form-control" >
                 <option value="" {% if not sociological_form.mother_profession %}selected{% endif %}>---------</option>
             {% for profession in sociological_form.professions %}
-                <option value="{{ profession.id }}" {% if profession.id == sociological_form.mother_profession.value %} selected {% endif %}>{{ profession.name }}</option>
+                <option value="{{ profession.id }}" {% if profession.id == sociological_form.mother_profession.value|add:0 %} selected {% endif %}>{{ profession.name }}</option>
             {% endfor %}
             </select>
         </div>
@@ -167,12 +167,12 @@
             </span>
             {% endif %}
         </div>
-        <div class="col-md-7 form-group">
+        <div class="col-md-7 form-group {% if sociological_form.student_profession.errors %}has-error{%endif%}">
             <label>{% trans 'profession'%}</label>
             <select name="student_profession" id="student_profession" class="form-control" >
                 <option value="" {% if not sociological_form.student_profession %}selected{% endif %}>---------</option>
             {% for profession in sociological_form.professions %}
-                <option value="{{ profession.id }}" {% if profession.id == sociological_form.student_profession.value %} selected {% endif %}>{{ profession.name }}</option>
+                <option value="{{ profession.id }}" {% if profession.id == sociological_form.student_profession.value|add:0 %} selected {% endif %}>{{ profession.name }}</option>
             {% endfor %}
             </select>
             {% if sociological_form.student_profession.errors %}
@@ -192,7 +192,7 @@
         <div class="col-md-12">
             <label>{% trans 'conjoint'%}</label>
         </div>
-        <div class="col-md-5 form-group">
+        <div class="col-md-5 form-group {% if sociological_form.conjoint_professional_activity.errors %}has-error{%endif%}">
             <label>{% trans 'professional_activity'%}</label>
             <select name="conjoint_professional_activity"
                     id="conjoint_professional_activity"
@@ -202,17 +202,35 @@
                     <option value="{{ activity_key }}" {% if activity_key == sociological_form.conjoint_professional_activity.value %} selected {% endif %}>{{ activity_value }}</option>
                 {% endfor %}
             </select>
+            {% if sociological_form.conjoint_professional_activity.errors %}
+                <span class="help-block">
+                <ul style="list-style-type: none">
+                    {% for error in sociological_form.conjoint_professional_activity.errors %}
+                        <li>{{ error | escape }}</li>
+                    {% endfor %}
+                </ul>
+            </span>
+            {% endif %}
         </div>
-        <div class="col-md-7 form-group">
+        <div class="col-md-7 form-group {% if sociological_form.conjoint_profession.errors %}has-error{%endif%}">
             <label>{% trans 'profession'%}</label>
             <select name="conjoint_profession"
                     id="conjoint_profession"
                     class="form-control" >
                 <option value="" {% if not sociological_form.conjoint_profession %}selected{% endif %}>---------</option>
             {% for profession in sociological_form.professions %}
-                <option value="{{ profession.id }}" {% if profession.id == sociological_form.conjoint_profession.value %} selected {% endif %}>{{ profession.name }}</option>
+                <option value="{{ profession.id }}" {% if profession.id == sociological_form.conjoint_profession.value|add:0 %} selected {% endif %}>{{ profession.name }}</option>
             {% endfor %}
             </select>
+            {% if sociological_form.conjoint_profession.errors %}
+                <span class="help-block alert alert-danger" role="alert">
+                <ul style="list-style-type: none">
+                    {% for error in sociological_form.conjoint_profession.errors %}
+                        <li>{{ error | escape }}</li>
+                    {% endfor %}
+                </ul>
+            </span>
+            {% endif %}
         </div>
     </div>
 
@@ -229,7 +247,7 @@
                     class="form-control" >
                 <option value="" {% if not sociological_form.paternal_grandfather_profession %}selected{% endif %}>---------</option>
             {% for profession in sociological_form.professions %}
-                <option value="{{ profession.id }}" {% if profession.id == sociological_form.paternal_grandfather_profession.value %} selected {% endif %}>{{ profession.name }}</option>
+                <option value="{{ profession.id }}" {% if profession.id == sociological_form.paternal_grandfather_profession.value|add:0 %} selected {% endif %}>{{ profession.name }}</option>
             {% endfor %}
             </select>
         </div>
@@ -240,7 +258,7 @@
                     class="form-control" >
                 <option value="" {% if not sociological_form.maternal_grandfather_profession %}selected{% endif %}>---------</option>
             {% for profession in sociological_form.professions %}
-                <option value="{{ profession.id }}" {% if profession.id == sociological_form.maternal_grandfather_profession.value %} selected {% endif %}>{{ profession.name }}</option>
+                <option value="{{ profession.id }}" {% if profession.id == sociological_form.maternal_grandfather_profession.value|add:0 %} selected {% endif %}>{{ profession.name }}</option>
             {% endfor %}
             </select>
         </div>
