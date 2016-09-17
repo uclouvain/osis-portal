@@ -240,7 +240,7 @@
                                                    class="radio_assimilation_criteria"
                                                    value="true"
                                                    {% for applicant_criteria in applicant_assimilation_criteria %}
-                                                     {% if applicant_criteria.criteria.id == criteria.id %} checked {% endif %}
+                                                     {% if applicant_criteria.criteria.id == criteria.id and applicant_criteria.selected %} checked {% endif %}
                                                    {% endfor %}
                                             > {% trans 'yes' %}
                                         </label>
@@ -387,7 +387,8 @@
                                                 class="btn btn-success pull-right"
                                                 title="{% trans 'change_document'%}"
                                                 data-toggle="modal"
-                                                data-target="#pnl_upload_documents">
+                                                data-target="#pnl_upload_documents"
+                                                style="margin-right:10px;">
                                             <span class="glyphicon glyphicon-ok-circle" aria-hidden="true" id="spn_modify_id_document"></span>&nbsp;{%trans 'id_document'%} upload
                                         </button>
                                 {%else%}
@@ -395,7 +396,8 @@
                                             title="{% trans 'id_add'%}"
                                             id="btn_modify_id_document"
                                             class="btn btn-default pull-right"
-                                            data-toggle="modal" data-target="#pnl_upload_documents">
+                                            data-toggle="modal" data-target="#pnl_upload_documents"
+                                            style="margin-right:10px;">
                                         <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_modify_id_document"></span>&nbsp;{%trans 'id_document'%} upload
                                     </button>
                                 {%endif%}

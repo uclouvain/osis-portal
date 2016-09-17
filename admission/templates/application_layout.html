@@ -861,7 +861,7 @@
 
             if(description == 'ID_CARD'){
                 $('#btn_modify_id_document').attr('title', gettext('change_document'));
-                $('#btn_modify_id_document').attr('class', 'btn btn-success');
+                $('#btn_modify_id_document').attr('class', 'btn btn-success pull-right');
                 $('#spn_modify_id_document').attr('class', 'glyphicon glyphicon-ok-circle');
             }
 
@@ -892,7 +892,7 @@
 
             if(description == 'ID_CARD'){
                 $('#btn_modify_id_document').attr('title', gettext('add_document'));
-                $('#btn_modify_id_document').attr('class', 'btn');
+                $('#btn_modify_id_document').attr('class', 'btn btn-default pull-right');
                 $('#spn_modify_id_document').attr('class', 'glyphicon glyphicon-upload');
             }
 
@@ -918,9 +918,9 @@
 	    }
 	}
 
-    $("#bt_submit_profile").click(function(e) {
+    $("#bt_submit_profile").click(function() {
         $('#txt_message_error_profile').css('visibility', 'hidden').css('display','none');
-        if (! valid(e)){
+        if (! valid()){
             return false;
         }
         return true;
