@@ -49,15 +49,17 @@ from rest_framework import serializers
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
 def home(request):
     applicant = mdl.applicant.find_by_user(request.user)
-
+    same_addresses = True
+    person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
+    person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
+    if person_contact_address:
+        same_addresses = False
     if applicant and applicant.gender:
         if applicant.language:
             user_language = applicant.language
             translation.activate(user_language)
             request.session[translation.LANGUAGE_SESSION_KEY] = user_language
         applications = mdl.application.find_by_user(request.user)
-        person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
-        person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
         if applications:
             applicant_form = ApplicantForm()
 
@@ -93,7 +95,8 @@ def home(request):
                 'assimilationCriteria': assimilation_criteria,
                 'applicant_assimilation_criteria': applicant_assimilation_criteria,
                 'assimilation_basic_documents': assimilation_criteria_view.find_assimilation_basic_documents(),
-                'assimilation_documents_existing': get_assimilation_documents_existing(request.user)})
+                'assimilation_documents_existing': get_assimilation_documents_existing(request.user),
+                'same_addresses': same_addresses,})
 
     else:
         return profile(request)
@@ -437,7 +440,7 @@ def profile(request, application_id=None, message_success=None):
         'same_addresses': same_addresses,
         'previous_enrollment': previous_enrollment,
         'institution': institution_name,
-        "message_success": message_success,
+        'message_success': message_success,
         'tab_active': 0,
         'validated_profil': demande_validation.validate_profil(applicant, request.user),
         'validated_diploma': demande_validation.validate_diploma(application),

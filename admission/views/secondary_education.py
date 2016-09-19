@@ -84,7 +84,7 @@ def validate_fields_form(request, secondary_education, next_step):
                                 if request.POST.get('dipl_acc_high_educ') is None:
                                     validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
                                     is_valid = False
-                            if request.POST.get('chb_other_education') == 'on':
+                            if request.POST.get('other_education') == 'on':
                                 if request.POST.get('other_education_type') is None:
                                     validation_messages['pnl_teaching_type'] = _('msg_error_other_education_type')
                                     is_valid = False
@@ -323,8 +323,11 @@ def diploma_save(request):
         else:
             if previous_step:
                 return HttpResponseRedirect(reverse('home'))
+    app_id = None
+    if application:
+        app_id = application.id
 
-    return HttpResponseRedirect(reverse('diploma_update', args=(application.id, 1)))
+    return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': app_id, 'saved': 1}))
 
 
 def diploma_update(request, application_id=None, saved=None):

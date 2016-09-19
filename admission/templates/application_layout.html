@@ -41,9 +41,10 @@
     <br>
 
     <br>
-    <input type="hidden" id="hdn_tab_active" value="{{tab_active}}" title="active tab">
-
-    <input type="hidden" value="{{application.id | default_if_none:''}}" id="hdn_current_application_id" name="application_id" title="application_id" >
+    <form id="form_application_layout">
+        <input type="hidden" id="hdn_tab_active" value="{{tab_active}}" title="active tab">
+        <input type="hidden" value="{{application.id | default_if_none:''}}" id="hdn_current_application_id" name="application_id" title="application_id" >
+    </form>
     <div class="row">
         <div class="col-md-2">
             {% if applications%}<a href="{%url 'home'%}">{% trans 'back_demandes_list'%}</a>{%endif%}
@@ -182,7 +183,6 @@
     </div>
 
     <br>
-    <input type="hidden" id="hdn_pushed" />
 
 {% endblock %}
 
@@ -240,7 +240,11 @@
 
     function save(form_to_submit){
         var id = 'form#' + form_to_submit;
-        $(id).submit();
+        $.ajax({
+            url: $(id).attr('action'), // Le nom du fichier indiqué dans le formulaire
+            type: $(id).attr('method'), // La méthode indiquée dans le formulaire (get ou post)
+            data: $(id).serialize(), // Je sérialise les données (j'envoie toutes les valeurs présentes dans le formulaire)
+        });
     }
 
     $("#lnk_profil_next_step").click(function() {
@@ -669,7 +673,6 @@
         $('#hdn_description').val(description);
         $('#lbl_description_label').text(gettext(description.toLowerCase()));
         $('#txt_file').val('');
-        $('#hdn_pushed').val(elt.attr("id"));
     }
 
     $("#txt_file").on("change", function(){

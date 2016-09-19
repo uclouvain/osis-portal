@@ -54,6 +54,7 @@ def profile_confirmed(request):
 
 
 def save_application_offer(request):
+    print('save_application_offer')
     next_tab = None
     application = None
 
@@ -98,6 +99,7 @@ def save_application_offer(request):
             else:
                 application.valuation_possible = False
         if request.POST.get('rdb_offer_samestudies'):
+            print(request.POST.get('rdb_offer_samestudies'))
             if request.POST.get('rdb_offer_samestudies') == "true":
                 application.started_similar_studies = True
             else:
@@ -170,12 +172,12 @@ def save_application_offer(request):
 
     if next_tab == "0":
         return HttpResponseRedirect(reverse('profile', args=(application.id,)))
-
+    print(next_tab)
     if next_tab == "1":
         return HttpResponseRedirect(reverse('applications', args=(application.id,)))
 
     if next_tab == "2":
-        return HttpResponseRedirect(reverse('diploma_update', args=(application.id,)))
+        return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': application.id, 'saved': None}))
 
     if next_tab == "3":
         return HttpResponseRedirect(reverse('curriculum_update', args=(application.id,)))
