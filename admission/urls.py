@@ -50,8 +50,7 @@ urlpatterns = [
     url(r'^admission/application/diploma/save/$', secondary_education.diploma_save, name='diploma'),
     url(r'^admission/curriculum/save/$', curriculum.save, name='curriculum'),
     url(r'^admission/curriculum/update/(?:([0-9]+)/)?$', curriculum.update, name='curriculum_update'),
-    url(r'^admission/diploma/update(?:/(?P<application_id>[0-9]+))?(?:/(?P<saved>[0-9]+))?/$',
-        secondary_education.diploma_update, name='diploma_update'),
+    url(r'^admission/diploma/update(?:/(?P<application_id>[0-9]+))?(?:/(?P<saved>[0-9]+))?/$', secondary_education.diploma_update, name='diploma_update'),
 
 
     url(r'^admission/offer/$', offer.offer_selection, name='offer_selection'),

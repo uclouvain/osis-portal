@@ -88,7 +88,7 @@
 
                 </li>
                 <li class="{%if tab_active == 2 %}active{%endif%}" >
-                    <a href="{%if tab_diploma%}{%if application.id %}{% url 'diploma_update' application.id%}{%else%}{% url 'diploma_update'%}{%endif%}{%endif%}"
+                    <a href="{%if tab_diploma%}{%if application.id %}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}{%endif%}"
                        id="lnk_diploma_tab"
                        class="{%if tab_diploma%}{%else%}not-active{%endif%}">
                         {% if validated_diploma %}
@@ -738,10 +738,11 @@
                             $('#pnl_admission_errors').append(msg_error);
                             return false;
                         }
+                        update_upload_btn_class(file, description);
                     }
 
                 });
-                update_upload_btn_class(file, description);
+                // update_upload_btn_class(file, description);
                 return true;
             }else{
                 display_existing_files(description);
@@ -851,7 +852,12 @@
                     url: "/admission/picture?description="+description
                 }).then(function(data) {
                     if(data){
-                        $('#img_picture').attr('src','/admission'+data.file);
+                        if(data.content_type.startsWith('image')){
+                            $('#img_picture').attr('src','/admission'+data.file);
+                        }else{
+                           $('#img_picture').attr('src','');
+                           $('#img_picture').css('visibility', 'hidden').css('display','none');
+                        }
                     }else{
                         $('#img_picture').css('visibility', 'hidden').css('display','none');
                     }
@@ -860,7 +866,7 @@
 
             if(description == 'ID_CARD'){
                 $('#btn_modify_id_document').attr('title', gettext('change_document'));
-                $('#btn_modify_id_document').attr('class', 'btn btn-success');
+                $('#btn_modify_id_document').attr('class', 'btn btn-success pull-right');
                 $('#spn_modify_id_document').attr('class', 'glyphicon glyphicon-ok-circle');
             }
 
@@ -891,7 +897,7 @@
 
             if(description == 'ID_CARD'){
                 $('#btn_modify_id_document').attr('title', gettext('add_document'));
-                $('#btn_modify_id_document').attr('class', 'btn');
+                $('#btn_modify_id_document').attr('class', 'btn btn-default pull-right');
                 $('#spn_modify_id_document').attr('class', 'glyphicon glyphicon-upload');
             }
 
@@ -917,9 +923,9 @@
 	    }
 	}
 
-    $("#bt_submit_profile").click(function(e) {
+    $("#bt_submit_profile").click(function() {
         $('#txt_message_error_profile').css('visibility', 'hidden').css('display','none');
-        if (! valid(e)){
+        if (! valid()){
             return false;
         }
         return true;
