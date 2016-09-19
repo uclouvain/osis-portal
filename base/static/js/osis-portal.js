@@ -1225,6 +1225,7 @@ function display_dynamic_form(offer_year_id){
                                        .attr("id","txt_answer_question_"+value.option_id)
                                        .attr("placeholder", value.option_value)
                                        .attr("title",value.option_description)
+                                       .attr("value",value.answer)
                                        .prop("required",value.question_required));
                     if(value.question_description != ""){
                         $('#pnl_questions').append($("<label></label>")
@@ -1245,6 +1246,7 @@ function display_dynamic_form(offer_year_id){
                                        .attr("id","txt_answer_question_2"+value.option_id)
                                        .attr("placeholder", value.option_label)
                                        .attr("title",value.option_description)
+                                       .attr("value",value.answer)
                                        .prop("required",value.question_required));
                     if(value.question_description != ""){
                         $('#pnl_questions').append($("<label></label>")

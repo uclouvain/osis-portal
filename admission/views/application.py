@@ -242,7 +242,6 @@ def applications(request, application_id=None):
     else:
         application = mdl.application.init_application(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
-    answers = mdl.answer.find_by_application(application_id)
     return render(request, "admission_home.html", {"applications": application_list,
                                                    "grade_choices": mdl_reference.grade_type.GRADE_CHOICES,
                                                    "domains": mdl_reference.domain.find_all_domains(),
@@ -269,8 +268,7 @@ def applications(request, application_id=None):
                                                    'tab_attachments': tab_status['tab_attachments'],
                                                    'tab_submission': tab_status['tab_submission'],
                                                    "local_language_exam_needed": is_local_language_exam_needed(
-                                                       request.user),
-                                                   "answers": answers})
+                                                       request.user)})
 
 
 def submission(request, application_id=None):
