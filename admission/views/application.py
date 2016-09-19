@@ -25,19 +25,14 @@
 #
 ##############################################################################
 from admission import models as mdl
+from admission.models.answer import find_by_option, find_by_id
 from django.shortcuts import render, get_object_or_404
 from reference import models as mdl_reference
-
-from datetime import datetime
-from admission.views.common import home, get_picture_id, get_id_document
-from functools import cmp_to_key
-import locale
-from django.utils.translation import ugettext_lazy as _
+from admission.views.common import get_picture_id, get_id_document
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from admission.views.common import extra_information
 from admission.views import demande_validation
-from admission.views import tabs
 from admission.views import tabs
 
 
@@ -138,34 +133,54 @@ def save_application_offer(request):
         # answer_question_
         for key, value in request.POST.items():
             if "txt_answer_question_" in key:
+                # INPUT OR LABEL
+                option_id = key.replace("txt_answer_question_", "")
+                asw = find_by_option(option_id)
+                if not asw:
+                    answer = mdl.answer.Answer()
+                    answer.application = application
+                    answer.option = mdl.option.find_by_id(int(option_id))
+                    answer.value = value
+                else:
+                    answer = find_by_id(asw)
+                    answer.value = value
+                answer.save()
+            if "txt_answer_radio_" in key:
+                # RADIO_BUTTON
+                option_id = request.POST[key]
+                option = mdl.option.find_by_id(int(option_id))
+                options = mdl.option.find_options_by_question_id(option.question.id)
+                if options:
+                    for opt in options:
+                        asw = mdl.answer.find_by_option(opt.id)
+                        asw.delete()
+                    answer = mdl.answer.Answer()
+                    answer.application = application
+                    answer.option = option
+                    answer.value = option.value
+                    answer.save()
+            if "txt_answer_checkbox_" in key:
+                # CHECK_BOX
+                option_id = request.POST[key]
+                option = mdl.option.find_by_id(int(option_id))
                 answer = mdl.answer.Answer()
                 answer.application = application
-                answer.value = value
-                # as it's txt_answer we know that it's there is only one option available,
-                # (SHORT_INPUT_TEXT, LONG_INPUT_TEXT)
-                option_id = key.replace("txt_answer_question_", "")
-                answer.option = mdl.option.find_by_id(int(option_id))
+                answer.option = option
+                answer.value = option.value
                 answer.save()
-            else:
-                if "txt_answer_radio_chck_optid_" in key:
-
-                    # RADIO_BUTTON
-                    if "on" == value:
-                        answer = mdl.answer.Answer()
-                        answer.application = application
-                        option_id = key.replace("txt_answer_radio_chck_optid_", "")
-                        option = mdl.option.find_by_id(int(option_id))
-                        answer.option = option
-                        answer.value = option.value
-                        answer.save()
+            if "slt_question_" in key:
+                # DROPDOWN_LIST
+                option_id = key.replace("slt_question_", "")
+                asw = find_by_option(option_id)
+                if not asw:
+                    answer = mdl.answer.Answer()
+                    answer.application = application
+                    answer.option = mdl.option.find_by_id(int(option_id))
+                    answer.value = value
                 else:
-                    if "slt_question_" in key:
-                        answer = mdl.answer.Answer()
-                        answer.application = application
-                        option = mdl.option.find_by_id(value)
-                        answer.option = option
-                        answer.value = option.value
-                        answer.save()
+                    answer = find_by_id(asw)
+                    answer.value = value
+                answer.save()
     applicant = mdl.applicant.find_by_user(request.user)
 
     if next_tab == "0":
@@ -227,6 +242,7 @@ def applications(request, application_id=None):
     else:
         application = mdl.application.init_application(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
+    answers = mdl.answer.find_by_application(application_id)
     return render(request, "admission_home.html", {"applications": application_list,
                                                    "grade_choices": mdl_reference.grade_type.GRADE_CHOICES,
                                                    "domains": mdl_reference.domain.find_all_domains(),
@@ -253,7 +269,8 @@ def applications(request, application_id=None):
                                                    'tab_attachments': tab_status['tab_attachments'],
                                                    'tab_submission': tab_status['tab_submission'],
                                                    "local_language_exam_needed": is_local_language_exam_needed(
-                                                       request.user)})
+                                                       request.user),
+                                                   "answers": answers})
 
 
 def submission(request, application_id=None):

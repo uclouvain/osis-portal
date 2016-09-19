@@ -44,3 +44,11 @@ class Answer(models.Model):
 
 def find_by_application(application_id):
     return Answer.objects.filter(application=application_id)
+
+
+def find_by_option(option_id):
+    return Answer.objects.filter(option=option_id)
+
+
+def find_by_id(answer_id):
+    return Answer.objects.get(id=answer_id)
