@@ -260,7 +260,7 @@ def validate_diploma(applicant, user):
             validation_messages['LANGUAGE_EXAM_CERTIFICATE'] = ALERT_MANDATORY_FILE
             is_valid = False
     #
-    if secondary_education.diploma is not True \
+    if (secondary_education is not None and secondary_education.diploma is not True) \
             and admission_exam is None \
             and professional_exam is None \
             and language_exam is None:
