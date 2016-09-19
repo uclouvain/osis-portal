@@ -78,27 +78,27 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='offer',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='offerenrollment',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='person',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='student',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='tutor',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AlterField(
             model_name='offerenrollment',
