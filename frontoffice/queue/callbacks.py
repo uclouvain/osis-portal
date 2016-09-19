@@ -29,6 +29,4 @@ from django.core import serializers
 def insert_or_update(json_data):
     instances = serializers.deserialize('json', json_data, ignorenonexistent=True)
     for instance in instances:
-        # for i in range(0, 99999999):
-        #     k = i + 2
         super(instance.object.__class__, instance.object).save()

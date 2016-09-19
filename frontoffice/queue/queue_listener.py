@@ -71,18 +71,13 @@ class ScoresSheetClient(object):
         return self.response
 
 
-def listen_queue_test(queue_name, callback):
-    thread = SynchronousConsumerThread(queue_name, callback)
-    thread.daemon = True
-    thread.start()
-
-
 class SynchronousConsumerThread(threading.Thread):
     def __init__(self, queue_name, callback, *args, **kwargs):
         super(SynchronousConsumerThread, self).__init__(*args, **kwargs)
 
         self._queue_name = queue_name
         self.callback = callback
+        self.daemon = True
 
     def run(self):
         listen_queue_synchronously(self._queue_name, self.callback)
@@ -100,7 +95,12 @@ def listen_queue_synchronously(queue_name, callback):
                                                                    QUEUE_CONTEXT_ROOT,
                                                                    credentials))
     channel = connection.channel()
-    channel.queue_declare(queue=queue_name, durable=True, exclusive=False, auto_delete=False)
+    channel.queue_declare(queue=queue_name,
+                          # durable=True,
+                          # exclusive=False,
+                          # auto_delete=False,
+                          )
+    # channel.basic_qos(prefetch_count=1)
     channel.basic_consume(on_message, queue_name)
     try:
         channel.start_consuming()
