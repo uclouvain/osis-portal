@@ -197,8 +197,7 @@
                     <label>{% trans 'other_education_type' %}</label>
                       <input type="checkbox"
                              id="chb_other_education"
-                             name="other_education"
-                             onclick="disabled_field('txt_other_education_type',this);reset_rdb('rdb_education_transition_type');reset_rdb('rdb_education_technic_type');">
+                             name="other_education">
                 </div>
                 <div >
                     <div class="col-md-8">
@@ -330,7 +329,7 @@
             {%endif%}
 
             &nbsp;&nbsp;
-            {%if national_diploma_verso%}
+            {%if national_diploma_verso %}
                 <button type="button" class="btn btn-success"
                         title="{% trans 'modify'%} : {% trans 'high_school_diploma'%} - {% trans 'verso'%}"
                         id="bt_load_doc_NATIONAL_DIPLOMA_VERSO"

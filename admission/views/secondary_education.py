@@ -93,6 +93,7 @@ def validate_fields_form(request, secondary_education, next_step):
                                     new_education_type.adhoc = True
                                     new_education_type.name = request.POST.get('other_education_type')
                                     new_education_type.type = 'ANOTHER'
+                                    new_education_type.save()
                                     secondary_education.education_type = new_education_type
 
                         else:
@@ -389,9 +390,9 @@ def diploma_update(request, application_id=None, saved=None):
             'tab_submission': tab_status['tab_submission'],
             'applications': mdl.application.find_by_user(request.user),
             'national_diploma_verso': mdl.application_document_file.find_first(application,
-                                                                           document_type.NATIONAL_DIPLOMA_VERSO),
+                                                                               document_type.NATIONAL_DIPLOMA_VERSO),
             'national_diploma_recto': mdl.application_document_file.find_first(application,
-                                                                           document_type.NATIONAL_DIPLOMA_RECTO),
+                                                                               document_type.NATIONAL_DIPLOMA_RECTO),
             'international_diploma_verso':
                 mdl.application_document_file.search(application, document_type.INTERNATIONAL_DIPLOMA_VERSO),
             'international_diploma_recto':
@@ -637,7 +638,7 @@ def populate_secondary_education(request, secondary_education):
                         .find_by_id(int(request.POST.get('school')))
                     secondary_education.national_institution = national_institution
 
-            if request.POST.get('chb_other_education') == 'on':
+            if request.POST.get('other_education') == 'on':
                 existing_education_type = mdl_reference.education_type\
                     .find_by_name(request.POST.get('other_education_type'))
                 if existing_education_type:

@@ -236,6 +236,12 @@
         {% else %}
             choices = [];
         {% endif %}
+
+        $("#pnl_existing_files").on('click', '#bt_delete_document_file', function () {
+            // needed otherwise the click event isn't handled
+            click_bt_delete_document_file();
+        });
+
     });
 
     function save(form_to_submit){
@@ -640,10 +646,6 @@
             }
         }
 
-        if(id=='bt_delete_document_file'){
-            e.preventDefault(); // if you want to cancel the event flow
-            click_bt_delete_document_file();
-        }
     });
 
     $("#slt_criteria_5").change(function(event) {
@@ -793,13 +795,12 @@
                     $('#pnl_existing_files').append($("<a></a>").attr("href", url)
                                                                 .attr("target","_blank")
                                                                 .append(value.file_name));
-                    var url = build_url('upload/delete/', value.id);
+                    //var url = build_url('upload/delete/', value.id);
                     var bt = jQuery('<input  id="hdn_delete_document_file" type="hidden" value="'+value.id+'">');
                     $('#pnl_existing_files').append(bt);
                     $('#pnl_existing_files').append('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
                     bt = jQuery('<button type="submit" id="bt_delete_document_file" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-trash"></span></button>');
                     $('#pnl_existing_files').append(bt);
-
                 });
             }
         });
@@ -937,6 +938,10 @@
     $("#rd_previous_enrollment_false").click(function() {
         $('#txt_registration_id').val('');
         $('#txt_last_academic_year').val('');
+    });
+    $("#field").click(function() {
+        alert('iii');
+
     });
 
     </script>
