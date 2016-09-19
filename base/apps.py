@@ -37,7 +37,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 class BaseConfig(AppConfig):
     name = 'base'
     queue_name = 'osis_base'
-    queue_for_migration = 'osis_portal_test' # Data from Osis to insert/update in Osis-portal
+    queue_for_migration = 'osis_portal' # Data from Osis to insert/update in Osis-portal
 
     def ready(self):
         try:
