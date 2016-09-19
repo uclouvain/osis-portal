@@ -53,6 +53,9 @@ admin.site.register(curriculum.Curriculum,
 admin.site.register(form.Form,
                     form.FormAdmin)
 
+admin.site.register(offer_year_domain.OfferYearDomain,
+                    offer_year_domain.OfferYearDomainAdmin)
+
 admin.site.register(option.Option,
                     option.OptionAdmin)
 

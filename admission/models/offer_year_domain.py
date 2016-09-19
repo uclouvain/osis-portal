@@ -1,3 +1,4 @@
+
 ##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
@@ -23,12 +24,21 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.core import serializers
+from django.db import models
+from django.contrib import admin
 
 
-def insert_or_update(json_data):
-    instances = serializers.deserialize('json', json_data, ignorenonexistent=True)
-    for instance in instances:
-        # for i in range(0, 99999999):
-        #     k = i + 2
-        super(instance.object.__class__, instance.object).save()
+class OfferYearDomainAdmin(admin.ModelAdmin):
+    list_display = ('domain', 'offer_year')
+    fieldsets = ((None, {'fields': ('domain', 'offer_year')}),)
+    raw_id_fields = ('domain', 'offer_year')
+    search_fields = ['domain__name', 'offer_year__acronym']
+
+
+class OfferYearDomain(models.Model):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
+    domain = models.ForeignKey('reference.Domain', blank=True, null=True)
+    offer_year = models.ForeignKey('base.OfferYear', blank=True, null=True)
+
+    def __str__(self):
+        return u"%s - %s" % (self.domain, self.offer_year)

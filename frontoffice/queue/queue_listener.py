@@ -71,6 +71,44 @@ class ScoresSheetClient(object):
         return self.response
 
 
+def listen_queue_test(queue_name, callback):
+    thread = SynchronousConsumerThread(queue_name, callback)
+    thread.daemon = True
+    thread.start()
+
+
+class SynchronousConsumerThread(threading.Thread):
+    def __init__(self, queue_name, callback, *args, **kwargs):
+        super(SynchronousConsumerThread, self).__init__(*args, **kwargs)
+
+        self._queue_name = queue_name
+        self.callback = callback
+
+    def run(self):
+        listen_queue_synchronously(self._queue_name, self.callback)
+
+
+def listen_queue_synchronously(queue_name, callback):
+
+    def on_message(channel, method_frame, header_frame, body):
+        callback(body)
+        channel.basic_ack(delivery_tag=method_frame.delivery_tag)
+
+    credentials = pika.PlainCredentials(QUEUE_USER, QUEUE_PASSWORD)
+    connection = pika.BlockingConnection(pika.ConnectionParameters(QUEUE_URL,
+                                                                   QUEUE_PORT,
+                                                                   QUEUE_CONTEXT_ROOT,
+                                                                   credentials))
+    channel = connection.channel()
+    channel.queue_declare(queue=queue_name, durable=True, exclusive=False, auto_delete=False)
+    channel.basic_consume(on_message, queue_name)
+    try:
+        channel.start_consuming()
+    except KeyboardInterrupt:
+        channel.stop_consuming()
+    connection.close()
+
+
 def listen_queue(queue_name, callback):
     """
     Create a thread in which a queue is created (from the queue name passed in parameter) and listened.

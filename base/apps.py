@@ -47,7 +47,7 @@ class BaseConfig(AppConfig):
         # if following exception is thrown ; django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
         # ===> This exception says that there is an error anywhere in the implementation of method ready(self) !
         queue_listener.listen_queue(self.queue_name, insert)
-        queue_listener.listen_queue(self.queue_for_migration, callbacks.insert_or_update)
+        queue_listener.listen_queue_test(self.queue_for_migration, callbacks.insert_or_update)
 
 
 def insert(json_data):
