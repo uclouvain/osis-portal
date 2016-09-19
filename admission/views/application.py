@@ -128,16 +128,9 @@ def save_application_offer(request):
         applicant_assimilation_criteria_list = mdl.applicant_assimilation_criteria.\
             find_by_applicant(application.applicant)
         for applicant_assimilation_criteria in applicant_assimilation_criteria_list:
-            application_assimilation_criteria = mdl.application_assimilation_criteria.ApplicationAssimilationCriteria()
-            application_assimilation_criteria.application = application
-            application_assimilation_criteria.criteria = applicant_assimilation_criteria.criteria
-            if applicant_assimilation_criteria.additional_criteria:
-                application_assimilation_criteria.additional_criteria = \
-                    applicant_assimilation_criteria.additional_criteria
-            else:
-                applicant_assimilation_criteria.additional_criteria = None
-            application_assimilation_criteria.save()
-
+            # Copy the applicant_assimilation_criteria
+            mdl.application_assimilation_criteria.\
+                copy_from_applicant_assimilation_criteria(applicant_assimilation_criteria, application)
         # answer_question_
         for key, value in request.POST.items():
             if "txt_answer_question_" in key:
