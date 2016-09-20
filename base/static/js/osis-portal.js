@@ -1382,44 +1382,58 @@ function display_dynamic_form(offer_year_id){
                 if(value.question_type=='CHECKBOX'){
                     if(value.option_order == 1){
                         $('#pnl_questions').append("<br>");
-                        $('#pnl_questions').append("<br>");
                         $('#pnl_questions').append($("<label></label>")
                                            .append(value.question_label)
                                            .attr("id","lbl_question_"+value.question_id));
                         $('#pnl_questions').append("<br>");
-                        if (value.question_required ){
+                    }
+                    if(value.question_required){
+                        if(value.option_value == value.answer){
+                            $('#pnl_questions').append("<br>");
+                            $('#pnl_questions').append($("<label></label>")
+                                               .append($("<input>")
+                                               .prop("checked", "checked")
+                                               .attr("type","checkbox")
+                                               .attr("name","txt_answer_checkbox_"+value.option_id)
+                                               .attr("id","txt_answer_checkbox_"+value.option_id))
+                                               .append("&nbsp;&nbsp;"+value.option_label)
+                                               .prop("required",value.question_required));
+                        }else{
+                            $('#pnl_questions').append("<br>");
                             $('#pnl_questions').append($("<label></label>")
                                                .append($("<input>")
                                                .attr("type","checkbox")
-                                               .attr("value",value.option_id)
+                                               .attr("name","txt_answer_checkbox_"+value.option_id)
+                                               .attr("id","txt_answer_checkbox_"+value.option_id))
+                                               .append("&nbsp;&nbsp;"+value.option_label)
+                                               .prop("required",value.question_required));
+                        }
+                    }else{
+                        if(value.option_value == value.answer){
+                            $('#pnl_questions').append("<br>");
+                            $('#pnl_questions').append($("<label></label>")
+                                               .append($("<input>")
+                                               .prop("checked", "checked")
+                                               .attr("type","checkbox")
                                                .attr("name","txt_answer_checkbox_"+value.option_id)
                                                .attr("id","txt_answer_checkbox_"+value.option_id))
                                                .append("&nbsp;&nbsp;"+value.option_label));
                         }else{
+                            $('#pnl_questions').append("<br>");
                             $('#pnl_questions').append($("<label></label>")
                                                .append($("<input>")
                                                .attr("type","checkbox")
-                                               .attr("value",value.option_id)
-                                               .attr("name","txt_answer_checkbox_"+value.option_id))
-                                               .attr("id","txt_answer_checkbox_"+value.option_id)
+                                               .attr("name","txt_answer_checkbox_"+value.option_id)
+                                               .attr("id","txt_answer_checkbox_"+value.option_id))
                                                .append("&nbsp;&nbsp;"+value.option_label));
                         }
-                    }else{
+                    }
+                   if(value.option_order == value.options_max_number && value.question_description != ""){
                         $('#pnl_questions').append("<br>");
-                        $('#pnl_questions').append($("<label></label>")
-                                           .append($("<input>")
-                                           .attr("type","checkbox")
-                                           .attr("value",value.option_id)
-                                           .attr("name","txt_answer_checkbox_"+value.option_id)
-                                           .attr("id","txt_answer_checkbox_"+value.option_id))
-                                           .append("&nbsp;&nbsp;"+value.option_label));
-                    }
-                    if(value.option_order == value.options_max_number && value.question_description != ""){
-                            $('#pnl_questions').append("<br>");
-                            $('#pnl_questions').append($("<label></label>").append(value.question_description)
-                                               .attr("id","lbl_question_description_"+value.option_id)
-                                               .attr("class","description"));
-                    }
+                        $('#pnl_questions').append($("<label></label>").append(value.question_description)
+                                           .attr("id","lbl_question_description_"+value.option_id)
+                                           .attr("class","description"));
+                   }
                 }
                 if(value.question_type=='DROPDOWN_LIST'){
                     if(value.option_order == 1){

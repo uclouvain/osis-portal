@@ -25,7 +25,7 @@
 #
 ##############################################################################
 from admission import models as mdl
-from admission.models.answer import find_by_option, find_by_id
+from admission.models.answer import find_by_option, find_by_id, find_by_application
 from django.shortcuts import render, get_object_or_404
 from reference import models as mdl_reference
 from admission.views.common import get_picture_id, get_id_document
@@ -130,7 +130,11 @@ def save_application_offer(request):
             # Copy the applicant_assimilation_criteria
             mdl.application_assimilation_criteria.\
                 copy_from_applicant_assimilation_criteria(applicant_assimilation_criteria, application)
+
         # answer_question_
+        answers = find_by_application(application_id)
+        for answer in answers:
+            answer.delete()
         for key, value in request.POST.items():
             if "txt_answer_question_" in key:
                 # INPUT OR LABEL
@@ -161,13 +165,14 @@ def save_application_offer(request):
                     answer.save()
             if "txt_answer_checkbox_" in key:
                 # CHECK_BOX
-                option_id = request.POST[key]
-                option = mdl.option.find_by_id(int(option_id))
-                answer = mdl.answer.Answer()
-                answer.application = application
-                answer.option = option
-                answer.value = option.value
-                answer.save()
+                if "on" == value:
+                    answer = mdl.answer.Answer()
+                    answer.application = application
+                    option_id = key.replace("txt_answer_checkbox_", "")
+                    option = mdl.option.find_by_id(int(option_id))
+                    answer.option = option
+                    answer.value = option.value
+                    answer.save()
             if "slt_question_" in key:
                 # DROPDOWN_LIST
                 option_id = key.replace("slt_question_", "")
