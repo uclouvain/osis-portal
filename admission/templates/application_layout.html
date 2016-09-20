@@ -261,7 +261,7 @@
         var id = 'form#' + form_to_submit;
         $.ajax({
             url: $(id).attr('action'), // Le nom du fichier indiqué dans le formulaire
-            type: $(id).attr('method'), // La méthode indiquée dans le formulaire (get ou post)
+            type:'post', // La méthode indiquée dans le formulaire (get ou post)
             data: $(id).serialize(), // Je sérialise les données (j'envoie toutes les valeurs présentes dans le formulaire)
         });
     }
@@ -302,6 +302,7 @@
                 }
             });
         }
+        save_form();
     });
 
     $("#btn_modify_picture").click(function(event) {
@@ -468,16 +469,14 @@
             legal_valid = false;
         }
         if($('#txt_legal_adr_city').val() == '' ){
-            $('#spn_legal_adr_city').text(gettext('legal_postal_code'));
+            $('#spn_legal_adr_city').text(gettext('legal_city'));
             legal_valid = false;
         }
         if($('#slt_legal_adr_country').prop('selectedIndex') <= 0 ){
             $('#spn_legal_adr_country').text(gettext('legal_country'));
             legal_valid = false;
         }
-        if(legal_valid == false){
-            return legal_valid;
-        }
+
         if($('#rd_same_contact_legal_addr_false').prop("checked")){
             var contact_valid = true;
             if($('#txt_contact_adr_street').val() == '' ){
@@ -493,16 +492,16 @@
                 contact_valid = false;
             }
             if($('#txt_contact_adr_city').val() == '' ){
-                $('#spn_contact_adr_city').text(gettext('contact_postal_code'));
+                $('#spn_contact_adr_city').text(gettext('contact_city'));
                 contact_valid = false;
             }
             if($('#slt_contact_adr_country').prop('selectedIndex') <= 0 ){
                 $('#spn_contact_adr_country').text(gettext('contact_country'));
                 contact_valid = false;
             }
-            if(contact_valid == false){
-                return contact_valid;
-            }
+        }
+        if(legal_valid == false || contact_valid == false){
+            return false;
         }
         // email validation
         var sEmail = $('#txt_additional_email').val();
@@ -518,36 +517,42 @@
         if (! valid()) {
             return false;
         }
+        save_form();
     });
 
     $("#lnk_curriculum_tab").click(function() {
         if (! valid()){
             return false;
         }
+        save_form();
     });
 
     $("#lnk_accounting_tab").click(function() {
         if (! valid()){
             return false;
         }
+        save_form();
     });
 
     $("#lnk_sociological_tab").click(function() {
         if (! valid()){
             return false;
         }
+        save_form();
     });
 
     $("#lnk_attachments_tab").click(function() {
         if (! valid()){
             return false;
         }
+        save_form();
     });
 
     $("#lnk_submission_tab").click(function() {
         if (! valid()){
             return false;
         }
+        save_form();
     });
 
     $("#lnk_profile_tab").click(function() {
@@ -556,6 +561,10 @@
                 return false;
             }
         }
+        if($("#hdn_tab_active").val() != "1") {
+            save_form();
+        }
+
     });
 
     function valid_offer() {
@@ -935,5 +944,31 @@
         $('#txt_last_academic_year').val('');
     });
 
+    function save_form(){
+        if($("#hdn_tab_active").val()=="0"){
+            save('form_profile');
+        }
+        if($("#hdn_tab_active").val()=="1"){
+            save('form_questions');
+        }
+        if($("#hdn_tab_active").val()=="2"){
+            save('form_secondary_education');
+        }
+        if($("#hdn_tab_active").val()=="3"){
+            save('form_curriculum');
+        }
+        if($("#hdn_tab_active").val()=="4"){
+            save('form_accounting');
+        }
+        if($("#hdn_tab_active").val()=="5"){
+            save('form_sociological_survey');
+        }
+        if($("#hdn_tab_active").val()=="6"){
+            save('form_attachements');
+        }
+        if($("#hdn_tab_active").val()=="7"){
+            save('form_submission');
+        }
+    }
     </script>
 {% endblock %}
