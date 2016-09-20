@@ -32,7 +32,10 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from admission.views import assimilation_criteria as assimilation_criteria_view
 from admission.models.enums import document_type
+from django.utils.translation import ugettext_lazy as _
 
+
+ALERT_MANDATORY_FIELD = _('mandatory_field')
 
 def validate_profil(applicant, user):
     if applicant.user.last_name is None \
@@ -98,6 +101,7 @@ def validate_application(application):
 
 
 def validate_diploma(application, user):
+    validation_messages = {}
     applicant = mdl.applicant.find_by_user(user)
     secondary_education = mdl.secondary_education.find_by_person(applicant)
 
@@ -116,43 +120,43 @@ def validate_diploma(application, user):
         else:
             if secondary_education.diploma is True and secondary_education.national is True:
                 if secondary_education.academic_year is None:
-                    return False
+                    validation_messages['academic_year'] = ALERT_MANDATORY_FIELD
                 if secondary_education.national_community is None:
-                    return False
+                    validation_messages['belgian_community'] = ALERT_MANDATORY_FIELD
                 else:
                     if secondary_education.national_community == 'FRENCH':
                         if secondary_education.academic_year.year < 1994:
                             if secondary_education.dipl_acc_high_educ is None:
-                                return False
+                                validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
 
                     if secondary_education.national_community == 'DUTCH':
 
                         if secondary_education.academic_year.year < 1992:
                             if secondary_education.dipl_acc_high_educ is None:
-                                return False
+                                validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
 
                 if secondary_education.national_institution is None:
-                    return False
+                    validation_messages['school'] = _('msg_school_name')
                 else:
                     if secondary_education.national_institution.national_community == 'FRENCH':
                         # Belgian school
                         if secondary_education.education_type is None:
-                            return False
+                            validation_messages['pnl_teaching_type'] = _('msg_error_education_type')
 
                 if secondary_education.academic_year.year < 1994:
                     if secondary_education.path_repetition is None:
-                        return False
+                        validation_messages['path_repetition'] = ALERT_MANDATORY_FIELD
                     if secondary_education.path_reorientation is None:
-                        return False
+                        validation_messages['path_reorientation'] = ALERT_MANDATORY_FIELD
                 if secondary_education.result is None:
-                    return False
+                    validation_messages['result'] = ALERT_MANDATORY_FIELD
                 # Validation of the needed documents
                 doc_recto = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_RECTO)
                 doc_verso = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_VERSO)
                 if doc_recto.exists() is False or doc_verso.exists() is False:
-                    return False
+                    validation_messages['national_diploma_doc'] = ALERT_MANDATORY_FIELD
+    return validation_messages
 
-    return True
 
 
 def validate_curriculum(application):
@@ -176,9 +180,14 @@ def validate_submission():
 
 
 def get_validation_status(application, applicant, user):
+    diploma_tab_valid = True
+    msgs = validate_diploma(application, user),
+    if len(msgs) > 0:
+        diploma_tab_valid = False
+
     return {
         "validated_profil":             validate_profil(applicant, user),
-        "validated_diploma":            validate_diploma(application, user),
+        "validated_diploma":            diploma_tab_valid,
         "validated_curriculum":         validate_curriculum(application),
         "validated_application":        validate_application(application),
         "validated_accounting":         validate_accounting(),

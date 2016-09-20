@@ -359,6 +359,8 @@ def diploma_update(request, application_id=None, saved=None):
     countries = mdl_reference.country.find_excluding("BE")
     academic_years = mdl.academic_year.find_academic_years()
     tab_status = tabs.init(request)
+    validation_messages = demande_validation.validate_diploma(application, request.user)
+
     data = {"application":                  application,
             "academic_years":               academic_years,
             "secondary_education":          secondary_education,
@@ -410,7 +412,8 @@ def diploma_update(request, application_id=None, saved=None):
                 mdl.application_document_file.find_first(application, document_type.ADMISSION_EXAM_CERTIFICATE),
             'professional_exam_file':
                 mdl.application_document_file.find_first(application, document_type.PROFESSIONAL_EXAM_CERTIFICATE),
-            'message_info': message_info}
+            'message_info': message_info,
+            'validation_messages': validation_messages}
 
     # merge 3 dictionaries
     data.update(demande_validation.get_validation_status(application, applicant, request.user))

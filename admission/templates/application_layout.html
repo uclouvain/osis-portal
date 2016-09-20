@@ -230,6 +230,7 @@
         $('#slt_criteria_5').trigger('change');
         //If information message is on the screen it will disappear after 5s
         $('#message_info').fadeOut(5000);
+         $('#msg_validation_diploma').fadeOut(5000);
 
         {% if list_choices %}
             choices = {{ list_choices | safe }};
