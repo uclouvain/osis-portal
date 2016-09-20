@@ -85,7 +85,7 @@ def validate_fields_form(request, secondary_education, next_step):
                                 if request.POST.get('dipl_acc_high_educ') is None:
                                     validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
                                     is_valid = False
-                            if request.POST.get('chb_other_education') == 'on':
+                            if request.POST.get('other_education') == 'on':
                                 if request.POST.get('other_education_type') is None:
                                     validation_messages['pnl_teaching_type'] = _('msg_error_other_education_type')
                                     is_valid = False
@@ -94,6 +94,7 @@ def validate_fields_form(request, secondary_education, next_step):
                                     new_education_type.adhoc = True
                                     new_education_type.name = request.POST.get('other_education_type')
                                     new_education_type.type = 'ANOTHER'
+                                    new_education_type.save()
                                     secondary_education.education_type = new_education_type
 
                         else:
@@ -217,8 +218,8 @@ def validate_fields_form(request, secondary_education, next_step):
         is_valid,
         validation_messages,
         secondary_education)
-    is_valid, validation_messages, secondary_education, local_language_exam = \
-        validate_local_language_exam(request, is_valid, validation_messages, secondary_education)
+    is_valid, validation_messages, secondary_education, local_language_exam  = validate_local_language_exam(
+        request, is_valid, validation_messages,secondary_education)
 
     if next_step is True \
             and request.POST.get('diploma') == 'false' \
@@ -321,8 +322,11 @@ def diploma_save(request):
         else:
             if previous_step:
                 return HttpResponseRedirect(reverse('home'))
+    app_id = None
+    if application:
+        app_id = application.id
 
-    return HttpResponseRedirect(reverse('diploma_update', args=(application.id, 1)))
+    return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': app_id, 'saved': 1}))
 
 
 def diploma_update(request, application_id=None, saved=None):
@@ -353,6 +357,8 @@ def diploma_update(request, application_id=None, saved=None):
     countries = mdl_reference.country.find_excluding("BE")
     academic_years = mdl.academic_year.find_academic_years()
     tab_status = tabs.init(request)
+    validation_messages = demande_validation.validate_diploma(application, request.user)
+
     data = {"application":                  application,
             "academic_years":               academic_years,
             "secondary_education":          secondary_education,
@@ -396,7 +402,8 @@ def validate_professional_exam(request, is_valid, validation_messages, secondary
             if professional_exam is None:
                 professional_exam = mdl.secondary_education_exam.SecondaryEducationExam()
                 professional_exam.secondary_education = secondary_education
-                professional_exam.type = PROFESSIONAL_TYPE
+            professional_exam.type = PROFESSIONAL_TYPE
+            professional_exam.exam_date = None
             if request.POST.get('professional_exam_date') is None \
                     or len(request.POST.get('professional_exam_date').strip()) == 0:
                 validation_messages['professional_exam_date'] = ALERT_MANDATORY_FIELD
@@ -602,7 +609,7 @@ def populate_secondary_education(request, secondary_education):
                         .find_by_id(int(request.POST.get('school')))
                     secondary_education.national_institution = national_institution
 
-            if request.POST.get('chb_other_education') == 'on':
+            if request.POST.get('other_education') == 'on':
                 existing_education_type = mdl_reference.education_type\
                     .find_by_name(request.POST.get('other_education_type'))
                 if existing_education_type:
@@ -718,7 +725,7 @@ def documents_update(request, secondary_education, application, professional_exa
     if not secondary_education.international_diploma:
         list_unwanted_files.append(document_type.INTERNATIONAL_DIPLOMA_RECTO)
         list_unwanted_files.append(document_type.INTERNATIONAL_DIPLOMA_VERSO)
-    if secondary_education.international_diploma is None\
+    if secondary_education.international_diploma is None \
             or secondary_education.international_diploma != 'INTERNATIONAL':
         list_unwanted_files.append(document_type.EQUIVALENCE)
     if secondary_education.international_diploma_language is None \

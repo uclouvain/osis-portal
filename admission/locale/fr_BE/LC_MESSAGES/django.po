@@ -1377,3 +1377,6 @@ msgstr "Equivalence"
 
 msgid "prerequisites_min_data"
 msgstr "Vous devez au minimum avoir un diplôme d'études secondaire, un examen professionnel/d'admission/de langue française"
+
+msgid "validation_errors"
+msgstr " champ(s) empêche(nt) la validation de l'onglet"

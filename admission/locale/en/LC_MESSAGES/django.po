@@ -1360,3 +1360,6 @@ msgstr "Equivalence"
 msgid "prerequisites_min_data"
 msgstr "You must have, at least, an secondary diploma or a professional exam or an admission exam or a local language exam"
 
+
+msgid "validation_errors"
+msgstr " field(s) stop(s) the tab validation"

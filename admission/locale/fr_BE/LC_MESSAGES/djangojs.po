@@ -157,7 +157,6 @@ msgstr "Avant de pouvoir accéder à l'étape suivante vous devez : "
 msgid "msg_assimilation_criteria"
 msgstr "Précisez le critère d'assimilation auquel vous correspondez le mieux, ou si vous ne correspondez à aucun critère.  "
 
-
 msgid "contact_country"
 msgstr "Pays requis"
 

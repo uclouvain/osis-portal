@@ -1,5 +1,4 @@
 ##############################################################################
-##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -175,7 +174,7 @@ def save_application_offer(request):
         return HttpResponseRedirect(reverse('applications', args=(application.id,)))
 
     if next_tab == "2":
-        return HttpResponseRedirect(reverse('diploma_update', args=(application.id,)))
+        return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': application.id, 'saved': None}))
 
     if next_tab == "3":
         return HttpResponseRedirect(reverse('curriculum_update', args=(application.id,)))
@@ -191,6 +190,7 @@ def save_application_offer(request):
 
     if next_tab == "7":
         return HttpResponseRedirect(reverse('submission', args=(application.id,)))
+
     data = {
         'tab_active': next_tab,
         'application': application,
@@ -219,11 +219,11 @@ def applications(request, application_id=None):
         application = mdl.application.init_application(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
     data = {
-        'applications': application_list,
-        'grade_choices': mdl_reference.grade_type.GRADE_CHOICES,
-        'domains': mdl_reference.domain.find_all_domains(),
+        "applications": application_list,
+        "grade_choices": mdl_reference.grade_type.GRADE_CHOICES,
+        "domains": mdl_reference.domain.find_all_domains(),
         'tab_active': 1,
-        'application': application,
+        "application": application,
         'tab_profile': tab_status['tab_profile'],
         'tab_applications': tab_status['tab_applications'],
         'tab_diploma': tab_status['tab_diploma'],
@@ -277,11 +277,11 @@ def change_application_offer(request, application_id=None):
     applicant = mdl.applicant.find_by_user(request.user)
     data = {
         'applications': application_list,
-        'grade_choices': mdl_reference.grade_type.GRADE_CHOICES,
-        'domains': mdl_reference.domain.find_all_domains(),
+        "grade_choices": mdl_reference.grade_type.GRADE_CHOICES,
+        "domains": mdl_reference.domain.find_all_domains(),
         'tab_active': 1,
-        'first': True,
-        'application': application,
+        "first": True,
+        "application": application,
     }
     data.update(demande_validation.get_validation_status(application, applicant, request.user))
     return render(request, "admission_home.html", data)
