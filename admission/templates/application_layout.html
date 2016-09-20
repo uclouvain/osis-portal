@@ -795,7 +795,6 @@
                     $('#pnl_existing_files').append($("<a></a>").attr("href", url)
                                                                 .attr("target","_blank")
                                                                 .append(value.file_name));
-                    //var url = build_url('upload/delete/', value.id);
                     var bt = jQuery('<input  id="hdn_delete_document_file" type="hidden" value="'+value.id+'">');
                     $('#pnl_existing_files').append(bt);
                     $('#pnl_existing_files').append('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
@@ -938,10 +937,6 @@
     $("#rd_previous_enrollment_false").click(function() {
         $('#txt_registration_id').val('');
         $('#txt_last_academic_year').val('');
-    });
-    $("#field").click(function() {
-        alert('iii');
-
     });
 
     </script>
