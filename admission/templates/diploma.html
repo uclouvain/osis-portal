@@ -26,7 +26,7 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<form method="post" action="{% url 'diploma'%}" id="form_secondary_education" enctype="multipart/form-data">
+<form method="post" action="{% url 'diploma'%}" id="form_secondary_education">
     <input type="hidden"
            id="hdn_diploma"
            name="diploma"
@@ -204,11 +204,9 @@
     <div>
         <br>
         {%if validation_messages%}
-            <br>
-            <span class="error" role="alert" style="margin-left:5px;">
-                Il y a {{ validation_messages|length}} {% trans 'errors'%}
-            </span>
-            <br><br>
+            <div class="alert alert-warning" role="alert" style="margin-left:5px;" id="msg_validation_diploma">
+                {{ validation_messages|length}} {% trans 'validation_errors'%}
+            </div>
         {% endif %}
         {%if message_success%}
             <br>

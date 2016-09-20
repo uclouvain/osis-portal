@@ -51,7 +51,7 @@ def accounting(request, application_id=None):
     solidary_affiliation_amount = 0
     applicant = mdl.applicant.find_by_user(request.user)
     tab_status = tabs.init(request)
-    return render(request, "admission_home.html", {
+    data = {
         "academic_year": academic_yr,
         "previous_academic_year": previous_academic_year,
         "sport_affiliation_amount": sport_affiliation_amount,
@@ -63,14 +63,6 @@ def accounting(request, application_id=None):
         "third_cycle": third_cycle(application),
         "tab_active": 4,
         "applications": mdl.application.find_by_user(request.user),
-        "validated_profil": demande_validation.validate_profil(applicant, request.user),
-        "validated_diploma": demande_validation.validate_diploma(application),
-        "validated_curriculum": demande_validation.validate_curriculum(application),
-        "validated_application": demande_validation.validate_application(application),
-        "validated_accounting": demande_validation.validate_accounting(),
-        "validated_sociological": demande_validation.validate_sociological(),
-        "validated_attachments": demande_validation.validate_attachments(),
-        "validated_submission": demande_validation.validate_submission(),
         'tab_profile': tab_status['tab_profile'],
         'tab_applications': tab_status['tab_applications'],
         'tab_diploma': tab_status['tab_diploma'],
@@ -78,7 +70,10 @@ def accounting(request, application_id=None):
         'tab_accounting': tab_status['tab_accounting'],
         'tab_sociological': tab_status['tab_sociological'],
         'tab_attachments': tab_status['tab_attachments'],
-        'tab_submission': tab_status['tab_submission']})
+        'tab_submission': tab_status['tab_submission']
+    }
+    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    return render(request, "admission_home.html", data)
 
 
 def accounting_update(request, application_id=None):

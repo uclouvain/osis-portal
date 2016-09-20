@@ -41,9 +41,10 @@
     <br>
 
     <br>
-    <input type="hidden" id="hdn_tab_active" value="{{tab_active}}" title="active tab">
-
-    <input type="hidden" value="{{application.id | default_if_none:''}}" id="hdn_current_application_id" name="application_id" title="application_id" >
+    <form id="form_application_layout">
+        <input type="hidden" id="hdn_tab_active" value="{{tab_active}}" title="active tab">
+        <input type="hidden" value="{{application.id | default_if_none:''}}" id="hdn_current_application_id" name="application_id" title="application_id" >
+    </form>
     <div class="row">
         <div class="col-md-2">
             {% if applications%}<a href="{%url 'home'%}">{% trans 'back_demandes_list'%}</a>{%endif%}
@@ -182,7 +183,6 @@
     </div>
 
     <br>
-    <input type="hidden" id="hdn_pushed" />
 
 {% endblock %}
 
@@ -214,6 +214,10 @@
         $('#chb_admission_exam_type').prop( "checked", false);
 
         populate_exam_admin();
+<<<<<<< HEAD
+=======
+
+>>>>>>> 43cd569c443350818a181eb7ac82bee88a3c4bc4
         if($('#hdn_current_application_id').val() != '') {
             $('#txt_offer_year_id').val($('#hdn_application_offer_year_id').val())
             $('#slt_offer_type').val($('#hdn_application_grade').val())
@@ -227,17 +231,42 @@
         $('#slt_criteria_5').trigger('change');
         //If information message is on the screen it will disappear after 5s
         $('#message_info').fadeOut(5000);
+         $('#msg_validation_diploma').fadeOut(5000);
 
         {% if list_choices %}
             choices = {{ list_choices | safe }};
         {% else %}
             choices = [];
         {% endif %}
+
+        $("#pnl_existing_files").on('click', '#bt_delete_document_file', function () {
+            // needed otherwise the click event isn't handled
+            click_bt_delete_document_file();
+        });
+
+        $("#pnl_assimilation_criteria").on('click', "button[id^='btn_load_assimilation_doc_']" , function (event) {
+
+            var target = $(event.target);
+            var id = target.attr("id");
+            // needed otherwise the click event isn't handled
+            if(id.startsWith('btn_load_assimilation_doc_') ){
+                //upload for assimilation
+                var pos = id.indexOf('_id_')
+                var description = id.substring(pos+4)
+                update_description(description, target);
+                display_existing_files(description)
+            }
+        });
+
     });
 
     function save(form_to_submit){
         var id = 'form#' + form_to_submit;
-        $(id).submit();
+        $.ajax({
+            url: $(id).attr('action'), // Le nom du fichier indiqué dans le formulaire
+            type:'post', // La méthode indiquée dans le formulaire (get ou post)
+            data: $(id).serialize(), // Je sérialise les données (j'envoie toutes les valeurs présentes dans le formulaire)
+        });
     }
 
     $("#lnk_profil_next_step").click(function() {
@@ -276,6 +305,7 @@
                 }
             });
         }
+        save_form();
     });
 
     $("#btn_modify_picture").click(function(event) {
@@ -442,16 +472,14 @@
             legal_valid = false;
         }
         if($('#txt_legal_adr_city').val() == '' ){
-            $('#spn_legal_adr_city').text(gettext('legal_postal_code'));
+            $('#spn_legal_adr_city').text(gettext('legal_city'));
             legal_valid = false;
         }
         if($('#slt_legal_adr_country').prop('selectedIndex') <= 0 ){
             $('#spn_legal_adr_country').text(gettext('legal_country'));
             legal_valid = false;
         }
-        if(legal_valid == false){
-            return legal_valid;
-        }
+
         if($('#rd_same_contact_legal_addr_false').prop("checked")){
             var contact_valid = true;
             if($('#txt_contact_adr_street').val() == '' ){
@@ -467,16 +495,16 @@
                 contact_valid = false;
             }
             if($('#txt_contact_adr_city').val() == '' ){
-                $('#spn_contact_adr_city').text(gettext('contact_postal_code'));
+                $('#spn_contact_adr_city').text(gettext('contact_city'));
                 contact_valid = false;
             }
             if($('#slt_contact_adr_country').prop('selectedIndex') <= 0 ){
                 $('#spn_contact_adr_country').text(gettext('contact_country'));
                 contact_valid = false;
             }
-            if(contact_valid == false){
-                return contact_valid;
-            }
+        }
+        if(legal_valid == false || contact_valid == false){
+            return false;
         }
         // email validation
         var sEmail = $('#txt_additional_email').val();
@@ -492,36 +520,42 @@
         if (! valid()) {
             return false;
         }
+        save_form();
     });
 
     $("#lnk_curriculum_tab").click(function() {
         if (! valid()){
             return false;
         }
+        save_form();
     });
 
     $("#lnk_accounting_tab").click(function() {
         if (! valid()){
             return false;
         }
+        save_form();
     });
 
     $("#lnk_sociological_tab").click(function() {
         if (! valid()){
             return false;
         }
+        save_form();
     });
 
     $("#lnk_attachments_tab").click(function() {
         if (! valid()){
             return false;
         }
+        save_form();
     });
 
     $("#lnk_submission_tab").click(function() {
         if (! valid()){
             return false;
         }
+        save_form();
     });
 
     $("#lnk_profile_tab").click(function() {
@@ -530,6 +564,10 @@
                 return false;
             }
         }
+        if($("#hdn_tab_active").val() != "1") {
+            save_form();
+        }
+
     });
 
     function valid_offer() {
@@ -618,27 +656,6 @@
         }
     });
 
-    $(document).bind('click', function (e) {
-        var target = $(e.target);
-        var id = target.attr("id");
-        if (target.is('.class_upload_assimilation')) {
-            e.preventDefault(); // if you want to cancel the event flow
-
-            if(id.startsWith('btn_load_assimilation_doc_') ){
-                //upload for assimilation
-                var pos = id.indexOf('_id_')
-                var description = id.substring(pos+4)
-                update_description(description, target);
-                display_existing_files(description)
-            }
-        }
-
-        if(id=='bt_delete_document_file'){
-            e.preventDefault(); // if you want to cancel the event flow
-            click_bt_delete_document_file();
-        }
-    });
-
     $("#slt_criteria_5").change(function(event) {
         $('[id^="pnl_criteria_bis_"]').each(function(){
             $(this).remove();
@@ -666,7 +683,6 @@
         $('#hdn_description').val(description);
         $('#lbl_description_label').text(gettext(description.toLowerCase()));
         $('#txt_file').val('');
-        $('#hdn_pushed').val(elt.attr("id"));
     }
 
     $("#txt_file").on("change", function(){
@@ -787,13 +803,11 @@
                     $('#pnl_existing_files').append($("<a></a>").attr("href", url)
                                                                 .attr("target","_blank")
                                                                 .append(value.file_name));
-                    var url = build_url('upload/delete/', value.id);
                     var bt = jQuery('<input  id="hdn_delete_document_file" type="hidden" value="'+value.id+'">');
                     $('#pnl_existing_files').append(bt);
                     $('#pnl_existing_files').append('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
                     bt = jQuery('<button type="submit" id="bt_delete_document_file" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-trash"></span></button>');
                     $('#pnl_existing_files').append(bt);
-
                 });
             }
         });
@@ -900,7 +914,7 @@
 
             $('[id$="'+description+'"]').each(function() {
                 if($(this).attr("id").startsWith('btn_load_assimilation_doc_') || $(this).attr("id").startsWith('bt_load_doc_')) {
-                    if($(this).attr("id")=='bt_load_doc_'+description){
+                    if($(this).attr("id")=='bt_load_doc_'+description || $(this).attr("id").startsWith('btn_load_assimilation_doc_')){
                         $(this).attr('title', gettext('add_document'));
                         $(this).attr('class', 'btn');
                         var spn_id = '#spn_' +$(this).attr("id");
@@ -933,5 +947,31 @@
         $('#txt_last_academic_year').val('');
     });
 
+    function save_form(){
+        if($("#hdn_tab_active").val()=="0"){
+            save('form_profile');
+        }
+        if($("#hdn_tab_active").val()=="1"){
+            save('form_questions');
+        }
+        if($("#hdn_tab_active").val()=="2"){
+            save('form_secondary_education');
+        }
+        if($("#hdn_tab_active").val()=="3"){
+            save('form_curriculum');
+        }
+        if($("#hdn_tab_active").val()=="4"){
+            save('form_accounting');
+        }
+        if($("#hdn_tab_active").val()=="5"){
+            save('form_sociological_survey');
+        }
+        if($("#hdn_tab_active").val()=="6"){
+            save('form_attachements');
+        }
+        if($("#hdn_tab_active").val()=="7"){
+            save('form_submission');
+        }
+    }
     </script>
 {% endblock %}

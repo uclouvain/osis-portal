@@ -29,7 +29,7 @@
                      value="GERMAN" onclick="show_hide_pnl_dipl_acc_high_educ();"> {%trans 'german_belgian_community'%}
             </label>
             {%if validation_messages and validation_messages|get_item:'belgian_community'%}
-                <br><span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'belgian_community'}}</span>
+                <br><span class="error" style="margin-left:5px;" id="national_diploma_belgian_community_error">{{ validation_messages|get_item:'belgian_community'}}</span>
             {% endif %}
             <br>
             <br>
@@ -156,7 +156,8 @@
             </div>
 
             {%if validation_messages and validation_messages|get_item:'school'%}
-                <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'school'}}</span>
+                <span class="error" style="margin-left:5px;"
+                      id="national_diploma_school_error">{{ validation_messages|get_item:'school'}}</span>
             {% endif %}
             <br>
         </div>
@@ -197,8 +198,7 @@
                     <label>{% trans 'other_education_type' %}</label>
                       <input type="checkbox"
                              id="chb_other_education"
-                             name="other_education"
-                             onclick="disabled_field('txt_other_education_type',this);reset_rdb('rdb_education_transition_type');reset_rdb('rdb_education_technic_type');">
+                             name="other_education">
                 </div>
                 <div >
                     <div class="col-md-8">
@@ -211,7 +211,7 @@
             </div>
         </div>
         {%if validation_messages and validation_messages|get_item:'pnl_teaching_type'%}
-            <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'pnl_teaching_type'}}</span>
+            <span class="error" style="margin-left:5px;" id="national_diploma_pnl_teaching_type_error">{{ validation_messages|get_item:'pnl_teaching_type'}}</span>
         {% endif %}
 
     </div>
@@ -233,7 +233,7 @@
                      > {% trans 'no' %}
             </label>
             {%if validation_messages and validation_messages|get_item:'dipl_acc_high_educ'%}
-                <br> <br><span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'dipl_acc_high_educ'}}</span> <br>
+                <br> <br><span class="error" style="margin-left:5px;" id="national_diploma_dipl_acc_high_educ_error">{{ validation_messages|get_item:'dipl_acc_high_educ'}}</span> <br>
             {% endif %}
         </div>
     </div>
@@ -254,7 +254,7 @@
                      value="false"> {% trans 'no' %}
             </label>
             {%if validation_messages and validation_messages|get_item:'path_repetition'%}
-                <br><br><span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'path_repetition'}}</span><br>
+                <br><br><span class="error" style="margin-left:5px;" id="national_diploma_path_repetition_error">{{ validation_messages|get_item:'path_repetition'}}</span><br>
             {% endif %}
             <br><br>
             {% trans 'question_path_reorientation'%} *
@@ -272,7 +272,7 @@
             </label>
             {%if validation_messages and validation_messages|get_item:'path_reorientation'%}
                 <br><br>
-                <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'path_reorientation'}}</span>
+                <span class="error" style="margin-left:5px;" id="national_diploma_path_reorientation_error">{{ validation_messages|get_item:'path_reorientation'}}</span>
                 <br>
             {% endif %}
         </div>
@@ -301,7 +301,7 @@
                      value="HIGH">&nbsp;{% trans 'high_result'%}
             </label>
             {%if validation_messages and validation_messages|get_item:'result'%}
-                <br><br><span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'result'}}</span><br>
+                <br><br><span class="error" style="margin-left:5px;" id="national_diploma_result_error">{{ validation_messages|get_item:'result'}}</span><br>
             {% endif %}
         </div>
     </div>
@@ -328,9 +328,8 @@
                               id="spn_bt_load_doc_NATIONAL_DIPLOMA_RECTO"></span> {% trans 'high_school_diploma'%} - {% trans 'recto'%}
                 </button>
             {%endif%}
-
             &nbsp;&nbsp;
-            {%if national_diploma_verso%}
+            {%if national_diploma_verso %}
                 <button type="button" class="btn btn-success"
                         title="{% trans 'modify'%} : {% trans 'high_school_diploma'%} - {% trans 'verso'%}"
                         id="bt_load_doc_NATIONAL_DIPLOMA_VERSO"
@@ -347,6 +346,9 @@
                               id="spn_bt_load_doc_NATIONAL_DIPLOMA_VERSO"></span> {% trans 'high_school_diploma'%} - {% trans 'verso'%}
                 </button>
             {%endif%}
+            {%if validation_messages and validation_messages|get_item:'national_diploma_doc'%}
+            <br><br><span class="error" style="margin-left:5px;" id="national_diploma_national_diploma_doc_error">{{ validation_messages|get_item:'national_diploma_doc'}}</span><br>
+            {% endif %}
 
             {% if object_application.application_type == True %}
                 <br>
