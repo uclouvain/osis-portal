@@ -373,14 +373,6 @@ def diploma_update(request, application_id=None, saved=None):
             "current_academic_year":        mdl.academic_year.current_academic_year(),
             "local_language_exam_needed":   is_local_language_exam_needed(request.user),
             'tab_active':                   2,
-            "validated_profil":             demande_validation.validate_profil(applicant, request.user),
-            "validated_diploma":            demande_validation.validate_diploma(application),
-            "validated_curriculum":         demande_validation.validate_curriculum(application),
-            "validated_application":        demande_validation.validate_application(application),
-            "validated_accounting":         demande_validation.validate_accounting(),
-            "validated_sociological":       demande_validation.validate_sociological(),
-            "validated_attachments":        demande_validation.validate_attachments(),
-            "validated_submission":         demande_validation.validate_submission(),
             'tab_profile': tab_status['tab_profile'],
             'tab_applications': tab_status['tab_applications'],
             'tab_diploma': tab_status['tab_diploma'],
@@ -420,7 +412,7 @@ def diploma_update(request, application_id=None, saved=None):
                 mdl.application_document_file.find_first(application, document_type.PROFESSIONAL_EXAM_CERTIFICATE),
             'message_info': message_info}
 
-    # merge 2 dictionaries
+    # merge 3 dictionaries
     data.update(demande_validation.get_validation_status(application, applicant, request.user))
     data.update(get_secondary_education_exams_data(secondary_education))
 
