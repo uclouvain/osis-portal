@@ -31,7 +31,7 @@ from django.utils.translation import ugettext_lazy as _
 from admission.models import offer_year, academic_year
 from base.models import student
 from . import proposition_dissertation
-from dissertation.models.dissertation_role import get_promoteur_by_dissertation
+from dissertation.models.dissertation_role import search_by_dissertation_and_role
 from dissertation.utils.emails_dissert import send_mail_to_teacher_new_dissert
 
 
@@ -94,7 +94,7 @@ class Dissertation(models.Model):
     def go_forward(self):
         next_status = get_next_status(self, "go_forward")
         if self.status == 'DRAFT' and next_status == 'DIR_SUBMIT':
-            send_mail_to_teacher_new_dissert(get_promoteur_by_dissertation(self))
+            send_mail_to_teacher_new_dissert(search_by_dissertation_and_role(self, 'PROMOTEUR'))
         self.set_status(next_status)
 
     def accept(self):

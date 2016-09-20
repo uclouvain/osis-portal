@@ -74,4 +74,5 @@ def search_by_dissertation(dissertation):
 
 
 def search_by_dissertation_and_role(dissertation, role):
-    return search_by_dissertation(dissertation).filter(status=role)
+    dissertation_role = search_by_dissertation(dissertation).get(status=role)
+    return dissertation_role.adviser
