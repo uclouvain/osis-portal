@@ -1368,3 +1368,6 @@ msgstr "Il reste des erreurs qui empêche la validation de l'onglet"
 
 msgid "no_doc"
 msgstr "Pas de document"
+
+msgid "validation_errors"
+msgstr " champ(s) empêche(nt) la validation de l'onglet"

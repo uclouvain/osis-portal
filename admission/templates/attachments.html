@@ -78,7 +78,8 @@
     <div class="col-md-2">
         {{ attachment.description }}
     </div>
-    <form action="{% url 'remove_attachment' %}" name="remove_attachment_{{attachment.pk}}" method="post">
+    <form action="{% url 'remove_attachment' %}" name="remove_attachment_{{attachment.pk}}" method="post"
+          id="form_attachements">
         {% csrf_token %}
         {% if removeAttachmentForm.errors %}
         <div class="alert alert-danger" role="alert">
