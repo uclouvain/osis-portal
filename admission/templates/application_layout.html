@@ -249,7 +249,7 @@
         var id = 'form#' + form_to_submit;
         $.ajax({
             url: $(id).attr('action'), // Le nom du fichier indiqué dans le formulaire
-            type: $(id).attr('method'), // La méthode indiquée dans le formulaire (get ou post)
+            type:'post', // La méthode indiquée dans le formulaire (get ou post)
             data: $(id).serialize(), // Je sérialise les données (j'envoie toutes les valeurs présentes dans le formulaire)
         });
     }
@@ -549,7 +549,10 @@
                 return false;
             }
         }
-        save_form();
+        if($("#hdn_tab_active").val() != "1") {
+            save_form();
+        }
+
     });
 
     function valid_offer() {
