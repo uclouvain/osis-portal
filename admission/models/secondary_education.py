@@ -63,7 +63,8 @@ class SecondaryEducation(models.Model):
     national_community = models.CharField(max_length=20, choices=NATIONAL_COMMUNITY_TYPES, blank=True, null=True)
     national_institution = models.ForeignKey('reference.EducationInstitution', blank=True, null=True)
     education_type = models.ForeignKey('reference.EducationType', blank=True, null=True)
-    dipl_acc_high_educ = models.NullBooleanField(default=False) # Belgian qualification diploma to get access to higher education studies (DAES)
+    dipl_acc_high_educ = models.NullBooleanField(default=False)  # Belgian qualification diploma to get access to higher
+                                                                 #  education studies (DAES)
     path_repetition = models.NullBooleanField(default=False)
     path_reorientation = models.NullBooleanField(default=False)
     result = models.CharField(max_length=20, choices=RESULT_TYPE, blank=True, null=True)

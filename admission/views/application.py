@@ -1,5 +1,4 @@
 ##############################################################################
-##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -56,9 +55,11 @@ def profile_confirmed(request):
 def save_application_offer(request):
     next_tab = None
     application = None
+
     if request.method == 'POST':
+        new_application = False
         next_tab = request.POST.get('next_tab')
-        print('next_tab', next_tab)
+
         offer_year = None
         offer_year_id = request.POST.get('offer_year_id')
 
@@ -71,6 +72,7 @@ def save_application_offer(request):
             secondary_education = mdl.secondary_education.find_by_person(application.applicant)
         else:
             application = mdl.application.init_application(request.user)
+            new_application = True
             person_application = mdl.applicant.find_by_user(request.user)
             application.applicant = person_application
             secondary_education = mdl.secondary_education.SecondaryEducation()
@@ -118,6 +120,20 @@ def save_application_offer(request):
             application.raffle_number = request.POST.get('txt_offer_lottery')
 
         application.save()
+
+        if new_application is False:
+            # delete all existing application_assimilation_criteria
+            for a in mdl.application_assimilation_criteria.find_by_application(application):
+                a.delete()
+
+        # If application assimilation criteria exists copy them to application assimilation criteria
+
+        applicant_assimilation_criteria_list = mdl.applicant_assimilation_criteria.\
+            find_by_applicant(application.applicant)
+        for applicant_assimilation_criteria in applicant_assimilation_criteria_list:
+            # Copy the applicant_assimilation_criteria
+            mdl.application_assimilation_criteria.\
+                copy_from_applicant_assimilation_criteria(applicant_assimilation_criteria, application)
         # answer_question_
         for key, value in request.POST.items():
             if "txt_answer_question_" in key:
@@ -158,7 +174,7 @@ def save_application_offer(request):
         return HttpResponseRedirect(reverse('applications', args=(application.id,)))
 
     if next_tab == "2":
-        return HttpResponseRedirect(reverse('diploma_update', args=(application.id,)))
+        return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': application.id, 'saved': None}))
 
     if next_tab == "3":
         return HttpResponseRedirect(reverse('curriculum_update', args=(application.id,)))
@@ -175,23 +191,15 @@ def save_application_offer(request):
     if next_tab == "7":
         return HttpResponseRedirect(reverse('submission', args=(application.id,)))
 
-    return render(request, "admission_home.html", {
+    data = {
         'tab_active': next_tab,
         'application': application,
-        'validated_profil': demande_validation.validate_profil(applicant, request.user),
-        'validated_diploma': demande_validation.validate_diploma(
-           application),
-        'validated_curriculum': demande_validation.validate_curriculum(
-           application),
-        'validated_application': demande_validation.validate_application(
-           application),
-        'validated_accounting': demande_validation.validate_accounting(),
-        'validated_sociological': demande_validation.validate_sociological(),
-        'validated_attachments': demande_validation.validate_attachments(),
-        'validated_submission': demande_validation.validate_submission(),
         'picture': get_picture_id(request.user),
         'id_document': get_id_document(request.user),
-        'applicant': applicant})
+        'applicant': applicant
+    }
+    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    return render(request, "admission_home.html", data)
 
 
 def application_view(request, application_id):
@@ -210,33 +218,24 @@ def applications(request, application_id=None):
     else:
         application = mdl.application.init_application(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
-    return render(request, "admission_home.html", {"applications": application_list,
-                                                   "grade_choices": mdl_reference.grade_type.GRADE_CHOICES,
-                                                   "domains": mdl_reference.domain.find_all_domains(),
-                                                   'tab_active': 1,
-                                                   "application": application,
-                                                   "validated_profil": demande_validation.validate_profil(applicant,
-                                                                                                          request.user),
-                                                   "validated_diploma": demande_validation.validate_diploma(
-                                                       application),
-                                                   "validated_curriculum": demande_validation.validate_curriculum(
-                                                       application),
-                                                   "validated_application": demande_validation.validate_application(
-                                                       application),
-                                                   "validated_accounting": demande_validation.validate_accounting(),
-                                                   "validated_sociological": demande_validation.validate_sociological(),
-                                                   "validated_attachments": demande_validation.validate_attachments(),
-                                                   "validated_submission": demande_validation.validate_submission(),
-                                                   'tab_profile': tab_status['tab_profile'],
-                                                   'tab_applications': tab_status['tab_applications'],
-                                                   'tab_diploma': tab_status['tab_diploma'],
-                                                   'tab_curriculum': tab_status['tab_curriculum'],
-                                                   'tab_accounting': tab_status['tab_accounting'],
-                                                   'tab_sociological': tab_status['tab_sociological'],
-                                                   'tab_attachments': tab_status['tab_attachments'],
-                                                   'tab_submission': tab_status['tab_submission'],
-                                                   "local_language_exam_needed": is_local_language_exam_needed(
-                                                       request.user)})
+    data = {
+        "applications": application_list,
+        "grade_choices": mdl_reference.grade_type.GRADE_CHOICES,
+        "domains": mdl_reference.domain.find_all_domains(),
+        'tab_active': 1,
+        "application": application,
+        'tab_profile': tab_status['tab_profile'],
+        'tab_applications': tab_status['tab_applications'],
+        'tab_diploma': tab_status['tab_diploma'],
+        'tab_curriculum': tab_status['tab_curriculum'],
+        'tab_accounting': tab_status['tab_accounting'],
+        'tab_sociological': tab_status['tab_sociological'],
+        'tab_attachments': tab_status['tab_attachments'],
+        'tab_submission': tab_status['tab_submission'],
+        "local_language_exam_needed": is_local_language_exam_needed(request.user)
+    }
+    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    return render(request, "admission_home.html", data)
 
 
 def submission(request, application_id=None):
@@ -272,24 +271,16 @@ def change_application_offer(request, application_id=None):
     application.save()
     application_list = mdl.application.find_by_user(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
-    return render(request, "admission_home.html", {'applications': application_list,
-                                                   "grade_choices": mdl_reference.grade_type.GRADE_CHOICES,
-                                                   "domains": mdl_reference.domain.find_all_domains(),
-                                                   'tab_active': 1,
-                                                   "first": True,
-                                                   "application": application,
-                                                   "validated_profil": demande_validation.validate_profil(applicant,
-                                                                                                          request.user),
-                                                   "validated_diploma": demande_validation.validate_diploma(
-                                                       application),
-                                                   "validated_curriculum": demande_validation.validate_curriculum(
-                                                       application),
-                                                   "validated_application": demande_validation.validate_application(
-                                                       application),
-                                                   "validated_accounting": demande_validation.validate_accounting(),
-                                                   "validated_sociological": demande_validation.validate_sociological(),
-                                                   "validated_attachments": demande_validation.validate_attachments(),
-                                                   "validated_submission": demande_validation.validate_submission()})
+    data = {
+        'applications': application_list,
+        "grade_choices": mdl_reference.grade_type.GRADE_CHOICES,
+        "domains": mdl_reference.domain.find_all_domains(),
+        'tab_active': 1,
+        "first": True,
+        "application": application,
+    }
+    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    return render(request, "admission_home.html", data)
 
 
 def is_local_language_exam_needed(user):

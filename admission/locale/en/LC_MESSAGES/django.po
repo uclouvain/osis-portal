@@ -1347,3 +1347,9 @@ msgstr "5th paycheck"
 
 msgid "paycheck_6"
 msgstr "6th paycheck"
+
+msgid "no_doc"
+msgstr "No document available"
+
+msgid "validation_errors"
+msgstr " field(s) stop(s) the tab validation"

@@ -26,7 +26,7 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<form method="post" action="{% url 'diploma'%}" id="form_secondary_education" enctype="multipart/form-data">
+<form method="post" action="{% url 'diploma'%}" id="form_secondary_education">
     <input type="hidden"
            id="hdn_diploma"
            name="diploma"
@@ -116,7 +116,7 @@
     <input type="hidden"
            id="hdn_secondary_education_admission_exam"
            name="secondary_education_admission_exam"
-           value="{% if admission_exam %} true {% else %} false {% endif %}" >
+           value="{% if admission_exam %}True{% else %}False{% endif %}" >
     <input type="hidden"
            id="hdn_secondary_education_admission_exam_date"
            name="secondary_education_admission_exam_date"
@@ -140,7 +140,7 @@
     <input type="hidden"
            id="hdn_secondary_education_admission_exam_result"
            name="secondary_education_admission_exam_result"
-           value="{{admission_exam.esult| default_if_none:''}}" >
+           value="{{admission_exam.result| default_if_none:''}}" >
     <input type="hidden"
            id="hdn_secondary_education_professional_exam_date"
            name="secondary_education_professional_exam_date"
@@ -148,7 +148,7 @@
     <input type="hidden"
            id="hdn_secondary_professional_exam"
            name="secondary_education_professional_exam"
-           value="{% if professional_exam %} True {% else %} False {% endif %}" >
+           value="{% if professional_exam %}True{% else %}False{% endif %}" >
     <input type="hidden"
            id="hdn_secondary_professional_exam_id"
            value="{{professional_exam.id | default_if_none:''}}" >
@@ -169,29 +169,44 @@
            value="{{application.id| default_if_none:''}}" >
 
     {% csrf_token %}
-    <div>
-        <a id="lnk_previous_step_up"
-           class="btn btn-default"
-           href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications'%}{%endif%}"
-           onclick="save('form_secondary_education');"
-           title="{% trans 'demandes'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-            {%trans 'previous_step'%} : {%trans 'offer_choice'%}</a>
-        <a id="lnk_next_step_up"
-           class="btn btn-default"
-           href="{%if application.id%}{% url 'curriculum_update' application.id%}{%else%}{% url 'curriculum_update'%}{%endif%}"
-           onclick="save('form_secondary_education');"
-           title="{% trans 'curriculum'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            {%trans 'next_step'%} : {%trans 'curriculum'%}</a>
+    <div class="row">
+        <div class="col-md-8">
+            <h5>{% trans 'mandatory_asterisk'%}</h5>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" id="bt_submit_diploma" class="btn btn-default pull-right" role="button"
+                    title="{%trans 'save'%}"
+                    name="submit_diploma" >
+                <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+                {%trans 'save'%}
+            </button>
+        </div>
+    </div>
+    <div class="row" style="margin-top:5px;">
+        <div class="col-md-6">
+            <a id="lnk_previous_step_up"
+               class="btn btn-default"
+               href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications'%}{%endif%}"
+               onclick="save('form_secondary_education');"
+               title="{% trans 'demandes'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+                {%trans 'previous_step'%} : {%trans 'offer_choice'%}</a>
+        </div>
+        <div class="col-md-6">
+            <a id="lnk_next_step_up"
+               class="btn btn-default pull-right"
+               href="{%if application.id%}{% url 'curriculum_update' application.id%}{%else%}{% url 'curriculum_update'%}{%endif%}"
+               onclick="save('form_secondary_education');"
+               title="{% trans 'curriculum'%}">{%trans 'next_step'%} : {%trans 'curriculum'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+                </a>
+        </div>
     </div>
 
     <div>
         <br>
         {%if validation_messages%}
-            <br>
-            <span class="error" role="alert" style="margin-left:5px;">
-                Il y a {{ validation_messages|length}} {% trans 'errors'%}
-            </span>
-            <br><br>
+            <div class="alert alert-warning" role="alert" style="margin-left:5px;" id="msg_validation_diploma">
+                {{ validation_messages|length}} {% trans 'validation_errors'%}
+            </div>
         {% endif %}
         {%if message_success%}
             <br>
@@ -304,19 +319,23 @@
         {% endif %}
     </div>
 
-    <div>
-        <a id="lnk_previous_step"
-           class="btn btn-default"
-           href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications'%}{%endif%}"
-           onclick="save('form_secondary_education');"
-           title="{% trans 'demandes'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-            {%trans 'previous_step'%} : {%trans 'offer_choice'%}</a>
-        <a id="lnk_next_step"
-           class="btn btn-default"
-           href="{%if application.id%}{% url 'curriculum_update' application.id%}{%else%}{% url 'curriculum_update'%}{%endif%}"
-           onclick="save('form_secondary_education');"
-           title="{% trans 'curriculum'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            {%trans 'next_step'%} : {%trans 'curriculum'%}</a>
+    <div class="row">
+        <div class="col-md-6">
+            <a id="lnk_previous_step"
+               class="btn btn-default"
+               href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications'%}{%endif%}"
+               onclick="save('form_secondary_education');"
+               title="{% trans 'demandes'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+                {%trans 'previous_step'%} : {%trans 'offer_choice'%}</a>
+        </div>
+        <div class="col-md-6">
+            <a id="lnk_next_step"
+               class="btn btn-default pull-right"
+               href="{%if application.id%}{% url 'curriculum_update' application.id%}{%else%}{% url 'curriculum_update'%}{%endif%}"
+               onclick="save('form_secondary_education');"
+               title="{% trans 'curriculum'%}">{%trans 'next_step'%} : {%trans 'curriculum'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+                </a>
+        </div>
     </div>
 </form>
 

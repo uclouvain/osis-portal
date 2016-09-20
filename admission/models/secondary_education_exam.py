@@ -46,7 +46,7 @@ class SecondaryEducationExam(models.Model):
                   ('PROFESSIONAL', _('professional')))
 
     secondary_education = models.ForeignKey('SecondaryEducation')
-    admission_exam_type = models.ForeignKey('AdmissionExamType')
+    admission_exam_type = models.ForeignKey('AdmissionExamType', blank=True, null=True)
     type = models.CharField(max_length=20, choices=EXAM_TYPES)
     exam_date = models.DateField(blank=True, null=True)
     institution = models.CharField(max_length=100, blank=True, null=True)
@@ -66,3 +66,11 @@ def search(pk=None, secondary_education_id=None, type=None):
         queryset = queryset.filter(type=type)
 
     return queryset
+
+
+def find_by_type(secondary_education_id=None, type=None):
+    results = search(None, secondary_education_id, type)
+    if results and results.exists():
+        return results[0]
+    return None
+

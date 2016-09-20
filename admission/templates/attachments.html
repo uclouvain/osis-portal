@@ -26,20 +26,35 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-
-<div>
-    <a id="lnk_previous_step_up"
-       class="btn btn-default"
-       href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey'%}{%endif%}"
-       onclick="save('form_attachments');"
-       title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-        {%trans 'previous_step'%} : {% trans 'sociological_survey'%}</a>
-    <a id="lnk_next_step_up"
-       class="btn btn-default"
-       href="{%if application.id%}{% url 'submission' application.id%}{%else%}{% url 'submission'%}{%endif%}"
-       onclick="save('form_attachments');"
-       title="{% trans 'submission'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-        {%trans 'next_step'%} : {%trans 'submission'%}</a>
+<div class="row">
+    <div class="col-md-8">
+        <h5>{% trans 'mandatory_asterisk'%}</h5>
+    </div>
+    <div class="col-md-4">
+        <button type="submit" id="bt_submit_attachments" class="btn btn-default pull-right" role="button"
+                title="{%trans 'save'%}">
+            <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+            {%trans 'save'%}
+        </button>
+    </div>
+</div>
+<div class="row"  style="margin-top:5px;">
+    <div class="col-md-6">
+        <a id="lnk_previous_step_up"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey'%}{%endif%}"
+           onclick="save('form_attachments');"
+           title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%} : {% trans 'sociological_survey'%}</a>
+    </div>
+    <div class="col-md-6">
+        <a id="lnk_next_step_up"
+           class="btn btn-default pull-right"
+           href="{%if application.id%}{% url 'submission' application.id%}{%else%}{% url 'submission'%}{%endif%}"
+           onclick="save('form_attachments');"
+           title="{% trans 'submission'%}">{%trans 'next_step'%} : {%trans 'submission'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            </a>
+    </div>
 </div>
 
 <br/>
@@ -115,31 +130,25 @@
     </button>
 
 </form>
-
-<div>
-    <br>
-    <a id="lnk_previous_step"
-       class="btn btn-default"
-       href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey'%}{%endif%}"
-       onclick="save('form_attachments');"
-       title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-        {%trans 'previous_step'%} : {% trans 'sociological_survey'%}</a>
-    <a id="lnk_next_step"
-       class="btn btn-default"
-       href="{%if application.id%}{% url 'submission' application.id%}{%else%}{% url 'submission'%}{%endif%}"
-       onclick="save('form_attachments');"
-       title="{% trans 'submission'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-        {%trans 'next_step'%} : {%trans 'submission'%}</a>
+<br>
+<div class="row">
+    <div class="col-md-6">
+        <a id="lnk_previous_step"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey'%}{%endif%}"
+           onclick="save('form_attachments');"
+           title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%} : {% trans 'sociological_survey'%}</a>
+    </div>
+    <div class="col-md-6">
+        <a id="lnk_next_step"
+           class="btn btn-default pull-right"
+           href="{%if application.id%}{% url 'submission' application.id%}{%else%}{% url 'submission'%}{%endif%}"
+           onclick="save('form_attachments');"
+           title="{% trans 'submission'%}">{%trans 'next_step'%} : {%trans 'submission'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            </a>
+    </div>
 </div>
 
-{% block script %}
-<script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
-<script src="{% static 'js/attachments.js' %}"></script>
-<script type="text/javascript">
-    $( document ).ready(function() {
-        choices = {{ list_choices|safe }};
-    });
-</script>
-{% endblock %}
 
 

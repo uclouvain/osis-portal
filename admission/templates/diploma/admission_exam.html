@@ -37,6 +37,7 @@
                        id="txt_admission_exam_date"
                        name="admission_exam_date"
                        value="{{admission_exam.exam_date | default_if_none:''|date:"j/m/Y"}}">
+                (format : {% trans 'format_date'%})
                 {%if validation_messages and validation_messages|get_item:'admission_exam_date'%}
                     <br><span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_date'}}</span>
                 {% endif %}
@@ -108,21 +109,20 @@
                      name="admission_exam_result"
                      id="rdb_admission_exam_result_low"
                      value="LOW"
-                     {%if admission_exam.result = 'LOW' %}checked{%endif%}> {% trans 'low_result' %}
+                     > {% trans 'low_result' %}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="admission_exam_result"
                      id="rdb_admission_exam_result_middle"
                      value="MIDDLE"
-                     {%if admission_exam.result = 'MIDDLE'%}checked{%endif%}>  {% trans 'middle_result' %}
+                    >  {% trans 'middle_result' %}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="admission_exam_result"
                      id="rdb_admission_exam_result_high"
-                     value="HIGH"
-                     {%if admission_exam.result  = 'HIGH' %}checked{%endif%}>  {% trans 'high_result' %}
+                     value="HIGH">  {% trans 'high_result' %}
             </label>
             <br>
             {%if validation_messages and validation_messages|get_item:'admission_exam_result'%}

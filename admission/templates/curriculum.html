@@ -29,19 +29,35 @@
 
 <form method="post" action="{% url 'curriculum' %}">
     {% csrf_token %}
-    <div>
-        <a id="lnk_previous_step_up"
-           class="btn btn-default"
-           href="{%if application.id%}{% url 'diploma_update' application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
-           onclick="save('form_curriculum');"
-           title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-            {%trans 'previous_step'%} : {%trans 'prerequisites'%}</a>
-        <a id="lnk_next_step_up"
-           class="btn btn-default"
-           href="{%if application.id%}{% url 'accounting' application.id%}{%else%}{% url 'accounting'%}{%endif%}"
-           onclick="save('form_curriculum');"
-           title="{% trans 'accounting'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            {%trans 'next_step'%} : {%trans 'accounting'%}</a>
+    <div class="row">
+        <div class="col-md-8">
+            <h5>{% trans 'mandatory_asterisk'%}</h5>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" id="bt_submit_curriculum" class="btn btn-default pull-right" role="button"
+                    title="{%trans 'save'%}">
+                <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+                {%trans 'save'%}
+            </button>
+        </div>
+    </div>
+    <div class="row" style="margin-top:5px;">
+        <div class="col-md-6">
+            <a id="lnk_previous_step_up"
+               class="btn btn-default"
+               href="{%if application.id%}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
+               onclick="save('form_curriculum');"
+               title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+                {%trans 'previous_step'%} : {%trans 'prerequisites'%}</a>
+        </div>
+        <div class="col-md-6">
+            <a id="lnk_next_step_up"
+               class="btn btn-default pull-right"
+               href="{%if application.id%}{% url 'accounting' application.id%}{%else%}{% url 'accounting'%}{%endif%}"
+               onclick="save('form_curriculum');"
+               title="{% trans 'accounting'%}">{%trans 'next_step'%} : {%trans 'accounting'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+                </a>
+        </div>
     </div>
     <div>
         {%if message_success%}
@@ -261,18 +277,22 @@
             <br><br>
         {% endif %}
     </div>
-    <div>
-        <a id="lnk_previous_step"
-           class="btn btn-default"
-           href="{%if application.id%}{% url 'diploma_update' application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
-           onclick="save('form_curriculum');"
-           title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-            {%trans 'previous_step'%} : {%trans 'prerequisites'%}</a>
-        <a id="lnk_next_step"
-           class="btn btn-default"
-           href="{%if application.id%}{% url 'accounting' application.id%}{%else%}{% url 'accounting'%}{%endif%}"
-           onclick="save('form_curriculum');"
-           title="{% trans 'accounting'%}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            {%trans 'next_step'%} : {%trans 'accounting'%}</a>
+    <div class="row">
+        <div class="col-md-6">
+            <a id="lnk_previous_step"
+               class="btn btn-default"
+               href="{%if application.id%}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
+               onclick="save('form_curriculum');"
+               title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+                {%trans 'previous_step'%} : {%trans 'prerequisites'%}</a>
+        </div>
+        <div class="col-md-6">
+            <a id="lnk_next_step"
+               class="btn btn-default pull-right"
+               href="{%if application.id%}{% url 'accounting' application.id%}{%else%}{% url 'accounting'%}{%endif%}"
+               onclick="save('form_curriculum');"
+               title="{% trans 'accounting'%}">{%trans 'next_step'%} : {%trans 'accounting'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+                </a>
+        </div>
     </div>
 </form>

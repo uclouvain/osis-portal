@@ -26,21 +26,31 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-
-
-
-
 <form id="form_sociological_survey" action="{% url 'sociological_survey' %}" method="POST">
-
-    <div>
-        <button type="submit" class="btn btn-default" title="{% trans 'accounting'%}">
-            <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-            {%trans 'previous_step'%} : {%trans 'accounting'%}
-        </button>
-        <button type="submit" class="btn btn-default" title="{% trans 'accounting'%}">
-            <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            {%trans 'next_step'%} : {%trans 'attachments'%}
-        </button>
+    <div class="row">
+        <div class="col-md-8">
+            <h5>{% trans 'mandatory_asterisk'%}</h5>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" id="bt_submit_sociological" class="btn btn-default pull-right" role="button"
+                    title="{%trans 'save'%}">
+                <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+                {%trans 'save'%}
+            </button>
+        </div>
+    </div>
+    <div class="row" style="margin-top:5px;">
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-default" title="{% trans 'accounting'%}">
+                <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+                {%trans 'previous_step'%} : {%trans 'accounting'%}
+            </button>
+        </div>
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-default pull-right" title="{% trans 'accounting'%}">
+                {%trans 'next_step'%} : {%trans 'attachments'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            </button>
+        </div>
     </div>
 
     <br>
@@ -51,9 +61,6 @@
         {% trans 'error_with_form' %}
     </div>
     {% endif %}
-
-    <!-- To know wich tab to go if valid -->
-    <input type="hidden" value="next" id="hdn_next_tab" name="next_tab" title="Next tab" >
 
     <!-- NUMBER OF BROTHERS AND SISTERS -->
     <div class="row">
@@ -308,15 +315,18 @@
         </div>
     </div>
 
-    <div>
-        <button type="submit" class="btn btn-default" title="{% trans 'accounting'%}">
-            <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-            {%trans 'previous_step'%} : {%trans 'accounting'%}
-        </button>
-        <button type="submit" class="btn btn-default" title="{% trans 'accounting'%}">
-            <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            {%trans 'next_step'%} : {%trans 'attachments'%}
-        </button>
+    <div class="row">
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-default" title="{% trans 'accounting'%}">
+                <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+                {%trans 'previous_step'%} : {%trans 'accounting'%}
+            </button>
+        </div>
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-default pull-right" title="{% trans 'accounting'%}">
+                {%trans 'next_step'%} : {%trans 'attachments'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            </button>
+        </div>
     </div>
 
 </form>
