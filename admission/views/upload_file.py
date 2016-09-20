@@ -254,7 +254,7 @@ def save_uploaded_file(request):
                     secondary_education_exam.type = secondary_education_exam_type
                     secondary_education_exam.save()
 
-    return ''
+    return HttpResponse('')
 
 
 @login_required

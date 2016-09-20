@@ -56,17 +56,9 @@ def update(request, application_id=None):
 
     remove_attachment_form = RemoveAttachmentForm()
     list_choices = [x[1] for x in document_type.DOCUMENT_TYPE_CHOICES]
-    return render(request, "admission_home.html", {
+    data = {
         "tab_active": 6,
         "application": application,
-        "validated_profil": demande_validation.validate_profil(applicant, request.user),
-        "validated_diploma": demande_validation.validate_diploma(application),
-        "validated_curriculum": demande_validation.validate_curriculum(application),
-        "validated_application": demande_validation.validate_application(application),
-        "validated_accounting": demande_validation.validate_accounting(),
-        "validated_sociological": demande_validation.validate_sociological(),
-        "validated_attachments": demande_validation.validate_attachments(),
-        "validated_submission": demande_validation.validate_submission(),
         "tab_profile": tab_status['tab_profile'],
         "tab_applications": tab_status['tab_applications'],
         "tab_diploma": tab_status['tab_diploma'],
@@ -79,7 +71,10 @@ def update(request, application_id=None):
         "document_formset": document_formset,
         "attachments": past_attachments,
         "removeAttachmentForm": remove_attachment_form,
-        "list_choices": list_choices})
+        "list_choices": list_choices
+    }
+    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    return render(request, "admission_home.html", )
 
 
 def remove_attachment(request):

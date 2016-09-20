@@ -41,9 +41,10 @@
     <br>
 
     <br>
-    <input type="hidden" id="hdn_tab_active" value="{{tab_active}}" title="active tab">
-
-    <input type="hidden" value="{{application.id | default_if_none:''}}" id="hdn_current_application_id" name="application_id" title="application_id" >
+    <form id="form_application_layout">
+        <input type="hidden" id="hdn_tab_active" value="{{tab_active}}" title="active tab">
+        <input type="hidden" value="{{application.id | default_if_none:''}}" id="hdn_current_application_id" name="application_id" title="application_id" >
+    </form>
     <div class="row">
         <div class="col-md-2">
             {% if applications%}<a href="{%url 'home'%}">{% trans 'back_demandes_list'%}</a>{%endif%}
@@ -182,7 +183,6 @@
     </div>
 
     <br>
-    <input type="hidden" id="hdn_pushed" />
 
 {% endblock %}
 
@@ -230,17 +230,28 @@
         $('#slt_criteria_5').trigger('change');
         //If information message is on the screen it will disappear after 5s
         $('#message_info').fadeOut(5000);
+         $('#msg_validation_diploma').fadeOut(5000);
 
         {% if list_choices %}
             choices = {{ list_choices | safe }};
         {% else %}
             choices = [];
         {% endif %}
+
+        $("#pnl_existing_files").on('click', '#bt_delete_document_file', function () {
+            // needed otherwise the click event isn't handled
+            click_bt_delete_document_file();
+        });
+
     });
 
     function save(form_to_submit){
         var id = 'form#' + form_to_submit;
-        $(id).submit();
+        $.ajax({
+            url: $(id).attr('action'), // Le nom du fichier indiqué dans le formulaire
+            type: $(id).attr('method'), // La méthode indiquée dans le formulaire (get ou post)
+            data: $(id).serialize(), // Je sérialise les données (j'envoie toutes les valeurs présentes dans le formulaire)
+        });
     }
 
     $("#lnk_profil_next_step").click(function() {
@@ -636,10 +647,6 @@
             }
         }
 
-        if(id=='bt_delete_document_file'){
-            e.preventDefault(); // if you want to cancel the event flow
-            click_bt_delete_document_file();
-        }
     });
 
     $("#slt_criteria_5").change(function(event) {
@@ -669,7 +676,6 @@
         $('#hdn_description').val(description);
         $('#lbl_description_label').text(gettext(description.toLowerCase()));
         $('#txt_file').val('');
-        $('#hdn_pushed').val(elt.attr("id"));
     }
 
     $("#txt_file").on("change", function(){
@@ -790,13 +796,11 @@
                     $('#pnl_existing_files').append($("<a></a>").attr("href", url)
                                                                 .attr("target","_blank")
                                                                 .append(value.file_name));
-                    var url = build_url('upload/delete/', value.id);
                     var bt = jQuery('<input  id="hdn_delete_document_file" type="hidden" value="'+value.id+'">');
                     $('#pnl_existing_files').append(bt);
                     $('#pnl_existing_files').append('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
                     bt = jQuery('<button type="submit" id="bt_delete_document_file" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-trash"></span></button>');
                     $('#pnl_existing_files').append(bt);
-
                 });
             }
         });
