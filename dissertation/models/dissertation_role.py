@@ -65,12 +65,12 @@ def count_by_status_student_dissertation(status, adviser, dissertation):
 
 
 def get_promoteur_by_dissertation(dissertation):
-    promoteurs = search_by_dissertation_and_role(dissertation, 'PROMOTEUR')
-    return promoteurs[0].adviser
+    promoteur = search_by_dissertation_and_role(dissertation, 'PROMOTEUR')
+    return promoteur.adviser
 
 
 def search_by_dissertation(dissertation):
-    return DissertationRole.objects.filter(dissertation=dissertation).order_by('pk')
+    return DissertationRole.objects.filter(dissertation=dissertation)
 
 
 def search_by_dissertation_and_role(dissertation, role):
