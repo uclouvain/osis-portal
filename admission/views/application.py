@@ -56,9 +56,11 @@ def profile_confirmed(request):
 def save_application_offer(request):
     next_tab = None
     application = None
+
     if request.method == 'POST':
+        new_application = False
         next_tab = request.POST.get('next_tab')
-        print('next_tab', next_tab)
+
         offer_year = None
         offer_year_id = request.POST.get('offer_year_id')
 
@@ -71,6 +73,7 @@ def save_application_offer(request):
             secondary_education = mdl.secondary_education.find_by_person(application.applicant)
         else:
             application = mdl.application.init_application(request.user)
+            new_application = True
             person_application = mdl.applicant.find_by_user(request.user)
             application.applicant = person_application
             secondary_education = mdl.secondary_education.SecondaryEducation()
@@ -118,6 +121,20 @@ def save_application_offer(request):
             application.raffle_number = request.POST.get('txt_offer_lottery')
 
         application.save()
+
+        if new_application is False:
+            # delete all existing application_assimilation_criteria
+            for a in mdl.application_assimilation_criteria.find_by_application(application):
+                a.delete()
+
+        # If application assimilation criteria exists copy them to application assimilation criteria
+
+        applicant_assimilation_criteria_list = mdl.applicant_assimilation_criteria.\
+            find_by_applicant(application.applicant)
+        for applicant_assimilation_criteria in applicant_assimilation_criteria_list:
+            # Copy the applicant_assimilation_criteria
+            mdl.application_assimilation_criteria.\
+                copy_from_applicant_assimilation_criteria(applicant_assimilation_criteria, application)
         # answer_question_
         for key, value in request.POST.items():
             if "txt_answer_question_" in key:

@@ -41,6 +41,9 @@ from admission.views import tabs
 from osis_common import models as mdl_osis_common
 from admission.models.enums import document_type
 from osis_common.forms import UploadDocumentFileForm
+from django.http import HttpResponse
+from rest_framework.renderers import JSONRenderer
+from rest_framework import serializers
 
 
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
@@ -98,6 +101,11 @@ def home(request):
 
 def profile(request, application_id=None, message_success=None):
     tab_status = tabs.init(request)
+    message_info = None
+    application = None
+    assimilation_case = False
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
     if request.method == 'POST':
         applicant_form = ApplicantForm(data=request.POST)
         applicant = mdl.applicant.find_by_user(request.user)
@@ -164,6 +172,9 @@ def profile(request, application_id=None, message_success=None):
                 country = mdl_ref.country.find_by_id(country_id)
             else:
                 country = None
+            if country:
+                if not country.european_union:
+                    assimilation_case = True
             applicant.nationality = country
         else:
             applicant.nationality = None
@@ -208,7 +219,7 @@ def profile(request, application_id=None, message_success=None):
             person_legal_address.country = country
         else:
             applicant_form.errors['legal_adr_country'] = _('mandatory_field')
-            # person_legal_address.country = None
+
         if request.POST.get('same_contact_legal_addr') == "false":
             person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
             if person_contact_address is None:
@@ -241,80 +252,136 @@ def profile(request, application_id=None, message_success=None):
                 country = None
                 if country_id and int(country_id) >= 0:
                     country = mdl_ref.country.find_by_id(country_id)
-                person_contact_address.country = country
+                if country:
+                    person_contact_address.country = country
             else:
                 person_contact_address.country = None
             same_addresses = False
+            person_contact_address.save()
         else:
-            # Question que faire si true, mais qu'une adresse de contact existe déjà
-            person_contact_address = None
             same_addresses = True
+            person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
+            if person_contact_address:
+                person_contact_address.delete()
 
         if request.POST['phone_mobile']:
             applicant.phone_mobile = request.POST['phone_mobile']
         if request.POST['phone']:
             applicant.phone = request.POST['phone']
+        else:
+            applicant.phone = None
         if request.POST['additional_email']:
             applicant.additional_email = request.POST['additional_email']
-
+        else:
+            applicant.additional_email = None
         if request.POST['previous_enrollment'] == "true":
             if request.POST['registration_id']:
                 applicant.registration_id = request.POST['registration_id']
+            else:
+                applicant.registration_id = None
             if request.POST['last_academic_year']:
                 applicant.last_academic_year = request.POST['last_academic_year']
+            else:
+                applicant.last_academic_year = None
             previous_enrollment = True
         else:
             applicant.registration_id = None
             applicant.last_academic_year = None
             previous_enrollment = False
+        if assimilation_case:
+            # verify if it exists one record per criteria
+            default_critera_list = mdl_ref.assimilation_criteria.find_criteria()
+            for crit in default_critera_list:
+                existing_crit = mdl.applicant_assimilation_criteria.find_first(applicant, crit)
+                if existing_crit is None:
+                    applicant_assimilation_criteria = \
+                                    mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria()
+                    applicant_assimilation_criteria.criteria = crit
+                    applicant_assimilation_criteria.applicant = applicant
+                    applicant_assimilation_criteria.additional_criteria = None
+                    applicant_assimilation_criteria.selected = None
+                    applicant_assimilation_criteria.save()
+                if application:
+                    application_assimilation_criteria = mdl.application_assimilation_criteria.find_first(application,
+                                                                                                         crit)
+                    if application_assimilation_criteria is None:
+                        application_assimilation_criteria = \
+                            mdl.application_assimilation_criteria.ApplicationAssimilationCriteria()
+                        application_assimilation_criteria.criteria = crit
+                        application_assimilation_criteria.application = application
+                        application_assimilation_criteria.additional_criteria = None
+                        application_assimilation_criteria.selected = None
+                        application_assimilation_criteria.save()
 
-        for key in request.POST:
-            if key[0:22] == "assimilation_criteria_":
-                if request.POST[key] == "true":
+            for key in request.POST:
+                if key[0:22] == "assimilation_criteria_":
                     criteria_id = key[22:]
-                    # Delete other previous criteria encoded
-                    criterias = mdl.applicant_assimilation_criteria.find_by_applicant(applicant)
-                    for c in criterias:
-                        if c.criteria.id != int(criteria_id):
-                            c.delete()
-                    #
                     criteria = mdl_ref.assimilation_criteria.find_by_id(criteria_id)
-                    if criteria:
-                        assimilation_basic_documents = assimilation_criteria_view.\
-                            find_list_assimilation_basic_documents()
-                        list_document_type_needed = get_list_docs(criteria.id)
-                        list_document_type_needed.append(document_type.ID_CARD)
 
-                        if criteria.id == 5:
-                            if request.POST.get("slt_criteria_5") == "1":
-                                list_document_type_needed.extend(assimilation_criteria_view.
-                                                                 criteria1(list_document_type_needed))
-                            if request.POST.get("slt_criteria_5") == "2":
-                                list_document_type_needed.extend(assimilation_criteria_view.
-                                                                 criteria2(list_document_type_needed))
-                            if request.POST.get("slt_criteria_5") == "3":
-                                list_document_type_needed.extend(assimilation_criteria_view.
-                                                                 criteria3(list_document_type_needed))
-                            if request.POST.get("slt_criteria_5") == "4":
-                                list_document_type_needed.extend(assimilation_criteria_view.
-                                                                 criteria4(list_document_type_needed))
-                        for d in assimilation_basic_documents:
-                            if d not in list_document_type_needed:
-                                docs = mdl_osis_common.document_file.search(request.user, d)
-                                for d in docs:
-                                    # delete unnecessary documents
-                                    d.delete()
-                        applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.search(applicant,
-                                                                                                     criteria)
-                        if not applicant_assimilation_criteria:
-                            applicant_assimilation_criteria = \
-                                mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria()
-                            applicant_assimilation_criteria.criteria = criteria
-                            applicant_assimilation_criteria.applicant = applicant
+                    if request.POST[key] == "true":
+                        applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_first(applicant,
+                                                                                                         criteria)
+                        if criteria:
+                            assimilation_basic_documents = assimilation_criteria_view.\
+                                find_list_assimilation_basic_documents()
+                            list_document_type_needed = assimilation_criteria_view.get_list_docs(criteria.id)
+                            list_document_type_needed.append(document_type.ID_CARD)
+
+                            if criteria.id == 5:
+                                if request.POST.get("criteria_5") == "1":
+                                    list_document_type_needed.extend(assimilation_criteria_view.
+                                                                     criteria1(list_document_type_needed))
+                                if request.POST.get("criteria_5") == "2":
+                                    list_document_type_needed.extend(assimilation_criteria_view.
+                                                                     criteria2(list_document_type_needed))
+                                if request.POST.get("criteria_5") == "3":
+                                    list_document_type_needed.extend(assimilation_criteria_view.
+                                                                     criteria3(list_document_type_needed))
+                                if request.POST.get("criteria_5") == "4":
+                                    list_document_type_needed.extend(assimilation_criteria_view.
+                                                                     criteria4(list_document_type_needed))
+                            for d in assimilation_basic_documents:
+                                if d not in list_document_type_needed:
+                                    docs = mdl_osis_common.document_file.search(request.user, d)
+                                    for document_to_be_deleted in docs:
+                                        # delete unnecessary documents
+                                        document_to_be_deleted.delete()
+
+                            applicant_assimilation_criteria.additional_criteria = \
+                                define_additional_criteria(request.POST.get("criteria_5"))
+                            applicant_assimilation_criteria.selected = True
                             applicant_assimilation_criteria.save()
 
-        documents_upload(request)
+                            # Update/create application_assimilation_criteria
+                            if application:
+                                application_assimilation_criteria = mdl.application_assimilation_criteria.\
+                                    find_first(application, criteria)
+                                application_assimilation_criteria.criteria = criteria
+                                if applicant_assimilation_criteria.additional_criteria:
+                                    application_assimilation_criteria.additional_criteria = \
+                                        applicant_assimilation_criteria.additional_criteria
+                                application_assimilation_criteria.selected = True
+                                application_assimilation_criteria.save()
 
+                    if request.POST[key] == "false":
+                        applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_first(applicant,
+                                                                                                         criteria)
+                        applicant_assimilation_criteria.selected = False
+                        applicant_assimilation_criteria.save()
+                        # Update/create application_assimilation_criteria
+                        if application:
+                            application_assimilation_criteria = mdl.application_assimilation_criteria.\
+                                find_first(application, criteria)
+                            application_assimilation_criteria.criteria = criteria
+                            if applicant_assimilation_criteria.additional_criteria:
+                                application_assimilation_criteria.additional_criteria = \
+                                    applicant_assimilation_criteria.additional_criteria
+                            application_assimilation_criteria.selected = False
+                            application_assimilation_criteria.save()
+
+        else:
+            # cleanup the database if needed
+            delete_previous_criteria(applicant, application)
         message_success = None
 
         if person_contact_address:
@@ -323,7 +390,7 @@ def profile(request, application_id=None, message_success=None):
         applicant.user.save()
         request.user = applicant.user  # Otherwise it was not refreshed while going back to home page
         applicant.save()
-
+        message_info = _('msg_info_saved')
     else:
         applicant = mdl.applicant.find_by_user(request.user)
         applicant_form = ApplicantForm()
@@ -348,9 +415,10 @@ def profile(request, application_id=None, message_success=None):
 
     assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
     applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
-    application = None
-    if application_id:
-        application = mdl.application.find_by_id(application_id)
+
+    if application:
+        # applicant_assimilation_criteria = mdl.application_assimilation_criteria.find_by_application(application)
+        pass
     else:
         tab_status = tabs.init(request)
     # validated are not ready yet, to be achieved in another issue - Leila
@@ -393,7 +461,8 @@ def profile(request, application_id=None, message_success=None):
         'id_document': get_id_document(request.user),
         'assimilation_basic_documents': assimilation_criteria_view.find_assimilation_basic_documents(),
         'assimilation_documents_existing': get_assimilation_documents_existing(request.user),
-        'document_formset': document_formset})
+        'document_formset': document_formset,
+        'message_info': message_info})
 
 
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
@@ -525,25 +594,41 @@ def documents_upload(request):
                             adm_doc_file.save()
 
 
-def get_list_docs(criteria_id):
-    list_document_type = []
-    if criteria_id == 1:
-        list_document_type = assimilation_criteria_view.criteria1(list_document_type)
-    if criteria_id == 2:
-        list_document_type = assimilation_criteria_view.criteria2(list_document_type)
-    if criteria_id == 3:
-        list_document_type = assimilation_criteria_view.criteria3(list_document_type)
-    if criteria_id == 4:
-        list_document_type = assimilation_criteria_view.criteria4(list_document_type)
-    if criteria_id == 5:
-        list_document_type = assimilation_criteria_view.criteria5(list_document_type)
-    if criteria_id == 6:
-        list_document_type = assimilation_criteria_view.criteria6(list_document_type)
-    if criteria_id == 7:
-        list_document_type = assimilation_criteria_view.criteria7(list_document_type)
-    list_documents = []
-    for l in list_document_type:
-        for elt in l.descriptions:
-            if elt not in list_documents:
-                list_documents.append(elt)
-    return list_documents
+def define_additional_criteria(criteria5):
+    if criteria5:
+        return mdl_ref.assimilation_criteria.find_by_id(int(criteria5))
+    else:
+        return None
+
+
+class JSONResponse(HttpResponse):
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
+
+
+class DocumentFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = mdl_osis_common.document_file.DocumentFile
+        fields = ('file', 'file_name', 'content_type')
+
+
+def get_picture(request):
+    description = request.GET['description']
+    pictures = mdl_osis_common.document_file.search(request.user, description)
+
+    if pictures.exists():
+        serializer = DocumentFileSerializer(pictures[0])
+        return JSONResponse(serializer.data)
+    return None
+
+
+def delete_previous_criteria(applicant, application):
+    criteria_list = mdl.applicant_assimilation_criteria.find_by_applicant(applicant)
+    for c in criteria_list:
+        c.delete()
+    if application:
+        criteria_list = mdl.application_assimilation_criteria.find_by_application(application)
+        for c in criteria_list:
+            c.delete()

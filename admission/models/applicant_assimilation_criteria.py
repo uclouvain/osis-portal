@@ -28,12 +28,15 @@ from django.contrib import admin
 
 
 class ApplicantAssimilationCriteriaAdmin(admin.ModelAdmin):
-    list_display = ('applicant', 'criteria')
+    list_display = ('applicant', 'criteria', 'selected')
 
 
 class ApplicantAssimilationCriteria(models.Model):
     applicant = models.ForeignKey('Applicant')
     criteria = models.ForeignKey('reference.AssimilationCriteria')
+    additional_criteria = models.ForeignKey('reference.AssimilationCriteria', blank=True, null=True,
+                                            related_name='applicant_additional_criteria')
+    selected = models.NullBooleanField(null=True, blank=True)
 
 
 def find_by_applicant(applicant):
@@ -54,3 +57,11 @@ def search(applicant=None, criteria=None):
     if applicant or criteria:
         out = queryset
     return out
+
+
+def find_first(applicant=None, criteria=None):
+    results = search(applicant, criteria)
+    if results.exists():
+        return results[0]
+    return None
+
