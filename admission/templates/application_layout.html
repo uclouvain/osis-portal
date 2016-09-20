@@ -214,9 +214,7 @@
         $('#chb_admission_exam_type').prop( "checked", false);
 
         populate_exam_admin();
-        if($("#hdn_application_offer_year_id").val()){
-            display_dynamic_form($("#hdn_application_offer_year_id").val());
-        }
+
         if($('#hdn_current_application_id').val() != '') {
             $('#txt_offer_year_id').val($('#hdn_application_offer_year_id').val())
             $('#slt_offer_type').val($('#hdn_application_grade').val())
@@ -241,6 +239,20 @@
         $("#pnl_existing_files").on('click', '#bt_delete_document_file', function () {
             // needed otherwise the click event isn't handled
             click_bt_delete_document_file();
+        });
+
+        $("#pnl_assimilation_criteria").on('click', "button[id^='btn_load_assimilation_doc_']" , function (event) {
+
+            var target = $(event.target);
+            var id = target.attr("id");
+            // needed otherwise the click event isn't handled
+            if(id.startsWith('btn_load_assimilation_doc_') ){
+                //upload for assimilation
+                var pos = id.indexOf('_id_')
+                var description = id.substring(pos+4)
+                update_description(description, target);
+                display_existing_files(description)
+            }
         });
 
     });
@@ -632,23 +644,6 @@
         }
     });
 
-    $(document).bind('click', function (e) {
-        var target = $(e.target);
-        var id = target.attr("id");
-        if (target.is('.class_upload_assimilation')) {
-            e.preventDefault(); // if you want to cancel the event flow
-
-            if(id.startsWith('btn_load_assimilation_doc_') ){
-                //upload for assimilation
-                var pos = id.indexOf('_id_')
-                var description = id.substring(pos+4)
-                update_description(description, target);
-                display_existing_files(description)
-            }
-        }
-
-    });
-
     $("#slt_criteria_5").change(function(event) {
         $('[id^="pnl_criteria_bis_"]').each(function(){
             $(this).remove();
@@ -907,7 +902,7 @@
 
             $('[id$="'+description+'"]').each(function() {
                 if($(this).attr("id").startsWith('btn_load_assimilation_doc_') || $(this).attr("id").startsWith('bt_load_doc_')) {
-                    if($(this).attr("id")=='bt_load_doc_'+description){
+                    if($(this).attr("id")=='bt_load_doc_'+description || $(this).attr("id").startsWith('btn_load_assimilation_doc_')){
                         $(this).attr('title', gettext('add_document'));
                         $(this).attr('class', 'btn');
                         var spn_id = '#spn_' +$(this).attr("id");

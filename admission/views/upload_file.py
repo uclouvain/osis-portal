@@ -268,8 +268,9 @@ def delete_document_file(request):
         description = request.POST.get('description')
         document = mdl_osis_common.document_file.search(request.user, description)
         if document:
-            document_applicant = mdl.application_document_file.find_by_document(document)
-            if document_applicant:
-                document_applicant.delete()
+            document_applicant_list = mdl.application_document_file.find_by_document(document)
+            if document_applicant_list.exists():
+                for document_applicant in document_applicant_list:
+                    document_applicant.delete()
             document.delete()
-    return ''
+    return HttpResponse('')
