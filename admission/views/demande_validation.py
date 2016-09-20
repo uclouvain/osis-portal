@@ -155,8 +155,18 @@ def validate_diploma(application, user):
                 doc_verso = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_VERSO)
                 if doc_recto.exists() is False or doc_verso.exists() is False:
                     validation_messages['national_diploma_doc'] = ALERT_MANDATORY_FIELD
-    return validation_messages
 
+            if professional_exam:
+                if professional_exam.exam_date is None:
+                    validation_messages['professional_exam_date'] = ALERT_MANDATORY_FIELD
+                if professional_exam.institution is None:
+                    validation_messages['professional_exam_institution'] = ALERT_MANDATORY_FIELD
+                if professional_exam.result is None:
+                    validation_messages['professional_exam_result'] = ALERT_MANDATORY_FIELD
+                doc = mdl.application_document_file.search(application, document_type.PROFESSIONAL_EXAM_CERTIFICATE)
+                if doc.exists() is False:
+                    validation_messages['professional_exam_doc'] = ALERT_MANDATORY_FIELD
+    return validation_messages
 
 
 def validate_curriculum(application):
@@ -181,7 +191,7 @@ def validate_submission():
 
 def get_validation_status(application, applicant, user):
     diploma_tab_valid = True
-    msgs = validate_diploma(application, user),
+    msgs = validate_diploma(application, user)
     if len(msgs) > 0:
         diploma_tab_valid = False
 

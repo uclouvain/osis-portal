@@ -42,7 +42,7 @@
                        name="professional_exam_date">
                  {%if validation_messages and validation_messages|get_item:'professional_exam_date'%}
                     <br>
-                    <span class="error" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'professional_exam_date'}}</span>
+                    <span class="error" role="alert" style="margin-left:5px;" id="professional_exam_date_error">{{ validation_messages|get_item:'professional_exam_date'}}</span>
                 {% endif %}
                 <br><br>
                 <label>{% trans 'question_institution_name_nice' %} *</label>
@@ -51,7 +51,7 @@
                        name="professional_exam_institution">
                 <br>
                 {%if validation_messages and validation_messages|get_item:'professional_exam_institution'%}
-                    <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'professional_exam_institution'}}</span><br>
+                    <span class="error" style="margin-left:5px;" id="professional_exam_institution_error">{{ validation_messages|get_item:'professional_exam_institution'}}</span><br>
                 {% endif %}
             </div>
             <br>
@@ -79,7 +79,7 @@
             </label>
             <br>
             {%if validation_messages and validation_messages|get_item:'professional_exam_result'%}
-                <span class="error" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'professional_exam_result'}}</span>
+                <span class="error" role="alert" style="margin-left:5px;" id="professional_exam_result_error">{{ validation_messages|get_item:'professional_exam_result'}}</span>
             {% endif %}
             <br>
             {%if professional_exam_file%}
@@ -99,6 +99,9 @@
                               id="spn_bt_load_doc_PROFESSIONAL_EXAM_CERTIFICATE"></span> {% trans 'add_professional_exam_file' %}
                 </button>
             {%endif%}
+            {%if validation_messages and validation_messages|get_item:'professional_exam_doc'%}
+            <br><br><span class="error" style="margin-left:5px;" id="professional_exam_doc_error">{{ validation_messages|get_item:'professional_exam_doc'}}</span><br>
+            {% endif %}
         </div>
 
     </div>
