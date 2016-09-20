@@ -27,7 +27,7 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<form method="post" action="{% url 'curriculum' %}">
+<form method="post" action="{% url 'curriculum' %}" id="form_curriculum">
     {% csrf_token %}
     <div class="row">
         <div class="col-md-8">

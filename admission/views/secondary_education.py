@@ -434,6 +434,7 @@ def validate_professional_exam(request, is_valid, validation_messages, secondary
                 professional_exam = mdl.secondary_education_exam.SecondaryEducationExam()
                 professional_exam.secondary_education = secondary_education
             professional_exam.type = PROFESSIONAL_TYPE
+            professional_exam.exam_date = None
             if request.POST.get('professional_exam_date') is None \
                     or len(request.POST.get('professional_exam_date').strip()) == 0:
                 validation_messages['professional_exam_date'] = ALERT_MANDATORY_FIELD
