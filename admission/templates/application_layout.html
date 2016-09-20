@@ -456,7 +456,7 @@
             legal_valid = false;
         }
         if($('#txt_legal_adr_city').val() == '' ){
-            $('#spn_legal_adr_city').text(gettext('legal_postal_code'));
+            $('#spn_legal_adr_city').text(gettext('legal_city'));
             legal_valid = false;
         }
         if($('#slt_legal_adr_country').prop('selectedIndex') <= 0 ){
@@ -481,7 +481,7 @@
                 contact_valid = false;
             }
             if($('#txt_contact_adr_city').val() == '' ){
-                $('#spn_contact_adr_city').text(gettext('contact_postal_code'));
+                $('#spn_contact_adr_city').text(gettext('contact_city'));
                 contact_valid = false;
             }
             if($('#slt_contact_adr_country').prop('selectedIndex') <= 0 ){
