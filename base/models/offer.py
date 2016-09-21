@@ -25,6 +25,7 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from base.models.serializable_model import SerializableModel
 from base.models import offer_enrollment
 
 
@@ -33,7 +34,7 @@ class OfferAdmin(admin.ModelAdmin):
     search_fields = ['title']
 
 
-class Offer(models.Model):
+class Offer(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     title = models.CharField(max_length=255)
 

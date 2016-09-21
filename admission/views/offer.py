@@ -31,6 +31,7 @@ from rest_framework.renderers import JSONRenderer
 from admission import models as mdl
 from reference import models as mdl_reference
 from admission.views.common import extra_information, validated_extra, get_picture_id
+from base import models as mdl_base
 
 
 class JSONResponse(HttpResponse):
@@ -42,7 +43,7 @@ class JSONResponse(HttpResponse):
 
 class OfferSerializer(serializers.ModelSerializer):
     class Meta:
-        model = mdl.offer_year.OfferYear
+        model = mdl_base.offer_year.OfferYear
         fields = ('id', 'acronym', 'title', 'title_international', 'grade_type', 'subject_to_quota')
 
 
@@ -51,14 +52,14 @@ def search(request):
     domain = request.GET['domain']
     serializer = OfferSerializer([], many=True)
     if level != 'undefined' and domain != 'undefined':
-        offers = mdl.offer_year.search(level, domain)
+        offers = mdl_base.offer_year.search(level, domain)
         serializer = OfferSerializer(offers, many=True)
     return JSONResponse(serializer.data)
 
 
 def find_by_id(request):
     offer_year_id = request.GET['offer']
-    offer_year = mdl.offer_year.find_by_id(offer_year_id)
+    offer_year = mdl_base.offer_year.find_by_id(offer_year_id)
     serializer = OfferSerializer(offer_year)
     return JSONResponse(serializer.data)
 
@@ -99,7 +100,7 @@ def _get_domain(request):
 
 
 def selection_offer(request, offer_id):
-    offer_year = get_object_or_404(mdl.offer_year.OfferYear, pk=offer_id)
+    offer_year = get_object_or_404(mdl_base.offer_year.OfferYear, pk=offer_id)
     grade = _get_offer_type(request)
     domain = _get_domain(request)
 

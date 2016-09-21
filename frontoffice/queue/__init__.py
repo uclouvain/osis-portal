@@ -25,4 +25,4 @@
 ##############################################################################
 
 from frontoffice.queue import callbacks
-from frontoffice.queue import queue
+from frontoffice.queue import queue_listener
