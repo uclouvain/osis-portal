@@ -44,6 +44,7 @@ TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO = 'TRANSLATED_HIGH_SCHOOL_SCORES_
 EQUIVALENCE = 'EQUIVALENCE'
 ADMISSION_EXAM_CERTIFICATE = 'ADMISSION_EXAM_CERTIFICATE'
 PROFESSIONAL_EXAM_CERTIFICATE = 'PROFESSIONAL_EXAM_CERTIFICATE'
+LANGUAGE_EXAM_CERTIFICATE = 'LANGUAGE_EXAM_CERTIFICATE'
 RESIDENT_LONG_DURATION = 'RESIDENT_LONG_DURATION'
 ID_FOREIGN_UNLIMITED = 'ID_FOREIGN_UNLIMITED'
 ATTACHMENT_26 = 'ATTACHMENT_26'
@@ -85,6 +86,7 @@ DOCUMENT_TYPE_CHOICES = ((ID_CARD, 'identity_card', '', ''),
                          (EQUIVALENCE, 'equivalence', '', ''),
                          (ADMISSION_EXAM_CERTIFICATE, 'admission_exam_certificate', '', ''),
                          (PROFESSIONAL_EXAM_CERTIFICATE, 'professional_exam_certificate', '', ''),
+                         (LANGUAGE_EXAM_CERTIFICATE, 'language_exam_certificate', '', ''),
                          (RESIDENT_LONG_DURATION, 'resident_long_duration', '', ''),
                          (ID_FOREIGN_UNLIMITED, 'id_foreign_unlimited', '', ''),
                          (ATTACHMENT_26, 'attachment_26', '', ''),

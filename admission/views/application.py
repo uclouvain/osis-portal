@@ -240,19 +240,23 @@ def submission(request, application_id=None):
     else:
         application = mdl.application.init_application(request.user)
     tab_status = tabs.init(request)
-    return render(request, "admission_home.html",
-                  {'application': application,
-                   'display_admission_exam': extra_information(request, application),
-                   'tab_active': 7,
-                   'tab_profile': tab_status['tab_profile'],
-                   'tab_applications': tab_status['tab_applications'],
-                   'tab_diploma': tab_status['tab_diploma'],
-                   'tab_curriculum': tab_status['tab_curriculum'],
-                   'tab_accounting': tab_status['tab_accounting'],
-                   'tab_sociological': tab_status['tab_sociological'],
-                   'tab_attachments': tab_status['tab_attachments'],
-                   'tab_submission': tab_status['tab_submission'],
-                   'applications': mdl.application.find_by_user(request.user)})
+    data = {
+        'application': application,
+        'display_admission_exam': extra_information(request, application),
+        'tab_active': 7,
+        'tab_profile': tab_status['tab_profile'],
+        'tab_applications': tab_status['tab_applications'],
+        'tab_diploma': tab_status['tab_diploma'],
+        'tab_curriculum': tab_status['tab_curriculum'],
+        'tab_accounting': tab_status['tab_accounting'],
+        'tab_sociological': tab_status['tab_sociological'],
+        'tab_attachments': tab_status['tab_attachments'],
+        'tab_submission': tab_status['tab_submission'],
+        'applications': mdl.application.find_by_user(request.user)
+    }
+    applicant = mdl.applicant.find_by_user(request.user)
+    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    return render(request, "admission_home.html", data)
 
 
 def application_delete(request, application_id):
