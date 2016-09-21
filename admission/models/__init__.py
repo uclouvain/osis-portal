@@ -34,7 +34,6 @@ from admission.models import curriculum
 from admission.models import document_type_assimilation
 from admission.models import form
 from admission.models import option
-from admission.models import offer_year_domain
 from admission.models import person_address
 from admission.models import profession
 from admission.models import properties

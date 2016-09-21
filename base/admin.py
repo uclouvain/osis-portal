@@ -45,6 +45,9 @@ admin.site.register(external_offer.ExternalOffer,
 admin.site.register(offer_year.OfferYear,
                     offer_year.OfferYearAdmin)
 
+admin.site.register(offer_year_domain.OfferYearDomain,
+                    offer_year_domain.OfferYearDomainAdmin)
+
 admin.site.register(organization.Organization,
                     organization.OrganizationAdmin)
 
