@@ -24,10 +24,11 @@
 #
 ##############################################################################
 from rest_framework import serializers
-from admission import models as mdl
 from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
-from django.views.decorators.csrf import csrf_exempt
+
+from admission import models as mdl
+from base import models as mdl_base
 
 
 class JSONResponse(HttpResponse):
@@ -46,7 +47,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 def find_by_offer(request):
     offer_yr_id = request.GET['offer']
 
-    offer_yr = mdl.offer_year.find_by_id(offer_yr_id)
+    offer_yr = mdl_base.offer_year.find_by_id(offer_yr_id)
     questions = mdl.question.find_form_ordered_questions(offer_yr)
     serializer = QuestionSerializer(questions, many=True)
     return JSONResponse(serializer.data)

@@ -33,6 +33,9 @@ admin.site.register(assimilation_criteria.AssimilationCriteria,
 admin.site.register(country.Country,
                     country.CountryAdmin)
 
+admin.site.register(decree.Decree,
+                    decree.DecreeAdmin)
+
 admin.site.register(domain.Domain,
                     domain.DomainAdmin)
 
@@ -44,6 +47,9 @@ admin.site.register(education_type.EducationType,
 
 admin.site.register(grade_type.GradeType,
                     grade_type.GradeTypeAdmin)
+
+admin.site.register(institutional_grade_type.InstitutionalGradeType,
+                    institutional_grade_type.InstitutionalGradeTypeAdmin)
 
 admin.site.register(language.Language,
                     language.LanguageAdmin)

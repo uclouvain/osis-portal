@@ -25,47 +25,58 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from django.utils import timezone
+from django.core.exceptions import ObjectDoesNotExist
+from base.models.serializable_model import SerializableModel
 
 
-class OfferYearAdmin(admin.ModelAdmin):
-    list_display = ('acronym', 'title', 'academic_year', 'domain', 'grade_type', 'subject_to_quota')
-    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'offer', 'title', 'title_international',
-                                    'domain', 'grade_type', 'subject_to_quota')}),)
+class AcademicYearAdmin(admin.ModelAdmin):
+    list_display = ('name', 'start_date', 'end_date')
+    fieldsets = ((None, {'fields': ('year', 'start_date', 'end_date')}),)
 
 
-class OfferYear(models.Model):
+class AcademicYear(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    academic_year = models.ForeignKey('AcademicYear')
-    acronym = models.CharField(max_length=15)
-    title = models.CharField(max_length=255)
-    title_international = models.CharField(max_length=255, blank=True, null=True)
-    domain = models.ForeignKey('reference.Domain')
-    grade_type = models.ForeignKey('reference.GradeType', blank=True, null=True, db_index=True)
-    subject_to_quota = models.BooleanField(default=False)
-    offer = models.ForeignKey('base.Offer', blank=True, null=True)
+    year = models.IntegerField()
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+
+    @property
+    def name(self):
+        return self.__str__()
 
     def __str__(self):
-        return u"%s - %s" % (self.academic_year, self.acronym)
+        return u"%s-%s" % (self.year, self.year + 1)
 
 
-def find_by_id(offer_year_id):
-    return OfferYear.objects.get(pk=offer_year_id)
+def next_academic_year(self):
+    next_year = self.year + 1
+    return AcademicYear.objects.filter(year=next_year)
 
 
-def find_all():
-    return OfferYear.objects.all().order_by("acronym")
+def find_academic_years():
+    return AcademicYear.objects.all().order_by('year')
 
 
-def search(level=None, domain=None):
-    if level and domain:
-        return OfferYear.objects.filter(grade_type=level, domain=domain).order_by("acronym")
+def find_last_academic_years():
+    return AcademicYear.objects.all().order_by('-year')[:2]
+
+
+def current_academic_year():
+    academic_yr = AcademicYear.objects.filter(start_date__lte=timezone.now()) \
+                                      .filter(end_date__gte=timezone.now()).first()
+    if academic_yr:
+        return academic_yr
     else:
         return None
 
 
-def find_by_domain_grade(domain, grade):
-    return OfferYear.objects.filter(domain=domain, grade_type=grade).order_by("acronym")
+def find_by_id(id):
+    return AcademicYear.objects.get(pk=id)
 
 
-def find_by_offer(offers):
-    return OfferYear.objects.filter(offer__in=offers)
+def find_by_year(a_year):
+    try:
+        return AcademicYear.objects.get(year=a_year)
+    except ObjectDoesNotExist:
+        return None

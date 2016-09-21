@@ -25,32 +25,49 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-
-from base.models.offer_year import OfferYear
+from base.enums.organization_type import TYPES as ORGANIZATION_TYPES
 from base.models.serializable_model import SerializableModel
 
 
-class OfferEnrollmentAdmin(admin.ModelAdmin):
-    list_display = ('offer_year', 'student', 'date_enrollment')
-    fieldsets = ((None, {'fields': ('offer_year','student','date_enrollment')}),)
-    raw_id_fields = ('offer_year', 'student')
-    search_fields = ['offer_year__acronym', 'student__person__first_name', 'student__person__last_name']
+class OrganizationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'acronym', 'website', 'reference', 'type')
+    fieldsets = ((None, {'fields': ('name', 'acronym', 'reference', 'website', 'type')}),)
+    search_fields = ['acronym']
 
 
-class OfferEnrollment(SerializableModel):
+class Organization(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    date_enrollment = models.DateField()
-    offer_year = models.ForeignKey(OfferYear)
-    student = models.ForeignKey('Student')
+    name = models.CharField(max_length=255)
+    acronym = models.CharField(max_length=15)
+    website = models.URLField(max_length=255, blank=True, null=True)
+    reference = models.CharField(max_length=30, blank=True, null=True)
+    type = models.CharField(max_length=30, blank=True, null=True, choices=ORGANIZATION_TYPES, default='UNKNOWN')
 
     def __str__(self):
-        return u"%s - %s" % (self.student, self.offer_year)
+        return self.name
 
 
-def find_by_student(a_student):
-    enrollments = OfferEnrollment.objects.filter(student=a_student)
-    return enrollments
+def find_by_id(organization_id):
+    return Organization.objects.get(pk=organization_id)
 
 
-def find_by_student_offer(a_student, offer_year):
-    return OfferEnrollment.objects.filter(student=a_student, offer_year=offer_year)
+def search(acronym=None, name=None, type=None, reference=None):
+    out = None
+    queryset = Organization.objects
+
+    if acronym:
+        queryset = queryset.filter(acronym=acronym)
+
+    if name:
+        queryset = queryset.filter(name=name)
+
+    if type:
+        queryset = queryset.filter(type=type)
+
+    if reference:
+        queryset = queryset.filter(reference=reference)
+
+    if acronym or name or type or reference:
+        out = queryset
+
+    return out

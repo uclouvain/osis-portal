@@ -27,9 +27,6 @@ from django.contrib import admin
 
 from admission.models import *
 
-admin.site.register(academic_year.AcademicYear,
-                    academic_year.AcademicYearAdmin)
-
 admin.site.register(admission_exam_type.AdmissionExamType,
                     admission_exam_type.AdmissionExamTypeAdmin)
 
@@ -55,9 +52,6 @@ admin.site.register(curriculum.Curriculum,
 
 admin.site.register(form.Form,
                     form.FormAdmin)
-
-admin.site.register(offer_year.OfferYear,
-                    offer_year.OfferYearAdmin)
 
 admin.site.register(option.Option,
                     option.OptionAdmin)

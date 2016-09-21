@@ -23,35 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-from couchbase import Couchbase
-from pprint import pprint
 import json
-import logging
-from django.conf import settings
 import pika
 from frontoffice.settings import QUEUE_URL, QUEUE_USER, QUEUE_PASSWORD, QUEUE_PORT, QUEUE_CONTEXT_ROOT
-
-logger = logging.getLogger(settings.DEFAULT_LOGGER)
-
-
-def couchbase_insert(json_datas):
-    cb = Couchbase.connect(bucket='default')
-    data = json.loads(json_datas.decode("utf-8"))
-    key = "{0}-{1}".format(
-        data['id'],
-        data['name'].replace(' ', '_').lower()
-    )
-    logger.debug('inserting datas in couchDB...')
-    cb.set(key, data)
-    logger.debug('Done.')
-    logger.debug('getting datas just inserted in couchDB...')
-    result = cb.get(key)
-    pprint(result.value, indent=4)
-    logger.debug('Done.')
-    logger.debug('deleting datas just inserted in couchDB...')
-    cb.delete(key)
-    logger.debug('Done.')
 
 
 def send_message(queue_name, message):
