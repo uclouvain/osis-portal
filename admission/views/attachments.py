@@ -33,6 +33,7 @@ from osis_common.forms import UploadDocumentFileForm
 from osis_common.models.document_file import DocumentFile
 from django.forms import formset_factory
 
+
 def update(request, application_id=None):
     past_attachments = list_attachments(request.user)
     attachments_available = attachments_left_available(len(past_attachments))
