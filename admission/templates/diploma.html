@@ -167,7 +167,28 @@
            id="hdn_application_id"
            name="application_id"
            value="{{application.id| default_if_none:''}}" >
-
+    <input type="hidden"
+           id="hdn_local_language_exam_needed"
+           value="{{local_language_exam_needed}}" >
+    <input type="hidden"
+           id="hdn_secondary_education_local_language_exam"
+           name="secondary_education_local_language_exam"
+           value="{% if local_language_exam %}True{% else %}False{% endif %}" >
+    <input type="hidden"
+           id="hdn_secondary_education_local_language_exam_date"
+           name="secondary_education_local_language_exam_date"
+           value="{{local_language_exam.exam_date | default_if_none:'' | date:"d/m/Y" }}" >
+    <input type="hidden"
+           id="hdn_secondary_education_local_language_exam_institution"
+           name="secondary_education_local_language_exam_institution"
+           value="{{local_language_exam.institution| default_if_none:''}}" >
+    <input type="hidden"
+           id="hdn_secondary_education_local_language_exam_result"
+           name="secondary_education_local_language_exam_result"
+           value="{{local_language_exam.result| default_if_none:''}}" >
+    <input type="hidden"
+           id="hdn_person_registration_id"
+           value="{{application.applicant.registration_id| default_if_none:''}}" >
     {% csrf_token %}
     <div class="row">
         <div class="col-md-8">
@@ -234,14 +255,13 @@
                       <input type="radio"
                              name="diploma"
                              id="rdb_diploma_true"
-                             value="true"
-                             onclick="display('pnl_academic_year',true);display('pnl_admission_exam',false);"> {% trans 'yes'%}
+                             value="true"> {% trans 'yes'%}
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
                              name="diploma"
-                             id="rdb_diploma_false" value="false"
-                             onclick="display('pnl_academic_year',false);display('pnl_admission_exam',true);"> {% trans 'no'%}
+                             id="rdb_diploma_false"
+                             value="false"> {% trans 'no'%}
                     </label>
                     {%if validation_messages and validation_messages|get_item:'diploma'%}
                         <br><span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'diploma'}}</span>
@@ -298,6 +318,7 @@
     </div>
     {% include "diploma/admission_exam.html" %}
     {% include "diploma/professional_exam.html" %}
+    {% include "diploma/local_language_exam.html" %}
     {%if validation_messages and validation_messages|get_item:'final'%}
         <br>
         <span class="error" style="margin-left:5px;">

@@ -23,27 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-import json
+from django.core import serializers
 
 
 def insert_or_update(json_data):
-    """
-    Insert the records in PostGreSQL. If the records already exist, then the method makes an update.
-    """
-    data = json.loads(json_data.decode("utf-8"))
-    # Import must be inside the method because django isn't loaded at the launch of the application
-    from reference import models as mdl_ref
-    from base import models as mdl_base
-    map_classes = {
-        'reference.country.Country': mdl_ref.country.Country,
-        'reference.domain.Domain': mdl_ref.domain.Domain,
-        'base.tutor.Tutor': mdl_base.tutor.Tutor,
-        'base.student.Student': mdl_base.student.Student
-    }
-    cls_str = data['model_class_str']
-    model_class = map_classes[cls_str]
-    records = data['records']
-    # ids = [obj['id'] for obj in records]
-    for record in records :
-        obj, created = model_class.objects.update_or_create(defaults=record, **{'id' : record['id']})
+    instances = serializers.deserialize('json', json_data, ignorenonexistent=True)
+    for instance in instances:
+        super(instance.object.__class__, instance.object).save()

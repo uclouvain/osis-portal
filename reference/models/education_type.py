@@ -25,17 +25,19 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from base.models.serializable_model import SerializableModel
 
 
 class EducationTypeAdmin(admin.ModelAdmin):
     list_display = ('name', 'type', 'adhoc')
 
 
-class EducationType(models.Model):
+class EducationType(SerializableModel):
     EDUCATION_TYPE = (('TRANSITION','Transition'),
             ('QUALIFICATION','Qualification'),
-            ('ANOTHER','Autre'))
+            ('ANOTHER', 'Autre'))
 
+    external_id = models.CharField(max_length=100, blank=True, null=True)
     type = models.CharField(max_length=20, choices=EDUCATION_TYPE)
     name = models.CharField(max_length=100)
     adhoc = models.BooleanField(default=False)

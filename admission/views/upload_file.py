@@ -207,7 +207,8 @@ def save_uploaded_file(request):
                              document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
                              document_type.EQUIVALENCE,
                              document_type.ADMISSION_EXAM_CERTIFICATE,
-                             document_type.PROFESSIONAL_EXAM_CERTIFICATE]
+                             document_type.PROFESSIONAL_EXAM_CERTIFICATE,
+                             document_type.LANGUAGE_EXAM_CERTIFICATE]
         assimilation_uploads = assimilation_criteria_view.find_list_assimilation_basic_documents()
 
         if description in prerequis_uploads:
