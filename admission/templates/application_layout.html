@@ -112,7 +112,7 @@
                         &nbsp;&nbsp;{%trans 'curriculum'%}</a>
                 </li>
                 <li class="{%if tab_active == 4 %}active{%endif%}">
-                        <a href="{%if tab_accounting%}{%if  application.id%}{% url 'accounting_update' application.id%}{%else%}{% url 'accounting_update' %}{%endif%}{%endif%}"
+                        <a href="{%if tab_accounting%}{%if application.id%}{% url 'accounting_update' application.id%}{%else%}{% url 'accounting_update' %}{%endif%}{%endif%}"
                            id="lnk_accounting_tab"
                            class="{%if tab_accounting%}{%else%}not-active{%endif%}" >
                         {% if validated_accounting %}
@@ -942,6 +942,16 @@
     $("#rd_previous_enrollment_false").click(function() {
         $('#txt_registration_id').val('');
         $('#txt_last_academic_year').val('');
+    });
+
+    $("#txt_local_language_exam_date").blur(function() {
+        var value = $("#txt_local_language_exam_date").val();
+        $("#msg_error_local_language_exam_date").find("label").remove();
+        if (isDate(value)){
+            $("#msg_error_local_language_exam_date").find("label").remove();
+        }else{
+            $("#msg_error_local_language_exam_date").append("<label>Invalid</label>");
+        }
     });
 
     function save_form(){

@@ -23,13 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+<<<<<<< HEAD
 from admission import models as mdl
 from admission.models.answer import find_by_option, find_by_id
 from django.shortcuts import render, get_object_or_404
 from reference import models as mdl_reference
 from admission.views.common import get_picture_id, get_id_document
+=======
+from django.shortcuts import render, get_object_or_404
+>>>>>>> 9ce15cfdfb665749aaf6b6d8ad86e93a9f0eff6d
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+
+from admission import models as mdl
+from reference import models as mdl_reference
+from base import models as mdl_base
+from admission.views.common import get_picture_id, get_id_document
 from admission.views.common import extra_information
 from admission.views import demande_validation
 from admission.views import tabs
@@ -74,10 +83,10 @@ def save_application_offer(request):
             secondary_education.applicant = application.applicant
 
         if secondary_education and secondary_education.academic_year is None:
-            secondary_education.academic_year = mdl.academic_year.current_academic_year()
+            secondary_education.academic_year = mdl_base.academic_year.current_academic_year()
 
         if offer_year_id:
-            offer_year = mdl.offer_year.find_by_id(offer_year_id)
+            offer_year = mdl_base.offer_year.find_by_id(offer_year_id)
 
         application.offer_year = offer_year
 
@@ -259,19 +268,23 @@ def submission(request, application_id=None):
     else:
         application = mdl.application.init_application(request.user)
     tab_status = tabs.init(request)
-    return render(request, "admission_home.html",
-                  {'application': application,
-                   'display_admission_exam': extra_information(request, application),
-                   'tab_active': 7,
-                   'tab_profile': tab_status['tab_profile'],
-                   'tab_applications': tab_status['tab_applications'],
-                   'tab_diploma': tab_status['tab_diploma'],
-                   'tab_curriculum': tab_status['tab_curriculum'],
-                   'tab_accounting': tab_status['tab_accounting'],
-                   'tab_sociological': tab_status['tab_sociological'],
-                   'tab_attachments': tab_status['tab_attachments'],
-                   'tab_submission': tab_status['tab_submission'],
-                   'applications': mdl.application.find_by_user(request.user)})
+    data = {
+        'application': application,
+        'display_admission_exam': extra_information(request, application),
+        'tab_active': 7,
+        'tab_profile': tab_status['tab_profile'],
+        'tab_applications': tab_status['tab_applications'],
+        'tab_diploma': tab_status['tab_diploma'],
+        'tab_curriculum': tab_status['tab_curriculum'],
+        'tab_accounting': tab_status['tab_accounting'],
+        'tab_sociological': tab_status['tab_sociological'],
+        'tab_attachments': tab_status['tab_attachments'],
+        'tab_submission': tab_status['tab_submission'],
+        'applications': mdl.application.find_by_user(request.user)
+    }
+    applicant = mdl.applicant.find_by_user(request.user)
+    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    return render(request, "admission_home.html", data)
 
 
 def application_delete(request, application_id):

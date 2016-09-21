@@ -43,7 +43,7 @@ class Application(models.Model):
                         ('INSCRIPTION', _('inscription')))
 
     applicant = models.ForeignKey('Applicant')
-    offer_year = models.ForeignKey('OfferYear')
+    offer_year = models.ForeignKey('base.OfferYear')
     creation_date = models.DateTimeField(auto_now=True)
     application_type = models.CharField(max_length=20, choices=APPLICATION_TYPE)
     national_degree = models.NullBooleanField(default=None)
