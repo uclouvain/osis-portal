@@ -1438,20 +1438,26 @@ function display_dynamic_form(offer_year_id){
                                            .append(value.question_label)
                                            .attr("id","lbl_question_"+value.question_id));
                         $('#pnl_questions').append("<br>");
-                        $('#pnl_questions').append($("<select></select>")
+                        if(value.option_value == value.answer){
+                            $('#pnl_questions').append($("<select></select>")
                                                .attr("class", "form-control")
-                                               .attr("name","slt_question_"+value.option_id)
+                                               .attr("name","slt_question_"+value.question_id)
                                                .attr("id","slt_question_"+value.question_id)
                                                .prop("required",value.question_required)
                                                .append($("<option></option")
-                                               .attr("value",value.option_value)
-                                               .append(value.answer)));
-                        $('#slt_question_'+value.question_id).append($("<option></option")
-                                                             .attr("value",value.option_value)
-                                                             .append("----------------------"));
-                        $('#slt_question_'+value.question_id).append($("<option></option")
-                                                             .attr("value",value.option_value)
-                                                             .append(value.option_label));
+                                               .attr('selected', 'selected')
+                                               .attr("value",value.option_id)
+                                               .append(value.option_value)));
+                        }else{
+                            $('#pnl_questions').append($("<select></select>")
+                                               .attr("class", "form-control")
+                                               .attr("name","slt_question_"+value.question_id)
+                                               .attr("id","slt_question_"+value.question_id)
+                                               .prop("required",value.question_required)
+                                               .append($("<option></option")
+                                               .attr("value",value.option_id)
+                                               .append(value.option_value)));
+                        }
                         if (value.question_description != ""){
                             $('#pnl_questions').append($("<label></label>")
                                                .append(value.question_description)
@@ -1459,9 +1465,16 @@ function display_dynamic_form(offer_year_id){
                                                .attr("class","description"));
                         }
                     }else{
-                        $('#slt_question_'+value.question_id).append($("<option></option")
-                                                             .attr("value",value.option_value)
-                                                             .append(value.option_label));
+                        if(value.option_value == value.answer){
+                            $('#slt_question_'+value.question_id).append($("<option></option")
+                                                                 .attr('selected', 'selected')
+                                                                 .attr("value",value.option_id)
+                                                                 .append(value.option_value));
+                        }else{
+                            $('#slt_question_'+value.question_id).append($("<option></option")
+                                                                 .attr("value",value.option_id)
+                                                                 .append(value.option_value));
+                        }
                     }
                 }
 

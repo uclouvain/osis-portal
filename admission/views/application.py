@@ -173,17 +173,11 @@ def save_application_offer(request):
                     answer.value = option.value
                     answer.save()
             if "slt_question_" in key:
-                # DROPDOWN_LIST
-                option_id = key.replace("slt_question_", "")
-                asw = find_by_option(option_id)
-                if not asw:
-                    answer = mdl.answer.Answer()
-                    answer.application = application
-                    answer.option = mdl.option.find_by_id(int(option_id))
-                    answer.value = value
-                else:
-                    answer = find_by_id(asw)
-                    answer.value = value
+                answer = mdl.answer.Answer()
+                answer.application = application
+                option = mdl.option.find_by_id(value)
+                answer.option = option
+                answer.value = option.value
                 answer.save()
     applicant = mdl.applicant.find_by_user(request.user)
 
