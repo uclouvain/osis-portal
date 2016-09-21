@@ -25,32 +25,26 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-
-from base.models.offer_year import OfferYear
 from base.models.serializable_model import SerializableModel
 
 
-class OfferEnrollmentAdmin(admin.ModelAdmin):
-    list_display = ('offer_year', 'student', 'date_enrollment')
-    fieldsets = ((None, {'fields': ('offer_year','student','date_enrollment')}),)
-    raw_id_fields = ('offer_year', 'student')
-    search_fields = ['offer_year__acronym', 'student__person__first_name', 'student__person__last_name']
+class ExternalOfferAdmin(admin.ModelAdmin):
+    list_display = ('name', 'adhoc', 'domain', 'grade_type', 'offer_year', 'changed')
+    fieldsets = ((None, {'fields': ('name', 'adhoc', 'domain', 'grade_type', 'offer_year')}),)
+    ordering = ('name',)
+    search_fields = ['name']
 
 
-class OfferEnrollment(SerializableModel):
+class ExternalOffer(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    date_enrollment = models.DateField()
-    offer_year = models.ForeignKey(OfferYear)
-    student = models.ForeignKey('Student')
+    changed = models.DateTimeField(null=True)
+    name = models.CharField(max_length=150, unique=True)
+    adhoc = models.BooleanField(default=True)  # If False == Official/validated, if True == Not Official/not validated
+    domain = models.ForeignKey('reference.Domain', on_delete=models.CASCADE)
+    grade_type = models.ForeignKey('reference.GradeType', on_delete=models.CASCADE)
+    offer_year = models.ForeignKey('base.OfferYear', blank=True, null=True, on_delete=models.CASCADE) # Institution equivalence ("internal" offer)
+    national = models.BooleanField(default=False) # True if is Belgian else False
 
     def __str__(self):
-        return u"%s - %s" % (self.student, self.offer_year)
+        return self.name
 
-
-def find_by_student(a_student):
-    enrollments = OfferEnrollment.objects.filter(student=a_student)
-    return enrollments
-
-
-def find_by_student_offer(a_student, offer_year):
-    return OfferEnrollment.objects.filter(student=a_student, offer_year=offer_year)

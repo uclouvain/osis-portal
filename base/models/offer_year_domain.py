@@ -1,3 +1,4 @@
+
 ##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
@@ -26,31 +27,18 @@
 from django.db import models
 from django.contrib import admin
 
-from base.models.offer_year import OfferYear
-from base.models.serializable_model import SerializableModel
+
+class OfferYearDomainAdmin(admin.ModelAdmin):
+    list_display = ('domain', 'offer_year')
+    fieldsets = ((None, {'fields': ('domain', 'offer_year')}),)
+    raw_id_fields = ('domain', 'offer_year')
+    search_fields = ['domain__name', 'offer_year__acronym']
 
 
-class OfferEnrollmentAdmin(admin.ModelAdmin):
-    list_display = ('offer_year', 'student', 'date_enrollment')
-    fieldsets = ((None, {'fields': ('offer_year','student','date_enrollment')}),)
-    raw_id_fields = ('offer_year', 'student')
-    search_fields = ['offer_year__acronym', 'student__person__first_name', 'student__person__last_name']
-
-
-class OfferEnrollment(SerializableModel):
+class OfferYearDomain(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    date_enrollment = models.DateField()
-    offer_year = models.ForeignKey(OfferYear)
-    student = models.ForeignKey('Student')
+    domain = models.ForeignKey('reference.Domain', blank=True, null=True)
+    offer_year = models.ForeignKey('base.OfferYear', blank=True, null=True)
 
     def __str__(self):
-        return u"%s - %s" % (self.student, self.offer_year)
-
-
-def find_by_student(a_student):
-    enrollments = OfferEnrollment.objects.filter(student=a_student)
-    return enrollments
-
-
-def find_by_student_offer(a_student, offer_year):
-    return OfferEnrollment.objects.filter(student=a_student, offer_year=offer_year)
+        return u"%s - %s" % (self.domain, self.offer_year)

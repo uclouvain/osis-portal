@@ -32,7 +32,7 @@
 # > osis.migrate_base_student() # migration of all students
 ###########################################################################
 
-from frontoffice.queue import queue_actions
+from frontoffice.queue import queue_sender
 from dissertation.models.adviser import Adviser
 
 
@@ -76,7 +76,7 @@ def migrate(model_class, records, queue_name):
         'model_class_str': get_model_class_str(model_class),
         'records': records,
     }
-    queue_actions.send_message(queue_name, data)
+    queue_sender.send_message(queue_name, data)
 
 
 def migrate_records(records, model_class, queue_name):

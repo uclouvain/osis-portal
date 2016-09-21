@@ -25,32 +25,47 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-
-from base.models.offer_year import OfferYear
 from base.models.serializable_model import SerializableModel
 
 
-class OfferEnrollmentAdmin(admin.ModelAdmin):
-    list_display = ('offer_year', 'student', 'date_enrollment')
-    fieldsets = ((None, {'fields': ('offer_year','student','date_enrollment')}),)
-    raw_id_fields = ('offer_year', 'student')
-    search_fields = ['offer_year__acronym', 'student__person__first_name', 'student__person__last_name']
+class OfferYearAdmin(admin.ModelAdmin):
+    list_display = ('acronym', 'title', 'academic_year', 'grade_type','subject_to_quota')
+    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'grade_type','subject_to_quota')}),)
 
 
-class OfferEnrollment(SerializableModel):
+class OfferYear(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    date_enrollment = models.DateField()
-    offer_year = models.ForeignKey(OfferYear)
-    student = models.ForeignKey('Student')
+    academic_year = models.ForeignKey('base.AcademicYear')
+    acronym = models.CharField(max_length=15)
+    title = models.CharField(max_length=255)
+    title_international = models.CharField(max_length=255, blank=True, null=True)
+    grade_type = models.ForeignKey('reference.GradeType', blank=True, null=True, db_index=True)
+    subject_to_quota = models.BooleanField(default=False)
+    offer = models.ForeignKey('base.Offer', blank=True, null=True)
+    campus = models.ForeignKey('base.Campus', blank=True, null=True)
 
     def __str__(self):
-        return u"%s - %s" % (self.student, self.offer_year)
+        return u"%s - %s" % (self.academic_year, self.acronym)
 
 
-def find_by_student(a_student):
-    enrollments = OfferEnrollment.objects.filter(student=a_student)
-    return enrollments
+def find_by_id(offer_year_id):
+    return OfferYear.objects.get(pk=offer_year_id)
 
 
-def find_by_student_offer(a_student, offer_year):
-    return OfferEnrollment.objects.filter(student=a_student, offer_year=offer_year)
+def find_all():
+    return OfferYear.objects.all().order_by("acronym")
+
+
+def search(level=None, domain=None):
+    if level and domain:
+        return OfferYear.objects.filter(grade_type=level, domain=domain).order_by("acronym")
+    else:
+        return None
+
+
+def find_by_domain_grade(domain, grade):
+    return OfferYear.objects.filter(domain=domain, grade_type=grade).order_by("acronym")
+
+
+def find_by_offer(offers):
+    return OfferYear.objects.filter(offer__in=offers)
