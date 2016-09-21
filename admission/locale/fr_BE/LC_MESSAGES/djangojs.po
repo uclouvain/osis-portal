@@ -201,3 +201,9 @@ msgstr "Merci de préciser la dernière année"
 
 msgid "previous_enrollment_required_nb"
 msgstr "Merci de préciser un numéro de matricule"
+
+msgid "equivalence"
+msgstr "Equivalence"
+
+msgid "language_exam_certificate"
+msgstr "Attestation de réussite ou la preuve d'inscription"

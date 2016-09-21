@@ -24,7 +24,7 @@
 #
 ##############################################################################
 
-from admission.models import academic_year, offer_year
+from base.models import academic_year, offer_year
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from base import models as mdl

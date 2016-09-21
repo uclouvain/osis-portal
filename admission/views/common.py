@@ -60,6 +60,8 @@ def home(request):
             translation.activate(user_language)
             request.session[translation.LANGUAGE_SESSION_KEY] = user_language
         applications = mdl.application.find_by_user(request.user)
+        person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
+        person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
         if applications:
             applicant_form = ApplicantForm()
 
@@ -434,10 +436,7 @@ def profile(request, application_id=None, message_success=None):
     assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
     applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
 
-    if application:
-        # applicant_assimilation_criteria = mdl.application_assimilation_criteria.find_by_application(application)
-        pass
-    else:
+    if application is None:
         tab_status = tabs.init(request)
     # validated are not ready yet, to be achieved in another issue - Leila
     person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')

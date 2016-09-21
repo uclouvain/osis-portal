@@ -25,7 +25,7 @@
 ##############################################################################
 
 from django.apps import AppConfig
-from frontoffice.queue import callbacks, queue
+from frontoffice.queue import callbacks, queue_listener
 
 
 class AdmissionConfig(AppConfig):
@@ -34,4 +34,4 @@ class AdmissionConfig(AppConfig):
     def ready(self):
         # if django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
         # ===> This exception says that there is an error in the implementation of method ready(self) !!
-        queue.listen_queue(self.name, callbacks.insert_or_update)
+        queue_listener.listen_queue(self.name, callbacks.insert_or_update)
