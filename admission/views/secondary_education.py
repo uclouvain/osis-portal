@@ -85,7 +85,7 @@ def validate_fields_form(request, secondary_education, next_step):
                                 if request.POST.get('dipl_acc_high_educ') is None:
                                     validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
                                     is_valid = False
-                            if request.POST.get('chb_other_education') == 'on':
+                            if request.POST.get('other_education') == 'on':
                                 if request.POST.get('other_education_type') is None:
                                     validation_messages['pnl_teaching_type'] = _('msg_error_other_education_type')
                                     is_valid = False
@@ -94,6 +94,7 @@ def validate_fields_form(request, secondary_education, next_step):
                                     new_education_type.adhoc = True
                                     new_education_type.name = request.POST.get('other_education_type')
                                     new_education_type.type = 'ANOTHER'
+                                    new_education_type.save()
                                     secondary_education.education_type = new_education_type
 
                         else:
@@ -305,7 +306,7 @@ def diploma_save(request):
         secondary_education = mdl.secondary_education.SecondaryEducation()
         secondary_education.academic_year = mdl_base.academic_year.current_academic_year()
         secondary_education.person = applicant
-    saved = 0
+
     if next_step or previous_step or save_step:
         # Check if all the necessary fields have been filled
         is_valid, validation_messages, secondary_education, professional_exam, admission_exam = validate_fields_form(
@@ -326,8 +327,11 @@ def diploma_save(request):
         else:
             if previous_step:
                 return HttpResponseRedirect(reverse('home'))
+    app_id = None
+    if application:
+        app_id = application.id
 
-    return HttpResponseRedirect(reverse('diploma_update', args=(application.id, 1)))
+    return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': app_id, 'saved': 1}))
 
 
 def diploma_update(request, application_id=None, saved=None):
@@ -335,6 +339,7 @@ def diploma_update(request, application_id=None, saved=None):
     Called when prerequis and diplomas are displayed
     :param request:
     :param application_id:
+    :param saved:
     :return:
     """
     if saved:
@@ -357,6 +362,8 @@ def diploma_update(request, application_id=None, saved=None):
     countries = mdl_reference.country.find_excluding("BE")
     academic_years = mdl_base.academic_year.find_academic_years()
     tab_status = tabs.init(request)
+    validation_messages = demande_validation.validate_diploma(application, request.user)
+
     data = {"application":                  application,
             "academic_years":               academic_years,
             "secondary_education":          secondary_education,
@@ -371,14 +378,6 @@ def diploma_update(request, application_id=None, saved=None):
             "current_academic_year":        mdl_base.academic_year.current_academic_year(),
             "local_language_exam_needed":   is_local_language_exam_needed(request.user),
             'tab_active':                   2,
-            "validated_profil":             demande_validation.validate_profil(applicant, request.user),
-            "validated_diploma":            demande_validation.validate_diploma(application),
-            "validated_curriculum":         demande_validation.validate_curriculum(application),
-            "validated_application":        demande_validation.validate_application(application),
-            "validated_accounting":         demande_validation.validate_accounting(),
-            "validated_sociological":       demande_validation.validate_sociological(),
-            "validated_attachments":        demande_validation.validate_attachments(),
-            "validated_submission":         demande_validation.validate_submission(),
             'tab_profile': tab_status['tab_profile'],
             'tab_applications': tab_status['tab_applications'],
             'tab_diploma': tab_status['tab_diploma'],
@@ -389,9 +388,9 @@ def diploma_update(request, application_id=None, saved=None):
             'tab_submission': tab_status['tab_submission'],
             'applications': mdl.application.find_by_user(request.user),
             'national_diploma_verso': mdl.application_document_file.find_first(application,
-                                                                           document_type.NATIONAL_DIPLOMA_VERSO),
+                                                                               document_type.NATIONAL_DIPLOMA_VERSO),
             'national_diploma_recto': mdl.application_document_file.find_first(application,
-                                                                           document_type.NATIONAL_DIPLOMA_RECTO),
+                                                                               document_type.NATIONAL_DIPLOMA_RECTO),
             'international_diploma_verso':
                 mdl.application_document_file.search(application, document_type.INTERNATIONAL_DIPLOMA_VERSO),
             'international_diploma_recto':
@@ -416,9 +415,11 @@ def diploma_update(request, application_id=None, saved=None):
                 mdl.application_document_file.find_first(application, document_type.ADMISSION_EXAM_CERTIFICATE),
             'professional_exam_file':
                 mdl.application_document_file.find_first(application, document_type.PROFESSIONAL_EXAM_CERTIFICATE),
-            'message_info': message_info}
+            'message_info': message_info,
+            'validation_messages': validation_messages}
 
-    # merge 2 dictionaries
+    # merge 3 dictionaries
+    data.update(demande_validation.get_validation_status(application, applicant, request.user))
     data.update(get_secondary_education_exams_data(secondary_education))
 
     return render(request, "admission_home.html", data)
@@ -436,6 +437,7 @@ def validate_professional_exam(request, is_valid, validation_messages, secondary
                 professional_exam = mdl.secondary_education_exam.SecondaryEducationExam()
                 professional_exam.secondary_education = secondary_education
             professional_exam.type = PROFESSIONAL_TYPE
+            professional_exam.exam_date = None
             if request.POST.get('professional_exam_date') is None \
                     or len(request.POST.get('professional_exam_date').strip()) == 0:
                 validation_messages['professional_exam_date'] = ALERT_MANDATORY_FIELD
@@ -637,7 +639,7 @@ def populate_secondary_education(request, secondary_education):
                         .find_by_id(int(request.POST.get('school')))
                     secondary_education.national_institution = national_institution
 
-            if request.POST.get('chb_other_education') == 'on':
+            if request.POST.get('other_education') == 'on':
                 existing_education_type = mdl_reference.education_type\
                     .find_by_name(request.POST.get('other_education_type'))
                 if existing_education_type:
@@ -743,7 +745,7 @@ def secondary_education_exam_update(secondary_education, type, secondary_educati
 
 
 def documents_update(request, secondary_education, application, professional_exam, admission_exam):
-    list_unwanted_files=[]
+    list_unwanted_files = []
 
     if not secondary_education.diploma:
         list_unwanted_files.append(document_type.NATIONAL_DIPLOMA_RECTO)
@@ -753,9 +755,11 @@ def documents_update(request, secondary_education, application, professional_exa
     if not secondary_education.international_diploma:
         list_unwanted_files.append(document_type.INTERNATIONAL_DIPLOMA_RECTO)
         list_unwanted_files.append(document_type.INTERNATIONAL_DIPLOMA_VERSO)
-    if secondary_education.international_diploma is None or secondary_education.international_diploma !='INTERNATIONAL':
+    if secondary_education.international_diploma is None \
+            or secondary_education.international_diploma != 'INTERNATIONAL':
         list_unwanted_files.append(document_type.EQUIVALENCE)
-    if secondary_education.international_diploma_language is None or secondary_education.international_diploma_language.recognized:
+    if secondary_education.international_diploma_language is None \
+            or secondary_education.international_diploma_language.recognized:
         list_unwanted_files.append(document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO)
         list_unwanted_files.append(document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO)
         list_unwanted_files.append(document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)

@@ -552,8 +552,14 @@ function national_community_display(){
             }
             if($('#hdn_secondary_education_education_type_adhoc').val() == 'True'){
                 $('#chb_other_education').prop( "checked", true);
-                $('#txt_other_education_type')( "disabled", false);
+                $('#txt_other_education_type').prop( "disabled", false);
                 $('#txt_other_education_type').val($('#hdn_secondary_education_education_type_name').val());
+                $('[name^="rdb_education_transition_type"]').each(function(){
+                    $(this).prop( "disabled", true);
+                });
+                $('[name^="rdb_education_technic_type"]').each(function(){
+                    $(this).prop( "disabled", true);
+                });
             }
         }
     }
@@ -644,3 +650,27 @@ $("#chb_other_school").change(function() {
         $('#rdb_school_belgian_community_german').prop( "disabled", true);
     }
 });
+
+$("#chb_other_education").change(function() {
+    if ($('#chb_other_education').prop( "checked")){
+            $('[name^="rdb_education_transition_type"]').each(function(){
+                $(this).prop( "disabled", true);
+            });
+            $('[name^="rdb_education_technic_type"]').each(function(){
+                $(this).prop( "disabled", true);
+            });
+            $('#txt_other_education_type').prop( "disabled",false);
+
+    }else{
+            $('[name^="rdb_education_transition_type"]').each(function(){
+                $(this).prop( "disabled", false);
+            });
+            $('[name^="rdb_education_technic_type"]').each(function(){
+                $(this).prop( "disabled", false);
+            });
+            $('#txt_other_education_type').prop( "disabled",true);
+            $('#txt_other_education_type').val('');
+    }
+});
+
+

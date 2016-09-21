@@ -177,37 +177,33 @@ def update(request, application_id=None):
     else:
         universities_cities, universities = populate_dropdown_list(curricula)
         tab_status = tabs.init(request)
-        return render(request, "admission_home.html",
-                      {"curricula": curricula,
-                       "local_universities_french": local_universities_french,
-                       "local_universities_dutch": local_universities_dutch,
-                       "domains": mdl_reference.domain.find_all_domains(),
-                       "subdomains": mdl_reference.domain.find_all_subdomains(),
-                       "grade_types": mdl_reference.grade_type.find_all(),
-                       "universities_countries": mdl_reference.education_institution.find_countries(),
-                       "universities_cities": universities_cities,
-                       "universities": universities,
-                       "languages": mdl_reference.language.find_languages(),
-                       "current_academic_year": mdl_base.academic_year.current_academic_year(),
-                       "tab_active": 3,
-                       "application": application,
-                       "validated_profil": demande_validation.validate_profil(applicant, request.user),
-                       "validated_diploma": demande_validation.validate_diploma(application),
-                       "validated_curriculum": demande_validation.validate_curriculum(application),
-                       "validated_application": demande_validation.validate_application(application),
-                       "validated_accounting": demande_validation.validate_accounting(),
-                       "validated_sociological": demande_validation.validate_sociological(),
-                       "validated_attachments": demande_validation.validate_attachments(),
-                       "validated_submission": demande_validation.validate_submission(),
-                       'tab_profile': tab_status['tab_profile'],
-                       'tab_applications': tab_status['tab_applications'],
-                       'tab_diploma': tab_status['tab_diploma'],
-                       'tab_curriculum': tab_status['tab_curriculum'],
-                       'tab_accounting': tab_status['tab_accounting'],
-                       'tab_sociological': tab_status['tab_sociological'],
-                       'tab_attachments': tab_status['tab_attachments'],
-                       'tab_submission': tab_status['tab_submission'],
-                       'applications': mdl.application.find_by_user(request.user)})
+
+        data = {
+            "curricula": curricula,
+            "local_universities_french": local_universities_french,
+            "local_universities_dutch": local_universities_dutch,
+            "domains": mdl_reference.domain.find_all_domains(),
+            "subdomains": mdl_reference.domain.find_all_subdomains(),
+            "grade_types": mdl_reference.grade_type.find_all(),
+            "universities_countries": mdl_reference.education_institution.find_countries(),
+            "universities_cities": universities_cities,
+            "universities": universities,
+            "languages": mdl_reference.language.find_languages(),
+            "current_academic_year": mdl_base.academic_year.current_academic_year(),
+            "tab_active": 3,
+            "application": application,
+            'tab_profile': tab_status['tab_profile'],
+            'tab_applications': tab_status['tab_applications'],
+            'tab_diploma': tab_status['tab_diploma'],
+            'tab_curriculum': tab_status['tab_curriculum'],
+            'tab_accounting': tab_status['tab_accounting'],
+            'tab_sociological': tab_status['tab_sociological'],
+            'tab_attachments': tab_status['tab_attachments'],
+            'tab_submission': tab_status['tab_submission'],
+            'applications': mdl.application.find_by_user(request.user)
+        }
+        data.update(demande_validation.get_validation_status(application, applicant, request.user))
+        return render(request, "admission_home.html", data)
 
 
 def validate_fields_form(request, duplicate_year_origin):

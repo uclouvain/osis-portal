@@ -1368,3 +1368,11 @@ msgstr "Il reste des erreurs qui empêche la validation de l'onglet"
 
 msgid "no_doc"
 msgstr "Pas de document"
+
+msgid "validation_errors"
+msgstr " champ(s) empêche(nt) la validation de l'onglet"
+
+msgid "msg_one_prerequisite"
+msgstr ""
+"Vous devez au minimum être en possession d'un diplome d'étude secondaires, d'une expérience professionnelle, d'un "
+"examen d'admission ou encore d'un examen de langue française"
