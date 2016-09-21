@@ -45,9 +45,6 @@ admin.site.register(education_institution.EducationInstitution,
 admin.site.register(education_type.EducationType,
                     education_type.EducationTypeAdmin)
 
-admin.site.register(external_offer.ExternalOffer,
-                    external_offer.ExternalOfferAdmin)
-
 admin.site.register(grade_type.GradeType,
                     grade_type.GradeTypeAdmin)
 

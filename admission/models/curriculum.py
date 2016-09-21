@@ -70,7 +70,7 @@ class Curriculum(models.Model):
     )
     person = models.ForeignKey('Applicant')
     academic_year = models.ForeignKey('base.AcademicYear')
-    path_type = models.CharField(max_length=25, choices=PATH_TYPES)
+    path_type = models.CharField(max_length=25, choices=PATH_TYPES, blank=True, null=True)
     national_education = models.CharField(max_length=20, choices=NATIONAL_COMMUNITY_TYPES, blank=True, null=True)
     language = models.ForeignKey('reference.Language', blank=True, null=True)
     national_institution = models.ForeignKey('reference.EducationInstitution', blank=True, null=True)
