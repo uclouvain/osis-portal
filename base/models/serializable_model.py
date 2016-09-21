@@ -24,33 +24,24 @@
 #
 ##############################################################################
 from django.db import models
-from django.contrib import admin
-
-from base.models.offer_year import OfferYear
-from base.models.serializable_model import SerializableModel
+import uuid
 
 
-class OfferEnrollmentAdmin(admin.ModelAdmin):
-    list_display = ('offer_year', 'student', 'date_enrollment')
-    fieldsets = ((None, {'fields': ('offer_year','student','date_enrollment')}),)
-    raw_id_fields = ('offer_year', 'student')
-    search_fields = ['offer_year__acronym', 'student__person__first_name', 'student__person__last_name']
+class SerializableModelManager(models.Manager):
+    def get_by_natural_key(self, uuid):
+        return self.get(uuid=uuid)
 
 
-class OfferEnrollment(SerializableModel):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    date_enrollment = models.DateField()
-    offer_year = models.ForeignKey(OfferYear)
-    student = models.ForeignKey('Student')
+class SerializableModel(models.Model):
+    objects = SerializableModelManager()
+
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, db_index=True)
+
+    def natural_key(self):
+        return [self.uuid]
 
     def __str__(self):
-        return u"%s - %s" % (self.student, self.offer_year)
+        return self.uuid
 
-
-def find_by_student(a_student):
-    enrollments = OfferEnrollment.objects.filter(student=a_student)
-    return enrollments
-
-
-def find_by_student_offer(a_student, offer_year):
-    return OfferEnrollment.objects.filter(student=a_student, offer_year=offer_year)
+    class Meta:
+        abstract = True

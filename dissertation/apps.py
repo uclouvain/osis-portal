@@ -26,7 +26,7 @@
 from django.apps import AppConfig
 from django.conf import settings
 from django.core import serializers
-from frontoffice.queue import queue
+from frontoffice.queue import queue_listener
 import json
 import logging
 
@@ -40,7 +40,7 @@ class DissertationConfig(AppConfig):
     def ready(self):
         # if django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
         # ===> This exception says that there is an error in the implementation of method ready(self) !!
-        queue.listen_queue(self.queue_name, insert)
+        queue_listener.listen_queue(self.queue_name, insert)
 
 
 def insert(json_data):

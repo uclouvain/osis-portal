@@ -35,7 +35,7 @@ class FormAdmin(admin.ModelAdmin):
 class Form(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    offer_year = models.ForeignKey('OfferYear')
+    offer_year = models.ForeignKey('base.OfferYear')
 
     def __str__(self):
         return u"%s" % self.title
