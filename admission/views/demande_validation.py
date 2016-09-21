@@ -31,11 +31,16 @@ from osis_common import models as mdl_common
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from admission.views import assimilation_criteria as assimilation_criteria_view
-from admission.models.enums import document_type
 from django.utils.translation import ugettext_lazy as _
+from admission.models.enums import document_type
 
 
 ALERT_MANDATORY_FIELD = _('mandatory_field')
+ALERT_MANDATORY_FILE = _('mandatory_file')
+PROFESSIONAL_TYPE = 'PROFESSIONAL'
+ADMISSION_EXAM_TYPE = 'ADMISSION'
+LANGUAGE_EXAM_TYPE = 'LANGUAGE'
+
 
 def validate_profil(applicant, user):
     if applicant.user.last_name is None \

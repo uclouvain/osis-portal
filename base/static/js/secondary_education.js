@@ -674,3 +674,17 @@ $("#chb_other_education").change(function() {
 });
 
 
+
+$("#rdb_diploma_false").click(function() {
+    $('#pnl_academic_year').css('visibility', 'hidden').css('display','none');
+    if($('#hdn_local_language_exam_needed').val()=="True"){
+        $('#pnl_admission_exam').css('visibility', 'visible').css('display','block');
+    }else{
+        $('#pnl_admission_exam').css('visibility', 'hidden').css('display','none');
+    }
+});
+
+$("#rdb_diploma_true").click(function() {
+    $('#pnl_academic_year').css('visibility', 'visible').css('display','block');
+    $('#pnl_admission_exam').css('visibility', 'hidden').css('display','none');
+});
