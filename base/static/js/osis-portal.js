@@ -1211,35 +1211,27 @@ function display_dynamic_form(offer_year_id){
                     $('#pnl_questions').append($("<label></label>")
                                        .append(value.question_label));
                     $('#pnl_questions').append("<br>");
+                    $('#pnl_questions').append("<br>");
                 }
                 if(value.question_type=='SHORT_INPUT_TEXT'){
                     $('#pnl_questions').append($("<label></label>")
                                        .append(value.question_label)
                                        .attr("id","lbl_question_"+value.option_id));
                     $('#pnl_questions').append("<br>");
-                    if (value.question_required ){
-                        $('#pnl_questions').append($("<input>")
-                                           .attr("class", "form-control")
-                                           .attr("name","txt_answer_question_"+value.option_id)
-                                           .attr("id","txt_answer_question_"+value.option_id)
-                                           .attr("placeholder", value.option_label)
-                                           .attr("title",value.option_description)
-                                           .attr("value",value.answer)
-                                           .prop("required",value.question_required));
-                    }else{
-                        $('#pnl_questions').append($("<input>")
-                                           .attr("class", "form-control")
-                                           .attr("name","txt_answer_question_"+value.option_id)
-                                           .attr("id","txt_answer_question_"+value.option_id)
-                                           .attr("placeholder", value.option_label)
-                                           .attr("title",value.option_description)
-                                           .attr("value",value.answer));
-                    }
+                    $('#pnl_questions').append($("<input>")
+                                       .attr("class", "form-control")
+                                       .attr("name","txt_answer_question_"+value.option_id)
+                                       .attr("id","txt_answer_question_"+value.option_id)
+                                       .attr("placeholder", value.option_label)
+                                       .attr("title",value.option_description)
+                                       .attr("value",value.answer)
+                                       .prop("required",value.question_required));
                     if(value.question_description != ""){
                         $('#pnl_questions').append($("<label></label>")
                                            .append(value.question_description)
                                            .attr("id","lbl_question_description_"+value.option_id)
                                            .attr("class","description"));
+                        $('#pnl_questions').append("<br>");
                         $('#pnl_questions').append("<br>");
                     }
                 }
@@ -1248,126 +1240,71 @@ function display_dynamic_form(offer_year_id){
                                        .append(value.question_label)
                                        .attr("id","lbl_question_"+value.option_id));
                     $('#pnl_questions').append("<br>");
-                    if (value.question_required ){
-                        $('#pnl_questions').append($("<textarea></textarea>")
-                                           .attr("class", "form-control")
-                                           .attr("name","txt_answer_question_"+value.option_id)
-                                           .attr("id","txt_answer_question_"+value.option_id)
-                                           .attr("placeholder", value.option_label)
-                                           .attr("title",value.option_description)
-                                           .text(value.answer)
-                                           .prop("required",value.question_required));
-                    }else{
-                        $('#pnl_questions').append($("<textarea></textarea>")
-                                           .attr("class", "form-control")
-                                           .attr("name","txt_answer_question_"+value.option_id)
-                                           .attr("id","txt_answer_question_"+value.option_id)
-                                           .attr("placeholder", value.option_label)
-                                           .attr("title",value.option_description)
-                                           .text(value.answer));
-                    }
+                    $('#pnl_questions').append($("<textarea></textarea>")
+                                       .attr("class", "form-control")
+                                       .attr("name","txt_answer_question_"+value.option_id)
+                                       .attr("id","txt_answer_question_"+value.option_id)
+                                       .attr("placeholder", value.option_label)
+                                       .attr("title",value.option_description)
+                                       .text(value.answer)
+                                       .prop("required",value.question_required));
                     if(value.question_description != ""){
                         $('#pnl_questions').append($("<label></label>")
                                            .append(value.question_description)
                                            .attr("id","lbl_question_description_"+value.option_id)
                                            .attr("class","description"));
                         $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append("<br>");
                     }
                 }
                 if(value.question_type=='RADIO_BUTTON'){
-                    var radio_checked = new Boolean(false)
                     if(value.option_order == 1){
-                        radio_checked = new Boolean(true)
                         $('#pnl_questions').append($("<label></label>")
                                            .append(value.question_label)
                                            .attr("id","lbl_question_"+value.question_id));
                         $('#pnl_questions').append("<br>");
-                        if(value.question_required){
-                            if(value.option_value == value.answer){
-                                $('#pnl_questions').append($("<label></label>")
-                                                   .append($("<input>")
-                                                   .prop("checked", "checked")
-                                                   .attr("type","radio")
-                                                   .attr("value",value.option_id)
-                                                   .attr("name","txt_answer_radio_"+value.question_id)
-                                                   .attr("id","txt_answer_radio_"+value.option_id))
-                                                   .append("&nbsp;&nbsp;"+value.option_label)
-                                                   .prop("required",value.question_required));
-                            }else{
-                                $('#pnl_questions').append($("<label></label>")
-                                                   .append($("<input>")
-                                                   .attr("type","radio")
-                                                   .attr("value",value.option_id)
-                                                   .attr("name","txt_answer_radio_"+value.question_id)
-                                                   .attr("id","txt_answer_radio_"+value.option_id))
-                                                   .append("&nbsp;&nbsp;"+value.option_label)
-                                                   .prop("required",value.question_required));
-                            }
+                        if(value.option_value == value.answer){
+                            $('#pnl_questions').append($("<label></label>")
+                                               .append($("<input>")
+                                               .prop("checked", "checked")
+                                               .attr("type","radio")
+                                               .attr("value",value.option_id)
+                                               .attr("name","txt_answer_radio_"+value.question_id)
+                                               .attr("id","txt_answer_radio_"+value.option_id))
+                                               .append("&nbsp;&nbsp;"+value.option_label)
+                                               .prop("required",value.question_required));
                         }else{
-                            if(value.option_value == value.answer){
-                                $('#pnl_questions').append($("<label></label>")
-                                                   .append($("<input>")
-                                                   .prop("checked", "checked")
-                                                   .attr("type","radio")
-                                                   .attr("value",value.option_id)
-                                                   .attr("name","txt_answer_radio_"+value.question_id)
-                                                   .attr("id","txt_answer_radio_"+value.option_id))
-                                                   .append("&nbsp;&nbsp;"+value.option_label));
-                            }else{
-                                $('#pnl_questions').append($("<label></label>")
-                                                   .append($("<input>")
-                                                   .attr("type","radio")
-                                                   .attr("value",value.option_id)
-                                                   .attr("name","txt_answer_radio_"+value.question_id)
-                                                   .attr("id","txt_answer_radio_"+value.option_id))
-                                                   .append("&nbsp;&nbsp;"+value.option_label));
-                            }
+                            $('#pnl_questions').append($("<label></label>")
+                                               .append($("<input>")
+                                               .attr("type","radio")
+                                               .attr("value",value.option_id)
+                                               .attr("name","txt_answer_radio_"+value.question_id)
+                                               .attr("id","txt_answer_radio_"+value.option_id))
+                                               .append("&nbsp;&nbsp;"+value.option_label)
+                                               .prop("required",value.question_required));
                         }
                     }else{
-                        if(value.question_required){
-                            if(value.option_value == value.answer){
-                                $('#pnl_questions').append("<br>");
-                                $('#pnl_questions').append($("<label></label>")
-                                                   .append($("<input>")
-                                                   .prop("checked", "checked")
-                                                   .attr("type","radio")
-                                                   .attr("value",value.option_id)
-                                                   .attr("name","txt_answer_radio_"+value.question_id)
-                                                   .attr("id","txt_answer_radio_"+value.option_id))
-                                                   .append("&nbsp;&nbsp;"+value.option_label)
-                                                   .prop("required",value.question_required));
-                            }else{
-                                $('#pnl_questions').append("<br>");
-                                $('#pnl_questions').append($("<label></label>")
-                                                   .append($("<input>")
-                                                   .attr("type","radio")
-                                                   .attr("value",value.option_id)
-                                                   .attr("name","txt_answer_radio_"+value.question_id)
-                                                   .attr("id","txt_answer_radio_"+value.option_id))
-                                                   .append("&nbsp;&nbsp;"+value.option_label)
-                                                   .prop("required",value.question_required));
-                            }
+                        if(value.option_value == value.answer){
+                            $('#pnl_questions').append("<br>");
+                            $('#pnl_questions').append($("<label></label>")
+                                               .append($("<input>")
+                                               .prop("checked", "checked")
+                                               .attr("type","radio")
+                                               .attr("value",value.option_id)
+                                               .attr("name","txt_answer_radio_"+value.question_id)
+                                               .attr("id","txt_answer_radio_"+value.option_id))
+                                               .append("&nbsp;&nbsp;"+value.option_label)
+                                               .prop("required",value.question_required));
                         }else{
-                            if(value.option_value == value.answer){
-                                $('#pnl_questions').append("<br>");
-                                $('#pnl_questions').append($("<label></label>")
-                                                   .append($("<input>")
-                                                   .prop("checked", "checked")
-                                                   .attr("type","radio")
-                                                   .attr("value",value.option_id)
-                                                   .attr("name","txt_answer_radio_"+value.question_id)
-                                                   .attr("id","txt_answer_radio_"+value.option_id))
-                                                   .append("&nbsp;&nbsp;"+value.option_label));
-                            }else{
-                                $('#pnl_questions').append("<br>");
-                                $('#pnl_questions').append($("<label></label>")
-                                                   .append($("<input>")
-                                                   .attr("type","radio")
-                                                   .attr("value",value.option_id)
-                                                   .attr("name","txt_answer_radio_"+value.question_id)
-                                                   .attr("id","txt_answer_radio_"+value.option_id))
-                                                   .append("&nbsp;&nbsp;"+value.option_label));
-                            }
+                            $('#pnl_questions').append("<br>");
+                            $('#pnl_questions').append($("<label></label>")
+                                               .append($("<input>")
+                                               .attr("type","radio")
+                                               .attr("value",value.option_id)
+                                               .attr("name","txt_answer_radio_"+value.question_id)
+                                               .attr("id","txt_answer_radio_"+value.option_id))
+                                               .append("&nbsp;&nbsp;"+value.option_label)
+                                               .prop("required",value.question_required));
                         }
                     }
                     if(value.option_order == value.options_max_number && value.question_description != ""){
@@ -1375,6 +1312,8 @@ function display_dynamic_form(offer_year_id){
                             $('#pnl_questions').append($("<label></label>").append(value.question_description)
                                                .attr("id","lbl_question_description_"+value.option_id)
                                                .attr("class","description"));
+                             $('#pnl_questions').append("<br>");
+                             $('#pnl_questions').append("<br>");
                     }
                 }
                 if(value.question_type=='CHECKBOX'){
@@ -1383,10 +1322,7 @@ function display_dynamic_form(offer_year_id){
                                            .append(value.question_label)
                                            .attr("id","lbl_question_"+value.question_id));
                         $('#pnl_questions').append("<br>");
-                    }
-                    if(value.question_required){
                         if(value.option_value == value.answer){
-                            $('#pnl_questions').append("<br>");
                             $('#pnl_questions').append($("<label></label>")
                                                .append($("<input>")
                                                .prop("checked", "checked")
@@ -1396,7 +1332,6 @@ function display_dynamic_form(offer_year_id){
                                                .append("&nbsp;&nbsp;"+value.option_label)
                                                .prop("required",value.question_required));
                         }else{
-                            $('#pnl_questions').append("<br>");
                             $('#pnl_questions').append($("<label></label>")
                                                .append($("<input>")
                                                .attr("type","checkbox")
@@ -1414,7 +1349,8 @@ function display_dynamic_form(offer_year_id){
                                                .attr("type","checkbox")
                                                .attr("name","txt_answer_checkbox_"+value.option_id)
                                                .attr("id","txt_answer_checkbox_"+value.option_id))
-                                               .append("&nbsp;&nbsp;"+value.option_label));
+                                               .append("&nbsp;&nbsp;"+value.option_label)
+                                               .prop("required",value.question_required));
                         }else{
                             $('#pnl_questions').append("<br>");
                             $('#pnl_questions').append($("<label></label>")
@@ -1422,7 +1358,8 @@ function display_dynamic_form(offer_year_id){
                                                .attr("type","checkbox")
                                                .attr("name","txt_answer_checkbox_"+value.option_id)
                                                .attr("id","txt_answer_checkbox_"+value.option_id))
-                                               .append("&nbsp;&nbsp;"+value.option_label));
+                                               .append("&nbsp;&nbsp;"+value.option_label)
+                                               .prop("required",value.question_required));
                         }
                     }
                    if(value.option_order == value.options_max_number && value.question_description != ""){
@@ -1430,6 +1367,8 @@ function display_dynamic_form(offer_year_id){
                         $('#pnl_questions').append($("<label></label>").append(value.question_description)
                                            .attr("id","lbl_question_description_"+value.option_id)
                                            .attr("class","description"));
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append("<br>");
                    }
                 }
                 if(value.question_type=='DROPDOWN_LIST'){
@@ -1463,6 +1402,7 @@ function display_dynamic_form(offer_year_id){
                                                .append(value.question_description)
                                                .attr("id","lbl_question_description_"+value.option_id)
                                                .attr("class","description"));
+                            $('#pnl_questions').append("<br>");
                         }
                     }else{
                         if(value.option_value == value.answer){
