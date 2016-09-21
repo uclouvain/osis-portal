@@ -97,26 +97,31 @@ def accounting_update(request, application_id=None):
     except:
         pass
     tab_status = tabs.init(request)
-    return render(request, "admission_home.html", {"academic_year": academic_yr,
-                                                   "previous_academic_year": previous_academic_year,
-                                                   "sport_affiliation_amount": sport_affiliation_amount,
-                                                   "culture_affiliation_amount": culture_affiliation_amount,
-                                                   "solidary_affiliation_amount": solidary_affiliation_amount,
-                                                   "application": application,
-                                                   "form": accounting_form,
-                                                   "debts_check": debts_check(application),
-                                                   "reduction_possible": reduction_possible(application),
-                                                   "third_cycle": third_cycle(application),
-                                                   "tab_active": 4,
-                                                   "applications": mdl.application.find_by_user(request.user),
-                                                   "tab_profile": tab_status['tab_profile'],
-                                                   "tab_applications": tab_status['tab_applications'],
-                                                   "tab_diploma": tab_status['tab_diploma'],
-                                                   "tab_curriculum": tab_status['tab_curriculum'],
-                                                   "tab_accounting": tab_status['tab_accounting'],
-                                                   "tab_sociological": tab_status['tab_sociological'],
-                                                   "tab_attachments": tab_status['tab_attachments'],
-                                                   "tab_submission": tab_status['tab_submission']})
+    data = {
+        "academic_year": academic_yr,
+        "previous_academic_year": previous_academic_year,
+        "sport_affiliation_amount": sport_affiliation_amount,
+        "culture_affiliation_amount": culture_affiliation_amount,
+        "solidary_affiliation_amount": solidary_affiliation_amount,
+        "application": application,
+        "form": accounting_form,
+        "debts_check": debts_check(application),
+        "reduction_possible": reduction_possible(application),
+        "third_cycle": third_cycle(application),
+        "tab_active": 4,
+        "applications": mdl.application.find_by_user(request.user),
+        "tab_profile": tab_status['tab_profile'],
+        "tab_applications": tab_status['tab_applications'],
+        "tab_diploma": tab_status['tab_diploma'],
+        "tab_curriculum": tab_status['tab_curriculum'],
+        "tab_accounting": tab_status['tab_accounting'],
+        "tab_sociological": tab_status['tab_sociological'],
+        "tab_attachments": tab_status['tab_attachments'],
+        "tab_submission": tab_status['tab_submission']
+    }
+    applicant = mdl.applicant.find_by_user(request.user)
+    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    return render(request, "admission_home.html", data)
 
 
 def populate_application(request, application):

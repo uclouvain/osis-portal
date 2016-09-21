@@ -11,6 +11,7 @@ $("#slt_offer_type").change(function() {
     set_pnl_questions_empty();
     //Cancel the previous selection
     document.getElementById("txt_offer_year_id").value = "";
+
     if($("#slt_offer_type").val()=="BACHELOR" || $("#slt_offer_type").val()=="MASTER" || $("#slt_offer_type").val()=="TRAINING_CERTIFICATE"){
         $("#hdn_local_language_exam_needed").val('True')
          $('#pnl_local_exam').css('visibility', 'visible').css('display','block');
