@@ -108,6 +108,7 @@ def listen_queue_synchronously(queue_name, callback, counter=3):
     channel.basic_consume(on_message, queue_name)
     try:
         channel.start_consuming()
+        counter = 3
     except KeyboardInterrupt:
         channel.stop_consuming()
     except ConnectionClosed:
