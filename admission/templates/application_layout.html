@@ -88,7 +88,8 @@
                     {%endif%}
 
                 </li>
-                <li class="{%if tab_active == 2 %}active{%endif%}" >
+
+                <li class="{%if tab_active == 2 %}active{%endif%}"  id="mn_diploma">
                     <a href="{%if tab_diploma%}{%if application.id %}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}{%endif%}"
                        id="lnk_diploma_tab"
                        class="{%if tab_diploma%}{%else%}not-active{%endif%}">
@@ -99,7 +100,7 @@
                         {%endif%}
                         &nbsp;&nbsp;{%trans 'prerequisites'%}</a>
                 </li>
-                <li class="{%if tab_active == 3 %}active{%endif%}">
+                <li class="{%if tab_active == 3 %}active{%endif%}" id="mn_curriculum">
 
                     <a href="{%if tab_curriculum%}{%if application.id %}{% url 'curriculum_update' application.id%}{%else%}{% url 'curriculum_update' %}{%endif%}{%endif%}"
                        id="lnk_curriculum_tab"
@@ -111,7 +112,7 @@
                         {%endif%}
                         &nbsp;&nbsp;{%trans 'curriculum'%}</a>
                 </li>
-                <li class="{%if tab_active == 4 %}active{%endif%}">
+                <li class="{%if tab_active == 4 %}active{%endif%}" id="mn_accounting">
                         <a href="{%if tab_accounting%}{%if application.id%}{% url 'accounting_update' application.id%}{%else%}{% url 'accounting_update' %}{%endif%}{%endif%}"
                            id="lnk_accounting_tab"
                            class="{%if tab_accounting%}{%else%}not-active{%endif%}" >
@@ -122,7 +123,7 @@
                         {%endif%}
                             &nbsp;&nbsp;{%trans 'accounting'%}</a>
                 </li>
-                <li class="{%if tab_active == 5 %}active{%endif%}">
+                <li class="{%if tab_active == 5 %}active{%endif%}" id="mn_sociological">
                     {%if tab_sociological%}
                     <a href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey' %}{%endif%}"
                        id="lnk_sociological_tab">
@@ -144,7 +145,7 @@
 
                     {%endif%}
                 </li>
-                <li class="{%if tab_active == 6 %}active{%endif%}">
+                <li class="{%if tab_active == 6 %}active{%endif%}" id="mn_attachments">
                         <a href="{%if tab_attachments%}{%if application.id%}{% url 'attachments' application.id %}{%else%}{% url 'attachments' %}{%endif%}{%endif%}"
                            id="lnk_attachments_tab"
                            {%if tab_attachments%}{%else%}class="not-active"{%endif%}>
@@ -155,7 +156,7 @@
                             {%endif%}
                             &nbsp;&nbsp;{%trans 'attachments'%}</a>
                 </li>
-                <li class="{%if tab_active == 7 %}active{%endif%}">
+                <li class="{%if tab_active == 7 %}active{%endif%}" id="mn_submission">
                         <a href="{%if tab_submission%}{%if application.id%}{% url 'submission' application.id %}{%else%}{% url 'submission' %}{%endif%}{%endif%}"
                            id="lnk_submission_tab"
                            {%if tab_submission%}{%else%}class="not-active"{%endif%}>
@@ -166,6 +167,7 @@
                             {%endif%}
                             &nbsp;&nbsp;{%trans 'submission'%}</a>
                 </li>
+
             </ul>
         </div>
         <div class="col-md-10">
@@ -255,6 +257,26 @@
             }
         });
 
+        var enableMyLink = true;
+        if($('#hdn_current_application_id').val()==''){
+            var enableMyLink = false;
+        }
+        if (enableMyLink) {
+          $("#mn_diploma").removeClass("disabled").find("a").removeAttr("onclick");
+          $("#mn_curriculum").removeClass("disabled").find("a").removeAttr("onclick");
+          $("#mn_accounting").removeClass("disabled").find("a").removeAttr("onclick");
+          $("#mn_sociological").removeClass("disabled").find("a").removeAttr("onclick");
+          $("#mn_attachments").removeClass("disabled").find("a").removeAttr("onclick");
+          $("#mn_submission").removeClass("disabled").find("a").removeAttr("onclick");
+        } else {
+          $("#mn_diploma").addClass("disabled").find("a").attr("onclick", "return false;");
+          $("#mn_curriculum").addClass("disabled").find("a").attr("onclick", "return false;");
+          $("#mn_accounting").addClass("disabled").find("a").attr("onclick", "return false;");
+          $("#mn_sociological").addClass("disabled").find("a").attr("onclick", "return false;");
+          $("#mn_attachments").addClass("disabled").find("a").attr("onclick", "return false;");
+          $("#mn_submission").addClass("disabled").find("a").attr("onclick", "return false;");
+        }
+
     });
 
     function save(form_to_submit){
@@ -268,7 +290,7 @@
 
     $("#lnk_profil_next_step").click(function() {
         $('#txt_message_error_profile').css('visibility', 'hidden').css('display','none');
-        if (! valid()){
+        if (! valid(1)){
             return false;
         }
         $('#hdn_tab_applications_status').val('True');
@@ -278,7 +300,7 @@
 
     $("#lnk_profil_next_step_up").click(function() {
         $('#txt_message_error_profile_up').css('visibility', 'hidden').css('display','none');
-        if (! valid()){
+        if (! valid(1)){
             return false;
         }
         $('#hdn_tab_applications_status').val('True');
@@ -287,7 +309,7 @@
     });
 
     $("#lnk_application_tab").click(function() {
-        if(! valid()){
+        if(! valid(1)){
             return false;
         }
         if ($('#hdn_application_id').val()){
@@ -359,197 +381,94 @@
         return true;
     }
 
-    function valid(){
-        if($("#hdn_tab_active").val()=="0"){
-            if (! valid_profile()){
-                if ($('#txt_message_error_profile_up').html() == ''){
+    function valid(next_tab){
+        $('#txt_message_error_profile_up').css('visibility', 'hidden').css('display','none');
+        $('#txt_message_error_profile_up').html('');
+
+        if($("#hdn_tab_active").val() == "0"){
+            if(!valid_profile_navigation()){
+                return false;
+            }
+        }else{
+            if($("#hdn_tab_active").val() == "1" && next_tab != 0){
+                 if(!valid_offer()){
                     $('#txt_message_error_profile_up').css('visibility', 'visible').css('display','block');
                     $('#txt_message_error_profile_up').text(gettext('invalid_data'));
-                }
+                    return false;
+                 }
+            }
+        }
+
+
+        if($("#hdn_tab_active").val()=="0"){
+            if (! valid_profile()){
+                    $('#txt_message_error_profile_up').css('visibility', 'visible').css('display','block');
+                    $('#txt_message_error_profile_up').text(gettext('invalid_data'));
                 return false;
             }
         }
-        if($("#hdn_tab_active").val()=="1"){
-            if (! valid_offer()){
-                return false;
-            }
-        }
+
         return true;
     }
 
     function valid_profile(){
-        var message = "";
         $('#txt_message_error_profile_up').css('visibility', 'hidden').css('display','none');
         $('#txt_message_error_profile_up').html('');
-        // clear error messages
-        $('#spn_number_children').html('');
-        $('#spn_last_academic_year').html('');
-        $('#spn_contact_adr_street').html('');
-        $('#spn_contact_adr_number').html('');
-        $('#spn_contact_adr_postal_code').html('');
-        $('#spn_contact_adr_city').html('');
-        $('#spn_contact_adr_country').html('');
-        $('#spn_legal_adr_street').html('');
-        $('#spn_legal_adr_number').html('');
-        $('#spn_legal_adr_postal_code').html('');
-        $('#spn_legal_adr_city').html('');
-        $('#spn_legal_adr_country').html('');
-        $('#spn_additional_email').html('');
-        $('#spn_registration_id').html('');
-        $('#spn_last_academic_year').html('');
 
-        if($('#txt_number_children').val() != ''){
-            if(! $.isNumeric( $('#txt_number_children').val())){
-                $('#spn_number_children').text(gettext('number_invalid'));
+        if (valid_profile_data()){
+            if( !valid_profile_navigation() ){
+                $('#txt_message_error_profile_up').css('visibility', 'visible').css('display','block');
+                $('#txt_message_error_profile_up').text(gettext('invalid_data'));
                 return false;
             }else{
-                var nb_children = parseInt($('#txt_number_children').val());
-                if(nb_children < 0 || nb_children >20){
-                    $('#spn_number_children').text(gettext('number_invalid'));
-                    return false;
-                }
+                return true;
             }
-        }
-        if( $('#rd_previous_enrollment_true').prop('checked')){
-            txt_registration_id
-            if($('#txt_registration_id').val() == ''){
-                $('#spn_registration_id').text(gettext('previous_enrollment_required_nb'));
-                return false;
-            }
-            if($('#txt_last_academic_year').val() == ''){
-                $('#spn_last_academic_year').text(gettext('previous_enrollment_required_year'));
-                return false;
-            }
-        }
-        if($('#txt_last_academic_year').val() != ''){
-            if(! $.isNumeric( $('#txt_last_academic_year').val())){
-                $('#spn_last_academic_year').text(gettext('number_invalid'));
-                return false;
-            }else{
-                var year = parseInt($('#txt_last_academic_year').val());
-                if(year < 1900 || year >3000){
-                    $('#spn_last_academic_year').text(gettext('number_invalid'));
-                    return false;
-                }
-            }
-        }
-        if (($("#slt_nationality").prop('selectedIndex') <= 0
-            || $("#slt_legal_adr_country").prop('selectedIndex') <= 0) || ($("#slt_nationality").val()=='-1' || $("#slt_legal_adr_country").val()=='-1')){
-            message = gettext('msg_next_profil');
-        }
-
-        if($('#pnl_assimilation_criteria').is(":visible")){
-            var cpt = 1;
-            while(cpt <=7){
-                if(! $("#assimilation_criteria_"+ cpt+"_true").prop('checked') && ! $("#assimilation_criteria_"+cpt+"_false").prop('checked') ){
-                    message += gettext('msg_assimilation_criteria');
-                    break;
-                }
-                cpt = cpt +1;
-            }
-        }
-
-        if(message != ''){
-            $("#txt_message_error_profile_up").text(message);
-            $('#txt_message_error_profile_up').css('visibility', 'visible').css('display','block');
+        }else{
             return false;
         }
 
-        var legal_valid = true;
-        if($('#txt_legal_adr_street').val() == '' ){
-            $('#spn_legal_adr_street').text(gettext('legal_street'));
-            legal_valid = false;
-        }
-        if($('#txt_legal_adr_number').val() == '' ){
-            $('#spn_legal_adr_number').text(gettext('legal_number'));
-            legal_valid = false;
-        }
-        if($('#txt_legal_adr_postal_code').val() == '' ){
-            $('#spn_legal_adr_postal_code').text(gettext('legal_postal_code'));
-            legal_valid = false;
-        }
-        if($('#txt_legal_adr_city').val() == '' ){
-            $('#spn_legal_adr_city').text(gettext('legal_city'));
-            legal_valid = false;
-        }
-        if($('#slt_legal_adr_country').prop('selectedIndex') <= 0 ){
-            $('#spn_legal_adr_country').text(gettext('legal_country'));
-            legal_valid = false;
-        }
-
-        if($('#rd_same_contact_legal_addr_false').prop("checked")){
-            var contact_valid = true;
-            if($('#txt_contact_adr_street').val() == '' ){
-                $('#spn_contact_adr_street').text(gettext('contact_street'));
-                contact_valid = false;
-            }
-            if($('#txt_contact_adr_number').val() == '' ){
-                $('#spn_contact_adr_number').text(gettext('contact_number'));
-                contact_valid = false;
-            }
-            if($('#txt_contact_adr_postal_code').val() == '' ){
-                $('#spn_contact_adr_postal_code').text(gettext('contact_postal_code'));
-                contact_valid = false;
-            }
-            if($('#txt_contact_adr_city').val() == '' ){
-                $('#spn_contact_adr_city').text(gettext('contact_city'));
-                contact_valid = false;
-            }
-            if($('#slt_contact_adr_country').prop('selectedIndex') <= 0 ){
-                $('#spn_contact_adr_country').text(gettext('contact_country'));
-                contact_valid = false;
-            }
-        }
-        if(legal_valid == false || contact_valid == false){
-            return false;
-        }
-        // email validation
-        var sEmail = $('#txt_additional_email').val();
-        if ($.trim(sEmail).length > 0 && validateEmail(sEmail) == false) {
-            $('#spn_additional_email').text(gettext('invalid_email'));
-            return false;
-        }
-        return true;
     }
 
     $("#lnk_diploma_tab").click(function() {
+        $('#txt_message_error_profile_up').css('visibility', 'hidden').css('display','none');
+        $('#txt_message_error_profile_up').html('');
         $('#form_secondary_education').append( $('#pnl_files>div') );
-        if (! valid()) {
+        if (! valid(2)) {
             return false;
         }
         save_form();
     });
 
     $("#lnk_curriculum_tab").click(function() {
-        if (! valid()){
+        if (! valid(3)){
             return false;
         }
         save_form();
     });
 
     $("#lnk_accounting_tab").click(function() {
-        if (! valid()){
+        if (! valid(4)){
             return false;
         }
         save_form();
     });
 
     $("#lnk_sociological_tab").click(function() {
-        if (! valid()){
+        if (! valid(5)){
             return false;
         }
         save_form();
     });
 
     $("#lnk_attachments_tab").click(function() {
-        if (! valid()){
+        if (! valid(6)){
             return false;
         }
         save_form();
     });
 
     $("#lnk_submission_tab").click(function() {
-        if (! valid()){
+        if (! valid(7)){
             return false;
         }
         save_form();
@@ -557,7 +476,7 @@
 
     $("#lnk_profile_tab").click(function() {
         if($("#hdn_tab_active").val() != "1") {
-            if (! valid()) {
+            if (! valid(0)) {
                 return false;
             }
         }
@@ -568,6 +487,8 @@
     });
 
     function valid_offer() {
+        $('#txt_message_error_profile_up').css('visibility', 'hidden').css('display','none');
+        $('#txt_message_error_profile_up').html('');
         if ($("#txt_offer_year_id").val()==''
             || ($('#rdb_offer_belgiandegree_true').prop("checked") == "false" && $('#rdb_offer_belgiandegree_false').prop("checked") == "false") ){
             $("#txt_message_error_offer_up").text(gettext('msg_next_offer'));
@@ -580,27 +501,27 @@
     }
 
     $("#lnk_next_offer_step_up").click(function() {
-       return offer_steps();
+       return offer_steps(2);
     });
 
     $("#lnk_next_offer_step").click(function() {
-        return offer_steps();
+        return offer_steps(2);
     });
 
     $("#lnk_previous_offer_step_up").click(function() {
        $('#form_secondary_education').append( $('#pnl_files>div') );
-       return offer_steps();
+       return offer_steps(0);
     });
 
     $("#lnk_previous_offer_step").click(function() {
         $('#form_secondary_education').append( $('#pnl_files>div') );
-        return offer_steps();
+        return offer_steps(0);
     });
 
-    function offer_steps(){
+    function offer_steps(next_tab){
         $('#txt_message_error_offer_up').css('visibility', 'hidden').css('display','none');
         $('#txt_message_error_offer_down').css('visibility', 'hidden').css('display','none');
-        if (! valid()){
+        if (! valid(next_tab)){
             return false;
         }
         $('#hdn_tab_applications_status').val('True');
@@ -979,6 +900,143 @@
         if($("#hdn_tab_active").val()=="7"){
             save('form_submission');
         }
+    }
+    function valid_profile_data(){
+
+        // clear error messages
+        $('#spn_number_children').html('');
+        $('#spn_last_academic_year').html('');
+        $('#spn_contact_adr_street').html('');
+        $('#spn_contact_adr_number').html('');
+        $('#spn_contact_adr_postal_code').html('');
+        $('#spn_contact_adr_city').html('');
+        $('#spn_contact_adr_country').html('');
+        $('#spn_legal_adr_street').html('');
+        $('#spn_legal_adr_number').html('');
+        $('#spn_legal_adr_postal_code').html('');
+        $('#spn_legal_adr_city').html('');
+        $('#spn_legal_adr_country').html('');
+        $('#spn_additional_email').html('');
+        $('#spn_registration_id').html('');
+        $('#spn_last_academic_year').html('');
+
+        if($('#txt_number_children').val() != ''){
+            if(! $.isNumeric( $('#txt_number_children').val())){
+                $('#spn_number_children').text(gettext('number_invalid'));
+                return false;
+            }else{
+                var nb_children = parseInt($('#txt_number_children').val());
+                if(nb_children < 0 || nb_children >20){
+                    $('#spn_number_children').text(gettext('number_invalid'));
+                    return false;
+                }
+            }
+        }
+        if( $('#rd_previous_enrollment_true').prop('checked')){
+            txt_registration_id
+            if($('#txt_registration_id').val() == ''){
+                $('#spn_registration_id').text(gettext('previous_enrollment_required_nb'));
+                return false;
+            }
+            if($('#txt_last_academic_year').val() == ''){
+                $('#spn_last_academic_year').text(gettext('previous_enrollment_required_year'));
+                return false;
+            }
+        }
+        if($('#txt_last_academic_year').val() != ''){
+            if(! $.isNumeric( $('#txt_last_academic_year').val())){
+                $('#spn_last_academic_year').text(gettext('number_invalid'));
+                return false;
+            }else{
+                var year = parseInt($('#txt_last_academic_year').val());
+                if(year < 1900 || year >3000){
+                    $('#spn_last_academic_year').text(gettext('number_invalid'));
+                    return false;
+                }
+            }
+        }
+
+        var legal_valid = true;
+        if($('#txt_legal_adr_street').val() == '' ){
+            $('#spn_legal_adr_street').text(gettext('legal_street'));
+            legal_valid = false;
+        }
+        if($('#txt_legal_adr_number').val() == '' ){
+            $('#spn_legal_adr_number').text(gettext('legal_number'));
+            legal_valid = false;
+        }
+        if($('#txt_legal_adr_postal_code').val() == '' ){
+            $('#spn_legal_adr_postal_code').text(gettext('legal_postal_code'));
+            legal_valid = false;
+        }
+        if($('#txt_legal_adr_city').val() == '' ){
+            $('#spn_legal_adr_city').text(gettext('legal_city'));
+            legal_valid = false;
+        }
+        if($('#slt_legal_adr_country').prop('selectedIndex') <= 0 ){
+            $('#spn_legal_adr_country').text(gettext('legal_country'));
+            legal_valid = false;
+        }
+
+        if($('#rd_same_contact_legal_addr_false').prop("checked")){
+            var contact_valid = true;
+            if($('#txt_contact_adr_street').val() == '' ){
+                $('#spn_contact_adr_street').text(gettext('contact_street'));
+                contact_valid = false;
+            }
+            if($('#txt_contact_adr_number').val() == '' ){
+                $('#spn_contact_adr_number').text(gettext('contact_number'));
+                contact_valid = false;
+            }
+            if($('#txt_contact_adr_postal_code').val() == '' ){
+                $('#spn_contact_adr_postal_code').text(gettext('contact_postal_code'));
+                contact_valid = false;
+            }
+            if($('#txt_contact_adr_city').val() == '' ){
+                $('#spn_contact_adr_city').text(gettext('contact_city'));
+                contact_valid = false;
+            }
+            if($('#slt_contact_adr_country').prop('selectedIndex') <= 0 ){
+                $('#spn_contact_adr_country').text(gettext('contact_country'));
+                contact_valid = false;
+            }
+        }
+        if(legal_valid == false || contact_valid == false){
+            return false;
+        }
+        // email validation
+        var sEmail = $('#txt_additional_email').val();
+        if ($.trim(sEmail).length > 0 && validateEmail(sEmail) == false) {
+            $('#spn_additional_email').text(gettext('invalid_email'));
+            return false;
+        }
+        return true;
+    }
+
+    function valid_profile_navigation(){
+        var message = new String("");
+        if (($("#slt_nationality").prop('selectedIndex') <= 0
+            || $("#slt_legal_adr_country").prop('selectedIndex') <= 0) || ($("#slt_nationality").val()=='-1' || $("#slt_legal_adr_country").val()=='-1')){
+            message = gettext('msg_next_profil');
+        }
+
+        if($('#pnl_assimilation_criteria').is(":visible")){
+            var cpt = 1;
+            while(cpt <=7){
+                if(! $("#assimilation_criteria_"+ cpt+"_true").prop('checked') && ! $("#assimilation_criteria_"+cpt+"_false").prop('checked') ){
+                    message += gettext('msg_assimilation_criteria');
+                    break;
+                }
+                cpt = cpt +1;
+            }
+        }
+
+        if(message.trim().length > 0){
+            $("#txt_message_error_profile_up").text(message);
+            $('#txt_message_error_profile_up').css('visibility', 'visible').css('display','block');
+            return false;
+        }
+        return true;
     }
     </script>
 {% endblock %}
