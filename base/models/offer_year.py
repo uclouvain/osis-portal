@@ -24,7 +24,6 @@
 #
 ##############################################################################
 from base.models import offer_year_domain
-from base.models.offer_year_domain import OfferYearDomain
 from django.db import models
 from django.contrib import admin
 from base.models.serializable_model import SerializableModel

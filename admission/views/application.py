@@ -237,7 +237,7 @@ def applications(request, application_id=None):
     data = {
         "applications": application_list,
         "grade_choices": mdl_reference.institutional_grade_type.find_all(),
-        "domains": mdl_reference.domain.find_all_domains(),
+        "domains": mdl_reference.domain.find_current_domains(),
         'tab_active': 1,
         "application": application,
         'tab_profile': tab_status['tab_profile'],
@@ -294,7 +294,7 @@ def change_application_offer(request, application_id=None):
     data = {
         'applications': application_list,
         "grade_choices": mdl_reference.institutional_grade_type.find_all(),
-        "domains": mdl_reference.domain.find_all_domains(),
+        "domains": mdl_reference.domain.find_current_domains(),
         'tab_active': 1,
         "first": True,
         "application": application,
