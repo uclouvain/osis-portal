@@ -40,6 +40,8 @@ def find_by_criteria(request):
 
 
 def criteria1(list_document_type):
+    if list_document_type is None:
+        list_document_type = []
     assimilation_doc = AssimilationDoc()
     assimilation_doc.criteria_id = 1
     assimilation_doc.descriptions = [document_type.RESIDENT_LONG_DURATION]
@@ -53,6 +55,9 @@ def criteria1(list_document_type):
 
 
 def criteria2(list_document_type):
+    if list_document_type is None:
+        list_document_type = []
+
     assimilation_doc = AssimilationDoc()
     assimilation_doc.criteria_id = 2
     assimilation_doc.descriptions = [document_type.ATTACHMENT_26]
@@ -144,6 +149,9 @@ def find_list_assimilation_basic_documents():
 
 
 def criteria3(list_document_type):
+    if list_document_type is None:
+        list_document_type = []
+
     assimilation_doc = AssimilationDoc()
     assimilation_doc.criteria_id = 3
     assimilation_doc.first = True
@@ -163,6 +171,9 @@ def criteria3(list_document_type):
 
 
 def criteria4(list_document_type):
+    if list_document_type is None:
+        list_document_type = []
+
     assimilation_doc = AssimilationDoc()
     assimilation_doc.criteria_id = 4
     assimilation_doc.first = True
@@ -172,6 +183,9 @@ def criteria4(list_document_type):
 
 
 def criteria5(list_document_type):
+    if list_document_type is None:
+        list_document_type = []
+
     assimilation_doc = AssimilationDoc()
     assimilation_doc.criteria_id = 5
     assimilation_doc.first = True
@@ -181,6 +195,9 @@ def criteria5(list_document_type):
 
 
 def criteria6(list_document_type):
+    if list_document_type is None:
+        list_document_type = []
+
     assimilation_doc = AssimilationDoc()
     assimilation_doc.criteria_id = 6
     assimilation_doc.first = True
@@ -190,6 +207,9 @@ def criteria6(list_document_type):
 
 
 def criteria7(list_document_type):
+    if list_document_type is None:
+        list_document_type = []
+
     assimilation_doc = AssimilationDoc()
     assimilation_doc.criteria_id = 7
     assimilation_doc.first = True

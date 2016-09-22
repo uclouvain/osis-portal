@@ -34,7 +34,9 @@ from django.contrib.auth.models import User
 from admission.utils import send_mail
 from admission.models import applicant
 from django.core.management import call_command
-
+from admission.views import assimilation_criteria
+from django.utils.encoding import force_text
+import json
 
 ASSETS_PATH = os.path.join(settings.BASE_DIR, 'admission/tests/assets/')
 PDF1 = "pdf1.pdf"
@@ -137,3 +139,55 @@ class SendMailTest(TestCase):
                                                          an_applicant,
                                                          'account_activation'))
 
+
+class AssimilationCriteriaTest(TestCase):
+
+    def test_criteria1(self):
+        list_document_type = []
+        list_document_type = assimilation_criteria.criteria1(list_document_type)
+        self.assertTrue(len(list_document_type) == 2)
+
+        list_document_type = assimilation_criteria.criteria1(None)
+        self.assertTrue(len(list_document_type) == 2)
+
+        list_document_type = []
+        assimilation_doc = assimilation_criteria.AssimilationDoc()
+        assimilation_doc.criteria_id = 1
+        list_document_type.append(assimilation_doc)
+        list_document_type = assimilation_criteria.criteria1(list_document_type)
+        self.assertTrue(len(list_document_type) == 3)
+
+    def test_criteria2(self):
+        list_document_type = []
+        list_document_type = assimilation_criteria.criteria2(list_document_type)
+        self.assertTrue(len(list_document_type) == 5)
+
+        list_document_type = assimilation_criteria.criteria2(None)
+        self.assertTrue(len(list_document_type) == 5)
+
+        list_document_type = []
+        assimilation_doc = assimilation_criteria.AssimilationDoc()
+        assimilation_doc.criteria_id = 2
+        list_document_type.append(assimilation_doc)
+        list_document_type = assimilation_criteria.criteria2(list_document_type)
+        self.assertTrue(len(list_document_type) == 6)
+
+    def test_find_list_document_type_by_criteria(self):
+        list_document_type = assimilation_criteria.find_list_document_type_by_criteria(None)
+        self.assertTrue(len(list_document_type) == 0)
+
+        list_document_type = assimilation_criteria.find_list_document_type_by_criteria("1")
+        self.assertTrue(len(list_document_type) == 0)
+
+        list_document_type = assimilation_criteria.find_list_document_type_by_criteria(1)
+        self.assertTrue(len(list_document_type) == 2)
+
+    def test_get_list_docs(self):
+        list_document_type = assimilation_criteria.get_list_docs(None)
+        self.assertTrue(len(list_document_type) == 0)
+
+        list_document_type = assimilation_criteria.get_list_docs("1")
+        self.assertTrue(len(list_document_type) == 0)
+
+        list_document_type = assimilation_criteria.get_list_docs(3)
+        self.assertTrue(len(list_document_type) == 9)
