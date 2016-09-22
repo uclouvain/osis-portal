@@ -76,7 +76,7 @@
     <select class="form-control" id="slt_offer_type" name="type" >
         <option value="" selected>...</option>
     {% for grade_choice in grade_choices %}
-         <option value="{{grade_choice.0}}" >{{grade_choice.1}}</option>
+         <option value="{{grade_choice.id}}" >{{grade_choice.name}}</option>
     {% endfor %}
     </select>
     <br>

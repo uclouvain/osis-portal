@@ -236,7 +236,7 @@ def applications(request, application_id=None):
     applicant = mdl.applicant.find_by_user(request.user)
     data = {
         "applications": application_list,
-        "grade_choices": mdl_reference.grade_type.GRADE_CHOICES,
+        "grade_choices": mdl_reference.institutional_grade_type.find_all(),
         "domains": mdl_reference.domain.find_all_domains(),
         'tab_active': 1,
         "application": application,
@@ -293,7 +293,7 @@ def change_application_offer(request, application_id=None):
     applicant = mdl.applicant.find_by_user(request.user)
     data = {
         'applications': application_list,
-        "grade_choices": mdl_reference.grade_type.GRADE_CHOICES,
+        "grade_choices": mdl_reference.institutional_grade_type.find_all(),
         "domains": mdl_reference.domain.find_all_domains(),
         'tab_active': 1,
         "first": True,
@@ -307,9 +307,9 @@ def is_local_language_exam_needed(user):
     local_language_exam_needed = False
     applications_list = mdl.application.find_by_user(user)
     for application in applications_list:
-        if application.offer_year.grade_type.grade == 'BACHELOR' or \
-                        application.offer_year.grade_type.grade == 'MASTER' or \
-                        application.offer_year.grade_type.grade == 'TRAINING_CERTIFICATE':
+        if application.offer_year.grade_type.name == 'BACHELOR' or \
+                        application.offer_year.grade_type.name == 'MASTER' or \
+                        application.offer_year.grade_type.name == 'TRAINING_CERTIFICATE':
             local_language_exam_needed = True
             break
     return local_language_exam_needed
