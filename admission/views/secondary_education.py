@@ -219,8 +219,8 @@ def validate_fields_form(request, secondary_education, next_step):
         is_valid,
         validation_messages,
         secondary_education)
-    is_valid, validation_messages, secondary_education, local_language_exam  = validate_local_language_exam(
-        request, is_valid, validation_messages,secondary_education)
+    is_valid, validation_messages, secondary_education, local_language_exam = validate_local_language_exam(
+        request, is_valid, validation_messages, secondary_education)
 
     if next_step is True \
             and request.POST.get('diploma') == 'false' \
@@ -286,8 +286,7 @@ def diploma_save(request):
     next_step = False
     previous_step = False
     save_step = True
-    validation_messages = {}
-    academic_years = mdl_base.academic_year.find_academic_years()
+
     if request.POST:
         if 'bt_next_step_up' in request.POST or 'bt_next_step_down' in request.POST:
             next_step = True
@@ -360,7 +359,6 @@ def diploma_update(request, application_id=None, saved=None):
     countries = mdl_reference.country.find_excluding("BE")
     academic_years = mdl_base.academic_year.find_academic_years()
     tab_status = tabs.init(request)
-    validation_messages = demande_validation.validate_diploma(application, request.user)
 
     data = {"application":                  application,
             "academic_years":               academic_years,
