@@ -267,17 +267,8 @@
         });
     }
 
-    $("#lnk_profil_next_step").click(function() {
-        $('#txt_message_error_profile').css('visibility', 'hidden').css('display','none');
-        if (! valid(1)){
-            return false;
-        }
-        $('#hdn_tab_applications_status').val('True');
-        save('form_profile');
-        return true;
-    });
-
-    $("#lnk_profil_next_step_up").click(function() {
+    $('[id^="lnk_profil_next_step"]').click(function() {
+        change_menu();
         $('#txt_message_error_profile_up').css('visibility', 'hidden').css('display','none');
         if (! valid(1)){
             return false;
@@ -288,6 +279,7 @@
     });
 
     $("#lnk_application_tab").click(function() {
+        change_menu();
         if(! valid(1)){
             return false;
         }
@@ -479,24 +471,15 @@
         return true;
     }
 
-    $("#lnk_next_offer_step_up").click(function() {
-        change_menu();
+    $('[id^="lnk_next_offer_step"]').click(function() {
+       change_menu();
        return offer_steps(2);
     });
 
-    $("#lnk_next_offer_step").click(function() {
-        change_menu();
-        return offer_steps(2);
-    });
-
-    $("#lnk_previous_offer_step_up").click(function() {
+    $('[id^="lnk_previous_offer_step"]').click(function() {
+       change_menu();
        $('#form_secondary_education').append( $('#pnl_files>div') );
        return offer_steps(0);
-    });
-
-    $("#lnk_previous_offer_step").click(function() {
-        $('#form_secondary_education').append( $('#pnl_files>div') );
-        return offer_steps(0);
     });
 
     function offer_steps(next_tab){
@@ -1021,27 +1004,23 @@
     }
 
     function change_menu(){
-        var valid_belgiandegree = true;
-        if($('#rdb_offer_belgiandegree_true').length ){
-            if ($('#rdb_offer_belgiandegree_true').prop("checked") == false && $('#rdb_offer_belgiandegree_false').prop("checked") == false){
-                valid_belgiandegree=false;
-            }
-        }else{
-            if ($('#hdn_belgian_degree').val()==''){
-                valid_belgiandegree=false;
-            }
-        }
-
-
         var enableMyLink = true;
-        if($('#hdn_current_application_id').val()=='' || valid_belgiandegree == false){
-            enableMyLink = false;
-        }else{
-            // verify some data
-            if($("#slt_nationality").prop('selectedIndex')<=0 || $("#slt_legal_adr_country").prop('selectedIndex')<=0){
+        var valid_belgiandegree = true;
+        if($('#hdn_tab_active').val() < "2"){
+            if ($('#hdn_belgian_degree').val()==''){
+                valid_belgiandegree = false;
+            }
+
+            if($('#hdn_current_application_id').val()=='' || valid_belgiandegree == false){
                 enableMyLink = false;
+            }else{
+                // verify some data
+                if($("#slt_nationality").prop('selectedIndex')<=0 || $("#slt_legal_adr_country").prop('selectedIndex')<=0){
+                    enableMyLink = false;
+                }
             }
         }
+
         if (enableMyLink) {
           $("#mn_diploma").removeClass("disabled").find("a").removeAttr("onclick");
           $("#mn_curriculum").removeClass("disabled").find("a").removeAttr("onclick");
@@ -1062,5 +1041,6 @@
     $("#slt_legal_adr_country").change(function() {
         change_menu();
     });
+
     </script>
 {% endblock %}
