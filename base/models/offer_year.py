@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from base.models import offer_year_domain
 from django.db import models
 from django.contrib import admin
 from base.models.serializable_model import SerializableModel
@@ -58,7 +59,7 @@ def find_all():
 
 def search(level=None, domain=None):
     if level and domain:
-        return OfferYear.objects.filter(grade_type=level, domain=domain).order_by("acronym")
+        return offer_year_domain.search(level, domain)
     else:
         return None
 
