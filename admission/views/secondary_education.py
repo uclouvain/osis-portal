@@ -250,38 +250,6 @@ def get_secondary_education_exams_data(secondary_education):
         return {}
 
 
-def curriculum_save(request, application_id):
-    exam_types = mdl.admission_exam_type.find_all_by_adhoc(False)
-
-    local_language_exam_link = mdl.properties.find_by_key('PROFESSIONAL_EXAM_LINK')
-    professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
-
-    application = mdl.application.find_by_id(application_id)
-    other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
-    recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
-
-    secondary_education = mdl.secondary_education.find_by_person(application.applicant)
-    education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
-    education_type_qualification = mdl_reference.education_type.find_education_type_by_adhoc('QUALIFICATION', False)
-    data = {"application":                  application,
-            "academic_years":               mdl_base.academic_year.find_academic_years(),
-            "secondary_education":          secondary_education,
-            "countries":                    mdl_reference.country.find_excluding("BE"),
-            "recognized_languages":         recognized_languages,
-            "languages":                    other_language_regime,
-            "exam_types":                   exam_types,
-            'local_language_exam_link':     local_language_exam_link,
-            "professional_exam_link":       professional_exam_link,
-            "education_type_transition":    education_type_transition,
-            "education_type_qualification": education_type_qualification,
-            "current_academic_year":        mdl_base.academic_year.current_academic_year(),
-            "local_language_exam_needed":   is_local_language_exam_needed(request.user)}
-
-    # merge 2 dictionaries
-    data.update(get_secondary_education_exams_data(secondary_education))
-    return render(request, "diploma.html", data)
-
-
 def diploma_save(request):
     next_step = False
     previous_step = False
@@ -547,12 +515,14 @@ def validate_admission_exam(request, is_valid, validation_messages, secondary_ed
 def is_local_language_exam_needed(user):
     local_language_exam_needed = False
     applications = mdl.application.find_by_user(user)
-    for application in applications:
-        if application.offer_year.grade_type.name == 'BACHELOR' or \
-            application.offer_year.grade_type.name == 'MASTER' or \
-                application.offer_year.grade_type.name == 'TRAINING_CERTIFICATE':
-            local_language_exam_needed = True
-            break
+    if applications:
+        for application in applications:
+            if application.offer_year.grade_type and \
+                    (application.offer_year.grade_type.name == 'BACHELOR' or \
+                     application.offer_year.grade_type.name == 'MASTER' or \
+                     application.offer_year.grade_type.name == 'TRAINING_CERTIFICATE'):
+                local_language_exam_needed = True
+                break
     return local_language_exam_needed
 
 
@@ -710,9 +680,10 @@ def secondary_education_exam_update(secondary_education, type, secondary_educati
         secondary_education_exam.save()
     else:
         # Delete if it exists
-        secondary_education_exam = mdl.secondary_education_exam.find_by_type(secondary_education, type)
-        if secondary_education_exam:
-            secondary_education_exam.delete()
+        if secondary_education:
+            secondary_education_exam = mdl.secondary_education_exam.find_by_type(secondary_education, type)
+            if secondary_education_exam:
+                secondary_education_exam.delete()
 
 
 def documents_update(request, secondary_education, application, professional_exam, admission_exam):
