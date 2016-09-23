@@ -27,6 +27,7 @@ from django.core import serializers
 
 
 def insert_or_update(json_data):
+    from base.models.serializable_model import SerializableModel
     instances = serializers.deserialize('json', json_data, ignorenonexistent=True)
     for instance in instances:
-        super(instance.object.__class__, instance.object).save()
+        super(SerializableModel, instance.object).save()
