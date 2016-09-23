@@ -1,5 +1,4 @@
 $("#slt_offer_type").change(function() {
-
     init_static_questions();
     $("#pnl_grade_choices").find("label")
         .remove()
@@ -135,6 +134,7 @@ function disabled_reset_field_txt(id, state){
 }
 
 $("#slt_nationality").change(function() {
+   change_menu();
    $.ajax({
        url: "/admission/country?nationality=" + $("#slt_nationality").val()
      }).then(function(data) {
@@ -1553,8 +1553,6 @@ function ajax_static_questions(offer_year_id, sameprogram, belgiandegree, samest
    }).then(function(data) {
 
     init_static_questions();
-//            alert(data.subject_to_quota);
-//            alert(data.grade_type);
     if (data.subject_to_quota){
 
         $('#pnl_offer_sameprogram').css('visibility', 'visible').css('display','block');

@@ -195,7 +195,6 @@
         if($('#hdn_tab_active').val()=='2'){
             $('#form_secondary_education').append( $('#pnl_files>div') );
         }
-        $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
         if($("#slt_nationality").val()!="-1"){
             $.ajax({
                 url: "/admission/country?nationality=" + $("#slt_nationality").val()
@@ -256,27 +255,7 @@
                 display_existing_files(description)
             }
         });
-
-        var enableMyLink = true;
-        if($('#hdn_current_application_id').val()==''){
-            var enableMyLink = false;
-        }
-        if (enableMyLink) {
-          $("#mn_diploma").removeClass("disabled").find("a").removeAttr("onclick");
-          $("#mn_curriculum").removeClass("disabled").find("a").removeAttr("onclick");
-          $("#mn_accounting").removeClass("disabled").find("a").removeAttr("onclick");
-          $("#mn_sociological").removeClass("disabled").find("a").removeAttr("onclick");
-          $("#mn_attachments").removeClass("disabled").find("a").removeAttr("onclick");
-          $("#mn_submission").removeClass("disabled").find("a").removeAttr("onclick");
-        } else {
-          $("#mn_diploma").addClass("disabled").find("a").attr("onclick", "return false;");
-          $("#mn_curriculum").addClass("disabled").find("a").attr("onclick", "return false;");
-          $("#mn_accounting").addClass("disabled").find("a").attr("onclick", "return false;");
-          $("#mn_sociological").addClass("disabled").find("a").attr("onclick", "return false;");
-          $("#mn_attachments").addClass("disabled").find("a").attr("onclick", "return false;");
-          $("#mn_submission").addClass("disabled").find("a").attr("onclick", "return false;");
-        }
-
+        change_menu()
     });
 
     function save(form_to_submit){
@@ -490,7 +469,7 @@
         $('#txt_message_error_profile_up').css('visibility', 'hidden').css('display','none');
         $('#txt_message_error_profile_up').html('');
         if ($("#txt_offer_year_id").val()==''
-            || ($('#rdb_offer_belgiandegree_true').prop("checked") == "false" && $('#rdb_offer_belgiandegree_false').prop("checked") == "false") ){
+            || ($('#rdb_offer_belgiandegree_true').prop("checked") == false && $('#rdb_offer_belgiandegree_false').prop("checked") == false) ){
             $("#txt_message_error_offer_up").text(gettext('msg_next_offer'));
             $('#txt_message_error_offer_up').css('visibility', 'visible').css('display','block');
             $("#txt_message_error_offer_down").text(gettext('msg_next_offer'));
@@ -501,10 +480,12 @@
     }
 
     $("#lnk_next_offer_step_up").click(function() {
+        change_menu();
        return offer_steps(2);
     });
 
     $("#lnk_next_offer_step").click(function() {
+        change_menu();
         return offer_steps(2);
     });
 
@@ -901,8 +882,8 @@
             save('form_submission');
         }
     }
-    function valid_profile_data(){
 
+    function valid_profile_data(){
         // clear error messages
         $('#spn_number_children').html('');
         $('#spn_last_academic_year').html('');
@@ -1038,5 +1019,48 @@
         }
         return true;
     }
+
+    function change_menu(){
+        var valid_belgiandegree = true;
+        if($('#rdb_offer_belgiandegree_true').length ){
+            if ($('#rdb_offer_belgiandegree_true').prop("checked") == false && $('#rdb_offer_belgiandegree_false').prop("checked") == false){
+                valid_belgiandegree=false;
+            }
+        }else{
+            if ($('#hdn_belgian_degree').val()==''){
+                valid_belgiandegree=false;
+            }
+        }
+
+
+        var enableMyLink = true;
+        if($('#hdn_current_application_id').val()=='' || valid_belgiandegree == false){
+            enableMyLink = false;
+        }else{
+            // verify some data
+            if($("#slt_nationality").prop('selectedIndex')<=0 || $("#slt_legal_adr_country").prop('selectedIndex')<=0){
+                enableMyLink = false;
+            }
+        }
+        if (enableMyLink) {
+          $("#mn_diploma").removeClass("disabled").find("a").removeAttr("onclick");
+          $("#mn_curriculum").removeClass("disabled").find("a").removeAttr("onclick");
+          $("#mn_accounting").removeClass("disabled").find("a").removeAttr("onclick");
+          $("#mn_sociological").removeClass("disabled").find("a").removeAttr("onclick");
+          $("#mn_attachments").removeClass("disabled").find("a").removeAttr("onclick");
+          $("#mn_submission").removeClass("disabled").find("a").removeAttr("onclick");
+        } else {
+          $("#mn_diploma").addClass("disabled").find("a").attr("onclick", "return false;");
+          $("#mn_curriculum").addClass("disabled").find("a").attr("onclick", "return false;");
+          $("#mn_accounting").addClass("disabled").find("a").attr("onclick", "return false;");
+          $("#mn_sociological").addClass("disabled").find("a").attr("onclick", "return false;");
+          $("#mn_attachments").addClass("disabled").find("a").attr("onclick", "return false;");
+          $("#mn_submission").addClass("disabled").find("a").attr("onclick", "return false;");
+        }
+    }
+
+    $("#slt_legal_adr_country").change(function() {
+        change_menu();
+    });
     </script>
 {% endblock %}

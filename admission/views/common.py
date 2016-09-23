@@ -471,7 +471,8 @@ def profile(request, application_id=None, message_success=None):
         'assimilation_basic_documents': assimilation_criteria_view.find_assimilation_basic_documents(),
         'assimilation_documents_existing': get_assimilation_documents_existing(request.user),
         'document_formset': document_formset,
-        'message_info': message_info}
+        'message_info': message_info,
+        'application': application}
     data.update(demande_validation.get_validation_status(application, applicant, request.user))
     return render(request, "admission_home.html", data)
 

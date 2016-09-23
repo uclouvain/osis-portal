@@ -3,7 +3,7 @@
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
-* designed to manage the core business of higher education institutions,
+* designed to manage the core business of higher education inbelgian_degreestitutions,
 * such as universities, faculties, institutes and professional schools.
 * The core business involves the administration of students, teachers,
 * courses, programs and so on.
@@ -26,7 +26,7 @@
 {% endcomment %}
     <div class="row">
         <div class="col-md-8">
-            <h5>{% trans 'mandatory_asterisk'%}</h5>
+            <h5>{% trans 'mandatory_asterisk'%}a{{applicant.nationality.id}}b</h5>
         </div>
         <div class="col-md-4">
             <button type="submit" id="bt_submit_application" class="btn btn-default pull-right" role="button"
@@ -61,9 +61,10 @@
     <input type="hidden" value="{{application.offer_year.grade_type.id}}" id="hdn_application_grade_type_id">
     <input type="hidden" value="{{application.offer_year.domain.id}}" id="hdn_application_domain_id" title="dom">
     <input type="hidden" value="{{application.offer_year.id}}" id="hdn_application_offer_year_id" name="hdn_application_offer_year_id">
-    <input type="hidden" value="{{application.national_degree}}" id="hdn_belgian_degree">
+    <input type="hidden" value="{{application.national_degree| default_if_none:''}}" id="hdn_belgian_degree">
     <input type="hidden" value="{{application.started_similar_studies}}" id="hdn_started_samestudies">
     <input type="hidden" value="{{application.applied_to_sameprogram}}" id="hdn_applied_to_sameprogram">
+    <input type="hidden" value="{{application.valuation_possible}}" id="hdn_valuation_possible">
 
     <br>
     {% trans 'instruction_offer_selection_part1' %}
@@ -164,13 +165,13 @@
                 <div class="col-md-4">
                     <div>
                         <label class="radio-inline">
-                            <input type="radio" id="rdb_offer_vae_true" name="rdb_offer_vae" value="true"
-                                   {% if application.vae %}checked{%endif%}
+                            <input type="radio" id="rdb_valuation_possible_true" name="valuation_possible" value="true"
+                                   {% if application.valuation_possible %} checked{%endif%}
                             > {% trans 'yes'%}
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" id="rdb_offer_vae_false" name="rdb_offer_vae" value="false"
-                                   {% if application.vae %}{%else%}checked{%endif%}
+                            <input type="radio" id="rdb_valuation_possible_false" name="valuation_possible" value="false"
+                                   {% if application.valuation_possible %}{%else%} checked{%endif%}
                             > {% trans 'no'%}
                         </label>
                     </div>

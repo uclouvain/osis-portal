@@ -88,8 +88,9 @@ def save_application_offer(request):
                 application.national_degree = True
             else:
                 application.national_degree = False
-        if request.POST.get('rdb_offer_vae'):
-            if request.POST.get('rdb_offer_vae') == "true":
+        print (request.POST.get('valuation_possible'))
+        if request.POST.get('valuation_possible'):
+            if request.POST.get('valuation_possible') == "true":
                 application.valuation_possible = True
             else:
                 application.valuation_possible = False
@@ -234,21 +235,27 @@ def applications(request, application_id=None):
     else:
         application = mdl.application.init_application(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
+    person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
+    countries = mdl_reference.country.find_all()
     data = {
         "applications": application_list,
         "grade_choices": mdl_reference.institutional_grade_type.find_all(),
         "domains": mdl_reference.domain.find_current_domains(),
         'tab_active': 1,
         "application": application,
-        'tab_profile': tab_status['tab_profile'],
-        'tab_applications': tab_status['tab_applications'],
-        'tab_diploma': tab_status['tab_diploma'],
-        'tab_curriculum': tab_status['tab_curriculum'],
-        'tab_accounting': tab_status['tab_accounting'],
-        'tab_sociological': tab_status['tab_sociological'],
-        'tab_attachments': tab_status['tab_attachments'],
-        'tab_submission': tab_status['tab_submission'],
-        "local_language_exam_needed": is_local_language_exam_needed(request.user)
+        "tab_profile": tab_status['tab_profile'],
+        "tab_applications": tab_status['tab_applications'],
+        "tab_diploma": tab_status['tab_diploma'],
+        "tab_curriculum": tab_status['tab_curriculum'],
+        "tab_accounting": tab_status['tab_accounting'],
+        "tab_sociological": tab_status['tab_sociological'],
+        "tab_attachments": tab_status['tab_attachments'],
+        "tab_submission": tab_status['tab_submission'],
+        "local_language_exam_needed": is_local_language_exam_needed(request.user),
+        "applicant": applicant,
+        "person_legal_address": person_legal_address,
+        "countries": countries,
+        "application": application
     }
     data.update(demande_validation.get_validation_status(application, applicant, request.user))
     return render(request, "admission_home.html", data)
