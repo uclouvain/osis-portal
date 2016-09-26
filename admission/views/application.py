@@ -184,7 +184,7 @@ def save_application_offer(request):
                 answer.value = option.value
                 answer.save()
     applicant = mdl.applicant.find_by_user(request.user)
-    # return HttpResponse('')
+
     if next_tab:
         if next_tab == "0":
             return HttpResponseRedirect(reverse('profile', args=(application.id,)))
@@ -193,14 +193,7 @@ def save_application_offer(request):
             return HttpResponseRedirect(reverse('applications', args=(application.id,)))
 
         if next_tab == "2":
-            # return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': application.id, 'saved': 0}))
             return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': application_id, 'saved': 1}))
-            # return HttpResponseRedirect(reverse('diploma_update?application_id=1'))
-
-            # quick_add_order_url = url_with_querystring(reverse('diploma_update'),
-            #    application_id=application_id, saved=0)
-            # return HttpResponseRedirect(reverse(quick_add_order_url))
-            #return HttpResponseRedirect(reverse('diploma_update',args=(application_id,  1)))
 
         if next_tab == "3":
             return HttpResponseRedirect(reverse('curriculum_update', args=(application.id,)))
@@ -237,7 +230,6 @@ def application_view(request, application_id):
 
 
 def applications(request, application_id=None):
-    print('applications')
     tab_status = tabs.init(request)
     application_list = mdl.application.find_by_user(request.user)
     if application_id:
