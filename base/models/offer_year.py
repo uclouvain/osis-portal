@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from base.models import offer_year_domain
+from base.models.offer_year_domain import OfferYearDomain
 from django.db import models
 from django.contrib import admin
 from base.models.serializable_model import SerializableModel
@@ -49,6 +50,10 @@ class OfferYear(SerializableModel):
 
     def __str__(self):
         return u"%s - %s" % (self.academic_year, self.acronym)
+
+    @property
+    def find_domain(self):
+        return OfferYearDomain.objects.get(offer_year=self)
 
 
 def find_by_id(offer_year_id):

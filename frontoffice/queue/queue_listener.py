@@ -27,6 +27,7 @@ from django.conf import settings
 
 import pika
 import uuid
+from pika.exceptions import ConnectionClosed
 from frontoffice.settings import QUEUE_URL, QUEUE_USER, QUEUE_PASSWORD, QUEUE_PORT, QUEUE_CONTEXT_ROOT
 import threading
 import logging
@@ -83,11 +84,14 @@ class SynchronousConsumerThread(threading.Thread):
         listen_queue_synchronously(self._queue_name, self.callback)
 
 
-def listen_queue_synchronously(queue_name, callback):
+def listen_queue_synchronously(queue_name, callback, counter=3):
 
     def on_message(channel, method_frame, header_frame, body):
         callback(body)
         channel.basic_ack(delivery_tag=method_frame.delivery_tag)
+
+    if counter == 0:
+        return # Stop the function
 
     credentials = pika.PlainCredentials(QUEUE_USER, QUEUE_PASSWORD)
     connection = pika.BlockingConnection(pika.ConnectionParameters(QUEUE_URL,
@@ -104,8 +108,11 @@ def listen_queue_synchronously(queue_name, callback):
     channel.basic_consume(on_message, queue_name)
     try:
         channel.start_consuming()
+        counter = 3
     except KeyboardInterrupt:
         channel.stop_consuming()
+    except ConnectionClosed:
+        listen_queue_synchronously(queue_name, callback, counter - 1)
     connection.close()
 
 

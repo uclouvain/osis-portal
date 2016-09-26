@@ -43,7 +43,8 @@
     <br>
     <form id="form_application_layout">
         <input type="hidden" id="hdn_tab_active" value="{{tab_active}}" title="active tab">
-        <input type="hidden" value="{{application.id | default_if_none:''}}" id="hdn_current_application_id" name="application_id" title="application_id" >
+        <input type="hidden" value="{{application.id | default_if_none:''}}" id="hdn_current_application_id"
+               name="application_id" title="application_id" >
     </form>
     <div class="row">
         <div class="col-md-2">
@@ -195,6 +196,7 @@
         if($('#hdn_tab_active').val()=='2'){
             $('#form_secondary_education').append( $('#pnl_files>div') );
         }
+        $('#pnl_assimilation_criteria').css('visibility', 'hidden').css('display','none');
         if($("#slt_nationality").val()!="-1"){
             $.ajax({
                 url: "/admission/country?nationality=" + $("#slt_nationality").val()
@@ -215,10 +217,9 @@
         $('#chb_admission_exam_type').prop( "checked", false);
 
         populate_exam_admin();
-
         if($('#hdn_current_application_id').val() != '') {
             $('#txt_offer_year_id').val($('#hdn_application_offer_year_id').val())
-            $('#slt_offer_type').val($('#hdn_application_grade').val())
+            $('#slt_offer_type').val($('#hdn_application_grade_type_id').val())
             display_known_offer($('#hdn_application_offer_year_id').val());
         }
         {% if list_choices%}
@@ -258,12 +259,13 @@
         change_menu()
     });
 
-    function save(form_to_submit){
+    function save(form_to_submit, next_tab){
         var id = 'form#' + form_to_submit;
+        var data = $(id).serialize();
         $.ajax({
             url: $(id).attr('action'), // Le nom du fichier indiqué dans le formulaire
             type:'post', // La méthode indiquée dans le formulaire (get ou post)
-            data: $(id).serialize(), // Je sérialise les données (j'envoie toutes les valeurs présentes dans le formulaire)
+            data: data, // Je sérialise les données (j'envoie toutes les valeurs présentes dans le formulaire)
         });
     }
 
@@ -274,7 +276,7 @@
             return false;
         }
         $('#hdn_tab_applications_status').val('True');
-        save('form_profile');
+        save('form_profile',1);
         return true;
     });
 
@@ -295,7 +297,7 @@
                 }
             });
         }
-        save_form();
+        save_form(1);
     });
 
     $("#btn_modify_picture").click(function(event) {
@@ -397,7 +399,6 @@
         }else{
             return false;
         }
-
     }
 
     $("#lnk_diploma_tab").click(function() {
@@ -407,42 +408,42 @@
         if (! valid(2)) {
             return false;
         }
-        save_form();
+        save_form(2);
     });
 
     $("#lnk_curriculum_tab").click(function() {
         if (! valid(3)){
             return false;
         }
-        save_form();
+        save_form(3);
     });
 
     $("#lnk_accounting_tab").click(function() {
         if (! valid(4)){
             return false;
         }
-        save_form();
+        save_form(4);
     });
 
     $("#lnk_sociological_tab").click(function() {
         if (! valid(5)){
             return false;
         }
-        save_form();
+        save_form(5);
     });
 
     $("#lnk_attachments_tab").click(function() {
         if (! valid(6)){
             return false;
         }
-        save_form();
+        save_form(6);
     });
 
     $("#lnk_submission_tab").click(function() {
         if (! valid(7)){
             return false;
         }
-        save_form();
+        save_form(7);
     });
 
     $("#lnk_profile_tab").click(function() {
@@ -452,7 +453,7 @@
             }
         }
         if($("#hdn_tab_active").val() != "1") {
-            save_form();
+            save_form(0);
         }
 
     });
@@ -473,6 +474,7 @@
 
     $('[id^="lnk_next_offer_step"]').click(function() {
        change_menu();
+       $('#demande_next_tab').val('2');
        return offer_steps(2);
     });
 
@@ -489,7 +491,10 @@
             return false;
         }
         $('#hdn_tab_applications_status').val('True');
-        save('form_questions');
+        if( $('#demande_next_tab').val()!=''){
+            next_tab=$('#demande_next_tab').val();
+        }
+        save('form_questions', next_tab);
         return true;
     }
 
@@ -498,7 +503,7 @@
         $('#slt_domain').val($('#hdn_application_domain_id').val());
         ajax_offers($('#hdn_application_grade_type_id').val(),$('#hdn_application_offer_year_id').val());
         display_dynamic_form(offer_year_id);
-        ajax_static_questions(offer_year_id,$('#hdn_applied_to_sameprogram').val(),$('#hdn_belgian_degree').val(),$('#hdn_started_samestudies').val());
+        ajax_static_questions(offer_year_id,$('#hdn_applied_to_sameprogram').val(),$('#hdn_belgian_degree').val(),$('#hdn_started_samestudies').val(),$('#hdn_valuation_possible').val());
     }
 
     //***************************
@@ -839,30 +844,30 @@
         }
     });
 
-    function save_form(){
+    function save_form(next_tab){
         if($("#hdn_tab_active").val()=="0"){
-            save('form_profile');
+            save('form_profile', next_tab);
         }
         if($("#hdn_tab_active").val()=="1"){
-            save('form_questions');
+            save('form_questions', next_tab);
         }
         if($("#hdn_tab_active").val()=="2"){
-            save('form_secondary_education');
+            save('form_secondary_education', next_tab);
         }
         if($("#hdn_tab_active").val()=="3"){
-            save('form_curriculum');
+            save('form_curriculum', next_tab);
         }
         if($("#hdn_tab_active").val()=="4"){
-            save('form_accounting');
+            save('form_accounting', next_tab);
         }
         if($("#hdn_tab_active").val()=="5"){
-            save('form_sociological_survey');
+            save('form_sociological_survey', next_tab);
         }
         if($("#hdn_tab_active").val()=="6"){
-            save('form_attachements');
+            save('form_attachements', next_tab);
         }
         if($("#hdn_tab_active").val()=="7"){
-            save('form_submission');
+            save('form_submission', next_tab);
         }
     }
 
@@ -1041,6 +1046,10 @@
     $("#slt_legal_adr_country").change(function() {
         change_menu();
     });
-
+    $('#bt_submit_application').click(function() {
+       change_menu();
+       $('#demande_next_tab').val('1');
+       return offer_steps(1);
+    });
     </script>
 {% endblock %}

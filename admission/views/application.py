@@ -35,7 +35,8 @@ from admission.views.common import get_picture_id, get_id_document
 from admission.views.common import extra_information
 from admission.views import demande_validation
 from admission.views import tabs
-
+from django.http import *
+from django.http import HttpResponsePermanentRedirect
 
 def application_update(request, application_id):
     application = mdl.application.find_by_id(application_id)
@@ -118,7 +119,7 @@ def save_application_offer(request):
             application.raffle_number = request.POST.get('txt_offer_lottery')
 
         application.save()
-
+        application_id = application.id
         if new_application is False:
             # delete all existing application_assimilation_criteria
             for a in mdl.application_assimilation_criteria.find_by_application(application):
@@ -183,30 +184,38 @@ def save_application_offer(request):
                 answer.value = option.value
                 answer.save()
     applicant = mdl.applicant.find_by_user(request.user)
+    # return HttpResponse('')
+    if next_tab:
+        if next_tab == "0":
+            return HttpResponseRedirect(reverse('profile', args=(application.id,)))
 
-    if next_tab == "0":
-        return HttpResponseRedirect(reverse('profile', args=(application.id,)))
+        if next_tab == "1":
+            return HttpResponseRedirect(reverse('applications', args=(application.id,)))
 
-    if next_tab == "1":
-        return HttpResponseRedirect(reverse('applications', args=(application.id,)))
+        if next_tab == "2":
+            # return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': application.id, 'saved': 0}))
+            return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': application_id, 'saved': 1}))
+            # return HttpResponseRedirect(reverse('diploma_update?application_id=1'))
 
-    if next_tab == "2":
-        return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': application.id, 'saved': None}))
+            # quick_add_order_url = url_with_querystring(reverse('diploma_update'),
+            #    application_id=application_id, saved=0)
+            # return HttpResponseRedirect(reverse(quick_add_order_url))
+            #return HttpResponseRedirect(reverse('diploma_update',args=(application_id,  1)))
 
-    if next_tab == "3":
-        return HttpResponseRedirect(reverse('curriculum_update', args=(application.id,)))
+        if next_tab == "3":
+            return HttpResponseRedirect(reverse('curriculum_update', args=(application.id,)))
 
-    if next_tab == "4":
-        return HttpResponseRedirect(reverse('accounting_update', args=(application.id,)))
+        if next_tab == "4":
+            return HttpResponseRedirect(reverse('accounting_update', args=(application.id,)))
 
-    if next_tab == "5":
-        return HttpResponseRedirect(reverse('sociological_survey', args=(application.id,)))
+        if next_tab == "5":
+            return HttpResponseRedirect(reverse('sociological_survey', args=(application.id,)))
 
-    if next_tab == "6":
-        return HttpResponseRedirect(reverse('attachments', args=(application.id,)))
+        if next_tab == "6":
+            return HttpResponseRedirect(reverse('attachments', args=(application.id,)))
 
-    if next_tab == "7":
-        return HttpResponseRedirect(reverse('submission', args=(application.id,)))
+        if next_tab == "7":
+            return HttpResponseRedirect(reverse('submission', args=(application.id,)))
 
     data = {
         'tab_active': next_tab,
@@ -228,12 +237,14 @@ def application_view(request, application_id):
 
 
 def applications(request, application_id=None):
+    print('applications')
     tab_status = tabs.init(request)
     application_list = mdl.application.find_by_user(request.user)
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
-        application = mdl.application.init_application(request.user)
+        # application = mdl.application.init_application(request.user)
+        application = None
     applicant = mdl.applicant.find_by_user(request.user)
     person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
     countries = mdl_reference.country.find_all()
@@ -254,8 +265,7 @@ def applications(request, application_id=None):
         "local_language_exam_needed": is_local_language_exam_needed(request.user),
         "applicant": applicant,
         "person_legal_address": person_legal_address,
-        "countries": countries,
-        "application": application
+        "countries": countries
     }
     data.update(demande_validation.get_validation_status(application, applicant, request.user))
     return render(request, "admission_home.html", data)
@@ -320,3 +330,6 @@ def is_local_language_exam_needed(user):
             local_language_exam_needed = True
             break
     return local_language_exam_needed
+
+def url_with_querystring(path, **kwargs):
+    return path + '?' + urllib.urlencode(kwargs)

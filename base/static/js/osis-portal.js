@@ -77,7 +77,7 @@ function selection(row_number, offers_length, offer_year_id){
         document.getElementById("offer_sel_" + row_number).checked = true;
     }
     display_dynamic_form(offer_year_id);
-    ajax_static_questions(offer_year_id,'','','');
+    ajax_static_questions(offer_year_id,'','','','');
 
 
     }
@@ -149,30 +149,36 @@ $("#slt_nationality").change(function() {
 //Display pnl_offer_vae only for Masters and only when rdb_offer_belgiandegree_false is clicked
 
 $("#rdb_offer_belgiandegree_true").click(function() {
-           $.ajax({
-            url: "/admission/offer?offer=" + $("#txt_offer_year_id").val()
-           }).then(function(data) {
+       $.ajax({
+        url: "/admission/offer?offer=" + $("#txt_offer_year_id").val()
+       }).then(function(data) {
+        var is_master = false;
+        if((data.institutional_grade_type_name.toLowerCase()).startsWith('master') ){
+            is_master=true;
+        }
 
-            if (data.grade_type!=1){
-               $('#pnl_offer_vae').css('visibility', 'hidden').css('display','none');
-               $('#pnl_offer_vae').find('input[type=radio]:checked').removeAttr('checked');
-               $('#pnl_offer_vae').find('input').removeAttr('required');
-              }
-        });
+        if (! is_master){
+           $('#pnl_offer_vae').css('visibility', 'hidden').css('display','none');
+           $('#pnl_offer_vae').find('input[type=radio]:checked').removeAttr('checked');
+           $('#pnl_offer_vae').find('input').removeAttr('required');
+        }
+    });
 
 });
 
 $("#rdb_offer_belgiandegree_false").click(function() {
-           $.ajax({
-            url: "/admission/offer?offer=" + $("#txt_offer_year_id").val()
-           }).then(function(data) {
-
-            if (data.grade_type!=1){
-               $('#pnl_offer_vae').css('visibility', 'visible').css('display','block');
-               $('#pnl_offer_vae').find('input').prop('required', true );
-              }
-        });
-
+       $.ajax({
+        url: "/admission/offer?offer=" + $("#txt_offer_year_id").val()
+       }).then(function(data) {
+        var is_master = false;
+        if((data.institutional_grade_type_name.toLowerCase()).startsWith('master') ){
+            is_master=true;
+        }
+        if (is_master){
+           $('#pnl_offer_vae').css('visibility', 'visible').css('display','block');
+           $('#pnl_offer_vae').find('input').prop('required', true );
+          }
+    });
 });
 
 
@@ -1547,14 +1553,13 @@ function ajax_offers(radio_button_value, offer_year_id){
       });
 }
 
-function ajax_static_questions(offer_year_id, sameprogram, belgiandegree, samestudies) {
+function ajax_static_questions(offer_year_id, sameprogram, belgiandegree, samestudies,valuation_possible) {
    $.ajax({
     url: "/admission/offer?offer=" + offer_year_id
    }).then(function(data) {
 
     init_static_questions();
     if (data.subject_to_quota){
-
         $('#pnl_offer_sameprogram').css('visibility', 'visible').css('display','block');
         $('#pnl_offer_sameprogram').find('input').prop('required', true);
 
@@ -1599,6 +1604,14 @@ function ajax_static_questions(offer_year_id, sameprogram, belgiandegree, samest
             $('#rdb_offer_samestudies_false').trigger('click');
         }
     }
-
+    if(valuation_possible == 'True'){
+        $('#rdb_valuation_possible_true').find('input').prop('checked', true);
+        $('#rdb_valuation_possible_true').trigger('click');
+    }else{
+        if(valuation_possible == 'False'){
+            $('#rdb_valuation_possible_false').find('input').prop('checked', false);
+            $('#rdb_valuation_possible_false').trigger('click');
+        }
+    }
     });
 }

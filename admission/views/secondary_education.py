@@ -307,6 +307,8 @@ def diploma_update(request, application_id=None, saved=None):
     :param saved:
     :return:
     """
+
+
     if saved:
         message_info = _('msg_info_saved')
     else:
@@ -314,7 +316,8 @@ def diploma_update(request, application_id=None, saved=None):
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
-        application = mdl.application.init_application(request.user)
+        #application = mdl.application.init_application(request.user)
+        application = mdl.application.find_first_by_user(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
     other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
     recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
