@@ -217,7 +217,7 @@
 
         if($('#hdn_current_application_id').val() != '') {
             $('#txt_offer_year_id').val($('#hdn_application_offer_year_id').val())
-            $('#slt_offer_type').val($('#hdn_application_grade').val())
+            $('#slt_offer_type').val($('#hdn_application_grade_type_id').val())
             display_known_offer($('#hdn_application_offer_year_id').val());
         }
         {% if list_choices%}
@@ -287,6 +287,7 @@
     });
 
     $("#lnk_application_tab").click(function() {
+
         if(! valid()){
             return false;
         }
@@ -297,6 +298,7 @@
                 }
             });
             $('#slt_domain option').each(function(){
+
                 if($(this).attr('value')==$('#hdn_application_domain_id').val()){
                     $(this).prop('selected', true);
                 }
