@@ -27,6 +27,9 @@
 import os,sys
 
 from django.core.wsgi import get_wsgi_application
+from frontoffice.queue import callbacks
+from frontoffice.queue import queue_listener
+from performance.queue import callbacks as perf_callbacks
 
 # The two following lines are mandatory for working with mod_wsgi on the servers
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..' )
@@ -35,3 +38,11 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../frontoffice')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "frontoffice.settings")
 
 application = get_wsgi_application()
+
+# Thread in which is running the listening of the queue used to migrate data (from Osis to Osis-portal)
+queue_for_migration = 'osis_portal' # Data from Osis to insert/update in Osis-portal
+queue_listener.SynchronousConsumerThread(queue_for_migration, callbacks.insert_or_update).start()
+
+# Thread in which is running the listening of the queue used to print exams scores of students
+queue_for_performancce = 'performance'
+queue_listener.listen_queue(queue_for_performancce, perf_callbacks.couchbase_insert_or_update)

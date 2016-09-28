@@ -23,9 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import json
+from performance.models import student_performance
 
-from django.apps import AppConfig
 
-
-class AdmissionConfig(AppConfig):
-    name = 'admission'
+def couchbase_insert_or_update(json_data):
+    """
+        Insert the records in CouchBase. If the records already exist, then the method makes an update.
+    """
+    data = json.loads(json_data.decode("utf-8"))
+    key = student_performance.key_from_json(data)
+    student_performance.save_document(key, data)
