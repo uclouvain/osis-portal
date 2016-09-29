@@ -243,7 +243,7 @@ def find_list_document_type_by_criteria(criteria):
     return list_document_type
 
 
-def get_list_docs(criteria_id):
+def get_list_documents_descriptions(criteria_id):
     list_document_type = []
     if criteria_id == 1:
         list_document_type = criteria1(list_document_type)
@@ -259,9 +259,9 @@ def get_list_docs(criteria_id):
         list_document_type = criteria6(list_document_type)
     if criteria_id == 7:
         list_document_type = criteria7(list_document_type)
-    list_documents = []
+    list_documents_description = []
     for l in list_document_type:
-        for elt in l.descriptions:
-            if elt not in list_documents:
-                list_documents.append(elt)
-    return list_documents
+        for description in l.descriptions:
+            if description not in list_documents_description:
+                list_documents_description.append(description)
+    return list_documents_description

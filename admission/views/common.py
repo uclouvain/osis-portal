@@ -329,7 +329,7 @@ def profile(request, application_id=None, message_success=None):
                         if criteria:
                             assimilation_basic_documents = assimilation_criteria_view.\
                                 find_list_assimilation_basic_documents()
-                            list_document_type_needed = assimilation_criteria_view.get_list_docs(criteria.id)
+                            list_document_type_needed = assimilation_criteria_view.get_list_documents_descriptions(criteria.id)
                             list_document_type_needed.append(document_type.ID_CARD)
 
                             if criteria.id == 5:
