@@ -1424,6 +1424,20 @@ function display_dynamic_form(offer_year_id){
                         }
                     }
                 }
+                if(value.question_type=='HTTP_LINK'){
+                    $('#pnl_questions').append($("<a></a>")
+                                       .append(value.question_label)
+                                       .attr("id","lnk_question_"+value.option_id)
+                                       .attr("target","_blank")
+                                       .attr("href",value.option_value));
+                    if(value.question_description != ""){
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append($("<label></label>")
+                                           .append(value.question_description)
+                                           .attr("id","lbl_question_description_"+value.option_id)
+                                           .attr("class","description"));
+                    }
+            }
 
             if(value.question_type=='DOWNLOAD_LINK'){
                 $('#pnl_questions').append("<br>");
@@ -1431,20 +1445,6 @@ function display_dynamic_form(offer_year_id){
                 $('#pnl_questions').append($("<label></label>").append(value.question_label)
                                                             .attr("id","lbl_question_"+value.question_id));
                 $('#pnl_questions').append($("<a></a>").append("&nbsp;&nbsp;Cliquez ici pour obtenir le fichier")
-                                                       .attr("id","lnk_question_"+value.option_id)
-                                                       .attr("target","_blank")
-                                                       .attr("href",value.option_value));
-                if(value.question_description != ""){
-                    $('#pnl_questions').append("<br>");
-                    $('#pnl_questions').append($("<label></label>").append(value.question_description)
-                                                            .attr("id","lbl_question_description_"+value.option_id)
-                                                            .attr("class","description"));
-                }
-            }
-            if(value.question_type=='HTTP_LINK'){
-                $('#pnl_questions').append("<br>");
-                $('#pnl_questions').append("<br>");
-                $('#pnl_questions').append($("<a></a>").append(value.option_value)
                                                        .attr("id","lnk_question_"+value.option_id)
                                                        .attr("target","_blank")
                                                        .attr("href",value.option_value));
