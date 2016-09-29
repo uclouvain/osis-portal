@@ -59,15 +59,13 @@ def validate_profil(applicant, user):
         return False
 
     applicant_legal_adress = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
-    if applicant_legal_adress is None:
-        return False
-    else:
-        if applicant_legal_adress.street is None \
+    if applicant_legal_adress is None \
+            or (applicant_legal_adress.street is None \
                 or applicant_legal_adress.number is None \
                 or applicant_legal_adress.postal_code is None \
                 or applicant_legal_adress.city is None \
-                or applicant_legal_adress.country is None:
-            return False
+                or applicant_legal_adress.country is None):
+        return False
     if applicant.nationality and not applicant.nationality.european_union:
         applicant_assimilation_criterias = mdl.applicant_assimilation_criteria.find_by_applicant(applicant)
         if not applicant_assimilation_criterias:
@@ -120,7 +118,7 @@ def validate_diploma(application, user):
         if secondary_education.diploma is not True \
             and admission_exam is None \
             and professional_exam is None \
-            and local_language_exam is None:
+                and local_language_exam is None:
             validation_messages['diploma'] = _('msg_one_prerequisite')
         else:
             if secondary_education.diploma is True and secondary_education.national is True:
@@ -129,24 +127,23 @@ def validate_diploma(application, user):
                 if secondary_education.national_community is None:
                     validation_messages['belgian_community'] = ALERT_MANDATORY_FIELD
                 else:
-                    if secondary_education.national_community == 'FRENCH':
-                        if secondary_education.academic_year.year < 1994:
-                            if secondary_education.dipl_acc_high_educ is None:
-                                validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
+                    if secondary_education.national_community == 'FRENCH' \
+                            and secondary_education.academic_year.year < 1994 \
+                            and secondary_education.dipl_acc_high_educ is None:
+                        validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
 
-                    if secondary_education.national_community == 'DUTCH':
-
-                        if secondary_education.academic_year.year < 1992:
-                            if secondary_education.dipl_acc_high_educ is None:
-                                validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
+                    if secondary_education.national_community == 'DUTCH' \
+                            and secondary_education.academic_year.year < 1992 \
+                            and secondary_education.dipl_acc_high_educ is None:
+                        validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
 
                 if secondary_education.national_institution is None:
                     validation_messages['school'] = _('msg_school_name')
                 else:
-                    if secondary_education.national_institution.national_community == 'FRENCH':
-                        # Belgian school
-                        if secondary_education.education_type is None:
-                            validation_messages['pnl_teaching_type'] = _('msg_error_education_type')
+                    # Belgian school
+                    if secondary_education.national_institution.national_community == 'FRENCH' \
+                            and secondary_education.education_type is None:
+                        validation_messages['pnl_teaching_type'] = _('msg_error_education_type')
 
                 if secondary_education.academic_year.year < 1994:
                     if secondary_education.path_repetition is None:

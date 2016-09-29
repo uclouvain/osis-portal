@@ -38,6 +38,7 @@ from admission.views import tabs
 from django.http import *
 from django.http import HttpResponsePermanentRedirect
 
+
 def application_update(request, application_id):
     application = mdl.application.find_by_id(application_id)
     return render(request, "offer_selection.html",
@@ -53,7 +54,7 @@ def profile_confirmed(request):
 def save_application_offer(request):
     next_tab = None
     application = None
-
+    application_id = None
     if request.method == 'POST':
         new_application = False
         next_tab = request.POST.get('next_tab')
@@ -89,7 +90,7 @@ def save_application_offer(request):
                 application.national_degree = True
             else:
                 application.national_degree = False
-        print (request.POST.get('valuation_possible'))
+
         if request.POST.get('valuation_possible'):
             if request.POST.get('valuation_possible') == "true":
                 application.valuation_possible = True
@@ -193,7 +194,8 @@ def save_application_offer(request):
             return HttpResponseRedirect(reverse('applications', args=(application.id,)))
 
         if next_tab == "2":
-            return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': application_id, 'saved': 1}))
+            return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': application_id,
+                                                                          'saved': 1}))
 
         if next_tab == "3":
             return HttpResponseRedirect(reverse('curriculum_update', args=(application.id,)))
@@ -296,7 +298,6 @@ def application_delete(request, application_id):
 
 def change_application_offer(request, application_id=None):
     application = mdl.application.find_by_id(application_id)
-    # application.offer_year = None  # Ici on ne peut pas mettre None
     application.save()
     application_list = mdl.application.find_by_user(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
@@ -322,6 +323,7 @@ def is_local_language_exam_needed(user):
             local_language_exam_needed = True
             break
     return local_language_exam_needed
+
 
 def url_with_querystring(path, **kwargs):
     return path + '?' + urllib.urlencode(kwargs)
