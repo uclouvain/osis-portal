@@ -131,6 +131,9 @@ msgstr "Confirmer la justification"
 msgid "level"
 msgstr "Niveau de développment du sujet"
 
+msgid "link"
+msgstr "Lien"
+
 msgid "literature_review"
 msgstr "Revue Littéraire"
 

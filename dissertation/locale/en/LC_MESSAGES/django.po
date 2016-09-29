@@ -131,6 +131,9 @@ msgstr "Confirm justification"
 msgid "level"
 msgstr "Level"
 
+msgid "link"
+msgstr "Link"
+
 msgid "literature_review"
 msgstr "Literature Review"
 

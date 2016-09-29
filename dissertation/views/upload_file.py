@@ -38,11 +38,11 @@ from rest_framework.renderers import JSONRenderer
 
 @login_required
 def download(request, pk):
-    document = get_object_or_404(mdl_osis_common.document_file.DocumentFile, pk=pk)
+    dissertation_document = mdl.dissertation_document_file.find_by_id(pk)
+    document = mdl_osis_common.document_file.find_by_id(dissertation_document.document_file.id)
     filename = document.file_name
     response = HttpResponse(document.file, content_type=document.content_type)
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
-
     return response
 
 
@@ -53,7 +53,6 @@ def upload_file_description(request):
     :param request:
     :return:
     """
-
     description = request.POST['description']
     dissertation_id = request.POST['dissertation_id']
     if not dissertation_id.isdigit():
@@ -227,8 +226,7 @@ def save_uploaded_file(request):
         adm_doc_file.dissertation = dissertation
         adm_doc_file.document_file = doc_file
         adm_doc_file.save()
-
-    return HttpResponse('')
+    return redirect('dissertation_detail', pk=dissertation.pk)
 
 
 @login_required

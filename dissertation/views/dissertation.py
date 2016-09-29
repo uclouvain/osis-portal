@@ -29,7 +29,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from base import models as mdl
 from base.views import layout
-from dissertation.models import dissertation, dissertation_role, dissertation_update, offer_proposition, \
+from dissertation.models import dissertation, dissertation_document_file,  dissertation_role, dissertation_update, offer_proposition, \
                                 proposition_dissertation, proposition_role
 from dissertation.forms import DissertationForm, DissertationEditForm, DissertationRoleForm,\
                                 DissertationTitleForm, DissertationUpdateForm
@@ -71,6 +71,8 @@ def dissertation_detail(request, pk):
     off = memory.offer_year_start.offer
     offer_pro = offer_proposition.search_by_offer(off)
     count = dissertation.count_submit_by_user(student, off)
+    file = dissertation_document_file.find_by_dissertation(memory)
+    filename = file.document_file.file_name
     if offer_pro.start_edit_title <= timezone.now().date() <= offer_pro.end_edit_title:
         check_edit = True
     else:
@@ -105,7 +107,9 @@ def dissertation_detail(request, pk):
                                   'dissertation_roles': dissertation_roles,
                                   'jury_visibility': jury_visibility,
                                   'manage_readers': manage_readers,
-                                  'student': student})
+                                  'student': student,
+                                  'document': file,
+                                  'filename': filename})
         else:
             jury_visibility = False
             return layout.render(request, 'dissertation_detail.html',
@@ -113,7 +117,9 @@ def dissertation_detail(request, pk):
                                   'count': count,
                                   'dissertation': memory,
                                   'jury_visibility': jury_visibility,
-                                  'student': student})
+                                  'student': student,
+                                  'document': file,
+                                  'filename': filename})
 
 
 @login_required
