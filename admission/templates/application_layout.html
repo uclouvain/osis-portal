@@ -256,7 +256,7 @@
                 display_existing_files(description);
             }
         });
-        change_menu()
+        change_menu();
     });
     const PROFILE_TAB = 0;
     const DEMAND_TAB = 1;
@@ -284,7 +284,7 @@
             return false;
         }
         $('#hdn_tab_applications_status').val('True');
-        save('form_profile',1);
+        save('form_profile',DEMAND_TAB);
         return true;
     });
 
