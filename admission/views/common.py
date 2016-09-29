@@ -49,7 +49,11 @@ from rest_framework import serializers
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
 def home(request):
     applicant = mdl.applicant.find_by_user(request.user)
-
+    same_addresses = True
+    person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
+    person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
+    if person_contact_address:
+        same_addresses = False
     if applicant and applicant.gender:
         if applicant.language:
             user_language = applicant.language
@@ -93,7 +97,8 @@ def home(request):
                 'assimilationCriteria': assimilation_criteria,
                 'applicant_assimilation_criteria': applicant_assimilation_criteria,
                 'assimilation_basic_documents': assimilation_criteria_view.find_assimilation_basic_documents(),
-                'assimilation_documents_existing': get_assimilation_documents_existing(request.user)})
+                'assimilation_documents_existing': get_assimilation_documents_existing(request.user),
+                'same_addresses': same_addresses})
 
     else:
         return profile(request)
@@ -329,17 +334,32 @@ def profile(request, application_id=None, message_success=None):
 
                             if criteria.id == 5:
                                 if request.POST.get("criteria_5") == "1":
-                                    list_document_type_needed.extend(assimilation_criteria_view.
-                                                                     criteria1(list_document_type_needed))
+                                    list_document_type_needed.extend([document_type.RESIDENT_LONG_DURATION,
+                                                                      document_type.ID_FOREIGN_UNLIMITED])
                                 if request.POST.get("criteria_5") == "2":
-                                    list_document_type_needed.extend(assimilation_criteria_view.
-                                                                     criteria2(list_document_type_needed))
+                                    list_document_type_needed.extend([
+                                        document_type.ATTACHMENT_26,
+                                        document_type.REFUGEE_CARD,
+                                        document_type.FAMILY_COMPOSITION,
+                                        document_type.BIRTH_CERTIFICATE,
+                                        document_type.REFUGEE_CARD,
+                                        document_type.RESIDENT_CERTIFICATE,
+                                        document_type.FOREIGN_INSCRIPTION_CERTIFICATE,
+                                        document_type.SUBSIDIARY_PROTECTION_DECISION,
+                                        document_type.RESIDENCE_PERMIT,
+                                        document_type.STATELESS_CERTIFICATE])
                                 if request.POST.get("criteria_5") == "3":
-                                    list_document_type_needed.extend(assimilation_criteria_view.
-                                                                     criteria3(list_document_type_needed))
+                                    list_document_type_needed.extend([document_type.FAMILY_COMPOSITION,
+                                                                      document_type.PAYCHECK_1,
+                                                                      document_type.PAYCHECK_2,
+                                                                      document_type.PAYCHECK_3,
+                                                                      document_type.PAYCHECK_4,
+                                                                      document_type.PAYCHECK_5,
+                                                                      document_type.PAYCHECK_6,
+                                                                      document_type.RESIDENT_CERTIFICATE,
+                                                                      document_type.ID_CARD])
                                 if request.POST.get("criteria_5") == "4":
-                                    list_document_type_needed.extend(assimilation_criteria_view.
-                                                                     criteria4(list_document_type_needed))
+                                    list_document_type_needed.extend([document_type.CPAS])
                             for d in assimilation_basic_documents:
                                 if d not in list_document_type_needed:
                                     docs = mdl_osis_common.document_file.search(request.user, d)
@@ -416,17 +436,14 @@ def profile(request, application_id=None, message_success=None):
     assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
     applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
 
-    if application:
-        # applicant_assimilation_criteria = mdl.application_assimilation_criteria.find_by_application(application)
-        pass
-    else:
+    if application is None:
         tab_status = tabs.init(request)
     # validated are not ready yet, to be achieved in another issue - Leila
     person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
     person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
 
     document_formset = UploadDocumentFileForm()
-    return render(request, "admission_home.html", {
+    data = {
         'applicant': applicant,
         'applicant_form': applicant_form,
         'countries': countries,
@@ -437,16 +454,8 @@ def profile(request, application_id=None, message_success=None):
         'same_addresses': same_addresses,
         'previous_enrollment': previous_enrollment,
         'institution': institution_name,
-        "message_success": message_success,
+        'message_success': message_success,
         'tab_active': 0,
-        'validated_profil': demande_validation.validate_profil(applicant, request.user),
-        'validated_diploma': demande_validation.validate_diploma(application),
-        'validated_curriculum': demande_validation.validate_curriculum(application),
-        'validated_application': demande_validation.validate_application(application),
-        'validated_accounting': demande_validation.validate_accounting(),
-        'validated_sociological': demande_validation.validate_sociological(),
-        'validated_attachments': demande_validation.validate_attachments(),
-        'validated_submission': demande_validation.validate_submission(),
         'application': application,
         'tab_profile': tab_status['tab_profile'],
         'tab_applications': tab_status['tab_applications'],
@@ -462,7 +471,9 @@ def profile(request, application_id=None, message_success=None):
         'assimilation_basic_documents': assimilation_criteria_view.find_assimilation_basic_documents(),
         'assimilation_documents_existing': get_assimilation_documents_existing(request.user),
         'document_formset': document_formset,
-        'message_info': message_info})
+        'message_info': message_info}
+    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    return render(request, "admission_home.html", data)
 
 
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)

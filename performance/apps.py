@@ -24,7 +24,7 @@
 #
 ##############################################################################
 from django.apps import AppConfig
-from frontoffice.queue import queue
+from frontoffice.queue import queue_listener
 import json
 import performance.models as mdl
 
@@ -35,7 +35,7 @@ class PerformanceConfig(AppConfig):
     def ready(self):
         # if django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
         # ===> This exception says that there is an error in the implementation of method ready(self) !!
-        queue.listen_queue(self.name, insert_or_update)
+        queue_listener.listen_queue(self.name, insert_or_update)
 
 
 def insert_or_update(json_data):

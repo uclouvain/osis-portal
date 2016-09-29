@@ -207,7 +207,8 @@ def save_uploaded_file(request):
                              document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
                              document_type.EQUIVALENCE,
                              document_type.ADMISSION_EXAM_CERTIFICATE,
-                             document_type.PROFESSIONAL_EXAM_CERTIFICATE]
+                             document_type.PROFESSIONAL_EXAM_CERTIFICATE,
+                             document_type.LANGUAGE_EXAM_CERTIFICATE]
         assimilation_uploads = assimilation_criteria_view.find_list_assimilation_basic_documents()
 
         if description in prerequis_uploads:
@@ -254,7 +255,7 @@ def save_uploaded_file(request):
                     secondary_education_exam.type = secondary_education_exam_type
                     secondary_education_exam.save()
 
-    return ''
+    return HttpResponse('')
 
 
 @login_required
@@ -268,8 +269,9 @@ def delete_document_file(request):
         description = request.POST.get('description')
         document = mdl_osis_common.document_file.search(request.user, description)
         if document:
-            document_applicant = mdl.application_document_file.find_by_document(document)
-            if document_applicant:
-                document_applicant.delete()
+            document_applicant_list = mdl.application_document_file.find_by_document(document)
+            if document_applicant_list.exists():
+                for document_applicant in document_applicant_list:
+                    document_applicant.delete()
             document.delete()
-    return ''
+    return HttpResponse('')

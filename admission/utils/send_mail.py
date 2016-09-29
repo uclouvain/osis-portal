@@ -35,8 +35,8 @@ from django.utils.translation import ugettext as _
 
 from frontoffice.settings import DEFAULT_FROM_EMAIL, LOGO_OSIS_URL, LOGO_EMAIL_SIGNATURE_URL
 from frontoffice import settings
-from admission import models as mdl
 from osis_common.messaging import send_message
+from base.models import academic_year
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -54,7 +54,7 @@ def send_mail_activation(request, activation_code, applicant, template_reference
                                                                                  request.get_host(),
                                                                                  activation_code)
     data = {'title': title(applicant.gender),
-            'academic_year': mdl.academic_year.current_academic_year(),
+            'academic_year': academic_year.current_academic_year(),
             'activation_link': activation_link,
             'signature': render_to_string('messaging/html_email_signature.html',
                                           {'logo_mail_signature_url': LOGO_EMAIL_SIGNATURE_URL,

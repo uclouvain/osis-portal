@@ -27,6 +27,7 @@ from django.conf import settings
 
 import pika
 import uuid
+from pika.exceptions import ConnectionClosed
 from frontoffice.settings import QUEUE_URL, QUEUE_USER, QUEUE_PASSWORD, QUEUE_PORT, QUEUE_CONTEXT_ROOT
 import threading
 import logging
@@ -69,6 +70,50 @@ class ScoresSheetClient(object):
         while self.response is None:
             self.connection.process_data_events()
         return self.response
+
+
+class SynchronousConsumerThread(threading.Thread):
+    def __init__(self, queue_name, callback, *args, **kwargs):
+        super(SynchronousConsumerThread, self).__init__(*args, **kwargs)
+
+        self._queue_name = queue_name
+        self.callback = callback
+        self.daemon = True
+
+    def run(self):
+        listen_queue_synchronously(self._queue_name, self.callback)
+
+
+def listen_queue_synchronously(queue_name, callback, counter=3):
+
+    def on_message(channel, method_frame, header_frame, body):
+        callback(body)
+        channel.basic_ack(delivery_tag=method_frame.delivery_tag)
+
+    if counter == 0:
+        return # Stop the function
+
+    credentials = pika.PlainCredentials(QUEUE_USER, QUEUE_PASSWORD)
+    connection = pika.BlockingConnection(pika.ConnectionParameters(QUEUE_URL,
+                                                                   QUEUE_PORT,
+                                                                   QUEUE_CONTEXT_ROOT,
+                                                                   credentials))
+    channel = connection.channel()
+    channel.queue_declare(queue=queue_name,
+                          # durable=True,
+                          # exclusive=False,
+                          # auto_delete=False,
+                          )
+    # channel.basic_qos(prefetch_count=1)
+    channel.basic_consume(on_message, queue_name)
+    try:
+        channel.start_consuming()
+        counter = 3
+    except KeyboardInterrupt:
+        channel.stop_consuming()
+    except ConnectionClosed:
+        listen_queue_synchronously(queue_name, callback, counter - 1)
+    connection.close()
 
 
 def listen_queue(queue_name, callback):
@@ -388,8 +433,9 @@ class ExampleConsumer(object):
         :param str|unicode body: The message body
         """
         logger.debug(self._connection_parameters['queue_name'] + ' : Received message # %s from %s' % (basic_deliver.delivery_tag, properties.app_id))
-        self.acknowledge_message(basic_deliver.delivery_tag)
+        logger.debug('Executing callback function on the received message...')
         self.callback_func(body)
+        self.acknowledge_message(basic_deliver.delivery_tag)
 
     def acknowledge_message(self, delivery_tag):
         """Acknowledge the message delivery from RabbitMQ by sending a

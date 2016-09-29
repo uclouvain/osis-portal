@@ -1371,3 +1371,21 @@ msgstr "Pas de document"
 
 msgid "profession_professionnal_activity_no_correspondance"
 msgstr "Inéquation entre la profession et l'activité professionnelle"
+
+msgid "mandatory_file"
+msgstr "Fichier obligatoire"
+
+msgid "equivalence"
+msgstr "Equivalence"
+
+msgid "prerequisites_min_data"
+msgstr "Vous devez au minimum avoir un diplôme d'études secondaire, un examen professionnel/d'admission/de langue française"
+
+msgid "validation_errors"
+msgstr " champ(s) empêche(nt) la validation de l'onglet"
+
+msgid "msg_one_prerequisite"
+msgstr ""
+"Vous devez au minimum être en possession d'un diplome d'étude secondaires, d'une expérience professionnelle, d'un "
+"examen d'admission ou encore d'un examen de langue française"
+

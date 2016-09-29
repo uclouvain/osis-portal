@@ -26,7 +26,7 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<form method="post" action="{% url 'diploma'%}" id="form_secondary_education" enctype="multipart/form-data">
+<form method="post" action="{% url 'diploma'%}" id="form_secondary_education">
     <input type="hidden"
            id="hdn_diploma"
            name="diploma"
@@ -167,7 +167,28 @@
            id="hdn_application_id"
            name="application_id"
            value="{{application.id| default_if_none:''}}" >
-
+    <input type="hidden"
+           id="hdn_local_language_exam_needed"
+           value="{{local_language_exam_needed}}" >
+    <input type="hidden"
+           id="hdn_secondary_education_local_language_exam"
+           name="secondary_education_local_language_exam"
+           value="{% if local_language_exam %}True{% else %}False{% endif %}" >
+    <input type="hidden"
+           id="hdn_secondary_education_local_language_exam_date"
+           name="secondary_education_local_language_exam_date"
+           value="{{local_language_exam.exam_date | default_if_none:'' | date:"d/m/Y" }}" >
+    <input type="hidden"
+           id="hdn_secondary_education_local_language_exam_institution"
+           name="secondary_education_local_language_exam_institution"
+           value="{{local_language_exam.institution| default_if_none:''}}" >
+    <input type="hidden"
+           id="hdn_secondary_education_local_language_exam_result"
+           name="secondary_education_local_language_exam_result"
+           value="{{local_language_exam.result| default_if_none:''}}" >
+    <input type="hidden"
+           id="hdn_person_registration_id"
+           value="{{application.applicant.registration_id| default_if_none:''}}" >
     {% csrf_token %}
     <div class="row">
         <div class="col-md-8">
@@ -204,11 +225,9 @@
     <div>
         <br>
         {%if validation_messages%}
-            <br>
-            <span class="error" role="alert" style="margin-left:5px;">
-                Il y a {{ validation_messages|length}} {% trans 'errors'%}
-            </span>
-            <br><br>
+            <div class="alert alert-warning" role="alert" style="margin-left:5px;" id="msg_validation_diploma">
+                {{ validation_messages|length}} {% trans 'validation_errors'%}
+            </div>
         {% endif %}
         {%if message_success%}
             <br>
@@ -236,14 +255,13 @@
                       <input type="radio"
                              name="diploma"
                              id="rdb_diploma_true"
-                             value="true"
-                             onclick="display('pnl_academic_year',true);display('pnl_admission_exam',false);"> {% trans 'yes'%}
+                             value="true"> {% trans 'yes'%}
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
                              name="diploma"
-                             id="rdb_diploma_false" value="false"
-                             onclick="display('pnl_academic_year',false);display('pnl_admission_exam',true);"> {% trans 'no'%}
+                             id="rdb_diploma_false"
+                             value="false"> {% trans 'no'%}
                     </label>
                     {%if validation_messages and validation_messages|get_item:'diploma'%}
                         <br><span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'diploma'}}</span>
@@ -300,6 +318,7 @@
     </div>
     {% include "diploma/admission_exam.html" %}
     {% include "diploma/professional_exam.html" %}
+    {% include "diploma/local_language_exam.html" %}
     {%if validation_messages and validation_messages|get_item:'final'%}
         <br>
         <span class="error" style="margin-left:5px;">

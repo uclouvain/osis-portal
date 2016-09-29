@@ -1351,5 +1351,23 @@ msgstr "6th paycheck"
 msgid "no_doc"
 msgstr "No document available"
 
+
 msgid "profession_professionnal_activity_no_correspondance"
 msgstr "Profession and Professional activity have to match"
+
+msgid "mandatory_file"
+msgstr "Mandatory file"
+
+msgid "equivalence"
+msgstr "Equivalence"
+
+msgid "prerequisites_min_data"
+msgstr "You must have, at least, an secondary diploma or a professional exam or an admission exam or a local language exam"
+
+
+msgid "validation_errors"
+msgstr " field(s) stop(s) the tab validation"
+
+msgid "msg_one_prerequisite"
+msgstr ""
+"You must at minimum have a diploma for high school, a professional exam, an admission exam or a local language exam"
