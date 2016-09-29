@@ -88,14 +88,16 @@
                         {{ dissertation.title }}
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-2 col-lg-offset-1" style="text-align:right">
-                        <label>{% trans 'file_name' %}</label>
+                {% if filename != "" %}
+                    <div class="row">
+                        <div class="col-md-2 col-lg-offset-1" style="text-align:right">
+                            <label>{% trans 'file_name' %}</label>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{% url 'download' pk=dissertation.pk %}">{% trans 'link' %}</a>
+                        </div>
                     </div>
-                    <div class="col-md-4">
-                        <a href="{% url 'download' pk=dissertation.pk %}">{% trans 'link' %}</a>
-                    </div>
-                </div>
+                {% endif %}
                 <div class="row">
                     <div class="col-md-3" style="text-align: right">
                         <label>{% trans 'status' %}</label>

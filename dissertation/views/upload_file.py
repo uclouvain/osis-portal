@@ -205,13 +205,9 @@ def save_uploaded_file(request):
         documents = mdl.dissertation_document_file.search(dissertation, description)
         for document in documents:
             document.delete()
-        if description == document_type.ID_PICTURE \
-                or description == document_type.ID_CARD \
-                or description in prerequis_uploads:
-            # Delete older file with the same description
-            documents = mdl_osis_common.document_file.search(user=request.user, description=description)
-            for document in documents:
-                document.delete()
+        documents = mdl_osis_common.document_file.search(user=request.user, description=description)
+        for document in documents:
+            document.delete()
 
         doc_file = mdl_osis_common.document_file.DocumentFile(file_name=file_name,
                                                               file=file_s,
@@ -226,7 +222,8 @@ def save_uploaded_file(request):
         adm_doc_file.dissertation = dissertation
         adm_doc_file.document_file = doc_file
         adm_doc_file.save()
-    return redirect('dissertation_detail', pk=dissertation.pk)
+
+    return HttpResponse('')
 
 
 @login_required
