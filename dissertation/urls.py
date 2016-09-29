@@ -25,7 +25,7 @@
 ##############################################################################
 
 from django.conf.urls import url
-from dissertation.views import common, dissertation, proposition_dissertation
+from dissertation.views import common, dissertation, proposition_dissertation, upload_file
 
 
 urlpatterns = [
@@ -60,4 +60,10 @@ urlpatterns = [
         name='proposition_dissertation_detail'),
     url(r'^proposition_dissertations_search$', proposition_dissertation.proposition_dissertations_search,
         name='proposition_dissertations_search'),
+
+    url(r'^upload/download/(?P<pk>[0-9]+)$', upload_file.download, name='download'),
+    url(r'^upload/description/$', upload_file.upload_file_description, name="upload_file_description"),
+    url(r'^upload/$', upload_file.upload_document, name='upload_document'),
+    url(r'^upload/delete/$', upload_file.delete_document_file, name='delete_document_file'),
+    url(r'^upload/save/$', upload_file.save_uploaded_file, name="save_uploaded_file"),
 ]
