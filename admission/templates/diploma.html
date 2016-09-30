@@ -294,19 +294,19 @@
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
-                             name="rdb_belgian_foreign" id="rdb_belgium"
+                             name="rdb_local_foreign" id="rdb_local"
                              value="true"
-                             onclick="display('pnl_belgian_detail',true);display('pnl_foreign_detail',false);populate_secondary_national_institution();"> {% trans 'in_belgium'%}
+                             onclick="display('pnl_local_detail',true);display('pnl_foreign_detail',false);populate_secondary_national_institution();"> {% trans 'in_belgium'%}
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
-                             name="rdb_belgian_foreign" id="rdb_foreign"
+                             name="rdb_local_foreign" id="rdb_foreign"
                              value="false"
-                             onclick="display('pnl_belgian_detail',false);display('pnl_foreign_detail',true);"> {% trans 'not_in_belgium'%}
+                             onclick="display('pnl_local_detail',false);display('pnl_foreign_detail',true);"> {% trans 'not_in_belgium'%}
                     </label>
-                    {%if validation_messages and validation_messages|get_item:'rdb_belgian_foreign'%}
+                    {%if validation_messages and validation_messages|get_item:'rdb_localforeign'%}
                         <span class="error" style="margin-left:5px;">
-                            {{ validation_messages|get_item:'rdb_belgian_foreign'}}
+                            {{ validation_messages|get_item:'rdb_local_foreign'}}
                         </span>
                     {% endif %}
                 </div>
@@ -434,14 +434,14 @@
             year = s.substring(0,pos);
         }
 
-        elt = document.getElementById('rdb_belgian_community_french');
+        elt = document.getElementById('rdb_local_community_french');
 
         if(elt.checked){
             if(year < 1994){
                 return display('pnl_dipl_acc_high_educ',true);
             }
         }
-        elt = document.getElementById('rdb_belgian_community_dutch');
+        elt = document.getElementById('rdb_local_community_dutch');
         if(elt.checked){
             if(year < 1992){
                return display('pnl_dipl_acc_high_educ',true);

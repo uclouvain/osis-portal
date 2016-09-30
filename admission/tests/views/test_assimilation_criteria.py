@@ -38,7 +38,7 @@ from django.test import Client
 
 class AssimilationCriteriaTest(TestCase):
 
-    def test_criteria1_list_size_2(self):
+    def test_criteria1_list_size(self):
         list_document_type = []
         list_document_type = assimilation_criteria.criteria1(list_document_type)
         self.assertTrue(len(list_document_type) == 2)
@@ -53,7 +53,7 @@ class AssimilationCriteriaTest(TestCase):
         list_document_type = assimilation_criteria.criteria1(list_document_type)
         self.assertTrue(len(list_document_type) == 3)
 
-    def test_criteria2_list_size_5(self):
+    def test_criteria2_list_size(self):
         list_document_type = []
         list_document_type = assimilation_criteria.criteria2(list_document_type)
         self.assertTrue(len(list_document_type) == 5)

@@ -3,7 +3,7 @@
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
-* designed to manage the core business of higher education inbelgian_degreestitutions,
+* designed to manage the core business of higher education institutions,
 * such as universities, faculties, institutes and professional schools.
 * The core business involves the administration of students, teachers,
 * courses, programs and so on.
@@ -61,7 +61,7 @@
     <input type="hidden" value="{{application.offer_year.grade_type.institutional_grade_type.id}}" id="hdn_application_grade_type_id">
     <input type="hidden" value="{{application.offer_year.find_domain.domain.id}}" id="hdn_application_domain_id">
     <input type="hidden" value="{{application.offer_year.id}}" id="hdn_application_offer_year_id" name="hdn_application_offer_year_id">
-    <input type="hidden" value="{{application.national_degree| default_if_none:''}}" id="hdn_belgian_degree">
+    <input type="hidden" value="{{application.national_degree| default_if_none:''}}" id="hdn_local_degree">
     <input type="hidden" value="{{application.started_similar_studies}}" id="hdn_started_samestudies">
     <input type="hidden" value="{{application.applied_to_sameprogram}}" id="hdn_applied_to_sameprogram">
     <input type="hidden" value="{{application.valuation_possible}}" id="hdn_valuation_possible">
@@ -130,7 +130,7 @@
 
     <!--Static questions :-->
     <div id="pnl_static_questions">
-        <div id="pnl_offer_belgiandegree" style="visibility:hidden;display:none;">
+        <div id="pnl_offer_localdegree" style="visibility:hidden;display:none;">
 
             <div class="row">
                 <div class="col-md-8">
@@ -140,15 +140,15 @@
                 <div class="col-md-4">
                     <div>
                         <label class="radio-inline">
-                            <input type="radio" id="rdb_offer_belgiandegree_true" name="rdb_offer_belgiandegree"
+                            <input type="radio" id="rdb_offer_localdegree_true" name="rdb_offer_loaldegree"
                                    value="true"
-                                   {% if application.belgian_degree %}checked{%endif%}
+                                   {% if application.local_degree %}checked{%endif%}
                             > {% trans 'yes'%}
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" id="rdb_offer_belgiandegree_false" name="rdb_offer_belgiandegree"
+                            <input type="radio" id="rdb_offer_localdegree_false" name="rdb_offer_localdegree"
                                    value="false"
-                                   {% if application.belgian_degree %}{%else%}checked{%endif%}
+                                   {% if application.national_degree %}{%else%}checked{%endif%}
                             > {% trans 'no'%}
                         </label>
                     </div>

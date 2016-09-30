@@ -63,24 +63,24 @@ def validate_fields_form(request, secondary_education, next_step):
             else:
                 academic_year = mdl_base.academic_year.find_by_id(int(request.POST.get('academic_year')))
                 secondary_education.academic_year = academic_year
-            if request.POST.get('rdb_belgian_foreign') is None:
-                validation_messages['rdb_belgian_foreign'] = ALERT_MANDATORY_FIELD
+            if request.POST.get('rdb_local_foreign') is None:
+                validation_messages['rdb_local_foreign'] = ALERT_MANDATORY_FIELD
                 is_valid = False
             else:
-                if request.POST.get('rdb_belgian_foreign') == 'true':
+                if request.POST.get('rdb_local_foreign') == 'true':
                     secondary_education.national = True
-                    # Belgian diploma
+                    # Local diploma
                     if request.POST.get('result') is None:
                         validation_messages['result'] = ALERT_MANDATORY_FIELD
                         is_valid = False
                     else:
                         secondary_education.result = request.POST.get('result')
-                    if request.POST.get('belgian_community') is None:
-                        validation_messages['belgian_community'] = ALERT_MANDATORY_FIELD
+                    if request.POST.get('local_community') is None:
+                        validation_messages['local_community'] = ALERT_MANDATORY_FIELD
                         is_valid = False
                     else:
-                        secondary_education.national_community = request.POST.get('belgian_community')
-                        if request.POST.get('belgian_community') == 'FRENCH':
+                        secondary_education.national_community = request.POST.get('local_community')
+                        if request.POST.get('local_community') == 'FRENCH':
                             # diploma of the French community
                             if academic_year.year < 1994:
                                 if request.POST.get('dipl_acc_high_educ') is None:
@@ -99,15 +99,15 @@ def validate_fields_form(request, secondary_education, next_step):
                                     secondary_education.education_type = new_education_type
 
                         else:
-                            if request.POST.get('belgian_community') == 'DUTCH':
+                            if request.POST.get('local_community') == 'DUTCH':
                                 # diploma of the Dutch community
                                 if academic_year.year < 1992:
                                     if request.POST.get('dipl_acc_high_educ') is None:
                                         validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
                                         is_valid = False
 
-                    if request.POST.get('school_belgian_community') == 'FRENCH':
-                        # Belgian school
+                    if request.POST.get('school_local_community') == 'FRENCH':
+                        # Local school
                         if request.POST.get('rdb_education_transition_type') is None \
                                 and request.POST.get('rdb_education_technic_type') is None\
                                 and request.POST.get('other_education') is None:
@@ -147,8 +147,8 @@ def validate_fields_form(request, secondary_education, next_step):
                         secondary_education.national_institution.adhoc = False
                     else:
                         if request.POST.get('other_school') == "on":
-                            if request.POST.get('school_belgian_community') is None:
-                                validation_messages['school'] = _('msg_error_school_belgian_community')
+                            if request.POST.get('school_local_community') is None:
+                                validation_messages['school'] = _('msg_error_school_local_community')
                                 is_valid = False
 
                             national_institution = mdl_reference.education_institution.EducationInstitution()
@@ -157,9 +157,9 @@ def validate_fields_form(request, secondary_education, next_step):
                             national_institution.city = request.POST.get('CESS_other_school_city')
                             national_institution.postal_code = request.POST.get('CESS_other_school_postal_code')
 
-                            if request.POST.get('school_belgian_community'):
+                            if request.POST.get('school_local_community'):
                                 national_institution.national_community = request.POST\
-                                    .get('school_belgian_community')
+                                    .get('school_local_community')
                             secondary_education.national_institution = national_institution
 
                         else:
@@ -170,7 +170,7 @@ def validate_fields_form(request, secondary_education, next_step):
                                     .find_by_id(int(request.POST.get('school')))
                                 secondary_education.national_institution = national_institution
                 else:
-                    if request.POST.get('rdb_belgian_foreign') == 'false':
+                    if request.POST.get('rdb_local_foreign') == 'false':
                         if request.POST.get('foreign_result') is None:
                             validation_messages['foreign_result'] = ALERT_MANDATORY_FIELD
                             is_valid = False
@@ -530,7 +530,6 @@ def is_local_language_exam_needed(user):
 
 
 def populate_secondary_education(request, secondary_education):
-    # belgian
     secondary_education.diploma = None
     secondary_education.academic_year = None
     secondary_education.national = None
@@ -548,12 +547,12 @@ def populate_secondary_education(request, secondary_education):
                 academic_year = mdl_base.academic_year.find_by_id(int(request.POST.get('academic_year')))
                 secondary_education.academic_year = academic_year
             secondary_education.diploma = True
-            if request.POST.get('rdb_belgian_foreign'):
-                if request.POST.get('rdb_belgian_foreign') == 'true':
+            if request.POST.get('rdb_local_foreign'):
+                if request.POST.get('rdb_local_foreign') == 'true':
                     secondary_education.national = True
                     secondary_education.result = request.POST.get('result')
-                    if request.POST.get('belgian_community'):
-                        secondary_education.national_community = request.POST.get('belgian_community')
+                    if request.POST.get('local_community'):
+                        secondary_education.national_community = request.POST.get('local_community')
                 else:
                     secondary_education.national = False
                     secondary_education.result = request.POST.get('foreign_result')
@@ -563,7 +562,7 @@ def populate_secondary_education(request, secondary_education):
                     .find_by_name_city_postal_code(request.POST.get('CESS_other_school_name'),
                                                    request.POST.get('CESS_other_school_city'),
                                                    request.POST.get('CESS_other_school_postal_code'),
-                                                   request.POST.get('school_belgian_community'))
+                                                   request.POST.get('school_local_community'))
                 if existing_institution:
                     secondary_education.national_institution = existing_institution
                 else:
@@ -572,7 +571,7 @@ def populate_secondary_education(request, secondary_education):
                     new_education_institution.city = request.POST.get('CESS_other_school_city')
                     new_education_institution.postal_code = request.POST.get('CESS_other_school_postal_code')
                     new_education_institution.institution_type = "SECONDARY"
-                    new_education_institution.national_community = request.POST.get('school_belgian_community')
+                    new_education_institution.national_community = request.POST.get('school_local_community')
                     new_education_institution.adhoc = True
                     new_education_institution.country = mdl_reference.country.find_by_iso_code('BE')
                     new_education_institution.save()

@@ -38,6 +38,15 @@ from admission.views import tabs
 from django.http import *
 from django.http import HttpResponsePermanentRedirect
 
+PROFILE_TAB = "0"
+DEMAND_TAB = "1"
+PREREQUISITES_TAB = "2"
+CURRICULUM_TAB ="3"
+ACCOUNTING_TAB = "4"
+SOCIOLOGICAL_SURVEY_TAB = "5"
+ATTACHMENTS_TAB = "6"
+SUBMISSION_TAB = "7"
+
 
 def application_update(request, application_id):
     application = mdl.application.find_by_id(application_id)
@@ -85,8 +94,8 @@ def save_application_offer(request):
 
         application.offer_year = offer_year
 
-        if request.POST.get('rdb_offer_belgiandegree'):
-            if request.POST.get('rdb_offer_belgiandegree') == "true":
+        if request.POST.get('rdb_offer_localegree'):
+            if request.POST.get('rdb_offer_localdegree') == "true":
                 application.national_degree = True
             else:
                 application.national_degree = False
@@ -187,29 +196,29 @@ def save_application_offer(request):
     applicant = mdl.applicant.find_by_user(request.user)
 
     if next_tab:
-        if next_tab == "0":
+        if next_tab == PROFILE_TAB:
             return HttpResponseRedirect(reverse('profile', args=(application.id,)))
 
-        if next_tab == "1":
+        if next_tab == DEMAND_TAB:
             return HttpResponseRedirect(reverse('applications', args=(application.id,)))
 
-        if next_tab == "2":
+        if next_tab == PREREQUISITES_TAB:
             return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': application_id,
                                                                           'saved': 1}))
 
-        if next_tab == "3":
+        if next_tab == CURRICULUM_TAB:
             return HttpResponseRedirect(reverse('curriculum_update', args=(application.id,)))
 
-        if next_tab == "4":
+        if next_tab == ACCOUNTING_TAB:
             return HttpResponseRedirect(reverse('accounting_update', args=(application.id,)))
 
-        if next_tab == "5":
+        if next_tab == SOCIOLOGICAL_SURVEY_TAB:
             return HttpResponseRedirect(reverse('sociological_survey', args=(application.id,)))
 
-        if next_tab == "6":
+        if next_tab == ATTACHMENTS_TAB:
             return HttpResponseRedirect(reverse('attachments', args=(application.id,)))
 
-        if next_tab == "7":
+        if next_tab == SUBMISSION_TAB:
             return HttpResponseRedirect(reverse('submission', args=(application.id,)))
 
     data = {

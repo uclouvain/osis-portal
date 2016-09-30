@@ -71,29 +71,30 @@
                             {%else%}
                                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
                             {%endif%}
-                            &nbsp;&nbsp;{%trans 'offer_choice'%}                     {%if application.offer_year %}
-                    ({{application.offer_year.acronym}})
-                    {%endif%}</a>
-                    {%else%}
-                        <a class="not-active"
-                           id="lnk_application_tab">
-                            {% if validated_application %}
-                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                            {%else%}
-                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                            {%endif%}
-                            &nbsp;&nbsp;{%trans 'offer_choice'%}                     {%if application.offer_year %}
-                    ({{application.offer_year.acronym}})
-                    {%endif%}</a>
-
+                            &nbsp;&nbsp;{%trans 'offer_choice'%}
+                        {%if application.offer_year %}
+                            ({{application.offer_year.acronym}})
+                        {%endif%}</a>
+                        {%else%}
+                            <a class="not-active"
+                               id="lnk_application_tab">
+                                {% if validated_application %}
+                                    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
+                                {%else%}
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
+                                {%endif%}
+                                &nbsp;&nbsp;{%trans 'offer_choice'%}
+                        {%if application.offer_year %}
+                            ({{application.offer_year.acronym}})
+                        {%endif%}</a>
                     {%endif%}
 
                 </li>
 
                 <li class="{%if tab_active == 2 %}active{%endif%}"  id="mn_diploma">
-                    <a href="{%if tab_diploma%}{%if application.id %}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}{%endif%}"
+                    <a href="{%if tab_diploma and application.id %}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
                        id="lnk_diploma_tab"
-                       class="{%if tab_diploma%}{%else%}not-active{%endif%}">
+                       class="{%if not tab_diploma%}not-active{%endif%}">
                         {% if validated_diploma %}
                             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
                         {%else%}
@@ -103,9 +104,9 @@
                 </li>
                 <li class="{%if tab_active == 3 %}active{%endif%}" id="mn_curriculum">
 
-                    <a href="{%if tab_curriculum%}{%if application.id %}{% url 'curriculum_update' application.id%}{%else%}{% url 'curriculum_update' %}{%endif%}{%endif%}"
+                    <a href="{%if tab_curriculum and application.id %}{% url 'curriculum_update' application.id%}{%else%}{% url 'curriculum_update' %}{%endif%}"
                        id="lnk_curriculum_tab"
-                       class="{%if tab_curriculum%}{%else%}not-active{%endif%}" >
+                       class="{%if not tab_curriculum%}not-active{%endif%}" >
                         {% if validated_curriculum %}
                             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
                         {%else%}
@@ -114,9 +115,9 @@
                         &nbsp;&nbsp;{%trans 'curriculum'%}</a>
                 </li>
                 <li class="{%if tab_active == 4 %}active{%endif%}" id="mn_accounting">
-                        <a href="{%if tab_accounting%}{%if application.id%}{% url 'accounting_update' application.id%}{%else%}{% url 'accounting_update' %}{%endif%}{%endif%}"
+                        <a href="{%if tab_accounting and application.id%}{% url 'accounting_update' application.id%}{%else%}{% url 'accounting_update' %}{%endif%}"
                            id="lnk_accounting_tab"
-                           class="{%if tab_accounting%}{%else%}not-active{%endif%}" >
+                           class="{%if not tab_accounting%}not-active{%endif%}" >
                         {% if validated_accounting %}
                             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
                         {%else%}
@@ -147,9 +148,9 @@
                     {%endif%}
                 </li>
                 <li class="{%if tab_active == 6 %}active{%endif%}" id="mn_attachments">
-                        <a href="{%if tab_attachments%}{%if application.id%}{% url 'attachments' application.id %}{%else%}{% url 'attachments' %}{%endif%}{%endif%}"
+                        <a href="{%if tab_attachments and application.id%}{% url 'attachments' application.id %}{%else%}{% url 'attachments' %}{%endif%}"
                            id="lnk_attachments_tab"
-                           {%if tab_attachments%}{%else%}class="not-active"{%endif%}>
+                           {%if not tab_attachments%}class="not-active"{%endif%}>
                             {% if validated_attachments %}
                                 <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
                             {%else%}
@@ -158,9 +159,9 @@
                             &nbsp;&nbsp;{%trans 'attachments'%}</a>
                 </li>
                 <li class="{%if tab_active == 7 %}active{%endif%}" id="mn_submission">
-                        <a href="{%if tab_submission%}{%if application.id%}{% url 'submission' application.id %}{%else%}{% url 'submission' %}{%endif%}{%endif%}"
+                        <a href="{%if tab_submission and application.id%}{% url 'submission' application.id %}{%else%}{% url 'submission' %}{%endif%}"
                            id="lnk_submission_tab"
-                           {%if tab_submission%}{%else%}class="not-active"{%endif%}>
+                           {%if not tab_submission%}class="not-active"{%endif%}>
                             {% if validated_submission %}
                                 <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
                             {%else%}
@@ -470,7 +471,7 @@
         $('#txt_message_error_profile_up').css('visibility', 'hidden').css('display','none');
         $('#txt_message_error_profile_up').html('');
         if ($("#txt_offer_year_id").val()==''
-            || ($('#rdb_offer_belgiandegree_true').prop("checked") == false && $('#rdb_offer_belgiandegree_false').prop("checked") == false) ){
+            || ($('#rdb_offer_localdegree_true').prop("checked") == false && $('#rdb_offer_localdegree_false').prop("checked") == false) ){
             $("#txt_message_error_offer_up").text(gettext('msg_next_offer'));
             $('#txt_message_error_offer_up').css('visibility', 'visible').css('display','block');
             $("#txt_message_error_offer_down").text(gettext('msg_next_offer'));
@@ -511,7 +512,7 @@
         $('#slt_domain').val($('#hdn_application_domain_id').val());
         ajax_offers($('#hdn_application_grade_type_id').val(),$('#hdn_application_offer_year_id').val());
         display_dynamic_form(offer_year_id);
-        ajax_static_questions(offer_year_id,$('#hdn_applied_to_sameprogram').val(),$('#hdn_belgian_degree').val(),$('#hdn_started_samestudies').val(),$('#hdn_valuation_possible').val());
+        ajax_static_questions(offer_year_id,$('#hdn_applied_to_sameprogram').val(),$('#hdn_local_degree').val(),$('#hdn_started_samestudies').val(),$('#hdn_valuation_possible').val());
     }
 
     //***************************
@@ -1018,13 +1019,13 @@
 
     function change_menu(){
         var enableMyLink = true;
-        var valid_belgiandegree = true;
+        var valid_localdegree = true;
         if($('#hdn_tab_active').val() < "2"){
-            if ($('#hdn_belgian_degree').val()==''){
-                valid_belgiandegree = false;
+            if ($('#hdn_local_degree').val()==''){
+                valid_localdegree = false;
             }
 
-            if($('#hdn_current_application_id').val()=='' || valid_belgiandegree == false){
+            if($('#hdn_current_application_id').val()=='' || valid_localdegree == false){
                 enableMyLink = false;
             }else{
                 // verify some data

@@ -125,7 +125,7 @@ def validate_diploma(application, user):
                 if secondary_education.academic_year is None:
                     validation_messages['academic_year'] = ALERT_MANDATORY_FIELD
                 if secondary_education.national_community is None:
-                    validation_messages['belgian_community'] = ALERT_MANDATORY_FIELD
+                    validation_messages['local_community'] = ALERT_MANDATORY_FIELD
                 else:
                     if secondary_education.national_community == 'FRENCH' \
                             and secondary_education.academic_year.year < 1994 \
@@ -140,7 +140,6 @@ def validate_diploma(application, user):
                 if secondary_education.national_institution is None:
                     validation_messages['school'] = _('msg_school_name')
                 else:
-                    # Belgian school
                     if secondary_education.national_institution.national_community == 'FRENCH' \
                             and secondary_education.education_type is None:
                         validation_messages['pnl_teaching_type'] = _('msg_error_education_type')

@@ -266,11 +266,11 @@ def validate_fields_form(request, duplicate_year_origin):
             curriculum.path_type = data_dict['path_type']
 
             if curriculum.path_type == 'LOCAL_UNIVERSITY' or curriculum.path_type == 'LOCAL_HIGH_EDUCATION':
-                is_valid, validation_messages, curriculum = validate_belgian_fields_form(curriculum,
-                                                                                         curriculum_year,
-                                                                                         validation_messages,
-                                                                                         is_valid,
-                                                                                         data_dict)
+                is_valid, validation_messages, curriculum = validate_local_fields_form(curriculum,
+                                                                                       curriculum_year,
+                                                                                       validation_messages,
+                                                                                       is_valid,
+                                                                                       data_dict)
             else:
                 if curriculum.path_type == 'FOREIGN_UNIVERSITY' or curriculum.path_type == 'FOREIGN_HIGH_EDUCATION':
                     is_valid, validation_messages, curriculum, universities_cities, universities, \
@@ -305,7 +305,7 @@ def is_admission(applicant, secondary_education):
     return True
 
 
-def validate_belgian_fields_form(curriculum, curriculum_year, validation_messages, is_valid, data_dict):
+def validate_local_fields_form(curriculum, curriculum_year, validation_messages, is_valid, data_dict):
     if curriculum.path_type == "LOCAL_UNIVERSITY":
         if data_dict['national_education'] is None:
             validation_messages['national_education_%s' % curriculum_year] = _('mandatory_field')
@@ -418,7 +418,7 @@ def validate_belgian_fields_form(curriculum, curriculum_year, validation_message
             curriculum.result = data_dict['result_national']
         else:
             curriculum.result = None
-    # common fields for belgian university and no-university curriculum
+    # common fields for local university and no-university curriculum
     if data_dict['diploma_title'] and len(data_dict['diploma_title'].strip()) > 0:
         curriculum.diploma_title = data_dict['diploma_title']
 
