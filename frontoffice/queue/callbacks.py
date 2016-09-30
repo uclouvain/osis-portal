@@ -34,7 +34,7 @@ def insert_or_update(json_data):
     deserialized_objects = serializers.deserialize('json', serialized_objects, ignorenonexistent=True)
     if json_data['to_delete']:
         for deser_object in deserialized_objects:
-            deser_object.object.delete()
+            super(SerializableModel, deser_object.object).delete()
     else:
         for deser_object in deserialized_objects:
             super(SerializableModel, deser_object.object).save()
