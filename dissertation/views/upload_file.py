@@ -26,7 +26,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import *
 from django.shortcuts import get_object_or_404, render, redirect
-
 from dissertation import models as mdl
 from dissertation.models.enums import document_type
 from osis_common import models as mdl_osis_common
@@ -57,7 +56,6 @@ def upload_file_description(request):
     dissertation_id = request.POST['dissertation_id']
     if not dissertation_id.isdigit():
         dissertation_id = None
-
     documents = mdl_osis_common.document_file.search(user=request.user, description=description)
     form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                            'document_type': "dissertation",
@@ -78,7 +76,6 @@ def upload_file_description(request):
 @login_required
 def upload_document(request):
     documents = mdl_osis_common.document_file.search(user=request.user, description=None)
-
     if request.method == "POST":
         description = None
         if request.POST['description']:
@@ -136,7 +133,6 @@ def save_document_from_form(document, request):
     storage_duration = 0
     content_type = file.content_type
     size = file.size
-
     doc_file = mdl_osis_common.document_file.DocumentFile(file_name=file_name,
                                                           file=file,
                                                           description=description,
@@ -168,14 +164,12 @@ def find_by_description(request):
     if documents:
         last_document = documents.reverse()[0]
         last_documents = [last_document]
-
     serializer = DocumentFileSerializer(last_documents, many=True)
     return JSONResponse(serializer.data)
 
 
 def save_uploaded_file(request):
     data = request.POST
-
     if request.method == 'POST':
         if request.POST.get('dissertation_id'):
             dissertation = mdl.dissertation.find_by_id(request.POST['dissertation_id'])
@@ -184,31 +178,14 @@ def save_uploaded_file(request):
         file_name = file_selected.name
         content_type = file_selected.content_type
         size = file_selected.size
-
         description = data['description']
         storage_duration = 0
-        prerequis_uploads = [document_type.NATIONAL_DIPLOMA_RECTO,
-                             document_type.NATIONAL_DIPLOMA_VERSO,
-                             document_type.INTERNATIONAL_DIPLOMA_RECTO,
-                             document_type.INTERNATIONAL_DIPLOMA_VERSO,
-                             document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO,
-                             document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO,
-                             document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
-                             document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
-                             document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
-                             document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
-                             document_type.EQUIVALENCE,
-                             document_type.ADMISSION_EXAM_CERTIFICATE,
-                             document_type.PROFESSIONAL_EXAM_CERTIFICATE,
-                             document_type.LANGUAGE_EXAM_CERTIFICATE]
-
         documents = mdl.dissertation_document_file.search(dissertation, description)
         for document in documents:
             document.delete()
         documents = mdl_osis_common.document_file.search(user=request.user, description=description)
         for document in documents:
             document.delete()
-
         doc_file = mdl_osis_common.document_file.DocumentFile(file_name=file_name,
                                                               file=file_s,
                                                               description=description,
@@ -222,7 +199,6 @@ def save_uploaded_file(request):
         adm_doc_file.dissertation = dissertation
         adm_doc_file.document_file = doc_file
         adm_doc_file.save()
-
     return HttpResponse('')
 
 
