@@ -48,11 +48,11 @@ queue_for_migration = 'osis_portal' # Data from Osis to insert/update/delete in 
 try:
     queue_listener.SynchronousConsumerThread(queue_for_migration, callbacks.insert_or_update).start()
 except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
-    LOGGER.warning("Couldn't connect to the QueueServer")
+    LOGGER.exception("Couldn't connect to the QueueServer")
 
 # Thread in which is running the listening of the queue used to print exams scores of students
 queue_for_performancce = 'performance'
 try:
     queue_listener.listen_queue(queue_for_performancce, perf_callbacks.couchbase_insert_or_update)
 except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
-    LOGGER.warning("Couldn't connect to the QueueServer")
+    LOGGER.exception("Couldn't connect to the QueueServer")
