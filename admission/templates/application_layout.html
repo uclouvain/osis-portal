@@ -67,7 +67,7 @@
                         <a href="{%if application.id%}{% url 'applications' application.id%}{%else%}{% url 'applications' %}{%endif%}"
                            id="lnk_application_tab">
                             {% if validated_application %}
-                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
+                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
                             {%else%}
                                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
                             {%endif%}
@@ -75,22 +75,20 @@
                         {%if application.offer_year %}
                             ({{application.offer_year.acronym}})
                         {%endif%}</a>
-                        {%else%}
-                            <a class="not-active"
-                               id="lnk_application_tab">
-                                {% if validated_application %}
-                                    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                                {%else%}
-                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                                {%endif%}
-                                &nbsp;&nbsp;{%trans 'offer_choice'%}
+                    {%else%}
+                        <a class="not-active"
+                           id="lnk_application_tab">
+                            {% if validated_application %}
+                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
+                            {%else%}
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
+                            {%endif%}
+                            &nbsp;&nbsp;{%trans 'offer_choice'%}
                         {%if application.offer_year %}
                             ({{application.offer_year.acronym}})
                         {%endif%}</a>
                     {%endif%}
-
                 </li>
-
                 <li class="{%if tab_active == 2 %}active{%endif%}"  id="mn_diploma">
                     <a href="{%if tab_diploma and application.id %}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
                        id="lnk_diploma_tab"
@@ -103,7 +101,6 @@
                         &nbsp;&nbsp;{%trans 'prerequisites'%}</a>
                 </li>
                 <li class="{%if tab_active == 3 %}active{%endif%}" id="mn_curriculum">
-
                     <a href="{%if tab_curriculum and application.id %}{% url 'curriculum_update' application.id%}{%else%}{% url 'curriculum_update' %}{%endif%}"
                        id="lnk_curriculum_tab"
                        class="{%if not tab_curriculum%}not-active{%endif%}" >
@@ -115,7 +112,7 @@
                         &nbsp;&nbsp;{%trans 'curriculum'%}</a>
                 </li>
                 <li class="{%if tab_active == 4 %}active{%endif%}" id="mn_accounting">
-                        <a href="{%if tab_accounting and application.id%}{% url 'accounting_update' application.id%}{%else%}{% url 'accounting_update' %}{%endif%}"
+                    <a href="{%if tab_accounting and application.id%}{% url 'accounting_update' application.id%}{%else%}{% url 'accounting_update' %}{%endif%}"
                            id="lnk_accounting_tab"
                            class="{%if not tab_accounting%}not-active{%endif%}" >
                         {% if validated_accounting %}
@@ -127,49 +124,45 @@
                 </li>
                 <li class="{%if tab_active == 5 %}active{%endif%}" id="mn_sociological">
                     {%if tab_sociological%}
-                    <a href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey' %}{%endif%}"
-                       id="lnk_sociological_tab">
-                        {% if validated_sociological %}
-                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                        {%else%}
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                        {%endif%}
-                        &nbsp;&nbsp;{%trans 'sociological_survey'%}</a>
+                        <a href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey' %}{%endif%}"
+                           id="lnk_sociological_tab">
+                            {% if validated_sociological %}
+                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
+                            {%else%}
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
+                            {%endif%}
+                            &nbsp;&nbsp;{%trans 'sociological_survey'%}</a>
                     {%else%}
-                    <a class="not-active"
-                       id="lnk_sociological_tab">
-                        {% if validated_sociological %}
-                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                        {%else%}
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                        {%endif%}
-                        &nbsp;&nbsp;{%trans 'sociological_survey'%}</a>
-
+                        <a class="not-active"
+                           id="lnk_sociological_tab">
+                            {% if validated_sociological %}
+                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
+                            {%else%}
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
+                            {%endif%}
+                            &nbsp;&nbsp;{%trans 'sociological_survey'%}</a>
                     {%endif%}
                 </li>
                 <li class="{%if tab_active == 6 %}active{%endif%}" id="mn_attachments">
-                        <a href="{%if tab_attachments and application.id%}{% url 'attachments' application.id %}{%else%}{% url 'attachments' %}{%endif%}"
-                           id="lnk_attachments_tab"
-                           {%if not tab_attachments%}class="not-active"{%endif%}>
-                            {% if validated_attachments %}
-                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                            {%else%}
-                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                            {%endif%}
-                            &nbsp;&nbsp;{%trans 'attachments'%}</a>
+                    <a href="{%if tab_attachments and application.id%}{% url 'attachments' application.id %}{%else%}{% url 'attachments' %}{%endif%}"
+                       id="lnk_attachments_tab" {%if not tab_attachments%}class="not-active"{%endif%}>
+                        {% if validated_attachments %}
+                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
+                        {%else%}
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
+                        {%endif%}
+                        &nbsp;&nbsp;{%trans 'attachments'%}</a>
                 </li>
                 <li class="{%if tab_active == 7 %}active{%endif%}" id="mn_submission">
-                        <a href="{%if tab_submission and application.id%}{% url 'submission' application.id %}{%else%}{% url 'submission' %}{%endif%}"
-                           id="lnk_submission_tab"
-                           {%if not tab_submission%}class="not-active"{%endif%}>
-                            {% if validated_submission %}
-                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                            {%else%}
-                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                            {%endif%}
-                            &nbsp;&nbsp;{%trans 'submission'%}</a>
+                    <a href="{%if tab_submission and application.id%}{% url 'submission' application.id %}{%else%}{% url 'submission' %}{%endif%}"
+                       id="lnk_submission_tab" {%if not tab_submission%}class="not-active"{%endif%}>
+                        {% if validated_submission %}
+                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
+                        {%else%}
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
+                        {%endif%}
+                        &nbsp;&nbsp;{%trans 'submission'%}</a>
                 </li>
-
             </ul>
         </div>
         <div class="col-md-10">
@@ -187,7 +180,6 @@
     </div>
 
     <br>
-
 {% endblock %}
 
 {% block script %}
@@ -223,11 +215,11 @@
             $('#slt_offer_type').val($('#hdn_application_grade_type_id').val());
             display_known_offer($('#hdn_application_offer_year_id').val());
         }
-        {% if list_choices%}
+        {% if list_choices %}
             choices = {{ list_choices | safe }};
-        {%else%}
+        {% else %}
             choices = []
-        {%endif%}
+        {% endif %}
         $('#slt_criteria_5').trigger('change');
         //If information message is on the screen it will disappear after 5s
         $('#message_info').fadeOut(5000);
@@ -259,6 +251,7 @@
         });
         change_menu();
     });
+
     const PROFILE_TAB = 0;
     const DEMAND_TAB = 1;
     const PREREQUISITES_TAB = 2;
@@ -724,9 +717,8 @@
         var url = url_begin + value;
         var cpt = 0;
         while (cpt< count){
-            url = "../" + url
-            cpt=cpt+1;
-
+            url = "../" + url;
+            cpt = cpt + 1;
         }
         return url;
     }
