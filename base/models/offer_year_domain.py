@@ -43,3 +43,10 @@ class OfferYearDomain(SerializableModel):
 
     def __str__(self):
         return u"%s - %s" % (self.domain, self.offer_year)
+
+
+def search(level=None, domain=None):
+    if level and domain:
+        return OfferYearDomain.objects.filter(offer_year__grade_type__institutional_grade_type=level, domain=domain)
+    else:
+        return None
