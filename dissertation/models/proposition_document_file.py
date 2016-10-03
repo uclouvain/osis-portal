@@ -24,7 +24,46 @@
 #
 ##############################################################################
 
-from dissertation.views import common
-from dissertation.views import dissertation
-from dissertation.views import proposition_dissertation
-from dissertation.views import upload_dissertation_file
+from django.db import models
+from django.contrib import admin
+from django.contrib.auth.models import User
+
+
+class PropositionDocumentFile(models.Model):
+    proposition = models.ForeignKey('PropositionDissertation')
+    document_file = models.ForeignKey('osis_common.documentFile')
+
+
+def search(proposition=None, description=None):
+    out = None
+    queryset = PropositionDocumentFile.objects.order_by('document_file__creation_date')
+    if proposition:
+        queryset = queryset.filter(proposition=proposition)
+    if description:
+        queryset = queryset.filter(document_file__description=description)
+    if proposition or description:
+        out = queryset
+    return out
+
+
+def find_first(proposition=None, description=None):
+    results = search(proposition, description)
+    if results.exists():
+        return results[0]
+    return None
+
+
+def find_by_document(document_file):
+    return PropositionDocumentFile.objects.filter(document_file=document_file)
+
+
+def find_by_proposition(proposition):
+    return PropositionDocumentFile.objects.filter(proposition=proposition)
+
+
+def find_by_id(proposition_id):
+    return PropositionDocumentFile.objects.get(proposition__id=proposition_id)
+
+
+
+

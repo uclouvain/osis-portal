@@ -72,6 +72,7 @@ def dissertation_detail(request, pk):
     offer_pro = offer_proposition.search_by_offer(off)
     count = dissertation.count_submit_by_user(student, off)
     files = dissertation_document_file.find_by_dissertation(dissertation)
+    filename = ""
     for file in files:
         filename = file.document_file.file_name
     if offer_pro.start_edit_title <= timezone.now().date() <= offer_pro.end_edit_title:
