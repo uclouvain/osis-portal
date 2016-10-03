@@ -51,11 +51,11 @@ def save_uploaded_file(request):
         size = file_selected.size
         description = data['description']
         storage_duration = 0
-        documents = mdl.dissertation_document_file.search(dissertation, description)
+        documents = mdl.dissertation_document_file.find_by_dissertation(dissertation)
         for document in documents:
+            document.delete()
             old_document = mdl_osis_common.document_file.find_by_id(document.document_file.id)
             old_document.delete()
-            document.delete()
         new_document = mdl_osis_common.document_file.DocumentFile(file_name=file_name,
                                                                   file=file,
                                                                   description=description,
