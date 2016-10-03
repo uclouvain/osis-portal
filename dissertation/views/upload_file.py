@@ -25,14 +25,8 @@
 ##############################################################################
 from django.contrib.auth.decorators import login_required
 from django.http import *
-from django.shortcuts import get_object_or_404, render, redirect
 from dissertation import models as mdl
-from dissertation.models.enums import document_type
 from osis_common import models as mdl_osis_common
-from osis_common.forms import UploadDocumentFileForm
-from django.core.urlresolvers import reverse
-from rest_framework import serializers
-from rest_framework.renderers import JSONRenderer
 
 
 @login_required
