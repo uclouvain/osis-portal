@@ -1,7 +1,7 @@
 {% load dictionnary %}
 {% load i18n %}
 
-<div id="pnl_belgian_detail">
+<div id="pnl_local_detail">
     <br>
     <div class="panel panel-default">
         <div class="panel-heading">{% trans 'institution' %}</div>
@@ -10,26 +10,26 @@
             <br>
             <label>
                 <input type="radio"
-                       name="belgian_community"
-                       id="rdb_belgian_community_french"
+                       name="local_community"
+                       id="rdb_local_community_french"
                        value="FRENCH" onclick="show_hide_pnl_dipl_acc_high_educ();"> {%trans 'french_belgian_community'%}
             </label>
             <br>
             <label>
               <input type="radio"
-                     name="belgian_community"
-                     id="rdb_belgian_community_dutch"
+                     name="local_community"
+                     id="rdb_local_community_dutch"
                      value="DUTCH" onclick="show_hide_pnl_dipl_acc_high_educ();"> {%trans 'dutch_belgian_community'%}
             </label>
             <br>
             <label>
               <input type="radio"
-                     name="belgian_community"
-                     id="rdb_belgian_community_german"
+                     name="local_community"
+                     id="rdb_local_community_german"
                      value="GERMAN" onclick="show_hide_pnl_dipl_acc_high_educ();"> {%trans 'german_belgian_community'%}
             </label>
-            {%if validation_messages and validation_messages|get_item:'belgian_community'%}
-                <br><span class="error" style="margin-left:5px;" id="national_diploma_belgian_community_error">{{ validation_messages|get_item:'belgian_community'}}</span>
+            {%if validation_messages and validation_messages|get_item:'local_community'%}
+                <br><span class="error" style="margin-left:5px;" id="national_diploma_local_community_error">{{ validation_messages|get_item:'local_community'}}</span>
             {% endif %}
             <br>
             <br>
@@ -131,24 +131,24 @@
                 <div class="col-md-11">
                     <label>
                         <input type="radio"
-                               name="school_belgian_community"
-                               id="rdb_school_belgian_community_french"
+                               name="school_local_community"
+                               id="rdb_school_local_community_french"
                                value="FRENCH"
                                onclick="display('pnl_teaching_type',true)"> {%trans 'french_belgian_community'%}
                     </label>
                     <br>
                     <label>
                       <input type="radio"
-                             name="school_belgian_community"
-                             id="rdb_school_belgian_community_dutch"
+                             name="school_local_community"
+                             id="rdb_school_local_community_dutch"
                              value="DUTCH"
                              onclick="display('pnl_teaching_type',false)"> {%trans 'dutch_belgian_community'%}
                     </label>
                     <br>
                     <label>
                       <input type="radio"
-                             name="school_belgian_community"
-                             id="rdb_school_belgian_community_german"
+                             name="school_local_community"
+                             id="rdb_school_local_community_german"
                              value="GERMAN"
                              onclick="display('pnl_teaching_type',false)"> {%trans 'german_belgian_community'%}
                     </label>

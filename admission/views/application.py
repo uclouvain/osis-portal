@@ -35,6 +35,17 @@ from admission.views.common import get_picture_id, get_id_document
 from admission.views.common import extra_information
 from admission.views import demande_validation
 from admission.views import tabs
+from django.http import *
+from django.http import HttpResponsePermanentRedirect
+
+PROFILE_TAB = "0"
+DEMAND_TAB = "1"
+PREREQUISITES_TAB = "2"
+CURRICULUM_TAB ="3"
+ACCOUNTING_TAB = "4"
+SOCIOLOGICAL_SURVEY_TAB = "5"
+ATTACHMENTS_TAB = "6"
+SUBMISSION_TAB = "7"
 
 
 def application_update(request, application_id):
@@ -52,7 +63,7 @@ def profile_confirmed(request):
 def save_application_offer(request):
     next_tab = None
     application = None
-
+    application_id = None
     if request.method == 'POST':
         new_application = False
         next_tab = request.POST.get('next_tab')
@@ -83,13 +94,14 @@ def save_application_offer(request):
 
         application.offer_year = offer_year
 
-        if request.POST.get('rdb_offer_belgiandegree'):
-            if request.POST.get('rdb_offer_belgiandegree') == "true":
+        if request.POST.get('rdb_offer_localegree'):
+            if request.POST.get('rdb_offer_localdegree') == "true":
                 application.national_degree = True
             else:
                 application.national_degree = False
-        if request.POST.get('rdb_offer_vae'):
-            if request.POST.get('rdb_offer_vae') == "true":
+
+        if request.POST.get('valuation_possible'):
+            if request.POST.get('valuation_possible') == "true":
                 application.valuation_possible = True
             else:
                 application.valuation_possible = False
@@ -117,7 +129,7 @@ def save_application_offer(request):
             application.raffle_number = request.POST.get('txt_offer_lottery')
 
         application.save()
-
+        application_id = application.id
         if new_application is False:
             # delete all existing application_assimilation_criteria
             for a in mdl.application_assimilation_criteria.find_by_application(application):
@@ -183,29 +195,31 @@ def save_application_offer(request):
                 answer.save()
     applicant = mdl.applicant.find_by_user(request.user)
 
-    if next_tab == "0":
-        return HttpResponseRedirect(reverse('profile', args=(application.id,)))
+    if next_tab:
+        if next_tab == PROFILE_TAB:
+            return HttpResponseRedirect(reverse('profile', args=(application.id,)))
 
-    if next_tab == "1":
-        return HttpResponseRedirect(reverse('applications', args=(application.id,)))
+        if next_tab == DEMAND_TAB:
+            return HttpResponseRedirect(reverse('applications', args=(application.id,)))
 
-    if next_tab == "2":
-        return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': application.id, 'saved': None}))
+        if next_tab == PREREQUISITES_TAB:
+            return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': application_id,
+                                                                          'saved': 1}))
 
-    if next_tab == "3":
-        return HttpResponseRedirect(reverse('curriculum_update', args=(application.id,)))
+        if next_tab == CURRICULUM_TAB:
+            return HttpResponseRedirect(reverse('curriculum_update', args=(application.id,)))
 
-    if next_tab == "4":
-        return HttpResponseRedirect(reverse('accounting_update', args=(application.id,)))
+        if next_tab == ACCOUNTING_TAB:
+            return HttpResponseRedirect(reverse('accounting_update', args=(application.id,)))
 
-    if next_tab == "5":
-        return HttpResponseRedirect(reverse('sociological_survey', args=(application.id,)))
+        if next_tab == SOCIOLOGICAL_SURVEY_TAB:
+            return HttpResponseRedirect(reverse('sociological_survey', args=(application.id,)))
 
-    if next_tab == "6":
-        return HttpResponseRedirect(reverse('attachments', args=(application.id,)))
+        if next_tab == ATTACHMENTS_TAB:
+            return HttpResponseRedirect(reverse('attachments', args=(application.id,)))
 
-    if next_tab == "7":
-        return HttpResponseRedirect(reverse('submission', args=(application.id,)))
+        if next_tab == SUBMISSION_TAB:
+            return HttpResponseRedirect(reverse('submission', args=(application.id,)))
 
     data = {
         'tab_active': next_tab,
@@ -232,23 +246,29 @@ def applications(request, application_id=None):
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
-        application = mdl.application.init_application(request.user)
+        # application = mdl.application.init_application(request.user)
+        application = None
     applicant = mdl.applicant.find_by_user(request.user)
+    person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
+    countries = mdl_reference.country.find_all()
     data = {
         "applications": application_list,
         "grade_choices": mdl_reference.institutional_grade_type.find_all(),
         "domains": mdl_reference.domain.find_current_domains(),
         'tab_active': 1,
         "application": application,
-        'tab_profile': tab_status['tab_profile'],
-        'tab_applications': tab_status['tab_applications'],
-        'tab_diploma': tab_status['tab_diploma'],
-        'tab_curriculum': tab_status['tab_curriculum'],
-        'tab_accounting': tab_status['tab_accounting'],
-        'tab_sociological': tab_status['tab_sociological'],
-        'tab_attachments': tab_status['tab_attachments'],
-        'tab_submission': tab_status['tab_submission'],
-        "local_language_exam_needed": is_local_language_exam_needed(request.user)
+        "tab_profile": tab_status['tab_profile'],
+        "tab_applications": tab_status['tab_applications'],
+        "tab_diploma": tab_status['tab_diploma'],
+        "tab_curriculum": tab_status['tab_curriculum'],
+        "tab_accounting": tab_status['tab_accounting'],
+        "tab_sociological": tab_status['tab_sociological'],
+        "tab_attachments": tab_status['tab_attachments'],
+        "tab_submission": tab_status['tab_submission'],
+        "local_language_exam_needed": is_local_language_exam_needed(request.user),
+        "applicant": applicant,
+        "person_legal_address": person_legal_address,
+        "countries": countries
     }
     data.update(demande_validation.get_validation_status(application, applicant, request.user))
     return render(request, "admission_home.html", data)
@@ -287,7 +307,6 @@ def application_delete(request, application_id):
 
 def change_application_offer(request, application_id=None):
     application = mdl.application.find_by_id(application_id)
-    # application.offer_year = None  # Ici on ne peut pas mettre None
     application.save()
     application_list = mdl.application.find_by_user(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
@@ -313,3 +332,7 @@ def is_local_language_exam_needed(user):
             local_language_exam_needed = True
             break
     return local_language_exam_needed
+
+
+def url_with_querystring(path, **kwargs):
+    return path + '?' + urllib.urlencode(kwargs)
