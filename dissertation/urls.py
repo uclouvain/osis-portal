@@ -62,8 +62,5 @@ urlpatterns = [
         name='proposition_dissertations_search'),
 
     url(r'^upload/download/(?P<pk>[0-9]+)$', upload_file.download, name='download'),
-    url(r'^upload/description/$', upload_file.upload_file_description, name="upload_file_description"),
-    url(r'^upload/$', upload_file.upload_document, name='upload_document'),
-    url(r'^upload/delete/$', upload_file.delete_document_file, name='delete_document_file'),
     url(r'^upload/save/$', upload_file.save_uploaded_file, name="save_uploaded_file"),
 ]

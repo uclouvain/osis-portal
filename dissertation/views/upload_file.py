@@ -45,136 +45,13 @@ def download(request, pk):
     return response
 
 
-@login_required
-def upload_file_description(request):
-    """
-    To display the scree to upload id_picture
-    :param request:
-    :return:
-    """
-    description = request.POST['description']
-    dissertation_id = request.POST['dissertation_id']
-    if not dissertation_id.isdigit():
-        dissertation_id = None
-    documents = mdl_osis_common.document_file.search(user=request.user, description=description)
-    form = UploadDocumentFileForm(initial={'storage_duration': 0,
-                                           'document_type': "dissertation",
-                                           'user': request.user})
-    if dissertation_id:
-        dissertation = mdl.dissertation.find_by_id(dissertation_id)
-    else:
-        dissertation = None
-    return render(request, 'new_document.html', {
-        'form': form,
-        'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
-        'description_choices': mdl.enums.document_type.DOCUMENT_TYPE_CHOICES,
-        'description': description,
-        'documents': documents,
-        'dissertation': dissertation})
-
-
-@login_required
-def upload_document(request):
-    documents = mdl_osis_common.document_file.search(user=request.user, description=None)
-    if request.method == "POST":
-        description = None
-        if request.POST['description']:
-            description = request.POST['description']
-        form = UploadDocumentFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            file = form.save()
-            file.size = file.file.size
-            file.file_name = request.FILES['file'].name
-            file_type = form.cleaned_data["file"]
-            content_type = file_type.content_type
-            file.content_type = content_type
-            file.save()
-            return redirect('new_document')
-        else:
-            if description == mdl.enums.document_type.DOCUMENT_TYPE_CHOICES[document_type.ID_PICTURE]:
-                # return common.home(request)
-                return HttpResponseRedirect(reverse('home', ))
-            else:
-                return render(request, 'new_document.html', {
-                    'form': form,
-                    'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
-                    'description_choices': mdl.enums.document_type.DOCUMENT_TYPE_CHOICES,
-                    'description': description,
-                    'documents': documents})
-
-
-@login_required
-def delete_old(request, pk):
-    document = get_object_or_404(mdl_osis_common.document_file.DocumentFile, pk=pk)
-    if document:
-        description = document.description
-        document.delete()
-        documents = mdl_osis_common.document_file.search(user=request.user, description=description)
-
-        return render(request, 'new_document.html', {
-            'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
-            'description_choices': mdl.enums.document_type.DOCUMENT_TYPE_CHOICES,
-            'description': description,
-            'documents': documents})
-
-
-def save_document_from_form(document, request):
-    """
-    Save a document (attachment) from a form.
-    :param document: an UploadDocumentForm received from a POST request.
-    :param request:
-    :return:
-    """
-    file_name = request.FILES['file'].name
-    file = document.cleaned_data['file']
-    description = document.cleaned_data['description']
-    # Never trust a user. They could change the hidden input values.
-    # Ex: user, document_type, storage_duration, etc.
-    storage_duration = 0
-    content_type = file.content_type
-    size = file.size
-    doc_file = mdl_osis_common.document_file.DocumentFile(file_name=file_name,
-                                                          file=file,
-                                                          description=description,
-                                                          storage_duration=storage_duration,
-                                                          application_name='dissertation',
-                                                          content_type=content_type,
-                                                          size=size,
-                                                          user=request.user)
-    doc_file.save()
-
-
-class JSONResponse(HttpResponse):
-    def __init__(self, data, **kwargs):
-        content = JSONRenderer().render(data)
-        kwargs['content_type'] = 'application/json'
-        super(JSONResponse, self).__init__(content, **kwargs)
-
-
-class DocumentFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = mdl_osis_common.document_file.DocumentFile
-        fields = ('id', 'file_name', 'file')
-
-
-def find_by_description(request):
-    description = request.GET['description']
-    documents = mdl_osis_common.document_file.search(request.user, description)
-    last_documents = []
-    if documents:
-        last_document = documents.reverse()[0]
-        last_documents = [last_document]
-    serializer = DocumentFileSerializer(last_documents, many=True)
-    return JSONResponse(serializer.data)
-
-
 def save_uploaded_file(request):
     data = request.POST
     if request.method == 'POST':
         if request.POST.get('dissertation_id'):
             dissertation = mdl.dissertation.find_by_id(request.POST['dissertation_id'])
         file_selected = request.FILES['file']
-        file_s = file_selected
+        file = file_selected
         file_name = file_selected.name
         content_type = file_selected.content_type
         size = file_selected.size
@@ -182,40 +59,21 @@ def save_uploaded_file(request):
         storage_duration = 0
         documents = mdl.dissertation_document_file.search(dissertation, description)
         for document in documents:
+            old_document = mdl_osis_common.document_file.find_by_id(document.document_file.id)
+            old_document.delete()
             document.delete()
-        documents = mdl_osis_common.document_file.search(user=request.user, description=description)
-        for document in documents:
-            document.delete()
-        doc_file = mdl_osis_common.document_file.DocumentFile(file_name=file_name,
-                                                              file=file_s,
-                                                              description=description,
-                                                              storage_duration=storage_duration,
-                                                              application_name='dissertation',
-                                                              content_type=content_type,
-                                                              size=size,
-                                                              user=request.user)
-        doc_file.save()
-        adm_doc_file = mdl.dissertation_document_file.DissertationDocumentFile()
-        adm_doc_file.dissertation = dissertation
-        adm_doc_file.document_file = doc_file
-        adm_doc_file.save()
+        new_document = mdl_osis_common.document_file.DocumentFile(file_name=file_name,
+                                                                  file=file,
+                                                                  description=description,
+                                                                  storage_duration=storage_duration,
+                                                                  application_name='dissertation',
+                                                                  content_type=content_type,
+                                                                  size=size,
+                                                                  user=request.user)
+        new_document.save()
+        dissertation_file = mdl.dissertation_document_file.DissertationDocumentFile()
+        dissertation_file.dissertation = dissertation
+        dissertation_file.document_file = new_document
+        dissertation_file.save()
     return HttpResponse('')
 
-
-@login_required
-def delete_document_file(request):
-    pk = request.POST.get('document_file_id')
-    if pk:
-        document = get_object_or_404(mdl_osis_common.document_file.DocumentFile, pk=pk)
-        if document:
-            document.delete()
-    else:
-        description = request.POST.get('description')
-        document = mdl_osis_common.document_file.search(request.user, description)
-        if document:
-            document_applicant_list = mdl.dissertation_document_file.find_by_document(document)
-            if document_applicant_list.exists():
-                for document_applicant in document_applicant_list:
-                    document_applicant.delete()
-            document.delete()
-    return HttpResponse('')
