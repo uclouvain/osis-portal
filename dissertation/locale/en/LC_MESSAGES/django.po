@@ -68,11 +68,14 @@ msgstr "Defended"
 msgid "delete"
 msgstr "Delete"
 
+msgid "delete_adviser_role_confirmation_message"
+msgstr "You are ready to delete this jury member.  Are you sure you want to continue ?"
+
 msgid "desc_lnk_dissertations"
-msgstr "List of my projects dissertation"
+msgstr "List of dissertations which I am linked to"
 
 msgid "desc_lnk_propositions_dissertations"
-msgstr "List of available subjects"
+msgstr "Dissertation subjects submitted by teachers"
 
 msgid "description"
 msgstr "Description"
@@ -80,8 +83,8 @@ msgstr "Description"
 msgid "dir_submit"
 msgstr "Submit"
 
-msgid "dissertation"
-msgstr "Dissertation"
+msgid "dissertations"
+msgstr "Dissertations"
 
 msgid "dissertation_confirmation_message"
 msgstr "Confirm dissertation"
@@ -93,7 +96,13 @@ msgid "dissertation_informations"
 msgstr "Dissertation informations"
 
 msgid "dissertation_jury"
-msgstr "Jury"
+msgstr "Dissertation jury"
+
+msgid "dissertation_location"
+msgstr "Dissertation location"
+
+msgid "dissertation_updates"
+msgstr "Dissertation updates"
 
 msgid "domain"
 msgstr "Domain"
@@ -134,6 +143,9 @@ msgstr "Level"
 msgid "literature_review"
 msgstr "Literature Review"
 
+msgid "main"
+msgstr "Main"
+
 msgid "manager"
 msgstr "Course manager"
 
@@ -141,7 +153,7 @@ msgid "max_students_number"
 msgstr "Maximum number of student"
 
 msgid "memories_list"
-msgstr "Dissertation List"
+msgstr "Dissertations"
 
 msgid "next_status"
 msgstr "Next status"
@@ -174,13 +186,13 @@ msgid "promotor"
 msgstr "Promoter"
 
 msgid "proposition_dissertation"
-msgstr "Subject"
+msgstr "Dissertation subject"
 
 msgid "proposition_dissertation_informations"
 msgstr "Subject informations"
 
 msgid "proposition_dissertation_jury"
-msgstr "Suggested jury"
+msgstr "Dissertation subject jury"
 
 msgid "question"
 msgstr "Question"
@@ -200,6 +212,9 @@ msgstr "Refused by first year evaluation"
 msgid "required"
 msgstr "Required"
 
+msgid "save"
+msgstr "Save"
+
 msgid "search"
 msgstr "Search"
 
@@ -210,7 +225,7 @@ msgid "status"
 msgstr "Status"
 
 msgid "subjects_list"
-msgstr "Subject List"
+msgstr "Dissertation subjects"
 
 msgid "submitted_to_commission"
 msgstr "Submitted to commission"
@@ -222,7 +237,7 @@ msgid "submitted_to_first_year_evaluation"
 msgstr "Submitted to first year evaluation "
 
 msgid "taken_places"
-msgstr "Interest"
+msgstr "Taken places"
 
 msgid "theme"
 msgstr "Theme"
@@ -241,6 +256,9 @@ msgstr "Warning : you will submit the draft memorandum to the promotor. Are you 
 
 msgid "type"
 msgstr "Type"
+
+msgid "visibility"
+msgstr "Visibility"
 
 msgid "work"
 msgstr "Work"
