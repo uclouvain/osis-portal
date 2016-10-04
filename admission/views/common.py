@@ -618,9 +618,11 @@ def documents_upload(request):
 
 def define_additional_criteria(criteria5):
     if criteria5:
-        return mdl_ref.assimilation_criteria.find_by_id(int(criteria5))
-    else:
-        return None
+        criteria_ref = assimilation_criteria_enum.find(criteria5)
+        if criteria_ref:
+            return criteria_ref[0]
+
+    return None
 
 
 class JSONResponse(HttpResponse):
