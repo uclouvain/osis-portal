@@ -94,7 +94,7 @@ def save_application_offer(request):
 
         application.offer_year = offer_year
 
-        if request.POST.get('rdb_offer_localegree'):
+        if request.POST.get('rdb_offer_localdegree'):
             if request.POST.get('rdb_offer_localdegree') == "true":
                 application.national_degree = True
             else:
