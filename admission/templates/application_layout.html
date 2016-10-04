@@ -546,14 +546,15 @@
     });
 
     $("#slt_criteria_5").change(function(event) {
-        $('[id^="pnl_criteria_bis_"]').each(function(){
+        $('[id^="pnl_criteria_bis_CRITERIA"]').each(function(){
             $(this).remove();
         });
 
         var target = $(event.target);
         var id = target.attr("id");
         var selected_criteria = $("#slt_criteria_5").val();
-        var div_cloned =$("#pnl_criteria_"+selected_criteria).clone();
+        var id_to_clone = "#pnl_criteria_"+selected_criteria;
+        var div_cloned =$(id_to_clone).clone();
         var id_cloned_div = "pnl_criteria_bis_"+selected_criteria;
         div_cloned.attr("id",id_cloned_div);
         div_cloned.css('visibility', 'visible').css('display','block');
@@ -993,7 +994,7 @@
         if($('#pnl_assimilation_criteria').is(":visible")){
             var cpt = 1;
             while(cpt <=7){
-                if(! $("#assimilation_criteria_"+ cpt+"_true").prop('checked') && ! $("#assimilation_criteria_"+cpt+"_false").prop('checked') ){
+                if(! $("#assimilation_criteria_CRITERIA_"+ cpt+"_true").prop('checked') && ! $("#assimilation_criteria_CRITERIA_"+cpt+"_false").prop('checked') ){
                     message += gettext('msg_assimilation_criteria');
                     break;
                 }

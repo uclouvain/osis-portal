@@ -48,7 +48,7 @@ class AssimilationCriteriaTest(TestCase):
 
         list_document_type = []
         assimilation_doc = assimilation_criteria.AssimilationDoc()
-        assimilation_doc.criteria_id = 1
+        assimilation_doc.criteria = 1
         list_document_type.append(assimilation_doc)
         list_document_type = assimilation_criteria.criteria1(list_document_type)
         self.assertTrue(len(list_document_type) == 3)

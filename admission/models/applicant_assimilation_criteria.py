@@ -33,9 +33,8 @@ class ApplicantAssimilationCriteriaAdmin(admin.ModelAdmin):
 
 class ApplicantAssimilationCriteria(models.Model):
     applicant = models.ForeignKey('Applicant')
-    criteria = models.ForeignKey('reference.AssimilationCriteria')
-    additional_criteria = models.ForeignKey('reference.AssimilationCriteria', blank=True, null=True,
-                                            related_name='applicant_additional_criteria')
+    criteria = models.CharField(max_length=50)
+    additional_criteria = models.CharField(max_length=50, blank=True, null=True)
     selected = models.NullBooleanField(null=True, blank=True)
 
 

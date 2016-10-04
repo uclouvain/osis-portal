@@ -32,6 +32,6 @@ class DocumentTypeAssimilationAdmin(admin.ModelAdmin):
 
 
 class DocumentTypeAssimilation(models.Model):
-    assimilation_criteria = models.ForeignKey('reference.AssimilationCriteria')
+    assimilation_criteria = models.CharField(max_length=50)
     document_type = models.CharField(max_length=50)
 

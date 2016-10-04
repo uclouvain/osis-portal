@@ -1370,3 +1370,24 @@ msgstr ""
 
 msgid "question_lottery_number"
 msgstr "Please mention your lottery number"
+
+msgid "CRITERIA_1"
+msgstr "criteria_1"
+
+msgid "CRITERIA_2"
+msgstr "criteria_2"
+
+msgid "CRITERIA_3"
+msgstr "criteria_3"
+
+msgid "CRITERIA_4"
+msgstr "criteria_4"
+
+msgid "CRITERIA_5"
+msgstr "criteria_5"
+
+msgid "CRITERIA_6"
+msgstr "criteria_6"
+
+msgid "CRITERIA_7"
+msgstr "criteria_7"
