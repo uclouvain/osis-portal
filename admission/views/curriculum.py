@@ -138,10 +138,14 @@ def update(request, application_id=None):
     message = None
     applicant = mdl.applicant.find_by_user(request.user)
     secondary_education = mdl.secondary_education.find_by_person(applicant)
-    current_academic_year = mdl_base.academic_year.current_academic_year().year
+    current_academic_year = None
+    if mdl_base.academic_year.current_academic_year():
+        current_academic_year = mdl_base.academic_year.current_academic_year().year
     admission = is_admission(applicant, secondary_education)
     year_secondary = None
-    year = current_academic_year - 5
+    year = None
+    if current_academic_year:
+        year = current_academic_year - 5
     if secondary_education is None:
         pass
     else:
@@ -152,21 +156,21 @@ def update(request, application_id=None):
         if secondary_education and secondary_education.diploma is True and secondary_education.academic_year:
             year = secondary_education.academic_year.year + 1
 
-    if year_secondary and year < year_secondary:
+    if year_secondary and year and year < year_secondary:
         year = year_secondary + 1
-
-    while year < current_academic_year:
-        academic_year = mdl_base.academic_year.find_by_year(year)
-        if academic_year:
-            # find existing cv
-            curriculum = mdl.curriculum.find_by_academic_year(academic_year)
-            if curriculum is None:
-                # add cv empty cv's for the year if it's needed
-                curriculum = mdl.curriculum.Curriculum()
-                curriculum.person = applicant
-                curriculum.academic_year = academic_year
-            curricula.append(curriculum)
-        year = year + 1
+    if year and current_academic_year:
+        while year < current_academic_year:
+            academic_year = mdl_base.academic_year.find_by_year(year)
+            if academic_year:
+                # find existing cv
+                curriculum = mdl.curriculum.find_by_academic_year(academic_year)
+                if curriculum is None:
+                    # add cv empty cv's for the year if it's needed
+                    curriculum = mdl.curriculum.Curriculum()
+                    curriculum.person = applicant
+                    curriculum.academic_year = academic_year
+                curricula.append(curriculum)
+            year = year + 1
     local_universities_french = mdl_reference.education_institution \
         .find_by_institution_type_national_community(education_institution_type.UNIVERSITY, national_cmunity_type.FRENCH, False)
 
