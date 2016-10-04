@@ -46,6 +46,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework import serializers
 from reference.enums import assimilation_criteria as assimilation_criteria_enum
 
+RADIO_NAME_ASSIMILATION_CRITERIA = "assimilation_criteria_"
+
 
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
 def home(request):
@@ -295,9 +297,9 @@ def profile(request, application_id=None, message_success=None):
             previous_enrollment = False
         if assimilation_case:
             # verify if it exists one record per criteria
-            default_critera_list = assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES
-            for critere in default_critera_list:
-                crit = critere[0]
+            default_criteria_list = assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES
+            for criteria in default_criteria_list:
+                crit = criteria[0]
                 existing_crit = mdl.applicant_assimilation_criteria.find_first(applicant, crit)
                 if existing_crit is None:
                     applicant_assimilation_criteria = \
@@ -318,16 +320,10 @@ def profile(request, application_id=None, message_success=None):
                         application_assimilation_criteria.additional_criteria = None
                         application_assimilation_criteria.selected = None
                         application_assimilation_criteria.save()
-                        # Delete other previous criteria encoded
-            # criterias = mdl.applicant_assimilation_criteria.find_by_applicant(applicant)
-            # for c in criterias:
-            #     c.delete()
-            # if application:
-            #     criterias = mdl.application_assimilation_criteria.find_by_application(application)
-            #     c.delete()
+
             for key in request.POST:
-                if key[0:22] == "assimilation_criteria_":
-                    criteria_id = key[22:]
+                if key[0:len(RADIO_NAME_ASSIMILATION_CRITERIA)] == RADIO_NAME_ASSIMILATION_CRITERIA:
+                    criteria_id = key[len(RADIO_NAME_ASSIMILATION_CRITERIA):]
                     criteria_ref = assimilation_criteria_enum.find(criteria_id)
                     criteria = criteria_ref[0]
                     applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_first(applicant,
