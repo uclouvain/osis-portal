@@ -26,6 +26,7 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from base.models.serializable_model import SerializableModel
 
 
 class OfferYearDomainAdmin(admin.ModelAdmin):
@@ -35,10 +36,17 @@ class OfferYearDomainAdmin(admin.ModelAdmin):
     search_fields = ['domain__name', 'offer_year__acronym']
 
 
-class OfferYearDomain(models.Model):
+class OfferYearDomain(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     domain = models.ForeignKey('reference.Domain', blank=True, null=True)
     offer_year = models.ForeignKey('base.OfferYear', blank=True, null=True)
 
     def __str__(self):
         return u"%s - %s" % (self.domain, self.offer_year)
+
+
+def search(level=None, domain=None):
+    if level and domain:
+        return OfferYearDomain.objects.filter(offer_year__grade_type__institutional_grade_type=level, domain=domain)
+    else:
+        return None

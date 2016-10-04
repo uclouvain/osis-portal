@@ -92,21 +92,29 @@ def listen_queue_synchronously(queue_name, callback, counter=3):
 
     if counter == 0:
         return # Stop the function
-
+    logger.debug("Connecting to {0} (queue name = {1})...".format(QUEUE_URL, queue_name))
     credentials = pika.PlainCredentials(QUEUE_USER, QUEUE_PASSWORD)
     connection = pika.BlockingConnection(pika.ConnectionParameters(QUEUE_URL,
                                                                    QUEUE_PORT,
                                                                    QUEUE_CONTEXT_ROOT,
                                                                    credentials))
+    logger.debug("Connection opened.")
+    logger.debug("Creating a new channel...")
     channel = connection.channel()
+    logger.debug("Channel opened.")
+    logger.debug("Declaring queue (if it doesn't exist yet)...")
     channel.queue_declare(queue=queue_name,
                           # durable=True,
                           # exclusive=False,
                           # auto_delete=False,
                           )
+    logger.debug("Queue declared.")
     # channel.basic_qos(prefetch_count=1)
+    logger.debug("Declaring on message callback...")
     channel.basic_consume(on_message, queue_name)
+    logger.debug("Done.")
     try:
+        logger.debug("Ready to synchronously consume messages")
         channel.start_consuming()
         counter = 3
     except KeyboardInterrupt:

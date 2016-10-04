@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from base.models import offer_year_domain
+from base.models.offer_year_domain import OfferYearDomain
 from django.db import models
 from django.contrib import admin
 from base.models.serializable_model import SerializableModel
@@ -31,7 +33,8 @@ from base.models.serializable_model import SerializableModel
 class OfferYearAdmin(admin.ModelAdmin):
     raw_id_fields = ('offer',)
     list_display = ('acronym', 'title', 'academic_year', 'grade_type', 'offer', 'subject_to_quota')
-    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'offer', 'title', 'title_international', 'grade_type','subject_to_quota')}),)
+    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'offer', 'title', 'title_international',
+                                    'grade_type','subject_to_quota')}),)
 
 
 class OfferYear(SerializableModel):
@@ -48,6 +51,10 @@ class OfferYear(SerializableModel):
     def __str__(self):
         return u"%s - %s" % (self.academic_year, self.acronym)
 
+    @property
+    def find_domain(self):
+        return OfferYearDomain.objects.get(offer_year=self)
+
 
 def find_by_id(offer_year_id):
     return OfferYear.objects.get(pk=offer_year_id)
@@ -59,7 +66,7 @@ def find_all():
 
 def search(level=None, domain=None):
     if level and domain:
-        return OfferYear.objects.filter(grade_type=level, domain=domain).order_by("acronym")
+        return offer_year_domain.search(level, domain)
     else:
         return None
 

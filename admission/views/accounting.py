@@ -159,7 +159,7 @@ def debts_check(application):
     if application:
         academic_yr = mdl_base.academic_year.current_academic_year()
         previous_academic_year = mdl_base.academic_year.find_by_year(academic_yr.year - 1)
-        secondary_curriculum = mdl.curriculum.find_belgian_french(application.applicant, previous_academic_year)
+        secondary_curriculum = mdl.curriculum.find_local_french(application.applicant, previous_academic_year)
         if secondary_curriculum:
             return True
 

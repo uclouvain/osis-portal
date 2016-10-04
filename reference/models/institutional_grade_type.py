@@ -40,3 +40,15 @@ class InstitutionalGradeType(SerializableModel):
 
     def __str__(self):
         return self.name
+
+
+def find_all():
+    return InstitutionalGradeType.objects.all().order_by("name")
+
+
+def find_by_name(name):
+    return InstitutionalGradeType.objects.filter(name=name).order_by("name")
+
+
+def find_by_id(an_id):
+    return InstitutionalGradeType.objects.get(pk=an_id)

@@ -1385,3 +1385,6 @@ msgid "msg_one_prerequisite"
 msgstr ""
 "Vous devez au minimum être en possession d'un diplome d'étude secondaires, d'une expérience professionnelle, d'un "
 "examen d'admission ou encore d'un examen de langue française"
+
+msgid "question_lottery_number"
+msgstr "Veuillez indique le numéro que le Service d'inscription vous a fourni"
