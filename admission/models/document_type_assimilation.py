@@ -25,6 +25,7 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from reference.enums import assimilation_criteria as assimilation_criteria_enum
 
 
 class DocumentTypeAssimilationAdmin(admin.ModelAdmin):
@@ -32,6 +33,6 @@ class DocumentTypeAssimilationAdmin(admin.ModelAdmin):
 
 
 class DocumentTypeAssimilation(models.Model):
-    assimilation_criteria = models.CharField(max_length=50)
+    assimilation_criteria = models.CharField(max_length=50, choices=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES)
     document_type = models.CharField(max_length=50)
 

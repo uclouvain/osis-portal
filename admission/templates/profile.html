@@ -265,7 +265,7 @@
                                     <div {% if assimilation_basic_documents|table_display:criteria %} class="panel panel-default" {%endif%}>
 
                                     {% if assimilation_basic_documents|table_display:criteria%}
-                                        <div class="panel-heading"><h4><strong>{% trans 'criteria'%} {{criteria|get_at_index:2}}</strong></h4></div>
+                                        <div class="panel-heading"><h4><strong>{% trans 'criteria'%} {{forloop.counter}}</strong></h4></div>
                                         <div class="panel-body"></div>
                                         <!--It's normal that the table is outside of the body.  It's for a better display -->
                                         <table class="table table-bordered table-condensed" style="margin-top:-30px;">
@@ -284,6 +284,7 @@
                                                                                 class="{{assimilation_documents_existing|button_class_color:d }}"
                                                                                 id="btn_load_assimilation_doc_{{doc.criteria}}_id_{{d}}"
                                                                                 title="{{assimilation_documents_existing|button_title:d }}"
+                                                                                style="margin-bottom:5px;"
                                                                                 data-toggle="modal"
                                                                                 data-target="#pnl_upload_documents">
                                                                             <span class="{{assimilation_documents_existing|button_class:d }}"
@@ -341,10 +342,10 @@
                                                 <label>Documents demandés pour l’étudiant à adapter pour la personne concernée suivant le critère :</label>
                                                 <select id="slt_criteria_5" name="criteria_5" class="form-control">
                                                     <option value="" >-</option>
-                                                    <option value="CRITERIA_1" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:1 }}>{% trans 'criteria' %} 1</option>
-                                                    <option value="CRITERIA_2" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:2 }} >{% trans 'criteria' %} 2</option>
-                                                    <option value="CRITERIA_3" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:3 }}>{% trans 'criteria' %} 3</option>
-                                                    <option value="CRITERIA_4" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:4 }} >{% trans 'criteria' %} 4</option>
+                                                    <option value="CRITERIA_1" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:'CRITERIA_1' }}>{% trans 'criteria' %} 1</option>
+                                                    <option value="CRITERIA_2" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:'CRITERIA_2' }} >{% trans 'criteria' %} 2</option>
+                                                    <option value="CRITERIA_3" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:'CRITERIA_3' }}>{% trans 'criteria' %} 3</option>
+                                                    <option value="CRITERIA_4" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:'CRITERIA_4' }} >{% trans 'criteria' %} 4</option>
                                                 </select>
                                                 <br>
                                                 <div id="pnl_other_criteria"></div>
