@@ -37,6 +37,9 @@ from admission.views import demande_validation
 from admission.views import tabs
 from reference.enums import education_institution_type, education_institution_national_comunity as national_cmunity_type
 
+CURRICULUM_YEARS_REQUIRED = 5
+MAX_CREDITS = 75
+
 
 def save(request):
     save_step = False
@@ -58,10 +61,14 @@ def save(request):
     message_success = None
     # Get the data in bd for dropdown list
     local_universities_french = mdl_reference.education_institution \
-        .find_by_institution_type_national_community(education_institution_type.UNIVERSITY, national_cmunity_type.FRENCH, False)
+        .find_by_institution_type_national_community(education_institution_type.UNIVERSITY,
+                                                     national_cmunity_type.FRENCH,
+                                                     False)
 
     local_universities_dutch = mdl_reference.education_institution \
-        .find_by_institution_type_national_community(education_institution_type.UNIVERSITY, national_cmunity_type.DUTCH, False)
+        .find_by_institution_type_national_community(education_institution_type.UNIVERSITY,
+                                                     national_cmunity_type.DUTCH,
+                                                     False)
     universities_cities = []
     universities = []
 
@@ -78,7 +85,7 @@ def save(request):
                           {"curricula": curricula,
                            "local_universities_french": local_universities_french,
                            "local_universities_dutch": local_universities_dutch,
-                           "domains": mdl_reference.domain.find_all_domains(),
+                           "domains": mdl_reference.domain.find_current_domains(),
                            "subdomains": mdl_reference.domain.find_all_subdomains(),
                            "grade_types": mdl_reference.grade_type.find_all(),
                            "validation_messages": validation_messages,
@@ -105,7 +112,7 @@ def save(request):
         while year < current_academic_year:
             academic_year = mdl_base.academic_year.find_by_year(year)
             curriculum = mdl.curriculum.find_by_academic_year(academic_year)
-            if curriculum is None:
+            if not curriculum:
                 # add cv empty cv's for the year if it's needed
                 curriculum = mdl.curriculum.Curriculum()
                 curriculum.person = applicant
@@ -116,7 +123,7 @@ def save(request):
     return render(request, "curriculum.html", {"curricula": curricula,
                                                "local_universities_french": local_universities_french,
                                                "local_universities_dutch": local_universities_dutch,
-                                               "domains": mdl_reference.domain.find_all_domains(),
+                                               "domains": mdl_reference.domain.find_current_domains(),
                                                "subdomains": mdl_reference.domain.find_all_subdomains(),
                                                "grade_types": mdl_reference.grade_type.find_all(),
                                                "universities_countries": mdl_reference.education_institution.
@@ -138,10 +145,14 @@ def update(request, application_id=None):
     message = None
     applicant = mdl.applicant.find_by_user(request.user)
     secondary_education = mdl.secondary_education.find_by_person(applicant)
-    current_academic_year = mdl_base.academic_year.current_academic_year().year
+    current_academic_year = None
+    if mdl_base.academic_year.current_academic_year():
+        current_academic_year = mdl_base.academic_year.current_academic_year().year
     admission = is_admission(applicant, secondary_education)
     year_secondary = None
-    year = current_academic_year - 5
+    year = None
+    if current_academic_year:
+        year = current_academic_year - CURRICULUM_YEARS_REQUIRED
     if secondary_education is None:
         pass
     else:
@@ -152,26 +163,30 @@ def update(request, application_id=None):
         if secondary_education and secondary_education.diploma is True and secondary_education.academic_year:
             year = secondary_education.academic_year.year + 1
 
-    if year_secondary and year < year_secondary:
+    if year_secondary and year and year < year_secondary:
         year = year_secondary + 1
-
-    while year < current_academic_year:
-        academic_year = mdl_base.academic_year.find_by_year(year)
-        if academic_year:
-            # find existing cv
-            curriculum = mdl.curriculum.find_by_academic_year(academic_year)
-            if curriculum is None:
-                # add cv empty cv's for the year if it's needed
-                curriculum = mdl.curriculum.Curriculum()
-                curriculum.person = applicant
-                curriculum.academic_year = academic_year
-            curricula.append(curriculum)
-        year = year + 1
+    if year and current_academic_year:
+        while year < current_academic_year:
+            academic_year = mdl_base.academic_year.find_by_year(year)
+            if academic_year:
+                # find existing cv
+                curriculum = mdl.curriculum.find_by_academic_year(academic_year)
+                if not curriculum:
+                    # add cv empty cv's for the year if it's needed
+                    curriculum = mdl.curriculum.Curriculum()
+                    curriculum.person = applicant
+                    curriculum.academic_year = academic_year
+                curricula.append(curriculum)
+            year = year + 1
     local_universities_french = mdl_reference.education_institution \
-        .find_by_institution_type_national_community(education_institution_type.UNIVERSITY, national_cmunity_type.FRENCH, False)
+        .find_by_institution_type_national_community(education_institution_type.UNIVERSITY,
+                                                     national_cmunity_type.FRENCH,
+                                                     False)
 
     local_universities_dutch = mdl_reference.education_institution \
-        .find_by_institution_type_national_community(education_institution_type.UNIVERSITY, national_cmunity_type.DUTCH, False)
+        .find_by_institution_type_national_community(education_institution_type.UNIVERSITY,
+                                                     national_cmunity_type.DUTCH,
+                                                     False)
     if message:
         return common.home(request)
     else:
@@ -182,7 +197,7 @@ def update(request, application_id=None):
             "curricula": curricula,
             "local_universities_french": local_universities_french,
             "local_universities_dutch": local_universities_dutch,
-            "domains": mdl_reference.domain.find_all_domains(),
+            "domains": mdl_reference.domain.find_current_domains(),
             "subdomains": mdl_reference.domain.find_all_subdomains(),
             "grade_types": mdl_reference.grade_type.find_all(),
             "universities_countries": mdl_reference.education_institution.find_countries(),
@@ -238,7 +253,7 @@ def validate_fields_form(request, duplicate_year_origin):
         academic_year = mdl_base.academic_year.find_by_year(curriculum_year)
         curriculum = mdl.curriculum.find_by_person_year(applicant, int(curriculum_year))
 
-        if curriculum is None:
+        if not curriculum:
             curriculum = mdl.curriculum.Curriculum()
             curriculum.person = applicant
             curriculum.academic_year = academic_year
@@ -266,11 +281,11 @@ def validate_fields_form(request, duplicate_year_origin):
             curriculum.path_type = data_dict['path_type']
 
             if curriculum.path_type == 'LOCAL_UNIVERSITY' or curriculum.path_type == 'LOCAL_HIGH_EDUCATION':
-                is_valid, validation_messages, curriculum = validate_belgian_fields_form(curriculum,
-                                                                                         curriculum_year,
-                                                                                         validation_messages,
-                                                                                         is_valid,
-                                                                                         data_dict)
+                is_valid, validation_messages, curriculum = validate_local_fields_form(curriculum,
+                                                                                       curriculum_year,
+                                                                                       validation_messages,
+                                                                                       is_valid,
+                                                                                       data_dict)
             else:
                 if curriculum.path_type == 'FOREIGN_UNIVERSITY' or curriculum.path_type == 'FOREIGN_HIGH_EDUCATION':
                     is_valid, validation_messages, curriculum, universities_cities, universities, \
@@ -305,7 +320,7 @@ def is_admission(applicant, secondary_education):
     return True
 
 
-def validate_belgian_fields_form(curriculum, curriculum_year, validation_messages, is_valid, data_dict):
+def validate_local_fields_form(curriculum, curriculum_year, validation_messages, is_valid, data_dict):
     if curriculum.path_type == "LOCAL_UNIVERSITY":
         if data_dict['national_education'] is None:
             validation_messages['national_education_%s' % curriculum_year] = _('mandatory_field')
@@ -418,7 +433,7 @@ def validate_belgian_fields_form(curriculum, curriculum_year, validation_message
             curriculum.result = data_dict['result_national']
         else:
             curriculum.result = None
-    # common fields for belgian university and no-university curriculum
+    # common fields for local university and no-university curriculum
     if data_dict['diploma_title'] and len(data_dict['diploma_title'].strip()) > 0:
         curriculum.diploma_title = data_dict['diploma_title']
 
@@ -438,7 +453,7 @@ def validate_belgian_fields_form(curriculum, curriculum_year, validation_message
         try:
             credits = float(data_dict['credits_enrolled'].strip().replace(',', '.'))
             curriculum.credits_enrolled = credits
-            if credits > 75:
+            if credits > MAX_CREDITS:
                 validation_messages['credits_enrolled_%s' % curriculum_year] = _('credits_too_high')
                 is_valid = False
             else:
@@ -459,7 +474,7 @@ def validate_belgian_fields_form(curriculum, curriculum_year, validation_message
         try:
             credits = float(data_dict['credits_obtained'].strip().replace(',', '.'))
             curriculum.credits_obtained = credits
-            if credits > 75:
+            if credits > MAX_CREDITS:
                 validation_messages['credits_obtained_%s' % curriculum_year] = _('credits_too_high')
                 is_valid = False
             else:
@@ -640,7 +655,7 @@ def validate_foreign_university_fields_form(curriculum,
         try:
             credits = float(data_dict['credits_enrolled_foreign'].strip().replace(',', '.'))
             curriculum.credits_enrolled = credits
-            if credits > 75:
+            if credits > MAX_CREDITS:
                 validation_messages['credits_enrolled_foreign_%s' % curriculum_year] = _('credits_too_high')
                 is_valid = False
             else:
@@ -655,7 +670,7 @@ def validate_foreign_university_fields_form(curriculum,
         try:
             credits = float(data_dict['credits_obtained_foreign'].strip().replace(',', '.'))
             curriculum.credits_obtained = credits
-            if credits > 75:
+            if credits > MAX_CREDITS:
                 validation_messages['credits_obtained_foreign_%s' % curriculum_year] = _('credits_too_high')
                 is_valid = False
             else:

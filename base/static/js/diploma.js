@@ -38,16 +38,16 @@ $("#rdb_dipl_acc_high_educ_false").click(function(event) {
     $('#national_diploma_dipl_acc_high_educ_error').html('');
 });
 
-$("#rdb_belgian_community_french").click(function(event) {
-    $('#national_diploma_belgian_community_error').html('');
+$("#rdb_local_community_french").click(function(event) {
+    $('#national_diploma_local_community_error').html('');
 });
 
-$("#rdb_belgian_community_dutch").click(function(event) {
-    $('#national_diploma_belgian_community_error').html('');
+$("#rdb_local_community_dutch").click(function(event) {
+    $('#national_diploma_local_community_error').html('');
 });
 
-$("#rdb_belgian_community_german").click(function(event) {
-    $('#national_diploma_belgian_community_error').html('');
+$("#rdb_local_community_german").click(function(event) {
+    $('#national_diploma_local_community_error').html('');
 });
 
 $( "input[name^='rdb_education_transition_type']" ).click(function() {
