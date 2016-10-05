@@ -9,14 +9,14 @@ $('document').ready(function(){
 
         $('#slt_academic_year').prop("selectedIndex",-1);
 
-        $('#rdb_belgium').prop( "checked", false);
+        $('#rdb_local').prop( "checked", false);
         $('#rdb_foreign').prop( "checked", false);
 
-        $('#pnl_belgian_detail').css('visibility', 'hidden').css('display','none');
+        $('#pnl_local_detail').css('visibility', 'hidden').css('display','none');
 
-        $('#rdb_belgian_community_french').prop( "checked", false);
-        $('#rdb_belgian_community_dutch').prop( "checked", false);
-        $('#rdb_belgian_community_german').prop( "checked", false);
+        $('#rdb_loal_community_french').prop( "checked", false);
+        $('#rdb_local_community_dutch').prop( "checked", false);
+        $('#rdb_local_community_german').prop( "checked", false);
 
         $('#pnl_dipl_acc_high_educ').css('visibility', 'hidden').css('display','none');
 
@@ -36,13 +36,13 @@ $('document').ready(function(){
         $('#txt_CESS_other_school_postal_code').val('');
         $('#txt_CESS_other_school_postal_code').prop( "disabled", true);
 
-        $('#rdb_school_belgian_community_french').prop( "checked", false);
-        $('#rdb_school_belgian_community_dutch').prop( "checked", false);
-        $('#rdb_school_belgian_community_german').prop( "checked", false);
+        $('#rdb_school_local_community_french').prop( "checked", false);
+        $('#rdb_school_local_community_dutch').prop( "checked", false);
+        $('#rdb_school_local_community_german').prop( "checked", false);
 
-        $('#rdb_school_belgian_community_french').prop( "disabled", true);
-        $('#rdb_school_belgian_community_dutch').prop( "disabled", true);
-        $('#rdb_school_belgian_community_german').prop( "disabled", true);
+        $('#rdb_school_local_community_french').prop( "disabled", true);
+        $('#rdb_school_local_community_dutch').prop( "disabled", true);
+        $('#rdb_school_local_community_german').prop( "disabled", true);
 
         $('#pnl_teaching_type').css('visibility', 'hidden').css('display','none');
         $('[id^="rdb_general_transition_"]').prop( "checked", false);
@@ -119,7 +119,7 @@ $('document').ready(function(){
 
         if ($('#hdn_person_registration_id').val()){
         }else{
-//Belgian diploma
+//Local diploma
             $('#pnl_secondary_education_main').css('visibility', 'visible').css('display','block');
             // on pnl_secondary_education_main
             if($('#hdn_diploma').val() == 'True'){
@@ -132,7 +132,7 @@ $('document').ready(function(){
                     }
                 });
                 if($('#hdn_secondary_education_national').val() == 'True'){
-                    display_belgian_secondary();
+                    display_local_secondary();
                 }
                 if($('#hdn_secondary_education_national').val() == 'False'){
                     display_foreign_secondary();
@@ -404,18 +404,18 @@ $("select[id^='slt_language_diploma']" ).change(function(event) {
 
 });
 
-function display_belgian_secondary(){
-    $('#rdb_belgium').prop( "checked", true);
-    //on pnl_belgian_detail
-    $('#pnl_belgian_detail').css('visibility', 'visible').css('display','block');
+function display_local_secondary(){
+    $('#rdb_local').prop( "checked", true);
+    //on pnl_local_detail
+    $('#pnl_local_detail').css('visibility', 'visible').css('display','block');
     if($('#hdn_secondary_education_national_community').val() == 'FRENCH'){
-        $('#rdb_belgian_community_french').prop( "checked", true);
+        $('#rdb_local_community_french').prop( "checked", true);
     }
     if($('#hdn_secondary_education_national_community').val() == 'DUTCH'){
-        $('#rdb_belgian_community_dutch').prop( "checked", true);
+        $('#rdb_local_community_dutch').prop( "checked", true);
     }
     if($('#hdn_secondary_education_national_community').val() == 'GERMAN'){
-        $('#rdb_belgian_community_german').prop( "checked", true);
+        $('#rdb_local_community_german').prop( "checked", true);
     }
     populate_secondary_national_institution();
     if($('#hdn_secondary_education_national_institution_adhoc').val() == 'True'){
@@ -446,8 +446,8 @@ function display_belgian_secondary(){
 
     }
     national_community_display();
-    if(($('#rdb_belgian_community_french').checked && $('#hdn_secondary_education_academic_year').val()<1994)
-        || (($('#rdb_belgian_community_dutch').checked && $('#hdn_secondary_education_academic_year').val()<1992))){
+    if(($('#rdb_local_community_french').checked && $('#hdn_secondary_education_academic_year').val()<1994)
+        || (($('#rdb_local_community_dutch').checked && $('#hdn_secondary_education_academic_year').val()<1992))){
         $('#rdb_dipl_acc_high_educ_true').prop( "checked", true);
         $('#pnl_dipl_acc_high_educ').css('visibility', 'visible').css('display','block');
     }else{
@@ -541,7 +541,7 @@ function display_foreign_secondary(){
 function national_community_display(){
 
     if($('#hdn_secondary_education_national_institution_national_community').val() == 'FRENCH'){
-        $('#rdb_school_belgian_community_french').prop( "checked", true);
+        $('#rdb_school_local_community_french').prop( "checked", true);
         $('#pnl_teaching_type').css('visibility', 'visible').css('display','block');
         if($('#hdn_secondary_education_education_type_id')){
             if($('#rdb_general_transition_'+$('#hdn_secondary_education_education_type_id').val())){
@@ -564,22 +564,22 @@ function national_community_display(){
         }
     }
     if($('#hdn_secondary_education_national_institution_national_community').val() == 'DUTCH'){
-        $('#rdb_school_belgian_community_dutch').prop( "checked", true);
+        $('#rdb_school_local_community_dutch').prop( "checked", true);
     }
     if($('#hdn_secondary_education_national_institution_national_community').val() == 'GERMAN'){
-        $('#rdb_school_belgian_community_german').prop( "checked", true);
+        $('#rdb_school_local_community_german').prop( "checked", true);
     }
     if($('#hdn_secondary_education_national_institution_adhoc').val()=='False' || $('#hdn_secondary_education_national_institution_adhoc').val()==''){
-        $('#rdb_school_belgian_community_french').prop( "checked", false);
-        $('#rdb_school_belgian_community_dutch').prop( "checked", false);
-        $('#rdb_school_belgian_community_german').prop( "checked", false);
-        $('#rdb_school_belgian_community_french').prop( "disabled", true);
-        $('#rdb_school_belgian_community_dutch').prop( "disabled", true);
-        $('#rdb_school_belgian_community_german').prop( "disabled", true);
+        $('#rdb_school_local_community_french').prop( "checked", false);
+        $('#rdb_school_local_community_dutch').prop( "checked", false);
+        $('#rdb_school_local_community_german').prop( "checked", false);
+        $('#rdb_school_local_community_french').prop( "disabled", true);
+        $('#rdb_school_local_community_dutch').prop( "disabled", true);
+        $('#rdb_school_local_community_german').prop( "disabled", true);
     }else{
-        $('#rdb_school_belgian_community_french').prop( "disabled", false);
-        $('#rdb_school_belgian_community_dutch').prop( "disabled", false);
-        $('#rdb_school_belgian_community_german').prop( "disabled", false);
+        $('#rdb_school_local_community_french').prop( "disabled", false);
+        $('#rdb_school_local_community_dutch').prop( "disabled", false);
+        $('#rdb_school_local_community_german').prop( "disabled", false);
     }
 
 }
@@ -638,16 +638,16 @@ $("#rdb_professional_experience_false").click(function() {
 
 $("#chb_other_school").change(function() {
     if ($('#chb_other_school').prop( "checked")){
-        $('#rdb_school_belgian_community_french').prop( "disabled", false);
-        $('#rdb_school_belgian_community_dutch').prop( "disabled", false);
-        $('#rdb_school_belgian_community_german').prop( "disabled", false);
+        $('#rdb_school_local_community_french').prop( "disabled", false);
+        $('#rdb_school_local_community_dutch').prop( "disabled", false);
+        $('#rdb_school_local_community_german').prop( "disabled", false);
     }else{
-        $('#rdb_school_belgian_community_french').prop( "checked", false);
-        $('#rdb_school_belgian_community_dutch').prop( "checked", false);
-        $('#rdb_school_belgian_community_german').prop( "checked", false);
-        $('#rdb_school_belgian_community_french').prop( "disabled", true);
-        $('#rdb_school_belgian_community_dutch').prop( "disabled", true);
-        $('#rdb_school_belgian_community_german').prop( "disabled", true);
+        $('#rdb_school_local_community_french').prop( "checked", false);
+        $('#rdb_school_local_community_dutch').prop( "checked", false);
+        $('#rdb_school_local_community_german').prop( "checked", false);
+        $('#rdb_school_local_community_french').prop( "disabled", true);
+        $('#rdb_school_local_community_dutch').prop( "disabled", true);
+        $('#rdb_school_local_community_german').prop( "disabled", true);
     }
 });
 

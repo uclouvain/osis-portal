@@ -23,33 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from dissertation.models import adviser
-import frontoffice.osis_migration as osis_migration
-import sys
-
-queue_name = 'dissertation_osis'
+import json
+from performance.models import student_performance
 
 
-@receiver(post_save, sender=adviser.Adviser)
-def on_post_save_dissertation(sender, **kwargs):
-    try:
-        instance = kwargs["instance"]
-        send_instance_to_osis(sender, instance)
-    except KeyError:
-        pass
-
-
-def send_instance_to_osis(model_class, instance):
+def couchbase_insert_or_update(json_data):
     """
-    Send the instance to osis-portal.
-    :param model_class: model class of the instance
-    :param instance: a model object
-    :return:
+        Insert the records in CouchBase. If the records already exist, then the method makes an update.
     """
-    # Records contains the serialized instance.
-    mod = sys.modules[model_class.__module__]
-    # Need to put instance in a list.
-    records = mod.serialize_list([instance])
-    osis_migration.migrate_records(records=records, model_class=model_class, queue_name=queue_name)
+    data = json.loads(json_data.decode("utf-8"))
+    key = student_performance.key_from_json(data)
+    student_performance.save_document(key, data)
