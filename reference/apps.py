@@ -24,7 +24,6 @@
 #
 ##############################################################################
 from django.apps import AppConfig
-from frontoffice.queue import callbacks, queue_listener
 
 
 class ReferenceConfig(AppConfig):

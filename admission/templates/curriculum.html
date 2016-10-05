@@ -173,7 +173,7 @@
                name="original_study_system_{{curriculum.academic_year.year}}"
                value="{{curriculum.study_system}}" >
 
-        {% pnl_national_education__message_error validation_messages year=curriculum.academic_year.year as pnl_national_detail_error%}
+        {% pnl_national_education_message_error validation_messages year=curriculum.academic_year.year as pnl_national_detail_error%}
         {% pnl_foreign_education_message_error validation_messages year=curriculum.academic_year.year as pnl_foreign_detail_error %}
         {% pnl_other_message_error validation_messages year=curriculum.academic_year.year as pnl_other_error %}
 
