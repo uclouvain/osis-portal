@@ -82,15 +82,6 @@ class Person(SerializableModel):
 
         return u"%s %s %s" % (last_name.upper(), first_name, middle_name)
 
-    def save_from_osis_migration(self):
-        if not self.global_id:
-            logger.warning(''.join(['Not migrating person without global id : ', self.first_name, ' - ', self.last_name]))
-        elif not find_by_global_id(self.global_id):
-            logger.debug(''.join(['New person : ', self.global_id]))
-            self.pk = None
-            self.id = None
-            self.save()
-
     class Meta:
         permissions = (
             ("is_tutor", "Is tutor"),

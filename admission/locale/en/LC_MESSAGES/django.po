@@ -1367,3 +1367,6 @@ msgstr " field(s) stop(s) the tab validation"
 msgid "msg_one_prerequisite"
 msgstr ""
 "You must at minimum have a diploma for high school, a professional exam, an admission exam or a local language exam"
+
+msgid "question_lottery_number"
+msgstr "Please mention your lottery number"
