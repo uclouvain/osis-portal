@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
 from admission.models.answer import find_by_option, find_by_id, find_by_application
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse

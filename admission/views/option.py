@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
 from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
 from admission import models as mdl
