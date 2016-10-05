@@ -47,7 +47,7 @@ def message_error(a, **kwargs):
 
 
 @register.assignment_tag
-def pnl_national_education__message_error(a, **kwargs):
+def pnl_national_education_message_error(a, **kwargs):
 
     if a is None or len(a) == 0:
         return False

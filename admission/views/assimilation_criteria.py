@@ -39,7 +39,10 @@ def find_by_criteria(request):
     return JSONResponse(serializer.data)
 
 
-def criteria1(list_document_type):
+def criteria1(list_document_type_param):
+    list_document_type = []
+    if list_document_type_param:
+        list_document_type.extend(list_document_type_param)
     assimilation_doc = AssimilationDoc()
     assimilation_doc.criteria_id = 1
     assimilation_doc.descriptions = [document_type.RESIDENT_LONG_DURATION]
@@ -52,7 +55,11 @@ def criteria1(list_document_type):
     return list_document_type
 
 
-def criteria2(list_document_type):
+def criteria2(list_document_type_param):
+    list_document_type = []
+    if list_document_type_param:
+        list_document_type.extend(list_document_type_param)
+
     assimilation_doc = AssimilationDoc()
     assimilation_doc.criteria_id = 2
     assimilation_doc.descriptions = [document_type.ATTACHMENT_26]
@@ -143,7 +150,11 @@ def find_list_assimilation_basic_documents():
         return assimilation_uploads
 
 
-def criteria3(list_document_type):
+def criteria3(list_document_type_param):
+    list_document_type = []
+    if list_document_type_param:
+        list_document_type.extend(list_document_type_param)
+
     assimilation_doc = AssimilationDoc()
     assimilation_doc.criteria_id = 3
     assimilation_doc.first = True
@@ -162,7 +173,11 @@ def criteria3(list_document_type):
     return list_document_type
 
 
-def criteria4(list_document_type):
+def criteria4(list_document_type_param):
+    list_document_type = []
+    if list_document_type_param:
+        list_document_type.extend(list_document_type_param)
+
     assimilation_doc = AssimilationDoc()
     assimilation_doc.criteria_id = 4
     assimilation_doc.first = True
@@ -171,7 +186,11 @@ def criteria4(list_document_type):
     return list_document_type
 
 
-def criteria5(list_document_type):
+def criteria5(list_document_type_param):
+    list_document_type = []
+    if list_document_type_param:
+        list_document_type.extend(list_document_type_param)
+
     assimilation_doc = AssimilationDoc()
     assimilation_doc.criteria_id = 5
     assimilation_doc.first = True
@@ -180,7 +199,10 @@ def criteria5(list_document_type):
     return list_document_type
 
 
-def criteria6(list_document_type):
+def criteria6(list_document_type_param):
+    list_document_type = []
+    if list_document_type_param:
+        list_document_type.extend(list_document_type_param)
     assimilation_doc = AssimilationDoc()
     assimilation_doc.criteria_id = 6
     assimilation_doc.first = True
@@ -189,7 +211,11 @@ def criteria6(list_document_type):
     return list_document_type
 
 
-def criteria7(list_document_type):
+def criteria7(list_document_type_param):
+    list_document_type = []
+    if list_document_type_param:
+        list_document_type.extend(list_document_type_param)
+
     assimilation_doc = AssimilationDoc()
     assimilation_doc.criteria_id = 7
     assimilation_doc.first = True
@@ -217,7 +243,7 @@ def find_list_document_type_by_criteria(criteria):
     return list_document_type
 
 
-def get_list_docs(criteria_id):
+def get_list_documents_descriptions(criteria_id):
     list_document_type = []
     if criteria_id == 1:
         list_document_type = criteria1(list_document_type)
@@ -233,9 +259,9 @@ def get_list_docs(criteria_id):
         list_document_type = criteria6(list_document_type)
     if criteria_id == 7:
         list_document_type = criteria7(list_document_type)
-    list_documents = []
+    list_documents_description = []
     for l in list_document_type:
-        for elt in l.descriptions:
-            if elt not in list_documents:
-                list_documents.append(elt)
-    return list_documents
+        for description in l.descriptions:
+            if description not in list_documents_description:
+                list_documents_description.append(description)
+    return list_documents_description

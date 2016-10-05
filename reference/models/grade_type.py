@@ -30,14 +30,6 @@ from django.utils.translation import ugettext_lazy as _
 from base.models.serializable_model import SerializableModel
 
 
-GRADE_CHOICES = (
-    ('BACHELOR', _('bachelor')),
-    ('MASTER', _('master')),
-    ('DOCTORATE', _('ph_d')),
-    ('TRAINING_CERTIFICATE', _('teacher_training_certificate')),
-    ('CERTIFICATE', _('certificate')))
-
-
 class GradeTypeAdmin(admin.ModelAdmin):
     list_display = ('name', 'institutional_grade_type', 'coverage', 'adhoc', 'institutional')
     fieldsets = ((None, {'fields': ('name', 'institutional_grade_type', 'coverage', 'adhoc', 'institutional')}),)
@@ -56,11 +48,11 @@ class GradeType(SerializableModel):
 
 
 def find_all():
-    return GradeType.objects.all().order_by("grade")
+    return GradeType.objects.all().order_by("name")
 
 
-def find_by_grade(grade):
-    return GradeType.objects.filter(grade=grade).order_by("name")
+def find_by_grade(name):
+    return GradeType.objects.filter(name=name).order_by("name")
 
 
 def find_by_id(an_id):
