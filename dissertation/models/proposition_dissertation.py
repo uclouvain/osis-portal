@@ -104,5 +104,5 @@ def search(terms, active=None, visibility=None):
 
 
 def search_by_offer(offers):
-    return PropositionDissertation.objects.filter(active=True, visibility=True, offer_proposition__offer__in=offers)\
-        .distinct()
+    return PropositionDissertation.objects.filter(active=True, visibility=True, offer_proposition__offer__in=offers,
+                                                  offer_proposition__start_visibility_proposition__gte=timezone.now()).distinct()
