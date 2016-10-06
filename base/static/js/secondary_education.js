@@ -7,8 +7,6 @@ $('document').ready(function(){
         $('#rdb_diploma_true').prop( "checked", false);
         $('#rdb_diploma_false').prop( "checked", false);
 
-        $('#slt_academic_year').prop("selectedIndex",-1);
-
         $('#rdb_local').prop( "checked", false);
         $('#rdb_foreign').prop( "checked", false);
 
@@ -125,11 +123,13 @@ $('document').ready(function(){
                 $('#rdb_diploma_true').prop( "checked", true);
                 $('#pnl_academic_year').css('visibility', 'visible').css('display','block');
                 //on pnl_academic_year
-                $('#slt_academic_year'+' option').each(function(){
-                    if($(this).attr('value')==$('#hdn_secondary_education_academic_year_id').val()){
-                        $(this).prop('selected', true);
-                    }
-                });
+                if ($('#hdn_secondary_education_academic_year_id').val() != ''){
+                    $('#slt_academic_year'+' option').each(function(){
+                        if($(this).attr('value')==$('#hdn_secondary_education_academic_year_id').val()){
+                            $(this).prop('selected', true);
+                        }
+                    });
+                }
                 if($('#hdn_secondary_education_national').val() == 'True'){
                     display_local_secondary();
                 }

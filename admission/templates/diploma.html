@@ -278,7 +278,9 @@
                             name="academic_year"
                             onchange="show_hide_pnl_dipl_acc_high_educ();">
                             {% for academic_yr in academic_years %}
-                                <option value="{{ academic_yr.id }}" title="{% trans 'academic_year'%}{{academic_yr.year}}">{{ academic_yr }}</option>
+                                    <option value="{{ academic_yr.id }}"
+                                            title="{% trans 'academic_year'%} {{academic_yr.year}}"
+                                            {%if current_academic_year = academic_yr %}selected{%endif%}>{{ academic_yr }}</option>
                             {% endfor %}
                     </select>
                     {%if validation_messages and validation_messages|get_item:'academic_year'%}

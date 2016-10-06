@@ -327,6 +327,10 @@ def diploma_update(request, application_id=None, saved=None):
     countries = mdl_reference.country.find_excluding("BE")
     academic_years = mdl_base.academic_year.find_academic_years()
     tab_status = tabs.init(request)
+    current_academic_year = mdl_base.academic_year.current_academic_year()
+    current_academic_year_id = None
+    if current_academic_year:
+        current_academic_year_id = current_academic_year.id
 
     data = {"application":                  application,
             "academic_years":               academic_years,
@@ -342,16 +346,17 @@ def diploma_update(request, application_id=None, saved=None):
             "current_academic_year":        mdl_base.academic_year.current_academic_year(),
             "local_language_exam_needed":   is_local_language_exam_needed(request.user),
             'tab_active':                   2,
-            'tab_profile': tab_status['tab_profile'],
-            'tab_applications': tab_status['tab_applications'],
-            'tab_diploma': tab_status['tab_diploma'],
-            'tab_curriculum': tab_status['tab_curriculum'],
-            'tab_accounting': tab_status['tab_accounting'],
-            'tab_sociological': tab_status['tab_sociological'],
-            'tab_attachments': tab_status['tab_attachments'],
-            'tab_submission': tab_status['tab_submission'],
-            'applications': mdl.application.find_by_user(request.user),
-            'message_info': message_info}
+            'tab_profile':                  tab_status['tab_profile'],
+            'tab_applications':             tab_status['tab_applications'],
+            'tab_diploma':                  tab_status['tab_diploma'],
+            'tab_curriculum':               tab_status['tab_curriculum'],
+            'tab_accounting':               tab_status['tab_accounting'],
+            'tab_sociological':             tab_status['tab_sociological'],
+            'tab_attachments':              tab_status['tab_attachments'],
+            'tab_submission':               tab_status['tab_submission'],
+            'applications':                 mdl.application.find_by_user(request.user),
+            'message_info':                 message_info,
+            'current_academic_year':        mdl_base.academic_year.current_academic_year()}
 
     # merge dictionaries
     data.update(get_secondary_education_exams_data(secondary_education))
