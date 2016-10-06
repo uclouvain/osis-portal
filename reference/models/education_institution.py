@@ -106,7 +106,7 @@ def find_by_institution_city_type_iso_code(a_city, an_institution_type, iso_code
     return EducationInstitution.objects.filter(city=a_city,
                                                adhoc=an_adhoc,
                                                institution_type=an_institution_type,
-                                               country__iso_code=iso_code)
+                                               country__iso_code=iso_code).order_by('name')
 
 
 def find_by_city_isocode(a_city, iso_code):
