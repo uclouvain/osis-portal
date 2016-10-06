@@ -517,10 +517,9 @@ def is_local_language_exam_needed(user):
     applications = mdl.application.find_by_user(user)
     if applications:
         for application in applications:
-            print(application.offer_year.grade_type.institutional_grade_type)
             if application.offer_year.grade_type and \
-                    (application.offer_year.grade_type.institutional_grade_type == 'BACHELOR' or
-                     application.offer_year.grade_type.institutional_grade_type == 'MASTER' or
+                    (application.offer_year.grade_type.institutional_grade_type == 'BACHELOR' or \
+                     application.offer_year.grade_type.institutional_grade_type == 'MASTER' or \
                      application.offer_year.grade_type.institutional_grade_type == 'TRAINING_CERTIFICATE'):
                 local_language_exam_needed = True
                 break
