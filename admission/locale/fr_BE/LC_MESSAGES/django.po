@@ -1388,3 +1388,18 @@ msgstr ""
 
 msgid "question_lottery_number"
 msgstr "Veuillez indique le numéro que le Service d'inscription vous a fourni"
+
+msgid "master_60"
+msgstr "Master 60"
+
+msgid "master_120"
+msgstr "Master 120"
+
+msgid "master_180_240"
+msgstr "Master 180 or 240"
+
+msgid "advanced_master"
+msgstr "Advanced master"
+
+msgid "capaes"
+msgstr "Capaes"

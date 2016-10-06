@@ -42,14 +42,15 @@ class JSONResponse(HttpResponse):
 
 
 class OfferSerializer(serializers.ModelSerializer):
-    institutional_grade_type_name = serializers.SerializerMethodField('get_grade_type')
+    institutional_grade_type = serializers.SerializerMethodField('get_grade_type')
 
     class Meta:
         model = mdl_base.offer_year.OfferYear
-        fields = ('id', 'acronym', 'title', 'title_international', 'grade_type', 'subject_to_quota', 'institutional_grade_type_name')
+        fields = ('id', 'acronym', 'title', 'title_international', 'grade_type', 'subject_to_quota',
+                  'institutional_grade_type')
 
     def get_grade_type(self, obj):
-        return obj.grade_type.institutional_grade_type.name
+        return obj.grade_type.institutional_grade_type
 
 
 def search(request):

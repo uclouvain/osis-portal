@@ -307,8 +307,6 @@ def diploma_update(request, application_id=None, saved=None):
     :param saved:
     :return:
     """
-
-
     if saved:
         message_info = _('msg_info_saved')
     else:
@@ -316,7 +314,6 @@ def diploma_update(request, application_id=None, saved=None):
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
-        #application = mdl.application.init_application(request.user)
         application = mdl.application.find_first_by_user(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
     other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
@@ -520,10 +517,11 @@ def is_local_language_exam_needed(user):
     applications = mdl.application.find_by_user(user)
     if applications:
         for application in applications:
+            print(application.offer_year.grade_type.institutional_grade_type)
             if application.offer_year.grade_type and \
-                    (application.offer_year.grade_type.name == 'BACHELOR' or \
-                     application.offer_year.grade_type.name == 'MASTER' or \
-                     application.offer_year.grade_type.name == 'TRAINING_CERTIFICATE'):
+                    (application.offer_year.grade_type.institutional_grade_type == 'BACHELOR' or
+                     application.offer_year.grade_type.institutional_grade_type == 'MASTER' or
+                     application.offer_year.grade_type.institutional_grade_type == 'TRAINING_CERTIFICATE'):
                 local_language_exam_needed = True
                 break
     return local_language_exam_needed
