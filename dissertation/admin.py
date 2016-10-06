@@ -30,6 +30,7 @@ from dissertation.models import *
 admin.site.register(adviser.Adviser, adviser.AdviserAdmin)
 admin.site.register(dissertation.Dissertation, dissertation.DissertationAdmin)
 admin.site.register(dissertation_document_file.DissertationDocumentFile)
+admin.site.register(dissertation_location.DissertationLocation)
 admin.site.register(dissertation_group.DissertationGroup)
 admin.site.register(dissertation_role.DissertationRole)
 admin.site.register(dissertation_update.DissertationUpdate)

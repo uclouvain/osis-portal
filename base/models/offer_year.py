@@ -31,10 +31,17 @@ from base.models.serializable_model import SerializableModel
 
 
 class OfferYearAdmin(admin.ModelAdmin):
+<<<<<<< HEAD
     list_display = ('acronym', 'title', 'academic_year', 'grade_type', 'subject_to_quota')
     list_filter = ('grade_type__institutional_grade_type', 'subject_to_quota',)
     fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'grade_type',
                                     'subject_to_quota', 'offer')}),)
+=======
+    raw_id_fields = ('offer',)
+    list_display = ('acronym', 'title', 'academic_year', 'grade_type', 'offer', 'subject_to_quota')
+    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'offer', 'title', 'title_international',
+                                    'grade_type','subject_to_quota')}),)
+>>>>>>> 2377c2703b5dced2279004da4a048686a7e7e69b
 
 
 class OfferYear(SerializableModel):
