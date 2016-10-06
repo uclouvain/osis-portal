@@ -88035,7 +88035,7 @@
         "external_id": "osis.reference.education_type_form_generale",
         "type": "TRANSITION",
         "name": "Enseignement de formation g\u00e9n\u00e9rale",
-        "adhoc": true
+        "adhoc": false
     }
 },
 {
@@ -88046,7 +88046,7 @@
         "external_id": "osis.reference.education_type_art_transition",
         "type": "TRANSITION",
         "name": "Artistique de transition",
-        "adhoc": true
+        "adhoc": false
     }
 },
 {
@@ -88057,7 +88057,7 @@
         "external_id": "osis.reference.education_type_tech_transition",
         "type": "TRANSITION",
         "name": "Technique de transition",
-        "adhoc": true
+        "adhoc": false
     }
 },
 {
@@ -88068,7 +88068,7 @@
         "external_id": "osis.reference.education_type_tech_qualificaiton",
         "type": "QUALIFICATION",
         "name": "Technique de qualification",
-        "adhoc": true
+        "adhoc": false
     }
 },
 {
@@ -88079,7 +88079,7 @@
         "external_id": "osis.reference.education_type_art_qualification",
         "type": "QUALIFICATION",
         "name": "Artistique de qualification",
-        "adhoc": true
+        "adhoc": false
     }
 },
 {
@@ -88090,7 +88090,7 @@
         "external_id": "osis.reference.education_type_professionel",
         "type": "QUALIFICATION",
         "name": "Enseignement professionnel",
-        "adhoc": true
+        "adhoc": false
     }
 },
 {
@@ -88101,7 +88101,7 @@
         "external_id": "osis.reference.education_type_professionnel_exam_maturite",
         "type": "QUALIFICATION",
         "name": "Enseignement professionnel+Examen de maturit\u00e9",
-        "adhoc": true
+        "adhoc": false
     }
 },
 {
