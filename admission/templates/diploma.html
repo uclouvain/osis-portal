@@ -296,13 +296,13 @@
                       <input type="radio"
                              name="rdb_local_foreign" id="rdb_local"
                              value="true"
-                             onclick="display('pnl_local_detail',true);display('pnl_foreign_detail',false);populate_secondary_national_institution();"> {% trans 'in_belgium'%}
+                             onclick="display('pnl_local_detail',true);display('pnl_foreign_detail',false);populate_secondary_national_institution();">&nbsp;{% trans 'in_belgium'%}
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
                              name="rdb_local_foreign" id="rdb_foreign"
                              value="false"
-                             onclick="display('pnl_local_detail',false);display('pnl_foreign_detail',true);"> {% trans 'not_in_belgium'%}
+                             onclick="display('pnl_local_detail',false);display('pnl_foreign_detail',true);">&nbsp;{% trans 'not_in_belgium'%}
                     </label>
                     {%if validation_messages and validation_messages|get_item:'rdb_localforeign'%}
                         <span class="error" style="margin-left:5px;">

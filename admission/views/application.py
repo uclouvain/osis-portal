@@ -23,10 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
 from admission.models.answer import find_by_option, find_by_id, find_by_application
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from admission import models as mdl
 from reference import models as mdl_reference
@@ -36,12 +34,13 @@ from admission.views.common import extra_information
 from admission.views import demande_validation
 from admission.views import tabs
 from django.http import *
-from django.http import HttpResponsePermanentRedirect
+import urllib
+
 
 PROFILE_TAB = "0"
 DEMAND_TAB = "1"
 PREREQUISITES_TAB = "2"
-CURRICULUM_TAB ="3"
+CURRICULUM_TAB = "3"
 ACCOUNTING_TAB = "4"
 SOCIOLOGICAL_SURVEY_TAB = "5"
 ATTACHMENTS_TAB = "6"
