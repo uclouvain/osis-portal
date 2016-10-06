@@ -23,12 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+from base.models.serializable_model import SerializableModel
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
-class PropositionRole(models.Model):
+class PropositionRole(SerializableModel):
     STATUS_CHOICES = (
         ('PROMOTEUR', _('promotor')),
         ('CO_PROMOTEUR', _('copromotor')),

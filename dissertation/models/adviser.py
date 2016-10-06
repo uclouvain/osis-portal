@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+from base.models.serializable_model import SerializableModel
 from django.core import serializers
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -34,7 +34,7 @@ class AdviserAdmin(admin.ModelAdmin):
     list_display = ('person', 'type')
 
 
-class Adviser(models.Model):
+class Adviser(SerializableModel):
     TYPES_CHOICES = (
         ('PRF', _('professor')),
         ('MGR', _('manager')),

@@ -23,12 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+from base.models.serializable_model import SerializableModel
 from django.contrib import admin
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
-
 from base.models import student, offer_year, academic_year
 from . import proposition_dissertation
 from dissertation.models.dissertation_role import get_promoteur_by_dissertation
@@ -66,7 +65,7 @@ DEFEND_PERIODE_CHOICES = (
 )
 
 
-class Dissertation(models.Model):
+class Dissertation(SerializableModel):
 
     title = models.CharField(max_length=200)
     author = models.ForeignKey(student.Student)

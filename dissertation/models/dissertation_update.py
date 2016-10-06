@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+from base.models.serializable_model import SerializableModel
 from django.db import models
 from base import models as mdl
 from dissertation.models import dissertation
@@ -31,7 +31,7 @@ from dissertation.models import dissertation
 JUSTIFICATION_LINK = "_set_to_"
 
 
-class DissertationUpdate(models.Model):
+class DissertationUpdate(SerializableModel):
 
     status_from = models.CharField(max_length=12, choices=dissertation.STATUS_CHOICES, default='DRAFT')
     status_to = models.CharField(max_length=12, choices=dissertation.STATUS_CHOICES, default='DRAFT')
