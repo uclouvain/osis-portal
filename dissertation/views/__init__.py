@@ -28,3 +28,4 @@ from dissertation.views import common
 from dissertation.views import dissertation
 from dissertation.views import proposition_dissertation
 from dissertation.views import upload_dissertation_file
+from dissertation.views import upload_proposition_file
