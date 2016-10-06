@@ -9,7 +9,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('dissertation', '0001_initial'),
+        ('dissertation', '0003_propositiondocumentfile'),
     ]
 
     operations = [
