@@ -243,6 +243,7 @@ $('document').ready(function(){
 });
 
 function populate_secondary_national_institution(){
+alert('populate_secondary_national_institution');
     $("#slt_cities").find("option")
         .remove()
        .end();
@@ -257,10 +258,12 @@ function populate_secondary_national_institution(){
           if(data.length >0){
           $("<option></option>").attr("value","-").append("-").appendTo("#slt_cities");
             $.each(data, function(key, value) {
+                var city_name_value= ucwords(value.city,true) ;
+
                 if(value.city == city_name){
-                    $("<option></option>").attr("value",value.city).prop('selected', true).append(value.city).appendTo("#slt_cities");
+                    $("<option></option>").attr("value",value.city).prop('selected', true).append(city_name_value).appendTo("#slt_cities");
                 }else{
-                    $("<option></option>").attr("value",value.city).append(value.city).appendTo("#slt_cities");
+                    $("<option></option>").attr("value",value.city).append(city_name_value).appendTo("#slt_cities");
                 }
             });
           }
@@ -687,3 +690,11 @@ $("#rdb_diploma_true").click(function() {
     $('#pnl_academic_year').css('visibility', 'visible').css('display','block');
     $('#pnl_admission_exam').css('visibility', 'hidden').css('display','none');
 });
+
+function ucwords(str,force){
+  str=force ? str.toLowerCase() : str;
+  return str.replace(/(\b)([a-zA-Z])/g,
+           function(firstLetter){
+              return   firstLetter.toUpperCase();
+           });
+}
