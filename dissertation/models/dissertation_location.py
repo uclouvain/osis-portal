@@ -23,10 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from base.models.serializable_model import SerializableModel
 from django.db import models
 
 
-class DissertationLocation(models.Model):
+class DissertationLocation(SerializableModel):
     name = models.CharField(max_length=200)
 
     def __str__(self):
