@@ -25,8 +25,6 @@
 ##############################################################################
 
 from django.db import models
-from django.contrib import admin
-from django.contrib.auth.models import User
 
 
 class PropositionDocumentFile(models.Model):
@@ -63,7 +61,3 @@ def find_by_proposition(proposition):
 
 def find_by_id(proposition_id):
     return PropositionDocumentFile.objects.get(proposition__id=proposition_id)
-
-
-
-

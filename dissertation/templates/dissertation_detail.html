@@ -89,7 +89,7 @@
                             <label>{% trans 'file' %}</label>
                         </div>
                         <div class="col-md-4">
-                            <a href="{% url 'download' pk=dissertation.pk %}">{% trans 'link' %}</a>
+                            <a href="{% url 'dissertation_download' pk=dissertation.pk %}">{% trans 'link' %}</a>
                         </div>
                     </div>
                 {% endif %}
@@ -347,7 +347,7 @@
             if ($.inArray(file.type,accepted_types) >= 0){
                 data.append('file', file);
                 $.ajax({
-                    url: "{% url 'save_uploaded_file' %}",
+                    url: "{% url 'dissertation_save_upload' %}",
                     enctype: 'multipart/form-data',
                     type: 'POST',
                     data : data,

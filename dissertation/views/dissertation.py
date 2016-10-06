@@ -71,7 +71,7 @@ def dissertation_detail(request, pk):
     off = memory.offer_year_start.offer
     offer_pro = offer_proposition.search_by_offer(off)
     count = dissertation.count_submit_by_user(student, off)
-    files = dissertation_document_file.find_by_dissertation(dissertation)
+    files = dissertation_document_file.find_by_dissertation(memory)
     filename = ""
     for file in files:
         filename = file.document_file.file_name
@@ -109,8 +109,6 @@ def dissertation_detail(request, pk):
                                   'dissertation_roles': dissertation_roles,
                                   'jury_visibility': jury_visibility,
                                   'manage_readers': manage_readers,
-                                  'student': student,
-                                  'document': file,
                                   'filename': filename})
         else:
             jury_visibility = False
@@ -120,7 +118,6 @@ def dissertation_detail(request, pk):
                                   'dissertation': memory,
                                   'jury_visibility': jury_visibility,
                                   'student': student,
-                                  'document': file,
                                   'filename': filename})
 
 

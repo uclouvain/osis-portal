@@ -70,4 +70,3 @@ def save_uploaded_file(request):
         dissertation_file.document_file = new_document
         dissertation_file.save()
     return HttpResponse('')
-
