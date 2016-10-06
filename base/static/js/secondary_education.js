@@ -55,7 +55,6 @@ $('document').ready(function(){
         $('#rdb_dipl_acc_high_educ_true').prop( "checked", false);
         $('#rdb_dipl_acc_high_educ_false').prop( "checked", false);
 
-        $('#pnl_parcours').css('visibility', 'hidden').css('display','none');
         $('#rdb_repeated_grade_true').prop( "checked", false);
         $('#rdb_repeated_grade_false').prop( "checked", false);
         $('#rdb_re_orientation_true').prop( "checked", false);

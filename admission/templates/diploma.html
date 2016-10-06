@@ -276,7 +276,7 @@
                     <select class="form-control"
                             id="slt_academic_year"
                             name="academic_year"
-                            onchange="show_hide_parcours(this);show_hide_pnl_dipl_acc_high_educ();">
+                            onchange="show_hide_pnl_dipl_acc_high_educ();">
                             {% for academic_yr in academic_years %}
                                 <option value="{{ academic_yr.id }}" title="{% trans 'academic_year'%}{{academic_yr.year}}">{{ academic_yr }}</option>
                             {% endfor %}
@@ -404,22 +404,6 @@
 
     function display_or_hide(id,elt){
         display(id,elt.checked);
-    }
-
-    function show_hide_parcours(elt){
-        if (elt.selectedIndex == -1)
-            return null;
-        var s= elt.options[elt.selectedIndex].text;
-        var pos = s.indexOf("-");
-        var year=""
-        if (pos > -1){
-            year = s.substring(0,pos);
-        }
-        if(year < 1994){
-            display('pnl_parcours',true);
-        }else{
-            display('pnl_parcours',false);
-        }
     }
 
     function show_hide_pnl_dipl_acc_high_educ(){
