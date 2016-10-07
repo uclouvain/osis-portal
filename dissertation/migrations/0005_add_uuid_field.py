@@ -31,57 +31,57 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='adviser',
             name='uuid',
-            field=models.UUIDField(db_index=True, null=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='dissertation',
             name='uuid',
-            field=models.UUIDField(db_index=True, null=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='dissertationgroup',
             name='uuid',
-            field=models.UUIDField(db_index=True, null=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='dissertationlocation',
             name='uuid',
-            field=models.UUIDField(db_index=True, null=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='dissertationrole',
             name='uuid',
-            field=models.UUIDField(db_index=True, null=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='dissertationupdate',
             name='uuid',
-            field=models.UUIDField(db_index=True, null=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='offerproposition',
             name='uuid',
-            field=models.UUIDField(db_index=True, null=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='propositiondissertation',
             name='uuid',
-            field=models.UUIDField(db_index=True, null=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='propositionrole',
             name='uuid',
-            field=models.UUIDField(db_index=True, null=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='propositiondocumentfile',
             name='uuid',
-            field=models.UUIDField(db_index=True, null=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='dissertationdocumentfile',
             name='uuid',
-            field=models.UUIDField(db_index=True, null=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.RunPython(set_uuid_field),
         migrations.AlterField(
