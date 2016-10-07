@@ -126,7 +126,7 @@ def save_application_offer(request):
                 application.resident = False
         if request.POST.get('txt_offer_lottery'):
             application.raffle_number = request.POST.get('txt_offer_lottery')
-
+        application.application_type =mdl.application.define_application_type(application.national_degree, request.user)
         application.save()
         application_id = application.id
         if new_application is False:
@@ -306,6 +306,7 @@ def application_delete(request, application_id):
 
 def change_application_offer(request, application_id=None):
     application = mdl.application.find_by_id(application_id)
+    application.application_type = mdl.application.define_application_type(application.national_degree, request.user)
     application.save()
     application_list = mdl.application.find_by_user(request.user)
     applicant = mdl.applicant.find_by_user(request.user)

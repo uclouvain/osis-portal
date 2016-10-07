@@ -166,3 +166,28 @@ def find_by_institution_postal_code_type_iso_code(a_postal_code, an_institution_
                                                adhoc=an_adhoc,
                                                institution_type=an_institution_type,
                                                country__iso_code=iso_code)
+
+
+def search(an_iso_code=None, an_institution_type=None, an_adhoc=None, a_city=None, a_postal_code=None):
+    out = None
+    queryset = EducationInstitution.objects.order_by('name')
+    if an_iso_code:
+        queryset = queryset.filter(country__iso_code=an_iso_code)
+    if an_institution_type:
+        queryset = queryset.filter(institution_type=an_institution_type)
+    if an_adhoc is not None:
+        queryset = queryset.filter(adhoc=False)
+    if a_city:
+        queryset = queryset.filter(city=a_city)
+    if a_postal_code:
+        queryset = queryset.filter(postal_code=a_postal_code)
+    if an_iso_code or an_institution_type or an_adhoc or a_city or a_postal_code:
+        out = queryset.order_by('name')
+    return out
+
+
+def find_cities(an_iso_code=None, an_institution_type=None, an_adhoc=None,  a_postal_code=None):
+    return EducationInstitution.objects.filter(country__iso_code=an_iso_code,
+                                               institution_type=an_institution_type,
+                                               adhoc=an_adhoc,
+                                               postal_code=a_postal_code).distinct('city').order_by('city')
