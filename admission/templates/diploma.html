@@ -53,14 +53,14 @@
     <input type="hidden"
            id="hdn_secondary_education_national_institution_postal_code"
            name="secondary_education_national_institution_postal_code"
-           value="{{secondary_education.national_institution.postal_code}}" >
+           value="{{secondary_education.national_institution.postal_code| default_if_none:''}}" >
     <input type="hidden"
            id="hdn_secondary_education_national_institution_name"
            name="secondary_education_national_institution_name"
            value="{{secondary_education.national_institution.name}}" >
     <input type="hidden"
            id="hdn_secondary_education_national_institution_adhoc"
-           value="{{secondary_education.national_institution.adhoc| default_if_none:''}}" >
+           value="{{secondary_education.national_institution.adhoc| default_if_none:'False'}}" >
     <input type="hidden"
            id="hdn_secondary_education_national_institution_national_community"
            name="secondary_education_national_institution_national_community"

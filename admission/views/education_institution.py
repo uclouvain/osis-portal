@@ -43,7 +43,7 @@ class EducationInstitutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = mdl_reference.education_institution.EducationInstitution
         fields = ('id', 'name', 'postal_code', 'city', 'country', 'national_community')
-
+        order_by = ('name')
 
 def find_by_country(request):
     country = request.GET['country']
@@ -159,15 +159,13 @@ def find_postal_codes_by_type(request):
 def find_institution_by_city_postal_code_type(request):
     type = request.GET['type']
     city = request.GET['city']
+    if city == "-" or city == '':
+        city = None
     postal_code = request.GET['postal_code']
-    education_institutions = None
-    if city != "-":
-        education_institutions = mdl_reference.education_institution\
-            .find_by_institution_city_type_iso_code(city, type, 'BE', False)
-    else:
-        if postal_code != "-":
-            education_institutions = mdl_reference.education_institution\
-                .find_by_institution_postal_code_type_iso_code(postal_code, type, 'BE', False)
+    if postal_code == "-" or postal_code == '':
+        postal_code = None
 
-    serializer = EducationInstitutionSerializer(education_institutions, many=True)
+    education_institutions = mdl_reference.education_institution.search('BE', type, False, city, postal_code)
+
+    serializer = EducationInstitutionSerializer(education_institutions, many=True, )
     return JSONResponse(serializer.data)
