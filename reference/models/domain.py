@@ -25,6 +25,7 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from django.utils import timezone
 from reference.enums import domain_type
 from base.models.serializable_model import SerializableModel
 
@@ -59,8 +60,11 @@ def find_by_id(an_id):
     return Domain.objects.get(pk=an_id)
 
 
-def find_all_domains():
-    return Domain.objects.filter(parent=None)
+def find_current_domains():
+    return Domain.objects.filter(decree__start_date__lte=timezone.now())\
+                         .filter(decree__end_date__gte=timezone.now())\
+                         .filter(type=domain_type.UNIVERSITY)\
+                         .order_by("name")
 
 
 def find_all_subdomains():

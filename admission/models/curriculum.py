@@ -108,7 +108,7 @@ def find_by_person_year(a_person, year):
     return Curriculum.objects.filter(person=a_person, academic_year__year=year).first()
 
 
-def find_belgian_french(a_person, an_academic_year):
+def find_local_french(a_person, an_academic_year):
     path_types = ['LOCAL_UNIVERSITY', 'LOCAL_HIGH_EDUCATION']
     return Curriculum.objects.filter(person=a_person,
                                      path_type__in=path_types,

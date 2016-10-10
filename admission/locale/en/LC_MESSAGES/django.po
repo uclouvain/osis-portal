@@ -1371,3 +1371,54 @@ msgstr " field(s) stop(s) the tab validation"
 msgid "msg_one_prerequisite"
 msgstr ""
 "You must at minimum have a diploma for high school, a professional exam, an admission exam or a local language exam"
+
+msgid "question_lottery_number"
+msgstr "Please mention your lottery number"
+
+msgid "CRITERIA_1"
+msgstr "Please mention if you have an authorisation of an institute or if you are long-term resident."
+
+msgid "CRITERIA_2"
+msgstr "Please mention if you are a refugee, stateless or if you want to benefit from a subsidiary protection."
+
+msgid "CRITERIA_3"
+msgstr "Please mention if you have a residence permit beyond 3 months and if you benefit from professional or replacement income."
+
+msgid "CRITERIA_4"
+msgstr "Please mention if you receive support from CPAS, a residence of CPAS or designated by CPAS (is the public institute for social welfare)"
+
+msgid "CRITERIA_5"
+msgstr "Please mention if your father, mother, legal guardian, spouse or legal cohabitant carries the nationality of a EU-member state or if this persons complies with the conditions as referred to in the questions 1 to 4."
+
+msgid "CRITERIA_6"
+msgstr "Please mention if you benefit from a scholarship as defined in article 105 § 2 of the  decree of November 7th, 2013 (CFWB or the Cooperation to Development)"
+
+msgid "CRITERIA_7"
+msgstr "Are you an european long-term resident (of a country other than Belgium)?"
+
+msgid "MASTER_60"
+msgstr "Master 60"
+
+msgid "MASTER_120"
+msgstr "Master 120"
+
+msgid "MASTER_180_OR_240"
+msgstr "Master 180 or 240"
+
+msgid "ADVANCED_MASTER"
+msgstr "Advanced master"
+
+msgid "CAPAES"
+msgstr "Capaes"
+
+msgid "BACHELOR"
+msgstr "Bachelor"
+
+msgid "TRAINING_CERTIFICATE"
+msgstr "Training certificate"
+
+msgid "CERTIFICATE"
+msgstr "Certificate"
+
+msgid "DOCTORATE"
+msgstr "Ph. d"

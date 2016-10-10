@@ -23,20 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
-from django.contrib import admin
-from base.models.serializable_model import SerializableModel
 
+from django.utils.translation import ugettext_lazy as _
 
-class InstitutionalGradeTypeAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    fieldsets = ((None, {'fields': ('name',)}),)
+BACHELOR = "BACHELOR"
+MASTER_60 = "MASTER_60"
+MASTER_120 = "MASTER_120"
+MASTER_180_OR_240 = "MASTER_180_OR_240"
+ADVANCED_MASTER = "ADVANCED_MASTER"
+TRAINING_CERTIFICATE = "TRAINING_CERTIFICATE"
+CERTIFICATE = "CERTIFICATE"
+DOCTORATE = "DOCTORATE"
+CAPAES = "CAPAES"
 
-
-# Customized parent's list of institutional GradeType (used & displayed in Admission - offer choice).
-class InstitutionalGradeType(SerializableModel):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
+INSTITUTIONAL_GRADE_CHOICES = (
+    ('BACHELOR', _(BACHELOR)),
+    ('MASTER_60', _(MASTER_60)),
+    ('MASTER_120', _(MASTER_120)),
+    ('MASTER_180_OR_240', _(MASTER_180_OR_240)),
+    ('ADVANCED_MASTER', _(ADVANCED_MASTER)),
+    ('TRAINING_CERTIFICATE', _(TRAINING_CERTIFICATE)),
+    ('CERTIFICATE', _(CERTIFICATE)),
+    ('DOCTORATE', _(DOCTORATE)),
+    ('CAPAES',_(CAPAES)))

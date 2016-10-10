@@ -33,7 +33,7 @@
          <br><br>
      </div>
      <div class="row">
-         <div class="col-md-4">
+         <div class="col-md-5">
              <label for="slt_country" class="control-label">{%trans 'awarding_country' %}</label><br>
              <select class="form-control"
                      id="slt_country"
@@ -44,7 +44,7 @@
                 {% endfor %}
             </select>
          </div>
-         <div class="col-md-4">
+         <div class="col-md-3">
              <label for="slt_language_diploma">{% trans 'linguistic_regime'%} *</label><br>
              <select class="form-control"
                      id="slt_language_diploma"
@@ -56,15 +56,13 @@
             </select>
          </div>
          <div class="col-md-4">
-             <div>
-             <label for="chb_other_language_regime">{% trans 'other_linguistic_regime'%}
-                    <input type="checkbox"
-                           id="chb_other_language_regime"
-                           name="other_language_regime"
-                           onclick="enabled_other_language(this)"
-                           class="form-control">
+
+            <label for="chb_other_language_regime">{% trans 'other_linguistic_regime'%}
+            <input type="checkbox"
+                   id="chb_other_language_regime"
+                   name="other_language_regime"
+                   onclick="enabled_other_language(this)">
              </label>
-                 </div>
              <select class="form-control"
                      id="slt_other_language_diploma"
                      name="other_international_diploma_language">

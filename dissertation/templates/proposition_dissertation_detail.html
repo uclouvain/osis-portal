@@ -57,20 +57,10 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3" style="text-align: right">
-                        <label>{% trans 'offer_propositions' %}</label>
+                        <label>{% trans 'description' %}</label>
                     </div>
-                    <div class="col-md-9">
-                        {% for offer_proposition in proposition_dissertation.offer_proposition.all %}
-                            <span class="label label-default">{{ offer_proposition }}</span>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3" style="text-align: right">
-                        <label>{% trans 'level' %}</label>
-                    </div>
-                    <div class="col-md-9" style="text-align: justify">
-                        {{ proposition_dissertation.get_level_display  }}
+                    <div class="col-md-9" style="text-align: left">
+                        {{ proposition_dissertation.description|linebreaks }}
                     </div>
                 </div>
                 <div class="row">
@@ -79,6 +69,14 @@
                     </div>
                     <div class="col-md-9" style="text-align: justify">
                         {{ proposition_dissertation.get_type_display }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'level' %}</label>
+                    </div>
+                    <div class="col-md-9" style="text-align: justify">
+                        {{ proposition_dissertation.get_level_display  }}
                     </div>
                 </div>
                 <div class="row">
@@ -107,10 +105,12 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3" style="text-align: right">
-                        <label>{% trans 'description' %}</label>
+                        <label>{% trans 'offer_propositions' %}</label>
                     </div>
-                    <div class="col-md-9" style="text-align: left">
-                        {{ proposition_dissertation.description|linebreaks }}
+                    <div class="col-md-9">
+                        {% for offer_proposition in proposition_dissertation.offer_proposition.all %}
+                            <span class="label label-default">{{ offer_proposition }}</span>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

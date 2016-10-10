@@ -26,26 +26,36 @@
 
 from django.db import models
 from django.contrib import admin
-from base.models.serializable_model import SerializableModel
+from django.contrib.auth.models import User
 
 
-class AssimilationCriteriaAdmin(admin.ModelAdmin):
-    list_display = ('criteria', 'order')
-    fieldsets = ((None, {'fields': ('criteria', 'order')}),)
+class DissertationDocumentFile(models.Model):
+    dissertation = models.ForeignKey('Dissertation')
+    document_file = models.ForeignKey('osis_common.documentFile')
 
 
-class AssimilationCriteria(SerializableModel):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    criteria = models.CharField(max_length=255, unique=True)
-    order = models.IntegerField(blank=True, null=True)
+def search(dissertation=None, description=None):
+    out = None
+    queryset = DissertationDocumentFile.objects.order_by('document_file__creation_date')
+    if dissertation:
+        queryset = queryset.filter(dissertation=dissertation)
+    if description:
+        queryset = queryset.filter(document_file__description=description)
+    if dissertation or description:
+        out = queryset
+    return out
 
-    def __str__(self):
-        return self.criteria
+
+def find_first(dissertation=None, description=None):
+    results = search(dissertation, description)
+    if results.exists():
+        return results[0]
+    return None
 
 
-def find_criteria():
-    return AssimilationCriteria.objects.all().order_by("order")
+def find_by_document(document_file):
+    return DissertationDocumentFile.objects.filter(document_file=document_file)
 
 
-def find_by_id(criteria_id):
-    return AssimilationCriteria.objects.get(pk=criteria_id)
+
+

@@ -39,6 +39,16 @@ class DissertationForm(ModelForm):
         widgets = {'author': forms.HiddenInput()}
 
 
+class DissertationEditForm(ModelForm):
+    class Meta:
+        model = Dissertation
+        fields = ('title', 'author', 'offer_year_start', 'proposition_dissertation', 'description', 'defend_year',
+                  'defend_periode')
+        widgets = {'author': forms.HiddenInput(),
+                   'offer_year_start': forms.HiddenInput(),
+                   'proposition_dissertation': forms.HiddenInput()}
+
+
 class DissertationRoleForm(ModelForm):
     class Meta:
         model = DissertationRole

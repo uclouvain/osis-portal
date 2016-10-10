@@ -23,33 +23,30 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from dissertation.models import adviser
-import frontoffice.osis_migration as osis_migration
-import sys
 
-queue_name = 'dissertation_osis'
+from django.utils.translation import ugettext_lazy as _
+
+CRITERIA_1 = "CRITERIA_1"
+CRITERIA_2 = "CRITERIA_2"
+CRITERIA_3 = "CRITERIA_3"
+CRITERIA_4 = "CRITERIA_4"
+CRITERIA_5 = "CRITERIA_5"
+CRITERIA_6 = "CRITERIA_6"
+CRITERIA_7 = "CRITERIA_7"
+
+ASSIMILATION_CRITERIA_CHOICES = (
+    (CRITERIA_1, _(CRITERIA_1)),
+    (CRITERIA_2, _(CRITERIA_2)),
+    (CRITERIA_3, _(CRITERIA_3)),
+    (CRITERIA_4, _(CRITERIA_4)),
+    (CRITERIA_5, _(CRITERIA_5)),
+    (CRITERIA_6, _(CRITERIA_6)),
+    (CRITERIA_7, _(CRITERIA_7)),
+)
 
 
-@receiver(post_save, sender=adviser.Adviser)
-def on_post_save_dissertation(sender, **kwargs):
-    try:
-        instance = kwargs["instance"]
-        send_instance_to_osis(sender, instance)
-    except KeyError:
-        pass
-
-
-def send_instance_to_osis(model_class, instance):
-    """
-    Send the instance to osis-portal.
-    :param model_class: model class of the instance
-    :param instance: a model object
-    :return:
-    """
-    # Records contains the serialized instance.
-    mod = sys.modules[model_class.__module__]
-    # Need to put instance in a list.
-    records = mod.serialize_list([instance])
-    osis_migration.migrate_records(records=records, model_class=model_class, queue_name=queue_name)
+def find(criteria):
+    for elt in ASSIMILATION_CRITERIA_CHOICES:
+        if elt[0] == criteria:
+            return elt
+    return None

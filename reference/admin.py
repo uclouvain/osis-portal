@@ -27,9 +27,6 @@ from reference.models import *
 from django.contrib import admin
 
 
-admin.site.register(assimilation_criteria.AssimilationCriteria,
-                    assimilation_criteria.AssimilationCriteriaAdmin)
-
 admin.site.register(country.Country,
                     country.CountryAdmin)
 
@@ -47,9 +44,6 @@ admin.site.register(education_type.EducationType,
 
 admin.site.register(grade_type.GradeType,
                     grade_type.GradeTypeAdmin)
-
-admin.site.register(institutional_grade_type.InstitutionalGradeType,
-                    institutional_grade_type.InstitutionalGradeTypeAdmin)
 
 admin.site.register(language.Language,
                     language.LanguageAdmin)

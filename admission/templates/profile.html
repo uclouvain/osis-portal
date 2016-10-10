@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load assimilation %}
+{% load get_at_index %}
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
 * designed to manage the core business of higher education institutions,
@@ -228,29 +229,29 @@
                     <br>
                     {% trans 'criteria_question'%} :
                     <ol>
-                        {% for criteria in assimilationCriteria %}
+                        {% for criteria in assimilation_criteria %}
 
                             <div class="row">
                                 <div class="col-md-8">
-                                    <li>&nbsp;{{criteria.criteria}}</li>
+                                    <li>&nbsp;{{criteria|get_at_index:1}}</li>
                                 </div>
                                 <div class="col-md-4">
                                     <div>
                                         <label class="radio-inline">
-                                            <input type="radio" id="assimilation_criteria_{{forloop.counter}}_true"
-                                                   name="assimilation_criteria_{{criteria.id}}"
+                                            <input type="radio" id="assimilation_criteria_{{criteria|get_at_index:0}}_true"
+                                                   name="assimilation_criteria_{{criteria|get_at_index:0}}"
                                                    class="radio_assimilation_criteria"
                                                    value="true"
                                                    {% for applicant_criteria in applicant_assimilation_criteria %}
-                                                     {% if applicant_criteria.criteria.id == criteria.id and applicant_criteria.selected %} checked {% endif %}
+                                                     {% if applicant_criteria.criteria == criteria|get_at_index:0 and applicant_criteria.selected %} checked {% endif %}
                                                    {% endfor %}
                                             > {% trans 'yes' %}
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" id="assimilation_criteria_{{forloop.counter}}_false"
-                                                   name="assimilation_criteria_{{criteria.id}}"
+                                            <input type="radio" id="assimilation_criteria_{{criteria|get_at_index:0}}_false"
+                                                   name="assimilation_criteria_{{criteria|get_at_index:0}}"
                                                    value="false"
-                                                   {{applicant_assimilation_criteria|assimilation_criteria_radio:criteria.id }}
+                                                   {{applicant_assimilation_criteria|assimilation_criteria_radio:criteria }}
                                             > {% trans 'no' %}
                                         </label>
                                     </div>
@@ -258,19 +259,19 @@
                             </div>
 
                             <div class="row">
-                                <div id="pnl_criteria_{{criteria.id}}"
-                                     style="{{applicant_assimilation_criteria|div_visibility:criteria.id }}" >
+                                <div id="pnl_criteria_{{criteria|get_at_index:0}}"
+                                     {% if applicant_assimilation_criteria|div_visibility:criteria %}style="visibility:visible;display:block;"{%else%}style="visibility:hidden;display:none;"{%endif%}>
                                     <br>
-                                    <div {% if assimilation_basic_documents|table_display:criteria.id%} class="panel panel-default" {%endif%}>
+                                    <div {% if assimilation_basic_documents|table_display:criteria %} class="panel panel-default" {%endif%}>
 
-                                    {% if assimilation_basic_documents|table_display:criteria.id%}
-                                        <div class="panel-heading"><h4><strong>{% trans 'criteria'%} {{ criteria.id}}</strong></h4></div>
+                                    {% if assimilation_basic_documents|table_display:criteria%}
+                                        <div class="panel-heading"><h4><strong>{% trans 'criteria'%} {{forloop.counter}}</strong></h4></div>
                                         <div class="panel-body"></div>
                                         <!--It's normal that the table is outside of the body.  It's for a better display -->
                                         <table class="table table-bordered table-condensed" style="margin-top:-30px;">
                                     {%endif%}
                                     {%for doc in assimilation_basic_documents%}
-                                        {% if doc.criteria_id == criteria.id %}
+                                        {% if doc.criteria == criteria|get_at_index:0 %}
                                             {%if doc.first%}
                                                 <tr>
                                                     <td>
@@ -281,12 +282,13 @@
                                                                     <td>
                                                                         <button type="button"
                                                                                 class="{{assimilation_documents_existing|button_class_color:d }}"
-                                                                                id="btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}"
+                                                                                id="btn_load_assimilation_doc_{{doc.criteria}}_id_{{d}}"
                                                                                 title="{{assimilation_documents_existing|button_title:d }}"
+                                                                                style="margin-bottom:5px;"
                                                                                 data-toggle="modal"
                                                                                 data-target="#pnl_upload_documents">
                                                                             <span class="{{assimilation_documents_existing|button_class:d }}"
-                                                                                  id="spn_btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}"></span>&nbsp;Upload
+                                                                                  id="spn_btn_load_assimilation_doc_{{doc.criteria}}_id_{{d}}"></span>&nbsp;Upload
                                                                         </button>
                                                                     </td>
                                                                     <td>&nbsp;&nbsp;</td>
@@ -310,13 +312,13 @@
                                                                     <td>
                                                                         <button type="button"
                                                                                 class="{{assimilation_documents_existing|button_class_color:d }}"
-                                                                                id="btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}"
+                                                                                id="btn_load_assimilation_doc_{{doc.criteria}}_id_{{d}}"
                                                                                 title="{{assimilation_documents_existing|button_title:d }}"
                                                                                 style="margin-bottom:5px;"
                                                                                 data-toggle="modal"
                                                                                 data-target="#pnl_upload_documents">
                                                                             <span class="{{assimilation_documents_existing|button_class:d }}"
-                                                                                  id="spn_btn_load_assimilation_doc_{{doc.criteria_id}}_id_{{d}}">
+                                                                                  id="spn_btn_load_assimilation_doc_{{doc.criteria}}_id_{{d}}">
                                                                             </span>&nbsp;Upload
                                                                         </button>
                                                                     </td>
@@ -333,18 +335,20 @@
                                             {%endif%}
                                         {%endif%}
                                     {%endfor%}
-                                    {% if assimilation_basic_documents|table_display:criteria.id%}
-                                        {%if criteria.id == 5%}
+                                    {% if assimilation_basic_documents|table_display:criteria%}
+                                        {%if criteria|get_at_index:0 == 'CRITERIA_5'%}
                                             <tr><td colspan="2">&nbsp;&nbsp;{% trans 'and' as and_upper%} {{and_upper| upper}}</td></tr>
                                             <tr><td colspan="2">
                                                 <label>Documents demandés pour l’étudiant à adapter pour la personne concernée suivant le critère :</label>
-                                                <select id="slt_criteria_5" name="criteria_5"  class="form-control" >
+                                                <select id="slt_criteria_5" name="criteria_5" class="form-control">
                                                     <option value="" >-</option>
-                                                    <option value="1" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:1 }}>{% trans 'criteria' %} 1</option>
-                                                    <option value="2" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:2 }} >{% trans 'criteria' %} 2</option>
-                                                    <option value="3" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:3 }}>{% trans 'criteria' %} 3</option>
-                                                    <option value="4" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:4 }} >{% trans 'criteria' %} 4</option>
-                                                </select><div id="pnl_other_criteria"></div>
+                                                    <option value="CRITERIA_1" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:'CRITERIA_1' }}>{% trans 'criteria' %} 1</option>
+                                                    <option value="CRITERIA_2" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:'CRITERIA_2' }} >{% trans 'criteria' %} 2</option>
+                                                    <option value="CRITERIA_3" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:'CRITERIA_3' }}>{% trans 'criteria' %} 3</option>
+                                                    <option value="CRITERIA_4" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:'CRITERIA_4' }} >{% trans 'criteria' %} 4</option>
+                                                </select>
+                                                <br>
+                                                <div id="pnl_other_criteria"></div>
                                                 <br>
                                                 </td>
                                             </tr>

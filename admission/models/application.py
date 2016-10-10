@@ -35,7 +35,7 @@ from localflavor.generic.countries.sepa import IBAN_SEPA_COUNTRIES
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = ('applicant', 'offer_year', 'creation_date', 'application_type')
     fieldsets = ((None, {'fields': ('applicant', 'offer_year', 'application_type', 'applied_to_sameprogram',
-                                    'national_degree')}),)
+                                    'national_degree', 'valuation_possible')}),)
 
 
 class Application(models.Model):
@@ -65,8 +65,6 @@ class Application(models.Model):
     bank_account_bic = BICField(blank=True, null=True)
     bank_account_name = models.CharField(max_length=255, blank=True, null=True)
 
-    def __str__(self):
-        return u"%s" % self.offer_year
 
 
 def find_by_user(user):

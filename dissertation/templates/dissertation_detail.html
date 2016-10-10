@@ -39,23 +39,30 @@
             {% trans 'dissertation_history' %}
         </a>
     </li>
-        {% if dissertation.status == 'DRAFT' or dissertation.status == 'DIR_KO' %}
-            <a class="btn btn-default btn-warning pull-right"
-               href="{% url 'dissertation_delete' pk=dissertation.pk %}"
-               onclick="return confirm('{% trans 'delete_dissertation_confirmation_message' %}')"
-               title="{% trans 'delete'%}">
-                <span class="glyphicon glyphicon-remove"></span></a>
-            <a class="btn btn-default btn-primary pull-right "
-               href="{% url 'dissertation_edit' pk=dissertation.pk %}"
-               style="margin-right: 5px;"
-               title="{% trans 'edit'%}">
-                <span class="glyphicon glyphicon-edit"></span></a>
-        {% elif check_edit == True %}
-            <a class="btn btn-default btn-primary pull-right"
-               href="{% url 'dissertation_edit' pk=dissertation.pk %}"
-               title="{% trans 'edit'%}">
-                <span class="glyphicon glyphicon-edit"></span></a>
-        {% endif %}
+    {% if dissertation.status == 'DRAFT' or dissertation.status == 'DIR_KO' %}
+        <a class="btn btn-default btn-warning pull-right"
+           href="{% url 'dissertation_delete' pk=dissertation.pk %}"
+           onclick="return confirm('{% trans 'delete_dissertation_confirmation_message' %}')"
+           title="{% trans 'delete'%}">
+            <span class="glyphicon glyphicon-remove"></span></a>
+        <a class="btn btn-default btn-primary pull-right "
+           href="{% url 'dissertation_edit' pk=dissertation.pk %}"
+           style="margin-right: 5px;"
+           title="{% trans 'edit'%}">
+            <span class="glyphicon glyphicon-edit"></span></a>
+        <a class="btn btn-default btn-primary pull-right"
+           data-toggle="modal" data-target="#pnl_upload_documents"
+           id="btn_add_file"
+           style="margin-right: 5px;"
+           title="{% trans 'add_picture'%}">
+            <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_modify_picture"></span></a>
+    {% elif check_edit == True %}
+        <a class="btn btn-default btn-primary pull-right"
+           href="{% url 'dissertation_edit' pk=dissertation.pk %}"
+           style="margin-right: 5px;"
+           title="{% trans 'edit'%}">
+            <span class="glyphicon glyphicon-edit"></span></a>
+    {% endif %}
 </ul>
 <div class="panel panel-default">
     <div class="panel-body">
@@ -267,4 +274,259 @@
         </div>
     </div>
 </div>
+<!-- UploadFile modal -->
+{% include "new_document.html" %}
+{% endblock %}
+
+{% block script %}
+    <script>
+    //***************************
+    //File upload
+    //***************************
+    function update_description(description, elt){
+        $('#hdn_description').val(description);
+        $('#lbl_description_label').text(gettext(description.toLowerCase()));
+        $('#txt_file').val('');
+    }
+
+    $("#txt_file").on("change", function(){
+       var file = this.files[0];
+       fileName = file.name;
+       $("#hdn_filename").val(fileName);
+    });
+
+    $('[id^="bt_load_doc_"]').click(function(event) {
+        var target = $(event.target);
+        var id = target.attr("id");
+        var pos = id.indexOf('bt_load_doc_');
+        var description = id.substring(pos+12);
+        update_description(description, target);
+        display_existing_files(description);
+    });
+
+    $("#bt_upload_document").click(function(event) {
+        var target = $(event.target);
+        var id = target.attr("id");
+        var form = target.form;
+
+        var description = $("#hdn_description").val();
+        //Clear existing fields
+        $('#hdn_file_'+$("#txt_file").val()).remove();
+        $('#hdn_file_name_'+description).remove();
+        $('#hdn_file_description_'+description).remove();
+        var fileSelect = document.getElementById('txt_file');
+        var files = fileSelect.files;
+        var file = files[0];
+        var data = new FormData();
+        data.append('description', description);
+        data.append('storage_duration', 0);
+        data.append('content_type',file.type);
+        data.append('filename', $("#txt_file").val());
+        data.append('dissertation_id', $("#hdn_current_dissertation_id").val());
+
+
+        var accepted_types = ['application/csv',
+                              'application/doc',
+                              'application/pdf',
+                              'application/xls',
+                              'application/xlsx',
+                              'application/xml',
+                              'application/zip',
+                              'image/jpeg',
+                              'image/gif',
+                              'image/png',
+                              'text/html',
+                              'text/plain'];
+        if(file){
+            if ($.inArray(file.type,accepted_types) >= 0){
+                data.append('file', file);
+                $.ajax({
+                    url: "{% url 'save_uploaded_file' %}",
+                    enctype: 'multipart/form-data',
+                    type: 'POST',
+                    data : data,
+                    processData: false,
+                    contentType: false,
+                    complete: function(xhr, statusText){
+                        if(xhr.status=='0'){
+                            //problem occured
+                            $('#pnl_admission_error').remove();
+                            var msg_error = jQuery('<div class="alert alert-danger" id="pnl_admission_error">'+ gettext('error_occured')+'</span>');
+                            $('#pnl_admission_errors').append(msg_error);
+                            return false;
+                        }
+                        update_upload_btn_class(file, description);
+                    }
+
+                });
+                // update_upload_btn_class(file, description);
+                return true;
+            }else{
+                display_existing_files(description);
+                $("#txt_file").val('')
+                $('#pnl_upload_error').remove();
+                var msg_error = jQuery('<div class="alert alert-danger" id="pnl_upload_error">'+ file.name + ' : ' +gettext('invalid_content_type')+ ' </span>');
+                $('#pnl_modal_upload').append(msg_error);
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                return false;
+            }
+        }else{
+                display_existing_files(description);
+                $("#txt_file").val('')
+                $('#pnl_upload_error').remove();
+                var msg_error = jQuery('<div class="alert alert-warning" role="alert" id="pnl_upload_error">' +gettext('select_file')+ ' </div>');
+                $('#pnl_modal_upload').append(msg_error);
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                return false;
+        }
+
+
+    });
+
+    //***************************
+    //File upload - end
+    //***************************
+    function display_existing_files(description){
+        // To clear the div
+        $("#pnl_existing_files").html('')
+        $("#pnl_existing_files").find("a")
+            .remove()
+            .end()
+        $("#pnl_modal_upload").find("span").remove();
+        $.ajax({
+            url: "/admission/document?description=" + description
+        }).then(function(data) {
+            if(data.length > 0 ){
+                $('#pnl_existing_files').append("<br>");
+                $('#pnl_existing_files').append('<span style="text-decoration:underline;">Existing file :</span>');
+                $.each(data, function(key, value) {
+                    var url = build_url('upload/download/', value.id);
+                    $('#pnl_existing_files').append("<br>");
+                    $('#pnl_existing_files').append($("<a></a>").attr("href", url)
+                                                                .attr("target","_blank")
+                                                                .append(value.file_name));
+                    var bt = jQuery('<input  id="hdn_delete_document_file" type="hidden" value="'+value.id+'">');
+                    $('#pnl_existing_files').append(bt);
+                    $('#pnl_existing_files').append('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+                    bt = jQuery('<button type="submit" id="bt_delete_document_file" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-trash"></span></button>');
+                    $('#pnl_existing_files').append(bt);
+                });
+            }
+        });
+    }
+
+    function build_url(url_begin, value){
+        /*Todo try to use django url directly in href - Leila*/
+        var loc = location.href;
+        var count = 0;
+        var pos = loc.indexOf('/admission/');
+
+        pos = pos + 12;
+        while ( pos != -1 ) {
+           count++;
+           pos = loc.indexOf( "/",pos + 1 );
+        }
+        count=count-1;
+        var url = url_begin + value;
+        var cpt = 0;
+        while (cpt< count){
+            url = "../" + url
+            cpt=cpt+1;
+
+        }
+        return url;
+    }
+
+    function click_bt_delete_document_file(){
+        var document_file_id = $('#hdn_delete_document_file').val();
+        var description = $("#hdn_description").val();
+        var data = new FormData();
+        data.append('document_file_id', document_file_id);
+        $.ajax({
+            url: "{% url 'delete_document_file' %}",
+            type: 'POST',
+            data : data,
+            processData: false,
+            contentType: false
+
+        });
+        update_upload_btn_class('',description);
+        return true;
+    }
+
+    function update_upload_btn_class(file, description){
+        if(file != ''){
+            if(description == 'ID_PICTURE'){
+                $('#btn_modify_picture').attr('title', gettext('change_document'));
+                $('#btn_modify_picture').attr('class', 'btn btn-success ');
+                $('#spn_modify_picture').attr('class', 'glyphicon glyphicon-ok-circle');
+                $('#img_picture').css('visibility', 'visible').css('display','block');
+                $.ajax({
+                    url: "/admission/picture?description="+description
+                }).then(function(data) {
+                    if(data){
+                        if(data.content_type.startsWith('image')){
+                            $('#img_picture').attr('src','/admission'+data.file);
+                        }else{
+                           $('#img_picture').attr('src','');
+                           $('#img_picture').css('visibility', 'hidden').css('display','none');
+                        }
+                    }else{
+                        $('#img_picture').css('visibility', 'hidden').css('display','none');
+                    }
+                });
+            }
+
+            if(description == 'ID_CARD'){
+                $('#btn_modify_id_document').attr('title', gettext('change_document'));
+                $('#btn_modify_id_document').attr('class', 'btn btn-success pull-right');
+                $('#spn_modify_id_document').attr('class', 'glyphicon glyphicon-ok-circle');
+            }
+
+            $('[id$="'+description+'"]').each(function(){
+                if($(this).attr("id").startsWith('btn_load_assimilation_doc_')){
+                    $(this).attr('title', gettext('change_document'));
+                    $(this).attr('class', 'btn btn-success class_upload_assimilation');
+                    var spn_id = '#spn_' +$(this).attr("id");
+                    $(spn_id).attr('class', 'glyphicon glyphicon-ok-circle');
+                }
+                if( $(this).attr("id").startsWith('bt_load_doc_')){
+                    if($(this).attr("id")=='bt_load_doc_'+description  ){
+                        $(this).attr('title', gettext('change_document'));
+                        $(this).attr('class', 'btn btn-success');
+                        var spn_id = '#spn_' +$(this).attr("id");
+                        $(spn_id).attr('class', 'glyphicon glyphicon-ok-circle');
+                    }
+                }
+            });
+        } else {
+            if(description == 'ID_PICTURE'){
+                $('#btn_modify_picture').attr('title', gettext('add_document'));
+                $('#btn_modify_picture').attr('class', 'btn');
+                $('#spn_modify_picture').attr('class', 'glyphicon glyphicon-upload');
+                $('#img_picture').attr('src','');
+                $('#img_picture').css('visibility', 'hidden').css('display','none');
+            }
+
+            if(description == 'ID_CARD'){
+                $('#btn_modify_id_document').attr('title', gettext('add_document'));
+                $('#btn_modify_id_document').attr('class', 'btn btn-default pull-right');
+                $('#spn_modify_id_document').attr('class', 'glyphicon glyphicon-upload');
+            }
+
+            $('[id$="'+description+'"]').each(function() {
+                if($(this).attr("id").startsWith('btn_load_assimilation_doc_') || $(this).attr("id").startsWith('bt_load_doc_')) {
+                    if($(this).attr("id")=='bt_load_doc_'+description || $(this).attr("id").startsWith('btn_load_assimilation_doc_')){
+                        $(this).attr('title', gettext('add_document'));
+                        $(this).attr('class', 'btn');
+                        var spn_id = '#spn_' +$(this).attr("id");
+                        $(spn_id).attr('class', 'glyphicon glyphicon-upload');
+                    }
+                }
+            });
+        }
+    }
+    </script>
 {% endblock %}
