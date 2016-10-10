@@ -27,7 +27,6 @@ from datetime import datetime
 from django.conf import settings
 
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils import translation
@@ -440,7 +439,7 @@ def profile(request, application_id=None, message_success=None):
     else:
         institution_name = None
 
-    assimilation_criterias = assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES
+    assimilation_criteria = assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES
     applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
 
     if application is None:
@@ -454,7 +453,7 @@ def profile(request, application_id=None, message_success=None):
         'applicant': applicant,
         'applicant_form': applicant_form,
         'countries': countries,
-        'assimilation_criteria': assimilation_criterias,
+        'assimilation_criteria': assimilation_criteria,
         'applicant_assimilation_criteria': applicant_assimilation_criteria,
         'person_legal_address': person_legal_address,
         'person_contact_address': person_contact_address,

@@ -33,6 +33,7 @@ class DocumentTypeAssimilationAdmin(admin.ModelAdmin):
 
 
 class DocumentTypeAssimilation(models.Model):
-    assimilation_criteria = models.CharField(max_length=50, choices=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES)
+    assimilation_criteria = models.CharField(max_length=50,
+                                             choices=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES)
     document_type = models.CharField(max_length=50)
 
