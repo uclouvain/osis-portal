@@ -26,10 +26,10 @@
 ############################################################################
 
 
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist
-from base.models.student import find_by_user, find_by_registration_id, Student
+from base.models.student import find_by_user, find_by_registration_id
 from base.models import offer_enrollment as mdl_offer_enrollment
 from base.models import offer_year as mdl_offer_year
 from performance import models as mdl_performance
@@ -105,15 +105,18 @@ def student_programs(request, registration_id):
 
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
-def student_result(request, registration_id, anac, program_acronym):
+def student_result(request, registration_id, offer_year_id):
     """
     View to visualize a particular student program courses result.
     !!! Should only be open for staff having the rights.
     """
     stud = get_student_by_registration_id(registration_id)
-
-    query_result = mdl_performance.student_performance.select_where_registration_id_is(stud.registration_id)
-    document = filter_by_anac_and_program_acronym(query_result, anac, program_acronym)
+    offer_year = mdl_offer_year.find_by_id(offer_year_id)
+    stud_perf = mdl_performance.student_performance.find_by_student_and_offer_year(student=stud, offer_year=offer_year)
+    if stud_perf:
+        document = stud_perf.data
+    else:
+        document = None
 
     return layout.render(request, "performance_result.html", {"results": document})
 
@@ -121,7 +124,7 @@ def student_result(request, registration_id, anac, program_acronym):
 # *************************** UTILITY FUNCTIONS
 
 
-def get_student_by_registration_id(registration_id):
+def get_student_by_registration_id(registration_id):  # TODO test
     """
     Get the student having the corresponding registration_id.
     :param registration_id: a string
@@ -134,7 +137,7 @@ def get_student_by_registration_id(registration_id):
     return stud
 
 
-def fetch_student_programs_list(stud):
+def fetch_student_programs_list(stud):  # todo TEST
     """
     Fetch the student programs of the student "stud"
     :param stud: a student object
@@ -148,7 +151,7 @@ def fetch_student_programs_list(stud):
     return list_student_programs
 
 
-def query_result_to_list(query_result):
+def query_result_to_list(query_result):  # todo TEST
     """
     Parse the query result (a lisf of offer enrollments),
     to a list of dictonnary.
@@ -161,27 +164,9 @@ def query_result_to_list(query_result):
         d["year"] =  row.offer_year.academic_year
         d["anac"] = row.offer_year.academic_year.year
         d["acronym"] = row.offer_year.acronym
-        d["formatted_acronym"] = mdl_performance.student_performance.format_acronym(row.offer_year.acronym)
         d["title"] = row.offer_year.title
         d["program_id"] = row.offer_year.id
         l.append(d)
     return l
 
 
-def filter_by_anac_and_program_acronym(query_result, anac, program_acronym):
-    """
-    Return the document which have anac equals to "anac" and program id
-    equals to "program_id" from the query_results.
-    :param query_result: a n1ql query object
-    :param anac: a string
-    :param program_acronym: a string
-    :return: a json document
-    """
-    for row in query_result:
-        academic_year = row["performance"]["academic_years"][0]
-        program = academic_year["programs"][0]
-        if academic_year["anac"] == anac and \
-                        mdl_performance.student_performance.format_acronym(program["acronym"]) \
-                        == mdl_performance.student_performance.format_acronym(program_acronym):
-            return row["performance"]
-    return None
