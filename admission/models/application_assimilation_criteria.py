@@ -25,6 +25,7 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from reference.enums import assimilation_criteria as assimilation_criteria_enum
 
 
 class ApplicationAssimilationCriteriaAdmin(admin.ModelAdmin):
@@ -33,9 +34,9 @@ class ApplicationAssimilationCriteriaAdmin(admin.ModelAdmin):
 
 class ApplicationAssimilationCriteria(models.Model):
     application = models.ForeignKey('Application')
-    criteria = models.ForeignKey('reference.AssimilationCriteria')
-    additional_criteria = models.ForeignKey('reference.AssimilationCriteria', blank=True, null=True,
-                                            related_name='application_additional_criteria')
+    criteria = models.CharField(max_length=50, choices=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES)
+    additional_criteria = models.CharField(max_length=50, blank=True, null=True,
+                                           choices=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES)
     selected = models.NullBooleanField(null=True, blank=True)
 
 

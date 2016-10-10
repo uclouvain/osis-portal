@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from reference.models import assimilation_criteria
 from reference.models import country
 from reference.models import decree
 from reference.models import domain
