@@ -1408,3 +1408,6 @@ msgid "institution_not_found_question"
 msgstr ""
 "Vous n'avez pas trouvé votre établissement dans cette liste?"
 "ci-après"
+
+msgid "mandatory_file_recto_verso"
+msgstr "Fichiers recto et verso obligatoires"

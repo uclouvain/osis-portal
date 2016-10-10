@@ -1390,3 +1390,6 @@ msgid "institution_not_found_question"
 msgstr ""
 "You didn't find your institute in the list?"
 "below."
+
+msgid "mandatory_file_recto_verso"
+msgstr "Mandatory files for recto and verso"
