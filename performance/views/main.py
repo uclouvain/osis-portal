@@ -29,11 +29,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist
-from base.models.student import find_by_user, Student
+from base.models.student import find_by_user, find_by_registration_id, Student
 from base.models import offer_enrollment as mdl_offer_enrollment
+from base.models import offer_year as mdl_offer_year
 from performance import models as mdl_performance
 from performance.forms import RegistrationIdForm
 from base.views import layout
+
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
@@ -53,15 +55,20 @@ def home(request):
 def performance_administration(request):
     return layout.render(request, 'admin/performance_administration.html')
 
+
 @login_required
 @permission_required('base.is_student', raise_exception=True)
-def result_by_year_and_program(request, anac, program_acronym):
+def result_by_year_and_program(request, offer_year_id):
     """
     Display the student result for a particular year and program.
     """
     stud = find_by_user(request.user)
-    query_result = mdl_performance.student_performance.select_where_registration_id_is(stud.registration_id)
-    document = filter_by_anac_and_program_acronym(query_result, anac, program_acronym)
+    offer_year = mdl_offer_year.find_by_id(offer_year_id)
+    stud_perf = mdl_performance.student_performance.find_by_student_and_offer_year(student=stud, offer_year=offer_year)
+    if stud_perf:
+        document = stud_perf.data
+    else:
+        document = None
     return layout.render(request, "performance_result.html", {"results": document})
 
 
@@ -89,11 +96,7 @@ def student_programs(request, registration_id):
     View to visualize a particular student list of academic programs.
     !!! Should only be open for staff having the rights.
     """
-    try:
-        stud = Student.objects.get(registration_id=registration_id)
-    except ObjectDoesNotExist:
-        stud = None
-
+    stud = get_student_by_registration_id(registration_id)
     list_student_programs = fetch_student_programs_list(stud)
 
     return layout.render(request, "performance_home.html", {"student": stud,
@@ -107,10 +110,7 @@ def student_result(request, registration_id, anac, program_acronym):
     View to visualize a particular student program courses result.
     !!! Should only be open for staff having the rights.
     """
-    try:
-        stud = Student.objects.get(registration_id=registration_id)
-    except ObjectDoesNotExist:
-        stud = None
+    stud = get_student_by_registration_id(registration_id)
 
     query_result = mdl_performance.student_performance.select_where_registration_id_is(stud.registration_id)
     document = filter_by_anac_and_program_acronym(query_result, anac, program_acronym)
@@ -119,6 +119,19 @@ def student_result(request, registration_id, anac, program_acronym):
 
 
 # *************************** UTILITY FUNCTIONS
+
+
+def get_student_by_registration_id(registration_id):
+    """
+    Get the student having the corresponding registration_id.
+    :param registration_id: a string
+    :return: a student object or none
+    """
+    try:
+        stud = find_by_registration_id(registration_id)
+    except ObjectDoesNotExist:
+        stud = None
+    return stud
 
 
 def fetch_student_programs_list(stud):

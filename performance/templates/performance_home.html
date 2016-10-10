@@ -76,7 +76,7 @@
                             {{row.acronym}}
                         </a>
                     {% else %}
-                        <a href="{% url 'performance_result' anac=row.anac program_acronym=row.formatted_acronym%}">
+                        <a href="{% url 'performance_result' offer_year_id=row.program_id %}">
                             {{row.acronym}}
                         </a>
                     {% endif %}

@@ -30,6 +30,7 @@ from couchbase.exceptions import CouchbaseError, BucketNotFoundError, AuthError,
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.contrib import admin
+from django.core.exceptions import ObjectDoesNotExist
 from base.models.serializable_model import SerializableModel
 
 
@@ -160,3 +161,29 @@ class StudentPerformance(SerializableModel):
         return
 
 
+def search(student=None, offer_year=None):
+    """
+        Search students by optional arguments. At least one argument should be informed
+        otherwise it returns empty.
+    """
+    has_criteria = False
+    student_performances = StudentPerformance.objects
+    if student:
+        student_performances.filter(student=student)
+        has_criteria = True
+    if offer_year:
+        student_performances.filter(offer_year=offer_year)
+        has_criteria = True
+
+    if has_criteria:
+        return student_performances
+    else:
+        return None
+
+
+def find_by_student_and_offer_year(student, offer_year):
+    try:
+      result = StudentPerformance.objects.get(student=student, offer_year=offer_year)
+    except ObjectDoesNotExist:
+        result = None
+    return result
