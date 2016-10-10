@@ -26,7 +26,7 @@
 from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-from .secondary_education import NATIONAL_COMMUNITY_TYPES
+from reference.enums.education_institution_national_comunity import NATIONAL_COMMUNITY_TYPES
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -69,8 +69,8 @@ class Curriculum(models.Model):
         ('FULL_EXERCISE', _('full_exercise'))
     )
     person = models.ForeignKey('Applicant')
-    academic_year = models.ForeignKey('AcademicYear')
-    path_type = models.CharField(max_length=25, choices=PATH_TYPES)
+    academic_year = models.ForeignKey('base.AcademicYear')
+    path_type = models.CharField(max_length=25, choices=PATH_TYPES, blank=True, null=True)
     national_education = models.CharField(max_length=20, choices=NATIONAL_COMMUNITY_TYPES, blank=True, null=True)
     language = models.ForeignKey('reference.Language', blank=True, null=True)
     national_institution = models.ForeignKey('reference.EducationInstitution', blank=True, null=True)
@@ -108,7 +108,7 @@ def find_by_person_year(a_person, year):
     return Curriculum.objects.filter(person=a_person, academic_year__year=year).first()
 
 
-def find_belgian_french(a_person, an_academic_year):
+def find_local_french(a_person, an_academic_year):
     path_types = ['LOCAL_UNIVERSITY', 'LOCAL_HIGH_EDUCATION']
     return Curriculum.objects.filter(person=a_person,
                                      path_type__in=path_types,

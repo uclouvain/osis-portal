@@ -24,26 +24,7 @@
 #
 ##############################################################################
 from django.apps import AppConfig
-from frontoffice.queue import queue
-import json
-import performance.models as mdl
 
 
 class PerformanceConfig(AppConfig):
     name = 'performance'
-
-    def ready(self):
-        # if django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
-        # ===> This exception says that there is an error in the implementation of method ready(self) !!
-        queue.listen_queue(self.name, insert_or_update)
-
-
-def insert_or_update(json_data):
-    """
-        Insert the records in CouchBase. If the records already exist, then the method makes an update.
-    """
-    data = json.loads(json_data.decode("utf-8"))
-    key = mdl.student_performance.key_from_json(data)
-    mdl.student_performance.save_document(key, data)
-
-

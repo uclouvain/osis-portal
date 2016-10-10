@@ -1351,5 +1351,45 @@ msgstr "6th paycheck"
 msgid "no_doc"
 msgstr "No document available"
 
+msgid "mandatory_file"
+msgstr "Mandatory file"
+
+msgid "equivalence"
+msgstr "Equivalence"
+
+msgid "prerequisites_min_data"
+msgstr "You must have, at least, an secondary diploma or a professional exam or an admission exam or a local language exam"
+
+
 msgid "validation_errors"
 msgstr " field(s) stop(s) the tab validation"
+
+msgid "msg_one_prerequisite"
+msgstr ""
+"You must at minimum have a diploma for high school, a professional exam, an admission exam or a local language exam"
+
+msgid "question_lottery_number"
+msgstr "Please mention your lottery number"
+
+msgid "master_60"
+msgstr "Master 60"
+
+msgid "master_120"
+msgstr "Master 120"
+
+msgid "master_180_240"
+msgstr "Master 180 or 240"
+
+msgid "advanced_master"
+msgstr "Advanced master"
+
+msgid "capaes"
+msgstr "Capaes"
+
+msgid "institution_not_found_question"
+msgstr ""
+"You didn't find your institute in the list?"
+"below."
+
+msgid "mandatory_file_recto_verso"
+msgstr "Mandatory files for recto and verso"

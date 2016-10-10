@@ -41,16 +41,7 @@ def init(request):
             "tab_sociological": True,
             "tab_attachments": True,
             "tab_submission": True}
-    #
-    # applicant = mdl.applicant.find_by_user(request.user)
-    # if not demande_validation.validate_profil(applicant):
-    #     tabs['tab_applications'] = False
-    #     tabs['tab_diploma'] = False
-    #     tabs['tab_curriculum'] = False
-    #     tabs['tab_accounting'] = False
-    #     tabs['tab_sociological'] = False
-    #     tabs['tab_attachments'] = False
-    #     tabs['tab_submission'] = False
+
     return tabs
 
 

@@ -1,5 +1,6 @@
 {% load staticfiles %}
 {% load i18n %}
+{% load get_at_index %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -57,13 +58,15 @@
     </div>
 <form method="post" action="{% url 'save_offer_selection' %}" id="form_questions">
     <input type="hidden" value="{{application.id | default_if_none:''}}" id="hdn_application_id">
-    <input type="hidden" value="{{application.offer_year.grade_type.grade}}" id="hdn_application_grade">
-    <input type="hidden" value="{{application.offer_year.grade_type.id}}" id="hdn_application_grade_type_id">
-    <input type="hidden" value="{{application.offer_year.domain.id}}" id="hdn_application_domain_id" title="dom">
+    <input type="hidden" value="{{application.offer_year.grade_type.name}}" id="hdn_application_grade">
+    <input type="hidden" value="{{application.offer_year.grade_type.institutional_grade_type}}" id="hdn_application_grade_type_id">
+    <input type="hidden" value="{{application.offer_year.find_domain.domain.id}}" id="hdn_application_domain_id">
     <input type="hidden" value="{{application.offer_year.id}}" id="hdn_application_offer_year_id" name="hdn_application_offer_year_id">
-    <input type="hidden" value="{{application.national_degree}}" id="hdn_belgian_degree">
+    <input type="hidden" value="{{application.national_degree| default_if_none:''}}" id="hdn_local_degree">
     <input type="hidden" value="{{application.started_similar_studies}}" id="hdn_started_samestudies">
     <input type="hidden" value="{{application.applied_to_sameprogram}}" id="hdn_applied_to_sameprogram">
+    <input type="hidden" value="{{application.valuation_possible}}" id="hdn_valuation_possible">
+    <input type="hidden" value="" name="next_tab" id="demande_next_tab">
 
     <br>
     {% trans 'instruction_offer_selection_part1' %}
@@ -76,7 +79,7 @@
     <select class="form-control" id="slt_offer_type" name="type" >
         <option value="" selected>...</option>
     {% for grade_choice in grade_choices %}
-         <option value="{{grade_choice.0}}" >{{grade_choice.1}}</option>
+         <option value="{{grade_choice|get_at_index:0}}" >{{grade_choice|get_at_index:1}}</option>
     {% endfor %}
     </select>
     <br>
@@ -128,7 +131,7 @@
 
     <!--Static questions :-->
     <div id="pnl_static_questions">
-        <div id="pnl_offer_belgiandegree" style="visibility:hidden;display:none;">
+        <div id="pnl_offer_localdegree" style="visibility:hidden;display:none;">
 
             <div class="row">
                 <div class="col-md-8">
@@ -138,15 +141,15 @@
                 <div class="col-md-4">
                     <div>
                         <label class="radio-inline">
-                            <input type="radio" id="rdb_offer_belgiandegree_true" name="rdb_offer_belgiandegree"
+                            <input type="radio" id="rdb_offer_localdegree_true" name="rdb_offer_localdegree"
                                    value="true"
-                                   {% if application.belgian_degree %}checked{%endif%}
+                                   {% if application.national_degree %}checked{%endif%}
                             > {% trans 'yes'%}
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" id="rdb_offer_belgiandegree_false" name="rdb_offer_belgiandegree"
+                            <input type="radio" id="rdb_offer_localdegree_false" name="rdb_offer_localdegree"
                                    value="false"
-                                   {% if application.belgian_degree %}{%else%}checked{%endif%}
+                                   {% if application.national_degree %}{%else%}checked{%endif%}
                             > {% trans 'no'%}
                         </label>
                     </div>
@@ -164,13 +167,13 @@
                 <div class="col-md-4">
                     <div>
                         <label class="radio-inline">
-                            <input type="radio" id="rdb_offer_vae_true" name="rdb_offer_vae" value="true"
-                                   {% if application.vae %}checked{%endif%}
+                            <input type="radio" id="rdb_valuation_possible_true" name="valuation_possible" value="true"
+                                   {% if application.valuation_possible %} checked{%endif%}
                             > {% trans 'yes'%}
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" id="rdb_offer_vae_false" name="rdb_offer_vae" value="false"
-                                   {% if application.vae %}{%else%}checked{%endif%}
+                            <input type="radio" id="rdb_valuation_possible_false" name="valuation_possible" value="false"
+                                   {% if application.valuation_possible %}{%else%} checked{%endif%}
                             > {% trans 'no'%}
                         </label>
                     </div>
@@ -299,51 +302,28 @@
     </div>
 
     <br>
-
-        <input type="hidden"
-           id="hdn_secondary_education_local_language_exam"
-           name="secondary_education_local_language_exam"
-           value="{% if local_language_exam %} true {% else %} false {% endif %}" >
-    <input type="hidden"
-           id="hdn_secondary_education_local_language_exam_date"
-           name="secondary_education_local_language_exam_date"
-           value="{{local_language_exam.exam_date | default_if_none:'' | date:"d/m/Y" }}" >
-    <input type="hidden"
-           id="hdn_secondary_education_local_language_exam_institution"
-           name="secondary_education_local_language_exam_institution"
-           value="{{local_language_exam.institution}}" >
-    <input type="hidden"
-           id="hdn_secondary_education_local_language_exam_result"
-           name="secondary_education_local_language_exam_result"
-           value="{{local_language_exam.result| default_if_none:''}}" >
-    <input type="hidden"
-           id="hdn_person_registration_id"
-           value="{{application.applicant.registration_id| default_if_none:''}}" >
-    <input type="hidden"
-           id="hdn_local_language_exam_needed"
-           value="{{local_language_exam_needed}}" >
-    {% include "diploma/local_language_exam.html" %}
-
-</form>
     <span id="txt_message_error_offer_down"
            class="alert alert-warning"
            style="visibility:hidden;display:none;"></span><br>
 
-<div class="row">
-    <div class="col-md-6">
-        <a id="lnk_previous_offer_step"
-           class="btn btn-default"
-           href="#"
-           title="{% trans 'profile'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-            {%trans 'previous_step'%} : {%trans 'profile'%}</a>
+    <div class="row">
+        <div class="col-md-6">
+            <a id="lnk_previous_offer_step"
+               class="btn btn-default"
+               href="#"
+               title="{% trans 'profile'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+                {%trans 'previous_step'%} : {%trans 'profile'%}</a>
+        </div>
+        <div class="col-md-6">
+            <a id="lnk_next_offer_step"
+               class="btn btn-default pull-right"
+               href="{%if application.id %}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
+               title="{% trans 'diploma'%}">{%trans 'next_step'%} : {%trans 'tab_diplomas'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+                </a>
+        </div>
     </div>
-    <div class="col-md-6">
-        <a id="lnk_next_offer_step"
-           class="btn btn-default pull-right"
-           href="{%if application.id %}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
-           title="{% trans 'diploma'%}">{%trans 'next_step'%} : {%trans 'tab_diplomas'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            </a>
-    </div>
-</div>
+</form>
+
+
 
 

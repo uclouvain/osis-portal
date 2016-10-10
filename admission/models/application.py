@@ -30,22 +30,21 @@ from django.core.exceptions import ObjectDoesNotExist
 from admission.models import applicant
 from localflavor.generic.models import IBANField, BICField
 from localflavor.generic.countries.sepa import IBAN_SEPA_COUNTRIES
+from admission.models.enums import application_type
 
 
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = ('applicant', 'offer_year', 'creation_date', 'application_type')
     fieldsets = ((None, {'fields': ('applicant', 'offer_year', 'application_type', 'applied_to_sameprogram',
-                                    'national_degree')}),)
+                                    'national_degree', 'valuation_possible')}),)
 
 
 class Application(models.Model):
-    APPLICATION_TYPE = (('ADMISSION', _('admission')),
-                        ('INSCRIPTION', _('inscription')))
 
     applicant = models.ForeignKey('Applicant')
-    offer_year = models.ForeignKey('OfferYear')
+    offer_year = models.ForeignKey('base.OfferYear')
     creation_date = models.DateTimeField(auto_now=True)
-    application_type = models.CharField(max_length=20, choices=APPLICATION_TYPE)
+    application_type = models.CharField(max_length=20, choices=application_type.APPLICATION_TYPE_CHOICES)
     national_degree = models.NullBooleanField(default=None)
     valuation_possible = models.NullBooleanField(default=None)
     started_similar_studies = models.NullBooleanField(default=None)
@@ -64,9 +63,6 @@ class Application(models.Model):
     bank_account_iban = IBANField(include_countries=IBAN_SEPA_COUNTRIES, blank=True, null=True)
     bank_account_bic = BICField(blank=True, null=True)
     bank_account_name = models.CharField(max_length=255, blank=True, null=True)
-
-    def __str__(self):
-        return u"%s" % self.offer_year
 
 
 def find_by_user(user):
@@ -102,3 +98,10 @@ def init_application(user):
     application = Application()
     application.applicant = person_application
     return application
+
+
+def define_application_type(national_degree, user):
+    person_application = applicant.Applicant.objects.get(user=user)
+    if person_application.nationality.european_union and national_degree:
+        return application_type.INSCRIPTION
+    return application_type.ADMISSION

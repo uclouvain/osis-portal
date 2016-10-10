@@ -33,6 +33,9 @@ admin.site.register(assimilation_criteria.AssimilationCriteria,
 admin.site.register(country.Country,
                     country.CountryAdmin)
 
+admin.site.register(decree.Decree,
+                    decree.DecreeAdmin)
+
 admin.site.register(domain.Domain,
                     domain.DomainAdmin)
 

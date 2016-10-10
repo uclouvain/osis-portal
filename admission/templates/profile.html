@@ -26,7 +26,9 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-    <form method="post" action="{%if application.id%}{% url 'profile' application.id%}{%else%}{% url 'profile'%}{%endif%}" id="form_profile">
+    <form method="post"
+          action="{%if application.id%}{% url 'profile' application.id%}{%else%}{% url 'profile'%}{%endif%}"
+          id="form_profile">
         {% csrf_token %}
         <div class="row">
             <div class="col-md-8">
@@ -235,7 +237,7 @@
                                 <div class="col-md-4">
                                     <div>
                                         <label class="radio-inline">
-                                            <input type="radio" id="assimilation_criteria_{{forloop.counter}}_true"
+                                            <input type="radio" id="assimilation_criteria_{{criteria.id}}_true"
                                                    name="assimilation_criteria_{{criteria.id}}"
                                                    class="radio_assimilation_criteria"
                                                    value="true"
@@ -245,7 +247,7 @@
                                             > {% trans 'yes' %}
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" id="assimilation_criteria_{{forloop.counter}}_false"
+                                            <input type="radio" id="assimilation_criteria_{{criteria.id}}_false"
                                                    name="assimilation_criteria_{{criteria.id}}"
                                                    value="false"
                                                    {{applicant_assimilation_criteria|assimilation_criteria_radio:criteria.id }}

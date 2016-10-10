@@ -31,11 +31,18 @@ from osis_common import models as mdl_common
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from admission.views import assimilation_criteria as assimilation_criteria_view
-from admission.models.enums import document_type
 from django.utils.translation import ugettext_lazy as _
+from admission.models.enums import document_type
+from admission.models.enums import application_type
 
 
 ALERT_MANDATORY_FIELD = _('mandatory_field')
+ALERT_MANDATORY_FILE = _('mandatory_file')
+ALERT_MANDATORY_FILE_RECTO_VERSO = _('mandatory_file_recto_verso')
+PROFESSIONAL_TYPE = 'PROFESSIONAL'
+ADMISSION_EXAM_TYPE = 'ADMISSION'
+LANGUAGE_EXAM_TYPE = 'LANGUAGE'
+
 
 def validate_profil(applicant, user):
     if applicant.user.last_name is None \
@@ -54,15 +61,13 @@ def validate_profil(applicant, user):
         return False
 
     applicant_legal_adress = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
-    if applicant_legal_adress is None:
-        return False
-    else:
-        if applicant_legal_adress.street is None \
+    if applicant_legal_adress is None \
+            or (applicant_legal_adress.street is None \
                 or applicant_legal_adress.number is None \
                 or applicant_legal_adress.postal_code is None \
                 or applicant_legal_adress.city is None \
-                or applicant_legal_adress.country is None:
-            return False
+                or applicant_legal_adress.country is None):
+        return False
     if applicant.nationality and not applicant.nationality.european_union:
         applicant_assimilation_criterias = mdl.applicant_assimilation_criteria.find_by_applicant(applicant)
         if not applicant_assimilation_criterias:
@@ -88,7 +93,7 @@ def validate_profil(applicant, user):
                 return False
     assimilation_criteria_list = mdl.applicant_assimilation_criteria.find_by_applicant(applicant)
     for assimilation_criteria in assimilation_criteria_list:
-        docs_needed = assimilation_criteria_view.get_list_docs(assimilation_criteria.criteria.id)
+        docs_needed = assimilation_criteria_view.get_list_documents_descriptions(assimilation_criteria.criteria.id)
         for doc_needed in docs_needed:
             doc = mdl_common.document_file.search(user, doc_needed)
             if not doc.exists():
@@ -115,33 +120,31 @@ def validate_diploma(application, user):
         if secondary_education.diploma is not True \
             and admission_exam is None \
             and professional_exam is None \
-            and local_language_exam is None:
-            return False
+                and local_language_exam is None:
+            validation_messages['diploma'] = _('msg_one_prerequisite')
         else:
             if secondary_education.diploma is True and secondary_education.national is True:
                 if secondary_education.academic_year is None:
                     validation_messages['academic_year'] = ALERT_MANDATORY_FIELD
                 if secondary_education.national_community is None:
-                    validation_messages['belgian_community'] = ALERT_MANDATORY_FIELD
+                    validation_messages['local_community'] = ALERT_MANDATORY_FIELD
                 else:
-                    if secondary_education.national_community == 'FRENCH':
-                        if secondary_education.academic_year.year < 1994:
-                            if secondary_education.dipl_acc_high_educ is None:
-                                validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
+                    if secondary_education.national_community == 'FRENCH' \
+                            and secondary_education.academic_year.year < 1994 \
+                            and secondary_education.dipl_acc_high_educ is None:
+                        validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
 
-                    if secondary_education.national_community == 'DUTCH':
-
-                        if secondary_education.academic_year.year < 1992:
-                            if secondary_education.dipl_acc_high_educ is None:
-                                validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
+                    if secondary_education.national_community == 'DUTCH' \
+                            and secondary_education.academic_year.year < 1992 \
+                            and secondary_education.dipl_acc_high_educ is None:
+                        validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
 
                 if secondary_education.national_institution is None:
                     validation_messages['school'] = _('msg_school_name')
                 else:
-                    if secondary_education.national_institution.national_community == 'FRENCH':
-                        # Belgian school
-                        if secondary_education.education_type is None:
-                            validation_messages['pnl_teaching_type'] = _('msg_error_education_type')
+                    if secondary_education.national_institution.national_community == 'FRENCH' \
+                            and secondary_education.education_type is None:
+                        validation_messages['pnl_teaching_type'] = _('msg_error_education_type')
 
                 if secondary_education.academic_year.year < 1994:
                     if secondary_education.path_repetition is None:
@@ -154,9 +157,24 @@ def validate_diploma(application, user):
                 doc_recto = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_RECTO)
                 doc_verso = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_VERSO)
                 if doc_recto.exists() is False or doc_verso.exists() is False:
-                    validation_messages['national_diploma_doc'] = ALERT_MANDATORY_FIELD
-    return validation_messages
+                    validation_messages['national_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
+                if application.application_type == application_type.ADMISSION:
+                    doc_recto = mdl.application_document_file.search(application, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
+                    doc_verso = mdl.application_document_file.search(application, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO)
+                    if doc_recto.exists() is False or doc_verso.exists() is False:
+                        validation_messages['high_school_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
 
+            if professional_exam:
+                if professional_exam.exam_date is None:
+                    validation_messages['professional_exam_date'] = ALERT_MANDATORY_FIELD
+                if professional_exam.institution is None:
+                    validation_messages['professional_exam_institution'] = ALERT_MANDATORY_FIELD
+                if professional_exam.result is None:
+                    validation_messages['professional_exam_result'] = ALERT_MANDATORY_FIELD
+                doc = mdl.application_document_file.search(application, document_type.PROFESSIONAL_EXAM_CERTIFICATE)
+                if doc.exists() is False:
+                    validation_messages['professional_exam_doc'] = ALERT_MANDATORY_FIELD
+    return validation_messages
 
 
 def validate_curriculum(application):
@@ -181,7 +199,7 @@ def validate_submission():
 
 def get_validation_status(application, applicant, user):
     diploma_tab_valid = True
-    msgs = validate_diploma(application, user),
+    msgs = validate_diploma(application, user)
     if len(msgs) > 0:
         diploma_tab_valid = False
 
@@ -193,4 +211,5 @@ def get_validation_status(application, applicant, user):
         "validated_accounting":         validate_accounting(),
         "validated_sociological":       validate_sociological(),
         "validated_attachments":        validate_attachments(),
-        "validated_submission":         validate_submission()}
+        "validated_submission":         validate_submission(),
+        "validation_messages":          msgs}

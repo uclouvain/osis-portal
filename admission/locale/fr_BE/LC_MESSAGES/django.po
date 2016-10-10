@@ -1369,5 +1369,45 @@ msgstr "Il reste des erreurs qui empêche la validation de l'onglet"
 msgid "no_doc"
 msgstr "Pas de document"
 
+msgid "mandatory_file"
+msgstr "Fichier obligatoire"
+
+msgid "equivalence"
+msgstr "Equivalence"
+
+msgid "prerequisites_min_data"
+msgstr "Vous devez au minimum avoir un diplôme d'études secondaire, un examen professionnel/d'admission/de langue française"
+
 msgid "validation_errors"
 msgstr " champ(s) empêche(nt) la validation de l'onglet"
+
+msgid "msg_one_prerequisite"
+msgstr ""
+"Vous devez au minimum être en possession d'un diplome d'étude secondaires, d'une expérience professionnelle, d'un "
+"examen d'admission ou encore d'un examen de langue française"
+
+msgid "question_lottery_number"
+msgstr "Veuillez indique le numéro que le Service d'inscription vous a fourni"
+
+msgid "master_60"
+msgstr "Master 60"
+
+msgid "master_120"
+msgstr "Master 120"
+
+msgid "master_180_240"
+msgstr "Master 180 or 240"
+
+msgid "advanced_master"
+msgstr "Advanced master"
+
+msgid "capaes"
+msgstr "Capaes"
+
+msgid "institution_not_found_question"
+msgstr ""
+"Vous n'avez pas trouvé votre établissement dans cette liste?"
+"ci-après"
+
+msgid "mandatory_file_recto_verso"
+msgstr "Fichiers recto et verso obligatoires"
