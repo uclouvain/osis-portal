@@ -72,7 +72,7 @@ class Dissertation(SerializableModel):
     author = models.ForeignKey(student.Student)
     status = models.CharField(max_length=12, choices=STATUS_CHOICES, default='DRAFT')
     defend_periode = models.CharField(max_length=12, choices=DEFEND_PERIODE_CHOICES, default='UNDEFINED')
-    defend_year = models.IntegerField()
+    defend_year = models.IntegerField(blank=True, null=True)
     offer_year_start = models.ForeignKey(offer_year.OfferYear)
     proposition_dissertation = models.ForeignKey(proposition_dissertation.PropositionDissertation)
     description = models.TextField(blank=True, null=True)
