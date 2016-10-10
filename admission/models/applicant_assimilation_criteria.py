@@ -35,7 +35,8 @@ class ApplicantAssimilationCriteriaAdmin(admin.ModelAdmin):
 class ApplicantAssimilationCriteria(models.Model):
     applicant = models.ForeignKey('Applicant')
     criteria = models.CharField(max_length=50, choices=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES)
-    additional_criteria = models.CharField(max_length=50, blank=True, null=True)
+    additional_criteria = models.CharField(max_length=50, blank=True, null=True,
+                                           choices=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES)
     selected = models.NullBooleanField(null=True, blank=True)
 
 
