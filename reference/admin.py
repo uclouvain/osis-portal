@@ -45,9 +45,6 @@ admin.site.register(education_type.EducationType,
 admin.site.register(grade_type.GradeType,
                     grade_type.GradeTypeAdmin)
 
-admin.site.register(institutional_grade_type.InstitutionalGradeType,
-                    institutional_grade_type.InstitutionalGradeTypeAdmin)
-
 admin.site.register(language.Language,
                     language.LanguageAdmin)
 

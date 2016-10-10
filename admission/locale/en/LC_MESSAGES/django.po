@@ -1391,3 +1391,30 @@ msgstr "Please mention if you benefit from a scholarship as defined in article 1
 
 msgid "CRITERIA_7"
 msgstr "Are you an european long-term resident (of a country other than Belgium)?"
+
+msgid "MASTER_60"
+msgstr "Master 60"
+
+msgid "MASTER_120"
+msgstr "Master 120"
+
+msgid "MASTER_180_OR_240"
+msgstr "Master 180 or 240"
+
+msgid "ADVANCED_MASTER"
+msgstr "Advanced master"
+
+msgid "CAPAES"
+msgstr "Capaes"
+
+msgid "BACHELOR"
+msgstr "Bachelor"
+
+msgid "TRAINING_CERTIFICATE"
+msgstr "Training certificate"
+
+msgid "CERTIFICATE"
+msgstr "Certificate"
+
+msgid "DOCTORATE"
+msgstr "Ph. d"

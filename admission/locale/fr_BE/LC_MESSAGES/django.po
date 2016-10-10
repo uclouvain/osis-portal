@@ -1409,3 +1409,30 @@ msgstr "Bénéficiez-vous d’une bourse visée à l’article 105 § 2 du décr
 
 msgid "CRITERIA_7"
 msgstr "Etes-vous résident de longue durée en U.E. (hors Belgique) ?"
+
+msgid "MASTER_60"
+msgstr "Master 60"
+
+msgid "MASTER_120"
+msgstr "Master 120"
+
+msgid "MASTER_180_OR_240"
+msgstr "Master 180 or 240"
+
+msgid "ADVANCED_MASTER"
+msgstr "Master spécialisé"
+
+msgid "CAPAES"
+msgstr "Capaes"
+
+msgid "BACHELOR"
+msgstr "Bachelierr"
+
+msgid "TRAINING_CERTIFICATE"
+msgstr "Agrégation"
+
+msgid "CERTIFICATE"
+msgstr "Certificat"
+
+msgid "DOCTORATE"
+msgstr "Doctorat"
