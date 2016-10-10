@@ -33,10 +33,12 @@ from django.core.urlresolvers import reverse
 from admission.views import assimilation_criteria as assimilation_criteria_view
 from django.utils.translation import ugettext_lazy as _
 from admission.models.enums import document_type
+from admission.models.enums import application_type
 
 
 ALERT_MANDATORY_FIELD = _('mandatory_field')
 ALERT_MANDATORY_FILE = _('mandatory_file')
+ALERT_MANDATORY_FILE_RECTO_VERSO = _('mandatory_file_recto_verso')
 PROFESSIONAL_TYPE = 'PROFESSIONAL'
 ADMISSION_EXAM_TYPE = 'ADMISSION'
 LANGUAGE_EXAM_TYPE = 'LANGUAGE'
@@ -155,7 +157,12 @@ def validate_diploma(application, user):
                 doc_recto = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_RECTO)
                 doc_verso = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_VERSO)
                 if doc_recto.exists() is False or doc_verso.exists() is False:
-                    validation_messages['national_diploma_doc'] = ALERT_MANDATORY_FIELD
+                    validation_messages['national_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
+                if application.application_type == application_type.ADMISSION:
+                    doc_recto = mdl.application_document_file.search(application, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
+                    doc_verso = mdl.application_document_file.search(application, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO)
+                    if doc_recto.exists() is False or doc_verso.exists() is False:
+                        validation_messages['high_school_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
 
             if professional_exam:
                 if professional_exam.exam_date is None:
@@ -204,4 +211,5 @@ def get_validation_status(application, applicant, user):
         "validated_accounting":         validate_accounting(),
         "validated_sociological":       validate_sociological(),
         "validated_attachments":        validate_attachments(),
-        "validated_submission":         validate_submission()}
+        "validated_submission":         validate_submission(),
+        "validation_messages":          msgs}

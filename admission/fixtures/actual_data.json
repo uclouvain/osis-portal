@@ -21,6 +21,88 @@
     }
 },
 {
+    "model": "base.academicyear",
+    "pk": 3,
+    "fields": {
+        "year": 2014,
+        "start_date": "2014-09-15",
+        "end_date": "2015-09-14"
+    }
+},
+{
+    "model": "base.academicyear",
+    "pk": 4,
+    "fields": {
+        "year": 2013,
+        "start_date": "2013-09-15",
+        "end_date": "2014-09-14"
+    }
+},
+{
+    "model": "base.academicyear",
+    "pk": 5,
+    "fields": {
+
+        "year": 2012,
+        "start_date": "2012-09-15",
+        "end_date": "2013-09-14"
+    }
+},
+{
+    "model": "base.academicyear",
+    "pk": 6,
+    "fields": {
+        "year": 2011,
+        "start_date": "2011-09-15",
+        "end_date": "2012-09-14"
+    }
+},
+{
+    "model": "base.academicyear",
+    "pk": 7,
+    "fields": {
+        "year": 2010,
+        "start_date": "2010-09-15",
+        "end_date": "2011-09-14"
+    }
+},
+{
+    "model": "base.academicyear",
+    "pk": 8,
+    "fields": {
+        "year": 2009,
+        "start_date": "2009-09-15",
+        "end_date": "2010-09-14"
+    }
+},
+{
+    "model": "base.academicyear",
+    "pk": 9,
+    "fields": {
+        "year": 2009,
+        "start_date": "2009-09-15",
+        "end_date": "2010-09-14"
+    }
+},
+{
+    "model": "base.academicyear",
+    "pk": 10,
+    "fields": {
+        "year": 2008,
+        "start_date": "2008-09-15",
+        "end_date": "2009-09-14"
+    }
+},
+{
+    "model": "base.academicyear",
+    "pk": 11,
+    "fields": {
+        "year": 1992,
+        "start_date": "1992-09-15",
+        "end_date": "1993-09-14"
+    }
+},
+{
     "model": "base.organization",
     "pk": 1,
     "fields": {
@@ -62509,87 +62591,6 @@
     }
 },
 {
-    "model": "reference.institutionalgradetype",
-    "pk": 1,
-    "fields": {
-        "uuid": "52ae0c71-f459-4201-bd46-9362001fc23d",
-        "external_id": "osis.reference.institutional_grade_type_Bachelier",
-        "name": "Bachelier"
-    }
-},
-{
-    "model": "reference.institutionalgradetype",
-    "pk": 2,
-    "fields": {
-        "uuid": "eb114919-ec8d-4711-a44b-575ed5066b26",
-        "external_id": "osis.reference.institutional_grade_type_Master 60",
-        "name": "Master 60"
-    }
-},
-{
-    "model": "reference.institutionalgradetype",
-    "pk": 3,
-    "fields": {
-        "uuid": "1cb06430-c264-494c-841a-f527c21bcfb5",
-        "external_id": "osis.reference.institutional_grade_type_Master 120",
-        "name": "Master 120"
-    }
-},
-{
-    "model": "reference.institutionalgradetype",
-    "pk": 4,
-    "fields": {
-        "uuid": "53a52083-fb95-41a9-8654-7e0b903302c8",
-        "external_id": "osis.reference.institutional_grade_type_Master 180 ou 240",
-        "name": "Master 180 ou 240"
-    }
-},
-{
-    "model": "reference.institutionalgradetype",
-    "pk": 5,
-    "fields": {
-        "uuid": "940cd9d9-0b73-44ef-b83c-36bc770c81a3",
-        "external_id": "osis.reference.institutional_grade_type_Master de sp\u00e9cialisation",
-        "name": "Master de sp\u00e9cialisation"
-    }
-},
-{
-    "model": "reference.institutionalgradetype",
-    "pk": 6,
-    "fields": {
-        "uuid": "9d8711b6-84f8-4a29-b858-cfaf42091bbd",
-        "external_id": "osis.reference.institutional_grade_type_Agr\u00e9gation",
-        "name": "Agr\u00e9gation"
-    }
-},
-{
-    "model": "reference.institutionalgradetype",
-    "pk": 7,
-    "fields": {
-        "uuid": "7d2ea584-a2ae-4b52-8f9f-42f77734d604",
-        "external_id": "osis.reference.institutional_grade_type_Certificat",
-        "name": "Certificat"
-    }
-},
-{
-    "model": "reference.institutionalgradetype",
-    "pk": 8,
-    "fields": {
-        "uuid": "9e8f3757-8012-4684-9545-7e4d85c1129f",
-        "external_id": "osis.reference.institutional_grade_type_CAPAES",
-        "name": "CAPAES"
-    }
-},
-{
-    "model": "reference.institutionalgradetype",
-    "pk": 9,
-    "fields": {
-        "uuid": "9857f94b-8585-4569-beb9-4e3ce674ee1c",
-        "external_id": "osis.reference.institutional_grade_type_Doctorat",
-        "name": "Doctorat"
-    }
-},
-{
     "model": "reference.gradetype",
     "pk": 1,
     "fields": {
@@ -62742,7 +62743,7 @@
         "coverage": "UNIVERSITY",
         "adhoc": false,
         "institutional": true,
-        "institutional_grade_type": 1
+        "institutional_grade_type": "BACHELOR"
     }
 },
 {
@@ -62768,7 +62769,7 @@
         "coverage": "UNIVERSITY",
         "adhoc": false,
         "institutional": true,
-        "institutional_grade_type": 2
+        "institutional_grade_type": "MASTER_60"
     }
 },
 {
@@ -62781,7 +62782,7 @@
         "coverage": "UNIVERSITY",
         "adhoc": false,
         "institutional": true,
-        "institutional_grade_type": 3
+        "institutional_grade_type": "MASTER_120"
     }
 },
 {
@@ -62794,7 +62795,7 @@
         "coverage": "UNIVERSITY",
         "adhoc": false,
         "institutional": true,
-        "institutional_grade_type": 3
+        "institutional_grade_type": "MASTER_120"
     }
 },
 {
@@ -62807,7 +62808,7 @@
         "coverage": "UNIVERSITY",
         "adhoc": false,
         "institutional": true,
-        "institutional_grade_type": 3
+        "institutional_grade_type": "MASTER_120"
     }
 },
 {
@@ -62820,7 +62821,7 @@
         "coverage": "UNIVERSITY",
         "adhoc": false,
         "institutional": true,
-        "institutional_grade_type": 3
+        "institutional_grade_type": "MASTER_120"
     }
 },
 {
@@ -62833,7 +62834,7 @@
         "coverage": "UNIVERSITY",
         "adhoc": false,
         "institutional": true,
-        "institutional_grade_type": 4
+        "institutional_grade_type": "MASTER_180_OR_240"
     }
 },
 {
@@ -62859,7 +62860,7 @@
         "coverage": "UNIVERSITY",
         "adhoc": false,
         "institutional": true,
-        "institutional_grade_type": 5
+        "institutional_grade_type": "CAPAES"
     }
 },
 {
@@ -62872,7 +62873,7 @@
         "coverage": "UNIVERSITY",
         "adhoc": false,
         "institutional": true,
-        "institutional_grade_type": 6
+        "institutional_grade_type": "TRAINING_CERTIFICATE"
     }
 },
 {
@@ -62885,7 +62886,7 @@
         "coverage": "UNIVERSITY",
         "adhoc": false,
         "institutional": true,
-        "institutional_grade_type": 8
+        "institutional_grade_type": "CERTIFICATE"
     }
 },
 {
@@ -62911,7 +62912,7 @@
         "coverage": "UNIVERSITY",
         "adhoc": false,
         "institutional": true,
-        "institutional_grade_type": 9
+        "institutional_grade_type": "DOCTORATE"
     }
 },
 {
@@ -62924,7 +62925,7 @@
         "coverage": "UNIVERSITY",
         "adhoc": false,
         "institutional": true,
-        "institutional_grade_type": 9
+        "institutional_grade_type": "DOCTORATE"
     }
 },
 {
@@ -62937,7 +62938,7 @@
         "coverage": "UNIVERSITY",
         "adhoc": false,
         "institutional": true,
-        "institutional_grade_type": 7
+        "institutional_grade_type": "CERTIFICATE"
     }
 },
 {
