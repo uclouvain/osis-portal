@@ -47,6 +47,7 @@ class OfferEnrollment(SerializableModel):
         return u"%s - %s" % (self.student, self.offer_year)
 
 
+# TODO optimized query to prefetch offer_year
 def find_by_student(a_student):
     enrollments = OfferEnrollment.objects.filter(student=a_student)
     return enrollments

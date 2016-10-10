@@ -137,9 +137,9 @@ def fetch_student_programs_list(stud):
 
 def query_result_to_list(query_result):
     """
-    Parse the query result (a lisf of offer enrollment),
+    Parse the query result (a lisf of offer enrollments),
     to a list of dictonnary.
-    :param query_result: a query result
+    :param query_result: a query result of offer_enrollments
     :return: a list of dictionaries
     """
     l = []

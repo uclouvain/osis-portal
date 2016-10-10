@@ -27,6 +27,11 @@ import logging
 import time
 from couchbase.bucket import Bucket, NotFoundError, N1QLQuery
 from couchbase.exceptions import CouchbaseError, BucketNotFoundError, AuthError, TemporaryFailError
+from django.db import models
+from django.contrib.postgres.fields import JSONField
+from django.contrib import admin
+from base.models.serializable_model import SerializableModel
+
 
 from django.conf import settings
 import re
@@ -138,3 +143,20 @@ def alpha_numeric_only(s):
     pattern = re.compile('[\W_]+')
 
     return pattern.sub('', s)
+
+
+class StudentPerformanceAdmin(admin.ModelAdmin):
+    list_display = ('student', 'offer_year')
+    list_filter = ('student__registration_id',)
+    fieldsets = ((None, {'fields': ('student', 'offer_year')}),)
+
+
+class StudentPerformance(SerializableModel):
+    student = models.ForeignKey('base.Student')
+    offer_year = models.ForeignKey('base.OfferYear')
+    data = JSONField()  # TODO discuss about db_index
+
+    def __str__(self):
+        return
+
+
