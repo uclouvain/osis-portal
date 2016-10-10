@@ -27,9 +27,6 @@ from reference.models import *
 from django.contrib import admin
 
 
-admin.site.register(assimilation_criteria.AssimilationCriteria,
-                    assimilation_criteria.AssimilationCriteriaAdmin)
-
 admin.site.register(country.Country,
                     country.CountryAdmin)
 

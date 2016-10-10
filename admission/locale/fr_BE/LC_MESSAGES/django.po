@@ -1389,6 +1389,27 @@ msgstr ""
 msgid "question_lottery_number"
 msgstr "Veuillez indique le numéro que le Service d'inscription vous a fourni"
 
+msgid "CRITERIA_1"
+msgstr "Avez-vous une autorisation d’établissement ou vous êtes résident de longue durée ?"
+
+msgid "CRITERIA_2"
+msgstr "Etes-vous réfugié, apatride ou bénéficiez- vous d’une protection subsidiaire ?"
+
+msgid "CRITERIA_3"
+msgstr "Avez-vous une autorisation de séjour de plus de 3 mois et bénéficiez–vous de revenus professionnels ou de remplacement ?"
+
+msgid "CRITERIA_4"
+msgstr "Etes-vous pris en charge par le CPAS, un home du CPAS ou désigné par le CPAS ?"
+
+msgid "CRITERIA_5"
+msgstr "Votre père, mère, tuteur légal, conjoint ou cohabitant légal a-t-il la nationalité d’un pays d’un état membre de l’Union Européenne ou remplit- il une des conditions visées par les questions de 1 à 4 "
+
+msgid "CRITERIA_6"
+msgstr "Bénéficiez-vous d’une bourse visée à l’article 105 § 2 du décret du 7 novembre 2013 (CFWB ou la Coopération au développement) ?"
+
+msgid "CRITERIA_7"
+msgstr "Etes-vous résident de longue durée en U.E. (hors Belgique) ?"
+
 msgid "master_60"
 msgstr "Master 60"
 

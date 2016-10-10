@@ -281,7 +281,7 @@ def submission(request, application_id=None):
     tab_status = tabs.init(request)
     data = {
         'application': application,
-        'display_admission_exam': extra_information(request, application),
+        'display_admission_exam': extra_information(application),
         'tab_active': 7,
         'tab_profile': tab_status['tab_profile'],
         'tab_applications': tab_status['tab_applications'],
