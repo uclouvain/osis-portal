@@ -29,10 +29,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 from admission.validators import date_validator
 from admission.models.sociological_survey import SociologicalSurvey
-from admission.models.enums import professional_activity, education
+from admission.models.enums import professional_activity
 from localflavor.generic.forms import BICFormField, IBANFormField
 from osis_common.models.document_file import DocumentFile
-from admission.models import profession as profession_mdl
 
 
 class NewAccountForm(forms.Form):
@@ -253,24 +252,9 @@ class RemoveAttachmentForm(forms.Form):
 
 
 class SociologicalSurveyForm(forms.ModelForm):
-
-    student_profession = forms.ModelChoiceField(queryset=profession_mdl.Profession.objects.all(), required=False)
-    conjoint_profession = forms.ModelChoiceField(queryset=profession_mdl.Profession.objects.all(), required=False)
-    mother_profession = forms.ModelChoiceField(queryset=profession_mdl.Profession.objects.all(), required=False)
-    father_profession = forms.ModelChoiceField(queryset=profession_mdl.Profession.objects.all(), required=False)
-    paternal_grandfather_profession = forms.ModelChoiceField(queryset=profession_mdl.Profession.objects.all(), required=False)
-    maternal_grandfather_profession = forms.ModelChoiceField(queryset=profession_mdl.Profession.objects.all(), required=False)
-
-
     class Meta:
         model = SociologicalSurvey
         exclude = ['applicant']
-
-    def __init__(self, *args, **kwargs):
-        super(SociologicalSurveyForm, self).__init__(*args, **kwargs)
-        self.professions = list(profession_mdl.Profession.objects.all())
-        self.proffessional_activities = professional_activity.PROFESSIONAL_ACTIVITY_CHOICES
-        self.education_types = education.EDUCATION_TYPE_CHOICES
 
     def clean(self):
         cleaned_data = super(SociologicalSurveyForm, self).clean()
@@ -279,23 +263,19 @@ class SociologicalSurveyForm(forms.ModelForm):
         student_professional_activity = cleaned_data.get('student_professional_activity')
         student_profession = cleaned_data.get('student_profession')
 
-        if (not student_profession
-                and student_professional_activity is not None
-                and student_professional_activity != professional_activity.NO_PROFESSION) or \
-                (student_profession and (not student_professional_activity
-                                         or student_professional_activity == professional_activity.NO_PROFESSION)):
-            self.add_error('student_profession', _('profession_professionnal_activity_no_correspondance'))
-            self.add_error('student_professional_activity', '')
+        if student_profession is None and student_professional_activity is not None:
+            if student_professional_activity != professional_activity.NO_PROFESSION:
+                self.add_error('student_profession', _('field_is_required'))
+        if student_profession is not None and student_professional_activity is None:
+            self.add_error('student_professional_activity', _('field_is_required'))
 
         conjoint_professional_activity = cleaned_data.get('conjoint_professional_activity')
         conjoint_profession = cleaned_data.get('conjoint_profession')
 
-        if (not conjoint_profession
-                and conjoint_professional_activity is not None
-                and conjoint_professional_activity != professional_activity.NO_PROFESSION) or \
-                (conjoint_profession and (not conjoint_professional_activity
-                                          or conjoint_professional_activity == professional_activity.NO_PROFESSION)):
-            self.add_error('conjoint_profession', _('profession_professionnal_activity_no_correspondance'))
-            self.add_error('conjoint_professional_activity', '')
+        if conjoint_profession is None and conjoint_professional_activity is not None:
+            if conjoint_professional_activity != professional_activity.NO_PROFESSION:
+                self.add_error('conjoint_profession', _('field_is_required'))
+        if conjoint_profession is not None and conjoint_professional_activity is None:
+            self.add_error('conjoint_professional_activity', _('field_is_required'))
 
         return cleaned_data

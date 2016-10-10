@@ -1,135 +1,16 @@
 [
   {
     "model": "admission.profession",
+    "pk": 1,
+    "fields": {
+      "name": "Inconnu"
+    }
+  },
+  {
+    "model": "admission.profession",
     "pk": 2,
     "fields": {
       "name": "Chef d'une exploitation agricole de moins de 30 ha."
-    }
-  },
-  {
-    "model": "admission.profession",
-    "pk": 3,
-    "fields": {
-      "name": "Chef d'une exploitation agricole de plus de 30 ha."
-    }
-  },
-  {
-    "model": "admission.profession",
-    "pk": 4,
-    "fields": {
-      "name": "Ind\u00e9pendant isol\u00e9 ou chef d'une entreprise occupant moins de 5 personnes (exemple : artisan, commer\u00e7ant, d\u00e9taillant, coiffeur, cordonnier, tailleur, modiste, etc.)"
-    }
-  },
-  {
-    "model": "admission.profession",
-    "pk": 5,
-    "fields": {
-      "name": "Chef d'une entreprise industrielle ou commerciale occupant en moyenne 5 \u00e0 49 personnes"
-    }
-  },
-  {
-    "model": "admission.profession",
-    "pk": 6,
-    "fields": {
-      "name": "Chef d'une entreprise industrielle ou commerciale occupant en moyenne 50 personnes et plus"
-    }
-  },
-  {
-    "model": "admission.profession",
-    "pk": 7,
-    "fields": {
-      "name": "Titulaire d'une autre profession lib\u00e9rale, soit uniquement : m\u00e9decin, pharmacien, dentiste, \"             + \"v\u00e9t\u00e9rinaire, avocat, notaire, ing\u00e9nieur-conseil, architecte"
-    }
-  },
-  {
-    "model": "admission.profession",
-    "pk": 8,
-    "fields": {
-      "name": "Titulaire d'une autre profession ind\u00e9pendante non reprise ci-dessus, telle que courtier,  agent d'assurances, agent de change, expert immobilier, kin\u00e9sith\u00e9rapeute, huissier de justice, commerce de luxe, h\u00f4tellerie, etc."
-    }
-  },
-  {
-    "model": "admission.profession",
-    "pk": 9,
-    "fields": {
-      "name": "Ouvrier, ouvrier agricole, manoeuvre, mineur, cheminot, cuisinier, chauffeur de camion, etc."
-    }
-  },
-  {
-    "model": "admission.profession",
-    "pk": 10,
-    "fields": {
-      "name": "Contrema\u00eetre, chef d'\u00e9quipe"
-    }
-  },
-  {
-    "model": "admission.profession",
-    "pk": 11,
-    "fields": {
-      "name": "Employ\u00e9 (niveau ensignement primaire ou secondaire inf\u00e9rieur), pu\u00e9ricultrice, sous-officier sans qualification"
-    }
-  },
-  {
-    "model": "admission.profession",
-    "pk": 12,
-    "fields": {
-      "name": "Employ\u00e9 qualifi\u00e9 (niveau enseignement secondaire sup\u00e9rieur complet), sous-officier avec qualification"
-    }
-  },
-  {
-    "model": "admission.profession",
-    "pk": 13,
-    "fields": {
-      "name": "Cadre (niveau enseignement sup\u00e9rieur non universitaire), instituteur, r\u00e9gent, directeur d'\u00e9cole primaire,  assistant social, officier subalterne, etc."
-    }
-  },
-  {
-    "model": "admission.profession",
-    "pk": 14,
-    "fields": {
-      "name": "Cadre sup\u00e9rieur (niveau universitaire), professeur dans le secondaire sup\u00e9rieur, chercheur, officier sup\u00e9rieur, etc."
-    }
-  },
-  {
-    "model": "admission.profession",
-    "pk": 15,
-    "fields": {
-      "name": "Cadre dirigeant (directeur g\u00e9n\u00e9ral, secr\u00e9taire g\u00e9n\u00e9ral, PDG, professeur d'universit\u00e9,  pr\u00e9sident de cour d'appel, officier g\u00e9n\u00e9ral"
-    }
-  },
-  {
-    "model": "admission.profession",
-    "pk": 16,
-    "fields": {
-      "name": "Administrateur de soci\u00e9t\u00e9"
-    }
-  },
-  {
-    "model": "admission.profession",
-    "pk": 17,
-    "fields": {
-      "name": "Homme politique, s\u00e9nateur, d\u00e9put\u00e9, bourgmestre d'une commune de plus de 30.000 habitants"
-    }
-  },
-  {
-    "model": "admission.profession",
-    "pk": 18,
-    "fields": {
-      "name": "Com\u00e9dien, artiste, sportif, musicien"
-    }
-  },
-  {
-    "model": "admission.profession",
-    "pk": 19,
-    "fields": {
-      "name": "Sans profession"
-    }
-  },
-  {
-    "model": "admission.profession",
-    "pk": 20,
-    "fields": {
-      "name": "Ch\u00f4meur"
     }
   }
 ]

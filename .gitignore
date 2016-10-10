@@ -6,7 +6,8 @@ base/tests/sent_mails/
 *.mo
 
 /osis-portal.iml
+/cover.pdf
+/output.pdf
+/test.pdf
 /uploads/
 *.iml
-*.pdf
-*.xlsx
