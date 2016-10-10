@@ -38,15 +38,17 @@ class PropositionDissertationAdmin(admin.ModelAdmin):
 
 class PropositionDissertation(SerializableModel):
     TYPES_CHOICES = (
-        ('RDL', _('literature_review')),
-        ('EDC', _('case_study')),
+        ('RDL', _('litterature_review')),
+        ('EMP', _('empirical_research')),
+        ('THE', _('theoretical_analysis')),
+        ('PRO', _('project_dissertation')),
+        ('DEV', _('development_dissertation')),
+        ('OTH', _('other')),
         )
 
     LEVELS_CHOICES = (
-        ('DOMAIN', _('domain')),
-        ('WORK', _('work')),
-        ('QUESTION', _('question')),
-        ('THEME', _('theme')),
+        ('SPECIFIC', _('specific_subject')),
+        ('THEME', _('large_theme')),
         )
 
     COLLABORATION_CHOICES = (
