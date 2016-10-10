@@ -30,7 +30,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist
 from base.models.student import find_by_user, Student
-from performance import models as mdl
+from base.models import offer_enrollment as mdl_offer_enrollment
+from performance import models as mdl_performance
 from performance.forms import RegistrationIdForm
 from base.views import layout
 
@@ -59,7 +60,7 @@ def result_by_year_and_program(request, anac, program_acronym):
     Display the student result for a particular year and program.
     """
     stud = find_by_user(request.user)
-    query_result = mdl.student_performance.select_where_registration_id_is(stud.registration_id)
+    query_result = mdl_performance.student_performance.select_where_registration_id_is(stud.registration_id)
     document = filter_by_anac_and_program_acronym(query_result, anac, program_acronym)
     return layout.render(request, "performance_result.html", {"results": document})
 
@@ -111,7 +112,7 @@ def student_result(request, registration_id, anac, program_acronym):
     except ObjectDoesNotExist:
         stud = None
 
-    query_result = mdl.student_performance.select_where_registration_id_is(stud.registration_id)
+    query_result = mdl_performance.student_performance.select_where_registration_id_is(stud.registration_id)
     document = filter_by_anac_and_program_acronym(query_result, anac, program_acronym)
 
     return layout.render(request, "performance_result.html", {"results": document})
@@ -129,29 +130,27 @@ def fetch_student_programs_list(stud):
     list_student_programs = None
 
     if stud:
-        query_result = mdl.student_performance.select_where_registration_id_is(stud.registration_id)
+        query_result = mdl_offer_enrollment.find_by_student(stud)
         list_student_programs = query_result_to_list(query_result)
     return list_student_programs
 
 
 def query_result_to_list(query_result):
     """
-    Parse the query result (a select all on the bucket performance),
+    Parse the query result (a lisf of offer enrollment),
     to a list of dictonnary.
-    :param query_result: a n1ql query object
+    :param query_result: a query result
     :return: a list of dictionaries
     """
     l = []
     for row in query_result:
         d = {}
-        academic_year = row["performance"]["academic_years"][0]
-        program = academic_year["programs"][0]
-        d["year"] =  academic_year["year"]
-        d["anac"] = academic_year["anac"]
-        d["acronym"] = program["acronym"]
-        d["formatted_acronym"] = mdl.student_performance.format_acronym(program["acronym"])
-        d["title"] = program["title"]
-        d["program_id"] = program["program_id"]
+        d["year"] =  row.offer_year.academic_year
+        d["anac"] = row.offer_year.academic_year.year
+        d["acronym"] = row.offer_year.acronym
+        d["formatted_acronym"] = mdl_performance.student_performance.format_acronym(row.offer_year.acronym)
+        d["title"] = row.offer_year.title
+        d["program_id"] = row.offer_year.id
         l.append(d)
     return l
 
@@ -169,7 +168,7 @@ def filter_by_anac_and_program_acronym(query_result, anac, program_acronym):
         academic_year = row["performance"]["academic_years"][0]
         program = academic_year["programs"][0]
         if academic_year["anac"] == anac and \
-                        mdl.student_performance.format_acronym(program["acronym"]) \
-                        == mdl.student_performance.format_acronym(program_acronym):
+                        mdl_performance.student_performance.format_acronym(program["acronym"]) \
+                        == mdl_performance.student_performance.format_acronym(program_acronym):
             return row["performance"]
     return None
