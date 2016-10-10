@@ -1351,6 +1351,10 @@ msgstr "6th paycheck"
 msgid "no_doc"
 msgstr "No document available"
 
+
+msgid "profession_professionnal_activity_no_correspondance"
+msgstr "Profession and Professional activity have to match"
+
 msgid "mandatory_file"
 msgstr "Mandatory file"
 
