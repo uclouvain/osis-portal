@@ -24,11 +24,17 @@
 #
 ##############################################################################
 from base.models.serializable_model import SerializableModel
+from django.contrib import admin
 from django.db import models
 from base import models as mdl
 from dissertation.models import dissertation
 
 JUSTIFICATION_LINK = "_set_to_"
+
+
+class DissertationUpdateAdmin(admin.ModelAdmin):
+    list_display = ('dissertation', 'get_dissertation_author', 'status_from', 'status_to', 'person', 'created')
+    raw_id_fields = ('person',)
 
 
 class DissertationUpdate(SerializableModel):
@@ -43,6 +49,9 @@ class DissertationUpdate(SerializableModel):
     def __str__(self):
         desc = "%s / %s >> %s / %s" % (self.dissertation.title, self.status_from, self.status_to, str(self.created))
         return desc
+
+    def get_dissertation_author(self):
+        return self.dissertation.author
 
 
 def search_by_dissertation(memory):

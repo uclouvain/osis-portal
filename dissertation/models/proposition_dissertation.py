@@ -32,7 +32,8 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class PropositionDissertationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'visibility', 'active')
+    list_display = ('title', 'author', 'visibility', 'active', 'get_offer_propositions', 'creator')
+    raw_id_fields = ('creator', )
 
 
 class PropositionDissertation(SerializableModel):
@@ -79,6 +80,9 @@ class PropositionDissertation(SerializableModel):
             last_name = self.author.person.last_name + ","
         author = u"%s %s %s" % (last_name.upper(), first_name, middle_name)
         return author+" - "+str(self.title)
+
+    def get_offer_propositions(self):
+        return " - ".join([str(s) for s in self.offer_proposition.all()])
 
     class Meta:
         ordering = ["author__person__last_name", "author__person__middle_name", "author__person__first_name", "title"]

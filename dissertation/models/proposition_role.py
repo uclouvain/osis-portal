@@ -24,8 +24,13 @@
 #
 ##############################################################################
 from base.models.serializable_model import SerializableModel
+from django.contrib import admin
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
+
+class PropositionRoleAdmin(admin.ModelAdmin):
+    list_display = ('adviser', 'status', 'proposition_dissertation')
 
 
 class PropositionRole(SerializableModel):

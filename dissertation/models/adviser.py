@@ -32,6 +32,7 @@ from django.contrib import admin
 
 class AdviserAdmin(admin.ModelAdmin):
     list_display = ('person', 'type')
+    raw_id_fields = ('person', )
 
 
 class Adviser(SerializableModel):
@@ -64,13 +65,3 @@ def search_by_person(a_person):
     adviser = Adviser.objects.get(person=a_person)
     return adviser
 
-
-def serialize_list(list_advisers):
-    """
-    Serialize a list of "Adviser" objects using the json format.
-    Use to send data to osis-portal.
-    :param list_advisers: a list of "Adviser" objects
-    :return: the serialized list (a json)
-    """
-    fields = ('id', 'person', 'type', 'available_by_email', 'available_by_phone', 'available_at_office', 'comment')
-    return serializers.serialize("json", list_advisers, fields=fields)
