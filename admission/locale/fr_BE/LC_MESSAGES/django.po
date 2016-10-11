@@ -1379,7 +1379,7 @@ msgid "prerequisites_min_data"
 msgstr "Vous devez au minimum avoir un diplôme d'études secondaire, un examen professionnel/d'admission/de langue française"
 
 msgid "validation_errors"
-msgstr " champ(s) empêche(nt) la validation de l'onglet"
+msgstr " champs empêchent la validation de l'onglet"
 
 msgid "msg_one_prerequisite"
 msgstr ""
@@ -1389,25 +1389,69 @@ msgstr ""
 msgid "question_lottery_number"
 msgstr "Veuillez indique le numéro que le Service d'inscription vous a fourni"
 
-msgid "master_60"
-msgstr "Master 60"
+msgid "CRITERIA_1"
+msgstr "Avez-vous une autorisation d’établissement ou vous êtes résident de longue durée ?"
 
-msgid "master_120"
-msgstr "Master 120"
+msgid "CRITERIA_2"
+msgstr "Etes-vous réfugié, apatride ou bénéficiez- vous d’une protection subsidiaire ?"
 
-msgid "master_180_240"
-msgstr "Master 180 or 240"
+msgid "CRITERIA_3"
+msgstr "Avez-vous une autorisation de séjour de plus de 3 mois et bénéficiez–vous de revenus professionnels ou de remplacement ?"
 
-msgid "advanced_master"
-msgstr "Advanced master"
+msgid "CRITERIA_4"
+msgstr "Etes-vous pris en charge par le CPAS, un home du CPAS ou désigné par le CPAS ?"
 
-msgid "capaes"
-msgstr "Capaes"
+msgid "CRITERIA_5"
+msgstr "Votre père, mère, tuteur légal, conjoint ou cohabitant légal a-t-il la nationalité d’un pays d’un état membre de l’Union Européenne ou remplit- il une des conditions visées par les questions de 1 à 4 "
+
+msgid "CRITERIA_6"
+msgstr "Bénéficiez-vous d’une bourse visée à l’article 105 § 2 du décret du 7 novembre 2013 (CFWB ou la Coopération au développement) ?"
+
+msgid "CRITERIA_7"
+msgstr "Etes-vous résident de longue durée en U.E. (hors Belgique) ?"
 
 msgid "institution_not_found_question"
 msgstr ""
-"Vous n'avez pas trouvé votre établissement dans cette liste?"
-"ci-après"
+"Vous n'avez pas trouvé votre établissement dans cette liste ci-après?"
+
+msgid "validate_data"
+msgstr "Valider mes données"
 
 msgid "mandatory_file_recto_verso"
 msgstr "Fichiers recto et verso obligatoires"
+
+msgid "validation_error"
+msgstr " champ empêche la validation de l'onglet"
+
+msgid "you_have_to_save"
+msgstr "N'oubliez pas de sauvegarder, la validation ne sauve rien"
+
+msgid "MASTER_60"
+msgstr "Master 60"
+
+msgid "MASTER_120"
+msgstr "Master 120"
+
+msgid "MASTER_180_OR_240"
+msgstr "Master 180 or 240"
+
+msgid "ADVANCED_MASTER"
+msgstr "Master spécialisé"
+
+msgid "CAPAES"
+msgstr "Capaes"
+
+msgid "BACHELOR"
+msgstr "Bachelier"
+
+msgid "TRAINING_CERTIFICATE"
+msgstr "Agrégation"
+
+msgid "CERTIFICATE"
+msgstr "Certificat"
+
+msgid "DOCTORATE"
+msgstr "Doctorat"
+
+
+

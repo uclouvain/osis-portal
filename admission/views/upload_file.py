@@ -30,7 +30,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from admission import models as mdl
 from admission import settings as adm_settings
 from admission.models.enums import document_type
-from admission.views import common, tabs, assimilation_criteria as assimilation_criteria_view
+from admission.views import common, assimilation_criteria as assimilation_criteria_view
 from osis_common import models as mdl_osis_common
 from osis_common.forms import UploadDocumentFileForm
 from reference import models as mdl_ref

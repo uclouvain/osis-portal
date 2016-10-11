@@ -34,6 +34,7 @@ from admission import models as mdl
 from django.contrib.auth.models import User
 import admission.tests.data_for_tests as data_model
 from django.test import Client
+from reference.enums import assimilation_criteria as assimilation_criteria_enum
 
 
 class AssimilationCriteriaTest(TestCase):
@@ -48,7 +49,7 @@ class AssimilationCriteriaTest(TestCase):
 
         list_document_type = []
         assimilation_doc = assimilation_criteria.AssimilationDoc()
-        assimilation_doc.criteria_id = 1
+        assimilation_doc.criteria = assimilation_criteria_enum.CRITERIA_1
         list_document_type.append(assimilation_doc)
         list_document_type = assimilation_criteria.criteria1(list_document_type)
         self.assertTrue(len(list_document_type) == 3)

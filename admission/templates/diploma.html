@@ -1,6 +1,7 @@
 {% load staticfiles %}
 {% load i18n %}
 {% load dictionnary %}
+{% load get_at_index %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -191,18 +192,46 @@
            value="{{application.applicant.registration_id| default_if_none:''}}" >
     {% csrf_token %}
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-6">
             <h5>{% trans 'mandatory_asterisk'%}</h5>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
+            <button type="submit" id="bt_validate_diploma" class="btn btn-default pull-right" role="button"
+                    title="{%trans 'validate_data'%}"
+                    name="validate_diploma" style="
+                    {% if valid_data == True%}
+                        background-color:#22f52b;
+                    {%else%}
+                        {% if valid_data == False %}
+                            background-color:orange;
+                        {%else%}
+                            background-color:transparent;
+                        {% endif %}
+                    {% endif %}">
+                    {% if valid_data == True%}
+                        <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                    {%else%}
+                        {% if valid_data == False %}
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" ></span>
+                        {%else%}
+                            <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+                        {% endif %}
+                    {% endif %}
+
+                {%trans 'validate_data'%}
+            </button>
+
             <button type="submit" id="bt_submit_diploma" class="btn btn-default pull-right" role="button"
                     title="{%trans 'save'%}"
-                    name="submit_diploma" >
+                    name="submit_diploma"
+                    style="margin-right:10px;">
                 <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
                 {%trans 'save'%}
             </button>
         </div>
     </div>
+
+
     <div class="row" style="margin-top:5px;">
         <div class="col-md-6">
             <a id="lnk_previous_step_up"
@@ -225,8 +254,20 @@
     <div>
         <br>
         {%if validation_messages%}
-            <div class="alert alert-warning" role="alert" style="margin-left:5px;" id="msg_validation_diploma">
-                {{ validation_messages|length}} {% trans 'validation_errors'%}
+            <div class="alert alert-warning" role="alert" style="margin-left:5px;" id="msg_validate_diploma">
+                {% if validation_messages|length == 1 %}
+                    {{ validation_messages|length}} {% trans 'validation_error'%}
+                {%else%}
+                     {% if validation_messages|length > 1 %}
+                        {{ validation_messages|length}} {% trans 'validation_errors'%}
+                     {% endif %}
+                {% endif %}
+
+            </div>
+        {% endif %}
+        {% if valid_data == True %}
+            <div class="alert alert-warning" role="alert" style="margin-left:5px;" id="msg_validat_data">
+                 {% trans 'you_have_to_save' %}
             </div>
         {% endif %}
         {%if message_success%}
@@ -296,17 +337,20 @@
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
-                             name="rdb_local_foreign" id="rdb_local"
+                             name="rdb_local_foreign"
+                             id="rdb_local"
                              value="true"
-                             onclick="display('pnl_local_detail',true);display('pnl_foreign_detail',false);populate_secondary_national_institution();">&nbsp;{% trans 'in_belgium'%}
+                             onclick="display('pnl_local_detail',true);display('pnl_foreign_detail',false);">&nbsp;{% trans 'in_belgium'%}
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
-                             name="rdb_local_foreign" id="rdb_foreign"
+                             name="rdb_local_foreign"
+                             id="rdb_foreign"
                              value="false"
                              onclick="display('pnl_local_detail',false);display('pnl_foreign_detail',true);">&nbsp;{% trans 'not_in_belgium'%}
                     </label>
-                    {%if validation_messages and validation_messages|get_item:'rdb_localforeign'%}
+                    {%if validation_messages and validation_messages|get_item:'rdb_local_foreign'%}
+                        <br>
                         <span class="error" style="margin-left:5px;">
                             {{ validation_messages|get_item:'rdb_local_foreign'}}
                         </span>

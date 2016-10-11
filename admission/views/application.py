@@ -32,7 +32,8 @@ from reference.enums import institutional_grade_type as enum_institutional_grade
 from base import models as mdl_base
 from admission.views.common import get_picture_id, get_id_document
 from admission.views.common import extra_information
-from admission.views import demande_validation, tabs, secondary_education
+from admission.views import common
+from admission.views import demande_validation
 from django.http import *
 import urllib
 
@@ -126,7 +127,7 @@ def save_application_offer(request):
                 application.resident = False
         if request.POST.get('txt_offer_lottery'):
             application.raffle_number = request.POST.get('txt_offer_lottery')
-        application.application_type =mdl.application.define_application_type(application.national_degree, request.user)
+        application.application_type = mdl.application.define_application_type(application.national_degree, request.user)
         application.save()
         application_id = application.id
         if new_application is False:
@@ -240,7 +241,6 @@ def application_view(request, application_id):
 
 
 def applications(request, application_id=None):
-    tab_status = tabs.init(request)
     application_list = mdl.application.find_by_user(request.user)
     if application_id:
         application = mdl.application.find_by_id(application_id)
@@ -256,15 +256,7 @@ def applications(request, application_id=None):
         "domains": mdl_reference.domain.find_current_domains(),
         'tab_active': 1,
         "application": application,
-        "tab_profile": tab_status['tab_profile'],
-        "tab_applications": tab_status['tab_applications'],
-        "tab_diploma": tab_status['tab_diploma'],
-        "tab_curriculum": tab_status['tab_curriculum'],
-        "tab_accounting": tab_status['tab_accounting'],
-        "tab_sociological": tab_status['tab_sociological'],
-        "tab_attachments": tab_status['tab_attachments'],
-        "tab_submission": tab_status['tab_submission'],
-        "local_language_exam_needed": secondary_education.is_local_language_exam_needed(request.user),
+        "local_language_exam_needed": common.is_local_language_exam_needed(request.user),
         "applicant": applicant,
         "person_legal_address": person_legal_address,
         "countries": countries
@@ -278,19 +270,10 @@ def submission(request, application_id=None):
         application = mdl.application.find_by_id(application_id)
     else:
         application = mdl.application.init_application(request.user)
-    tab_status = tabs.init(request)
     data = {
         'application': application,
-        'display_admission_exam': extra_information(request, application),
+        'display_admission_exam': extra_information(application),
         'tab_active': 7,
-        'tab_profile': tab_status['tab_profile'],
-        'tab_applications': tab_status['tab_applications'],
-        'tab_diploma': tab_status['tab_diploma'],
-        'tab_curriculum': tab_status['tab_curriculum'],
-        'tab_accounting': tab_status['tab_accounting'],
-        'tab_sociological': tab_status['tab_sociological'],
-        'tab_attachments': tab_status['tab_attachments'],
-        'tab_submission': tab_status['tab_submission'],
         'applications': mdl.application.find_by_user(request.user)
     }
     applicant = mdl.applicant.find_by_user(request.user)

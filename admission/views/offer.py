@@ -142,7 +142,7 @@ def demande_update(request, application_id=None):
                    "grade_choices":          grade_choices,
                    'tab_active':             0,
                    "tab_demande_active":     0,
-                   "display_admission_exam": extra_information(request, application),
+                   "display_admission_exam": extra_information(application),
                    "validated_extra":        validated_extra(secondary_education, application),
                    "picture": get_picture_id(request.user),
                    "id_document": get_id_document(request.user),

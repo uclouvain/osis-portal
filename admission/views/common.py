@@ -27,7 +27,6 @@ from datetime import datetime
 from django.conf import settings
 
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils import translation
@@ -37,20 +36,21 @@ from admission import models as mdl
 from admission.forms import ApplicantForm
 from reference import models as mdl_ref
 from admission.views import demande_validation, assimilation_criteria as assimilation_criteria_view
-from admission.views import tabs
 from osis_common import models as mdl_osis_common
 from admission.models.enums import document_type
 from osis_common.forms import UploadDocumentFileForm
 from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
 from rest_framework import serializers
+from reference.enums import assimilation_criteria as assimilation_criteria_enum
+
+RADIO_NAME_ASSIMILATION_CRITERIA = "assimilation_criteria_"
 
 
 @login_required(login_url=settings.ADMISSION_LOGIN_URL)
 def home(request):
     applicant = mdl.applicant.find_by_user(request.user)
     same_addresses = True
-    person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
     person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
     if person_contact_address:
         same_addresses = False
@@ -72,8 +72,7 @@ def home(request):
                                                          'person_contact_address': person_contact_address,
                                                          "tab_active": -1})
         else:
-            tab_status = tabs.init(request)
-            assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
+            assimilation_criteria = assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES
             applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
             return render(request, "admission_home.html", {
                 'applications': applications,
@@ -81,20 +80,12 @@ def home(request):
                 'tab_active': 0,
                 'first': True,
                 'countries': mdl_ref.country.find_all(),
-                'tab_profile': tab_status['tab_profile'],
-                'tab_applications': tab_status['tab_applications'],
-                'tab_diploma': tab_status['tab_diploma'],
-                'tab_curriculum': tab_status['tab_curriculum'],
-                'tab_accounting': tab_status['tab_accounting'],
-                'tab_sociological': tab_status['tab_sociological'],
-                'tab_attachments': tab_status['tab_attachments'],
-                'tab_submission': tab_status['tab_submission'],
                 'main_status': 0,
                 'picture': get_picture_id(request.user),
                 'id_document': get_id_document(request.user),
                 'person_legal_address': person_legal_address,
                 'person_contact_address': person_contact_address,
-                'assimilationCriteria': assimilation_criteria,
+                'assimilation_criteria': assimilation_criteria,
                 'applicant_assimilation_criteria': applicant_assimilation_criteria,
                 'assimilation_basic_documents': assimilation_criteria_view.find_assimilation_basic_documents(),
                 'assimilation_documents_existing': get_assimilation_documents_existing(request.user),
@@ -105,7 +96,6 @@ def home(request):
 
 
 def profile(request, application_id=None, message_success=None):
-    tab_status = tabs.init(request)
     message_info = None
     application = None
     assimilation_case = False
@@ -295,8 +285,9 @@ def profile(request, application_id=None, message_success=None):
             previous_enrollment = False
         if assimilation_case:
             # verify if it exists one record per criteria
-            default_critera_list = mdl_ref.assimilation_criteria.find_criteria()
-            for crit in default_critera_list:
+            default_criteria_list = assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES
+            for criteria in default_criteria_list:
+                crit = criteria[0]
                 existing_crit = mdl.applicant_assimilation_criteria.find_first(applicant, crit)
                 if existing_crit is None:
                     applicant_assimilation_criteria = \
@@ -319,24 +310,30 @@ def profile(request, application_id=None, message_success=None):
                         application_assimilation_criteria.save()
 
             for key in request.POST:
-                if key[0:22] == "assimilation_criteria_":
-                    criteria_id = key[22:]
-                    criteria = mdl_ref.assimilation_criteria.find_by_id(criteria_id)
-
+                if key[0:len(RADIO_NAME_ASSIMILATION_CRITERIA)] == RADIO_NAME_ASSIMILATION_CRITERIA:
+                    criteria_id = key[len(RADIO_NAME_ASSIMILATION_CRITERIA):]
+                    criteria_ref = assimilation_criteria_enum.find(criteria_id)
+                    criteria = criteria_ref[0]
+                    applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_first(applicant,
+                                                                                                     criteria)
+                    if applicant_assimilation_criteria is None:
+                        applicant_assimilation_criteria = mdl.applicant_assimilation_criteria\
+                            .ApplicantAssimilationCriteria()
+                        applicant_assimilation_criteria.criteria = criteria
+                        applicant_assimilation_criteria.applicant = applicant
                     if request.POST[key] == "true":
-                        applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_first(applicant,
-                                                                                                         criteria)
                         if criteria:
                             assimilation_basic_documents = assimilation_criteria_view.\
                                 find_list_assimilation_basic_documents()
-                            list_document_type_needed = assimilation_criteria_view.get_list_documents_descriptions(criteria.id)
+                            list_document_type_needed = assimilation_criteria_view.\
+                                get_list_documents_descriptions(criteria)
                             list_document_type_needed.append(document_type.ID_CARD)
 
-                            if criteria.id == 5:
-                                if request.POST.get("criteria_5") == "1":
+                            if criteria == assimilation_criteria_enum.CRITERIA_5:
+                                if request.POST.get("criteria_5") == assimilation_criteria_enum.CRITERIA_1:
                                     list_document_type_needed.extend([document_type.RESIDENT_LONG_DURATION,
                                                                       document_type.ID_FOREIGN_UNLIMITED])
-                                if request.POST.get("criteria_5") == "2":
+                                if request.POST.get("criteria_5") == assimilation_criteria_enum.CRITERIA_2:
                                     list_document_type_needed.extend([
                                         document_type.ATTACHMENT_26,
                                         document_type.REFUGEE_CARD,
@@ -348,7 +345,7 @@ def profile(request, application_id=None, message_success=None):
                                         document_type.SUBSIDIARY_PROTECTION_DECISION,
                                         document_type.RESIDENCE_PERMIT,
                                         document_type.STATELESS_CERTIFICATE])
-                                if request.POST.get("criteria_5") == "3":
+                                if request.POST.get("criteria_5") == assimilation_criteria_enum.CRITERIA_3:
                                     list_document_type_needed.extend([document_type.FAMILY_COMPOSITION,
                                                                       document_type.PAYCHECK_1,
                                                                       document_type.PAYCHECK_2,
@@ -358,7 +355,7 @@ def profile(request, application_id=None, message_success=None):
                                                                       document_type.PAYCHECK_6,
                                                                       document_type.RESIDENT_CERTIFICATE,
                                                                       document_type.ID_CARD])
-                                if request.POST.get("criteria_5") == "4":
+                                if request.POST.get("criteria_5") == assimilation_criteria_enum.CRITERIA_4:
                                     list_document_type_needed.extend([document_type.CPAS])
                             for d in assimilation_basic_documents:
                                 if d not in list_document_type_needed:
@@ -384,8 +381,6 @@ def profile(request, application_id=None, message_success=None):
                                 application_assimilation_criteria.save()
 
                     if request.POST[key] == "false":
-                        applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_first(applicant,
-                                                                                                         criteria)
                         applicant_assimilation_criteria.selected = False
                         applicant_assimilation_criteria.save()
                         # Update/create application_assimilation_criteria
@@ -408,6 +403,9 @@ def profile(request, application_id=None, message_success=None):
             person_contact_address.save()
         person_legal_address.save()
         applicant.user.save()
+        if application:
+            application.application_type = mdl.application.define_application_type(application.national_degree, request.user)
+            application.save()
         request.user = applicant.user  # Otherwise it was not refreshed while going back to home page
         applicant.save()
         message_info = _('msg_info_saved')
@@ -433,11 +431,9 @@ def profile(request, application_id=None, message_success=None):
     else:
         institution_name = None
 
-    assimilation_criteria = mdl_ref.assimilation_criteria.find_criteria()
+    assimilation_criteria = assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES
     applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
 
-    if application is None:
-        tab_status = tabs.init(request)
     # validated are not ready yet, to be achieved in another issue - Leila
     person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
     person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
@@ -447,7 +443,7 @@ def profile(request, application_id=None, message_success=None):
         'applicant': applicant,
         'applicant_form': applicant_form,
         'countries': countries,
-        'assimilationCriteria': assimilation_criteria,
+        'assimilation_criteria': assimilation_criteria,
         'applicant_assimilation_criteria': applicant_assimilation_criteria,
         'person_legal_address': person_legal_address,
         'person_contact_address': person_contact_address,
@@ -457,22 +453,13 @@ def profile(request, application_id=None, message_success=None):
         'message_success': message_success,
         'tab_active': 0,
         'application': application,
-        'tab_profile': tab_status['tab_profile'],
-        'tab_applications': tab_status['tab_applications'],
-        'tab_diploma': tab_status['tab_diploma'],
-        'tab_curriculum': tab_status['tab_curriculum'],
-        'tab_accounting': tab_status['tab_accounting'],
-        'tab_sociological': tab_status['tab_sociological'],
-        'tab_attachments': tab_status['tab_attachments'],
-        'tab_submission': tab_status['tab_submission'],
         'applications': mdl.application.find_by_user(request.user),
         'picture': get_picture_id(request.user),
         'id_document': get_id_document(request.user),
         'assimilation_basic_documents': assimilation_criteria_view.find_assimilation_basic_documents(),
         'assimilation_documents_existing': get_assimilation_documents_existing(request.user),
         'document_formset': document_formset,
-        'message_info': message_info,
-        'application': application}
+        'message_info': message_info}
     data.update(demande_validation.get_validation_status(application, applicant, request.user))
     return render(request, "admission_home.html", data)
 
@@ -483,7 +470,7 @@ def home_retour(request):
     return render(request, "admission_home.html", {'applications': applications, 'message_info': _('msg_info_saved')})
 
 
-def extra_information(request, application):
+def extra_information(application):
     try:
         if application.offer_year:
             admission_exam_offer_yr = mdl.admission_exam_offer_year.find_by_offer_year(application.offer_year)
@@ -608,9 +595,11 @@ def documents_upload(request):
 
 def define_additional_criteria(criteria5):
     if criteria5:
-        return mdl_ref.assimilation_criteria.find_by_id(int(criteria5))
-    else:
-        return None
+        criteria_ref = assimilation_criteria_enum.find(criteria5)
+        if criteria_ref:
+            return criteria_ref[0]
+
+    return None
 
 
 class JSONResponse(HttpResponse):
@@ -644,3 +633,16 @@ def delete_previous_criteria(applicant, application):
         criteria_list = mdl.application_assimilation_criteria.find_by_application(application)
         for c in criteria_list:
             c.delete()
+
+def is_local_language_exam_needed(user):
+    local_language_exam_needed = False
+    applications = mdl.application.find_by_user(user)
+    if applications:
+        for application in applications:
+            if application.offer_year.grade_type and \
+                    (application.offer_year.grade_type.name == 'BACHELOR' or \
+                     application.offer_year.grade_type.name == 'MASTER' or \
+                     application.offer_year.grade_type.name == 'TRAINING_CERTIFICATE'):
+                local_language_exam_needed = True
+                break
+    return local_language_exam_needed

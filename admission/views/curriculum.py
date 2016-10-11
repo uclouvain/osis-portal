@@ -34,7 +34,6 @@ from base import models as mdl_base
 from admission.views import common
 from reference import models as mdl_reference
 from admission.views import demande_validation
-from admission.views import tabs
 from reference.enums import education_institution_type, education_institution_national_comunity as national_cmunity_type
 
 CURRICULUM_YEARS_REQUIRED = 5
@@ -191,7 +190,6 @@ def update(request, application_id=None):
         return common.home(request)
     else:
         universities_cities, universities = populate_dropdown_list(curricula)
-        tab_status = tabs.init(request)
 
         data = {
             "curricula": curricula,
@@ -207,14 +205,6 @@ def update(request, application_id=None):
             "current_academic_year": mdl_base.academic_year.current_academic_year(),
             "tab_active": 3,
             "application": application,
-            'tab_profile': tab_status['tab_profile'],
-            'tab_applications': tab_status['tab_applications'],
-            'tab_diploma': tab_status['tab_diploma'],
-            'tab_curriculum': tab_status['tab_curriculum'],
-            'tab_accounting': tab_status['tab_accounting'],
-            'tab_sociological': tab_status['tab_sociological'],
-            'tab_attachments': tab_status['tab_attachments'],
-            'tab_submission': tab_status['tab_submission'],
             'applications': mdl.application.find_by_user(request.user)
         }
         data.update(demande_validation.get_validation_status(application, applicant, request.user))

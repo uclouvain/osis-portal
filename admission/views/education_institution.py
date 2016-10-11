@@ -159,13 +159,12 @@ def find_postal_codes_by_type(request):
 def find_institution_by_city_postal_code_type(request):
     type = request.GET['type']
     city = request.GET['city']
-    if city == "-" or city == '':
+    if city == "" or city=="-":
         city = None
     postal_code = request.GET['postal_code']
-    if postal_code == "-" or postal_code == '':
+    if postal_code == "" or postal_code=="-":
         postal_code = None
 
     education_institutions = mdl_reference.education_institution.search('BE', type, False, city, postal_code)
-
     serializer = EducationInstitutionSerializer(education_institutions, many=True, )
     return JSONResponse(serializer.data)

@@ -30,7 +30,7 @@ from django.utils.translation import ugettext_lazy as _
 INSCRIPTION = 'INSCRIPTION'
 ADMISSION = 'ADMISSION'
 
-APPLICATION_TYPE_CHOICES = (('ADMISSION', _('admission')),
-                            ('INSCRIPTION', _('inscription')))
+APPLICATION_TYPE_CHOICES = (('ADMISSION', _(ADMISSION)),
+                            ('INSCRIPTION', _(INSCRIPTION)))
 
 

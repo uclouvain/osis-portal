@@ -115,5 +115,6 @@ urlpatterns = [
     url(r'^picture/$', common.get_picture),
     url(r'^postalcodes/$', places.find_postal_codes_by_city),
     url(r'^educationinstitution/cities/$', places.find_cities_by_postal_code),
+    url(r'^validate_tab/prerequis/$', secondary_education.validate),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
