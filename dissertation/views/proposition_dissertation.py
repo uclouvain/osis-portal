@@ -28,7 +28,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from base import models as mdl
 from base.views import layout
-from dissertation.models import dissertation, proposition_dissertation, proposition_role
+from dissertation.models import dissertation, proposition_dissertation, proposition_document_file, proposition_role
 from django.utils import timezone
 
 
@@ -53,6 +53,10 @@ def proposition_dissertation_detail(request, pk):
     using = dissertation.count_by_proposition(subject)
     percent = using * 100 / subject.max_number_student
     count_proposition_role = proposition_role.count_by_proposition(subject)
+    files = proposition_document_file.find_by_proposition(subject)
+    filename = ""
+    for file in files:
+        filename = file.document_file.file_name
     if count_proposition_role < 1:
         proposition_role.add('PROMOTEUR', subject.author, subject)
     proposition_roles = proposition_role.search_by_proposition(subject)
@@ -61,7 +65,8 @@ def proposition_dissertation_detail(request, pk):
                           'proposition_roles': proposition_roles,
                           'proposition_dissertation': subject,
                           'student': student,
-                          'using': using})
+                          'using': using,
+                          'filename': filename})
 
 
 @login_required

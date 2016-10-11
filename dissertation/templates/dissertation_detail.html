@@ -45,17 +45,12 @@
            onclick="return confirm('{% trans 'delete_dissertation_confirmation_message' %}')"
            title="{% trans 'delete'%}">
             <span class="glyphicon glyphicon-remove"></span></a>
-        <a class="btn btn-default btn-primary pull-right "
-           href="{% url 'dissertation_edit' pk=dissertation.pk %}"
-           style="margin-right: 5px;"
-           title="{% trans 'edit'%}">
+        <a class="btn btn-default btn-primary pull-right " href="{% url 'dissertation_edit' pk=dissertation.pk %}"
+           style="margin-right: 5px;" title="{% trans 'edit'%}">
             <span class="glyphicon glyphicon-edit"></span></a>
-        <a class="btn btn-default btn-primary pull-right"
-           data-toggle="modal" data-target="#pnl_upload_documents"
-           id="btn_add_file"
-           style="margin-right: 5px;"
-           title="{% trans 'add_picture'%}">
-            <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_modify_picture"></span></a>
+        <a class="btn btn-default btn-primary pull-right" data-toggle="modal" data-target="#pnl_upload_documents"
+           id="btn_add_file" style="margin-right: 5px;" title="{% trans 'add_file'%}">
+            <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_add_file"></span></a>
     {% elif check_edit == True %}
         <a class="btn btn-default btn-primary pull-right"
            href="{% url 'dissertation_edit' pk=dissertation.pk %}"
@@ -64,6 +59,7 @@
             <span class="glyphicon glyphicon-edit"></span></a>
     {% endif %}
 </ul>
+<input type="hidden" value="{{dissertation.pk | default_if_none:''}}" id="hdn_current_dissertation_id" name="dissertation_id" title="dissertation_id" >
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="panel panel-default">
@@ -87,6 +83,16 @@
                         {{ dissertation.title }}
                     </div>
                 </div>
+                {% if filename != "" %}
+                    <div class="row">
+                        <div class="col-md-2 col-lg-offset-1" style="text-align:right">
+                            <label>{% trans 'file' %}</label>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{% url 'dissertation_download' pk=dissertation.pk %}">{% trans 'link' %}</a>
+                        </div>
+                    </div>
+                {% endif %}
                 <div class="row">
                     <div class="col-md-3" style="text-align: right">
                         <label>{% trans 'status' %}</label>
@@ -341,7 +347,7 @@
             if ($.inArray(file.type,accepted_types) >= 0){
                 data.append('file', file);
                 $.ajax({
-                    url: "{% url 'save_uploaded_file' %}",
+                    url: "{% url 'dissertation_save_upload' %}",
                     enctype: 'multipart/form-data',
                     type: 'POST',
                     data : data,
