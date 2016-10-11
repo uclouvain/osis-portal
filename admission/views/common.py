@@ -36,7 +36,6 @@ from admission import models as mdl
 from admission.forms import ApplicantForm
 from reference import models as mdl_ref
 from admission.views import demande_validation, assimilation_criteria as assimilation_criteria_view
-from admission.views import tabs
 from osis_common import models as mdl_osis_common
 from admission.models.enums import document_type
 from osis_common.forms import UploadDocumentFileForm
@@ -73,7 +72,6 @@ def home(request):
                                                          'person_contact_address': person_contact_address,
                                                          "tab_active": -1})
         else:
-            tab_status = tabs.init(request)
             assimilation_criteria = assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES
             applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
             return render(request, "admission_home.html", {
@@ -82,14 +80,6 @@ def home(request):
                 'tab_active': 0,
                 'first': True,
                 'countries': mdl_ref.country.find_all(),
-                'tab_profile': tab_status['tab_profile'],
-                'tab_applications': tab_status['tab_applications'],
-                'tab_diploma': tab_status['tab_diploma'],
-                'tab_curriculum': tab_status['tab_curriculum'],
-                'tab_accounting': tab_status['tab_accounting'],
-                'tab_sociological': tab_status['tab_sociological'],
-                'tab_attachments': tab_status['tab_attachments'],
-                'tab_submission': tab_status['tab_submission'],
                 'main_status': 0,
                 'picture': get_picture_id(request.user),
                 'id_document': get_id_document(request.user),
@@ -106,7 +96,6 @@ def home(request):
 
 
 def profile(request, application_id=None, message_success=None):
-    tab_status = tabs.init(request)
     message_info = None
     application = None
     assimilation_case = False
@@ -442,8 +431,6 @@ def profile(request, application_id=None, message_success=None):
     assimilation_criteria = assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES
     applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
 
-    if application is None:
-        tab_status = tabs.init(request)
     # validated are not ready yet, to be achieved in another issue - Leila
     person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
     person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
@@ -463,14 +450,6 @@ def profile(request, application_id=None, message_success=None):
         'message_success': message_success,
         'tab_active': 0,
         'application': application,
-        'tab_profile': tab_status['tab_profile'],
-        'tab_applications': tab_status['tab_applications'],
-        'tab_diploma': tab_status['tab_diploma'],
-        'tab_curriculum': tab_status['tab_curriculum'],
-        'tab_accounting': tab_status['tab_accounting'],
-        'tab_sociological': tab_status['tab_sociological'],
-        'tab_attachments': tab_status['tab_attachments'],
-        'tab_submission': tab_status['tab_submission'],
         'applications': mdl.application.find_by_user(request.user),
         'picture': get_picture_id(request.user),
         'id_document': get_id_document(request.user),

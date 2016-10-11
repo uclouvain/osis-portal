@@ -1379,7 +1379,7 @@ msgid "prerequisites_min_data"
 msgstr "Vous devez au minimum avoir un diplôme d'études secondaire, un examen professionnel/d'admission/de langue française"
 
 msgid "validation_errors"
-msgstr " champ(s) empêche(nt) la validation de l'onglet"
+msgstr " champs empêchent la validation de l'onglet"
 
 msgid "msg_one_prerequisite"
 msgstr ""
@@ -1419,3 +1419,9 @@ msgstr "Valider mes données"
 
 msgid "mandatory_file_recto_verso"
 msgstr "Fichiers recto et verso obligatoires"
+
+msgid "validation_error"
+msgstr " champ empêche la validation de l'onglet"
+
+msgid "you_have_to_save"
+msgstr "N'oubliez pas de sauvegarder"

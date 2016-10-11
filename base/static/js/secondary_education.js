@@ -388,8 +388,8 @@ $("select[id^='slt_postal_codes']" ).change(function(event) {
               if(data.length >0){
               $("<option></option>").attr("value","-").append("-").appendTo("#slt_cities");
                 $.each(data, function(key, value) {
-                    var city_name_value= first_letter_each_word_uppercase(value.city,true) ;
-                        $("<option></option>").attr("value",value.city).append(city_name_value).appendTo("#slt_cities");
+                    var city_name_value= first_letter_each_word_uppercase(value.city) ;
+                    $("<option></option>").attr("value",value.city).append(city_name_value).appendTo("#slt_cities");
 
                 });
               }
@@ -716,8 +716,8 @@ $("#rdb_diploma_true").click(function() {
     $('#pnl_admission_exam').css('visibility', 'hidden').css('display','none');
 });
 
-function first_letter_each_word_uppercase(str,force){
-  str=force ? str.toLowerCase() : str;
+function first_letter_each_word_uppercase(str){
+  str=str.toLowerCase();
   return str.replace(/(\b)([a-zA-Z])/g,
            function(firstLetter){
               return   firstLetter.toUpperCase();
@@ -757,7 +757,6 @@ function populate_postal_code(city_name,postal_code){
 }
 
 function populate_city(city_name,postal_code){
-
     if ($('#hdn_secondary_education_national_institution_adhoc').val()!='True'){
         $.ajax({
             url: "/admission/educationinstitution/cities?postal_code=" + postal_code
@@ -772,10 +771,11 @@ function populate_city(city_name,postal_code){
                     option_selected = true;
                 }
                 $.each(data, function(key, value) {
+                    var city_name_value = first_letter_each_word_uppercase(value.city);
                     if(option_selected){
-                        $("<option></option>").attr("value",value.city).prop('selected', true).append(value.city).appendTo("#slt_cities");
+                        $("<option></option>").attr("value",value.city).prop('selected', true).append(city_name_value).appendTo("#slt_cities");
                     }else{
-                        $("<option></option>").attr("value",value.city).append(value.city).appendTo("#slt_cities");
+                        $("<option></option>").attr("value",value.city).append(city_name_value).appendTo("#slt_cities");
                     }
                 });
 
@@ -796,7 +796,7 @@ function populate_city_default(city_name){
           if(data.length >0){
           $("<option></option>").attr("value","-").append("-").appendTo("#slt_cities");
             $.each(data, function(key, value) {
-                var city_name_value= first_letter_each_word_uppercase(value.city,true) ;
+                var city_name_value= first_letter_each_word_uppercase(value.city) ;
                 if(value.city == city_name){
                     $("<option></option>").attr("value",value.city).prop('selected', true).append(city_name_value).appendTo("#slt_cities");
                 }else{

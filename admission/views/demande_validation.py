@@ -105,7 +105,6 @@ def validate_application(application):
 
 
 def validate_diploma(application, user):
-    print('validate_diploma')
     validation_messages = {}
     applicant = mdl.applicant.find_by_user(user)
     secondary_education = mdl.secondary_education.find_by_person(applicant)
@@ -158,7 +157,7 @@ def validate_diploma(application, user):
                 doc_verso = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_VERSO)
                 if doc_recto.exists() is False or doc_verso.exists() is False:
                     validation_messages['national_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
-                if application.application_type == application_type.ADMISSION:
+                if application and application.application_type == application_type.ADMISSION:
                     doc_recto = mdl.application_document_file.search(application, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
                     doc_verso = mdl.application_document_file.search(application, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO)
                     if doc_recto.exists() is False or doc_verso.exists() is False:
@@ -176,8 +175,10 @@ def validate_diploma(application, user):
                     validation_messages['professional_exam_doc'] = ALERT_MANDATORY_FIELD
     print(validation_messages)
     if len(validation_messages) > 0:
+        print('falser')
         return False
     else:
+        print('true')
         return True
 
 

@@ -34,7 +34,6 @@ from admission.views.common import home, documents_upload
 from admission.views import common
 from reference import models as mdl_reference
 from admission.views import demande_validation
-from admission.views import tabs
 from admission.models.enums import document_type
 from osis_common import models as mdl_osis_common
 from django.http import HttpResponseRedirect
@@ -345,7 +344,6 @@ def diploma_update(request, application_id=None, saved=None):
     professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
     countries = mdl_reference.country.find_excluding("BE")
     academic_years = mdl_base.academic_year.find_academic_years()
-    tab_status = tabs.init(request)
 
     data = {"application":                  application,
             "academic_years":               academic_years,
@@ -361,14 +359,6 @@ def diploma_update(request, application_id=None, saved=None):
             "current_academic_year":        mdl_base.academic_year.current_academic_year(),
             "local_language_exam_needed":   common.is_local_language_exam_needed(request.user),
             'tab_active':                   2,
-            'tab_profile': tab_status['tab_profile'],
-            'tab_applications': tab_status['tab_applications'],
-            'tab_diploma': tab_status['tab_diploma'],
-            'tab_curriculum': tab_status['tab_curriculum'],
-            'tab_accounting': tab_status['tab_accounting'],
-            'tab_sociological': tab_status['tab_sociological'],
-            'tab_attachments': tab_status['tab_attachments'],
-            'tab_submission': tab_status['tab_submission'],
             'applications': mdl.application.find_by_user(request.user),
             'message_info': message_info}
 
@@ -783,11 +773,6 @@ def get_prerequis_data(request, saved, application_id):
     professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
     countries = mdl_reference.country.find_excluding("BE")
     academic_years = mdl_base.academic_year.find_academic_years()
-    # tab_status = tabs.init(request)
-    current_academic_year = mdl_base.academic_year.current_academic_year()
-    current_academic_year_id = None
-    if current_academic_year:
-        current_academic_year_id = current_academic_year.id
 
     data = {"application":                  application,
             "academic_years":               academic_years,
@@ -824,10 +809,13 @@ def validate(request, application, secondary_education, next_step):
         validate_fields_form(request, secondary_education, next_step, application)
 
     data = get_prerequis_data(request, None, application_id)
-    data.update({"secondary_education":secondary_education})
+    data.update({"secondary_education": secondary_education})
+
     if len(validation_messages) > 0:
+        data.update({'valid_data': False})
         data.update({"validation_messages": validation_messages})
     else:
+        data.update({'valid_data': True})
         data.update({"validation_messages": None})
 
     return render(request, "admission_home.html", data)

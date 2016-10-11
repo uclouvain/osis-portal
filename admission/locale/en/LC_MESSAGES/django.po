@@ -1360,9 +1360,8 @@ msgstr "Equivalence"
 msgid "prerequisites_min_data"
 msgstr "You must have, at least, an secondary diploma or a professional exam or an admission exam or a local language exam"
 
-
 msgid "validation_errors"
-msgstr " field(s) stop(s) the tab validation"
+msgstr " fields stop the tab validation"
 
 msgid "msg_one_prerequisite"
 msgstr ""
@@ -1402,3 +1401,9 @@ msgstr "Mandatory files for recto and verso"
 
 msgid "validate_data"
 msgstr "Validate data"
+
+msgid "validation_error"
+msgstr " field stops the tab validation"
+
+msgid "you_have_to_save"
+msgstr "Don't forget to save"

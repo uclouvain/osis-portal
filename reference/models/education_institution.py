@@ -31,7 +31,8 @@ from base.models.serializable_model import SerializableModel
 
 
 class EducationInstitutionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'institution_type', 'country', 'adhoc')
+    list_display = ('name', 'institution_type', 'country', 'adhoc', 'city', 'postal_code')
+    list_filter = ('institution_type', 'postal_code',)
 
 
 class EducationInstitution(SerializableModel):
