@@ -28,6 +28,7 @@ from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from admission import models as mdl
 from reference import models as mdl_reference
+from reference.enums import institutional_grade_type as enum_institutional_grade_type
 from base import models as mdl_base
 from admission.views.common import get_picture_id, get_id_document
 from admission.views.common import extra_information
@@ -126,7 +127,7 @@ def save_application_offer(request):
                 application.resident = False
         if request.POST.get('txt_offer_lottery'):
             application.raffle_number = request.POST.get('txt_offer_lottery')
-
+        application.application_type = mdl.application.define_application_type(application.national_degree, request.user)
         application.save()
         application_id = application.id
         if new_application is False:
@@ -251,7 +252,7 @@ def applications(request, application_id=None):
     countries = mdl_reference.country.find_all()
     data = {
         "applications": application_list,
-        "grade_choices": mdl_reference.institutional_grade_type.find_all(),
+        "grade_choices": enum_institutional_grade_type.INSTITUTIONAL_GRADE_CHOICES,
         "domains": mdl_reference.domain.find_current_domains(),
         'tab_active': 1,
         "application": application,
@@ -288,12 +289,13 @@ def application_delete(request, application_id):
 
 def change_application_offer(request, application_id=None):
     application = mdl.application.find_by_id(application_id)
+    application.application_type = mdl.application.define_application_type(application.national_degree, request.user)
     application.save()
     application_list = mdl.application.find_by_user(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
     data = {
         'applications': application_list,
-        "grade_choices": mdl_reference.institutional_grade_type.find_all(),
+        "grade_choices": enum_institutional_grade_type.INSTITUTIONAL_GRADE_CHOICES,
         "domains": mdl_reference.domain.find_current_domains(),
         'tab_active': 1,
         "first": True,
@@ -307,9 +309,9 @@ def is_local_language_exam_needed(user):
     local_language_exam_needed = False
     applications_list = mdl.application.find_by_user(user)
     for application in applications_list:
-        if application.offer_year.grade_type.name == 'BACHELOR' or \
-                        application.offer_year.grade_type.name == 'MASTER' or \
-                        application.offer_year.grade_type.name == 'TRAINING_CERTIFICATE':
+        if application.offer_year.grade_type == 'BACHELOR' or \
+                        application.offer_year.grade_type.startswith('MASTER') or \
+                        application.offer_year.grade_type == 'TRAINING_CERTIFICATE':
             local_language_exam_needed = True
             break
     return local_language_exam_needed

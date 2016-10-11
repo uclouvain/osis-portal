@@ -331,7 +331,6 @@ def diploma_update(request, application_id=None, saved=None):
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
-        #application = mdl.application.init_application(request.user)
         application = mdl.application.find_first_by_user(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
     other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
@@ -519,8 +518,6 @@ def validate_admission_exam(request, is_valid, validation_messages, secondary_ed
                 admission_exam.result = request.POST.get('admission_exam_result')
 
     return is_valid, validation_messages, secondary_education, admission_exam
-
-
 
 
 def populate_secondary_education(request, secondary_education):

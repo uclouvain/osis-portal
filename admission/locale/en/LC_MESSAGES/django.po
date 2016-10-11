@@ -1370,6 +1370,29 @@ msgstr ""
 msgid "question_lottery_number"
 msgstr "Please mention your lottery number"
 
+msgid "master_60"
+msgstr "Master 60"
+
+msgid "master_120"
+msgstr "Master 120"
+
+msgid "master_180_240"
+msgstr "Master 180 or 240"
+
+msgid "advanced_master"
+msgstr "Advanced master"
+
+msgid "capaes"
+msgstr "Capaes"
+
+msgid "institution_not_found_question"
+msgstr ""
+"You didn't find your institute in the list?"
+"below."
+
+msgid "mandatory_file_recto_verso"
+msgstr "Mandatory files for recto and verso"
+
 msgid "CRITERIA_1"
 msgstr "Please mention if you have an authorisation of an institute or if you are long-term resident."
 

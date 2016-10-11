@@ -35,6 +35,7 @@ from django.utils.translation import ugettext_lazy as _
 from admission.models.enums import document_type
 from admission.models.enums import application_type
 
+
 ALERT_MANDATORY_FIELD = _('mandatory_field')
 ALERT_MANDATORY_FILE = _('mandatory_file')
 ALERT_MANDATORY_FILE_RECTO_VERSO = _('mandatory_file_recto_verso')
@@ -157,7 +158,7 @@ def validate_diploma(application, user):
                 doc_verso = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_VERSO)
                 if doc_recto.exists() is False or doc_verso.exists() is False:
                     validation_messages['national_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
-                if application and application.application_type == application_type.ADMISSION:
+                if application.application_type == application_type.ADMISSION:
                     doc_recto = mdl.application_document_file.search(application, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
                     doc_verso = mdl.application_document_file.search(application, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO)
                     if doc_recto.exists() is False or doc_verso.exists() is False:
@@ -173,12 +174,10 @@ def validate_diploma(application, user):
                 doc = mdl.application_document_file.search(application, document_type.PROFESSIONAL_EXAM_CERTIFICATE)
                 if doc.exists() is False:
                     validation_messages['professional_exam_doc'] = ALERT_MANDATORY_FIELD
-    print(validation_messages)
+
     if len(validation_messages) > 0:
-        print('falser')
         return False
     else:
-        print('true')
         return True
 
 
