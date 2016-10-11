@@ -149,12 +149,12 @@ $("#slt_nationality").change(function() {
 //Display pnl_offer_vae only for Masters and only when rdb_offer_localdegree_false is clicked
 
 $("#rdb_offer_localdegree_true").click(function() {
-       $.ajax({
-        url: "/admission/offer?offer=" + $("#txt_offer_year_id").val()
-       }).then(function(data) {
+   $.ajax({
+    url: "/admission/offer?offer=" + $("#txt_offer_year_id").val()
+   }).then(function(data) {
         var is_master = false;
-        if((data.institutional_grade_type_name.toLowerCase()).startsWith('master') ){
-            is_master=true;
+        if((data.institutional_grade_type.toLowerCase()).startsWith('master') ){
+            is_master = true;
         }
 
         if (! is_master){
@@ -163,7 +163,6 @@ $("#rdb_offer_localdegree_true").click(function() {
            $('#pnl_offer_vae').find('input').removeAttr('required');
         }
     });
-
 });
 
 $("#rdb_offer_localdegree_false").click(function() {
@@ -171,7 +170,7 @@ $("#rdb_offer_localdegree_false").click(function() {
         url: "/admission/offer?offer=" + $("#txt_offer_year_id").val()
        }).then(function(data) {
         var is_master = false;
-        if((data.institutional_grade_type_name.toLowerCase()).startsWith('master') ){
+        if((data.institutional_grade_type.toLowerCase()).startsWith('master') ){
             is_master=true;
         }
         if (is_master){
