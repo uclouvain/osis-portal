@@ -916,3 +916,12 @@ function enabled_known_national_school(){
     $('#txt_CESS_other_school_postal_code').val('');
     $('#txt_CESS_other_school_postal_code').prop( "disabled", true);
 }
+
+$("#rdb_local").click(function(event) {
+    $('#hdn_secondary_education_national_institution_city').val('')
+    $('#hdn_secondary_education_national_institution_postal_code').val('');
+    $('#hdn_secondary_education_national_institution_adhoc').val('');
+    $('#hdn_secondary_education_national_institution_id').val('');
+    $('#hdn_secondary_education_national_institution_name').val('');
+    populate_school_dropdown('', '', '', '', '');
+});

@@ -403,6 +403,9 @@ def profile(request, application_id=None, message_success=None):
             person_contact_address.save()
         person_legal_address.save()
         applicant.user.save()
+        if application:
+            application.application_type = mdl.application.define_application_type(application.national_degree, request.user)
+            application.save()
         request.user = applicant.user  # Otherwise it was not refreshed while going back to home page
         applicant.save()
         message_info = _('msg_info_saved')

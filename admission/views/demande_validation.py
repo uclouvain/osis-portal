@@ -174,11 +174,14 @@ def validate_diploma(application, user):
                 doc = mdl.application_document_file.search(application, document_type.PROFESSIONAL_EXAM_CERTIFICATE)
                 if doc.exists() is False:
                     validation_messages['professional_exam_doc'] = ALERT_MANDATORY_FIELD
+        if len(validation_messages) > 0:
+            return False
+        else:
+            return True
 
-    if len(validation_messages) > 0:
-        return False
     else:
-        return True
+        return False
+
 
 
 def validate_curriculum(application):

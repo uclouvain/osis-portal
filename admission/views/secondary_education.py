@@ -171,6 +171,16 @@ def validate_fields_form(request, secondary_education, next_step, application):
                                 national_institution = mdl_reference.education_institution\
                                     .find_by_id(int(request.POST.get('school')))
                                 secondary_education.national_institution = national_institution
+                    # Validation of the needed documents
+                    doc_recto = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_RECTO)
+                    doc_verso = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_VERSO)
+                    if doc_recto.exists() is False or doc_verso.exists() is False:
+                        validation_messages['national_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
+                    if application.application_type == application_type.ADMISSION:
+                        doc_recto = mdl.application_document_file.search(application, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
+                        doc_verso = mdl.application_document_file.search(application, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO)
+                        if doc_recto.exists() is False or doc_verso.exists() is False:
+                            validation_messages['high_school_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
                 else:
                     if request.POST.get('rdb_local_foreign') == 'false':
                         if request.POST.get('foreign_result') is None:
@@ -203,16 +213,7 @@ def validate_fields_form(request, secondary_education, next_step, application):
                             if request.POST.get('international_diploma_language') == "-":
                                 validation_messages['language_regime'] = _('msg_language_diploma')
                                 is_valid = False
-            # Validation of the needed documents
-            doc_recto = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_RECTO)
-            doc_verso = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_VERSO)
-            if doc_recto.exists() is False or doc_verso.exists() is False:
-                validation_messages['national_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
-            if application.application_type == application_type.ADMISSION:
-                doc_recto = mdl.application_document_file.search(application, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
-                doc_verso = mdl.application_document_file.search(application, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO)
-                if doc_recto.exists() is False or doc_verso.exists() is False:
-                    validation_messages['high_school_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
+
         else:
             if request.POST.get('diploma') == 'false':
                 secondary_education.diploma = False
@@ -239,9 +240,9 @@ def validate_fields_form(request, secondary_education, next_step, application):
             and request.POST.get('professional_exam') == 'false':
         if next_step is True:
             validation_messages['final'] = "%s" % _('msg_error_next_step_impossible')
-        validation_messages['final3'] = "%s " % _('question_professional_experience')
-        validation_messages['final2'] = "%s " % _('question_admission_exam')
-        validation_messages['final1'] = "%s " % _('question_get_diploma')
+            validation_messages['final3'] = "%s " % _('question_professional_experience')
+            validation_messages['final2'] = "%s " % _('question_admission_exam')
+            validation_messages['final1'] = "%s " % _('question_get_diploma')
         validation_messages['diploma'] = "%s " % _('msg_one_prerequisite')
         is_valid = False
 
@@ -283,6 +284,10 @@ def diploma_save(request):
     applicant = mdl.applicant.find_by_user(request.user)
     secondary_education = mdl.secondary_education.find_by_person(applicant)
     if validate_diploma:
+        if secondary_education is None:
+            secondary_education = mdl.secondary_education.SecondaryEducation()
+            secondary_education.academic_year = mdl_base.academic_year.current_academic_year()
+            secondary_education.person = applicant
         return validate(request, application, secondary_education, next_step)
 
     if secondary_education is None:

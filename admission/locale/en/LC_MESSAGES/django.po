@@ -1433,4 +1433,4 @@ msgid "validation_error"
 msgstr " field stops the tab validation"
 
 msgid "you_have_to_save"
-msgstr "Don't forget to save"
+msgstr "Don't forget to save, validation doesn't save"

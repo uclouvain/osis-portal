@@ -1424,7 +1424,7 @@ msgid "validation_error"
 msgstr " champ empêche la validation de l'onglet"
 
 msgid "you_have_to_save"
-msgstr "N'oubliez pas de sauvegarder"
+msgstr "N'oubliez pas de sauvegarder, la validation ne sauve rien"
 
 msgid "MASTER_60"
 msgstr "Master 60"
