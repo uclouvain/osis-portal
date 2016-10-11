@@ -1389,29 +1389,6 @@ msgstr ""
 msgid "question_lottery_number"
 msgstr "Veuillez indique le numéro que le Service d'inscription vous a fourni"
 
-msgid "master_60"
-msgstr "Master 60"
-
-msgid "master_120"
-msgstr "Master 120"
-
-msgid "master_180_240"
-msgstr "Master 180 or 240"
-
-msgid "advanced_master"
-msgstr "Advanced master"
-
-msgid "capaes"
-msgstr "Capaes"
-
-msgid "institution_not_found_question"
-msgstr ""
-"Vous n'avez pas trouvé votre établissement dans cette liste?"
-"ci-après"
-
-msgid "mandatory_file_recto_verso"
-msgstr "Fichiers recto et verso obligatoires"
-
 msgid "CRITERIA_1"
 msgstr "Avez-vous une autorisation d’établissement ou vous êtes résident de longue durée ?"
 
@@ -1448,3 +1425,33 @@ msgstr " champ empêche la validation de l'onglet"
 
 msgid "you_have_to_save"
 msgstr "N'oubliez pas de sauvegarder"
+
+msgid "MASTER_60"
+msgstr "Master 60"
+
+msgid "MASTER_120"
+msgstr "Master 120"
+
+msgid "MASTER_180_OR_240"
+msgstr "Master 180 or 240"
+
+msgid "ADVANCED_MASTER"
+msgstr "Master spécialisé"
+
+msgid "CAPAES"
+msgstr "Capaes"
+
+msgid "BACHELOR"
+msgstr "Bachelier"
+
+msgid "TRAINING_CERTIFICATE"
+msgstr "Agrégation"
+
+msgid "CERTIFICATE"
+msgstr "Certificat"
+
+msgid "DOCTORATE"
+msgstr "Doctorat"
+
+
+

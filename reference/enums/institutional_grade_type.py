@@ -26,13 +26,23 @@
 
 from django.utils.translation import ugettext_lazy as _
 
+BACHELOR = "BACHELOR"
+MASTER_60 = "MASTER_60"
+MASTER_120 = "MASTER_120"
+MASTER_180_OR_240 = "MASTER_180_OR_240"
+ADVANCED_MASTER = "ADVANCED_MASTER"
+TRAINING_CERTIFICATE = "TRAINING_CERTIFICATE"
+CERTIFICATE = "CERTIFICATE"
+DOCTORATE = "DOCTORATE"
+CAPAES = "CAPAES"
+
 INSTITUTIONAL_GRADE_CHOICES = (
-    ('BACHELOR', _('bachelor')),
-    ('MASTER_60', _('master_60')),
-    ('MASTER_120', _('master_120')),
-    ('MASTER_180_OR_240', _('master_180_240')),
-    ('ADVANCED_MASTER', _('advanced_master')),
-    ('TRAINING_CERTIFICATE', _('teacher_training_certificate')),
-    ('CERTIFICATE', _('certificate')),
-    ('DOCTORATE', _('ph_d')),
-    ('CAPAES',_('capaes')))
+    ('BACHELOR', _(BACHELOR)),
+    ('MASTER_60', _(MASTER_60)),
+    ('MASTER_120', _(MASTER_120)),
+    ('MASTER_180_OR_240', _(MASTER_180_OR_240)),
+    ('ADVANCED_MASTER', _(ADVANCED_MASTER)),
+    ('TRAINING_CERTIFICATE', _(TRAINING_CERTIFICATE)),
+    ('CERTIFICATE', _(CERTIFICATE)),
+    ('DOCTORATE', _(DOCTORATE)),
+    ('CAPAES',_(CAPAES)))
