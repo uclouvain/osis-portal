@@ -23,15 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
-from django.contrib import admin
 
+from django.utils.translation import ugettext_lazy as _
 
-class DocumentTypeAssimilationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'adhoc')
+BACHELOR = "BACHELOR"
+MASTER_60 = "MASTER_60"
+MASTER_120 = "MASTER_120"
+MASTER_180_OR_240 = "MASTER_180_OR_240"
+ADVANCED_MASTER = "ADVANCED_MASTER"
+TRAINING_CERTIFICATE = "TRAINING_CERTIFICATE"
+CERTIFICATE = "CERTIFICATE"
+DOCTORATE = "DOCTORATE"
+CAPAES = "CAPAES"
 
-
-class DocumentTypeAssimilation(models.Model):
-    assimilation_criteria = models.ForeignKey('reference.AssimilationCriteria')
-    document_type = models.CharField(max_length=50)
-
+INSTITUTIONAL_GRADE_CHOICES = (
+    ('BACHELOR', _(BACHELOR)),
+    ('MASTER_60', _(MASTER_60)),
+    ('MASTER_120', _(MASTER_120)),
+    ('MASTER_180_OR_240', _(MASTER_180_OR_240)),
+    ('ADVANCED_MASTER', _(ADVANCED_MASTER)),
+    ('TRAINING_CERTIFICATE', _(TRAINING_CERTIFICATE)),
+    ('CERTIFICATE', _(CERTIFICATE)),
+    ('DOCTORATE', _(DOCTORATE)),
+    ('CAPAES',_(CAPAES)))

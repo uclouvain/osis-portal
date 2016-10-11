@@ -42,14 +42,15 @@ class JSONResponse(HttpResponse):
 
 
 class OfferSerializer(serializers.ModelSerializer):
-    institutional_grade_type_name = serializers.SerializerMethodField('get_grade_type')
+    institutional_grade_type = serializers.SerializerMethodField('get_grade_type')
 
     class Meta:
         model = mdl_base.offer_year.OfferYear
-        fields = ('id', 'acronym', 'title', 'title_international', 'grade_type', 'subject_to_quota', 'institutional_grade_type_name')
+        fields = ('id', 'acronym', 'title', 'title_international', 'grade_type', 'subject_to_quota',
+                  'institutional_grade_type')
 
     def get_grade_type(self, obj):
-        return obj.grade_type.institutional_grade_type.name
+        return obj.grade_type.institutional_grade_type
 
 
 def search(request):
@@ -141,7 +142,7 @@ def demande_update(request, application_id=None):
                    "grade_choices":          grade_choices,
                    'tab_active':             0,
                    "tab_demande_active":     0,
-                   "display_admission_exam": extra_information(request, application),
+                   "display_admission_exam": extra_information(application),
                    "validated_extra":        validated_extra(secondary_education, application),
                    "picture": get_picture_id(request.user),
                    "id_document": get_id_document(request.user),
