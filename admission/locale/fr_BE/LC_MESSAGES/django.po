@@ -1426,7 +1426,7 @@ msgid "CAPAES"
 msgstr "Capaes"
 
 msgid "BACHELOR"
-msgstr "Bachelierr"
+msgstr "Bachelier"
 
 msgid "TRAINING_CERTIFICATE"
 msgstr "Agrégation"
