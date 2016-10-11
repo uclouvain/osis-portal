@@ -130,12 +130,12 @@ def validate_diploma(application, user):
                     validation_messages['local_community'] = ALERT_MANDATORY_FIELD
                 else:
                     if secondary_education.national_community == 'FRENCH' \
-                            and secondary_education.academic_year.year < 1994 \
+                            and secondary_education.academic_year < 1994 \
                             and secondary_education.dipl_acc_high_educ is None:
                         validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
 
                     if secondary_education.national_community == 'DUTCH' \
-                            and secondary_education.academic_year.year < 1992 \
+                            and secondary_education.academic_year < 1992 \
                             and secondary_education.dipl_acc_high_educ is None:
                         validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
 
@@ -146,7 +146,7 @@ def validate_diploma(application, user):
                             and secondary_education.education_type is None:
                         validation_messages['pnl_teaching_type'] = _('msg_error_education_type')
 
-                if secondary_education.academic_year.year < 1994:
+                if secondary_education.academic_year < 1994:
                     if secondary_education.path_repetition is None:
                         validation_messages['path_repetition'] = ALERT_MANDATORY_FIELD
                     if secondary_education.path_reorientation is None:

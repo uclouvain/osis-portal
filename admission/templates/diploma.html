@@ -33,9 +33,9 @@
            name="diploma"
            value="{{secondary_education.diploma | default_if_none:'False'}}" >
     <input type="hidden"
-           id="hdn_secondary_education_academic_year_id"
+           id="hdn_secondary_education_academic_year"
            name="secondary_academic_year"
-           value="{{secondary_education.academic_year.id}}" >
+           value="{{secondary_education.academic_year}}" >
     <input type="hidden"
            id="hdn_secondary_education_national"
            name="secondary_education_national"
@@ -315,13 +315,14 @@
                 <div class="form-group" >
                     <label>{% trans 'pnl_academic_year_which_year'%} *</label>
                     <select class="form-control"
+                            style="text-align: center;"
                             id="slt_academic_year"
                             name="academic_year"
                             onchange="show_hide_pnl_dipl_acc_high_educ();">
                             {% for academic_yr in academic_years %}
-                                    <option value="{{ academic_yr.id }}"
-                                            title="{% trans 'academic_year'%} {{academic_yr.year}}"
-                                            {%if current_academic_year = academic_yr %}selected{%endif%}>{{ academic_yr }}</option>
+                                    <option value="{{ academic_yr }}"
+                                            title="{% trans 'academic_year'%} {{academic_yr}}"
+                                            {%if current_academic_year = academic_yr %}selected{%endif%}>{{ academic_yr }} - {{academic_yr|add:1 }}</option>
                             {% endfor %}
                     </select>
                     {%if validation_messages and validation_messages|get_item:'academic_year'%}

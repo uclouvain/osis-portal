@@ -46,6 +46,7 @@ ALERT_MANDATORY_FIELD = _('mandatory_field')
 PROFESSIONAL_TYPE = 'PROFESSIONAL'
 ADMISSION_EXAM_TYPE = 'ADMISSION'
 LANGUAGE_EXAM_TYPE = 'LANGUAGE'
+NB_YEARS_AVAILABLE_FOR_DIPLOMA_ACQUISITION = 50
 
 
 def validate_fields_form(request, secondary_education, next_step, application):
@@ -63,8 +64,8 @@ def validate_fields_form(request, secondary_education, next_step, application):
                 validation_messages['academic_year'] = ALERT_MANDATORY_FIELD
                 is_valid = False
             else:
-                academic_year = mdl_base.academic_year.find_by_id(int(request.POST.get('academic_year')))
-                secondary_education.academic_year = academic_year
+                secondary_education.academic_year = int(request.POST.get('academic_year'))
+                academic_year = secondary_education.academic_year
             if request.POST.get('rdb_local_foreign') is None:
                 validation_messages['rdb_local_foreign'] = ALERT_MANDATORY_FIELD
                 is_valid = False
@@ -84,7 +85,7 @@ def validate_fields_form(request, secondary_education, next_step, application):
                         secondary_education.national_community = request.POST.get('local_community')
                         if request.POST.get('local_community') == 'FRENCH':
                             # diploma of the French community
-                            if academic_year.year < 1994:
+                            if academic_year < 1994:
                                 if request.POST.get('dipl_acc_high_educ') is None:
                                     validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
                                     is_valid = False
@@ -103,7 +104,7 @@ def validate_fields_form(request, secondary_education, next_step, application):
                         else:
                             if request.POST.get('local_community') == 'DUTCH':
                                 # diploma of the Dutch community
-                                if academic_year.year < 1992:
+                                if academic_year < 1992:
                                     if request.POST.get('dipl_acc_high_educ') is None:
                                         validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
                                         is_valid = False
@@ -123,7 +124,7 @@ def validate_fields_form(request, secondary_education, next_step, application):
                                 secondary_education.education_type = mdl_reference.education_type\
                                     .find_by_id(int(request.POST.get('rdb_education_technic_type')))
 
-                    if academic_year.year < 1994:
+                    if academic_year < 1994:
                         if request.POST.get('path_repetition') is None:
                             validation_messages['path_repetition'] = ALERT_MANDATORY_FIELD
                             is_valid = False
@@ -329,47 +330,7 @@ def diploma_update(request, application_id=None, saved=None):
     :param saved:
     :return:
     """
-    if saved:
-        message_info = _('msg_info_saved')
-    else:
-        message_info = ""
-    if application_id:
-        application = mdl.application.find_by_id(application_id)
-    else:
-        application = mdl.application.find_first_by_user(request.user)
-    applicant = mdl.applicant.find_by_user(request.user)
-    other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
-    recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
-    exam_types = mdl.admission_exam_type.find_all_by_adhoc(False)
-    secondary_education = mdl.secondary_education.find_by_person(applicant)
-    education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
-    education_type_qualification = mdl_reference.education_type.find_education_type_by_adhoc('QUALIFICATION', False)
-    local_language_exam_link = mdl.properties.find_by_key('PROFESSIONAL_EXAM_LINK')
-    professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
-    countries = mdl_reference.country.find_excluding("BE")
-    academic_years = mdl_base.academic_year.find_academic_years()
-
-    data = {"application":                  application,
-            "academic_years":               academic_years,
-            "secondary_education":          secondary_education,
-            "countries":                    countries,
-            "recognized_languages":         recognized_languages,
-            "languages":                    other_language_regime,
-            "exam_types":                   exam_types,
-            'local_language_exam_link':     local_language_exam_link,
-            "professional_exam_link":       professional_exam_link,
-            "education_type_transition":    education_type_transition,
-            "education_type_qualification": education_type_qualification,
-            "current_academic_year":        mdl_base.academic_year.current_academic_year(),
-            "local_language_exam_needed":   common.is_local_language_exam_needed(request.user),
-            'tab_active':                   2,
-            'applications': mdl.application.find_by_user(request.user),
-            'message_info': message_info}
-
-    # merge dictionaries
-    data.update(get_secondary_education_exams_data(secondary_education))
-    data.update(get_secondary_education_files_data(application))
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data = get_prerequis_data(request, saved, application_id)
     return render(request, "admission_home.html", data)
 
 
@@ -540,7 +501,7 @@ def populate_secondary_education(request, secondary_education):
     if request.POST.get('diploma'):
         if request.POST.get('diploma') == 'true':
             if request.POST.get('academic_year'):
-                academic_year = mdl_base.academic_year.find_by_id(int(request.POST.get('academic_year')))
+                academic_year = int(request.POST.get('academic_year'))
                 secondary_education.academic_year = academic_year
             secondary_education.diploma = True
             if request.POST.get('rdb_local_foreign'):
@@ -667,7 +628,7 @@ def populate_secondary_education(request, secondary_education):
             and (secondary_education.national is True or secondary_education.international_diploma is True):
         academic_year = None
         if request.POST.get('academic_year'):
-            academic_year = mdl_base.academic_year.find_by_id(int(request.POST.get('academic_year')))
+            academic_year = int(request.POST.get('academic_year'))
         secondary_education.academic_year = academic_year
 
     return secondary_education
@@ -774,8 +735,18 @@ def get_prerequis_data(request, saved, application_id):
     local_language_exam_link = mdl.properties.find_by_key('PROFESSIONAL_EXAM_LINK')
     professional_exam_link = mdl.properties.find_by_key('LOCAL_LANGUAGE_EXAM_LINK')
     countries = mdl_reference.country.find_excluding("BE")
-    academic_years = mdl_base.academic_year.find_academic_years()
-
+    current_academic_year = mdl_base.academic_year.current_academic_year()
+    academic_years = []
+    if current_academic_year:
+        upper_bound = current_academic_year.year
+        low_bound = upper_bound - NB_YEARS_AVAILABLE_FOR_DIPLOMA_ACQUISITION
+        year_cpt = low_bound
+        while year_cpt <= upper_bound:
+            academic_years.append(year_cpt)
+            year_cpt = year_cpt + 1
+    current_year = None
+    if current_academic_year:
+        current_year = current_academic_year.year
     data = {"application":                  application,
             "academic_years":               academic_years,
             "secondary_education":          secondary_education,
@@ -787,14 +758,12 @@ def get_prerequis_data(request, saved, application_id):
             "professional_exam_link":       professional_exam_link,
             "education_type_transition":    education_type_transition,
             "education_type_qualification": education_type_qualification,
-            "current_academic_year":        mdl_base.academic_year.current_academic_year(),
+            "current_academic_year":        current_year,
             "local_language_exam_needed":   common.is_local_language_exam_needed(request.user),
             'tab_active':                   2,
             'applications':                 mdl.application.find_by_user(request.user),
             'message_info':                 message_info,
-            'current_academic_year':        mdl_base.academic_year.current_academic_year(),
             'form': None}
-
     # merge dictionaries
     data.update(get_secondary_education_exams_data(secondary_education))
     data.update(get_secondary_education_files_data(application))

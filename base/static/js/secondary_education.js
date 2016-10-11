@@ -126,9 +126,9 @@ $('document').ready(function(){
                 $('#rdb_diploma_true').prop( "checked", true);
                 $('#pnl_academic_year').css('visibility', 'visible').css('display','block');
                 //on pnl_academic_year
-                if ($('#hdn_secondary_education_academic_year_id').val() != ''){
+                if ($('#hdn_secondary_education_academic_year').val() != ''){
                     $('#slt_academic_year'+' option').each(function(){
-                        if($(this).attr('value')==$('#hdn_secondary_education_academic_year_id').val()){
+                        if($(this).attr('value')==$('#hdn_secondary_education_academic_year').val()){
                             $(this).prop('selected', true);
                         }
                     });
@@ -422,7 +422,7 @@ $("select[id^='slt_academic_year']" ).change(function(event) {
         target = target.parent();
         id = target.attr("id");
     }
-    $('#hdn_secondary_education_academic_year_id').val(target.val());
+    $('#hdn_secondary_education_academic_year').val(target.val());
 
 
 });
