@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -27,37 +27,8 @@ from base.models.serializable_model import SerializableModel
 from django.db import models
 
 
-class DissertationDocumentFile(SerializableModel):
-    dissertation = models.ForeignKey('Dissertation')
-    document_file = models.ForeignKey('osis_common.documentFile')
+class DissertationLocation(SerializableModel):
+    name = models.CharField(max_length=200)
 
-
-def search(dissertation=None, description=None):
-    out = None
-    queryset = DissertationDocumentFile.objects.order_by('document_file__creation_date')
-    if dissertation:
-        queryset = queryset.filter(dissertation=dissertation)
-    if description:
-        queryset = queryset.filter(document_file__description=description)
-    if dissertation or description:
-        out = queryset
-    return out
-
-
-def find_first(dissertation=None, description=None):
-    results = search(dissertation, description)
-    if results.exists():
-        return results[0]
-    return None
-
-
-def find_by_document(document_file):
-    return DissertationDocumentFile.objects.filter(document_file=document_file)
-
-
-def find_by_dissertation(dissertation):
-    return DissertationDocumentFile.objects.filter(dissertation=dissertation)
-
-
-def find_by_id(dissertation_id):
-    return DissertationDocumentFile.objects.get(dissertation__id=dissertation_id)
+    def __str__(self):
+        return self.name
