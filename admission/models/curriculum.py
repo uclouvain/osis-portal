@@ -94,10 +94,7 @@ def find_by_id(an_id):
 
 
 def find_by_academic_year(an_academic_year):
-    try:
-        return Curriculum.objects.get(academic_year=an_academic_year)
-    except ObjectDoesNotExist:
-        return None
+    return Curriculum.objects.filter(academic_year=an_academic_year).first()
 
 
 def find_user(a_person):
@@ -105,7 +102,7 @@ def find_user(a_person):
 
 
 def find_by_person_year(a_person, year):
-    return Curriculum.objects.filter(person=a_person, academic_year__year=year).first()
+    return Curriculum.objects.filter(person=a_person, academic_year=year).first()
 
 
 def find_local_french(a_person, an_academic_year):

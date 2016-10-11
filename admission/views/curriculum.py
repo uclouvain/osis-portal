@@ -80,7 +80,7 @@ def save(request):
             for curriculum in curricula:
                 curriculum.save()
         else:
-            return render(request, "curriculum.html",
+            return render(request, "admission_home.html",
                           {"curricula": curricula,
                            "local_universities_french": local_universities_french,
                            "local_universities_dutch": local_universities_dutch,
@@ -92,7 +92,8 @@ def save(request):
                            "universities_cities": universities_cities,
                            "universities": universities,
                            "languages": mdl_reference.language.find_languages(),
-                           "current_academic_year": mdl_base.academic_year.current_academic_year()})
+                           "current_academic_year": mdl_base.academic_year.current_academic_year(),
+                           "tab_active": 3})
 
     # Get the data in bd
     applicant = mdl.applicant.find_by_user(request.user)
@@ -102,24 +103,23 @@ def save(request):
     secondary_education = mdl.secondary_education.find_by_person(applicant)
     if secondary_education:
         if secondary_education.academic_year:
-            first_academic_year_for_cv = secondary_education.academic_year.year + 1
+            first_academic_year_for_cv = secondary_education.academic_year + 1
 
     current_academic_year = mdl_base.academic_year.current_academic_year().year
 
     year = first_academic_year_for_cv
     if year:
         while year < current_academic_year:
-            academic_year = mdl_base.academic_year.find_by_year(year)
-            curriculum = mdl.curriculum.find_by_academic_year(academic_year)
-            if not curriculum:
+            curriculum = mdl.curriculum.find_by_academic_year(year)
+            if curriculum is None:
                 # add cv empty cv's for the year if it's needed
                 curriculum = mdl.curriculum.Curriculum()
                 curriculum.person = applicant
-                curriculum.academic_year = academic_year
+                curriculum.academic_year = year
             curricula.append(curriculum)
             year += 1
 
-    return render(request, "curriculum.html", {"curricula": curricula,
+    return render(request, "admission_home.html", {"curricula": curricula,
                                                "local_universities_french": local_universities_french,
                                                "local_universities_dutch": local_universities_dutch,
                                                "domains": mdl_reference.domain.find_current_domains(),
@@ -132,7 +132,8 @@ def save(request):
                                                "universities_cities": universities_cities,
                                                "universities": universities,
                                                "languages": mdl_reference.language.find_languages(),
-                                               "current_academic_year": mdl_base.academic_year.current_academic_year()})
+                                               "current_academic_year": mdl_base.academic_year.current_academic_year(),
+                                                   "tab_active": 3})
 
 
 def update(request, application_id=None):
@@ -156,26 +157,24 @@ def update(request, application_id=None):
         pass
     else:
         if secondary_education and secondary_education.diploma is True and secondary_education.academic_year:
-            year_secondary = secondary_education.academic_year.year
+            year_secondary = secondary_education.academic_year
 
     if admission:
         if secondary_education and secondary_education.diploma is True and secondary_education.academic_year:
-            year = secondary_education.academic_year.year + 1
+            year = secondary_education.academic_year + 1
 
     if year_secondary and year and year < year_secondary:
         year = year_secondary + 1
     if year and current_academic_year:
         while year < current_academic_year:
-            academic_year = mdl_base.academic_year.find_by_year(year)
-            if academic_year:
-                # find existing cv
-                curriculum = mdl.curriculum.find_by_academic_year(academic_year)
-                if not curriculum:
-                    # add cv empty cv's for the year if it's needed
-                    curriculum = mdl.curriculum.Curriculum()
-                    curriculum.person = applicant
-                    curriculum.academic_year = academic_year
-                curricula.append(curriculum)
+            # find existing cv
+            curriculum = mdl.curriculum.find_by_academic_year(year)
+            if curriculum is None:
+                # add cv empty cv's for the year if it's needed
+                curriculum = mdl.curriculum.Curriculum()
+                curriculum.person = applicant
+                curriculum.academic_year = year
+            curricula.append(curriculum)
             year = year + 1
     local_universities_french = mdl_reference.education_institution \
         .find_by_institution_type_national_community(education_institution_type.UNIVERSITY,
@@ -240,13 +239,12 @@ def validate_fields_form(request, duplicate_year_origin):
                 data_dict_to_duplicate = data_dict.copy()
 
         # No need to validate the curriculum of the year which is going to be duplicated
-        academic_year = mdl_base.academic_year.find_by_year(curriculum_year)
         curriculum = mdl.curriculum.find_by_person_year(applicant, int(curriculum_year))
 
         if not curriculum:
             curriculum = mdl.curriculum.Curriculum()
             curriculum.person = applicant
-            curriculum.academic_year = academic_year
+            curriculum.academic_year = curriculum_year
         # default
         curriculum.path_type = None
         curriculum.national_education = None
@@ -686,14 +684,14 @@ def validate_foreign_university_fields_form(curriculum,
 def populate_dropdown_list(curricula):
     universities_cities = []
     universities = []
-    for curriculum in curricula:
+    for cv in curricula:
         cities_list = []
         universities_list = []
-        if curriculum.national_institution:
+        if cv.national_institution:
             universities_by_city = mdl_reference.education_institution \
-                .find_by_city_not_isocode(curriculum.national_institution.city, 'BE', 'UNIVERSITY')
+                .find_by_city_not_isocode(cv.national_institution.city, 'BE', 'UNIVERSITY')
             universities_by_country = mdl_reference.education_institution \
-                .find_by_country(curriculum.national_institution.country)
+                .find_by_country(cv.national_institution.country)
 
             for university in universities_by_country:
                 cities_list.append(university.city)
