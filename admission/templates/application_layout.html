@@ -250,6 +250,7 @@
                 display_existing_files(description);
             }
         });
+        alert('ready');
         change_menu();
     });
 
@@ -1030,6 +1031,7 @@
         }
 
         if (enableMyLink) {
+          alert('if');
           $("#mn_diploma").removeClass("disabled").find("a").removeAttr("onclick");
           $("#mn_curriculum").removeClass("disabled").find("a").removeAttr("onclick");
           $("#mn_accounting").removeClass("disabled").find("a").removeAttr("onclick");
@@ -1037,6 +1039,7 @@
           $("#mn_attachments").removeClass("disabled").find("a").removeAttr("onclick");
           $("#mn_submission").removeClass("disabled").find("a").removeAttr("onclick");
         } else {
+           alert('else');
           $("#mn_diploma").addClass("disabled").find("a").attr("onclick", "return false;");
           $("#mn_curriculum").addClass("disabled").find("a").attr("onclick", "return false;");
           $("#mn_accounting").addClass("disabled").find("a").attr("onclick", "return false;");

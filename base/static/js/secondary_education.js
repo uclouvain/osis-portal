@@ -1,3 +1,5 @@
+
+
 $('document').ready(function(){
     // for secondary_education and diplomas screen
     if ($('#form_secondary_education')){
@@ -6,8 +8,6 @@ $('document').ready(function(){
 
         $('#rdb_diploma_true').prop( "checked", false);
         $('#rdb_diploma_false').prop( "checked", false);
-
-        $('#slt_academic_year').prop("selectedIndex",-1);
 
         $('#rdb_local').prop( "checked", false);
         $('#rdb_foreign').prop( "checked", false);
@@ -28,6 +28,7 @@ $('document').ready(function(){
         $('#slt_postal_codes').prop( "disabled", false);
         $('#slt_schools').prop( "disabled", false);
 
+        $('#pnl_other_school').css('visibility', 'hidden').css('display','none');
         $('#chb_other_school').prop( "checked", false);
         $('#txt_CESS_other_school_name').val('');
         $('#txt_CESS_other_school_name').prop( "disabled", true);
@@ -55,7 +56,6 @@ $('document').ready(function(){
         $('#rdb_dipl_acc_high_educ_true').prop( "checked", false);
         $('#rdb_dipl_acc_high_educ_false').prop( "checked", false);
 
-        $('#pnl_parcours').css('visibility', 'hidden').css('display','none');
         $('#rdb_repeated_grade_true').prop( "checked", false);
         $('#rdb_repeated_grade_false').prop( "checked", false);
         $('#rdb_re_orientation_true').prop( "checked", false);
@@ -126,11 +126,13 @@ $('document').ready(function(){
                 $('#rdb_diploma_true').prop( "checked", true);
                 $('#pnl_academic_year').css('visibility', 'visible').css('display','block');
                 //on pnl_academic_year
-                $('#slt_academic_year'+' option').each(function(){
-                    if($(this).attr('value')==$('#hdn_secondary_education_academic_year_id').val()){
-                        $(this).prop('selected', true);
-                    }
-                });
+                if ($('#hdn_secondary_education_academic_year_id').val() != ''){
+                    $('#slt_academic_year'+' option').each(function(){
+                        if($(this).attr('value')==$('#hdn_secondary_education_academic_year_id').val()){
+                            $(this).prop('selected', true);
+                        }
+                    });
+                }
                 if($('#hdn_secondary_education_national').val() == 'True'){
                     display_local_secondary();
                 }
@@ -244,59 +246,62 @@ $('document').ready(function(){
 });
 
 function populate_secondary_national_institution(){
-    $("#slt_cities").find("option")
-        .remove()
-       .end();
-    city_name = $("#hdn_secondary_education_national_institution_city").val();
-    if(city_name==''){
-        city_name = "-"
-    }
+    if (! $('#hdn_secondary_education_national_institution_adhoc').val()=='True'){
+        city_name = $("#hdn_secondary_education_national_institution_city").val();
+        if(city_name==''){
+            city_name = "-"
+        }
+        postal_code = $('#hdn_secondary_education_national_institution_postal_code').val()
+        if(postal_code==''){
+            postal_code = "-"
+        }
+        populate_city_default(city_name);
+        postal_code = $("#hdn_secondary_education_national_institution_postal_code").val();
+        if(postal_code==''){
+            postal_code = "-"
+        }
+        if(city_name=='-'){
+            $("#slt_postal_codes").find("option")
+                .remove()
+               .end();
+            postal_code = $("#hdn_secondary_education_national_institution_postal_code").val();
+            if(postal_code==''){
+                postal_code = "-"
+            }
 
-    $.ajax({
-        url: "/admission/institution_cities?type=" + 'SECONDARY'
-    }).then(function(data) {
-          if(data.length >0){
-          $("<option></option>").attr("value","-").append("-").appendTo("#slt_cities");
-            $.each(data, function(key, value) {
-                if(value.city == city_name){
-                    $("<option></option>").attr("value",value.city).prop('selected', true).append(value.city).appendTo("#slt_cities");
-                }else{
-                    $("<option></option>").attr("value",value.city).append(value.city).appendTo("#slt_cities");
-                }
+            $.ajax({
+                url: "/admission/institution_postal_codes?type=" + 'SECONDARY'
+            }).then(function(data) {
+                  if(data.length >0){
+                  $("<option></option>").attr("value","-").append("-").appendTo("#slt_postal_codes");
+                    $.each(data, function(key, value) {
+                        if(value.city == postal_code){
+                            $("<option></option>").attr("value",value.postal_code).prop('selected', true).append(value.postal_code).appendTo("#slt_postal_codes");
+                        }else{
+                            $("<option></option>").attr("value",value.postal_code).append(value.postal_code).appendTo("#slt_postal_codes");
+                        }
+                    });
+                  }
+
             });
-          }
-    });
-    $("#slt_postal_codes").find("option")
-        .remove()
-       .end();
-    postal_code = $("#hdn_secondary_education_national_institution_postal_code").val();
-    if(postal_code==''){
-        postal_code = "-"
-    }
-
-    $.ajax({
-        url: "/admission/institution_postal_codes?type=" + 'SECONDARY'
-    }).then(function(data) {
-          if(data.length >0){
-          $("<option></option>").attr("value","-").append("-").appendTo("#slt_postal_codes");
-            $.each(data, function(key, value) {
-                if(value.city == postal_code){
-                    $("<option></option>").attr("value",value.postal_code).prop('selected', true).append(value.postal_code).appendTo("#slt_postal_codes");
-                }else{
-                    $("<option></option>").attr("value",value.postal_code).append(value.postal_code).appendTo("#slt_postal_codes");
-                }
-            });
-          }
-
-    });
-    if( $("#hdn_secondary_education_national_institution_id").val() != ''){
-        populate_secondary_institution(city_name,postal_code);
-
-
+        }
+        if (city_name!='' && city_name != '-'){
+            populate_postal_code(city_name,postal_code);
+            if ($('#hdn_secondary_education_national_institution_postal_code').val() != '' ){
+                $('#slt_postal_codes'+' option').each(function(){
+                    if($(this).attr('value')==postal_code){
+                        $(this).prop('selected', true);
+                    }
+                });
+            }
+        }
+        if( $("#hdn_secondary_education_national_institution_id").val() != ''){
+            populate_secondary_institution(city_name,postal_code);
+        }
     }
 }
 
-function populate_secondary_institution(city_name,postal_code){
+function populate_secondary_institution(city_name, postal_code){
     $("#slt_schools").find("option")
         .remove()
        .end();
@@ -308,17 +313,20 @@ function populate_secondary_institution(city_name,postal_code){
     if(institution_id==''){
         institution_id = "-"
     }
-
     $.ajax({
         url: "/admission/institutions?type=" + 'SECONDARY'+"&city=" + city_name + "&postal_code="+ postal_code
     }).then(function(data) {
           if(data.length >0){
+            var option_selected="";
+            if(data.length==1){
+                option_selected = true;
+            }
             $("<option></option>").attr("value","-").append("-").appendTo("#slt_schools");
             $("<option></option>").attr("value","-").append("-").appendTo("#slt_schools_community");
             $('#pnl_teaching_type').css('visibility', 'hidden').css('display','none');
 
             $.each(data, function(key, value) {
-                if(value.id == institution_id){
+                if(value.id == institution_id || option_selected){
                     $("<option></option>").attr("value",value.id).prop('selected', true).append(value.name).appendTo("#slt_schools");
                     $("<option></option>").attr("value",value.national_community).prop('selected', true).append(value.national_community).appendTo("#slt_schools_community");
                     if(value.national_community=='FRENCH'){
@@ -330,8 +338,8 @@ function populate_secondary_institution(city_name,postal_code){
                 }
             });
           }
-
     });
+
 }
 
 $("select[id^='slt_cities']" ).change(function(event) {
@@ -345,6 +353,14 @@ $("select[id^='slt_cities']" ).change(function(event) {
 
     $('#slt_postal_codes').prop("selectedIndex",-1);
     $('#slt_schools').prop("selectedIndex",-1);
+
+    if(target.val() != '-'){
+        populate_postal_code(target.val(),'-');
+    }else{
+        populate_city_default('-');
+        populate_postal_code_default();
+    }
+
     populate_secondary_institution(target.val(),'-')
 
 });
@@ -359,10 +375,43 @@ $("select[id^='slt_postal_codes']" ).change(function(event) {
     }
     $('#slt_cities').prop("selectedIndex",-1);
     $('#slt_schools').prop("selectedIndex",-1);
+
+    $("#slt_cities").find("option")
+        .remove()
+        .end();
+    if(target.val() != '-'){
+        populate_city('-',target.val());
+    }else{
+        $.ajax({
+            url: "/admission/institution_cities?type=" + 'SECONDARY'
+        }).then(function(data) {
+              if(data.length >0){
+              $("<option></option>").attr("value","-").append("-").appendTo("#slt_cities");
+                $.each(data, function(key, value) {
+                    var city_name_value= first_letter_each_word_uppercase(value.city,true) ;
+                        $("<option></option>").attr("value",value.city).append(city_name_value).appendTo("#slt_cities");
+
+                });
+              }
+        });
+        $("#slt_postal_codes").find("option")
+            .remove()
+           .end();
+        $.ajax({
+            url: "/admission/institution_postal_codes?type=" + 'SECONDARY'
+        }).then(function(data) {
+              if(data.length >0){
+              $("<option></option>").attr("value","-").append("-").appendTo("#slt_postal_codes");
+                $.each(data, function(key, value) {
+                    $("<option></option>").attr("value",value.postal_code).append(value.postal_code).appendTo("#slt_postal_codes");
+
+                });
+              }
+        });
+    }
     populate_secondary_institution('-',target.val())
 
 });
-
 
 
 $("select[id^='slt_academic_year']" ).change(function(event) {
@@ -417,34 +466,12 @@ function display_local_secondary(){
     if($('#hdn_secondary_education_national_community').val() == 'GERMAN'){
         $('#rdb_local_community_german').prop( "checked", true);
     }
-    populate_secondary_national_institution();
-    if($('#hdn_secondary_education_national_institution_adhoc').val() == 'True'){
-        $('#chb_other_school').prop( "checked", true);
-        $('#txt_CESS_other_school_name').prop( "disabled", false);
-        $('#txt_CESS_other_school_name').val($('#hdn_secondary_education_national_institution_name').val());
-        $('#txt_CESS_other_school_city').prop("disabled", false);
-        $('#txt_CESS_other_school_city').val($('#hdn_secondary_education_national_institution_city').val());
-        $('#txt_CESS_other_school_postal_code').prop( "disabled", false);
-        $('#txt_CESS_other_school_postal_code').val($('#hdn_secondary_education_national_institution_postal_code').val());
-        $('#slt_schools').prop( "disabled", true);
-        $('#slt_cities').prop( "disabled", true);
-        $('#slt_postal_codes').prop( "disabled", true);
-    }else{
-        if($('#hdn_original_national_institution_id_').val() != ''){
-            $('#slt_cities'+' option').each(function(){
-                if($(this).attr('value')==$('#hdn_secondary_education_national_institution_city').val()){
-                    $(this).prop('selected', true);
-                }
-            });
-            $('#slt_schools'+' option').each(function(){
-                if($(this).attr('value')==$('#slt_schools').val()){
-                    $(this).prop('selected', true);
-                }
-            });
+    populate_school_dropdown($('#hdn_secondary_education_national_institution_city').val(),
+                             $('#hdn_secondary_education_national_institution_postal_code').val(),
+                             $('#hdn_secondary_education_national_institution_adhoc').val(),
+                             $('#hdn_secondary_education_national_institution_id').val(),
+                             $('#hdn_secondary_education_national_institution_name').val()) ;
 
-        }
-
-    }
     national_community_display();
     if(($('#rdb_local_community_french').checked && $('#hdn_secondary_education_academic_year').val()<1994)
         || (($('#rdb_local_community_dutch').checked && $('#hdn_secondary_education_academic_year').val()<1992))){
@@ -453,7 +480,7 @@ function display_local_secondary(){
     }else{
         $('#rdb_dipl_acc_high_educ_false').prop( "checked", true);
     }
-    if( $('#hdn_secondary_education_academic_year').val()<1994){
+    if( $('#hdn_secondary_education_academic_year').val() < 1994){
         $('#rdb_repeated_grade_true').prop( "checked", true);
     }else{
         $('#rdb_repeated_grade_false').prop( "checked", true);
@@ -688,3 +715,204 @@ $("#rdb_diploma_true").click(function() {
     $('#pnl_academic_year').css('visibility', 'visible').css('display','block');
     $('#pnl_admission_exam').css('visibility', 'hidden').css('display','none');
 });
+
+function first_letter_each_word_uppercase(str,force){
+  str=force ? str.toLowerCase() : str;
+  return str.replace(/(\b)([a-zA-Z])/g,
+           function(firstLetter){
+              return   firstLetter.toUpperCase();
+           });
+}
+
+function populate_postal_code(city_name,postal_code){
+    if ($('#hdn_secondary_education_national_institution_adhoc').val()!='True'){
+        $.ajax({
+            url: "/admission/postalcodes?city=" + city_name
+        }).then(function(data) {
+            $("#slt_postal_codes").find("option")
+                .remove()
+                .end();
+            if(data.length >0){
+                $("<option></option>").attr("value","-").append("-").appendTo("#slt_postal_codes");
+
+                var option_selected = false;
+                postal_code= '-'
+                if(data.length==1){
+                    option_selected = true;
+                }else{
+                    postal_code= $('#hdn_secondary_education_national_institution_postal_code').val();
+                }
+                $.each(data, function(key, value) {
+                    if(option_selected || postal_code==value.postal_code){
+                        $("<option></option>").attr("value",value.postal_code).prop('selected', true).append(value.postal_code).appendTo("#slt_postal_codes");
+                    }else{
+                        $("<option></option>").attr("value",value.postal_code).append(value.postal_code).appendTo("#slt_postal_codes");
+                    }
+                });
+
+            }
+
+        });
+    }
+}
+
+function populate_city(city_name,postal_code){
+
+    if ($('#hdn_secondary_education_national_institution_adhoc').val()!='True'){
+        $.ajax({
+            url: "/admission/educationinstitution/cities?postal_code=" + postal_code
+        }).then(function(data) {
+            $("#slt_cities").find("option")
+                .remove()
+                .end();
+                $("<option></option>").attr("value","-").append("-").appendTo("#slt_cities");
+            if(data.length >0){
+                var option_selected = false;
+                if(data.length==1){
+                    option_selected = true;
+                }
+                $.each(data, function(key, value) {
+                    if(option_selected){
+                        $("<option></option>").attr("value",value.city).prop('selected', true).append(value.city).appendTo("#slt_cities");
+                    }else{
+                        $("<option></option>").attr("value",value.city).append(value.city).appendTo("#slt_cities");
+                    }
+                });
+
+            }
+        });
+    }
+}
+
+function populate_city_default(city_name){
+    //Populate the dropdown list of city for education institution.
+    //The cities for schools are all the distinct cities existing in the table EducationInstitution
+    $("#slt_cities").find("option")
+        .remove()
+        .end();
+    $.ajax({
+        url: "/admission/institution_cities?type=" + 'SECONDARY'
+    }).then(function(data) {
+          if(data.length >0){
+          $("<option></option>").attr("value","-").append("-").appendTo("#slt_cities");
+            $.each(data, function(key, value) {
+                var city_name_value= first_letter_each_word_uppercase(value.city,true) ;
+                if(value.city == city_name){
+                    $("<option></option>").attr("value",value.city).prop('selected', true).append(city_name_value).appendTo("#slt_cities");
+                }else{
+                    $("<option></option>").attr("value",value.city).append(city_name_value).appendTo("#slt_cities");
+                }
+            });
+          }
+    });
+}
+
+$("#chb_other_school").change(function(event) {
+    var target = $(event.target);
+    if(target.prop("checked")){
+        $('#pnl_other_school').css('visibility', 'visible').css('display','block');
+        $('#slt_cities').prop( "disabled", true);
+        $('#slt_postal_codes').prop( "disabled", true);
+        $('#slt_schools').prop( "disabled", true);
+        $('#slt_cities').prop( "selectedIndex", -1);
+        $('#slt_postal_codes').prop( "selectedIndex", -1);
+        $('#slt_schools').prop("selectedIndex",-1);
+        $('#hdn_secondary_education_national_institution_adhoc').val('True') ;
+    }else{
+        $('#pnl_other_school').css('visibility', 'hidden').css('display','none');
+        $('#slt_cities').prop( "disabled", false);
+        $('#slt_postal_codes').prop( "disabled", false);
+        $('#slt_schools').prop( "disabled", false);
+        $('#hdn_secondary_education_national_institution_adhoc').val('False') ;
+        populate_city_default('-');
+        populate_postal_code_default();
+    }
+
+});
+
+function populate_postal_code_default(){
+    //Populate the dropdown list of postal codes for education institution.
+    //The postal codes for schools are all the distinct postal code existing in the table EducationInstitution
+    $("#slt_postal_codes").find("option")
+        .remove()
+       .end();
+    $.ajax({
+        url: "/admission/institution_postal_codes?type=" + 'SECONDARY'
+    }).then(function(data) {
+          $("#slt_postal_codes").prop("selectedIndex",-1);
+          if(data.length >0){
+            $("<option></option>").attr("value","-").append("-").appendTo("#slt_postal_codes");
+            $.each(data, function(key, value) {
+                $("<option></option>").attr("value",value.postal_code).append(value.postal_code).appendTo("#slt_postal_codes");
+            });
+          }
+    });
+}
+
+function populate_school_dropdown(city_name, postal_code, adhoc, institution_id, institution_name){
+    if(institution_id!=''){
+        if(adhoc == 'False'){
+            enabled_known_national_school();
+            if (city_name!='' && postal_code!=''){
+                populate_city(city_name,postal_code);
+                populate_postal_code(city_name,postal_code);
+                populate_secondary_institution(city_name,postal_code);
+                if ($('#hdn_secondary_education_national_institution_postal_code').val() != '' ){
+                    $('#slt_postal_codes'+' option').each(function(){
+                        if($(this).attr('value')==postal_code){
+                            $(this).prop('selected', true);
+                        }
+                    });
+                }
+            }
+        }else{
+            if(adhoc == 'True'){
+                empty_disabled_known_national_school(city_name, postal_code,institution_name);
+            }
+        }
+
+    }else{
+        populate_city_default('-');
+        populate_postal_code_default()
+    }
+}
+
+function empty_disabled_known_national_school(city_name, postal_code,institution_name){
+    $('#slt_cities').prop( "disabled", true);
+    $("#slt_cities").find("option")
+        .remove()
+        .end();
+
+    $('#slt_postal_codes').prop( "disabled", true);
+    $("#slt_postal_codes").find("option")
+        .remove()
+        .end();
+
+    $('#slt_schools').prop( "disabled", true);
+    $("#slt_schools").find("option")
+        .remove()
+        .end();
+
+    $('#pnl_other_school').css('visibility', 'visible').css('display','block');
+    $('#chb_other_school').prop( "checked", true);
+    $('#txt_CESS_other_school_name').val(institution_name);
+    $('#txt_CESS_other_school_name').prop( "disabled", false);
+    $('#txt_CESS_other_school_city').val(city_name);
+    $('#txt_CESS_other_school_city').prop( "disabled", false);
+    $('#txt_CESS_other_school_postal_code').val(postal_code);
+    $('#txt_CESS_other_school_postal_code').prop( "disabled", false);
+}
+
+function enabled_known_national_school(){
+    $('#slt_cities').prop( "disabled", false);
+    $('#slt_postal_codes').prop( "disabled", false);
+    $('#slt_schools').prop( "disabled", false);
+    $('#pnl_other_school').css('visibility', 'hidden').css('display','none');
+    $('#chb_other_school').prop( "checked", false);
+    $('#txt_CESS_other_school_name').val('');
+    $('#txt_CESS_other_school_name').prop( "disabled", true);
+    $('#txt_CESS_other_school_city').val('');
+    $('#txt_CESS_other_school_city').prop( "disabled", true);
+    $('#txt_CESS_other_school_postal_code').val('');
+    $('#txt_CESS_other_school_postal_code').prop( "disabled", true);
+}

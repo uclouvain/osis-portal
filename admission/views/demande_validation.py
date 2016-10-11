@@ -33,10 +33,11 @@ from django.core.urlresolvers import reverse
 from admission.views import assimilation_criteria as assimilation_criteria_view
 from django.utils.translation import ugettext_lazy as _
 from admission.models.enums import document_type
-
+from admission.models.enums import application_type
 
 ALERT_MANDATORY_FIELD = _('mandatory_field')
 ALERT_MANDATORY_FILE = _('mandatory_file')
+ALERT_MANDATORY_FILE_RECTO_VERSO = _('mandatory_file_recto_verso')
 PROFESSIONAL_TYPE = 'PROFESSIONAL'
 ADMISSION_EXAM_TYPE = 'ADMISSION'
 LANGUAGE_EXAM_TYPE = 'LANGUAGE'
@@ -104,6 +105,7 @@ def validate_application(application):
 
 
 def validate_diploma(application, user):
+    print('validate_diploma')
     validation_messages = {}
     applicant = mdl.applicant.find_by_user(user)
     secondary_education = mdl.secondary_education.find_by_person(applicant)
@@ -155,7 +157,12 @@ def validate_diploma(application, user):
                 doc_recto = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_RECTO)
                 doc_verso = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_VERSO)
                 if doc_recto.exists() is False or doc_verso.exists() is False:
-                    validation_messages['national_diploma_doc'] = ALERT_MANDATORY_FIELD
+                    validation_messages['national_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
+                if application.application_type == application_type.ADMISSION:
+                    doc_recto = mdl.application_document_file.search(application, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
+                    doc_verso = mdl.application_document_file.search(application, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO)
+                    if doc_recto.exists() is False or doc_verso.exists() is False:
+                        validation_messages['high_school_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
 
             if professional_exam:
                 if professional_exam.exam_date is None:
@@ -167,7 +174,11 @@ def validate_diploma(application, user):
                 doc = mdl.application_document_file.search(application, document_type.PROFESSIONAL_EXAM_CERTIFICATE)
                 if doc.exists() is False:
                     validation_messages['professional_exam_doc'] = ALERT_MANDATORY_FIELD
-    return validation_messages
+    print(validation_messages)
+    if len(validation_messages) > 0:
+        return False
+    else:
+        return True
 
 
 def validate_curriculum(application):
@@ -191,17 +202,13 @@ def validate_submission():
 
 
 def get_validation_status(application, applicant, user):
-    diploma_tab_valid = True
-    msgs = validate_diploma(application, user)
-    if len(msgs) > 0:
-        diploma_tab_valid = False
-
     return {
         "validated_profil":             validate_profil(applicant, user),
-        "validated_diploma":            diploma_tab_valid,
+        "validated_diploma":            validate_diploma(application, user),
         "validated_curriculum":         validate_curriculum(application),
         "validated_application":        validate_application(application),
         "validated_accounting":         validate_accounting(),
         "validated_sociological":       validate_sociological(),
         "validated_attachments":        validate_attachments(),
-        "validated_submission":         validate_submission()}
+        "validated_submission":         validate_submission(),
+        "validation_message":           None}

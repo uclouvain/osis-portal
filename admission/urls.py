@@ -26,7 +26,7 @@
 from django.conf.urls import url
 from admission.views import application, common, identification, offer, level, question, option, country, curriculum, \
     education_institution, language, domain, secondary_education, accounting, upload_file, sociological, attachments, \
-    assimilation_criteria
+    assimilation_criteria, places
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -113,5 +113,8 @@ urlpatterns = [
     url(r'^document/$', upload_file.find_by_description),
     url(r'^upload/save/$', upload_file.save_uploaded_file, name="save_uploaded_file"),
     url(r'^picture/$', common.get_picture),
+    url(r'^postalcodes/$', places.find_postal_codes_by_city),
+    url(r'^educationinstitution/cities/$', places.find_cities_by_postal_code),
+    url(r'^validate_tab/prerequis/$', secondary_education.validate),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -31,6 +31,7 @@ from reference import models as mdl_reference
 from base import models as mdl_base
 from admission.views.common import get_picture_id, get_id_document
 from admission.views.common import extra_information
+from admission.views import common
 from admission.views import demande_validation
 from admission.views import tabs
 from django.http import *
@@ -264,7 +265,7 @@ def applications(request, application_id=None):
         "tab_sociological": tab_status['tab_sociological'],
         "tab_attachments": tab_status['tab_attachments'],
         "tab_submission": tab_status['tab_submission'],
-        "local_language_exam_needed": is_local_language_exam_needed(request.user),
+        "local_language_exam_needed": common.is_local_language_exam_needed(request.user),
         "applicant": applicant,
         "person_legal_address": person_legal_address,
         "countries": countries

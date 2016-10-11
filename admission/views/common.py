@@ -651,3 +651,16 @@ def delete_previous_criteria(applicant, application):
         criteria_list = mdl.application_assimilation_criteria.find_by_application(application)
         for c in criteria_list:
             c.delete()
+
+def is_local_language_exam_needed(user):
+    local_language_exam_needed = False
+    applications = mdl.application.find_by_user(user)
+    if applications:
+        for application in applications:
+            if application.offer_year.grade_type and \
+                    (application.offer_year.grade_type.name == 'BACHELOR' or \
+                     application.offer_year.grade_type.name == 'MASTER' or \
+                     application.offer_year.grade_type.name == 'TRAINING_CERTIFICATE'):
+                local_language_exam_needed = True
+                break
+    return local_language_exam_needed

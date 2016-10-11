@@ -1391,3 +1391,14 @@ msgstr "Please mention if you benefit from a scholarship as defined in article 1
 
 msgid "CRITERIA_7"
 msgstr "Are you an european long-term resident (of a country other than Belgium)?"
+
+msgid "institution_not_found_question"
+msgstr ""
+"You didn't find your institute in the list?"
+"below."
+
+msgid "mandatory_file_recto_verso"
+msgstr "Mandatory files for recto and verso"
+
+msgid "validate_data"
+msgstr "Validate data"

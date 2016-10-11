@@ -150,6 +150,7 @@ def find_cities_by_type(request):
 
 
 def find_postal_codes_by_type(request):
+    print('find_postal_codes_by_type')
     type = request.GET['type']
     education_institutions = mdl_reference.education_institution.find_postal_codes_by_isocode_type('BE', type, False)
     serializer = EducationInstitutionSerializer(education_institutions, many=True)
@@ -168,6 +169,8 @@ def find_institution_by_city_postal_code_type(request):
         if postal_code != "-":
             education_institutions = mdl_reference.education_institution\
                 .find_by_institution_postal_code_type_iso_code(postal_code, type, 'BE', False)
+            for i in education_institutions:
+                print(i.name)
 
     serializer = EducationInstitutionSerializer(education_institutions, many=True)
     return JSONResponse(serializer.data)
