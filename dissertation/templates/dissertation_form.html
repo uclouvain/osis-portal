@@ -81,9 +81,7 @@
                 <div class="col-md-6">
                     <div class="panel-group" {% if form.defend_year.errors %} style="color:red;" {% endif %}>
                         <label for="txt_defend_year" style="margin-left:-6px;">{% trans 'defend_year' %}</label>
-                        <select class="form-control" id="txt_defend_year"  name="defend_year" style="margin:-6px;">
-                            <option value={{ form.defend_year }}
-                        </select>
+                        <input class="form-control" id="txt_defend_year"  name="defend_year" style="margin:-6px;" value="{{ form.defend_year.value | default_if_none:'' }}">
                     </div>
                 </div>
             </div>

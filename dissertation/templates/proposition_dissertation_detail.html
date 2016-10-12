@@ -122,7 +122,7 @@
                         <label>{% trans 'offer_propositions' %}</label>
                     </div>
                     <div class="col-md-8">
-                        {% for offer_proposition in proposition_dissertation.offer_proposition.all %}
+                        {% for offer_proposition in offer_propositions %}
                             <span class="label label-default">{{ offer_proposition }}</span>
                         {% endfor %}
                     </div>

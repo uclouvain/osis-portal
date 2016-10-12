@@ -32,7 +32,7 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class PropositionDissertationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'visibility', 'active', 'get_offer_propositions', 'creator')
+    list_display = ('title', 'author', 'visibility', 'active', 'creator')
     raw_id_fields = ('creator', )
 
 
@@ -67,7 +67,6 @@ class PropositionDissertation(SerializableModel):
     type = models.CharField(max_length=12, choices=TYPES_CHOICES, default='RDL')
     visibility = models.BooleanField(default=True)
     active = models.BooleanField(default=True)
-    offer_proposition = models.ManyToManyField('OfferProposition')
     created_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
@@ -83,9 +82,6 @@ class PropositionDissertation(SerializableModel):
         author = u"%s %s %s" % (last_name.upper(), first_name, middle_name)
         return author+" - "+str(self.title)
 
-    def get_offer_propositions(self):
-        return " - ".join([str(s) for s in self.offer_proposition.all()])
-
     class Meta:
         ordering = ["author__person__last_name", "author__person__middle_name", "author__person__first_name", "title"]
 
@@ -98,8 +94,7 @@ def search(terms, active=None, visibility=None):
             Q(description__icontains=terms) |
             Q(author__person__first_name__icontains=terms) |
             Q(author__person__middle_name__icontains=terms) |
-            Q(author__person__last_name__icontains=terms) |
-            Q(offer_proposition__acronym__icontains=terms)
+            Q(author__person__last_name__icontains=terms)
         )
     if active:
         queryset = queryset.filter(active=active)
