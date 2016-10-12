@@ -20,8 +20,8 @@ def my_custom_sql(apps, schema_editor):
     cursor.execute("select * from dissertation_propositiondissertation_offer_proposition")
     for record in dictfetchall(cursor):
         print(record)
-        propositionoffer_proposition_dissertation = record['propositiondissertation']
-        propositionoffer_offer_proposition = record['offerproposition']
+        propositionoffer_proposition_dissertation_id = record['propositiondissertation_id']
+        propositionoffer_offer_proposition_id = record['offerproposition_id']
 
 
 class Migration(migrations.Migration):
