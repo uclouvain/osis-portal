@@ -15,13 +15,13 @@ def dictfetchall(cursor):
         ]
 
 
-def my_custom_sql():
+def my_custom_sql(apps, schema_editor):
     cursor = connection.cursor()
     cursor.execute("select * from dissertation_propositiondissertation_offer_proposition")
     for record in dictfetchall(cursor):
         print(record)
-        propositiondissertation_id = record['propositiondissertation_id']
-        offerproposition_id = record['offerproposition_id']
+        propositionoffer_proposition_dissertation = record['propositiondissertation']
+        propositionoffer_offer_proposition = record['offerproposition']
 
 
 class Migration(migrations.Migration):
