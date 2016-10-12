@@ -37,7 +37,7 @@ class PropositionOffer(SerializableModel):
         return str(self.offer_proposition)
 
 
-def search_by_offer(offers):
+def search_by_offers(offers):
     return PropositionOffer.objects.filter(proposition_dissertation__active=True,
                                            proposition_dissertation__visibility=True,
                                            offer_proposition__offer__in=offers,

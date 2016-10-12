@@ -67,6 +67,14 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <label for="txt_location" {% if form.location.errors %} style="color:red;" {% endif %}>{% trans 'dissertation_location' %}</label>
+                    <select class="form-control" id="txt_location"  name="location" style="margin:-6px;">
+                        <option value={{ form.location }}
+                    </select>
+                </div>
+            </div>
             <div class="row {% if field.errors %}error{% endif %}">
                 <div class="col-md-12">
                     <div class="panel-group">

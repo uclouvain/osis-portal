@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from base.models.serializable_model import SerializableModel
+from dissertation.models import proposition_offer
 from django.contrib import admin
 from django.db import models
 from django.db.models import Q
@@ -104,9 +105,6 @@ def search(terms, active=None, visibility=None):
     return queryset
 
 
-def search_by_offer(offers):
-    return PropositionDissertation.objects.filter(active=True,
-                                                  visibility=True,
-                                                  offer_proposition__offer__in=offers,
-                                                  offer_proposition__start_visibility_proposition__lte=timezone.now())\
-        .distinct()
+def search_by_offers(offers):
+    proposition_ids = proposition_offer.search_by_offers(offers).values('proposition_dissertation_id')
+    return PropositionDissertation.objects.filter(pk__in=proposition_ids, active=True, visibility=True)
