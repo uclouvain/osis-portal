@@ -90,8 +90,8 @@ def fetch_and_save(student, offer_year):
 
 def fetch_student_performance(student, offer_year):
     message = str(student) + "_" + str(offer_year)
-    json_student_perf = fetch_json_data(message)
-    obj = StudentPerformance(student=student, offer_year=offer_year, data=json_student_perf)
+    json_data = fetch_json_data(message)
+    obj = StudentPerformance(student=student, offer_year=offer_year, data=json_data)
     return obj
 
 
