@@ -29,6 +29,7 @@ from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from base.models.serializable_model import SerializableModel
 from frontoffice.queue.queue_listener import DocumentClient
+import datetime
 import json
 
 
@@ -42,6 +43,7 @@ class StudentPerformance(SerializableModel):
     student = models.ForeignKey('base.Student')
     offer_year = models.ForeignKey('base.OfferYear')
     data = JSONField()  # TODO discuss about db_index
+    expiration_date = models.DateField()
 
     def __str__(self):
         return
@@ -79,6 +81,8 @@ def find_or_fetch(student, offer_year):
     result = find_by_student_and_offer_year(student, offer_year)
     if result is None:
         result = fetch_and_save(student, offer_year)
+    elif has_expired(result):
+        fetch_and_update(result)
     return result
 
 
@@ -88,10 +92,22 @@ def fetch_and_save(student, offer_year):
     return obj
 
 
+def fetch_and_update(student_performance):
+    student = student_performance.student
+    offer_year = student_performance.offer_year
+    message = str(student) + "_" + str(offer_year)
+    json_data = fetch_json_data(message)
+    student_performance.data = json_data
+    student_performance.expiration_date = get_expiration_date()
+    student_performance.save()
+
+
+
 def fetch_student_performance(student, offer_year):
     message = str(student) + "_" + str(offer_year)
     json_data = fetch_json_data(message)
-    obj = StudentPerformance(student=student, offer_year=offer_year, data=json_data)
+    obj = StudentPerformance(student=student, offer_year=offer_year, data=json_data,
+                             expiration_date=get_expiration_date())
     return obj
 
 
@@ -103,8 +119,15 @@ def fetch_json_data(message):
     return json_student_perf
 
 
+def has_expired(student_performance):
+    today = datetime.date.today()
+    expiration_date = student_performance.expiration_date
+    return expiration_date < today
 
 
-
-
+def get_expiration_date():
+    today = datetime.date.today()
+    timedelta = datetime.timedelta(days=2)
+    expiration_date = today + timedelta
+    return expiration_date
 
