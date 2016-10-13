@@ -28,6 +28,8 @@ from django.contrib.postgres.fields import JSONField
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from base.models.serializable_model import SerializableModel
+from frontoffice.queue.queue_listener import DocumentClient
+import json
 
 
 class StudentPerformanceAdmin(admin.ModelAdmin):
@@ -67,8 +69,30 @@ def search(student=None, offer_year=None):
 
 def find_by_student_and_offer_year(student, offer_year):
     try:
-      result = StudentPerformance.objects.get(student=student, offer_year=offer_year)
+        result = StudentPerformance.objects.get(student=student, offer_year=offer_year)
     except ObjectDoesNotExist:
         result = None
     return result
+
+
+def fetch_student_performance(student, offer_year):
+    STUDENT_PERFORMANCE_QUEUE_NAME = "STUDENT_PERFORMANCE_QUEUE"
+    message = str(student) + "_" + str(offer_year)
+    client = DocumentClient(STUDENT_PERFORMANCE_QUEUE_NAME)
+    json_data = client.call(message)        # Can take a long time
+    json_student_perf = json.loads(json_data.decode("utf-8"))
+    return json_student_perf
+
+
+def fetch_and_save(student, offer_year):
+    json_student_perf = fetch_student_performance(student, offer_year)
+    return StudentPerformance(student=student, offer_year=offer_year, json=json_student_perf).save()
+
+
+def find_or_fetch(student, offer_year):
+    result = find_by_student_and_offer_year(student, offer_year)
+    if result is None:
+        result = fetch_and_save(student, offer_year)
+    return result
+
 

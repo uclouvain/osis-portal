@@ -72,6 +72,43 @@ class ScoresSheetClient(object):
         return self.response
 
 
+class DocumentClient(object):
+    def __init__(self, queue_name):
+        self.paper_sheet_queue = queue_name
+        credentials = pika.PlainCredentials(QUEUE_USER, QUEUE_PASSWORD)
+        self.connection = pika.BlockingConnection(pika.ConnectionParameters(QUEUE_URL,
+                                                                            QUEUE_PORT,
+                                                                            QUEUE_CONTEXT_ROOT,
+                                                                            credentials))
+
+        self.channel = self.connection.channel()
+
+        result = self.channel.queue_declare(exclusive=True)
+        self.callback_queue = result.method.queue
+
+        self.channel.basic_consume(self.on_response, no_ack=True,
+                                   queue=self.callback_queue)
+
+    def on_response(self, ch, method, props, body):
+        if self.corr_id == props.correlation_id:
+            self.response = body
+
+    def call(self, message):
+        self.response = None
+        self.corr_id = str(uuid.uuid4())
+        self.channel.basic_publish(exchange='',
+                                   routing_key=self.paper_sheet_queue,
+                                   properties=pika.BasicProperties(
+                                         reply_to=self.callback_queue,
+                                         correlation_id=self.corr_id,
+                                         content_type='application/json',
+                                         ),
+                                   body=message)
+        while self.response is None:
+            self.connection.process_data_events()
+        return self.response
+
+
 class SynchronousConsumerThread(threading.Thread):
     def __init__(self, queue_name, callback, *args, **kwargs):
         super(SynchronousConsumerThread, self).__init__(*args, **kwargs)
