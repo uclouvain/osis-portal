@@ -79,14 +79,16 @@ def fetch_student_performance(student, offer_year):
     STUDENT_PERFORMANCE_QUEUE_NAME = "STUDENT_PERFORMANCE_QUEUE"
     message = str(student) + "_" + str(offer_year)
     client = DocumentClient(STUDENT_PERFORMANCE_QUEUE_NAME)
-    json_data = client.call(message)        # Can take a long time
+    json_data = client.call(message)        # TODO Can take a long time
     json_student_perf = json.loads(json_data.decode("utf-8"))
     return json_student_perf
 
 
 def fetch_and_save(student, offer_year):
     json_student_perf = fetch_student_performance(student, offer_year)
-    return StudentPerformance(student=student, offer_year=offer_year, json=json_student_perf).save()
+    obj = StudentPerformance(student=student, offer_year=offer_year, data=json_student_perf)
+    obj.save()
+    return obj
 
 
 def find_or_fetch(student, offer_year):

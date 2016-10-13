@@ -44,7 +44,9 @@ def home(request):
     Display the academic programs of the student.
     """
     stud = find_by_user(request.user)
-    list_student_programs = fetch_student_programs_list(stud)
+    list_student_programs = None
+    if stud:
+        list_student_programs = fetch_student_programs_list(stud)
 
     return layout.render(request, "performance_home.html", {"student": stud,
                                                      "programs": list_student_programs})
@@ -64,11 +66,9 @@ def result_by_year_and_program(request, offer_year_id):
     """
     stud = find_by_user(request.user)
     offer_year = mdl_offer_year.find_by_id(offer_year_id)
-    stud_perf = mdl_performance.student_performance.find_by_student_and_offer_year(student=stud, offer_year=offer_year)
-    if stud_perf:
-        document = stud_perf.data
-    else:
-        document = None
+    stud_perf = mdl_performance.student_performance.find_or_fetch(student=stud, offer_year=offer_year)
+    document = stud_perf.data if stud_perf else None
+
     return layout.render(request, "performance_result.html", {"results": document})
 
 
@@ -97,7 +97,9 @@ def student_programs(request, registration_id):
     !!! Should only be open for staff having the rights.
     """
     stud = get_student_by_registration_id(registration_id)
-    list_student_programs = fetch_student_programs_list(stud)
+    list_student_programs = None
+    if stud:
+        list_student_programs = fetch_student_programs_list(stud)
 
     return layout.render(request, "performance_home.html", {"student": stud,
                                                      "programs": list_student_programs})
@@ -113,10 +115,7 @@ def student_result(request, registration_id, offer_year_id):
     stud = get_student_by_registration_id(registration_id)
     offer_year = mdl_offer_year.find_by_id(offer_year_id)
     stud_perf = mdl_performance.student_performance.find_by_student_and_offer_year(student=stud, offer_year=offer_year)
-    if stud_perf:
-        document = stud_perf.data
-    else:
-        document = None
+    document = stud_perf.data if stud_perf else None
 
     return layout.render(request, "performance_result.html", {"results": document})
 
@@ -144,10 +143,8 @@ def fetch_student_programs_list(stud):  # todo TEST
     :return: a list of dictionnary (see query_result_to_list for the format)
     """
     list_student_programs = None
-
-    if stud:
-        query_result = mdl_offer_enrollment.find_by_student(stud)
-        list_student_programs = query_result_to_list(query_result)
+    query_result = mdl_offer_enrollment.find_by_student(stud)
+    list_student_programs = query_result_to_list(query_result)
     return list_student_programs
 
 
