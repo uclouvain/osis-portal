@@ -85,10 +85,9 @@ def validate_fields_form(request, secondary_education, next_step, application):
                         secondary_education.national_community = request.POST.get('local_community')
                         if request.POST.get('local_community') == 'FRENCH':
                             # diploma of the French community
-                            if academic_year < 1994:
-                                if request.POST.get('dipl_acc_high_educ') is None:
-                                    validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
-                                    is_valid = False
+                            if academic_year < 1994 and request.POST.get('dipl_acc_high_educ') is None:
+                                validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
+                                is_valid = False
                             if request.POST.get('other_education') == 'on':
                                 if request.POST.get('other_education_type') is None:
                                     validation_messages['pnl_teaching_type'] = _('msg_error_other_education_type')
@@ -102,12 +101,10 @@ def validate_fields_form(request, secondary_education, next_step, application):
                                     secondary_education.education_type = new_education_type
 
                         else:
-                            if request.POST.get('local_community') == 'DUTCH':
+                            if request.POST.get('local_community') == 'DUTCH' and academic_year < 1992 and request.POST.get('dipl_acc_high_educ') is None:
                                 # diploma of the Dutch community
-                                if academic_year < 1992:
-                                    if request.POST.get('dipl_acc_high_educ') is None:
-                                        validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
-                                        is_valid = False
+                                validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
+                                is_valid = False
 
                     if request.POST.get('school_local_community') == 'FRENCH':
                         # Local school
@@ -250,7 +247,7 @@ def validate_fields_form(request, secondary_education, next_step, application):
     return is_valid, validation_messages, secondary_education, professional_exam, admission_exam, local_language_exam
 
 
-def get_secondary_education_exams_data(secondary_education):
+def get_secondary_education_exams(secondary_education):
     if secondary_education:
         admission_exam = mdl.secondary_education_exam.find_by_type(secondary_education_id=secondary_education.id,
                                                                    type='ADMISSION')
@@ -682,7 +679,7 @@ def delete_documents(request, application, list_unwanted_files):
             document.delete()
 
 
-def get_secondary_education_files_data(application):
+def get_secondary_education_files(application):
     return{'national_diploma_verso': mdl.application_document_file.find_first(application,
                                                                               document_type.NATIONAL_DIPLOMA_VERSO),
            'national_diploma_recto': mdl.application_document_file.find_first(application,
@@ -765,8 +762,8 @@ def get_prerequis_data(request, saved, application_id):
             'message_info':                 message_info,
             'form': None}
     # merge dictionaries
-    data.update(get_secondary_education_exams_data(secondary_education))
-    data.update(get_secondary_education_files_data(application))
+    data.update(get_secondary_education_exams(secondary_education))
+    data.update(get_secondary_education_files(application))
     data.update(demande_validation.get_validation_status(application, applicant, request.user))
     return data
 

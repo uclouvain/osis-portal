@@ -23,13 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.models import User
 from admission import models as mdl
 from osis_common import models as mdl_common
 
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
 from admission.views import assimilation_criteria as assimilation_criteria_view
 from django.utils.translation import ugettext_lazy as _
 from admission.models.enums import document_type
@@ -101,7 +97,7 @@ def validate_profil(applicant, user):
     return True
 
 
-def validate_application(application):
+def validate_application():
     return False
 
 
@@ -159,8 +155,10 @@ def validate_diploma(application, user):
                 if doc_recto.exists() is False or doc_verso.exists() is False:
                     validation_messages['national_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
                 if application.application_type == application_type.ADMISSION:
-                    doc_recto = mdl.application_document_file.search(application, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
-                    doc_verso = mdl.application_document_file.search(application, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO)
+                    doc_recto = mdl.application_document_file.search(application,
+                                                                     document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
+                    doc_verso = mdl.application_document_file.search(application,
+                                                                     document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO)
                     if doc_recto.exists() is False or doc_verso.exists() is False:
                         validation_messages['high_school_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
 
@@ -183,8 +181,7 @@ def validate_diploma(application, user):
         return False
 
 
-
-def validate_curriculum(application):
+def validate_curriculum():
     return False
 
 
@@ -208,8 +205,8 @@ def get_validation_status(application, applicant, user):
     return {
         "validated_profil":             validate_profil(applicant, user),
         "validated_diploma":            validate_diploma(application, user),
-        "validated_curriculum":         validate_curriculum(application),
-        "validated_application":        validate_application(application),
+        "validated_curriculum":         validate_curriculum(),
+        "validated_application":        validate_application(),
         "validated_accounting":         validate_accounting(),
         "validated_sociological":       validate_sociological(),
         "validated_attachments":        validate_attachments(),

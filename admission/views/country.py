@@ -50,6 +50,3 @@ def find_by_id_json(request):
     serializer = CountrySerializer(country)
     return JSONResponse(serializer.data)
 
-
-def find_by_id(an_id):
-    return Country.find_by_id(an_id)

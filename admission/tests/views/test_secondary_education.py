@@ -49,12 +49,12 @@ class SecondaryEducationTest(TestCase):
     def test_get_secondary_education_exams_data_size(self):
         secondary_education_record = None
         list_secondary_education_exams = secondary_education.\
-            get_secondary_education_exams_data(secondary_education_record)
+            get_secondary_education_exams(secondary_education_record)
         self.assertTrue(len(list_secondary_education_exams) == 0)
 
         secondary_education_record = data_model.create_secondary_education_with_exams()
         list_secondary_education_exams = secondary_education.\
-            get_secondary_education_exams_data(secondary_education_record)
+            get_secondary_education_exams(secondary_education_record)
         self.assertTrue(len(list_secondary_education_exams) == 3)
 
     def test_is_local_language_exam_needed_status(self):
@@ -102,12 +102,12 @@ class SecondaryEducationTest(TestCase):
 
     def test_get_secondary_education_files_data_existence(self):
         try:
-            secondary_education.get_secondary_education_files_data(None)
+            secondary_education.get_secondary_education_files(None)
         except Exception:
             self.fail("get_secondary_education_files_data raised ExceptionType unexpectedly!")
         an_application = data_model.create_application(self.applicant)
         try:
-            secondary_education.get_secondary_education_files_data(an_application)
+            secondary_education.get_secondary_education_files(an_application)
         except Exception:
             self.fail("get_secondary_education_files_data raised ExceptionType unexpectedly!")
 
@@ -115,6 +115,6 @@ class SecondaryEducationTest(TestCase):
                                                                                    self.user,
                                                                                    'NATIONAL_DIPLOMA_VERSO')
 
-        dict = secondary_education.get_secondary_education_files_data(an_application)
+        dict = secondary_education.get_secondary_education_files(an_application)
         self.assertTrue(dict['national_diploma_verso'] == an_application_document_file)
 

@@ -25,7 +25,6 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
 from admission.models import applicant
 from localflavor.generic.models import IBANField, BICField

@@ -119,21 +119,21 @@ def save(request):
             curricula.append(curriculum)
             year += 1
 
-    return render(request, "admission_home.html", {"curricula": curricula,
-                                               "local_universities_french": local_universities_french,
-                                               "local_universities_dutch": local_universities_dutch,
-                                               "domains": mdl_reference.domain.find_current_domains(),
-                                               "subdomains": mdl_reference.domain.find_all_subdomains(),
-                                               "grade_types": mdl_reference.grade_type.find_all(),
-                                               "universities_countries": mdl_reference.education_institution.
-                  find_countries(),
-                                               "validation_messages": validation_messages,
-                                               "message_success": message_success,
-                                               "universities_cities": universities_cities,
-                                               "universities": universities,
-                                               "languages": mdl_reference.language.find_languages(),
-                                               "current_academic_year": mdl_base.academic_year.current_academic_year(),
-                                                   "tab_active": 3})
+    return render(request, "admission_home.html",
+                  {"curricula": curricula,
+                   "local_universities_french": local_universities_french,
+                   "local_universities_dutch": local_universities_dutch,
+                   "domains": mdl_reference.domain.find_current_domains(),
+                   "subdomains": mdl_reference.domain.find_all_subdomains(),
+                   "grade_types": mdl_reference.grade_type.find_all(),
+                   "universities_countries": mdl_reference.education_institution.find_countries(),
+                   "validation_messages": validation_messages,
+                   "message_success": message_success,
+                   "universities_cities": universities_cities,
+                   "universities": universities,
+                   "languages": mdl_reference.language.find_languages(),
+                   "current_academic_year": mdl_base.academic_year.current_academic_year(),
+                   "tab_active": 3})
 
 
 def update(request, application_id=None):

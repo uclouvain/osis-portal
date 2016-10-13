@@ -127,7 +127,8 @@ def save_application_offer(request):
                 application.resident = False
         if request.POST.get('txt_offer_lottery'):
             application.raffle_number = request.POST.get('txt_offer_lottery')
-        application.application_type = mdl.application.define_application_type(application.national_degree, request.user)
+        application.application_type = mdl.application.define_application_type(application.national_degree,
+                                                                               request.user)
         application.save()
         application_id = application.id
         if new_application is False:
