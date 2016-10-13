@@ -39,28 +39,22 @@ from base.views import layout
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
-def home(request):
+def display_performance_home(request):
     """
     Display the academic programs of the student.
     """
     stud = find_by_user(request.user)
     list_student_programs = None
     if stud:
-        list_student_programs = fetch_student_programs_list(stud)
+        list_student_programs = get_student_programs_list(stud)
 
     return layout.render(request, "performance_home.html", {"student": stud,
-                                                     "programs": list_student_programs})
-
-
-@login_required
-@permission_required('base.is_faculty_administrator', raise_exception=True)
-def performance_administration(request):
-    return layout.render(request, 'admin/performance_administration.html')
+                                                            "programs": list_student_programs})
 
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
-def result_by_year_and_program(request, offer_year_id):
+def display_result_for_specific_year_and_program(request, offer_year_id):
     """
     Display the student result for a particular year and program.
     """
@@ -74,16 +68,22 @@ def result_by_year_and_program(request, offer_year_id):
 
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
+def performance_administration(request):
+    return layout.render(request, 'admin/performance_administration.html')
+
+
+@login_required
+@permission_required('base.is_faculty_administrator', raise_exception=True)
 def select_student(request):
     """
     View to select a student to visualize his/her results.
-    !!! Should only be open for staff having the rights.
+    !!! Should only be accessible for staff having the rights.
     """
     if request.method == "POST":
         form = RegistrationIdForm(request.POST)
         if form.is_valid():
             registration_id = form.cleaned_data['registration_id']
-            return redirect(student_programs, registration_id=registration_id)
+            return redirect(visualize_student_programs, registration_id=registration_id)
     else:
         form = RegistrationIdForm()
     return layout.render(request, "admin/performance_select_student.html", {"form": form})
@@ -91,30 +91,30 @@ def select_student(request):
 
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
-def student_programs(request, registration_id):
+def visualize_student_programs(request, registration_id):
     """
     View to visualize a particular student list of academic programs.
-    !!! Should only be open for staff having the rights.
+    !!! Should only be accessible for staff having the rights.
     """
     stud = get_student_by_registration_id(registration_id)
     list_student_programs = None
     if stud:
-        list_student_programs = fetch_student_programs_list(stud)
+        list_student_programs = get_student_programs_list(stud)
 
     return layout.render(request, "performance_home.html", {"student": stud,
-                                                     "programs": list_student_programs})
+                                                            "programs": list_student_programs})
 
 
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
-def student_result(request, registration_id, offer_year_id):
+def visualize_student_result(request, registration_id, offer_year_id):
     """
     View to visualize a particular student program courses result.
-    !!! Should only be open for staff having the rights.
+    !!! Should only be accessible for staff having the rights.
     """
     stud = get_student_by_registration_id(registration_id)
     offer_year = mdl_offer_year.find_by_id(offer_year_id)
-    stud_perf = mdl_performance.student_performance.find_by_student_and_offer_year(student=stud, offer_year=offer_year)
+    stud_perf = mdl_performance.student_performance.find_or_fetch(student=stud, offer_year=offer_year)
     document = stud_perf.data if stud_perf else None
 
     return layout.render(request, "performance_result.html", {"results": document})
@@ -136,13 +136,12 @@ def get_student_by_registration_id(registration_id):  # TODO test
     return stud
 
 
-def fetch_student_programs_list(stud):  # todo TEST
+def get_student_programs_list(stud):  # todo TEST
     """
     Fetch the student programs of the student "stud"
     :param stud: a student object
     :return: a list of dictionnary (see query_result_to_list for the format)
     """
-    list_student_programs = None
     query_result = mdl_offer_enrollment.find_by_student(stud)
     list_student_programs = query_result_to_list(query_result)
     return list_student_programs
