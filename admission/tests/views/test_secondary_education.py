@@ -54,8 +54,6 @@ class SecondaryEducationTest(TestCase):
             get_secondary_education_exams(secondary_education_record)
         self.assertTrue(len(list_secondary_education_exams) == 3)
 
-
-
     def test_secondary_education_exam_update(self):
         secondary_education_record = data_model.create_secondary_education_with_exams()
         type = 'ADMISSION'
@@ -100,4 +98,10 @@ class SecondaryEducationTest(TestCase):
 
         dict = secondary_education.get_secondary_education_files(an_application)
         self.assertTrue(dict['national_diploma_verso'] == an_application_document_file)
+
+    def test_get_boolean_value_from_form(self):
+        self.assertTrue(secondary_education.get_boolean_value('true'))
+        self.assertFalse(secondary_education.get_boolean_value('True'))
+        self.assertFalse(secondary_education.get_boolean_value('false'))
+        self.assertEqual(secondary_education.get_boolean_value('-'), None)
 
