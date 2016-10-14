@@ -101,7 +101,7 @@ def validate_application():
     return False
 
 
-def validate_diploma(application,secondary_education):
+def validate_diploma(application, secondary_education):
     validation_messages = {}
 
     if secondary_education:
@@ -185,7 +185,7 @@ def get_validation_status(application, applicant, user):
     secondary_education = mdl.secondary_education.find_by_person(applicant)
     if secondary_education:
         validated_diploma = True
-        if len(validate_diploma(application, user,secondary_education)) > 0:
+        if len(validate_diploma(application, secondary_education)) > 0:
             validated_diploma = False
     else:
         validated_diploma = False

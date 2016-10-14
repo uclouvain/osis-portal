@@ -925,3 +925,30 @@ $("#rdb_local").click(function(event) {
     $('#hdn_secondary_education_national_institution_name').val('');
     populate_school_dropdown('', '', '', '', '');
 });
+
+function display_date_msg_error(value, id_msg_field){
+
+    $(id_msg_field).find("label").remove();
+    if (isDate(value)){
+        $(id_msg_field).find("label").remove();
+    }else{
+        $(id_msg_field).append("<label>"+gettext('invalid_date')+"</label>");
+    }
+}
+
+$("#txt_professional_exam_date").blur(function() {
+    display_date_msg_error($("#txt_professional_exam_date").val(), "#msg_error_txt_professional_exam_date");
+});
+
+$("#txt_admission_exam_date").blur(function() {
+    display_date_msg_error($("#txt_admission_exam_date").val(), "#msg_error_txt_admission_exam_date");
+});
+
+$("#txt_local_language_exam_date").blur(function() {
+    display_date_msg_error($("#txt_local_language_exam_date").val(), "#msg_error_local_language_exam_date");
+});
+
+
+
+
+

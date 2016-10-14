@@ -48,7 +48,7 @@
     </form>
     <div class="row">
         <div class="col-md-2">
-            {% if applications%}<a href="{%url 'home'%}">{% trans 'back_demandes_list'%}</a>{%endif%}
+            {% if applications %}<a href="{%url 'home'%}" onclick="return confirm(gettext('question_need_to_save'))">{% trans 'back_demandes_list'%}</a>{%endif%}
             <br>
             <br>
             <ul class="nav nav-pills nav-stacked">
@@ -825,16 +825,6 @@ success : function(code_html, statut){ // code_html contient le HTML renvoyé
     $("#rd_previous_enrollment_false").click(function() {
         $('#txt_registration_id').val('');
         $('#txt_last_academic_year').val('');
-    });
-
-    $("#txt_local_language_exam_date").blur(function() {
-        var value = $("#txt_local_language_exam_date").val();
-        $("#msg_error_local_language_exam_date").find("label").remove();
-        if (isDate(value)){
-            $("#msg_error_local_language_exam_date").find("label").remove();
-        }else{
-            $("#msg_error_local_language_exam_date").append("<label>Invalid</label>");
-        }
     });
 
     function save_form(next_tab){
