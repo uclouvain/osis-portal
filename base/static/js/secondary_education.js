@@ -13,10 +13,8 @@ $('document').ready(function(){
         $('#rdb_foreign').prop( "checked", false);
 
         $('#pnl_local_detail').css('visibility', 'hidden').css('display','none');
+        reset_rdb_local_community(false);
 
-        $('#rdb_loal_community_french').prop( "checked", false);
-        $('#rdb_local_community_dutch').prop( "checked", false);
-        $('#rdb_local_community_german').prop( "checked", false);
 
         $('#pnl_dipl_acc_high_educ').css('visibility', 'hidden').css('display','none');
 
@@ -473,8 +471,8 @@ function display_local_secondary(){
                              $('#hdn_secondary_education_national_institution_name').val()) ;
 
     national_community_display();
-    if(($('#rdb_local_community_french').checked && $('#hdn_secondary_education_academic_year').val()<1994)
-        || (($('#rdb_local_community_dutch').checked && $('#hdn_secondary_education_academic_year').val()<1992))){
+    if(($('#rdb_local_community_french').prop("checked") && $('#hdn_secondary_education_academic_year').val() < 1994)
+        || (($('#rdb_local_community_dutch').prop("checked") && $('#hdn_secondary_education_academic_year').val() < 1992))){
         $('#rdb_dipl_acc_high_educ_true').prop( "checked", true);
         $('#pnl_dipl_acc_high_educ').css('visibility', 'visible').css('display','block');
     }else{
@@ -923,6 +921,13 @@ $("#rdb_local").click(function(event) {
     $('#hdn_secondary_education_national_institution_adhoc').val('');
     $('#hdn_secondary_education_national_institution_id').val('');
     $('#hdn_secondary_education_national_institution_name').val('');
+    reset_rdb_local_community(false);
+    $('#rdb_repeated_grade_true').prop("checked", false);
+    $('#rdb_repeated_grade_false').prop("checked", false);
+    $('#rdb_re_orientation_true').prop("checked", false);
+    $('#rdb_re_orientation_false').prop("checked", false);
+    $('#rdb_dipl_acc_high_educ_true').prop("checked", false);
+    $('#rdb_dipl_acc_high_educ_false').prop("checked", false);
     populate_school_dropdown('', '', '', '', '');
 });
 
@@ -948,7 +953,11 @@ $("#txt_local_language_exam_date").blur(function() {
     display_date_msg_error($("#txt_local_language_exam_date").val(), "#msg_error_local_language_exam_date");
 });
 
-
+function reset_rdb_local_community(status){
+    $('#rdb_local_community_french').prop( "checked", status);
+    $('#rdb_local_community_dutch').prop( "checked", status);
+    $('#rdb_local_community_german').prop( "checked", status);
+}
 
 
 
