@@ -637,14 +637,12 @@ def delete_previous_criteria(applicant, application):
 
 
 def is_local_language_exam_needed(user):
-    local_language_exam_needed = False
     applications = mdl.application.find_by_user(user)
     if applications:
         for application in applications:
-            if application.offer_year.grade_type and \
+            if application.offer_year.grade_type and application.offer_year.grade_type.institutional_grade_type and \
                     (application.offer_year.grade_type.institutional_grade_type == 'BACHELOR' or \
                      application.offer_year.grade_type.institutional_grade_type.startswith('MASTER') or \
                      application.offer_year.grade_type.institutional_grade_type == 'TRAINING_CERTIFICATE'):
-                local_language_exam_needed = True
-                break
-    return local_language_exam_needed
+                return True
+    return False

@@ -67,7 +67,6 @@ def get_secondary_education_exams(secondary_education):
 
 
 def diploma_save(request):
-    print('diploma_save')
     next_step = False
     previous_step = False
     save_step = True

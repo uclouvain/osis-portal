@@ -23,9 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-from django.test import TestCase, RequestFactory
-
+from django.test import TestCase
 from django.conf import settings
 from django.contrib.auth.models import User
 from admission.models import applicant
@@ -41,7 +39,6 @@ from django.test import Client
 class SecondaryEducationTest(TestCase):
 
     def setUp(self):
-        self.factory = RequestFactory()
         self.user = User.objects.create_user(
             username='jacob', email='jacob@gmail.com', password='top_secret')
         self.applicant = data_model.create_applicant_by_user(self.user)
@@ -57,21 +54,7 @@ class SecondaryEducationTest(TestCase):
             get_secondary_education_exams(secondary_education_record)
         self.assertTrue(len(list_secondary_education_exams) == 3)
 
-    def test_is_local_language_exam_needed_status(self):
-        self.assertFalse(secondary_education.is_local_language_exam_needed(None))
 
-        self.assertFalse(secondary_education.is_local_language_exam_needed(self.user))
-
-        an_application = data_model.create_application(self.applicant)
-        self.assertFalse(secondary_education.is_local_language_exam_needed(self.user))
-
-        an_application.offer_year.grade_type = data_model.create_grade_type('BACHELOR')
-        an_application.offer_year.save()
-        self.assertTrue(secondary_education.is_local_language_exam_needed(self.user))
-
-        an_application.offer_year.grade_type = data_model.create_grade_type('BACHELORZ')
-        an_application.offer_year.save()
-        self.assertFalse(secondary_education.is_local_language_exam_needed(self.user))
 
     def test_secondary_education_exam_update(self):
         secondary_education_record = data_model.create_secondary_education_with_exams()
