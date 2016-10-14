@@ -30,7 +30,6 @@
 <form method="post" action="{% url 'diploma'%}" id="form_secondary_education">
     <input type="hidden"
            id="hdn_diploma"
-           name="diploma"
            value="{{secondary_education.diploma | default_if_none:'False'}}" >
     <input type="hidden"
            id="hdn_secondary_education_academic_year"
@@ -196,31 +195,6 @@
             <h5>{% trans 'mandatory_asterisk'%}</h5>
         </div>
         <div class="col-md-6">
-            <button type="submit" id="bt_validate_diploma" class="btn btn-default pull-right" role="button"
-                    title="{%trans 'validate_data'%}"
-                    name="validate_diploma" style="
-                    {% if valid_data == True%}
-                        background-color:#22f52b;
-                    {%else%}
-                        {% if valid_data == False %}
-                            background-color:orange;
-                        {%else%}
-                            background-color:transparent;
-                        {% endif %}
-                    {% endif %}">
-                    {% if valid_data == True%}
-                        <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
-                    {%else%}
-                        {% if valid_data == False %}
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" ></span>
-                        {%else%}
-                            <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
-                        {% endif %}
-                    {% endif %}
-
-                {%trans 'validate_data'%}
-            </button>
-
             <button type="submit" id="bt_submit_diploma" class="btn btn-default pull-right" role="button"
                     title="{%trans 'save'%}"
                     name="submit_diploma"
@@ -263,11 +237,6 @@
                      {% endif %}
                 {% endif %}
 
-            </div>
-        {% endif %}
-        {% if valid_data == True %}
-            <div class="alert alert-warning" role="alert" style="margin-left:5px;" id="msg_validat_data">
-                 {% trans 'you_have_to_save' %}
             </div>
         {% endif %}
         {%if message_success%}

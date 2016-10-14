@@ -24,7 +24,6 @@
 #
 ##############################################################################
 from django.shortcuts import render, redirect
-from django.core.exceptions import ObjectDoesNotExist
 from admission import models as mdl
 from admission.models.enums import document_type
 from admission.views import demande_validation

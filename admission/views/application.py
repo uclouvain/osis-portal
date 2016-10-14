@@ -34,7 +34,7 @@ from admission.views.common import get_picture_id, get_id_document
 from admission.views.common import extra_information
 from admission.views import common
 from admission.views import demande_validation
-from django.http import *
+from django.http import HttpResponseRedirect
 import urllib
 
 

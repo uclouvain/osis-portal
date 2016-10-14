@@ -480,7 +480,7 @@ function display_local_secondary(){
     }else{
         $('#rdb_dipl_acc_high_educ_false').prop( "checked", true);
     }
-    if( $('#hdn_secondary_education_academic_year').val() < 1994){
+    if( $('#hdn_secondary_education_path_repetition').val() == 'True'){
         $('#rdb_repeated_grade_true').prop( "checked", true);
     }else{
         $('#rdb_repeated_grade_false').prop( "checked", true);

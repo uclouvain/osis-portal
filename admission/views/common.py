@@ -404,7 +404,8 @@ def profile(request, application_id=None, message_success=None):
         person_legal_address.save()
         applicant.user.save()
         if application:
-            application.application_type = mdl.application.define_application_type(application.national_degree, request.user)
+            application.application_type = mdl.application.define_application_type(application.national_degree,
+                                                                                   request.user)
             application.save()
         request.user = applicant.user  # Otherwise it was not refreshed while going back to home page
         applicant.save()
@@ -634,15 +635,16 @@ def delete_previous_criteria(applicant, application):
         for c in criteria_list:
             c.delete()
 
+
 def is_local_language_exam_needed(user):
     local_language_exam_needed = False
     applications = mdl.application.find_by_user(user)
     if applications:
         for application in applications:
             if application.offer_year.grade_type and \
-                    (application.offer_year.grade_type.name == 'BACHELOR' or \
-                     application.offer_year.grade_type.name == 'MASTER' or \
-                     application.offer_year.grade_type.name == 'TRAINING_CERTIFICATE'):
+                    (application.offer_year.grade_type.institutional_grade_type == 'BACHELOR' or \
+                     application.offer_year.grade_type.institutional_grade_type.startswith('MASTER') or \
+                     application.offer_year.grade_type.institutional_grade_type == 'TRAINING_CERTIFICATE'):
                 local_language_exam_needed = True
                 break
     return local_language_exam_needed

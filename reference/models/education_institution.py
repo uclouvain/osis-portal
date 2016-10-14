@@ -98,9 +98,10 @@ def find_by_institution_type_iso_code(an_institution_type, iso_code,an_adhoc):
 
 
 def find_by_isocode_type(an_iso_code, an_institution_type, an_adhoc):
-    return EducationInstitution.objects.filter(country__iso_code=an_iso_code,
-                                               institution_type=an_institution_type,
-                                               adhoc=an_adhoc).distinct('city').order_by('city')
+    education_institutions = EducationInstitution.objects.filter(country__iso_code=an_iso_code,
+                                                                 institution_type=an_institution_type,
+                                                                 adhoc=an_adhoc).distinct('city').order_by('city')
+    return remove_city_case_duplicates(education_institutions)
 
 
 def find_by_institution_city_type_iso_code(a_city, an_institution_type, iso_code, an_adhoc):
@@ -194,3 +195,14 @@ def find_cities(an_iso_code=None, an_institution_type=None, an_adhoc=None,  a_po
                                                institution_type=an_institution_type,
                                                adhoc=an_adhoc,
                                                postal_code=a_postal_code).distinct('city').order_by('city')
+
+
+def remove_city_case_duplicates(education_institutions):
+    # I can't figure out how to make a distinct on the city name independently of the case
+    results2 = []
+    city_names = []
+    for r in education_institutions:
+        if r.city.lower() not in city_names:
+            results2.append(r)
+            city_names.append(r.city.lower())
+    return results2

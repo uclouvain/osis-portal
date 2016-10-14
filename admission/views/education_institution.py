@@ -24,10 +24,8 @@
 #
 ##############################################################################
 from rest_framework import serializers
-from admission import models as mdl
 from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
-from django.views.decorators.csrf import csrf_exempt
 from reference import models as mdl_reference
 from django.core.serializers.python import Serializer
 
@@ -44,6 +42,7 @@ class EducationInstitutionSerializer(serializers.ModelSerializer):
         model = mdl_reference.education_institution.EducationInstitution
         fields = ('id', 'name', 'postal_code', 'city', 'country', 'national_community')
         order_by = ('name')
+
 
 def find_by_country(request):
     country = request.GET['country']
@@ -121,12 +120,12 @@ def find_countries(request):
 
 
 def find_countries_by_type_adhoc(request):
-    '''
+    """
     Get all the countries present in the table education_institution.
     Non belgian Countries of HIGHER_NON_UNIVERSITY type and with adhoc = false
     :param request:
     :return:
-    '''
+    """
     education_institutions = mdl_reference.education_institution\
         .find_countries_by_type_excluding_country('HIGHER_NON_UNIVERSITY', False, "BE")
     serializer = MyEducationInstitutionSerializer()
@@ -162,7 +161,7 @@ def find_institution_by_city_postal_code_type(request):
     if city == "" or city == "-" or city == 'null':
         city = None
     postal_code = request.GET['postal_code']
-    if postal_code == "" or postal_code=="-":
+    if postal_code == "" or postal_code == "-":
         postal_code = None
 
     education_institutions = mdl_reference.education_institution.search('BE', type, False, city, postal_code)

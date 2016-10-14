@@ -72,15 +72,16 @@
             <br>
             <div >
             <label>{% trans 'institution_not_found_question'%}</label>
-                      <input type="checkbox"
-                             id="chb_other_school"
-                             name="other_school"
-                             onclick="disabled_field('txt_CESS_other_school_name',this);disabled_field('txt_CESS_other_school_city',this);disabled_field('txt_CESS_other_school_postal_code',this);
-                                      reset_input('txt_CESS_other_school_name');reset_input('txt_CESS_other_school_city');reset_input('txt_CESS_other_school_postal_code');">
+            <input type="checkbox"
+                   id="chb_other_school"
+                   name="other_school"
+                   onclick="disabled_field('txt_CESS_other_school_name',this);disabled_field('txt_CESS_other_school_city',this);disabled_field('txt_CESS_other_school_postal_code',this);
+                            reset_input('txt_CESS_other_school_name');reset_input('txt_CESS_other_school_city');reset_input('txt_CESS_other_school_postal_code');">
             </div>
             <br>
 
-            <div class="row" id="pnl_other_school" >
+            <div id="pnl_other_school" >
+                <div class="row">
                 <div class="col-md-1">
                     &nbsp;
                 </div>
@@ -105,7 +106,7 @@
                            name="CESS_other_school_postal_code"
                            style="max-width:100px;">
                 </div>
-
+                </div>
                 <br>
                 <div class="row">
                     <div class="col-md-1">

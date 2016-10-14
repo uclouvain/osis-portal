@@ -1432,5 +1432,5 @@ msgstr "Validate data"
 msgid "validation_error"
 msgstr " field stops the tab validation"
 
-msgid "you_have_to_save"
-msgstr "Don't forget to save, validation doesn't save"
+msgid "msg_error_school_local_community"
+msgstr "Please mention a community for the school"
