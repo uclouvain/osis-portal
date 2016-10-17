@@ -34,6 +34,21 @@ from django.utils.translation import ugettext_lazy as _
 
 class Profession(models.Model):
     name = models.CharField(max_length=255)
+    adhoc = models.BooleanField(default=False)
 
     def __str__(self):
         return u"%s" % self.name
+
+
+def find_by_id(an_id):
+    try:
+        return Profession.objects.get(pk=an_id)
+    except:
+        return None
+
+
+def find_by_adoc(an_adhoc):
+    return Profession.objects.filter(adhoc=an_adhoc).order_by('name')
+
+def find_by_name(a_name):
+    return Profession.objects.filter(name=a_name).first()

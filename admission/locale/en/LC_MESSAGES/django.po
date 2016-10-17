@@ -1418,3 +1418,9 @@ msgstr "Certificate"
 
 msgid "DOCTORATE"
 msgstr "Ph. d"
+
+msgid "profession_not_found"
+msgstr "You haven't found your profession above?"
+
+msgid "grandfather"
+msgstr "Grandfathers"
