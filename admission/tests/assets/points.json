@@ -1,0 +1,119 @@
+{
+  "last_name": "Ndizera",
+  "first_name": "Eddy",
+  "academic_years": [
+    {
+      "anac": "2015",
+      "year": "2015 - 2016",
+      "programs": [
+        {
+          "title": "Master [120] en sciences informatiques, à finalité spécialisée",
+          "acronym": "SINF2MS/G",
+          "results": [
+            {
+              "insc": "IS",
+              "mean": "-",
+              "month": "janvier",
+              "mention": "-"
+            },
+            {
+              "insc": "EP",
+              "mean": "13.85",
+              "month": "juin",
+              "mention": "R"
+            },
+            {
+              "insc": "-",
+              "mean": "-",
+              "month": "septembre",
+              "mention": "-"
+            }
+          ],
+          "program_id": "13128",
+          "total_ECTS": "62.0",
+          "learning_units": [
+            {
+              "insc": "I",
+              "exams": [
+                {
+                  "score": "-",
+                  "session": "janvier",
+                  "status_exam": "-"
+                },
+                {
+                  "score": "15.0",
+                  "session": "juin",
+                  "status_exam": "I"
+                },
+                {
+                  "score": "-",
+                  "session": "septembre",
+                  "status_exam": "-"
+                }
+              ],
+              "title": "Languages and translators",
+              "acronym": "LINGI2132",
+              "credits": "6.0",
+              "credit_report": "K"
+            }
+          ],
+          "mention_explanation": ""
+        },
+        {
+          "title": "Bachelier[180] en sciences informatiques, à finalité spécialisée",
+          "acronym": "SINF2BA/G",
+          "results": [
+            {
+              "insc": "IS",
+              "mean": "-",
+              "month": "janvier",
+              "mention": "-"
+            },
+            {
+              "insc": "EP",
+              "mean": "13.85",
+              "month": "juin",
+              "mention": "R"
+            },
+            {
+              "insc": "-",
+              "mean": "-",
+              "month": "septembre",
+              "mention": "-"
+            }
+          ],
+          "program_id": "13128",
+          "total_ECTS": "62.0",
+          "learning_units": [
+            {
+              "insc": "I",
+              "exams": [
+                {
+                  "score": "-",
+                  "session": "janvier",
+                  "status_exam": "-"
+                },
+                {
+                  "score": "15.0",
+                  "session": "juin",
+                  "status_exam": "I"
+                },
+                {
+                  "score": "-",
+                  "session": "septembre",
+                  "status_exam": "-"
+                }
+              ],
+              "title": "Languages and translators",
+              "acronym": "LINGI2132",
+              "credits": "6.0",
+              "credit_report": "K"
+            }
+          ],
+          "mention_explanation": ""
+        }
+      ]
+    }
+  ],
+  "registration_id": "64641200"
+}

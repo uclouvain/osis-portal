@@ -3,13 +3,27 @@ from admission import models as mdl
 from base import models as mdl_base
 from reference import models as mdl_reference
 from osis_common import models as mdl_osis_common
-import random
+from performance import models as mdl_performance
+import datetime
+import json
 
 
 def create_user():
     a_user = User.objects.create_user('testo', password='testopw')
     a_user.save()
     return a_user
+
+
+def create_person():
+    a_person = mdl_base.person.Person(first_name="first", last_name="last")
+    a_person.save()
+    return a_person
+
+
+def create_student():
+    a_student = mdl_base.student.Student(registration_id="64641200", person=create_person())
+    a_student.save()
+    return a_student
 
 
 def create_applicant_by_user(user):
@@ -92,3 +106,13 @@ def create_application_document_file(an_application, a_user, description=None):
     an_application_document_file.document_file = a_document_file
     an_application_document_file.save()
     return an_application_document_file
+
+
+def create_student_performance():
+    with open("./admission/tests/assets/points.json") as f:
+        data = json.load(f)
+    a_student_performance = mdl_performance.\
+        student_performance.StudentPerformance(offer_year=create_offer_year(), student=create_student(),
+                                               expiration_date=datetime.date.today(), data=data)
+    a_student_performance.save()
+    return a_student_performance
