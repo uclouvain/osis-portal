@@ -88,7 +88,8 @@ def find_or_fetch(student, offer_year):
 
 def fetch_and_save(student, offer_year):
     obj = fetch_student_performance(student, offer_year)
-    obj.save()
+    if obj:
+        obj.save()
     return obj
 
 
@@ -97,16 +98,19 @@ def fetch_and_update(student_performance):
     offer_year = student_performance.offer_year
     message = str(student) + "_" + str(offer_year)
     json_data = fetch_json_data(message)
-    student_performance.data = json_data
-    student_performance.expiration_date = get_expiration_date()
-    student_performance.save()
+    if json_data:
+        student_performance.data = json_data
+        student_performance.expiration_date = get_expiration_date()
+        student_performance.save()
 
 
 def fetch_student_performance(student, offer_year):
     message = str(student) + "_" + str(offer_year)
     json_data = fetch_json_data(message)
-    obj = StudentPerformance(student=student, offer_year=offer_year, data=json_data,
-                             expiration_date=get_expiration_date())
+    obj = None
+    if json_data:
+        obj = StudentPerformance(student=student, offer_year=offer_year, data=json_data,
+                                 expiration_date=get_expiration_date())
     return obj
 
 
@@ -114,7 +118,9 @@ def fetch_json_data(message):
     STUDENT_PERFORMANCE_QUEUE_NAME = "STUDENT_PERFORMANCE_QUEUE"
     client = DocumentClient(STUDENT_PERFORMANCE_QUEUE_NAME)
     json_data = client.call(message)  # TODO Can take a long time
-    json_student_perf = json.loads(json_data.decode("utf-8"))
+    json_student_perf = None
+    if json_data:
+        json_student_perf = json.loads(json_data.decode("utf-8"))
     return json_student_perf
 
 

@@ -33,6 +33,7 @@ import threading
 import logging
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
+DELAY_TIME_OUT = 30
 
 
 class ScoresSheetClient(object):
@@ -80,7 +81,8 @@ class DocumentClient(object):
                                                                             QUEUE_PORT,
                                                                             QUEUE_CONTEXT_ROOT,
                                                                             credentials))
-
+        self.timed_out = False
+        self.connection.add_timeout(DELAY_TIME_OUT, self.on_timed_out)
         self.channel = self.connection.channel()
 
         result = self.channel.queue_declare(exclusive=True)
@@ -88,6 +90,9 @@ class DocumentClient(object):
 
         self.channel.basic_consume(self.on_response, no_ack=True,
                                    queue=self.callback_queue)
+
+    def on_timed_out(self):
+        self.timed_out = True
 
     def on_response(self, ch, method, props, body):
         if self.corr_id == props.correlation_id:
@@ -104,7 +109,7 @@ class DocumentClient(object):
                                          content_type='application/json',
                                          ),
                                    body=message)
-        while self.response is None:
+        while self.response is None and not self.timed_out:
             self.connection.process_data_events()
         return self.response
 
