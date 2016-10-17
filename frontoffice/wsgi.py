@@ -30,7 +30,6 @@ from django.conf import settings
 from django.core.wsgi import get_wsgi_application
 from frontoffice.queue import callbacks
 from frontoffice.queue import queue_listener
-from performance.queue import callbacks as perf_callbacks
 from pika.exceptions import ConnectionClosed, AMQPConnectionError, ChannelClosed
 
 LOGGER = logging.getLogger(settings.DEFAULT_LOGGER)
@@ -50,9 +49,3 @@ try:
 except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
     LOGGER.exception("Couldn't connect to the QueueServer")
 
-# Thread in which is running the listening of the queue used to print exams scores of students
-queue_for_performancce = 'performance'
-try:
-    queue_listener.listen_queue(queue_for_performancce, perf_callbacks.couchbase_insert_or_update)
-except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
-    LOGGER.exception("Couldn't connect to the QueueServer")
