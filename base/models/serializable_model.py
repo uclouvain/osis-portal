@@ -101,7 +101,7 @@ def serialize_objects(objects, format='json'):
     """
     if not objects:
         return None
-    if len([obj.__class__ for obj in objects]) > 1:
+    if len({obj.__class__ for obj in objects}) > 1:
         raise Exception("Please give objects for only 1 model at the same time")
     model_class = objects[0].__class__
     return serializers.serialize(format,
