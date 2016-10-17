@@ -102,7 +102,6 @@ def fetch_and_update(student_performance):
     student_performance.save()
 
 
-
 def fetch_student_performance(student, offer_year):
     message = str(student) + "_" + str(offer_year)
     json_data = fetch_json_data(message)

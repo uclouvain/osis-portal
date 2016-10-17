@@ -159,29 +159,6 @@ function fillMentionExplanation(studentJson) {
   $("#paragraph_mention_explanation").html(mentionExplanation);
 }
 
-/***************************** UTILITY FUNCTIONS TEMPLATE ***************/
-
-
-/*
- * Format the program acronym for the url by lowering the cases of all characters
- * and removing the non alpha numeric characters.
- * programAcronym: a string
- */
-function formatAcronym(programAcronym) {
-    var lowerCaseProgramAcronym = programAcronym.toLowerCase();
-    return onlyAlphaNumeric(lowerCaseProgramAcronym);
-}
-
-
-/*
- * Return the string obtained by removing all non alphanumeric characters from s
- * s: a string
- */
-function onlyAlphaNumeric(s) {
-    var pattern = /[\W_]/g; // Regexp consisting of all non alphanumeric characters.
-    return s.replace(pattern ,"");
-}
-
 /***************************** UTILITY FUNCTIONS ***********************/
 
 /*
@@ -209,55 +186,3 @@ function onlyAlphaNumeric(s) {
     $jQObj.appendTo($parent) ;
     return $jQObj;
   }
-
- /*
-  * Creates a new jQuery object representing a DOM document.
-  * tag: string of the form "<HTML_tag/>" which is the DOM type
-  * attributes: object of key/value pairs that are attributes of the DOM
-  */
-  function createJQObjectNoParentNoText(tag, attributes) {
-    var $jQObj = $(tag, attributes);
-    return $jQObj;
-  }
-
-  /*
-   * Creates "n" same jQuery objects that are child of "parent".
-   * tag: string of the form "<HTML_tag/>" which is the DOM type
-   * attributes: object of key/value pairs that are attributes of the DOM
-   * $parent: jQuery object that will be the parent (container)
-   * n: number of objects to create
-   */
-   function createMultipleJQObject(tag, attributes, $parent, n){
-     //Fragment use for efficiency as dom manipulaiton is costy
-     var $frag = $(document.createDocumentFragment());
-     var array_obj = [];
-
-     for(var i = 0; i < n; i++){
-       var obj = createJQObjectNoText(tag, attributes, $frag);
-       array_obj.push(obj);
-     }
-
-     $frag.appendTo($parent);
-     return array_obj;
-   }
-
-  /*
-   * Fill the table with data.
-   * $table: jQuery object representing a table DOM document
-   * data: a two dimension array of data to put in the table
-   */
-   function fillTable($table, data){
-     //Fragment use for efficiency as dom manipulation is costy
-     var $frag = $(document.createDocumentFragment());
-
-     $.each(data, function(row_index, row_data) {
-       var $row = createJQObjectNoText("<tr>", {}, $frag);
-
-       $.each(row_data, function(cell_index, cell_data) {
-         var $cell = createJQObject("<td>", {}, cell_data, $row);
-       });
-
-     });
-
-     $frag.appendTo($table);
-   }
