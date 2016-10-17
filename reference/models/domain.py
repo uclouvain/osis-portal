@@ -29,6 +29,8 @@ from django.utils import timezone
 from reference.enums import domain_type
 from base.models.serializable_model import SerializableModel
 
+PAYSAGE_DECREE = 'Paysage'
+
 
 class DomainAdmin(admin.ModelAdmin):
     list_display = ('name', 'parent', 'decree', 'type')
@@ -73,3 +75,11 @@ def find_all_subdomains():
 
 def find_subdomains_by_domain_id(a_domain_id):
     return Domain.objects.filter(parent=a_domain_id)
+
+
+def find_offers_domains():
+    return Domain.objects.filter(decree__name=PAYSAGE_DECREE)\
+                         .filter(parent__isnull=False)\
+                         .filter(type=domain_type.UNIVERSITY)\
+                         .order_by('name')
+
