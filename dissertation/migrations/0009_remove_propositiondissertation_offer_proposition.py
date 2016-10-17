@@ -16,7 +16,7 @@ def dictfetchall(cursor):
         ]
 
 
-def my_custom_sql(apps, schema_editor):
+def move_data_from_offer_proposition_to_proposition_offer(apps, schema_editor):
     cursor = connection.cursor()
     cursor.execute("select * from dissertation_propositiondissertation_offer_proposition")
     for record in dictfetchall(cursor):
@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(my_custom_sql),
+        migrations.RunPython(move_data_from_offer_proposition_to_proposition_offer),
         migrations.RemoveField(
             model_name='propositiondissertation',
             name='offer_proposition',
