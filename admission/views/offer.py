@@ -32,6 +32,9 @@ from admission import models as mdl
 from reference import models as mdl_reference
 from admission.views.common import extra_information, validated_extra, get_picture_id
 from base import models as mdl_base
+from reference.enums import assimilation_criteria as assimilation_criteria_enum
+from admission.views import assimilation_criteria as assimilation_criteria_view
+from admission.views.common import  get_assimilation_documents_existing
 
 
 class JSONResponse(HttpResponse):
@@ -75,15 +78,33 @@ def find_by_id(request):
 
 def offer_selection(request):
     offers = None
-    application = mdl.application.find_by_user(request.user)
+
     grade_choices = mdl_reference.grade_type.find_all()
-    return render(request, "offer_selection.html",
-                  {"gradetypes":  mdl_reference.grade_type.find_all(),
-                   "domains":     mdl_reference.domain.find_current_domains(),
-                   "offers":      offers,
-                   "offer":       None,
+    applicant = mdl.applicant.find_by_user(request.user)
+    same_addresses = True
+    person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
+    if person_contact_address:
+        same_addresses = False
+    application = mdl.application.init_application(request.user)
+    applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
+    return render(request, "admission_home.html",
+                  {"gradetypes": mdl_reference.grade_type.find_all(),
+                   "domains": mdl_reference.domain.find_current_domains(),
+                   "offers": offers,
+                   "offer": None,
                    "application": application,
-                   "grade_choices": grade_choices})
+                   "grade_choices": grade_choices,
+                   'tab_active': 0,
+                   'applicant': applicant,
+                   'person_contact_address': person_contact_address,
+                   'person_legal_address': mdl.person_address.find_by_person_type(applicant, 'LEGAL'),
+                   'countries': mdl_reference.country.find_all(),
+                   'assimilation_criteria': assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES,
+                   'applicant_assimilation_criteria': applicant_assimilation_criteria,
+                   'assimilation_basic_documents': assimilation_criteria_view.find_assimilation_basic_documents(),
+                   'assimilation_documents_existing': get_assimilation_documents_existing(request.user),
+                   'same_addresses': same_addresses,
+                   'application': application})
 
 
 def _get_offer_type(request):
