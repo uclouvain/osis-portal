@@ -33,16 +33,17 @@ import datetime
 
 
 class StudentPerformanceAdmin(admin.ModelAdmin):
-    list_display = ('student', 'offer_year')
+    list_display = ('student', 'offer_year', 'update_date', 'creation_date')
     list_filter = ('student__registration_id',)
-    fieldsets = ((None, {'fields': ('student', 'offer_year')}),)
+    fieldsets = ((None, {'fields': ('student', 'offer_year', 'update_date', 'creation_date')}),)
 
 
 class StudentPerformance(SerializableModel):
     student = models.ForeignKey('base.Student')
     offer_year = models.ForeignKey('base.OfferYear')
-    data = JSONField()  # TODO discuss about db_index
-    expiration_date = models.DateField()
+    data = JSONField()
+    update_date = models.DateField()
+    creation_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return
@@ -87,7 +88,7 @@ def find_or_fetch(student, offer_year):
 
 def has_expired(student_performance):
     today = datetime.date.today()
-    expiration_date = student_performance.expiration_date
+    expiration_date = student_performance.update_date
     return expiration_date < today
 
 

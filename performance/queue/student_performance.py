@@ -43,7 +43,8 @@ def fetch_and_update(student_performance):
     obj = fetch_student_performance(student, offer_year)
     if obj:
         student_performance.data = obj.data
-        student_performance.expiration_date = get_expiration_date()
+        student_performance.update_date = get_expiration_date()
+        student_performance.creation_date = get_creation_date()
         student_performance.save()
     return student_performance
 
@@ -55,7 +56,7 @@ def fetch_student_performance(student, offer_year):
     if json_data:
         from performance.models.student_performance import StudentPerformance
         obj = StudentPerformance(student=student, offer_year=offer_year, data=json_data,
-                                 expiration_date=get_expiration_date())
+                                 update_date=get_expiration_date())
     return obj
 
 
@@ -73,3 +74,8 @@ def get_expiration_date():
     timedelta = datetime.timedelta(days=2)
     expiration_date = today + timedelta
     return expiration_date
+
+
+def get_creation_date():
+    today = datetime.datetime.today()
+    return today

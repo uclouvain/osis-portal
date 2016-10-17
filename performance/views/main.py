@@ -61,8 +61,9 @@ def display_result_for_specific_year_and_program(request, offer_year_id):
     offer_year = mdl_offer_year.find_by_id(offer_year_id)
     stud_perf = mdl_performance.student_performance.find_or_fetch(student=stud, offer_year=offer_year)
     document = stud_perf.data if stud_perf else None
+    creation_date = stud_perf.creation_date if stud_perf else None
 
-    return layout.render(request, "performance_result.html", {"results": document})
+    return layout.render(request, "performance_result.html", {"results": document, "creation_date": creation_date})
 
 
 @login_required
@@ -141,7 +142,7 @@ def get_student_programs_list(stud):  # todo TEST
     :param stud: a student object
     :return: a list of dictionnary (see query_result_to_list for the format)
     """
-    query_result = mdl_offer_enrollment.find_by_student(stud)
+    query_result = mdl_offer_enrollment.find_by_student_ordered(stud)
     list_student_programs = query_result_to_list(query_result)
     return list_student_programs
 
