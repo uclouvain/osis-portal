@@ -47,7 +47,6 @@ def display_performance_home(request):
     list_student_programs = None
     if stud:
         list_student_programs = get_student_programs_list(stud)
-
     return layout.render(request, "performance_home.html", {"student": stud,
                                                             "programs": list_student_programs})
 
