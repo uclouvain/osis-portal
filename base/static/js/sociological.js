@@ -96,7 +96,6 @@ $('document').ready(function(){
                                   '');
 
     if($('#hdn_maternal_grandfather_profession_adhoc').val() == 'True'){
-        alert('ii');
         display_hide_other_profession('#slt_maternal_grandfather_profession',
                                       '#chb_maternal_grandfather_profession_other',
                                       '#div_maternal_grandfather_profession_other',

@@ -104,16 +104,11 @@ def save_sociological_form(request):
         father_is_deceased = True
     else:
         father_is_deceased = False
-
     if request.POST.get('father_education').startswith('-') or request.POST.get('father_education') == '':
         father_education = None
     else:
         father_education = request.POST.get('father_education')
-    if request.POST.get('father_profession') and request.POST.get('father_profession') != '-' \
-            and request.POST.get('father_profession').isnumeric():
-        father_profession = mdl.profession.find_by_id(int(request.POST.get('father_profession')))
-    else:
-        father_profession = get_profession(request.POST.get('father_profession_other_name'))
+    father_profession = get_profession(request.POST.get('father_profession'), request.POST.get('father_profession_other_name'))
     if request.POST.get('mother_is_deceased') and request.POST.get('mother_is_deceased') == "on":
         mother_is_deceased = True
     else:
@@ -122,37 +117,19 @@ def save_sociological_form(request):
         mother_education = None
     else:
         mother_education = request.POST.get('mother_education')
-    if request.POST.get('mother_profession') and request.POST.get('mother_profession').isnumeric():
-        mother_profession = mdl.profession.find_by_id(int(request.POST.get('mother_profession')))
-    else:
-        mother_profession = get_profession(request.POST.get('mother_profession_other_name'))
+    mother_profession = get_profession(request.POST.get('mother_profession'), request.POST.get('mother_profession_other_name'))
     if request.POST.get('student_professional_activity') != '-':
         student_professional_activity = request.POST.get('student_professional_activity')
     else:
         student_professional_activity = None
-    if request.POST.get('student_profession') and request.POST.get('student_profession').isnumeric():
-        student_profession = mdl.profession.find_by_id(int(request.POST.get('student_profession')))
-    else:
-        student_profession = get_profession(request.POST.get('student_profession_other_name'))
+    student_profession = get_profession(request.POST.get('student_profession'), request.POST.get('student_profession_other_name'))
     if request.POST.get('conjoint_professional_activity') != '-':
         conjoint_professional_activity = request.POST.get('conjoint_professional_activity')
     else:
         conjoint_professional_activity = None
-    if request.POST.get('conjoint_profession') and request.POST.get('conjoint_profession').isnumeric():
-        conjoint_profession = mdl.profession.find_by_id(int(request.POST.get('conjoint_profession')))
-    else:
-        conjoint_profession = get_profession(request.POST.get('conjoint_profession_other_name'))
-    if request.POST.get('paternal_grandfather_profession') != '-':
-        paternal_grandfather_profession = mdl.profession\
-            .find_by_id(int(request.POST.get('paternal_grandfather_profession')))
-    else:
-        paternal_grandfather_profession = get_profession(request.POST.get('paternal_grandfather_profession_other_name'))
-    if request.POST.get('maternal_grandfather_profession')\
-            and request.POST.get('maternal_grandfather_profession').isnumeric():
-        maternal_grandfather_profession = mdl.profession\
-            .find_by_id(int(request.POST.get('maternal_grandfather_profession')))
-    else:
-        maternal_grandfather_profession = get_profession(request.POST.get('maternal_grandfather_profession_other_name'))
+    conjoint_profession = get_profession(request.POST.get('conjoint_profession'), request.POST.get('conjoint_profession_other_name'))
+    paternal_grandfather_profession = get_profession(request.POST.get('paternal_grandfather_profession'), request.POST.get('paternal_grandfather_profession_other_name'))
+    maternal_grandfather_profession = get_profession(request.POST.get('maternal_grandfather_profession'), request.POST.get('maternal_grandfather_profession_other_name'))
 
     sociological_survey = SociologicalSurvey(applicant=applicant,
                                              number_brothers_sisters=number_brothers_sisters,
@@ -181,7 +158,7 @@ def redirect_to_next_tab(next_tab):
     return redirect(attachments.update)
 
 
-def get_profession(field):
+def get_other_profession(field):
     if field:
         existing_profession = mdl.profession.find_by_name(field)
         if existing_profession:
@@ -192,4 +169,12 @@ def get_profession(field):
             new_profession.name = field
             new_profession.save()
             return new_profession
+    return None
+
+
+def get_profession(known, other):
+    if known and known != '-'  and known.isnumeric():
+        return mdl.profession.find_by_id(int(known))
+    else:
+        return get_other_profession(other)
     return None
