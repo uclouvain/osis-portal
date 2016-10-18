@@ -45,6 +45,7 @@ def update(request, application_id=None):
     applicant = mdl.applicant.find_by_user(request.user)
     tab_active = TAB_SOCIOLOGICAL_SURVEY
     sociological_survey = None
+    sociological_form = None
     if request.method == "POST":
         save_sociological_form(request)
         if 'bt_submit_sociological' in request.POST:

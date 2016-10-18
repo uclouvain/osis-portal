@@ -26,7 +26,7 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<form id="form_sociological_survey" action="{% url 'sociological_survey' %}" method="POST">
+<form id="form_sociological_survey" action="{% url 'sociological_survey' %}" method="post">
     <input type="hidden" id="hdn_father_profession_adhoc" value="{{sociological_survey.father_profession.adhoc}}">
     <input type="hidden" id="hdn_father_profession_name" value="{{sociological_survey.father_profession.name}}">
     <input type="hidden" id="hdn_mother_profession_adhoc" value="{{sociological_survey.mother_profession.adhoc}}">
@@ -53,15 +53,21 @@
     </div>
     <div class="row" style="margin-top:5px;">
         <div class="col-md-6">
-            <button type="submit" class="btn btn-default" title="{% trans 'accounting'%}">
-                <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            <a id="lnk_previous_step_up"
+               class="btn btn-default"
+               href="{%if application.id%}{% url 'accounting_update' application.id%}{%else%}{% url 'accounting_update' %}{%endif%}"
+               onclick="save('form_sociological_survey');"
+               title="{% trans 'accounting'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
                 {%trans 'previous_step'%} : {%trans 'accounting'%}
-            </button>
+            </a>
         </div>
         <div class="col-md-6">
-            <button type="submit" class="btn btn-default pull-right" title="{% trans 'accounting'%}">
-                {%trans 'next_step'%} : {%trans 'attachments'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            </button>
+            <a id="lnk_next_sociological_step"
+               class="btn btn-default pull-right"
+               href="{%if application.id%}{% url 'attachments' application.id%}{%else%}{% url 'attachments' %}{%endif%}"
+               onclick="save('form_sociological_survey');"
+               title="{% trans 'attachments'%}">{%trans 'next_step'%} : {%trans 'attachments'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            </a>
         </div>
     </div>
 
@@ -424,17 +430,23 @@
         </div>
     </div>
     <br>
-    <div class="row">
+    <div class="row" style="margin-top:5px;">
         <div class="col-md-6">
-            <button type="submit" class="btn btn-default" title="{% trans 'accounting'%}">
-                <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            <a id="lnk_previous_step_down"
+               class="btn btn-default"
+               href="{%if application.id%}{% url 'accounting_update' application.id%}{%else%}{% url 'accounting_update' %}{%endif%}"
+               onclick="save('form_sociological_survey');"
+               title="{% trans 'accounting'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
                 {%trans 'previous_step'%} : {%trans 'accounting'%}
-            </button>
+            </a>
         </div>
         <div class="col-md-6">
-            <button type="submit" class="btn btn-default pull-right" title="{% trans 'accounting'%}">
-                {%trans 'next_step'%} : {%trans 'attachments'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            </button>
+            <a id="lnk_next_sociological_down"
+               class="btn btn-default pull-right"
+               href="{%if application.id%}{% url 'attachments' application.id%}{%else%}{% url 'attachments' %}{%endif%}"
+               onclick="save('form_sociological_survey');"
+               title="{% trans 'attachments'%}">{%trans 'next_step'%} : {%trans 'attachments'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            </a>
         </div>
     </div>
 
