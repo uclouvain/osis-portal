@@ -32,6 +32,9 @@ from admission.forms import SociologicalSurveyForm
 from admission.models.sociological_survey import SociologicalSurvey
 from admission.views import attachments, accounting
 
+TAB_SOCIOLOGICAL_SURVEY = 5
+CHECKED_STATUS = 'on'
+
 
 def update(request, application_id=None):
     """
@@ -40,19 +43,17 @@ def update(request, application_id=None):
     :param application_id
     """
     applicant = mdl.applicant.find_by_user(request.user)
-    next_tab = 5
+    tab_active = TAB_SOCIOLOGICAL_SURVEY
     sociological_survey = None
     if request.method == "POST":
+        save_sociological_form(request)
         if 'bt_submit_sociological' in request.POST:
-            save_sociological_form(request)
             u = SociologicalSurvey.objects.get(applicant=applicant)
             sociological_form = SociologicalSurveyForm(instance=u)
             sociological_form.is_valid()
             sociological_survey = u
         else:
-            save_sociological_form(request)
-            next_tab = request.POST.get('next_tab', 'next')
-            return redirect_to_next_tab(next_tab)
+            return redirect_to_next_tab(request.POST.get('next_tab', 'next'))
     else:
         try:    # Prefill the form if the user already filled it.
             sociological_survey = SociologicalSurvey.objects.get(applicant=applicant)
@@ -67,7 +68,7 @@ def update(request, application_id=None):
 
     tab_status = tabs.init(request)
     data = {
-        'tab_active': next_tab,
+        'tab_active': tab_active,
         'application': application,
         'tab_profile': tab_status['tab_profile'],
         'tab_applications': tab_status['tab_applications'],
@@ -90,7 +91,6 @@ def save_sociological_form(request):
     """
     Save a sociological form.
     The form must have passed the is_valid check.
-    :param sociological_form: a form of type SociologicalForm
     :param request
     :return:
     """
@@ -100,36 +100,37 @@ def save_sociological_form(request):
         number_brothers_sisters = int(request.POST.get('number_brothers_sisters'))
     else:
         number_brothers_sisters = 0
-    if request.POST.get('father_is_deceased') and request.POST.get('father_is_deceased') == "on":
-        father_is_deceased = True
-    else:
-        father_is_deceased = False
+    father_is_deceased = get_boolean_status(request.POST.get('father_is_deceased'))
+
     if request.POST.get('father_education').startswith('-') or request.POST.get('father_education') == '':
         father_education = None
     else:
         father_education = request.POST.get('father_education')
-    father_profession = get_profession(request.POST.get('father_profession'), request.POST.get('father_profession_other_name'))
-    if request.POST.get('mother_is_deceased') and request.POST.get('mother_is_deceased') == "on":
-        mother_is_deceased = True
-    else:
-        mother_is_deceased = False
+    father_profession = get_profession(request.POST.get('father_profession'),
+                                       request.POST.get('father_profession_other_name'))
+    mother_is_deceased = get_boolean_status(request.POST.get('mother_is_deceased'))
     if request.POST.get('mother_education').startswith('-') or request.POST.get('mother_education') == '':
         mother_education = None
     else:
         mother_education = request.POST.get('mother_education')
-    mother_profession = get_profession(request.POST.get('mother_profession'), request.POST.get('mother_profession_other_name'))
+    mother_profession = get_profession(request.POST.get('mother_profession'),
+                                       request.POST.get('mother_profession_other_name'))
     if request.POST.get('student_professional_activity') != '-':
         student_professional_activity = request.POST.get('student_professional_activity')
     else:
         student_professional_activity = None
-    student_profession = get_profession(request.POST.get('student_profession'), request.POST.get('student_profession_other_name'))
+    student_profession = get_profession(request.POST.get('student_profession'),
+                                        request.POST.get('student_profession_other_name'))
     if request.POST.get('conjoint_professional_activity') != '-':
         conjoint_professional_activity = request.POST.get('conjoint_professional_activity')
     else:
         conjoint_professional_activity = None
-    conjoint_profession = get_profession(request.POST.get('conjoint_profession'), request.POST.get('conjoint_profession_other_name'))
-    paternal_grandfather_profession = get_profession(request.POST.get('paternal_grandfather_profession'), request.POST.get('paternal_grandfather_profession_other_name'))
-    maternal_grandfather_profession = get_profession(request.POST.get('maternal_grandfather_profession'), request.POST.get('maternal_grandfather_profession_other_name'))
+    conjoint_profession = get_profession(request.POST.get('conjoint_profession'),
+                                         request.POST.get('conjoint_profession_other_name'))
+    paternal_grandfather_profession = get_profession(request.POST.get('paternal_grandfather_profession'),
+                                                     request.POST.get('paternal_grandfather_profession_other_name'))
+    maternal_grandfather_profession = get_profession(request.POST.get('maternal_grandfather_profession'),
+                                                     request.POST.get('maternal_grandfather_profession_other_name'))
 
     sociological_survey = SociologicalSurvey(applicant=applicant,
                                              number_brothers_sisters=number_brothers_sisters,
@@ -172,9 +173,15 @@ def get_other_profession(field):
     return None
 
 
-def get_profession(known, other):
-    if known and known != '-'  and known.isnumeric():
-        return mdl.profession.find_by_id(int(known))
+def get_profession(known_profession_id, other):
+    if known_profession_id and known_profession_id != '-' and known_profession_id.isnumeric():
+        return mdl.profession.find_by_id(int(known_profession_id))
     else:
         return get_other_profession(other)
-    return None
+
+
+def get_boolean_status(field_value):
+    if field_value and field_value == CHECKED_STATUS:
+        return True
+    else:
+        return False
