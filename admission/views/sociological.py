@@ -53,8 +53,6 @@ def update(request, application_id=None):
             sociological_form = SociologicalSurveyForm(instance=u)
             sociological_form.is_valid()
             sociological_survey = u
-        else:
-            return redirect_to_next_tab(request.POST.get('next_tab', 'next'))
     else:
         try:    # Prefill the form if the user already filled it.
             sociological_survey = SociologicalSurvey.objects.get(applicant=applicant)
@@ -145,19 +143,6 @@ def save_sociological_form(request):
                                              paternal_grandfather_profession=paternal_grandfather_profession,
                                              maternal_grandfather_profession=maternal_grandfather_profession)
     sociological_survey.save()  # Will update or create depending if a record exist with the same applicant
-
-
-def redirect_to_next_tab(next_tab):
-    """
-    Redirect to the next or previous page.
-    The next page is the "attachments" one and
-    the previous is the "accounting" one.
-    :param next_tab: a string equals to previous or next
-    :return: redirect to another page
-    """
-    if next_tab == "previous":
-        return redirect(accounting.accounting_update)
-    return redirect(attachments.update)
 
 
 def get_other_profession(field):
