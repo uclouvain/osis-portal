@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models.answer import find_by_option, find_by_id, find_by_application
+from admission.models.answer import find_by_application_and_option, find_by_id, find_by_application
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from admission import models as mdl
@@ -151,7 +151,7 @@ def save_application_offer(request):
             if "txt_answer_question_" in key:
                 # INPUT OR LABEL
                 option_id = key.replace("txt_answer_question_", "")
-                asw = find_by_option(option_id)
+                asw = find_by_application_and_option(application_id, option_id)
                 if not asw:
                     answer = mdl.answer.Answer()
                     answer.application = application

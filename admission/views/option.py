@@ -26,7 +26,7 @@
 from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
 from admission import models as mdl
-from admission.models.answer import find_by_option
+from admission.models.answer import find_by_option, find_by_application_and_option
 from base import models as mdl_base
 
 
@@ -39,7 +39,7 @@ class JSONResponse(HttpResponse):
 
 def find_by_offer(request):
     offer_yr_id = request.GET['offer']
-
+    application_id = request.GET['application']
     offer_yr = mdl_base.offer_year.find_by_id(offer_yr_id)
     questions = mdl.question.find_form_ordered_questions(offer_yr)
     options = []
@@ -49,26 +49,25 @@ def find_by_offer(request):
             options_by_question = mdl.option.find_options_by_question_id(question.id)
             for o in options_by_question:
                 options.append(o)
-
         for option in options:
-                options_max_number = 0
-                if option.question.type == 'RADIO_BUTTON' or option.question.type == 'CHECKBOX' \
-                        or option.question.type == 'DROPDOWN_LIST':
-                    options_max_number = mdl.option.find_number_options_by_question_id(option.question.id)
-                answers = find_by_option(option.id)
-                answer = ""
-                if answers.exists():
-                    answer = answers[0].value
-                question_list.append({'answer': answer,
-                                      'option_id': option.id,
-                                      'option_label': option.label,
-                                      'option_description': option.description,
-                                      'option_value': option.value,
-                                      'option_order': option.order,
-                                      'question_id': option.question.id,
-                                      'question_label': option.question.label,
-                                      'question_type': option.question.type,
-                                      'question_required': option.question.required,
-                                      'question_description': option.question.description,
-                                      'options_max_number': options_max_number})
+            options_max_number = 0
+            if option.question.type == 'RADIO_BUTTON' or option.question.type == 'CHECKBOX' \
+                    or option.question.type == 'DROPDOWN_LIST':
+                options_max_number = mdl.option.find_number_options_by_question_id(option.question.id)
+            answers = find_by_application_and_option(application_id, option.id)
+            answer = ""
+            if answers.exists():
+                answer = answers[0].value
+            question_list.append({'answer': answer,
+                                  'option_id': option.id,
+                                  'option_label': option.label,
+                                  'option_description': option.description,
+                                  'option_value': option.value,
+                                  'option_order': option.order,
+                                  'question_id': option.question.id,
+                                  'question_label': option.question.label,
+                                  'question_type': option.question.type,
+                                  'question_required': option.question.required,
+                                  'question_description': option.question.description,
+                                  'options_max_number': options_max_number})
     return JSONResponse(question_list)
