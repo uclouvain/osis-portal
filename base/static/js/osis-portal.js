@@ -76,7 +76,7 @@ function selection(row_number, offers_length, offer_year_id){
         $('#bt_save').prop("disabled",false);
         document.getElementById("offer_sel_" + row_number).checked = true;
     }
-    display_dynamic_form(offer_year_id, application_id);
+    display_dynamic_form(offer_year_id);
     ajax_static_questions(offer_year_id,'','','','');
 
 
@@ -1205,10 +1205,10 @@ function reset_chb(elt_name){
     }
 }
 
-function display_dynamic_form(offer_year_id, application_id){
+function display_dynamic_form(offer_year_id){
     set_pnl_questions_empty();
     $.ajax({
-        url: "/admission/options?offer=" + offer_year_id +"&application=" + application_id
+        url: "/admission/options?offer=" + offer_year_id
     }).then(function(data){
           var table_size=data.length;
           if(data.length >0){

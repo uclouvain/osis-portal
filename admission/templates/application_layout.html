@@ -214,7 +214,7 @@
         if($('#hdn_current_application_id').val() != '') {
             $('#txt_offer_year_id').val($('#hdn_application_offer_year_id').val());
             $('#slt_offer_type').val($('#hdn_application_grade_type_id').val());
-            display_known_offer($('#hdn_application_offer_year_id').val(), $('#hdn_application_id').val());
+            display_known_offer($('#hdn_application_offer_year_id').val());
         }
         {% if list_choices %}
             choices = {{ list_choices | safe }};
@@ -501,11 +501,11 @@
         return true;
     }
 
-    function display_known_offer(offer_year_id, application_id){
+    function display_known_offer(offer_year_id){
         ajax_grade_choice($('#hdn_application_grade_type_id').val());
         $('#slt_domain').val($('#hdn_application_domain_id').val());
         ajax_offers($('#hdn_application_grade_type_id').val(),$('#hdn_application_offer_year_id').val());
-        display_dynamic_form(offer_year_id, application_id);
+        display_dynamic_form(offer_year_id);
         ajax_static_questions(offer_year_id,$('#hdn_applied_to_sameprogram').val(),$('#hdn_local_degree').val(),$('#hdn_started_samestudies').val(),$('#hdn_valuation_possible').val());
     }
 
