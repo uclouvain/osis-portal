@@ -92,10 +92,6 @@ def find_by_id(an_id):
     return Curriculum.objects.get(pk=an_id)
 
 
-def find_by_academic_year(an_academic_year):
-    return Curriculum.objects.filter(academic_year=an_academic_year).first()
-
-
 def find_user(a_person):
     return Curriculum.objects.filter(person=a_person)
 

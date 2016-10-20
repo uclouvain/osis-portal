@@ -1361,7 +1361,7 @@ msgid "prerequisites_min_data"
 msgstr "You must have, at least, an secondary diploma or a professional exam or an admission exam or a local language exam"
 
 msgid "validation_errors"
-msgstr " fields stop the tab validation"
+msgstr " fields are invalid"
 
 msgid "msg_one_prerequisite"
 msgstr ""
@@ -1371,7 +1371,7 @@ msgid "question_lottery_number"
 msgstr "Please mention your lottery number"
 
 msgid "CRITERIA_1"
-msgstr "Please mention if you have an authorization of an institute or if you are long-term resident."
+msgstr "Please, mention whether you have an authorization of an institute or you are a long-term resident."
 
 msgid "CRITERIA_2"
 msgstr "Please mention if you are a refugee, stateless or if you want to benefit from a subsidiary protection."
@@ -1416,12 +1416,10 @@ msgid "CERTIFICATE"
 msgstr "Certificate"
 
 msgid "DOCTORATE"
-msgstr "Ph. d"
+msgstr "Ph.D"
 
 msgid "institution_not_found_question"
-msgstr ""
-"You didn't find your institute in the list?"
-"below."
+msgstr "Didn't you find your institute in the list below?"
 
 msgid "mandatory_file_recto_verso"
 msgstr "Mandatory files for recto and verso"
@@ -1430,7 +1428,7 @@ msgid "validate_data"
 msgstr "Validate data"
 
 msgid "validation_error"
-msgstr " field stops the tab validation"
+msgstr " field is invalid"
 
 msgid "msg_error_school_local_community"
 msgstr "Please mention a community for the school"

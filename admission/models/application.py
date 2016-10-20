@@ -82,10 +82,10 @@ def find_by_id(application_id):
 
 def find_first_by_user(user):
     try:
-        person_application = applicant.Applicant.objects.get(user=user)
+        applicant = applicant.Applicant.objects.get(user=user)
 
-        if person_application:
-            return Application.objects.filter(applicant=person_application).first()
+        if applicant:
+            return Application.objects.filter(applicant=applicant).first()
         else:
             return None
     except ObjectDoesNotExist:
@@ -93,14 +93,14 @@ def find_first_by_user(user):
 
 
 def init_application(user):
-    person_application = applicant.Applicant.objects.get(user=user)
+    applicant = applicant.Applicant.objects.get(user=user)
     application = Application()
-    application.applicant = person_application
+    application.applicant = applicant
     return application
 
 
 def define_application_type(national_degree, user):
-    person_application = applicant.Applicant.objects.get(user=user)
-    if person_application.nationality.european_union and national_degree:
+    applicant = applicant.Applicant.objects.get(user=user)
+    if applicant.nationality.european_union and national_degree:
         return application_type.INSCRIPTION
     return application_type.ADMISSION

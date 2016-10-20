@@ -81,8 +81,8 @@ def save_application_offer(request):
         else:
             application = mdl.application.init_application(request.user)
             new_application = True
-            person_application = mdl.applicant.find_by_user(request.user)
-            application.applicant = person_application
+            applicant = mdl.applicant.find_by_user(request.user)
+            application.applicant = applicant
             secondary_education = mdl.secondary_education.SecondaryEducation()
             secondary_education.applicant = application.applicant
 

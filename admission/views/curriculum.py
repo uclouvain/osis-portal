@@ -110,7 +110,7 @@ def save(request):
     year = first_academic_year_for_cv
     if year:
         while year < current_academic_year:
-            curriculum = mdl.curriculum.find_by_academic_year(year)
+            curriculum = mdl.curriculum.find_by_person_year(applicant, year)
             if curriculum is None:
                 # add cv empty cv's for the year if it's needed
                 curriculum = mdl.curriculum.Curriculum()
@@ -168,7 +168,7 @@ def update(request, application_id=None):
     if year and current_academic_year:
         while year < current_academic_year:
             # find existing cv
-            curriculum = mdl.curriculum.find_by_academic_year(year)
+            curriculum = mdl.curriculum.find_by_person_year(applicant, year)
             if curriculum is None:
                 # add cv empty cv's for the year if it's needed
                 curriculum = mdl.curriculum.Curriculum()
