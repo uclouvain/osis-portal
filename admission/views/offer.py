@@ -24,16 +24,12 @@
 #
 ##############################################################################
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
 
-from admission import models as mdl
 from reference import models as mdl_reference
 from base import models as mdl_base
-from reference.enums import assimilation_criteria as assimilation_criteria_enum
-from admission.views import assimilation_criteria as assimilation_criteria_view
-from admission.views.common import  get_assimilation_documents_existing
 
 
 class JSONResponse(HttpResponse):
@@ -75,37 +71,6 @@ def find_by_id(request):
     return JSONResponse(serializer.data)
 
 
-def offer_selection(request):
-    offers = None
-
-    grade_choices = mdl_reference.grade_type.find_all()
-    applicant = mdl.applicant.find_by_user(request.user)
-    same_addresses = True
-    person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
-    if person_contact_address:
-        same_addresses = False
-    application = mdl.application.init_application(request.user)
-    applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
-    return render(request, "admission_home.html",
-                  {"gradetypes": mdl_reference.grade_type.find_all(),
-                   "domains": mdl_reference.domain.find_current_domains(),
-                   "offers": offers,
-                   "offer": None,
-                   "application": application,
-                   "grade_choices": grade_choices,
-                   'tab_active': 0,
-                   'applicant': applicant,
-                   'person_contact_address': person_contact_address,
-                   'person_legal_address': mdl.person_address.find_by_person_type(applicant, 'LEGAL'),
-                   'countries': mdl_reference.country.find_all(),
-                   'assimilation_criteria': assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES,
-                   'applicant_assimilation_criteria': applicant_assimilation_criteria,
-                   'assimilation_basic_documents': assimilation_criteria_view.find_assimilation_basic_documents(),
-                   'assimilation_documents_existing': get_assimilation_documents_existing(request.user),
-                   'same_addresses': same_addresses,
-                   'application': application})
-
-
 def _get_offer_type(request):
     offer_type = None
 
@@ -127,16 +92,3 @@ def _get_domain(request):
         domain = get_object_or_404(mdl_reference.domain.Domain, pk=domain_id)
     return domain
 
-
-def selection_offer(request, offer_id):
-    offer_year = get_object_or_404(mdl_base.offer_year.OfferYear, pk=offer_id)
-    grade = _get_offer_type(request)
-    domain = _get_domain(request)
-
-    return render(request, "offer_selection.html",
-                           {"gradetypes":  mdl_reference.grade_type.find_all(),
-                            "domains":     mdl_reference.domain.find_current_domains(),
-                            "offers":      None,
-                            "offer":       offer_year,
-                            "offer_type":  grade,
-                            "domain":      domain})

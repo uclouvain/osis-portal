@@ -986,7 +986,6 @@
     }
 
     function change_menu(){
-        alert('change_menu');
         var enableMyLink = true;
         var valid_localdegree = true;
         if($('#hdn_tab_active').val() < "2"){
@@ -1003,7 +1002,6 @@
                 }
             }
         }
-        alert(enableMyLink);
         if (enableMyLink) {
           $("#mn_diploma").removeClass("disabled").find("a").removeAttr("onclick");
           $("#mn_curriculum").removeClass("disabled").find("a").removeAttr("onclick");
