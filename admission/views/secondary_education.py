@@ -38,6 +38,7 @@ from osis_common import models as mdl_osis_common
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
+FOREIGN_NATIONAL_DIPLOMA_TYPE = mdl.secondary_education.NATIONAL
 
 ALERT_MANDATORY_FILE_RECTO_VERSO = _('mandatory_file_recto_verso')
 ALERT_MANDATORY_FIELD = _('mandatory_field')
@@ -170,7 +171,7 @@ def populate_secondary_education(request, secondary_education):
 
 
 def populate_international_diploma(request, secondary_education):
-    secondary_education.international_diploma = get_boolean_value(request.POST.get('international_diploma'))
+    secondary_education.international_diploma = request.POST.get('international_diploma')
 
     if request.POST.get('international_diploma_country') \
             and request.POST.get('international_diploma_country') != "-":
@@ -190,7 +191,8 @@ def populate_international_diploma(request, secondary_education):
             if language_int:
                 secondary_education.international_diploma_language = mdl_reference.language \
                     .find_by_id(int(language_int))
-    secondary_education.international_equivalence = request.POST.get('international_equivalence')
+    if secondary_education.international_diploma == FOREIGN_NATIONAL_DIPLOMA_TYPE:
+        secondary_education.international_equivalence = request.POST.get('international_equivalence')
     secondary_education.result = request.POST.get('foreign_result')
 
 
@@ -276,7 +278,7 @@ def documents_update(request, secondary_education, application, professional_exa
         list_unwanted_files.append(document_type.INTERNATIONAL_DIPLOMA_RECTO)
         list_unwanted_files.append(document_type.INTERNATIONAL_DIPLOMA_VERSO)
     if secondary_education.international_diploma is None \
-            or secondary_education.international_diploma != 'INTERNATIONAL':
+            or secondary_education.international_diploma != FOREIGN_NATIONAL_DIPLOMA_TYPE:
         list_unwanted_files.append(document_type.EQUIVALENCE)
     if secondary_education.international_diploma_language is None \
             or secondary_education.international_diploma_language.recognized:

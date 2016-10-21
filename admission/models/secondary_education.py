@@ -28,6 +28,10 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from reference.enums.education_institution_national_comunity import NATIONAL_COMMUNITY_TYPES
 
+NATIONAL = 'NATIONAL'
+EUROPEAN = 'EUROPEAN'
+INTERNATIONAL = 'INTERNATIONAL'
+
 
 class SecondaryEducationAdmin(admin.ModelAdmin):
     list_display = ('person', 'national')
@@ -38,9 +42,9 @@ class SecondaryEducation(models.Model):
                    ('MIDDLE', 'entre 65% et 75%'),
                    ('HIGH', 'plus de 75%'))
 
-    INTERNATIONAL_DIPLOMA_TYPE = (('NATIONAL', 'Baccalauréat national (ou diplôme d\'état, ...)'),
-                                  ('EUROPEAN', 'Baccalauréat européen (Schola Europea)'),
-                                  ('INTERNATIONAL', 'Baccalauréat international(IBO)'))
+    INTERNATIONAL_DIPLOMA_TYPE = ((NATIONAL, 'Baccalauréat national (ou diplôme d\'état, ...)'),
+                                  (EUROPEAN, 'Baccalauréat européen (Schola Europea)'),
+                                  (INTERNATIONAL, 'Baccalauréat international(IBO)'))
 
     EQUIVALENCE_TYPE = (('YES', _('Yes')),
                         ('NO', _('No')),

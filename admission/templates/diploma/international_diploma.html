@@ -11,7 +11,7 @@
                name="international_diploma"
                id="rdb_foreign_baccalaureate_diploma_national"
                value="NATIONAL"
-               onclick="display('pnl_equivalence',false);">&nbsp;&nbsp;{% trans 'baccalaureat_national' %}
+               onclick="display('pnl_equivalence',true);">&nbsp;&nbsp;{% trans 'baccalaureat_national' %}
          <br>
         <input type="radio"
                name="international_diploma"
@@ -24,7 +24,7 @@
                name="international_diploma"
                id="rdb_foreign_baccalaureate_diploma_international"
                value="INTERNATIONAL"
-               onclick="display('pnl_equivalence',true);">&nbsp;&nbsp;{% trans 'baccalaureat_international' %}&nbsp;&nbsp;
+               onclick="display('pnl_equivalence',false);">&nbsp;&nbsp;{% trans 'baccalaureat_international' %}&nbsp;&nbsp;
          <img src="{% static 'img/ib-world-school.png' %}" height="50px">
          {%if validation_messages and validation_messages|get_item:'international_diploma'%}
              <br><br><span class="error" style="margin-left:5px;">
@@ -44,7 +44,10 @@
                 {% endfor %}
             </select>
          </div>
-         <div class="col-md-3">
+     </div>
+     <br>
+     <div class="row">
+         <div class="col-md-5">
              <label for="slt_language_diploma">{% trans 'linguistic_regime'%} *</label><br>
              <select class="form-control"
                      id="slt_language_diploma"
@@ -55,14 +58,15 @@
                  {%endfor%}
             </select>
          </div>
-         <div class="col-md-4">
-
+         <div class="col-md-7">
+             <div>
             <label for="chb_other_language_regime">{% trans 'other_linguistic_regime'%}
             <input type="checkbox"
                    id="chb_other_language_regime"
                    name="other_language_regime"
                    onclick="enabled_other_language(this)">
              </label>
+                 </div>
              <select class="form-control"
                      id="slt_other_language_diploma"
                      name="other_international_diploma_language">
@@ -84,7 +88,7 @@
      {% endif %}
 
      <div id="pnl_equivalence"
-          style="{%if secondary_education.international_diploma = 'INTERNATIONAL' %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+          style="{%if secondary_education.international_diploma = 'NATIONAL' %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
         <br>
         <label>{% trans 'equivalence_question' %} *</label>
         <br>
