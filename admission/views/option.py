@@ -26,7 +26,7 @@
 from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
 from admission import models as mdl
-from admission.models.answer import find_by_option
+from admission.models.answer import find_by_option, find_by_user_and_option
 from base import models as mdl_base
 
 
@@ -55,7 +55,7 @@ def find_by_offer(request):
                 if option.question.type == 'RADIO_BUTTON' or option.question.type == 'CHECKBOX' \
                         or option.question.type == 'DROPDOWN_LIST':
                     options_max_number = mdl.option.find_number_options_by_question_id(option.question.id)
-                answers = find_by_option(option.id)
+                answers = find_by_user_and_option(request.user, option.id)
                 answer = ""
                 if answers.exists():
                     answer = answers[0].value

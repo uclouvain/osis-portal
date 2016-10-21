@@ -277,7 +277,7 @@ $("select[id^='slt_foreign_institution_country_']" ).change(function(event) {
     $("#slt_foreign_university_name_"+year).find("option")
         .remove()
        .end();
-     
+
     $.ajax({
         url: "/admission/universities?city=" + target.val()
       }).then(function(data) {
