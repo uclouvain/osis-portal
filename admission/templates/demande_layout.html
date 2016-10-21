@@ -25,6 +25,7 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
+<form method="post" action="{% url 'save_offer_selection' %}" id="form_questions">
     <div class="row">
         <div class="col-md-8">
             <h5>{% trans 'mandatory_asterisk'%}</h5>
@@ -56,7 +57,8 @@
             </a>
         </div>
     </div>
-<form method="post" action="{% url 'save_offer_selection' %}" id="form_questions">
+
+
     <input type="hidden" value="{{application.id | default_if_none:''}}" id="hdn_application_id">
     <input type="hidden" value="{{application.offer_year.grade_type.name}}" id="hdn_application_grade">
     <input type="hidden" value="{{application.offer_year.grade_type.institutional_grade_type}}" id="hdn_application_grade_type_id">

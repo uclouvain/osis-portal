@@ -1,6 +1,7 @@
 {% load staticfiles %}
 {% load i18n %}
 {% load dictionnary %}
+{% load get_at_index %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -29,12 +30,11 @@
 <form method="post" action="{% url 'diploma'%}" id="form_secondary_education">
     <input type="hidden"
            id="hdn_diploma"
-           name="diploma"
            value="{{secondary_education.diploma | default_if_none:'False'}}" >
     <input type="hidden"
-           id="hdn_secondary_education_academic_year_id"
+           id="hdn_secondary_education_academic_year"
            name="secondary_academic_year"
-           value="{{secondary_education.academic_year.id}}" >
+           value="{{secondary_education.academic_year}}" >
     <input type="hidden"
            id="hdn_secondary_education_national"
            name="secondary_education_national"
@@ -53,14 +53,14 @@
     <input type="hidden"
            id="hdn_secondary_education_national_institution_postal_code"
            name="secondary_education_national_institution_postal_code"
-           value="{{secondary_education.national_institution.postal_code}}" >
+           value="{{secondary_education.national_institution.postal_code| default_if_none:''}}" >
     <input type="hidden"
            id="hdn_secondary_education_national_institution_name"
            name="secondary_education_national_institution_name"
            value="{{secondary_education.national_institution.name}}" >
     <input type="hidden"
            id="hdn_secondary_education_national_institution_adhoc"
-           value="{{secondary_education.national_institution.adhoc| default_if_none:''}}" >
+           value="{{secondary_education.national_institution.adhoc| default_if_none:'False'}}" >
     <input type="hidden"
            id="hdn_secondary_education_national_institution_national_community"
            name="secondary_education_national_institution_national_community"
@@ -191,18 +191,21 @@
            value="{{application.applicant.registration_id| default_if_none:''}}" >
     {% csrf_token %}
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-6">
             <h5>{% trans 'mandatory_asterisk'%}</h5>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <button type="submit" id="bt_submit_diploma" class="btn btn-default pull-right" role="button"
                     title="{%trans 'save'%}"
-                    name="submit_diploma" >
+                    name="submit_diploma"
+                    style="margin-right:10px;">
                 <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
                 {%trans 'save'%}
             </button>
         </div>
     </div>
+
+
     <div class="row" style="margin-top:5px;">
         <div class="col-md-6">
             <a id="lnk_previous_step_up"
@@ -225,8 +228,15 @@
     <div>
         <br>
         {%if validation_messages%}
-            <div class="alert alert-warning" role="alert" style="margin-left:5px;" id="msg_validation_diploma">
-                {{ validation_messages|length}} {% trans 'validation_errors'%}
+            <div class="alert alert-warning" role="alert" style="margin-left:5px;" id="msg_validate_diploma">
+                {% if validation_messages|length == 1 %}
+                    {{ validation_messages|length}} {% trans 'validation_error'%}
+                {%else%}
+                     {% if validation_messages|length > 1 %}
+                        {{ validation_messages|length}} {% trans 'validation_errors'%}
+                     {% endif %}
+                {% endif %}
+
             </div>
         {% endif %}
         {%if message_success%}
@@ -274,11 +284,14 @@
                 <div class="form-group" >
                     <label>{% trans 'pnl_academic_year_which_year'%} *</label>
                     <select class="form-control"
+                            style="text-align: center;"
                             id="slt_academic_year"
                             name="academic_year"
-                            onchange="show_hide_parcours(this);show_hide_pnl_dipl_acc_high_educ();">
+                            onchange="show_hide_pnl_dipl_acc_high_educ();">
                             {% for academic_yr in academic_years %}
-                                <option value="{{ academic_yr.id }}" title="{% trans 'academic_year'%}{{academic_yr.year}}">{{ academic_yr }}</option>
+                                    <option value="{{ academic_yr }}"
+                                            title="{% trans 'academic_year'%} {{academic_yr}}"
+                                            {%if current_academic_year = academic_yr %}selected{%endif%}>{{ academic_yr }} - {{academic_yr|add:1 }}</option>
                             {% endfor %}
                     </select>
                     {%if validation_messages and validation_messages|get_item:'academic_year'%}
@@ -294,17 +307,20 @@
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
-                             name="rdb_local_foreign" id="rdb_local"
+                             name="rdb_local_foreign"
+                             id="rdb_local"
                              value="true"
-                             onclick="display('pnl_local_detail',true);display('pnl_foreign_detail',false);populate_secondary_national_institution();">&nbsp;{% trans 'in_belgium'%}
+                             onclick="display('pnl_local_detail',true);display('pnl_foreign_detail',false);">&nbsp;{% trans 'in_belgium'%}
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
-                             name="rdb_local_foreign" id="rdb_foreign"
+                             name="rdb_local_foreign"
+                             id="rdb_foreign"
                              value="false"
                              onclick="display('pnl_local_detail',false);display('pnl_foreign_detail',true);">&nbsp;{% trans 'not_in_belgium'%}
                     </label>
-                    {%if validation_messages and validation_messages|get_item:'rdb_localforeign'%}
+                    {%if validation_messages and validation_messages|get_item:'rdb_local_foreign'%}
+                        <br>
                         <span class="error" style="margin-left:5px;">
                             {{ validation_messages|get_item:'rdb_local_foreign'}}
                         </span>
@@ -404,22 +420,6 @@
 
     function display_or_hide(id,elt){
         display(id,elt.checked);
-    }
-
-    function show_hide_parcours(elt){
-        if (elt.selectedIndex == -1)
-            return null;
-        var s= elt.options[elt.selectedIndex].text;
-        var pos = s.indexOf("-");
-        var year=""
-        if (pos > -1){
-            year = s.substring(0,pos);
-        }
-        if(year < 1994){
-            display('pnl_parcours',true);
-        }else{
-            display('pnl_parcours',false);
-        }
     }
 
     function show_hide_pnl_dipl_acc_high_educ(){

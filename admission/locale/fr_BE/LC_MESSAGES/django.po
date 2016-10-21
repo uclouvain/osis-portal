@@ -1379,7 +1379,7 @@ msgid "prerequisites_min_data"
 msgstr "Vous devez au minimum avoir un diplôme d'études secondaire, un examen professionnel/d'admission/de langue française"
 
 msgid "validation_errors"
-msgstr " champ(s) empêche(nt) la validation de l'onglet"
+msgstr " champs sont invalides"
 
 msgid "msg_one_prerequisite"
 msgstr ""
@@ -1436,3 +1436,21 @@ msgstr "Certificat"
 
 msgid "DOCTORATE"
 msgstr "Doctorat"
+
+msgid "institution_not_found_question"
+msgstr ""
+"Vous n'avez pas trouvé votre établissement dans cette liste ci-après?"
+
+msgid "validate_data"
+msgstr "Valider mes données"
+
+msgid "mandatory_file_recto_verso"
+msgstr "Fichiers recto et verso obligatoires"
+
+msgid "validation_error"
+msgstr " champ empêche la validation de l'onglet"
+
+msgid "msg_error_school_local_community"
+msgstr "Merci de préciser une communauté pour l'école"
+
+

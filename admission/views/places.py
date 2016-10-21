@@ -23,11 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from rest_framework import serializers
-from reference import models as ref
+
+from reference import models as mdl_reference
 from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
-from reference import models as mdl_reference
 
 
 class JSONResponse(HttpResponse):
@@ -37,15 +36,23 @@ class JSONResponse(HttpResponse):
         super(JSONResponse, self).__init__(content, **kwargs)
 
 
-class CountrySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ref.country.Country
-        fields = '__all__'
+def find_postal_codes_by_city(request):
+    city_name = request.GET['city']
+    education_institutions = mdl_reference.education_institution.search('BE', 'SECONDARY', False, city_name, None)
+    postal_codes = []
+    postal_codes_data = []
+    for education_institution in education_institutions:
+
+        if education_institution.postal_code not in postal_codes:
+            postal_codes.append(education_institution.postal_code)
+            postal_codes_data.append({"postal_code": education_institution.postal_code})
+    return JSONResponse(postal_codes_data)
 
 
-def find_by_id_json(request):
-    country_id = request.GET['nationality']
-    country = mdl_reference.country.find_by_id(country_id)
-    serializer = CountrySerializer(country)
-    return JSONResponse(serializer.data)
-
+def find_cities_by_postal_code(request):
+    postal_code = request.GET['postal_code']
+    education_institutions = mdl_reference.education_institution.find_cities('BE', 'SECONDARY', False, postal_code)
+    cities_data = []
+    for education_institution in education_institutions:
+        cities_data.append({"city": education_institution.city})
+    return JSONResponse(cities_data)

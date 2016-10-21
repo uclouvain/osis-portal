@@ -69,7 +69,8 @@ class AssimilationCriteriaTest(TestCase):
         list_document_type = assimilation_criteria.find_list_document_type_by_criteria("1")
         self.assertTrue(len(list_document_type) == 0)
 
-        list_document_type = assimilation_criteria.find_list_document_type_by_criteria(1)
+        list_document_type = assimilation_criteria\
+            .find_list_document_type_by_criteria(assimilation_criteria_enum.CRITERIA_1)
         self.assertTrue(len(list_document_type) == 2)
 
     def test_get_list_documents_descriptions_size(self):
@@ -79,6 +80,7 @@ class AssimilationCriteriaTest(TestCase):
         list_document_type = assimilation_criteria.get_list_documents_descriptions("1")
         self.assertTrue(len(list_document_type) == 0)
 
-        list_document_type = assimilation_criteria.get_list_documents_descriptions(3)
+        list_document_type = assimilation_criteria\
+            .get_list_documents_descriptions(assimilation_criteria_enum.CRITERIA_3)
         self.assertTrue(len(list_document_type) == 9)
 
