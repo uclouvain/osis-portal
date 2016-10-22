@@ -1,3 +1,4 @@
 [submodule "osis_common"]
 	path = osis_common
-	url = git@github.com:uclouvain/osis-common.git
+	url = https://github.com/uclouvain/osis-common.git
+	branch = master
