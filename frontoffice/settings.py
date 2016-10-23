@@ -233,12 +233,6 @@ QUEUES = {
     }
 }
 
-QUEUE_URL = 'localhost'
-QUEUE_USER = 'guest'
-QUEUE_PASSWORD = 'guest'
-QUEUE_PORT = 5672
-QUEUE_CONTEXT_ROOT = '/'
-
 LOGIN_URL=reverse_lazy('login')
 OVERRIDED_LOGOUT_URL=''
 OVERRIDED_LOGIN_URL=''
