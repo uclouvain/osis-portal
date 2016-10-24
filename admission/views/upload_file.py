@@ -63,7 +63,7 @@ def upload_file_description(request):
     documents = mdl_osis_common.document_file.search(user=request.user, description=description)
     form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                            'document_type': "admission",
-                                           'user': request.user})
+                                           'username': request.user.username})
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
@@ -114,7 +114,8 @@ def delete_old(request, pk):
     if document:
         description = document.description
         document.delete()
-        documents = mdl_osis_common.document_file.search(user=request.user, description=description)
+        applicant = mdl.applicant.find_by_user(request.user)
+        documents = mdl.applicant_document_file.find_document_by_applicant(applicant)
 
         return render(request, 'new_document.html', {
             'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
@@ -146,8 +147,12 @@ def save_document_from_form(document, request):
                                                           application_name='admission',
                                                           content_type=content_type,
                                                           size=size,
-                                                          user=request.user)
+                                                          username=request.user.username)
     doc_file.save()
+    applicant = mdl.applicant.find_by_user(request.user)
+    applicant_document_file = mdl.applicant_document_file.ApplicantDocumentFile(applicant=applicant,
+                                                                                document_file = doc_file)
+    applicant_document_file.save()
 
 
 class JSONResponse(HttpResponse):
@@ -263,12 +268,8 @@ def delete_document_file(request):
         if document:
             document.delete()
     else:
-        description = request.POST.get('description')
-        document = mdl_osis_common.document_file.search(request.user, description)
-        if document:
-            document_applicant_list = mdl.application_document_file.find_by_document(document)
-            if document_applicant_list.exists():
-                for document_applicant in document_applicant_list:
-                    document_applicant.delete()
+        applicant = mdl.applicant.find_by_user(request.user)
+        documents = mdl.applicant_document_file.find_document_by_applicant(applicant)
+        for document in documents:
             document.delete()
     return HttpResponse('')

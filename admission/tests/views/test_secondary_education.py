@@ -24,16 +24,10 @@
 #
 ##############################################################################
 from django.test import TestCase
-from django.conf import settings
 from django.contrib.auth.models import User
-from admission.models import applicant
+
 from admission.views import secondary_education
-from django.utils.encoding import force_text
-import json
-from admission import models as mdl
-from django.contrib.auth.models import User
 import admission.tests.data_for_tests as data_model
-from django.test import Client
 
 
 class SecondaryEducationTest(TestCase):
@@ -63,17 +57,17 @@ class SecondaryEducationTest(TestCase):
             secondary_education.secondary_education_exam_update(secondary_education_record,
                                                                 type,
                                                                 secondary_education_exam)
-        except ExceptionType:
+        except Exception:
             self.fail("secondary_education_exam_update raised ExceptionType unexpectedly!")
 
         try:
             secondary_education.secondary_education_exam_update(None, type, secondary_education_exam)
-        except ExceptionType:
+        except Exception:
             self.fail("secondary_education_exam_update raised ExceptionType unexpectedly!")
 
         try:
             secondary_education.secondary_education_exam_update(None, None, secondary_education_exam)
-        except ExceptionType:
+        except Exception:
             self.fail("secondary_education_exam_update raised ExceptionType unexpectedly!")
 
         try:
@@ -93,7 +87,7 @@ class SecondaryEducationTest(TestCase):
             self.fail("get_secondary_education_files_data raised ExceptionType unexpectedly!")
 
         an_application_document_file = data_model.create_application_document_file(an_application,
-                                                                                   self.user,
+                                                                                   self.user.username,
                                                                                    'NATIONAL_DIPLOMA_VERSO')
 
         dict = secondary_education.get_secondary_education_files(an_application)

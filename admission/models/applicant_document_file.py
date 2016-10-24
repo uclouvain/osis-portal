@@ -23,23 +23,33 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models import admission_exam_type
-from admission.models import application_document_file
-from admission.models import answer
-from admission.models import applicant
-from admission.models import applicant_assimilation_criteria
-from admission.models import application
-from admission.models import application_assimilation_criteria
-from admission.models import curriculum
-from admission.models import form
-from admission.models import option
-from admission.models import person_address
-from admission.models import profession
-from admission.models import properties
-from admission.models import question
-from admission.models import secondary_education
-from admission.models import secondary_education_exam
-from admission.models import sociological_survey
-from admission.models import supported_languages
-from admission.models import applicant_document_file
 
+from django.db import models
+from django.contrib import admin
+from admission.models.applicant import Applicant
+from osis_common.models.document_file import DocumentFile
+
+
+class ApplicantDocumentFile(models.Model):
+    applicant = models.ForeignKey(Applicant, db_index=True)
+    document_file = models.ForeignKey(DocumentFile)
+
+    def applicant_name(self):
+        return '{} {}'.format(self.applicant.user.first_name, self.applicant.user.last_name)
+
+    def document_filename(self):
+        return '{}'.format(self.document_file.file_name)
+
+    class Meta:
+        unique_together = (('applicant', 'document_file'),)
+
+
+class ApplicantDocumentFileAdmin(admin.ModelAdmin):
+    list_display = ('applicant_name', 'document_filename')
+    fieldsets = ((None, {'fields': ('applicant', 'document_file')}),)
+    raw_id_fields = ('applicant', 'document_file')
+
+
+def find_document_by_applicant(applicant):
+    return [applicant_document_file.document_file for applicant_document_file
+            in ApplicantDocumentFile.filter(applicant=applicant)]

@@ -25,6 +25,7 @@
 ##############################################################################
 from django.shortcuts import render, redirect
 from admission import models as mdl
+from admission.models.applicant_document_file import ApplicantDocumentFile
 from admission.models.enums import document_type
 from admission.views import demande_validation
 from admission.forms import RemoveAttachmentForm
@@ -90,7 +91,7 @@ def safe_document_removal(user, application_name, document):
     :param application_name: a string
     :return:
     """
-    if document.user == user and document.application_name == application_name:
+    if document.user.username == user.username and document.application_name == application_name:
         document.delete()
 
 
@@ -100,10 +101,8 @@ def list_attachments(user):
     :param user: the current user in session.
     :return: an array of dictionnary
     """
-    uploaded_attachments = DocumentFile.objects.filter(user=user,
-                                                       application_name="admission_attachments")
-
-    return list(uploaded_attachments)
+    applicant = mdl.applicant.find_by_user(user)
+    return mdl.applicant_document_file.find_document_by_applicant(applicant)
 
 
 def attachments_left_available(number_attachments_uploaded):
@@ -137,6 +136,9 @@ def save_document_from_form(document, user):
     doc_file = DocumentFile(file_name=file_name, file=file,
                             description=description, storage_duration=storage_duration,
                             application_name=application_name, content_type=content_type,
-                            size=size, user=user)
+                            size=size, username=user.username)
     doc_file.save()
+    applicant = mdl.applicant.find_by_user(user)
+    applicant_document_file = ApplicantDocumentFile(applicant=applicant, document_file=doc_file)
+    applicant_document_file.save()
 
