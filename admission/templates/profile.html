@@ -31,6 +31,8 @@
           action="{%if application.id%}{% url 'profile' application.id%}{%else%}{% url 'profile'%}{%endif%}"
           id="form_profile">
         {% csrf_token %}
+        <input type="hidden" id="hdn_following_profile_tab"
+           name="following_profile_tab">
         <div class="row">
             <div class="col-md-8">
                 <h5>{% trans 'mandatory_asterisk'%}</h5>
@@ -48,12 +50,13 @@
         <span id="txt_message_error_profile_up"
                class="alert alert-warning"
                style="visibility:hidden;display:none;"></span>
-        <a id="lnk_profil_next_step_up"
-           class="btn btn-default pull-right"
-           style="margin-top:5px;"
-           href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"
-           title="{% trans 'demandes'%}">{%trans 'next_step'%} : {%trans 'offer_choice'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-        </a><br><br>
+        <button type="submit"
+                id="lnk_profil_next_step_up"
+                class="btn btn-default pull-right"
+                style="margin-top:5px;"
+                title="{% trans 'demandes'%}">{%trans 'next_step'%} : {%trans 'offer_choice'%}
+            <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+        </button><br><br>
 
         {% if applicant_form.errors %}
         <span class="error">{% if applicant_form.errors %}{% trans 'errors_validation_warning'%}{%endif%}</span>
@@ -637,11 +640,11 @@
         <span id="txt_message_error_profile"
                class="alert alert-warning"
                style="visibility:hidden;display:none;"></span><br>
-        <a id="lnk_profil_next_step"
-           class="btn btn-default pull-right"
-           href="{%if application.id%}{% url 'applications' application.id %}{%else%}{% url 'applications' %}{%endif%}"
-           title="{% trans 'demandes'%}">{%trans 'next_step'%} : {%trans 'offer_choice'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-        </a>
+        <button type="submit"
+                id="lnk_profil_next_step"
+                class="btn btn-default pull-right"
+                title="{% trans 'demandes'%}">{%trans 'next_step'%} : {%trans 'offer_choice'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+        </button>
 
         <div id="pnl_files"><div id="pnl_uploaded_files" style="visibility:hidden;display:none;" ></div></div>
     </form>

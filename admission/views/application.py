@@ -32,20 +32,9 @@ from reference.enums import institutional_grade_type as enum_institutional_grade
 from base import models as mdl_base
 from admission.views.common import get_picture_id, get_id_document
 from admission.views.common import extra_information
-from admission.views import common
-from admission.views import demande_validation
+from admission.views import common, demande_validation, navigation
 from django.http import HttpResponseRedirect
 import urllib
-
-
-PROFILE_TAB = "0"
-DEMAND_TAB = "1"
-PREREQUISITES_TAB = "2"
-CURRICULUM_TAB = "3"
-ACCOUNTING_TAB = "4"
-SOCIOLOGICAL_SURVEY_TAB = "5"
-ATTACHMENTS_TAB = "6"
-SUBMISSION_TAB = "7"
 
 
 def application_update(request, application_id):
@@ -197,29 +186,29 @@ def save_application_offer(request):
     applicant = mdl.applicant.find_by_user(request.user)
 
     if next_tab:
-        if next_tab == PROFILE_TAB:
+        if next_tab == navigation.PROFILE_TAB:
             return HttpResponseRedirect(reverse('profile', args=(application.id,)))
 
-        if next_tab == DEMAND_TAB:
+        if next_tab == navigation.DEMAND_TAB:
             return HttpResponseRedirect(reverse('applications', args=(application.id,)))
 
-        if next_tab == PREREQUISITES_TAB:
+        if next_tab == navigation.PREREQUISITES_TAB:
             return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': application_id,
                                                                           'saved': 1}))
 
-        if next_tab == CURRICULUM_TAB:
+        if next_tab == navigation.CURRICULUM_TAB:
             return HttpResponseRedirect(reverse('curriculum_update', args=(application.id,)))
 
-        if next_tab == ACCOUNTING_TAB:
+        if next_tab == navigation.ACCOUNTING_TAB:
             return HttpResponseRedirect(reverse('accounting_update', args=(application.id,)))
 
-        if next_tab == SOCIOLOGICAL_SURVEY_TAB:
+        if next_tab == navigation.SOCIOLOGICAL_SURVEY_TAB:
             return HttpResponseRedirect(reverse('sociological_survey', args=(application.id,)))
 
-        if next_tab == ATTACHMENTS_TAB:
+        if next_tab == navigation.ATTACHMENTS_TAB:
             return HttpResponseRedirect(reverse('attachments', args=(application.id,)))
 
-        if next_tab == SUBMISSION_TAB:
+        if next_tab == navigation.SUBMISSION_TAB:
             return HttpResponseRedirect(reverse('submission', args=(application.id,)))
 
     data = {

@@ -30,7 +30,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from admission import models as mdl
 from base import models as mdl_base
-from admission.views import common
+from admission.views import common, navigation
 from reference import models as mdl_reference
 from admission.views import demande_validation
 from admission.models.enums import document_type
@@ -111,6 +111,9 @@ def diploma_save(request):
     app_id = None
     if application:
         app_id = application.id
+    following_tab = navigation.get_following_tab(request, 'diploma', application)
+    if following_tab:
+        return following_tab
 
     data = get_prerequis_data(request, 1, app_id)
     data.update({"secondary_education": secondary_education})

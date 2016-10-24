@@ -960,4 +960,3 @@ function reset_rdb_local_community(status){
 }
 
 
-

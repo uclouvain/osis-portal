@@ -31,10 +31,12 @@ from django.utils.translation import ugettext_lazy as _
 
 from admission import models as mdl
 from base import models as mdl_base
-from admission.views import common
+from admission.views import common, navigation
 from reference import models as mdl_reference
 from admission.views import demande_validation
 from reference.enums import education_institution_type, education_institution_national_comunity as national_cmunity_type
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 
 CURRICULUM_YEARS_REQUIRED = 5
 MAX_CREDITS = 75
@@ -79,6 +81,10 @@ def save(request):
             message_success = _('msg_info_saved')
             for curriculum in curricula:
                 curriculum.save()
+            following_tab = navigation.get_following_tab(request, 'curriculum', None)
+            if following_tab:
+                return following_tab
+
         else:
             return render(request, "admission_home.html",
                           {"curricula": curricula,

@@ -26,7 +26,8 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<form id="form_sociological_survey" action="{% url 'sociological_survey' %}" method="POST">
+<form id="form_sociological_survey" action="{% url 'sociological_survey' %}" method="post">
+    <input type="hidden" id="hdn_following_sociological_tab" name="following_sociological_tab">
     <div class="row">
         <div class="col-md-8">
             <h5>{% trans 'mandatory_asterisk'%}</h5>
@@ -41,14 +42,23 @@
     </div>
     <div class="row" style="margin-top:5px;">
         <div class="col-md-6">
-            <button type="submit" class="btn btn-default" title="{% trans 'accounting'%}">
+            <button type="submit"
+                    id="bt_previous_sociological_step_up"
+                    name="previous_sociological_step_up"
+                    class="btn btn-default"
+                    title="{% trans 'accounting'%}">
                 <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
                 {%trans 'previous_step'%} : {%trans 'accounting'%}
             </button>
         </div>
         <div class="col-md-6">
-            <button type="submit" class="btn btn-default pull-right" title="{% trans 'accounting'%}">
-                {%trans 'next_step'%} : {%trans 'attachments'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            <button type="submit"
+                    id="bt_next_sociological_step_up"
+                    name="next_sociological_step_up"
+                    class="btn btn-default pull-right"
+                    title="{% trans 'accounting'%}">
+                {%trans 'next_step'%} : {%trans 'attachments'%}
+                <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
             </button>
         </div>
     </div>
@@ -317,13 +327,19 @@
 
     <div class="row">
         <div class="col-md-6">
-            <button type="submit" class="btn btn-default" title="{% trans 'accounting'%}">
+            <button type="submit"
+                    id="bt_previous_sociological_step_down"
+                    class="btn btn-default"
+                    title="{% trans 'accounting'%}">
                 <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
                 {%trans 'previous_step'%} : {%trans 'accounting'%}
             </button>
         </div>
         <div class="col-md-6">
-            <button type="submit" class="btn btn-default pull-right" title="{% trans 'accounting'%}">
+            <button type="submit"
+                    id="bt_next_sociological_step_down"
+                    class="btn btn-default pull-right"
+                    title="{% trans 'accounting'%}">
                 {%trans 'next_step'%} : {%trans 'attachments'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
             </button>
         </div>

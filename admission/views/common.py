@@ -35,7 +35,7 @@ from django.utils.translation import ugettext_lazy as _
 from admission import models as mdl
 from admission.forms import ApplicantForm
 from reference import models as mdl_ref
-from admission.views import demande_validation, assimilation_criteria as assimilation_criteria_view
+from admission.views import demande_validation, assimilation_criteria as assimilation_criteria_view, navigation
 from osis_common import models as mdl_osis_common
 from admission.models.enums import document_type
 from osis_common.forms import UploadDocumentFileForm
@@ -43,6 +43,7 @@ from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
 from rest_framework import serializers
 from reference.enums import assimilation_criteria as assimilation_criteria_enum
+from django.core.urlresolvers import reverse
 
 RADIO_NAME_ASSIMILATION_CRITERIA = "assimilation_criteria_"
 
@@ -99,6 +100,7 @@ def profile(request, application_id=None, message_success=None):
     message_info = None
     application = None
     assimilation_case = False
+
     if application_id:
         application = mdl.application.find_by_id(application_id)
     if request.method == 'POST':
@@ -410,6 +412,10 @@ def profile(request, application_id=None, message_success=None):
         request.user = applicant.user  # Otherwise it was not refreshed while going back to home page
         applicant.save()
         message_info = _('msg_info_saved')
+
+        following_tab = navigation.get_following_tab(request, 'profile', application)
+        if following_tab:
+            return following_tab
     else:
         applicant = mdl.applicant.find_by_user(request.user)
         applicant_form = ApplicantForm()

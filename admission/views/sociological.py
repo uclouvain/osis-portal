@@ -29,33 +29,37 @@ from admission import models as mdl
 from admission.views import demande_validation
 from admission.forms import SociologicalSurveyForm
 from admission.models.sociological_survey import SociologicalSurvey
-from admission.views import attachments, accounting
+from admission.views import attachments, accounting, navigation
 
 
 def update(request, application_id=None):
     """
     Sociological survey of an applicant.
+    :param request
+    :param application_id
+    :return:
     """
     applicant = mdl.applicant.find_by_user(request.user)
-    next_tab = 5
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
+    else:
+        application = mdl.application.init_application(request.user)
+
+    next_tab = navigation.SOCIOLOGICAL_SURVEY_TAB
     if request.method == "POST":
         sociological_form = SociologicalSurveyForm(request.POST)
-        if sociological_form.is_valid():
-            save_sociological_form(sociological_form, request.user)
-            next_tab = request.POST.get('next_tab', 'next')
-            return redirect_to_next_tab(next_tab)
+        save_sociological_form(sociological_form, request.user)
+
+        application = mdl.application.find_by_id(application_id)
+        following_tab = navigation.get_following_tab(request, 'sociological', application)
+        if following_tab:
+            return following_tab
     else:
         try:    # Prefill the form if the user already filled it.
             u = SociologicalSurvey.objects.get(applicant=applicant)
             sociological_form = SociologicalSurveyForm(instance=u)
         except ObjectDoesNotExist:
             sociological_form = SociologicalSurveyForm()
-
-    if application_id:
-        application = mdl.application.find_by_id(application_id)
-    else:
-        application = mdl.application.init_application(request.user)
-
     data = {
         'tab_active': next_tab,
         'application': application,
