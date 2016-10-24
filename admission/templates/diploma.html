@@ -279,52 +279,52 @@
                 </div>
             </div>
             <br>
-            <div id="pnl_academic_year"
-                 class="form-inline">
-                <div class="form-group" >
-                    <label>{% trans 'pnl_academic_year_which_year'%} *</label>
-                    <select class="form-control"
-                            style="text-align: center;"
-                            id="slt_academic_year"
-                            name="academic_year"
-                            onchange="show_hide_pnl_dipl_acc_high_educ();">
-                            {% for academic_yr in academic_years %}
-                                    <option value="{{ academic_yr }}"
-                                            title="{% trans 'academic_year'%} {{academic_yr}}"
-                                            {%if current_academic_year = academic_yr %}selected{%endif%}>{{ academic_yr }} - {{academic_yr|add:1 }}</option>
-                            {% endfor %}
-                    </select>
-                    {%if validation_messages and validation_messages|get_item:'academic_year'%}
-                        <span class="error" style="margin-left:5px;">
-                            {{ validation_messages|get_item:'academic_year'}}
-                        </span>
-                    {% endif %}
-                </div>
-                <br><br>
-                <div class="form-group" >
-                    <label>
-                      {% trans 'pnl_academic_year_secondary_education'%} *
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio"
-                             name="rdb_local_foreign"
-                             id="rdb_local"
-                             value="true"
-                             onclick="display('pnl_local_detail');hide('pnl_foreign_detail');">&nbsp;{% trans 'in_belgium'%}
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio"
-                             name="rdb_local_foreign"
-                             id="rdb_foreign"
-                             value="false"
-                             onclick="hide('pnl_local_detail');display('pnl_foreign_detail');">&nbsp;{% trans 'not_in_belgium'%}
-                    </label>
-                    {%if validation_messages and validation_messages|get_item:'rdb_local_foreign'%}
-                        <br>
-                        <span class="error" style="margin-left:5px;">
-                            {{ validation_messages|get_item:'rdb_local_foreign'}}
-                        </span>
-                    {% endif %}
+            <div id="pnl_academic_year">
+                <div class="row" >
+                    <div class="col-md-6">
+                        <label>{% trans 'pnl_academic_year_which_year'%} *</label>
+                        <select class="form-control"
+                                style="text-align: center;"
+                                id="slt_academic_year"
+                                name="academic_year"
+                                onchange="show_hide_pnl_dipl_acc_high_educ();">
+                                {% for academic_yr in academic_years %}
+                                        <option value="{{ academic_yr }}"
+                                                title="{% trans 'academic_year'%} {{academic_yr}}"
+                                                {%if current_academic_year = academic_yr %}selected{%endif%}>{{ academic_yr }} - {{academic_yr|add:1 }}</option>
+                                {% endfor %}
+                        </select>
+                        {%if validation_messages and validation_messages|get_item:'academic_year'%}
+                            <span class="error" style="margin-left:5px;">
+                                {{ validation_messages|get_item:'academic_year'}}
+                            </span>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label>
+                          {% trans 'pnl_academic_year_secondary_education'%} *
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio"
+                                 name="rdb_local_foreign"
+                                 id="rdb_local"
+                                 value="true"
+                                 onclick="display('pnl_local_detail');hide('pnl_foreign_detail');">&nbsp;{% trans 'in_belgium'%}
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio"
+                                 name="rdb_local_foreign"
+                                 id="rdb_foreign"
+                                 value="false"
+                                 onclick="hide('pnl_local_detail');display('pnl_foreign_detail');">&nbsp;{% trans 'not_in_belgium'%}
+                        </label>
+                        {%if validation_messages and validation_messages|get_item:'rdb_local_foreign'%}
+                            <br>
+                            <span class="error" style="margin-left:5px;">
+                                {{ validation_messages|get_item:'rdb_local_foreign'}}
+                            </span>
+                        {% endif %}
+                    </div>
                 </div>
                 <br>
                 {% include "diploma/national_diploma.html" %}
