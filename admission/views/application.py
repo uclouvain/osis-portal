@@ -170,7 +170,7 @@ def save_application_offer(request):
                 options = mdl.option.find_options_by_question_id(option.question.id)
                 if options:
                     for opt in options:
-                        asw = mdl.answer.find_by_option(opt.id)
+                        asw = find_by_application_and_option(application_id, opt.id)
                         asw.delete()
                     answer = mdl.answer.Answer()
                     answer.application = application
