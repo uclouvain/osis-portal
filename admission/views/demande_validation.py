@@ -77,7 +77,8 @@ def validate_profil(applicant, user):
                     nb_necessary_doc = len(list_document_type)
                     nb_doc = 0
                     for document_typ in l.descriptions:
-                        docs = mdl_common.document_file.search(user, document_typ)
+                        docs = mdl.applicant_document_file.\
+                            find_document_by_applicant_and_description(applicant, document_typ)
                         if docs:
                             nb_doc = nb_doc+1
                     if nb_necessary_doc == nb_doc:
@@ -91,7 +92,8 @@ def validate_profil(applicant, user):
     for assimilation_criteria in assimilation_criteria_list:
         docs_needed = assimilation_criteria_view.get_list_documents_descriptions(assimilation_criteria.criteria.id)
         for doc_needed in docs_needed:
-            doc = mdl_common.document_file.search(user, doc_needed)
+            doc = mdl.applicant_document_file. \
+                find_document_by_applicant_and_description(applicant, doc_needed)
             if not doc.exists():
                 return False
     return True

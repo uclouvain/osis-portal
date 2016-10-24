@@ -52,4 +52,17 @@ class ApplicantDocumentFileAdmin(admin.ModelAdmin):
 
 def find_document_by_applicant(applicant):
     return [applicant_document_file.document_file for applicant_document_file
-            in ApplicantDocumentFile.filter(applicant=applicant)]
+            in ApplicantDocumentFile.objects.filter(applicant=applicant)]
+
+
+def find_document_by_applicant_and_description(applicant=None, description=None):
+    queryset = ApplicantDocumentFile.objects
+    if applicant:
+        queryset = queryset.filter(applicant=applicant)
+    if description:
+        queryset = queryset.filter(document_file__description=description)
+    if applicant or description:
+        return [applicant_document_file.document_file for applicant_document_file
+                in queryset.order_by('document_file__creation_date')]
+    else:
+        return None
