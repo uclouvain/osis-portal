@@ -54,7 +54,7 @@ def find_languages():
 
 
 def find_languages_by_recognized(a_recognized_state):
-    return Language.objects.filter(recognized=a_recognized_state)
+    return Language.objects.filter(recognized=a_recognized_state).order_by('name')
 
 
 def find_by_code(a_code):

@@ -34,7 +34,7 @@
      </div>
      <div class="row">
          <div class="col-md-5">
-             <label for="slt_country" class="control-label">{%trans 'awarding_country' %}</label><br>
+             <label for="slt_country" class="control-label">{%trans 'awarding_country' %}</label>
              <select class="form-control"
                      id="slt_country"
                      name="international_diploma_country">
@@ -44,40 +44,36 @@
                 {% endfor %}
             </select>
          </div>
-     </div>
-     <br>
-     <div class="row">
-         <div class="col-md-5">
-             <label for="slt_language_diploma">{% trans 'linguistic_regime'%} *</label><br>
+         <div class="col-md-7">
+             <label for="slt_language_diploma">{% trans 'linguistic_regime'%} *</label>
              <select class="form-control"
                      id="slt_language_diploma"
                      name="international_diploma_language">
-                <option value="-">-</option>
+                <option value="-" style="font-style: italic;color:grey">--- {% trans 'linguistic_regime' %} ---</option>
                 {%for recognized_lang in recognized_languages %}
                  <option value="{{ recognized_lang.id }}">{{ recognized_lang.name }}</option>
                  {%endfor%}
-            </select>
-         </div>
-         <div class="col-md-7">
-             <div>
-            <label for="chb_other_language_regime">{% trans 'other_linguistic_regime'%}
-            <input type="checkbox"
-                   id="chb_other_language_regime"
-                   name="other_language_regime"
-                   onclick="enabled_other_language(this)">
-             </label>
-                 </div>
-             <select class="form-control"
-                     id="slt_other_language_diploma"
-                     name="other_international_diploma_language">
-                 <option value="-" >-</option>
+                 <option value="-" style="font-style: italic;color:grey">--- {% trans 'other_linguistic_regime' %} --- </option>
                 {% for l in languages %}
                     <option value="{{ l.id }}">{{ l }}</option>
                 {% endfor %}
             </select>
-
+             <select class="form-control"
+                     id="slt_language_diploma_recognized"
+                     name="international_diploma_language_recognized"
+                     style="visibility:hidden;display:none;">
+                <option value="-">--- {% trans 'linguistic_regime' %} ---</option>
+                {%for recognized_lang in recognized_languages %}
+                 <option value="{{ recognized_lang.id }}">{{ recognized_lang.recognized }}</option>
+                 {%endfor%}
+                 <option value="-">--- {% trans 'other_linguistic_regime' %} --- </option>
+                {% for l in languages %}
+                    <option value="{{ l.id }}">{{ l.recognized }}</option>
+                {% endfor %}
+            </select>
          </div>
      </div>
+     <br>
      {%if validation_messages and validation_messages|get_item:'language_regime'%}
      <div class="row">
          <div class="col-md-4"></div>

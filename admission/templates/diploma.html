@@ -472,23 +472,7 @@
         document.getElementById(id).selectedIndex = -1;
     }
 
-    function enabled_other_language(elt){
-        if(elt.checked){
-            document.getElementById('slt_other_language_diploma').disabled = false;
-            document.getElementById('slt_language_diploma').selectedIndex = 0;
-            document.getElementById('slt_country').selectedIndex = 0;
-            document.getElementById('slt_language_diploma').disabled=true;
-            document.getElementById('slt_country').disabled=true;
-            document.getElementById('pnl_translation').style="visibility:visible;display:block;";
 
-        }else{
-            document.getElementById('slt_other_language_diploma').disabled = true;
-            document.getElementById('slt_other_language_diploma').selectedIndex = 0;
-            document.getElementById('slt_language_diploma').disabled=false;
-            document.getElementById('slt_country').disabled=false;
-            document.getElementById('pnl_translation').style="visibility:hidden;display:none;";
-        }
-    }
 
     function delete_document(description){
         var data = new FormData();

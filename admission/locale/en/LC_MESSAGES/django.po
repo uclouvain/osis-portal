@@ -824,9 +824,6 @@ msgstr "Other education type"
 msgid "other_institution"
 msgstr "Other institution"
 
-msgid "other_linguistic_regime"
-msgstr "If other linguistic regime, please clarify"
-
 msgid "other_phone"
 msgstr "Other phone"
 
@@ -1432,3 +1429,6 @@ msgstr " field is invalid"
 
 msgid "msg_error_school_local_community"
 msgstr "Please mention a community for the school"
+
+msgid "other_linguistic_regime"
+msgstr "Other linguistic regime"

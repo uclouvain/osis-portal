@@ -177,20 +177,14 @@ def populate_international_diploma(request, secondary_education):
             and request.POST.get('international_diploma_country') != "-":
         secondary_education.international_diploma_country = \
             get_country(request.POST.get('international_diploma_country'))
-    if request.POST.get('other_language_regime') \
-            and request.POST.get('other_language_regime') == FIELD_ON_STATUS \
-            and request.POST.get('other_language_regime') != "-":
-        secondary_education.international_diploma_language = mdl_reference.language \
-            .find_by_id(int(request.POST.get('other_international_diploma_language')))
-    else:
-        if request.POST.get('international_diploma_language') \
-                and request.POST.get('international_diploma_language') != "-":
-            language_int = request.POST.get('international_diploma_language')
-            if language_int == 'None':
-                language_int = None
-            if language_int:
-                secondary_education.international_diploma_language = mdl_reference.language \
-                    .find_by_id(int(language_int))
+    if request.POST.get('international_diploma_language') \
+            and request.POST.get('international_diploma_language') != "-":
+        language_int = request.POST.get('international_diploma_language')
+        if language_int == 'None':
+            language_int = None
+        if language_int:
+            secondary_education.international_diploma_language = mdl_reference.language \
+                .find_by_id(int(language_int))
     if secondary_education.international_diploma == FOREIGN_NATIONAL_DIPLOMA_TYPE:
         secondary_education.international_equivalence = request.POST.get('international_equivalence')
     secondary_education.result = request.POST.get('foreign_result')

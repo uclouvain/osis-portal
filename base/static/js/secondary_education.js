@@ -447,8 +447,14 @@ $("select[id^='slt_language_diploma']" ).change(function(event) {
         id = target.attr("id");
     }
     $('#hdn_secondary_education_international_diploma_language_id').val(target.val());
+    $('#slt_language_diploma_recognized').prop("selectedIndex",target.prop("selectedIndex"));
+    $('#slt_language_diploma_recognized').val(target.val());
 
-
+    if($('#slt_language_diploma_recognized option:selected').text() == 'True'){
+        disabled_other_language();
+    }else{
+        enabled_other_language();
+    }
 });
 
 function display_local_secondary(){
@@ -527,11 +533,12 @@ function display_foreign_secondary(){
             $(this).prop('selected', true);
         }
     });
-
+    $('#slt_language_diploma_recognized'+' option').each(function(){
+        if($(this).attr('value')==$('#hdn_secondary_education_international_diploma_language_id').val()){
+            $(this).prop('selected', true);
+        }
+    });
     if( $('#hdn_secondary_education_international_diploma_language_recognized').val() == 'False'){
-        $('#chb_other_language_regime').prop( "checked", true);
-        $('#slt_other_language_diploma').prop( "disabled", false);
-        $('#slt_language_diploma').prop( "disabled", true);
         $('#pnl_translation').css('visibility', 'visible').css('display','block');
     }else{
         $('#pnl_translation').css('visibility', 'hidden').css('display','none');
@@ -959,5 +966,36 @@ function reset_rdb_local_community(status){
     $('#rdb_local_community_german').prop( "checked", status);
 }
 
+$("select[id^='slt_language_diploma_recognized']" ).change(function(event) {
+    var target = $(event.target);
 
+    if (typeof id == 'undefined') {
+        target = target.parent();
 
+    }
+    if(target.val()=="True"){
+        alert('t');
+        enabled_other_language();
+    }else{
+        if(target.val()=="False"){
+            alert('F');
+            disabled_other_language();
+        }else{
+            alert('o');
+            disabled_other_language();
+        }
+    }
+
+});
+
+function disabled_other_language(){
+    document.getElementById('slt_country').disabled=false;
+    document.getElementById('pnl_translation').style="visibility:hidden;display:none;";
+}
+
+function enabled_other_language(){
+    document.getElementById('slt_country').selectedIndex = 0;
+    document.getElementById('slt_country').disabled=true;
+    document.getElementById('pnl_translation').style="visibility:visible;display:block;";
+
+}
