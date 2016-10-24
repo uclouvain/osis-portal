@@ -38,13 +38,13 @@ class SecondaryEducationAdmin(admin.ModelAdmin):
 
 
 class SecondaryEducation(models.Model):
-    RESULT_TYPE = (('LOW', 'Moins de 65%'),
-                   ('MIDDLE', 'entre 65% et 75%'),
-                   ('HIGH', 'plus de 75%'))
+    RESULT_TYPE = (('LOW', _('low_result')),
+                   ('MIDDLE', _('middle_result')),
+                   ('HIGH', _('high_result')))
 
-    INTERNATIONAL_DIPLOMA_TYPE = ((NATIONAL, 'Baccalauréat national (ou diplôme d\'état, ...)'),
-                                  (EUROPEAN, 'Baccalauréat européen (Schola Europea)'),
-                                  (INTERNATIONAL, 'Baccalauréat international(IBO)'))
+    INTERNATIONAL_DIPLOMA_TYPE = ((NATIONAL, _('baccalaureat_national')),
+                                  (EUROPEAN, _('baccalaureat_european')),
+                                  (INTERNATIONAL, _('baccalaureat_international')))
 
     EQUIVALENCE_TYPE = (('YES', _('Yes')),
                         ('NO', _('No')),
