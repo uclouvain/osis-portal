@@ -11,20 +11,20 @@
                name="international_diploma"
                id="rdb_foreign_baccalaureate_diploma_national"
                value="NATIONAL"
-               onclick="display('pnl_equivalence',true);">&nbsp;&nbsp;{% trans 'baccalaureat_national' %}
+               onclick="display('pnl_equivalence');">&nbsp;&nbsp;{% trans 'baccalaureat_national' %}
          <br>
         <input type="radio"
                name="international_diploma"
                id="rdb_foreign_baccalaureate_diploma_european"
                value="EUROPEAN"
-               onclick="display('pnl_equivalence',false);">&nbsp;&nbsp;{% trans 'baccalaureat_european' %}&nbsp;&nbsp;
+               onclick="hide('pnl_equivalence');">&nbsp;&nbsp;{% trans 'baccalaureat_european' %}&nbsp;&nbsp;
         <img src="{% static 'img/schola_europaea.jpg' %}" height="50px">
          <br>
         <input type="radio"
                name="international_diploma"
                id="rdb_foreign_baccalaureate_diploma_international"
                value="INTERNATIONAL"
-               onclick="display('pnl_equivalence',false);">&nbsp;&nbsp;{% trans 'baccalaureat_international' %}&nbsp;&nbsp;
+               onclick="hide('pnl_equivalence');">&nbsp;&nbsp;{% trans 'baccalaureat_international' %}&nbsp;&nbsp;
          <img src="{% static 'img/ib-world-school.png' %}" height="50px">
          {%if validation_messages and validation_messages|get_item:'international_diploma'%}
              <br><br><span class="error" style="margin-left:5px;">

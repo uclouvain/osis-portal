@@ -14,14 +14,14 @@
                          name="admission_exam"
                          id="rdb_admission_exam_true"
                          value="true"
-                         onclick="display('pnl_admission_exam_detail',true);"> {% trans 'yes' %}
+                         onclick="display('pnl_admission_exam_detail');"> {% trans 'yes' %}
                 </label>
                 <label class="radio-inline">
                   <input type="radio"
                          name="admission_exam"
                          id="rdb_admission_exam_false"
                          value="false"
-                         onclick="display('pnl_admission_exam_detail',false);"> {% trans 'no' %}
+                         onclick="hide('pnl_admission_exam_detail');"> {% trans 'no' %}
                 </label>
                 {%if validation_messages and validation_messages|get_item:'admission_exam'%}
                     <br><br><span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam'}}</span>

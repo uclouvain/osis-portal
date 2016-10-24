@@ -310,14 +310,14 @@
                              name="rdb_local_foreign"
                              id="rdb_local"
                              value="true"
-                             onclick="display('pnl_local_detail',true);display('pnl_foreign_detail',false);">&nbsp;{% trans 'in_belgium'%}
+                             onclick="display('pnl_local_detail');hide('pnl_foreign_detail');">&nbsp;{% trans 'in_belgium'%}
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
                              name="rdb_local_foreign"
                              id="rdb_foreign"
                              value="false"
-                             onclick="display('pnl_local_detail',false);display('pnl_foreign_detail',true);">&nbsp;{% trans 'not_in_belgium'%}
+                             onclick="hide('pnl_local_detail');display('pnl_foreign_detail');">&nbsp;{% trans 'not_in_belgium'%}
                     </label>
                     {%if validation_messages and validation_messages|get_item:'rdb_local_foreign'%}
                         <br>
@@ -418,10 +418,6 @@
         document.getElementById(id).value="";
     }
 
-    function display_or_hide(id,elt){
-        display(id,elt.checked);
-    }
-
     function show_hide_pnl_dipl_acc_high_educ(){
         var elt = document.getElementById('slt_academic_year');
         if (elt.selectedIndex == -1)
@@ -438,16 +434,16 @@
 
         if(elt.checked){
             if(year < 1994){
-                return display('pnl_dipl_acc_high_educ',true);
+                return display('pnl_dipl_acc_high_educ');
             }
         }
         elt = document.getElementById('rdb_local_community_dutch');
         if(elt.checked){
             if(year < 1992){
-               return display('pnl_dipl_acc_high_educ',true);
+               return display('pnl_dipl_acc_high_educ');
             }
         }
-        display('pnl_dipl_acc_high_educ',false);
+        hide('pnl_dipl_acc_high_educ');
     }
 
     function reset_rdb(elt_name){

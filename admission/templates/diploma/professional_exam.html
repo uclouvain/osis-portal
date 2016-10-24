@@ -13,14 +13,14 @@
                              name="professional_exam"
                              id="rdb_professional_experience_true"
                              value="true"
-                             onclick="display('pnl_professional_experience_detail',true);"> {% trans 'yes' %}
+                             onclick="display('pnl_professional_experience_detail');"> {% trans 'yes' %}
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
                              name="professional_exam"
                              id="rdb_professional_experience_false"
                              value="false"
-                             onclick="display('pnl_professional_experience_detail',false);"> {% trans 'no' %}
+                             onclick="hide('pnl_professional_experience_detail');"> {% trans 'no' %}
                     </label>
                     {%if validation_messages and validation_messages|get_item:'professional_experience'%}
                         <br>
