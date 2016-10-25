@@ -1417,7 +1417,7 @@ msgid "CERTIFICATE"
 msgstr "Certificate"
 
 msgid "DOCTORATE"
-msgstr "Ph. d"
+msgstr "Ph.d"
 
 msgid "profession_not_found"
 msgstr "You haven't found your profession above?"

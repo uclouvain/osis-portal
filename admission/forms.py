@@ -32,7 +32,6 @@ from admission.models.sociological_survey import SociologicalSurvey
 from admission.models.enums import professional_activity
 from localflavor.generic.forms import BICFormField, IBANFormField
 from osis_common.models.document_file import DocumentFile
-from admission import models as mdl
 
 
 class NewAccountForm(forms.Form):
