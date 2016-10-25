@@ -62,22 +62,23 @@ class SociologicalSurveyFormTest(TestCase):
         data.update({'student_professional_activity': professional_activity.NO_PROFESSION})
         self.assertFalse(form.is_valid())
 
-    @staticmethod
-    def init_data():
-        profession_choice = mdl.profession.Profession.objects.create(name=PROFESSION_EMPLOYEE, adhoc=False)
 
-        data = {'number_brothers_sisters': 2,
-                'father_is_deceased': False,
-                'father_education': education.PRIMARY,
-                'father_profession': profession_choice.id,
-                'mother_is_deceased': False,
-                'mother_education': education.PRIMARY,
-                'mother_profession': profession_choice.id,
-                'student_professional_activity': professional_activity.PART_TIME,
-                'student_profession': profession_choice.id,
-                'conjoint_professional_activity': professional_activity.PART_TIME,
-                'conjoint_profession': profession_choice.id,
-                'paternal_grandfather_profession': profession_choice.id,
-                'maternal_grandfather_profession': profession_choice.id
-                }
-        return data
+def init_data():
+    profession_choice = mdl.profession.Profession.objects.create(name=PROFESSION_EMPLOYEE, adhoc=False)
+
+    data = {'number_brothers_sisters': 2,
+            'father_is_deceased': False,
+            'father_education': education.PRIMARY,
+            'father_profession': profession_choice.id,
+            'mother_is_deceased': False,
+            'mother_education': education.PRIMARY,
+            'mother_profession': profession_choice.id,
+            'student_professional_activity': professional_activity.PART_TIME,
+            'student_profession': profession_choice.id,
+            'conjoint_professional_activity': professional_activity.PART_TIME,
+            'conjoint_profession': profession_choice.id,
+            'paternal_grandfather_profession': profession_choice.id,
+            'maternal_grandfather_profession': profession_choice.id
+            }
+    return data
+

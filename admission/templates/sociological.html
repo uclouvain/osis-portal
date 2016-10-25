@@ -82,7 +82,7 @@
 
     <!-- NUMBER OF BROTHERS AND SISTERS -->
     <div class="row">
-        <div class="col-md-4 form-group {% if sociological_form.number_brothers_sisters.errors %} has-error {% endif %}">
+        <div class="col-md-4 {% if sociological_form.number_brothers_sisters.errors %} has-error {% endif %}">
             <label>{% trans 'brother_sister_number'%}</label>
             <input class="form-control" id="txt_number_brothers_sisters"
                    name="number_brothers_sisters" type="text"
@@ -98,7 +98,7 @@
             {% endif %}
         </div>
     </div>
-
+    <br>
     <!-- FATHER INFORMATION -->
     <div class="panel panel-default">
         <div class="panel-heading">{% trans 'father'%}</div>
@@ -146,18 +146,15 @@
                     </select>
                 </div>
             </div>
+            <br>
             <div class="row">
-                <div class="col-md-5">
-                </div>
-                <div class="col-md-7">
-                    <label>{% trans 'profession_not_found' %}</label>
+                <div class="col-md-7 col-md-offset-5">
                     <input type="checkbox" id="chb_father_profession_other" value="{{sociological_form.father_profession.adhoc}}"/>
+                    <label>{% trans 'profession_not_found' %}</label>
                 </div>
             </div>
-            <div class="row" >
-                <div class="col-md-5" >
-                </div>
-                <div class="col-md-7" id="div_father_profession_other">
+            <div class="row">
+                <div class="col-md-7 col-md-offset-5" id="div_father_profession_other">
                     <label>{% trans 'specify' %}</label>
                     <input type="text" value="{{sociological_form.father_profession_other_name.value}}" id="txt_father_profession_other" name="father_profession_other_name"/>
                 </div>
@@ -210,18 +207,15 @@
                     </select>
                 </div>
             </div>
+            <br>
             <div class="row">
-                <div class="col-md-5">
-                </div>
-                <div class="col-md-7">
-                    <label>{% trans 'profession_not_found' %}</label>
+                <div class="col-md-7 col-md-offset-5">
                     <input type="checkbox" id="chb_mother_profession_other" value="{{sociological_form.mother_profession.adhoc}}"/>
+                    <label>{% trans 'profession_not_found' %}</label>
                 </div>
             </div>
-            <div class="row" >
-                <div class="col-md-5" >
-                </div>
-                <div class="col-md-7" id="div_mother_profession_other">
+            <div class="row">
+                <div class="col-md-7 col-md-offset-5" id="div_mother_profession_other">
                     <label>{% trans 'specify' %}</label>
                     <input type="text" value="{{sociological_form.mother_profession_other_name.value}}" id="txt_mother_profession_other" name="mother_profession_other_name"/>
                 </div>
@@ -285,19 +279,16 @@
                     {% endif %}
                 </div>
             </div>
+            <br>
             <div class="row">
-                <div class="col-md-5">
-                </div>
-                <div class="col-md-7">
-                    <label>{% trans 'profession_not_found' %}</label>
+                <div class="col-md-7 col-md-offset-5">
                     <input type="checkbox" id="chb_student_profession_other"
                            value="{{sociological_form.student_profession.adhoc}}"/>
+                    <label>{% trans 'profession_not_found' %}</label>
                 </div>
             </div>
-            <div class="row" >
-                <div class="col-md-5" >
-                </div>
-                <div class="col-md-7" id="div_student_profession_other">
+            <div class="row">
+                <div class="col-md-7 col-md-offset-5" id="div_student_profession_other">
                     <label>{% trans 'specify' %}</label>
                     <input type="text" value="{{sociological_form.student_profession_other_name.value}}" id="txt_student_profession_other" name="student_profession_other_name"/>
                 </div>
@@ -310,7 +301,7 @@
         <div class="panel-heading">{% trans 'conjoint'%}</div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-5 form-group">
+                <div class="col-md-5">
                     <label>{% trans 'professional_activity'%}</label>
                     <select name="conjoint_professional_activity"
                             id="conjoint_professional_activity"
@@ -327,7 +318,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-md-7 form-group">
+                <div class="col-md-7">
                     <label>{% trans 'profession'%}</label>
                     <select name="conjoint_profession"
                             id="slt_conjoint_profession"
@@ -344,18 +335,15 @@
                     </select>
                 </div>
             </div>
+            <br>
             <div class="row">
-                <div class="col-md-5">
-                </div>
-                <div class="col-md-7">
-                    <label>{% trans 'profession_not_found' %}</label>
+                <div class="col-md-7 col-md-offset-5">
                     <input type="checkbox" id="chb_conjoint_profession_other" value="{{sociological_form.conjoint_profession.adhoc}}"/>
+                    <label>{% trans 'profession_not_found' %}</label>
                 </div>
             </div>
-            <div class="row" >
-                <div class="col-md-5" >
-                </div>
-                <div class="col-md-7" id="div_conjoint_profession_other">
+            <div class="row">
+                <div class="col-md-7 col-md-offset-5" id="div_conjoint_profession_other">
                     <label>{% trans 'specify' %}</label>
                     <input type="text" value="{{sociological_form.conjoint_profession_other_name.value}}" id="txt_conjoint_profession_other" name="conjoint_profession_other_name"/>
                 </div>
@@ -401,18 +389,18 @@
                     </select>
                 </div>
             </div>
-
+            <br>
             <div class="row">
                 <div class="col-md-6">
-                    <label>{% trans 'profession_not_found' %}</label>
                     <input type="checkbox" id="chb_paternal_grandfather_profession_other" value="{{sociological_form.paternal_grandfather_profession.adhoc}}"/>
+                    <label>{% trans 'profession_not_found' %}</label>
                 </div>
                 <div class="col-md-6">
-                    <label>{% trans 'profession_not_found' %}</label>
                     <input type="checkbox" id="chb_maternal_grandfather_profession_other" value="{{sociological_form.maternal_grandfather_profession.adhoc}}"/>
+                    <label>{% trans 'profession_not_found' %}</label>
                 </div>
             </div>
-            <div class="row" >
+            <div class="row">
                 <div class="col-md-6 pull-left" id="div_paternal_grandfather_profession_other">
                     <label>{% trans 'specify' %}</label>
                     <input type="text" value="{{sociological_form.paternal_grandfather_profession_other_name.value}}"

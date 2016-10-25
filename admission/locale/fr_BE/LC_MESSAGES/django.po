@@ -1438,7 +1438,7 @@ msgid "DOCTORATE"
 msgstr "Doctorat"
 
 msgid "profession_not_found"
-msgstr "Vous n'avez pas trouvé votre profession ci-dessus?"
+msgstr "Vous n'avez pas trouvé votre profession?"
 
 msgid "grandfather"
 msgstr "Grand-pères"
