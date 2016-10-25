@@ -73,27 +73,46 @@
             <div class="panel-heading">{% trans 'identification' %}</div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-4">
-                        <label>{%trans 'lastname'%} *</label>
-                        <input class="form-control" id="txt_last_name" name="last_name"
-                               value="{{ applicant.user.last_name  | default_if_none:'' }}" maxlength="255">
-                        (ex: Van der Elst)
-                        <span class="error">{{ applicant_form.last_name.errors|striptags }}</span>
-                    </div>
-                    <div class="col-md-4">
+                    <div class="col-md-8">
                         <div class="row">
-                        <label>{%trans 'firstname'%} *</label>
-                        <input class="form-control" id="txt_first_name" name="first_name"
-                               value="{{ applicant.user.first_name  | default_if_none:'' }}" maxlength="255">
-                        (ex: Frédéric <span style="text-decoration: line-through;">frederic FREDERIC</span>)
-                        <span class="error">{{ applicant_form.first_name.errors|striptags }}</span>
+                            <div class="col-md-6">
+                                <label>{%trans 'lastname'%} *</label>
+                                <input class="form-control" id="txt_last_name" name="last_name"
+                                       value="{{ applicant.user.last_name  | default_if_none:'' }}" maxlength="255">
+                                <p class="caption">(ex: Van der Elst)</p>
+                                <span class="error">{{ applicant_form.last_name.errors|striptags }}</span>
+                            </div>
+                            <div class="col-md-6">
+                                <label>{%trans 'firstname'%} *</label>
+                                <input class="form-control" id="txt_first_name" name="first_name"
+                                       value="{{ applicant.user.first_name  | default_if_none:'' }}" maxlength="255">
+                                <p class="caption">(ex: Frédéric <span style="text-decoration: line-through;">frederic FREDERIC</span>)</p>
+                                <span class="error">{{ applicant_form.first_name.errors|striptags }}</span>
+                            </div>
                         </div>
+                        <br>
                         <div class="row">
-                            <label>{%trans 'middle_name'%}</label>
-                            <input class="form-control" id="txt_middle_name" name="middle_name"
-                                   value="{{ applicant.middle_name  | default_if_none:'' }}" maxlength="50">
-                            (ex: Pierre, Paul, Jacques  <span style="text-decoration: line-through;">pierre, paul,
-                             JACQUES</span>)
+                            <div class="col-md-6">
+                                <label>{%trans 'middle_name'%}</label>
+                                <input class="form-control" id="txt_middle_name" name="middle_name"
+                                       value="{{ applicant.middle_name  | default_if_none:'' }}" maxlength="50">
+                                <p class="caption">(ex: Pierre, Paul, Jacques  <span style="text-decoration: line-through;">pierre, paul,
+                                 JACQUES</span>)</p>
+                            </div>
+                            <div class="col-md-6">
+                                <label>{%trans 'gender'%} *</label>
+                                <div>
+                                    <label class="radio-inline">
+                                        <input type="radio" id="rd_gender_male" name="gender" value="MALE"
+                                               {% if applicant.gender = "MALE" %} checked {% endif %}> Masculin
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" id="rd_gender_female" name="gender" value="FEMALE"
+                                               {% if applicant.gender = "FEMALE" %} checked {% endif %}> Féminin
+                                    </label>
+                                </div>
+                                <span class="error">{{ applicant_form.gender.errors|striptags }}</span>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -132,14 +151,14 @@
                 </div>
                 <br>
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <label>{%trans 'birth_day'%} *</label>
                         <input type="text" class="form-control" id="txt_birth_date" name="birth_date"
                                value="{{ applicant.birth_date  | default_if_none:'' | date:'d/m/Y' }}">
-                        (format : {% trans 'format_date'%})
+                        <p class="caption">(format : {% trans 'format_date'%})</p>
                         <span class="error" id="msg_error_birth_date">{{ applicant_form.birth_date.errors|striptags }}</span>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label>{%trans 'birth_place'%} *</label>
                             <input class="form-control" id="txt_birth_place" name="birth_place"
                                    value="{{ applicant.birth_place | default_if_none:''}}" maxlength="255">
@@ -174,20 +193,6 @@
                     <br>
                     <div class="row">
                         <div class="col-md-3">
-                            <label>{%trans 'gender'%} *</label>
-                            <div>
-                                <label class="radio-inline">
-                                    <input type="radio" id="rd_gender_male" name="gender" value="MALE"
-                                           {% if applicant.gender = "MALE" %} checked {% endif %}> Masculin
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" id="rd_gender_female" name="gender" value="FEMALE"
-                                           {% if applicant.gender = "FEMALE" %} checked {% endif %}> Féminin
-                                </label>
-                            </div>
-                            <span class="error">{{ applicant_form.gender.errors|striptags }}</span>
-                        </div>
-                        <div class="col-md-3">
                             <label>{%trans 'civil_status'%} *</label>
                             <select class="form-control" id="slt_civil_status" name="civil_status">
                                 <option value="SINGLE" {% if applicant.civil_status = "SINGLE" %}selected{%endif%}>
@@ -211,6 +216,11 @@
                             </select>
                             <span class="error">{{ applicant_form.civil_status.errors|striptags }}</span>
                         </div>
+                        <div class="col-md-6">
+                            <label>{%trans 'spouse_name'%}</label>
+                            <input class="form-control" id="txt_spouse_name" name="spouse_name"
+                                   value="{{ applicant.spouse_name | default_if_none:''}}" maxlength="50">
+                        </div>
                         <div class="col-md-3">
                             <label>{%trans 'children'%}</label>
                             <input class="form-control" id="txt_number_children" name="number_children"
@@ -219,152 +229,7 @@
                         </div>
                     </div>
                 <br>
-
-                <label>{%trans 'spouse_name'%}</label>
-                <input class="form-control" id="txt_spouse_name" name="spouse_name"
-                       value="{{ applicant.spouse_name | default_if_none:''}}" maxlength="50">
-
-                <br>
-                <div id="pnl_assimilation_criteria">
-                    <br>
-                    {% trans 'criteria_question'%} :
-                    <ol>
-                        {% for criteria in assimilation_criteria %}
-
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <li>&nbsp;{{criteria|get_at_index:1}}</li>
-                                </div>
-                                <div class="col-md-4">
-                                    <div>
-                                        <label class="radio-inline">
-                                            <input type="radio" id="assimilation_criteria_{{criteria|get_at_index:0}}_true"
-                                                   name="assimilation_criteria_{{criteria|get_at_index:0}}"
-                                                   class="radio_assimilation_criteria"
-                                                   value="true"
-                                                   {% for applicant_criteria in applicant_assimilation_criteria %}
-                                                     {% if applicant_criteria.criteria == criteria|get_at_index:0 and applicant_criteria.selected %} checked {% endif %}
-                                                   {% endfor %}
-                                            > {% trans 'yes' %}
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" id="assimilation_criteria_{{criteria|get_at_index:0}}_false"
-                                                   name="assimilation_criteria_{{criteria|get_at_index:0}}"
-                                                   value="false"
-                                                   {{applicant_assimilation_criteria|assimilation_criteria_radio:criteria }}
-                                            > {% trans 'no' %}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div id="pnl_criteria_{{criteria|get_at_index:0}}"
-                                     {% if applicant_assimilation_criteria|div_visibility:criteria %}style="visibility:visible;display:block;"{%else%}style="visibility:hidden;display:none;"{%endif%}>
-                                    <br>
-                                    <div {% if assimilation_basic_documents|table_display:criteria %} class="panel panel-default" {%endif%}>
-
-                                    {% if assimilation_basic_documents|table_display:criteria%}
-                                        <div class="panel-heading"><h4><strong>{% trans 'criteria'%} {{forloop.counter}}</strong></h4></div>
-                                        <div class="panel-body"></div>
-                                        <!--It's normal that the table is outside of the body.  It's for a better display -->
-                                        <table class="table table-bordered table-condensed" style="margin-top:-30px;">
-                                    {%endif%}
-                                    {%for doc in assimilation_basic_documents%}
-                                        {% if doc.criteria == criteria|get_at_index:0 %}
-                                            {%if doc.first%}
-                                                <tr>
-                                                    <td>
-                                                        <table>
-                                                            {% for d in doc.descriptions%}
-                                                                <tr>
-                                                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                                                    <td>
-                                                                        <button type="button"
-                                                                                class="{{assimilation_documents_existing|button_class_color:d }}"
-                                                                                id="btn_load_assimilation_doc_{{doc.criteria}}_id_{{d}}"
-                                                                                title="{{assimilation_documents_existing|button_title:d }}"
-                                                                                style="margin-bottom:5px;"
-                                                                                data-toggle="modal"
-                                                                                data-target="#pnl_upload_documents">
-                                                                            <span class="{{assimilation_documents_existing|button_class:d }}"
-                                                                                  id="spn_btn_load_assimilation_doc_{{doc.criteria}}_id_{{d}}"></span>&nbsp;Upload
-                                                                        </button>
-                                                                    </td>
-                                                                    <td>&nbsp;&nbsp;</td>
-                                                                    <td>{% with document_description=d|slugify %}
-                                                                            {% trans document_description %}
-                                                                        {% endwith %}
-                                                                    </td>
-                                                                </tr>
-                                                            {%endfor%}
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            {%else%}
-                                            <tr><td colspan="2">&nbsp;&nbsp;{% trans 'or' as and_upper%} {{and_upper| upper}}</td></tr>
-                                                <tr>
-                                                    <td>
-                                                        <table >
-                                                            {% for d in doc.descriptions%}
-                                                                <tr >
-                                                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                                                    <td>
-                                                                        <button type="button"
-                                                                                class="{{assimilation_documents_existing|button_class_color:d }}"
-                                                                                id="btn_load_assimilation_doc_{{doc.criteria}}_id_{{d}}"
-                                                                                title="{{assimilation_documents_existing|button_title:d }}"
-                                                                                style="margin-bottom:5px;"
-                                                                                data-toggle="modal"
-                                                                                data-target="#pnl_upload_documents">
-                                                                            <span class="{{assimilation_documents_existing|button_class:d }}"
-                                                                                  id="spn_btn_load_assimilation_doc_{{doc.criteria}}_id_{{d}}">
-                                                                            </span>&nbsp;Upload
-                                                                        </button>
-                                                                    </td>
-                                                                    <td>&nbsp;&nbsp;</td>
-                                                                    <td >{% with document_description=d|slugify %}
-                                                                            {% trans document_description %}
-                                                                         {% endwith %}
-                                                                    </td>
-                                                                </tr>
-                                                            {%endfor%}
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            {%endif%}
-                                        {%endif%}
-                                    {%endfor%}
-                                    {% if assimilation_basic_documents|table_display:criteria%}
-                                        {%if criteria|get_at_index:0 == 'CRITERIA_5'%}
-                                            <tr><td colspan="2">&nbsp;&nbsp;{% trans 'and' as and_upper%} {{and_upper| upper}}</td></tr>
-                                            <tr><td colspan="2">
-                                                <label>Documents demandés pour l’étudiant à adapter pour la personne concernée suivant le critère :</label>
-                                                <select id="slt_criteria_5" name="criteria_5" class="form-control">
-                                                    <option value="" >-</option>
-                                                    <option value="CRITERIA_1" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:'CRITERIA_1' }}>{% trans 'criteria' %} 1</option>
-                                                    <option value="CRITERIA_2" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:'CRITERIA_2' }} >{% trans 'criteria' %} 2</option>
-                                                    <option value="CRITERIA_3" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:'CRITERIA_3' }}>{% trans 'criteria' %} 3</option>
-                                                    <option value="CRITERIA_4" {{applicant_assimilation_criteria|assimilation_criteria_criteria5:'CRITERIA_4' }} >{% trans 'criteria' %} 4</option>
-                                                </select>
-                                                <br>
-                                                <div id="pnl_other_criteria"></div>
-                                                <br>
-                                                </td>
-                                            </tr>
-                                            {%endif%}
-                                    </table>
-                                    <br>
-                                    {%endif%}
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </ol>
-                        <br>
-                        <label>Fournir obligatoirement une attestation pour au moins une des assimilations que vous avez choisies.</label>
-                        <br>
-                    </div>
+                {% include "profile/assimilation_criteria.html" %}
                 </div>
             </div>
             <div class="panel panel-default">
@@ -423,7 +288,7 @@
                             <input class="form-control" id="txt_legal_adr_street" name="legal_adr_street"
                                    value="{{ person_legal_address.street | default_if_none:''}}"
                                    maxlength="255">
-                            (ex: Avenue Louis Braille, Rue de la Loi, Place de l'Université)
+                            <p class="caption">(ex: Avenue Louis Braille, Rue de la Loi, Place de l'Université)</p>
                             <span class="error" id="spn_legal_adr_street">{{ applicant_form.legal_adr_street.errors|striptags }}</span>
                         </div>
                         <div class="col-md-2">
@@ -447,7 +312,7 @@
                             <input class="form-control" id="txt_legal_adr_postal_code" name="legal_adr_postal_code"
                                    value="{{ person_legal_address.postal_code | default_if_none:''}}"
                                    maxlength="20">
-                            (ex: 1348)
+                            <p class="caption">(ex: 1348)</p>
                             <span class="error" id="spn_legal_adr_postal_code">{{ applicant_form.legal_adr_postal_code.errors|striptags }}</span>
                         </div>
                         <div class="col-md-6">
@@ -509,7 +374,7 @@
                                 <input class="form-control" id="txt_contact_adr_street" name="contact_adr_street"
                                        value="{{ person_contact_address.street | default_if_none:''}}"
                                        maxlength="255">
-                                (ex: Avenue Louis Braille, Rue de la Loi, Place de l'Université)
+                                <p class="caption">(ex: Avenue Louis Braille, Rue de la Loi, Place de l'Université)</p>
                                 <span class="error" id="spn_contact_adr_street">{{ applicant_form.contact_adr_street.errors|striptags }}</span>
                             </div>
                             <div class="col-md-2">
@@ -535,7 +400,7 @@
                                        name="contact_adr_postal_code"
                                        value="{{ person_contact_address.postal_code | default_if_none:''}}"
                                        maxlength="20">
-                                (ex: 1348)
+                                <p class="caption">(ex: 1348)</p>
                                 <span class="error" id="spn_contact_adr_postal_code">{{ applicant_form.contact_adr_postal_code.errors|striptags }}</span>
                             </div>
                             <div class="col-md-6">
@@ -572,13 +437,13 @@
                             <input class="form-control" id="txt_phone_mobile" name="phone_mobile"
                                    value="{{ applicant.phone_mobile | default_if_none:''}}"
                                    maxlength="30">
-                            (ex: +32 490 00 00 00)
+                            <p class="caption">(ex: +32 490 00 00 00)</p>
                         </div>
                         <div class="col-md-3">
                             <label>{% trans 'other_phone'%}</label>
                             <input class="form-control" id="txt_phone" name="phone"
                                    value="{{ applicant.phone | default_if_none:''}}" maxlength="30">
-                            (ex: +32 10 47 21 72)
+                            <p class="caption">(ex: +32 10 47 21 72)</p>
                         </div>
                         <div class="col-md-3">
                             <label>{% trans 'mail' %} *</label>
