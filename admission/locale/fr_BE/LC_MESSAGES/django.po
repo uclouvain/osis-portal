@@ -1453,4 +1453,8 @@ msgstr " champ empêche la validation de l'onglet"
 msgid "msg_error_school_local_community"
 msgstr "Merci de préciser une communauté pour l'école"
 
+msgid "profession_not_found"
+msgstr "Vous n'avez pas trouvé votre profession?"
 
+msgid "grandfather"
+msgstr "Grand-pères"

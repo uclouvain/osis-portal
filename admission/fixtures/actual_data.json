@@ -127223,14 +127223,16 @@
   "model": "admission.profession",
   "pk": 1,
   "fields": {
-    "name": "Inconnu"
+    "name": "Inconnu",
+    "adhoc": false
   }
 },
 {
   "model": "admission.profession",
   "pk": 2,
   "fields": {
-    "name": "Chef d'une exploitation agricole de moins de 30 ha."
+    "name": "Chef d'une exploitation agricole de moins de 30 ha.",
+    "adhoc": false
   }
 }
 ]
