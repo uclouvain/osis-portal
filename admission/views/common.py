@@ -502,11 +502,11 @@ def validated_extra(secondary_education, application):
 
 def get_picture_id(user):
     applicant = mdl.applicant.find_by_user(user)
-    pictures = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant,
-                                                                                      document_type.ID_PICTURE)
+    applicant_doucument_file = mdl.applicant_document_file.ApplicantDocumentFile.objects.filter(applicant=applicant)
+    pictures = [adc.document_file for adc in applicant_doucument_file if adc.document_file.description == document_type.ID_PICTURE]
+    #pictures = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant,document_type.ID_PICTURE)
     if pictures:
-        pictures.reverse()
-        picture = pictures.reverse()[0]
+        picture = pictures[-1]
         return ''.join(('/admission', picture.file.url))
 
     return None
@@ -517,7 +517,8 @@ def get_id_document(user):
     id_cards = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant,
                                                                                       document_type.ID_CARD)
     if id_cards:
-        return ''.join(('/admission', id_cards.reverse()[0].file.url))
+        id_card = id_cards[-1]
+        return ''.join(('/admission', id_card.file.url))
     return None
 
 
@@ -526,7 +527,8 @@ def get_document_assimilation(user, description):
     documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant,
                                                                                        description)
     if documents:
-        return ''.join(('/admission', documents.reverse()[0].file.url))
+        document = documents[-1]
+        return ''.join(('/admission', document.file.url))
     return None
 
 

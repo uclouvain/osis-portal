@@ -175,7 +175,7 @@ def find_by_description(request):
     documents = [document for document in all_applicant_documents if document.description == description]
     last_documents = []
     if documents:
-        last_document = documents.reverse()[0]
+        last_document = documents[-1]
         last_documents = [last_document]
 
     serializer = DocumentFileSerializer(last_documents, many=True)
@@ -183,21 +183,20 @@ def find_by_description(request):
 
 
 def save_uploaded_file(request):
-    data = request.POST
-    application = None
-    applicant = None
-
     if request.method == 'POST':
         if request.POST.get('application_id'):
-            application = mdl.application.find_by_id(request.POST['application_id'])
+            application = mdl.application.find_by_id(request.POST.get('application_id'))
             applicant = application.applicant
+        else:
+            application = None
+            applicant = mdl.applicant.find_by_user(request.user)
         file_selected = request.FILES['file']
         file_s = file_selected
         file_name = file_selected.name
         content_type = file_selected.content_type
         size = file_selected.size
 
-        description = data['description']
+        description = request.POST.get('description')
         storage_duration = 0
         prerequis_uploads = [document_type.NATIONAL_DIPLOMA_RECTO,
                              document_type.NATIONAL_DIPLOMA_VERSO,
@@ -219,12 +218,13 @@ def save_uploaded_file(request):
             documents = mdl.application_document_file.search(application, description)
             for document in documents:
                 document.delete()
+
         if description == document_type.ID_PICTURE \
                 or description == document_type.ID_CARD \
                 or description in prerequis_uploads \
                 or description in assimilation_uploads:
             # Delete older file with the same description
-            documents = mdl.applicant_document_file.find_document_by_applicant(applicant)
+            documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
             for document in documents:
                 document.delete()
 
@@ -237,7 +237,6 @@ def save_uploaded_file(request):
                                                               size=size,
                                                               username=request.user.username)
         doc_file.save()
-        applicant = mdl.applicant.find_by_user(request.user)
         applicant_document_file = mdl.applicant_document_file.ApplicantDocumentFile(applicant=applicant,
                                                                                     document_file=doc_file)
         applicant_document_file.save()
