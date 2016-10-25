@@ -503,9 +503,7 @@ def validated_extra(secondary_education, application):
 
 def get_picture_id(user):
     applicant = mdl.applicant.find_by_user(user)
-    applicant_doucument_file = mdl.applicant_document_file.ApplicantDocumentFile.objects.filter(applicant=applicant)
-    pictures = [adc.document_file for adc in applicant_doucument_file if adc.document_file.description == document_type.ID_PICTURE]
-    #pictures = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant,document_type.ID_PICTURE)
+    pictures = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, document_type.ID_PICTURE)
     if pictures:
         picture = pictures[-1]
         return ''.join(('/admission', picture.file.url))
@@ -515,8 +513,7 @@ def get_picture_id(user):
 
 def get_id_document(user):
     applicant = mdl.applicant.find_by_user(user)
-    id_cards = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant,
-                                                                                      document_type.ID_CARD)
+    id_cards = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, document_type.ID_CARD)
     if id_cards:
         id_card = id_cards[-1]
         return ''.join(('/admission', id_card.file.url))
@@ -525,8 +522,7 @@ def get_id_document(user):
 
 def get_document_assimilation(user, description):
     applicant = mdl.applicant.find_by_user(user)
-    documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant,
-                                                                                       description)
+    documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
     if documents:
         document = documents[-1]
         return ''.join(('/admission', document.file.url))
@@ -538,10 +534,10 @@ def get_assimilation_documents_existing(user):
     assimilation_basic_documents = assimilation_criteria_view.find_list_assimilation_basic_documents()
     docs = []
     for document_type_description in assimilation_basic_documents:
-        pictures = mdl.applicant_document_file\
-            .find_document_by_applicant_and_description(applicant, document_type_description)
-        if pictures:
-            docs.extend(pictures)
+        documents = mdl.applicant_document_file\
+                       .find_document_by_applicant_and_description(applicant, document_type_description)
+        if documents:
+            docs.extend(documents)
 
     return docs
 
@@ -585,7 +581,6 @@ def documents_upload(request):
                         or file_description in prerequisites_uploads \
                             or file_description in assimilation_uploads:
                         # Delete older file with the same description
-                        applicant = mdl.applicant.find_by_user(request.user)
                         documents = mdl.applicant_document_file\
                             .find_document_by_applicant_and_description(applicant, file_description)
                         for document in documents:
@@ -604,6 +599,9 @@ def documents_upload(request):
                                                                               size=size,
                                                                               username=request.user.username)
                         doc_file.save()
+                        applicant_document_file = mdl.applicant_document_file\
+                                                     .ApplicantDocumentFile(applicant=applicant, document_file=doc_file)
+                        applicant_document_file.save()
                         if file_description in prerequisites_uploads:
                             adm_doc_file = mdl.application_document_file.ApplicationDocumentFile()
                             adm_doc_file.application = application
@@ -637,7 +635,6 @@ def get_picture(request):
     applicant = mdl.applicant.find_by_user(request.user)
     description = request.GET['description']
     pictures = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
-
     if pictures:
         serializer = DocumentFileSerializer(pictures[0])
         return JSONResponse(serializer.data)

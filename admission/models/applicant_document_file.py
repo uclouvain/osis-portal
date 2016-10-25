@@ -55,14 +55,9 @@ def find_document_by_applicant(applicant):
             in ApplicantDocumentFile.objects.filter(applicant=applicant)]
 
 
-def find_document_by_applicant_and_description(applicant=None, description=None):
-    queryset = ApplicantDocumentFile.objects
-    if applicant:
-        queryset = queryset.filter(applicant=applicant)
-    if description:
-        queryset = queryset.filter(document_file__description=description)
-    if applicant or description:
-        return [applicant_document_file.document_file for applicant_document_file
-                in queryset.order_by('document_file__creation_date')]
-    else:
-        return None
+def find_document_by_applicant_and_description(applicant, description):
+    queryset = ApplicantDocumentFile.objects\
+        .filter(applicant=applicant)\
+        .filter(document_file__description=description)\
+        .order_by('document_file__creation_date')
+    return [applicant_document_file.document_file for applicant_document_file in queryset]

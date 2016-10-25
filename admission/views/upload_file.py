@@ -60,7 +60,10 @@ def upload_file_description(request):
     if not application_id.isdigit():
         application_id = None
     applicant = mdl.applicant.find_by_user(request.user)
-    documents = mdl.applicant_document_file.find_document_by_applicant(applicant)
+    if description:
+        documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
+    else:
+        documents = mdl.applicant_document_file.find_document_by_applicant(applicant)
     form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                            'document_type': "admission",
                                            'username': request.user.username})
@@ -115,7 +118,7 @@ def delete_old(request, pk):
         description = document.description
         document.delete()
         applicant = mdl.applicant.find_by_user(request.user)
-        documents = mdl.applicant_document_file.find_document_by_applicant(applicant)
+        documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
 
         return render(request, 'new_document.html', {
             'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
@@ -171,8 +174,7 @@ class DocumentFileSerializer(serializers.ModelSerializer):
 def find_by_description(request):
     description = request.GET['description']
     applicant = mdl.applicant.find_by_user(request.user)
-    all_applicant_documents = mdl.applicant_document_file.find_document_by_applicant(applicant)
-    documents = [document for document in all_applicant_documents if document.description == description]
+    documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
     last_documents = []
     if documents:
         last_document = documents[-1]
@@ -274,8 +276,10 @@ def delete_document_file(request):
         if document:
             document.delete()
     else:
-        applicant = mdl.applicant.find_by_user(request.user)
-        documents = mdl.applicant_document_file.find_document_by_applicant(applicant)
-        for document in documents:
-            document.delete()
+        description = request.POST.get('description')
+        if description:
+            applicant = mdl.applicant.find_by_user(request.user)
+            document = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
+            if document:
+                document.delete()
     return HttpResponse('')
