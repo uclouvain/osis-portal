@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models.answer import find_by_option, find_by_id, find_by_application
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from admission import models as mdl
@@ -35,7 +34,6 @@ from admission.views.common import extra_information
 from admission.views import common
 from admission.views import demande_validation
 from django.http import HttpResponseRedirect
-import urllib
 
 
 PROFILE_TAB = "0"
@@ -146,21 +144,21 @@ def save_application_offer(request):
                 copy_from_applicant_assimilation_criteria(applicant_assimilation_criteria, application)
 
         # answer_question_
-        answers = find_by_application(application_id)
+        answers = mdl.answer.find_by_application(application_id)
         for answer in answers:
             answer.delete()
         for key, value in request.POST.items():
             if "txt_answer_question_" in key:
                 # INPUT OR LABEL
                 option_id = key.replace("txt_answer_question_", "")
-                asw = find_by_option(option_id)
+                asw = mdl.answer.find_by_application_and_option(application_id, option_id)
                 if not asw:
                     answer = mdl.answer.Answer()
                     answer.application = application
                     answer.option = mdl.option.find_by_id(int(option_id))
                     answer.value = value
                 else:
-                    answer = find_by_id(asw)
+                    answer = mdl.answer.find_by_id(asw)
                     answer.value = value
                 answer.save()
             if "txt_answer_radio_" in key:
@@ -170,7 +168,7 @@ def save_application_offer(request):
                 options = mdl.option.find_options_by_question_id(option.question.id)
                 if options:
                     for opt in options:
-                        asw = mdl.answer.find_by_option(opt.id)
+                        asw = mdl.answer.find_by_application_and_option(application_id, opt.id)
                         asw.delete()
                     answer = mdl.answer.Answer()
                     answer.application = application
@@ -316,7 +314,3 @@ def is_local_language_exam_needed(user):
             local_language_exam_needed = True
             break
     return local_language_exam_needed
-
-
-def url_with_querystring(path, **kwargs):
-    return path + '?' + urllib.urlencode(kwargs)
