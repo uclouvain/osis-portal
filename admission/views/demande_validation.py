@@ -97,10 +97,6 @@ def validate_profil(applicant, user):
     return True
 
 
-def validate_application():
-    return False
-
-
 def validate_diploma(application, secondary_education):
     validation_messages = {}
 
@@ -160,28 +156,31 @@ def validate_prerequisites_data(application, secondary_education, validation_mes
         validation_messages.update(validate_local_language_exam(local_language_exam))
 
 
-def validate_curriculum():
+def _validate_application():
     return False
 
 
-def validate_accounting():
+def _validate_curriculum():
     return False
 
 
-def validate_sociological():
+def _validate_accounting():
     return False
 
 
-def validate_attachments():
+def _validate_sociological():
     return False
 
 
-def validate_submission():
+def _validate_attachments():
+    return False
+
+
+def _validate_submission():
     return False
 
 
 def get_validation_status(application, applicant, user):
-
     secondary_education = mdl.secondary_education.find_by_person(applicant)
     if secondary_education:
         validated_diploma = True
@@ -192,12 +191,12 @@ def get_validation_status(application, applicant, user):
     return {
         "validated_profil":             validate_profil(applicant, user),
         "validated_diploma":            validated_diploma,
-        "validated_curriculum":         validate_curriculum(),
-        "validated_application":        validate_application(),
-        "validated_accounting":         validate_accounting(),
-        "validated_sociological":       validate_sociological(),
-        "validated_attachments":        validate_attachments(),
-        "validated_submission":         validate_submission(),
+        "validated_curriculum":         _validate_curriculum(),
+        "validated_application":        _validate_application(),
+        "validated_accounting":         _validate_accounting(),
+        "validated_sociological":       _validate_sociological(),
+        "validated_attachments":        _validate_attachments(),
+        "validated_submission":         _validate_submission(),
         "validation_message":           None}
 
 
@@ -244,7 +243,8 @@ def validate_admission_exam(admission_exam, application):
         else:
             if application.offer_year:
                 offer_admission_exam_type = mdl.offer_admission_exam_type.find_by_offer_year(application.offer_year)
-                if offer_admission_exam_type and offer_admission_exam_type.admission_exam_type != admission_exam.admission_exam_type:
+                if offer_admission_exam_type and \
+                        (offer_admission_exam_type.admission_exam_type != admission_exam.admission_exam_type):
                     validation_messages['admission_exam_type'] = "{0} '{1}' {2} {3}"\
                         .format(_('the_exam_type'),
                                 offer_admission_exam_type.admission_exam_type.name,

@@ -25,11 +25,6 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-from django.core.exceptions import ObjectDoesNotExist
-from admission.models import applicant
-from localflavor.generic.models import IBANField, BICField
-from localflavor.generic.countries.sepa import IBAN_SEPA_COUNTRIES
-from admission.models.enums import application_type
 
 
 class OfferAdmissionExamTypeAdmin(admin.ModelAdmin):
@@ -39,7 +34,6 @@ class OfferAdmissionExamTypeAdmin(admin.ModelAdmin):
 
 
 class OfferAdmissionExamType(models.Model):
-
     offer_year = models.ForeignKey('base.OfferYear', null=False)
     admission_exam_type = models.ForeignKey('AdmissionExamType', null=False)
 
