@@ -170,7 +170,7 @@
                   <input type="radio" name="scholarship"
                          id="rdb_scholarship_true"
                          value="true"
-                         onclick="display('pnl_scholarship_organization',true);"
+                         onclick="display('pnl_scholarship_organization');"
                          {%if application.scholarship = True %}checked{%endif%}> {% trans 'yes' %}
                 </label>
                 <label class="radio-inline">
@@ -178,7 +178,7 @@
                          name="scholarship"
                          id="rdb_scholarship_false"
                          value="false"
-                         onclick="display('pnl_scholarship_organization',false);"
+                         onclick="hide('pnl_scholarship_organization');"
                         {%if application.scholarship != True %}checked{%endif%}> {% trans 'no' %}
                 </label>
 

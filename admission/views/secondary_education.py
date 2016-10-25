@@ -38,6 +38,7 @@ from osis_common import models as mdl_osis_common
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
+FOREIGN_NATIONAL_DIPLOMA_TYPE = mdl.secondary_education.NATIONAL
 
 ALERT_MANDATORY_FILE_RECTO_VERSO = _('mandatory_file_recto_verso')
 ALERT_MANDATORY_FIELD = _('mandatory_field')
@@ -173,27 +174,22 @@ def populate_secondary_education(request, secondary_education):
 
 
 def populate_international_diploma(request, secondary_education):
-    secondary_education.international_diploma = get_boolean_value(request.POST.get('international_diploma'))
+    secondary_education.international_diploma = request.POST.get('international_diploma')
 
     if request.POST.get('international_diploma_country') \
             and request.POST.get('international_diploma_country') != "-":
         secondary_education.international_diploma_country = \
             get_country(request.POST.get('international_diploma_country'))
-    if request.POST.get('other_language_regime') \
-            and request.POST.get('other_language_regime') == FIELD_ON_STATUS \
-            and request.POST.get('other_language_regime') != "-":
-        secondary_education.international_diploma_language = mdl_reference.language \
-            .find_by_id(int(request.POST.get('other_international_diploma_language')))
-    else:
-        if request.POST.get('international_diploma_language') \
-                and request.POST.get('international_diploma_language') != "-":
-            language_int = request.POST.get('international_diploma_language')
-            if language_int == 'None':
-                language_int = None
-            if language_int:
-                secondary_education.international_diploma_language = mdl_reference.language \
-                    .find_by_id(int(language_int))
-    secondary_education.international_equivalence = request.POST.get('international_equivalence')
+    if request.POST.get('international_diploma_language') \
+            and request.POST.get('international_diploma_language') != "-":
+        language_int = request.POST.get('international_diploma_language')
+        if language_int == 'None':
+            language_int = None
+        if language_int:
+            secondary_education.international_diploma_language = mdl_reference.language \
+                .find_by_id(int(language_int))
+    if secondary_education.international_diploma == FOREIGN_NATIONAL_DIPLOMA_TYPE:
+        secondary_education.international_equivalence = request.POST.get('international_equivalence')
     secondary_education.result = request.POST.get('foreign_result')
 
 
@@ -279,7 +275,7 @@ def documents_update(request, secondary_education, application, professional_exa
         list_unwanted_files.append(document_type.INTERNATIONAL_DIPLOMA_RECTO)
         list_unwanted_files.append(document_type.INTERNATIONAL_DIPLOMA_VERSO)
     if secondary_education.international_diploma is None \
-            or secondary_education.international_diploma != 'INTERNATIONAL':
+            or secondary_education.international_diploma != FOREIGN_NATIONAL_DIPLOMA_TYPE:
         list_unwanted_files.append(document_type.EQUIVALENCE)
     if secondary_education.international_diploma_language is None \
             or secondary_education.international_diploma_language.recognized:
@@ -347,8 +343,8 @@ def get_prerequis_data(request, saved, application_id):
     else:
         application = mdl.application.find_first_by_user(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
-    other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
-    recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
+    other_language_regime = mdl_reference.language.find_unrecognized_languages()
+    recognized_languages = mdl_reference.language.find_recognized_languages()
     exam_types = mdl.admission_exam_type.find_all_by_adhoc(False)
     secondary_education = mdl.secondary_education.find_by_person(applicant)
     education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)

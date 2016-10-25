@@ -63,6 +63,9 @@ class Application(models.Model):
     bank_account_bic = BICField(blank=True, null=True)
     bank_account_name = models.CharField(max_length=255, blank=True, null=True)
 
+    def __str__(self):
+        return u"%s" % self.applicant
+
 
 def find_by_user(user):
     try:

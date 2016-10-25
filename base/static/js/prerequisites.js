@@ -447,8 +447,14 @@ $("select[id^='slt_language_diploma']" ).change(function(event) {
         id = target.attr("id");
     }
     $('#hdn_secondary_education_international_diploma_language_id').val(target.val());
+    $('#slt_language_diploma_recognized').prop("selectedIndex",target.prop("selectedIndex"));
+    $('#slt_language_diploma_recognized').val(target.val());
 
-
+    if($('#slt_language_diploma_recognized option:selected').text() == 'True'){
+        disabled_other_language();
+    }else{
+        enabled_other_language();
+    }
 });
 
 function display_local_secondary(){
@@ -527,11 +533,19 @@ function display_foreign_secondary(){
             $(this).prop('selected', true);
         }
     });
+    $('#slt_language_diploma_recognized'+' option').each(function(){
+        if($(this).attr('value')==$('#hdn_secondary_education_international_diploma_language_id').val()){
+            $(this).prop('selected', true);
+        }
+    });
+    if($('#slt_language_diploma_recognized option:selected').text() == 'True'){
+        disabled_other_language();
+    }else{
+        enabled_other_language();
+    }
+
 
     if( $('#hdn_secondary_education_international_diploma_language_recognized').val() == 'False'){
-        $('#chb_other_language_regime').prop( "checked", true);
-        $('#slt_other_language_diploma').prop( "disabled", false);
-        $('#slt_language_diploma').prop( "disabled", true);
         $('#pnl_translation').css('visibility', 'visible').css('display','block');
     }else{
         $('#pnl_translation').css('visibility', 'hidden').css('display','none');
@@ -959,4 +973,119 @@ function reset_rdb_local_community(status){
     $('#rdb_local_community_german').prop( "checked", status);
 }
 
+$("select[id^='slt_language_diploma_recognized']" ).change(function(event) {
+    var target = $(event.target);
 
+    if (typeof id == 'undefined') {
+        target = target.parent();
+
+    }
+    if(target.val()=="True"){
+        alert('t');
+        enabled_other_language();
+    }else{
+        if(target.val()=="False"){
+            alert('F');
+            disabled_other_language();
+        }else{
+            alert('o');
+            disabled_other_language();
+        }
+    }
+
+});
+
+function disabled_other_language(){
+    document.getElementById('slt_country').disabled=false;
+    document.getElementById('pnl_translation').style="visibility:hidden;display:none;";
+}
+
+function enabled_other_language(){
+    document.getElementById('slt_country').selectedIndex = 0;
+    document.getElementById('slt_country').disabled=true;
+    document.getElementById('pnl_translation').style="visibility:visible;display:block;";
+
+}
+
+$("#slt_schools").change(function(event) {
+    $('#slt_schools_community').prop("selectedIndex",$('#slt_schools').prop("selectedIndex"));
+    if($('#slt_schools_community').val()=='FRENCH'){
+        $('#pnl_teaching_type').css('visibility', 'visible').css('display','block');
+    }else{
+        $('#pnl_teaching_type').css('visibility', 'hidden').css('display','none');
+    }
+    if($(this).prop('selectedIndex') >= 0 ){
+        $('#national_diploma_school_error').html('');
+    }
+});
+
+$("#rdb_result_less_65").click(function(event) {
+    $('#national_diploma_result_error').html('');
+});
+
+$("#rdb_result_between_65_75").click(function(event) {
+    $('#national_diploma_result_error').html('');
+});
+
+$("#rdb_result_more_75").click(function(event) {
+    $('#national_diploma_result_error').html('');
+});
+
+$("#path_repetition").click(function(event) {
+    $('#national_diploma_path_repetition_error').html('');
+});
+
+$("#path_reorientation").click(function(event) {
+    $('#national_diploma_path_reorientation_error').html('');
+});
+
+$("#rdb_dipl_acc_high_educ_true").click(function(event) {
+    $('#national_diploma_dipl_acc_high_educ_error').html('');
+});
+
+$("#rdb_dipl_acc_high_educ_false").click(function(event) {
+    $('#national_diploma_dipl_acc_high_educ_error').html('');
+});
+
+$("#rdb_local_community_french").click(function(event) {
+    $('#national_diploma_local_community_error').html('');
+});
+
+$("#rdb_local_community_dutch").click(function(event) {
+    $('#national_diploma_local_community_error').html('');
+});
+
+$("#rdb_local_community_german").click(function(event) {
+    $('#national_diploma_local_community_error').html('');
+});
+
+$( "input[name^='rdb_education_transition_type']" ).click(function() {
+    $('#national_diploma_pnl_teaching_type_error').html('');
+});
+
+$("input[name^='rdb_education_technic_type']" ).click(function() {
+    $('#national_diploma_pnl_teaching_type_error').html('');
+});
+
+$("button[id^='bt_load_doc_NATIONAL_DIPLOMA_']" ).click(function() {
+    $('#national_diploma_national_diploma_doc_error').html('');
+});
+
+$( "#txt_professional_exam_date").blur(function() {
+    $('#professional_exam_date_error').html('');
+});
+
+$( "#txt_professional_exam_institution").blur(function() {
+    $('#professional_exam_institution_error').html('');
+});
+
+$( "input[name^='professional_exam_result']" ).click(function() {
+    $('#professional_exam_result_error').html('');
+});
+$("#bt_load_doc_PROFESSIONAL_EXAM_CERTIFICATE" ).click(function() {
+    $('#professional_exam_doc_error').html('');
+});
+
+$("button[id^='bt_load_doc_HIGH_SCHOOL_SCORES_TRANSCRIPT_']" ).click(function() {
+    $('#high_school_diploma_doc_error').html('');
+});

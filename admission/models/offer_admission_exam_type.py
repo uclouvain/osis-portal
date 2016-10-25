@@ -25,41 +25,18 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-from base.models.serializable_model import SerializableModel
 
 
-class LanguageAdmin(admin.ModelAdmin):
-    list_display = ('code', 'name', 'recognized')
-    ordering = ('code',)
-    search_fields = ['code', 'name']
-    fieldsets = ((None, {'fields': ('code', 'name', 'recognized')}),)
+class OfferAdmissionExamTypeAdmin(admin.ModelAdmin):
+    list_display = ('offer_year', 'admission_exam_type')
+    fieldsets = ((None, {'fields': ('offer_year', 'admission_exam_type')}),)
+    list_filter = ('offer_year',)
 
 
-class Language(SerializableModel):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    code = models.CharField(max_length=4, unique=True)
-    name = models.CharField(max_length=80, unique=True)
-    recognized = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.name
+class OfferAdmissionExamType(models.Model):
+    offer_year = models.ForeignKey('base.OfferYear', null=False)
+    admission_exam_type = models.ForeignKey('AdmissionExamType', null=False)
 
 
-def find_by_id(a_language_id):
-    return Language.objects.get(pk=a_language_id)
-
-
-def find_languages():
-    return Language.objects.all().order_by('name')
-
-
-def find_recognized_languages():
-    return Language.objects.filter(recognized=True).order_by('name')
-
-
-def find_unrecognized_languages():
-    return Language.objects.filter(recognized=False).order_by('name')
-
-
-def find_by_code(a_code):
-    return Language.objects.get(code=a_code)
+def find_by_offer_year(an_offer_year):
+    return OfferAdmissionExamType.objects.filter(offer_year=an_offer_year).first()

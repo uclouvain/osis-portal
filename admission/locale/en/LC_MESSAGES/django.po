@@ -824,9 +824,6 @@ msgstr "Other education type"
 msgid "other_institution"
 msgstr "Other institution"
 
-msgid "other_linguistic_regime"
-msgstr "If other linguistic regime, please clarify"
-
 msgid "other_phone"
 msgstr "Other phone"
 
@@ -1438,3 +1435,12 @@ msgstr "You haven't found your profession above?"
 
 msgid "grandfather"
 msgstr "Grandfathers"
+
+msgid "other_linguistic_regime"
+msgstr "Other linguistic regime"
+
+msgid "is_required_for"
+msgstr "is required for the following offer : "
+
+msgid "the_exam_type"
+msgstr "The exam type "
