@@ -1432,3 +1432,9 @@ msgstr " field is invalid"
 
 msgid "msg_error_school_local_community"
 msgstr "Please mention a community for the school"
+
+msgid "profession_not_found"
+msgstr "You haven't found your profession above?"
+
+msgid "grandfather"
+msgstr "Grandfathers"

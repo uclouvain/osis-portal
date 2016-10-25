@@ -55,7 +55,7 @@ def home(request):
     person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
     if person_contact_address:
         same_addresses = False
-    if applicant and applicant.gender:
+    if applicant:
         if applicant.language:
             user_language = applicant.language
             translation.activate(user_language)
@@ -260,6 +260,7 @@ def profile(request, application_id=None, message_success=None):
             person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
             if person_contact_address:
                 person_contact_address.delete()
+                person_contact_address = None
 
         if request.POST['phone_mobile']:
             applicant.phone_mobile = request.POST['phone_mobile']
