@@ -244,7 +244,7 @@ def applications(request, application_id=None):
         "applications": application_list,
         "grade_choices": enum_institutional_grade_type.INSTITUTIONAL_GRADE_CHOICES,
         "domains": mdl_reference.domain.find_current_domains(),
-        'tab_active': 1,
+        'tab_active': navigation.DEMAND_TAB,
         "application": application,
         "local_language_exam_needed": common.is_local_language_exam_needed(request.user),
         "applicant": applicant,
@@ -263,7 +263,7 @@ def submission(request, application_id=None):
     data = {
         'application': application,
         'display_admission_exam': extra_information(application),
-        'tab_active': 7,
+        'tab_active': navigation.SUBMISSION_TAB,
         'applications': mdl.application.find_by_user(request.user)
     }
     applicant = mdl.applicant.find_by_user(request.user)
@@ -287,7 +287,7 @@ def change_application_offer(request, application_id=None):
         'applications': application_list,
         "grade_choices": enum_institutional_grade_type.INSTITUTIONAL_GRADE_CHOICES,
         "domains": mdl_reference.domain.find_current_domains(),
-        'tab_active': 1,
+        'tab_active': navigation.DEMAND_TAB,
         "first": True,
         "application": application,
     }

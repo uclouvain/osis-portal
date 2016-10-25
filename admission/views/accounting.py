@@ -28,10 +28,11 @@ from django.shortcuts import render
 from admission import models as mdl
 from base import models as mdl_base
 from admission.forms import AccountingForm
-from admission.views import demande_validation
+from admission.views import demande_validation, navigation
 
 
 def accounting(request, application_id=None):
+    print('accoutning')
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
@@ -53,7 +54,7 @@ def accounting(request, application_id=None):
         "debts_check": debts_check(application),
         "reduction_possible": reduction_possible(application),
         "third_cycle": third_cycle(application),
-        "tab_active": 4,
+        "tab_active": navigation.ACCOUNTING_TAB,
         "applications": mdl.application.find_by_user(request.user),
     }
     data.update(demande_validation.get_validation_status(application, applicant, request.user))
@@ -61,6 +62,7 @@ def accounting(request, application_id=None):
 
 
 def accounting_update(request, application_id=None):
+    next_tab = navigation.ACCOUNTING_TAB
     academic_yr = mdl_base.academic_year.current_academic_year()
     previous_academic_year = mdl_base.academic_year.find_by_year(academic_yr.year - 1)
     sport_affiliation_amount = 0
@@ -80,7 +82,9 @@ def accounting_update(request, application_id=None):
             application.save()
     except:
         pass
-
+    following_tab = navigation.get_following_tab(request, 'accounting', application)
+    if following_tab:
+        return following_tab
     data = {
         "academic_year": academic_yr,
         "previous_academic_year": previous_academic_year,
@@ -92,7 +96,7 @@ def accounting_update(request, application_id=None):
         "debts_check": debts_check(application),
         "reduction_possible": reduction_possible(application),
         "third_cycle": third_cycle(application),
-        "tab_active": 4,
+        "tab_active": next_tab,
         "applications": mdl.application.find_by_user(request.user),
     }
     applicant = mdl.applicant.find_by_user(request.user)

@@ -43,7 +43,6 @@ from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
 from rest_framework import serializers
 from reference.enums import assimilation_criteria as assimilation_criteria_enum
-from django.core.urlresolvers import reverse
 
 RADIO_NAME_ASSIMILATION_CRITERIA = "assimilation_criteria_"
 
@@ -78,7 +77,7 @@ def home(request):
             return render(request, "admission_home.html", {
                 'applications': applications,
                 'applicant': applicant,
-                'tab_active': 0,
+                'tab_active': navigation.PROFILE_TAB,
                 'first': True,
                 'countries': mdl_ref.country.find_all(),
                 'main_status': 0,
@@ -459,7 +458,7 @@ def profile(request, application_id=None, message_success=None):
         'previous_enrollment': previous_enrollment,
         'institution': institution_name,
         'message_success': message_success,
-        'tab_active': 0,
+        'tab_active': navigation.PROFILE_TAB,
         'application': application,
         'applications': mdl.application.find_by_user(request.user),
         'picture': get_picture_id(request.user),

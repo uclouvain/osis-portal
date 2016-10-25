@@ -52,7 +52,7 @@
             <br>
             <br>
             <ul class="nav nav-pills nav-stacked">
-                <li class="{%if tab_active == 0 %}active{%endif%}">
+                <li class="{%if tab_active == '0' %}active{%endif%}">
                     <a href="{%if application.id%}{% url 'profile' application.id%}{%else%}{% url 'profile' %}{%endif%}"
                        id="lnk_profile_tab">
                         {% if validated_profil %}
@@ -62,7 +62,7 @@
                         {%endif%}
                         &nbsp;&nbsp;{%trans 'profile'%}</a>
                 </li>
-                <li class="{%if tab_active == 1 %}active{%endif%}">
+                <li class="{%if tab_active == '1' %}active{%endif%}">
 
                     <a href="{%if application.id%}{% url 'applications' application.id%}{%else%}{% url 'applications' %}{%endif%}"
                        id="lnk_application_tab">
@@ -77,8 +77,8 @@
                     {%endif%}</a>
 
                 </li>
-                <li class="{%if tab_active == 2 %}active{%endif%}"  id="mn_diploma">
-                    <a href="{%if tab_diploma and application.id %}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
+                <li class="{%if tab_active == '2' %}active{%endif%}"  id="mn_diploma">
+                    <a href="{%if application.id %}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
                        id="lnk_diploma_tab">
                         {% if validated_diploma == True%}
                             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
@@ -87,7 +87,7 @@
                         {%endif%}
                         &nbsp;&nbsp;{%trans 'prerequisites'%}</a>
                 </li>
-                <li class="{%if tab_active == 3 %}active{%endif%}" id="mn_curriculum">
+                <li class="{%if tab_active == '3' %}active{%endif%}" id="mn_curriculum">
                     <a href="{%if tab_curriculum and application.id %}{% url 'curriculum_update' application.id%}{%else%}{% url 'curriculum_update' %}{%endif%}"
                        id="lnk_curriculum_tab">
                         {% if validated_curriculum %}
@@ -97,8 +97,8 @@
                         {%endif%}
                         &nbsp;&nbsp;{%trans 'curriculum'%}</a>
                 </li>
-                <li class="{%if tab_active == 4 %}active{%endif%}" id="mn_accounting">
-                    <a href="{%if tab_accounting and application.id%}{% url 'accounting_update' application.id%}{%else%}{% url 'accounting_update' %}{%endif%}"
+                <li class="{%if tab_active == '4' %}active{%endif%}" id="mn_accounting">
+                    <a href="{%if application.id%}{% url 'accounting_update' application.id%}{%else%}{% url 'accounting_update' %}{%endif%}"
                            id="lnk_accounting_tab">
                         {% if validated_accounting %}
                             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
@@ -107,28 +107,18 @@
                         {%endif%}
                             &nbsp;&nbsp;{%trans 'accounting'%}</a>
                 </li>
-                <li class="{%if tab_active == 5 %}active{%endif%}" id="mn_sociological">
-                    {%if tab_sociological%}
-                        <a href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey' %}{%endif%}"
-                           id="lnk_sociological_tab">
-                            {% if validated_sociological %}
-                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                            {%else%}
-                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                            {%endif%}
-                            &nbsp;&nbsp;{%trans 'sociological_survey'%}</a>
-                    {%else%}
-                        <a id="lnk_sociological_tab">
-                            {% if validated_sociological %}
-                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                            {%else%}
-                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                            {%endif%}
-                            &nbsp;&nbsp;{%trans 'sociological_survey'%}</a>
-                    {%endif%}
+                <li class="{%if tab_active == '5' %}active{%endif%}" id="mn_sociological">
+                    <a id="lnk_sociological_tab"
+                       href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey' %}{%endif%}">
+                        {% if validated_sociological %}
+                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
+                        {%else%}
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
+                        {%endif%}
+                        &nbsp;&nbsp;{%trans 'sociological_survey'%}</a>
                 </li>
-                <li class="{%if tab_active == 6 %}active{%endif%}" id="mn_attachments">
-                    <a href="{%if tab_attachments and application.id%}{% url 'attachments' application.id %}{%else%}{% url 'attachments' %}{%endif%}"
+                <li class="{%if tab_active == '6' %}active{%endif%}" id="mn_attachments">
+                    <a href="{%if application.id%}{% url 'attachments' application.id %}{%else%}{% url 'attachments' %}{%endif%}"
                        id="lnk_attachments_tab" >
                         {% if validated_attachments %}
                             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
@@ -137,8 +127,8 @@
                         {%endif%}
                         &nbsp;&nbsp;{%trans 'attachments'%}</a>
                 </li>
-                <li class="{%if tab_active == 7 %}active{%endif%}" id="mn_submission">
-                    <a href="{%if tab_submission and application.id%}{% url 'submission' application.id %}{%else%}{% url 'submission' %}{%endif%}"
+                <li class="{%if tab_active == '7' %}active{%endif%}" id="mn_submission">
+                    <a href="{%if application.id%}{% url 'submission' application.id %}{%else%}{% url 'submission' %}{%endif%}"
                        id="lnk_submission_tab">
                         {% if validated_submission %}
                             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
@@ -256,15 +246,7 @@
     const SUBMISSION_TAB = 7;
 
     function save(form_to_submit, next_tab){
-       // $('#hdn_following_tab').val(next_tab);
         $('[id^="hdn_following_"]').val(next_tab);
-       /* var id = 'form#' + form_to_submit;
-        var data = $(id).serialize();
-        $.ajax({
-            url: $(id).attr('action'), // Le nom du fichier indiqué dans le formulaire
-            type:'post', // La méthode indiquée dans le formulaire (get ou post)
-            data: data, // Je sérialise les données (j'envoie toutes les valeurs présentes dans le formulaire)
-        });*/
     }
 
     $('[id^="lnk_profil_next_step"]').click(function() {
@@ -1058,28 +1040,42 @@
      $('[id^="bt_previous_curriculum_step_"]').click(function() {
         change_menu();
         $('#hdn_tab_applications_status').val('True');
-        save('form_secondary_education',PREREQUISITES_TAB);
+        save('form_curriculum',PREREQUISITES_TAB);
         return true;
     });
 
     $('[id^="bt_next_curriculum_step_"]').click(function() {
         change_menu();
         $('#hdn_tab_applications_status').val('True');
-        save('form_secondary_education', ACCOUNTING_TAB);
+        save('form_curriculum', ACCOUNTING_TAB);
         return true;
     });
 
      $('[id^="bt_previous_sociological_step_"]').click(function() {
         change_menu();
         $('#hdn_tab_applications_status').val('True');
-        save('form_secondary_education', ACCOUNTING_TAB);
+        save('form_sociological_survey', ACCOUNTING_TAB);
         return true;
     });
 
     $('[id^="bt_next_sociological_step_"]').click(function() {
         change_menu();
         $('#hdn_tab_applications_status').val('True');
-        save('form_secondary_education', ATTACHMENTS_TAB );
+        save('form_sociological_survey', ATTACHMENTS_TAB );
+        return true;
+    });
+
+    $('[id^="bt_previous_accounting_step_"]').click(function() {
+        change_menu();
+        $('#hdn_tab_applications_status').val('True');
+        save('form_accounting', CURRICULUM_TAB);
+        return true;
+    });
+
+    $('[id^="bt_next_accounting_step_"]').click(function() {
+        change_menu();
+        $('#hdn_tab_applications_status').val('True');
+        save('form_accounting', SOCIOLOGICAL_SURVEY_TAB );
         return true;
     });
 

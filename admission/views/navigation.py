@@ -43,50 +43,38 @@ def get_following_tab(request, active_tab, application):
     if application:
         application_id = application.id
 
-    if next_tab:
+    return get_redirection(next_tab, application_id)
+
+
+def get_redirection(next_tab, application_id):
+        reverse_name = None
         if next_tab == PROFILE_TAB:
-            if application_id:
-                return HttpResponseRedirect(reverse('profile', args=(application_id,)))
-            else:
-                return HttpResponseRedirect(reverse('profile'),)
+            reverse_name = 'profile'
         if next_tab == DEMAND_TAB:
-            if application_id:
-                return HttpResponseRedirect(reverse('applications', args=(application_id,)))
-            else:
-                return HttpResponseRedirect(reverse('applications', ))
+            reverse_name = 'applications'
 
         if next_tab == PREREQUISITES_TAB:
-            if application_id:
-                return HttpResponseRedirect(reverse('diploma_update', args=(application_id,)))
-            else:
-                return HttpResponseRedirect(reverse('diploma_update'))
+            reverse_name = 'diploma_update'
 
         if next_tab == CURRICULUM_TAB:
-            if application_id:
-                return HttpResponseRedirect(reverse('curriculum_update', args=(application_id,)))
-            else:
-                return HttpResponseRedirect(reverse('curriculum_update', ))
+            reverse_name = 'curriculum_update'
+
         if next_tab == ACCOUNTING_TAB:
-            if application_id:
-                return HttpResponseRedirect(reverse('accounting_update', args=(application_id,)))
-            else:
-                return HttpResponseRedirect(reverse('accounting_update', ))
+            reverse_name = 'accounting_update'
 
         if next_tab == SOCIOLOGICAL_SURVEY_TAB:
-            if application_id:
-                return HttpResponseRedirect(reverse('sociological_survey', args=(application_id,)))
-            else:
-                return HttpResponseRedirect(reverse('sociological_survey', ))
+            reverse_name = 'sociological_survey'
 
         if next_tab == ATTACHMENTS_TAB:
-            if application_id:
-                return HttpResponseRedirect(reverse('attachments', args=(application_id,)))
-            else:
-                return HttpResponseRedirect(reverse('attachments', ))
-        if next_tab == SUBMISSION_TAB:
-            if application_id:
-                return HttpResponseRedirect(reverse('submission', args=(application_id,)))
-            else:
-                return HttpResponseRedirect(reverse('submission', ))
+            reverse_name = 'attachments'
 
-    return None
+        if next_tab == SUBMISSION_TAB:
+            reverse_name = 'submission'
+
+        if reverse_name:
+            if application_id:
+                return HttpResponseRedirect(reverse(reverse_name, args=(application_id,)))
+            else:
+                return HttpResponseRedirect(reverse(reverse_name), )
+
+        return None

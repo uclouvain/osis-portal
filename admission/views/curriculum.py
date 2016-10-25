@@ -35,8 +35,6 @@ from admission.views import common, navigation
 from reference import models as mdl_reference
 from admission.views import demande_validation
 from reference.enums import education_institution_type, education_institution_national_comunity as national_cmunity_type
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
 
 CURRICULUM_YEARS_REQUIRED = 5
 MAX_CREDITS = 75
@@ -99,7 +97,7 @@ def save(request):
                            "universities": universities,
                            "languages": mdl_reference.language.find_languages(),
                            "current_academic_year": mdl_base.academic_year.current_academic_year(),
-                           "tab_active": 3})
+                           "tab_active": navigation.CURRICULUM_TAB})
 
     # Get the data in bd
     applicant = mdl.applicant.find_by_user(request.user)
@@ -139,7 +137,7 @@ def save(request):
                    "universities": universities,
                    "languages": mdl_reference.language.find_languages(),
                    "current_academic_year": mdl_base.academic_year.current_academic_year(),
-                   "tab_active": 3})
+                   "tab_active": navigation.CURRICULUM_TAB})
 
 
 def update(request, application_id=None):
@@ -208,7 +206,7 @@ def update(request, application_id=None):
             "universities": universities,
             "languages": mdl_reference.language.find_languages(),
             "current_academic_year": mdl_base.academic_year.current_academic_year(),
-            "tab_active": 3,
+            "tab_active": navigation.CURRICULUM_TAB,
             "application": application,
             'applications': mdl.application.find_by_user(request.user)
         }

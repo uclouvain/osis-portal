@@ -381,7 +381,7 @@ def get_prerequis_data(request, saved, application_id):
             "education_type_qualification": education_type_qualification,
             "current_academic_year":        current_year,
             "local_language_exam_needed":   common.is_local_language_exam_needed(request.user),
-            'tab_active':                   2,
+            'tab_active':                   navigation.PREREQUISITES_TAB,
             'applications':                 mdl.application.find_by_user(request.user),
             'message_info':                 message_info}
     # merge dictionaries
