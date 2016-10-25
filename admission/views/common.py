@@ -54,7 +54,7 @@ def home(request):
     person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
     if person_contact_address:
         same_addresses = False
-    if applicant and applicant.gender:
+    if applicant:
         if applicant.language:
             user_language = applicant.language
             translation.activate(user_language)
