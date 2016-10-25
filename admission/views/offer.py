@@ -79,7 +79,7 @@ def offer_selection(request):
     grade_choices = mdl_reference.grade_type.find_all()
     return render(request, "offer_selection.html",
                   {"gradetypes":  mdl_reference.grade_type.find_all(),
-                   "domains":     mdl_reference.domain.find_offers_domains(),
+                   "domains":     mdl_reference.domain.find_current_domains(),
                    "offers":      offers,
                    "offer":       None,
                    "application": application,
@@ -115,7 +115,7 @@ def selection_offer(request, offer_id):
 
     return render(request, "offer_selection.html",
                            {"gradetypes":  mdl_reference.grade_type.find_all(),
-                            "domains":     mdl_reference.domain.find_offers_domains(),
+                            "domains":     mdl_reference.domain.find_current_domains(),
                             "offers":      None,
                             "offer":       offer_year,
                             "offer_type":  grade,

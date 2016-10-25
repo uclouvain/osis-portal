@@ -253,7 +253,7 @@ def applications(request, application_id=None):
     data = {
         "applications": application_list,
         "grade_choices": enum_institutional_grade_type.INSTITUTIONAL_GRADE_CHOICES,
-        "domains": mdl_reference.domain.find_offers_domains(),
+        "domains": mdl_reference.domain.find_current_domains(),
         'tab_active': 1,
         "application": application,
         "tab_profile": tab_status['tab_profile'],
@@ -312,7 +312,7 @@ def change_application_offer(request, application_id=None):
     data = {
         'applications': application_list,
         "grade_choices": enum_institutional_grade_type.INSTITUTIONAL_GRADE_CHOICES,
-        "domains": mdl_reference.domain.find_offers_domains(),
+        "domains": mdl_reference.domain.find_current_domains(),
         'tab_active': 1,
         "first": True,
         "application": application,
