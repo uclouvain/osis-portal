@@ -47,7 +47,7 @@ class SociologicalSurveyFormTest(TestCase):
         self.applicant = data_model.create_applicant()
 
     def test_valid_form(self):
-        data = self.init_data()
+        data = init_data()
         form = SociologicalSurveyForm(data)
         self.assertTrue(form.is_valid())
         data.update({'student_professional_activity': professional_activity.NO_PROFESSION})
@@ -55,7 +55,7 @@ class SociologicalSurveyFormTest(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_invalid_form(self):
-        data = self.init_data()
+        data = init_data()
         data.update({'student_profession': None})
         form = SociologicalSurveyForm(data)
         self.assertFalse(form.is_valid())
