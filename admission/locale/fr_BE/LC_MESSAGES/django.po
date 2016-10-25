@@ -840,9 +840,6 @@ msgstr "Autre enseignement"
 msgid "other_institution"
 msgstr "Autre etablissement"
 
-msgid "other_linguistic_regime"
-msgstr "Si autre régime linguistique, précisez"
-
 msgid "other_phone"
 msgstr "Autre téléphone"
 
@@ -1458,3 +1455,6 @@ msgstr "Vous n'avez pas trouvé votre profession?"
 
 msgid "grandfather"
 msgstr "Grand-pères"
+
+msgid "other_linguistic_regime"
+msgstr "Autre régime linguistique"
