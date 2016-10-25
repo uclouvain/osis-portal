@@ -26,13 +26,25 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<form id="form_sociological_survey" action="{% url 'sociological_survey' %}" method="POST">
+<form id="form_sociological_survey" action="{% url 'sociological_survey' %}" method="post">
+    <input type="hidden" id="hdn_father_profession_adhoc" value="{{sociological_survey.father_profession.adhoc}}">
+    <input type="hidden" id="hdn_father_profession_name" value="{{sociological_survey.father_profession.name}}">
+    <input type="hidden" id="hdn_mother_profession_adhoc" value="{{sociological_survey.mother_profession.adhoc}}">
+    <input type="hidden" id="hdn_mother_profession_name" value="{{sociological_survey.mother_profession.name}}">
+    <input type="hidden" id="hdn_student_profession_adhoc" value="{{sociological_survey.student_profession.adhoc}}">
+    <input type="hidden" id="hdn_student_profession_name" value="{{sociological_survey.student_profession.name}}">
+    <input type="hidden" id="hdn_conjoint_profession_adhoc" value="{{sociological_survey.conjoint_profession.adhoc}}">
+    <input type="hidden" id="hdn_conjoint_profession_name" value="{{sociological_survey.conjoint_profession.name}}">
+    <input type="hidden" id="hdn_paternal_grandfather_profession_adhoc" value="{{sociological_survey.paternal_grandfather_profession.adhoc}}">
+    <input type="hidden" id="hdn_paternal_grandfather_profession_name" value="{{sociological_survey.paternal_grandfather_profession.name}}">
+    <input type="hidden" id="hdn_maternal_grandfather_profession_adhoc" value="{{sociological_survey.maternal_grandfather_profession.adhoc}}">
+    <input type="hidden" id="hdn_maternal_grandfather_profession_name" value="{{sociological_survey.maternal_grandfather_profession.name}}">
     <div class="row">
         <div class="col-md-8">
             <h5>{% trans 'mandatory_asterisk'%}</h5>
         </div>
         <div class="col-md-4">
-            <button type="submit" id="bt_submit_sociological" class="btn btn-default pull-right" role="button"
+            <button type="submit" id="bt_submit_sociological" name="bt_submit_sociological" class="btn btn-default pull-right" role="button"
                     title="{%trans 'save'%}">
                 <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
                 {%trans 'save'%}
@@ -41,15 +53,21 @@
     </div>
     <div class="row" style="margin-top:5px;">
         <div class="col-md-6">
-            <button type="submit" class="btn btn-default" title="{% trans 'accounting'%}">
-                <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            <a id="lnk_previous_step_up"
+               class="btn btn-default"
+               href="{%if application.id%}{% url 'accounting_update' application.id%}{%else%}{% url 'accounting_update' %}{%endif%}"
+               onclick="save('form_sociological_survey');"
+               title="{% trans 'accounting'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
                 {%trans 'previous_step'%} : {%trans 'accounting'%}
-            </button>
+            </a>
         </div>
         <div class="col-md-6">
-            <button type="submit" class="btn btn-default pull-right" title="{% trans 'accounting'%}">
-                {%trans 'next_step'%} : {%trans 'attachments'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            </button>
+            <a id="lnk_next_sociological_step"
+               class="btn btn-default pull-right"
+               href="{%if application.id%}{% url 'attachments' application.id%}{%else%}{% url 'attachments' %}{%endif%}"
+               onclick="save('form_sociological_survey');"
+               title="{% trans 'attachments'%}">{%trans 'next_step'%} : {%trans 'attachments'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            </a>
         </div>
     </div>
 
@@ -64,9 +82,9 @@
 
     <!-- NUMBER OF BROTHERS AND SISTERS -->
     <div class="row">
-        <div class="col-md-4 form-group {% if sociological_form.number_brothers_sisters.errors %} has-error {% endif %}">
+        <div class="col-md-4 {% if sociological_form.number_brothers_sisters.errors %} has-error {% endif %}">
             <label>{% trans 'brother_sister_number'%}</label>
-            <input class="form-control" id="number_brothers_sisters"
+            <input class="form-control" id="txt_number_brothers_sisters"
                    name="number_brothers_sisters" type="text"
                    maxlength="2" value="{{ sociological_form.number_brothers_sisters.value }}">
             {% if sociological_form.number_brothers_sisters.errors %}
@@ -80,252 +98,343 @@
             {% endif %}
         </div>
     </div>
-
+    <br>
     <!-- FATHER INFORMATION -->
-    <div class="row">
-        <div class="col-md-12">
-            <label>{% trans 'father'%}</label>
-        </div>
-        <div class="col-md-2 form-group">
-            {% if sociological_form.father_is_deceased.value %}
-            <input type="checkbox" id="father_is_deceased" name="father_is_deceased" checked>
-            {% else %}
-            <input type="checkbox" id="father_is_deceased" name="father_is_deceased">
-            {% endif %}
-            <label>{% trans 'deceased_male'%}</label>
-        </div>
-        <div class="col-md-3 form-group">
-            <label>{% trans 'study'%}</label>
-            <select name="father_education" id="father_education" class="form-control" >
-                {% for choice in sociological_form.father_education.field.choices %}
-                {{ choice }}
-                <option value="{{ choice.0}}"
-                        {% if sociological_form.father_education.value == choice.0 %}
+    <div class="panel panel-default">
+        <div class="panel-heading">{% trans 'father'%}</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-2">
+                    {% if sociological_form.father_is_deceased.value %}
+                    <input type="checkbox" id="father_is_deceased" name="father_is_deceased" checked>
+                    {% else %}
+                    <input type="checkbox" id="father_is_deceased" name="father_is_deceased">
+                    {% endif %}
+                    <label>{% trans 'deceased_male'%}</label>
+                </div>
+                <div class="col-md-3">
+                    <label>{% trans 'study'%}</label>
+                    <select name="father_education" id="father_education" class="form-control" >
+                        {% for choice in sociological_form.father_education.field.choices %}
+                        {{ choice }}
+                        <option value="{{ choice.0}}"
+                                {% if sociological_form.father_education.value == choice.0 %}
+                                selected
+                                {% elif sociological_form.father_education.value|add:"0" == choice.0 %}
                         selected
-                        {% elif sociological_form.father_education.value|add:"0" == choice.0 %}
-                selected
-                {% endif %}>
-                <!-- This is a bit of hack as the value changed between int or str depending on situation. -->
-                {{ choice.1 }}
-                </option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="col-md-7 form-group">
-            <label>{% trans 'profession'%}</label>
-            <select name="father_profession" id="father_profession" class="form-control" >
-                {% for choice in sociological_form.father_profession.field.choices %}
-                <option value="{{ choice.0}}"
-                        {%if sociological_form.father_profession.value == choice.0 %}
-                        selected
-                        {% elif sociological_form.father_profession.value|add:"0" == choice.0 %}
-                selected
-                {% endif %}>
-                {{ choice.1 }}
-                </option>
-                {% endfor %}
-            </select>
+                        {% endif %}>
+                        <!-- This is a bit of hack as the value changed between int or str depending on situation. -->
+                        {{ choice.1 }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-7">
+                    <label>{% trans 'profession'%}</label>
+                    <select name="father_profession"
+                            id="slt_father_profession"
+                            class="form-control" >
+                        <option value="-">-</option>
+                        {% for choice in professions %}
+                            <option value="{{ choice.id}}"
+                                {%if sociological_form.father_profession.value == choice.id %}
+                                    selected
+                                {% endif %}>
+                        {{ choice.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-7 col-md-offset-5">
+                    <input type="checkbox" id="chb_father_profession_other" value="{{sociological_form.father_profession.adhoc}}"/>
+                    <label>{% trans 'profession_not_found' %}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7 col-md-offset-5" id="div_father_profession_other">
+                    <label>{% trans 'specify' %}</label>
+                    <input type="text" value="{{sociological_form.father_profession_other_name.value}}" id="txt_father_profession_other" name="father_profession_other_name"/>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- MOTHER INFORMATION -->
-    <div class="row">
-        <div class="col-md-12">
-            <label>{% trans 'mother'%}</label>
-        </div>
-        <div class="col-md-2 form-group">
-            {% if sociological_form.mother_is_deceased.value %}
-            <input type="checkbox" id="mother_is_deceased" name="mother_is_deceased" checked>
-            {% else %}
-            <input type="checkbox" id="mother_is_deceased" name="mother_is_deceased">
-            {% endif %}
-            <label>{% trans 'deceased_female'%}</label>
-        </div>
-        <div class="col-md-3 form-group">
-            <label>{% trans 'study'%}</label>
-            <select name="mother_education" id="mother_education" class="form-control" >
-                {% for choice in sociological_form.mother_education.field.choices %}
-                <option value="{{ choice.0}}"
-                        {% if sociological_form.mother_education.value == choice.0 %}
+    <div class="panel panel-default">
+        <div class="panel-heading">{% trans 'mother'%}</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-2">
+                    {% if sociological_form.mother_is_deceased.value %}
+                    <input type="checkbox" id="mother_is_deceased" name="mother_is_deceased" checked>
+                    {% else %}
+                    <input type="checkbox" id="mother_is_deceased" name="mother_is_deceased">
+                    {% endif %}
+                    <label>{% trans 'deceased_female'%}</label>
+                </div>
+                <div class="col-md-3">
+                    <label>{% trans 'study'%}</label>
+                    <select name="mother_education" id="mother_education" class="form-control" >
+                        {% for choice in sociological_form.mother_education.field.choices %}
+                        <option value="{{ choice.0}}"
+                                {% if sociological_form.mother_education.value == choice.0 %}
+                                selected
+                                {% elif sociological_form.mother_education.value|add:"0" == choice.0 %}
                         selected
-                        {% elif sociological_form.mother_education.value|add:"0" == choice.0 %}
-                selected
-                {% endif %}>
-                {{ choice.1 }}
-                </option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="col-md-7 form-group">
-            <label>{% trans 'profession'%}</label>
-            <select name="mother_profession" id="mother_profession" class="form-control" >
-                {% for choice in sociological_form.mother_profession.field.choices %}
-                <option value="{{ choice.0}}"
-                        {% if sociological_form.mother_profession.value == choice.0 %}
-                        selected
-                        {% elif sociological_form.mother_profession.value|add:"0" == choice.0 %}
-                selected
-                {% endif %}>
-                {{ choice.1 }}
-                </option>
-                {% endfor %}
-            </select>
+                        {% endif %}>
+                        {{ choice.1 }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-7">
+                    <label>{% trans 'profession'%}</label>
+                    <select name="mother_profession"
+                            id="slt_mother_profession"
+                            class="form-control" >
+                        <option value="1">-</option>
+                        {% for choice in professions %}
+                        <option value="{{ choice.id}}"
+                        {% if sociological_form.mother_profession.value == choice.id %}
+                            selected
+                        {% endif %}>
+                        {{ choice.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-7 col-md-offset-5">
+                    <input type="checkbox" id="chb_mother_profession_other" value="{{sociological_form.mother_profession.adhoc}}"/>
+                    <label>{% trans 'profession_not_found' %}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7 col-md-offset-5" id="div_mother_profession_other">
+                    <label>{% trans 'specify' %}</label>
+                    <input type="text" value="{{sociological_form.mother_profession_other_name.value}}" id="txt_mother_profession_other" name="mother_profession_other_name"/>
+                </div>
+            </div>
         </div>
     </div>
-
     <!-- STUDENT INFORMATION -->
-    <div class="row">
-        <div class="col-md-12">
-            <label>{% trans 'student'%}</label>
-        </div>
-        <div class="col-md-5 form-group {% if sociological_form.student_professional_activity.errors %}has-error{%endif%}">
-            <label>{% trans 'professional_activity'%}</label>
-            <select name="student_professional_activity"
-                    id="student_professional_activity"
-                    class="form-control" >
-                {% for choice in sociological_form.student_professional_activity.field.choices %}
-                <option value="{{ choice.0}}"
-                        {% if sociological_form.student_professional_activity.value == choice.0 %}
+    <div class="panel panel-default">
+        <div class="panel-heading">{% trans 'student'%}</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-5 {% if sociological_form.student_professional_activity.errors %}has-error{%endif%}">
+                    <label>{% trans 'professional_activity'%}</label>
+                    <select name="student_professional_activity"
+                            id="student_professional_activity"
+                            class="form-control" >
+                        {% for choice in sociological_form.student_professional_activity.field.choices %}
+                        <option value="{{ choice.0}}"
+                                {% if sociological_form.student_professional_activity.value == choice.0 %}
+                                selected
+                                {% elif sociological_form.student_professional_activity.value|add:"0" == choice.0 %}
                         selected
-                        {% elif sociological_form.student_professional_activity.value|add:"0" == choice.0 %}
-                selected
-                {% endif %}>
-                {{ choice.1 }}
-                </option>
-                {% endfor %}
-            </select>
-            {% if sociological_form.student_professional_activity.errors %}
-            <span class="help-block">
-                <ul style="list-style-type: none">
-                    {% for error in sociological_form.student_professional_activity.errors %}
-                    <li>{{ error | escape }}</li>
-                    {% endfor %}
-                </ul>
-            </span>
-            {% endif %}
-        </div>
-        <div class="col-md-7 form-group">
-            <label>{% trans 'profession'%}</label>
-            <select name="student_profession"
-                    id="student_profession"
-                    class="form-control" >
-                {% for choice in sociological_form.student_profession.field.choices %}
-                <option value="{{ choice.0}}"
-                        {% if sociological_form.student_profession.value == choice.0 %}
-                        selected
-                        {% elif sociological_form.student_profession.value|add:"0" == choice.0 %}
-                selected
-                {% endif %}>
-                {{ choice.1 }}
-                </option>
-                {% endfor %}
-            </select>
-            {% if sociological_form.student_profession.errors %}
-            <span class="help-block alert alert-danger" role="alert">
-                <ul style="list-style-type: none">
-                    {% for error in sociological_form.student_profession.errors %}
-                    <li>{{ error | escape }}</li>
-                    {% endfor %}
-                </ul>
-            </span>
-            {% endif %}
+                        {% endif %}>
+                        {{ choice.1 }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    {% if sociological_form.student_professional_activity.errors %}
+                    <span class="help-block">
+                        <ul style="list-style-type: none">
+                            {% for error in sociological_form.student_professional_activity.errors %}
+                            <li>{{ error | escape }}</li>
+                            {% endfor %}
+                        </ul>
+                    </span>
+                    {% endif %}
+                </div>
+                <div class="col-md-7">
+                    <label>{% trans 'profession'%}</label>
+                    <select name="student_profession"
+                            id="slt_student_profession"
+                            class="form-control" >
+                        <option>-</option>
+                        {% for choice in professions %}
+                        <option value="{{ choice.id}}"
+                            {% if sociological_form.student_profession.value == choice.id %}
+                                selected
+                            {% endif %}>
+                        {{ choice.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    {% if sociological_form.student_profession.errors %}
+                    <span class="help-block alert alert-danger" role="alert">
+                        <ul style="list-style-type: none">
+                            {% for error in sociological_form.student_profession.errors %}
+                            <li>{{ error | escape }}</li>
+                            {% endfor %}
+                        </ul>
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-7 col-md-offset-5">
+                    <input type="checkbox" id="chb_student_profession_other"
+                           value="{{sociological_form.student_profession.adhoc}}"/>
+                    <label>{% trans 'profession_not_found' %}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7 col-md-offset-5" id="div_student_profession_other">
+                    <label>{% trans 'specify' %}</label>
+                    <input type="text" value="{{sociological_form.student_profession_other_name.value}}" id="txt_student_profession_other" name="student_profession_other_name"/>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- CONJOINT INFORMATION -->
-    <div class="row">
-        <div class="col-md-12">
-            <label>{% trans 'conjoint'%}</label>
-        </div>
-        <div class="col-md-5 form-group">
-            <label>{% trans 'professional_activity'%}</label>
-            <select name="conjoint_professional_activity"
-                    id="conjoint_professional_activity"
-                    class="form-control" >
-                {% for choice in sociological_form.conjoint_professional_activity.field.choices %}
-                <option value="{{ choice.0}}"
-                        {% if sociological_form.conjoint_professional_activity.value == choice.0 %}
+    <div class="panel panel-default">
+        <div class="panel-heading">{% trans 'conjoint'%}</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-5">
+                    <label>{% trans 'professional_activity'%}</label>
+                    <select name="conjoint_professional_activity"
+                            id="conjoint_professional_activity"
+                            class="form-control" >
+                        {% for choice in sociological_form.conjoint_professional_activity.field.choices %}
+                        <option value="{{ choice.0}}"
+                                {% if sociological_form.conjoint_professional_activity.value == choice.0 %}
+                                selected
+                                {% elif sociological_form.conjoint_professional_activity.value|add:"0" == choice.0 %}
                         selected
-                        {% elif sociological_form.conjoint_professional_activity.value|add:"0" == choice.0 %}
-                selected
-                {% endif %}>
-                {{ choice.1 }}
-                </option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="col-md-7 form-group">
-            <label>{% trans 'profession'%}</label>
-            <select name="conjoint_profession"
-                    id="conjoint_profession"
-                    class="form-control" >
-                {% for choice in sociological_form.conjoint_profession.field.choices %}
-                <option value="{{ choice.0}}"
-                        {% if sociological_form.conjoint_profession.value == choice.0 %}
-                        selected
-                        {% elif sociological_form.conjoint_profession.value|add:"0" == choice.0 %}
-                selected
-                {% endif %}>
-                {{ choice.1 }}
-                </option>
-                {% endfor %}
-            </select>
+                        {% endif %}>
+                        {{ choice.1 }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-7">
+                    <label>{% trans 'profession'%}</label>
+                    <select name="conjoint_profession"
+                            id="slt_conjoint_profession"
+                            class="form-control" >
+                        <option>-</option>
+                        {% for choice in professions%}
+                        <option value="{{ choice.id}}"
+                        {% if sociological_form.conjoint_profession.value == choice.id %}
+                            selected
+                        {% endif %}>
+                        {{ choice.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-7 col-md-offset-5">
+                    <input type="checkbox" id="chb_conjoint_profession_other" value="{{sociological_form.conjoint_profession.adhoc}}"/>
+                    <label>{% trans 'profession_not_found' %}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7 col-md-offset-5" id="div_conjoint_profession_other">
+                    <label>{% trans 'specify' %}</label>
+                    <input type="text" value="{{sociological_form.conjoint_profession_other_name.value}}" id="txt_conjoint_profession_other" name="conjoint_profession_other_name"/>
+                </div>
+            </div>
         </div>
     </div>
 
-
-    <!-- CONJOINT INFORMATION -->
-    <div class="row">
-        <div class="col-md-12">
-            <label>{% trans 'grandfather_profession' %}</label>
-        </div>
-        <div class="col-md-5 form-group">
-            <label>{% trans 'paternal'%}</label>
-            <select name="paternal_grandfather_profession"
-                    id="paternal_grandfather_profession"
-                    class="form-control" >
-                <{% for choice in sociological_form.paternal_grandfather_profession.field.choices %}
-                <option value="{{ choice.0}}"
-                        {% if sociological_form.paternal_grandfather_profession.value == choice.0 %}
-                        selected
-                        {% elif sociological_form.paternal_grandfather_profession.value|add:"0" == choice.0 %}
-                selected
-                {% endif %}>
-                {{ choice.1 }}
-                </option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="col-md-7 form-group">
-            <label>{% trans 'maternal'%}</label>
-            <select name="maternal_grandfather_profession"
-                    id="maternal_grandfather_profession"
-                    class="form-control" >
-                {% for choice in sociological_form.maternal_grandfather_profession.field.choices %}
-                <option value="{{ choice.0}}"
-                        {% if sociological_form.maternal_grandfather_profession.value == choice.0 %}
-                        selected
-                        {% elif sociological_form.maternal_grandfather_profession.value|add:"0" == choice.0 %}
-                selected
-                {% endif %}>
-                {{ choice.1 }}
-                </option>
-                {% endfor %}
-            </select>
+    <!-- grandfather INFORMATION -->
+    <div class="panel panel-default">
+        <div class="panel-heading">{% trans 'grandfather'%}</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <label>{% trans 'paternal'%} {% trans 'grandfather_profession' %}</label>
+                    <select name="paternal_grandfather_profession"
+                            id="slt_paternal_grandfather_profession"
+                            class="form-control" >
+                        <option>-</option>
+                        <{% for choice in professions %}
+                        <option value="{{ choice.id}}"
+                        {% if sociological_form.paternal_grandfather_profession.value == choice.id %}
+                            selected
+                        {% endif %}>
+                        {{ choice.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label>{% trans 'maternal'%} {% trans 'grandfather_profession' %}</label>
+                    <select name="maternal_grandfather_profession"
+                            id="slt_maternal_grandfather_profession"
+                            class="form-control" >
+                        <option>-</option>
+                        {% for choice in professions %}
+                        <option value="{{ choice.id}}"
+                                {% if sociological_form.maternal_grandfather_profession.value == choice.id %}
+                                selected
+                                {% endif %}>
+                        {{ choice.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="checkbox" id="chb_paternal_grandfather_profession_other" value="{{sociological_form.paternal_grandfather_profession.adhoc}}"/>
+                    <label>{% trans 'profession_not_found' %}</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="checkbox" id="chb_maternal_grandfather_profession_other" value="{{sociological_form.maternal_grandfather_profession.adhoc}}"/>
+                    <label>{% trans 'profession_not_found' %}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 pull-left" id="div_paternal_grandfather_profession_other">
+                    <label>{% trans 'specify' %}</label>
+                    <input type="text" value="{{sociological_form.paternal_grandfather_profession_other_name.value}}"
+                           id="txt_paternal_grandfather_profession_other"
+                           name="paternal_grandfather_profession_other_name"/>
+                </div>
+                <div class="col-md-6 pull-right" id="div_maternal_grandfather_profession_other">
+                    <label>{% trans 'specify' %}</label>
+                    <input type="text"
+                           value=""
+                           id="txt_maternal_grandfather_profession_other"
+                           name="maternal_grandfather_profession_other_name"/>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="row">
+    <br>
+    <div class="row" style="margin-top:5px;">
         <div class="col-md-6">
-            <button type="submit" class="btn btn-default" title="{% trans 'accounting'%}">
-                <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            <a id="lnk_previous_step_down"
+               class="btn btn-default"
+               href="{%if application.id%}{% url 'accounting_update' application.id%}{%else%}{% url 'accounting_update' %}{%endif%}"
+               onclick="save('form_sociological_survey');"
+               title="{% trans 'accounting'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
                 {%trans 'previous_step'%} : {%trans 'accounting'%}
-            </button>
+            </a>
         </div>
         <div class="col-md-6">
-            <button type="submit" class="btn btn-default pull-right" title="{% trans 'accounting'%}">
-                {%trans 'next_step'%} : {%trans 'attachments'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            </button>
+            <a id="lnk_next_sociological_down"
+               class="btn btn-default pull-right"
+               href="{%if application.id%}{% url 'attachments' application.id%}{%else%}{% url 'attachments' %}{%endif%}"
+               onclick="save('form_sociological_survey');"
+               title="{% trans 'attachments'%}">{%trans 'next_step'%} : {%trans 'attachments'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            </a>
         </div>
     </div>
 
