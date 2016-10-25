@@ -23,23 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models import admission_exam_type
-from admission.models import application_document_file
-from admission.models import answer
-from admission.models import applicant
-from admission.models import applicant_assimilation_criteria
-from admission.models import application
-from admission.models import application_assimilation_criteria
-from admission.models import curriculum
-from admission.models import form
-from admission.models import option
-from admission.models import person_address
-from admission.models import profession
-from admission.models import properties
-from admission.models import question
-from admission.models import secondary_education
-from admission.models import secondary_education_exam
-from admission.models import sociological_survey
-from admission.models import supported_languages
-from admission.models import offer_admission_exam_type
+from django.db import models
+from django.contrib import admin
 
+
+class OfferAdmissionExamTypeAdmin(admin.ModelAdmin):
+    list_display = ('offer_year', 'admission_exam_type')
+    fieldsets = ((None, {'fields': ('offer_year', 'admission_exam_type')}),)
+    list_filter = ('offer_year',)
+
+
+class OfferAdmissionExamType(models.Model):
+    offer_year = models.ForeignKey('base.OfferYear', null=False)
+    admission_exam_type = models.ForeignKey('AdmissionExamType', null=False)
+
+
+def find_by_offer_year(an_offer_year):
+    return OfferAdmissionExamType.objects.filter(offer_year=an_offer_year).first()

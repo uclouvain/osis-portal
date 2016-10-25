@@ -1438,3 +1438,9 @@ msgstr "Grandfathers"
 
 msgid "other_linguistic_regime"
 msgstr "Other linguistic regime"
+
+msgid "is_required_for"
+msgstr "is required for the following offer : "
+
+msgid "the_exam_type"
+msgstr "The exam type "
