@@ -340,8 +340,8 @@ def get_prerequis_data(request, saved, application_id):
     else:
         application = mdl.application.find_first_by_user(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
-    other_language_regime = mdl_reference.language.find_languages_by_recognized(False)
-    recognized_languages = mdl_reference.language.find_languages_by_recognized(True)
+    other_language_regime = mdl_reference.language.find_unrecognized_languages()
+    recognized_languages = mdl_reference.language.find_recognized_languages()
     exam_types = mdl.admission_exam_type.find_all_by_adhoc(False)
     secondary_education = mdl.secondary_education.find_by_person(applicant)
     education_type_transition = mdl_reference.education_type.find_education_type_by_adhoc('TRANSITION', False)
