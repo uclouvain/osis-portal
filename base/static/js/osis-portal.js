@@ -103,14 +103,12 @@ function set_pnl_questions_empty(){
     .end()
 }
 
-function display(id,state){
-    var elt = document.getElementById(id);
+function display(id){
+    $('#' + id).css('visibility', 'visible').css('display','block');
+}
 
-    if(state){
-        elt.style = "visibility:visible;display:block;";
-    }else{
-        elt.style = "visibility:hidden;display:none;";
-    }
+function hide(id){
+    $('#' + id).css('visibility', 'hidden').css('display','none');
 }
 
 function reset_radio(elt_name){

@@ -26,7 +26,7 @@
 from django.conf.urls import url
 from admission.views import application, common, identification, offer, level, question, option, country, curriculum, \
     education_institution, language, domain, secondary_education, accounting, upload_file, sociological, attachments, \
-    assimilation_criteria, places
+    places
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -53,10 +53,7 @@ urlpatterns = [
     url(r'^admission/diploma/update(?:/(?P<application_id>[0-9]+))?(?:/(?P<saved>[0-9]+))?/$',
         secondary_education.diploma_update, name='diploma_update'),
 
-
-    url(r'^admission/offer/$', offer.offer_selection, name='offer_selection'),
     url(r'^admission/offer/save/$', application.save_application_offer, name='save_offer_selection'),
-    url(r'^admission/offer/application/([0-9]+)/$', offer.selection_offer, name='selection_offer'),
     url(r'^admission/application/read/([0-9]+)/$', application.application_view, name='application_view'),
 
     url(r'^country/$', country.find_by_id_json),

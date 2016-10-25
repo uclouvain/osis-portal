@@ -257,14 +257,14 @@
                            name="diploma_{{curriculum.academic_year}}"
                            id="rdb_diploma_true_{{curriculum.academic_year}}"
                            value="true"
-                           onclick="display('pnl_diploma_files_{{curriculum.academic_year}}',true);"
+                           onclick="display('pnl_diploma_files_{{curriculum.academic_year}}');"
                     > {% trans 'yes' %}
                 </label>
                 <label class="radio-inline">
                     <input type="radio"
                            name="diploma_{{curriculum.academic_year}}"
                            id="rdb_diploma_false_{{curriculum.academic_year}}" value="false"
-                           onclick="display('pnl_diploma_files_{{curriculum.academic_year}}',false);"
+                           onclick="hide('pnl_diploma_files_{{curriculum.academic_year}}');"
                     > {% trans 'no' %}
                 </label>
                 {% message_error validation_messages year=curriculum.academic_year.year|lower param='diploma' as diploma_msg%}

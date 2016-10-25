@@ -66,12 +66,13 @@ def update(request, application_id=None):
         "list_choices": list_choices
     }
     data.update(demande_validation.get_validation_status(application, applicant, request.user))
-    return render(request, "admission_home.html", )
+    return render(request, "admission_home.html", data)
 
 
 def remove_attachment(request):
     """
     View used to remove previous attachments.
+    :param request
     """
     if request.method == "POST":
         form = RemoveAttachmentForm(request.POST)
@@ -89,6 +90,7 @@ def safe_document_removal(user, application_name, document):
     that owns the file and the application_name is the correct one.
     :param user: a User object
     :param application_name: a string
+    :param document
     :return:
     """
     if document.user.username == user.username and document.application_name == application_name:

@@ -25,6 +25,8 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from django.utils import timezone
+
 from osis_common.models.serializable_model import SerializableModel
 
 
@@ -44,3 +46,7 @@ class Decree(SerializableModel):
     def __str__(self):
         return self.name
 
+
+def find_current_decree():
+    return Decree.objects.filter(start_date__lte=timezone.now())\
+                         .filter(end_date__gte=timezone.now()).first()

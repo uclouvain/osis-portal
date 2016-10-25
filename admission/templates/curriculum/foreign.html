@@ -221,7 +221,7 @@
                        id="rdb_diploma_foreign_true_{{curriculum.academic_year}}"
                        value="true"
                        {%if curriculum.diploma == True %}checked="checked"{%endif%}
-                       onclick="display('pnl_diploma_foreign_files_{{curriculum.academic_year}}',true);display('pnl_upload_{{curriculum.academic_year}}',true);"
+                       onclick="display('pnl_diploma_foreign_files_{{curriculum.academic_year}}');display('pnl_upload_{{curriculum.academic_year}}');"
                 > {% trans 'yes' %}
             </label>
             <label class="radio-inline">
@@ -230,7 +230,7 @@
                        id="rdb_diploma_foreign_false_{{curriculum.academic_year}}"
                        value="false"
                        {%if  curriculum.diploma == False %}checked="checked"{%endif%}
-                       onclick="display('pnl_diploma_foreign_files_{{curriculum.academic_year}}',false);display('pnl_upload_{{curriculum.academic_year}}',false);"
+                       onclick="hide('pnl_diploma_foreign_files_{{curriculum.academic_year}}');hide('pnl_upload_{{curriculum.academic_year}}');"
                 > {% trans 'no' %}
             </label>
             {% message_error validation_messages year=curriculum.academic_year.year|lower param='diploma_foreign' as diploma_foreign_msg%}

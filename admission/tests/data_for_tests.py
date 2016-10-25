@@ -92,3 +92,7 @@ def create_application_document_file(an_application, username, description=None)
     an_application_document_file.document_file = a_document_file
     an_application_document_file.save()
     return an_application_document_file
+
+
+def create_profession(a_name, an_adhoc):
+    return mdl.profession.Profession(name=a_name, adhoc=an_adhoc)
