@@ -25,9 +25,6 @@
 ##############################################################################
 
 from django.db import models
-from django.contrib import admin
-from django.contrib.auth.models import User
-
 
 class ApplicationDocumentFile(models.Model):
     application = models.ForeignKey('Application')
@@ -45,6 +42,16 @@ def search(application=None, description=None):
         out = queryset
     return out
 
+
+def find_first(application=None, description=None):
+    results = search(application, description)
+    if results.exists():
+        return results[0]
+    return None
+
+
+def find_by_document(document_file):
+    return ApplicationDocumentFile.objects.filter(document_file=document_file)
 
 
 

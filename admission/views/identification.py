@@ -39,6 +39,7 @@ from admission import models as mdl
 from admission.forms import NewAccountForm, NewPasswordForm, AccessAccountForm
 from admission.utils import send_mail
 from reference import models as reference_mdl
+from base import models as mdl_base
 
 TEMPLATE_MSG_ACTIVATION ="account_activation"
 
@@ -278,7 +279,7 @@ def offer_selection(request):
     grade_choices = reference_mdl.grade_type.GRADE_CHOICES
     return render(request, "offer_selection.html",
                           {"gradetypes":    reference_mdl.grade_type.find_all(),
-                           "domains":       reference_mdl.domain.find_all_domains(),
+                           "domains":       reference_mdl.domain.find_current_domains(),
                            "offers":        offers,
                            "offer":         None,
                            "application":   application,
@@ -322,14 +323,15 @@ def save_offer_selection(request):
             application.applicant = applicant
 
         if offer_year_id:
-            offer_year = mdl.offer_year.find_by_id(offer_year_id)
+            offer_year = mdl_base.offer_year.find_by_id(offer_year_id)
 
         application.offer_year = offer_year
+        application.application_type = mdl.application.define_application_type(application.national_degree, request.user)
         application.save()
 
     return render(request, "offer_selection.html",
                   {"gradetypes": reference_mdl.grade_type.find_all(),
-                   "domains": reference_mdl.domain.find_all_domains(),
+                   "domains": reference_mdl.domain.find_current_domains(),
                    "offers": None,
                    "offer_type": None,
                    "domain": mdl})
@@ -341,3 +343,4 @@ def application_update(request, application_id):
                           {"offers":      None,
                            "offer":       application.offer_year,
                            "application": application})
+

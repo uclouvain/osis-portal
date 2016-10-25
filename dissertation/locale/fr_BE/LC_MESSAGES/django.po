@@ -129,7 +129,7 @@ msgid "justification_confirmation_message"
 msgstr "Confirmer la justification"
 
 msgid "level"
-msgstr "Niveau"
+msgstr "Niveau de développment du sujet"
 
 msgid "literature_review"
 msgstr "Revue Littéraire"
@@ -138,7 +138,7 @@ msgid "manager"
 msgstr "Gestionnaire de cours"
 
 msgid "max_students_number"
-msgstr "Nombre maximum d'étudiant"
+msgstr "Nombre indicatif de places pour ce sujet"
 
 msgid "memories_list"
 msgstr "Liste de mes mémoires"
@@ -240,7 +240,7 @@ msgid "to_dir_submit_confirmation_message"
 msgstr "Attention : vous allez soumettre ce projet de mémoire au promoteur. Êtes-vous certain de vouloir continuer ?"
 
 msgid "type"
-msgstr "Type"
+msgstr "Type de sujet"
 
 msgid "work"
 msgstr "Travail"

@@ -25,15 +25,19 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from reference.enums import assimilation_criteria as assimilation_criteria_enum
 
 
 class ApplicantAssimilationCriteriaAdmin(admin.ModelAdmin):
-    list_display = ('applicant', 'criteria')
+    list_display = ('applicant', 'criteria', 'selected')
 
 
 class ApplicantAssimilationCriteria(models.Model):
     applicant = models.ForeignKey('Applicant')
-    criteria = models.ForeignKey('reference.AssimilationCriteria')
+    criteria = models.CharField(max_length=50, choices=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES)
+    additional_criteria = models.CharField(max_length=50, blank=True, null=True,
+                                           choices=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES)
+    selected = models.NullBooleanField(null=True, blank=True)
 
 
 def find_by_applicant(applicant):
@@ -54,3 +58,11 @@ def search(applicant=None, criteria=None):
     if applicant or criteria:
         out = queryset
     return out
+
+
+def find_first(applicant=None, criteria=None):
+    results = search(applicant, criteria)
+    if results.exists():
+        return results[0]
+    return None
+

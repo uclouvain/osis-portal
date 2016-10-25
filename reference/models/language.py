@@ -25,6 +25,7 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from base.models.serializable_model import SerializableModel
 
 
 class LanguageAdmin(admin.ModelAdmin):
@@ -34,7 +35,8 @@ class LanguageAdmin(admin.ModelAdmin):
     fieldsets = ((None, {'fields': ('code', 'name', 'recognized')}),)
 
 
-class Language(models.Model):
+class Language(SerializableModel):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
     code = models.CharField(max_length=4, unique=True)
     name = models.CharField(max_length=80, unique=True)
     recognized = models.BooleanField(default=False)
@@ -52,7 +54,7 @@ def find_languages():
 
 
 def find_languages_by_recognized(a_recognized_state):
-    return Language.objects.filter(recognized=a_recognized_state)
+    return Language.objects.filter(recognized=a_recognized_state).order_by('name')
 
 
 def find_by_code(a_code):

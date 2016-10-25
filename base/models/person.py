@@ -30,6 +30,7 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from base.models.serializable_model import SerializableModel
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -43,24 +44,7 @@ class PersonAdmin(admin.ModelAdmin):
     raw_id_fields = ('user',)
 
 
-class PersonManager(models.Manager):
-    def get_by_natural_key(self, global_id):
-        if not global_id or global_id == 'None' or global_id == 'Null':
-            logger.debug('Serialization of Person without global_id')
-            return Person()
-        try:
-            return self.get(global_id=global_id)
-        except Person.MultipleObjectsReturned:
-            logger.warning(''.join(['Multiple person during deserialization for globalId : ', global_id]))
-            return self.filter(global_id=global_id).first()
-        except Person.DoesNotExist:
-            return Person()
-
-
-class Person(models.Model):
-
-    objects = PersonManager()
-
+class Person(SerializableModel):
     GENDER_CHOICES = (
         ('F', _('female')),
         ('M', _('male')),
@@ -97,18 +81,6 @@ class Person(models.Model):
             last_name = self.last_name + ","
 
         return u"%s %s %s" % (last_name.upper(), first_name, middle_name)
-
-    def save_from_osis_migration(self):
-        if not self.global_id:
-            logger.warning(''.join(['Not migrating person without global id : ', self.first_name, ' - ', self.last_name]))
-        elif not find_by_global_id(self.global_id):
-            logger.debug(''.join(['New person : ', self.global_id]))
-            self.pk = None
-            self.id = None
-            self.save()
-
-    def natural_key(self):
-        return (self.global_id, )
 
     class Meta:
         permissions = (

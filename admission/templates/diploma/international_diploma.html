@@ -11,20 +11,20 @@
                name="international_diploma"
                id="rdb_foreign_baccalaureate_diploma_national"
                value="NATIONAL"
-               onclick="display('pnl_equivalence',false);">&nbsp;&nbsp;{% trans 'baccalaureat_national' %}
+               onclick="display('pnl_equivalence');">&nbsp;&nbsp;{% trans 'baccalaureat_national' %}
          <br>
         <input type="radio"
                name="international_diploma"
                id="rdb_foreign_baccalaureate_diploma_european"
                value="EUROPEAN"
-               onclick="display('pnl_equivalence',false);">&nbsp;&nbsp;{% trans 'baccalaureat_european' %}&nbsp;&nbsp;
+               onclick="hide('pnl_equivalence');">&nbsp;&nbsp;{% trans 'baccalaureat_european' %}&nbsp;&nbsp;
         <img src="{% static 'img/schola_europaea.jpg' %}" height="50px">
          <br>
         <input type="radio"
                name="international_diploma"
                id="rdb_foreign_baccalaureate_diploma_international"
                value="INTERNATIONAL"
-               onclick="display('pnl_equivalence',true);">&nbsp;&nbsp;{% trans 'baccalaureat_international' %}&nbsp;&nbsp;
+               onclick="hide('pnl_equivalence');">&nbsp;&nbsp;{% trans 'baccalaureat_international' %}&nbsp;&nbsp;
          <img src="{% static 'img/ib-world-school.png' %}" height="50px">
          {%if validation_messages and validation_messages|get_item:'international_diploma'%}
              <br><br><span class="error" style="margin-left:5px;">
@@ -33,8 +33,8 @@
          <br><br>
      </div>
      <div class="row">
-         <div class="col-md-4">
-             <label for="slt_country" class="control-label">{%trans 'awarding_country' %}</label><br>
+         <div class="col-md-5">
+             <label>{%trans 'awarding_country' %}</label>
              <select class="form-control"
                      id="slt_country"
                      name="international_diploma_country">
@@ -44,38 +44,35 @@
                 {% endfor %}
             </select>
          </div>
-         <div class="col-md-4">
-             <label for="slt_language_diploma">{% trans 'linguistic_regime'%} *</label><br>
+         <div class="col-md-7">
+             <label >{% trans 'linguistic_regime'%} *</label>
              <select class="form-control"
                      id="slt_language_diploma"
                      name="international_diploma_language">
-                <option value="-">-</option>
+                <option value="-" style="font-style: italic;color:grey">--- {% trans 'linguistic_regime' %} ---</option>
                 {%for recognized_lang in recognized_languages %}
                  <option value="{{ recognized_lang.id }}">{{ recognized_lang.name }}</option>
                  {%endfor%}
-            </select>
-         </div>
-         <div class="col-md-4">
-             <div>
-             <label for="chb_other_language_regime">{% trans 'other_linguistic_regime'%}
-                    <input type="checkbox"
-                           id="chb_other_language_regime"
-                           name="other_language_regime"
-                           onclick="enabled_other_language(this)"
-                           class="form-control">
-             </label>
-                 </div>
-             <select class="form-control"
-                     id="slt_other_language_diploma"
-                     name="other_international_diploma_language">
-                 <option value="-" >-</option>
+                 <option value="-" style="font-style: italic;color:grey">--- {% trans 'other_linguistic_regime' %} --- </option>
                 {% for l in languages %}
                     <option value="{{ l.id }}">{{ l }}</option>
                 {% endfor %}
             </select>
-
          </div>
      </div>
+     <select id="slt_language_diploma_recognized"
+             name="international_diploma_language_recognized"
+             style="visibility:hidden;display:none;">
+        <option value="-">--- {% trans 'linguistic_regime' %} ---</option>
+        {%for recognized_lang in recognized_languages %}
+         <option value="{{ recognized_lang.id }}">{{ recognized_lang.recognized }}</option>
+         {%endfor%}
+         <option value="-">--- {% trans 'other_linguistic_regime' %} --- </option>
+        {% for l in languages %}
+            <option value="{{ l.id }}">{{ l.recognized }}</option>
+        {% endfor %}
+    </select>
+     <br>
      {%if validation_messages and validation_messages|get_item:'language_regime'%}
      <div class="row">
          <div class="col-md-4"></div>
@@ -86,7 +83,7 @@
      {% endif %}
 
      <div id="pnl_equivalence"
-          style="{%if secondary_education.international_diploma = 'INTERNATIONAL' %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+          style="{%if secondary_education.international_diploma = 'NATIONAL' %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
         <br>
         <label>{% trans 'equivalence_question' %} *</label>
         <br>
@@ -119,9 +116,8 @@
          <br><br>
          {% trans 'file_equivalence_instructions'%}<a target="_blank" href="http://www.equivalences.cfwb.be/">CFWB</a>.
          <br><br>
-
          {%if equivalence_file%}
-            <button type="button" class="btn btn-default"
+            <button type="button" class="btn btn-success"
                     title="{% trans 'modify'%} {% trans 'file_equivalence' %}"
                     id="bt_load_doc_EQUIVALENCE"
                     data-toggle="modal" data-target="#pnl_upload_documents">

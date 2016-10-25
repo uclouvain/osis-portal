@@ -24,14 +24,15 @@
 #
 ##############################################################################
 
-from admission.models import academic_year, offer_year
+from base.models import academic_year, offer_year
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from base import models as mdl
 from base.views import layout
 from dissertation.models import dissertation, dissertation_role, dissertation_update, offer_proposition, \
-    proposition_dissertation, proposition_role
-from dissertation.forms import DissertationForm, DissertationRoleForm, DissertationTitleForm, DissertationUpdateForm
+                                proposition_dissertation, proposition_role
+from dissertation.forms import DissertationForm, DissertationEditForm, DissertationRoleForm,\
+                                DissertationTitleForm, DissertationUpdateForm
 from django.utils import timezone
 
 
@@ -130,7 +131,7 @@ def dissertation_edit(request, pk):
     if memory.author == student:
         if memory.status == 'DRAFT' or memory.status == 'DIR_KO':
             if request.method == "POST":
-                form = DissertationForm(request.POST, instance=memory)
+                form = DissertationEditForm(request.POST, instance=memory)
                 if form.is_valid():
                     memory = form.save()
                     return redirect('dissertation_detail', pk=memory.pk)
@@ -139,11 +140,11 @@ def dissertation_edit(request, pk):
                     form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
                     form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offer(offers)
             else:
-                form = DissertationForm(instance=memory)
+                form = DissertationEditForm(instance=memory)
                 form.fields["defend_year"].queryset = academic_year.find_last_academic_years()
                 form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
                 form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offer(offers)
-            return layout.render(request, 'dissertation_form.html',
+            return layout.render(request, 'dissertation_edit_form.html',
                                  {'form': form,
                                   'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
         else:
