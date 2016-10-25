@@ -353,13 +353,13 @@
                                 <label class="radio-inline">
                                     <input type="radio" id="rd_same_contact_legal_addr_true"
                                            name="same_contact_legal_addr" value="true"
-                                           onclick="display('pnl_contact_address',false);"
+                                           onclick="hide('pnl_contact_address');"
                                            {% if same_addresses %}checked{%endif%}> {% trans 'yes' %}
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" id="rd_same_contact_legal_addr_false"
                                            name="same_contact_legal_addr" value="false"
-                                           onclick="display('pnl_contact_address',true);"
+                                           onclick="display('pnl_contact_address');"
                                            {% if same_addresses %}{%else%}checked{%endif%}> {% trans 'no' %}
                                 </label>
                             </div>
@@ -464,13 +464,13 @@
                             <div>
                                 <label class="radio-inline">
                                     <input type="radio" id="rd_previous_enrollment_true" name="previous_enrollment"
-                                           value="true" onclick="display('pnl_previous_enrollment',true);"
+                                           value="true" onclick="display('pnl_previous_enrollment');"
                                            {% if previous_enrollment %}checked{% else %}{% endif %}> {% trans 'yes'%}
 
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" id="rd_previous_enrollment_false" name="previous_enrollment"
-                                           value="false" onclick="display('pnl_previous_enrollment',false);"
+                                           value="false" onclick="hide('pnl_previous_enrollment');"
                                            {% if previous_enrollment%}{% else %}checked{% endif %}> {% trans 'no'%}
                                 </label>
                             </div>

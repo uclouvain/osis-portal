@@ -3,92 +3,90 @@
 {% load i18n %}
 
 <div id="pnl_foreign_detail">
-     <div>
-         <br>
-         <label>{% trans 'international_diploma_question'%}</label>
-         <br>
+    <div>
+        <br>
+        <label>{% trans 'international_diploma_question'%}</label>
+        <br>
         <input type="radio"
                name="international_diploma"
                id="rdb_foreign_baccalaureate_diploma_national"
                value="NATIONAL"
-               onclick="display('pnl_equivalence',false);">&nbsp;&nbsp;{% trans 'baccalaureat_national' %}
-         <br>
+               onclick="display('pnl_equivalence');">&nbsp;&nbsp;{% trans 'baccalaureat_national' %}
+        <br>
         <input type="radio"
                name="international_diploma"
                id="rdb_foreign_baccalaureate_diploma_european"
                value="EUROPEAN"
-               onclick="display('pnl_equivalence',false);">&nbsp;&nbsp;{% trans 'baccalaureat_european' %}&nbsp;&nbsp;
+               onclick="hide('pnl_equivalence');">&nbsp;&nbsp;{% trans 'baccalaureat_european' %}&nbsp;&nbsp;
         <img src="{% static 'img/schola_europaea.jpg' %}" height="50px">
-         <br>
+        <br>
         <input type="radio"
                name="international_diploma"
                id="rdb_foreign_baccalaureate_diploma_international"
                value="INTERNATIONAL"
-               onclick="display('pnl_equivalence',true);">&nbsp;&nbsp;{% trans 'baccalaureat_international' %}&nbsp;&nbsp;
-         <img src="{% static 'img/ib-world-school.png' %}" height="50px">
-         {%if validation_messages and validation_messages|get_item:'international_diploma'%}
-             <br><br><span class="error" style="margin-left:5px;">
-             {{ validation_messages|get_item:'international_diploma'}}</span>
-         {% endif %}
-         <br><br>
-     </div>
-     <div class="row">
-         <div class="col-md-5">
-             <label for="slt_country" class="control-label">{%trans 'awarding_country' %}</label><br>
-             <select class="form-control"
+               onclick="hide('pnl_equivalence');">&nbsp;&nbsp;{% trans 'baccalaureat_international' %}&nbsp;&nbsp;
+        <img src="{% static 'img/ib-world-school.png' %}" height="50px">
+        {%if validation_messages and validation_messages|get_item:'international_diploma'%}
+            <br><br><span class="error" style="margin-left:5px;">
+            {{ validation_messages|get_item:'international_diploma'}}</span>
+        {% endif %}
+        <br><br>
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+            <label>{%trans 'awarding_country' %}</label>
+            <select class="form-control"
                      id="slt_country"
                      name="international_diploma_country">
-                    <option value="-">-</option>
+                <option value="-">-</option>
                 {% for c in countries %}
                     <option value="{{ c.id }}">{{ c }}</option>
                 {% endfor %}
             </select>
-         </div>
-         <div class="col-md-3">
-             <label for="slt_language_diploma">{% trans 'linguistic_regime'%} *</label><br>
-             <select class="form-control"
+        </div>
+        <div class="col-md-7">
+            <label >{% trans 'linguistic_regime'%} *</label>
+            <select class="form-control"
                      id="slt_language_diploma"
                      name="international_diploma_language">
-                <option value="-">-</option>
+                <option value="-" style="font-style: italic;color:grey">--- {% trans 'linguistic_regime' %} ---</option>
                 {%for recognized_lang in recognized_languages %}
-                 <option value="{{ recognized_lang.id }}">{{ recognized_lang.name }}</option>
-                 {%endfor%}
-            </select>
-         </div>
-         <div class="col-md-4">
-
-            <label for="chb_other_language_regime">{% trans 'other_linguistic_regime'%}
-            <input type="checkbox"
-                   id="chb_other_language_regime"
-                   name="other_language_regime"
-                   onclick="enabled_other_language(this)">
-             </label>
-             <select class="form-control"
-                     id="slt_other_language_diploma"
-                     name="other_international_diploma_language">
-                 <option value="-" >-</option>
+                    <option value="{{ recognized_lang.id }}">{{ recognized_lang.name }}</option>
+                {%endfor%}
+                <option value="-" style="font-style: italic;color:grey">--- {% trans 'other_linguistic_regime' %} --- </option>
                 {% for l in languages %}
                     <option value="{{ l.id }}">{{ l }}</option>
                 {% endfor %}
             </select>
+        </div>
+    </div>
+    <select id="slt_language_diploma_recognized"
+             name="international_diploma_language_recognized"
+             style="visibility:hidden;display:none;">
+        <option value="-">--- {% trans 'linguistic_regime' %} ---</option>
+        {%for recognized_lang in recognized_languages %}
+            <option value="{{ recognized_lang.id }}">{{ recognized_lang.recognized }}</option>
+        {%endfor%}
+        <option value="-">--- {% trans 'other_linguistic_regime' %} --- </option>
+        {%for l in languages %}
+            <option value="{{ l.id }}">{{ l.recognized }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    {%if validation_messages and validation_messages|get_item:'language_regime'%}
+        <div class="row">
+            <div class="col-md-8 col-md-offset-4">
+                <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'language_regime'}}</span>
+            </div>
+        </div>
+    {% endif %}
 
-         </div>
-     </div>
-     {%if validation_messages and validation_messages|get_item:'language_regime'%}
-     <div class="row">
-         <div class="col-md-4"></div>
-         <div class="col-md-8">
-            <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'language_regime'}}</span>
-         </div>
-     </div>
-     {% endif %}
-
-     <div id="pnl_equivalence"
-          style="{%if secondary_education.international_diploma = 'INTERNATIONAL' %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+    <div id="pnl_equivalence"
+          style="{%if secondary_education.international_diploma = 'NATIONAL' %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
         <br>
         <label>{% trans 'equivalence_question' %} *</label>
         <br>
-         <div class="form-group" >
+        <div class="form-group" >
             <label class="radio-inline">
             <input type="radio"
                    name="international_equivalence"
@@ -109,15 +107,15 @@
                    id="rdb_international_equivalence_in_progress"
                    value="DEMANDED"
                    class="radio-inline">&nbsp;&nbsp;{% trans 'demanded' %}</label>
-             {%if validation_messages and validation_messages|get_item:'international_equivalence'%}
-                 <br><br><span class="error" style="margin-left:5px;">
-                 {{ validation_messages|get_item:'international_equivalence'}}</span>
-             {% endif %}
-         </div>
-         <br><br>
-         {% trans 'file_equivalence_instructions'%}<a target="_blank" href="http://www.equivalences.cfwb.be/">CFWB</a>.
-         <br><br>
-         {%if equivalence_file%}
+            {%if validation_messages and validation_messages|get_item:'international_equivalence'%}
+                <br><br><span class="error" style="margin-left:5px;">
+                {{ validation_messages|get_item:'international_equivalence'}}</span>
+            {% endif %}
+        </div>
+        <br><br>
+        {% trans 'file_equivalence_instructions'%}<a target="_blank" href="http://www.equivalences.cfwb.be/">CFWB</a>.
+        <br><br>
+        {%if equivalence_file%}
             <button type="button" class="btn btn-success"
                     title="{% trans 'modify'%} {% trans 'file_equivalence' %}"
                     id="bt_load_doc_EQUIVALENCE"
@@ -125,7 +123,7 @@
                     <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"
                           id="spn_bt_load_doc_EQUIVALENCE"></span> {% trans 'file_equivalence_btn_modify' %} *
             </button>
-         {%else%}
+        {%else%}
             <button type="button" class="btn btn-default"
                     title="{% trans 'add'%} {% trans 'file_equivalence' %}"
                     id="bt_load_doc_EQUIVALENCE"
@@ -133,8 +131,8 @@
                     <span class="glyphicon glyphicon-upload" aria-hidden="true"
                           id="spn_bt_load_doc_EQUIVALENCE"></span> {% trans 'file_equivalence_btn' %} *
             </button>
-         {%endif%}
-     </div>
+        {%endif%}
+    </div>
     <br>
     <div class="panel panel-default">
         <div class="panel-heading">{% trans 'result'%}</div>
@@ -142,19 +140,19 @@
             <label>{% trans 'which_result'%} *</label>
             <br>
             <label class="radio-inline">
-              <input type="radio"
+                <input type="radio"
                      name="foreign_result"
                      id="rdb_foreign_result_low"
                      value="LOW"> {% trans 'low_result'%}
             </label>
             <label class="radio-inline">
-              <input type="radio"
+                <input type="radio"
                      name="foreign_result"
                      id="rdb_foreign_result_middle"
                      value="MIDDLE"> {% trans 'middle_result'%}
             </label>
             <label class="radio-inline">
-              <input type="radio"
+                <input type="radio"
                      name="foreign_result"
                      id="rdb_foreign_result_high"
                      value="HIGH"> {% trans 'high_result'%}
@@ -190,8 +188,8 @@
                         </button>
                     {%endif%}
                 </div>
-                 <div class="col-md-6">
-                     {% if international_diploma_verso%}
+                <div class="col-md-6">
+                    {% if international_diploma_verso%}
                         <button type="button" class="btn btn-success"
                                 title="{% trans 'modify'%} {% trans 'high_school_diploma'%} - {% trans 'verso'%}"
                                 id="bt_load_doc_INTERNATIONAL_DIPLOMA_VERSO"
@@ -199,7 +197,7 @@
                             <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"
                                   id="spn_bt_load_doc_INTERNATIONAL_DIPLOMA_VERSO"></span> {% trans 'high_school_diploma'%} - {% trans 'verso'%}
                         </button>
-                     {%else%}
+                    {%else%}
                         <button type="button" class="btn btn-default"
                                 title="{% trans 'add'%} {% trans 'high_school_diploma'%} - {% trans 'verso'%}"
                                 id="bt_load_doc_INTERNATIONAL_DIPLOMA_VERSO"
@@ -207,14 +205,14 @@
                             <span class="glyphicon glyphicon-upload" aria-hidden="true"
                                   id="spn_bt_load_doc_INTERNATIONAL_DIPLOMA_VERSO"></span> {% trans 'high_school_diploma'%} - {% trans 'verso'%}
                         </button>
-                     {%endif%}
+                    {%endif%}
                 </div>
             </div>
             <br>
             <div class="row">
                 <div class="col-md-6">
                     {%if high_school_scores_transcript_recto%}
-                         <button type="button"
+                        <button type="button"
                                  class="btn btn-success"
                                  title="{%trans 'modify'%} {% trans 'high_school_diploma_transcript'%} - {% trans 'recto'%}"
                                  id="bt_load_doc_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO"
@@ -223,7 +221,7 @@
                                   id="spn_bt_load_doc_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO"></span> {% trans 'high_school_diploma_transcript'%} - {% trans 'recto'%}
                         </button>
                     {%else%}
-                         <button type="button"
+                        <button type="button"
                                  class="btn btn-default"
                                  title="{%trans 'add'%} {% trans 'high_school_diploma_transcript'%} - {% trans 'recto'%}"
                                  id="bt_load_doc_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO"
@@ -233,24 +231,24 @@
                         </button>
                     {%endif%}
                 </div>
-                 <div class="col-md-6">
-                     {%if high_school_scores_transcript_verso%}
-                         <button type="button" class="btn btn-success"
+                <div class="col-md-6">
+                    {%if high_school_scores_transcript_verso%}
+                        <button type="button" class="btn btn-success"
                                  title="{% trans 'modify'%} {% trans 'high_school_diploma_transcript'%} - {% trans 'verso'%}"
                                  id="bt_load_doc_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO"
                                  data-toggle="modal" data-target="#pnl_upload_documents">
-                            <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"
+                           <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"
                                   id="spn_bt_load_doc_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO"></span> {% trans 'high_school_diploma_transcript'%} - {% trans 'verso'%}
                         </button>
-                     {%else%}
-                         <button type="button" class="btn btn-default"
+                    {%else%}
+                        <button type="button" class="btn btn-default"
                                  title="{% trans 'add'%} {% trans 'high_school_diploma_transcript'%} - {% trans 'verso'%}"
                                  id="bt_load_doc_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO"
                                  data-toggle="modal" data-target="#pnl_upload_documents">
                             <span class="glyphicon glyphicon-upload" aria-hidden="true"
                                   id="spn_bt_load_doc_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO"></span> {% trans 'high_school_diploma_transcript'%} - {% trans 'verso'%}
                         </button>
-                     {%endif%}
+                    {%endif%}
                 </div>
             </div>
             <br>
@@ -277,8 +275,8 @@
                             </button>
                         {%endif%}
                     </div>
-                     <div class="col-md-6">
-                         {%if translated_international_diploma_verso%}
+                    <div class="col-md-6">
+                        {%if translated_international_diploma_verso%}
                             <button type="button" class="btn btn-success"
                                     title="{%trans 'modify'%} {% trans 'high_school_diploma'%} - {% trans 'verso'%}"
                                     id="bt_load_doc_TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO"
@@ -286,7 +284,7 @@
                                     <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"
                                           id="spn_bt_load_doc_TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO"></span> {% trans 'high_school_diploma'%} - {% trans 'verso'%}
                             </button>
-                         {%else%}
+                        {%else%}
                             <button type="button" class="btn btn-default"
                                     title="{%trans 'add'%} {% trans 'high_school_diploma'%} - {% trans 'verso'%}"
                                     id="bt_load_doc_TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO"
@@ -294,7 +292,7 @@
                                     <span class="glyphicon glyphicon-upload" aria-hidden="true"
                                           id="spn_bt_load_doc_TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO"></span> {% trans 'high_school_diploma'%} - {% trans 'verso'%}
                             </button>
-                         {%endif%}
+                        {%endif%}
                     </div>
                 </div>
                 <br>
@@ -318,8 +316,8 @@
                             </button>
                         {%endif%}
                     </div>
-                     <div class="col-md-6">
-                         {%if translated_high_school_scores_transcript_verso%}
+                    <div class="col-md-6">
+                        {%if translated_high_school_scores_transcript_verso%}
                             <button type="button" class="btn btn-success"
                                     title="{% trans 'modify'%} {% trans 'high_school_diploma_transcript' %} - {% trans 'verso'%}"
                                     id="bt_load_doc_TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO"
@@ -327,7 +325,7 @@
                                     <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"
                                           id="spn_bt_load_doc_TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO"></span> {% trans 'high_school_diploma_transcript' %} - {% trans 'verso'%}
                             </button>
-                         {%else%}
+                        {%else%}
                             <button type="button" class="btn btn-default"
                                     title="{% trans 'add'%} {% trans 'high_school_diploma_transcript' %} - {% trans 'verso'%}"
                                     id="bt_load_doc_TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO"
@@ -335,7 +333,7 @@
                                     <span class="glyphicon glyphicon-upload" aria-hidden="true"
                                           id="spn_bt_load_doc_TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO"></span> {% trans 'high_school_diploma_transcript' %} - {% trans 'verso'%}
                             </button>
-                         {%endif%}
+                        {%endif%}
                     </div>
                 </div>
             </div>
