@@ -42,3 +42,7 @@ class OfferAdmissionExamType(models.Model):
 
     offer_year = models.ForeignKey('base.OfferYear', null=False)
     admission_exam_type = models.ForeignKey('AdmissionExamType', null=False)
+
+
+def find_by_offer_year(an_offer_year):
+    return OfferAdmissionExamType.objects.filter(offer_year=an_offer_year).first()

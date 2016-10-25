@@ -1458,3 +1458,9 @@ msgstr "Vous n'avez pas trouvé votre profession?"
 
 msgid "grandfather"
 msgstr "Grand-pères"
+
+msgid "is_required_for"
+msgstr "est requis pour l'offre suivante : "
+
+msgid "the_exam_type"
+msgstr "Le type d'examen "

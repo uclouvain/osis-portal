@@ -156,7 +156,7 @@ def validate_prerequisites_data(application, secondary_education, validation_mes
             validation_messages.update(validate_needed_docs(application))
 
         validation_messages.update(validate_professional_exam(professional_exam, application))
-        validation_messages.update(validate_admission_exam(admission_exam))
+        validation_messages.update(validate_admission_exam(admission_exam, application))
         validation_messages.update(validate_local_language_exam(local_language_exam))
 
 
@@ -232,7 +232,7 @@ def validate_professional_exam(professional_exam, application):
     return validation_messages
 
 
-def validate_admission_exam(admission_exam):
+def validate_admission_exam(admission_exam, application):
     validation_messages = {}
     if admission_exam:
         if admission_exam.exam_date is None:
@@ -241,8 +241,18 @@ def validate_admission_exam(admission_exam):
             validation_messages['admission_exam_institution'] = ALERT_MANDATORY_FIELD
         if admission_exam.admission_exam_type is None:
             validation_messages['admission_exam_type'] = ALERT_MANDATORY_FIELD
+        else:
+            if application.offer_year:
+                offer_admission_exam_type = mdl.offer_admission_exam_type.find_by_offer_year(application.offer_year)
+                if offer_admission_exam_type and offer_admission_exam_type.admission_exam_type != admission_exam.admission_exam_type:
+                    validation_messages['admission_exam_type'] = "{0} '{1}' {2} {3}"\
+                        .format(_('the_exam_type'),
+                                offer_admission_exam_type.admission_exam_type.name,
+                                _('is_required_for'),
+                                application.offer_year.acronym)
         if admission_exam.result is None:
             validation_messages['admission_exam_result'] = ALERT_MANDATORY_FIELD
+
     return validation_messages
 
 
