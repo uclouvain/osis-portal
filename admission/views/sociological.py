@@ -27,7 +27,6 @@ from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from admission import models as mdl
 from admission.views import demande_validation
-from admission.views import tabs
 from admission.forms import SociologicalSurveyForm
 from admission.models.sociological_survey import SociologicalSurvey
 from admission.views import attachments, accounting
@@ -65,18 +64,9 @@ def update(request, application_id=None):
     else:
         application = mdl.application.init_application(request.user)
 
-    tab_status = tabs.init(request)
     data = {
         'tab_active': tab_active,
         'application': application,
-        'tab_profile': tab_status['tab_profile'],
-        'tab_applications': tab_status['tab_applications'],
-        'tab_diploma': tab_status['tab_diploma'],
-        'tab_curriculum': tab_status['tab_curriculum'],
-        'tab_accounting': tab_status['tab_accounting'],
-        'tab_sociological': tab_status['tab_sociological'],
-        'tab_attachments': tab_status['tab_attachments'],
-        'tab_submission': tab_status['tab_submission'],
         'applications': mdl.application.find_by_user(request.user),
         'sociological_form': sociological_form,
         'professions': mdl.profession.find_by_adoc(False),

@@ -77,7 +77,9 @@ $("#bt_load_doc_PROFESSIONAL_EXAM_CERTIFICATE" ).click(function() {
     $('#professional_exam_doc_error').html('');
 });
 
-
+$("button[id^='bt_load_doc_HIGH_SCHOOL_SCORES_TRANSCRIPT_']" ).click(function() {
+    $('#high_school_diploma_doc_error').html('');
+});
 
 
 

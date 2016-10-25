@@ -210,3 +210,9 @@ msgstr "Equivalence"
 
 msgid "language_exam_certificate"
 msgstr "Language exam certificate"
+
+msgid "invalid_date"
+msgstr "Invalid date"
+
+msgid "question_need_to_save"
+msgstr "Sure?  Don't you need to save some data?"
