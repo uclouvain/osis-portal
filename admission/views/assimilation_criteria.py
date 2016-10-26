@@ -23,21 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.http import HttpResponse
-from rest_framework import serializers
-from rest_framework.renderers import JSONRenderer
 from admission.models.enums import document_type
-import json
 from reference.enums import assimilation_criteria as assimilation_criteria_enum
-
-
-def find_by_criteria(request):
-    criteria_param = request.GET['criteria']
-    criteria = int(criteria_param)
-    list_document_type = find_list_document_type_by_criteria(criteria)
-    serializer = AssimilationDocSerializer(list_document_type, many=True)
-
-    return JSONResponse(serializer.data)
 
 
 def criteria1(list_document_type_param):

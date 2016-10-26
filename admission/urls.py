@@ -26,7 +26,7 @@
 from django.conf.urls import url
 from admission.views import application, common, identification, offer, level, question, option, country, curriculum, \
     education_institution, language, domain, secondary_education, accounting, upload_file, sociological, attachments, \
-    assimilation_criteria
+    places
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -50,12 +50,10 @@ urlpatterns = [
     url(r'^admission/application/diploma/save/$', secondary_education.diploma_save, name='diploma'),
     url(r'^admission/curriculum/save/$', curriculum.save, name='curriculum'),
     url(r'^admission/curriculum/update/(?:([0-9]+)/)?$', curriculum.update, name='curriculum_update'),
-    url(r'^admission/diploma/update(?:/(?P<application_id>[0-9]+))?(?:/(?P<saved>[0-9]+))?/$', secondary_education.diploma_update, name='diploma_update'),
+    url(r'^admission/diploma/update(?:/(?P<application_id>[0-9]+))?(?:/(?P<saved>[0-9]+))?/$',
+        secondary_education.diploma_update, name='diploma_update'),
 
-
-    url(r'^admission/offer/$', offer.offer_selection, name='offer_selection'),
     url(r'^admission/offer/save/$', application.save_application_offer, name='save_offer_selection'),
-    url(r'^admission/offer/application/([0-9]+)/$', offer.selection_offer, name='selection_offer'),
     url(r'^admission/application/read/([0-9]+)/$', application.application_view, name='application_view'),
 
     url(r'^country/$', country.find_by_id_json),
@@ -98,7 +96,6 @@ urlpatterns = [
     url(r'^attachments/(?:([0-9]+)/)?$', attachments.update, name='attachments'),
     url(r'^attachments/remove_attachment/$',
         attachments.remove_attachment, name='remove_attachment'),
-    url(r'^admission/demande/(?:([0-9]+)/)?$', offer.demande_update, name='demande_update'),
     url(r'^admission/application/submission/(?:([0-9]+)/)?$', application.submission, name='submission'),
     url(r'^admission/application/delete/([0-9]+)/$', application.application_delete, name='application_delete'),
     url(r'^admission/offer_change/([0-9]+)/$', application.change_application_offer, name='change_application_offer'),
@@ -108,10 +105,11 @@ urlpatterns = [
     url(r'^upload/$', upload_file.upload_document, name='upload_document'),
     url(r'^jsi18n/', 'django.views.i18n.javascript_catalog', js_info_dict),
 
-    url(r'^criteria_document/$', assimilation_criteria.find_by_criteria),
     url(r'^upload/delete/$', upload_file.delete_document_file, name='delete_document_file'),
     url(r'^document/$', upload_file.find_by_description),
     url(r'^upload/save/$', upload_file.save_uploaded_file, name="save_uploaded_file"),
     url(r'^picture/$', common.get_picture),
+    url(r'^postalcodes/$', places.find_postal_codes_by_city),
+    url(r'^educationinstitution/cities/$', places.find_cities_by_postal_code),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

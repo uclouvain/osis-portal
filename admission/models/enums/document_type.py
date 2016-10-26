@@ -24,8 +24,6 @@
 #
 ##############################################################################
 
-from django.utils.translation import ugettext_lazy as _
-
 
 ID_CARD = 'ID_CARD'
 LETTER_MOTIVATION = 'LETTER_MOTIVATION'

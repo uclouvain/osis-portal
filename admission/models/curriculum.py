@@ -27,7 +27,6 @@ from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from reference.enums.education_institution_national_comunity import NATIONAL_COMMUNITY_TYPES
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class CurriculumAdmin(admin.ModelAdmin):
@@ -69,7 +68,7 @@ class Curriculum(models.Model):
         ('FULL_EXERCISE', _('full_exercise'))
     )
     person = models.ForeignKey('Applicant')
-    academic_year = models.ForeignKey('base.AcademicYear')
+    academic_year = models.IntegerField(blank=True, null=True)
     path_type = models.CharField(max_length=25, choices=PATH_TYPES, blank=True, null=True)
     national_education = models.CharField(max_length=20, choices=NATIONAL_COMMUNITY_TYPES, blank=True, null=True)
     language = models.ForeignKey('reference.Language', blank=True, null=True)
@@ -93,19 +92,12 @@ def find_by_id(an_id):
     return Curriculum.objects.get(pk=an_id)
 
 
-def find_by_academic_year(an_academic_year):
-    try:
-        return Curriculum.objects.get(academic_year=an_academic_year)
-    except ObjectDoesNotExist:
-        return None
-
-
 def find_user(a_person):
     return Curriculum.objects.filter(person=a_person)
 
 
 def find_by_person_year(a_person, year):
-    return Curriculum.objects.filter(person=a_person, academic_year__year=year).first()
+    return Curriculum.objects.filter(person=a_person, academic_year=year).first()
 
 
 def find_local_french(a_person, an_academic_year):

@@ -824,9 +824,6 @@ msgstr "Other education type"
 msgid "other_institution"
 msgstr "Other institution"
 
-msgid "other_linguistic_regime"
-msgstr "If other linguistic regime, please clarify"
-
 msgid "other_phone"
 msgstr "Other phone"
 
@@ -1360,9 +1357,8 @@ msgstr "Equivalence"
 msgid "prerequisites_min_data"
 msgstr "You must have, at least, an secondary diploma or a professional exam or an admission exam or a local language exam"
 
-
 msgid "validation_errors"
-msgstr " field(s) stop(s) the tab validation"
+msgstr " fields are invalid"
 
 msgid "msg_one_prerequisite"
 msgstr ""
@@ -1372,7 +1368,7 @@ msgid "question_lottery_number"
 msgstr "Please mention your lottery number"
 
 msgid "CRITERIA_1"
-msgstr "Please mention if you have an authorisation of an institute or if you are long-term resident."
+msgstr "Please, mention whether you have an authorization of an institute or you are a long-term resident."
 
 msgid "CRITERIA_2"
 msgstr "Please mention if you are a refugee, stateless or if you want to benefit from a subsidiary protection."
@@ -1417,4 +1413,34 @@ msgid "CERTIFICATE"
 msgstr "Certificate"
 
 msgid "DOCTORATE"
-msgstr "Ph. d"
+msgstr "Ph.D"
+
+msgid "institution_not_found_question"
+msgstr "Didn't you find your institute in the list below?"
+
+msgid "mandatory_file_recto_verso"
+msgstr "Mandatory files for recto and verso"
+
+msgid "validate_data"
+msgstr "Validate data"
+
+msgid "validation_error"
+msgstr " field is invalid"
+
+msgid "msg_error_school_local_community"
+msgstr "Please mention a community for the school"
+
+msgid "profession_not_found"
+msgstr "You haven't found your profession above?"
+
+msgid "grandfather"
+msgstr "Grandfathers"
+
+msgid "other_linguistic_regime"
+msgstr "Other linguistic regime"
+
+msgid "is_required_for"
+msgstr "is required for the following offer : "
+
+msgid "the_exam_type"
+msgstr "The exam type "

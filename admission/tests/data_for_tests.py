@@ -70,8 +70,8 @@ def create_academic_year():
     return an_academic_year
 
 
-def create_grade_type(a_name):
-    a_grade_type = mdl_reference.grade_type.GradeType(name=a_name)
+def create_grade_type(a_name, an_institutional_grade_type):
+    a_grade_type = mdl_reference.grade_type.GradeType(name=a_name, institutional_grade_type=an_institutional_grade_type)
     a_grade_type.save()
     return a_grade_type
 
@@ -92,3 +92,7 @@ def create_application_document_file(an_application, a_user, description=None):
     an_application_document_file.document_file = a_document_file
     an_application_document_file.save()
     return an_application_document_file
+
+
+def create_profession(a_name, an_adhoc):
+    return mdl.profession.Profession(name=a_name, adhoc=an_adhoc)

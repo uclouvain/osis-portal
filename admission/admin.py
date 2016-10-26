@@ -75,3 +75,6 @@ admin.site.register(secondary_education_exam.SecondaryEducationExam,
 
 admin.site.register(sociological_survey.SociologicalSurvey,
                     sociological_survey.SociologicalSurveyAdmin)
+
+admin.site.register(offer_admission_exam_type.OfferAdmissionExamType,
+                    offer_admission_exam_type.OfferAdmissionExamTypeAdmin)
