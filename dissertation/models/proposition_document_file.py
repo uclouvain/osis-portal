@@ -44,13 +44,6 @@ def search(proposition=None, description=None):
     return out
 
 
-def find_first(proposition=None, description=None):
-    results = search(proposition, description)
-    if results.exists():
-        return results[0]
-    return None
-
-
 def find_by_document(document_file):
     return PropositionDocumentFile.objects.filter(document_file=document_file)
 
