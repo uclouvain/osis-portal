@@ -33,7 +33,7 @@
                 {% url 'accounting_update' %}
               {%endif%}">
     {% csrf_token %}
-    <input type="text"
+    <input type="hidden"
            value="{{application.id}}"
            name="application_id"
            id="hdn_application_id"/>
