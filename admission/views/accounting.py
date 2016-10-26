@@ -76,7 +76,7 @@ def accounting_update(request, application_id=None):
         application = mdl.application.find_by_id(application_id)
     else:
         application = mdl.application.init_application(request.user)
-    application = populate_application(request, application)
+
     try:
         if application.offer_year and application.applicant:
             application.save()

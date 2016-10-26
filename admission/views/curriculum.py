@@ -40,11 +40,16 @@ CURRICULUM_YEARS_REQUIRED = 5
 MAX_CREDITS = 75
 
 
-def save(request):
+def save(request, application_id=None):
     save_step = False
     duplicate = False
     duplicate_year_origin = None
     validation_messages = {}
+
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
+    else:
+        application = mdl.application.init_application(request.user)
 
     key = 'bt_duplicate_'
     for k, v in request.POST.items():
@@ -79,7 +84,7 @@ def save(request):
             message_success = _('msg_info_saved')
             for curriculum in curricula:
                 curriculum.save()
-            following_tab = navigation.get_following_tab(request, 'curriculum', None)
+            following_tab = navigation.get_following_tab(request, 'curriculum', application)
             if following_tab:
                 return following_tab
 
@@ -97,7 +102,8 @@ def save(request):
                            "universities": universities,
                            "languages": mdl_reference.language.find_languages(),
                            "current_academic_year": mdl_base.academic_year.current_academic_year(),
-                           "tab_active": navigation.CURRICULUM_TAB})
+                           "tab_active": navigation.CURRICULUM_TAB,
+                           "application": application})
 
     # Get the data in bd
     applicant = mdl.applicant.find_by_user(request.user)
@@ -137,7 +143,8 @@ def save(request):
                    "universities": universities,
                    "languages": mdl_reference.language.find_languages(),
                    "current_academic_year": mdl_base.academic_year.current_academic_year(),
-                   "tab_active": navigation.CURRICULUM_TAB})
+                   "tab_active": navigation.CURRICULUM_TAB,
+                   "application": application})
 
 
 def update(request, application_id=None):

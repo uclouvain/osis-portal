@@ -27,8 +27,18 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<form method="post" action="{% url 'curriculum' %}" id="form_curriculum">
+<form method="post"
+      id="form_curriculum"
+      action="{% if application %}
+                {% url 'curriculum' application.id %}
+              {%else%}
+                {% url 'curriculum' %}
+              {%endif%}">
     {% csrf_token %}
+    <input type="text"
+           value="{{application.id}}"
+           name="application_id"
+           id="hdn_application_id"/>
     <input type="hidden" id="hdn_following_curriculum_tab" name="following_curriculum_tab">
     <div class="row">
         <div class="col-md-8">

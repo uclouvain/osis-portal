@@ -25,9 +25,15 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
-<form method="post" action="{% url 'accounting_update'%}" id="form_accounting">
+<form method="post"
+      id="form_accounting"
+      action="{%if application%}
+                {% url 'accounting_update' application.id %}
+              {%else%}
+                {% url 'accounting_update' %}
+              {%endif%}">
     {% csrf_token %}
-    <input type="hidden"
+    <input type="text"
            value="{{application.id}}"
            name="application_id"
            id="hdn_application_id"/>
