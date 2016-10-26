@@ -245,7 +245,7 @@
     const ATTACHMENTS_TAB = 6;
     const SUBMISSION_TAB = 7;
 
-    function save(form_to_submit, next_tab){
+    function set_following_tab(next_tab){
         $('[id^="hdn_following_"]').val(next_tab);
     }
 
@@ -256,7 +256,7 @@
             return false;
         }
         $('#hdn_tab_applications_status').val('True');
-        save('form_profile',DEMAND_TAB);
+        set_following_tab(DEMAND_TAB);
         return true;
     });
 
@@ -277,7 +277,7 @@
                 }
             });
         }
-        save_form(1);
+        set_following_tab(DEMAND_TAB);
     });
 
     $("#btn_modify_picture").click(function(event) {
@@ -388,42 +388,42 @@
         if (! valid(PREREQUISITES_TAB)) {
             return false;
         }
-        save_form(PREREQUISITES_TAB);
+        set_following_tab(PREREQUISITES_TAB);
     });
 
     $("#lnk_curriculum_tab").click(function() {
         if (! valid(CURRICULUM_TAB)){
             return false;
         }
-        save_form(CURRICULUM_TAB);
+        set_following_tab(CURRICULUM_TAB);
     });
 
     $("#lnk_accounting_tab").click(function() {
         if (! valid(ACCOUNTING_TAB)){
             return false;
         }
-        save_form(ACCOUNTING_TAB);
+        set_following_tab(ACCOUNTING_TAB);
     });
 
     $("#lnk_sociological_tab").click(function() {
         if (! valid(SOCIOLOGICAL_SURVEY_TAB)){
             return false;
         }
-        save_form(SOCIOLOGICAL_SURVEY_TAB);
+        set_following_tab(SOCIOLOGICAL_SURVEY_TAB);
     });
 
     $("#lnk_attachments_tab").click(function() {
         if (! valid(ATTACHMENTS_TAB)){
             return false;
         }
-        save_form(ATTACHMENTS_TAB);
+        set_following_tab(ATTACHMENTS_TAB);
     });
 
     $("#lnk_submission_tab").click(function() {
         if (! valid(SUBMISSION_TAB)){
             return false;
         }
-        save_form(SUBMISSION_TAB);
+        set_following_tab(SUBMISSION_TAB);
     });
 
     $("#lnk_profile_tab").click(function() {
@@ -433,7 +433,7 @@
             }
         }
         if($("#hdn_tab_active").val() != DEMAND_TAB.toString()) {
-            save_form(PROFILE_TAB);
+            set_following_tab(PROFILE_TAB);
         }
 
     });
@@ -475,7 +475,7 @@
         if( $('#demande_next_tab').val()!=''){
             next_tab=$('#demande_next_tab').val();
         }
-        save('form_questions', next_tab);
+        set_following_tab(next_tab);
         return true;
     }
 
@@ -815,33 +815,6 @@
         $('#txt_last_academic_year').val('');
     });
 
-    function save_form(next_tab){
-        if($("#hdn_tab_active").val()==PROFILE_TAB.toString()){
-            save('form_profile', next_tab);
-        }
-        if($("#hdn_tab_active").val()==DEMAND_TAB.toString()){
-            save('form_questions', next_tab);
-        }
-        if($("#hdn_tab_active").val()==PREREQUISITES_TAB.toString()){
-            save('form_secondary_education', next_tab);
-        }
-        if($("#hdn_tab_active").val()==CURRICULUM_TAB.toString()){
-            save('form_curriculum', next_tab);
-        }
-        if($("#hdn_tab_active").val()==ACCOUNTING_TAB.toString()){
-            save('form_accounting', next_tab);
-        }
-        if($("#hdn_tab_active").val()==SOCIOLOGICAL_SURVEY_TAB.toString()){
-            save('form_sociological_survey', next_tab);
-        }
-        if($("#hdn_tab_active").val()==ATTACHMENTS_TAB.toString()){
-            save('form_attachements', next_tab);
-        }
-        if($("#hdn_tab_active").val()==SUBMISSION_TAB.toString()){
-            save('form_submission', next_tab);
-        }
-    }
-
     function valid_profile_data(){
         // clear error messages
         $('#spn_number_children').html('');
@@ -1025,56 +998,56 @@
     $('[id^="bt_previous_diploma_step_"]').click(function() {
         change_menu();
         $('#hdn_tab_applications_status').val('True');
-        save('form_secondary_education',DEMAND_TAB);
+        set_following_tab(DEMAND_TAB);
         return true;
     });
 
     $('[id^="bt_next_diploma_step_"]').click(function() {
         change_menu();
         $('#hdn_tab_applications_status').val('True');
-        save('form_secondary_education',CURRICULUM_TAB);
+        set_following_tab(CURRICULUM_TAB);
         return true;
     });
 
      $('[id^="bt_previous_curriculum_step_"]').click(function() {
         change_menu();
         $('#hdn_tab_applications_status').val('True');
-        save('form_curriculum',PREREQUISITES_TAB);
+        set_following_tab(PREREQUISITES_TAB);
         return true;
     });
 
     $('[id^="bt_next_curriculum_step_"]').click(function() {
         change_menu();
         $('#hdn_tab_applications_status').val('True');
-        save('form_curriculum', ACCOUNTING_TAB);
+        set_following_tab(ACCOUNTING_TAB);
         return true;
     });
 
      $('[id^="bt_previous_sociological_step_"]').click(function() {
         change_menu();
         $('#hdn_tab_applications_status').val('True');
-        save('form_sociological_survey', ACCOUNTING_TAB);
+        set_following_tab(ACCOUNTING_TAB);
         return true;
     });
 
     $('[id^="bt_next_sociological_step_"]').click(function() {
         change_menu();
         $('#hdn_tab_applications_status').val('True');
-        save('form_sociological_survey', ATTACHMENTS_TAB );
+        set_following_tab(ATTACHMENTS_TAB );
         return true;
     });
 
     $('[id^="bt_previous_accounting_step_"]').click(function() {
         change_menu();
         $('#hdn_tab_applications_status').val('True');
-        save('form_accounting', CURRICULUM_TAB);
+        set_following_tab(CURRICULUM_TAB);
         return true;
     });
 
     $('[id^="bt_next_accounting_step_"]').click(function() {
         change_menu();
         $('#hdn_tab_applications_status').val('True');
-        save('form_accounting', SOCIOLOGICAL_SURVEY_TAB );
+        set_following_tab(SOCIOLOGICAL_SURVEY_TAB );
         return true;
     });
 
