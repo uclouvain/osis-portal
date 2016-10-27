@@ -48,14 +48,13 @@ def update(request, application_id=None):
 
     next_tab = navigation.SOCIOLOGICAL_SURVEY_TAB
     sociological_survey = None
-    sociological_form = None
     if request.method == "POST":
         save_sociological_form(request)
 
-        u = SociologicalSurvey.objects.get(applicant=applicant)
-        sociological_form = SociologicalSurveyForm(instance=u)
+        sociological_survey = SociologicalSurvey.objects.get(applicant=applicant)
+        sociological_form = SociologicalSurveyForm(instance=sociological_survey)
         sociological_form.is_valid()
-        sociological_survey = u
+
         following_tab = navigation.get_following_tab(request, 'sociological', application)
         if following_tab:
             return following_tab
