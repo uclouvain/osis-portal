@@ -41,4 +41,6 @@ from admission.models import secondary_education
 from admission.models import secondary_education_exam
 from admission.models import sociological_survey
 from admission.models import supported_languages
+from admission.models import applicant_document_file
+from admission.models import offer_admission_exam_type
 

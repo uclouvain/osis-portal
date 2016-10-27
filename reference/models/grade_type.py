@@ -26,8 +26,7 @@
 from django.db import models
 from django.contrib import admin
 from reference.enums import grade_type_coverage
-from django.utils.translation import ugettext_lazy as _
-from base.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel
 from reference.enums import institutional_grade_type as enum_institutional_grade_type
 
 
