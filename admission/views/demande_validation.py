@@ -243,8 +243,9 @@ def validate_admission_exam(admission_exam, application):
         if admission_exam.admission_exam_type is None:
             validation_messages['admission_exam_type'] = ALERT_MANDATORY_FIELD
         else:
-            if application.offer_year:
-                offer_admission_exam_type = mdl.offer_admission_exam_type.find_by_offer_year(application.offer_year)
+            offer_year = get_application_offer_year(application)
+            if offer_year:
+                offer_admission_exam_type = mdl.offer_admission_exam_type.find_by_offer_year(offer_year)
                 if offer_admission_exam_type and \
                         (offer_admission_exam_type.admission_exam_type != admission_exam.admission_exam_type):
                     validation_messages['admission_exam_type'] = "{0} '{1}' {2} {3}"\
@@ -268,3 +269,12 @@ def validate_local_language_exam(local_language_exam):
         if local_language_exam.result is None:
             validation_messages['local_language_exam_result'] = ALERT_MANDATORY_FIELD
     return validation_messages
+
+
+def get_application_offer_year(application):
+    if application:
+        try:
+            return application.offer_year
+        except:
+            return None
+    return None

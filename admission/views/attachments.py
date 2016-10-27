@@ -27,7 +27,7 @@ from django.shortcuts import render, redirect
 from admission import models as mdl
 from admission.models.applicant_document_file import ApplicantDocumentFile
 from admission.models.enums import document_type
-from admission.views import demande_validation
+from admission.views import demande_validation, navigation
 from admission.forms import RemoveAttachmentForm
 from osis_common.forms import UploadDocumentFileForm
 from osis_common.models.document_file import DocumentFile
@@ -57,7 +57,7 @@ def update(request, application_id=None):
     remove_attachment_form = RemoveAttachmentForm()
     list_choices = [x[1] for x in document_type.DOCUMENT_TYPE_CHOICES]
     data = {
-        "tab_active": 6,
+        "tab_active": navigation.ATTACHMENTS_TAB,
         "application": application,
         "applications": mdl.application.find_by_user(request.user),
         "document_formset": document_formset,

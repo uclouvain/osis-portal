@@ -67,7 +67,6 @@ DEFEND_PERIODE_CHOICES = (
 
 
 class Dissertation(models.Model):
-
     title = models.CharField(max_length=200)
     author = models.ForeignKey(student.Student)
     status = models.CharField(max_length=12, choices=STATUS_CHOICES, default='DRAFT')
@@ -140,5 +139,9 @@ def search(terms, author=None):
     return queryset
 
 
-def search_by_user(user):
+def find_by_user(user):
     return Dissertation.objects.filter(author=user).exclude(active=False)
+
+
+def find_by_id(dissertation_id):
+    return Dissertation.objects.get(pk=dissertation_id)

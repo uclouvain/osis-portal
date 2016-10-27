@@ -31,7 +31,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from admission import models as mdl
 from base import models as mdl_base
-from admission.views import common
+from admission.views import common, navigation
 from reference import models as mdl_reference
 from admission.views import demande_validation
 from reference.enums import education_institution_type, education_institution_national_comunity as national_cmunity_type
@@ -40,11 +40,16 @@ CURRICULUM_YEARS_REQUIRED = 5
 MAX_CREDITS = 75
 
 
-def save(request):
+def save(request, application_id=None):
     save_step = False
     duplicate = False
     duplicate_year_origin = None
     validation_messages = {}
+
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
+    else:
+        application = mdl.application.init_application(request.user)
 
     key = 'bt_duplicate_'
     for k, v in request.POST.items():
@@ -79,6 +84,10 @@ def save(request):
             message_success = _('msg_info_saved')
             for curriculum in curricula:
                 curriculum.save()
+            following_tab = navigation.get_following_tab(request, 'curriculum', application)
+            if following_tab:
+                return following_tab
+
         else:
             return render(request, "admission_home.html",
                           {"curricula": curricula,
@@ -93,7 +102,8 @@ def save(request):
                            "universities": universities,
                            "languages": mdl_reference.language.find_languages(),
                            "current_academic_year": mdl_base.academic_year.current_academic_year(),
-                           "tab_active": 3})
+                           "tab_active": navigation.CURRICULUM_TAB,
+                           "application": application})
 
     # Get the data in bd
     applicant = mdl.applicant.find_by_user(request.user)
@@ -133,7 +143,8 @@ def save(request):
                    "universities": universities,
                    "languages": mdl_reference.language.find_languages(),
                    "current_academic_year": mdl_base.academic_year.current_academic_year(),
-                   "tab_active": 3})
+                   "tab_active": navigation.CURRICULUM_TAB,
+                   "application": application})
 
 
 def update(request, application_id=None):
@@ -202,7 +213,7 @@ def update(request, application_id=None):
             "universities": universities,
             "languages": mdl_reference.language.find_languages(),
             "current_academic_year": mdl_base.academic_year.current_academic_year(),
-            "tab_active": 3,
+            "tab_active": navigation.CURRICULUM_TAB,
             "application": application,
             'applications': mdl.application.find_by_user(request.user)
         }

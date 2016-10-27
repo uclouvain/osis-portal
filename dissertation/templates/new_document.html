@@ -40,11 +40,6 @@
                     </div>
                     <div class="modal-body" id="pnl_modal_upload">
                         {% include "uploading/upload_file_form.html" %}
-                        {% for document in assimilation_documents_existing%}
-                            {% if display_link%}
-                                <a href="{% url 'download' pk=document.pk %}">{{ document.file_name }}</a>
-                            {%endif%}
-                        {%endfor%}
                         <div id="pnl_existing_files"></div>
                         <br>
                     </div>
@@ -55,7 +50,6 @@
                                id="bt_upload_document"/>
                         <input type="hidden" name="description" value="" id="hdn_description"/>
                         <input type="hidden" id="hdn_filename" />
-                        <input type="hidden" value="{{dissertation.id | default_if_none:''}}" id="hdn_current_dissertation_id" name="dissertation_id" title="dissertation_id" >
                     </div>
                 </form>
             </div>

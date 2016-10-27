@@ -25,41 +25,32 @@
 ##############################################################################
 
 from django.db import models
-from django.contrib import admin
-from django.contrib.auth.models import User
 
 
-class DissertationDocumentFile(models.Model):
-    dissertation = models.ForeignKey('Dissertation')
+class PropositionDocumentFile(models.Model):
+    proposition = models.ForeignKey('PropositionDissertation')
     document_file = models.ForeignKey('osis_common.documentFile')
 
 
-def search(dissertation=None, description=None):
+def search(proposition=None, description=None):
     out = None
-    queryset = DissertationDocumentFile.objects.order_by('document_file__creation_date')
-    if dissertation:
-        queryset = queryset.filter(dissertation=dissertation)
+    queryset = PropositionDocumentFile.objects.order_by('document_file__creation_date')
+    if proposition:
+        queryset = queryset.filter(proposition=proposition)
     if description:
         queryset = queryset.filter(document_file__description=description)
-    if dissertation or description:
+    if proposition or description:
         out = queryset
     return out
 
 
-def find_first(dissertation=None, description=None):
-    results = search(dissertation, description)
-    if results.exists():
-        return results[0]
-    return None
-
-
 def find_by_document(document_file):
-    return DissertationDocumentFile.objects.filter(document_file=document_file)
+    return PropositionDocumentFile.objects.filter(document_file=document_file)
 
 
-def find_by_dissertation(dissertation):
-    return DissertationDocumentFile.objects.filter(dissertation=dissertation)
+def find_by_proposition(proposition):
+    return PropositionDocumentFile.objects.filter(proposition=proposition)
 
 
-def find_by_id(dissertation_id):
-    return DissertationDocumentFile.objects.get(dissertation__id=dissertation_id)
+def find_by_id(proposition_id):
+    return PropositionDocumentFile.objects.get(proposition__id=proposition_id)
