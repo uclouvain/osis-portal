@@ -14,7 +14,7 @@ from admission.models import applicant as mdl_applicant
 def populate_applicant_document_file(apps, schema_editor):
     document_files = DocumentFile.objects.all()
     for document_file in document_files:
-        if document_file.username != 'system':
+        if document_file.update_by != 'system':
             user = User.objects.get(username=document_file.username)
             try:
                 applicant = mdl_applicant.find_by_user(user)
