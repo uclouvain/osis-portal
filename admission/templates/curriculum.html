@@ -27,8 +27,19 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<form method="post" action="{% url 'curriculum' %}" id="form_curriculum">
+<form method="post"
+      id="form_curriculum"
+      action="{% if application %}
+                {% url 'curriculum' application.id %}
+              {%else%}
+                {% url 'curriculum' %}
+              {%endif%}">
     {% csrf_token %}
+    <input type="hidden"
+           value="{{application.id}}"
+           name="application_id"
+           id="hdn_application_id"/>
+    <input type="hidden" id="hdn_following_curriculum_tab" name="following_curriculum_tab">
     <div class="row">
         <div class="col-md-8">
             <h5>{% trans 'mandatory_asterisk'%}</h5>
@@ -43,20 +54,21 @@
     </div>
     <div class="row" style="margin-top:5px;">
         <div class="col-md-6">
-            <a id="lnk_previous_step_up"
-               class="btn btn-default"
-               href="{%if application.id%}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
-               onclick="save('form_curriculum');"
-               title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-                {%trans 'previous_step'%} : {%trans 'prerequisites'%}</a>
+            <button type="submit"
+                    id="bt_previous_curriculum_step_up"
+                    class="btn btn-default"
+                    title="{% trans 'diploma'%}">
+                <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+                {%trans 'previous_step'%} : {%trans 'prerequisites'%}
+            </button>
         </div>
         <div class="col-md-6">
-            <a id="lnk_next_step_up"
-               class="btn btn-default pull-right"
-               href="{%if application.id%}{% url 'accounting' application.id%}{%else%}{% url 'accounting'%}{%endif%}"
-               onclick="save('form_curriculum');"
-               title="{% trans 'accounting'%}">{%trans 'next_step'%} : {%trans 'accounting'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-                </a>
+            <button type="submit"
+                    id="bt_next_curriculum_step_up"
+                    class="btn btn-default pull-right"
+                    title="{% trans 'accounting'%}">{%trans 'next_step'%} : {%trans 'accounting'%}
+                <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            </button>
         </div>
     </div>
     <div>
@@ -279,20 +291,21 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <a id="lnk_previous_step"
-               class="btn btn-default"
-               href="{%if application.id%}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
-               onclick="save('form_curriculum');"
-               title="{% trans 'diploma'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-                {%trans 'previous_step'%} : {%trans 'prerequisites'%}</a>
+            <button type="submit"
+                    id="bt_previous_curriculum_step_down"
+                    class="btn btn-default"
+                    title="{% trans 'diploma'%}">
+                <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+                {%trans 'previous_step'%} : {%trans 'prerequisites'%}
+            </button>
         </div>
         <div class="col-md-6">
-            <a id="lnk_next_step"
-               class="btn btn-default pull-right"
-               href="{%if application.id%}{% url 'accounting' application.id%}{%else%}{% url 'accounting'%}{%endif%}"
-               onclick="save('form_curriculum');"
-               title="{% trans 'accounting'%}">{%trans 'next_step'%} : {%trans 'accounting'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-                </a>
+            <button type="submit"
+                    id="bt_next_curriculum_step_down"
+                    class="btn btn-default pull-right"
+                    title="{% trans 'accounting'%}">{%trans 'next_step'%} : {%trans 'accounting'%}
+                <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            </button>
         </div>
     </div>
 </form>
