@@ -54,6 +54,7 @@ from admission.tests import data_for_tests
 from performance.models import student_performance as mdl_perf
 import json
 import datetime
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class TestStudentPerformance(TestCase):
@@ -66,10 +67,16 @@ class TestStudentPerformance(TestCase):
         fields_value = {"data": self.json_points, "update_date": datetime.date.today()}
         student = self.student_performance.student
         offer_year = self.student_performance.offer_year
-        mdl_perf.update_or_create(student, offer_year, fields_value)
+        stud_perf = mdl_perf.update_or_create(student, offer_year, fields_value)
 
-        stud_perf = mdl_perf.StudentPerformance.objects.get(student=student, offer_year=offer_year)
-        self.assertDictEqual(stud_perf.data, self.json_points)
+        self.assertDictEqual(stud_perf.data, self.json_points, "Object should be updated")
+
+        other_student = data_for_tests.create_student_with_specific_registration_id("64641202")
+        mdl_perf.update_or_create(other_student, offer_year, fields_value)
+        try:
+            mdl_perf.StudentPerformance.objects.get(student=other_student, offer_year=offer_year)
+        except ObjectDoesNotExist:
+            self.fail("Object should be created")
 
     def test_has_expired(self):
         timedelta = datetime.timedelta(days=4)
@@ -82,4 +89,13 @@ class TestStudentPerformance(TestCase):
         self.student_performance.update_date = datetime.date.today() - timedelta
         self.assertTrue(mdl_perf.has_expired(self.student_performance))
 
+    def test_find_by_student_and_offer_year(self):
+        student = self.student_performance.student
+        offer_year = self.student_performance.offer_year
+        stud_perf = mdl_perf.find_by_student_and_offer_year(student, offer_year)
+        self.assertEqual(stud_perf, self.student_performance, "Don\"t return the correct object")
+
+        other_student = data_for_tests.create_student_with_specific_registration_id("64641202")
+        stud_perf = mdl_perf.find_by_student_and_offer_year(other_student, offer_year)
+        self.assertIsNone(stud_perf, "Should find nothing")
 

@@ -30,37 +30,20 @@ import datetime
 STUDENT_PERFORMANCE_QUEUE_NAME = "STUDENT_PERFORMANCE_QUEUE"
 
 
+def generate_message(student, offer_year):
+    return str(student) + "_" + str(offer_year)
+
+
 def fetch_and_save(student, offer_year):
-    obj = fetch_student_performance(student, offer_year)
-    if obj:
-        obj.save()
-    return obj
-
-
-def fetch_and_update(student_performance):
-    student = student_performance.student
-    offer_year = student_performance.offer_year
-    obj = fetch_student_performance(student, offer_year)
-    if obj:
-        student_performance.data = obj.data
-        student_performance.update_date = get_expiration_date()
-        student_performance.creation_date = get_creation_date()
-        student_performance.save()
-    return student_performance
-
-
-def fetch_student_performance(student, offer_year):
-    message = str(student) + "_" + str(offer_year)
-    json_data = fetch_json_data(message)
+    data = fetch_json_data(student, offer_year)
     obj = None
-    if json_data:
-        from performance.models.student_performance import StudentPerformance
-        obj = StudentPerformance(student=student, offer_year=offer_year, data=json_data,
-                                 update_date=get_expiration_date())
+    if data:
+        obj = save(student, offer_year, data)
     return obj
 
 
-def fetch_json_data(message):
+def fetch_json_data(student, offer_year):
+    message = generate_message(student, offer_year)
     client = DocumentClient(STUDENT_PERFORMANCE_QUEUE_NAME)
     json_data = client.call(message)
     json_student_perf = None
@@ -79,3 +62,13 @@ def get_expiration_date():
 def get_creation_date():
     today = datetime.datetime.today()
     return today
+
+
+def save(student, offer_year, json_data):
+    from performance.models.student_performance import update_or_create
+    update_date = get_expiration_date()
+    creation_date = get_creation_date()
+    fields = {"data": json_data, "update_date": update_date, "creation_date": creation_date}
+    obj = update_or_create(student, offer_year, fields)
+    return obj
+

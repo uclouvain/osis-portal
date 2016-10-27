@@ -26,6 +26,12 @@ def create_student():
     return a_student
 
 
+def create_student_with_specific_registration_id(registration_id):
+    a_student = mdl_base.student.Student(registration_id=registration_id, person=create_person())
+    a_student.save()
+    return a_student
+
+
 def create_applicant_by_user(user):
     an_applicant = mdl.applicant.Applicant(user=user)
     an_applicant.save()

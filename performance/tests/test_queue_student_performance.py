@@ -51,13 +51,30 @@
 ##############################################################################
 from django.test import TestCase
 from admission.tests import data_for_tests
-from performance.models import student_performance
-import datetime
+import json
+from performance.models import student_performance as mdl_perf
+from performance.queue import student_performance as queue_stud_perf
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class TestQueueStudentPerformance(TestCase):
     def setUp(self):
         self.student_performance = data_for_tests.create_student_performance()
+        with open("performance/tests/ressources/points.json") as json_file:
+            self.json_points = json.load(json_file)
 
+    def test_save(self):
+        student = self.student_performance.student
+        offer_year = self.student_performance.offer_year
+        stud_perf = queue_stud_perf.save(student, offer_year, self.json_points)
+
+        self.assertDictEqual(stud_perf.data, self.json_points, "Object should be updated")
+
+        other_student = data_for_tests.create_student_with_specific_registration_id("64641202")
+        queue_stud_perf.save(other_student, offer_year, self.json_points)
+        try:
+            mdl_perf.StudentPerformance.objects.get(student=other_student, offer_year=offer_year)
+        except ObjectDoesNotExist:
+            self.fail("Object should be created")
 
 

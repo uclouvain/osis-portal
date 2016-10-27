@@ -69,6 +69,11 @@ def search(student=None, offer_year=None):
         return None
 
 
+def update_or_create(student, offer_year, fields):
+    obj, created = StudentPerformance.objects.update_or_create(student=student, offer_year=offer_year, defaults=fields)
+    return obj
+
+
 def find_by_student_and_offer_year(student, offer_year):
     try:
         result = StudentPerformance.objects.get(student=student, offer_year=offer_year)
@@ -79,10 +84,9 @@ def find_by_student_and_offer_year(student, offer_year):
 
 def find_or_fetch(student, offer_year):
     result = find_by_student_and_offer_year(student, offer_year)
-    if result is None:
-        result = fetch_and_save(student, offer_year)
-    elif has_expired(result):
-        fetch_and_update(result)
+    if result is None or has_expired(result):
+        new_result = fetch_and_save(student, offer_year)
+        result = new_result if new_result else result
     return result
 
 
@@ -91,7 +95,4 @@ def has_expired(student_performance):
     expiration_date = student_performance.update_date
     return expiration_date < today
 
-
-def update_or_create(student, offer_year, fields):
-    StudentPerformance.objects.update_or_create(student=student, offer_year=offer_year, defaults=fields)
 
