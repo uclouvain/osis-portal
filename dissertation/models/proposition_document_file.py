@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel
 from django.db import models
 
 
@@ -42,13 +42,6 @@ def search(proposition=None, description=None):
     if proposition or description:
         out = queryset
     return out
-
-
-def find_first(proposition=None, description=None):
-    results = search(proposition, description)
-    if results.exists():
-        return results[0]
-    return None
 
 
 def find_by_document(document_file):

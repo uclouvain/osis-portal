@@ -23,20 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.http import HttpResponse
-from rest_framework import serializers
-from rest_framework.renderers import JSONRenderer
 from admission.models.enums import document_type
-import json
-
-
-def find_by_criteria(request):
-    criteria_param = request.GET['criteria']
-    criteria = int(criteria_param)
-    list_document_type = find_list_document_type_by_criteria(criteria)
-    serializer = AssimilationDocSerializer(list_document_type, many=True)
-
-    return JSONResponse(serializer.data)
+from reference.enums import assimilation_criteria as assimilation_criteria_enum
 
 
 def criteria1(list_document_type_param):
@@ -44,12 +32,12 @@ def criteria1(list_document_type_param):
     if list_document_type_param:
         list_document_type.extend(list_document_type_param)
     assimilation_doc = AssimilationDoc()
-    assimilation_doc.criteria_id = 1
+    assimilation_doc.criteria = assimilation_criteria_enum.CRITERIA_1
     assimilation_doc.descriptions = [document_type.RESIDENT_LONG_DURATION]
     assimilation_doc.first = True
     list_document_type.append(assimilation_doc)
     assimilation_doc = AssimilationDoc()
-    assimilation_doc.criteria_id = 1
+    assimilation_doc.criteria = assimilation_criteria_enum.CRITERIA_1
     assimilation_doc.descriptions = [document_type.ID_FOREIGN_UNLIMITED]
     list_document_type.append(assimilation_doc)
     return list_document_type
@@ -61,33 +49,33 @@ def criteria2(list_document_type_param):
         list_document_type.extend(list_document_type_param)
 
     assimilation_doc = AssimilationDoc()
-    assimilation_doc.criteria_id = 2
+    assimilation_doc.criteria = assimilation_criteria_enum.CRITERIA_2
     assimilation_doc.descriptions = [document_type.ATTACHMENT_26]
     assimilation_doc.first = True
     list_document_type.append(assimilation_doc)
     assimilation_doc = AssimilationDoc()
-    assimilation_doc.criteria_id = 2
+    assimilation_doc.criteria = assimilation_criteria_enum.CRITERIA_2
     assimilation_doc.descriptions = [document_type.REFUGEE_CARD,
                                      document_type.FAMILY_COMPOSITION,
                                      document_type.BIRTH_CERTIFICATE]
     list_document_type.append(assimilation_doc)
     #
     assimilation_doc = AssimilationDoc()
-    assimilation_doc.criteria_id = 2
+    assimilation_doc.criteria = assimilation_criteria_enum.CRITERIA_2
     assimilation_doc.descriptions = [document_type.REFUGEE_CARD,
                                      document_type.RESIDENT_CERTIFICATE,
                                      document_type.BIRTH_CERTIFICATE]
     list_document_type.append(assimilation_doc)
     #
     assimilation_doc = AssimilationDoc()
-    assimilation_doc.criteria_id = 2
+    assimilation_doc.criteria = assimilation_criteria_enum.CRITERIA_2
     assimilation_doc.descriptions = [document_type.FOREIGN_INSCRIPTION_CERTIFICATE,
                                      document_type.SUBSIDIARY_PROTECTION_DECISION,
                                      document_type.RESIDENCE_PERMIT]
     list_document_type.append(assimilation_doc)
     #
     assimilation_doc = AssimilationDoc()
-    assimilation_doc.criteria_id = 2
+    assimilation_doc.criteria = assimilation_criteria_enum.CRITERIA_2
     assimilation_doc.descriptions = [document_type.STATELESS_CERTIFICATE, ]
     list_document_type.append(assimilation_doc)
     return list_document_type
@@ -112,13 +100,13 @@ def find_assimilation_basic_documents():
 
 
 class AssimilationDoc(object):
-    criteria_id = None
+    criteria = None
     descriptions = None
     first = False
 
     def __init__(self):
         self.description = None
-        self.criteria_id = None
+        self.criteria = None
         self.first = False
 
 
@@ -156,7 +144,7 @@ def criteria3(list_document_type_param):
         list_document_type.extend(list_document_type_param)
 
     assimilation_doc = AssimilationDoc()
-    assimilation_doc.criteria_id = 3
+    assimilation_doc.criteria = assimilation_criteria_enum.CRITERIA_3
     assimilation_doc.first = True
     assimilation_doc.descriptions = [document_type.FAMILY_COMPOSITION,
                                      document_type.PAYCHECK_1, document_type.PAYCHECK_2,
@@ -164,7 +152,7 @@ def criteria3(list_document_type_param):
                                      document_type.PAYCHECK_5, document_type.PAYCHECK_6, document_type.ID_CARD]
     list_document_type.append(assimilation_doc)
     assimilation_doc = AssimilationDoc()
-    assimilation_doc.criteria_id = 3
+    assimilation_doc.criteria = assimilation_criteria_enum.CRITERIA_3
     assimilation_doc.descriptions = [document_type.RESIDENT_CERTIFICATE,
                                      document_type.PAYCHECK_1, document_type.PAYCHECK_2,
                                      document_type.PAYCHECK_3, document_type.PAYCHECK_4,
@@ -179,7 +167,7 @@ def criteria4(list_document_type_param):
         list_document_type.extend(list_document_type_param)
 
     assimilation_doc = AssimilationDoc()
-    assimilation_doc.criteria_id = 4
+    assimilation_doc.criteria = assimilation_criteria_enum.CRITERIA_4
     assimilation_doc.first = True
     assimilation_doc.descriptions = [document_type.CPAS]
     list_document_type.append(assimilation_doc)
@@ -192,7 +180,7 @@ def criteria5(list_document_type_param):
         list_document_type.extend(list_document_type_param)
 
     assimilation_doc = AssimilationDoc()
-    assimilation_doc.criteria_id = 5
+    assimilation_doc.criteria = assimilation_criteria_enum.CRITERIA_5
     assimilation_doc.first = True
     assimilation_doc.descriptions = [document_type.ID_CARD, document_type.TUTORSHIP_CERTIFICATE]
     list_document_type.append(assimilation_doc)
@@ -204,7 +192,7 @@ def criteria6(list_document_type_param):
     if list_document_type_param:
         list_document_type.extend(list_document_type_param)
     assimilation_doc = AssimilationDoc()
-    assimilation_doc.criteria_id = 6
+    assimilation_doc.criteria = assimilation_criteria_enum.CRITERIA_6
     assimilation_doc.first = True
     assimilation_doc.descriptions = [document_type.SCHOLARSHIP_CFWB, document_type.TUTORSHIP_CERTIFICATE]
     list_document_type.append(assimilation_doc)
@@ -217,7 +205,7 @@ def criteria7(list_document_type_param):
         list_document_type.extend(list_document_type_param)
 
     assimilation_doc = AssimilationDoc()
-    assimilation_doc.criteria_id = 7
+    assimilation_doc.criteria = assimilation_criteria_enum.CRITERIA_7
     assimilation_doc.first = True
     assimilation_doc.descriptions = [document_type.RESIDENT_LONG_DURATION]
     list_document_type.append(assimilation_doc)
@@ -226,38 +214,38 @@ def criteria7(list_document_type_param):
 
 def find_list_document_type_by_criteria(criteria):
     list_document_type = []
-    if criteria == 1:
+    if criteria == assimilation_criteria_enum.CRITERIA_1:
         list_document_type = criteria1(list_document_type)
-    if criteria == 2:
+    if criteria == assimilation_criteria_enum.CRITERIA_2:
         list_document_type = criteria2(list_document_type)
-    if criteria == 3:
+    if criteria == assimilation_criteria_enum.CRITERIA_3:
         list_document_type = criteria3(list_document_type)
-    if criteria == 4:
+    if criteria == assimilation_criteria_enum.CRITERIA_4:
         list_document_type = criteria4(list_document_type)
-    if criteria == 5:
+    if criteria == assimilation_criteria_enum.CRITERIA_5:
         list_document_type = criteria5(list_document_type)
-    if criteria == 6:
+    if criteria == assimilation_criteria_enum.CRITERIA_6:
         list_document_type = criteria6(list_document_type)
-    if criteria == 7:
+    if criteria == assimilation_criteria_enum.CRITERIA_7:
         list_document_type = criteria7(list_document_type)
     return list_document_type
 
 
 def get_list_documents_descriptions(criteria_id):
     list_document_type = []
-    if criteria_id == 1:
+    if criteria_id == assimilation_criteria_enum.CRITERIA_1:
         list_document_type = criteria1(list_document_type)
-    if criteria_id == 2:
+    if criteria_id == assimilation_criteria_enum.CRITERIA_2:
         list_document_type = criteria2(list_document_type)
-    if criteria_id == 3:
+    if criteria_id == assimilation_criteria_enum.CRITERIA_3:
         list_document_type = criteria3(list_document_type)
-    if criteria_id == 4:
+    if criteria_id == assimilation_criteria_enum.CRITERIA_4:
         list_document_type = criteria4(list_document_type)
-    if criteria_id == 5:
+    if criteria_id == assimilation_criteria_enum.CRITERIA_5:
         list_document_type = criteria5(list_document_type)
-    if criteria_id == 6:
+    if criteria_id == assimilation_criteria_enum.CRITERIA_6:
         list_document_type = criteria6(list_document_type)
-    if criteria_id == 7:
+    if criteria_id == assimilation_criteria_enum.CRITERIA_7:
         list_document_type = criteria7(list_document_type)
     list_documents_description = []
     for l in list_document_type:

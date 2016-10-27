@@ -25,20 +25,16 @@
 ##############################################################################
 from django import template
 from django.utils.translation import ugettext_lazy as _
-
+from reference.enums import assimilation_criteria as assimilation_criteria_enum
 register = template.Library()
 
 
 @register.filter
-def div_visibility(applicant_assimilation_criteria, criteria_id):
+def div_visibility(applicant_assimilation_criteria, criteria):
     for applicant_criteria_div in applicant_assimilation_criteria:
-        if applicant_criteria_div.criteria.id == criteria_id:
-            if applicant_criteria_div.selected:
-                return "visibility:visible;display:block;"
-            else:
-                return "visibility:hidden;display:none;"
-
-    return "visibility:hidden;display:none;"
+        if applicant_criteria_div.criteria == criteria[0] and applicant_criteria_div.selected:
+            return True
+    return False
 
 
 @register.filter
@@ -58,24 +54,24 @@ def button_title(assimilation_documents_existing, document_description):
 
 
 @register.filter
-def table_display(assimilation_basic_documents, criteria_id):
+def table_display(assimilation_basic_documents, criteria):
     for doc in assimilation_basic_documents:
-        if doc.criteria_id == criteria_id:
+        if doc.criteria == criteria[0]:
             return True
     return False
 
 
 @register.filter
-def assimilation_criteria_radio(applicant_assimilation_criteria, criteria_id):
+def assimilation_criteria_radio(applicant_assimilation_criteria, criteria):
     if applicant_assimilation_criteria.exists():
         for applicant_criteria_div in applicant_assimilation_criteria:
-            if applicant_criteria_div.criteria.id == criteria_id:
+            if applicant_criteria_div.criteria == criteria[0]:
                 if not applicant_criteria_div.selected:
                     return "checked"
                 else:
                     return ""
+    else:
         return "checked"
-    return ""
 
 
 @register.filter
@@ -87,10 +83,10 @@ def button_class_color(assimilation_documents_existing, document_description):
 
 
 @register.filter
-def assimilation_criteria_criteria5(applicant_assimilation_criteria, criteria_id):
+def assimilation_criteria_criteria5(applicant_assimilation_criteria, criteria):
     for applicant_criteria_div in applicant_assimilation_criteria:
-        if applicant_criteria_div.criteria.id == 5 \
-                and applicant_criteria_div.additional_criteria \
-                and applicant_criteria_div.additional_criteria.id == criteria_id:
-            return "selected"
+        if applicant_criteria_div.criteria == assimilation_criteria_enum.CRITERIA_5:
+            if applicant_criteria_div.additional_criteria:
+                if applicant_criteria_div.additional_criteria == criteria:
+                    return "selected"
     return ""

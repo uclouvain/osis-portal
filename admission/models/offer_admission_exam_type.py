@@ -23,29 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
 from django.db import models
 from django.contrib import admin
-from base.models.serializable_model import SerializableModel
 
 
-class AssimilationCriteriaAdmin(admin.ModelAdmin):
-    list_display = ('criteria', 'order')
-    fieldsets = ((None, {'fields': ('criteria', 'order')}),)
+class OfferAdmissionExamTypeAdmin(admin.ModelAdmin):
+    list_display = ('offer_year', 'admission_exam_type')
+    fieldsets = ((None, {'fields': ('offer_year', 'admission_exam_type')}),)
+    list_filter = ('offer_year',)
 
 
-class AssimilationCriteria(SerializableModel):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    criteria = models.CharField(max_length=255, unique=True)
-    order = models.IntegerField(blank=True, null=True)
-
-    def __str__(self):
-        return self.criteria
+class OfferAdmissionExamType(models.Model):
+    offer_year = models.ForeignKey('base.OfferYear', null=False)
+    admission_exam_type = models.ForeignKey('AdmissionExamType', null=False)
 
 
-def find_criteria():
-    return AssimilationCriteria.objects.all().order_by("order")
-
-
-def find_by_id(criteria_id):
-    return AssimilationCriteria.objects.get(pk=criteria_id)
+def find_by_offer_year(an_offer_year):
+    return OfferAdmissionExamType.objects.filter(offer_year=an_offer_year).first()

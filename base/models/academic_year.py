@@ -27,7 +27,7 @@ from django.db import models
 from django.contrib import admin
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
-from base.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel
 
 
 class AcademicYearAdmin(admin.ModelAdmin):
@@ -69,10 +69,6 @@ def current_academic_year():
         return academic_yr
     else:
         return None
-
-
-def find_by_id(id):
-    return AcademicYear.objects.get(pk=id)
 
 
 def find_by_year(a_year):

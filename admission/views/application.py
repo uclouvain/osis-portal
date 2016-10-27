@@ -23,28 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.models.answer import find_by_option, find_by_id, find_by_application
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from admission import models as mdl
 from reference import models as mdl_reference
+from reference.enums import institutional_grade_type as enum_institutional_grade_type
 from base import models as mdl_base
 from admission.views.common import get_picture_id, get_id_document
 from admission.views.common import extra_information
-from admission.views import demande_validation
-from admission.views import tabs
-from django.http import *
-import urllib
-
-
-PROFILE_TAB = "0"
-DEMAND_TAB = "1"
-PREREQUISITES_TAB = "2"
-CURRICULUM_TAB = "3"
-ACCOUNTING_TAB = "4"
-SOCIOLOGICAL_SURVEY_TAB = "5"
-ATTACHMENTS_TAB = "6"
-SUBMISSION_TAB = "7"
+from admission.views import common, demande_validation, navigation
+from django.http import HttpResponseRedirect
 
 
 def application_update(request, application_id):
@@ -67,21 +55,17 @@ def save_application_offer(request):
         new_application = False
         next_tab = request.POST.get('next_tab')
 
-        offer_year = None
-        offer_year_id = request.POST.get('offer_year_id')
+        offer_year_id = request.POST.get('offer_year_id', None)
+        application_id = request.POST.get('application_id', None)
 
-        application_id = request.POST.get('application_id')
-
-        if application_id == 'None':
-            application_id = None
         if application_id:
             application = get_object_or_404(mdl.application.Application, pk=application_id)
             secondary_education = mdl.secondary_education.find_by_person(application.applicant)
         else:
             application = mdl.application.init_application(request.user)
             new_application = True
-            person_application = mdl.applicant.find_by_user(request.user)
-            application.applicant = person_application
+            applicant = mdl.applicant.find_by_user(request.user)
+            application.applicant = applicant
             secondary_education = mdl.secondary_education.SecondaryEducation()
             secondary_education.applicant = application.applicant
 
@@ -90,8 +74,7 @@ def save_application_offer(request):
 
         if offer_year_id:
             offer_year = mdl_base.offer_year.find_by_id(offer_year_id)
-
-        application.offer_year = offer_year
+            application.offer_year = offer_year
 
         if request.POST.get('rdb_offer_localdegree'):
             if request.POST.get('rdb_offer_localdegree') == "true":
@@ -126,9 +109,11 @@ def save_application_offer(request):
                 application.resident = False
         if request.POST.get('txt_offer_lottery'):
             application.raffle_number = request.POST.get('txt_offer_lottery')
-
-        application.save()
-        application_id = application.id
+        application.application_type = mdl.application.define_application_type(application.national_degree,
+                                                                               request.user)
+        if offer_year_id:
+            application.save()
+            application_id = application.id
         if new_application is False:
             # delete all existing application_assimilation_criteria
             for a in mdl.application_assimilation_criteria.find_by_application(application):
@@ -142,83 +127,60 @@ def save_application_offer(request):
             # Copy the applicant_assimilation_criteria
             mdl.application_assimilation_criteria.\
                 copy_from_applicant_assimilation_criteria(applicant_assimilation_criteria, application)
-
-        # answer_question_
-        answers = find_by_application(application_id)
-        for answer in answers:
-            answer.delete()
-        for key, value in request.POST.items():
-            if "txt_answer_question_" in key:
-                # INPUT OR LABEL
-                option_id = key.replace("txt_answer_question_", "")
-                asw = find_by_option(option_id)
-                if not asw:
-                    answer = mdl.answer.Answer()
-                    answer.application = application
-                    answer.option = mdl.option.find_by_id(int(option_id))
-                    answer.value = value
-                else:
-                    answer = find_by_id(asw)
-                    answer.value = value
-                answer.save()
-            if "txt_answer_radio_" in key:
-                # RADIO_BUTTON
-                option_id = request.POST[key]
-                option = mdl.option.find_by_id(int(option_id))
-                options = mdl.option.find_options_by_question_id(option.question.id)
-                if options:
-                    for opt in options:
-                        asw = mdl.answer.find_by_option(opt.id)
-                        asw.delete()
-                    answer = mdl.answer.Answer()
-                    answer.application = application
-                    answer.option = option
-                    answer.value = option.value
+        if application_id:
+            # answer_question_
+            answers = mdl.answer.find_by_application(application_id)
+            for answer in answers:
+                answer.delete()
+            for key, value in request.POST.items():
+                if "txt_answer_question_" in key:
+                    # INPUT OR LABEL
+                    option_id = key.replace("txt_answer_question_", "")
+                    asw = mdl.answer.find_by_application_and_option(application_id, option_id)
+                    if not asw:
+                        answer = mdl.answer.Answer()
+                        answer.application = application
+                        answer.option = mdl.option.find_by_id(int(option_id))
+                        answer.value = value
+                    else:
+                        answer = mdl.answer.find_by_id(asw)
+                        answer.value = value
                     answer.save()
-            if "txt_answer_checkbox_" in key:
-                # CHECK_BOX
-                if "on" == value:
-                    answer = mdl.answer.Answer()
-                    answer.application = application
-                    option_id = key.replace("txt_answer_checkbox_", "")
+                if "txt_answer_radio_" in key:
+                    # RADIO_BUTTON
+                    option_id = request.POST[key]
                     option = mdl.option.find_by_id(int(option_id))
+                    options = mdl.option.find_options_by_question_id(option.question.id)
+                    if options:
+                        for opt in options:
+                            asw = mdl.answer.find_by_application_and_option(application_id, opt.id)
+                            asw.delete()
+                        answer = mdl.answer.Answer()
+                        answer.application = application
+                        answer.option = option
+                        answer.value = option.value
+                        answer.save()
+                if "txt_answer_checkbox_" in key:
+                    # CHECK_BOX
+                    if "on" == value:
+                        answer = mdl.answer.Answer()
+                        answer.application = application
+                        option_id = key.replace("txt_answer_checkbox_", "")
+                        option = mdl.option.find_by_id(int(option_id))
+                        answer.option = option
+                        answer.value = option.value
+                        answer.save()
+                if "slt_question_" in key:
+                    answer = mdl.answer.Answer()
+                    answer.application = application
+                    option = mdl.option.find_by_id(value)
                     answer.option = option
                     answer.value = option.value
                     answer.save()
-            if "slt_question_" in key:
-                answer = mdl.answer.Answer()
-                answer.application = application
-                option = mdl.option.find_by_id(value)
-                answer.option = option
-                answer.value = option.value
-                answer.save()
     applicant = mdl.applicant.find_by_user(request.user)
 
     if next_tab:
-        if next_tab == PROFILE_TAB:
-            return HttpResponseRedirect(reverse('profile', args=(application.id,)))
-
-        if next_tab == DEMAND_TAB:
-            return HttpResponseRedirect(reverse('applications', args=(application.id,)))
-
-        if next_tab == PREREQUISITES_TAB:
-            return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': application_id,
-                                                                          'saved': 1}))
-
-        if next_tab == CURRICULUM_TAB:
-            return HttpResponseRedirect(reverse('curriculum_update', args=(application.id,)))
-
-        if next_tab == ACCOUNTING_TAB:
-            return HttpResponseRedirect(reverse('accounting_update', args=(application.id,)))
-
-        if next_tab == SOCIOLOGICAL_SURVEY_TAB:
-            return HttpResponseRedirect(reverse('sociological_survey', args=(application.id,)))
-
-        if next_tab == ATTACHMENTS_TAB:
-            return HttpResponseRedirect(reverse('attachments', args=(application.id,)))
-
-        if next_tab == SUBMISSION_TAB:
-            return HttpResponseRedirect(reverse('submission', args=(application.id,)))
+        return navigation.get_redirection(next_tab, application_id)
 
     data = {
         'tab_active': next_tab,
@@ -240,7 +202,6 @@ def application_view(request, application_id):
 
 
 def applications(request, application_id=None):
-    tab_status = tabs.init(request)
     application_list = mdl.application.find_by_user(request.user)
     if application_id:
         application = mdl.application.find_by_id(application_id)
@@ -252,19 +213,11 @@ def applications(request, application_id=None):
     countries = mdl_reference.country.find_all()
     data = {
         "applications": application_list,
-        "grade_choices": mdl_reference.institutional_grade_type.find_all(),
+        "grade_choices": enum_institutional_grade_type.INSTITUTIONAL_GRADE_CHOICES,
         "domains": mdl_reference.domain.find_current_domains(),
-        'tab_active': 1,
+        'tab_active': navigation.DEMAND_TAB,
         "application": application,
-        "tab_profile": tab_status['tab_profile'],
-        "tab_applications": tab_status['tab_applications'],
-        "tab_diploma": tab_status['tab_diploma'],
-        "tab_curriculum": tab_status['tab_curriculum'],
-        "tab_accounting": tab_status['tab_accounting'],
-        "tab_sociological": tab_status['tab_sociological'],
-        "tab_attachments": tab_status['tab_attachments'],
-        "tab_submission": tab_status['tab_submission'],
-        "local_language_exam_needed": is_local_language_exam_needed(request.user),
+        "local_language_exam_needed": common.is_local_language_exam_needed(request.user),
         "applicant": applicant,
         "person_legal_address": person_legal_address,
         "countries": countries
@@ -278,19 +231,10 @@ def submission(request, application_id=None):
         application = mdl.application.find_by_id(application_id)
     else:
         application = mdl.application.init_application(request.user)
-    tab_status = tabs.init(request)
     data = {
         'application': application,
-        'display_admission_exam': extra_information(request, application),
-        'tab_active': 7,
-        'tab_profile': tab_status['tab_profile'],
-        'tab_applications': tab_status['tab_applications'],
-        'tab_diploma': tab_status['tab_diploma'],
-        'tab_curriculum': tab_status['tab_curriculum'],
-        'tab_accounting': tab_status['tab_accounting'],
-        'tab_sociological': tab_status['tab_sociological'],
-        'tab_attachments': tab_status['tab_attachments'],
-        'tab_submission': tab_status['tab_submission'],
+        'display_admission_exam': extra_information(application),
+        'tab_active': navigation.SUBMISSION_TAB,
         'applications': mdl.application.find_by_user(request.user)
     }
     applicant = mdl.applicant.find_by_user(request.user)
@@ -306,14 +250,15 @@ def application_delete(request, application_id):
 
 def change_application_offer(request, application_id=None):
     application = mdl.application.find_by_id(application_id)
+    application.application_type = mdl.application.define_application_type(application.national_degree, request.user)
     application.save()
     application_list = mdl.application.find_by_user(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
     data = {
         'applications': application_list,
-        "grade_choices": mdl_reference.institutional_grade_type.find_all(),
+        "grade_choices": enum_institutional_grade_type.INSTITUTIONAL_GRADE_CHOICES,
         "domains": mdl_reference.domain.find_current_domains(),
-        'tab_active': 1,
+        'tab_active': navigation.DEMAND_TAB,
         "first": True,
         "application": application,
     }
@@ -325,13 +270,9 @@ def is_local_language_exam_needed(user):
     local_language_exam_needed = False
     applications_list = mdl.application.find_by_user(user)
     for application in applications_list:
-        if application.offer_year.grade_type.name == 'BACHELOR' or \
-                        application.offer_year.grade_type.name == 'MASTER' or \
-                        application.offer_year.grade_type.name == 'TRAINING_CERTIFICATE':
+        if application.offer_year.grade_type == 'BACHELOR' or \
+                        application.offer_year.grade_type.startswith('MASTER') or \
+                        application.offer_year.grade_type == 'TRAINING_CERTIFICATE':
             local_language_exam_needed = True
             break
     return local_language_exam_needed
-
-
-def url_with_querystring(path, **kwargs):
-    return path + '?' + urllib.urlencode(kwargs)

@@ -27,7 +27,6 @@ from rest_framework import serializers
 from reference import models as ref
 from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
-from django.views.decorators.csrf import csrf_exempt
 from reference import models as mdl_reference
 
 
@@ -50,6 +49,3 @@ def find_by_id_json(request):
     serializer = CountrySerializer(country)
     return JSONResponse(serializer.data)
 
-
-def find_by_id(an_id):
-    return Country.find_by_id(an_id)

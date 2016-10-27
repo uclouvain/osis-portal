@@ -23,40 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.utils import translation
+
 from django.utils.translation import ugettext_lazy as _
-from admission import models as mdl
-from admission.views import demande_validation
-
-# Not really useful for the moment, but I think it could be useful when we will work on the enabled/disabled tab for
-# the admission.  LV
 
 
-def init(request):
-    tabs = {"tab_profile": True,
-            "tab_applications": True,
-            "tab_diploma": True,
-            "tab_curriculum": True,
-            "tab_accounting": True,
-            "tab_sociological": True,
-            "tab_attachments": True,
-            "tab_submission": True}
+INSCRIPTION = 'INSCRIPTION'
+ADMISSION = 'ADMISSION'
 
-    return tabs
+APPLICATION_TYPE_CHOICES = ((ADMISSION, _(ADMISSION)),
+                            (INSCRIPTION, _(INSCRIPTION)))
 
 
-def get_tabs_status(request):
-
-    tabs = {"tab_profile": True,
-            "tab_applications": True,
-            "tab_diploma": False,
-            "tab_curriculum": False,
-            "tab_accounting": False,
-            "tab_sociological": False,
-            "tab_attachments": False,
-            "tab_submission": False}
-    applicant = mdl.applicant.find_by_user(request.user)
-    if not demande_validation.validate_profil(applicant, request.user):
-        tabs['tab_applications'] = False
-
-    return tabs

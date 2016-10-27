@@ -42,7 +42,7 @@ def dissertations(request):
     student = mdl.student.find_by_person(person)
     offers = mdl.offer.find_by_student(student)
     offer_propositions = offer_proposition.search_by_offers(offers)
-    memories = dissertation.search_by_user(student)
+    memories = dissertation.find_by_user(student)
     date_now = timezone.now().date()
     visibility = False
     for offer_pro in offer_propositions:

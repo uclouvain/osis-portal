@@ -24,13 +24,11 @@
 #
 ##############################################################################
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
 
-from admission import models as mdl
 from reference import models as mdl_reference
-from admission.views.common import extra_information, validated_extra, get_picture_id
 from base import models as mdl_base
 
 
@@ -42,14 +40,15 @@ class JSONResponse(HttpResponse):
 
 
 class OfferSerializer(serializers.ModelSerializer):
-    institutional_grade_type_name = serializers.SerializerMethodField('get_grade_type')
+    institutional_grade_type = serializers.SerializerMethodField('get_grade_type')
 
     class Meta:
         model = mdl_base.offer_year.OfferYear
-        fields = ('id', 'acronym', 'title', 'title_international', 'grade_type', 'subject_to_quota', 'institutional_grade_type_name')
+        fields = ('id', 'acronym', 'title', 'title_international', 'grade_type', 'subject_to_quota',
+                  'institutional_grade_type')
 
     def get_grade_type(self, obj):
-        return obj.grade_type.institutional_grade_type.name
+        return obj.grade_type.institutional_grade_type
 
 
 def search(request):
@@ -72,19 +71,6 @@ def find_by_id(request):
     return JSONResponse(serializer.data)
 
 
-def offer_selection(request):
-    offers = None
-    application = mdl.application.find_by_user(request.user)
-    grade_choices = mdl_reference.grade_type.find_all()
-    return render(request, "offer_selection.html",
-                  {"gradetypes":  mdl_reference.grade_type.find_all(),
-                   "domains":     mdl_reference.domain.find_current_domains(),
-                   "offers":      offers,
-                   "offer":       None,
-                   "application": application,
-                   "grade_choices": grade_choices})
-
-
 def _get_offer_type(request):
     offer_type = None
 
@@ -105,49 +91,4 @@ def _get_domain(request):
     if domain_id:
         domain = get_object_or_404(mdl_reference.domain.Domain, pk=domain_id)
     return domain
-
-
-def selection_offer(request, offer_id):
-    offer_year = get_object_or_404(mdl_base.offer_year.OfferYear, pk=offer_id)
-    grade = _get_offer_type(request)
-    domain = _get_domain(request)
-
-    return render(request, "offer_selection.html",
-                           {"gradetypes":  mdl_reference.grade_type.find_all(),
-                            "domains":     mdl_reference.domain.find_current_domains(),
-                            "offers":      None,
-                            "offer":       offer_year,
-                            "offer_type":  grade,
-                            "domain":      domain})
-
-
-def demande_update(request, application_id=None):
-    offers = None
-    if application_id:
-        application = mdl.application.find_by_id(application_id)
-    else:
-        application = mdl.application.init_application(request.user)
-    grade_choices = mdl_reference.grade_type.find_all()
-    an_applicant = mdl.applicant.find_by_user(request.user)
-    secondary_education = mdl.secondary_education.find_by_person(an_applicant)
-    person_legal_address = mdl.person_address.find_by_person_type(an_applicant, 'LEGAL')
-    person_contact_address = mdl.person_address.find_by_person_type(an_applicant, 'CONTACT')
-    return render(request, "admission_home.html",
-                  {"gradetypes":             mdl_reference.grade_type.find_all(),
-                   "domains":                mdl_reference.domain.find_current_domains(),
-                   "offers":                 offers,
-                   "offer":                  None,
-                   "application":            application,
-                   "grade_choices":          grade_choices,
-                   'tab_active':             0,
-                   "tab_demande_active":     0,
-                   "display_admission_exam": extra_information(request, application),
-                   "validated_extra":        validated_extra(secondary_education, application),
-                   "picture": get_picture_id(request.user),
-                   "id_document": get_id_document(request.user),
-                   'person_legal_address': person_legal_address,
-                   'person_contact_address': person_contact_address})
-
-
-
 

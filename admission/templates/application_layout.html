@@ -48,11 +48,11 @@
     </form>
     <div class="row">
         <div class="col-md-2">
-            {% if applications%}<a href="{%url 'home'%}">{% trans 'back_demandes_list'%}</a>{%endif%}
+            {% if applications %}<a href="{%url 'home'%}" onclick="return confirm(gettext('question_need_to_save'))">{% trans 'back_demandes_list'%}</a>{%endif%}
             <br>
             <br>
             <ul class="nav nav-pills nav-stacked">
-                <li class="{%if tab_active == 0 %}active{%endif%}">
+                <li class="{%if tab_active == '0' %}active{%endif%}">
                     <a href="{%if application.id%}{% url 'profile' application.id%}{%else%}{% url 'profile' %}{%endif%}"
                        id="lnk_profile_tab">
                         {% if validated_profil %}
@@ -62,48 +62,34 @@
                         {%endif%}
                         &nbsp;&nbsp;{%trans 'profile'%}</a>
                 </li>
-                <li class="{%if tab_active == 1 %}active{%endif%}">
-                    {%if tab_applications%}
-                        <a href="{%if application.id%}{% url 'applications' application.id%}{%else%}{% url 'applications' %}{%endif%}"
-                           id="lnk_application_tab">
-                            {% if validated_application %}
-                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                            {%else%}
-                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                            {%endif%}
-                            &nbsp;&nbsp;{%trans 'offer_choice'%}
-                        {%if application.offer_year %}
-                            ({{application.offer_year.acronym}})
-                        {%endif%}</a>
-                    {%else%}
-                        <a class="not-active"
-                           id="lnk_application_tab">
-                            {% if validated_application %}
-                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                            {%else%}
-                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                            {%endif%}
-                            &nbsp;&nbsp;{%trans 'offer_choice'%}
-                        {%if application.offer_year %}
-                            ({{application.offer_year.acronym}})
-                        {%endif%}</a>
-                    {%endif%}
+                <li class="{%if tab_active == '1' %}active{%endif%}">
+
+                    <a href="{%if application.id%}{% url 'applications' application.id%}{%else%}{% url 'applications' %}{%endif%}"
+                       id="lnk_application_tab">
+                        {% if validated_application %}
+                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
+                        {%else%}
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
+                        {%endif%}
+                        &nbsp;&nbsp;{%trans 'offer_choice'%}
+                    {%if application.offer_year %}
+                        ({{application.offer_year.acronym}})
+                    {%endif%}</a>
+
                 </li>
-                <li class="{%if tab_active == 2 %}active{%endif%}"  id="mn_diploma">
-                    <a href="{%if tab_diploma and application.id %}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
-                       id="lnk_diploma_tab"
-                       class="{%if not tab_diploma%}not-active{%endif%}">
-                        {% if validated_diploma %}
+                <li class="{%if tab_active == '2' %}active{%endif%}"  id="mn_diploma">
+                    <a href="{%if application.id %}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
+                       id="lnk_diploma_tab">
+                        {% if validated_diploma == True%}
                             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
                         {%else%}
                             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
                         {%endif%}
                         &nbsp;&nbsp;{%trans 'prerequisites'%}</a>
                 </li>
-                <li class="{%if tab_active == 3 %}active{%endif%}" id="mn_curriculum">
+                <li class="{%if tab_active == '3' %}active{%endif%}" id="mn_curriculum">
                     <a href="{%if tab_curriculum and application.id %}{% url 'curriculum_update' application.id%}{%else%}{% url 'curriculum_update' %}{%endif%}"
-                       id="lnk_curriculum_tab"
-                       class="{%if not tab_curriculum%}not-active{%endif%}" >
+                       id="lnk_curriculum_tab">
                         {% if validated_curriculum %}
                             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
                         {%else%}
@@ -111,10 +97,9 @@
                         {%endif%}
                         &nbsp;&nbsp;{%trans 'curriculum'%}</a>
                 </li>
-                <li class="{%if tab_active == 4 %}active{%endif%}" id="mn_accounting">
-                    <a href="{%if tab_accounting and application.id%}{% url 'accounting_update' application.id%}{%else%}{% url 'accounting_update' %}{%endif%}"
-                           id="lnk_accounting_tab"
-                           class="{%if not tab_accounting%}not-active{%endif%}" >
+                <li class="{%if tab_active == '4' %}active{%endif%}" id="mn_accounting">
+                    <a href="{%if application.id%}{% url 'accounting_update' application.id%}{%else%}{% url 'accounting_update' %}{%endif%}"
+                           id="lnk_accounting_tab">
                         {% if validated_accounting %}
                             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
                         {%else%}
@@ -122,30 +107,19 @@
                         {%endif%}
                             &nbsp;&nbsp;{%trans 'accounting'%}</a>
                 </li>
-                <li class="{%if tab_active == 5 %}active{%endif%}" id="mn_sociological">
-                    {%if tab_sociological%}
-                        <a href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey' %}{%endif%}"
-                           id="lnk_sociological_tab">
-                            {% if validated_sociological %}
-                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                            {%else%}
-                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                            {%endif%}
-                            &nbsp;&nbsp;{%trans 'sociological_survey'%}</a>
-                    {%else%}
-                        <a class="not-active"
-                           id="lnk_sociological_tab">
-                            {% if validated_sociological %}
-                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
-                            {%else%}
-                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
-                            {%endif%}
-                            &nbsp;&nbsp;{%trans 'sociological_survey'%}</a>
-                    {%endif%}
+                <li class="{%if tab_active == '5' %}active{%endif%}" id="mn_sociological">
+                    <a id="lnk_sociological_tab"
+                       href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey' %}{%endif%}">
+                        {% if validated_sociological %}
+                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
+                        {%else%}
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:orange;"></span>
+                        {%endif%}
+                        &nbsp;&nbsp;{%trans 'sociological_survey'%}</a>
                 </li>
-                <li class="{%if tab_active == 6 %}active{%endif%}" id="mn_attachments">
-                    <a href="{%if tab_attachments and application.id%}{% url 'attachments' application.id %}{%else%}{% url 'attachments' %}{%endif%}"
-                       id="lnk_attachments_tab" {%if not tab_attachments%}class="not-active"{%endif%}>
+                <li class="{%if tab_active == '6' %}active{%endif%}" id="mn_attachments">
+                    <a href="{%if application.id%}{% url 'attachments' application.id %}{%else%}{% url 'attachments' %}{%endif%}"
+                       id="lnk_attachments_tab" >
                         {% if validated_attachments %}
                             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
                         {%else%}
@@ -153,9 +127,9 @@
                         {%endif%}
                         &nbsp;&nbsp;{%trans 'attachments'%}</a>
                 </li>
-                <li class="{%if tab_active == 7 %}active{%endif%}" id="mn_submission">
-                    <a href="{%if tab_submission and application.id%}{% url 'submission' application.id %}{%else%}{% url 'submission' %}{%endif%}"
-                       id="lnk_submission_tab" {%if not tab_submission%}class="not-active"{%endif%}>
+                <li class="{%if tab_active == '7' %}active{%endif%}" id="mn_submission">
+                    <a href="{%if application.id%}{% url 'submission' application.id %}{%else%}{% url 'submission' %}{%endif%}"
+                       id="lnk_submission_tab">
                         {% if validated_submission %}
                             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green;"></span>
                         {%else%}
@@ -251,6 +225,15 @@
             }
         });
         change_menu();
+
+        $('body').ajaxComplete(function(e, xhr, settings) {
+            if (xhr.status == 278) {
+                alert('kk');
+                window.location.href = xhr.getResponseHeader("Location").replace(/\?.*$/, "?next="+window.location.pathname);
+            }
+        });
+
+
     });
 
     const PROFILE_TAB = 0;
@@ -262,14 +245,8 @@
     const ATTACHMENTS_TAB = 6;
     const SUBMISSION_TAB = 7;
 
-    function save(form_to_submit, next_tab){
-        var id = 'form#' + form_to_submit;
-        var data = $(id).serialize();
-        $.ajax({
-            url: $(id).attr('action'), // Le nom du fichier indiqué dans le formulaire
-            type:'post', // La méthode indiquée dans le formulaire (get ou post)
-            data: data, // Je sérialise les données (j'envoie toutes les valeurs présentes dans le formulaire)
-        });
+    function set_following_tab(next_tab){
+        $('[id^="hdn_following_"]').val(next_tab);
     }
 
     $('[id^="lnk_profil_next_step"]').click(function() {
@@ -279,7 +256,7 @@
             return false;
         }
         $('#hdn_tab_applications_status').val('True');
-        save('form_profile',DEMAND_TAB);
+        set_following_tab(DEMAND_TAB);
         return true;
     });
 
@@ -300,7 +277,7 @@
                 }
             });
         }
-        save_form(1);
+        set_following_tab(DEMAND_TAB);
     });
 
     $("#btn_modify_picture").click(function(event) {
@@ -411,42 +388,42 @@
         if (! valid(PREREQUISITES_TAB)) {
             return false;
         }
-        save_form(PREREQUISITES_TAB);
+        set_following_tab(PREREQUISITES_TAB);
     });
 
     $("#lnk_curriculum_tab").click(function() {
         if (! valid(CURRICULUM_TAB)){
             return false;
         }
-        save_form(CURRICULUM_TAB);
+        set_following_tab(CURRICULUM_TAB);
     });
 
     $("#lnk_accounting_tab").click(function() {
         if (! valid(ACCOUNTING_TAB)){
             return false;
         }
-        save_form(ACCOUNTING_TAB);
+        set_following_tab(ACCOUNTING_TAB);
     });
 
     $("#lnk_sociological_tab").click(function() {
         if (! valid(SOCIOLOGICAL_SURVEY_TAB)){
             return false;
         }
-        save_form(SOCIOLOGICAL_SURVEY_TAB);
+        set_following_tab(SOCIOLOGICAL_SURVEY_TAB);
     });
 
     $("#lnk_attachments_tab").click(function() {
         if (! valid(ATTACHMENTS_TAB)){
             return false;
         }
-        save_form(ATTACHMENTS_TAB);
+        set_following_tab(ATTACHMENTS_TAB);
     });
 
     $("#lnk_submission_tab").click(function() {
         if (! valid(SUBMISSION_TAB)){
             return false;
         }
-        save_form(SUBMISSION_TAB);
+        set_following_tab(SUBMISSION_TAB);
     });
 
     $("#lnk_profile_tab").click(function() {
@@ -456,7 +433,7 @@
             }
         }
         if($("#hdn_tab_active").val() != DEMAND_TAB.toString()) {
-            save_form(PROFILE_TAB);
+            set_following_tab(PROFILE_TAB);
         }
 
     });
@@ -477,14 +454,15 @@
 
     $('[id^="lnk_next_offer_step"]').click(function() {
        change_menu();
-       $('#demande_next_tab').val('2');
+       $('#demande_next_tab').val(PREREQUISITES_TAB);
        return offer_steps(2);
     });
 
     $('[id^="lnk_previous_offer_step"]').click(function() {
+       $('#demande_next_tab').val(PROFILE_TAB);
        change_menu();
        $('#form_secondary_education').append( $('#pnl_files>div') );
-       return offer_steps(0);
+       return offer_steps(PROFILE_TAB);
     });
 
     function offer_steps(next_tab){
@@ -497,7 +475,7 @@
         if( $('#demande_next_tab').val()!=''){
             next_tab=$('#demande_next_tab').val();
         }
-        save('form_questions', next_tab);
+        set_following_tab(next_tab);
         return true;
     }
 
@@ -547,14 +525,15 @@
     });
 
     $("#slt_criteria_5").change(function(event) {
-        $('[id^="pnl_criteria_bis_"]').each(function(){
+        $('[id^="pnl_criteria_bis_CRITERIA"]').each(function(){
             $(this).remove();
         });
 
         var target = $(event.target);
         var id = target.attr("id");
         var selected_criteria = $("#slt_criteria_5").val();
-        var div_cloned =$("#pnl_criteria_"+selected_criteria).clone();
+        var id_to_clone = "#pnl_criteria_"+selected_criteria;
+        var div_cloned =$(id_to_clone).clone();
         var id_cloned_div = "pnl_criteria_bis_"+selected_criteria;
         div_cloned.attr("id",id_cloned_div);
         div_cloned.css('visibility', 'visible').css('display','block');
@@ -836,43 +815,6 @@
         $('#txt_last_academic_year').val('');
     });
 
-    $("#txt_local_language_exam_date").blur(function() {
-        var value = $("#txt_local_language_exam_date").val();
-        $("#msg_error_local_language_exam_date").find("label").remove();
-        if (isDate(value)){
-            $("#msg_error_local_language_exam_date").find("label").remove();
-        }else{
-            $("#msg_error_local_language_exam_date").append("<label>Invalid</label>");
-        }
-    });
-
-    function save_form(next_tab){
-        if($("#hdn_tab_active").val()==PROFILE_TAB.toString()){
-            save('form_profile', next_tab);
-        }
-        if($("#hdn_tab_active").val()==DEMAND_TAB.toString()){
-            save('form_questions', next_tab);
-        }
-        if($("#hdn_tab_active").val()==PREREQUISITES_TAB.toString()){
-            save('form_secondary_education', next_tab);
-        }
-        if($("#hdn_tab_active").val()==CURRICULUM_TAB.toString()){
-            save('form_curriculum', next_tab);
-        }
-        if($("#hdn_tab_active").val()==ACCOUNTING_TAB.toString()){
-            save('form_accounting', next_tab);
-        }
-        if($("#hdn_tab_active").val()==SOCIOLOGICAL_SURVEY_TAB.toString()){
-            save('form_sociological_survey', next_tab);
-        }
-        if($("#hdn_tab_active").val()==ATTACHMENTS_TAB.toString()){
-            save('form_attachements', next_tab);
-        }
-        if($("#hdn_tab_active").val()==SUBMISSION_TAB.toString()){
-            save('form_submission', next_tab);
-        }
-    }
-
     function valid_profile_data(){
         // clear error messages
         $('#spn_number_children').html('');
@@ -994,7 +936,7 @@
         if($('#pnl_assimilation_criteria').is(":visible")){
             var cpt = 1;
             while(cpt <=7){
-                if(! $("#assimilation_criteria_"+ cpt+"_true").prop('checked') && ! $("#assimilation_criteria_"+cpt+"_false").prop('checked') ){
+                if(! $("#assimilation_criteria_CRITERIA_"+ cpt+"_true").prop('checked') && ! $("#assimilation_criteria_CRITERIA_"+cpt+"_false").prop('checked') ){
                     message += gettext('msg_assimilation_criteria');
                     break;
                 }
@@ -1027,7 +969,6 @@
                 }
             }
         }
-
         if (enableMyLink) {
           $("#mn_diploma").removeClass("disabled").find("a").removeAttr("onclick");
           $("#mn_curriculum").removeClass("disabled").find("a").removeAttr("onclick");
@@ -1053,5 +994,62 @@
        $('#demande_next_tab').val('1');
        return offer_steps(1);
     });
+
+    $('[id^="bt_previous_diploma_step_"]').click(function() {
+        change_menu();
+        $('#hdn_tab_applications_status').val('True');
+        set_following_tab(DEMAND_TAB);
+        return true;
+    });
+
+    $('[id^="bt_next_diploma_step_"]').click(function() {
+        change_menu();
+        $('#hdn_tab_applications_status').val('True');
+        set_following_tab(CURRICULUM_TAB);
+        return true;
+    });
+
+     $('[id^="bt_previous_curriculum_step_"]').click(function() {
+        change_menu();
+        $('#hdn_tab_applications_status').val('True');
+        set_following_tab(PREREQUISITES_TAB);
+        return true;
+    });
+
+    $('[id^="bt_next_curriculum_step_"]').click(function() {
+        change_menu();
+        $('#hdn_tab_applications_status').val('True');
+        set_following_tab(ACCOUNTING_TAB);
+        return true;
+    });
+
+     $('[id^="bt_previous_sociological_step_"]').click(function() {
+        change_menu();
+        $('#hdn_tab_applications_status').val('True');
+        set_following_tab(ACCOUNTING_TAB);
+        return true;
+    });
+
+    $('[id^="bt_next_sociological_step_"]').click(function() {
+        change_menu();
+        $('#hdn_tab_applications_status').val('True');
+        set_following_tab(ATTACHMENTS_TAB );
+        return true;
+    });
+
+    $('[id^="bt_previous_accounting_step_"]').click(function() {
+        change_menu();
+        $('#hdn_tab_applications_status').val('True');
+        set_following_tab(CURRICULUM_TAB);
+        return true;
+    });
+
+    $('[id^="bt_next_accounting_step_"]').click(function() {
+        change_menu();
+        $('#hdn_tab_applications_status').val('True');
+        set_following_tab(SOCIOLOGICAL_SURVEY_TAB );
+        return true;
+    });
+
     </script>
 {% endblock %}
