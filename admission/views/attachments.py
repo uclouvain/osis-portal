@@ -102,7 +102,7 @@ def list_attachments(user):
     :param user: the current user in session.
     :return: an array of dictionnary
     """
-    uploaded_attachments = DocumentFile.objects.filter(user=user,
+    uploaded_attachments = DocumentFile.objects.filter(username=user.username,
                                                        application_name="admission_attachments")
 
     return list(uploaded_attachments)
@@ -139,6 +139,6 @@ def save_document_from_form(document, user):
     doc_file = DocumentFile(file_name=file_name, file=file,
                             description=description, storage_duration=storage_duration,
                             application_name=application_name, content_type=content_type,
-                            size=size, user=user)
+                            size=size, username=user.username)
     doc_file.save()
 

@@ -164,11 +164,11 @@ function appendContentTypeInput($parentForm){
 function appendUserInput($parentForm){
     // A label for attribute is of the form "id_form-0-user" for example.
     var labelForPrefix = "id_form-";
-    var labelForSuffix = "-user";
+    var labelForSuffix = "-username";
     var labelFor = labelForPrefix.concat(nextIdDocForm.toString(), labelForSuffix);
 
     var inputNamePrefix = "form-";
-    var inputNameSuffix = "-user";
+    var inputNameSuffix = "-username";
     var inputName = inputNamePrefix.concat(nextIdDocForm.toString(), inputNameSuffix);
     var $input = createJQObjectNoText("<input/>", {"id": labelFor,
         "name": inputName,
