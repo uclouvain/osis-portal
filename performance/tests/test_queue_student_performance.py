@@ -51,35 +51,13 @@
 ##############################################################################
 from django.test import TestCase
 from admission.tests import data_for_tests
-from performance.models import student_performance as mdl_perf
-import json
+from performance.models import student_performance
 import datetime
 
 
-class TestStudentPerformance(TestCase):
+class TestQueueStudentPerformance(TestCase):
     def setUp(self):
         self.student_performance = data_for_tests.create_student_performance()
-        with open("performance/tests/ressources/points.json") as json_file:
-            self.json_points = json.load(json_file)
 
-    def test_update_or_create(self):
-        fields_value = {"data": self.json_points, "update_date": datetime.date.today()}
-        student = self.student_performance.student
-        offer_year = self.student_performance.offer_year
-        mdl_perf.update_or_create(student, offer_year, fields_value)
-
-        stud_perf = mdl_perf.StudentPerformance.objects.get(student=student, offer_year=offer_year)
-        self.assertDictEqual(stud_perf.data, self.json_points)
-
-    def test_has_expired(self):
-        timedelta = datetime.timedelta(days=4)
-
-        self.assertFalse(mdl_perf.has_expired(self.student_performance))
-
-        self.student_performance.update_date = datetime.date.today() + timedelta
-        self.assertFalse(mdl_perf.has_expired(self.student_performance))
-
-        self.student_performance.update_date = datetime.date.today() - timedelta
-        self.assertTrue(mdl_perf.has_expired(self.student_performance))
 
 

@@ -92,3 +92,6 @@ def has_expired(student_performance):
     return expiration_date < today
 
 
+def update_or_create(student, offer_year, fields):
+    StudentPerformance.objects.update_or_create(student=student, offer_year=offer_year, defaults=fields)
+

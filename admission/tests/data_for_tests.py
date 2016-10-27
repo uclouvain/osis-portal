@@ -113,7 +113,7 @@ def create_student_performance():
         data = json.load(f)
     a_student_performance = mdl_performance.\
         student_performance.StudentPerformance(offer_year=create_offer_year(), student=create_student(),
-                                               expiration_date=datetime.date.today(), data=data)
+                                               update_date=datetime.date.today(), data=data)
     a_student_performance.save()
     return a_student_performance
 
