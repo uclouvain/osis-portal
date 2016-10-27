@@ -55,13 +55,9 @@ def save_application_offer(request):
         new_application = False
         next_tab = request.POST.get('next_tab')
 
-        offer_year = None
-        offer_year_id = request.POST.get('offer_year_id')
+        offer_year_id = request.POST.get('offer_year_id', None)
+        application_id = request.POST.get('application_id', None)
 
-        application_id = request.POST.get('application_id')
-
-        if application_id == 'None':
-            application_id = None
         if application_id:
             application = get_object_or_404(mdl.application.Application, pk=application_id)
             secondary_education = mdl.secondary_education.find_by_person(application.applicant)
@@ -78,8 +74,7 @@ def save_application_offer(request):
 
         if offer_year_id:
             offer_year = mdl_base.offer_year.find_by_id(offer_year_id)
-
-        application.offer_year = offer_year
+            application.offer_year = offer_year
 
         if request.POST.get('rdb_offer_localdegree'):
             if request.POST.get('rdb_offer_localdegree') == "true":
@@ -116,8 +111,9 @@ def save_application_offer(request):
             application.raffle_number = request.POST.get('txt_offer_lottery')
         application.application_type = mdl.application.define_application_type(application.national_degree,
                                                                                request.user)
-        application.save()
-        application_id = application.id
+        if offer_year_id:
+            application.save()
+            application_id = application.id
         if new_application is False:
             # delete all existing application_assimilation_criteria
             for a in mdl.application_assimilation_criteria.find_by_application(application):
@@ -131,83 +127,60 @@ def save_application_offer(request):
             # Copy the applicant_assimilation_criteria
             mdl.application_assimilation_criteria.\
                 copy_from_applicant_assimilation_criteria(applicant_assimilation_criteria, application)
-
-        # answer_question_
-        answers = mdl.answer.find_by_application(application_id)
-        for answer in answers:
-            answer.delete()
-        for key, value in request.POST.items():
-            if "txt_answer_question_" in key:
-                # INPUT OR LABEL
-                option_id = key.replace("txt_answer_question_", "")
-                asw = mdl.answer.find_by_application_and_option(application_id, option_id)
-                if not asw:
-                    answer = mdl.answer.Answer()
-                    answer.application = application
-                    answer.option = mdl.option.find_by_id(int(option_id))
-                    answer.value = value
-                else:
-                    answer = mdl.answer.find_by_id(asw)
-                    answer.value = value
-                answer.save()
-            if "txt_answer_radio_" in key:
-                # RADIO_BUTTON
-                option_id = request.POST[key]
-                option = mdl.option.find_by_id(int(option_id))
-                options = mdl.option.find_options_by_question_id(option.question.id)
-                if options:
-                    for opt in options:
-                        asw = mdl.answer.find_by_application_and_option(application_id, opt.id)
-                        asw.delete()
-                    answer = mdl.answer.Answer()
-                    answer.application = application
-                    answer.option = option
-                    answer.value = option.value
+        if application_id:
+            # answer_question_
+            answers = mdl.answer.find_by_application(application_id)
+            for answer in answers:
+                answer.delete()
+            for key, value in request.POST.items():
+                if "txt_answer_question_" in key:
+                    # INPUT OR LABEL
+                    option_id = key.replace("txt_answer_question_", "")
+                    asw = mdl.answer.find_by_application_and_option(application_id, option_id)
+                    if not asw:
+                        answer = mdl.answer.Answer()
+                        answer.application = application
+                        answer.option = mdl.option.find_by_id(int(option_id))
+                        answer.value = value
+                    else:
+                        answer = mdl.answer.find_by_id(asw)
+                        answer.value = value
                     answer.save()
-            if "txt_answer_checkbox_" in key:
-                # CHECK_BOX
-                if "on" == value:
-                    answer = mdl.answer.Answer()
-                    answer.application = application
-                    option_id = key.replace("txt_answer_checkbox_", "")
+                if "txt_answer_radio_" in key:
+                    # RADIO_BUTTON
+                    option_id = request.POST[key]
                     option = mdl.option.find_by_id(int(option_id))
+                    options = mdl.option.find_options_by_question_id(option.question.id)
+                    if options:
+                        for opt in options:
+                            asw = mdl.answer.find_by_application_and_option(application_id, opt.id)
+                            asw.delete()
+                        answer = mdl.answer.Answer()
+                        answer.application = application
+                        answer.option = option
+                        answer.value = option.value
+                        answer.save()
+                if "txt_answer_checkbox_" in key:
+                    # CHECK_BOX
+                    if "on" == value:
+                        answer = mdl.answer.Answer()
+                        answer.application = application
+                        option_id = key.replace("txt_answer_checkbox_", "")
+                        option = mdl.option.find_by_id(int(option_id))
+                        answer.option = option
+                        answer.value = option.value
+                        answer.save()
+                if "slt_question_" in key:
+                    answer = mdl.answer.Answer()
+                    answer.application = application
+                    option = mdl.option.find_by_id(value)
                     answer.option = option
                     answer.value = option.value
                     answer.save()
-            if "slt_question_" in key:
-                answer = mdl.answer.Answer()
-                answer.application = application
-                option = mdl.option.find_by_id(value)
-                answer.option = option
-                answer.value = option.value
-                answer.save()
     applicant = mdl.applicant.find_by_user(request.user)
 
     if next_tab:
-        if next_tab == navigation.PROFILE_TAB:
-            return HttpResponseRedirect(reverse('profile', args=(application.id,)))
-
-        if next_tab == navigation.DEMAND_TAB:
-            return HttpResponseRedirect(reverse('applications', args=(application.id,)))
-
-        if next_tab == navigation.PREREQUISITES_TAB:
-            return HttpResponseRedirect(reverse('diploma_update', kwargs={'application_id': application_id,
-                                                                          'saved': 1}))
-
-        if next_tab == navigation.CURRICULUM_TAB:
-            return HttpResponseRedirect(reverse('curriculum_update', args=(application.id,)))
-
-        if next_tab == navigation.ACCOUNTING_TAB:
-            return HttpResponseRedirect(reverse('accounting_update', args=(application.id,)))
-
-        if next_tab == navigation.SOCIOLOGICAL_SURVEY_TAB:
-            return HttpResponseRedirect(reverse('sociological_survey', args=(application.id,)))
-
-        if next_tab == navigation.ATTACHMENTS_TAB:
-            return HttpResponseRedirect(reverse('attachments', args=(application.id,)))
-
-        if next_tab == navigation.SUBMISSION_TAB:
-            return HttpResponseRedirect(reverse('submission', args=(application.id,)))
+        return navigation.get_redirection(next_tab, application_id)
 
     data = {
         'tab_active': next_tab,
