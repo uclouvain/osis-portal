@@ -60,15 +60,22 @@ from django.core.exceptions import ObjectDoesNotExist
 class TestQueueStudentPerformance(TestCase):
     def setUp(self):
         self.student_performance = data_for_tests.create_student_performance()
-        with open("performance/tests/ressources/points.json") as json_file:
+        self.offer_year = \
+            data_for_tests.create_offer_year_with_academic_year(self.student_performance.offer_year.academic_year)
+        with open("performance/tests/ressources/points2.json") as json_file:
             self.json_points = json.load(json_file)
+
+        with open("performance/tests/ressources/points3.json") as json_file:
+            self.json_points_2 = json.load(json_file)
 
     def test_save(self):
         student = self.student_performance.student
         offer_year = self.student_performance.offer_year
         stud_perf = queue_stud_perf.save(student, offer_year, self.json_points)
 
-        self.assertDictEqual(stud_perf.data, self.json_points, "Object should be updated")
+        self.student_performance.refresh_from_db()
+
+        self.assertEqual(stud_perf, self.student_performance, "Object should be updated")
 
         other_student = data_for_tests.create_student_with_specific_registration_id("64641202")
         queue_stud_perf.save(other_student, offer_year, self.json_points)
@@ -76,5 +83,21 @@ class TestQueueStudentPerformance(TestCase):
             mdl_perf.StudentPerformance.objects.get(student=other_student, offer_year=offer_year)
         except ObjectDoesNotExist:
             self.fail("Object should be created")
+
+    def test_callback(self):
+        queue_stud_perf.callback(self.json_points)
+        self.student_performance.refresh_from_db()
+
+        self.assertDictEqual(self.student_performance.data, self.json_points, "Object should be updated")
+
+        queue_stud_perf.callback(self.json_points_2)
+
+        try:
+            mdl_perf.StudentPerformance.objects.get(student=self.student_performance.student,
+                                                    offer_year=self.offer_year)
+        except ObjectDoesNotExist:
+            self.fail("Object should be created")
+
+
 
 

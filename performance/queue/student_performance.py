@@ -27,7 +27,34 @@ import json
 from frontoffice.queue.queue_listener import DocumentClient
 import datetime
 
+
 STUDENT_PERFORMANCE_QUEUE_NAME = "STUDENT_PERFORMANCE_QUEUE"
+
+
+def callback(json_data):
+    try:
+        student = extract_student_from_json(json_data)
+        offer_year = extract_offer_year_from_json(json_data)
+        save(student, offer_year, json_data)
+    except RuntimeError:  # TODO check if correct error
+        pass
+
+
+def extract_student_from_json(json_data):
+    from base.models import student as mdl_std
+    registration_id = json_data["registration_id"]
+    student = mdl_std.find_by_registration_id(registration_id)
+    return student
+
+
+def extract_offer_year_from_json(json_data):
+    from base.models import academic_year as mdl_academic_yr
+    from base.models import offer_year as mdl_offer_yr
+    year = json_data["academic_years"][0]["anac"]
+    academic_year = mdl_academic_yr.find_by_year(year)
+    acronym = json_data["academic_years"][0]["programs"][0]["acronym"]
+    offer_year = mdl_offer_yr.find_by_acronym_academic_year(acronym, academic_year)
+    return offer_year
 
 
 def generate_message(student, offer_year):

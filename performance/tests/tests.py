@@ -60,7 +60,7 @@ from django.core.exceptions import ObjectDoesNotExist
 class TestStudentPerformance(TestCase):
     def setUp(self):
         self.student_performance = data_for_tests.create_student_performance()
-        with open("performance/tests/ressources/points.json") as json_file:
+        with open("performance/tests/ressources/points2.json") as json_file:
             self.json_points = json.load(json_file)
 
     def test_update_or_create(self):
@@ -69,7 +69,8 @@ class TestStudentPerformance(TestCase):
         offer_year = self.student_performance.offer_year
         stud_perf = mdl_perf.update_or_create(student, offer_year, fields_value)
 
-        self.assertDictEqual(stud_perf.data, self.json_points, "Object should be updated")
+        self.student_performance.refresh_from_db()
+        self.assertEqual(stud_perf, self.student_performance, "Object should be updated")
 
         other_student = data_for_tests.create_student_with_specific_registration_id("64641202")
         mdl_perf.update_or_create(other_student, offer_year, fields_value)

@@ -31,6 +31,7 @@ from django.core.wsgi import get_wsgi_application
 from frontoffice.queue import callbacks
 from frontoffice.queue import queue_listener
 from pika.exceptions import ConnectionClosed, AMQPConnectionError, ChannelClosed
+from performance.queue.student_performance import callback
 
 LOGGER = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -46,6 +47,14 @@ application = get_wsgi_application()
 queue_for_migration = 'osis_portal' # Data from Osis to insert/update/delete in Osis-portal
 try:
     queue_listener.SynchronousConsumerThread(queue_for_migration, callbacks.insert_or_update).start()
+except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
+    LOGGER.exception("Couldn't connect to the QueueServer")
+
+
+# Thread in which is running the listening of the queue used to received student points
+queue_for_migration = 'STUDENTS_POINTS' # Data from Osis to insert/update/delete in Osis-portal
+try:
+    queue_listener.SynchronousConsumerThread(queue_for_migration, callback).start()
 except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
     LOGGER.exception("Couldn't connect to the QueueServer")
 
