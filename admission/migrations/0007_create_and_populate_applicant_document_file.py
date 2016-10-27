@@ -15,7 +15,7 @@ def populate_applicant_document_file(apps, schema_editor):
     document_files = DocumentFile.objects.all()
     for document_file in document_files:
         if document_file.update_by != 'system':
-            user = User.objects.get(username=document_file.username)
+            user = User.objects.get(username=document_file.update_by)
             try:
                 applicant = mdl_applicant.find_by_user(user)
                 applicant_document_file = ApplicantDocumentFile(applicant=applicant, document_file=document_file)
@@ -26,7 +26,7 @@ def populate_applicant_document_file(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('osis_common', '0010_documentfile_username'),
+        ('osis_common', '0011_rename_username_to_update_by'),
         ('admission', '0006_offeradmissionexamtype'),
     ]
 
