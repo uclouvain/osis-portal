@@ -93,7 +93,9 @@ def safe_document_removal(user, application_name, document):
     :param document
     :return:
     """
-    if document.user.username == user.username and document.application_name == application_name:
+    applicant_calling = mdl.applicant.find_by_user(user)
+    applicant_from_document = mdl.applicant_document_file.find_applicant_by_document(document)
+    if applicant_calling == applicant_from_document and document.application_name == application_name:
         document.delete()
 
 
@@ -138,7 +140,7 @@ def save_document_from_form(document, user):
     doc_file = DocumentFile(file_name=file_name, file=file,
                             description=description, storage_duration=storage_duration,
                             application_name=application_name, content_type=content_type,
-                            size=size, username=user.username)
+                            size=size, update_by=user.username)
     doc_file.save()
     applicant = mdl.applicant.find_by_user(user)
     applicant_document_file = ApplicantDocumentFile(applicant=applicant, document_file=doc_file)

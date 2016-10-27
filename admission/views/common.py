@@ -602,7 +602,7 @@ def documents_upload(request):
                                                                               application_name='admission',
                                                                               content_type=content_type,
                                                                               size=size,
-                                                                              username=request.user.username)
+                                                                              update_by=request.user.username)
                         doc_file.save()
                         applicant_document_file = mdl.applicant_document_file\
                                                      .ApplicantDocumentFile(applicant=applicant, document_file=doc_file)

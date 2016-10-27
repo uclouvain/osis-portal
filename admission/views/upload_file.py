@@ -66,7 +66,7 @@ def upload_file_description(request):
         documents = mdl.applicant_document_file.find_document_by_applicant(applicant)
     form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                            'document_type': "admission",
-                                           'username': request.user.username})
+                                           'update_by': request.user.username})
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
@@ -150,7 +150,7 @@ def save_document_from_form(document, request):
                                                           application_name='admission',
                                                           content_type=content_type,
                                                           size=size,
-                                                          username=request.user.username)
+                                                          update_by=request.user.username)
     doc_file.save()
     applicant = mdl.applicant.find_by_user(request.user)
     applicant_document_file = mdl.applicant_document_file.ApplicantDocumentFile(applicant=applicant,
@@ -237,7 +237,7 @@ def save_uploaded_file(request):
                                                               application_name='admission',
                                                               content_type=content_type,
                                                               size=size,
-                                                              username=request.user.username)
+                                                              update_by=request.user.username)
         doc_file.save()
         applicant_document_file = mdl.applicant_document_file.ApplicantDocumentFile(applicant=applicant,
                                                                                     document_file=doc_file)

@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.core.exceptions import ObjectDoesNotExist
 
 from django.db import models
 from django.contrib import admin
@@ -61,3 +62,11 @@ def find_document_by_applicant_and_description(applicant, description):
         .filter(document_file__description=description)\
         .order_by('document_file__creation_date')
     return [applicant_document_file.document_file for applicant_document_file in queryset]
+
+
+def find_applicant_by_document(document):
+    try:
+        applicant_document_file = ApplicantDocumentFile.objects.get(document=document)
+        return applicant_document_file.applicant
+    except ObjectDoesNotExist:
+        return None

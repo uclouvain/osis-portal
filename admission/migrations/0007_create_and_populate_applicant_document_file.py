@@ -27,7 +27,7 @@ def populate_applicant_document_file(apps, schema_editor):
 class Migration(migrations.Migration):
     dependencies = [
         ('osis_common', '0010_documentfile_username'),
-        ('admission', '0005_auto_20161025_1150'),
+        ('admission', '0006_offeradmissionexamtype'),
     ]
 
     operations = [
