@@ -23,8 +23,3 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from admission.views import application
-from admission.views import common
-from admission.views import identification
-from admission.views import offer
-from admission.views import secondary_education

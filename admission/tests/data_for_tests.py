@@ -84,8 +84,8 @@ def create_academic_year():
     return an_academic_year
 
 
-def create_grade_type(a_name):
-    a_grade_type = mdl_reference.grade_type.GradeType(name=a_name)
+def create_grade_type(a_name, an_institutional_grade_type):
+    a_grade_type = mdl_reference.grade_type.GradeType(name=a_name, institutional_grade_type=an_institutional_grade_type)
     a_grade_type.save()
     return a_grade_type
 
@@ -116,3 +116,7 @@ def create_student_performance():
                                                expiration_date=datetime.date.today(), data=data)
     a_student_performance.save()
     return a_student_performance
+
+
+def create_profession(a_name, an_adhoc):
+    return mdl.profession.Profession(name=a_name, adhoc=an_adhoc)

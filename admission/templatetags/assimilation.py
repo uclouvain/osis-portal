@@ -70,8 +70,8 @@ def assimilation_criteria_radio(applicant_assimilation_criteria, criteria):
                     return "checked"
                 else:
                     return ""
+    else:
         return "checked"
-    return ""
 
 
 @register.filter

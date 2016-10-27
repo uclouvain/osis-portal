@@ -57,5 +57,9 @@ def find_by_document(document_file):
     return DissertationDocumentFile.objects.filter(document_file=document_file)
 
 
+def find_by_dissertation(dissertation):
+    return DissertationDocumentFile.objects.filter(dissertation=dissertation)
 
 
+def find_by_id(dissertation_id):
+    return DissertationDocumentFile.objects.get(dissertation__id=dissertation_id)

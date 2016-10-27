@@ -32,6 +32,7 @@
     <li><a href="{% url 'proposition_dissertations' %}" id="lnk_proposition_dissertations">{% trans 'subjects_list' %}</a></li>
     <li class="active">{{ proposition_dissertation.title }}</li>
 </ol>
+<input type="hidden" value="{{proposition_dissertation.pk | default_if_none:''}}" id="hdn_current_proposition_dissertation_id" name="proposition_dissertation_id" title="proposition_dissertation_id" >
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="panel panel-default">
@@ -55,6 +56,16 @@
                         {{ proposition_dissertation.title }}
                     </div>
                 </div>
+                {% if filename != "" %}
+                    <div class="row">
+                        <div class="col-md-3" style="text-align:right">
+                             <label>{% trans 'file' %}</label>
+                         </div>
+                         <div class="col-md-9">
+                             <a href="{% url 'proposition_download' pk=proposition_dissertation.pk %}">{% trans 'link' %}</a>
+                         </div>
+                     </div>
+                {% endif %}
                 <div class="row">
                     <div class="col-md-3" style="text-align: right">
                         <label>{% trans 'description' %}</label>

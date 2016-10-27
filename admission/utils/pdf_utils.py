@@ -27,23 +27,15 @@
 Utility files to manipulate pdf
 """
 import os
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from reportlab.platypus import SimpleDocTemplate, Image, Paragraph, Table, TableStyle
-from reportlab.lib.enums import TA_JUSTIFY
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from django.utils.translation import ugettext_lazy as _
-from io import BytesIO
 from reportlab.lib import utils
 from reportlab.lib.units import mm
 from reportlab.lib.pagesizes import A4 as A4
 from django.conf import settings
-from reportlab.lib import colors
-
 from PyPDF2 import PdfFileMerger,  PdfFileReader, PdfFileWriter
-from math import *
-import io
 
 PAGE_SIZE = A4
 MARGIN_SIZE = 15 * mm

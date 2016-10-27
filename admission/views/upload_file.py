@@ -24,20 +24,17 @@
 #
 ##############################################################################
 from django.contrib.auth.decorators import login_required
-from django.http import *
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 
 from admission import models as mdl
-from admission import settings as adm_settings
 from admission.models.enums import document_type
-from admission.views import common, tabs, assimilation_criteria as assimilation_criteria_view
+from admission.views import assimilation_criteria as assimilation_criteria_view
 from osis_common import models as mdl_osis_common
 from osis_common.forms import UploadDocumentFileForm
-from reference import models as mdl_ref
 from django.core.urlresolvers import reverse
 from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
-from django.core.files.base import File as DjangoFile
 
 
 @login_required

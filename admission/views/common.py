@@ -35,8 +35,7 @@ from django.utils.translation import ugettext_lazy as _
 from admission import models as mdl
 from admission.forms import ApplicantForm
 from reference import models as mdl_ref
-from admission.views import demande_validation, assimilation_criteria as assimilation_criteria_view
-from admission.views import tabs
+from admission.views import demande_validation, assimilation_criteria as assimilation_criteria_view, navigation
 from osis_common import models as mdl_osis_common
 from admission.models.enums import document_type
 from osis_common.forms import UploadDocumentFileForm
@@ -55,7 +54,7 @@ def home(request):
     person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
     if person_contact_address:
         same_addresses = False
-    if applicant and applicant.gender:
+    if applicant:
         if applicant.language:
             user_language = applicant.language
             translation.activate(user_language)
@@ -73,23 +72,14 @@ def home(request):
                                                          'person_contact_address': person_contact_address,
                                                          "tab_active": -1})
         else:
-            tab_status = tabs.init(request)
             assimilation_criteria = assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES
             applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
             return render(request, "admission_home.html", {
                 'applications': applications,
                 'applicant': applicant,
-                'tab_active': 0,
+                'tab_active': navigation.PROFILE_TAB,
                 'first': True,
                 'countries': mdl_ref.country.find_all(),
-                'tab_profile': tab_status['tab_profile'],
-                'tab_applications': tab_status['tab_applications'],
-                'tab_diploma': tab_status['tab_diploma'],
-                'tab_curriculum': tab_status['tab_curriculum'],
-                'tab_accounting': tab_status['tab_accounting'],
-                'tab_sociological': tab_status['tab_sociological'],
-                'tab_attachments': tab_status['tab_attachments'],
-                'tab_submission': tab_status['tab_submission'],
                 'main_status': 0,
                 'picture': get_picture_id(request.user),
                 'id_document': get_id_document(request.user),
@@ -106,10 +96,10 @@ def home(request):
 
 
 def profile(request, application_id=None, message_success=None):
-    tab_status = tabs.init(request)
     message_info = None
     application = None
     assimilation_case = False
+
     if application_id:
         application = mdl.application.find_by_id(application_id)
     if request.method == 'POST':
@@ -269,6 +259,7 @@ def profile(request, application_id=None, message_success=None):
             person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
             if person_contact_address:
                 person_contact_address.delete()
+                person_contact_address = None
 
         if request.POST['phone_mobile']:
             applicant.phone_mobile = request.POST['phone_mobile']
@@ -414,9 +405,17 @@ def profile(request, application_id=None, message_success=None):
             person_contact_address.save()
         person_legal_address.save()
         applicant.user.save()
+        if application:
+            application.application_type = mdl.application.define_application_type(application.national_degree,
+                                                                                   request.user)
+            application.save()
         request.user = applicant.user  # Otherwise it was not refreshed while going back to home page
         applicant.save()
         message_info = _('msg_info_saved')
+
+        following_tab = navigation.get_following_tab(request, 'profile', application)
+        if following_tab:
+            return following_tab
     else:
         applicant = mdl.applicant.find_by_user(request.user)
         applicant_form = ApplicantForm()
@@ -442,8 +441,6 @@ def profile(request, application_id=None, message_success=None):
     assimilation_criteria = assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES
     applicant_assimilation_criteria = mdl.applicant_assimilation_criteria.find_by_applicant(applicant.id)
 
-    if application is None:
-        tab_status = tabs.init(request)
     # validated are not ready yet, to be achieved in another issue - Leila
     person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
     person_contact_address = mdl.person_address.find_by_person_type(applicant, 'CONTACT')
@@ -461,16 +458,8 @@ def profile(request, application_id=None, message_success=None):
         'previous_enrollment': previous_enrollment,
         'institution': institution_name,
         'message_success': message_success,
-        'tab_active': 0,
+        'tab_active': navigation.PROFILE_TAB,
         'application': application,
-        'tab_profile': tab_status['tab_profile'],
-        'tab_applications': tab_status['tab_applications'],
-        'tab_diploma': tab_status['tab_diploma'],
-        'tab_curriculum': tab_status['tab_curriculum'],
-        'tab_accounting': tab_status['tab_accounting'],
-        'tab_sociological': tab_status['tab_sociological'],
-        'tab_attachments': tab_status['tab_attachments'],
-        'tab_submission': tab_status['tab_submission'],
         'applications': mdl.application.find_by_user(request.user),
         'picture': get_picture_id(request.user),
         'id_document': get_id_document(request.user),
@@ -651,3 +640,15 @@ def delete_previous_criteria(applicant, application):
         criteria_list = mdl.application_assimilation_criteria.find_by_application(application)
         for c in criteria_list:
             c.delete()
+
+
+def is_local_language_exam_needed(user):
+    applications = mdl.application.find_by_user(user)
+    if applications:
+        for application in applications:
+            if application.offer_year.grade_type and application.offer_year.grade_type.institutional_grade_type and \
+                    (application.offer_year.grade_type.institutional_grade_type == 'BACHELOR' or \
+                     application.offer_year.grade_type.institutional_grade_type.startswith('MASTER') or \
+                     application.offer_year.grade_type.institutional_grade_type == 'TRAINING_CERTIFICATE'):
+                return True
+    return False

@@ -24,7 +24,6 @@
 #
 ##############################################################################
 from django import template
-from admission import models as mdl
 from django.utils.safestring import mark_safe
 
 register = template.Library()

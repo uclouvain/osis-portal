@@ -24,10 +24,9 @@
 #
 ##############################################################################
 from django.shortcuts import render, redirect
-from django.core.exceptions import ObjectDoesNotExist
 from admission import models as mdl
 from admission.models.enums import document_type
-from admission.views import demande_validation, tabs
+from admission.views import demande_validation, navigation
 from admission.forms import RemoveAttachmentForm
 from osis_common.forms import UploadDocumentFileForm
 from osis_common.models.document_file import DocumentFile
@@ -53,21 +52,12 @@ def update(request, application_id=None):
         application = mdl.application.init_application(request.user)
 
     applicant = mdl.applicant.find_by_user(request.user)
-    tab_status = tabs.init(request)
 
     remove_attachment_form = RemoveAttachmentForm()
     list_choices = [x[1] for x in document_type.DOCUMENT_TYPE_CHOICES]
     data = {
-        "tab_active": 6,
+        "tab_active": navigation.ATTACHMENTS_TAB,
         "application": application,
-        "tab_profile": tab_status['tab_profile'],
-        "tab_applications": tab_status['tab_applications'],
-        "tab_diploma": tab_status['tab_diploma'],
-        "tab_curriculum": tab_status['tab_curriculum'],
-        "tab_accounting": tab_status['tab_accounting'],
-        "tab_sociological": tab_status['tab_sociological'],
-        "tab_attachments": tab_status['tab_attachments'],
-        "tab_submission": tab_status['tab_submission'],
         "applications": mdl.application.find_by_user(request.user),
         "document_formset": document_formset,
         "attachments": past_attachments,
@@ -75,12 +65,13 @@ def update(request, application_id=None):
         "list_choices": list_choices
     }
     data.update(demande_validation.get_validation_status(application, applicant, request.user))
-    return render(request, "admission_home.html", )
+    return render(request, "admission_home.html", data)
 
 
 def remove_attachment(request):
     """
     View used to remove previous attachments.
+    :param request
     """
     if request.method == "POST":
         form = RemoveAttachmentForm(request.POST)
@@ -98,6 +89,7 @@ def safe_document_removal(user, application_name, document):
     that owns the file and the application_name is the correct one.
     :param user: a User object
     :param application_name: a string
+    :param document
     :return:
     """
     if document.user == user and document.application_name == application_name:
