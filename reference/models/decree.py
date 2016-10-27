@@ -25,8 +25,9 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-from base.models.serializable_model import SerializableModel
 from django.utils import timezone
+
+from osis_common.models.serializable_model import SerializableModel
 
 
 class DecreeAdmin(admin.ModelAdmin):

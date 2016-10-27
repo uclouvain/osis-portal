@@ -30,7 +30,7 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-from base.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
