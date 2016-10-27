@@ -28,7 +28,7 @@ from django.contrib.postgres.fields import JSONField
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from base.models.serializable_model import SerializableModel
-from performance.queue.student_performance import fetch_and_save, fetch_and_update
+from performance.queue.student_performance import fetch_and_save
 import datetime
 
 
