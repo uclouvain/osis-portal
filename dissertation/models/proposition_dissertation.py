@@ -43,19 +43,16 @@ class PropositionDissertation(SerializableModel):
         ('THE', _('theoretical_analysis')),
         ('PRO', _('project_dissertation')),
         ('DEV', _('development_dissertation')),
-        ('OTH', _('other')),
-        )
+        ('OTH', _('other')))
 
     LEVELS_CHOICES = (
         ('SPECIFIC', _('specific_subject')),
-        ('THEME', _('large_theme')),
-        )
+        ('THEME', _('large_theme')))
 
     COLLABORATION_CHOICES = (
         ('POSSIBLE', _('possible')),
         ('REQUIRED', _('required')),
-        ('FORBIDDEN', _('forbidden')),
-        )
+        ('FORBIDDEN', _('forbidden')))
 
     author = models.ForeignKey('Adviser')
     creator = models.ForeignKey('base.Person', blank=True, null=True)
@@ -110,11 +107,11 @@ def search(terms, active=None, visibility=None):
 
 
 def search_by_offer(offers):
-    return PropositionDissertation.objects.filter(active=True,
-                                                  visibility=True,
-                                                  offer_proposition__offer__in=offers,
-                                                  offer_proposition__start_visibility_proposition__lte=timezone.now())\
-        .distinct()
+    props = PropositionDissertation.objects.filter(active=True,
+                                                   visibility=True,
+                                                   offer_proposition__offer__in=offers,
+                                                   offer_proposition__start_visibility_proposition__lte=timezone.now())
+    return props.distinct()
 
 
 def find_by_id(proposition_id):
