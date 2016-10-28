@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('dissertation', '0005_add_uuid_field'),
+        ('dissertation', '0007_remove_null'),
     ]
 
     operations = [
