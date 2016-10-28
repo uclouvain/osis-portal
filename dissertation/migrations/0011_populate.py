@@ -25,19 +25,9 @@ def set_uuid_field(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('dissertation', '0007_propositionoffer'),
+        ('dissertation', '0010_propositionoffer_uuid'),
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='propositionoffer',
-            name='uuid',
-            field=models.UUIDField(db_index=True, null=True),
-        ),
         migrations.RunPython(set_uuid_field),
-        migrations.AlterField(
-            model_name='propositionoffer',
-            name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True),
-        ),
     ]

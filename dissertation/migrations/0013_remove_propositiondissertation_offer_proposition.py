@@ -31,7 +31,7 @@ def move_data_from_offer_proposition_to_proposition_offer(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('dissertation', '0008_propositionoffer_uuid'),
+        ('dissertation', '0012_remove_null'),
     ]
 
     operations = [
