@@ -70,7 +70,6 @@
               <th>{% trans 'title_dissertation'%}</th>
               <th>{% trans 'author'%}</th>
               <th>{% trans 'status'%}</th>
-              <th>{% trans 'active'%}</th>
               <th>{% trans 'offer_year_start'%}</th>
               <th>{% trans 'proposition_dissertation'%}</th>
             </tr>
@@ -114,13 +113,6 @@
                     {% endif %}
                         {{ dissertation.get_status_display }}
                     </span>
-                </td>
-                <td>
-                    {% if dissertation.active %}
-                    <span class="label label-success">{% trans 'yes'%}</span>
-                    {% else %}
-                    <span class="label label-danger">{% trans 'no'%}</span>
-                    {% endif %}
                 </td>
                 <td>{{ dissertation.offer_year_start }}</td>
                 <td>{{ dissertation.proposition_dissertation }}</td>

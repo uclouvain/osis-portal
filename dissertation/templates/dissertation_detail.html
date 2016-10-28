@@ -85,10 +85,10 @@
                 </div>
                 {% if filename != "" %}
                     <div class="row">
-                        <div class="col-md-2 col-lg-offset-1" style="text-align:right">
+                        <div class="col-md-4" style="text-align: right">
                             <label>{% trans 'file' %}</label>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-8">
                             <a href="{% url 'dissertation_download' pk=dissertation.pk %}">{% trans 'link' %}</a>
                         </div>
                     </div>
@@ -241,7 +241,7 @@
                         <label>{% trans 'offer_propositions' %}</label>
                     </div>
                     <div class="col-md-8">
-                        {% for offer_proposition in dissertation.proposition_dissertation.offer_proposition.all %}
+                        {% for offer_proposition in offer_propositions %}
                             <span class="label label-default">{{ offer_proposition }}</span>
                         {% endfor %}
                     </div>
@@ -369,7 +369,7 @@
                             $('#pnl_admission_errors').append(msg_error);
                             return false;
                         }
-                        update_upload_btn_class(file, description);
+                        window.location.reload(true);
                     }
 
                 });
