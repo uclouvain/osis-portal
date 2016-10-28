@@ -65,7 +65,7 @@ def find_current_domains():
     current_decree = decree.find_current_decree()
     return Domain.objects.filter(decree=current_decree)\
                          .filter(type=domain_type.UNIVERSITY)\
-                         .filter(parent__isnull=False)\
+                         .filter(parent__isnull=True)\
                          .order_by("name")
 
 
