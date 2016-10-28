@@ -23,18 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-from django.test import TestCase, RequestFactory
-from django.contrib.auth.models import User
-from admission.models import applicant
+from django.test import TestCase
 from admission.views import sociological
-from django.utils.encoding import force_text
-import json
-from admission import models as mdl
-from django.contrib.auth.models import User
 import admission.tests.data_for_tests as data_model
-from django.test import Client
-from reference.enums import assimilation_criteria as assimilation_criteria_enum
 
 PROFESSION_EMPLOYEE = 'Employee'
 CHECKED_STATUS = 'on'
@@ -63,7 +54,3 @@ class SociologicalTest(TestCase):
     def get_profession_by_name(self):
         self.assertIs(get_other_profession(PROFESSION_EMPLOYEE), self.profession)
         self.assertIsNot(get_other_profession(PROFESSION_EMPLOYEE+' de poste'), self.profession)
-
-
-
-
