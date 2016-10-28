@@ -24,20 +24,16 @@
 #
 ##############################################################################
 
-from django.test import TestCase, RequestFactory
-
+import json
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.test import Client
+from django.test import TestCase, RequestFactory
+from django.utils.encoding import force_text
+
+import admission.tests.data_for_tests as data_model
 from admission.models import applicant
 from admission.views import application
-from django.utils.encoding import force_text
-import json
-from admission import models as mdl
-from django.contrib.auth.models import User
-import admission.tests.data_for_tests as data_model
-from django.test import Client
-from reference.enums import institutional_grade_type
-from django.test import RequestFactory
 
 
 class ApplicationTest(TestCase):
