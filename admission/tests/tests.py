@@ -23,24 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
 from django.test import TestCase, RequestFactory
 from admission.utils import pdf_utils
 from reportlab.platypus import SimpleDocTemplate, Image
 import os
 from django.conf import settings
 import io as io
-from django.contrib.auth.models import User
 from admission.utils import send_mail
 from admission.models import applicant
 from django.core.management import call_command
-from admission.views import assimilation_criteria, secondary_education
-from django.utils.encoding import force_text
-import json
-from admission import models as mdl
 from django.contrib.auth.models import User
-import admission.tests.data_for_tests as data_model
-from django.test import Client
 
 ASSETS_PATH = os.path.join(settings.BASE_DIR, 'admission/tests/assets/')
 PDF1 = "pdf1.pdf"
@@ -123,7 +115,7 @@ class SendMailTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.user = User.objects.create_user(
-            username='jacob', email='jacob@gmail.com', password='top_secret')
+            username='jacob', email='person@localhost', password='top_secret')
         applicant.Applicant.objects.create(user=self.user, gender="MALE")
         call_command("loaddata", "message_templates.json", verbosity=0)
 

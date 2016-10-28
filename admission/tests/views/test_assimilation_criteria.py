@@ -23,17 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-from django.test import TestCase, RequestFactory
-from django.contrib.auth.models import User
-from admission.models import applicant
+from django.test import TestCase
 from admission.views import assimilation_criteria
-from django.utils.encoding import force_text
-import json
-from admission import models as mdl
-from django.contrib.auth.models import User
-import admission.tests.data_for_tests as data_model
-from django.test import Client
 from reference.enums import assimilation_criteria as assimilation_criteria_enum
 
 
@@ -83,4 +74,3 @@ class AssimilationCriteriaTest(TestCase):
         list_document_type = assimilation_criteria\
             .get_list_documents_descriptions(assimilation_criteria_enum.CRITERIA_3)
         self.assertTrue(len(list_document_type) == 9)
-

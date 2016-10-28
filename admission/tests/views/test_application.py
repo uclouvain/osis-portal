@@ -23,16 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-import json
-from django.conf import settings
 from django.contrib.auth.models import User
-from django.test import Client
 from django.test import TestCase, RequestFactory
-from django.utils.encoding import force_text
-
 import admission.tests.data_for_tests as data_model
-from admission.models import applicant
 from admission.views import application
 
 
@@ -40,7 +33,7 @@ class ApplicationTest(TestCase):
 
     def setUp(self):
         a_user = User.objects.create_user(
-            username='jacob', email='jacob@gmail.com', password='top_secret')
+            username='jacob', email='jacob@localhost', password='top_secret')
         self.applicant = data_model.create_applicant_by_user(a_user)
         self.application = data_model.create_application(self.applicant)
 
