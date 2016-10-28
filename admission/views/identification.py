@@ -101,6 +101,7 @@ def new_user(request):
         user = User.objects.get(pk=user.id)
         applicant = mdl.applicant.Applicant()
         applicant.user = user
+        applicant.additional_email = user.email
         applicant.save()
         # send an activation email
         send_mail.send_mail_activation(request, str(applicant.activation_code), applicant, TEMPLATE_MSG_ACTIVATION)
