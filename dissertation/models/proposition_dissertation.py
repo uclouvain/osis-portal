@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from osis_common.models.serializable_model import SerializableModel
+from dissertation.models import proposition_offer
 from django.contrib import admin
 from django.db import models
 from django.db.models import Q
@@ -32,7 +33,7 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class PropositionDissertationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'visibility', 'active', 'get_offer_propositions', 'creator')
+    list_display = ('title', 'author', 'visibility', 'active', 'creator')
     raw_id_fields = ('creator', )
 
 
@@ -64,7 +65,6 @@ class PropositionDissertation(SerializableModel):
     type = models.CharField(max_length=12, choices=TYPES_CHOICES, default='RDL')
     visibility = models.BooleanField(default=True)
     active = models.BooleanField(default=True)
-    offer_proposition = models.ManyToManyField('OfferProposition')
     created_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
@@ -80,9 +80,6 @@ class PropositionDissertation(SerializableModel):
         author = u"%s %s %s" % (last_name.upper(), first_name, middle_name)
         return author+" - "+str(self.title)
 
-    def get_offer_propositions(self):
-        return " - ".join([str(s) for s in self.offer_proposition.all()])
-
     class Meta:
         ordering = ["author__person__last_name", "author__person__middle_name", "author__person__first_name", "title"]
 
@@ -95,8 +92,7 @@ def search(terms, active=None, visibility=None):
             Q(description__icontains=terms) |
             Q(author__person__first_name__icontains=terms) |
             Q(author__person__middle_name__icontains=terms) |
-            Q(author__person__last_name__icontains=terms) |
-            Q(offer_proposition__acronym__icontains=terms)
+            Q(author__person__last_name__icontains=terms)
         )
     if active:
         queryset = queryset.filter(active=active)
@@ -106,13 +102,10 @@ def search(terms, active=None, visibility=None):
     return queryset
 
 
-def search_by_offer(offers):
-    props = PropositionDissertation.objects.filter(active=True,
-                                                   visibility=True,
-                                                   offer_proposition__offer__in=offers,
-                                                   offer_proposition__start_visibility_proposition__lte=timezone.now())
-    return props.distinct()
-
-
 def find_by_id(proposition_id):
     return PropositionDissertation.objects.get(pk=proposition_id)
+
+
+def search_by_offers(offers):
+    proposition_ids = proposition_offer.search_by_offers(offers).values('proposition_dissertation_id')
+    return PropositionDissertation.objects.filter(pk__in=proposition_ids, active=True, visibility=True)

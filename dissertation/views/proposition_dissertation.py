@@ -28,7 +28,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from base import models as mdl
 from base.views import layout
-from dissertation.models import dissertation, proposition_dissertation, proposition_document_file, proposition_role
+from dissertation.models import dissertation, proposition_dissertation, proposition_document_file, proposition_role,\
+    proposition_offer
 from django.utils import timezone
 
 
@@ -37,17 +38,18 @@ def proposition_dissertations(request):
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
     offers = mdl.offer.find_by_student(student)
-    subjects = proposition_dissertation.search_by_offer(offers)
+    proposition_offers = proposition_offer.search_by_offers(offers)
     date_now = timezone.now().date()
     return layout.render(request, 'proposition_dissertations_list.html',
                          {'date_now': date_now,
-                          'proposition_dissertations': subjects,
+                          'proposition_offers': proposition_offers,
                           'student': student})
 
 
 @login_required
 def proposition_dissertation_detail(request, pk):
     subject = get_object_or_404(proposition_dissertation.PropositionDissertation, pk=pk)
+    offer_propositions = proposition_offer.search_by_proposition_dissertation(subject)
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
     using = dissertation.count_by_proposition(subject)
@@ -64,6 +66,7 @@ def proposition_dissertation_detail(request, pk):
                          {'percent': round(percent, 2),
                           'proposition_roles': proposition_roles,
                           'proposition_dissertation': subject,
+                          'offer_propositions': offer_propositions,
                           'student': student,
                           'using': using,
                           'filename': filename})
@@ -73,7 +76,10 @@ def proposition_dissertation_detail(request, pk):
 def proposition_dissertations_search(request):
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
-    subjects = proposition_dissertation.search(terms=request.GET['search'], active=True, visibility=True)
-    return layout.render(request, "proposition_dissertations_list.html",
-                         {'student': student,
-                          'proposition_dissertations': subjects})
+    offers = mdl.offer.find_by_student(student)
+    proposition_offers = proposition_offer.search(offers=offers, terms=request.GET['search'], active=True, visibility=True)
+    date_now = timezone.now().date()
+    return layout.render(request, 'proposition_dissertations_list.html',
+                         {'date_now': date_now,
+                          'proposition_offers': proposition_offers,
+                          'student': student})
