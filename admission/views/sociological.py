@@ -78,7 +78,7 @@ def update(request, application_id=None):
         'professions': mdl.profession.find_by_adoc(False),
         'sociological_survey': sociological_survey
     }
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data.update(demande_validation.get_validation_status(application, applicant))
     return render(request, "admission_home.html", data)
 
 

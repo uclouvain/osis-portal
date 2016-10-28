@@ -189,7 +189,7 @@ def save_application_offer(request):
         'id_document': get_id_document(request.user),
         'applicant': applicant
     }
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data.update(demande_validation.get_validation_status(application, applicant))
     return render(request, "admission_home.html", data)
 
 
@@ -222,7 +222,7 @@ def applications(request, application_id=None):
         "person_legal_address": person_legal_address,
         "countries": countries
     }
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data.update(demande_validation.get_validation_status(application, applicant))
     return render(request, "admission_home.html", data)
 
 
@@ -238,7 +238,7 @@ def submission(request, application_id=None):
         'applications': mdl.application.find_by_user(request.user)
     }
     applicant = mdl.applicant.find_by_user(request.user)
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data.update(demande_validation.get_validation_status(application, applicant))
     return render(request, "admission_home.html", data)
 
 
@@ -262,7 +262,7 @@ def change_application_offer(request, application_id=None):
         "first": True,
         "application": application,
     }
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data.update(demande_validation.get_validation_status(application, applicant))
     return render(request, "admission_home.html", data)
 
 

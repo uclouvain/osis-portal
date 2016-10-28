@@ -469,7 +469,7 @@ def profile(request, application_id=None, message_success=None):
         'assimilation_documents_existing': get_assimilation_documents_existing(request.user),
         'document_formset': document_formset,
         'message_info': message_info}
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data.update(demande_validation.get_validation_status(application, applicant))
     return render(request, "admission_home.html", data)
 
 
@@ -508,7 +508,8 @@ def validated_extra(secondary_education, application):
 
 def get_picture_id(user):
     applicant = mdl.applicant.find_by_user(user)
-    pictures = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, document_type.ID_PICTURE)
+    pictures = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant,
+                                                                                      document_type.ID_PICTURE)
     if pictures:
         picture = pictures[-1]
         return ''.join(('/admission', picture.file.url))

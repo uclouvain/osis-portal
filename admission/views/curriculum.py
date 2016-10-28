@@ -217,7 +217,7 @@ def update(request, application_id=None):
             "application": application,
             'applications': mdl.application.find_by_user(request.user)
         }
-        data.update(demande_validation.get_validation_status(application, applicant, request.user))
+        data.update(demande_validation.get_validation_status(application, applicant))
         return render(request, "admission_home.html", data)
 
 

@@ -24,7 +24,6 @@
 #
 ##############################################################################
 from admission import models as mdl
-from osis_common import models as mdl_common
 
 from admission.views import assimilation_criteria as assimilation_criteria_view
 from django.utils.translation import ugettext_lazy as _
@@ -40,7 +39,7 @@ ADMISSION_EXAM_TYPE = 'ADMISSION'
 LANGUAGE_EXAM_TYPE = 'LANGUAGE'
 
 
-def validate_profil(applicant, user):
+def validate_profil(applicant):
     if applicant.user.last_name is None \
         or applicant.user.first_name is None \
         or applicant.birth_date is None\
@@ -182,7 +181,7 @@ def _validate_submission():
     return False
 
 
-def get_validation_status(application, applicant, user):
+def get_validation_status(application, applicant):
     secondary_education = mdl.secondary_education.find_by_person(applicant)
     if secondary_education:
         validated_diploma = True
@@ -191,7 +190,7 @@ def get_validation_status(application, applicant, user):
     else:
         validated_diploma = False
     return {
-        "validated_profil":             validate_profil(applicant, user),
+        "validated_profil":             validate_profil(applicant),
         "validated_diploma":            validated_diploma,
         "validated_curriculum":         _validate_curriculum(),
         "validated_application":        _validate_application(),
@@ -208,7 +207,7 @@ def validate_needed_docs(application):
     doc_verso = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_VERSO)
     if doc_recto.exists() is False or doc_verso.exists() is False:
         validation_messages['national_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
-    if application.application_type == application_type.ADMISSION:
+    if application and application.application_type == application_type.ADMISSION:
         doc_recto = mdl.application_document_file.search(application,
                                                          document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
         doc_verso = mdl.application_document_file.search(application,

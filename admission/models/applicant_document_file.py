@@ -66,7 +66,7 @@ def find_document_by_applicant_and_description(applicant, description):
 
 def find_applicant_by_document(document):
     try:
-        applicant_document_file = ApplicantDocumentFile.objects.get(document=document)
+        applicant_document_file = ApplicantDocumentFile.objects.get(document_file=document)
         return applicant_document_file.applicant
     except ObjectDoesNotExist:
         return None

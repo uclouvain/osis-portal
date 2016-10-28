@@ -64,7 +64,7 @@ class Application(models.Model):
     bank_account_name = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return u"%s" % self.applicant
+        return u"%s %s" % (self.applicant, self.offer_year)
 
 
 def find_by_user(user):

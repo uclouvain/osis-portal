@@ -660,8 +660,13 @@
             .remove()
             .end()
         $("#pnl_modal_upload").find("span").remove();
+        application = $('#hdn_current_application_id').val();
+        var url_str = "/admission/document_application?description=" + description + "&application=" + application;
+        if(description == 'ID_CARD' || description == 'ID_PICTURE'){
+            url_str = "/admission/document?description=" + description;
+        }
         $.ajax({
-            url: "/admission/document?description=" + description
+                url: url_str
         }).then(function(data) {
             if(data.length > 0 ){
                 $('#pnl_existing_files').append("<br>");

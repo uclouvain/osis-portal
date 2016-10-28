@@ -57,7 +57,7 @@ def accounting(request, application_id=None):
         "tab_active": navigation.ACCOUNTING_TAB,
         "applications": mdl.application.find_by_user(request.user),
     }
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data.update(demande_validation.get_validation_status(application, applicant))
     return render(request, "admission_home.html", data)
 
 
@@ -100,7 +100,7 @@ def accounting_update(request, application_id=None):
         "applications": mdl.application.find_by_user(request.user),
     }
     applicant = mdl.applicant.find_by_user(request.user)
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data.update(demande_validation.get_validation_status(application, applicant))
     return render(request, "admission_home.html", data)
 
 

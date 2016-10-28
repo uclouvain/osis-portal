@@ -96,3 +96,12 @@ def create_application_document_file(an_application, update_by, description=None
 
 def create_profession(a_name, an_adhoc):
     return mdl.profession.Profession(name=a_name, adhoc=an_adhoc)
+
+
+def create_applicant_document_file(an_applicant, description):
+    a_document_file = create_document_file(an_applicant.user.username, description)
+    an_applicant_document_file = mdl.applicant_document_file.ApplicantDocumentFile()
+    an_applicant_document_file.applicant = an_applicant
+    an_applicant_document_file.document_file = a_document_file
+    an_applicant_document_file.save()
+    return an_applicant_document_file
