@@ -23,19 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-from django.test import TestCase, RequestFactory
-
-from django.conf import settings
-from django.contrib.auth.models import User
-from admission.models import applicant
+from django.test import TestCase
 from admission.views import common
-from django.utils.encoding import force_text
-import json
-from admission import models as mdl
 from django.contrib.auth.models import User
 import admission.tests.data_for_tests as data_model
-from django.test import Client
 from reference.enums import institutional_grade_type
 
 
@@ -43,7 +34,7 @@ class CommonTest(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(
-            username='jacob', email='jacob@gmail.com', password='top_secret')
+            username='jacob', email='jacob@localhost', password='top_secret')
         self.applicant = data_model.create_applicant_by_user(self.user)
 
     def test_is_local_language_exam_needed_status(self):
