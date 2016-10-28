@@ -85,10 +85,10 @@
                 </div>
                 {% if filename != "" %}
                     <div class="row">
-                        <div class="col-md-2 col-lg-offset-1" style="text-align:right">
+                        <div class="col-md-4" style="text-align: right">
                             <label>{% trans 'file' %}</label>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-8">
                             <a href="{% url 'dissertation_download' pk=dissertation.pk %}">{% trans 'link' %}</a>
                         </div>
                     </div>
