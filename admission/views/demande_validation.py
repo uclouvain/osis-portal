@@ -71,7 +71,7 @@ def validate_profil(applicant):
             criteria_doc_ok = False
             for applicant_assimilation_criteria in applicant_assimilation_criterias:
                 list_document_type = assimilation_criteria_view.\
-                    find_list_document_type_by_criteria(applicant_assimilation_criteria.criteria.id)
+                    find_list_document_type_by_criteria(applicant_assimilation_criteria.criteria)
                 for l in list_document_type:
                     nb_necessary_doc = len(list_document_type)
                     nb_doc = 0
