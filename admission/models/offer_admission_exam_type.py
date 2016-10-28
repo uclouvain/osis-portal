@@ -23,40 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.utils import translation
-from django.utils.translation import ugettext_lazy as _
-from admission import models as mdl
-from admission.views import demande_validation
-
-# Not really useful for the moment, but I think it could be useful when we will work on the enabled/disabled tab for
-# the admission.  LV
+from django.db import models
+from django.contrib import admin
 
 
-def init(request):
-    tabs = {"tab_profile": True,
-            "tab_applications": True,
-            "tab_diploma": True,
-            "tab_curriculum": True,
-            "tab_accounting": True,
-            "tab_sociological": True,
-            "tab_attachments": True,
-            "tab_submission": True}
-
-    return tabs
+class OfferAdmissionExamTypeAdmin(admin.ModelAdmin):
+    list_display = ('offer_year', 'admission_exam_type')
+    fieldsets = ((None, {'fields': ('offer_year', 'admission_exam_type')}),)
+    list_filter = ('offer_year',)
 
 
-def get_tabs_status(request):
+class OfferAdmissionExamType(models.Model):
+    offer_year = models.ForeignKey('base.OfferYear', null=False)
+    admission_exam_type = models.ForeignKey('AdmissionExamType', null=False)
 
-    tabs = {"tab_profile": True,
-            "tab_applications": True,
-            "tab_diploma": False,
-            "tab_curriculum": False,
-            "tab_accounting": False,
-            "tab_sociological": False,
-            "tab_attachments": False,
-            "tab_submission": False}
-    applicant = mdl.applicant.find_by_user(request.user)
-    if not demande_validation.validate_profil(applicant, request.user):
-        tabs['tab_applications'] = False
 
-    return tabs
+def find_by_offer_year(an_offer_year):
+    return OfferAdmissionExamType.objects.filter(offer_year=an_offer_year).first()

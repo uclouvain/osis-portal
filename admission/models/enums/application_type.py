@@ -23,22 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import json
-from django.core import serializers
+
+from django.utils.translation import ugettext_lazy as _
 
 
-def insert_or_update(json_data):
-    from base.models.serializable_model import SerializableModel
-    json_data = json.loads(json_data.decode("utf-8"))
-    serialized_objects = json_data['serialized_objects']
-    deserialized_objects = serializers.deserialize('json', serialized_objects, ignorenonexistent=True)
-    if json_data['to_delete']:
-        for deser_object in deserialized_objects:
-            try:
-                super(SerializableModel, deser_object.object).delete()
-            except AssertionError:
-                # In case the object doesn't exist (object can't be deleted)
-                pass
-    else:
-        for deser_object in deserialized_objects:
-            super(SerializableModel, deser_object.object).save()
+INSCRIPTION = 'INSCRIPTION'
+ADMISSION = 'ADMISSION'
+
+APPLICATION_TYPE_CHOICES = ((ADMISSION, _(ADMISSION)),
+                            (INSCRIPTION, _(INSCRIPTION)))
+
+

@@ -326,6 +326,7 @@ def save_offer_selection(request):
             offer_year = mdl_base.offer_year.find_by_id(offer_year_id)
 
         application.offer_year = offer_year
+        application.application_type = mdl.application.define_application_type(application.national_degree, request.user)
         application.save()
 
     return render(request, "offer_selection.html",

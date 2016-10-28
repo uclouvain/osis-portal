@@ -23,25 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-from django.test import TestCase, RequestFactory
-
-from django.conf import settings
+from django.test import TestCase
 from django.contrib.auth.models import User
-from admission.models import applicant
+
 from admission.views import secondary_education
-from django.utils.encoding import force_text
-import json
-from admission import models as mdl
-from django.contrib.auth.models import User
 import admission.tests.data_for_tests as data_model
-from django.test import Client
 
 
 class SecondaryEducationTest(TestCase):
 
     def setUp(self):
-        self.factory = RequestFactory()
         self.user = User.objects.create_user(
             username='jacob', email='jacob@gmail.com', password='top_secret')
         self.applicant = data_model.create_applicant_by_user(self.user)
@@ -49,29 +40,13 @@ class SecondaryEducationTest(TestCase):
     def test_get_secondary_education_exams_data_size(self):
         secondary_education_record = None
         list_secondary_education_exams = secondary_education.\
-            get_secondary_education_exams_data(secondary_education_record)
+            get_secondary_education_exams(secondary_education_record)
         self.assertTrue(len(list_secondary_education_exams) == 0)
 
         secondary_education_record = data_model.create_secondary_education_with_exams()
         list_secondary_education_exams = secondary_education.\
-            get_secondary_education_exams_data(secondary_education_record)
+            get_secondary_education_exams(secondary_education_record)
         self.assertTrue(len(list_secondary_education_exams) == 3)
-
-    def test_is_local_language_exam_needed_status(self):
-        self.assertFalse(secondary_education.is_local_language_exam_needed(None))
-
-        self.assertFalse(secondary_education.is_local_language_exam_needed(self.user))
-
-        an_application = data_model.create_application(self.applicant)
-        self.assertFalse(secondary_education.is_local_language_exam_needed(self.user))
-
-        an_application.offer_year.grade_type = data_model.create_grade_type('BACHELOR')
-        an_application.offer_year.save()
-        self.assertTrue(secondary_education.is_local_language_exam_needed(self.user))
-
-        an_application.offer_year.grade_type = data_model.create_grade_type('BACHELORZ')
-        an_application.offer_year.save()
-        self.assertFalse(secondary_education.is_local_language_exam_needed(self.user))
 
     def test_secondary_education_exam_update(self):
         secondary_education_record = data_model.create_secondary_education_with_exams()
@@ -82,17 +57,17 @@ class SecondaryEducationTest(TestCase):
             secondary_education.secondary_education_exam_update(secondary_education_record,
                                                                 type,
                                                                 secondary_education_exam)
-        except ExceptionType:
+        except Exception:
             self.fail("secondary_education_exam_update raised ExceptionType unexpectedly!")
 
         try:
             secondary_education.secondary_education_exam_update(None, type, secondary_education_exam)
-        except ExceptionType:
+        except Exception:
             self.fail("secondary_education_exam_update raised ExceptionType unexpectedly!")
 
         try:
             secondary_education.secondary_education_exam_update(None, None, secondary_education_exam)
-        except ExceptionType:
+        except Exception:
             self.fail("secondary_education_exam_update raised ExceptionType unexpectedly!")
 
         try:
@@ -102,19 +77,25 @@ class SecondaryEducationTest(TestCase):
 
     def test_get_secondary_education_files_data_existence(self):
         try:
-            secondary_education.get_secondary_education_files_data(None)
+            secondary_education.get_secondary_education_files(None)
         except Exception:
             self.fail("get_secondary_education_files_data raised ExceptionType unexpectedly!")
         an_application = data_model.create_application(self.applicant)
         try:
-            secondary_education.get_secondary_education_files_data(an_application)
+            secondary_education.get_secondary_education_files(an_application)
         except Exception:
             self.fail("get_secondary_education_files_data raised ExceptionType unexpectedly!")
 
         an_application_document_file = data_model.create_application_document_file(an_application,
-                                                                                   self.user,
+                                                                                   self.user.username,
                                                                                    'NATIONAL_DIPLOMA_VERSO')
 
-        dict = secondary_education.get_secondary_education_files_data(an_application)
+        dict = secondary_education.get_secondary_education_files(an_application)
         self.assertTrue(dict['national_diploma_verso'] == an_application_document_file)
+
+    def test_get_boolean_value_from_form(self):
+        self.assertTrue(secondary_education.get_boolean_value('true'))
+        self.assertFalse(secondary_education.get_boolean_value('True'))
+        self.assertFalse(secondary_education.get_boolean_value('false'))
+        self.assertEqual(secondary_education.get_boolean_value('-'), None)
 

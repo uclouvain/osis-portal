@@ -32,6 +32,9 @@ admin.site.register(admission_exam_type.AdmissionExamType,
 
 admin.site.register(application_document_file.ApplicationDocumentFile)
 
+admin.site.register(applicant_document_file.ApplicantDocumentFile,
+                    applicant_document_file.ApplicantDocumentFileAdmin)
+
 admin.site.register(answer.Answer,
                     answer.AnswerAdmin)
 
@@ -75,3 +78,6 @@ admin.site.register(secondary_education_exam.SecondaryEducationExam,
 
 admin.site.register(sociological_survey.SociologicalSurvey,
                     sociological_survey.SociologicalSurveyAdmin)
+
+admin.site.register(offer_admission_exam_type.OfferAdmissionExamType,
+                    offer_admission_exam_type.OfferAdmissionExamTypeAdmin)

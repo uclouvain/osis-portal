@@ -69886,7 +69886,7 @@
     "pk": 497,
     "fields": {
         "uuid": "b5b32231-543e-4d3a-9db1-0e8665a5b093",
-        "name": "LYC\u00c3\u00a9E MOLI\u00c3\u00a8RE",
+        "name": "LYCEE MOLIERE",
         "institution_type": "SECONDARY",
         "postal_code": "1060",
         "city": "Bruxelles",
@@ -127223,14 +127223,16 @@
   "model": "admission.profession",
   "pk": 1,
   "fields": {
-    "name": "Inconnu"
+    "name": "Inconnu",
+    "adhoc": false
   }
 },
 {
   "model": "admission.profession",
   "pk": 2,
   "fields": {
-    "name": "Chef d'une exploitation agricole de moins de 30 ha."
+    "name": "Chef d'une exploitation agricole de moins de 30 ha.",
+    "adhoc": false
   }
 }
 ]

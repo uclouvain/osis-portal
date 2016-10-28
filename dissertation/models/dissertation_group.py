@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel
 from django.db import models
 from . import dissertation
 

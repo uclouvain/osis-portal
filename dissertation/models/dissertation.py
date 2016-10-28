@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel
 from django.contrib import admin
 from django.db import models
 from django.db.models import Q
@@ -67,7 +67,6 @@ DEFEND_PERIODE_CHOICES = (
 
 
 class Dissertation(SerializableModel):
-
     title = models.CharField(max_length=200)
     author = models.ForeignKey(student.Student)
     status = models.CharField(max_length=12, choices=STATUS_CHOICES, default='DRAFT')
@@ -141,7 +140,7 @@ def search(terms, author=None):
     return queryset
 
 
-def search_by_user(user):
+def find_by_user(user):
     return Dissertation.objects.filter(author=user).exclude(active=False)
 
 

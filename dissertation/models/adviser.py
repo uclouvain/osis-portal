@@ -23,8 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models.serializable_model import SerializableModel
-from django.core import serializers
+from osis_common.models.serializable_model import SerializableModel
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin

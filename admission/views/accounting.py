@@ -28,11 +28,11 @@ from django.shortcuts import render
 from admission import models as mdl
 from base import models as mdl_base
 from admission.forms import AccountingForm
-from admission.views import demande_validation
-from admission.views import tabs
+from admission.views import demande_validation, navigation
 
 
 def accounting(request, application_id=None):
+    print('accoutning')
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
@@ -43,7 +43,7 @@ def accounting(request, application_id=None):
     culture_affiliation_amount = 0
     solidary_affiliation_amount = 0
     applicant = mdl.applicant.find_by_user(request.user)
-    tab_status = tabs.init(request)
+
     data = {
         "academic_year": academic_yr,
         "previous_academic_year": previous_academic_year,
@@ -54,22 +54,15 @@ def accounting(request, application_id=None):
         "debts_check": debts_check(application),
         "reduction_possible": reduction_possible(application),
         "third_cycle": third_cycle(application),
-        "tab_active": 4,
+        "tab_active": navigation.ACCOUNTING_TAB,
         "applications": mdl.application.find_by_user(request.user),
-        'tab_profile': tab_status['tab_profile'],
-        'tab_applications': tab_status['tab_applications'],
-        'tab_diploma': tab_status['tab_diploma'],
-        'tab_curriculum': tab_status['tab_curriculum'],
-        'tab_accounting': tab_status['tab_accounting'],
-        'tab_sociological': tab_status['tab_sociological'],
-        'tab_attachments': tab_status['tab_attachments'],
-        'tab_submission': tab_status['tab_submission']
     }
     data.update(demande_validation.get_validation_status(application, applicant, request.user))
     return render(request, "admission_home.html", data)
 
 
 def accounting_update(request, application_id=None):
+    next_tab = navigation.ACCOUNTING_TAB
     academic_yr = mdl_base.academic_year.current_academic_year()
     previous_academic_year = mdl_base.academic_year.find_by_year(academic_yr.year - 1)
     sport_affiliation_amount = 0
@@ -83,13 +76,15 @@ def accounting_update(request, application_id=None):
         application = mdl.application.find_by_id(application_id)
     else:
         application = mdl.application.init_application(request.user)
-    application = populate_application(request, application)
+
     try:
         if application.offer_year and application.applicant:
             application.save()
     except:
         pass
-    tab_status = tabs.init(request)
+    following_tab = navigation.get_following_tab(request, 'accounting', application)
+    if following_tab:
+        return following_tab
     data = {
         "academic_year": academic_yr,
         "previous_academic_year": previous_academic_year,
@@ -101,16 +96,8 @@ def accounting_update(request, application_id=None):
         "debts_check": debts_check(application),
         "reduction_possible": reduction_possible(application),
         "third_cycle": third_cycle(application),
-        "tab_active": 4,
+        "tab_active": next_tab,
         "applications": mdl.application.find_by_user(request.user),
-        "tab_profile": tab_status['tab_profile'],
-        "tab_applications": tab_status['tab_applications'],
-        "tab_diploma": tab_status['tab_diploma'],
-        "tab_curriculum": tab_status['tab_curriculum'],
-        "tab_accounting": tab_status['tab_accounting'],
-        "tab_sociological": tab_status['tab_sociological'],
-        "tab_attachments": tab_status['tab_attachments'],
-        "tab_submission": tab_status['tab_submission']
     }
     applicant = mdl.applicant.find_by_user(request.user)
     data.update(demande_validation.get_validation_status(application, applicant, request.user))
@@ -158,7 +145,7 @@ def populate_application(request, application):
 def debts_check(application):
     if application:
         academic_yr = mdl_base.academic_year.current_academic_year()
-        previous_academic_year = mdl_base.academic_year.find_by_year(academic_yr.year - 1)
+        previous_academic_year = academic_yr.year - 1
         secondary_curriculum = mdl.curriculum.find_local_french(application.applicant, previous_academic_year)
         if secondary_curriculum:
             return True
