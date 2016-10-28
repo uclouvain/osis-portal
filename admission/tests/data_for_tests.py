@@ -4,6 +4,7 @@ from base import models as mdl_base
 from reference import models as mdl_reference
 from osis_common import models as mdl_osis_common
 import random
+from reference.enums import assimilation_criteria as assimilation_criteria_enum
 
 
 def create_user():
@@ -96,3 +97,11 @@ def create_application_document_file(an_application, update_by, description=None
 
 def create_profession(a_name, an_adhoc):
     return mdl.profession.Profession(name=a_name, adhoc=an_adhoc)
+
+
+def create_applicant_assimilation_criteria(an_applicant):
+    return mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria(
+        applicant=an_applicant,
+        criteria=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES[0][0],
+        additional_criteria=None,
+        selected=False)

@@ -50,9 +50,8 @@ def profile_confirmed(request):
 def save_application_offer(request):
     next_tab = None
     application = None
-    application_id = None
+
     if request.method == 'POST':
-        new_application = False
         next_tab = request.POST.get('next_tab')
 
         offer_year_id = request.POST.get('offer_year_id', None)
@@ -63,7 +62,6 @@ def save_application_offer(request):
             secondary_education = mdl.secondary_education.find_by_person(application.applicant)
         else:
             application = mdl.application.init_application(request.user)
-            new_application = True
             applicant = mdl.applicant.find_by_user(request.user)
             application.applicant = applicant
             secondary_education = mdl.secondary_education.SecondaryEducation()
@@ -113,74 +111,16 @@ def save_application_offer(request):
                                                                                request.user)
         if offer_year_id:
             application.save()
-            application_id = application.id
-        if new_application is False:
-            # delete all existing application_assimilation_criteria
-            for a in mdl.application_assimilation_criteria.find_by_application(application):
-                a.delete()
+        delete_application_assimilation_criteria(application)
 
-        # If application assimilation criteria exists copy them to application assimilation criteria
-
-        applicant_assimilation_criteria_list = mdl.applicant_assimilation_criteria.\
-            find_by_applicant(application.applicant)
-        for applicant_assimilation_criteria in applicant_assimilation_criteria_list:
-            # Copy the applicant_assimilation_criteria
-            mdl.application_assimilation_criteria.\
-                copy_from_applicant_assimilation_criteria(applicant_assimilation_criteria, application)
-        if application_id:
-            # answer_question_
-            answers = mdl.answer.find_by_application(application_id)
-            for answer in answers:
-                answer.delete()
-            for key, value in request.POST.items():
-                if "txt_answer_question_" in key:
-                    # INPUT OR LABEL
-                    option_id = key.replace("txt_answer_question_", "")
-                    asw = mdl.answer.find_by_application_and_option(application_id, option_id)
-                    if not asw:
-                        answer = mdl.answer.Answer()
-                        answer.application = application
-                        answer.option = mdl.option.find_by_id(int(option_id))
-                        answer.value = value
-                    else:
-                        answer = mdl.answer.find_by_id(asw)
-                        answer.value = value
-                    answer.save()
-                if "txt_answer_radio_" in key:
-                    # RADIO_BUTTON
-                    option_id = request.POST[key]
-                    option = mdl.option.find_by_id(int(option_id))
-                    options = mdl.option.find_options_by_question_id(option.question.id)
-                    if options:
-                        for opt in options:
-                            asw = mdl.answer.find_by_application_and_option(application_id, opt.id)
-                            asw.delete()
-                        answer = mdl.answer.Answer()
-                        answer.application = application
-                        answer.option = option
-                        answer.value = option.value
-                        answer.save()
-                if "txt_answer_checkbox_" in key:
-                    # CHECK_BOX
-                    if "on" == value:
-                        answer = mdl.answer.Answer()
-                        answer.application = application
-                        option_id = key.replace("txt_answer_checkbox_", "")
-                        option = mdl.option.find_by_id(int(option_id))
-                        answer.option = option
-                        answer.value = option.value
-                        answer.save()
-                if "slt_question_" in key:
-                    answer = mdl.answer.Answer()
-                    answer.application = application
-                    option = mdl.option.find_by_id(value)
-                    answer.option = option
-                    answer.value = option.value
-                    answer.save()
+        if application.id:
+            create_application_assimilation_criteria(application)
+            delete_existing_answers(application)
+            create_answers(application, request)
     applicant = mdl.applicant.find_by_user(request.user)
 
     if next_tab:
-        return navigation.get_redirection(next_tab, application_id)
+        return navigation.get_redirection(next_tab, application.id)
 
     data = {
         'tab_active': next_tab,
@@ -276,3 +216,75 @@ def is_local_language_exam_needed(user):
             local_language_exam_needed = True
             break
     return local_language_exam_needed
+
+
+def create_application_assimilation_criteria(application):
+    # If application assimilation criteria exists copy them to application assimilation criteria
+    applicant_assimilation_criteria_list = mdl.applicant_assimilation_criteria. \
+        find_by_applicant(application.applicant)
+    for applicant_assimilation_criteria in applicant_assimilation_criteria_list:
+        # Copy the applicant_assimilation_criteria
+        mdl.application_assimilation_criteria. \
+            copy_from_applicant_assimilation_criteria(applicant_assimilation_criteria, application)
+
+
+def delete_existing_answers(application):
+    answers = mdl.answer.find_by_application(application)
+    for answer in answers:
+        answer.delete()
+
+
+def create_answers(application, request):
+    for key, value in request.POST.items():
+        if "txt_answer_question_" in key:
+            # INPUT OR LABEL
+            option_id = key.replace("txt_answer_question_", "")
+            asw = mdl.answer.find_by_application_and_option(application.id, option_id)
+            if not asw:
+                answer = mdl.answer.Answer()
+                answer.application = application
+                answer.option = mdl.option.find_by_id(int(option_id))
+                answer.value = value
+            else:
+                answer = mdl.answer.find_by_id(asw)
+                answer.value = value
+            answer.save()
+        if "txt_answer_radio_" in key:
+            # RADIO_BUTTON
+            option_id = request.POST[key]
+            option = mdl.option.find_by_id(int(option_id))
+            options = mdl.option.find_options_by_question_id(option.question.id)
+            if options:
+                for opt in options:
+                    asw = mdl.answer.find_by_application_and_option(application.id, opt.id)
+                    asw.delete()
+                answer = mdl.answer.Answer()
+                answer.application = application
+                answer.option = option
+                answer.value = option.value
+                answer.save()
+        if "txt_answer_checkbox_" in key:
+            # CHECK_BOX
+            if "on" == value:
+                answer = mdl.answer.Answer()
+                answer.application = application
+                option_id = key.replace("txt_answer_checkbox_", "")
+                option = mdl.option.find_by_id(int(option_id))
+                answer.option = option
+                answer.value = option.value
+                answer.save()
+        if "slt_question_" in key:
+            answer = mdl.answer.Answer()
+            answer.application = application
+            option = mdl.option.find_by_id(value)
+            answer.option = option
+            answer.value = option.value
+            answer.save()
+
+
+def delete_application_assimilation_criteria(application):
+    if application.id is None:
+        # delete all existing application_assimilation_criteria
+        for a in mdl.application_assimilation_criteria.find_by_application(application):
+            a.delete()
+
