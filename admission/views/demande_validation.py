@@ -208,7 +208,7 @@ def validate_needed_docs(application):
     doc_verso = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_VERSO)
     if doc_recto.exists() is False or doc_verso.exists() is False:
         validation_messages['national_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
-    if application.application_type == application_type.ADMISSION:
+    if application and application.application_type == application_type.ADMISSION:
         doc_recto = mdl.application_document_file.search(application,
                                                          document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
         doc_verso = mdl.application_document_file.search(application,

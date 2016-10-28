@@ -25,7 +25,6 @@
 ##############################################################################
 from django.test import TestCase
 from django.contrib.auth.models import User
-
 from admission.views import secondary_education
 import admission.tests.data_for_tests as data_model
 
@@ -34,7 +33,7 @@ class SecondaryEducationTest(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(
-            username='jacob', email='jacob@gmail.com', password='top_secret')
+            username='jacob', email='jacob@localhost', password='top_secret')
         self.applicant = data_model.create_applicant_by_user(self.user)
 
     def test_get_secondary_education_exams_data_size(self):
@@ -98,4 +97,3 @@ class SecondaryEducationTest(TestCase):
         self.assertFalse(secondary_education.get_boolean_value('True'))
         self.assertFalse(secondary_education.get_boolean_value('false'))
         self.assertEqual(secondary_education.get_boolean_value('-'), None)
-
