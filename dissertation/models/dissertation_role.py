@@ -23,12 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+from osis_common.models.serializable_model import SerializableModel
+from django.contrib import admin
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
-class DissertationRole(models.Model):
+class DissertationRoleAdmin(admin.ModelAdmin):
+    list_display = ('adviser', 'status', 'dissertation', 'author', 'dissertation_status')
+
+
+class DissertationRole(SerializableModel):
     STATUS_CHOICES = (
         ('PROMOTEUR', _('promotor')),
         ('CO_PROMOTEUR', _('copromotor')),
@@ -41,6 +46,14 @@ class DissertationRole(models.Model):
 
     def __str__(self):
         return u"%s %s" % (self.status if self.status else "", self.adviser if self.adviser else "")
+
+    @property
+    def author(self):
+        return self.dissertation.author
+
+    @property
+    def dissertation_status(self):
+        return self.dissertation.status
 
 
 def add(status, adviser, dissertation):

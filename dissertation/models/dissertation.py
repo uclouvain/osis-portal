@@ -23,20 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+from osis_common.models.serializable_model import SerializableModel
 from django.contrib import admin
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
-
 from base.models import student, offer_year, academic_year
-from . import proposition_dissertation
+from . import dissertation_location, proposition_dissertation
 from dissertation.models.dissertation_role import get_promoteur_by_dissertation
 from dissertation.utils.emails_dissert import send_mail_to_teacher_new_dissert
 
 
 class DissertationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'status', 'active')
+    list_display = ('title', 'author', 'status', 'active', 'proposition_dissertation', 'modification_date')
+    raw_id_fields = ('author', 'offer_year_start')
 
 
 STATUS_CHOICES = (
@@ -66,18 +66,19 @@ DEFEND_PERIODE_CHOICES = (
 )
 
 
-class Dissertation(models.Model):
+class Dissertation(SerializableModel):
     title = models.CharField(max_length=200)
     author = models.ForeignKey(student.Student)
     status = models.CharField(max_length=12, choices=STATUS_CHOICES, default='DRAFT')
     defend_periode = models.CharField(max_length=12, choices=DEFEND_PERIODE_CHOICES, default='UNDEFINED')
-    defend_year = models.ForeignKey(academic_year.AcademicYear, blank=True, null=True)
+    defend_year = models.IntegerField(blank=True, null=True)
     offer_year_start = models.ForeignKey(offer_year.OfferYear)
     proposition_dissertation = models.ForeignKey(proposition_dissertation.PropositionDissertation)
     description = models.TextField(blank=True, null=True)
     active = models.BooleanField(default=True)
     creation_date = models.DateTimeField(auto_now_add=True, editable=False)
     modification_date = models.DateTimeField(auto_now=True)
+    location = models.ForeignKey(dissertation_location.DissertationLocation, blank=True, null=True)
 
     def __str__(self):
         return self.title

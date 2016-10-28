@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+from osis_common.models.serializable_model import SerializableModel
 from django.contrib import admin
 from django.db import models
 from django.db.models import Q
@@ -32,27 +32,27 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class PropositionDissertationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'visibility', 'active')
+    list_display = ('title', 'author', 'visibility', 'active', 'get_offer_propositions', 'creator')
+    raw_id_fields = ('creator', )
 
 
-class PropositionDissertation(models.Model):
+class PropositionDissertation(SerializableModel):
     TYPES_CHOICES = (
-        ('RDL', _('literature_review')),
-        ('EDC', _('case_study')),
-        )
+        ('RDL', _('litterature_review')),
+        ('EMP', _('empirical_research')),
+        ('THE', _('theoretical_analysis')),
+        ('PRO', _('project_dissertation')),
+        ('DEV', _('development_dissertation')),
+        ('OTH', _('other')))
 
     LEVELS_CHOICES = (
-        ('DOMAIN', _('domain')),
-        ('WORK', _('work')),
-        ('QUESTION', _('question')),
-        ('THEME', _('theme')),
-        )
+        ('SPECIFIC', _('specific_subject')),
+        ('THEME', _('large_theme')))
 
     COLLABORATION_CHOICES = (
         ('POSSIBLE', _('possible')),
         ('REQUIRED', _('required')),
-        ('FORBIDDEN', _('forbidden')),
-        )
+        ('FORBIDDEN', _('forbidden')))
 
     author = models.ForeignKey('Adviser')
     creator = models.ForeignKey('base.Person', blank=True, null=True)
@@ -80,6 +80,9 @@ class PropositionDissertation(models.Model):
         author = u"%s %s %s" % (last_name.upper(), first_name, middle_name)
         return author+" - "+str(self.title)
 
+    def get_offer_propositions(self):
+        return " - ".join([str(s) for s in self.offer_proposition.all()])
+
     class Meta:
         ordering = ["author__person__last_name", "author__person__middle_name", "author__person__first_name", "title"]
 
@@ -104,5 +107,12 @@ def search(terms, active=None, visibility=None):
 
 
 def search_by_offer(offers):
-    return PropositionDissertation.objects.filter(active=True, visibility=True, offer_proposition__offer__in=offers,
-                                                  offer_proposition__start_visibility_proposition__lte=timezone.now()).distinct()
+    props = PropositionDissertation.objects.filter(active=True,
+                                                   visibility=True,
+                                                   offer_proposition__offer__in=offers,
+                                                   offer_proposition__start_visibility_proposition__lte=timezone.now())
+    return props.distinct()
+
+
+def find_by_id(proposition_id):
+    return PropositionDissertation.objects.get(pk=proposition_id)
