@@ -30,9 +30,12 @@
 <ol class="breadcrumb">
     <li><a href="{% url 'dissertation' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
     <li><a href="{% url 'proposition_dissertations' %}" id="lnk_proposition_dissertations">{% trans 'subjects_list' %}</a></li>
-    <li class="active">{{ proposition_dissertation.title }}</li>
+    <li class="active">{{ proposition_dissertation.title|truncatechars:24 }}</li>
 </ol>
 <input type="hidden" value="{{proposition_dissertation.pk | default_if_none:''}}" id="hdn_current_proposition_dissertation_id" name="proposition_dissertation_id" title="proposition_dissertation_id" >
+<div class="page-header">
+    <h2>{{ proposition_dissertation.title }}</h2>
+</div>
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="panel panel-default">
@@ -41,85 +44,85 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-3" style="text-align: right">
+                    <div class="col-md-4" style="text-align: right">
                         <label>{% trans 'promotor' %}</label>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-8">
                         {{ proposition_dissertation.author }}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3" style="text-align: right">
-                        <label>{% trans 'title' %}</label>
+                    <div class="col-md-4" style="text-align: right">
+                        <label>{% trans 'title_dissertation' %}</label>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-8">
                         {{ proposition_dissertation.title }}
                     </div>
                 </div>
                 {% if filename != "" %}
                     <div class="row">
-                        <div class="col-md-3" style="text-align:right">
+                        <div class="col-md-4" style="text-align: right">
                              <label>{% trans 'file' %}</label>
                          </div>
-                         <div class="col-md-9">
+                         <div class="col-md-8">
                              <a href="{% url 'proposition_download' pk=proposition_dissertation.pk %}">{% trans 'link' %}</a>
                          </div>
                      </div>
                 {% endif %}
                 <div class="row">
-                    <div class="col-md-3" style="text-align: right">
+                    <div class="col-md-4" style="text-align: right">
                         <label>{% trans 'description' %}</label>
                     </div>
-                    <div class="col-md-9" style="text-align: left">
+                    <div class="col-md-8" style="text-align: left">
                         {{ proposition_dissertation.description|linebreaks }}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3" style="text-align: right">
+                    <div class="col-md-4" style="text-align: right">
                         <label>{% trans 'type' %}</label>
                     </div>
-                    <div class="col-md-9" style="text-align: justify">
+                    <div class="col-md-8" style="text-align: justify">
                         {{ proposition_dissertation.get_type_display }}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3" style="text-align: right">
+                    <div class="col-md-4" style="text-align: right">
                         <label>{% trans 'level' %}</label>
                     </div>
-                    <div class="col-md-9" style="text-align: justify">
+                    <div class="col-md-8" style="text-align: justify">
                         {{ proposition_dissertation.get_level_display  }}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3" style="text-align: right">
+                    <div class="col-md-4" style="text-align: right">
                         <label>{% trans 'collaboration' %}</label>
                     </div>
-                    <div class="col-md-9" style="text-align: justify">
+                    <div class="col-md-8" style="text-align: justify">
                         {{ proposition_dissertation.get_collaboration_display }}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3" style="text-align: right">
+                    <div class="col-md-4" style="text-align: right">
                         <label>{% trans 'max_students_number' %}</label>
                     </div>
-                    <div class="col-md-9" style="text-align: justify">
+                    <div class="col-md-8" style="text-align: justify">
                         {{ proposition_dissertation.max_number_student }}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3" style="text-align: right">
+                    <div class="col-md-4" style="text-align: right">
                         <label>{% trans 'taken_places' %}</label>
                     </div>
-                    <div class="col-md-9" style="text-align: justify">
+                    <div class="col-md-8" style="text-align: justify">
                         {{ using }} {% trans 'of' %} {{ proposition_dissertation.max_number_student }} ({{ percent }}{% trans '%'%})
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3" style="text-align: right">
+                    <div class="col-md-4" style="text-align: right">
                         <label>{% trans 'offer_propositions' %}</label>
                     </div>
-                    <div class="col-md-9">
-                        {% for offer_proposition in proposition_dissertation.offer_proposition.all %}
+                    <div class="col-md-8">
+                        {% for offer_proposition in offer_propositions %}
                             <span class="label label-default">{{ offer_proposition }}</span>
                         {% endfor %}
                     </div>
@@ -128,12 +131,12 @@
         </div>
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans 'dissertation_jury' %}</h3>
+                <h3 class="panel-title">{% trans 'proposition_dissertation_jury' %}</h3>
             </div>
             <div class="panel-body">
                 {% for proposition_role in proposition_roles %}
                     <div class="row" style="margin: 10px;">
-                        <div class="col-md-3" style="text-align: right">
+                        <div class="col-md-4" style="text-align: right">
                             <label>{{ proposition_role.get_status_display }}</label>
                         </div>
                         <div class="col-md-2">
@@ -149,7 +152,7 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-3" style="text-align: right">
+                    <div class="col-md-4" style="text-align: right">
                         <label>{% trans 'promotor' %}</label>
                     </div>
                     <div class="col-md-3">
@@ -157,7 +160,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3" style="text-align: right">
+                    <div class="col-md-4" style="text-align: right">
                         <label>{% trans 'mail' %}</label>
                     </div>
                     {% if proposition_dissertation.author.available_by_email %}
@@ -174,7 +177,7 @@
                     {% endif %}
                 </div>
                 <div class="row">
-                    <div class="col-md-3" style="text-align: right">
+                    <div class="col-md-4" style="text-align: right">
                         <label>{% trans 'phone' %}</label>
                     </div>
                     {% if proposition_dissertation.author.available_by_phone %}
@@ -191,7 +194,7 @@
                     {% endif %}
                 </div>
                 <div class="row">
-                    <div class="col-md-3" style="text-align: right">
+                    <div class="col-md-4" style="text-align: right">
                         <label>{% trans 'mobile' %}</label>
                     </div>
                     {% if proposition_dissertation.author.available_by_phone %}
@@ -208,7 +211,7 @@
                     {% endif %}
                 </div>
                 <div class="row">
-                    <div class="col-md-3" style="text-align: right">
+                    <div class="col-md-4" style="text-align: right">
                         <label>{% trans 'comment' %}</label>
                     </div>
                     <div class="col-md-9">

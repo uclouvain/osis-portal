@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -23,22 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import json
-from django.core import serializers
+from osis_common.models.serializable_model import SerializableModel
+from django.db import models
 
 
-def insert_or_update(json_data):
-    from base.models.serializable_model import SerializableModel
-    json_data = json.loads(json_data.decode("utf-8"))
-    serialized_objects = json_data['serialized_objects']
-    deserialized_objects = serializers.deserialize('json', serialized_objects, ignorenonexistent=True)
-    if json_data['to_delete']:
-        for deser_object in deserialized_objects:
-            try:
-                super(SerializableModel, deser_object.object).delete()
-            except AssertionError:
-                # In case the object doesn't exist (object can't be deleted)
-                pass
-    else:
-        for deser_object in deserialized_objects:
-            super(SerializableModel, deser_object.object).save()
+class DissertationLocation(SerializableModel):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name

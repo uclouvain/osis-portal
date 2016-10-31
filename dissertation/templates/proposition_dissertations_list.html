@@ -31,6 +31,9 @@
     <li><a href="{% url 'dissertation' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
     <li class="active">{% trans 'subjects_list' %}</li>
 </ol>
+<div class="page-header">
+    <h2>{% trans 'subjects_list' %}</h2>
+</div>
 <div class="panel panel-default">
     <div class="panel-body">
         <form method="get" action="{% url 'proposition_dissertations_search'%}">
@@ -46,34 +49,27 @@
                 </div>
             </div>
         </form>
-        <br>
-        <div>
-            {% if proposition_dissertations|length == 0 %}
-                <br>
-                <label class="alert alert-info" style="margin-left:10%;width:80%;text-align:center;">{% trans 'no_result' %}</label>
-            {% else %}
-                <table class="table table-hover">
-                    <tr>
-                        <td style="text-align: center">{% trans 'title'%}</td>
-                        <td style="text-align: center">{% trans 'author'%}</td>
-                        <td style="text-align: center">{% trans 'offer_proposition'%}</td>
-                        <td style="text-align: center">{% trans 'max_students_number'%}</td>
-                    </tr>
-                  {% for proposition_dissertation in proposition_dissertations %}
-                    {% for offer_proposition in proposition_dissertation.offer_proposition.all %}
-                        {% if offer_proposition.start_visibility_proposition <= date_now and offer_proposition.end_visibility_proposition >= date_now %}
-                            <tr>
-                                <td style="text-align: center"><a href="{% url 'proposition_dissertation_detail' pk=proposition_dissertation.pk %}">{{ proposition_dissertation.title }}</a></td>
-                                <td style="text-align: center">{{ proposition_dissertation.author }}</td>
-                                <td style="text-align: center"><span class="label label-default">{{ offer_proposition }}</span></td>
-                                <td style="text-align: center">{{ proposition_dissertation.max_number_student }}</td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                  {% endfor %}
-                </table>
-            {% endif %}
-        </div>
     </div>
-</div>
+    {% if proposition_offers|length == 0 %}
+        <br>
+        <label class="alert alert-info" style="margin-left:10%;width:80%;text-align:center;">{% trans 'no_result' %}</label>
+    {% else %}
+        <table class="table table-hover">
+            <tr>
+                <th>{% trans 'title_dissertation'%}</th>
+                <th>{% trans 'author'%}</th>
+                <th>{% trans 'offer_propositions'%}</th>
+                <th>{% trans 'max_students_number'%}</th>
+            </tr>
+              {% for proposition_offer in proposition_offers %}
+                <tr>
+                  <td><a href="{% url 'proposition_dissertation_detail' pk=proposition_offer.proposition_dissertation.pk %}">{{ proposition_offer.proposition_dissertation.title }}</a></td>
+                  <td>{{ proposition_offer.proposition_dissertation.author }}</td>
+                  <td><span class="label label-default">{{ proposition_offer.offer_proposition }}</span></td>
+                  <td>{{ proposition_offer.proposition_dissertation.max_number_student }}</td>
+                </tr>
+              {% endfor %}
+            </table>
+          {% endif %}
+    </div>
 {% endblock %}

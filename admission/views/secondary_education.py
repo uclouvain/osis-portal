@@ -291,8 +291,9 @@ def documents_update(request, secondary_education, application, professional_exa
 
 
 def delete_documents(request, application, list_unwanted_files):
+    applicant = mdl.applicant.find_by_user(request.user)
     for file_description in list_unwanted_files:
-        documents = mdl_osis_common.document_file.search(request.user, file_description)
+        documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, file_description)
         for document in documents:
             documents_application = mdl.application_document_file.search(application, file_description)
             for doc_application in documents_application:

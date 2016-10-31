@@ -29,8 +29,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from base import models as mdl
 from base.views import layout
-from dissertation.models import dissertation, dissertation_document_file,  dissertation_role, dissertation_update, offer_proposition, \
-                                proposition_dissertation, proposition_role
+from dissertation.models import dissertation, dissertation_document_file,  dissertation_role, dissertation_update,\
+    offer_proposition, proposition_dissertation, proposition_offer, proposition_role
 from dissertation.forms import DissertationForm, DissertationEditForm, DissertationRoleForm,\
                                 DissertationTitleForm, DissertationUpdateForm
 from django.utils import timezone
@@ -70,6 +70,7 @@ def dissertation_detail(request, pk):
     student = mdl.student.find_by_person(person)
     off = memory.offer_year_start.offer
     offer_pro = offer_proposition.search_by_offer(off)
+    offer_propositions = proposition_offer.search_by_proposition_dissertation(memory.proposition_dissertation)
     count = dissertation.count_submit_by_user(student, off)
     files = dissertation_document_file.find_by_dissertation(memory)
     filename = ""
@@ -109,7 +110,8 @@ def dissertation_detail(request, pk):
                                   'dissertation_roles': dissertation_roles,
                                   'jury_visibility': jury_visibility,
                                   'manage_readers': manage_readers,
-                                  'filename': filename})
+                                  'filename': filename,
+                                  'offer_propositions': offer_propositions})
         else:
             jury_visibility = False
             return layout.render(request, 'dissertation_detail.html',
@@ -118,7 +120,8 @@ def dissertation_detail(request, pk):
                                   'dissertation': memory,
                                   'jury_visibility': jury_visibility,
                                   'student': student,
-                                  'filename': filename})
+                                  'filename': filename,
+                                  'offer_propositions': offer_propositions})
 
 
 @login_required
@@ -141,14 +144,12 @@ def dissertation_edit(request, pk):
                     memory = form.save()
                     return redirect('dissertation_detail', pk=memory.pk)
                 else:
-                    form.fields["defend_year"].queryset = academic_year.find_last_academic_years()
                     form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
-                    form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offer(offers)
+                    form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offers(offers)
             else:
                 form = DissertationEditForm(instance=memory)
-                form.fields["defend_year"].queryset = academic_year.find_last_academic_years()
                 form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
-                form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offer(offers)
+                form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offers(offers)
             return layout.render(request, 'dissertation_edit_form.html',
                                  {'form': form,
                                   'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
@@ -222,14 +223,12 @@ def dissertation_new(request):
             form.save()
             return redirect('dissertations')
         else:
-            form.fields["defend_year"].queryset = academic_year.find_last_academic_years()
             form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
-            form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offer(offers)
+            form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offers(offers)
     else:
         form = DissertationForm(initial={'active': True, 'author': student})
-        form.fields["defend_year"].queryset = academic_year.find_last_academic_years()
         form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
-        form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offer(offers)
+        form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offers(offers)
     return layout.render(request, 'dissertation_form.html',
                          {'form': form,
                           'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})

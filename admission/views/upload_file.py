@@ -59,11 +59,14 @@ def upload_file_description(request):
     application_id = request.POST['application_id']
     if not application_id.isdigit():
         application_id = None
-
-    documents = mdl_osis_common.document_file.search(user=request.user, description=description)
+    applicant = mdl.applicant.find_by_user(request.user)
+    if description:
+        documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
+    else:
+        documents = mdl.applicant_document_file.find_document_by_applicant(applicant)
     form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                            'document_type': "admission",
-                                           'user': request.user})
+                                           'update_by': request.user.username})
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
@@ -79,8 +82,8 @@ def upload_file_description(request):
 
 @login_required
 def upload_document(request):
-    documents = mdl_osis_common.document_file.search(user=request.user, description=None)
-
+    applicant = mdl.applicant.find_by_user(request.user)
+    documents = mdl.applicant_document_file.find_document_by_applicant(applicant)
     if request.method == "POST":
         description = None
         if request.POST['description']:
@@ -114,7 +117,8 @@ def delete_old(request, pk):
     if document:
         description = document.description
         document.delete()
-        documents = mdl_osis_common.document_file.search(user=request.user, description=description)
+        applicant = mdl.applicant.find_by_user(request.user)
+        documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
 
         return render(request, 'new_document.html', {
             'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
@@ -146,8 +150,12 @@ def save_document_from_form(document, request):
                                                           application_name='admission',
                                                           content_type=content_type,
                                                           size=size,
-                                                          user=request.user)
+                                                          update_by=request.user.username)
     doc_file.save()
+    applicant = mdl.applicant.find_by_user(request.user)
+    applicant_document_file = mdl.applicant_document_file.ApplicantDocumentFile(applicant=applicant,
+                                                                                document_file=doc_file)
+    applicant_document_file.save()
 
 
 class JSONResponse(HttpResponse):
@@ -165,10 +173,11 @@ class DocumentFileSerializer(serializers.ModelSerializer):
 
 def find_by_description(request):
     description = request.GET['description']
-    documents = mdl_osis_common.document_file.search(request.user, description)
+    applicant = mdl.applicant.find_by_user(request.user)
+    documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
     last_documents = []
     if documents:
-        last_document = documents.reverse()[0]
+        last_document = documents[-1]
         last_documents = [last_document]
 
     serializer = DocumentFileSerializer(last_documents, many=True)
@@ -176,21 +185,20 @@ def find_by_description(request):
 
 
 def save_uploaded_file(request):
-    data = request.POST
-    application = None
-    applicant = None
-
     if request.method == 'POST':
         if request.POST.get('application_id'):
-            application = mdl.application.find_by_id(request.POST['application_id'])
+            application = mdl.application.find_by_id(request.POST.get('application_id'))
             applicant = application.applicant
+        else:
+            application = None
+            applicant = mdl.applicant.find_by_user(request.user)
         file_selected = request.FILES['file']
         file_s = file_selected
         file_name = file_selected.name
         content_type = file_selected.content_type
         size = file_selected.size
 
-        description = data['description']
+        description = request.POST.get('description')
         storage_duration = 0
         prerequis_uploads = [document_type.NATIONAL_DIPLOMA_RECTO,
                              document_type.NATIONAL_DIPLOMA_VERSO,
@@ -212,12 +220,13 @@ def save_uploaded_file(request):
             documents = mdl.application_document_file.search(application, description)
             for document in documents:
                 document.delete()
+
         if description == document_type.ID_PICTURE \
                 or description == document_type.ID_CARD \
                 or description in prerequis_uploads \
                 or description in assimilation_uploads:
             # Delete older file with the same description
-            documents = mdl_osis_common.document_file.search(user=request.user, description=description)
+            documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
             for document in documents:
                 document.delete()
 
@@ -228,8 +237,12 @@ def save_uploaded_file(request):
                                                               application_name='admission',
                                                               content_type=content_type,
                                                               size=size,
-                                                              user=request.user)
+                                                              update_by=request.user.username)
         doc_file.save()
+        applicant_document_file = mdl.applicant_document_file.ApplicantDocumentFile(applicant=applicant,
+                                                                                    document_file=doc_file)
+        applicant_document_file.save()
+
         if description in prerequis_uploads:
             adm_doc_file = mdl.application_document_file.ApplicationDocumentFile()
             adm_doc_file.application = application
@@ -264,11 +277,9 @@ def delete_document_file(request):
             document.delete()
     else:
         description = request.POST.get('description')
-        document = mdl_osis_common.document_file.search(request.user, description)
-        if document:
-            document_applicant_list = mdl.application_document_file.find_by_document(document)
-            if document_applicant_list.exists():
-                for document_applicant in document_applicant_list:
-                    document_applicant.delete()
-            document.delete()
+        if description:
+            applicant = mdl.applicant.find_by_user(request.user)
+            document = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
+            if document:
+                document.delete()
     return HttpResponse('')

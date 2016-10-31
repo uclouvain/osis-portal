@@ -64,7 +64,7 @@ def save_uploaded_file(request):
                                                                   application_name='dissertation',
                                                                   content_type=content_type,
                                                                   size=size,
-                                                                  user=request.user)
+                                                                  update_by=request.user.username)
         new_document.save()
         proposition_file = mdl.proposition_document_file.PropositionDocumentFile()
         proposition_file.proposition = proposition
