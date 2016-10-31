@@ -49,11 +49,10 @@ if hasattr(settings, 'QUEUES'):
     except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
         LOGGER.exception("Couldn't connect to the QueueServer")
 
-
-# Thread in which is running the listening of the queue used to received student points
-queue_for_migration = 'STUDENTS_POINTS' # Data from Osis to insert/update/delete in Osis-portal
-try:
-    queue_listener.SynchronousConsumerThread(queue_for_migration, callback).start()
-except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
-    LOGGER.exception("Couldn't connect to the QueueServer")
+    # Thread in which is running the listening of the queue used to received student points
+    try:
+        queue_listener.SynchronousConsumerThread(settings.QUEUES.get('QUEUES_NAME').get('STUDENT_POINTS'),
+                                                 callback).start()
+    except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
+        LOGGER.exception("Couldn't connect to the QueueServer")
 

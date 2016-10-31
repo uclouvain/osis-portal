@@ -24,15 +24,13 @@
 #
 ##############################################################################
 import json
-from frontoffice.queue.queue_listener import DocumentClient
+from osis_common.queue.queue_listener import DocumentClient
 import datetime
-
-
-STUDENT_PERFORMANCE_QUEUE_NAME = "STUDENT_PERFORMANCE_QUEUE"
 
 
 def callback(json_data):
     try:
+        json_data = json.loads(json_data.decode("utf-8"))
         student = extract_student_from_json(json_data)
         offer_year = extract_offer_year_from_json(json_data)
         save(student, offer_year, json_data)
@@ -71,7 +69,7 @@ def fetch_and_save(student, offer_year):
 
 def fetch_json_data(student, offer_year):
     message = generate_message(student, offer_year)
-    client = DocumentClient(STUDENT_PERFORMANCE_QUEUE_NAME)
+    client = DocumentClient()
     json_data = client.call(message)
     json_student_perf = None
     if json_data:
