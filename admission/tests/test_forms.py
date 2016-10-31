@@ -23,17 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-from django.test import TestCase, RequestFactory
-from django.contrib.auth.models import User
-from admission.models import applicant
-from admission.views import sociological
-from django.utils.encoding import force_text
-import json
+from django.test import TestCase
 from admission import models as mdl
-from django.contrib.auth.models import User
 import admission.tests.data_for_tests as data_model
-from django.test import Client
 from admission.forms import SociologicalSurveyForm
 from admission.models.enums import education, professional_activity
 
@@ -81,4 +73,3 @@ def init_data():
             'maternal_grandfather_profession': profession_choice.id
             }
     return data
-

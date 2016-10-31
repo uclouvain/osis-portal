@@ -23,7 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+from osis_common.models.serializable_model import SerializableModel
+from django.contrib import admin
 from django.db import models
 from base import models as mdl
 from dissertation.models import dissertation
@@ -31,14 +32,22 @@ from dissertation.models import dissertation
 JUSTIFICATION_LINK = "_set_to_"
 
 
-class DissertationUpdate(models.Model):
+class DissertationUpdateAdmin(admin.ModelAdmin):
+    list_display = ('dissertation', 'author', 'status_from', 'status_to', 'person', 'created')
+    raw_id_fields = ('person',)
 
+
+class DissertationUpdate(SerializableModel):
     status_from = models.CharField(max_length=12, choices=dissertation.STATUS_CHOICES, default='DRAFT')
     status_to = models.CharField(max_length=12, choices=dissertation.STATUS_CHOICES, default='DRAFT')
     created = models.DateTimeField(auto_now_add=True)
     justification = models.TextField(default='')
     person = models.ForeignKey('base.Person')
     dissertation = models.ForeignKey(dissertation.Dissertation)
+
+    @property
+    def author(self):
+        return self.dissertation.author
 
     def __str__(self):
         desc = "%s / %s >> %s / %s" % (self.dissertation.title, self.status_from, self.status_to, str(self.created))

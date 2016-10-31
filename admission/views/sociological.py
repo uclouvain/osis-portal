@@ -23,15 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
 from admission import models as mdl
 from admission.views import demande_validation
 from admission.forms import SociologicalSurveyForm
 from admission.models.sociological_survey import SociologicalSurvey
-from admission.views import attachments, accounting
+from admission.views import navigation
 
-TAB_SOCIOLOGICAL_SURVEY = 5
 CHECKED_STATUS = 'on'
 
 
@@ -42,16 +41,23 @@ def update(request, application_id=None):
     :param application_id
     """
     applicant = mdl.applicant.find_by_user(request.user)
-    tab_active = TAB_SOCIOLOGICAL_SURVEY
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
+    else:
+        application = mdl.application.init_application(request.user)
+
+    next_tab = navigation.SOCIOLOGICAL_SURVEY_TAB
     sociological_survey = None
-    sociological_form = None
     if request.method == "POST":
         save_sociological_form(request)
-        if 'bt_submit_sociological' in request.POST:
-            u = SociologicalSurvey.objects.get(applicant=applicant)
-            sociological_form = SociologicalSurveyForm(instance=u)
-            sociological_form.is_valid()
-            sociological_survey = u
+
+        sociological_survey = SociologicalSurvey.objects.get(applicant=applicant)
+        sociological_form = SociologicalSurveyForm(instance=sociological_survey)
+        sociological_form.is_valid()
+
+        following_tab = navigation.get_following_tab(request, 'sociological', application)
+        if following_tab:
+            return following_tab
     else:
         try:    # Prefill the form if the user already filled it.
             sociological_survey = SociologicalSurvey.objects.get(applicant=applicant)
@@ -65,7 +71,7 @@ def update(request, application_id=None):
         application = mdl.application.init_application(request.user)
 
     data = {
-        'tab_active': tab_active,
+        'tab_active': next_tab,
         'application': application,
         'applications': mdl.application.find_by_user(request.user),
         'sociological_form': sociological_form,
@@ -91,14 +97,16 @@ def save_sociological_form(request):
         number_brothers_sisters = 0
     father_is_deceased = get_boolean_status(request.POST.get('father_is_deceased'))
 
-    if request.POST.get('father_education').startswith('-') or request.POST.get('father_education') == '':
+    if request.POST.get('father_education') is None \
+            or (request.POST.get('father_education').startswith('-') or request.POST.get('father_education') == ''):
         father_education = None
     else:
         father_education = request.POST.get('father_education')
     father_profession = get_profession(request.POST.get('father_profession'),
                                        request.POST.get('father_profession_other_name'))
     mother_is_deceased = get_boolean_status(request.POST.get('mother_is_deceased'))
-    if request.POST.get('mother_education').startswith('-') or request.POST.get('mother_education') == '':
+    if request.POST.get('father_education') is None \
+            or (request.POST.get('mother_education').startswith('-') or request.POST.get('mother_education') == ''):
         mother_education = None
     else:
         mother_education = request.POST.get('mother_education')

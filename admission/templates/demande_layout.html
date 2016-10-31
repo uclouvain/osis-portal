@@ -26,6 +26,7 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 <form method="post" action="{% url 'save_offer_selection' %}" id="form_questions">
+    <input type="hidden" id="hdn_following_demand_tab" name="following_demand_tab">
     <div class="row">
         <div class="col-md-8">
             <h5>{% trans 'mandatory_asterisk'%}</h5>
@@ -43,18 +44,20 @@
            style="visibility:hidden;display:none;"></span>
     <div class="row" style="margin-top:5px;">
         <div class="col-md-6">
-            <a id="lnk_previous_offer_step_up"
-               class="btn btn-default"
-               href="{%if application.id%}{% url 'profile' application.id%}{%else%}{% url 'profile'%}{%endif%}"
-               title="{% trans 'profile'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-                {%trans 'previous_step'%} : {%trans 'profile'%}</a>
+            <button type="submit"
+                    id="lnk_previous_offer_step_up"
+                    class="btn btn-default"
+                    title="{% trans 'profile'%}">
+                <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+                {%trans 'previous_step'%} : {%trans 'profile'%}
+            </button>
         </div>
         <div class="col-md-6">
-            <a id="lnk_next_offer_step_up"
-                class="btn btn-default pull-right"
-                href="{%if application.id %}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
-                title="{% trans 'diploma'%}">{%trans 'next_step'%} : {%trans 'tab_diplomas'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            </a>
+            <button type="submit"
+                    id="lnk_next_offer_step_up"
+                    class="btn btn-default pull-right"
+                    title="{% trans 'diploma'%}">{%trans 'next_step'%} : {%trans 'tab_diplomas'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            </button>
         </div>
     </div>
 
@@ -310,18 +313,22 @@
 
     <div class="row">
         <div class="col-md-6">
-            <a id="lnk_previous_offer_step"
+            <button type="submit"
+               id="lnk_previous_offer_step"
                class="btn btn-default"
-               href="#"
-               title="{% trans 'profile'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-                {%trans 'previous_step'%} : {%trans 'profile'%}</a>
+               title="{% trans 'profile'%}">
+                <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+                {%trans 'previous_step'%} : {%trans 'profile'%}
+            </button>
         </div>
         <div class="col-md-6">
-            <a id="lnk_next_offer_step"
-               class="btn btn-default pull-right"
-               href="{%if application.id %}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
-               title="{% trans 'diploma'%}">{%trans 'next_step'%} : {%trans 'tab_diplomas'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-                </a>
+            <button type="submit"
+                    id="lnk_next_offer_step"
+                   class="btn btn-default pull-right"
+                   href="{%if application.id %}{% url 'diploma_update' application_id=application.id%}{%else%}{% url 'diploma_update'%}{%endif%}"
+                   title="{% trans 'diploma'%}">{%trans 'next_step'%} : {%trans 'tab_diplomas'%}
+                <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            </button>
         </div>
     </div>
 </form>

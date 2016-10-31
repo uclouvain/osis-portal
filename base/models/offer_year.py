@@ -27,14 +27,14 @@ from base.models import offer_year_domain
 from base.models.offer_year_domain import OfferYearDomain
 from django.db import models
 from django.contrib import admin
-from base.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel
 
 
 class OfferYearAdmin(admin.ModelAdmin):
     list_display = ('acronym', 'title', 'academic_year', 'grade_type', 'subject_to_quota')
     list_filter = ('grade_type__institutional_grade_type', 'subject_to_quota',)
     fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'grade_type',
-                                    'subject_to_quota')}),)
+                                    'subject_to_quota', 'offer')}),)
 
 
 class OfferYear(SerializableModel):

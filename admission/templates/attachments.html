@@ -41,8 +41,7 @@
     </div>
     <div class="row"  style="margin-top:5px;">
         <div class="col-md-6">
-            <a id="lnk_previous_step_up"
-               class="btn btn-default"
+            <a id="lnk_previous_step_up" class="btn btn-default"
                href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey'%}{%endif%}"
                onclick="save('form_attachments');"
                title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
@@ -57,65 +56,10 @@
                 </a>
         </div>
     </div>
-
     <br/>
-
-    <!-- HEADER -->
-    <div class="row">
-        <div class="col-md-4"><strong>{% trans 'description' %}</strong></div>
-        <div class="col-md-4"><strong>{% trans 'file' %}</strong></div>
-        <div class="col-md-4"><strong>{% trans 'type' %}</strong></div>
-    </div>
-
-    <!-- PREVIOUS UPLOADED ATTACHMENTS -->
-    {% for attachment in attachments %}
-    <br>
-    <div class="row">
-        <div class="col-md-4">{{ attachment.file_name }}</div>
-        <div class="col-md-4">
-            <a href="{% url 'download' attachment.pk %}">
-                <span class="glyphicon glyphicon-open-file"></span>
-            </a> </div>
-        <div class="col-md-2">
-            {{ attachment.description }}
-        </div>
-        <form action="{% url 'remove_attachment' %}" name="remove_attachment_{{attachment.pk}}" method="post"
-              id="form_attachements">
-            {% csrf_token %}
-            {% if removeAttachmentForm.errors %}
-            <div class="alert alert-danger" role="alert">
-                <ul style="list-style-type: none">
-                    {% for field in removeAttachmentForm %}
-                    {% for error in field.errors %}
-                    <li>{{ error | escape }}</li>
-                    {% endfor %}
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
-            <input name="attachment_id" class="form-control" type="hidden" value="{{ attachment.pk }}">
-            <!-- Button to triger modal -->
-            <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#btn_remove_{{attachment.pk}}">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-            </button>
-
-            <!-- Modal -->
-            <div class="modal fade" id="btn_remove_{{attachment.pk}}" tabindex="-1" role="dialog" aria-labelledby="modal_{{attachment.pk}}">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            Are you sure want to remove the file (<b>{{ attachment.file_name }}</b>) ?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                            <button type="submit" class="btn btn-default btn-sm">Yes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    {% endfor %}
+    <button id="button_add_form"  type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    </button>
     <!-- FORM TO UPLOAD ATTACHMENTS -->
     <div id="div_document_forms">
         {% csrf_token %}
@@ -123,30 +67,81 @@
         <br>
     </div>
     <br>
-    <button id="button_add_form"  type="button" class="btn btn-default">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-    </button>
-    <br>
-    <br>
-    <div class="row">
-        <div class="col-md-6">
-            <a id="lnk_previous_step"
-               class="btn btn-default"
-               href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey'%}{%endif%}"
-               onclick="save('form_attachments');"
-               title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-                {%trans 'previous_step'%} : {% trans 'sociological_survey'%}</a>
-        </div>
-        <div class="col-md-6">
-            <a id="lnk_next_step"
-               class="btn btn-default pull-right"
-               href="{%if application.id%}{% url 'submission' application.id%}{%else%}{% url 'submission'%}{%endif%}"
-               onclick="save('form_attachments');"
-               title="{% trans 'submission'%}">{%trans 'next_step'%} : {%trans 'submission'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-                </a>
-        </div>
-    </div>
 </form>
+<!-- HEADER -->
+<div class="row">
+    <div class="col-md-4"><strong>{% trans 'description' %}</strong></div>
+    <div class="col-md-4"><strong>{% trans 'file' %}</strong></div>
+    <div class="col-md-4"><strong>{% trans 'type' %}</strong></div>
+</div>
+<!-- PREVIOUS UPLOADED ATTACHMENTS -->
+{% for attachment in attachments %}
+<br>
+<div class="row">
+    <div class="col-md-4">{{ attachment.file_name }}</div>
+    <div class="col-md-4">
+        <a href="{% url 'download' attachment.pk %}">
+            <span class="glyphicon glyphicon-open-file"></span>
+        </a> </div>
+    <div class="col-md-2">
+        {{ attachment.description }}
+    </div>
+    <form action="{% url 'remove_attachment' %}" name="remove_attachment_{{attachment.pk}}" method="post"
+          id="form_attachements">
+        {% csrf_token %}
+        {% if removeAttachmentForm.errors %}
+        <div class="alert alert-danger" role="alert">
+            <ul style="list-style-type: none">
+                {% for field in removeAttachmentForm %}
+                {% for error in field.errors %}
+                <li>{{ error | escape }}</li>
+                {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        <input name="attachment_id" class="form-control" type="hidden" value="{{ attachment.pk }}">
+        <!-- Button to triger modal -->
+        <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#btn_remove_{{attachment.pk}}">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="btn_remove_{{attachment.pk}}" tabindex="-1" role="dialog" aria-labelledby="modal_{{attachment.pk}}">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        Are you sure want to remove the file (<b>{{ attachment.file_name }}</b>) ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                        <button type="submit" class="btn btn-default btn-sm">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endfor %}
+<br>
+<div class="row">
+    <div class="col-md-6">
+        <a id="lnk_previous_step"
+           class="btn btn-default"
+           href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey'%}{%endif%}"
+           onclick="save('form_attachments');"
+           title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            {%trans 'previous_step'%} : {% trans 'sociological_survey'%}</a>
+    </div>
+    <div class="col-md-6">
+        <a id="lnk_next_step"
+           class="btn btn-default pull-right"
+           href="{%if application.id%}{% url 'submission' application.id%}{%else%}{% url 'submission'%}{%endif%}"
+           onclick="save('form_attachments');"
+           title="{% trans 'submission'%}">{%trans 'next_step'%} : {%trans 'submission'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+            </a>
+    </div>
+</div>
 
 
 

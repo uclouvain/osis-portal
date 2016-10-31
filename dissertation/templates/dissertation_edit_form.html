@@ -44,7 +44,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel-group" {% if form.title.errors %} style="color:red;" {% endif %}>
-                        <label for="txt_title" style="margin-left:-6px;">{% trans 'title' %}</label>
+                        <label for="txt_title" style="margin-left:-6px;">{% trans 'title_dissertation' %}</label>
                         <input class="form-control" id="txt_title"  name="title" style="margin:-6px;" value="{{ form.title.value | default_if_none:'' }}">
                     </div>
                 </div>
@@ -63,10 +63,16 @@
                 <div class="col-md-6">
                     <div class="panel-group" {% if form.defend_year.errors %} style="color:red;" {% endif %}>
                         <label for="txt_defend_year" style="margin-left:-6px;">{% trans 'defend_year' %}</label>
-                        <select class="form-control" id="txt_defend_year"  name="defend_year" style="margin:-6px;">
-                            <option value={{ form.defend_year }}
-                        </select>
+                        <input class="form-control" id="txt_defend_year"  name="defend_year" style="margin:-6px;" value="{{ form.defend_year.value | default_if_none:'' }}">
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <label for="txt_location" {% if form.location.errors %} style="color:red;" {% endif %}>{% trans 'dissertation_location' %}</label>
+                    <select class="form-control" id="txt_location"  name="location" style="margin:-6px;">
+                        <option value={{ form.location }}
+                    </select>
                 </div>
             </div>
             <div class="row {% if field.errors %}error{% endif %}">
@@ -77,7 +83,9 @@
                     </div>
                 </div>
             </div>
-            <button type="submit" class="save btn btn-primary pull-right">Save</button>
+            <div style="text-align:right">
+                <button type="submit" class="save btn btn-primary" onclick="return confirm('{% trans 'dissertation_confirmation_message' %}')">{% trans 'save' %}</button>
+            </div>
       </form>
     </div>
   </div>

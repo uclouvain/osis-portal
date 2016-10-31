@@ -25,8 +25,9 @@
 ##############################################################################
 from django.shortcuts import render, redirect
 from admission import models as mdl
+from admission.models.applicant_document_file import ApplicantDocumentFile
 from admission.models.enums import document_type
-from admission.views import demande_validation
+from admission.views import application, demande_validation, navigation
 from admission.forms import RemoveAttachmentForm
 from osis_common.forms import UploadDocumentFileForm
 from osis_common.models.document_file import DocumentFile
@@ -37,9 +38,10 @@ def update(request, application_id=None):
     past_attachments = list_attachments(request.user)
     attachments_available = attachments_left_available(len(past_attachments))
     UploadDocumentFileFormSet = formset_factory(UploadDocumentFileForm, extra=0, max_num=attachments_available)
-
+    print(request)
     if request.method == "POST":
         document_formset = UploadDocumentFileFormSet(request.POST, request.FILES)
+        print(document_formset)
         if document_formset.is_valid():
             for document in document_formset:
                 save_document_from_form(document, request.user)
@@ -56,7 +58,7 @@ def update(request, application_id=None):
     remove_attachment_form = RemoveAttachmentForm()
     list_choices = [x[1] for x in document_type.DOCUMENT_TYPE_CHOICES]
     data = {
-        "tab_active": 6,
+        "tab_active": navigation.ATTACHMENTS_TAB,
         "application": application,
         "applications": mdl.application.find_by_user(request.user),
         "document_formset": document_formset,
@@ -68,7 +70,7 @@ def update(request, application_id=None):
     return render(request, "admission_home.html", data)
 
 
-def remove_attachment(request):
+def remove_attachment(request, application_id):
     """
     View used to remove previous attachments.
     :param request
@@ -80,7 +82,7 @@ def remove_attachment(request):
             # form is valid ensure that there is a document having that pk value
             attachment_to_remove = DocumentFile.objects.get(pk=attachment_pk)
             safe_document_removal(request.user, "admission_attachments", attachment_to_remove)
-    return redirect(update)
+    return redirect(update, application_id=application_id)
 
 
 def safe_document_removal(user, application_name, document):
@@ -92,7 +94,9 @@ def safe_document_removal(user, application_name, document):
     :param document
     :return:
     """
-    if document.user == user and document.application_name == application_name:
+    applicant_calling = mdl.applicant.find_by_user(user)
+    applicant_from_document = mdl.applicant_document_file.find_applicant_by_document(document)
+    if applicant_calling == applicant_from_document and document.application_name == application_name:
         document.delete()
 
 
@@ -102,10 +106,8 @@ def list_attachments(user):
     :param user: the current user in session.
     :return: an array of dictionnary
     """
-    uploaded_attachments = DocumentFile.objects.filter(username=user.username,
-                                                       application_name="admission_attachments")
-
-    return list(uploaded_attachments)
+    applicant = mdl.applicant.find_by_user(user)
+    return mdl.applicant_document_file.find_document_by_applicant(applicant)
 
 
 def attachments_left_available(number_attachments_uploaded):
@@ -139,6 +141,8 @@ def save_document_from_form(document, user):
     doc_file = DocumentFile(file_name=file_name, file=file,
                             description=description, storage_duration=storage_duration,
                             application_name=application_name, content_type=content_type,
-                            size=size, username=user.username)
+                            size=size, update_by=user.username)
     doc_file.save()
-
+    applicant = mdl.applicant.find_by_user(user)
+    applicant_document_file = ApplicantDocumentFile(applicant=applicant, document_file=doc_file)
+    applicant_document_file.save()

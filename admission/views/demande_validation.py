@@ -77,7 +77,8 @@ def validate_profil(applicant, user):
                     nb_necessary_doc = len(list_document_type)
                     nb_doc = 0
                     for document_typ in l.descriptions:
-                        docs = mdl_common.document_file.search(user, document_typ)
+                        docs = mdl.applicant_document_file.\
+                            find_document_by_applicant_and_description(applicant, document_typ)
                         if docs:
                             nb_doc = nb_doc+1
                     if nb_necessary_doc == nb_doc:
@@ -91,7 +92,8 @@ def validate_profil(applicant, user):
     for assimilation_criteria in assimilation_criteria_list:
         docs_needed = assimilation_criteria_view.get_list_documents_descriptions(assimilation_criteria.criteria.id)
         for doc_needed in docs_needed:
-            doc = mdl_common.document_file.search(user, doc_needed)
+            doc = mdl.applicant_document_file. \
+                find_document_by_applicant_and_description(applicant, doc_needed)
             if not doc.exists():
                 return False
     return True
@@ -206,7 +208,7 @@ def validate_needed_docs(application):
     doc_verso = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_VERSO)
     if doc_recto.exists() is False or doc_verso.exists() is False:
         validation_messages['national_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
-    if application.application_type == application_type.ADMISSION:
+    if application and application.application_type == application_type.ADMISSION:
         doc_recto = mdl.application_document_file.search(application,
                                                          document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
         doc_verso = mdl.application_document_file.search(application,
@@ -241,8 +243,9 @@ def validate_admission_exam(admission_exam, application):
         if admission_exam.admission_exam_type is None:
             validation_messages['admission_exam_type'] = ALERT_MANDATORY_FIELD
         else:
-            if application.offer_year:
-                offer_admission_exam_type = mdl.offer_admission_exam_type.find_by_offer_year(application.offer_year)
+            offer_year = get_application_offer_year(application)
+            if offer_year:
+                offer_admission_exam_type = mdl.offer_admission_exam_type.find_by_offer_year(offer_year)
                 if offer_admission_exam_type and \
                         (offer_admission_exam_type.admission_exam_type != admission_exam.admission_exam_type):
                     validation_messages['admission_exam_type'] = "{0} '{1}' {2} {3}"\
@@ -266,3 +269,12 @@ def validate_local_language_exam(local_language_exam):
         if local_language_exam.result is None:
             validation_messages['local_language_exam_result'] = ALERT_MANDATORY_FIELD
     return validation_messages
+
+
+def get_application_offer_year(application):
+    if application:
+        try:
+            return application.offer_year
+        except:
+            return None
+    return None

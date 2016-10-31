@@ -26,10 +26,14 @@
 
 from dissertation.models import adviser
 from dissertation.models import dissertation
+
 from dissertation.models import dissertation_document_file
+from dissertation.models import dissertation_location
 from dissertation.models import dissertation_group
 from dissertation.models import dissertation_role
 from dissertation.models import dissertation_update
 from dissertation.models import offer_proposition
 from dissertation.models import proposition_dissertation
+from dissertation.models import proposition_document_file
+from dissertation.models import proposition_offer
 from dissertation.models import proposition_role

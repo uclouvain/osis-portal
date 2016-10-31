@@ -48,7 +48,7 @@ urlpatterns = [
     url(r'^admission/new_password/info/$', identification.new_password_info, name='new_password_info'),
     url(r'^admission/application/([0-9]+)/$', application.application_update, name='application_update'),
     url(r'^admission/application/diploma/save/$', secondary_education.diploma_save, name='diploma'),
-    url(r'^admission/curriculum/save/$', curriculum.save, name='curriculum'),
+    url(r'^admission/curriculum/save/(?:([0-9]+)/)?$', curriculum.save, name='curriculum'),
     url(r'^admission/curriculum/update/(?:([0-9]+)/)?$', curriculum.update, name='curriculum_update'),
     url(r'^admission/diploma/update(?:/(?P<application_id>[0-9]+))?(?:/(?P<saved>[0-9]+))?/$',
         secondary_education.diploma_update, name='diploma_update'),

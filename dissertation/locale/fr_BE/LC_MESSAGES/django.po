@@ -68,11 +68,14 @@ msgstr "Défendu"
 msgid "delete"
 msgstr "Supprimer"
 
+msgid "delete_adviser_role_confirmation_message"
+msgstr "Vous allez définitivement supprimer ce membre du jury. Êtes-vous certain de vouloir continuer ?"
+
 msgid "desc_lnk_dissertations"
-msgstr "Liste de mes projets de mémoire"
+msgstr "Liste des projets de mémoires auxquels je suis relié."
 
 msgid "desc_lnk_propositions_dissertations"
-msgstr "Liste des sujets disponibles"
+msgstr "Sujets de mémoire proposés par les enseignants"
 
 msgid "description"
 msgstr "Description"
@@ -80,8 +83,8 @@ msgstr "Description"
 msgid "dir_submit"
 msgstr "Soumettre au professeur"
 
-msgid "dissertation"
-msgstr "Mémoire"
+msgid "dissertations"
+msgstr "Mémoires"
 
 msgid "dissertation_confirmation_message"
 msgstr "Confirmer le mémoire"
@@ -93,7 +96,13 @@ msgid "dissertation_informations"
 msgstr "Informations du mémoire"
 
 msgid "dissertation_jury"
-msgstr "Jury"
+msgstr "Jury du mémoire"
+
+msgid "dissertation_location"
+msgstr "Site de rattachement"
+
+msgid "dissertation_updates"
+msgstr "Mises-à-jour du mémoire"
 
 msgid "domain"
 msgstr "Domaine"
@@ -131,8 +140,14 @@ msgstr "Confirmer la justification"
 msgid "level"
 msgstr "Niveau de développment du sujet"
 
+msgid "link"
+msgstr "Lien"
+
 msgid "literature_review"
 msgstr "Revue Littéraire"
+
+msgid "main"
+msgstr "Principal"
 
 msgid "manager"
 msgstr "Gestionnaire de cours"
@@ -141,7 +156,7 @@ msgid "max_students_number"
 msgstr "Nombre indicatif de places pour ce sujet"
 
 msgid "memories_list"
-msgstr "Liste de mes mémoires"
+msgstr "Mémoires"
 
 msgid "next_status"
 msgstr "Nouveau statut"
@@ -153,7 +168,7 @@ msgid "offer_proposition"
 msgstr "Programme de cours"
 
 msgid "offer_propositions"
-msgstr "Programmes de cours"
+msgstr "Programmes"
 
 msgid "offer_year_start"
 msgstr "Programme de cours de départ du mémoire"
@@ -174,13 +189,13 @@ msgid "promotor"
 msgstr "Promoteur"
 
 msgid "proposition_dissertation"
-msgstr "Sujet"
+msgstr "Sujet de mémoire"
 
 msgid "proposition_dissertation_informations"
-msgstr "Informations du sujet"
+msgstr "Informations du sujet de mémoire"
 
 msgid "proposition_dissertation_jury"
-msgstr "Jury proposé"
+msgstr "Jury du sujet de mémoire"
 
 msgid "question"
 msgstr "Question"
@@ -200,6 +215,9 @@ msgstr "Validation de première année ratée"
 msgid "required"
 msgstr "Requis"
 
+msgid "save"
+msgstr "Sauvegarder"
+
 msgid "search"
 msgstr "Rechercher"
 
@@ -210,7 +228,7 @@ msgid "status"
 msgstr "Statut"
 
 msgid "subjects_list"
-msgstr "Liste des sujets"
+msgstr "Sujets de mémoires"
 
 msgid "submitted_to_commission"
 msgstr "Soumis à la commission"
@@ -222,13 +240,13 @@ msgid "submitted_to_first_year_evaluation"
 msgstr "Soumis à l'évaluation de première année"
 
 msgid "taken_places"
-msgstr "Intérêt"
+msgstr "Places occupées"
 
 msgid "theme"
 msgstr "Theme"
 
-msgid "title"
-msgstr "Titre"
+msgid "title_dissertation"
+msgstr "Intitulé"
 
 msgid "to_be_defended"
 msgstr "En attente de défense"
@@ -241,6 +259,9 @@ msgstr "Attention : vous allez soumettre ce projet de mémoire au promoteur. Êt
 
 msgid "type"
 msgstr "Type de sujet"
+
+msgid "visibility"
+msgstr "Visibilité"
 
 msgid "work"
 msgstr "Travail"

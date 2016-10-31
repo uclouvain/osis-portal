@@ -30,7 +30,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from admission import models as mdl
 from base import models as mdl_base
-from admission.views import common
+from admission.views import common, navigation
 from reference import models as mdl_reference
 from admission.views import demande_validation
 from admission.models.enums import document_type
@@ -112,6 +112,9 @@ def diploma_save(request):
     app_id = None
     if application:
         app_id = application.id
+    following_tab = navigation.get_following_tab(request, 'diploma', application)
+    if following_tab:
+        return following_tab
 
     data = get_prerequis_data(request, 1, app_id)
     data.update({"secondary_education": secondary_education})
@@ -288,8 +291,9 @@ def documents_update(request, secondary_education, application, professional_exa
 
 
 def delete_documents(request, application, list_unwanted_files):
+    applicant = mdl.applicant.find_by_user(request.user)
     for file_description in list_unwanted_files:
-        documents = mdl_osis_common.document_file.search(request.user, file_description)
+        documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, file_description)
         for document in documents:
             documents_application = mdl.application_document_file.search(application, file_description)
             for doc_application in documents_application:
@@ -374,7 +378,7 @@ def get_prerequis_data(request, saved, application_id):
             "education_type_qualification": education_type_qualification,
             "current_academic_year":        current_year,
             "local_language_exam_needed":   common.is_local_language_exam_needed(request.user),
-            'tab_active':                   2,
+            'tab_active':                   navigation.PREREQUISITES_TAB,
             'applications':                 mdl.application.find_by_user(request.user),
             'message_info':                 message_info}
     # merge dictionaries

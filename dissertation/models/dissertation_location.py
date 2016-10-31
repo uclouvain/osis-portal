@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -23,6 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from osis_common.models.serializable_model import SerializableModel
+from django.db import models
 
-from frontoffice.queue import callbacks
-from frontoffice.queue import queue_listener
+
+class DissertationLocation(SerializableModel):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name

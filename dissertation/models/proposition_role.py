@@ -23,12 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+from osis_common.models.serializable_model import SerializableModel
+from django.contrib import admin
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
-class PropositionRole(models.Model):
+class PropositionRoleAdmin(admin.ModelAdmin):
+    list_display = ('adviser', 'status', 'proposition_dissertation')
+
+
+class PropositionRole(SerializableModel):
     STATUS_CHOICES = (
         ('PROMOTEUR', _('promotor')),
         ('CO_PROMOTEUR', _('copromotor')),

@@ -23,22 +23,34 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import json
-from django.core import serializers
+from osis_common.models.serializable_model import SerializableModel
+from django.db import models
 
 
-def insert_or_update(json_data):
-    from base.models.serializable_model import SerializableModel
-    json_data = json.loads(json_data.decode("utf-8"))
-    serialized_objects = json_data['serialized_objects']
-    deserialized_objects = serializers.deserialize('json', serialized_objects, ignorenonexistent=True)
-    if json_data['to_delete']:
-        for deser_object in deserialized_objects:
-            try:
-                super(SerializableModel, deser_object.object).delete()
-            except AssertionError:
-                # In case the object doesn't exist (object can't be deleted)
-                pass
-    else:
-        for deser_object in deserialized_objects:
-            super(SerializableModel, deser_object.object).save()
+class PropositionDocumentFile(SerializableModel):
+    proposition = models.ForeignKey('PropositionDissertation')
+    document_file = models.ForeignKey('osis_common.documentFile')
+
+
+def search(proposition=None, description=None):
+    out = None
+    queryset = PropositionDocumentFile.objects.order_by('document_file__creation_date')
+    if proposition:
+        queryset = queryset.filter(proposition=proposition)
+    if description:
+        queryset = queryset.filter(document_file__description=description)
+    if proposition or description:
+        out = queryset
+    return out
+
+
+def find_by_document(document_file):
+    return PropositionDocumentFile.objects.filter(document_file=document_file)
+
+
+def find_by_proposition(proposition):
+    return PropositionDocumentFile.objects.filter(proposition=proposition)
+
+
+def find_by_id(proposition_id):
+    return PropositionDocumentFile.objects.get(proposition__id=proposition_id)
