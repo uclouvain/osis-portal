@@ -40,7 +40,6 @@ QUEUE_PORT = 5672
 QUEUE_CONTEXT_ROOT = '/'
 
 
-
 class DocumentClient(object):
     def __init__(self, queue_name):
         self.paper_sheet_queue = queue_name
