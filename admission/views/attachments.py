@@ -99,7 +99,9 @@ def list_attachments(application):
     :param application
     :return: an array of dictionnary
     """
-    return mdl.application_document_file.find_document_by_application(application)
+    application_document_files = mdl.application_document_file.find_document_by_application(application)
+    return [application_document_file.document_file for application_document_file
+            in application_document_files]
 
 
 def attachments_left_available(number_attachments_uploaded):

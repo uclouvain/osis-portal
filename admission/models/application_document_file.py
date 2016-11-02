@@ -61,13 +61,11 @@ def find_by_document(document_file):
 
 
 def find_document_by_application(application):
-    return [application_document_file.document_file for application_document_file
-            in ApplicationDocumentFile.objects.filter(application=application)]
+    return ApplicationDocumentFile.objects.filter(application=application)
 
 
-def find_document_by_application_and_description(application, description):
-    queryset = ApplicationDocumentFile.objects\
+def find_document_by_application_description(application, description):
+    return ApplicationDocumentFile.objects\
         .filter(application=application)\
         .filter(document_file__description=description)\
         .order_by('document_file__creation_date')
-    return [application_document_file.document_file for application_document_file in queryset]
