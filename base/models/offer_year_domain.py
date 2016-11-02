@@ -53,6 +53,6 @@ def search(level=None, domain=None):
         if domains.exists():
             list(domains).append(domain_selected)
         return OfferYearDomain.objects.filter(offer_year__grade_type__institutional_grade_type=level,
-                                              domain__in=domains)
+                                              domain__in=domains, offer_year__enrollment_enabled=True)
     else:
         return []

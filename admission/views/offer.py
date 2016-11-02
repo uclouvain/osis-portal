@@ -59,8 +59,7 @@ def search(request):
         offer_year_domains = mdl_base.offer_year_domain.search(level, domain)
         list_offer_years = []
         for offer_year_domain in offer_year_domains:
-            if offer_year_domain.enrollment_enabled:
-                list_offer_years.append(offer_year_domain.offer_year)
+            list_offer_years.append(offer_year_domain.offer_year)
         serializer = OfferSerializer(list_offer_years, many=True)
     return JSONResponse(serializer.data)
 

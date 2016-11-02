@@ -31,10 +31,10 @@ from osis_common.models.serializable_model import SerializableModel
 
 
 class OfferYearAdmin(admin.ModelAdmin):
-    list_display = ('acronym', 'title', 'academic_year', 'grade_type', 'subject_to_quota')
-    list_filter = ('grade_type__institutional_grade_type', 'subject_to_quota',)
+    list_display = ('acronym', 'title', 'academic_year', 'grade_type', 'subject_to_quota', 'enrollment_enabled')
+    list_filter = ('grade_type__institutional_grade_type', 'subject_to_quota', 'enrollment_enabled')
     fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'grade_type',
-                                    'subject_to_quota', 'offer')}),)
+                                    'subject_to_quota', 'offer', 'enrollment_enabled')}),)
 
 
 class OfferYear(SerializableModel):
