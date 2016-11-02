@@ -23,17 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models import offer_year_domain
 from django.db import models
 from django.contrib import admin
 from osis_common.models.serializable_model import SerializableModel
 
 
 class OfferYearAdmin(admin.ModelAdmin):
-    list_display = ('acronym', 'title', 'academic_year', 'grade_type', 'subject_to_quota')
-    list_filter = ('grade_type__institutional_grade_type', 'subject_to_quota',)
+    list_display = ('acronym', 'title', 'academic_year', 'grade_type', 'subject_to_quota', 'enrollment_enabled')
+    list_filter = ('grade_type__institutional_grade_type', 'subject_to_quota', 'enrollment_enabled')
     fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'grade_type',
-                                    'subject_to_quota', 'offer')}),)
+                                    'subject_to_quota', 'offer', 'enrollment_enabled')}),)
 
 
 class OfferYear(SerializableModel):
@@ -46,6 +45,7 @@ class OfferYear(SerializableModel):
     subject_to_quota = models.BooleanField(default=False)
     offer = models.ForeignKey('base.Offer', blank=True, null=True)
     campus = models.ForeignKey('base.Campus', blank=True, null=True)
+    enrollment_enabled = models.BooleanField(default=False)
 
     def __str__(self):
         return u"%s - %s" % (self.academic_year, self.acronym)
@@ -61,10 +61,3 @@ def find_by_domain_grade(domain, grade):
 
 def find_by_offer(offers):
     return OfferYear.objects.filter(offer__in=offers)
-
-
-def search(grade_type=None, domain=None):
-    if grade_type and domain:
-        return offer_year_domain.search(grade_type, domain)
-    else:
-        return None
