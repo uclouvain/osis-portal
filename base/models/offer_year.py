@@ -56,6 +56,11 @@ class OfferYear(SerializableModel):
     def find_domain(self):
         return OfferYearDomain.objects.get(offer_year=self)
 
+    @property
+    def find_parent_domain(self):
+        offer_yr_domain = OfferYearDomain.objects.get(offer_year=self)
+        return offer_yr_domain.domain.parent
+
 
 def find_by_id(offer_year_id):
     return OfferYear.objects.get(pk=offer_year_id)
