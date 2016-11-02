@@ -1520,7 +1520,7 @@ function ajax_offers(radio_button_value, offer_year_id){
 
     var i=0;
     $.ajax({
-        url: "/admission/offers?level=" + $("#slt_offer_type").val() +"&domain="+$("#slt_domain").val()
+        url: "/admission/offers?grade_type=" + $("#slt_offer_type").val() +"&domain="+$("#slt_domain").val()
 
       }).then(function(data) {
       var table_size=data.length;

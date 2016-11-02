@@ -46,13 +46,13 @@ class OfferYearDomain(SerializableModel):
         return u"%s - %s" % (self.domain, self.offer_year)
 
 
-def search(level=None, domain=None):
-    if level and domain and domain.isnumeric():
+def search(grade_type=None, domain=None):
+    if grade_type and domain and domain.isnumeric():
         domains = mdl_reference.domain.find_subdomains_by_domain_id(domain)
         domain_selected = mdl_reference.domain.find_by_id(int(domain))
         if domains.exists():
             list(domains).append(domain_selected)
-        return OfferYearDomain.objects.filter(offer_year__grade_type__institutional_grade_type=level,
+        return OfferYearDomain.objects.filter(offer_year__grade_type__institutional_grade_type=grade_type,
                                               domain__in=domains)
     else:
         return []

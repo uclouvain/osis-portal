@@ -60,9 +60,9 @@ def find_all():
     return OfferYear.objects.all().order_by("acronym")
 
 
-def search(level=None, domain=None):
-    if level and domain:
-        return offer_year_domain.search(level, domain)
+def search(grade_type=None, domain=None):
+    if grade_type and domain:
+        return offer_year_domain.search(grade_type, domain)
     else:
         return None
 
