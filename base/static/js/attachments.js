@@ -162,13 +162,13 @@ function appendContentTypeInput($parentForm){
  * $parentForm: a JQuery object representing a form.
  */
 function appendUserInput($parentForm){
-    // A label for attribute is of the form "id_form-0-update_by" for example.
+    // A label for attribute is of the form "id_form-0-user" for example.
     var labelForPrefix = "id_form-";
-    var labelForSuffix = "-update_by";
+    var labelForSuffix = "-user";
     var labelFor = labelForPrefix.concat(nextIdDocForm.toString(), labelForSuffix);
 
     var inputNamePrefix = "form-";
-    var inputNameSuffix = "-update_by";
+    var inputNameSuffix = "-user";
     var inputName = inputNamePrefix.concat(nextIdDocForm.toString(), inputNameSuffix);
     var $input = createJQObjectNoText("<input/>", {"id": labelFor,
         "name": inputName,
@@ -306,7 +306,7 @@ function decrementFile($divDocForm, currentIdNumber) {
 
 // decrement user id
 function decrementUserId($divDocForm, currentIdNumber){
-   decrement($divDocForm, currentIdNumber, "-update_by");
+   decrement($divDocForm, currentIdNumber, "-user");
 }
 
 // decrement description id
