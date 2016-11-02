@@ -360,7 +360,7 @@ def profile(request, application_id=None, message_success=None):
                                                                       document_type.ID_CARD])
                                 if request.POST.get("criteria_5") == assimilation_criteria_enum.CRITERIA_4:
                                     list_document_type_needed.extend([document_type.CPAS])
-                            applicant = mdl.applicant.find_by_user(request.user)
+
                             for basic_doc_description in assimilation_basic_documents:
                                 if basic_doc_description not in list_document_type_needed:
                                     docs = mdl.applicant_document_file.\
