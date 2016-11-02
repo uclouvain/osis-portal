@@ -28,7 +28,6 @@ from base.models.offer_year_domain import OfferYearDomain
 from django.db import models
 from django.contrib import admin
 from osis_common.models.serializable_model import SerializableModel
-from reference import models as mdl_reference
 
 
 class OfferYearAdmin(admin.ModelAdmin):
