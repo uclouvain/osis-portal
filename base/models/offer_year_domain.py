@@ -56,3 +56,7 @@ def search(level=None, domain=None):
                                               domain__in=domains)
     else:
         return []
+
+
+def find_by_offer_year(offer_yr):
+    return OfferYearDomain.objects.get(offer_year=offer_yr)
