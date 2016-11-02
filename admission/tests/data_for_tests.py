@@ -129,3 +129,12 @@ def create_applicant_assimilation_criteria(an_applicant):
         criteria=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES[0][0],
         additional_criteria=None,
         selected=False)
+
+
+def create_applicant_document_file(an_applicant, description):
+    a_document_file = create_document_file(an_applicant.user.username, description)
+    an_applicant_document_file = mdl.applicant_document_file.ApplicantDocumentFile()
+    an_applicant_document_file.applicant = an_applicant
+    an_applicant_document_file.document_file = a_document_file
+    an_applicant_document_file.save()
+    return an_applicant_document_file

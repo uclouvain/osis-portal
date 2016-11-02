@@ -129,7 +129,7 @@ def save_application_offer(request):
         'id_document': get_id_document(request.user),
         'applicant': applicant
     }
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data.update(demande_validation.get_validation_status(application, applicant))
     return render(request, "admission_home.html", data)
 
 
@@ -151,6 +151,11 @@ def applications(request, application_id=None):
     applicant = mdl.applicant.find_by_user(request.user)
     person_legal_address = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
     countries = mdl_reference.country.find_all()
+    a_domain = None
+    a_parent_domain = None
+    if application and application.offer_year:
+        a_domain = mdl_base.offer_year_domain.find_by_offer_year(application.offer_year)
+        a_parent_domain = a_domain.domain.parent
     data = {
         "applications": application_list,
         "grade_choices": enum_institutional_grade_type.INSTITUTIONAL_GRADE_CHOICES,
@@ -160,9 +165,11 @@ def applications(request, application_id=None):
         "local_language_exam_needed": common.is_local_language_exam_needed(request.user),
         "applicant": applicant,
         "person_legal_address": person_legal_address,
-        "countries": countries
+        "countries": countries,
+        "domain": a_domain,
+        "parent_domain": a_parent_domain
     }
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data.update(demande_validation.get_validation_status(application, applicant))
     return render(request, "admission_home.html", data)
 
 
@@ -178,7 +185,7 @@ def submission(request, application_id=None):
         'applications': mdl.application.find_by_user(request.user)
     }
     applicant = mdl.applicant.find_by_user(request.user)
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data.update(demande_validation.get_validation_status(application, applicant))
     return render(request, "admission_home.html", data)
 
 
@@ -202,7 +209,7 @@ def change_application_offer(request, application_id=None):
         "first": True,
         "application": application,
     }
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data.update(demande_validation.get_validation_status(application, applicant))
     return render(request, "admission_home.html", data)
 
 

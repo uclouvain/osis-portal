@@ -253,3 +253,9 @@ def get_list_documents_descriptions(criteria_id):
             if description not in list_documents_description:
                 list_documents_description.append(description)
     return list_documents_description
+
+
+def find_list_only_assimilation_documents():
+    list_documents = find_list_assimilation_basic_documents()
+    list_documents.remove(document_type.ID_CARD)
+    return list_documents

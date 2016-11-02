@@ -24,7 +24,6 @@
 #
 ##############################################################################
 from admission import models as mdl
-from osis_common import models as mdl_common
 
 from admission.views import assimilation_criteria as assimilation_criteria_view
 from django.utils.translation import ugettext_lazy as _
@@ -40,7 +39,7 @@ ADMISSION_EXAM_TYPE = 'ADMISSION'
 LANGUAGE_EXAM_TYPE = 'LANGUAGE'
 
 
-def validate_profil(applicant, user):
+def validate_profil(applicant):
     if applicant.user.last_name is None \
         or applicant.user.first_name is None \
         or applicant.birth_date is None\
@@ -72,7 +71,7 @@ def validate_profil(applicant, user):
             criteria_doc_ok = False
             for applicant_assimilation_criteria in applicant_assimilation_criterias:
                 list_document_type = assimilation_criteria_view.\
-                    find_list_document_type_by_criteria(applicant_assimilation_criteria.criteria.id)
+                    find_list_document_type_by_criteria(applicant_assimilation_criteria.criteria)
                 for l in list_document_type:
                     nb_necessary_doc = len(list_document_type)
                     nb_doc = 0
@@ -182,7 +181,7 @@ def _validate_submission():
     return False
 
 
-def get_validation_status(application, applicant, user):
+def get_validation_status(application, applicant):
     secondary_education = mdl.secondary_education.find_by_person(applicant)
     if secondary_education:
         validated_diploma = True
@@ -191,7 +190,7 @@ def get_validation_status(application, applicant, user):
     else:
         validated_diploma = False
     return {
-        "validated_profil":             validate_profil(applicant, user),
+        "validated_profil":             validate_profil(applicant),
         "validated_diploma":            validated_diploma,
         "validated_curriculum":         _validate_curriculum(),
         "validated_application":        _validate_application(),

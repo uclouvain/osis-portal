@@ -62,7 +62,7 @@ def update(request, application_id=None):
         "removeAttachmentForm": remove_attachment_form,
         "list_choices": list_choices
     }
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data.update(demande_validation.get_validation_status(application, applicant))
     return render(request, "admission_home.html", data)
 
 
