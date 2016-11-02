@@ -52,11 +52,11 @@ class OfferSerializer(serializers.ModelSerializer):
 
 
 def search(request):
-    level = request.GET['level']
+    grade_type = request.GET['grade_type']
     domain = request.GET['domain']
     serializer = OfferSerializer([], many=True)
-    if level != 'undefined' and domain != 'undefined':
-        offer_year_domains = mdl_base.offer_year_domain.search(level, domain)
+    if grade_type != 'undefined' and domain != 'undefined':
+        offer_year_domains = mdl_base.offer_year_domain.search(grade_type, domain)
         list_offer_years = []
         for offer_year_domain in offer_year_domains:
             list_offer_years.append(offer_year_domain.offer_year)
