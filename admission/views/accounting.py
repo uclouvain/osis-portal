@@ -32,7 +32,6 @@ from admission.views import demande_validation, navigation
 
 
 def accounting(request, application_id=None):
-    print('accoutning')
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:

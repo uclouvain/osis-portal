@@ -67,7 +67,6 @@ def get_secondary_education_exams(secondary_education):
 
 
 def diploma_save(request):
-    print('diploma_save')
     next_step = False
     previous_step = False
     save_step = True
@@ -138,7 +137,6 @@ def diploma_update(request, application_id=None, saved=None):
     :param saved:
     :return:
     """
-    print('diploma_update')
     data = get_prerequis_data(request, saved, application_id)
     return render(request, "admission_home.html", data)
 
@@ -298,9 +296,8 @@ def delete_documents(request, application, list_unwanted_files):
         for document in documents:
             documents_application = mdl.application_document_file.search(application, file_description)
             for doc_application in documents_application:
-                print('delete')
                 doc_application.delete()
-            document.delete()
+            document.document_file.delete()
 
 
 def get_secondary_education_files(application):

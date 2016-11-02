@@ -64,6 +64,11 @@ def upload_file_description(request):
         documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
     else:
         documents = mdl.applicant_document_file.find_document_by_applicant(applicant)
+    document_files = []
+    if documents.exists():
+        for document in documents:
+            document_files.append(document.document_file)
+
     form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                            'document_type': "admission",
                                            'update_by': request.user.username})
@@ -76,7 +81,7 @@ def upload_file_description(request):
         'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
         'description_choices': mdl.enums.document_type.DOCUMENT_TYPE_CHOICES,
         'description': description,
-        'documents': documents,
+        'documents': document_files,
         'application': application})
 
 
@@ -109,22 +114,6 @@ def upload_document(request):
                     'description_choices': mdl.enums.document_type.DOCUMENT_TYPE_CHOICES,
                     'description': description,
                     'documents': documents})
-
-
-@login_required
-def delete_old(request, pk):
-    document = get_object_or_404(mdl_osis_common.document_file.DocumentFile, pk=pk)
-    if document:
-        description = document.description
-        document.delete()
-        applicant = mdl.applicant.find_by_user(request.user)
-        documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
-
-        return render(request, 'new_document.html', {
-            'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
-            'description_choices': mdl.enums.document_type.DOCUMENT_TYPE_CHOICES,
-            'description': description,
-            'documents': documents})
 
 
 def save_document_from_form(document, request):
@@ -174,10 +163,9 @@ class DocumentFileSerializer(serializers.ModelSerializer):
 def find_by_description(request):
     description = request.GET['description']
     applicant = mdl.applicant.find_by_user(request.user)
-    documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
+    document = mdl.applicant_document_file.find_last_document_by_applicant_and_description(applicant, description)
     last_documents = []
-    if documents:
-        last_document = documents[-1]
+    if document:
         last_documents = [last_document]
 
     serializer = DocumentFileSerializer(last_documents, many=True)
@@ -186,13 +174,10 @@ def find_by_description(request):
 
 def save_uploaded_file(request):
     if request.method == 'POST':
-        print('save_uploaded_file')
         if request.POST.get('application_id'):
-            print('application_id')
             application = mdl.application.find_by_id(request.POST.get('application_id'))
             applicant = application.applicant
         else:
-            print('application_id none')
             application = None
             applicant = mdl.applicant.find_by_user(request.user)
 
@@ -251,7 +236,7 @@ def delete_document_file(request):
             applicant = mdl.applicant.find_by_user(request.user)
             document = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
             if document:
-                document.delete()
+                document.document_file.delete()
     return HttpResponse('')
 
 
@@ -285,9 +270,9 @@ def create_document_file(description, request):
 
 def delete_existing_applicant_documents(applicant, description):
     # Delete older file with the same description
-    documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
-    for document in documents:
-        document.delete()
+    applicant_documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
+    for document in applicant_documents:
+        document.document_file.delete()
 
 
 def delete_existing_application_documents(application, description):
