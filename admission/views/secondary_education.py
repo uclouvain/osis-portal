@@ -34,7 +34,6 @@ from admission.views import common, navigation
 from reference import models as mdl_reference
 from admission.views import demande_validation
 from admission.models.enums import document_type
-from osis_common import models as mdl_osis_common
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
@@ -298,7 +297,7 @@ def delete_documents(request, application, list_unwanted_files):
             documents_application = mdl.application_document_file.search(application, file_description)
             for doc_application in documents_application:
                 doc_application.delete()
-            document.delete()
+            document.document_file.delete()
 
 
 def get_secondary_education_files(application):
@@ -384,7 +383,7 @@ def get_prerequis_data(request, saved, application_id):
     # merge dictionaries
     data.update(get_secondary_education_exams(secondary_education))
     data.update(get_secondary_education_files(application))
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data.update(demande_validation.get_validation_status(application, applicant))
     return data
 
 

@@ -308,7 +308,7 @@ msgid "debts"
 msgstr "Dette"
 
 msgid "deceased_female"
-msgstr "Décédé(e)"
+msgstr "Décédée"
 
 msgid "deceased_male"
 msgstr "Décédé"
