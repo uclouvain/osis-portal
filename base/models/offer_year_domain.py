@@ -27,6 +27,7 @@
 from django.db import models
 from django.contrib import admin
 from osis_common.models.serializable_model import SerializableModel
+from reference import models as mdl_reference
 
 
 class OfferYearDomainAdmin(admin.ModelAdmin):
@@ -45,8 +46,17 @@ class OfferYearDomain(SerializableModel):
         return u"%s - %s" % (self.domain, self.offer_year)
 
 
-def search(level=None, domain=None):
-    if level and domain:
-        return OfferYearDomain.objects.filter(offer_year__grade_type__institutional_grade_type=level, domain=domain)
+def search(grade_type=None, domain=None):
+    if grade_type and domain and domain.isnumeric():
+        domains = mdl_reference.domain.find_subdomains_by_domain_id(domain)
+        domain_selected = mdl_reference.domain.find_by_id(int(domain))
+        if domains.exists():
+            list(domains).append(domain_selected)
+        return OfferYearDomain.objects.filter(offer_year__grade_type__institutional_grade_type=grade_type,
+                                              domain__in=domains)
     else:
-        return None
+        return []
+
+
+def find_by_offer_year(offer_yr):
+    return OfferYearDomain.objects.get(offer_year=offer_yr)

@@ -24,7 +24,6 @@
 #
 ##############################################################################
 from base.models import offer_year_domain
-from base.models.offer_year_domain import OfferYearDomain
 from django.db import models
 from django.contrib import admin
 from osis_common.models.serializable_model import SerializableModel
@@ -51,24 +50,9 @@ class OfferYear(SerializableModel):
     def __str__(self):
         return u"%s - %s" % (self.academic_year, self.acronym)
 
-    @property
-    def find_domain(self):
-        return OfferYearDomain.objects.get(offer_year=self)
-
 
 def find_by_id(offer_year_id):
     return OfferYear.objects.get(pk=offer_year_id)
-
-
-def find_all():
-    return OfferYear.objects.all().order_by("acronym")
-
-
-def search(level=None, domain=None):
-    if level and domain:
-        return offer_year_domain.search(level, domain)
-    else:
-        return None
 
 
 def find_by_domain_grade(domain, grade):
@@ -77,3 +61,10 @@ def find_by_domain_grade(domain, grade):
 
 def find_by_offer(offers):
     return OfferYear.objects.filter(offer__in=offers)
+
+
+def search(grade_type=None, domain=None):
+    if grade_type and domain:
+        return offer_year_domain.search(grade_type, domain)
+    else:
+        return None
