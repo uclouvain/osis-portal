@@ -47,6 +47,7 @@ class OfferYear(SerializableModel):
     subject_to_quota = models.BooleanField(default=False)
     offer = models.ForeignKey('base.Offer', blank=True, null=True)
     campus = models.ForeignKey('base.Campus', blank=True, null=True)
+    enrollment_enabled = models.BooleanField(default=False)
 
     def __str__(self):
         return u"%s - %s" % (self.academic_year, self.acronym)
