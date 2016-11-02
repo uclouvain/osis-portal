@@ -28,6 +28,7 @@ from base.models.offer_year_domain import OfferYearDomain
 from django.db import models
 from django.contrib import admin
 from osis_common.models.serializable_model import SerializableModel
+from reference import models as mdl_reference
 
 
 class OfferYearAdmin(admin.ModelAdmin):
@@ -54,6 +55,11 @@ class OfferYear(SerializableModel):
     @property
     def find_domain(self):
         return OfferYearDomain.objects.get(offer_year=self)
+
+    @property
+    def find_parent_domain(self):
+        offer_yr_domain = OfferYearDomain.objects.get(offer_year=self)
+        return offer_yr_domain.domain.parent
 
 
 def find_by_id(offer_year_id):
