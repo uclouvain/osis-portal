@@ -26,46 +26,54 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<div class="row">
-    <div class="col-md-8">
-        <h5>{% trans 'mandatory_asterisk'%}</h5>
+<form id="form_attachments" method="POST" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-8">
+            <h5>{% trans 'mandatory_asterisk'%}</h5>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" id="bt_submit_attachments" class="btn btn-default pull-right" role="button"
+                    title="{%trans 'save'%}">
+                <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+                {%trans 'save'%}
+            </button>
+        </div>
     </div>
-    <div class="col-md-4">
-        <button type="submit" id="bt_submit_attachments" class="btn btn-default pull-right" role="button"
-                title="{%trans 'save'%}">
-            <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
-            {%trans 'save'%}
-        </button>
+    <div class="row"  style="margin-top:5px;">
+        <div class="col-md-6">
+            <a id="lnk_previous_step_up" class="btn btn-default"
+               href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey'%}{%endif%}"
+               onclick="save('form_attachments');"
+               title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+                {%trans 'previous_step'%} : {% trans 'sociological_survey'%}</a>
+        </div>
+        <div class="col-md-6">
+            <a id="lnk_next_step_up"
+               class="btn btn-default pull-right"
+               href="{%if application.id%}{% url 'submission' application.id%}{%else%}{% url 'submission'%}{%endif%}"
+               onclick="save('form_attachments');"
+               title="{% trans 'submission'%}">{%trans 'next_step'%} : {%trans 'submission'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+                </a>
+        </div>
     </div>
-</div>
-<div class="row"  style="margin-top:5px;">
-    <div class="col-md-6">
-        <a id="lnk_previous_step_up"
-           class="btn btn-default"
-           href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey'%}{%endif%}"
-           onclick="save('form_attachments');"
-           title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-            {%trans 'previous_step'%} : {% trans 'sociological_survey'%}</a>
+    <br/>
+    <button id="button_add_form"  type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    </button>
+    <!-- FORM TO UPLOAD ATTACHMENTS -->
+    <div id="div_document_forms">
+        {% csrf_token %}
+        {{ document_formset.management_form }}
+        <br>
     </div>
-    <div class="col-md-6">
-        <a id="lnk_next_step_up"
-           class="btn btn-default pull-right"
-           href="{%if application.id%}{% url 'submission' application.id%}{%else%}{% url 'submission'%}{%endif%}"
-           onclick="save('form_attachments');"
-           title="{% trans 'submission'%}">{%trans 'next_step'%} : {%trans 'submission'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-            </a>
-    </div>
-</div>
-
-<br/>
-
+    <br>
+</form>
 <!-- HEADER -->
 <div class="row">
     <div class="col-md-4"><strong>{% trans 'description' %}</strong></div>
     <div class="col-md-4"><strong>{% trans 'file' %}</strong></div>
     <div class="col-md-4"><strong>{% trans 'type' %}</strong></div>
 </div>
-
 <!-- PREVIOUS UPLOADED ATTACHMENTS -->
 {% for attachment in attachments %}
 <br>
@@ -115,22 +123,6 @@
     </form>
 </div>
 {% endfor %}
-
-<!-- FORM TO UPLOAD ATTACHMENTS -->
-<form id="form_attachments" method="POST" enctype="multipart/form-data">
-    <div id="div_document_forms">
-        {% csrf_token %}
-        {{ document_formset.management_form }}
-        <br>
-    </div>
-
-    <br>
-
-    <button id="button_add_form"  type="button" class="btn btn-default">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-    </button>
-
-</form>
 <br>
 <div class="row">
     <div class="col-md-6">

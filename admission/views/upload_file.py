@@ -244,7 +244,9 @@ def find_by_description_application(request):
     description = request.GET['description']
     application = request.GET['application']
 
-    documents = mdl.application_document_file.find_document_by_application_and_description(application, description)
+    application_document_files = mdl.application_document_file.find_document_by_application_description(application,
+                                                                                                        description)
+    documents = [application_document_file.document_file for application_document_file in application_document_files]
     last_documents = []
     if documents:
         last_document = documents[-1]
