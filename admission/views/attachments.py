@@ -34,16 +34,13 @@ from django.forms import formset_factory
 
 
 def update(request, application_id=None):
-
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
         application = mdl.application.init_application(request.user)
-
     past_attachments = list_attachments(application)
     attachments_available = attachments_left_available(len(past_attachments))
     UploadDocumentFileFormSet = formset_factory(UploadDocumentFileForm, extra=0, max_num=attachments_available)
-    print(request)
     if request.method == "POST":
         document_formset = UploadDocumentFileFormSet(request.POST, request.FILES)
         print(document_formset)
@@ -122,6 +119,7 @@ def save_document_from_form(document, user, application):
     Save a document (attachment) from a form.
     :param document: an UploadDocumentForm received from a POST request.
     :param user: the current user
+    :param application: the current application
     :return:
     """
     file_name = document.cleaned_data['file_name']
