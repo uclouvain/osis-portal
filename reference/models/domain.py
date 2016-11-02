@@ -73,7 +73,7 @@ def find_all_subdomains():
     return Domain.objects.exclude(parent=None)
 
 
-def find_subdomains_by_domain_id(a_domain_id):
+def find_subdomains_by_domain(a_domain_id):
     return Domain.objects.filter(parent=a_domain_id)
 
 

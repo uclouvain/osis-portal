@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models import offer_year_domain
 from django.db import models
 from django.contrib import admin
 from osis_common.models.serializable_model import SerializableModel
@@ -62,10 +61,3 @@ def find_by_domain_grade(domain, grade):
 
 def find_by_offer(offers):
     return OfferYear.objects.filter(offer__in=offers)
-
-
-def search(grade_type=None, domain=None):
-    if grade_type and domain:
-        return offer_year_domain.search(grade_type, domain)
-    else:
-        return None

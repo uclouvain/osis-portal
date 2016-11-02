@@ -47,13 +47,12 @@ class OfferYearDomain(SerializableModel):
 
 
 def search(grade_type=None, domain=None):
-    if grade_type and domain and domain.isnumeric():
-        domains = mdl_reference.domain.find_subdomains_by_domain_id(domain)
-        domain_selected = mdl_reference.domain.find_by_id(int(domain))
-        if domains.exists():
-            list(domains).append(domain_selected)
+    if grade_type and domain:
+        sub_domains = mdl_reference.domain.find_subdomains_by_domain(domain)
+        if sub_domains.exists():
+            list(sub_domains).append(domain)
         return OfferYearDomain.objects.filter(offer_year__grade_type__institutional_grade_type=grade_type,
-                                              domain__in=domains, offer_year__enrollment_enabled=True)
+                                              domain__in=sub_domains, offer_year__enrollment_enabled=True)
     else:
         return []
 
