@@ -54,4 +54,6 @@ def find_by_document(document_file):
     return ApplicationDocumentFile.objects.filter(document_file=document_file)
 
 
-
+def find_document_by_application(application):
+    return [application_document_file.document_file for application_document_file
+            in ApplicationDocumentFile.objects.filter(application=application)]

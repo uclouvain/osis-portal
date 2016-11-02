@@ -25,9 +25,8 @@
 ##############################################################################
 from django.shortcuts import render, redirect
 from admission import models as mdl
-from admission.models.applicant_document_file import ApplicantDocumentFile
 from admission.models.enums import document_type
-from admission.views import application, demande_validation, navigation
+from admission.views import demande_validation, navigation
 from admission.forms import RemoveAttachmentForm
 from osis_common.forms import UploadDocumentFileForm
 from osis_common.models.document_file import DocumentFile
@@ -35,7 +34,13 @@ from django.forms import formset_factory
 
 
 def update(request, application_id=None):
-    past_attachments = list_attachments(request.user)
+
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
+    else:
+        application = mdl.application.init_application(request.user)
+
+    past_attachments = list_attachments(application)
     attachments_available = attachments_left_available(len(past_attachments))
     UploadDocumentFileFormSet = formset_factory(UploadDocumentFileForm, extra=0, max_num=attachments_available)
     print(request)
@@ -44,14 +49,9 @@ def update(request, application_id=None):
         print(document_formset)
         if document_formset.is_valid():
             for document in document_formset:
-                save_document_from_form(document, request.user)
+                save_document_from_form(document, request.user, application)
     elif request.method == "GET":
         document_formset = UploadDocumentFileFormSet()
-
-    if application_id:
-        application = mdl.application.find_by_id(application_id)
-    else:
-        application = mdl.application.init_application(request.user)
 
     applicant = mdl.applicant.find_by_user(request.user)
 
@@ -70,7 +70,7 @@ def update(request, application_id=None):
     return render(request, "admission_home.html", data)
 
 
-def remove_attachment(request, application_id):
+def remove_attachment(request):
     """
     View used to remove previous attachments.
     :param request
@@ -81,33 +81,29 @@ def remove_attachment(request, application_id):
             attachment_pk = form.cleaned_data['attachment_id']
             # form is valid ensure that there is a document having that pk value
             attachment_to_remove = DocumentFile.objects.get(pk=attachment_pk)
-            safe_document_removal(request.user, "admission_attachments", attachment_to_remove)
-    return redirect(update, application_id=application_id)
+            safe_document_removal("admission_attachments", attachment_to_remove)
+    return redirect(update)
 
 
-def safe_document_removal(user, application_name, document):
+def safe_document_removal(application_name, document):
     """
     Safely remove a document by ensuring that the user is the one
     that owns the file and the application_name is the correct one.
-    :param user: a User object
     :param application_name: a string
     :param document
     :return:
     """
-    applicant_calling = mdl.applicant.find_by_user(user)
-    applicant_from_document = mdl.applicant_document_file.find_applicant_by_document(document)
-    if applicant_calling == applicant_from_document and document.application_name == application_name:
+    if document.application_name == application_name:
         document.delete()
 
 
-def list_attachments(user):
+def list_attachments(application):
     """
     Returns the list of all the attachments uploaded by the user.
-    :param user: the current user in session.
+    :param application
     :return: an array of dictionnary
     """
-    applicant = mdl.applicant.find_by_user(user)
-    return mdl.applicant_document_file.find_document_by_applicant(applicant)
+    return mdl.application_document_file.find_document_by_application(application)
 
 
 def attachments_left_available(number_attachments_uploaded):
@@ -121,7 +117,7 @@ def attachments_left_available(number_attachments_uploaded):
     return max_num_attachments - num_attachments_uploaded
 
 
-def save_document_from_form(document, user):
+def save_document_from_form(document, user, application):
     """
     Save a document (attachment) from a form.
     :param document: an UploadDocumentForm received from a POST request.
@@ -143,6 +139,7 @@ def save_document_from_form(document, user):
                             application_name=application_name, content_type=content_type,
                             size=size, update_by=user.username)
     doc_file.save()
-    applicant = mdl.applicant.find_by_user(user)
-    applicant_document_file = ApplicantDocumentFile(applicant=applicant, document_file=doc_file)
-    applicant_document_file.save()
+    application_file = mdl.application_document_file.ApplicationDocumentFile()
+    application_file.application = application
+    application_file.document_file = doc_file
+    application_file.save()
