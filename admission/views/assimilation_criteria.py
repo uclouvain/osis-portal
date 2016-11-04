@@ -231,21 +231,21 @@ def find_list_document_type_by_criteria(criteria):
     return list_document_type
 
 
-def get_list_documents_descriptions(criteria_id):
+def get_list_documents_descriptions(criteria):
     list_document_type = []
-    if criteria_id == assimilation_criteria_enum.CRITERIA_1:
+    if criteria == assimilation_criteria_enum.CRITERIA_1:
         list_document_type = criteria1(list_document_type)
-    if criteria_id == assimilation_criteria_enum.CRITERIA_2:
+    if criteria == assimilation_criteria_enum.CRITERIA_2:
         list_document_type = criteria2(list_document_type)
-    if criteria_id == assimilation_criteria_enum.CRITERIA_3:
+    if criteria == assimilation_criteria_enum.CRITERIA_3:
         list_document_type = criteria3(list_document_type)
-    if criteria_id == assimilation_criteria_enum.CRITERIA_4:
+    if criteria == assimilation_criteria_enum.CRITERIA_4:
         list_document_type = criteria4(list_document_type)
-    if criteria_id == assimilation_criteria_enum.CRITERIA_5:
+    if criteria == assimilation_criteria_enum.CRITERIA_5:
         list_document_type = criteria5(list_document_type)
-    if criteria_id == assimilation_criteria_enum.CRITERIA_6:
+    if criteria == assimilation_criteria_enum.CRITERIA_6:
         list_document_type = criteria6(list_document_type)
-    if criteria_id == assimilation_criteria_enum.CRITERIA_7:
+    if criteria == assimilation_criteria_enum.CRITERIA_7:
         list_document_type = criteria7(list_document_type)
     list_documents_description = []
     for l in list_document_type:
