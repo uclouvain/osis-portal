@@ -56,6 +56,5 @@ class AssimilationCriteriaTest(TestCase):
         list_document_type = assimilation_criteria.get_list_documents_descriptions("1")
         self.assertTrue(len(list_document_type) == 0)
 
-        list_document_type = assimilation_criteria\
-            .get_list_documents_descriptions(assimilation_criteria_enum.CRITERIA_3)
+        list_document_type = assimilation_criteria.get_list_documents_descriptions(assimilation_criteria_enum.CRITERIA_3)
         self.assertTrue(len(list_document_type) == 9)
