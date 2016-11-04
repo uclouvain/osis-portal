@@ -166,7 +166,7 @@ def find_by_description(request):
     document = mdl.applicant_document_file.find_last_document_by_applicant_and_description(applicant, description)
     last_documents = []
     if document:
-        last_documents = [last_document]
+        last_documents = [document]
 
     serializer = DocumentFileSerializer(last_documents, many=True)
     return JSONResponse(serializer.data)

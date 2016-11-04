@@ -31,26 +31,11 @@ from reference.enums import assimilation_criteria as assimilation_criteria_enum
 class AssimilationCriteriaTest(TestCase):
 
     def test_criteria1_list_size(self):
-        list_document_type = []
-        list_document_type = assimilation_criteria.criteria1(list_document_type)
+        list_document_type = assimilation_criteria.criteria1()
         self.assertTrue(len(list_document_type) == 2)
-
-        list_document_type = assimilation_criteria.criteria1(None)
-        self.assertTrue(len(list_document_type) == 2)
-
-        list_document_type = []
-        assimilation_doc = assimilation_criteria.AssimilationDoc()
-        assimilation_doc.criteria = assimilation_criteria_enum.CRITERIA_1
-        list_document_type.append(assimilation_doc)
-        list_document_type = assimilation_criteria.criteria1(list_document_type)
-        self.assertTrue(len(list_document_type) == 3)
 
     def test_criteria2_list_size(self):
-        list_document_type = []
-        list_document_type = assimilation_criteria.criteria2(list_document_type)
-        self.assertTrue(len(list_document_type) == 5)
-
-        list_document_type = assimilation_criteria.criteria2(None)
+        list_document_type = assimilation_criteria.criteria2()
         self.assertTrue(len(list_document_type) == 5)
 
     def test_find_list_document_type_by_criteria_size(self):

@@ -89,7 +89,7 @@ def validate_profil(applicant):
                 return False
     assimilation_criteria_list = mdl.applicant_assimilation_criteria.find_by_applicant(applicant)
     for assimilation_criteria in assimilation_criteria_list:
-        docs_needed = assimilation_criteria_view.get_list_documents_descriptions(assimilation_criteria.criteria.id)
+        docs_needed = assimilation_criteria_view.get_list_documents_descriptions(assimilation_criteria.criteria)
         for doc_needed in docs_needed:
             doc = mdl.applicant_document_file. \
                 find_document_by_applicant_and_description(applicant, doc_needed)
