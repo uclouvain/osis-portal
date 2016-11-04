@@ -27,6 +27,7 @@ from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from reference.enums.education_institution_national_comunity import NATIONAL_COMMUNITY_TYPES
+from reference.enums import education_institution_national_comunity
 
 
 class CurriculumAdmin(admin.ModelAdmin):
@@ -105,5 +106,5 @@ def find_local_french(a_person, an_academic_year):
     return Curriculum.objects.filter(person=a_person,
                                      path_type__in=path_types,
                                      academic_year=an_academic_year,
-                                     national_education='FRENCH',
+                                     national_education=education_institution_national_comunity.FRENCH,
                                      national_institution__country__iso_code='BE')
