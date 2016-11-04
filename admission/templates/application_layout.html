@@ -442,7 +442,7 @@
         $('#txt_message_error_profile_up').css('visibility', 'hidden').css('display','none');
         $('#txt_message_error_profile_up').html('');
         if ($("#txt_offer_year_id").val()==''
-            || ($('#rdb_offer_localdegree_true').prop("checked") == false && $('#rdb_offer_localdegree_false').prop("checked") == false) ){
+            || ($('#rdb_offer_national_coverage_degree_true').prop("checked") == false && $('#rdb_offer_national_coverage_degree_false').prop("checked") == false) ){
             $("#txt_message_error_offer_up").text(gettext('msg_next_offer'));
             $('#txt_message_error_offer_up').css('visibility', 'visible').css('display','block');
             $("#txt_message_error_offer_down").text(gettext('msg_next_offer'));
@@ -484,7 +484,7 @@
         $('#slt_domain').val($('#hdn_application_parent_domain_id').val());
         ajax_offers($('#hdn_application_grade_type_id').val(),$('#hdn_application_offer_year_id').val());
         display_dynamic_form(offer_year_id);
-        ajax_static_questions(offer_year_id,$('#hdn_applied_to_sameprogram').val(),$('#hdn_local_degree').val(),$('#hdn_started_samestudies').val(),$('#hdn_valuation_possible').val());
+        ajax_static_questions(offer_year_id,$('#hdn_applied_to_sameprogram').val(),$('#hdn_coverage_access_degree').val(),$('#hdn_started_samestudies').val(),$('#hdn_valuation_possible').val());
     }
 
     //***************************
@@ -961,7 +961,7 @@
         var enableMyLink = true;
         var valid_localdegree = true;
         if($('#hdn_tab_active').val() < "2"){
-            if ($('#hdn_local_degree').val()==''){
+            if ($('#hdn_coverage_access_degree').val()==''){
                 valid_localdegree = false;
             }
 

@@ -1464,3 +1464,15 @@ msgstr "est requis pour l'offre suivante : "
 
 msgid "the_exam_type"
 msgstr "Le type d'examen "
+
+msgid "NATIONAL"
+msgstr "National"
+
+msgid "NON_NATIONAL"
+msgstr "Non-national"
+
+msgid "EUROPEAN_UNION"
+msgstr "Union européenne"
+
+msgid "NON_EUROPEAN_UNION"
+msgstr "Non union européenne"

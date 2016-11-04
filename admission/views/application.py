@@ -74,11 +74,11 @@ def save_application_offer(request):
             offer_year = mdl_base.offer_year.find_by_id(offer_year_id)
             application.offer_year = offer_year
 
-        if request.POST.get('rdb_offer_localdegree'):
-            if request.POST.get('rdb_offer_localdegree') == "true":
-                application.national_degree = True
+        if request.POST.get('national_coverage_degree'):
+            if request.POST.get('national_coverage_degree') == "true":
+                application.coverage_access_degree = coverage_access_degree_choices.NATIONAL
             else:
-                application.national_degree = False
+                application.coverage_access_degree = coverage_access_degree_choices.NON_NATIONAL
 
         if request.POST.get('valuation_possible'):
             if request.POST.get('valuation_possible') == "true":
@@ -107,7 +107,7 @@ def save_application_offer(request):
                 application.resident = False
         if request.POST.get('txt_offer_lottery'):
             application.raffle_number = request.POST.get('txt_offer_lottery')
-        application.application_type = mdl.application.define_application_type(application.national_degree,
+        application.application_type = mdl.application.define_application_type(application.coverage_access_degree,
                                                                                request.user)
         if offer_year_id:
             application.save()
@@ -197,7 +197,8 @@ def application_delete(request, application_id):
 
 def change_application_offer(request, application_id=None):
     application = mdl.application.find_by_id(application_id)
-    application.application_type = mdl.application.define_application_type(application.national_degree, request.user)
+    application.application_type = mdl.application.define_application_type(application.coverage_access_degree,
+                                                                           request.user)
     application.save()
     application_list = mdl.application.find_by_user(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
