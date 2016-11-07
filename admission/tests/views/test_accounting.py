@@ -54,7 +54,7 @@ class AccountingTest(TestCase):
                                            'bank_account_name':        'Mister T'})
 
         try:
-            accounting.populate_application(my_request, self.application)
+            accounting.populate_save_application(my_request, self.application.id)
         except Exception:
             self.fail("delete_existing_application_documents raised ExceptionType unexpectedly!")
 
@@ -62,14 +62,14 @@ class AccountingTest(TestCase):
         my_request = self.factory.post("", {'study_grant':        'true',
                                             'study_grant_number': '152'})
 
-        application = accounting.populate_application(my_request, self.application)
+        application = accounting.populate_save_application(my_request, self.application.id)
         self.assertTrue(application.study_grant_number and application.study_grant)
 
     def test_populate_application_without_study_grant(self):
         my_request = self.factory.post("", {'study_grant':        'false',
                                             'study_grant_number': '152'})
 
-        application = accounting.populate_application(my_request, self.application)
+        application = accounting.populate_save_application(my_request, self.application.id)
         self.assertTrue(application.study_grant is False and application.study_grant_number is None)
 
     def test_populate_application_with_deduction_children(self):
@@ -77,7 +77,7 @@ class AccountingTest(TestCase):
                                             'study_grant_number': None,
                                             'deduction_children': 'true'})
 
-        application = accounting.populate_application(my_request, self.application)
+        application = accounting.populate_save_application(my_request, self.application.id)
         self.assertTrue(application.deduction_children and application.study_grant is False)
 
     def test_debts_check_true(self):

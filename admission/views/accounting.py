@@ -71,16 +71,8 @@ def accounting_update(request, application_id=None):
     if request.method == 'POST':
         accounting_form = AccountingForm(data=request.POST)
 
-    if application_id:
-        application = mdl.application.find_by_id(application_id)
-    else:
-        application = mdl.application.init_application(request.user)
+    application = populate_save_application(request, application_id)
 
-    try:
-        if application.offer_year and application.applicant:
-            application.save()
-    except:
-        pass
     following_tab = navigation.get_following_tab(request, 'accounting', application)
     if following_tab:
         return following_tab
@@ -103,41 +95,53 @@ def accounting_update(request, application_id=None):
     return render(request, "admission_home.html", data)
 
 
-def populate_application(request, application):
-    application.study_grant = False
-    application.study_grant_number = None
-    application.deduction_children = False
-    application.scholarship = False
-    application.scholarship_organization = None
-    application.sport_membership = False
-    application.culture_membership = False
-    application.solidarity_membership = False
-    application.bank_account_iban = None
-    application.bank_account_bic = None
-    application.bank_account_name = None
-    if request.POST.get('study_grant') == "true":
-        application.study_grant = True
-        if request.POST.get('study_grant_number'):
-            application.study_grant_number = request.POST.get('study_grant_number')
+def populate_save_application(request, application_id):
+
+    if application_id:
+        application = mdl.application.find_by_id(application_id)
     else:
-        if request.POST.get('deduction_children') == "true":
-            application.deduction_children = True
-    if request.POST.get('scholarship') == "true":
-        application.scholarship = True
-        if request.POST.get('scholarship_organization'):
-            application.scholarship_organization = request.POST.get('scholarship_organization')
-    if request.POST.get('sport_membership') == "true":
-        application.sport_membership = True
-    if request.POST.get('culture_membership') == "true":
-        application.culture_membership = True
-    if request.POST.get('solidarity_membership') == "true":
-        application.solidarity_membership = True
-    if request.POST.get('bank_account_iban'):
-        application.bank_account_iban = request.POST.get('bank_account_iban')
-    if request.POST.get('bank_account_bic'):
-        application.bank_account_bic = request.POST.get('bank_account_bic')
-    if request.POST.get('bank_account_name'):
-        application.bank_account_name = request.POST.get('bank_account_name')
+        application = mdl.application.init_application(request.user)
+
+    try:
+        if application.offer_year and application.applicant:
+            application.study_grant = False
+            application.study_grant_number = None
+            application.deduction_children = False
+            application.scholarship = False
+            application.scholarship_organization = None
+            application.sport_membership = False
+            application.culture_membership = False
+            application.solidarity_membership = False
+            application.bank_account_iban = None
+            application.bank_account_bic = None
+            application.bank_account_name = None
+            if request.POST.get('study_grant') == "true":
+                application.study_grant = True
+                if request.POST.get('study_grant_number'):
+                    application.study_grant_number = request.POST.get('study_grant_number')
+            else:
+                if request.POST.get('deduction_children') == "true":
+                    application.deduction_children = True
+            if request.POST.get('scholarship') == "true":
+                application.scholarship = True
+                if request.POST.get('scholarship_organization'):
+                    application.scholarship_organization = request.POST.get('scholarship_organization')
+            if request.POST.get('sport_membership') == "true":
+                application.sport_membership = True
+            if request.POST.get('culture_membership') == "true":
+                application.culture_membership = True
+            if request.POST.get('solidarity_membership') == "true":
+                application.solidarity_membership = True
+            if request.POST.get('bank_account_iban'):
+                application.bank_account_iban = request.POST.get('bank_account_iban')
+            if request.POST.get('bank_account_bic'):
+                application.bank_account_bic = request.POST.get('bank_account_bic')
+            if request.POST.get('bank_account_name'):
+                application.bank_account_name = request.POST.get('bank_account_name')
+            application.save()
+    except:
+        pass
+
     return application
 
 
@@ -155,13 +159,7 @@ def debts_check(application):
 
 def reduction_possible(application):
     try:
-        if application.offer_year.acronym.endswith("1BA") or \
-                application.offer_year.acronym.endswith("2M1") or \
-                application.offer_year.acronym.endswith("2MD") or \
-                application.offer_year.acronym.endswith("2MA") or \
-                application.offer_year.acronym.endswith("2MC") or \
-                application.offer_year.acronym.endswith("3D") or \
-                application.offer_year.acronym.find("2MS/") != -1:
+        if offer_year_reduction_possible(application.offer_year.acronym):
             return True
     except:  # RelatedObjectDoesNotExist
         return False
@@ -174,4 +172,24 @@ def third_cycle(application):
             return True
     except:  # RelatedObjectDoesNotExist
         return False
+    return False
+
+
+def offer_year_reduction_possible(acronym):
+    if reduction_by_acronym_ending(acronym) or reduction_by_acronym_containing(acronym):
+        return True
+    return False
+
+
+def reduction_by_acronym_ending(acronym):
+    acronym_endings = {"1BA", "2M1", "2MD", "2MA", "2MC", "3D"}
+    for ending in acronym_endings:
+        if acronym.endswith(ending):
+            return True
+    return False
+
+
+def reduction_by_acronym_containing(acronym):
+    if acronym.find("2MS/") != -1:
+        return True
     return False
