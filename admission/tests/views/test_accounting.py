@@ -30,6 +30,7 @@ from django.test import TestCase, RequestFactory
 import admission.tests.data_for_tests as data_model
 from admission.views import accounting
 from reference.enums import education_institution_national_comunity
+from django.http import HttpRequest
 
 
 class AccountingTest(TestCase):
@@ -51,10 +52,20 @@ class AccountingTest(TestCase):
                                            'solidarity_membership':    'true',
                                            'bank_account_iban':        'true',
                                            'bank_account_bic':         'true',
-                                           'bank_account_name':        'Mister T'})
+                                           'bank_account_name':        'Mister T'}
+)
 
         try:
             accounting.populate_save_application(my_request, self.application.id)
+        except Exception:
+            self.fail("delete_existing_application_documents raised ExceptionType unexpectedly!")
+
+    def test_populate_an_existing_application_without_offer_year(self):
+        request = HttpRequest()
+        request.user = self.user
+
+        try:
+            accounting.populate_save_application(request, None)
         except Exception:
             self.fail("delete_existing_application_documents raised ExceptionType unexpectedly!")
 
@@ -125,6 +136,4 @@ class AccountingTest(TestCase):
         an_application_no_third_cycle.offer_year = an_offer_year_no_third_cycle
         an_application_no_third_cycle.save()
         self.assertFalse(accounting.third_cycle(an_application_no_third_cycle))
-
-
 

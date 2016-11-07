@@ -31,6 +31,7 @@ from admission.forms import AccountingForm
 from admission.views import demande_validation, navigation
 
 
+
 def accounting(request, application_id=None):
     if application_id:
         application = mdl.application.find_by_id(application_id)
@@ -102,45 +103,42 @@ def populate_save_application(request, application_id):
     else:
         application = mdl.application.init_application(request.user)
 
-    try:
-        if application.offer_year and application.applicant:
-            application.study_grant = False
-            application.study_grant_number = None
-            application.deduction_children = False
-            application.scholarship = False
-            application.scholarship_organization = None
-            application.sport_membership = False
-            application.culture_membership = False
-            application.solidarity_membership = False
-            application.bank_account_iban = None
-            application.bank_account_bic = None
-            application.bank_account_name = None
-            if request.POST.get('study_grant') == "true":
-                application.study_grant = True
-                if request.POST.get('study_grant_number'):
-                    application.study_grant_number = request.POST.get('study_grant_number')
-            else:
-                if request.POST.get('deduction_children') == "true":
-                    application.deduction_children = True
-            if request.POST.get('scholarship') == "true":
-                application.scholarship = True
-                if request.POST.get('scholarship_organization'):
-                    application.scholarship_organization = request.POST.get('scholarship_organization')
-            if request.POST.get('sport_membership') == "true":
-                application.sport_membership = True
-            if request.POST.get('culture_membership') == "true":
-                application.culture_membership = True
-            if request.POST.get('solidarity_membership') == "true":
-                application.solidarity_membership = True
-            if request.POST.get('bank_account_iban'):
-                application.bank_account_iban = request.POST.get('bank_account_iban')
-            if request.POST.get('bank_account_bic'):
-                application.bank_account_bic = request.POST.get('bank_account_bic')
-            if request.POST.get('bank_account_name'):
-                application.bank_account_name = request.POST.get('bank_account_name')
-            application.save()
-    except:
-        pass
+    if application_has_offer_year(application) and application.applicant:
+        application.study_grant = False
+        application.study_grant_number = None
+        application.deduction_children = False
+        application.scholarship = False
+        application.scholarship_organization = None
+        application.sport_membership = False
+        application.culture_membership = False
+        application.solidarity_membership = False
+        application.bank_account_iban = None
+        application.bank_account_bic = None
+        application.bank_account_name = None
+        if request.POST.get('study_grant') == "true":
+            application.study_grant = True
+            if request.POST.get('study_grant_number'):
+                application.study_grant_number = request.POST.get('study_grant_number')
+        else:
+            if request.POST.get('deduction_children') == "true":
+                application.deduction_children = True
+        if request.POST.get('scholarship') == "true":
+            application.scholarship = True
+            if request.POST.get('scholarship_organization'):
+                application.scholarship_organization = request.POST.get('scholarship_organization')
+        if request.POST.get('sport_membership') == "true":
+            application.sport_membership = True
+        if request.POST.get('culture_membership') == "true":
+            application.culture_membership = True
+        if request.POST.get('solidarity_membership') == "true":
+            application.solidarity_membership = True
+        if request.POST.get('bank_account_iban'):
+            application.bank_account_iban = request.POST.get('bank_account_iban')
+        if request.POST.get('bank_account_bic'):
+            application.bank_account_bic = request.POST.get('bank_account_bic')
+        if request.POST.get('bank_account_name'):
+            application.bank_account_name = request.POST.get('bank_account_name')
+        application.save()
 
     return application
 
@@ -191,5 +189,11 @@ def reduction_by_acronym_ending(acronym):
 
 def reduction_by_acronym_containing(acronym):
     if acronym.find("2MS/") != -1:
+        return True
+    return False
+
+
+def application_has_offer_year(application):
+    if application.offer_year_id is not None:
         return True
     return False
