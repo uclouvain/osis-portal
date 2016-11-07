@@ -32,6 +32,10 @@ from admission.views import accounting
 from reference.enums import education_institution_national_comunity
 from django.http import HttpRequest
 
+NON_THIRD_CYCLE_ACRONYM = 'SPO11BA'
+THIRD_CYCLE_ACRONYM = 'SPO2MC'
+INVALID_ACRONYM = 'SPO2Z'
+
 
 class AccountingTest(TestCase):
 
@@ -52,13 +56,22 @@ class AccountingTest(TestCase):
                                            'solidarity_membership':    'true',
                                            'bank_account_iban':        'true',
                                            'bank_account_bic':         'true',
-                                           'bank_account_name':        'Mister T'}
-)
+                                           'bank_account_name':        'Mister T'})
 
         try:
             accounting.populate_save_application(my_request, self.application.id)
         except Exception:
             self.fail("delete_existing_application_documents raised ExceptionType unexpectedly!")
+
+    def test_get_existing_application(self):
+        request = HttpRequest()
+        request.user = self.user
+        self.assertIsNotNone(accounting.get_application(self.application.id, request))
+
+    def test_get_new_application(self):
+        request = HttpRequest()
+        request.user = self.user
+        self.assertIsNotNone(accounting.get_application(None, request))
 
     def test_populate_an_existing_application_without_offer_year(self):
         request = HttpRequest()
@@ -117,23 +130,34 @@ class AccountingTest(TestCase):
         self.assertTrue(accounting.reduction_possible(self.application))
 
     def test_reduction_possible_false(self):
-        an_offer_year_reduction_impossible = data_model.create_offer_year_by_acronym('SPO2Z')
+        an_offer_year_reduction_impossible = data_model.create_offer_year_by_acronym(INVALID_ACRONYM)
         an_application_reduction_impossible = data_model.create_application(self.applicant)
         an_application_reduction_impossible.offer_year = an_offer_year_reduction_impossible
         an_application_reduction_impossible.save()
         self.assertFalse(accounting.reduction_possible(an_application_reduction_impossible))
 
     def test_third_cycle_true(self):
-        an_offer_year_third_cycle = data_model.create_offer_year_by_acronym('SPO2MC')
+        an_offer_year_third_cycle = data_model.create_offer_year_by_acronym(THIRD_CYCLE_ACRONYM)
         an_application_third_cycle = data_model.create_application(self.applicant)
         an_application_third_cycle.offer_year = an_offer_year_third_cycle
         an_application_third_cycle.save()
         self.assertTrue(accounting.third_cycle(an_application_third_cycle))
 
     def test_third_cycle_false(self):
-        an_offer_year_no_third_cycle = data_model.create_offer_year_by_acronym('SPO11BA')
+        an_offer_year_no_third_cycle = data_model.create_offer_year_by_acronym(NON_THIRD_CYCLE_ACRONYM)
         an_application_no_third_cycle = data_model.create_application(self.applicant)
         an_application_no_third_cycle.offer_year = an_offer_year_no_third_cycle
         an_application_no_third_cycle.save()
         self.assertFalse(accounting.third_cycle(an_application_no_third_cycle))
 
+    def test_radio_is_true(self):
+        self.assertTrue(accounting.radio_form_value_is_true("true"))
+
+    def test_radio_is_false(self):
+        self.assertFalse(accounting.radio_form_value_is_true("false"))
+
+    def test_application_has_offer_year_true(self):
+        self.assertTrue(accounting.application_has_offer_year(self.application))
+
+    def test_application_has_offer_year_false(self):
+        self.assertFalse(accounting.application_has_offer_year(None))
