@@ -138,3 +138,15 @@ def create_applicant_document_file(an_applicant, description):
     an_applicant_document_file.document_file = a_document_file
     an_applicant_document_file.save()
     return an_applicant_document_file
+
+
+def create_education_institution_from_postal_code(postal_code):
+    an_education_institution = mdl_reference.education_institution.EducationInstitution(postal_code=postal_code)
+    an_education_institution.save()
+    return an_education_institution
+
+
+def create_education_institution_from_city(city):
+    an_education_institution = mdl_reference.education_institution.EducationInstitution(city=city)
+    an_education_institution.save()
+    return an_education_institution

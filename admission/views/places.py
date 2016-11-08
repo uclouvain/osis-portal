@@ -24,9 +24,15 @@
 #
 ##############################################################################
 
-from reference import models as mdl_reference
 from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
+
+from reference import models as mdl_reference
+from reference.enums import education_institution_type
+
+
+ADHOC_FALSE = False
+ISO_CODE_NATIONAL = 'BE'
 
 
 class JSONResponse(HttpResponse):
@@ -37,22 +43,34 @@ class JSONResponse(HttpResponse):
 
 
 def find_postal_codes_by_city(request):
-    city_name = request.GET['city']
-    education_institutions = mdl_reference.education_institution.search('BE', 'SECONDARY', False, city_name, None)
+    education_institutions = mdl_reference.education_institution.search(ISO_CODE_NATIONAL,
+                                                                        education_institution_type.SECONDARY,
+                                                                        ADHOC_FALSE,
+                                                                        request.GET['city'],
+                                                                        None)
+    return JSONResponse(get_dict_postal_codes(education_institutions))
+
+
+def get_dict_postal_codes(education_institutions):
     postal_codes = []
     postal_codes_data = []
     for education_institution in education_institutions:
-
         if education_institution.postal_code not in postal_codes:
             postal_codes.append(education_institution.postal_code)
             postal_codes_data.append({"postal_code": education_institution.postal_code})
-    return JSONResponse(postal_codes_data)
+    return postal_codes_data
 
 
 def find_cities_by_postal_code(request):
-    postal_code = request.GET['postal_code']
-    education_institutions = mdl_reference.education_institution.find_cities('BE', 'SECONDARY', False, postal_code)
+    education_institutions = mdl_reference.education_institution.find_cities(ISO_CODE_NATIONAL,
+                                                                             education_institution_type.SECONDARY,
+                                                                             ADHOC_FALSE,
+                                                                             request.GET['postal_code'])
+    return JSONResponse(get_dict_cities_names(education_institutions))
+
+
+def get_dict_cities_names(education_institutions):
     cities_data = []
     for education_institution in education_institutions:
         cities_data.append({"city": education_institution.city})
-    return JSONResponse(cities_data)
+    return cities_data
