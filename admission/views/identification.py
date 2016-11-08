@@ -36,7 +36,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 
 from admission import models as mdl
-from admission.forms import NewAccountForm, NewPasswordForm, AccessAccountForm
+from admission.forms.account import NewPasswordForm, AccessAccountForm, NewAccountForm
 from admission.utils import send_mail
 from reference import models as reference_mdl
 from base import models as mdl_base

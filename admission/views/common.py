@@ -33,7 +33,7 @@ from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 
 from admission import models as mdl
-from admission.forms import ApplicantForm
+from admission.forms.applicant import ApplicantForm
 from reference import models as mdl_ref
 from admission.views import demande_validation, assimilation_criteria as assimilation_criteria_view, navigation, \
     upload_file

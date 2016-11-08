@@ -23,20 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+from django import forms
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
+from osis_common.models.document_file import DocumentFile
 
 
-UNKNOWN = "UNKNOWN"
-PRIMARY = "PRIMARY"
-SECONDARY_INFERIOR = "SECONDARY_INFERIOR"
-SECONDARY_SUPERIOR = "SECONDARY_SUPERIOR"
-SUPERIOR_NON_UNIVERSITY = "SUPERIOR_NON_UNIVERSITY"
-UNIVERSITY = "UNIVERSITY"
+class RemoveAttachmentForm(forms.Form):
+    attachment_id = forms.IntegerField(min_value=0)
 
-EDUCATION_TYPE_CHOICES = ((UNKNOWN, _(UNKNOWN)),
-                          (PRIMARY, _(PRIMARY)),
-                          (SECONDARY_INFERIOR, _(SECONDARY_INFERIOR)),
-                          (SECONDARY_SUPERIOR, _(SECONDARY_SUPERIOR)),
-                          (SUPERIOR_NON_UNIVERSITY, _(SUPERIOR_NON_UNIVERSITY)),
-                          (UNIVERSITY, _(UNIVERSITY)))
+    def clean(self):
+        cleaned_data = super(RemoveAttachmentForm, self).clean()
+        attachment_id = cleaned_data.get('attachment_id')
+        if attachment_id:
+            try:
+                DocumentFile.objects.get(pk=attachment_id)
+            except ObjectDoesNotExist:
+                self.add_error('attachment_id', _('attachment_does_not_exist'))

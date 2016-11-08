@@ -23,20 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django import template
 
-from django.utils.translation import ugettext_lazy as _
+register = template.Library()
 
-
-UNKNOWN = "UNKNOWN"
-PRIMARY = "PRIMARY"
-SECONDARY_INFERIOR = "SECONDARY_INFERIOR"
-SECONDARY_SUPERIOR = "SECONDARY_SUPERIOR"
-SUPERIOR_NON_UNIVERSITY = "SUPERIOR_NON_UNIVERSITY"
-UNIVERSITY = "UNIVERSITY"
-
-EDUCATION_TYPE_CHOICES = ((UNKNOWN, _(UNKNOWN)),
-                          (PRIMARY, _(PRIMARY)),
-                          (SECONDARY_INFERIOR, _(SECONDARY_INFERIOR)),
-                          (SECONDARY_SUPERIOR, _(SECONDARY_SUPERIOR)),
-                          (SUPERIOR_NON_UNIVERSITY, _(SUPERIOR_NON_UNIVERSITY)),
-                          (UNIVERSITY, _(UNIVERSITY)))
+@register.filter
+def get_boolean(value):
+    returno = False
+    if (value):
+        returno = True
+    if str(value).upper() == 'False'.upper():
+        returno = False
+    return returno
