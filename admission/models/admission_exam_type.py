@@ -25,13 +25,14 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from osis_common.models.serializable_model import SerializableModel
 
 
 class AdmissionExamTypeAdmin(admin.ModelAdmin):
     list_display = ('name', 'adhoc')
 
 
-class AdmissionExamType(models.Model):
+class AdmissionExamType(SerializableModel):
     name = models.CharField(max_length=100)
     adhoc = models.BooleanField(default=False)
 

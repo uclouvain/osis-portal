@@ -27,6 +27,7 @@ from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from admission.models import form
+from osis_common.models.serializable_model import SerializableModel
 
 QUESTION_TYPES = (
     ('LABEL', _('label')),
@@ -46,7 +47,7 @@ class QuestionAdmin(admin.ModelAdmin):
     list_filter = ('form',)
 
 
-class Question(models.Model):
+class Question(SerializableModel):
     label = models.CharField(max_length=255)
     description = models.TextField()
     type = models.CharField(max_length=20, choices=QUESTION_TYPES)

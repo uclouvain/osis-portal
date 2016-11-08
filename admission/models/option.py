@@ -26,6 +26,7 @@
 from django.db import models
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
+from osis_common.models.serializable_model import SerializableModel
 
 
 class OptionAdmin(admin.ModelAdmin):
@@ -34,7 +35,7 @@ class OptionAdmin(admin.ModelAdmin):
     list_filter = ('question',)
 
 
-class Option(models.Model):
+class Option(SerializableModel):
     label = models.CharField(max_length=255)
     value = models.TextField()
     order = models.IntegerField()

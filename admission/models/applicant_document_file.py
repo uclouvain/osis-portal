@@ -29,9 +29,10 @@ from django.db import models
 from django.contrib import admin
 from admission.models.applicant import Applicant
 from osis_common.models.document_file import DocumentFile
+from osis_common.models.serializable_model import SerializableModel
 
 
-class ApplicantDocumentFile(models.Model):
+class ApplicantDocumentFile(SerializableModel):
     applicant = models.ForeignKey(Applicant, db_index=True)
     document_file = models.ForeignKey(DocumentFile)
 
