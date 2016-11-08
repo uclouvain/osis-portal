@@ -23,20 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+from django import forms
 from django.utils.translation import ugettext_lazy as _
+from localflavor.generic.forms import IBANFormField, BICFormField
 
 
-UNKNOWN = "UNKNOWN"
-PRIMARY = "PRIMARY"
-SECONDARY_INFERIOR = "SECONDARY_INFERIOR"
-SECONDARY_SUPERIOR = "SECONDARY_SUPERIOR"
-SUPERIOR_NON_UNIVERSITY = "SUPERIOR_NON_UNIVERSITY"
-UNIVERSITY = "UNIVERSITY"
+class AccountingForm(forms.Form):
+    scholarship = forms.BooleanField()
+    scholarship_organization = forms.CharField()
+    bank_account_iban = IBANFormField()
+    bank_account_bic = BICFormField()
 
-EDUCATION_TYPE_CHOICES = ((UNKNOWN, _(UNKNOWN)),
-                          (PRIMARY, _(PRIMARY)),
-                          (SECONDARY_INFERIOR, _(SECONDARY_INFERIOR)),
-                          (SECONDARY_SUPERIOR, _(SECONDARY_SUPERIOR)),
-                          (SUPERIOR_NON_UNIVERSITY, _(SUPERIOR_NON_UNIVERSITY)),
-                          (UNIVERSITY, _(UNIVERSITY)))
+    def __init__(self, *args, **kwargs):
+        super(AccountingForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super(AccountingForm, self).clean()
+        data = cleaned_data.get('scholarship_organization')
+        data_scholarship = cleaned_data.get('scholarship')
+        if data_scholarship and (data is None or len(data) == 0):
+            self.errors['scholarship_organization'] = _('mandatory_field')
+        return cleaned_data

@@ -24,11 +24,10 @@
 #
 ##############################################################################
 from django.shortcuts import render
-from django.core.exceptions import ObjectDoesNotExist
 from admission import models as mdl
 from admission.views import demande_validation
-from admission.forms import SociologicalSurveyForm
-from admission.models.sociological_survey import SociologicalSurvey
+from admission.forms.sociological_survey import SociologicalSurveyForm
+from admission.models import sociological_survey as sociological_survey_mdl
 from admission.views import navigation
 
 CHECKED_STATUS = 'on'
@@ -45,30 +44,22 @@ def update(request, application_id=None):
         application = mdl.application.find_by_id(application_id)
     else:
         application = mdl.application.init_application(request.user)
-
     next_tab = navigation.SOCIOLOGICAL_SURVEY_TAB
-    sociological_survey = None
+    sociological_survey = sociological_survey_mdl.find_by_applicant(applicant)
     if request.method == "POST":
-        save_sociological_form(request)
-
-        sociological_survey = SociologicalSurvey.objects.get(applicant=applicant)
+        sociological_form = SociologicalSurveyForm(request.POST)
+        if sociological_form.is_valid():
+            sociological_form.save(applicant=applicant)
+            sociological_survey = sociological_survey_mdl.find_by_applicant(applicant)
+            following_tab = navigation.get_following_tab(request, 'sociological', application)
+            if following_tab:
+                return following_tab
+            else:
+                sociological_form = SociologicalSurveyForm(instance=sociological_survey)
+    elif sociological_survey:
         sociological_form = SociologicalSurveyForm(instance=sociological_survey)
-        sociological_form.is_valid()
-
-        following_tab = navigation.get_following_tab(request, 'sociological', application)
-        if following_tab:
-            return following_tab
     else:
-        try:    # Prefill the form if the user already filled it.
-            sociological_survey = SociologicalSurvey.objects.get(applicant=applicant)
-            sociological_form = SociologicalSurveyForm(instance=sociological_survey)
-        except ObjectDoesNotExist:
-            sociological_form = SociologicalSurveyForm()
-
-    if application_id:
-        application = mdl.application.find_by_id(application_id)
-    else:
-        application = mdl.application.init_application(request.user)
+        sociological_form = SociologicalSurveyForm()
 
     data = {
         'tab_active': next_tab,
@@ -129,7 +120,7 @@ def save_sociological_form(request):
     maternal_grandfather_profession = get_profession(request.POST.get('maternal_grandfather_profession'),
                                                      request.POST.get('maternal_grandfather_profession_other_name'))
 
-    sociological_survey = SociologicalSurvey(applicant=applicant,
+    sociological_survey = sociological_survey_mdl.SociologicalSurvey(applicant=applicant,
                                              number_brothers_sisters=number_brothers_sisters,
                                              father_is_deceased=father_is_deceased, father_education=father_education,
                                              father_profession=father_profession, mother_is_deceased=mother_is_deceased,

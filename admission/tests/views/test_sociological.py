@@ -26,6 +26,7 @@
 from django.test import TestCase
 from admission.views import sociological
 import admission.tests.data_for_tests as data_model
+from admission.views.sociological import get_profession, get_other_profession
 
 PROFESSION_EMPLOYEE = 'Employee'
 CHECKED_STATUS = 'on'
@@ -54,3 +55,4 @@ class SociologicalTest(TestCase):
     def get_profession_by_name(self):
         self.assertIs(get_other_profession(PROFESSION_EMPLOYEE), self.profession)
         self.assertIsNot(get_other_profession(PROFESSION_EMPLOYEE+' de poste'), self.profession)
+

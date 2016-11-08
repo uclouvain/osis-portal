@@ -27,7 +27,7 @@ from django.shortcuts import render
 
 from admission import models as mdl
 from base import models as mdl_base
-from admission.forms import AccountingForm
+from admission.forms.accounting import AccountingForm
 from admission.views import demande_validation, navigation
 
 
