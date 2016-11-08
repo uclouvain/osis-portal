@@ -49,5 +49,6 @@ def find_by_id(an_id):
 def find_by_adoc(an_adhoc):
     return Profession.objects.filter(adhoc=an_adhoc).order_by('name')
 
+
 def find_by_name(a_name):
     return Profession.objects.filter(name=a_name).first()

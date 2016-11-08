@@ -41,7 +41,7 @@ def set_uuid_field(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('admission', '0008_auto_20161108_1247'),
+        ('admission', '0010_create_sociological_survey'),
     ]
 
     operations = [

@@ -39,7 +39,7 @@ class SociologicalSurveyAdmin(admin.ModelAdmin):
 
 
 class SociologicalSurvey(SerializableModel):
-    applicant = models.OneToOneField('Applicant', on_delete=models.CASCADE, primary_key=True)
+    applicant = models.OneToOneField('Applicant', on_delete=models.CASCADE)
 
     number_brothers_sisters = models.IntegerField(default=0)
 
