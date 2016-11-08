@@ -252,6 +252,10 @@ Create the data structure in the database:
 
     (venv)$ python manage.py migrate
 
+Create the groups used to allow/deny access to pages and functions:
+
+    (venv)$ python manage.py loaddata groups
+
 At this point we have two options:
 
 1. we create a super user and go on with an empty database or
