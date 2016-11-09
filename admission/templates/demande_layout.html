@@ -68,7 +68,9 @@
     <input type="hidden" value="{{domain.id}}" id="hdn_application_domain_id">
     <input type="hidden" value="{{parent_domain.id}}" id="hdn_application_parent_domain_id">
     <input type="hidden" value="{{application.offer_year.id}}" id="hdn_application_offer_year_id" name="hdn_application_offer_year_id">
-    <input type="hidden" value="{{application.national_degree| default_if_none:''}}" id="hdn_local_degree">
+    <input type="hidden"
+           value="{{application.coverage_access_degree| default_if_none:''}}"
+           id="hdn_coverage_access_degree">
     <input type="hidden" value="{{application.started_similar_studies}}" id="hdn_started_samestudies">
     <input type="hidden" value="{{application.applied_to_sameprogram}}" id="hdn_applied_to_sameprogram">
     <input type="hidden" value="{{application.valuation_possible}}" id="hdn_valuation_possible">
@@ -147,15 +149,19 @@
                 <div class="col-md-4">
                     <div>
                         <label class="radio-inline">
-                            <input type="radio" id="rdb_offer_localdegree_true" name="rdb_offer_localdegree"
+                            <input type="radio"
+                                   id="rdb_offer_national_coverage_degree_true"
+                                   name="national_coverage_degree"
                                    value="true"
-                                   {% if application.national_degree %}checked{%endif%}
+                                   {% if application.coverage_access_degree == "NATIONAL" %}checked{%endif%}
                             > {% trans 'yes'%}
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" id="rdb_offer_localdegree_false" name="rdb_offer_localdegree"
+                            <input type="radio"
+                                   id="rdb_offer_national_coverage_degree_false"
+                                   name="national_coverage_degree"
                                    value="false"
-                                   {% if application.national_degree %}{%else%}checked{%endif%}
+                                   {% if application.coverage_access_degree == "NON_NATIONAL" %}checked{%endif%}
                             > {% trans 'no'%}
                         </label>
                     </div>

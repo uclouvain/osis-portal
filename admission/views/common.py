@@ -409,7 +409,7 @@ def profile(request, application_id=None, message_success=None):
         person_legal_address.save()
         applicant.user.save()
         if application:
-            application.application_type = mdl.application.define_application_type(application.national_degree,
+            application.application_type = mdl.application.define_application_type(application.coverage_access_degree,
                                                                                    request.user)
             application.save()
         request.user = applicant.user  # Otherwise it was not refreshed while going back to home page
