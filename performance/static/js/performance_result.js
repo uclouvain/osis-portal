@@ -3,8 +3,8 @@
 function fillPage(studentJson) {
   fillStudentInfo(studentJson);
   fillSessionSummaryTable(studentJson);
-  fillCoursesTable(studentJson);
-  fillMentionExplanation(studentJson);
+  //fillCoursesTable(studentJson);
+  //fillMentionExplanation(studentJson);
 }
 
 /***************************** STUDENT INFORMATION ********************/
@@ -15,10 +15,10 @@ function fillPage(studentJson) {
  * studentJson: a json containing the student results.
  */
 function fillStudentInfo(studentJson) {
-  var firstName = studentJson.first_name;
-  var lastName = studentJson.last_name;
-  var academicYear = studentJson.academic_years[0].year;
-  var programTitle = studentJson.academic_years[0].programs[0].title;
+  var firstName = studentJson.etudiant.nom;
+  var lastName = studentJson.etudiant.prenom;
+  var academicYear = studentJson.monAnnee.anneeAcademique;
+  var programTitle = studentJson.monAnnee.monOffre.offre.intituleComplet;
   $("#student_name").append("<br>");
   $("#student_name").append(lastName + ", " + firstName);
   $("#academic_year").append("<br>");
@@ -36,7 +36,7 @@ function fillStudentInfo(studentJson) {
  * studentJson: a json containing the student results.
  */
 function fillSessionSummaryTable(studentJson) {
-  var program = studentJson.academic_years[0].programs[0];
+  var program = studentJson.monAnnee.monOffre.resultats;
 
   fillRowTotalECTSInscription(program);
   fillRowMean(program);
@@ -45,9 +45,9 @@ function fillSessionSummaryTable(studentJson) {
 
 function fillRowTotalECTSInscription(programJson) {
   var totalECTS = programJson.total_ECTS;
-  var janvInscription = programJson.results[0].insc;
-  var juinInscription = programJson.results[1].insc;
-  var septInscription = programJson.results[2].insc;
+  var janvInscription = programJson.session[0].inscription;
+  var juinInscription = programJson.session[1].inscription;
+  var septInscription = programJson.session[2].inscription;
 
   var $frag = $(document.createDocumentFragment());
   createJQObject("<td/>", {}, totalECTS, $frag);
@@ -58,9 +58,9 @@ function fillRowTotalECTSInscription(programJson) {
 }
 
 function fillRowMean(programJson) {
-  var meanJanv = programJson.results[0].mean;
-  var meanJuin = programJson.results[1].mean;
-  var meanSept = programJson.results[2].mean;
+  var meanJanv = programJson.session[0].moyenne;
+  var meanJuin = programJson.session[1].moyenne;
+  var meanSept = programJson.session[2].moyenne;
 
   var $rowMean = $("#summary_mean");
 
@@ -73,9 +73,9 @@ function fillRowMean(programJson) {
 }
 
 function fillRowMention(programJson) {
-  var mentionJanv = programJson.results[0].mention;
-  var mentionJuin = programJson.results[1].mention;
-  var mentionSept = programJson.results[2].mention;
+  var mentionJanv = programJson.session[0].mention;
+  var mentionJuin = programJson.session[1].mention;
+  var mentionSept = programJson.session[2].mention;
 
   var $rowMention = $("#summary_mention");
 

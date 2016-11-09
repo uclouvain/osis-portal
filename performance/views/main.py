@@ -35,6 +35,7 @@ from base.models import offer_year as mdl_offer_year
 from performance import models as mdl_performance
 from performance.forms import RegistrationIdForm
 from base.views import layout
+import json
 
 
 @login_required
@@ -60,7 +61,7 @@ def display_result_for_specific_year_and_program(request, offer_year_id):
     stud = find_by_user(request.user)
     offer_year = mdl_offer_year.find_by_id(offer_year_id)
     stud_perf = mdl_performance.student_performance.find_or_fetch(student=stud, offer_year=offer_year)
-    document = stud_perf.data if stud_perf else None
+    document = json.dumps(stud_perf.data) if stud_perf else None
     creation_date = stud_perf.creation_date if stud_perf else None
 
     return layout.render(request, "performance_result.html", {"results": document, "creation_date": creation_date})
