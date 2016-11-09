@@ -3,7 +3,7 @@
 function fillPage(studentJson) {
   fillStudentInfo(studentJson);
   fillSessionSummaryTable(studentJson);
-  //fillCoursesTable(studentJson);
+  fillCoursesTable(studentJson);
   //fillMentionExplanation(studentJson);
 }
 
@@ -97,7 +97,7 @@ function fillRowMention(programJson) {
  */
 
 function fillCoursesTable(studentJson) {
-  var arrayCourses = studentJson.academic_years[0].programs[0].learning_units;
+  var arrayCourses = studentJson.monAnnee.monOffre.cours;
 
   var $frag = $(document.createDocumentFragment());
   $.each(arrayCourses, function(index, course) {
@@ -108,14 +108,14 @@ function fillCoursesTable(studentJson) {
 }
 
 function addRowCourse(courseJson, $row) {
-  var acronym = courseJson.acronym;
-  var title = courseJson.title;
-  var ects = courseJson.credits;
+  var acronym = courseJson.sigleComplet;
+  var title = courseJson.intituleComplet;
+  var ects = courseJson.poids;
   var inscr = inscrToString(courseJson.insc);
-  var janv = examScoreToString(courseJson.exams[0]);
-  var juin = examScoreToString(courseJson.exams[1]);
-  var sept = examScoreToString(courseJson.exams[2]);
-  var credit = creditToString(courseJson.credit_report);
+  var janv = examScoreToString(courseJson.session[0]);
+  var juin = examScoreToString(courseJson.session[1]);
+  var sept = examScoreToString(courseJson.session[2]);
+  var credit = creditToString(courseJson.creditReport);
 
   createJQObject("<td/>", {}, acronym, $row);
   createJQObject("<td/>", {}, title, $row);
@@ -128,14 +128,14 @@ function addRowCourse(courseJson, $row) {
 }
 
 function examScoreToString(examJson) {
-  var score = examJson.score;
-  if (examJson.status_exam == "-") {
+  var score = examJson.note;
+  if (examJson.etatExam == "-") {
     return score;
   }
   else if(score == "-") {
-    return examJson.status_exam;
+    return examJson.etatExam;
   }
-  return score + examJson.status_exam;
+  return score + examJson.etatExam;
 }
 
 function inscrToString(inscr) {
