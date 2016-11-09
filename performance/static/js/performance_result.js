@@ -4,7 +4,7 @@ function fillPage(studentJson) {
   fillStudentInfo(studentJson);
   fillSessionSummaryTable(studentJson);
   fillCoursesTable(studentJson);
-  //fillMentionExplanation(studentJson);
+  fillMentionExplanation(studentJson);
 }
 
 /***************************** STUDENT INFORMATION ********************/
@@ -38,13 +38,14 @@ function fillStudentInfo(studentJson) {
 function fillSessionSummaryTable(studentJson) {
   var program = studentJson.monAnnee.monOffre.resultats;
 
-  fillRowTotalECTSInscription(program);
+  fillRowTotalECTSInscription(studentJson);
   fillRowMean(program);
   fillRowMention(program);
 }
 
-function fillRowTotalECTSInscription(programJson) {
-  var totalECTS = programJson.total_ECTS;
+function fillRowTotalECTSInscription(studentJson) {
+  var totalECTS = studentJson.monAnnee.monOffre.totalECTS;
+  var programJson = studentJson.monAnnee.monOffre.resultats;
   var janvInscription = programJson.session[0].inscription;
   var juinInscription = programJson.session[1].inscription;
   var septInscription = programJson.session[2].inscription;
@@ -155,7 +156,7 @@ function creditToString(creditReport) {
 /***************************** MENTION EXPLANATION PARAGRAPH ************/
 
 function fillMentionExplanation(studentJson) {
-  var mentionExplanation = studentJson.academic_years[0].programs[0].mention_explanation;
+  var mentionExplanation = studentJson.legende.explicationMention;
   $("#paragraph_mention_explanation").html(mentionExplanation);
 }
 
