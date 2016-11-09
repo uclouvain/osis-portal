@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('admission', '0007_create_and_populate_applicant_document_file'),
+        ('admission', '0008_auto_20161108_1442'),
     ]
 
     operations = [
