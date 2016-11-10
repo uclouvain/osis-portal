@@ -23,16 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+
 from admission import models as mdl
+from admission.models.enums import coverage_access_degree as coverage_access_degree_choices
+from admission.views import common, demande_validation, navigation
+from admission.views.common import extra_information
+from admission.views.common import get_picture_id, get_id_document
+from base import models as mdl_base
 from reference import models as mdl_reference
 from reference.enums import institutional_grade_type as enum_institutional_grade_type
-from base import models as mdl_base
-from admission.views.common import get_picture_id, get_id_document
-from admission.views.common import extra_information
-from admission.views import common, demande_validation, navigation
-from django.http import HttpResponseRedirect
 
 
 def application_update(request, application_id):
