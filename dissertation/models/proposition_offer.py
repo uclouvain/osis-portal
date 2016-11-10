@@ -27,6 +27,12 @@ from osis_common.models.serializable_model import SerializableModel
 from django.db import models
 from django.utils import timezone
 from django.db.models import Q
+from django.contrib import admin
+
+
+class PropositionOfferAdmin(admin.ModelAdmin):
+    list_display = ('proposition_dissertation', 'offer_proposition')
+    raw_id_fields = ('proposition_dissertation', 'offer_proposition')
 
 
 class PropositionOffer(SerializableModel):
