@@ -23,30 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.http import HttpResponse
-from rest_framework import serializers
-from rest_framework.renderers import JSONRenderer
-from reference import models as mdl_reference
+from django import forms
+from django.core.exceptions import ObjectDoesNotExist
+from django.utils.translation import ugettext_lazy as _
+from osis_common.models.document_file import DocumentFile
 
 
-class JSONResponse(HttpResponse):
-    def __init__(self, data, **kwargs):
-        content = JSONRenderer().render(data)
-        kwargs['content_type'] = 'application/json'
-        super(JSONResponse, self).__init__(content, **kwargs)
+class RemoveAttachmentForm(forms.Form):
+    attachment_id = forms.IntegerField(min_value=0)
 
-
-class DomainSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = mdl_reference.domain.Domain
-        fields = ('id', 'name')
-
-
-def find_subdomains(request):
-    domain_id = request.GET['domain']
-    if domain_id and domain_id != "-":
-        domain = mdl_reference.domain.Domain(id=domain_id)
-        subdomains = mdl_reference.domain.find_subdomains(domain)
-        serializer = DomainSerializer(subdomains, many=True)
-        return JSONResponse(serializer.data)
-    return None
+    def clean(self):
+        cleaned_data = super(RemoveAttachmentForm, self).clean()
+        attachment_id = cleaned_data.get('attachment_id')
+        if attachment_id:
+            try:
+                DocumentFile.objects.get(pk=attachment_id)
+            except ObjectDoesNotExist:
+                self.add_error('attachment_id', _('attachment_does_not_exist'))

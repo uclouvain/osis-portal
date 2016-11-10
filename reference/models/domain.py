@@ -65,15 +65,13 @@ def find_current_domains():
     current_decree = decree.find_current_decree()
     return Domain.objects.filter(decree=current_decree)\
                          .filter(type=domain_type.UNIVERSITY)\
-                         .filter(parent__isnull=False)\
+                         .filter(parent__isnull=True)\
                          .order_by("name")
 
 
-def find_all_subdomains():
+def find_parent_domains():
     return Domain.objects.exclude(parent=None)
 
 
-def find_subdomains_by_domain_id(a_domain_id):
-    return Domain.objects.filter(parent=a_domain_id)
-
-
+def find_subdomains(domain):
+    return Domain.objects.filter(parent=domain)

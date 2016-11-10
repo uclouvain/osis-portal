@@ -64,6 +64,11 @@ def upload_file_description(request):
         documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
     else:
         documents = mdl.applicant_document_file.find_document_by_applicant(applicant)
+    document_files = []
+    if documents.exists():
+        for document in documents:
+            document_files.append(document.document_file)
+
     form = UploadDocumentFileForm(initial={'storage_duration': 0,
                                            'document_type': "admission",
                                            'update_by': request.user.username})
@@ -76,7 +81,7 @@ def upload_file_description(request):
         'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
         'description_choices': mdl.enums.document_type.DOCUMENT_TYPE_CHOICES,
         'description': description,
-        'documents': documents,
+        'documents': document_files,
         'application': application})
 
 
@@ -109,22 +114,6 @@ def upload_document(request):
                     'description_choices': mdl.enums.document_type.DOCUMENT_TYPE_CHOICES,
                     'description': description,
                     'documents': documents})
-
-
-@login_required
-def delete_old(request, pk):
-    document = get_object_or_404(mdl_osis_common.document_file.DocumentFile, pk=pk)
-    if document:
-        description = document.description
-        document.delete()
-        applicant = mdl.applicant.find_by_user(request.user)
-        documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
-
-        return render(request, 'new_document.html', {
-            'content_type_choices': mdl_osis_common.document_file.CONTENT_TYPE_CHOICES,
-            'description_choices': mdl.enums.document_type.DOCUMENT_TYPE_CHOICES,
-            'description': description,
-            'documents': documents})
 
 
 def save_document_from_form(document, request):
@@ -174,11 +163,10 @@ class DocumentFileSerializer(serializers.ModelSerializer):
 def find_by_description(request):
     description = request.GET['description']
     applicant = mdl.applicant.find_by_user(request.user)
-    documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
+    document = mdl.applicant_document_file.find_last_document_by_applicant_and_description(applicant, description)
     last_documents = []
-    if documents:
-        last_document = documents[-1]
-        last_documents = [last_document]
+    if document:
+        last_documents = [document]
 
     serializer = DocumentFileSerializer(last_documents, many=True)
     return JSONResponse(serializer.data)
@@ -192,53 +180,20 @@ def save_uploaded_file(request):
         else:
             application = None
             applicant = mdl.applicant.find_by_user(request.user)
-        file_selected = request.FILES['file']
-        file_s = file_selected
-        file_name = file_selected.name
-        content_type = file_selected.content_type
-        size = file_selected.size
 
         description = request.POST.get('description')
-        storage_duration = 0
-        prerequis_uploads = [document_type.NATIONAL_DIPLOMA_RECTO,
-                             document_type.NATIONAL_DIPLOMA_VERSO,
-                             document_type.INTERNATIONAL_DIPLOMA_RECTO,
-                             document_type.INTERNATIONAL_DIPLOMA_VERSO,
-                             document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO,
-                             document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO,
-                             document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
-                             document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
-                             document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
-                             document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
-                             document_type.EQUIVALENCE,
-                             document_type.ADMISSION_EXAM_CERTIFICATE,
-                             document_type.PROFESSIONAL_EXAM_CERTIFICATE,
-                             document_type.LANGUAGE_EXAM_CERTIFICATE]
+
+        prerequis_uploads = get_prerequis_document_types()
         assimilation_uploads = assimilation_criteria_view.find_list_assimilation_basic_documents()
 
-        if description in prerequis_uploads:
-            documents = mdl.application_document_file.search(application, description)
-            for document in documents:
-                document.delete()
+        if description in prerequis_uploads or description in assimilation_uploads:
+            delete_existing_application_documents(application, description)
 
         if description == document_type.ID_PICTURE \
-                or description == document_type.ID_CARD \
-                or description in prerequis_uploads \
-                or description in assimilation_uploads:
-            # Delete older file with the same description
-            documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
-            for document in documents:
-                document.delete()
+                or description == document_type.ID_CARD:
+            delete_existing_applicant_documents(applicant, description)
 
-        doc_file = mdl_osis_common.document_file.DocumentFile(file_name=file_name,
-                                                              file=file_s,
-                                                              description=description,
-                                                              storage_duration=storage_duration,
-                                                              application_name='admission',
-                                                              content_type=content_type,
-                                                              size=size,
-                                                              update_by=request.user.username)
-        doc_file.save()
+        doc_file = create_document_file(description, request)
         applicant_document_file = mdl.applicant_document_file.ApplicantDocumentFile(applicant=applicant,
                                                                                     document_file=doc_file)
         applicant_document_file.save()
@@ -281,5 +236,66 @@ def delete_document_file(request):
             applicant = mdl.applicant.find_by_user(request.user)
             document = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
             if document:
-                document.delete()
+                document.document_file.delete()
     return HttpResponse('')
+
+
+def find_by_description_application(request):
+    description = request.GET['description']
+    application = request.GET['application']
+
+    documents = mdl.application_document_file.find_document_by_application_and_description(application, description)
+    last_documents = []
+    if documents:
+        last_document = documents[-1]
+        last_documents = [last_document]
+
+    serializer = DocumentFileSerializer(last_documents, many=True)
+    return JSONResponse(serializer.data)
+
+
+def create_document_file(description, request):
+    file_selected = request.FILES['file']
+    doc_file = mdl_osis_common.document_file.DocumentFile(file_name=file_selected.name,
+                                                          file=file_selected,
+                                                          description=description,
+                                                          storage_duration=0,
+                                                          application_name='admission',
+                                                          content_type=file_selected.content_type,
+                                                          size=file_selected.size,
+                                                          update_by=request.user.username)
+    doc_file.save()
+    return doc_file
+
+
+def delete_existing_applicant_documents(applicant, description):
+    # Delete older file with the same description
+    applicant_documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
+    for document in applicant_documents:
+        document.document_file.delete()
+
+
+def delete_existing_application_documents(application, description):
+    documents = mdl.application_document_file.search(application, description)
+    for document in documents:
+        document_applicant = mdl.applicant_document_file.find_applicant_by_document(document.document_file)
+        if document_applicant:
+            document_applicant.delete()
+        document.delete()
+
+
+def get_prerequis_document_types():
+    return [document_type.NATIONAL_DIPLOMA_RECTO,
+            document_type.NATIONAL_DIPLOMA_VERSO,
+            document_type.INTERNATIONAL_DIPLOMA_RECTO,
+            document_type.INTERNATIONAL_DIPLOMA_VERSO,
+            document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO,
+            document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO,
+            document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
+            document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
+            document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
+            document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO,
+            document_type.EQUIVALENCE,
+            document_type.ADMISSION_EXAM_CERTIFICATE,
+            document_type.PROFESSIONAL_EXAM_CERTIFICATE,
+            document_type.LANGUAGE_EXAM_CERTIFICATE]

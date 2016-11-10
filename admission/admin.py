@@ -30,7 +30,8 @@ from admission.models import *
 admin.site.register(admission_exam_type.AdmissionExamType,
                     admission_exam_type.AdmissionExamTypeAdmin)
 
-admin.site.register(application_document_file.ApplicationDocumentFile)
+admin.site.register(application_document_file.ApplicationDocumentFile,
+                    application_document_file.ApplicationDocumentFileAdmin)
 
 admin.site.register(applicant_document_file.ApplicantDocumentFile,
                     applicant_document_file.ApplicantDocumentFileAdmin)

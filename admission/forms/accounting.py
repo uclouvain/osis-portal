@@ -23,30 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.http import HttpResponse
-from rest_framework import serializers
-from rest_framework.renderers import JSONRenderer
-from reference import models as mdl_reference
+from django import forms
+from django.utils.translation import ugettext_lazy as _
+from localflavor.generic.forms import IBANFormField, BICFormField
 
 
-class JSONResponse(HttpResponse):
-    def __init__(self, data, **kwargs):
-        content = JSONRenderer().render(data)
-        kwargs['content_type'] = 'application/json'
-        super(JSONResponse, self).__init__(content, **kwargs)
+class AccountingForm(forms.Form):
+    scholarship = forms.BooleanField()
+    scholarship_organization = forms.CharField()
+    bank_account_iban = IBANFormField()
+    bank_account_bic = BICFormField()
 
+    def __init__(self, *args, **kwargs):
+        super(AccountingForm, self).__init__(*args, **kwargs)
 
-class DomainSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = mdl_reference.domain.Domain
-        fields = ('id', 'name')
-
-
-def find_subdomains(request):
-    domain_id = request.GET['domain']
-    if domain_id and domain_id != "-":
-        domain = mdl_reference.domain.Domain(id=domain_id)
-        subdomains = mdl_reference.domain.find_subdomains(domain)
-        serializer = DomainSerializer(subdomains, many=True)
-        return JSONResponse(serializer.data)
-    return None
+    def clean(self):
+        cleaned_data = super(AccountingForm, self).clean()
+        data = cleaned_data.get('scholarship_organization')
+        data_scholarship = cleaned_data.get('scholarship')
+        if data_scholarship and (data is None or len(data) == 0):
+            self.errors['scholarship_organization'] = _('mandatory_field')
+        return cleaned_data

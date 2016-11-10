@@ -28,7 +28,7 @@ from admission import models as mdl
 from admission.models.applicant_document_file import ApplicantDocumentFile
 from admission.models.enums import document_type
 from admission.views import demande_validation, navigation
-from admission.forms import RemoveAttachmentForm
+from admission.forms.attachement import RemoveAttachmentForm
 from osis_common.forms import UploadDocumentFileForm
 from osis_common.models.document_file import DocumentFile
 from django.forms import formset_factory
@@ -65,7 +65,7 @@ def update(request, application_id=None):
         "removeAttachmentForm": remove_attachment_form,
         "list_choices": list_choices
     }
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data.update(demande_validation.get_validation_status(application, applicant))
     return render(request, "admission_home.html", data)
 
 

@@ -58,6 +58,29 @@ def create_student_with_specific_registration_id(registration_id):
     return a_student
 
 
+def get_or_create_user():
+    a_user, created = User.objects.get_or_create(username='testo', password='testopw')
+    if created:
+        a_user.save()
+    return a_user
+
+
+def get_or_create_applicant():
+    an_applicant = mdl.applicant.find_by_user(user=get_or_create_user())
+    if not an_applicant:
+        an_applicant = mdl.applicant.Applicant(user=get_or_create_user())
+        an_applicant.save()
+    return an_applicant
+
+
+def get_or_create_profession(name, adhoc):
+    a_profession = mdl.profession.find_by_name(name)
+    if not a_profession:
+        a_profession = mdl.profession.Profession(name=name, adhoc=adhoc)
+        a_profession.save()
+    return a_profession
+
+
 def create_applicant_by_user(user):
     an_applicant = mdl.applicant.Applicant(user=user)
     an_applicant.save()
@@ -178,3 +201,12 @@ def create_applicant_assimilation_criteria(an_applicant):
         criteria=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES[0][0],
         additional_criteria=None,
         selected=False)
+
+
+def create_applicant_document_file(an_applicant, description):
+    a_document_file = create_document_file(an_applicant.user.username, description)
+    an_applicant_document_file = mdl.applicant_document_file.ApplicantDocumentFile()
+    an_applicant_document_file.applicant = an_applicant
+    an_applicant_document_file.document_file = a_document_file
+    an_applicant_document_file.save()
+    return an_applicant_document_file

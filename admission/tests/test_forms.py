@@ -26,7 +26,7 @@
 from django.test import TestCase
 from admission import models as mdl
 import admission.tests.data_for_tests as data_model
-from admission.forms import SociologicalSurveyForm
+from admission.forms.sociological_survey import SociologicalSurveyForm
 from admission.models.enums import education, professional_activity
 
 
@@ -42,9 +42,10 @@ class SociologicalSurveyFormTest(TestCase):
         data = init_data()
         form = SociologicalSurveyForm(data)
         self.assertTrue(form.is_valid())
+        data.update({'student_profession': None})
         data.update({'student_professional_activity': professional_activity.NO_PROFESSION})
         form = SociologicalSurveyForm(data)
-        self.assertTrue(form.is_valid())
+        self.assertTrue(form.is_valid(),str(form.errors))
 
     def test_invalid_form(self):
         data = init_data()

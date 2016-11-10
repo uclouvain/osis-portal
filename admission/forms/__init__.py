@@ -23,30 +23,3 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.http import HttpResponse
-from rest_framework import serializers
-from rest_framework.renderers import JSONRenderer
-from reference import models as mdl_reference
-
-
-class JSONResponse(HttpResponse):
-    def __init__(self, data, **kwargs):
-        content = JSONRenderer().render(data)
-        kwargs['content_type'] = 'application/json'
-        super(JSONResponse, self).__init__(content, **kwargs)
-
-
-class DomainSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = mdl_reference.domain.Domain
-        fields = ('id', 'name')
-
-
-def find_subdomains(request):
-    domain_id = request.GET['domain']
-    if domain_id and domain_id != "-":
-        domain = mdl_reference.domain.Domain(id=domain_id)
-        subdomains = mdl_reference.domain.find_subdomains(domain)
-        serializer = DomainSerializer(subdomains, many=True)
-        return JSONResponse(serializer.data)
-    return None

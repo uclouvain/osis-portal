@@ -36,7 +36,9 @@
         {% if tab_active == '1' %}
             {% include "offer_selection.html" %}
         {%else%}
-            <input type="hidden" value="{{application.national_degree| default_if_none:''}}" id="hdn_local_degree">
+            <input type="hidden"
+                   value="{{application.coverage_access_degree| default_if_none:''}}"
+                   id="hdn_coverage_access_degree">
         {%endif%}
     </div>
     <div id="tab_diploma" class="tab-pane fade {% if tab_active == '2' %} in active{%endif%}">

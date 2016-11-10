@@ -107,6 +107,8 @@ urlpatterns = [
 
     url(r'^upload/delete/$', upload_file.delete_document_file, name='delete_document_file'),
     url(r'^document/$', upload_file.find_by_description),
+    url(r'^document_application/$', upload_file.find_by_description_application),
+
     url(r'^upload/save/$', upload_file.save_uploaded_file, name="save_uploaded_file"),
     url(r'^picture/$', common.get_picture),
     url(r'^postalcodes/$', places.find_postal_codes_by_city),

@@ -144,9 +144,9 @@ $("#slt_nationality").change(function() {
      });
  });
 
-//Display pnl_offer_vae only for Masters and only when rdb_offer_localdegree_false is clicked
+//Display pnl_offer_vae only for Masters and only when rdb_offer_national_coverage_degree_false is clicked
 
-$("#rdb_offer_localdegree_true").click(function() {
+$("#rdb_offer_national_coverage_degree_true").click(function() {
    $.ajax({
     url: "/admission/offer?offer=" + $("#txt_offer_year_id").val()
    }).then(function(data) {
@@ -163,7 +163,7 @@ $("#rdb_offer_localdegree_true").click(function() {
     });
 });
 
-$("#rdb_offer_localdegree_false").click(function() {
+$("#rdb_offer_national_coverage_degree_false").click(function() {
        $.ajax({
         url: "/admission/offer?offer=" + $("#txt_offer_year_id").val()
        }).then(function(data) {
@@ -1520,7 +1520,7 @@ function ajax_offers(radio_button_value, offer_year_id){
 
     var i=0;
     $.ajax({
-        url: "/admission/offers?level=" + $("#slt_offer_type").val() +"&domain="+$("#slt_domain").val()
+        url: "/admission/offers?grade_type=" + $("#slt_offer_type").val() +"&domain="+$("#slt_domain").val()
 
       }).then(function(data) {
       var table_size=data.length;
@@ -1550,7 +1550,7 @@ function ajax_offers(radio_button_value, offer_year_id){
       });
 }
 
-function ajax_static_questions(offer_year_id, sameprogram, localdegree, samestudies,valuation_possible) {
+function ajax_static_questions(offer_year_id, sameprogram, national_coverage_access_degree, samestudies,valuation_possible) {
    $.ajax({
     url: "/admission/offer?offer=" + offer_year_id
    }).then(function(data) {
@@ -1581,14 +1581,15 @@ function ajax_static_questions(offer_year_id, sameprogram, localdegree, samestud
             $('#rdb_offer_valuecredits_false').trigger('click');
         }
     }
-    if(localdegree=='True'){
-        $('#rdb_offer_localdegree_true').attr('checked', 'checked');
-        $('#rdb_offer_localdegree_true').trigger('click');
+
+    if(national_coverage_access_degree=='NATIONAL'){
+        $('#rdb_offer_national_coverage_degree_true').attr('checked', 'checked');
+        $('#rdb_offer_national_coverage_degree_true').trigger('click');
 
     }else{
-        if(localdegree=='False'){
-            $('#rdb_offer_localdegree_false').prop('checked', false);
-            $('#rdb_offer_localdegree_false').trigger('click');
+        if(national_coverage_access_degree=='NON_NATIONAL'){
+            $('#rdb_offer_national_coverage_degree_false').prop('checked', false);
+            $('#rdb_offer_national_coverage_degree_false').trigger('click');
         }
     }
 

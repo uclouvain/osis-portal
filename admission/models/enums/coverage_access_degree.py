@@ -23,30 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.http import HttpResponse
-from rest_framework import serializers
-from rest_framework.renderers import JSONRenderer
-from reference import models as mdl_reference
+
+from django.utils.translation import ugettext_lazy as _
 
 
-class JSONResponse(HttpResponse):
-    def __init__(self, data, **kwargs):
-        content = JSONRenderer().render(data)
-        kwargs['content_type'] = 'application/json'
-        super(JSONResponse, self).__init__(content, **kwargs)
+NATIONAL = "NATIONAL"
+NON_NATIONAL = "NON_NATIONAL"
+EUROPEAN_UNION = "EUROPEAN_UNION"
+NON_EUROPEAN_UNION = "NON_EUROPEAN_UNION"
 
 
-class DomainSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = mdl_reference.domain.Domain
-        fields = ('id', 'name')
-
-
-def find_subdomains(request):
-    domain_id = request.GET['domain']
-    if domain_id and domain_id != "-":
-        domain = mdl_reference.domain.Domain(id=domain_id)
-        subdomains = mdl_reference.domain.find_subdomains(domain)
-        serializer = DomainSerializer(subdomains, many=True)
-        return JSONResponse(serializer.data)
-    return None
+COVERAGE_ACCESS_DEGREE_CHOICES = ((NATIONAL, _(NATIONAL)),
+                                  (NON_NATIONAL, _(NON_NATIONAL)),
+                                  (EUROPEAN_UNION, _(EUROPEAN_UNION)),
+                                  (NON_EUROPEAN_UNION, _(NON_EUROPEAN_UNION)))
