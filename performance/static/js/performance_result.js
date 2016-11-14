@@ -140,17 +140,46 @@ function examScoreToString(examJson) {
 }
 
 function inscrToString(inscr) {
-  if (inscr == "I") {
-    return "Inscr";
+  switch (inscr) {
+    case "I":
+      return "Inscr";
+    case "R":
+      return "Rep.";
+    case "D":
+      return "Dsip.";
+    case "B":
+      return "Créd.";
+    case "K":
+      return "K94";
+    case "C":
+      return "C94";
+    case "N":
+      return "RIP";
+    case "Q":
+      return "Q94";
+    case "S":
+      return "EPM";
+    case "T":
+      return "T94";
+    default:
+      return inscr;
   }
-  return "-";
 }
 
 function creditToString(creditReport) {
-  if (creditReport == "K") {
-    return "Crédit";
+  switch (creditReport) {
+    case "K":
+      return "Crédit";
+    case "R":
+      return "Report";
+    case "S":
+      return "EPM";
+    case "P":
+      return "Postposé";
+    default:
+      return creditReport;
+
   }
-  return "-";
 }
 
 /***************************** MENTION EXPLANATION PARAGRAPH ************/

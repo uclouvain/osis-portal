@@ -34,7 +34,7 @@ def callback(json_data):
         student = extract_student_from_json(json_data)
         offer_year = extract_offer_year_from_json(json_data)
         save(student, offer_year, json_data)
-    except RuntimeError:  # TODO check if correct error
+    except RuntimeError:
         pass
 
 
