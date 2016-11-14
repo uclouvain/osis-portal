@@ -129,6 +129,51 @@ function addRowCourse(courseJson, $row) {
 }
 
 function examScoreToString(examJson) {
+
+  var etatExam = etatExamToString(examJson);
+  if (etatExam != ""){
+    return etatExam;
+  }
+
+  var mention = mentionToString(examJson);
+  if (mention != ""){
+    return mention;
+  }
+
+  return scoreToString(examJson);
+}
+
+function etatExamToString(examJson){
+  if(examJson.etatExam == "Disp") {
+    return "Disp";
+  }
+  return "";
+}
+
+function mentionToString(examJson){
+  switch (examJson.mention) {
+    case "M":
+      return "Exc.";
+    case "S":
+      if (examJson.etatExam == "R"){
+        return "Abs.(R)"
+      }
+      else {
+        return "Abs";
+      }
+    case "A":
+      if (examJson.etatExam == "R"){
+        return "Abs.(R)"
+      }
+      else {
+        return "Abs";
+      }
+    default:
+      return "";
+  }
+}
+
+function scoreToString(examJson){
   var score = examJson.note;
   if (examJson.etatExam == "-") {
     return score;
