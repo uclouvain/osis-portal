@@ -144,8 +144,8 @@ function examScoreToString(examJson) {
 }
 
 function etatExamToString(examJson){
-  if(examJson.etatExam == "Disp") {
-    return "Disp";
+  if(examJson.etatExam == "D") {
+    return "Disp.";
   }
   return "";
 }
@@ -159,14 +159,14 @@ function mentionToString(examJson){
         return "Abs.(R)"
       }
       else {
-        return "Abs";
+        return "Abs.";
       }
     case "A":
       if (examJson.etatExam == "R"){
         return "Abs.(R)"
       }
       else {
-        return "Abs";
+        return "Abs.";
       }
     default:
       return "";
