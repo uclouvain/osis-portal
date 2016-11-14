@@ -1476,3 +1476,21 @@ msgstr "Union européenne"
 
 msgid "NON_EUROPEAN_UNION"
 msgstr "Non union européenne"
+
+msgid "msg_activation_failed"
+msgstr "Problème lors de l'activation de votre compte!"
+
+msgid "detail_activation_failed"
+msgstr "Peut-être avez-vous déjà activé votre compte"
+
+msgid "click"
+msgstr "Clique"
+
+msgid "here"
+msgstr "ici"
+
+msgid "to_connect"
+msgstr "pour vous connecter"
+
+msgid "contact_support"
+msgstr "contactez le support l'UCL"

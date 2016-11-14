@@ -30,13 +30,11 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <h2>Attention</h2><br><br>
-        <div class="alert alert-danger">Problème lors de l'activation de votre compte!</div><br><br>
-        <ul>
-            <li>Peut-être avez-vous déjà activé votre compte</li>
-            <li>ou...</li>
-        </ul>
-        <div>N'hésitez pas à contacter le <a href="http://www.uclouvain.be/ServiceDesk" target="_blank">service desk</a></div>
+        <div class="alert alert-danger">{% trans 'msg_activation_failed' %}</div><br><br>
+        {% trans 'detail_activation_failed' %}
+        <br>
+        <br>
+        <div>{% trans 'click' %}&nbsp;<a href="{% url 'home' %}">{% trans 'here' %}</a>&nbsp;{% trans 'to_connect' %}&nbsp;{% trans 'or' %} <a>{% trans 'contact_service_desk' %}.</a></div>
 
     </div>
 </div>
