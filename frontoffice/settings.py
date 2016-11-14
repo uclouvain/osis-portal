@@ -27,6 +27,8 @@ import os
 from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import sys
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -66,6 +68,15 @@ INSTALLED_APPS = (
     'statici18n',
     'ckeditor',
 )
+
+# check if we are testing right now
+TESTING = 'test' in sys.argv
+
+if TESTING:
+    # add test packages that have specific models for tests
+    INSTALLED_APPS = INSTALLED_APPS + (
+        'osis_common.tests',
+    )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -219,21 +230,22 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL
 # Queues Definition
 # Uncomment the configuration if you want to use the queue system
 # The queue system uses RabbitMq queues to communicate with other application (ex : osis)
-QUEUES = {
-   'QUEUE_URL': 'localhost',
-   'QUEUE_USER': 'guest',
-   'QUEUE_PASSWORD': 'guest',
-   'QUEUE_PORT': 5672,
-   'QUEUE_CONTEXT_ROOT': '/',
-   'QUEUES_NAME': {
-       'MIGRATIONS_TO_PRODUCE': 'osis',
-       'MIGRATIONS_TO_CONSUME': 'osis_portal',
-       'PAPER_SHEET': 'paper_sheet',
-       'PERFORMANCE': 'performance',
-       'STUDENT_PERFORMANCE': 'student_performance',
-       'STUDENT_POINTS': 'student_points'
-   }
-}
+# QUEUES = {
+#    'QUEUE_URL': 'localhost',
+#    'QUEUE_USER': 'guest',
+#    'QUEUE_PASSWORD': 'guest',
+#    'QUEUE_PORT': 5672,
+#    'QUEUE_CONTEXT_ROOT': '/',
+#    'QUEUES_NAME': {
+#        'MIGRATIONS_TO_PRODUCE': 'osis',
+#        'MIGRATIONS_TO_CONSUME': 'osis_portal',
+#        'PAPER_SHEET': 'paper_sheet',
+#        'PERFORMANCE': 'performance',
+#        'STUDENT_PERFORMANCE': 'student_performance',
+#        'STUDENT_POINTS': 'student_points'
+#    }
+# }
+
 
 LOGIN_URL=reverse_lazy('login')
 OVERRIDED_LOGOUT_URL=''
