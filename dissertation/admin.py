@@ -38,5 +38,5 @@ admin.site.register(offer_proposition.OfferProposition, offer_proposition.OfferP
 admin.site.register(proposition_dissertation.PropositionDissertation,
                     proposition_dissertation.PropositionDissertationAdmin)
 admin.site.register(proposition_document_file.PropositionDocumentFile)
-admin.site.register(proposition_offer.PropositionOffer)
+admin.site.register(proposition_offer.PropositionOffer, proposition_offer.PropositionOfferAdmin)
 admin.site.register(proposition_role.PropositionRole, proposition_role.PropositionRoleAdmin)
