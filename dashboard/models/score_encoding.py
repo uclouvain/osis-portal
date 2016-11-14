@@ -25,6 +25,36 @@
 ##############################################################################
 from couchbase.bucket import Bucket, NotFoundError
 from django.conf import settings
+from django.db import models
+from django.contrib import admin
+from django.utils import timezone
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.postgres.fields import JSONField
+from osis_common.models.serializable_model import SerializableModel
+
+
+class ScoreEncodingAdmin(admin.ModelAdmin):
+    list_display = ('name', 'global_id')
+    fieldsets = ((None, {'fields': ('global_id', 'document')}),)
+
+
+class ScoreEncoding(SerializableModel):
+    global_id = models.CharField(max_length=10, unique=True)
+    document = JSONField()
+
+    @property
+    def name(self):
+        return self.__str__()
+
+    def __str__(self):
+        return u"%s" % self.global_id
+
+
+def find_by_global_id(global_id):
+    try:
+        return ScoreEncoding.objects.get(global_id=global_id)
+    except ObjectDoesNotExist:
+        return None
 
 
 def connect_db():
@@ -39,10 +69,10 @@ cb = connect_db()
 
 
 def get_document(global_id):
-    try:
-        return cb.get(global_id)
-    except NotFoundError:
-        return None
+    score_encoding = find_by_global_id(global_id)
+    if score_encoding:
+        return score_encoding.document
+    return None
 
 
 def insert_or_update_document(key, data):
