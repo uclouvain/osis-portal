@@ -24,8 +24,8 @@
 #
 ##############################################################################
 from django.test import TestCase
-from dashboard.models import score_encoding as mdl_score_encoding
 from dashboard.tests import data_for_tests
+from dashboard.views import score_encoding
 
 
 class ScoreEncodingTest(TestCase):
@@ -33,35 +33,6 @@ class ScoreEncodingTest(TestCase):
         self.score_encoding = data_for_tests.create_score_encoding()
         self.global_id = self.score_encoding.global_id
 
-    def test_find_by_global_id(self):
-        score_encoding = mdl_score_encoding.find_by_global_id(global_id=self.global_id)
-        self.assertEqual(score_encoding, self.score_encoding, "Wrong score encoding returned")
-
-        score_encoding = mdl_score_encoding.find_by_global_id(global_id="101245")
-        self.assertIsNone(score_encoding, "Should return no score encoding")
-
-    def test_get_document(self):
-        document = mdl_score_encoding.get_document(global_id=self.global_id)
-        self.assertJSONEqual(document, self.score_encoding.document, "Wrong document returned")
-
-        document = mdl_score_encoding.get_document(global_id="120545")
-        self.assertIsNone(document, "Should return no document")
-
-    def test_insert_or_update_document(self):
-        new_document = """
-            {"msg":" new test"}
-        """
-        score_encoding = mdl_score_encoding.insert_or_update_document("1202151", new_document)
-        self.assertJSONEqual(score_encoding.document, new_document, "Problem when inserting new document")
-
-        mdl_score_encoding.insert_or_update_document(self.global_id, new_document)
-        self.score_encoding.refresh_from_db()
-        self.assertJSONEqual(self.score_encoding.document, new_document, "Problem when updating document")
-
-
-
-
-
-
-
-
+    def test_get_score_sheet_if_present_in_db(self):
+        document = score_encoding.get_score_sheet(self.global_id)
+        self.assertJSONEqual(self.score_encoding.document, document, "Should return the document in db")

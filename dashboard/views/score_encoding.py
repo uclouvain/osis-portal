@@ -37,24 +37,26 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 def get_score_sheet(global_id):
-    logger.debug("Instanciating the QueueConnection ScoresSheetClient...")
-    scores_sheets_cli = ScoresSheetClient()
-    logger.debug("Done.")
-
-    logger.debug("Sending the global id in the queue and waiting for a response...")
-    json_data = scores_sheets_cli.call(global_id)
-    logger.debug("Done.")
-    logger.debug("Json.loads data consumed in the queue...")
-    updated_document = json.loads(json_data.decode("utf-8"))
-    logger.debug("Done.")
-    try:
-        logger.debug("Updating/inserting the document in Couchbase...")
-        mdl.score_encoding.insert_or_update_document(global_id, updated_document)
-        logger.debug("Done.")
-    except ValueFormatError:
-        logger.debug("Document already in couchbase and last updated today.")
-        return None
-    return updated_document
+    # logger.debug("Instanciating the QueueConnection ScoresSheetClient...")
+    # scores_sheets_cli = ScoresSheetClient()
+    # logger.debug("Done.")
+    #
+    # logger.debug("Sending the global id in the queue and waiting for a response...")
+    # json_data = scores_sheets_cli.call(global_id)
+    # logger.debug("Done.")
+    # logger.debug("Json.loads data consumed in the queue...")
+    # updated_document = json.loads(json_data.decode("utf-8"))
+    # logger.debug("Done.")
+    # try:
+    #     logger.debug("Updating/inserting the document in Couchbase...")
+    #     mdl.score_encoding.insert_or_update_document(global_id, updated_document)
+    #     logger.debug("Done.")
+    # except ValueFormatError:
+    #     logger.debug("Document already in couchbase and last updated today.")
+    #     return None
+    # return updated_document
+    document = mdl.score_encoding.get_document(global_id)
+    return document
 
 
 def print_scores(request, global_id):
