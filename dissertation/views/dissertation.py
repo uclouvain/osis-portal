@@ -244,11 +244,17 @@ def dissertation_new(request):
 def dissertation_reader_delete(request, pk):
     dissert_role = get_object_or_404(dissertation_role.DissertationRole, pk=pk)
     dissert = dissert_role.dissertation
-    if dissert.status == 'DRAFT':
-        justification = "%s %s" % ("delete_reader", str(dissert_role))
-        dissertation_update.add(request, dissert, dissert.status, justification=justification)
-        dissert_role.delete()
-    return redirect('dissertation_detail', pk=dissert.pk)
+    person = mdl.person.find_by_user(request.user)
+    student = mdl.student.find_by_person(person)
+    if dissert.author == student:
+        offer_pro = offer_proposition.search_by_offer(dissert.offer_year_start.offer)
+        if offer_pro.student_can_manage_readers and dissert.status == 'DRAFT':
+            justification = "%s %s" % ("delete_reader", str(dissert_role))
+            dissertation_update.add(request, dissert, dissert.status, justification=justification)
+            dissert_role.delete()
+        return redirect('dissertation_detail', pk=dissert.pk)
+    else:
+        return redirect('dissertations')
 
 
 @login_required
