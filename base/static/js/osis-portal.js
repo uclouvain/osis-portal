@@ -1215,10 +1215,12 @@ function display_dynamic_form(offer_year_id){
                     $('#pnl_questions').append($("<label></label>")
                                        .append(value.question_label));
                     if(value.question_description != ""){
+                        $('#pnl_questions').append("<br>");
                         $('#pnl_questions').append($("<label></label>")
                                            .append(value.question_description)
                                            .attr("id","lbl_question_description_"+value.question_id)
                                            .attr("class","description"));
+                    }
                     $('#pnl_questions').append("<br>");
                     $('#pnl_questions').append("<br>");
                 }
@@ -1226,45 +1228,45 @@ function display_dynamic_form(offer_year_id){
                     $('#pnl_questions').append($("<label></label>")
                                        .append(value.question_label)
                                        .attr("id","lbl_question_"+value.option_id));
+                    if(value.question_description != ""){
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append($("<label></label>")
+                                           .append(value.question_description)
+                                           .attr("id","lbl_question_description_"+value.question_id)
+                                           .attr("class","description"));
+                    }
                     $('#pnl_questions').append("<br>");
                     $('#pnl_questions').append($("<input>")
                                        .attr("class", "form-control")
                                        .attr("name","txt_answer_question_"+value.option_id)
                                        .attr("id","txt_answer_question_"+value.option_id)
-                                       .attr("placeholder", value.option_label)
                                        .attr("title",value.option_description)
                                        .attr("value",value.answer)
                                        .prop("required",value.question_required));
-                    if(value.question_description != ""){
-                        $('#pnl_questions').append($("<label></label>")
-                                           .append(value.question_description)
-                                           .attr("id","lbl_question_description_"+value.option_id)
-                                           .attr("class","description"));
-                        $('#pnl_questions').append("<br>");
-                        $('#pnl_questions').append("<br>");
-                    }
+                    $('#pnl_questions').append("<br>");
+                    $('#pnl_questions').append("<br>");
                 }
                 if(value.question_type=='LONG_INPUT_TEXT'){
                     $('#pnl_questions').append($("<label></label>")
                                        .append(value.question_label)
                                        .attr("id","lbl_question_"+value.option_id));
+                    if(value.question_description != ""){
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append($("<label></label>")
+                                           .append(value.question_description)
+                                           .attr("id","lbl_question_description_"+value.question_id)
+                                           .attr("class","description"));
+                    }
                     $('#pnl_questions').append("<br>");
                     $('#pnl_questions').append($("<textarea></textarea>")
                                        .attr("class", "form-control")
                                        .attr("name","txt_answer_question_"+value.option_id)
                                        .attr("id","txt_answer_question_"+value.option_id)
-                                       .attr("placeholder", value.option_label)
                                        .attr("title",value.option_description)
                                        .text(value.answer)
                                        .prop("required",value.question_required));
-                    if(value.question_description != ""){
-                        $('#pnl_questions').append($("<label></label>")
-                                           .append(value.question_description)
-                                           .attr("id","lbl_question_description_"+value.option_id)
-                                           .attr("class","description"));
-                        $('#pnl_questions').append("<br>");
-                        $('#pnl_questions').append("<br>");
-                    }
+                    $('#pnl_questions').append("<br>");
+                    $('#pnl_questions').append("<br>");
                 }
                 if(value.question_type=='RADIO_BUTTON'){
                     if(value.option_order == 1){
