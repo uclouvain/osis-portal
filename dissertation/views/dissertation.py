@@ -196,7 +196,8 @@ def dissertation_jury_new(request, pk):
     memory = get_object_or_404(dissertation.Dissertation, pk=pk)
     count_dissertation_role = dissertation_role.count_by_dissertation(memory)
     count_reader = dissertation_role.count_reader_by_dissertation(memory)
-    if count_dissertation_role < 5 and count_reader < 3:
+    offer_pro = offer_proposition.search_by_offer(memory.offer_year_start.offer)
+    if offer_pro.student_can_manage_readers and count_dissertation_role < 5 and count_reader < 3:
         if request.method == "POST":
             form = DissertationRoleForm(request.POST)
             if form.is_valid():
