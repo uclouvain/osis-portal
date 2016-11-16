@@ -1217,7 +1217,7 @@ function display_dynamic_form(offer_year_id){
                     if(value.question_description != ""){
                         $('#pnl_questions').append($("<label></label>")
                                            .append(value.question_description)
-                                           .attr("id","lbl_question_description_"+value.option_id)
+                                           .attr("id","lbl_question_description_"+value.question_id)
                                            .attr("class","description"));
                     $('#pnl_questions').append("<br>");
                     $('#pnl_questions').append("<br>");
