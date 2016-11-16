@@ -299,13 +299,6 @@
     <br>
     <!--Dynamic questions :-->
     <div id="pnl_questions"></div>
-    {% if message%}
-    <div>
-        <br>
-        <div class="row">
-        </div>
-    </div>
-    {% endif %}
     <input type="hidden" id="txt_offer_year_id" name="offer_year_id" value="{{offer.id}}"/>
     <input type="hidden" id="txt_application_id" name="application_id" value="{{ application.id }}"/>
     {% csrf_token %}
