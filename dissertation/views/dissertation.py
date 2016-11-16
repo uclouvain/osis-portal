@@ -204,10 +204,14 @@ def dissertation_jury_new(request, pk):
             if request.method == "POST":
                 form = DissertationRoleForm(request.POST)
                 if form.is_valid():
-                    form.save()
-                    if memory.status != 'DRAFT':
-                        justification = "%s" % "add_reader"
-                        dissertation_update.add(request, memory, memory.status, justification=justification)
+                    data = form.cleaned_data
+                    if not dissertation_role.count_by_status_student_dissertation(data['status'],
+                                                                                  data['adviser'],
+                                                                                  data['dissertation']):
+                        form.save()
+                        if memory.status != 'DRAFT':
+                            justification = "%s" % "add_reader"
+                            dissertation_update.add(request, memory, memory.status, justification=justification)
                 return redirect('dissertation_detail', pk=memory.pk)
             else:
                 form = DissertationRoleForm(initial={'status': "READER", 'dissertation': memory})
