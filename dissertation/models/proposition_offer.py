@@ -49,7 +49,7 @@ def search_by_offers(offers):
                                            offer_proposition__offer__in=offers,
                                            offer_proposition__start_visibility_proposition__lte=timezone.now(),
                                            offer_proposition__end_visibility_proposition__gte=timezone.now()
-                                           ).distinct()
+                                           )
 
 
 def search_by_proposition_dissertation(proposition_dissertation):
