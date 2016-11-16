@@ -31,6 +31,7 @@ class FormAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'offer_year')
     fieldsets = ((None, {'fields': ('title', 'description', 'offer_year')}),)
     raw_id_fields = ('offer_year',)
+    search_fields = ['offer_year']
 
 
 class Form(models.Model):

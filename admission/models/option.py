@@ -32,6 +32,9 @@ class OptionAdmin(admin.ModelAdmin):
     list_display = ('label', 'description')
     fieldsets = ((None, {'fields': ('label', 'value', 'order', 'description', 'question')}),)
     list_filter = ('question',)
+    raw_id_fields = ('question',)
+    search_fields = ['question']
+
 
 
 class Option(models.Model):
