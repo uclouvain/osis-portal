@@ -47,8 +47,9 @@ def search_by_offers(offers):
     return PropositionOffer.objects.filter(proposition_dissertation__active=True,
                                            proposition_dissertation__visibility=True,
                                            offer_proposition__offer__in=offers,
-                                           offer_proposition__start_visibility_proposition__lte=timezone.now())\
-        .distinct()
+                                           offer_proposition__start_visibility_proposition__lte=timezone.now(),
+                                           offer_proposition__end_visibility_proposition__gte=timezone.now()
+                                           ).distinct()
 
 
 def search_by_proposition_dissertation(proposition_dissertation):
