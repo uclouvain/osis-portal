@@ -36,9 +36,9 @@ class OptionAdmin(admin.ModelAdmin):
 
 class Option(models.Model):
     label = models.CharField(max_length=255)
-    value = models.TextField()
-    order = models.IntegerField()
-    description = models.TextField()
+    value = models.TextField(blank=True, null=True)
+    order = models.IntegerField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     question = models.ForeignKey('Question')
 
     def __str__(self):
