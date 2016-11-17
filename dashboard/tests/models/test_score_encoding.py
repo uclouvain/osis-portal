@@ -48,9 +48,7 @@ class ScoreEncodingTest(TestCase):
         self.assertIsNone(document, "Should return no document")
 
     def test_insert_or_update_document(self):
-        new_document = """
-            {"msg":" new test"}
-        """
+        new_document = data_for_tests.get_sample()
         score_encoding = mdl_score_encoding.insert_or_update_document("1202151", new_document)
         self.assertJSONEqual(score_encoding.document, new_document, "Problem when inserting new document")
 

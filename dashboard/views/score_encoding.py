@@ -23,13 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from couchbase.exceptions import ValueFormatError
 from django.conf import settings
 from osis_common.document import paper_sheet
 from dashboard import models as mdl
 from osis_common.queue.queue_listener import ScoresSheetClient
 import datetime
 import logging
+import json
 
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
@@ -37,7 +37,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 def get_score_sheet(global_id):
     document = mdl.score_encoding.get_document(global_id)
-    if not document:
+    if not document or is_outdated(document):
         document = fetch_document(global_id)
     return document
 
@@ -57,21 +57,18 @@ def fetch_json(global_id):
     return json_data
 
 
+def is_outdated(document):
+    json_document = json.loads(document)
+    now = datetime.datetime.now()
+    now_str = '%s/%s/%s' % (now.day, now.month, now.year)
+    if json_document.get('publication_date', None) != now_str:
+            return True
+    return False
+
+
 def print_scores(request, global_id):
-    logger.debug("Searching document in couchbase (global id = " + global_id + ")")
-    document = mdl.score_encoding.get_document(global_id)
-    document = document.value if document else None
+    document = get_score_sheet(global_id)
     if document:
-        logger.debug("Document found")
-        now = datetime.datetime.now()
-        now_str = '%s/%s/%s' % (now.day, now.month, now.year)
-        if document.get('publication_date', None) != now_str:
-            document = get_score_sheet(global_id)
-    else:
-        logger.debug("No document found in couchbase")
-        document = get_score_sheet(global_id)
-    if document:
-        logger.debug("Calling build_pdf() method to generate the pdf...")
+        document = json.loads(document)
         return paper_sheet.build_pdf(document)
-    else:
-        return None
+    return None

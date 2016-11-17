@@ -24,13 +24,39 @@
 #
 ##############################################################################
 from dashboard.models import score_encoding as mdl_score_encoding
+import json
+import datetime
+
+sample_1 = "dashboard/tests/ressources/score_encoding_sample.json"
 
 
-def create_score_encoding():
-    document = """
-                    {"msg":"test"}
-                """
-    global_id = "001254"
+def create_score_encoding(global_id="001254"):
+    document = get_sample()
     score_encoding = mdl_score_encoding.ScoreEncoding(global_id=global_id, document=document)
     score_encoding.save()
     return score_encoding
+
+
+def load_sample(sample_path):
+    with open(sample_path) as file_sample:
+        return file_sample.read()
+
+
+def get_sample():
+    sample = get_old_sample()
+    return update_publication_date(sample)
+
+
+def get_old_sample():
+    return load_sample(sample_1)
+
+
+def update_publication_date(sample):
+    json_sample = json.loads(sample)
+    json_sample['publication_date'] = get_today_date()
+    return json.dumps(json_sample)
+
+
+def get_today_date():
+    now = datetime.datetime.now()
+    return '%s/%s/%s' % (now.day, now.month, now.year)

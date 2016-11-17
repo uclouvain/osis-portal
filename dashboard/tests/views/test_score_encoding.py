@@ -27,9 +27,11 @@ from django.test import TestCase
 from dashboard.tests import data_for_tests
 from dashboard.views import score_encoding
 from unittest.mock import patch
+from reportlab.platypus import SimpleDocTemplate
+import io
 
 
-class ScoreEncodingTest(TestCase):
+class ScoreSheetTest(TestCase):
     def setUp(self):
         self.score_encoding = data_for_tests.create_score_encoding()
         self.global_id = self.score_encoding.global_id
@@ -39,6 +41,18 @@ class ScoreEncodingTest(TestCase):
         self.assertJSONEqual(self.score_encoding.document, document, "Should return the document in db")
 
     @patch('osis_common.queue.queue_listener.Client.call')
+    def test_get_score_sheet_if_present_in_db_but_outdated(self, mock_client_call):
+        global_id = "12012"
+        new_score_encoding = data_for_tests.create_score_encoding(global_id=global_id)
+        new_score_encoding.document = data_for_tests.get_old_sample()
+        new_score_encoding.save()
+
+        expected = data_for_tests.get_sample()
+        mock_client_call.return_value = expected.encode("utf-8")
+        document = score_encoding.get_score_sheet(global_id)
+        self.assertJSONEqual(document, expected, "Should fetch document from queue")
+
+    @patch('osis_common.queue.queue_listener.Client.call')
     def test_get_score_sheet_if_not_present_in_db_with_timeout(self, mock_client_call):
         mock_client_call.return_value = None
         document = score_encoding.get_score_sheet("12012")
@@ -46,9 +60,24 @@ class ScoreEncodingTest(TestCase):
 
     @patch('osis_common.queue.queue_listener.Client.call')
     def test_get_score_sheet_if_not_present_in_db_and_fetch(self, mock_client_call):
-        expected = """{"msg":"response"}"""
+        expected = data_for_tests.get_sample()
         mock_client_call.return_value = expected.encode("utf-8")
         document = score_encoding.get_score_sheet("12012")
         self.assertJSONEqual(document, expected, "Should fetch document from queue")
+
+
+class PrintScoreSheetTest(TestCase):
+    def setUp(self):
+        self.score_encoding = data_for_tests.create_score_encoding()
+        self.global_id = self.score_encoding.global_id
+
+    def test_when_no_scores_sheet(self):
+        pdf = score_encoding.print_scores(None, "014")
+        self.assertIsNone(pdf, "Should not create any pdf")
+
+    def test_when_scores_sheet(self):
+        pdf = score_encoding.print_scores(None, self.global_id)
+        self.assertTrue(pdf, "Should generate a pdf")
+
 
 
