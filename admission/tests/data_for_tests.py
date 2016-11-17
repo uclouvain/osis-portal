@@ -161,3 +161,16 @@ def create_applicant_document_file(an_applicant, description):
     an_applicant_document_file.document_file = a_document_file
     an_applicant_document_file.save()
     return an_applicant_document_file
+
+
+def create_person(global_id="001254"):
+    user = create_user()
+    a_person = mdl_base.person.Person(user=user, global_id=global_id, first_name="first", last_name="last")
+    a_person.save()
+    return a_person
+
+
+def create_tutor(global_id="001254"):
+    person = create_person(global_id=global_id)
+    a_tutor = mdl_base.tutor.Tutor(person=person)
+    return a_tutor

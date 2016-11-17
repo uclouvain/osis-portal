@@ -47,7 +47,6 @@ def score_encoding(request):
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
 def download_papersheet(request):
-    print("Inside dowload_papersheet()")
     person = mdl_base.person.find_by_user(request.user)
     pdf = print_scores(request, person.global_id)
     if pdf:

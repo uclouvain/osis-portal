@@ -27,8 +27,6 @@ from django.test import TestCase
 from dashboard.tests import data_for_tests
 from dashboard.views import score_encoding
 from unittest.mock import patch
-from reportlab.platypus import SimpleDocTemplate
-import io
 
 
 class ScoreSheetTest(TestCase):
