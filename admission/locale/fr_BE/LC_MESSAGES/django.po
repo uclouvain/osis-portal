@@ -359,7 +359,7 @@ msgid "duplicate_help"
 msgstr "Dupliquer les informations de l'année en "
 
 msgid "dutch_belgian_community"
-msgstr "Communauté flammande de Belgique"
+msgstr "Communauté flamande de Belgique"
 
 msgid "education_community"
 msgstr "Communauté d'enseignement"
