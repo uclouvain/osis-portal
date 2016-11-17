@@ -22,6 +22,10 @@ $("#rdb_result_more_75").click(function(event) {
     $('#national_diploma_result_error').html('');
 });
 
+$("#rdb_no_result").click(function(event) {
+    $('#national_diploma_result_error').html('');
+});
+
 $("#path_repetition").click(function(event) {
     $('#national_diploma_path_repetition_error').html('');
 });

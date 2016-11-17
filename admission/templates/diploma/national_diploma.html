@@ -168,7 +168,8 @@
                         <label>{%trans 'to_specify'%}</label>
                         <input class="form-control"
                                id="txt_other_education_type"
-                               name="other_education_type">
+                               name="other_education_type"
+                               maxlength="100" >
                     </div>
                 </div>
             </div>
@@ -262,6 +263,12 @@
                      name="result"
                      id="rdb_result_more_75"
                      value="HIGH">&nbsp;{% trans 'high_result'%}
+            </label>
+            <label class="radio-inline">
+                <input type="radio"
+                       name="result"
+                       id="rdb_no_result"
+                       value="NO_RESULT">  {% trans 'no_result_yet' %}
             </label>
             {%if validation_messages and validation_messages|get_item:'result'%}
                 <br><br><span class="error" style="margin-left:5px;" id="national_diploma_result_error">{{ validation_messages|get_item:'result'}}</span><br>

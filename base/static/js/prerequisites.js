@@ -54,6 +54,7 @@ $('document').ready(function(){
         $('#rdb_result_less_65').prop( "checked", false);
         $('#rdb_result_between_65_75').prop( "checked", false);
         $('#rdb_result_more_75').prop( "checked", false);
+        $('#rdb_no_result').prop( "checked", false);
         //for foreign diploma
         $('#pnl_foreign_detail').css('visibility', 'hidden').css('display','none');
         $('#rdb_foreign_baccalaureate_diploma_national').prop( "checked", false);
@@ -452,12 +453,15 @@ function display_local_secondary(){
     $('#pnl_local_detail').css('visibility', 'visible').css('display','block');
     if($('#hdn_secondary_education_national_community').val() == 'FRENCH'){
         $('#rdb_local_community_french').prop( "checked", true);
+        $('#pnl_teaching_type').css('visibility', 'visible').css('display','block');
     }
     if($('#hdn_secondary_education_national_community').val() == 'DUTCH'){
         $('#rdb_local_community_dutch').prop( "checked", true);
+        $('#pnl_teaching_type').css('visibility', 'visible').css('display','block');
     }
     if($('#hdn_secondary_education_national_community').val() == 'GERMAN'){
         $('#rdb_local_community_german').prop( "checked", true);
+        $('#pnl_teaching_type').css('visibility', 'visible').css('display','block');
     }
     populate_school_dropdown($('#hdn_secondary_education_national_institution_city').val(),
                              $('#hdn_secondary_education_national_institution_postal_code').val(),
@@ -491,6 +495,9 @@ function display_local_secondary(){
     }
     if( $('#hdn_secondary_education_result').val() == 'HIGH'){
         $('#rdb_result_more_75').prop( "checked", true);
+    }
+    if( $('#hdn_secondary_education_result').val() == 'NO_RESULT'){
+        $('#rdb_no_result').prop( "checked", true);
     }
 
 }
@@ -568,7 +575,9 @@ function display_foreign_secondary(){
 
 function national_community_display(){
 
-    if($('#hdn_secondary_education_national_institution_national_community').val() == 'FRENCH'){
+    if($('#hdn_secondary_education_national_institution_national_community').val() == 'FRENCH' ||
+       $('#hdn_secondary_education_national_institution_national_community').val() == 'GERMAN' ||
+       $('#hdn_secondary_education_national_institution_national_community').val() == 'DUTCH'){
 
         $('#pnl_teaching_type').css('visibility', 'visible').css('display','block');
         if($('#hdn_secondary_education_education_type_id')){
@@ -650,9 +659,11 @@ $("#chb_other_education").change(function() {
     if ($('#chb_other_education').prop( "checked")){
             $('[name^="rdb_education_transition_type"]').each(function(){
                 $(this).prop( "disabled", true);
+                $(this).prop( "checked", false);
             });
             $('[name^="rdb_education_technic_type"]').each(function(){
                 $(this).prop( "disabled", true);
+                $(this).prop( "checked", false);
             });
             $('#txt_other_education_type').prop( "disabled",false);
 
@@ -982,6 +993,10 @@ $("#rdb_result_more_75").click(function(event) {
     $('#national_diploma_result_error').html('');
 });
 
+$("#rdb_no_result").click(function(event) {
+    $('#national_diploma_result_error').html('');
+});
+
 $("#path_repetition").click(function(event) {
     $('#national_diploma_path_repetition_error').html('');
 });
@@ -1048,9 +1063,22 @@ $("#txt_CESS_other_school_postal_code").blur(function() {
 function display_postal_code_msg_error(value, id_msg_field){
     $(id_msg_field).find("label").remove();
 
-    if (/[^a-zA-Z]/.test(value)){
+    if ( is_matching_postal_code( value) ) {
         $(id_msg_field).find("label").remove();
     }else{
         $(id_msg_field).append("<label>"+gettext('invalid_postal_code')+"</label>");
+
     }
+}
+
+function is_matching_postal_code(str){
+    if (/[^a-zA-Z]/.test(str)) {
+
+    }else{
+
+        return false;
+    }
+
+    var myRegExp = /[a-zA-Z0-9]/ ;
+    return myRegExp.test(str);
 }
