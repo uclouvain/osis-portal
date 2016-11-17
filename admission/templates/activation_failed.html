@@ -34,7 +34,11 @@
         {% trans 'detail_activation_failed' %}
         <br>
         <br>
-        <div>{% trans 'click' %}&nbsp;<a href="{% url 'home' %}">{% trans 'here' %}</a>&nbsp;{% trans 'to_connect' %}&nbsp;{% trans 'or' %} <a>{% trans 'contact_service_desk' %}.</a></div>
+        <div>
+            {% trans 'click' %}&nbsp;<a href="{% url 'home' %}">{% trans 'here' %}</a>&nbsp;{% trans 'to_connect' %}.
+            <br>
+            {% trans 'technical_failure' %} {% trans 'contact_service_desk' %} <a href="mailto:service-desk@uclouvain.be">service-desk@uclouvain.be</a>&nbsp;{% trans 'or' %}&nbsp;{% trans 'call' %}&nbsp;8282.
+        </div>
 
     </div>
 </div>

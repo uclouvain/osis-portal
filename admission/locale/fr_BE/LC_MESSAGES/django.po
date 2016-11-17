@@ -1484,7 +1484,7 @@ msgid "detail_activation_failed"
 msgstr "Peut-être avez-vous déjà activé votre compte"
 
 msgid "click"
-msgstr "Clique"
+msgstr "Cliquez"
 
 msgid "here"
 msgstr "ici"
@@ -1492,5 +1492,11 @@ msgstr "ici"
 msgid "to_connect"
 msgstr "pour vous connecter"
 
-msgid "contact_support"
-msgstr "contactez le support l'UCL"
+msgid "contact_service_desk"
+msgstr "contactez le support UCL à l'adresse suivante :"
+
+msgid "call"
+msgstr "téléphonez au"
+
+msgid "technical_failure"
+msgstr "En cas de problème technique,"

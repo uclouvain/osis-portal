@@ -1473,4 +1473,10 @@ msgid "to_connect"
 msgstr "to get to the login page"
 
 msgid "contact_service_desk"
-msgstr "contact the service desk"
+msgstr "contact the service desk : "
+
+msgid "call"
+msgstr "call"
+
+msgid "technical_failure"
+msgstr "Technical problems?"
