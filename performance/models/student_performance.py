@@ -30,6 +30,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from osis_common.models.serializable_model import SerializableModel
 from performance.queue.student_performance import fetch_and_save
 import datetime
+from django.utils import timezone
 
 
 class StudentPerformanceAdmin(admin.ModelAdmin):
@@ -91,8 +92,8 @@ def find_or_fetch(student, offer_year):
 
 
 def has_expired(student_performance):
-    today = datetime.datetime.now()
+    now = timezone.now()
     expiration_date = student_performance.update_date
-    return expiration_date < today
+    return expiration_date < now
 
 

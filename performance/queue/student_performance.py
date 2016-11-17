@@ -26,6 +26,7 @@
 import json
 from frontoffice.queue.queue_listener import PerformanceClient
 import datetime
+from django.utils import timezone
 
 UPDATE_DELTA = 12
 
@@ -58,7 +59,7 @@ def extract_offer_year_from_json(json_data):
 
 def generate_message(student, offer_year):
     message = {}
-    message['noma'] = student.global_id
+    message['noma'] = student.registration_id
     message["sigle"] = offer_year.acronym
     message["anac"] = str(offer_year.academic_year.year)
     return str(message)
@@ -83,7 +84,7 @@ def fetch_json_data(student, offer_year):
 
 
 def get_expiration_date():
-    now = datetime.datetime.now()
+    now = timezone.now()
     timedelta = datetime.timedelta(hours=UPDATE_DELTA)
     expiration_date = now + timedelta
     return expiration_date
