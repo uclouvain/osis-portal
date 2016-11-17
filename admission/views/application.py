@@ -26,7 +26,6 @@
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-
 from admission import models as mdl
 from admission.models.enums import coverage_access_degree as coverage_access_degree_choices
 from admission.views import common, demande_validation, navigation
@@ -297,4 +296,3 @@ def delete_application_assimilation_criteria(application):
         # delete all existing application_assimilation_criteria
         for a in mdl.application_assimilation_criteria.find_by_application(application):
             a.delete()
-
