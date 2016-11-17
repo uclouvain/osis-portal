@@ -35,14 +35,6 @@ $('document').ready(function(){
         $('#txt_CESS_other_school_postal_code').val('');
         $('#txt_CESS_other_school_postal_code').prop( "disabled", true);
 
-        $('#rdb_school_local_community_french').prop( "checked", false);
-        $('#rdb_school_local_community_dutch').prop( "checked", false);
-        $('#rdb_school_local_community_german').prop( "checked", false);
-
-        $('#rdb_school_local_community_french').prop( "disabled", true);
-        $('#rdb_school_local_community_dutch').prop( "disabled", true);
-        $('#rdb_school_local_community_german').prop( "disabled", true);
-
         $('#pnl_teaching_type').css('visibility', 'hidden').css('display','none');
         $('[id^="rdb_general_transition_"]').prop( "checked", false);
         $('[id^="rdb_technic_"]').prop( "checked", false);
@@ -577,7 +569,7 @@ function display_foreign_secondary(){
 function national_community_display(){
 
     if($('#hdn_secondary_education_national_institution_national_community').val() == 'FRENCH'){
-        $('#rdb_school_local_community_french').prop( "checked", true);
+
         $('#pnl_teaching_type').css('visibility', 'visible').css('display','block');
         if($('#hdn_secondary_education_education_type_id')){
             if($('#rdb_general_transition_'+$('#hdn_secondary_education_education_type_id').val())){
@@ -598,24 +590,6 @@ function national_community_display(){
                 });
             }
         }
-    }
-    if($('#hdn_secondary_education_national_institution_national_community').val() == 'DUTCH'){
-        $('#rdb_school_local_community_dutch').prop( "checked", true);
-    }
-    if($('#hdn_secondary_education_national_institution_national_community').val() == 'GERMAN'){
-        $('#rdb_school_local_community_german').prop( "checked", true);
-    }
-    if($('#hdn_secondary_education_national_institution_adhoc').val()=='False' || $('#hdn_secondary_education_national_institution_adhoc').val()==''){
-        $('#rdb_school_local_community_french').prop( "checked", false);
-        $('#rdb_school_local_community_dutch').prop( "checked", false);
-        $('#rdb_school_local_community_german').prop( "checked", false);
-        $('#rdb_school_local_community_french').prop( "disabled", true);
-        $('#rdb_school_local_community_dutch').prop( "disabled", true);
-        $('#rdb_school_local_community_german').prop( "disabled", true);
-    }else{
-        $('#rdb_school_local_community_french').prop( "disabled", false);
-        $('#rdb_school_local_community_dutch').prop( "disabled", false);
-        $('#rdb_school_local_community_german').prop( "disabled", false);
     }
 
 }
@@ -670,21 +644,6 @@ $("#rdb_professional_experience_false").click(function() {
     $('#rdb_professional_exam_result_middle').prop( "disabled", false);
     $('#rdb_professional_exam_result_high').prop( "disabled", false);
     delete_document('PROFESSIONAL_EXAM_CERTIFICATE');
-});
-
-$("#chb_other_school").change(function() {
-    if ($('#chb_other_school').prop( "checked")){
-        $('#rdb_school_local_community_french').prop( "disabled", false);
-        $('#rdb_school_local_community_dutch').prop( "disabled", false);
-        $('#rdb_school_local_community_german').prop( "disabled", false);
-    }else{
-        $('#rdb_school_local_community_french').prop( "checked", false);
-        $('#rdb_school_local_community_dutch').prop( "checked", false);
-        $('#rdb_school_local_community_german').prop( "checked", false);
-        $('#rdb_school_local_community_french').prop( "disabled", true);
-        $('#rdb_school_local_community_dutch').prop( "disabled", true);
-        $('#rdb_school_local_community_german').prop( "disabled", true);
-    }
 });
 
 $("#chb_other_education").change(function() {
