@@ -1221,8 +1221,10 @@ function display_dynamic_form(offer_year_id){
                                            .attr("id","lbl_question_description_"+value.question_id)
                                            .attr("class","description"));
                     }
-                    $('#pnl_questions').append("<br>");
-                    $('#pnl_questions').append("<br>");
+                    if(value.option_order == value.options_max_number){
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append("<br>");
+                    }
                 }
                 if(value.question_type=='SHORT_INPUT_TEXT'){
                     $('#pnl_questions').append($("<label></label>")
@@ -1243,8 +1245,10 @@ function display_dynamic_form(offer_year_id){
                                        .attr("title",value.option_description)
                                        .attr("value",value.answer)
                                        .prop("required",value.question_required));
-                    $('#pnl_questions').append("<br>");
-                    $('#pnl_questions').append("<br>");
+                    if(value.option_order == value.options_max_number){
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append("<br>");
+                    }
                 }
                 if(value.question_type=='LONG_INPUT_TEXT'){
                     $('#pnl_questions').append($("<label></label>")
@@ -1265,8 +1269,10 @@ function display_dynamic_form(offer_year_id){
                                        .attr("title",value.option_description)
                                        .text(value.answer)
                                        .prop("required",value.question_required));
-                    $('#pnl_questions').append("<br>");
-                    $('#pnl_questions').append("<br>");
+                    if(value.option_order == value.options_max_number){
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append("<br>");
+                    }
                 }
                 if(value.question_type=='RADIO_BUTTON'){
                     if(value.option_order == 1){
@@ -1323,8 +1329,10 @@ function display_dynamic_form(offer_year_id){
                                                .append("&nbsp;&nbsp;"+value.option_label)
                                                .prop("required",value.question_required));
                         }
-                    $('#pnl_questions').append("<br>");
-                    $('#pnl_questions').append("<br>");
+                    if(value.option_order == value.options_max_number){
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append("<br>");
+                    }
                     }
                 }
                 if(value.question_type=='CHECKBOX'){
@@ -1378,8 +1386,10 @@ function display_dynamic_form(offer_year_id){
                                                .append("&nbsp;&nbsp;"+value.option_label)
                                                .prop("required",value.question_required));
                         }
-                    $('#pnl_questions').append("<br>");
-                    $('#pnl_questions').append("<br>");
+                    if(value.option_order == value.options_max_number){
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append("<br>");
+                    }
                     }
                 }
                 if(value.question_type=='DROPDOWN_LIST'){
@@ -1426,8 +1436,10 @@ function display_dynamic_form(offer_year_id){
                                                                  .attr("value",value.option_id)
                                                                  .append(value.option_value));
                         }
-                    $('#pnl_questions').append("<br>");
-                    $('#pnl_questions').append("<br>");
+                    if(value.option_order == value.options_max_number){
+                        $('#pnl_questions').append("<br>");
+                        $('#pnl_questions').append("<br>");
+                    }
                     }
                 }
                 if(value.question_type=='HTTP_LINK'){
