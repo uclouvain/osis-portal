@@ -29,7 +29,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 class OptionAdmin(admin.ModelAdmin):
-    list_display = ('label', 'description')
+    list_display = ('label', 'description', 'question')
     fieldsets = ((None, {'fields': ('label', 'value', 'order', 'description', 'question')}),)
     list_filter = ('question',)
     raw_id_fields = ('question',)
