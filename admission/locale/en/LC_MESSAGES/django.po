@@ -51,7 +51,7 @@ msgid "add"
 msgstr "Add"
 
 msgid "add_enrollment_file"
-msgstr "Please add a copy of your certificate or a proof of your enrollment to "
+msgstr "Please add a copy of your certificate or a proof of your exam enrollment"
 
 msgid "add_file_children_deduction"
 msgstr "Veuillez joindre l'attestation officelle pour bénéficier de cette réduction"
@@ -933,7 +933,7 @@ msgid "question_culture_card"
 msgstr "Would you like to receive the culture card?"
 
 msgid "question_date_session"
-msgstr "Please mention if you have changed of orientation during your studies."
+msgstr "Date?"
 
 msgid "question_domain"
 msgstr "Domain, subdomain, and grade type corresponds to your studies"
@@ -1088,7 +1088,7 @@ msgid "specify_locality"
 msgstr "In case you could not find the locality in the list, please mention it below."
 
 msgid "specify_name"
-msgstr "To specify"
+msgstr "Other, please specify"
 
 msgid "specify_university_name"
 msgstr "In case you could not find your university in the list, please mention it below."
@@ -1456,3 +1456,6 @@ msgstr "European union"
 
 msgid "NON_EUROPEAN_UNION"
 msgstr "Non european union"
+
+msgid "no_result_yet"
+msgstr "No result yet"
