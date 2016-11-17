@@ -58,8 +58,9 @@ def dissertations(request):
 @login_required
 def dissertation_delete(request, pk):
     memory = get_object_or_404(dissertation.Dissertation, pk=pk)
-    memory.deactivate()
-    dissertation_update.add(request, memory, memory.status, justification="manager_set_active_false ")
+    if memory.author_is_logged_student(request):
+        memory.deactivate()
+        dissertation_update.add(request, memory, memory.status, justification="manager_set_active_false ")
     return redirect('dissertations')
 
 
@@ -172,23 +173,13 @@ def dissertation_edit(request, pk):
 @login_required
 def dissertation_history(request, pk):
     memory = get_object_or_404(dissertation.Dissertation, pk=pk)
-    dissertation_updates = dissertation_update.search_by_dissertation(memory)
-    return layout.render(request, 'dissertation_history.html',
-                         {'dissertation': memory,
-                          'dissertation_updates': dissertation_updates})
-
-
-@login_required
-def dissertation_jury_edit(request, pk):
-    role = get_object_or_404(dissertation_role.DissertationRole, pk=pk)
-    if request.method == "POST":
-        form = DissertationRoleForm(request.POST, instance=role)
-        if form.is_valid():
-            form.save()
-            return redirect('dissertation_detail', pk=role.dissertation.pk)
+    if memory.author_is_logged_student(request):
+        dissertation_updates = dissertation_update.search_by_dissertation(memory)
+        return layout.render(request, 'dissertation_history.html',
+                             {'dissertation': memory,
+                              'dissertation_updates': dissertation_updates})
     else:
-        form = DissertationRoleForm(instance=role)
-    return layout.render(request, 'dissertation_reader_edit.html', {'form': form})
+        return redirect('dissertations')
 
 
 @login_required
@@ -274,17 +265,20 @@ def dissertations_search(request):
 @login_required
 def dissertation_to_dir_submit(request, pk):
     memory = get_object_or_404(dissertation.Dissertation, pk=pk)
-    old_status = memory.status
-    new_status = dissertation.get_next_status(memory, "go_forward")
-    if request.method == "POST":
-        form = DissertationUpdateForm(request.POST)
-        if form.is_valid():
-            memory.go_forward()
-            data = form.cleaned_data
-            justification = data['justification']
-            dissertation_update.add(request, memory, old_status, justification=justification)
-            return redirect('dissertation_detail', pk=pk)
+    if memory.author_is_logged_student(request):
+        old_status = memory.status
+        new_status = dissertation.get_next_status(memory, "go_forward")
+        if request.method == "POST":
+            form = DissertationUpdateForm(request.POST)
+            if form.is_valid():
+                memory.go_forward()
+                data = form.cleaned_data
+                justification = data['justification']
+                dissertation_update.add(request, memory, old_status, justification=justification)
+                return redirect('dissertation_detail', pk=pk)
+        else:
+            form = DissertationUpdateForm()
+        return layout.render(request, 'dissertation_add_justification.html',
+                             {'form': form, 'dissertation': memory, "old_status": old_status, "new_status": new_status})
     else:
-        form = DissertationUpdateForm()
-    return layout.render(request, 'dissertation_add_justification.html',
-                         {'form': form, 'dissertation': memory, "old_status": old_status, "new_status": new_status})
+        return redirect('dissertations')
