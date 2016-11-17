@@ -951,7 +951,7 @@ msgid "question_culture_card"
 msgstr "Désirez-vous la carte culture?"
 
 msgid "question_date_session"
-msgstr "A quelle session (date)?"
+msgstr "A quelle date?"
 
 msgid "question_domain"
 msgstr "Le domaine, sous-domaine et type d'études correspondent à vos études"
