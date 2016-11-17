@@ -69,27 +69,22 @@ def dissertation_detail(request, pk):
     memory = get_object_or_404(dissertation.Dissertation, pk=pk)
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
-    off = memory.offer_year_start.offer
-    offer_pro = offer_proposition.search_by_offer(off)
-    offer_propositions = proposition_offer.search_by_proposition_dissertation(memory.proposition_dissertation)
-    count = dissertation.count_submit_by_user(student, off)
-    files = dissertation_document_file.find_by_dissertation(memory)
-    filename = ""
-    for file in files:
-        filename = file.document_file.file_name
-    if offer_pro.start_edit_title <= timezone.now().date() <= offer_pro.end_edit_title:
-        check_edit = True
-    else:
-        check_edit = False
-    if memory.author != student:
-        return redirect('dissertations')
-    else:
+
+    if memory.author_is_logged_student(request):
+        off = memory.offer_year_start.offer
+        offer_pro = offer_proposition.search_by_offer(off)
+        offer_propositions = proposition_offer.search_by_proposition_dissertation(memory.proposition_dissertation)
+        count = dissertation.count_submit_by_user(student, off)
+
+        files = dissertation_document_file.find_by_dissertation(memory)
+        filename = ""
+        for file in files:
+            filename = file.document_file.file_name
+
+        check_edit = offer_pro.start_edit_title <= timezone.now().date() <= offer_pro.end_edit_title
+
         if offer_pro.start_jury_visibility <= timezone.now().date() <= offer_pro.end_jury_visibility:
             jury_visibility = True
-            if offer_pro.student_can_manage_readers:
-                manage_readers = True
-            else:
-                manage_readers = False
             count_dissertation_role = dissertation_role.count_by_dissertation(memory)
             count_reader = dissertation_role.count_reader_by_dissertation(memory)
             count_proposition_role = proposition_role.count_by_dissertation(memory)
@@ -110,7 +105,7 @@ def dissertation_detail(request, pk):
                                   'dissertation': memory,
                                   'dissertation_roles': dissertation_roles,
                                   'jury_visibility': jury_visibility,
-                                  'manage_readers': manage_readers,
+                                  'manage_readers': offer_pro.student_can_manage_readers,
                                   'filename': filename,
                                   'offer_propositions': offer_propositions})
         else:
@@ -123,6 +118,8 @@ def dissertation_detail(request, pk):
                                   'student': student,
                                   'filename': filename,
                                   'offer_propositions': offer_propositions})
+    else:
+        return redirect('dissertations')
 
 
 @login_required
@@ -130,14 +127,11 @@ def dissertation_edit(request, pk):
     memory = get_object_or_404(dissertation.Dissertation, pk=pk)
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
-    offers = mdl.offer.find_by_student(student)
-    off = memory.offer_year_start.offer
-    offer_pro = offer_proposition.search_by_offer(off)
-    if offer_pro.start_edit_title <= timezone.now().date() <= offer_pro.end_edit_title:
-        check_edit = True
-    else:
-        check_edit = False
-    if memory.author == student:
+
+    if memory.author_is_logged_student(request):
+        offers = mdl.offer.find_by_student(student)
+        offer_pro = offer_proposition.search_by_offer(memory.offer_year_start.offer)
+
         if memory.status == 'DRAFT' or memory.status == 'DIR_KO':
             if request.method == "POST":
                 form = DissertationEditForm(request.POST, instance=memory)
@@ -155,7 +149,7 @@ def dissertation_edit(request, pk):
                                  {'form': form,
                                   'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
         else:
-            if check_edit:
+            if offer_pro.start_edit_title <= timezone.now().date() <= offer_pro.end_edit_title:
                 if request.method == "POST":
                     form = DissertationTitleForm(request.POST, instance=memory)
                     if form.is_valid():
@@ -185,9 +179,7 @@ def dissertation_history(request, pk):
 @login_required
 def dissertation_jury_new(request, pk):
     memory = get_object_or_404(dissertation.Dissertation, pk=pk)
-    person = mdl.person.find_by_user(request.user)
-    student = mdl.student.find_by_person(person)
-    if memory.author == student:
+    if memory.author_is_logged_student(request):
         count_dissertation_role = dissertation_role.count_by_dissertation(memory)
         count_reader = dissertation_role.count_reader_by_dissertation(memory)
         offer_pro = offer_proposition.search_by_offer(memory.offer_year_start.offer)
@@ -237,17 +229,15 @@ def dissertation_new(request):
 
 @login_required
 def dissertation_reader_delete(request, pk):
-    dissert_role = get_object_or_404(dissertation_role.DissertationRole, pk=pk)
-    dissert = dissert_role.dissertation
-    person = mdl.person.find_by_user(request.user)
-    student = mdl.student.find_by_person(person)
-    if dissert.author == student:
-        offer_pro = offer_proposition.search_by_offer(dissert.offer_year_start.offer)
-        if offer_pro.student_can_manage_readers and dissert.status == 'DRAFT':
-            justification = "%s %s" % ("delete_reader", str(dissert_role))
-            dissertation_update.add(request, dissert, dissert.status, justification=justification)
-            dissert_role.delete()
-        return redirect('dissertation_detail', pk=dissert.pk)
+    role = get_object_or_404(dissertation_role.DissertationRole, pk=pk)
+    memory = role.dissertation
+    if memory.author_is_logged_student(request):
+        offer_pro = offer_proposition.search_by_offer(memory.offer_year_start.offer)
+        if offer_pro.student_can_manage_readers and memory.status == 'DRAFT':
+            justification = "%s %s" % ("delete_reader", str(role))
+            dissertation_update.add(request, memory, memory.status, justification=justification)
+            role.delete()
+        return redirect('dissertation_detail', pk=memory.pk)
     else:
         return redirect('dissertations')
 
