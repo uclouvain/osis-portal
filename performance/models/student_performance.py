@@ -42,7 +42,7 @@ class StudentPerformance(SerializableModel):
     student = models.ForeignKey('base.Student')
     offer_year = models.ForeignKey('base.OfferYear')
     data = JSONField()
-    update_date = models.DateField()
+    update_date = models.DateTimeField()
     creation_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -91,7 +91,7 @@ def find_or_fetch(student, offer_year):
 
 
 def has_expired(student_performance):
-    today = datetime.date.today()
+    today = datetime.datetime.now()
     expiration_date = student_performance.update_date
     return expiration_date < today
 

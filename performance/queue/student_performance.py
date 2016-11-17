@@ -24,9 +24,10 @@
 #
 ##############################################################################
 import json
-from osis_common.queue.queue_listener import DocumentClient
+from frontoffice.queue.queue_listener import PerformanceClient
 import datetime
 
+UPDATE_DELTA = 12
 
 def callback(json_data):
     try:
@@ -56,7 +57,11 @@ def extract_offer_year_from_json(json_data):
 
 
 def generate_message(student, offer_year):
-    return str(student) + "_" + str(offer_year)
+    message = {}
+    message['noma'] = student.global_id
+    message["sigle"] = offer_year.acronym
+    message["anac"] = str(offer_year.academic_year.year)
+    return str(message)
 
 
 def fetch_and_save(student, offer_year):
@@ -69,7 +74,7 @@ def fetch_and_save(student, offer_year):
 
 def fetch_json_data(student, offer_year):
     message = generate_message(student, offer_year)
-    client = DocumentClient()
+    client = PerformanceClient()
     json_data = client.call(message)
     json_student_perf = None
     if json_data:
@@ -78,9 +83,9 @@ def fetch_json_data(student, offer_year):
 
 
 def get_expiration_date():
-    today = datetime.date.today()
-    timedelta = datetime.timedelta(days=2)
-    expiration_date = today + timedelta
+    now = datetime.datetime.now()
+    timedelta = datetime.timedelta(hours=UPDATE_DELTA)
+    expiration_date = now + timedelta
     return expiration_date
 
 
