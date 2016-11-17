@@ -216,3 +216,6 @@ msgstr "Invalid date"
 
 msgid "question_need_to_save"
 msgstr "Sure?  Don't you need to save some data?"
+
+msgid "invalid_postal_code"
+msgstr "Invalid postal code"

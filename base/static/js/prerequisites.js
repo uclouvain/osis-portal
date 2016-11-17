@@ -321,15 +321,12 @@ function populate_secondary_institution(city_name, postal_code){
             }
             $("<option></option>").attr("value","-").append("-").appendTo("#slt_schools");
             $("<option></option>").attr("value","-").append("-").appendTo("#slt_schools_community");
-            $('#pnl_teaching_type').css('visibility', 'hidden').css('display','none');
 
             $.each(data, function(key, value) {
                 if(value.id == institution_id || option_selected){
                     $("<option></option>").attr("value",value.id).prop('selected', true).append(value.name).appendTo("#slt_schools");
                     $("<option></option>").attr("value",value.national_community).prop('selected', true).append(value.national_community).appendTo("#slt_schools_community");
-                    if(value.national_community=='FRENCH'){
-                        $('#pnl_teaching_type').css('visibility', 'visible').css('display','block');
-                    }
+
                 }else{
                     $("<option></option>").attr("value",value.id).append(value.name).appendTo("#slt_schools");
                     $("<option></option>").attr("value",value.national_community).append(value.national_community).appendTo("#slt_schools_community");
@@ -1009,11 +1006,6 @@ function enabled_other_language(){
 
 $("#slt_schools").change(function(event) {
     $('#slt_schools_community').prop("selectedIndex",$('#slt_schools').prop("selectedIndex"));
-    if($('#slt_schools_community').val()=='FRENCH'){
-        $('#pnl_teaching_type').css('visibility', 'visible').css('display','block');
-    }else{
-        $('#pnl_teaching_type').css('visibility', 'hidden').css('display','none');
-    }
     if($(this).prop('selectedIndex') >= 0 ){
         $('#national_diploma_school_error').html('');
     }
@@ -1089,3 +1081,17 @@ $("#bt_load_doc_PROFESSIONAL_EXAM_CERTIFICATE" ).click(function() {
 $("button[id^='bt_load_doc_HIGH_SCHOOL_SCORES_TRANSCRIPT_']" ).click(function() {
     $('#high_school_diploma_doc_error').html('');
 });
+
+$("#txt_CESS_other_school_postal_code").blur(function() {
+    display_postal_code_msg_error($("#txt_CESS_other_school_postal_code").val(), "#msg_error_txt_postal_code");
+});
+
+function display_postal_code_msg_error(value, id_msg_field){
+    $(id_msg_field).find("label").remove();
+
+    if (/[^a-zA-Z]/.test(value)){
+        $(id_msg_field).find("label").remove();
+    }else{
+        $(id_msg_field).append("<label>"+gettext('invalid_postal_code')+"</label>");
+    }
+}

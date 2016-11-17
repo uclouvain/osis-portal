@@ -933,7 +933,7 @@ msgid "question_culture_card"
 msgstr "Would you like to receive the culture card?"
 
 msgid "question_date_session"
-msgstr "Please mention if you have changed of orientation during your studies."
+msgstr "Date?"
 
 msgid "question_domain"
 msgstr "Domain, subdomain, and grade type corresponds to your studies"
