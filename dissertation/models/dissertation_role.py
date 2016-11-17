@@ -31,6 +31,7 @@ from django.utils.translation import ugettext_lazy as _
 
 class DissertationRoleAdmin(admin.ModelAdmin):
     list_display = ('adviser', 'status', 'dissertation', 'author', 'dissertation_status')
+    raw_id_fields = ('adviser', 'dissertation')
 
 
 class DissertationRole(SerializableModel):

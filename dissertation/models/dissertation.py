@@ -36,8 +36,8 @@ from dissertation.utils.emails_dissert import send_mail_to_teacher_new_dissert
 
 class DissertationAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'status', 'active', 'proposition_dissertation', 'modification_date')
-    raw_id_fields = ('author', 'offer_year_start')
-
+    raw_id_fields = ('author', 'offer_year_start', 'proposition_dissertation', 'location')
+    search_fields = ('title', )
 
 STATUS_CHOICES = (
     ('DRAFT', _('draft')),
