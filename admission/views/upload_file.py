@@ -61,7 +61,7 @@ def upload_file_description(request):
         application_id = None
     applicant = mdl.applicant.find_by_user(request.user)
     if description:
-        documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
+        documents = [app_doc_file.document_file for app_doc_file in mdl.applicant_document_file.find_by_applicant_and_description(applicant, description)]
     else:
         documents = mdl.applicant_document_file.find_document_by_applicant(applicant)
     document_files = []
@@ -163,10 +163,10 @@ class DocumentFileSerializer(serializers.ModelSerializer):
 def find_by_description(request):
     description = request.GET['description']
     applicant = mdl.applicant.find_by_user(request.user)
-    document = mdl.applicant_document_file.find_last_document_by_applicant_and_description(applicant, description)
+    app_doc_file = mdl.applicant_document_file.find_last_by_applicant_and_description(applicant, description)
     last_documents = []
-    if document:
-        last_documents = [document]
+    if app_doc_file:
+        last_documents = [app_doc_file.document_file]
 
     serializer = DocumentFileSerializer(last_documents, many=True)
     return JSONResponse(serializer.data)
@@ -234,9 +234,8 @@ def delete_document_file(request):
         description = request.POST.get('description')
         if description:
             applicant = mdl.applicant.find_by_user(request.user)
-            document = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
-            if document:
-                document.document_file.delete()
+            app_doc_files = mdl.applicant_document_file.find_by_applicant_and_description(applicant, description)
+            [app_doc_file.document_file.delete() for app_doc_file in app_doc_files]
     return HttpResponse('')
 
 
@@ -270,18 +269,13 @@ def create_document_file(description, request):
 
 def delete_existing_applicant_documents(applicant, description):
     # Delete older file with the same description
-    applicant_documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
-    for document in applicant_documents:
-        document.document_file.delete()
+    applicant_document_files = mdl.applicant_document_file.find_by_applicant_and_description(applicant, description)
+    [applicant_document_file.document_file.delete() for applicant_document_file in applicant_document_files]
 
 
 def delete_existing_application_documents(application, description):
-    documents = mdl.application_document_file.search(application, description)
-    for document in documents:
-        document_applicant = mdl.applicant_document_file.find_applicant_by_document(document.document_file)
-        if document_applicant:
-            document_applicant.delete()
-        document.delete()
+    application_document_files = mdl.application_document_file.search(application, description)
+    [application_document_file.document_file.delete() for application_document_file in application_document_files]
 
 
 def get_prerequis_document_types():
