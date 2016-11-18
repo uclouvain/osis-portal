@@ -293,12 +293,12 @@ def documents_update(request, secondary_education, application, professional_exa
 def delete_documents(request, application, list_unwanted_files):
     applicant = mdl.applicant.find_by_user(request.user)
     for file_description in list_unwanted_files:
-        documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, file_description)
-        for document in documents:
+        applicant_doc_files = mdl.applicant_document_file.find_by_applicant_and_description(applicant, file_description)
+        for applicant_doc_file in applicant_doc_files:
             documents_application = mdl.application_document_file.search(application, file_description)
             for doc_application in documents_application:
                 doc_application.delete()
-            document.document_file.delete()
+            applicant_doc_file.document_file.delete()
 
 
 def get_secondary_education_files(application):
