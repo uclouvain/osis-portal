@@ -554,12 +554,6 @@
         $('#txt_file').val('');
     }
 
-    $("#txt_file").on("change", function(){
-       var file = this.files[0];
-       fileName = file.name;
-       $("#hdn_filename").val(fileName);
-    });
-
     $('[id^="bt_load_doc_"]').click(function(event) {
         var target = $(event.target);
         var id = target.attr("id");
