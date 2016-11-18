@@ -1462,6 +1462,9 @@ function display_dynamic_form(offer_year_id){
                                                .attr("id","slt_question_"+value.question_id)
                                                .prop("required",value.question_required)
                                                .append($("<option></option")
+                                               .attr("value", 0)
+                                               .append(""))
+                                               .append($("<option></option")
                                                .attr('selected', 'selected')
                                                .attr("value",value.option_id)
                                                .append(value.option_value)));
@@ -1471,6 +1474,9 @@ function display_dynamic_form(offer_year_id){
                                                .attr("name","slt_question_"+value.question_id)
                                                .attr("id","slt_question_"+value.question_id)
                                                .prop("required",value.question_required)
+                                               .append($("<option></option")
+                                               .attr("value", 0)
+                                               .append(""))
                                                .append($("<option></option")
                                                .attr("value",value.option_id)
                                                .append(value.option_value)));

@@ -283,12 +283,13 @@ def create_answers(application, request):
                 answer.value = option.value
                 answer.save()
         if "slt_question_" in key:
-            answer = mdl.answer.Answer()
-            answer.application = application
-            option = mdl.option.find_by_id(value)
-            answer.option = option
-            answer.value = option.value
-            answer.save()
+            if value != "0":
+                answer = mdl.answer.Answer()
+                answer.application = application
+                option = mdl.option.find_by_id(value)
+                answer.option = option
+                answer.value = option.value
+                answer.save()
 
 
 def delete_application_assimilation_criteria(application):
