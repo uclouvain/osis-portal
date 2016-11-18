@@ -32,6 +32,7 @@ from base.models import student, offer_year
 from . import dissertation_location, proposition_dissertation
 from dissertation.models.dissertation_role import get_promoteur_by_dissertation
 from dissertation.utils.emails_dissert import send_mail_to_teacher_new_dissert
+from base import models as mdl
 
 
 class DissertationAdmin(admin.ModelAdmin):
@@ -104,6 +105,11 @@ class Dissertation(SerializableModel):
     def refuse(self):
         next_status = get_next_status(self, "refuse")
         self.set_status(next_status)
+
+    def author_is_logged_student(self, request):
+        logged_person = mdl.person.find_by_user(request.user)
+        logged_student = mdl.student.find_by_person(logged_person)
+        return logged_student == self.author
 
 
 def count_by_proposition(subject):
