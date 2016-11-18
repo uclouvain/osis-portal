@@ -25,9 +25,6 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
-{% block style %}
-<link rel="stylesheet" href="{% static 'css/bootstrap-datepicker3.min.css' %}" type='text/css'>
-{% endblock %}
 {% block content %}
     <h2>{{ request.user.first_name }} {{ request.user.last_name }}</h2>
     <span>
@@ -1055,6 +1052,11 @@
         set_following_tab(SOCIOLOGICAL_SURVEY_TAB );
         return true;
     });
+    $("#txt_local_language_exam_date").datepicker({
 
+        format: "dd/mm/yyyy",
+        autoclose: true,
+        orientation: "bottom auto"
+    });
     </script>
 {% endblock %}

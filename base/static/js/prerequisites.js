@@ -198,6 +198,7 @@ $('document').ready(function(){
             }
             //local language exam
             if($('#hdn_local_language_exam_needed').val() == 'True'){
+                alert('if');
                 $('#pnl_local_exam').css('visibility', 'visible').css('display','block');
                 if($('#hdn_secondary_education_local_language_exam').val() == 'True'){
                     $('#rdb_local_language_exam_true').prop( "checked", true);
@@ -223,6 +224,8 @@ $('document').ready(function(){
                     $('#rdb_local_language_exam_false').prop( "checked", true);
                 }
 
+            }else{
+                alert('elsef');
             }
             //admission_exam
             if( $('#hdn_secondary_education_admission_exam_result').val() == 'LOW'){

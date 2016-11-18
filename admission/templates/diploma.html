@@ -163,7 +163,7 @@
            id="hdn_application_id"
            name="application_id"
            value="{{application.id| default_if_none:''}}" >
-    <input type="hidden"
+    <input type="text"
            id="hdn_local_language_exam_needed"
            value="{{local_language_exam_needed}}" >
     <input type="hidden"
@@ -487,5 +487,6 @@
         update_upload_btn_class('',description);
         return true;
     }
+
 
     </script>
