@@ -38,7 +38,8 @@
                            id="txt_admission_exam_date"
                            name="admission_exam_date"
                            value="{{admission_exam.exam_date | default_if_none:''|date:"j/m/Y"}}"
-                           maxlength="10">
+                           maxlength="10"
+                           type="date">
                     <p class="caption">(format : {% trans 'format_date'%})</p>
                     <span class="error" id="msg_error_txt_admission_exam_date"></span>
                     {%if validation_messages and validation_messages|get_item:'admission_exam_date'%}

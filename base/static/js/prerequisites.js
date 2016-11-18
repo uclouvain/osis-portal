@@ -928,7 +928,6 @@ $("#rdb_local").click(function(event) {
 });
 
 function display_date_msg_error(value, id_msg_field){
-
     $(id_msg_field).find("label").remove();
     if (isDate(value)){
         $(id_msg_field).find("label").remove();
@@ -939,10 +938,6 @@ function display_date_msg_error(value, id_msg_field){
 
 $("#txt_professional_exam_date").blur(function() {
     display_date_msg_error($("#txt_professional_exam_date").val(), "#msg_error_txt_professional_exam_date");
-});
-
-$("#txt_admission_exam_date").blur(function() {
-    display_date_msg_error($("#txt_admission_exam_date").val(), "#msg_error_txt_admission_exam_date");
 });
 
 $("#txt_local_language_exam_date").blur(function() {
@@ -1068,4 +1063,3 @@ $("#bt_load_doc_PROFESSIONAL_EXAM_CERTIFICATE" ).click(function() {
 $("button[id^='bt_load_doc_HIGH_SCHOOL_SCORES_TRANSCRIPT_']" ).click(function() {
     $('#high_school_diploma_doc_error').html('');
 });
-
