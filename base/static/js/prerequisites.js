@@ -78,6 +78,7 @@ $('document').ready(function(){
         $('#rdb_foreign_result_low').prop( "checked", false);
         $('#rdb_foreign_result_middle').prop( "checked", false);
         $('#rdb_foreign_result_high').prop( "checked", false);
+        $('#rdb_foreign_no_result').prop( "checked", false);
         $('#pnl_translation').css('visibility', 'hidden').css('display','none');
         //profressional
         $('#rdb_professional_experience_true').prop( "checked", false);
@@ -582,6 +583,9 @@ function display_foreign_secondary(){
     if( $('#hdn_secondary_education_result').val()=="HIGH"){
         $('#rdb_foreign_result_high').prop( "checked", true);
     }
+    if( $('#hdn_secondary_education_result').val()=="NO_RESULT"){
+        $('#rdb_foreign_no_result').prop( "checked", true);
+    }
 }
 
 function national_community_display(){
@@ -1006,13 +1010,11 @@ $("select[id^='slt_language_diploma_recognized']" ).change(function(event) {
 });
 
 function disabled_other_language(){
-    document.getElementById('slt_country').disabled=false;
     document.getElementById('pnl_translation').style="visibility:hidden;display:none;";
 }
 
 function enabled_other_language(){
     document.getElementById('slt_country').selectedIndex = 0;
-    document.getElementById('slt_country').disabled=true;
     document.getElementById('pnl_translation').style="visibility:visible;display:block;";
 
 }
