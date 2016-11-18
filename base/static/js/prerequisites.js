@@ -107,6 +107,7 @@ $('document').ready(function(){
         $('#rdb_admission_exam_result_low').prop( "checked", false);
         $('#rdb_admission_exam_result_middle').prop( "checked", false);
         $('#rdb_admission_exam_result_high').prop( "checked", false);
+        $('#rdb_admission_exam_no_result').prop( "checked", false);
 
         if ($('#hdn_person_registration_id').val()){
         }else{
@@ -170,6 +171,9 @@ $('document').ready(function(){
                 if($('#hdn_secondary_education_admission_exam_type_name').val()=="HIGH"){
                     $('#rdb_admission_exam_result_high').prop( "checked", true);
                 }
+                if($('#hdn_secondary_education_admission_exam_type_name').val()=="NO_RESULT"){
+                    $('#rdb_admission_exam_no_result').prop( "checked", true);
+                }
             }
             //profession
             if($('#hdn_secondary_professional_exam_id').val() == ''){
@@ -231,6 +235,9 @@ $('document').ready(function(){
 
             if( $('#hdn_secondary_education_admission_exam_result').val() == 'HIGH'){
                 $('#rdb_admission_exam_result_high').prop( "checked", true);
+            }
+            if( $('#hdn_secondary_education_admission_exam_result').val() == 'NO_RESULT'){
+                $('#rdb_admission_exam_no_result').prop( "checked", true);
             }
         }
     }
@@ -643,6 +650,9 @@ function populate_exam_admin(){
     }
     if($('#hdn_secondary_education_admission_exam_type_name').val()=="HIGH"){
         $('#rdb_admission_exam_result_high').prop( "checked", true);
+    }
+    if($('#hdn_secondary_education_admission_exam_type_name').val()=="NO_RESULT"){
+        $('#rdb_admission_exam_no_result').prop( "checked", true);
     }
 }
 
