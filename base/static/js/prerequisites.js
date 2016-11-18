@@ -666,6 +666,7 @@ $("#rdb_professional_experience_false").click(function() {
     $('#rdb_professional_exam_result_result_low').prop( "disabled", false);
     $('#rdb_professional_exam_result_middle').prop( "disabled", false);
     $('#rdb_professional_exam_result_high').prop( "disabled", false);
+    $('#rdb_professional_exam_no_result').prop( "disabled", false);
     delete_document('PROFESSIONAL_EXAM_CERTIFICATE');
 });
 
