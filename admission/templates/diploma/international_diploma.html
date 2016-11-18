@@ -194,7 +194,10 @@
                                   id="spn_bt_load_doc_INTERNATIONAL_DIPLOMA_RECTO"></span> {% trans 'high_school_diploma'%} - {% trans 'recto'%}
                         </button>
                     {%endif%}
-                    {%if validation_messages and validation_messages|get_item:'international_diploma_file'%}<br><span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'international_diploma_file'}}</span>{% endif %}
+                    {%if validation_messages and validation_messages|get_item:'international_diploma_file'%}
+                        <br>
+                        <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'international_diploma_file'}}</span>
+                    {% endif %}
                 </div>
                 <div class="col-md-6">
                     {% if international_diploma_verso%}
@@ -238,7 +241,10 @@
                                   id="spn_bt_load_doc_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO"></span> {% trans 'high_school_diploma_transcript'%} - {% trans 'recto'%}
                         </button>
                     {%endif%}
-                    {%if validation_messages and validation_messages|get_item:'high_school_scores_transcript'%}<br><span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'high_school_scores_transcript'}}</span>{% endif %}
+                    {%if validation_messages and validation_messages|get_item:'high_school_scores_transcript'%}
+                        <br>
+                        <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'high_school_scores_transcript'}}</span>
+                    {% endif %}
                 </div>
                 <div class="col-md-6">
                     {%if high_school_scores_transcript_verso%}
@@ -283,6 +289,10 @@
                                               id="spn_bt_load_doc_TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO"></span> {% trans 'high_school_diploma'%} - {% trans 'recto'%}
                             </button>
                         {%endif%}
+                        {%if validation_messages and validation_messages|get_item:'translated_international_diploma'%}
+                            <br>
+                            <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'translated_international_diploma'}}</span>
+                        {% endif %}
                     </div>
                     <div class="col-md-6">
                         {%if translated_international_diploma_verso%}
@@ -324,6 +334,10 @@
                                           id="spn_bt_load_doc_TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO"></span> {% trans 'high_school_diploma_transcript'%} - {% trans 'recto'%}
                             </button>
                         {%endif%}
+                        {%if validation_messages and validation_messages|get_item:'translated_high_school_scores_transcript'%}
+                            <br>
+                            <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'translated_high_school_scores_transcript'}}</span>
+                        {% endif %}
                     </div>
                     <div class="col-md-6">
                         {%if translated_high_school_scores_transcript_verso%}

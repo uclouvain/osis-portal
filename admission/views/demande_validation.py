@@ -160,8 +160,28 @@ def validate_prerequisites_data(application, secondary_education, validation_mes
                     if secondary_education.result is None:
                         validation_messages['foreign_result'] = ALERT_MANDATORY_FIELD
 
-                    validation_messages.update(validate_needed_docs_list(application, [document_type.INTERNATIONAL_DIPLOMA_RECTO, document_type.INTERNATIONAL_DIPLOMA_RECTO], 'international_diploma_file'))
-                    validation_messages.update(validate_needed_docs_list(application, [document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO, document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO], 'high_school_scores_transcript'))
+                    validation_messages.update(validate_needed_docs_list(application,
+                                                                         [document_type.INTERNATIONAL_DIPLOMA_RECTO,
+                                                                          document_type.INTERNATIONAL_DIPLOMA_VERSO],
+                                                                         'international_diploma_file'))
+                    validation_messages.update(
+                        validate_needed_docs_list(application,
+                                                  [document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
+                                                   document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO],
+                                                  'high_school_scores_transcript'))
+                    if secondary_education.international_diploma_language \
+                            and secondary_education.international_diploma_language.recognized is False:
+
+                            validation_messages.update(
+                                validate_needed_docs_list(application,
+                                                          [document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO,
+                                                           document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO],
+                                                          'translated_international_diploma'))
+                            validation_messages.update(
+                                validate_needed_docs_list(application,
+                                                          [document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
+                                                           document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO],
+                                                          'translated_high_school_scores_transcript'))
         validation_messages.update(validate_professional_exam(professional_exam, application))
         validation_messages.update(validate_admission_exam(admission_exam, application))
         validation_messages.update(validate_local_language_exam(local_language_exam))

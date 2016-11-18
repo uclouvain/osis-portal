@@ -251,13 +251,14 @@ def get_other_education_institution(request):
             return None
 
 
-def secondary_education_exam_update(secondary_education, type, secondary_education_exam):
+def secondary_education_exam_update(secondary_education, secondary_education_exam_type, secondary_education_exam):
     if secondary_education_exam:
         secondary_education_exam.save()
     else:
         # Delete if it exists
         if secondary_education:
-            secondary_education_exam = mdl.secondary_education_exam.find_by_type(secondary_education, type)
+            secondary_education_exam = mdl.secondary_education_exam.find_by_type(secondary_education,
+                                                                                 secondary_education_exam_type)
             if secondary_education_exam:
                 secondary_education_exam.delete()
 
@@ -270,7 +271,7 @@ def documents_update(request, secondary_education, application, professional_exa
         list_unwanted_files.append(document_type.NATIONAL_DIPLOMA_VERSO)
         list_unwanted_files.append(document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
         list_unwanted_files.append(document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO)
-    if not secondary_education.international_diploma:
+    if secondary_education.diploma and secondary_education.national:
         list_unwanted_files.append(document_type.INTERNATIONAL_DIPLOMA_RECTO)
         list_unwanted_files.append(document_type.INTERNATIONAL_DIPLOMA_VERSO)
     if secondary_education.international_diploma is None \
