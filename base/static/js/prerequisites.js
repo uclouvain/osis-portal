@@ -1056,28 +1056,3 @@ $("button[id^='bt_load_doc_HIGH_SCHOOL_SCORES_TRANSCRIPT_']" ).click(function() 
     $('#high_school_diploma_doc_error').html('');
 });
 
-$("#txt_CESS_other_school_postal_code").blur(function() {
-    display_postal_code_msg_error($("#txt_CESS_other_school_postal_code").val(), "#msg_error_txt_postal_code");
-});
-
-function display_postal_code_msg_error(value, id_msg_field){
-    $(id_msg_field).find("label").remove();
-
-    if ( is_matching_belgian_postal_code( value) ) {
-        $(id_msg_field).find("label").remove();
-    }else{
-        $(id_msg_field).append("<label>"+gettext('invalid_postal_code')+"</label>");
-
-    }
-}
-
-function is_matching_belgian_postal_code(str){
-    if (/[^a-zA-Z]/.test(str)) {
-    }else{
-        return false;
-    }
-    if(str.length > 8){
-        return false;
-    }
-    return true;
-}

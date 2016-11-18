@@ -213,6 +213,3 @@ msgstr "Date invalide"
 
 msgid "question_need_to_save"
 msgstr "Sûr?  Vous n'avez pas besoin de sauvegarder vos données?"
-
-msgid "invalid_postal_code"
-msgstr "Code postal invalide"
