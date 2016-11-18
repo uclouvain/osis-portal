@@ -42,7 +42,6 @@
                            name="professional_exam_date"
                            type="date"
                            maxlength="10">
-                    <span class="error" id="msg_error_txt_professional_exam_date"></span>
                      {%if validation_messages and validation_messages|get_item:'professional_exam_date'%}
                         <br>
                         <span class="error" role="alert" style="margin-left:5px;" id="professional_exam_date_error">{{ validation_messages|get_item:'professional_exam_date'}}</span>

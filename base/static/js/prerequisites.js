@@ -936,14 +936,6 @@ function display_date_msg_error(value, id_msg_field){
     }
 }
 
-$("#txt_professional_exam_date").blur(function() {
-    display_date_msg_error($("#txt_professional_exam_date").val(), "#msg_error_txt_professional_exam_date");
-});
-
-$("#txt_local_language_exam_date").blur(function() {
-    display_date_msg_error($("#txt_local_language_exam_date").val(), "#msg_error_local_language_exam_date");
-});
-
 function reset_rdb_local_community(status){
     $('#rdb_local_community_french').prop( "checked", status);
     $('#rdb_local_community_dutch').prop( "checked", status);
@@ -1045,9 +1037,6 @@ $("button[id^='bt_load_doc_NATIONAL_DIPLOMA_']" ).click(function() {
     $('#national_diploma_national_diploma_doc_error').html('');
 });
 
-$( "#txt_professional_exam_date").blur(function() {
-    $('#professional_exam_date_error').html('');
-});
 
 $( "#txt_professional_exam_institution").blur(function() {
     $('#professional_exam_institution_error').html('');
