@@ -1288,8 +1288,15 @@ function display_dynamic_form(offer_year_id){
                                                .attr("value",value.option_id)
                                                .attr("name","txt_answer_radio_"+value.question_id)
                                                .attr("id","txt_answer_radio_"+value.option_id))
-                                               .append("&nbsp;&nbsp;"+value.option_label)
+                                               .append("&nbsp;&nbsp;"+value.option_value)
                                                .prop("required",value.question_required));
+                            if(value.option_description != ""){
+                                $('#pnl_questions').append("<br>");
+                                $('#pnl_questions').append($("<label></label>")
+                                                   .append(value.option_description)
+                                                   .attr("id","lbl_option_description_"+value.option_id)
+                                                   .attr("class","description"));
+                            }
                         }else{
                             $('#pnl_questions').append($("<label></label>")
                                                .append($("<input>")
@@ -1297,8 +1304,15 @@ function display_dynamic_form(offer_year_id){
                                                .attr("value",value.option_id)
                                                .attr("name","txt_answer_radio_"+value.question_id)
                                                .attr("id","txt_answer_radio_"+value.option_id))
-                                               .append("&nbsp;&nbsp;"+value.option_label)
+                                               .append("&nbsp;&nbsp;"+value.option_value)
                                                .prop("required",value.question_required));
+                            if(value.option_description != ""){
+                                $('#pnl_questions').append("<br>");
+                                $('#pnl_questions').append($("<label></label>")
+                                                   .append(value.option_description)
+                                                   .attr("id","lbl_option_description_"+value.option_id)
+                                                   .attr("class","description"));
+                            }
                         }
                     }else{
                         if(value.option_value == value.answer){
@@ -1310,8 +1324,15 @@ function display_dynamic_form(offer_year_id){
                                                .attr("value",value.option_id)
                                                .attr("name","txt_answer_radio_"+value.question_id)
                                                .attr("id","txt_answer_radio_"+value.option_id))
-                                               .append("&nbsp;&nbsp;"+value.option_label)
+                                               .append("&nbsp;&nbsp;"+value.option_value)
                                                .prop("required",value.question_required));
+                            if(value.option_description != ""){
+                                $('#pnl_questions').append("<br>");
+                                $('#pnl_questions').append($("<label></label>")
+                                                   .append(value.option_description)
+                                                   .attr("id","lbl_option_description_"+value.option_id)
+                                                   .attr("class","description"));
+                            }
                         }else{
                             $('#pnl_questions').append("<br>");
                             $('#pnl_questions').append($("<label></label>")
@@ -1320,8 +1341,15 @@ function display_dynamic_form(offer_year_id){
                                                .attr("value",value.option_id)
                                                .attr("name","txt_answer_radio_"+value.question_id)
                                                .attr("id","txt_answer_radio_"+value.option_id))
-                                               .append("&nbsp;&nbsp;"+value.option_label)
+                                               .append("&nbsp;&nbsp;"+value.option_value)
                                                .prop("required",value.question_required));
+                            if(value.option_description != ""){
+                                $('#pnl_questions').append("<br>");
+                                $('#pnl_questions').append($("<label></label>")
+                                                   .append(value.option_description)
+                                                   .attr("id","lbl_option_description_"+value.option_id)
+                                                   .attr("class","description"));
+                            }
                         }
                     }
                     if(value.option_order == value.options_max_number){
@@ -1348,16 +1376,30 @@ function display_dynamic_form(offer_year_id){
                                                .attr("type","checkbox")
                                                .attr("name","txt_answer_checkbox_"+value.option_id)
                                                .attr("id","txt_answer_checkbox_"+value.option_id))
-                                               .append("&nbsp;&nbsp;"+value.option_label)
+                                               .append("&nbsp;&nbsp;"+value.option_value)
                                                .prop("required",value.question_required));
+                            if(value.option_description != ""){
+                                $('#pnl_questions').append("<br>");
+                                $('#pnl_questions').append($("<label></label>")
+                                                   .append(value.option_description)
+                                                   .attr("id","lbl_option_description_"+value.option_id)
+                                                   .attr("class","description"));
+                            }
                         }else{
                             $('#pnl_questions').append($("<label></label>")
                                                .append($("<input>")
                                                .attr("type","checkbox")
                                                .attr("name","txt_answer_checkbox_"+value.option_id)
                                                .attr("id","txt_answer_checkbox_"+value.option_id))
-                                               .append("&nbsp;&nbsp;"+value.option_label)
+                                               .append("&nbsp;&nbsp;"+value.option_value)
                                                .prop("required",value.question_required));
+                            if(value.option_description != ""){
+                                $('#pnl_questions').append("<br>");
+                                $('#pnl_questions').append($("<label></label>")
+                                                   .append(value.option_description)
+                                                   .attr("id","lbl_option_description_"+value.option_id)
+                                                   .attr("class","description"));
+                            }
                         }
                     }else{
                         if(value.option_value == value.answer){
@@ -1368,8 +1410,15 @@ function display_dynamic_form(offer_year_id){
                                                .attr("type","checkbox")
                                                .attr("name","txt_answer_checkbox_"+value.option_id)
                                                .attr("id","txt_answer_checkbox_"+value.option_id))
-                                               .append("&nbsp;&nbsp;"+value.option_label)
+                                               .append("&nbsp;&nbsp;"+value.option_value)
                                                .prop("required",value.question_required));
+                            if(value.option_description != ""){
+                                $('#pnl_questions').append("<br>");
+                                $('#pnl_questions').append($("<label></label>")
+                                                   .append(value.option_description)
+                                                   .attr("id","lbl_option_description_"+value.option_id)
+                                                   .attr("class","description"));
+                            }
                         }else{
                             $('#pnl_questions').append("<br>");
                             $('#pnl_questions').append($("<label></label>")
@@ -1377,8 +1426,15 @@ function display_dynamic_form(offer_year_id){
                                                .attr("type","checkbox")
                                                .attr("name","txt_answer_checkbox_"+value.option_id)
                                                .attr("id","txt_answer_checkbox_"+value.option_id))
-                                               .append("&nbsp;&nbsp;"+value.option_label)
+                                               .append("&nbsp;&nbsp;"+value.option_value)
                                                .prop("required",value.question_required));
+                            if(value.option_description != ""){
+                                $('#pnl_questions').append("<br>");
+                                $('#pnl_questions').append($("<label></label>")
+                                                   .append(value.option_description)
+                                                   .attr("id","lbl_option_description_"+value.option_id)
+                                                   .attr("class","description"));
+                            }
                         }
                     if(value.option_order == value.options_max_number){
                         $('#pnl_questions').append("<br>");
