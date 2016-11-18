@@ -1329,10 +1329,10 @@ function display_dynamic_form(offer_year_id){
                                                .append("&nbsp;&nbsp;"+value.option_label)
                                                .prop("required",value.question_required));
                         }
+                    }
                     if(value.option_order == value.options_max_number){
                         $('#pnl_questions').append("<br>");
                         $('#pnl_questions').append("<br>");
-                    }
                     }
                 }
                 if(value.question_type=='CHECKBOX'){
@@ -1436,10 +1436,10 @@ function display_dynamic_form(offer_year_id){
                                                                  .attr("value",value.option_id)
                                                                  .append(value.option_value));
                         }
+                    }
                     if(value.option_order == value.options_max_number){
                         $('#pnl_questions').append("<br>");
                         $('#pnl_questions').append("<br>");
-                    }
                     }
                 }
                 if(value.question_type=='HTTP_LINK'){
