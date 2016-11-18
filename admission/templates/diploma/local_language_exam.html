@@ -39,7 +39,8 @@
                 <input class="form-control"
                        id="txt_local_language_exam_date"
                        name="local_language_exam_date"
-                       value="{{local_language_exam.exam_date | default_if_none:''|date:"j/m/Y"}}">
+                       value="{{local_language_exam.exam_date | default_if_none:''|date:"j/m/Y"}}"
+                       maxlength="10" >
                 <br>
                 <span class="error" id="msg_error_local_language_exam_date"></span>
                 {%if validation_messages and validation_messages|get_item:'local_language_exam_date'%}
@@ -53,7 +54,8 @@
                     <input class="form-control"
                            id="txt_local_language_exam_institution"
                            name="local_language_exam_institution"
-                           value="{{ local_language_exam.institution | default_if_none:'' }}">
+                           value="{{ local_language_exam.institution | default_if_none:'' }}"
+                           maxlength="100" >
                     <br>
                 </div>
                 {%if validation_messages and validation_messages|get_item:'local_language_exam_institution'%}

@@ -238,7 +238,7 @@ def get_other_education_institution(request):
         .find_by_name_city_postal_code(request.POST.get('CESS_other_school_name'),
                                        request.POST.get('CESS_other_school_city'),
                                        request.POST.get('CESS_other_school_postal_code'),
-                                       request.POST.get('school_local_community'))
+                                       request.POST.get('local_community'))
 
     if existing_institution:
         return existing_institution
@@ -420,7 +420,7 @@ def create_new_education_instit(request):
     new_education_institution.city = request.POST.get('CESS_other_school_city')
     new_education_institution.postal_code = request.POST.get('CESS_other_school_postal_code')
     new_education_institution.institution_type = "SECONDARY"
-    new_education_institution.national_community = request.POST.get('school_local_community')
+    new_education_institution.national_community = request.POST.get('local_community')
     new_education_institution.adhoc = True
     new_education_institution.country = mdl_reference.country.find_by_iso_code('BE')
     new_education_institution.save()

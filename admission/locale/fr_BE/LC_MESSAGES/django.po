@@ -898,7 +898,7 @@ msgid "postal_address"
 msgstr "Adresse de correspondance"
 
 msgid "postal_code"
-msgstr "Par code postal"
+msgstr "Code postal"
 
 msgid "prerequisites"
 msgstr "Prérequis"
@@ -1446,9 +1446,6 @@ msgstr "Fichiers recto et verso obligatoires"
 
 msgid "validation_error"
 msgstr " champ empêche la validation de l'onglet"
-
-msgid "msg_error_school_local_community"
-msgstr "Merci de préciser une communauté pour l'école"
 
 msgid "profession_not_found"
 msgstr "Vous n'avez pas trouvé votre profession?"
