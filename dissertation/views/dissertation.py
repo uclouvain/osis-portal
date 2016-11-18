@@ -24,7 +24,7 @@
 #
 ##############################################################################
 
-from base.models import academic_year, offer_year
+from base.models import offer_year
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from base import models as mdl
@@ -263,7 +263,11 @@ def dissertations_search(request):
 @login_required
 def dissertation_to_dir_submit(request, pk):
     memory = get_object_or_404(dissertation.Dissertation, pk=pk)
-    if memory.author_is_logged_student(request):
+    person = mdl.person.find_by_user(request.user)
+    student = mdl.student.find_by_person(person)
+    submitted_memories_count = dissertation.count_submit_by_user(student, memory.offer_year_start.offer)
+
+    if memory.author_is_logged_student(request) and submitted_memories_count == 0:
         old_status = memory.status
         new_status = dissertation.get_next_status(memory, "go_forward")
         if request.method == "POST":
