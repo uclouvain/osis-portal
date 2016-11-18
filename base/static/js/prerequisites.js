@@ -575,9 +575,9 @@ function display_foreign_secondary(){
 
 function national_community_display(){
 
-    if($('#hdn_secondary_education_national_institution_national_community').val() == 'FRENCH' ||
-       $('#hdn_secondary_education_national_institution_national_community').val() == 'GERMAN' ||
-       $('#hdn_secondary_education_national_institution_national_community').val() == 'DUTCH'){
+    if($('#hdn_secondary_education_national_community').val() == 'FRENCH' ||
+       $('#hdn_secondary_education_national_community').val() == 'GERMAN' ||
+       $('#hdn_secondary_education_national_community').val() == 'DUTCH'){
 
         $('#pnl_teaching_type').css('visibility', 'visible').css('display','block');
         if($('#hdn_secondary_education_education_type_id')){
@@ -1063,7 +1063,7 @@ $("#txt_CESS_other_school_postal_code").blur(function() {
 function display_postal_code_msg_error(value, id_msg_field){
     $(id_msg_field).find("label").remove();
 
-    if ( is_matching_postal_code( value) ) {
+    if ( is_matching_belgian_postal_code( value) ) {
         $(id_msg_field).find("label").remove();
     }else{
         $(id_msg_field).append("<label>"+gettext('invalid_postal_code')+"</label>");
@@ -1071,14 +1071,13 @@ function display_postal_code_msg_error(value, id_msg_field){
     }
 }
 
-function is_matching_postal_code(str){
+function is_matching_belgian_postal_code(str){
     if (/[^a-zA-Z]/.test(str)) {
-
     }else{
-
         return false;
     }
-
-    var myRegExp = /[a-zA-Z0-9]/ ;
-    return myRegExp.test(str);
+    if(str.length > 8){
+        return false;
+    }
+    return true;
 }
