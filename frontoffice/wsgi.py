@@ -51,7 +51,7 @@ if hasattr(settings, 'QUEUES'):
 
     # Thread in which is running the listening of the queue used to received student points
     try:
-        queue_listener.SynchronousConsumerThread(settings.QUEUES.get('QUEUES_NAME').get('STUDENT_POINTS'),
+        queue_listener.SynchronousConsumerThread(settings.QUEUES.get('QUEUES_NAME').get('PERFORMANCE'),
                                                  callback).start()
     except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
         LOGGER.exception("Couldn't connect to the QueueServer")
