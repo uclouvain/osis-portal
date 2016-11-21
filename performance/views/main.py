@@ -136,7 +136,7 @@ def query_result_to_list(query_result):
 
 def convert_student_performance_to_dic(student_performance_obj):
     d = dict()
-    d["anac"] = student_performance_obj.anac
+    d["academic_year"] = student_performance_obj.academic_year
     d["acronym"] = student_performance_obj.acronym
     d["title"] = json.loads(json.dumps(student_performance_obj.data))["monAnnee"]["monOffre"]["offre"]["intituleComplet"]
     d["pk"] = student_performance_obj.pk

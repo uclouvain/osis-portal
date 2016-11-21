@@ -32,24 +32,27 @@ from django.utils.datetime_safe import datetime
 
 
 class StudentPerformanceAdmin(admin.ModelAdmin):
-    list_display = ('registration_id', 'anac', 'acronym')
-    list_filter = ('registration_id', 'anac', 'acronym', )
-    fieldsets = ((None, {'fields': ('registration_id', 'anac', 'acronym', 'update_date', 'creation_date')}),)
+    list_display = ('registration_id', 'academic_year', 'acronym')
+    list_filter = ('registration_id', 'academic_year', 'acronym', )
+    fieldsets = ((None, {'fields': ('registration_id', 'academic_year', 'acronym', 'update_date', 'creation_date')}),)
 
 
 class StudentPerformance(models.Model):
     registration_id = models.CharField(max_length=10)
-    anac = models.IntegerField()
+    academic_year = models.IntegerField()
     acronym = models.CharField(max_length=15)
     data = JSONField()
     update_date = models.DateTimeField()
     creation_date = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        unique_together = ('registration_id', 'academic_year', 'acronym')
+
     def __str__(self):
         return
 
 
-def search(registration_id=None, anac=None, acronym=None):
+def search(registration_id=None, academic_year=None, acronym=None):
     """
         Search students by optional arguments. At least one argument should be informed
         otherwise it returns empty.
@@ -59,8 +62,8 @@ def search(registration_id=None, anac=None, acronym=None):
     if registration_id:
         student_performances = student_performances.filter(registration_id=registration_id)
         has_criteria = True
-    if anac:
-        student_performances = student_performances.filter(anac=anac)
+    if academic_year:
+        student_performances = student_performances.filter(academic_year=academic_year)
         has_criteria = True
     if acronym:
         student_performances = student_performances.filter(acronym=acronym)
@@ -72,25 +75,25 @@ def search(registration_id=None, anac=None, acronym=None):
         return None
 
 
-def update_or_create(registration_id, anac, acronym, fields):
-    obj, created = StudentPerformance.objects.update_or_create(registration_id=registration_id, anac=anac,
+def update_or_create(registration_id, academic_year, acronym, fields):
+    obj, created = StudentPerformance.objects.update_or_create(registration_id=registration_id, academic_year=academic_year,
                                                                acronym=acronym, defaults=fields)
     return obj
 
 
-def find_by_student_and_offer_year(registration_id, anac, acronym):
+def find_by_student_and_offer_year(registration_id, academic_year, acronym):
     try:
-        result = StudentPerformance.objects.get(registration_id=registration_id, anac=anac,
+        result = StudentPerformance.objects.get(registration_id=registration_id, academic_year=academic_year,
                                                                acronym=acronym)
     except ObjectDoesNotExist:
         result = None
     return result
 
 
-def find_or_fetch(registration_id, anac, acronym):
-    result = find_by_student_and_offer_year(registration_id, anac, acronym)
+def find_or_fetch(registration_id, academic_year, acronym):
+    result = find_by_student_and_offer_year(registration_id, academic_year, acronym)
     if result is None or has_expired(result):
-        new_result = fetch_and_save(registration_id, anac, acronym)
+        new_result = fetch_and_save(registration_id, academic_year, acronym)
         result = new_result if new_result else result
     return result
 

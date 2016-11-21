@@ -41,9 +41,9 @@ class TestModelStudentPerformance(TestCase):
         student_performances = mdl_perf.search(registration_id=self.student_performance.registration_id)
         self.assertIn(self.student_performance, student_performances, "Invalid search result with student as argument")
 
-        student_performances = mdl_perf.search(anac=self.student_performance.anac)
+        student_performances = mdl_perf.search(academic_year=self.student_performance.academic_year)
         self.assertIn(self.student_performance, student_performances,
-                      "Invalid search result with anac as argument")
+                      "Invalid search result with academic_year as argument")
 
         student_performances = mdl_perf.search(acronym=self.student_performance.acronym)
         self.assertIn(self.student_performance, student_performances,
@@ -58,12 +58,12 @@ class TestModelStudentPerformance(TestCase):
 
     def test_find_by_student_and_offer_year(self):
         actual_student_performance = mdl_perf.find_by_student_and_offer_year(self.student_performance.registration_id,
-                                                                             self.student_performance.anac,
+                                                                             self.student_performance.academic_year,
                                                                              self.student_performance.acronym)
         self.assertEqual(actual_student_performance, self.student_performance)
 
         actual_student_performance = mdl_perf.find_by_student_and_offer_year("464846",
-                                                                             self.student_performance.anac,
+                                                                             self.student_performance.academic_year,
                                                                              self.student_performance.acronym)
         self.assertNotEqual(actual_student_performance, self.student_performance)
 
@@ -79,7 +79,7 @@ class TestModelStudentPerformance(TestCase):
     def test_update_or_create(self):
         fields_value = {"data": self.json_points, "update_date": datetime.date.today()}
         stud_perf = mdl_perf.update_or_create(self.student_performance.registration_id,
-                                              self.student_performance.anac,
+                                              self.student_performance.academic_year,
                                               self.student_performance.acronym,
                                               fields_value)
 
@@ -87,12 +87,12 @@ class TestModelStudentPerformance(TestCase):
         self.assertEqual(stud_perf, self.student_performance, "Object should be updated")
 
         mdl_perf.update_or_create("489461",
-                                  self.student_performance.anac,
+                                  self.student_performance.academic_year,
                                   self.student_performance.acronym,
                                   fields_value)
         try:
             mdl_perf.StudentPerformance.objects.get(registration_id="489461",
-                                                    anac=self.student_performance.anac,
+                                                    academic_year=self.student_performance.academic_year,
                                                     acronym=self.student_performance.acronym)
         except ObjectDoesNotExist:
             self.fail("Object should be created")

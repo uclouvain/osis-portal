@@ -35,9 +35,9 @@ def callback(json_data):
     try:
         json_data = json.loads(json_data.decode("utf-8"))
         registration_id = extract_student_from_json(json_data)
-        anac = extract_anac_from_json(json_data)
+        academic_year = extract_academic_year_from_json(json_data)
         acronym = extract_acronym_from_json(json_data)
-        save(registration_id, anac, acronym, json_data)
+        save(registration_id, academic_year, acronym, json_data)
     except RuntimeError:
         pass
 
@@ -47,9 +47,9 @@ def extract_student_from_json(json_data):
     return registration_id
 
 
-def extract_anac_from_json(json_data):
-    anac = json_data["monAnnee"]["anac"]
-    return int(anac)
+def extract_academic_year_from_json(json_data):
+    academic_year = json_data["monAnnee"]["anac"]
+    return int(academic_year)
 
 
 def extract_acronym_from_json(json_data):
@@ -57,24 +57,24 @@ def extract_acronym_from_json(json_data):
     return acronym
 
 
-def generate_message(registration_id, anac, acronym):
+def generate_message(registration_id, academic_year, acronym):
     message = dict()
     message['noma'] = registration_id
     message["sigle"] = acronym
-    message["anac"] = str(anac)
+    message["academic_year"] = str(academic_year)
     return json.dumps(message)
 
 
-def fetch_and_save(registration_id, anac, acronym):
-    data = fetch_json_data(registration_id, anac, acronym)
+def fetch_and_save(registration_id, academic_year, acronym):
+    data = fetch_json_data(registration_id, academic_year, acronym)
     obj = None
     if data:
-        obj = save(registration_id, anac, acronym, data)
+        obj = save(registration_id, academic_year, acronym, data)
     return obj
 
 
-def fetch_json_data(registration_id, anac, acronym):
-    message = generate_message(registration_id, anac, acronym)
+def fetch_json_data(registration_id, academic_year, acronym):
+    message = generate_message(registration_id, academic_year, acronym)
     client = PerformanceClient()
     json_data = client.call(message)
     json_student_perf = None
@@ -95,11 +95,11 @@ def get_creation_date():
     return today
 
 
-def save(registration_id, anac, acronym, json_data):
+def save(registration_id, academic_year, acronym, json_data):
     from performance.models.student_performance import update_or_create
     update_date = get_expiration_date()
     creation_date = get_creation_date()
     fields = {"data": json_data, "update_date": update_date, "creation_date": creation_date}
-    obj = update_or_create(registration_id, anac, acronym, fields)
+    obj = update_or_create(registration_id, academic_year, acronym, fields)
     return obj
 

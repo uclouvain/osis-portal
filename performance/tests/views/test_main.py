@@ -38,7 +38,7 @@ class TestMain(TestCase):
 
     def test_convert_student_performance_to_dic(self):
         student_performance_dic = main.convert_student_performance_to_dic(self.student_performance)
-        expected = {"anac": 2016,
+        expected = {"academic_year": 2016,
                     "acronym": "SINF2MS/G",
                     "title": " Master [120] en sciences informatiques, à finalité spécialisée ",
                     "pk": self.student_performance.pk}

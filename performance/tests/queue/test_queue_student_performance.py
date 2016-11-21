@@ -42,32 +42,32 @@ class TestQueueStudentPerformance(TestCase):
 
     def test_save(self):
         registration_id = self.student_performance.registration_id
-        anac = self.student_performance.anac
+        academic_year = self.student_performance.academic_year
         acronym = self.student_performance.acronym
-        stud_perf = queue_stud_perf.save(registration_id, anac, acronym, self.json_points)
+        stud_perf = queue_stud_perf.save(registration_id, academic_year, acronym, self.json_points)
 
         self.student_performance.refresh_from_db()
 
         self.assertEqual(stud_perf, self.student_performance, "Object should be updated")
 
-        queue_stud_perf.save("4549841", anac, acronym, self.json_points)
+        queue_stud_perf.save("4549841", academic_year, acronym, self.json_points)
         try:
             mdl_perf.StudentPerformance.objects.get(registration_id="4549841",
-                                                    anac=self.student_performance.anac,
+                                                    academic_year=self.student_performance.academic_year,
                                                     acronym=self.student_performance.acronym)
         except ObjectDoesNotExist:
             self.fail("Object should be created")
 
     def test_generate_message(self):
         message = queue_stud_perf.generate_message(self.student_performance.registration_id,
-                                                   self.student_performance.anac,
+                                                   self.student_performance.academic_year,
                                                    self.student_performance.acronym)
-        expected_message = json.dumps({"noma": "64641200", "sigle": "SINF2MS/G", "anac": "2016"})
+        expected_message = json.dumps({"noma": "64641200", "sigle": "SINF2MS/G", "academic_year": "2016"})
         self.assertJSONEqual(message, expected_message, "Wrong message returned.")
 
-    def test_extract_anac_from_json(self):
-        anac = queue_stud_perf.extract_anac_from_json(json.loads(self.json_points))
-        self.assertEqual(anac, 2016, "Invalid academic year")
+    def test_extract_academic_year_from_json(self):
+        academic_year = queue_stud_perf.extract_academic_year_from_json(json.loads(self.json_points))
+        self.assertEqual(academic_year, 2016, "Invalid academic year")
 
     def test_extract_acronym_from_json(self):
         acronym = queue_stud_perf.extract_acronym_from_json(json.loads(self.json_points))
@@ -86,7 +86,7 @@ class TestQueueStudentPerformance(TestCase):
 
         try:
             mdl_perf.StudentPerformance.objects.get(registration_id=self.student_performance.registration_id,
-                                                    anac=self.student_performance.anac,
+                                                    academic_year=self.student_performance.academic_year,
                                                     acronym=self.student_performance.acronym)
         except ObjectDoesNotExist:
             self.fail("Object should be created")
@@ -95,17 +95,17 @@ class TestQueueStudentPerformance(TestCase):
     def test_fetch_and_save(self, mock_client_call):
         mock_client_call.return_value = None
         obj = queue_stud_perf.fetch_and_save(self.student_performance.registration_id,
-                                             self.student_performance.anac,
+                                             self.student_performance.academic_year,
                                              self.student_performance.acronym)
         self.assertIsNone(obj, "Should return None")
 
         mock_client_call.return_value = self.json_points.encode()
         obj = queue_stud_perf.fetch_and_save(self.student_performance.registration_id,
-                                             self.student_performance.anac,
+                                             self.student_performance.academic_year,
                                              self.student_performance.acronym)
         self.assertIsNotNone(obj, "Should return a valid student performance object")
         self.assertJSONEqual(json.dumps(obj.data), self.json_points, "Incorrect student points json")
         self.assertEqual(self.student_performance.registration_id, obj.registration_id, "Incorrect student")
-        self.assertEqual(self.student_performance.anac, obj.anac, "Incorrect anac")
+        self.assertEqual(self.student_performance.academic_year, obj.academic_year, "Incorrect academic_year")
         self.assertEqual(self.student_performance.acronym, obj.acronym, "Incorrect acronym")
 

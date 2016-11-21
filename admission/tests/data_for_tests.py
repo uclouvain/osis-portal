@@ -185,7 +185,8 @@ def create_student_performance():
     with open("performance/tests/ressources/points.json") as f:
         data = json.load(f)
     a_student_performance = mdl_performance.student_performance.StudentPerformance(acronym="SINF2MS/G",
-                                                                                   registration_id="64641200", anac=2016,
+                                                                                   registration_id="64641200",
+                                                                                   academic_year=2016,
                                                                                    update_date=datetime.datetime.now(),
                                                                                    data=data)
     a_student_performance.save()
