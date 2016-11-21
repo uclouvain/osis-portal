@@ -118,8 +118,10 @@ def create_academic_year():
     return an_academic_year
 
 
-def create_grade_type(a_name, an_institutional_grade_type):
-    a_grade_type = mdl_reference.grade_type.GradeType(name=a_name, institutional_grade_type=an_institutional_grade_type)
+def create_grade_type(a_name, an_institutional_grade_type, a_language_exam_required=False):
+    a_grade_type = mdl_reference.grade_type.GradeType(name=a_name,
+                                                      institutional_grade_type=an_institutional_grade_type,
+                                                      language_exam_required=a_language_exam_required)
     a_grade_type.save()
     return a_grade_type
 

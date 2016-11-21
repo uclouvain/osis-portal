@@ -38,17 +38,15 @@ class CommonTest(TestCase):
         self.applicant = data_model.create_applicant_by_user(self.user)
 
     def test_is_local_language_exam_needed_status(self):
-        self.assertFalse(common.is_local_language_exam_needed(None))
-
-        self.assertFalse(common.is_local_language_exam_needed(self.user))
-
         an_application = data_model.create_application(self.applicant)
-        self.assertFalse(common.is_local_language_exam_needed(self.user))
-
-        an_application.offer_year.grade_type = data_model.create_grade_type('BACHELOR', institutional_grade_type.BACHELOR)
+        an_application.offer_year.grade_type = data_model.create_grade_type('BACHELOR', institutional_grade_type.BACHELOR, False)
         an_application.offer_year.save()
-        self.assertTrue(common.is_local_language_exam_needed(self.user))
+        self.assertFalse(common.is_local_language_exam_needed(an_application))
 
-        an_application.offer_year.grade_type = data_model.create_grade_type('BACHELORZ', None)
+        an_application.offer_year.grade_type = data_model.create_grade_type('BACHELOR', institutional_grade_type.BACHELOR, True)
         an_application.offer_year.save()
-        self.assertFalse(common.is_local_language_exam_needed(self.user))
+        self.assertTrue(common.is_local_language_exam_needed(an_application))
+
+        an_application.offer_year.grade_type = data_model.create_grade_type('BACHELORZ', None, False)
+        an_application.offer_year.save()
+        self.assertFalse(common.is_local_language_exam_needed(an_application))

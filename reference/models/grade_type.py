@@ -32,7 +32,8 @@ from reference.enums import institutional_grade_type as enum_institutional_grade
 
 class GradeTypeAdmin(admin.ModelAdmin):
     list_display = ('name', 'institutional_grade_type', 'coverage', 'adhoc', 'institutional')
-    fieldsets = ((None, {'fields': ('name', 'institutional_grade_type', 'coverage', 'adhoc', 'institutional')}),)
+    fieldsets = ((None, {'fields': ('name', 'institutional_grade_type', 'coverage', 'adhoc', 'institutional',
+                                    'language_exam_required')}),)
 
 
 class GradeType(SerializableModel):
