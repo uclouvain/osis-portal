@@ -66,10 +66,6 @@ $("button[id^='bt_load_doc_NATIONAL_DIPLOMA_']" ).click(function() {
     $('#national_diploma_national_diploma_doc_error').html('');
 });
 
-$( "#txt_professional_exam_date").blur(function() {
-    $('#professional_exam_date_error').html('');
-});
-
 $( "#txt_professional_exam_institution").blur(function() {
     $('#professional_exam_institution_error').html('');
 });
