@@ -198,7 +198,6 @@ $('document').ready(function(){
             }
             //local language exam
             if($('#hdn_local_language_exam_needed').val() == 'True'){
-                alert('if');
                 $('#pnl_local_exam').css('visibility', 'visible').css('display','block');
                 if($('#hdn_secondary_education_local_language_exam').val() == 'True'){
                     $('#rdb_local_language_exam_true').prop( "checked", true);
@@ -224,8 +223,6 @@ $('document').ready(function(){
                     $('#rdb_local_language_exam_false').prop( "checked", true);
                 }
 
-            }else{
-                alert('elsef');
             }
             //admission_exam
             if( $('#hdn_secondary_education_admission_exam_result').val() == 'LOW'){
@@ -943,10 +940,6 @@ $("#txt_admission_exam_date").blur(function() {
     display_date_msg_error($("#txt_admission_exam_date").val(), "#msg_error_txt_admission_exam_date");
 });
 
-$("#txt_local_language_exam_date").blur(function() {
-    display_date_msg_error($("#txt_local_language_exam_date").val(), "#msg_error_local_language_exam_date");
-});
-
 function reset_rdb_local_community(status){
     $('#rdb_local_community_french').prop( "checked", status);
     $('#rdb_local_community_dutch').prop( "checked", status);
@@ -961,14 +954,11 @@ $("select[id^='slt_language_diploma_recognized']" ).change(function(event) {
 
     }
     if(target.val()=="True"){
-        alert('t');
         enabled_other_language();
     }else{
         if(target.val()=="False"){
-            alert('F');
             disabled_other_language();
         }else{
-            alert('o');
             disabled_other_language();
         }
     }
