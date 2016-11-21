@@ -50,12 +50,13 @@ def update(request, application_id=None):
 
     remove_attachment_form = RemoveAttachmentForm()
     list_choices = [x[1] for x in document_type.DOCUMENT_TYPE_CHOICES]
+    all_attachments = list_attachments(application)
     data = {
         "tab_active": navigation.ATTACHMENTS_TAB,
         "application": application,
         "applications": mdl.application.find_by_user(request.user),
         "document_formset": document_formset,
-        "attachments": past_attachments,
+        "attachments": all_attachments,
         "removeAttachmentForm": remove_attachment_form,
         "list_choices": list_choices
     }
