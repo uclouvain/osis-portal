@@ -268,10 +268,7 @@ def profile(request, application_id=None, message_success=None):
             applicant.phone = request.POST['phone']
         else:
             applicant.phone = None
-        if request.POST['additional_email']:
-            applicant.additional_email = request.POST['additional_email']
-        else:
-            applicant.additional_email = None
+
         if request.POST['previous_enrollment'] == "true":
             if request.POST['registration_id']:
                 applicant.registration_id = request.POST['registration_id']
