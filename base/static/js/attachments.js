@@ -162,13 +162,13 @@ function appendContentTypeInput($parentForm){
  * $parentForm: a JQuery object representing a form.
  */
 function appendUserInput($parentForm){
-    // A label for attribute is of the form "id_form-0-user" for example.
+    // A label for attribute is of the form "id_form-0-update_by" for example.
     var labelForPrefix = "id_form-";
-    var labelForSuffix = "-user";
+    var labelForSuffix = "-update_by";
     var labelFor = labelForPrefix.concat(nextIdDocForm.toString(), labelForSuffix);
 
     var inputNamePrefix = "form-";
-    var inputNameSuffix = "-user";
+    var inputNameSuffix = "-update_by";
     var inputName = inputNamePrefix.concat(nextIdDocForm.toString(), inputNameSuffix);
     var $input = createJQObjectNoText("<input/>", {"id": labelFor,
         "name": inputName,
