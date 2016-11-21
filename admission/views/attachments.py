@@ -34,10 +34,7 @@ from django.forms import formset_factory
 
 
 def update(request, application_id=None):
-    if application_id:
-        application = mdl.application.find_by_id(application_id)
-    else:
-        application = mdl.application.init_application(request.user)
+    application = mdl.application.find_by_id(application_id)
     past_attachments = list_attachments(application)
     attachments_available = attachments_left_available(len(past_attachments))
     UploadDocumentFileFormSet = formset_factory(UploadDocumentFileForm, extra=0, max_num=attachments_available)
@@ -66,10 +63,11 @@ def update(request, application_id=None):
     return render(request, "admission_home.html", data)
 
 
-def remove_attachment(request):
+def remove_attachment(request, application_id=None):
     """
     View used to remove previous attachments.
     :param request
+    :param application_id
     """
     if request.method == "POST":
         form = RemoveAttachmentForm(request.POST)
@@ -78,7 +76,7 @@ def remove_attachment(request):
             # form is valid ensure that there is a document having that pk value
             attachment_to_remove = DocumentFile.objects.get(pk=attachment_pk)
             safe_document_removal("admission_attachments", attachment_to_remove)
-    return redirect(update)
+    return redirect('attachments', application_id)
 
 
 def safe_document_removal(application_name, document):
@@ -128,7 +126,7 @@ def save_document_from_form(document, user, application):
     description = document.cleaned_data['description']
     # Never trust a user. They could change the hidden input values.
     # Ex: user, application_name, storage_duration, etc.
-    storage_duration = 0
+    storage_duration = 720
     application_name = "admission_attachments"
     content_type = file.content_type
     size = file.size
@@ -142,3 +140,4 @@ def save_document_from_form(document, user, application):
     application_file.application = application
     application_file.document_file = doc_file
     application_file.save()
+    return redirect("attachments", application.id)
