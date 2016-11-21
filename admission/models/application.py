@@ -105,6 +105,10 @@ def init_application(user):
 
 def define_application_type(a_coverage_access_degree, user):
     an_applicant = applicant.Applicant.objects.get(user=user)
-    if an_applicant.nationality.european_union and a_coverage_access_degree == coverage_access_degree.NATIONAL:
+
+    if an_applicant.nationality and \
+            an_applicant.nationality.european_union and \
+                    a_coverage_access_degree == coverage_access_degree.NATIONAL:
         return application_type.INSCRIPTION
     return application_type.ADMISSION
+
