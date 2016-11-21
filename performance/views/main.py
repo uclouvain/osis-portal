@@ -29,7 +29,7 @@
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist
-from base.models.student import find_by_user, find_by_registration_id
+from base.models.student import find_by_user, find_by_registration_id, get_student_by_registration_id
 from base.models import offer_enrollment as mdl_offer_enrollment
 from base.models import offer_year as mdl_offer_year
 from performance import models as mdl_performance
@@ -122,20 +122,6 @@ def visualize_student_result(request, registration_id, offer_year_id):
 
 
 # *************************** UTILITY FUNCTIONS
-
-
-def get_student_by_registration_id(registration_id):  # TODO test
-    """
-    Get the student having the corresponding registration_id.
-    :param registration_id: a string
-    :return: a student object or none
-    """
-    try:
-        stud = find_by_registration_id(registration_id)
-    except ObjectDoesNotExist:
-        stud = None
-    return stud
-
 
 def get_student_programs_list(stud):  # todo TEST
     """

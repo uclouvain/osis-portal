@@ -103,3 +103,16 @@ def is_student(a_user):
     if find_by_user(a_user):
         return True
     return False
+
+
+def get_student_by_registration_id(registration_id):
+    """
+    Get the student having the corresponding registration_id.
+    :param registration_id: a string
+    :return: a student object or none
+    """
+    try:
+        stud = find_by_registration_id(registration_id)
+    except ObjectDoesNotExist:
+        stud = None
+    return stud

@@ -30,6 +30,7 @@ from performance.models import student_performance as mdl_perf
 from performance.queue import student_performance as queue_stud_perf
 from django.core.exceptions import ObjectDoesNotExist
 import json
+from unittest.mock import patch
 
 
 class TestQueueStudentPerformance(TestCase):
@@ -76,7 +77,7 @@ class TestQueueStudentPerformance(TestCase):
     def test_callback(self):
         queue_stud_perf.callback(self.json_points.encode())
         self.student_performance.refresh_from_db()
-        self.assertJSONEqual(self.student_performance.data, self.json_points, "Object should be updated")
+        self.assertJSONEqual(json.dumps(self.student_performance.data), self.json_points, "Object should be updated")
 
         queue_stud_perf.callback(self.json_points_2.encode())
 
@@ -86,9 +87,17 @@ class TestQueueStudentPerformance(TestCase):
         except ObjectDoesNotExist:
             self.fail("Object should be created")
 
-    def test_fetch_json_data(self):
+    @patch('frontoffice.queue.queue_listener.Client.call')
+    def test_fetch_and_save(self, mock_client_call):
+        mock_client_call.return_value = None
+        obj = queue_stud_perf.fetch_and_save(self.student_performance.student,
+                                             self.student_performance.offer_year)
+        self.assertIsNone(obj, "Should return None")
 
-
-
-
-
+        mock_client_call.return_value = self.json_points.encode()
+        obj = queue_stud_perf.fetch_and_save(self.student_performance.student,
+                                             self.student_performance.offer_year)
+        self.assertIsNotNone(obj, "Should return a valid student performance object")
+        self.assertJSONEqual(json.dumps(obj.data), self.json_points, "Incorrect student points json")
+        self.assertEqual(self.student_performance.student, obj.student, "Incorrect student")
+        self.assertEqual(self.student_performance.offer_year, obj.offer_year, "Incorrect offer year")
