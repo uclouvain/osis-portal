@@ -28,7 +28,8 @@ from frontoffice.queue.queue_listener import PerformanceClient
 import datetime
 from django.utils import timezone
 
-UPDATE_DELTA = 12
+UPDATE_DELTA_HOURS = 12
+
 
 def callback(json_data):
     try:
@@ -58,11 +59,11 @@ def extract_offer_year_from_json(json_data):
 
 
 def generate_message(student, offer_year):
-    message = {}
+    message = dict()
     message['noma'] = student.registration_id
     message["sigle"] = offer_year.acronym
     message["anac"] = str(offer_year.academic_year.year)
-    return str(message)
+    return json.dumps(message)
 
 
 def fetch_and_save(student, offer_year):
@@ -85,13 +86,13 @@ def fetch_json_data(student, offer_year):
 
 def get_expiration_date():
     now = timezone.now()
-    timedelta = datetime.timedelta(hours=UPDATE_DELTA)
+    timedelta = datetime.timedelta(hours=UPDATE_DELTA_HOURS)
     expiration_date = now + timedelta
     return expiration_date
 
 
 def get_creation_date():
-    today = datetime.datetime.today()
+    today = datetime.datetime.now()
     return today
 
 

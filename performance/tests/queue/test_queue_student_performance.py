@@ -29,6 +29,7 @@ from performance.tests import data_for_tests as utility_data
 from performance.models import student_performance as mdl_perf
 from performance.queue import student_performance as queue_stud_perf
 from django.core.exceptions import ObjectDoesNotExist
+import json
 
 
 class TestQueueStudentPerformance(TestCase):
@@ -55,19 +56,38 @@ class TestQueueStudentPerformance(TestCase):
         except ObjectDoesNotExist:
             self.fail("Object should be created")
 
+    def test_generate_message(self):
+        message = queue_stud_perf.generate_message(self.student_performance.student,
+                                                   self.student_performance.offer_year)
+        expected_message = json.dumps({"noma": "64641200", "sigle": "SINF2MS/G", "anac": "2016"})
+        self.assertJSONEqual(message, expected_message, "Wrong message returned.")
+
+    def test_extract_offer_year_from_json(self):
+        offer_year = queue_stud_perf.extract_offer_year_from_json(json.loads(self.json_points))
+        self.assertIsNotNone(offer_year, "Should return a valid offer year")
+        self.assertEqual(offer_year.acronym, "SINF2MS/G", "Invalid acronym")
+        self.assertEqual(offer_year.academic_year.year, 2016, "Invalid academic year")
+
+    def test_extract_student_from_json(self):
+        student = queue_stud_perf.extract_student_from_json(json.loads(self.json_points))
+        self.assertIsNotNone(student, "Should return a valid student")
+        self.assertEqual(student.registration_id, "64641200", "Invalid registration id")
+
     def test_callback(self):
-        queue_stud_perf.callback(self.json_points)
+        queue_stud_perf.callback(self.json_points.encode())
         self.student_performance.refresh_from_db()
+        self.assertJSONEqual(self.student_performance.data, self.json_points, "Object should be updated")
 
-        self.assertDictEqual(self.student_performance.data, self.json_points, "Object should be updated")
-
-        queue_stud_perf.callback(self.json_points_2)
+        queue_stud_perf.callback(self.json_points_2.encode())
 
         try:
             mdl_perf.StudentPerformance.objects.get(student=self.student_performance.student,
                                                     offer_year=self.offer_year)
         except ObjectDoesNotExist:
             self.fail("Object should be created")
+
+    def test_fetch_json_data(self):
+
 
 
 

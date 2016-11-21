@@ -28,4 +28,4 @@ import json
 
 def load_json_file(json_path):
     with open(json_path) as json_file:
-        return json.load(json_file)
+        return json_file.read()

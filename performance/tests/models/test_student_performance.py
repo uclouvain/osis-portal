@@ -28,15 +28,15 @@ from admission.tests import data_for_tests
 from performance.tests import data_for_tests as utility_data
 from performance.models import student_performance as mdl_perf
 import datetime
+from django.core.exceptions import ObjectDoesNotExist
 
 
-class TestQueueStudentPerformance(TestCase):
+class TestModelStudentPerformance(TestCase):
     def setUp(self):
         self.student_performance = data_for_tests.create_student_performance()
         self.offer_year = \
             data_for_tests.create_offer_year_with_academic_year(self.student_performance.offer_year.academic_year)
         self.json_points = utility_data.load_json_file("performance/tests/ressources/points2.json")
-        self.json_points_2 = utility_data.load_json_file("performance/tests/ressources/points3.json")
 
     def test_search(self):
         student_performances = mdl_perf.search(student=self.student_performance.student)
@@ -69,7 +69,21 @@ class TestQueueStudentPerformance(TestCase):
         self.student_performance.update_date = not_expired_date
         self.assertTrue(self.student_performance, "Should return false as date of update has not been exceeded")
 
+    def test_update_or_create(self):
+        fields_value = {"data": self.json_points, "update_date": datetime.date.today()}
+        student = self.student_performance.student
+        offer_year = self.student_performance.offer_year
+        stud_perf = mdl_perf.update_or_create(student, offer_year, fields_value)
 
+        self.student_performance.refresh_from_db()
+        self.assertEqual(stud_perf, self.student_performance, "Object should be updated")
+
+        other_student = data_for_tests.create_student_with_specific_registration_id("64641202")
+        mdl_perf.update_or_create(other_student, offer_year, fields_value)
+        try:
+            mdl_perf.StudentPerformance.objects.get(student=other_student, offer_year=offer_year)
+        except ObjectDoesNotExist:
+            self.fail("Object should be created")
 
     @staticmethod
     def create_other_student():
