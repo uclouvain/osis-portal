@@ -123,37 +123,24 @@ def visualize_student_result(request, registration_id, offer_year_id):
 # *************************** UTILITY FUNCTIONS
 
 def get_student_programs_list(stud):
-    """
-    Fetch the student programs of the student "stud"
-    :param stud: a student object
-    :return: a list of dictionnary (see query_result_to_list for the format)
-    """
-    query_result = mdl_offer_enrollment.find_by_student_ordered(stud)
+    query_result = mdl_performance.student_performance.search(registration_id=stud.registration_id)
     list_student_programs = query_result_to_list(query_result)
     return list_student_programs
 
 
 def query_result_to_list(query_result):
-    """
-    Parse the query result (a lisf of offer enrollments),
-    to a list of dictonnary.
-    :param query_result: a query result of offer_enrollments
-    :return: a list of dictionaries
-    """
     l = []
     for row in query_result:
-        d = convert_offer_enrollment_to_dic(row)
+        d = convert_student_performance_to_dic(row)
         l.append(d)
     return l
 
 
-def convert_offer_enrollment_to_dic(offer_enrollment_obj):
+def convert_student_performance_to_dic(student_performance_obj):
     d = dict()
-    d["year"] = offer_enrollment_obj.offer_year.academic_year
-    d["anac"] = offer_enrollment_obj.offer_year.academic_year.year
-    d["acronym"] = offer_enrollment_obj.offer_year.acronym
-    d["title"] = offer_enrollment_obj.offer_year.title
-    d["program_id"] = offer_enrollment_obj.offer_year.id
+    d["anac"] = student_performance_obj.anac
+    d["acronym"] = student_performance_obj.acronym
+    d["title"] = json.loads(student_performance_obj.data)["monAnnee"]["monOffre"]["offre"]["intituleComplet"]
     return d
 
 

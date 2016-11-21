@@ -27,20 +27,20 @@ from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
-from osis_common.models.serializable_model import SerializableModel
 from performance.queue.student_performance import fetch_and_save
-from django.utils import timezone
+from django.utils.datetime_safe import datetime
 
 
 class StudentPerformanceAdmin(admin.ModelAdmin):
-    list_display = ('student', 'offer_year', 'update_date', 'creation_date')
-    list_filter = ('student__registration_id',)
-    fieldsets = ((None, {'fields': ('student', 'offer_year', 'update_date', 'creation_date')}),)
+    list_display = ('registration_id', 'anac', 'acronym')
+    list_filter = ('registration_id', 'anac', 'acronym', )
+    fieldsets = ((None, {'fields': ('registration_id', 'anac', 'acronym', 'update_date', 'creation_date')}),)
 
 
-class StudentPerformance(SerializableModel):
-    student = models.ForeignKey('base.Student')
-    offer_year = models.ForeignKey('base.OfferYear')
+class StudentPerformance(models.Model):
+    registration_id = models.CharField(max_length=10)
+    anac = models.IntegerField()
+    acronym = models.CharField(max_length=15)
     data = JSONField()
     update_date = models.DateTimeField()
     creation_date = models.DateTimeField(auto_now=True)
@@ -49,18 +49,21 @@ class StudentPerformance(SerializableModel):
         return
 
 
-def search(student=None, offer_year=None):
+def search(registration_id=None, anac=None, acronym=None):
     """
         Search students by optional arguments. At least one argument should be informed
         otherwise it returns empty.
     """
     has_criteria = False
     student_performances = StudentPerformance.objects.all()
-    if student:
-        student_performances = student_performances.filter(student=student)
+    if registration_id:
+        student_performances = student_performances.filter(registration_id=registration_id)
         has_criteria = True
-    if offer_year:
-        student_performances = student_performances.filter(offer_year=offer_year)
+    if anac:
+        student_performances = student_performances.filter(anac=anac)
+        has_criteria = True
+    if acronym:
+        student_performances = student_performances.filter(acronym=acronym)
         has_criteria = True
 
     if has_criteria:
@@ -69,29 +72,31 @@ def search(student=None, offer_year=None):
         return None
 
 
-def update_or_create(student, offer_year, fields):
-    obj, created = StudentPerformance.objects.update_or_create(student=student, offer_year=offer_year, defaults=fields)
+def update_or_create(registration_id, anac, acronym, fields):
+    obj, created = StudentPerformance.objects.update_or_create(registration_id=registration_id, anac=anac,
+                                                               acronym=acronym, defaults=fields)
     return obj
 
 
-def find_by_student_and_offer_year(student, offer_year):
+def find_by_student_and_offer_year(registration_id, anac, acronym):
     try:
-        result = StudentPerformance.objects.get(student=student, offer_year=offer_year)
+        result = StudentPerformance.objects.get(registration_id=registration_id, anac=anac,
+                                                               acronym=acronym)
     except ObjectDoesNotExist:
         result = None
     return result
 
 
-def find_or_fetch(student, offer_year):
-    result = find_by_student_and_offer_year(student, offer_year)
+def find_or_fetch(registration_id, anac, acronym):
+    result = find_by_student_and_offer_year(registration_id, anac, acronym)
     if result is None or has_expired(result):
-        new_result = fetch_and_save(student, offer_year)
+        new_result = fetch_and_save(registration_id, anac, acronym)
         result = new_result if new_result else result
     return result
 
 
 def has_expired(student_performance):
-    now = timezone.now()
+    now = datetime.now()
     expiration_date = student_performance.update_date
     return expiration_date < now
 

@@ -32,19 +32,15 @@ from performance.views import main
 class TestMain(TestCase):
     def setUp(self):
         self.student_performance = data_for_tests.create_student_performance()
-        self.offer_year = \
-            data_for_tests.create_offer_year_with_academic_year(self.student_performance.offer_year.academic_year)
+        self.offer_year = data_for_tests.create_offer_year()
         self.json_points = utility_data.load_json_file("performance/tests/ressources/points2.json")
         self.json_points_2 = utility_data.load_json_file("performance/tests/ressources/points3.json")
 
-    def test_convert_offer_enrollment_to_dic(self):
-        offer_enrollment = data_for_tests.create_offer_enrollment(student=self.student_performance.student,
-                                                                  offer_year=self.student_performance.offer_year)
-        offer_enrollment_dic = main.convert_offer_enrollment_to_dic(offer_enrollment)
-        expected = {"year": self.student_performance.offer_year.academic_year,
-                    "anac": 2016, "acronym": "SINF2MS/G",
-                    "title": "Première année de bachelier en médecine vétérinaire",
-                    "program_id": self.student_performance.offer_year.id}
-        self.assertDictEqual(offer_enrollment_dic, expected)
+    def test_convert_student_performance_to_dic(self):
+        student_performance_dic = main.convert_student_performance_to_dic(self.student_performance)
+        expected = {"anac": 2016,
+                    "acronym": "SINF2MS/G",
+                    "title": " Master [120] en sciences informatiques, à finalité spécialisée "}
+        self.assertDictEqual(student_performance_dic, expected)
 
 

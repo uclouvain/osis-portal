@@ -34,30 +34,33 @@ from django.core.exceptions import ObjectDoesNotExist
 class TestModelStudentPerformance(TestCase):
     def setUp(self):
         self.student_performance = data_for_tests.create_student_performance()
-        self.offer_year = \
-            data_for_tests.create_offer_year_with_academic_year(self.student_performance.offer_year.academic_year)
+        self.offer_year = data_for_tests.create_offer_year()
         self.json_points = utility_data.load_json_file("performance/tests/ressources/points2.json")
 
     def test_search(self):
-        student_performances = mdl_perf.search(student=self.student_performance.student)
+        student_performances = mdl_perf.search(registration_id=self.student_performance.registration_id)
         self.assertIn(self.student_performance, student_performances, "Invalid search result with student as argument")
 
-        student_performances = mdl_perf.search(offer_year=self.student_performance.offer_year)
+        student_performances = mdl_perf.search(anac=self.student_performance.anac)
         self.assertIn(self.student_performance, student_performances,
-                      "Invalid search result with offer_year as argument")
+                      "Invalid search result with anac as argument")
 
-        other_student = self.create_other_student()
-        student_performances = mdl_perf.search(student=other_student)
+        student_performances = mdl_perf.search(acronym=self.student_performance.acronym)
+        self.assertIn(self.student_performance, student_performances,
+                      "Invalid search result with acronym as argument")
+
+        student_performances = mdl_perf.search(registration_id="541315")
         self.assertFalse(student_performances, "Should return empty result")
 
     def test_find_by_student_and_offer_year(self):
-        actual_student_performance = mdl_perf.find_by_student_and_offer_year(self.student_performance.student,
-                                                                             self.student_performance.offer_year)
+        actual_student_performance = mdl_perf.find_by_student_and_offer_year(self.student_performance.registration_id,
+                                                                             self.student_performance.anac,
+                                                                             self.student_performance.acronym)
         self.assertEqual(actual_student_performance, self.student_performance)
 
-        other_student = self.create_other_student()
-        actual_student_performance = mdl_perf.find_by_student_and_offer_year(other_student,
-                                                                             self.student_performance.offer_year)
+        actual_student_performance = mdl_perf.find_by_student_and_offer_year("464846",
+                                                                             self.student_performance.anac,
+                                                                             self.student_performance.acronym)
         self.assertNotEqual(actual_student_performance, self.student_performance)
 
     def test_has_expired(self):
@@ -71,20 +74,21 @@ class TestModelStudentPerformance(TestCase):
 
     def test_update_or_create(self):
         fields_value = {"data": self.json_points, "update_date": datetime.date.today()}
-        student = self.student_performance.student
-        offer_year = self.student_performance.offer_year
-        stud_perf = mdl_perf.update_or_create(student, offer_year, fields_value)
+        stud_perf = mdl_perf.update_or_create(self.student_performance.registration_id,
+                                              self.student_performance.anac,
+                                              self.student_performance.acronym,
+                                              fields_value)
 
         self.student_performance.refresh_from_db()
         self.assertEqual(stud_perf, self.student_performance, "Object should be updated")
 
-        other_student = data_for_tests.create_student_with_specific_registration_id("64641202")
-        mdl_perf.update_or_create(other_student, offer_year, fields_value)
+        mdl_perf.update_or_create("489461",
+                                  self.student_performance.anac,
+                                  self.student_performance.acronym,
+                                  fields_value)
         try:
-            mdl_perf.StudentPerformance.objects.get(student=other_student, offer_year=offer_year)
+            mdl_perf.StudentPerformance.objects.get(registration_id="489461",
+                                                    anac=self.student_performance.anac,
+                                                    acronym=self.student_performance.acronym)
         except ObjectDoesNotExist:
             self.fail("Object should be created")
-
-    @staticmethod
-    def create_other_student():
-        return data_for_tests.create_student("5621231")
