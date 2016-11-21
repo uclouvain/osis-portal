@@ -27,16 +27,21 @@ from django.contrib.auth.decorators import login_required
 from django.http import *
 from dissertation import models as mdl
 from osis_common import models as mdl_osis_common
+from django.shortcuts import get_object_or_404, redirect
 
 
 @login_required
 def download(request, pk):
-    dissertation_document = mdl.dissertation_document_file.find_by_id(pk)
-    document = mdl_osis_common.document_file.find_by_id(dissertation_document.document_file.id)
-    filename = document.file_name
-    response = HttpResponse(document.file, content_type=document.content_type)
-    response['Content-Disposition'] = 'attachment; filename=%s' % filename
-    return response
+    memory = get_object_or_404(mdl.dissertation.Dissertation, pk=pk)
+    if memory.author_is_logged_student(request):
+        dissertation_document = mdl.dissertation_document_file.find_by_id(pk)
+        document = mdl_osis_common.document_file.find_by_id(dissertation_document.document_file.id)
+        filename = document.file_name
+        response = HttpResponse(document.file, content_type=document.content_type)
+        response['Content-Disposition'] = 'attachment; filename=%s' % filename
+        return response
+    else:
+        return redirect('dissertations')
 
 
 @login_required
