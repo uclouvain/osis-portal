@@ -25,6 +25,9 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/bootstrap-datepicker3.min.css' %}" type='text/css'>
+{% endblock %}
 {% block content %}
     <h2>{{ request.user.first_name }} {{ request.user.last_name }}</h2>
     <span>
@@ -550,12 +553,6 @@
         $('#txt_file').val('');
     }
 
-    $("#txt_file").on("change", function(){
-       var file = this.files[0];
-       fileName = file.name;
-       $("#hdn_filename").val(fileName);
-    });
-
     $('[id^="bt_load_doc_"]').click(function(event) {
         var target = $(event.target);
         var id = target.attr("id");
@@ -1051,8 +1048,21 @@
         set_following_tab(SOCIOLOGICAL_SURVEY_TAB );
         return true;
     });
-    $("#txt_local_language_exam_date").datepicker({
 
+    $("#txt_professional_exam_date").datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+        orientation: "bottom auto"
+    });
+
+    $("#txt_admission_exam_date").datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+        orientation: "bottom auto"
+
+    });
+    
+    $("#txt_local_language_exam_date").datepicker({
         format: "dd/mm/yyyy",
         autoclose: true,
         orientation: "bottom auto"
