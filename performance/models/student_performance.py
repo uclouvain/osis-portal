@@ -101,3 +101,11 @@ def has_expired(student_performance):
     return expiration_date < now
 
 
+def find_by_pk(student_performance_pk):
+    try:
+        result = StudentPerformance.objects.get(pk=student_performance_pk)
+    except ObjectDoesNotExist:
+        result = None
+    return result
+
+

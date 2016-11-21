@@ -40,7 +40,17 @@ class TestMain(TestCase):
         student_performance_dic = main.convert_student_performance_to_dic(self.student_performance)
         expected = {"anac": 2016,
                     "acronym": "SINF2MS/G",
-                    "title": " Master [120] en sciences informatiques, à finalité spécialisée "}
+                    "title": " Master [120] en sciences informatiques, à finalité spécialisée ",
+                    "pk": self.student_performance.pk}
         self.assertDictEqual(student_performance_dic, expected)
+
+    def test_check_right_access(self):
+        student = data_for_tests.create_student(self.student_performance.registration_id)
+        has_access = main.check_right_access(self.student_performance, student)
+        self.assertTrue(has_access)
+
+        student = data_for_tests.create_student(registration_id="879466")
+        has_access = main.check_right_access(self.student_performance, student)
+        self.assertFalse(has_access)
 
 

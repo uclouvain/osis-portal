@@ -29,8 +29,6 @@
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from base.models.student import find_by_user, get_student_by_registration_id
-from base.models import offer_enrollment as mdl_offer_enrollment
-from base.models import offer_year as mdl_offer_year
 from performance import models as mdl_performance
 from performance.forms import RegistrationIdForm
 from base.views import layout
@@ -53,13 +51,14 @@ def display_performance_home(request):
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
-def display_result_for_specific_year_and_program(request, offer_year_id):
+def display_result_for_specific_year_and_program(request, pk):
     """
     Display the student result for a particular year and program.
     """
     stud = find_by_user(request.user)
-    offer_year = mdl_offer_year.find_by_id(offer_year_id)
-    stud_perf = mdl_performance.student_performance.find_or_fetch(student=stud, offer_year=offer_year)
+    stud_perf = mdl_performance.student_performance.find_by_pk(pk)
+    if not check_right_access(stud_perf, stud):
+        stud_perf = None
     document = json.dumps(stud_perf.data) if stud_perf else None
     creation_date = stud_perf.creation_date if stud_perf else None
 
@@ -107,14 +106,12 @@ def visualize_student_programs(request, registration_id):
 
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
-def visualize_student_result(request, registration_id, offer_year_id):
+def visualize_student_result(request, pk):
     """
     View to visualize a particular student program courses result.
     !!! Should only be accessible for staff having the rights.
     """
-    stud = get_student_by_registration_id(registration_id)
-    offer_year = mdl_offer_year.find_by_id(offer_year_id)
-    stud_perf = mdl_performance.student_performance.find_or_fetch(student=stud, offer_year=offer_year)
+    stud_perf = mdl_performance.student_performance.find_by_pk(pk)
     document = stud_perf.data if stud_perf else None
 
     return layout.render(request, "performance_result.html", {"results": document})
@@ -141,6 +138,11 @@ def convert_student_performance_to_dic(student_performance_obj):
     d["anac"] = student_performance_obj.anac
     d["acronym"] = student_performance_obj.acronym
     d["title"] = json.loads(student_performance_obj.data)["monAnnee"]["monOffre"]["offre"]["intituleComplet"]
+    d["pk"] = student_performance_obj.pk
     return d
+
+
+def check_right_access(student_performance, student):
+    return student_performance.registration_id == student.registration_id
 
 

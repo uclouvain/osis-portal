@@ -33,10 +33,10 @@ urlpatterns = [
     url(r'^administration/$', main.performance_administration, name='performance_administration'),
     url(r'^administration/select_student/$', main.select_student, name='performance_select_student'),
 
-    url(r'^result/(?P<offer_year_id>[0-9]+)/$',
+    url(r'^result/(?P<pk>[0-9]+)/$',
         main.display_result_for_specific_year_and_program, name='performance_result'),
     url(r'^student_programs/(?P<registration_id>[0-9]+)/$', main.visualize_student_programs, name='performance_student_programs'),
-    url(r'^student_result/(?P<registration_id>[0-9]+)/(?P<offer_year_id>[0-9]+)/$',
+    url(r'^student_result/(?P<pk>[0-9]+)/$',
         main.visualize_student_result, name='performance_student_result'),
 ]
 

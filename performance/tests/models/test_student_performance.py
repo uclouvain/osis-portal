@@ -52,6 +52,10 @@ class TestModelStudentPerformance(TestCase):
         student_performances = mdl_perf.search(registration_id="541315")
         self.assertFalse(student_performances, "Should return empty result")
 
+    def test_find_by_pk(self):
+        actual = mdl_perf.find_by_pk(self.student_performance.pk)
+        self.assertEqual(actual, self.student_performance)
+
     def test_find_by_student_and_offer_year(self):
         actual_student_performance = mdl_perf.find_by_student_and_offer_year(self.student_performance.registration_id,
                                                                              self.student_performance.anac,
