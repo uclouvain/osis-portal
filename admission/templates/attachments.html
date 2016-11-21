@@ -26,7 +26,8 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<form id="form_attachments" method="POST" enctype="multipart/form-data">
+<form action="{% url 'save_attachments' application.id %}" id="form_save" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
     <div class="row">
         <div class="col-md-8">
             <h5>{% trans 'mandatory_asterisk'%}</h5>
@@ -39,34 +40,36 @@
             </button>
         </div>
     </div>
-    <div class="row"  style="margin-top:5px;">
-        <div class="col-md-6">
-            <a id="lnk_previous_step_up" class="btn btn-default"
-               href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey'%}{%endif%}"
-               onclick="save('form_attachments');"
-               title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-                {%trans 'previous_step'%} : {% trans 'sociological_survey'%}</a>
+    <form id="form_attachments" method="POST" enctype="multipart/form-data">
+        <div class="row"  style="margin-top:5px;">
+            <div class="col-md-6">
+                <a id="lnk_previous_step_up" class="btn btn-default"
+                   href="{%if application.id%}{% url 'sociological_survey' application.id%}{%else%}{% url 'sociological_survey'%}{%endif%}"
+                   onclick="save('form_attachments');"
+                   title="{% trans 'sociological_survey'%}"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+                    {%trans 'previous_step'%} : {% trans 'sociological_survey'%}</a>
+            </div>
+            <div class="col-md-6">
+                <a id="lnk_next_step_up"
+                   class="btn btn-default pull-right"
+                   href="{%if application.id%}{% url 'submission' application.id%}{%else%}{% url 'submission'%}{%endif%}"
+                   onclick="save('form_attachments');"
+                   title="{% trans 'submission'%}">{%trans 'next_step'%} : {%trans 'submission'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+                    </a>
+            </div>
         </div>
-        <div class="col-md-6">
-            <a id="lnk_next_step_up"
-               class="btn btn-default pull-right"
-               href="{%if application.id%}{% url 'submission' application.id%}{%else%}{% url 'submission'%}{%endif%}"
-               onclick="save('form_attachments');"
-               title="{% trans 'submission'%}">{%trans 'next_step'%} : {%trans 'submission'%}<span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-                </a>
+        <br/>
+        <button id="button_add_form"  type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </button>
+        <!-- FORM TO UPLOAD ATTACHMENTS -->
+        <div id="div_document_forms">
+            {% csrf_token %}
+            {{ document_formset.management_form }}
+            <br>
         </div>
-    </div>
-    <br/>
-    <button id="button_add_form"  type="button" class="btn btn-default">
-    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-    </button>
-    <!-- FORM TO UPLOAD ATTACHMENTS -->
-    <div id="div_document_forms">
-        {% csrf_token %}
-        {{ document_formset.management_form }}
         <br>
-    </div>
-    <br>
+    </form>
 </form>
 <!-- HEADER -->
 <div class="row">
