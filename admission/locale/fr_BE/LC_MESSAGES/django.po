@@ -54,7 +54,7 @@ msgstr "Joindre"
 
 msgid "add_enrollment_file"
 msgstr ""
-"Veuillez joindre une copie de votre certificat ou une preuve d'inscription à"
+"Veuillez joindre une copie de votre certificat ou une preuve d'inscription à l'examen"
 
 msgid "add_file_children_deduction"
 msgstr "Veuillez joindre l'attestation officelle pour bénéficier de cette réduction"
@@ -359,7 +359,7 @@ msgid "duplicate_help"
 msgstr "Dupliquer les informations de l'année en "
 
 msgid "dutch_belgian_community"
-msgstr "Communauté flammande de Belgique"
+msgstr "Communauté flamande de Belgique"
 
 msgid "education_community"
 msgstr "Communauté d'enseignement"
@@ -898,7 +898,7 @@ msgid "postal_address"
 msgstr "Adresse de correspondance"
 
 msgid "postal_code"
-msgstr "Par code postal"
+msgstr "Code postal"
 
 msgid "prerequisites"
 msgstr "Prérequis"
@@ -951,7 +951,7 @@ msgid "question_culture_card"
 msgstr "Désirez-vous la carte culture?"
 
 msgid "question_date_session"
-msgstr "A quelle session (date)?"
+msgstr "A quelle date?"
 
 msgid "question_domain"
 msgstr "Le domaine, sous-domaine et type d'études correspondent à vos études"
@@ -1108,7 +1108,7 @@ msgid "specify_locality"
 msgstr "Vous ne trouvez pas la localité dans la liste"
 
 msgid "specify_name"
-msgstr "Préciser le nom"
+msgstr "Si autre, préciser le nom"
 
 msgid "specify_university_name"
 msgstr "Vous ne trouvez pas l'université dans la liste"
@@ -1447,9 +1447,6 @@ msgstr "Fichiers recto et verso obligatoires"
 msgid "validation_error"
 msgstr " champ empêche la validation de l'onglet"
 
-msgid "msg_error_school_local_community"
-msgstr "Merci de préciser une communauté pour l'école"
-
 msgid "profession_not_found"
 msgstr "Vous n'avez pas trouvé votre profession?"
 
@@ -1476,3 +1473,9 @@ msgstr "Union européenne"
 
 msgid "NON_EUROPEAN_UNION"
 msgstr "Non union européenne"
+
+msgid "no_result_yet"
+msgstr "Pas encore de résultat"
+
+msgid "no_identification_number"
+msgstr "Veuillez indiquer au moins un numéro de registre national, de carte d'identité ou de passeport."
