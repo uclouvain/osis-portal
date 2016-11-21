@@ -112,9 +112,10 @@ def visualize_student_result(request, pk):
     !!! Should only be accessible for staff having the rights.
     """
     stud_perf = mdl_performance.student_performance.find_by_pk(pk)
-    document = stud_perf.data if stud_perf else None
+    document = json.dumps(stud_perf.data) if stud_perf else None
+    creation_date = stud_perf.creation_date if stud_perf else None
 
-    return layout.render(request, "performance_result.html", {"results": document})
+    return layout.render(request, "performance_result.html", {"results": document, "creation_date": creation_date})
 
 
 # *************************** UTILITY FUNCTIONS
@@ -137,7 +138,7 @@ def convert_student_performance_to_dic(student_performance_obj):
     d = dict()
     d["anac"] = student_performance_obj.anac
     d["acronym"] = student_performance_obj.acronym
-    d["title"] = json.loads(student_performance_obj.data)["monAnnee"]["monOffre"]["offre"]["intituleComplet"]
+    d["title"] = json.loads(json.dumps(student_performance_obj.data))["monAnnee"]["monOffre"]["offre"]["intituleComplet"]
     d["pk"] = student_performance_obj.pk
     return d
 

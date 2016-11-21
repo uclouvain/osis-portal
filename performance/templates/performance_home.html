@@ -69,7 +69,7 @@
             </tr>
             {% for row in programs %}
             <tr>
-                <td>{{row.year}}</td>
+                <td>{{row.anac}}</td>
                 <td>
                     {% if perms.base.is_faculty_administrator %}
                         <a href="{% url 'performance_student_result' row.pk %}">

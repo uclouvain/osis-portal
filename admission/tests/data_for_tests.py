@@ -183,7 +183,7 @@ def create_application_document_file(an_application, update_by, description=None
 
 def create_student_performance():
     with open("performance/tests/ressources/points.json") as f:
-        data = f.read()
+        data = json.load(f)
     a_student_performance = mdl_performance.student_performance.StudentPerformance(acronym="SINF2MS/G",
                                                                                    registration_id="64641200", anac=2016,
                                                                                    update_date=datetime.datetime.now(),
