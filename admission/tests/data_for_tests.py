@@ -210,3 +210,10 @@ def create_applicant_document_file(an_applicant, description):
     an_applicant_document_file.document_file = a_document_file
     an_applicant_document_file.save()
     return an_applicant_document_file
+
+
+def create_offer_enrollment(student, offer_year):
+    offer_enrollment = mdl_base.offer_enrollment.OfferEnrollment(student=student, offer_year=offer_year,
+                                                                 date_enrollment=datetime.date.today())
+    offer_enrollment.save()
+    return offer_enrollment

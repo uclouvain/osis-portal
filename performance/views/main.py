@@ -123,7 +123,7 @@ def visualize_student_result(request, registration_id, offer_year_id):
 
 # *************************** UTILITY FUNCTIONS
 
-def get_student_programs_list(stud):  # todo TEST
+def get_student_programs_list(stud):
     """
     Fetch the student programs of the student "stud"
     :param stud: a student object
@@ -134,7 +134,7 @@ def get_student_programs_list(stud):  # todo TEST
     return list_student_programs
 
 
-def query_result_to_list(query_result):  # todo TEST
+def query_result_to_list(query_result):
     """
     Parse the query result (a lisf of offer enrollments),
     to a list of dictonnary.
@@ -143,13 +143,18 @@ def query_result_to_list(query_result):  # todo TEST
     """
     l = []
     for row in query_result:
-        d = {}
-        d["year"] =  row.offer_year.academic_year
-        d["anac"] = row.offer_year.academic_year.year
-        d["acronym"] = row.offer_year.acronym
-        d["title"] = row.offer_year.title
-        d["program_id"] = row.offer_year.id
+        d = convert_offer_enrollment_to_dic(row)
         l.append(d)
     return l
+
+
+def convert_offer_enrollment_to_dic(offer_enrollment_obj):
+    d = dict()
+    d["year"] = offer_enrollment_obj.offer_year.academic_year
+    d["anac"] = offer_enrollment_obj.offer_year.academic_year.year
+    d["acronym"] = offer_enrollment_obj.offer_year.acronym
+    d["title"] = offer_enrollment_obj.offer_year.title
+    d["program_id"] = offer_enrollment_obj.offer_year.id
+    return d
 
 
