@@ -43,7 +43,7 @@ def callback(json_data):
 
 def extract_student_from_json(json_data):
     from base.models import student as mdl_std
-    registration_id = json_data["registration_id"]
+    registration_id = json_data["etudiant"]["noma"]
     student = mdl_std.find_by_registration_id(registration_id)
     return student
 
@@ -51,9 +51,9 @@ def extract_student_from_json(json_data):
 def extract_offer_year_from_json(json_data):
     from base.models import academic_year as mdl_academic_yr
     from base.models import offer_year as mdl_offer_yr
-    year = json_data["academic_years"][0]["anac"]
+    year = json_data["monAnnee"]["anac"]
     academic_year = mdl_academic_yr.find_by_year(year)
-    acronym = json_data["academic_years"][0]["programs"][0]["acronym"]
+    acronym = json_data["monAnnee"]["monOffre"]["offre"]["sigleComplet"]
     offer_year = mdl_offer_yr.find_by_acronym_academic_year(acronym, academic_year)
     return offer_year
 
