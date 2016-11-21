@@ -26,6 +26,9 @@ msgstr "Accepté par le promoteur"
 msgid "accepted_by_first_year_evaluation"
 msgstr "Validation de première année validée"
 
+msgid "accompanist"
+msgstr "Accompagnateur"
+
 msgid "add_justification"
 msgstr "Ajouter une justification"
 
@@ -137,6 +140,9 @@ msgstr "Historique"
 msgid "information"
 msgstr "Information"
 
+msgid "internship_master"
+msgstr "Maître de stage"
+
 msgid "january"
 msgstr "Janvier"
 
@@ -193,6 +199,9 @@ msgstr "Personne"
 
 msgid "possible"
 msgstr "Possible"
+
+msgid "president"
+msgstr "Président"
 
 msgid "professor"
 msgstr "Professeur"

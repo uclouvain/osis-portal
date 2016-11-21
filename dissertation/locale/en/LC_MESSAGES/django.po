@@ -26,6 +26,9 @@ msgstr "Accepted by promoter"
 msgid "accepted_by_first_year_evaluation"
 msgstr "Accepted by first year evaluation"
 
+msgid "accompanist"
+msgstr "Accompanist"
+
 msgid "add_justification"
 msgstr "Add justification"
 
@@ -137,6 +140,9 @@ msgstr "History"
 msgid "information"
 msgstr "Information"
 
+msgid "internship_master"
+msgstr "Internship Master"
+
 msgid "january"
 msgstr "January"
 
@@ -193,6 +199,9 @@ msgstr "Person"
 
 msgid "possible"
 msgstr "Possible"
+
+msgid "president"
+msgstr "President"
 
 msgid "professor"
 msgstr "Professor"

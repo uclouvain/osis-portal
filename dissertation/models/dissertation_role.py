@@ -38,6 +38,9 @@ class DissertationRole(SerializableModel):
         ('PROMOTEUR', _('promotor')),
         ('CO_PROMOTEUR', _('copromotor')),
         ('READER', _('reader')),
+        ('ACCOMPANIST', _('accompanist')),
+        ('INTERNSHIP', _('internship_master')),
+        ('PRESIDENT', _('president')),
     )
 
     status = models.CharField(max_length=12, choices=STATUS_CHOICES)
