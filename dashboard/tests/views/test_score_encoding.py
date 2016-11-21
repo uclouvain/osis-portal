@@ -38,7 +38,7 @@ class ScoreSheetTest(TestCase):
         document = score_encoding.get_score_sheet(self.global_id)
         self.assertJSONEqual(self.score_encoding.document, document, "Should return the document in db")
 
-    @patch('osis_common.queue.queue_listener.Client.call')
+    @patch('frontoffice.queue.queue_listener.Client.call')
     def test_get_score_sheet_if_present_in_db_but_outdated(self, mock_client_call):
         global_id = "12012"
         new_score_encoding = data_for_tests.create_score_encoding(global_id=global_id)
@@ -50,13 +50,13 @@ class ScoreSheetTest(TestCase):
         document = score_encoding.get_score_sheet(global_id)
         self.assertJSONEqual(document, expected, "Should fetch document from queue")
 
-    @patch('osis_common.queue.queue_listener.Client.call')
+    @patch('frontoffice.queue.queue_listener.Client.call')
     def test_get_score_sheet_if_not_present_in_db_with_timeout(self, mock_client_call):
         mock_client_call.return_value = None
         document = score_encoding.get_score_sheet("12012")
         self.assertIsNone(document, "Should timeout when waiting for document and return none")
 
-    @patch('osis_common.queue.queue_listener.Client.call')
+    @patch('frontoffice.queue.queue_listener.Client.call')
     def test_get_score_sheet_if_not_present_in_db_and_fetch(self, mock_client_call):
         expected = data_for_tests.get_sample()
         mock_client_call.return_value = expected.encode("utf-8")
