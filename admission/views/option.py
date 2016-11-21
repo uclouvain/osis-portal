@@ -38,7 +38,6 @@ class JSONResponse(HttpResponse):
 
 def find_by_offer(request):
     offer_yr_id = request.GET['offer']
-
     offer_yr = mdl_base.offer_year.find_by_id(offer_yr_id)
     questions = mdl.question.find_form_ordered_questions(offer_yr)
     options = []
@@ -48,7 +47,6 @@ def find_by_offer(request):
             options_by_question = mdl.option.find_options_by_question_id(question.id)
             for o in options_by_question:
                 options.append(o)
-
         for option in options:
             options_max_number = 0
             if option.question.type == 'RADIO_BUTTON' or option.question.type == 'CHECKBOX' \
