@@ -46,8 +46,8 @@ def create_person():
     return a_person
 
 
-def create_student():
-    a_student = mdl_base.student.Student(registration_id="64641200", person=create_person())
+def create_student(registration_id="64641200"):
+    a_student = mdl_base.student.Student(registration_id=registration_id, person=create_person())
     a_student.save()
     return a_student
 
@@ -186,7 +186,7 @@ def create_student_performance():
         data = json.load(f)
     a_student_performance = mdl_performance.\
         student_performance.StudentPerformance(offer_year=create_offer_year_with_acronym("SINF2MS/G"), student=create_student(),
-                                               update_date=datetime.date.today(), data=data)
+                                               update_date=datetime.datetime.now(), data=data)
     a_student_performance.save()
     return a_student_performance
 

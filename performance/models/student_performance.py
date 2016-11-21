@@ -29,7 +29,6 @@ from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from osis_common.models.serializable_model import SerializableModel
 from performance.queue.student_performance import fetch_and_save
-import datetime
 from django.utils import timezone
 
 
@@ -56,12 +55,12 @@ def search(student=None, offer_year=None):
         otherwise it returns empty.
     """
     has_criteria = False
-    student_performances = StudentPerformance.objects
+    student_performances = StudentPerformance.objects.all()
     if student:
-        student_performances.filter(student=student)
+        student_performances = student_performances.filter(student=student)
         has_criteria = True
     if offer_year:
-        student_performances.filter(offer_year=offer_year)
+        student_performances = student_performances.filter(offer_year=offer_year)
         has_criteria = True
 
     if has_criteria:
