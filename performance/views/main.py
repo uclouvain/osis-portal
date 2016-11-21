@@ -28,8 +28,7 @@
 
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
-from django.core.exceptions import ObjectDoesNotExist
-from base.models.student import find_by_user, find_by_registration_id, get_student_by_registration_id
+from base.models.student import find_by_user, get_student_by_registration_id
 from base.models import offer_enrollment as mdl_offer_enrollment
 from base.models import offer_year as mdl_offer_year
 from performance import models as mdl_performance
