@@ -55,51 +55,27 @@ def update(request, application_id=None):
 
 
 def remove_attachment(request, application_id=None):
-    """
-    View used to remove previous attachments.
-    :param request
-    :param application_id
-    """
     if request.method == "POST":
         form = RemoveAttachmentForm(request.POST)
         if form.is_valid():
             attachment_pk = form.cleaned_data['attachment_id']
-            # form is valid ensure that there is a document having that pk value
             attachment_to_remove = DocumentFile.objects.get(pk=attachment_pk)
             safe_document_removal("admission_attachments", attachment_to_remove)
     return redirect('attachments', application_id)
 
 
 def safe_document_removal(application_name, document):
-    """
-    Safely remove a document by ensuring that the user is the one
-    that owns the file and the application_name is the correct one.
-    :param application_name: a string
-    :param document
-    :return:
-    """
     if document.application_name == application_name:
         document.delete()
 
 
 def list_attachments(application):
-    """
-    Returns the list of all the attachments uploaded by the user.
-    :param application
-    :return: an array of dictionnary
-    """
     application_document_files = mdl.application_document_file.find_document_by_application(application)
     return [application_document_file.document_file for application_document_file
             in application_document_files]
 
 
 def save_attachments(request, application_id):
-    """
-    Save a document (attachment) from a form.
-    :param application_id: the current application
-    :param request
-    :return:
-    """
     application = mdl.application.find_by_id(application_id)
     UploadDocumentFileFormSet = formset_factory(UploadDocumentFileForm, extra=0)
     if request.method == "POST":
@@ -109,8 +85,6 @@ def save_attachments(request, application_id):
                 file_name = document.cleaned_data['file_name']
                 file = document.cleaned_data['file']
                 description = document.cleaned_data['description']
-                # Never trust a user. They could change the hidden input values.
-                # Ex: user, application_name, storage_duration, etc.
                 storage_duration = 720
                 application_name = "admission_attachments"
                 content_type = file.content_type
