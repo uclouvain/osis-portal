@@ -111,7 +111,7 @@ def visualize_student_result(request, pk):
     View to visualize a particular student program courses result.
     !!! Should only be accessible for staff having the rights.
     """
-    stud_perf = mdl_performance.student_performance.find_by_pk(pk)
+    stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
     document = json.dumps(stud_perf.data) if stud_perf else None
     creation_date = stud_perf.creation_date if stud_perf else None
 

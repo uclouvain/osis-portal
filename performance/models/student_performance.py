@@ -28,13 +28,14 @@ from django.contrib.postgres.fields import JSONField
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from performance.queue.student_performance import fetch_and_save
-from django.utils.datetime_safe import datetime
+from django.utils import timezone
 
 
 class StudentPerformanceAdmin(admin.ModelAdmin):
-    list_display = ('registration_id', 'academic_year', 'acronym')
+    list_display = ('registration_id', 'academic_year', 'acronym', 'update_date', 'creation_date')
     list_filter = ('registration_id', 'academic_year', 'acronym', )
     fieldsets = ((None, {'fields': ('registration_id', 'academic_year', 'acronym', 'update_date', 'creation_date')}),)
+    readonly_fields = ('creation_date', )
 
 
 class StudentPerformance(models.Model):
@@ -49,7 +50,7 @@ class StudentPerformance(models.Model):
         unique_together = ('registration_id', 'academic_year', 'acronym')
 
     def __str__(self):
-        return
+        return '{} - {} - {}'.format(self.registration_id, self.acronym, self.academic_year)
 
 
 def search(registration_id=None, academic_year=None, acronym=None):
@@ -99,9 +100,17 @@ def find_or_fetch(registration_id, academic_year, acronym):
 
 
 def has_expired(student_performance):
-    now = datetime.now()
+    now = timezone.now()
     expiration_date = student_performance.update_date
     return expiration_date < now
+
+
+def find_actual_by_pk(student_performance_pk):
+    result = find_by_pk(student_performance_pk)
+    if result and has_expired(result):
+        new_result = fetch_and_save(result.registration_id, result.academic_year, result.acronym)
+        result = new_result if new_result else result
+    return result
 
 
 def find_by_pk(student_performance_pk):

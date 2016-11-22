@@ -62,7 +62,7 @@ class TestQueueStudentPerformance(TestCase):
         message = queue_stud_perf.generate_message(self.student_performance.registration_id,
                                                    self.student_performance.academic_year,
                                                    self.student_performance.acronym)
-        expected_message = json.dumps({"noma": "64641200", "sigle": "SINF2MS/G", "academic_year": "2016"})
+        expected_message = json.dumps({"registration_id": "64641200", "acronym": "SINF2MS/G", "academic_year": "2016"})
         self.assertJSONEqual(message, expected_message, "Wrong message returned.")
 
     def test_extract_academic_year_from_json(self):

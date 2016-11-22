@@ -120,7 +120,7 @@ def listen_queue_synchronously(queue_name, callback, counter=3):
     logger.debug("Channel opened.")
     logger.debug("Declaring queue (if it doesn't exist yet)...")
     channel.queue_declare(queue=queue_name,
-                          # durable=True,
+                          durable=True,
                           # exclusive=False,
                           # auto_delete=False,
                           )

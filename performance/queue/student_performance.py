@@ -59,8 +59,8 @@ def extract_acronym_from_json(json_data):
 
 def generate_message(registration_id, academic_year, acronym):
     message = dict()
-    message['noma'] = registration_id
-    message["sigle"] = acronym
+    message['registration_id'] = registration_id
+    message["acronym"] = acronym
     message["academic_year"] = str(academic_year)
     return json.dumps(message)
 
