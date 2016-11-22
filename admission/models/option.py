@@ -67,5 +67,5 @@ def find_by_id(option_id):
 
 
 def find_number_options_by_question_id(question):
-    opt = Option.objects.filter(question=question).count()
-    return opt
+    option = Option.objects.filter(question=question).count()
+    return option
