@@ -1097,6 +1097,24 @@
         }
     });
 
+    const MESSAGE_SAVE_CONFIRM = gettext('save_confirm');
+
+    $(window).on("beforeunload", function() {
+        return MESSAGE_SAVE_CONFIRM;
+    });
+
+    $("form[id*='form']").on("submit", function(e) {
+        //check form to make sure it is kosher
+        //remove the ev
+        $(window).off("beforeunload");
+        return true;
+    });
+
+    $(window).on('webapp:page:closing', function(e) {
+        e.preventDefault();
+        e.message = MESSAGE_SAVE_CONFIRM;
+    });
+
 
     </script>
 {% endblock %}
