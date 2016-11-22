@@ -43,20 +43,20 @@ def find_by_offer(request):
     question_list = []
     if questions:
         for question in questions:
-            count = 0
+            position = 0
             options_by_question = mdl.option.find_options_by_question_id(question.id)
             for option in options_by_question:
-                options_max_number = 0
-                count += 1
+                options_max_number = 1
+                position += 1
                 if option.question.type == 'RADIO_BUTTON' or option.question.type == 'CHECKBOX' \
                         or option.question.type == 'DROPDOWN_LIST':
-                    options_max_number = mdl.option.find_number_options_by_question_id(option.question.id)
+                    options_max_number = mdl.option.find_number_options_by_question_id(option.question)
                 answers = mdl.answer.find_by_user_and_option(request.user, option.id)
                 answer = ""
                 if answers.exists():
                     answer = answers[0].value
                 question_list.append({'answer': answer,
-                                      'count': count,
+                                      'position': position,
                                       'option_id': option.id,
                                       'option_label': option.label,
                                       'option_description': option.description,

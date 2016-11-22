@@ -1263,7 +1263,7 @@ function display_dynamic_form(offer_year_id){
                                        .prop("required",value.question_required));
                 }
                 if(value.question_type=='RADIO_BUTTON'){
-                    if(value.count == 1){
+                    if(value.position == 1){
                         $('#pnl_questions').append($("<label></label>")
                                            .append(value.question_label)
                                            .attr("id","lbl_question_"+value.question_id));
@@ -1348,7 +1348,7 @@ function display_dynamic_form(offer_year_id){
                     }
                 }
                 if(value.question_type=='CHECKBOX'){
-                    if(value.count == 1){
+                    if(value.position == 1){
                         $('#pnl_questions').append($("<label></label>")
                                            .append(value.question_label)
                                            .attr("id","lbl_question_"+value.question_id));
@@ -1429,7 +1429,7 @@ function display_dynamic_form(offer_year_id){
                     }
                 }
                 if(value.question_type=='DROPDOWN_LIST'){
-                    if(value.count == 1){
+                    if(value.position == 1){
                         $('#pnl_questions').append($("<label></label>")
                                            .append(value.question_label)
                                            .attr("id","lbl_question_"+value.question_id));
@@ -1493,7 +1493,7 @@ function display_dynamic_form(offer_year_id){
                                            .attr("class","description"));
                     }
                 }
-                if(value.count == value.options_max_number){
+                if(value.position == value.options_max_number){
                     $('#pnl_questions').append("<br>");
                     $('#pnl_questions').append("<br>");
                 }
