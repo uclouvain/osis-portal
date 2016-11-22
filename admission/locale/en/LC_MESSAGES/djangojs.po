@@ -79,7 +79,7 @@ msgid "scholarship_cfwb"
 msgstr "scholarship_cfwb"
 
 msgid "scholarship_development_cooperation"
-msgstr "scholarship_development_cooperation"
+msgstr "Scholarship development cooperation"
 
 msgid "change_document"
 msgstr "Modify the document"
@@ -219,3 +219,12 @@ msgstr "Sure?  Don't you need to save some data?"
 
 msgid "mandatory_field"
 msgstr "Mandatory field"
+
+msgid "identity_card"
+msgstr "Identity card"
+
+msgid "letter_motivation"
+msgstr "Motivation letter"
+
+msgid "other"
+msgstr "Other"
