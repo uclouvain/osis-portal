@@ -219,3 +219,6 @@ msgstr "Sure?  Don't you need to save some data?"
 
 msgid "mandatory_field"
 msgstr "Mandatory field"
+
+msgid "save_confirm"
+msgstr "Sure?  Don't you have to save data?"

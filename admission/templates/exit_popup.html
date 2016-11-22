@@ -1,0 +1,9 @@
+var exit_window_html = '<div id="ExitSplashMainOuterLayer" style="position:absolute;width:100%;height:100%;z-index:99;left:0;top:0;background-color:#fff"><div style="display:block; width:100%; height:100%; position:absolute; background:#FFFFFF; margin-top:0px; margin-left:0px;" align="center"><iframe src="'+event.data.exitpage+'" width="100%" height="100%" align="middle" frameborder="0"></iframe></div></div>';
+
+$('body').css({
+"top-margin":"0",
+"right-margin":"0",
+"bottom-margin":"0",
+"left-margin":"0",
+"overflow":"hidden"
+}).append(exit_window_html);

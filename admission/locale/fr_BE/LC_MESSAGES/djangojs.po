@@ -216,3 +216,6 @@ msgstr "Sûr?  Vous n'avez pas besoin de sauvegarder vos données?"
 
 msgid "mandatory_field"
 msgstr "Champ obligatoire"
+
+msgid "save_confirm"
+msgstr "Sûr?  Vous n'avez pas de données à sauvegarder?"
