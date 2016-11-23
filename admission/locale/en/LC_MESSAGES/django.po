@@ -747,7 +747,7 @@ msgid "msg_warning_curriculum"
 msgstr "Please mention your secondary education and diplomas informations, before encoding the curricula."
 
 msgid "name"
-msgstr "Nom"
+msgstr "Name"
 
 msgid "national_registry_number"
 msgstr "National registry number"
@@ -1456,3 +1456,6 @@ msgstr "Non european union"
 
 msgid "no_result_yet"
 msgstr "No result yet"
+
+msgid "no_identification_number"
+msgstr "Please mention at least a national register number, an identity card number or a passport number."

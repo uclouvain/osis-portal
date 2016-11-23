@@ -25,7 +25,6 @@
 ##############################################################################
 from django.shortcuts import render, redirect
 from admission import models as mdl
-from admission.models.applicant_document_file import ApplicantDocumentFile
 from admission.models.enums import document_type
 from admission.views import demande_validation, navigation
 from admission.forms.attachement import RemoveAttachmentForm
@@ -35,25 +34,11 @@ from django.forms import formset_factory
 
 
 def update(request, application_id=None):
-    past_attachments = list_attachments(request.user)
-    attachments_available = attachments_left_available(len(past_attachments))
-    UploadDocumentFileFormSet = formset_factory(UploadDocumentFileForm, extra=0, max_num=attachments_available)
-
-    if request.method == "POST":
-        document_formset = UploadDocumentFileFormSet(request.POST, request.FILES)
-        if document_formset.is_valid():
-            for document in document_formset:
-                save_document_from_form(document, request.user)
-    elif request.method == "GET":
-        document_formset = UploadDocumentFileFormSet()
-
-    if application_id:
-        application = mdl.application.find_by_id(application_id)
-    else:
-        application = mdl.application.init_application(request.user)
-
+    application = mdl.application.find_by_id(application_id)
+    past_attachments = list_attachments(application)
+    UploadDocumentFileFormSet = formset_factory(UploadDocumentFileForm, extra=0)
+    document_formset = UploadDocumentFileFormSet()
     applicant = mdl.applicant.find_by_user(request.user)
-
     remove_attachment_form = RemoveAttachmentForm()
     list_choices = [x[1] for x in document_type.DOCUMENT_TYPE_CHOICES]
     data = {
@@ -69,80 +54,48 @@ def update(request, application_id=None):
     return render(request, "admission_home.html", data)
 
 
-def remove_attachment(request):
-    """
-    View used to remove previous attachments.
-    :param request
-    """
+def remove_attachment(request, application_id=None):
     if request.method == "POST":
         form = RemoveAttachmentForm(request.POST)
         if form.is_valid():
             attachment_pk = form.cleaned_data['attachment_id']
-            # form is valid ensure that there is a document having that pk value
             attachment_to_remove = DocumentFile.objects.get(pk=attachment_pk)
-            safe_document_removal(request.user, "admission_attachments", attachment_to_remove)
-    return redirect(update)
+            safe_document_removal("admission_attachments", attachment_to_remove)
+    return redirect('attachments', application_id)
 
 
-def safe_document_removal(user, application_name, document):
-    """
-    Safely remove a document by ensuring that the user is the one
-    that owns the file and the application_name is the correct one.
-    :param user: a User object
-    :param application_name: a string
-    :param document
-    :return:
-    """
-    applicant_calling = mdl.applicant.find_by_user(user)
-    applicant_from_document = mdl.applicant_document_file.find_applicant_by_document(document)
-    if applicant_calling == applicant_from_document and document.application_name == application_name:
+def safe_document_removal(application_name, document):
+    if document.application_name == application_name:
         document.delete()
 
 
-def list_attachments(user):
-    """
-    Returns the list of all the attachments uploaded by the user.
-    :param user: the current user in session.
-    :return: an array of dictionnary
-    """
-    applicant = mdl.applicant.find_by_user(user)
-    return mdl.applicant_document_file.find_document_by_applicant(applicant)
+def list_attachments(application):
+    application_document_files = mdl.application_document_file.find_document_by_application(application)
+    return [application_document_file.document_file for application_document_file
+            in application_document_files]
 
 
-def attachments_left_available(number_attachments_uploaded):
-    """
-    Compute the number of attachments left that the user can upload.
-    :param number_attachments_uploaded: number of attachments already uploaded
-    :return: slot available
-    """
-    max_num_attachments = 5
-    num_attachments_uploaded = number_attachments_uploaded
-    return max_num_attachments - num_attachments_uploaded
-
-
-def save_document_from_form(document, user):
-    """
-    Save a document (attachment) from a form.
-    :param document: an UploadDocumentForm received from a POST request.
-    :param user: the current user
-    :return:
-    """
-    file_name = document.cleaned_data['file_name']
-    file = document.cleaned_data['file']
-    description = document.cleaned_data['description']
-    # Never trust a user. They could change the hidden input values.
-    # Ex: user, application_name, storage_duration, etc.
-    storage_duration = 0
-    application_name = "admission_attachments"
-    content_type = file.content_type
-    size = file.size
-
-    doc_file = DocumentFile(file_name=file_name, file=file,
-                            description=description, storage_duration=storage_duration,
-                            application_name=application_name, content_type=content_type,
-                            size=size, update_by=user.username)
-    doc_file.save()
-    applicant = mdl.applicant.find_by_user(user)
-    applicant_document_file = ApplicantDocumentFile(applicant=applicant, document_file=doc_file)
-    applicant_document_file.save()
-
+def save_attachments(request, application_id):
+    application = mdl.application.find_by_id(application_id)
+    UploadDocumentFileFormSet = formset_factory(UploadDocumentFileForm, extra=0)
+    if request.method == "POST":
+        document_formset = UploadDocumentFileFormSet(request.POST, request.FILES)
+        if document_formset.is_valid():
+            for document in document_formset:
+                file_name = document.cleaned_data['file_name']
+                file = document.cleaned_data['file']
+                description = document.cleaned_data['description']
+                storage_duration = 720
+                application_name = "admission_attachments"
+                content_type = file.content_type
+                size = file.size
+                doc_file = DocumentFile(file_name=file_name, file=file,
+                                        description=description, storage_duration=storage_duration,
+                                        application_name=application_name, content_type=content_type,
+                                        size=size, update_by=request.user.username)
+                doc_file.save()
+                application_file = mdl.application_document_file.ApplicationDocumentFile()
+                application_file.application = application
+                application_file.document_file = doc_file
+                application_file.save()
+    return redirect("attachments", application_id)

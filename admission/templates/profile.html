@@ -33,6 +33,8 @@
         {% csrf_token %}
         <input type="hidden" id="hdn_following_profile_tab"
            name="following_profile_tab">
+        <input type="hidden" id="hdn_original_last_name">
+        <input type="hidden" id="hdn_original_first_name">
         <div class="row">
             <div class="col-md-8">
                 <h5>{% trans 'mandatory_asterisk'%}</h5>
@@ -83,14 +85,14 @@
                                 <input class="form-control" id="txt_last_name" name="last_name"
                                        value="{{ applicant.user.last_name  | default_if_none:'' }}" maxlength="255">
                                 <p class="caption">(ex: Van der Elst)</p>
-                                <span class="error">{{ applicant_form.last_name.errors|striptags }}</span>
+                                <span class="error" id="spn_last_name_error">{{ applicant_form.last_name.errors|striptags }}</span>
                             </div>
                             <div class="col-md-6">
                                 <label>{%trans 'firstname'%} *</label>
                                 <input class="form-control" id="txt_first_name" name="first_name"
                                        value="{{ applicant.user.first_name  | default_if_none:'' }}" maxlength="255">
                                 <p class="caption">(ex: Frédéric <span style="text-decoration: line-through;">frederic FREDERIC</span>)</p>
-                                <span class="error">{{ applicant_form.first_name.errors|striptags }}</span>
+                                <span class="error" id="spn_first_name_error">{{ applicant_form.first_name.errors|striptags }}</span>
                             </div>
                         </div>
                         <br>
@@ -171,6 +173,7 @@
                         <div class="col-md-3">
                             <label>{%trans 'birth_country'%} *</label>
                             <select class="form-control" id="slt_birth_country" name="birth_country">
+                                <option value="-1">-</option>
                                 {% for country in countries%}
                                 <option value="{{country.id}}"
                                     {%if country.id = applicant.birth_country.id %} selected {% endif %}>{{ country}}
@@ -191,6 +194,7 @@
                                 {% endfor %}
                             </select>
                             <span class="error">{{ applicant_form.nationality.errors|striptags }}</span>
+                            <span class="error" id="spn_nationality_error">{{ applicant_form.nationality.errors|striptags }}</span>
                         </div>
                     </div>
                     <br>
@@ -252,6 +256,7 @@
                             <label>{% trans 'passport_number'%}</label>
                             <input class="form-control" id="txt_passport_number" name="passport_number"
                                    value="{{ applicant.passport_number | default_if_none:''}}">
+                            <span class="error">{{ applicant_form.passport_number.errors|striptags }}</span>
                         </div>
                         <div class="col-md-4">
                             <div class="row">
@@ -448,11 +453,12 @@
                                    value="{{ applicant.phone | default_if_none:''}}" maxlength="30">
                             <p class="caption">(ex: +32 10 47 21 72)</p>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                             <label>{% trans 'mail' %} *</label>
                             <input class="form-control" id="txt_additional_email" name="additional_email"
                                    type="email"
-                                   value="{{ applicant.additional_email| default_if_none:''}}" maxlength="255">
+                                   value="{{ applicant.additional_email| default_if_none:''}}" maxlength="255"
+                                   disabled>
                             <span class="error" id="spn_additional_email">{{ applicant_form.additional_email.errors|striptags }}</span>
                         </div>
                     </div>
