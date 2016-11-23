@@ -60,7 +60,7 @@ def dissertation_delete(request, pk):
     memory = get_object_or_404(dissertation.Dissertation, pk=pk)
     if memory.author_is_logged_student(request):
         memory.deactivate()
-        dissertation_update.add(request, memory, memory.status, justification="manager_set_active_false ")
+        dissertation_update.add(request, memory, memory.status, justification="student_set_active_false")
     return redirect('dissertations')
 
 
@@ -137,6 +137,7 @@ def dissertation_edit(request, pk):
                 form = DissertationEditForm(request.POST, instance=memory)
                 if form.is_valid():
                     memory = form.save()
+                    dissertation_update.add(request, memory, memory.status, justification="student_edit_dissertation")
                     return redirect('dissertation_detail', pk=memory.pk)
                 else:
                     form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
@@ -154,6 +155,7 @@ def dissertation_edit(request, pk):
                     form = DissertationTitleForm(request.POST, instance=memory)
                     if form.is_valid():
                         memory = form.save()
+                        dissertation_update.add(request, memory, memory.status, justification="student_edit_title")
                         return redirect('dissertation_detail', pk=memory.pk)
                 else:
                     form = DissertationTitleForm(instance=memory)
@@ -192,9 +194,8 @@ def dissertation_jury_new(request, pk):
                                                                                   data['adviser'],
                                                                                   data['dissertation']):
                         form.save()
-                        if dissert.status != 'DRAFT':
-                            justification = "%s" % "add_reader"
-                            dissertation_update.add(request, dissert, dissert.status, justification=justification)
+                        justification = "%s %s" % ("student_add_reader", data['adviser'])
+                        dissertation_update.add(request, dissert, dissert.status, justification=justification)
                 return redirect('dissertation_detail', pk=dissert.pk)
             else:
                 form = DissertationRoleForm(initial={'status': "READER", 'dissertation': dissert})
@@ -213,8 +214,9 @@ def dissertation_new(request):
     if request.method == "POST":
         form = DissertationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('dissertations')
+            memory = form.save()
+            dissertation_update.add(request, memory, memory.status, justification="student_creation_dissertation")
+            return redirect('dissertation_detail', pk=memory.pk)
         else:
             form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
             form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offers(offers)
@@ -234,7 +236,7 @@ def dissertation_reader_delete(request, pk):
     if memory.author_is_logged_student(request):
         offer_pro = offer_proposition.search_by_offer(memory.offer_year_start.offer)
         if offer_pro.student_can_manage_readers and memory.status == 'DRAFT':
-            justification = "%s %s" % ("delete_reader", str(role))
+            justification = "%s %s" % ("student_delete_reader", str(role))
             dissertation_update.add(request, memory, memory.status, justification=justification)
             role.delete()
         return redirect('dissertation_detail', pk=memory.pk)
