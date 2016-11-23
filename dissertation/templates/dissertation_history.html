@@ -53,9 +53,7 @@
             <tr>
                 <td style="text-align: center">
                     {% if dissertation_update.status_from != dissertation_update.status_to %}
-                        {% if dissertation_update.status_from == 'DRAFT' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_from == 'DIR_SUBMIT' %}
+                        {% if dissertation_update.status_from == 'DIR_SUBMIT' %}
                         <span class="label label-primary">
                         {% elif dissertation_update.status_from == 'DIR_OK' %}
                         <span class="label label-success">
@@ -63,37 +61,13 @@
                         <span class="label label-danger">
                         {% elif dissertation_update.status_from == 'COM_SUBMIT' %}
                         <span class="label label-primary">
-                        {% elif dissertation_update.status_from == 'COM_OK' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_from == 'COM_KO' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_from == 'EVA_SUBMIT' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_from == 'EVA_OK' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_from == 'EVA_KO' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_from == 'TO_RECEIVE' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_from == 'TO_DEFEND' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_from == 'DEFENDED' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_from == 'ENDED' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_from == 'ENDED_WIN' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_from == 'ENDED_LOS' %}
-                        <span class="label label-default">
                         {% else %}
                         <span class="label label-default">
                         {% endif %}
                         {{ dissertation_update.get_status_from_display }}
                         </span><br>
                         <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span><br>
-                        {% if dissertation_update.status_to == 'DRAFT' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_to == 'DIR_SUBMIT' %}
+                        {% if dissertation_update.status_to == 'DIR_SUBMIT' %}
                         <span class="label label-primary">
                         {% elif dissertation_update.status_to == 'DIR_OK' %}
                         <span class="label label-success">
@@ -101,28 +75,6 @@
                         <span class="label label-danger">
                         {% elif dissertation_update.status_to == 'COM_SUBMIT' %}
                         <span class="label label-primary">
-                        {% elif dissertation_update.status_to == 'COM_OK' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_to == 'COM_KO' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_to == 'EVA_SUBMIT' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_to == 'EVA_OK' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_to == 'EVA_KO' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_to == 'TO_RECEIVE' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_to == 'TO_DEFEND' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_to == 'DEFENDED' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_to == 'ENDED' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_to == 'ENDED_WIN' %}
-                        <span class="label label-default">
-                        {% elif dissertation_update.status_to == 'ENDED_LOS' %}
-                        <span class="label label-default">
                         {% else %}
                         <span class="label label-default">
                         {% endif %}
