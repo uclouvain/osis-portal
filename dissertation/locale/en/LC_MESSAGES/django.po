@@ -26,6 +26,9 @@ msgstr "Accepted by promoter"
 msgid "accepted_by_first_year_evaluation"
 msgstr "Accepted by first year evaluation"
 
+msgid "ACCOMPANIST"
+msgstr "Accompanist"
+
 msgid "accompanist"
 msgstr "Accompanist"
 
@@ -49,6 +52,9 @@ msgstr "Change"
 
 msgid "collaboration"
 msgstr "Collaboration"
+
+msgid "CO_PROMOTEUR"
+msgstr "Co-Promotor"
 
 msgid "copromotor"
 msgstr "Co-promoter"
@@ -140,6 +146,9 @@ msgstr "History"
 msgid "information"
 msgstr "Information"
 
+msgid "INTERNSHIP"
+msgstr "Internship Master"
+
 msgid "internship_master"
 msgstr "Internship Master"
 
@@ -200,11 +209,17 @@ msgstr "Person"
 msgid "possible"
 msgstr "Possible"
 
+msgid "PRESIDENT"
+msgstr "President"
+
 msgid "president"
 msgstr "President"
 
 msgid "professor"
 msgstr "Professor"
+
+msgid "PROMOTEUR"
+msgstr "Promotor"
 
 msgid "promotor"
 msgstr "Promoter"
@@ -220,6 +235,9 @@ msgstr "Dissertation subject jury"
 
 msgid "question"
 msgstr "Question"
+
+msgid "READER"
+msgstr "Reader"
 
 msgid "reader"
 msgstr "Reader"

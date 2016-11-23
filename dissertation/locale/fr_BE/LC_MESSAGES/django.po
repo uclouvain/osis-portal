@@ -26,6 +26,9 @@ msgstr "Accepté par le promoteur"
 msgid "accepted_by_first_year_evaluation"
 msgstr "Validation de première année validée"
 
+msgid "ACCOMPANIST"
+msgstr "Accompagnateur"
+
 msgid "accompanist"
 msgstr "Accompagnateur"
 
@@ -49,6 +52,9 @@ msgstr "Changement"
 
 msgid "collaboration"
 msgstr "Collaboration"
+
+msgid "CO_PROMOTEUR"
+msgstr "Co-Promoteur"
 
 msgid "copromotor"
 msgstr "Co-promoteur"
@@ -140,6 +146,9 @@ msgstr "Historique"
 msgid "information"
 msgstr "Information"
 
+msgid "INTERNSHIP"
+msgstr "Maître de stage"
+
 msgid "internship_master"
 msgstr "Maître de stage"
 
@@ -200,11 +209,17 @@ msgstr "Personne"
 msgid "possible"
 msgstr "Possible"
 
+msgid "PRESIDENT"
+msgstr "Président"
+
 msgid "president"
 msgstr "Président"
 
 msgid "professor"
 msgstr "Professeur"
+
+msgid "PROMOTEUR"
+msgstr "Promoteur"
 
 msgid "promotor"
 msgstr "Promoteur"
@@ -220,6 +235,9 @@ msgstr "Jury du sujet de mémoire"
 
 msgid "question"
 msgstr "Question"
+
+msgid "READER"
+msgstr "Lecteur"
 
 msgid "reader"
 msgstr "Lecteur"
