@@ -42,10 +42,6 @@ $("#rdb_dipl_acc_high_educ_false").click(function(event) {
     $('#national_diploma_dipl_acc_high_educ_error').html('');
 });
 
-$("#rdb_local_community_french").click(function(event) {
-    $('#national_diploma_local_community_error').html('');
-});
-
 $("#rdb_local_community_dutch").click(function(event) {
     $('#national_diploma_local_community_error').html('');
 });
@@ -64,10 +60,6 @@ $("input[name^='rdb_education_technic_type']" ).click(function() {
 
 $("button[id^='bt_load_doc_NATIONAL_DIPLOMA_']" ).click(function() {
     $('#national_diploma_national_diploma_doc_error').html('');
-});
-
-$( "#txt_professional_exam_date").blur(function() {
-    $('#professional_exam_date_error').html('');
 });
 
 $( "#txt_professional_exam_institution").blur(function() {

@@ -75,12 +75,13 @@
             </div>
             <br>
             <div >
-            <label>{% trans 'institution_not_found_question'%}</label>
+
             <input type="checkbox"
                    id="chb_other_school"
                    name="other_school"
                    onclick="disabled_field('txt_CESS_other_school_name',this);disabled_field('txt_CESS_other_school_city',this);disabled_field('txt_CESS_other_school_postal_code',this);
                             reset_input('txt_CESS_other_school_name');reset_input('txt_CESS_other_school_city');reset_input('txt_CESS_other_school_postal_code');">
+                <label>{% trans 'institution_not_found_question'%}</label>
             </div>
             <br>
 
@@ -90,7 +91,7 @@
                     &nbsp;
                 </div>
                 <div class="col-md-4">
-                    <label>{% trans 'institution_name'%}</label>
+                    <label>{% trans 'name' %}</label>
                     <input type="text"
                            class="form-control"
                            id="txt_CESS_other_school_name"
@@ -138,8 +139,8 @@
                    value="{{edtype_transition.id}}"
                    onclick="reset_rdb('rdb_education_technic_type');reset_chb('other_education');disabled_reset_field_txt('txt_other_education_type','True');">&nbsp;{{edtype_transition.name}}
                 </label>
+                <br>
             {%endfor%}
-            <br>
             <br>
             <label>{%trans 'educational_qualification'%}</label>
             <br>
@@ -157,10 +158,11 @@
             <br>
             <div class="row">
                 <div class="col-md-4">
+                    <input type="checkbox"
+                           id="chb_other_education"
+                           name="other_education">
                     <label>{% trans 'other_education_type' %}</label>
-                      <input type="checkbox"
-                             id="chb_other_education"
-                             name="other_education">
+
                 </div>
                 <div >
                     <div class="col-md-8">

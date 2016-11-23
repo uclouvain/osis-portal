@@ -55,10 +55,12 @@ class ApplicantForm(forms.Form):
     contact_adr_postal_code = forms.CharField(required=False)
     contact_adr_city        = forms.CharField(required=False)
     contact_adr_country     = forms.CharField(required=False)
-    additional_email        = forms.EmailField(required=True)
     previous_enrollment     = forms.CharField(required=False)
     registration_id         = forms.CharField(required=False)
     last_academic_year      = forms.IntegerField(required=False)
+    national_id             = forms.CharField(required=False)
+    id_card_number          = forms.CharField(required=False)
+    passport_number         = forms.CharField(required=False)
 
     def __init__(self, *args, **kwargs):
         super(ApplicantForm, self).__init__(*args, **kwargs)
@@ -77,7 +79,6 @@ class ApplicantForm(forms.Form):
         self.fields['legal_adr_city'].error_messages = {'required': _('mandatory_field')}
         self.fields['legal_adr_country'].error_messages = {'required': _('mandatory_field')}
         self.fields['same_contact_legal_addr'].error_messages = {'required': _('mandatory_field')}
-        self.fields['additional_email'].error_messages = {'required': _('mandatory_field')}
         self._initial_data = self.__dict__.copy()
 
     def clean(self):
@@ -119,4 +120,18 @@ class ApplicantForm(forms.Form):
             if last_academic_year is None or last_academic_year <= 0:
                 self.errors['last_academic_year'] = _('numeric_field')
 
+        nationality = cleaned_data.get("nationality")
+        if nationality == '-1':
+            self.errors['nationality'] = _('mandatory_field')
+
+        birth_country = cleaned_data.get("birth_country")
+        if birth_country == '-1':
+            self.errors['birth_country'] = _('mandatory_field')
+
+        national_id = cleaned_data.get("national_id")
+        id_card_number = cleaned_data.get("id_card_number")
+        passport_number = cleaned_data.get("passport_number")
+
+        if national_id == '' and id_card_number =='' and passport_number == '' :
+            self.errors['passport_number'] = _('no_identification_number')
         return cleaned_data

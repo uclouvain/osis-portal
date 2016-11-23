@@ -228,7 +228,6 @@
 
         $('body').ajaxComplete(function(e, xhr, settings) {
             if (xhr.status == 278) {
-                alert('kk');
                 window.location.href = xhr.getResponseHeader("Location").replace(/\?.*$/, "?next="+window.location.pathname);
             }
         });
@@ -927,8 +926,13 @@
 
     function valid_profile_navigation(){
         var message = new String("");
-        if (($("#slt_nationality").prop('selectedIndex') <= 0
-            || $("#slt_legal_adr_country").prop('selectedIndex') <= 0) || ($("#slt_nationality").val()=='-1' || $("#slt_legal_adr_country").val()=='-1')){
+
+        if ($("#slt_nationality").prop('selectedIndex') <= 0 || $("#slt_nationality").val()=='-1' ){
+            $('#spn_nationality_error').text(gettext('mandatory_field'));
+            message = gettext('msg_next_profil');
+        }
+        if ($("#slt_legal_adr_country").prop('selectedIndex') <= 0 || $("#slt_legal_adr_country").val()=='-1' ){
+            $('#spn_legal_adr_country').text(gettext('mandatory_field'));
             message = gettext('msg_next_profil');
         }
 
@@ -1055,5 +1059,44 @@
         autoclose: true,
         orientation: "bottom auto"
     });
+
+    $("#txt_admission_exam_date").datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+        orientation: "bottom auto"
+
+    });
+
+    $("#txt_local_language_exam_date").datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+        orientation: "bottom auto"
+    });
+
+    $('[id="txt_last_name"]').focus(function() {
+        $('#hdn_original_last_name').val($('#txt_last_name').val());
+    });
+
+    $('[id="txt_last_name"]').blur(function() {
+        $("#spn_last_name_error").text('');
+        if($('#txt_last_name').val().trim()==''){
+            $("#spn_last_name_error").text(gettext('mandatory_field'));
+            $('#txt_last_name').val($('#hdn_original_last_name').val());
+        }
+    });
+
+    $('[id="txt_first_name"]').focus(function() {
+        $('#hdn_original_first_name').val($('#txt_first_name').val());
+    });
+
+    $('[id="txt_first_name"]').blur(function() {
+        $("#spn_first_name_error").text('');
+        if($('#txt_first_name').val().trim()==''){
+            $("#spn_first_name_error").text(gettext('mandatory_field'));
+            $('#txt_first_name').val($('#hdn_original_first_name').val());
+        }
+    });
+
+
     </script>
 {% endblock %}
