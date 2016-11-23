@@ -34,7 +34,7 @@ JUSTIFICATION_LINK = "_set_to_"
 
 class DissertationUpdateAdmin(admin.ModelAdmin):
     list_display = ('dissertation', 'author', 'status_from', 'status_to', 'person', 'created')
-    raw_id_fields = ('person',)
+    raw_id_fields = ('person', 'dissertation')
 
 
 class DissertationUpdate(SerializableModel):
