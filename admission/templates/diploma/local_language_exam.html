@@ -33,23 +33,24 @@
         </div>
         <div id="pnl_local_exam_detail"
              style="{%if local_language_exam %}visibility:visible;display:display;{%else%}visibility:hidden;display:none;{%endif%}">
-            <div class="form-inline">
-                <br>
-                <label>{% trans 'question_date_session' %} *</label>
-                <input class="form-control"
-                       id="txt_local_language_exam_date"
-                       name="local_language_exam_date"
-                       value="{{local_language_exam.exam_date | default_if_none:''|date:"j/m/Y"}}"
-                       maxlength="10" >
-                <br>
-                <span class="error" id="msg_error_local_language_exam_date"></span>
-                {%if validation_messages and validation_messages|get_item:'local_language_exam_date'%}
+            <div class="row">
+                <div class="col-md-3">
+                    <label>{% trans 'question_date_session' %} *</label>
+                    <input class="form-control"
+                           id="txt_local_language_exam_date"
+                           name="local_language_exam_date"
+                           value="{{local_language_exam.exam_date | default_if_none:''|date:"j/m/Y"}}"
+                           maxlength="10"
+                           type="date">
                     <br>
-                    <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'local_language_exam_date'}}</span>
-                    <br>
-                {% endif %}
-                <br>
-                <div class="form-group">
+                    <span class="error" id="msg_error_local_language_exam_date"></span>
+                    {%if validation_messages and validation_messages|get_item:'local_language_exam_date'%}
+                        <br>
+                        <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'local_language_exam_date'}}</span>
+                        <br>
+                    {% endif %}
+                </div>
+                <div class="col-md-9">
                     <label>{% trans 'question_institution_name' %} *</label>
                     <input class="form-control"
                            id="txt_local_language_exam_institution"
@@ -57,7 +58,7 @@
                            value="{{ local_language_exam.institution | default_if_none:'' }}"
                            maxlength="100" >
                     <br>
-                </div>
+
                 {%if validation_messages and validation_messages|get_item:'local_language_exam_institution'%}
                     <br>
                     <span class="error" style="margin-left:5px;">
@@ -65,6 +66,7 @@
                     </span>
                     <br>
                 {% endif %}
+                </div>
             </div>
             <br>
             <br>

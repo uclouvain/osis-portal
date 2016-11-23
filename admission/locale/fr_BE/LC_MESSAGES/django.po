@@ -1476,3 +1476,6 @@ msgstr "Non union européenne"
 
 msgid "no_result_yet"
 msgstr "Pas encore de résultat"
+
+msgid "no_identification_number"
+msgstr "Veuillez indiquer au moins un numéro de registre national, de carte d'identité ou de passeport."

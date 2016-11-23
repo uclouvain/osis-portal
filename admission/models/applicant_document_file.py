@@ -51,16 +51,23 @@ class ApplicantDocumentFileAdmin(admin.ModelAdmin):
     raw_id_fields = ('applicant', 'document_file')
 
 
+def find_by_applicant_and_description(applicant, description):
+    return ApplicantDocumentFile.objects \
+        .filter(applicant=applicant) \
+        .filter(document_file__description=description) \
+        .order_by('document_file__creation_date')
+
+
+def find_last_by_applicant_and_description(applicant, description):
+    return ApplicantDocumentFile.objects \
+        .filter(applicant=applicant) \
+        .filter(document_file__description=description) \
+        .order_by('document_file__creation_date').last()
+
+
 def find_document_by_applicant(applicant):
     return [applicant_document_file.document_file for applicant_document_file
             in ApplicantDocumentFile.objects.filter(applicant=applicant)]
-
-
-def find_document_by_applicant_and_description(applicant, description):
-    return ApplicantDocumentFile.objects\
-        .filter(applicant=applicant)\
-        .filter(document_file__description=description)\
-        .order_by('document_file__creation_date')
 
 
 def find_applicant_by_document(document):
@@ -71,8 +78,4 @@ def find_applicant_by_document(document):
         return None
 
 
-def find_last_document_by_applicant_and_description(applicant, description):
-    return ApplicantDocumentFile.objects\
-        .filter(applicant=applicant)\
-        .filter(document_file__description=description)\
-        .order_by('document_file__creation_date').last()
+

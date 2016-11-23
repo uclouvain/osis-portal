@@ -666,6 +666,7 @@ $("#rdb_professional_experience_false").click(function() {
     $('#rdb_professional_exam_result_result_low').prop( "disabled", false);
     $('#rdb_professional_exam_result_middle').prop( "disabled", false);
     $('#rdb_professional_exam_result_high').prop( "disabled", false);
+    $('#rdb_professional_exam_no_result').prop( "disabled", false);
     delete_document('PROFESSIONAL_EXAM_CERTIFICATE');
 });
 
@@ -927,7 +928,6 @@ $("#rdb_local").click(function(event) {
 });
 
 function display_date_msg_error(value, id_msg_field){
-
     $(id_msg_field).find("label").remove();
     if (isDate(value)){
         $(id_msg_field).find("label").remove();
@@ -962,14 +962,11 @@ $("select[id^='slt_language_diploma_recognized']" ).change(function(event) {
 
     }
     if(target.val()=="True"){
-        alert('t');
         enabled_other_language();
     }else{
         if(target.val()=="False"){
-            alert('F');
             disabled_other_language();
         }else{
-            alert('o');
             disabled_other_language();
         }
     }
@@ -1049,10 +1046,6 @@ $("button[id^='bt_load_doc_NATIONAL_DIPLOMA_']" ).click(function() {
     $('#national_diploma_national_diploma_doc_error').html('');
 });
 
-$( "#txt_professional_exam_date").blur(function() {
-    $('#professional_exam_date_error').html('');
-});
-
 $( "#txt_professional_exam_institution").blur(function() {
     $('#professional_exam_institution_error').html('');
 });
@@ -1067,4 +1060,3 @@ $("#bt_load_doc_PROFESSIONAL_EXAM_CERTIFICATE" ).click(function() {
 $("button[id^='bt_load_doc_HIGH_SCHOOL_SCORES_TRANSCRIPT_']" ).click(function() {
     $('#high_school_diploma_doc_error').html('');
 });
-
