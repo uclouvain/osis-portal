@@ -270,6 +270,8 @@ def dissertation_to_dir_submit(request, pk):
     if memory.author_is_logged_student(request) and submitted_memories_count == 0:
         old_status = memory.status
         new_status = dissertation.get_next_status(memory, "go_forward")
+        status_dict = dict(dissertation.STATUS_CHOICES)
+        new_status_display = status_dict[new_status]
         if request.method == "POST":
             form = DissertationUpdateForm(request.POST)
             if form.is_valid():
@@ -281,6 +283,6 @@ def dissertation_to_dir_submit(request, pk):
         else:
             form = DissertationUpdateForm()
         return layout.render(request, 'dissertation_add_justification.html',
-                             {'form': form, 'dissertation': memory, "old_status": old_status, "new_status": new_status})
+                             {'form': form, 'dissertation': memory, "new_status_display": new_status_display})
     else:
         return redirect('dissertations')

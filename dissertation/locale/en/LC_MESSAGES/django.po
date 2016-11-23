@@ -26,6 +26,9 @@ msgstr "Accepted by promoter"
 msgid "accepted_by_first_year_evaluation"
 msgstr "Accepted by first year evaluation"
 
+msgid "add_justification"
+msgstr "Add justification"
+
 msgid "add_reader"
 msgstr "Add a reader"
 
@@ -83,6 +86,9 @@ msgstr "Description"
 msgid "dir_submit"
 msgstr "Submit"
 
+msgid "dissertation"
+msgstr "Dissertation"
+
 msgid "dissertations"
 msgstr "Dissertations"
 
@@ -128,6 +134,9 @@ msgstr "Forbidden"
 msgid "history"
 msgstr "History"
 
+msgid "information"
+msgstr "Information"
+
 msgid "january"
 msgstr "January"
 
@@ -136,6 +145,9 @@ msgstr "June"
 
 msgid "justification_confirmation_message"
 msgstr "Confirm justification"
+
+msgid "justification_instructions"
+msgstr "The status update is nearly done. This update is detailed just after. Please add your explanation for this update."
 
 msgid "level"
 msgstr "Level"
