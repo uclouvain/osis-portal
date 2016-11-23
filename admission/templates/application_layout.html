@@ -228,7 +228,6 @@
 
         $('body').ajaxComplete(function(e, xhr, settings) {
             if (xhr.status == 278) {
-                alert('kk');
                 window.location.href = xhr.getResponseHeader("Location").replace(/\?.*$/, "?next="+window.location.pathname);
             }
         });
@@ -927,9 +926,6 @@
 
     function valid_profile_navigation(){
         var message = new String("");
-        $('#spn_nationality_error').text('');
-        $('#spn_legal_adr_country').text('');
-
 
         if ($("#slt_nationality").prop('selectedIndex') <= 0 || $("#slt_nationality").val()=='-1' ){
             $('#spn_nationality_error').text(gettext('mandatory_field'));
@@ -1069,6 +1065,12 @@
         autoclose: true,
         orientation: "bottom auto"
 
+    });
+
+    $("#txt_local_language_exam_date").datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+        orientation: "bottom auto"
     });
 
     $('[id="txt_last_name"]').focus(function() {
