@@ -193,13 +193,13 @@ def dissertation_jury_edit(request, pk):
 
 @login_required
 def dissertation_jury_new(request, pk):
-    memory = get_object_or_404(dissertation.Dissertation, pk=pk)
+    dissert = get_object_or_404(dissertation.Dissertation, pk=pk)
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
-    if memory.author == student:
-        count_dissertation_role = dissertation_role.count_by_dissertation(memory)
-        count_reader = dissertation_role.count_reader_by_dissertation(memory)
-        offer_pro = offer_proposition.search_by_offer(memory.offer_year_start.offer)
+    if dissert.author == student:
+        count_dissertation_role = dissertation_role.count_by_dissertation(dissert)
+        count_reader = dissertation_role.count_reader_by_dissertation(dissert)
+        offer_pro = offer_proposition.search_by_offer(dissert.offer_year_start.offer)
         if offer_pro.student_can_manage_readers and count_dissertation_role < 5 and count_reader < 3:
             if request.method == "POST":
                 form = DissertationRoleForm(request.POST)
@@ -209,15 +209,15 @@ def dissertation_jury_new(request, pk):
                                                                                   data['adviser'],
                                                                                   data['dissertation']):
                         form.save()
-                        if memory.status != 'DRAFT':
+                        if dissert.status != 'DRAFT':
                             justification = "%s" % "add_reader"
-                            dissertation_update.add(request, memory, memory.status, justification=justification)
-                return redirect('dissertation_detail', pk=memory.pk)
+                            dissertation_update.add(request, dissert, dissert.status, justification=justification)
+                return redirect('dissertation_detail', pk=dissert.pk)
             else:
-                form = DissertationRoleForm(initial={'status': "READER", 'dissertation': memory})
-                return layout.render(request, 'dissertation_reader_edit.html', {'form': form, 'memory': memory})
+                form = DissertationRoleForm(initial={'status': "READER", 'dissertation': dissert})
+                return layout.render(request, 'dissertation_reader_edit.html', {'form': form})
         else:
-            return redirect('dissertation_detail', pk=memory.pk)
+            return redirect('dissertation_detail', pk=dissert.pk)
     else:
         return redirect('dissertations')
 
