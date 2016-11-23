@@ -26,7 +26,7 @@
 from osis_common.models.serializable_model import SerializableModel
 from django.contrib import admin
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from .enums import status_types
 
 
 class DissertationRoleAdmin(admin.ModelAdmin):
@@ -35,13 +35,7 @@ class DissertationRoleAdmin(admin.ModelAdmin):
 
 
 class DissertationRole(SerializableModel):
-    STATUS_CHOICES = (
-        ('PROMOTEUR', _('promotor')),
-        ('CO_PROMOTEUR', _('copromotor')),
-        ('READER', _('reader')),
-    )
-
-    status = models.CharField(max_length=12, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=12, choices=status_types.STATUS_CHOICES)
     adviser = models.ForeignKey('Adviser')
     dissertation = models.ForeignKey('Dissertation')
 
