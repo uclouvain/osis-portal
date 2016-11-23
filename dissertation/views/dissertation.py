@@ -193,23 +193,33 @@ def dissertation_jury_edit(request, pk):
 
 @login_required
 def dissertation_jury_new(request, pk):
-    memory = get_object_or_404(dissertation.Dissertation, pk=pk)
-    count_dissertation_role = dissertation_role.count_by_dissertation(memory)
-    count_reader = dissertation_role.count_reader_by_dissertation(memory)
-    if count_dissertation_role < 5 and count_reader < 3:
-        if request.method == "POST":
-            form = DissertationRoleForm(request.POST)
-            if form.is_valid():
-                form.save()
-                if memory.status != 'DRAFT':
-                    justification = "%s" % "add_reader"
-                    dissertation_update.add(request, memory, memory.status, justification=justification)
-            return redirect('dissertation_detail', pk=memory.pk)
+    dissert = get_object_or_404(dissertation.Dissertation, pk=pk)
+    person = mdl.person.find_by_user(request.user)
+    student = mdl.student.find_by_person(person)
+    if dissert.author == student:
+        count_dissertation_role = dissertation_role.count_by_dissertation(dissert)
+        count_reader = dissertation_role.count_reader_by_dissertation(dissert)
+        offer_pro = offer_proposition.search_by_offer(dissert.offer_year_start.offer)
+        if offer_pro.student_can_manage_readers and count_dissertation_role < 5 and count_reader < 3:
+            if request.method == "POST":
+                form = DissertationRoleForm(request.POST)
+                if form.is_valid():
+                    data = form.cleaned_data
+                    if not dissertation_role.count_by_status_student_dissertation(data['status'],
+                                                                                  data['adviser'],
+                                                                                  data['dissertation']):
+                        form.save()
+                        if dissert.status != 'DRAFT':
+                            justification = "%s" % "add_reader"
+                            dissertation_update.add(request, dissert, dissert.status, justification=justification)
+                return redirect('dissertation_detail', pk=dissert.pk)
+            else:
+                form = DissertationRoleForm(initial={'status': "READER", 'dissertation': dissert})
+                return layout.render(request, 'dissertation_reader_edit.html', {'form': form})
         else:
-            form = DissertationRoleForm(initial={'status': "READER", 'dissertation': memory})
-            return layout.render(request, 'dissertation_reader_edit.html', {'form': form, 'memory': memory})
+            return redirect('dissertation_detail', pk=dissert.pk)
     else:
-        return redirect('dissertation_detail', pk=memory.pk)
+        return redirect('dissertations')
 
 
 @login_required
@@ -238,11 +248,17 @@ def dissertation_new(request):
 def dissertation_reader_delete(request, pk):
     dissert_role = get_object_or_404(dissertation_role.DissertationRole, pk=pk)
     dissert = dissert_role.dissertation
-    if dissert.status == 'DRAFT':
-        justification = "%s %s" % ("delete_reader", str(dissert_role))
-        dissertation_update.add(request, dissert, dissert.status, justification=justification)
-        dissert_role.delete()
-    return redirect('dissertation_detail', pk=dissert.pk)
+    person = mdl.person.find_by_user(request.user)
+    student = mdl.student.find_by_person(person)
+    if dissert.author == student:
+        offer_pro = offer_proposition.search_by_offer(dissert.offer_year_start.offer)
+        if offer_pro.student_can_manage_readers and dissert.status == 'DRAFT':
+            justification = "%s %s" % ("delete_reader", str(dissert_role))
+            dissertation_update.add(request, dissert, dissert.status, justification=justification)
+            dissert_role.delete()
+        return redirect('dissertation_detail', pk=dissert.pk)
+    else:
+        return redirect('dissertations')
 
 
 @login_required
