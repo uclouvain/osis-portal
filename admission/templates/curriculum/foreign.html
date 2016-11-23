@@ -88,14 +88,16 @@
             <input type="text" class="form-control"
                    id="txt_foreing_city_specify_{{curriculum.academic_year}}"
                    name="foreign_city_specify_{{curriculum.academic_year}}"
-                   value="{%if curriculum.national_institution.adhoc = True %}curriculum.national_institution.city{%endif%}">
+                   value="{%if curriculum.national_institution.adhoc = True %}curriculum.national_institution.city{%endif%}"
+                   maxlength="255" >
         </div>
         <div class="col-md-5">
             <label>{% trans 'specify'%}</label>
             <input type="text" class="form-control"
                    id="txt_foreign_name_specify_{{curriculum.academic_year}}"
                    name="foreign_name_specify_{{curriculum.academic_year}}"
-                   value="{%if curriculum.national_institution.adhoc = True %}curriculum.national_institution.name{%endif%}">
+                   value="{%if curriculum.national_institution.adhoc = True %}curriculum.national_institution.name{%endif%}"
+                   maxlength="100">
         </div>
     </div>
     <div class="row">
