@@ -24,7 +24,7 @@
 #
 ##############################################################################
 
-from base.models import academic_year, offer_year
+from base.models import offer_year
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from base import models as mdl
@@ -211,22 +211,28 @@ def dissertation_new(request):
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
     offers = mdl.offer.find_by_student(student)
-    if request.method == "POST":
-        form = DissertationForm(request.POST)
-        if form.is_valid():
-            memory = form.save()
-            dissertation_update.add(request, memory, memory.status, justification="student_creation_dissertation")
-            return redirect('dissertation_detail', pk=memory.pk)
+    offer_propositions = offer_proposition.search_by_offers(offers)
+    date_now = timezone.now().date()
+
+    if any(o.start_visibility_dissertation <= date_now <= o.end_visibility_dissertation for o in offer_propositions):
+        if request.method == "POST":
+            form = DissertationForm(request.POST)
+            if form.is_valid():
+                memory = form.save()
+                dissertation_update.add(request, memory, memory.status, justification="student_creation_dissertation")
+                return redirect('dissertation_detail', pk=memory.pk)
+            else:
+                form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
+                form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offers(offers)
         else:
+            form = DissertationForm(initial={'active': True, 'author': student})
             form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
             form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offers(offers)
+        return layout.render(request, 'dissertation_form.html',
+                             {'form': form,
+                              'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
     else:
-        form = DissertationForm(initial={'active': True, 'author': student})
-        form.fields["offer_year_start"].queryset = offer_year.find_by_offer(offers)
-        form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offers(offers)
-    return layout.render(request, 'dissertation_form.html',
-                         {'form': form,
-                          'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
+        return redirect('dissertations')
 
 
 @login_required
@@ -257,7 +263,11 @@ def dissertations_search(request):
 @login_required
 def dissertation_to_dir_submit(request, pk):
     memory = get_object_or_404(dissertation.Dissertation, pk=pk)
-    if memory.author_is_logged_student(request):
+    person = mdl.person.find_by_user(request.user)
+    student = mdl.student.find_by_person(person)
+    submitted_memories_count = dissertation.count_submit_by_user(student, memory.offer_year_start.offer)
+
+    if memory.author_is_logged_student(request) and submitted_memories_count == 0:
         old_status = memory.status
         new_status = dissertation.get_next_status(memory, "go_forward")
         if request.method == "POST":
