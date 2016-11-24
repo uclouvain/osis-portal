@@ -525,17 +525,11 @@ msgstr "Account number (IBAN)"
 msgid "id_add"
 msgstr "Click here to add a id documents"
 
-msgid "id_card"
-msgstr "Identity card"
-
 msgid "id_document"
 msgstr "Id document"
 
 msgid "id_documents"
 msgstr "Id documents"
-
-msgid "id_picture"
-msgstr "Identity picture"
 
 msgid "id_picture_add"
 msgstr "Click here to add a picture"
@@ -1271,55 +1265,46 @@ msgid "precise_file"
 msgstr "Please select a file"
 
 msgid "resident_long_duration"
-msgstr "resident_long_duration"
+msgstr "Residence Long Duration"
 
 msgid "id_foreign_unlimited"
-msgstr "id_foreign_unlimited"
+msgstr " Unlimited Foreign ID"
 
 msgid "attachment_26"
-msgstr "attachment_26"
+msgstr "Attachment 26"
 
 msgid "refugee_card"
-msgstr "refugee_card"
+msgstr "Refugee Card"
 
 msgid "family_composition"
-msgstr "family_composition"
+msgstr "Family Composition"
 
 msgid "birth_certificate"
-msgstr "birth_certificate"
+msgstr "Birth Certificate"
 
 msgid "resident_certificate"
-msgstr "resident_certificate"
+msgstr "Resident Certificate"
 
 msgid "stateless_certificate"
-msgstr "stateless_certificate"
+msgstr "Stateless Certificate"
 
 msgid "foreign_inscription_certificate"
-msgstr "foreign_inscription_certificate"
+msgstr "Foreign Inscription Certificate"
 
 msgid "subsidiary_protection_decision"
-msgstr "subsidiary_protection_decision"
+msgstr "Subsidiary Protection Decision"
 
 msgid "residence_permit"
-msgstr "residence_permit"
-
-msgid "paycheck"
-msgstr "paycheck"
-
-msgid "cpas"
-msgstr "cpas"
+msgstr "Residence Permit"
 
 msgid "tutorship_certificate"
-msgstr "tutorship_certificate"
+msgstr "Tutorship Certificate"
 
 msgid "scholarship_cfwb"
-msgstr "scholarship_cfwb"
+msgstr "Scholarship CFWB"
 
 msgid "scholarship_development_cooperation"
-msgstr "scholarship_development_cooperation"
-
-msgid "criteria"
-msgstr "Criteria"
+msgstr "Scholarship Development Cooperation"
 
 msgid "help_pnl_selectedfiles"
 msgstr "Please select a file"
@@ -1468,3 +1453,141 @@ msgstr "Motivation letter document is mandatory"
 
 msgid "curriculum_doc_missing"
 msgstr "Curriculum document is mandatory"
+
+msgid "type"
+msgstr "Type"
+
+msgid "letter_motivation"
+msgstr "Motivation letter"
+
+msgid "national_diploma_recto"
+msgstr "High school diploma - recto"
+
+msgid "national_diploma_verso"
+msgstr "High school diploma - verso"
+
+msgid "professional_exam_certificate"
+msgstr "Please add a copy of your certificate or a proof of your professional exam enrollment."
+
+msgid "admission_exam_certificate"
+msgstr "Admission exam certificate"
+
+msgid "high_school_scores_transcript_recto"
+msgstr "High school transcript - recto"
+
+msgid "high_school_scores_transcript_verso"
+msgstr "High school transcript - verso"
+
+msgid "translated_high_school_scores_transcript_recto"
+msgstr "Translated high school transcript - recto"
+
+msgid "translated_high_school_scores_transcript_verso"
+msgstr "Translated high school transcript - verso"
+
+msgid "international_diploma_recto"
+msgstr "High school diploma - recto"
+
+msgid "international_diploma_verso"
+msgstr "High school diploma - verso"
+
+msgid "translated_international_diploma_recto"
+msgstr "Translated high school diploma - recto"
+
+msgid "translated_international_diploma_verso"
+msgstr "Translated high school diploma - verso"
+
+msgid "identity_card"
+msgstr "Identity card"
+
+
+msgid "msg_next_offer"
+msgstr "Before going to the next step you have to select at least one offer and mention if you obtained a belgian diploma"
+
+msgid "msg_next_profil"
+msgstr ""
+"Before going to the next step you have to mention you nationality and the country where you live"
+
+msgid "criteria"
+msgstr "Criteria"
+
+msgid "id_picture"
+msgstr "Identity picture"
+
+msgid "id_card"
+msgstr "Identity card"
+
+msgid "paycheck"
+msgstr "Paycheck"
+
+msgid "cpas"
+msgstr "CPAS"
+
+msgid "concerned_person"
+msgstr "for concerned person"
+
+msgid "invalid_content_type"
+msgstr "Invalid content type"
+
+msgid "select_file"
+msgstr "Please select a file"
+
+msgid "error_occured"
+msgstr "An error occured! The file hasn't been uploaded.  Restart your app"
+
+msgid "msg_no_next_step"
+msgstr "Before going to the next step you have to : "
+
+msgid "msg_assimilation_criteria"
+msgstr "Mention a assimilation criteria, or mention if you don't correspond to any criteria."
+
+msgid "contact_country"
+msgstr "Country required"
+
+msgid "contact_street"
+msgstr "Street required"
+
+msgid "contact_number"
+msgstr "Number required"
+
+msgid "contact_postal_code"
+msgstr "Zip code required"
+
+msgid "contact_city"
+msgstr "City required"
+
+msgid "legal_country"
+msgstr "Country required"
+
+msgid "legal_street"
+msgstr "Street required"
+
+msgid "legal_number"
+msgstr "Number required"
+
+msgid "legal_postal_code"
+msgstr "Zip code"
+
+msgid "legal_city"
+msgstr "City required"
+
+msgid "invalid_data"
+msgstr "Errors in the form"
+
+msgid "number_invalid"
+msgstr "Number invalid"
+
+msgid "previous_enrollment_required_year"
+msgstr "Please mention the last academic year"
+
+msgid "previous_enrollment_required_nb"
+msgstr "Please mention a registration number"
+
+msgid "errors_validation_warning"
+msgstr "Some errors prevent the tab validation"
+
+msgid "language_exam_certificate"
+msgstr "Language exam certificate"
+
+msgid "question_need_to_save"
+msgstr "Sure?  Don't you need to save some data?"
+

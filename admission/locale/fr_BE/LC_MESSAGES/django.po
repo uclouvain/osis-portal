@@ -1333,9 +1333,6 @@ msgstr "Attestation de bourse délivrée par la CFWB ou la Coopération au déve
 msgid "scholarship_development_cooperation"
 msgstr "scholarship_development_cooperation"
 
-msgid "criteria"
-msgstr "Critère"
-
 msgid "help_pnl_selectedfiles"
 msgstr "Veuillez sélectionner un fichier"
 
@@ -1488,3 +1485,125 @@ msgstr "La lettre de motivation est manquante"
 
 msgid "curriculum_doc_missing"
 msgstr "Le curriculum est manquant"
+
+msgid "type"
+msgstr "Type"
+
+msgid "letter_motivation"
+msgstr "Lettre de motivation"
+
+msgid "national_diploma_recto"
+msgstr "Diplôme d'études secondaires - recto"
+
+msgid "national_diploma_verso"
+msgstr "Diplôme d'études secondaires - verso"
+
+msgid "professional_exam_certificate"
+msgstr "Certificat ou preuve d'inscription à l'examen"
+
+msgid "admission_exam_certificate"
+msgstr "Certificat d'exament d'admission"
+
+msgid "high_school_scores_transcript_recto"
+msgstr "Relevé de notes des études secondaires - recto"
+
+msgid "high_school_scores_transcript_verso"
+msgstr "Relevé de notes des études secondaires - verso"
+
+msgid "translated_high_school_scores_transcript_recto"
+msgstr "Traduction relevé de notes des études secondaires - recto"
+
+msgid "translated_high_school_scores_transcript_verso"
+msgstr "Traduction relevé de notes des études secondaires - verso"
+
+msgid "international_diploma_recto"
+msgstr "Diplôme d'études secondaires - recto"
+
+msgid "international_diploma_verso"
+msgstr "Diplôme d'études secondaires - verso"
+
+msgid "translated_international_diploma_recto"
+msgstr "Traduction diplôme d'études secondaires - recto"
+
+msgid "translated_international_diploma_verso"
+msgstr "Traduction diplôme d'études secondaires - verso"
+
+msgid "identity_card"
+msgstr "Carte d'identité"
+
+msgid "msg_next_offer"
+msgstr ""
+"Avant de pouvoir accéder à l'étape suivante vous devez sélectionner au minimum une offre et indiquer si vous disposez d'un diplôme belge"
+
+msgid "msg_next_profil"
+msgstr ""
+"Avant de pouvoir accéder à l'étape suivante vous devez encoder au minimum, votre nationalité et votre pays de domicile"
+
+msgid "criteria"
+msgstr "Critère"
+
+msgid "concerned_person"
+msgstr "Pour la personne concernée"
+
+msgid "invalid_content_type"
+msgstr "Type de fichier invalide"
+
+msgid "select_file"
+msgstr "Sélectionner un fichier"
+
+msgid "error_occured"
+msgstr "Attention le fichier n'a pas été sauvegardé!"
+
+msgid "msg_no_next_step"
+msgstr "Avant de pouvoir accéder à l'étape suivante vous devez : "
+
+msgid "msg_assimilation_criteria"
+msgstr "Précisez le critère d'assimilation auquel vous correspondez le mieux, ou si vous ne correspondez à aucun critère.  "
+
+msgid "contact_country"
+msgstr "Pays requis"
+
+msgid "contact_street"
+msgstr "Rue requise"
+
+msgid "contact_number"
+msgstr "Numéro requis"
+
+msgid "contact_postal_code"
+msgstr "Code postal requis"
+
+msgid "contact_city"
+msgstr "Localité requise"
+
+msgid "legal_country"
+msgstr "Pays requis"
+
+msgid "legal_street"
+msgstr "Rue requise"
+
+msgid "legal_number"
+msgstr "Numéro requis"
+
+msgid "legal_postal_code"
+msgstr "Code postal requis"
+
+msgid "legal_city"
+msgstr "Localité requise"
+
+msgid "invalid_data"
+msgstr "Attention il y a des erreurs"
+
+msgid "number_invalid"
+msgstr "Nombre invalide"
+
+msgid "previous_enrollment_required_year"
+msgstr "Merci de préciser la dernière année"
+
+msgid "previous_enrollment_required_nb"
+msgstr "Merci de préciser un numéro de matricule"
+
+msgid "language_exam_certificate"
+msgstr "Attestation de réussite ou la preuve d'inscription"
+
+msgid "question_need_to_save"
+msgstr "Sûr?  Vous n'avez pas besoin de sauvegarder vos données?"
