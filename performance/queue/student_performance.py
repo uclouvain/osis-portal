@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from csv import excel
 import json
 from frontoffice.queue.queue_listener import PerformanceClient
 import datetime
@@ -100,6 +101,9 @@ def save(registration_id, academic_year, acronym, json_data):
     update_date = get_expiration_date()
     creation_date = get_creation_date()
     fields = {"data": json_data, "update_date": update_date, "creation_date": creation_date}
-    obj = update_or_create(registration_id, academic_year, acronym, fields)
+    try:
+        obj = update_or_create(registration_id, academic_year, acronym, fields)
+    except Exception:
+        obj = None
     return obj
 
