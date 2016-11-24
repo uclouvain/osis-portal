@@ -88,21 +88,23 @@
 <!-- HEADER -->
 <div class="row">
     <div class="col-md-4"><strong>{% trans 'description' %}</strong></div>
-    <div class="col-md-4"><strong>{% trans 'file' %}</strong></div>
+    <div class="col-md-2"><strong>{% trans 'file' %}</strong></div>
     <div class="col-md-4"><strong>{% trans 'type' %}</strong></div>
+    <div class="col-md-2"></div>
 </div>
 <!-- PREVIOUS UPLOADED ATTACHMENTS -->
 {% for attachment in attachments %}
 <br>
 <div class="row">
     <div class="col-md-4">{{ attachment.file_name }}</div>
-    <div class="col-md-4">
+    <div class="col-md-2">
         <a href="{% url 'download' attachment.pk %}">
             <span class="glyphicon glyphicon-open-file"></span>
         </a> </div>
-    <div class="col-md-2">
+    <div class="col-md-4">
         {{ attachment.description }}
     </div>
+    <div class="col-md-2">
     <form action="{% url 'remove_attachment' application.id %}" name="remove_attachment_{{attachment.pk}}" method="post"
           id="form_attachements">
         {% csrf_token %}
@@ -138,6 +140,7 @@
             </div>
         </div>
     </form>
+    </div>
 </div>
 {% endfor %}
 <br>
