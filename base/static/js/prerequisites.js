@@ -936,6 +936,18 @@ function display_date_msg_error(value, id_msg_field){
     }
 }
 
+$("#txt_professional_exam_date").blur(function() {
+    display_date_msg_error($("#txt_professional_exam_date").val(), "#msg_error_txt_professional_exam_date");
+});
+
+$("#txt_admission_exam_date").blur(function() {
+    display_date_msg_error($("#txt_admission_exam_date").val(), "#msg_error_txt_admission_exam_date");
+});
+
+$("#txt_local_language_exam_date").blur(function() {
+    display_date_msg_error($("#txt_local_language_exam_date").val(), "#msg_error_local_language_exam_date");
+});
+
 function reset_rdb_local_community(status){
     $('#rdb_local_community_french').prop( "checked", status);
     $('#rdb_local_community_dutch').prop( "checked", status);
@@ -950,14 +962,11 @@ $("select[id^='slt_language_diploma_recognized']" ).change(function(event) {
 
     }
     if(target.val()=="True"){
-        alert('t');
         enabled_other_language();
     }else{
         if(target.val()=="False"){
-            alert('F');
             disabled_other_language();
         }else{
-            alert('o');
             disabled_other_language();
         }
     }

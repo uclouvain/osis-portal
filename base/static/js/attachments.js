@@ -133,7 +133,7 @@ function appendDescriptionInput($parentForm) {
         "name": selectName, "class": "form-control"
     }, $divInput);
     $.each(choices, function (index, item) {
-        var $option = createJQObject("<option/>", {"value": item}, item, $select);
+        var $option = createJQObject("<option/>", {"value": item}, gettext(item), $select);
     });
 }
 

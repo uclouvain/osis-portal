@@ -23,18 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModel
-from django.db import models
-from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
 
+PROMOTEUR = 'PROMOTEUR'
+CO_PROMOTEUR = 'CO_PROMOTEUR'
+READER = 'READER'
+ACCOMPANIST = 'ACCOMPANIST'
+INTERNSHIP = 'INTERNSHIP'
+PRESIDENT = 'PRESIDENT'
 
-class DissertationLocationAdmin(admin.ModelAdmin):
-    list_display = ('name', )
-    search_fields = ('name', )
-
-
-class DissertationLocation(SerializableModel):
-    name = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.name
+STATUS_CHOICES = (
+    (PROMOTEUR, _(PROMOTEUR)),
+    (CO_PROMOTEUR, _(CO_PROMOTEUR)),
+    (READER, _(READER)),
+    (ACCOMPANIST, _(ACCOMPANIST)),
+    (INTERNSHIP, _(INTERNSHIP)),
+    (PRESIDENT, _(PRESIDENT)),
+)

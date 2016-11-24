@@ -1476,3 +1476,15 @@ msgstr "Non union européenne"
 
 msgid "no_result_yet"
 msgstr "Pas encore de résultat"
+
+msgid "no_identification_number"
+msgstr "Veuillez indiquer au moins un numéro de registre national, de carte d'identité ou de passeport."
+
+msgid "attachments_admission_mandatory"
+msgstr "Une lettre de motivation et un curriculum sont des documents obligatoires pour une demande d'admission"
+
+msgid "letter_motivation_doc_missing"
+msgstr "La lettre de motivation est manquante"
+
+msgid "curriculum_doc_missing"
+msgstr "Le curriculum est manquant"
