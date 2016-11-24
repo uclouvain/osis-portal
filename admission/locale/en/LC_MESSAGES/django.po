@@ -1468,3 +1468,50 @@ msgstr "Motivation letter document is mandatory"
 
 msgid "curriculum_doc_missing"
 msgstr "Curriculum document is mandatory"
+
+msgid "type"
+msgstr "Type"
+
+msgid "letter_motivation"
+msgstr "Motivation letter"
+
+msgid "national_diploma_recto"
+msgstr "High school diploma - recto"
+
+msgid "national_diploma_verso"
+msgstr "High school diploma - verso"
+
+msgid "professional_exam_certificate"
+msgstr "Please add a copy of your certificate or a proof of your professional exam enrollment."
+
+msgid "admission_exam_certificate"
+msgstr "Admission exam certificate"
+
+msgid "high_school_scores_transcript_recto"
+msgstr "High school transcript - recto"
+
+msgid "high_school_scores_transcript_verso"
+msgstr "High school transcript - verso"
+
+msgid "translated_high_school_scores_transcript_recto"
+msgstr "Translated high school transcript - recto"
+
+msgid "translated_high_school_scores_transcript_verso"
+msgstr "Translated high school transcript - verso"
+
+msgid "international_diploma_recto"
+msgstr "High school diploma - recto"
+
+msgid "international_diploma_verso"
+msgstr "High school diploma - verso"
+
+msgid "translated_international_diploma_recto"
+msgstr "Translated high school diploma - recto"
+
+msgid "translated_international_diploma_verso"
+msgstr "Translated high school diploma - verso"
+
+msgid "identity_card"
+msgstr "Identity card"
+
+
