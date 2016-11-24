@@ -1459,3 +1459,12 @@ msgstr "No result yet"
 
 msgid "no_identification_number"
 msgstr "Please mention at least a national register number, an identity card number or a passport number."
+
+msgid "attachments_admission_mandatory"
+msgstr "Motivation letter and curriculum document are mandatory for an admission"
+
+msgid "letter_motivation_doc_missing"
+msgstr "Motivation letter document is mandatory"
+
+msgid "curriculum_doc_missing"
+msgstr "Curriculum document is mandatory"

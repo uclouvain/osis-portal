@@ -31,6 +31,7 @@ from admission.forms.attachement import RemoveAttachmentForm
 from osis_common.forms import UploadDocumentFileForm
 from osis_common.models.document_file import DocumentFile
 from django.forms import formset_factory
+from admission.models.enums import application_type
 
 
 def update(request, application_id=None):
@@ -51,6 +52,17 @@ def update(request, application_id=None):
         "list_choices": list_choices
     }
     data.update(demande_validation.get_validation_status(application, applicant))
+    letter_motivation_doc_present = False
+    curriculum_doc_present = False
+
+    if application.application_type ==  application_type.ADMISSION:
+        for p in past_attachments:
+            if p.description == 'letter_motivation':
+                letter_motivation_doc_present=True
+            if p.description == 'curriculum':
+                curriculum_doc_present=True
+    data.update({'letter_motivation_doc_present': letter_motivation_doc_present,
+                 'curriculum_doc_present': curriculum_doc_present})
     return render(request, "admission_home.html", data)
 
 
