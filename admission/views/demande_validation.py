@@ -203,7 +203,21 @@ def _validate_sociological():
     return False
 
 
-def _validate_attachments():
+def _validate_attachments(application):
+    if application is None or application.application_type is None:
+        return False
+    else:
+        if application.application_type ==  application_type.ADMISSION:
+            letter_motivation_doc_present = False
+            curriculum_doc_present = False
+            application_document_files = mdl.application_document_file.find_document_by_application(application)
+            for p in application_document_files:
+                if p.document_file.description == 'letter_motivation':
+                    letter_motivation_doc_present=True
+                if p.document_file.description == 'curriculum':
+                    curriculum_doc_present=True
+            if letter_motivation_doc_present and curriculum_doc_present:
+                return True
     return False
 
 
@@ -226,7 +240,7 @@ def get_validation_status(application, applicant):
         "validated_application":        _validate_application(),
         "validated_accounting":         _validate_accounting(),
         "validated_sociological":       _validate_sociological(),
-        "validated_attachments":        _validate_attachments(),
+        "validated_attachments":        _validate_attachments(application),
         "validated_submission":         _validate_submission(),
         "validation_message":           None}
 

@@ -225,3 +225,6 @@ msgstr "Lettre de motivation"
 
 msgid "other"
 msgstr "Autre"
+
+msgid "curriculum"
+msgstr "Curriculum"
