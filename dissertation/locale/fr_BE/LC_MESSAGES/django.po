@@ -26,6 +26,18 @@ msgstr "Accepté par le promoteur"
 msgid "accepted_by_first_year_evaluation"
 msgstr "Validation de première année validée"
 
+msgid "ACCOMPANIST"
+msgstr "Accompagnateur"
+
+msgid "accompanist"
+msgstr "Accompagnateur"
+
+msgid "add_justification"
+msgstr "Ajouter une justification"
+
+msgid "add_reader"
+msgstr "Ajouter un lecteur"
+
 msgid "application_dissertation"
 msgstr "Gestion des mémoires"
 
@@ -41,8 +53,14 @@ msgstr "Changement"
 msgid "collaboration"
 msgstr "Collaboration"
 
+msgid "CO_PROMOTEUR"
+msgstr "Co-Promoteur"
+
 msgid "copromotor"
 msgstr "Co-promoteur"
+
+msgid "create"
+msgstr "Créer"
 
 msgid "current_status"
 msgstr "Statut actuel"
@@ -62,20 +80,29 @@ msgstr "Défendu"
 msgid "delete"
 msgstr "Supprimer"
 
+msgid "delete_adviser_role_confirmation_message"
+msgstr "Vous allez définitivement supprimer ce membre du jury. Êtes-vous certain de vouloir continuer ?"
+
 msgid "desc_lnk_dissertations"
-msgstr "Liste de mes projets de mémoire"
+msgstr "Liste des projets de mémoires auxquels je suis relié."
 
 msgid "desc_lnk_propositions_dissertations"
-msgstr "Liste des sujets disponibles"
+msgstr "Sujets de mémoire proposés par les enseignants"
 
 msgid "description"
 msgstr "Description"
 
 msgid "dir_submit"
-msgstr "Soumettre"
+msgstr "Soumettre au professeur"
 
 msgid "dissertation"
 msgstr "Mémoire"
+
+msgid "dissertations"
+msgstr "Mémoires"
+
+msgid "dissertation_confirmation_message"
+msgstr "Confirmer le mémoire"
 
 msgid "dissertation_history"
 msgstr "Historique du mémoire"
@@ -84,13 +111,22 @@ msgid "dissertation_informations"
 msgstr "Informations du mémoire"
 
 msgid "dissertation_jury"
-msgstr "Jury"
+msgstr "Jury du mémoire"
+
+msgid "dissertation_location"
+msgstr "Site de rattachement"
+
+msgid "dissertation_updates"
+msgstr "Mises-à-jour du mémoire"
 
 msgid "domain"
 msgstr "Domaine"
 
 msgid "draft"
 msgstr "Brouillon"
+
+msgid "edit"
+msgstr "Editer"
 
 msgid "ended"
 msgstr "Terminé"
@@ -107,6 +143,15 @@ msgstr "Interdite"
 msgid "history"
 msgstr "Historique"
 
+msgid "information"
+msgstr "Information"
+
+msgid "INTERNSHIP"
+msgstr "Maître de stage"
+
+msgid "internship_master"
+msgstr "Maître de stage"
+
 msgid "january"
 msgstr "Janvier"
 
@@ -116,20 +161,29 @@ msgstr "Juin"
 msgid "justification_confirmation_message"
 msgstr "Confirmer la justification"
 
+msgid "justification_instructions"
+msgstr "La mise-à-jour de l'état du mémoire est sur le point d'être effectuée. Le changement d'état qui sera appliqué est renseigné ci-dessous. Veuillez indiquer un message d'explication."
+
 msgid "level"
-msgstr "Niveau"
+msgstr "Niveau de développment du sujet"
+
+msgid "link"
+msgstr "Lien"
 
 msgid "literature_review"
-msgstr "Revue Litéraire"
+msgstr "Revue Littéraire"
+
+msgid "main"
+msgstr "Principal"
 
 msgid "manager"
 msgstr "Gestionnaire de cours"
 
 msgid "max_students_number"
-msgstr "Nombre maximum d'étudiant"
+msgstr "Nombre indicatif de places pour ce sujet"
 
 msgid "memories_list"
-msgstr "Liste de mes mémoires"
+msgstr "Mémoires"
 
 msgid "next_status"
 msgstr "Nouveau statut"
@@ -137,8 +191,14 @@ msgstr "Nouveau statut"
 msgid "no_result"
 msgstr "Aucun résultat trouvé"
 
+msgid "offer_proposition"
+msgstr "Programme de cours"
+
 msgid "offer_propositions"
-msgstr "Programmes de cours"
+msgstr "Programmes"
+
+msgid "offer_year_start"
+msgstr "Programme de cours de départ du mémoire"
 
 msgid "optional"
 msgstr "Facultatif"
@@ -149,20 +209,35 @@ msgstr "Personne"
 msgid "possible"
 msgstr "Possible"
 
+msgid "PRESIDENT"
+msgstr "Président"
+
+msgid "president"
+msgstr "Président"
+
 msgid "professor"
 msgstr "Professeur"
+
+msgid "PROMOTEUR"
+msgstr "Promoteur"
 
 msgid "promotor"
 msgstr "Promoteur"
 
+msgid "proposition_dissertation"
+msgstr "Sujet de mémoire"
+
 msgid "proposition_dissertation_informations"
-msgstr "Informations du sujet"
+msgstr "Informations du sujet de mémoire"
 
 msgid "proposition_dissertation_jury"
-msgstr "Jury proposé"
+msgstr "Jury du sujet de mémoire"
 
 msgid "question"
 msgstr "Question"
+
+msgid "READER"
+msgstr "Lecteur"
 
 msgid "reader"
 msgstr "Lecteur"
@@ -179,6 +254,9 @@ msgstr "Validation de première année ratée"
 msgid "required"
 msgstr "Requis"
 
+msgid "save"
+msgstr "Sauvegarder"
+
 msgid "search"
 msgstr "Rechercher"
 
@@ -189,7 +267,7 @@ msgid "status"
 msgstr "Statut"
 
 msgid "subjects_list"
-msgstr "Liste des sujets"
+msgstr "Sujets de mémoires"
 
 msgid "submitted_to_commission"
 msgstr "Soumis à la commission"
@@ -201,13 +279,13 @@ msgid "submitted_to_first_year_evaluation"
 msgstr "Soumis à l'évaluation de première année"
 
 msgid "taken_places"
-msgstr "Intérêt"
+msgstr "Places occupées"
 
 msgid "theme"
 msgstr "Theme"
 
-msgid "title"
-msgstr "Titre"
+msgid "title_dissertation"
+msgstr "Intitulé"
 
 msgid "to_be_defended"
 msgstr "En attente de défense"
@@ -219,7 +297,10 @@ msgid "to_dir_submit_confirmation_message"
 msgstr "Attention : vous allez soumettre ce projet de mémoire au promoteur. Êtes-vous certain de vouloir continuer ?"
 
 msgid "type"
-msgstr "Type"
+msgstr "Type de sujet"
+
+msgid "visibility"
+msgstr "Visibilité"
 
 msgid "work"
 msgstr "Travail"

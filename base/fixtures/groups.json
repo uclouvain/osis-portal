@@ -1,0 +1,97 @@
+[
+{
+    "model": "auth.group",
+    "fields": {
+        "name": "administrators",
+        "permissions": [
+            [
+                "can_access_administration",
+                "base",
+                "person"
+            ],
+            [
+                "is_administrator",
+                "base",
+                "person"
+            ]
+        ]
+    }
+},
+{
+    "model": "auth.group",
+    "fields": {
+        "name": "tutors",
+        "permissions": [
+            [
+                "is_tutor",
+                "base",
+                "person"
+            ]
+        ]
+    }
+},
+{
+    "model": "auth.group",
+    "fields": {
+        "name": "students",
+        "permissions": [
+            [
+                "is_student",
+                "base",
+                "person"
+            ]
+        ]
+    }
+},
+{
+    "model": "auth.group",
+    "fields": {
+        "name": "authorisations_managers",
+        "permissions": [
+            [
+                "add_group",
+                "auth",
+                "group"
+            ],
+            [
+                "change_group",
+                "auth",
+                "group"
+            ],
+            [
+                "change_user",
+                "auth",
+                "user"
+            ],
+            [
+                "can_access_administration",
+                "base",
+                "person"
+            ],
+            [
+                "is_administrator",
+                "base",
+                "person"
+            ]
+        ]
+    }
+},
+{
+    "model": "auth.group",
+    "fields": {
+        "name": "faculty_administrators",
+        "permissions": [
+            [
+                "can_access_administration",
+                "base",
+                "person"
+            ],
+            [
+                "is_faculty_administrator",
+                "base",
+                "person"
+            ]
+        ]
+    }
+}
+]

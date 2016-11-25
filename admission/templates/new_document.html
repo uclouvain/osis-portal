@@ -1,4 +1,3 @@
-{% extends "layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -26,74 +25,38 @@
  * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block content %}
-  <div class="page-header">
-    <h2>{% if description == 'ID_PICTURE'%}
-            {% trans 'id_picture' %}
-        {% endif %}
-        {% if description == 'ID_CARD'%}
-            {% trans 'id_documents' %}
-        {% endif %}
-        {% if description == 'NATIONAL_DIPLOMA_VERSO'%}
-            {% trans 'high_school_diploma'%} - {% trans 'verso'%}
-        {% endif %}
-        {% if description == 'NATIONAL_DIPLOMA_RECTO'%}
-            {% trans 'high_school_diploma' %} - {% trans 'recto'%}
-        {% endif %}
-        {% if description == 'INTERNATIONAL_DIPLOMA_VERSO'%}
-            {% trans 'high_school_diploma'%} - {% trans 'verso'%}
-        {% endif %}
-        {% if description == 'INTERNATIONAL_DIPLOMA_RECTO'%}
-            {% trans 'high_school_diploma' %} - {% trans 'recto'%}
-        {% endif %}
-        {% if description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO'%}
-            {% trans 'high_school_diploma'%} {% trans 'translated' %} - {% trans 'verso'%}
-        {% endif %}
-        {% if description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO'%}
-            {% trans 'high_school_diploma' %} {% trans 'translated' %} - {% trans 'recto'%}
-        {% endif %}
-        {% if description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO'%}
-            {% trans 'high_school_scores_transcript'%} - {% trans 'verso'%}
-        {% endif %}
-        {% if description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO'%}
-            {% trans 'high_school_scores_transcript' %} - {% trans 'recto'%}
-        {% endif %}
-        {% if description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO'%}
-            {% trans 'high_school_scores_transcript'%} {% trans 'translated' %} - {% trans 'verso'%}
-        {% endif %}
-        {% if description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO'%}
-            {% trans 'high_school_scores_transcript' %} {% trans 'translated' %} - {% trans 'recto'%}
-        {% endif %}
-        {% if description == 'EQUIVALENCE'%}
-            {% trans 'file_equivalence' %}
-        {% endif %}
-        {% if description == 'ADMISSION_EXAM_CERTIFICATE'%}
-            {% trans 'admission_exam_certificate_document' %}
-        {% endif %}
-        {% if description == 'PROFESSIONAL_EXAM_CERTIFICATE'%}
-            {% trans 'admission_exam_certificate_document' %}
-        {% endif %}
+    <!-- UploadFile modal -->
+    <div class="modal fade" id="pnl_upload_documents"
+         tabindex="-1" role="dialog" >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="post" enctype="multipart/form-data" >
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="bt_close_upload_score_modal"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="uploadScroresLabel">
+                            <label id="lbl_description_label"></label>
+                        </h4>
+                    </div>
+                    <div class="modal-body" id="pnl_modal_upload">
+                        {% include "uploading/upload_file_form.html" %}
+                        {% for document in assimilation_documents_existing%}
+                            {% if display_link%}
+                                <a href="{% url 'download' pk=document.pk %}">{{ document.file_name }}</a>
+                            {%endif%}
+                        {%endfor%}
+                        <div id="pnl_existing_files"></div>
+                        <br>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="bt_cancel_upload_score_modal">{% trans 'cancel' %}</button>
 
-    </h2>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <form method="POST" class="post-form" enctype="multipart/form-data" action="{% url 'upload_document' %}">
-        {% csrf_token %}
-        {% include "uploading/upload_file_form.html" %}
-        <input type="hidden" name="description" value='{{ description }}' />
-        <input type="hidden" name="application_id" value='{{ application.id | default_if_none:''}}' />
-        <button type="submit" class="save btn btn-default" onclick="return confirm('{% trans 'new_file_confirmation_message' %}')">{% trans 'save' %}</button>
-        {% if description == 'ID_PICTURE' or description == 'ID_CARD'%}
-            <a href="{% url 'home'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>
-        {% else %}
-          {% if description == 'NATIONAL_DIPLOMA_VERSO' or  description == 'NATIONAL_DIPLOMA_RECTO' or  description == 'INTERNATIONAL_DIPLOMA_RECTO' or  description == 'INTERNATIONAL_DIPLOMA_VERSO' or  description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO' or  description == 'TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO' or  description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO' or  description == 'HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO' or  description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO' or  description == 'TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO' or  description == 'EQUIVALENCE' or description == 'ADMISSION_EXAM_CERTIFICATE' or description == 'PROFESSIONAL_EXAM_CERTIFICATE'%}
-          <a href="{% url 'diploma_update'%}" type="cancel" class="btn btn-default">{% trans 'cancel'%}</a>
-          {% endif %}
-        {% endif %}
-      </form>
+                        <input type="submit" class="btn btn-primary" value="{% trans 'save'%}" data-dismiss="modal"
+                               id="bt_upload_document"/>
+                        <input type="hidden" name="description" value="" id="hdn_description"/>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
-{% include "uploaded_file_list.html" %}
-{% endblock %}
 

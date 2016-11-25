@@ -23,24 +23,32 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+from osis_common.models.serializable_model import SerializableModel
+from django.contrib import admin
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from .enums import status_types
 
 
-class DissertationRole(models.Model):
-    STATUS_CHOICES = (
-        ('PROMOTEUR', _('promotor')),
-        ('CO_PROMOTEUR', _('copromotor')),
-        ('READER', _('reader')),
-    )
+class DissertationRoleAdmin(admin.ModelAdmin):
+    list_display = ('adviser', 'status', 'dissertation', 'author', 'dissertation_status')
+    raw_id_fields = ('adviser', 'dissertation')
 
-    status = models.CharField(max_length=12, choices=STATUS_CHOICES)
+
+class DissertationRole(SerializableModel):
+    status = models.CharField(max_length=12, choices=status_types.STATUS_CHOICES)
     adviser = models.ForeignKey('Adviser')
     dissertation = models.ForeignKey('Dissertation')
 
     def __str__(self):
         return u"%s %s" % (self.status if self.status else "", self.adviser if self.adviser else "")
+
+    @property
+    def author(self):
+        return self.dissertation.author
+
+    @property
+    def dissertation_status(self):
+        return self.dissertation.status
 
 
 def add(status, adviser, dissertation):
@@ -53,6 +61,10 @@ def count_by_dissertation(dissertation):
     return DissertationRole.objects.filter(dissertation=dissertation).count()
 
 
+def count_reader_by_dissertation(dissertation):
+    return DissertationRole.objects.filter(dissertation=dissertation, status="READER").count()
+
+
 def count_by_status_student_dissertation(status, adviser, dissertation):
     return DissertationRole.objects.filter(adviser=adviser)\
         .filter(status=status)\
@@ -60,6 +72,15 @@ def count_by_status_student_dissertation(status, adviser, dissertation):
         .count()
 
 
-def search_by_dissertation(dissertation):
-    return DissertationRole.objects.filter(dissertation=dissertation).order_by('pk')
+def get_promoteur_by_dissertation(dissertation):
+    promoteur = search_by_dissertation_and_role(dissertation, 'PROMOTEUR')
+    return promoteur
 
+
+def search_by_dissertation(dissertation):
+    return DissertationRole.objects.filter(dissertation=dissertation)
+
+
+def search_by_dissertation_and_role(dissertation, role):
+    dissertation_role = search_by_dissertation(dissertation).get(status=role)
+    return dissertation_role.adviser

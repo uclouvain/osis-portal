@@ -27,7 +27,7 @@ from couchbase.exceptions import ValueFormatError
 from django.conf import settings
 from osis_common.document import paper_sheet
 from dashboard import models as mdl
-from frontoffice.queue.queue import ScoresSheetClient
+from osis_common.queue.queue_listener import ScoresSheetClient
 import datetime
 import json
 import logging

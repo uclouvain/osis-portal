@@ -25,7 +25,8 @@
 ##############################################################################
 
 from django.conf.urls import url
-from dissertation.views import common, dissertation, proposition_dissertation
+from dissertation.views import common, dissertation, proposition_dissertation, \
+    upload_dissertation_file, upload_proposition_file
 
 
 urlpatterns = [
@@ -37,10 +38,16 @@ urlpatterns = [
         name='dissertation_delete'),
     url(r'^dissertation_detail/(?P<pk>[0-9]+)/$', dissertation.dissertation_detail,
         name='dissertation_detail'),
+    url(r'^dissertation_edit/(?P<pk>[0-9]+)$', dissertation.dissertation_edit,
+        name='dissertation_edit'),
     url(r'^dissertation_history/(?P<pk>[0-9]+)$', dissertation.dissertation_history,
         name='dissertation_history'),
+    url(r'^add_reader/(?P<pk>[0-9]+)$', dissertation.dissertation_jury_new,
+        name='add_reader'),
     url(r'^dissertation_new$', dissertation.dissertation_new,
-        name='dissertation_new$'),
+        name='dissertation_new'),
+    url(r'^dissertation_reader_delete/(?P<pk>[0-9]+)$', dissertation.dissertation_reader_delete,
+        name='dissertation_reader_delete'),
     url(r'^dissertations_search$', dissertation.dissertations_search,
         name='dissertations_search'),
     url(r'^dissertation_to_dir_submit/(?P<pk>[0-9]+)$', dissertation.dissertation_to_dir_submit,
@@ -52,4 +59,10 @@ urlpatterns = [
         name='proposition_dissertation_detail'),
     url(r'^proposition_dissertations_search$', proposition_dissertation.proposition_dissertations_search,
         name='proposition_dissertations_search'),
+
+    url(r'^upload/proposition_download/(?P<pk>[0-9]+)$', upload_proposition_file.download, name='proposition_download'),
+    url(r'^upload/proposition_save/$', upload_proposition_file.save_uploaded_file, name="proposition_save_upload"),
+    url(r'^upload/dissertation_download/(?P<pk>[0-9]+)$', upload_dissertation_file.download,
+        name='dissertation_download'),
+    url(r'^upload/dissertation_save/$', upload_dissertation_file.save_uploaded_file, name="dissertation_save_upload"),
 ]

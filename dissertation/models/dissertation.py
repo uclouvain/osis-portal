@@ -23,19 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+from osis_common.models.serializable_model import SerializableModel
 from django.contrib import admin
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
-from admission.models import offer_year, academic_year
-from base.models import student
-from . import proposition_dissertation
+from base.models import student, offer_year
+from . import dissertation_location, proposition_dissertation
+from dissertation.models.dissertation_role import get_promoteur_by_dissertation
+from dissertation.utils.emails_dissert import send_mail_to_teacher_new_dissert
+from base import models as mdl
 
 
 class DissertationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'status', 'active')
-
+    list_display = ('title', 'author', 'status', 'active', 'proposition_dissertation', 'modification_date')
+    raw_id_fields = ('author', 'offer_year_start', 'proposition_dissertation', 'location')
+    search_fields = ('title', )
 
 STATUS_CHOICES = (
     ('DRAFT', _('draft')),
@@ -64,19 +67,19 @@ DEFEND_PERIODE_CHOICES = (
 )
 
 
-class Dissertation(models.Model):
-
+class Dissertation(SerializableModel):
     title = models.CharField(max_length=200)
     author = models.ForeignKey(student.Student)
     status = models.CharField(max_length=12, choices=STATUS_CHOICES, default='DRAFT')
-    defend_periode = models.CharField(max_length=12, choices=DEFEND_PERIODE_CHOICES, default='UNDEFINED')
-    defend_year = models.ForeignKey(academic_year.AcademicYear, blank=True, null=True)
+    defend_periode = models.CharField(max_length=12, choices=DEFEND_PERIODE_CHOICES, default='UNDEFINED', null=True)
+    defend_year = models.IntegerField(blank=True, null=True)
     offer_year_start = models.ForeignKey(offer_year.OfferYear)
     proposition_dissertation = models.ForeignKey(proposition_dissertation.PropositionDissertation)
     description = models.TextField(blank=True, null=True)
     active = models.BooleanField(default=True)
     creation_date = models.DateTimeField(auto_now_add=True, editable=False)
     modification_date = models.DateTimeField(auto_now=True)
+    location = models.ForeignKey(dissertation_location.DissertationLocation, blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -91,6 +94,8 @@ class Dissertation(models.Model):
 
     def go_forward(self):
         next_status = get_next_status(self, "go_forward")
+        if self.status == 'DRAFT' and next_status == 'DIR_SUBMIT':
+            send_mail_to_teacher_new_dissert(get_promoteur_by_dissertation(self))
         self.set_status(next_status)
 
     def accept(self):
@@ -101,6 +106,11 @@ class Dissertation(models.Model):
         next_status = get_next_status(self, "refuse")
         self.set_status(next_status)
 
+    def author_is_logged_student(self, request):
+        logged_person = mdl.person.find_by_user(request.user)
+        logged_student = mdl.student.find_by_person(logged_person)
+        return logged_student == self.author
+
 
 def count_by_proposition(subject):
     return Dissertation.objects.filter(active=True)\
@@ -109,8 +119,9 @@ def count_by_proposition(subject):
                                .count()
 
 
-def count_submit_by_user(user):
-    return Dissertation.objects.filter(author=user).exclude(status='DRAFT').exclude(status='DIR_KO').count()
+def count_submit_by_user(user, offer):
+    return Dissertation.objects.filter(author=user).filter(offer_year_start__offer=offer)\
+        .exclude(status='DRAFT').exclude(status='DIR_KO').count()
 
 
 def get_next_status(memory, operation):
@@ -135,6 +146,9 @@ def search(terms, author=None):
     return queryset
 
 
-def search_by_user(user):
+def find_by_user(user):
     return Dissertation.objects.filter(author=user).exclude(active=False)
 
+
+def find_by_id(dissertation_id):
+    return Dissertation.objects.get(pk=dissertation_id)

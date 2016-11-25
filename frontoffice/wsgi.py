@@ -25,13 +25,33 @@
 ##############################################################################
 
 import os,sys
-
+import logging
 from django.core.wsgi import get_wsgi_application
+from osis_common.queue import callbacks, queue_listener
+from performance.queue import callbacks as perf_callbacks
+from pika.exceptions import ConnectionClosed, AMQPConnectionError, ChannelClosed
 
 # The two following lines are mandatory for working with mod_wsgi on the servers
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..' )
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../frontoffice')
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "frontoffice.settings")
-
 application = get_wsgi_application()
+
+from django.conf import settings
+LOGGER = logging.getLogger(settings.DEFAULT_LOGGER)
+
+if hasattr(settings, 'QUEUES'):
+    # Thread in which is running the listening of the queue used to migrate data (from Osis to Osis-portal)
+    try:
+        queue_listener.SynchronousConsumerThread(settings.QUEUES.get('QUEUES_NAME').get('MIGRATIONS_TO_CONSUME')
+                                                 , callbacks.insert_or_update).start()
+    except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
+        LOGGER.exception("Couldn't connect to the QueueServer")
+
+    # Thread in which is running the listening of the queue used to print exams scores of students
+    try:
+        queue_listener.listen_queue(settings.QUEUES.get('QUEUES_NAME').get('PERFORMANCE')
+                                    , perf_callbacks.couchbase_insert_or_update)
+    except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
+        LOGGER.exception("Couldn't connect to the QueueServer")

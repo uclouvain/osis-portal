@@ -23,16 +23,31 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+from osis_common.models.serializable_model import SerializableModel
+from django.contrib import admin
 from django.db import models
 from base import models as mdl
 from dissertation.models import dissertation
 
 JUSTIFICATION_LINK = "_set_to_"
+INVISIBLE_JUSTIFICATION_KEYWORDS = ('auto_add_jury',
+                                    'manager_add_jury',
+                                    'manager_creation_dissertation',
+                                    'manager_delete_jury',
+                                    'manager_edit_dissertation',
+                                    'manager_set_active_false',
+                                    'teacher_add_jury',
+                                    'teacher_delete_jury',
+                                    'teacher_set_active_false'
+                                    )
 
 
-class DissertationUpdate(models.Model):
+class DissertationUpdateAdmin(admin.ModelAdmin):
+    list_display = ('dissertation', 'author', 'status_from', 'status_to', 'person', 'created')
+    raw_id_fields = ('person', 'dissertation')
 
+
+class DissertationUpdate(SerializableModel):
     status_from = models.CharField(max_length=12, choices=dissertation.STATUS_CHOICES, default='DRAFT')
     status_to = models.CharField(max_length=12, choices=dissertation.STATUS_CHOICES, default='DRAFT')
     created = models.DateTimeField(auto_now_add=True)
@@ -40,13 +55,20 @@ class DissertationUpdate(models.Model):
     person = models.ForeignKey('base.Person')
     dissertation = models.ForeignKey(dissertation.Dissertation)
 
+    @property
+    def author(self):
+        return self.dissertation.author
+
     def __str__(self):
         desc = "%s / %s >> %s / %s" % (self.dissertation.title, self.status_from, self.status_to, str(self.created))
         return desc
 
 
 def search_by_dissertation(memory):
-    return DissertationUpdate.objects.filter(dissertation=memory).order_by('created')
+    queryset = DissertationUpdate.objects.filter(dissertation=memory).order_by('created')
+    for keyword in INVISIBLE_JUSTIFICATION_KEYWORDS:
+        queryset = queryset.exclude(justification__contains=keyword)
+    return queryset
 
 
 def add(request, memory, old_status, justification=None):
@@ -61,4 +83,3 @@ def add(request, memory, old_status, justification=None):
     update.person = person
     update.dissertation = memory
     update.save()
-

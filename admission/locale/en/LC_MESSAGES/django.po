@@ -23,6 +23,9 @@ msgstr "Academic year"
 msgid "account_already_created"
 msgstr "If you already have requested creation of this account"
 
+msgid "account_created"
+msgstr "Your account was created!"
+
 msgid "account_creation"
 msgstr "Please create this account, composed of a private e-mail address and a password."
 
@@ -39,7 +42,7 @@ msgid "activation_link_not_valid"
 msgstr "Activation link invalid!"
 
 msgid "activation_mail_sent"
-msgstr "An activation message has been sent to your email account."
+msgstr "An activation message has been sent to your email."
 
 msgid "activity_type"
 msgstr "Activity type"
@@ -48,7 +51,7 @@ msgid "add"
 msgstr "Add"
 
 msgid "add_enrollment_file"
-msgstr "Please add a copy of your certificate or a proof of your enrollment to "
+msgstr "Please add a copy of your certificate or a proof of your exam enrollment"
 
 msgid "add_file_children_deduction"
 msgstr "Veuillez joindre l'attestation officelle pour bénéficier de cette réduction"
@@ -179,6 +182,9 @@ msgstr "Request to change password"
 
 msgid "changing_password_instruction"
 msgstr "Please enter your e-mail address. You will receive a link, allowing you to change your password."
+
+msgid "check_activation_email_sent"
+msgstr "Please, check your email box now and click on the link in the message we have sent to you to activate your account."
 
 msgid "checkbox"
 msgstr "checkbox"
@@ -366,6 +372,9 @@ msgstr "error(s)"
 msgid "errors_warning"
 msgstr "There are errors"
 
+msgid "error_with_form"
+msgstr "You didn't filled all the forms or the fields are incorrect."
+
 msgid "establishment"
 msgstr "Establishment"
 
@@ -377,6 +386,9 @@ msgstr "Father"
 
 msgid "female"
 msgstr "Female"
+
+msgid "field_is_required"
+msgstr "Field is required."
 
 msgid "file"
 msgstr "File"
@@ -439,6 +451,9 @@ msgstr "study grant French-speaking community"
 msgid "full_exercise"
 msgstr "Full exercise"
 
+msgid "FULL_TIME"
+msgstr "Yes, at full-time"
+
 msgid "further_information"
 msgstr "Further information"
 
@@ -498,6 +513,9 @@ msgstr "Last High school scores transcript"
 msgid "higher_non_university"
 msgstr "Higher non university"
 
+msgid "homepage"
+msgstr "Homepage"
+
 msgid "http_link"
 msgstr "HTTP link"
 
@@ -507,17 +525,11 @@ msgstr "Account number (IBAN)"
 msgid "id_add"
 msgstr "Click here to add a id documents"
 
-msgid "id_card"
-msgstr "Identity card"
-
 msgid "id_document"
 msgstr "Id document"
 
 msgid "id_documents"
 msgstr "Id documents"
-
-msgid "id_picture"
-msgstr "Identity picture"
 
 msgid "id_picture_add"
 msgstr "Click here to add a picture"
@@ -729,7 +741,7 @@ msgid "msg_warning_curriculum"
 msgstr "Please mention your secondary education and diplomas informations, before encoding the curricula."
 
 msgid "name"
-msgstr "Nom"
+msgstr "Name"
 
 msgid "national_registry_number"
 msgstr "National registry number"
@@ -751,7 +763,6 @@ msgstr "Please indicate your new password"
 
 msgid "next_step"
 msgstr "Next step"
-#: templates/diploma.html:210
 
 msgid "no"
 msgstr "No"
@@ -761,6 +772,9 @@ msgstr "If you do not yet have an account"
 
 msgid "no_preview"
 msgstr "No preview available on a non image file"
+
+msgid "NO_PROFESSION"
+msgstr "No profession"
 
 msgid "no_result"
 msgstr "No result"
@@ -783,6 +797,9 @@ msgstr "Offer choice"
 msgid "onem_needed"
 msgstr "Veuillez joindre l'attestation de l'ONEM stipulant qui n'a pas bénificier d'une dégoration l'autorisation de poursuivre des études"
 
+msgid "online_enrollment"
+msgstr "Online Enrollment"
+
 msgid "or"
 msgstr "or"
 
@@ -801,9 +818,6 @@ msgstr "Other education type"
 msgid "other_institution"
 msgstr "Other institution"
 
-msgid "other_linguistic_regime"
-msgstr "If other linguistic regime, please clarify"
-
 msgid "other_phone"
 msgstr "Other phone"
 
@@ -812,6 +826,9 @@ msgstr "Do you benefit from a study grant provided by another institute?"
 
 msgid "other_study_grant_address"
 msgstr "If affirmative, please provide the name and address of the organisation"
+
+msgid "PART_TIME"
+msgstr "Yes, at part-time"
 
 msgid "passport_number"
 msgstr "Passport number"
@@ -866,8 +883,9 @@ msgstr "Prerequisites"
 
 msgid "previous_step"
 msgstr "Previous step"
-#: templates/diploma.html:200 templates/diploma.html.py:201
-#: templates/diploma.html:318 templates/diploma.html.py:319
+
+msgid "PRIMARY"
+msgstr "Primary"
 
 msgid "profession"
 msgstr "Profession"
@@ -909,7 +927,7 @@ msgid "question_culture_card"
 msgstr "Would you like to receive the culture card?"
 
 msgid "question_date_session"
-msgstr "Please mention if you have changed of orientation during your studies."
+msgstr "Date?"
 
 msgid "question_domain"
 msgstr "Domain, subdomain, and grade type corresponds to your studies"
@@ -1012,6 +1030,9 @@ msgstr "Reference number"
 msgid "requested_study"
 msgstr "Requested study"
 
+msgid "resend_activation_email"
+msgstr "Resend activation email"
+
 msgid "residence_country"
 msgstr "Residence country"
 
@@ -1020,14 +1041,18 @@ msgstr "Result"
 
 msgid "save"
 msgstr "Save"
-#: templates/diploma.html:203 templates/diploma.html.py:204
-#: templates/diploma.html:321 templates/diploma.html.py:322
 
 msgid "scores_transcript"
 msgstr "Scores transcript"
 
 msgid "secondary_education"
 msgstr "Secondary education"
+
+msgid "SECONDARY_INFERIOR"
+msgstr "Secondary inferior"
+
+msgid "SECONDARY_SUPERIOR"
+msgstr "Secondary superior"
 
 msgid "separated"
 msgstr "Separated"
@@ -1057,7 +1082,7 @@ msgid "specify_locality"
 msgstr "In case you could not find the locality in the list, please mention it below."
 
 msgid "specify_name"
-msgstr "To specify"
+msgstr "Other, please specify"
 
 msgid "specify_university_name"
 msgstr "In case you could not find your university in the list, please mention it below."
@@ -1116,6 +1141,9 @@ msgstr "Succeed"
 msgid "succeeded"
 msgstr "Succeeded"
 
+msgid "SUPERIOR_NON_UNIVERSITY"
+msgstr "Superior but not university"
+
 msgid "tab_diplomas"
 msgstr "Diplomas and certificates"
 
@@ -1158,6 +1186,9 @@ msgstr "Unemployment"
 msgid "university"
 msgstr "University"
 
+msgid "UNIVERSITY"
+msgstr "University"
+
 msgid "university_country"
 msgstr "University country"
 
@@ -1168,6 +1199,9 @@ msgid "unknow_number_yet"
 msgstr "In case you do not know this number yet, you can always provide us this information later on."
 
 msgid "unknown"
+msgstr "Unknown"
+
+msgid "UNKNOWN"
 msgstr "Unknown"
 
 msgid "update_curriculum"
@@ -1223,3 +1257,337 @@ msgstr "Your profille"
 
 msgid "your_requests"
 msgstr "Your requests"
+
+msgid "add_document"
+msgstr "Add a document"
+
+msgid "precise_file"
+msgstr "Please select a file"
+
+msgid "resident_long_duration"
+msgstr "Residence Long Duration"
+
+msgid "id_foreign_unlimited"
+msgstr " Unlimited Foreign ID"
+
+msgid "attachment_26"
+msgstr "Attachment 26"
+
+msgid "refugee_card"
+msgstr "Refugee Card"
+
+msgid "family_composition"
+msgstr "Family Composition"
+
+msgid "birth_certificate"
+msgstr "Birth Certificate"
+
+msgid "resident_certificate"
+msgstr "Resident Certificate"
+
+msgid "stateless_certificate"
+msgstr "Stateless Certificate"
+
+msgid "foreign_inscription_certificate"
+msgstr "Foreign Inscription Certificate"
+
+msgid "subsidiary_protection_decision"
+msgstr "Subsidiary Protection Decision"
+
+msgid "residence_permit"
+msgstr "Residence Permit"
+
+msgid "tutorship_certificate"
+msgstr "Tutorship Certificate"
+
+msgid "scholarship_cfwb"
+msgstr "Scholarship CFWB"
+
+msgid "scholarship_development_cooperation"
+msgstr "Scholarship Development Cooperation"
+
+msgid "help_pnl_selectedfiles"
+msgstr "Please select a file"
+
+msgid "upload"
+msgstr "Upload"
+
+msgid "paycheck_1"
+msgstr "1st paycheck"
+
+msgid "paycheck_2"
+msgstr "2nd paycheck"
+
+msgid "paycheck_3"
+msgstr "3rd paycheck"
+
+msgid "paycheck_4"
+msgstr "4th paycheck"
+
+msgid "paycheck_5"
+msgstr "5th paycheck"
+
+msgid "paycheck_6"
+msgstr "6th paycheck"
+
+msgid "no_doc"
+msgstr "No document available"
+
+msgid "mandatory_file"
+msgstr "Mandatory file"
+
+msgid "equivalence"
+msgstr "Equivalence"
+
+msgid "prerequisites_min_data"
+msgstr "You must have, at least, an secondary diploma or a professional exam or an admission exam or a local language exam"
+
+msgid "validation_errors"
+msgstr " fields are invalid"
+
+msgid "msg_one_prerequisite"
+msgstr ""
+"You must at minimum have a diploma for high school, a professional exam, an admission exam or a local language exam"
+
+msgid "question_lottery_number"
+msgstr "Please mention your lottery number"
+
+msgid "CRITERIA_1"
+msgstr "Please, mention whether you have an authorization of an institute or you are a long-term resident."
+
+msgid "CRITERIA_2"
+msgstr "Please mention if you are a refugee, stateless or if you want to benefit from a subsidiary protection."
+
+msgid "CRITERIA_3"
+msgstr "Please mention if you have a residence permit beyond 3 months and if you benefit from professional or replacement income."
+
+msgid "CRITERIA_4"
+msgstr "Please mention if you receive support from CPAS, a residence of CPAS or designated by CPAS (is the public institute for social welfare)"
+
+msgid "CRITERIA_5"
+msgstr "Please mention if your father, mother, legal guardian, spouse or legal cohabitant carries the nationality of a EU-member state or if this persons complies with the conditions as referred to in the questions 1 to 4."
+
+msgid "CRITERIA_6"
+msgstr "Please mention if you benefit from a scholarship as defined in article 105 § 2 of the  decree of November 7th, 2013 (CFWB or the Cooperation to Development)"
+
+msgid "CRITERIA_7"
+msgstr "Are you an european long-term resident (of a country other than Belgium)?"
+
+msgid "MASTER_60"
+msgstr "Master 60"
+
+msgid "MASTER_120"
+msgstr "Master 120"
+
+msgid "MASTER_180_OR_240"
+msgstr "Master 180 or 240"
+
+msgid "ADVANCED_MASTER"
+msgstr "Advanced master"
+
+msgid "CAPAES"
+msgstr "Capaes"
+
+msgid "BACHELOR"
+msgstr "Bachelor"
+
+msgid "TRAINING_CERTIFICATE"
+msgstr "Training certificate"
+
+msgid "CERTIFICATE"
+msgstr "Certificate"
+
+msgid "DOCTORATE"
+msgstr "Ph.D"
+
+msgid "institution_not_found_question"
+msgstr "Didn't you find your institute in the list below?"
+
+msgid "mandatory_file_recto_verso"
+msgstr "Mandatory files for recto and verso"
+
+msgid "validate_data"
+msgstr "Validate data"
+
+msgid "validation_error"
+msgstr " field is invalid"
+
+msgid "profession_not_found"
+msgstr "You haven't found your profession above?"
+
+msgid "grandfather"
+msgstr "Grandfathers"
+
+msgid "other_linguistic_regime"
+msgstr "Other linguistic regime"
+
+msgid "is_required_for"
+msgstr "is required for the following offer : "
+
+msgid "the_exam_type"
+msgstr "The exam type "
+
+msgid "NATIONAL"
+msgstr "National"
+
+msgid "NON_NATIONAL"
+msgstr "Non-national"
+
+msgid "EUROPEAN_UNION"
+msgstr "European union"
+
+msgid "NON_EUROPEAN_UNION"
+msgstr "Non european union"
+
+msgid "no_result_yet"
+msgstr "No result yet"
+
+msgid "no_identification_number"
+msgstr "Please mention at least a national register number, an identity card number or a passport number."
+
+msgid "attachments_admission_mandatory"
+msgstr "Motivation letter and curriculum document are mandatory for an admission"
+
+msgid "letter_motivation_doc_missing"
+msgstr "Motivation letter document is mandatory"
+
+msgid "curriculum_doc_missing"
+msgstr "Curriculum document is mandatory"
+
+msgid "type"
+msgstr "Type"
+
+msgid "letter_motivation"
+msgstr "Motivation letter"
+
+msgid "national_diploma_recto"
+msgstr "High school diploma - recto"
+
+msgid "national_diploma_verso"
+msgstr "High school diploma - verso"
+
+msgid "professional_exam_certificate"
+msgstr "Please add a copy of your certificate or a proof of your professional exam enrollment."
+
+msgid "admission_exam_certificate"
+msgstr "Admission exam certificate"
+
+msgid "high_school_scores_transcript_recto"
+msgstr "High school transcript - recto"
+
+msgid "high_school_scores_transcript_verso"
+msgstr "High school transcript - verso"
+
+msgid "translated_high_school_scores_transcript_recto"
+msgstr "Translated high school transcript - recto"
+
+msgid "translated_high_school_scores_transcript_verso"
+msgstr "Translated high school transcript - verso"
+
+msgid "international_diploma_recto"
+msgstr "High school diploma - recto"
+
+msgid "international_diploma_verso"
+msgstr "High school diploma - verso"
+
+msgid "translated_international_diploma_recto"
+msgstr "Translated high school diploma - recto"
+
+msgid "translated_international_diploma_verso"
+msgstr "Translated high school diploma - verso"
+
+msgid "identity_card"
+msgstr "Identity card"
+
+
+msgid "msg_next_offer"
+msgstr "Before going to the next step you have to select at least one offer and mention if you obtained a belgian diploma"
+
+msgid "msg_next_profil"
+msgstr ""
+"Before going to the next step you have to mention you nationality and the country where you live"
+
+msgid "criteria"
+msgstr "Criteria"
+
+msgid "id_picture"
+msgstr "Identity picture"
+
+msgid "id_card"
+msgstr "Identity card"
+
+msgid "paycheck"
+msgstr "Paycheck"
+
+msgid "cpas"
+msgstr "CPAS"
+
+msgid "concerned_person"
+msgstr "for concerned person"
+
+msgid "invalid_content_type"
+msgstr "Invalid content type"
+
+msgid "select_file"
+msgstr "Please select a file"
+
+msgid "error_occured"
+msgstr "An error occured! The file hasn't been uploaded.  Restart your app"
+
+msgid "msg_no_next_step"
+msgstr "Before going to the next step you have to : "
+
+msgid "msg_assimilation_criteria"
+msgstr "Mention a assimilation criteria, or mention if you don't correspond to any criteria."
+
+msgid "contact_country"
+msgstr "Country required"
+
+msgid "contact_street"
+msgstr "Street required"
+
+msgid "contact_number"
+msgstr "Number required"
+
+msgid "contact_postal_code"
+msgstr "Zip code required"
+
+msgid "contact_city"
+msgstr "City required"
+
+msgid "legal_country"
+msgstr "Country required"
+
+msgid "legal_street"
+msgstr "Street required"
+
+msgid "legal_number"
+msgstr "Number required"
+
+msgid "legal_postal_code"
+msgstr "Zip code"
+
+msgid "legal_city"
+msgstr "City required"
+
+msgid "invalid_data"
+msgstr "Errors in the form"
+
+msgid "number_invalid"
+msgstr "Number invalid"
+
+msgid "previous_enrollment_required_year"
+msgstr "Please mention the last academic year"
+
+msgid "previous_enrollment_required_nb"
+msgstr "Please mention a registration number"
+
+msgid "errors_validation_warning"
+msgstr "Some errors prevent the tab validation"
+
+msgid "language_exam_certificate"
+msgstr "Language exam certificate"
+
+msgid "question_need_to_save"
+msgstr "Sure?  Don't you need to save some data?"
+

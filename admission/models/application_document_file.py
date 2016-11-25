@@ -24,9 +24,12 @@
 #
 ##############################################################################
 
-from django.db import models
 from django.contrib import admin
-from django.contrib.auth.models import User
+from django.db import models
+
+
+class ApplicationDocumentFileAdmin(admin.ModelAdmin):
+    list_display = ('application', 'document_file')
 
 
 class ApplicationDocumentFile(models.Model):
@@ -46,5 +49,23 @@ def search(application=None, description=None):
     return out
 
 
+def find_first(application=None, description=None):
+    results = search(application, description)
+    if results.exists():
+        return results[0]
+    return None
 
 
+def find_by_document(document_file):
+    return ApplicationDocumentFile.objects.filter(document_file=document_file)
+
+
+def find_document_by_application(application):
+    return ApplicationDocumentFile.objects.filter(application=application)
+
+
+def find_document_by_application_description(application, description):
+    return ApplicationDocumentFile.objects\
+        .filter(application=application)\
+        .filter(document_file__description=description)\
+        .order_by('document_file__creation_date')

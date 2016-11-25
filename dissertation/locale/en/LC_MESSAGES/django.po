@@ -26,6 +26,18 @@ msgstr "Accepted by promoter"
 msgid "accepted_by_first_year_evaluation"
 msgstr "Accepted by first year evaluation"
 
+msgid "ACCOMPANIST"
+msgstr "Accompanist"
+
+msgid "accompanist"
+msgstr "Accompanist"
+
+msgid "add_justification"
+msgstr "Add justification"
+
+msgid "add_reader"
+msgstr "Add a reader"
+
 msgid "application_dissertation"
 msgstr "Dissertation management"
 
@@ -41,8 +53,14 @@ msgstr "Change"
 msgid "collaboration"
 msgstr "Collaboration"
 
+msgid "CO_PROMOTEUR"
+msgstr "Co-Promotor"
+
 msgid "copromotor"
 msgstr "Co-promoter"
+
+msgid "create"
+msgstr "Create"
 
 msgid "current_status"
 msgstr "Current status"
@@ -62,11 +80,14 @@ msgstr "Defended"
 msgid "delete"
 msgstr "Delete"
 
+msgid "delete_adviser_role_confirmation_message"
+msgstr "You are ready to delete this jury member.  Are you sure you want to continue ?"
+
 msgid "desc_lnk_dissertations"
-msgstr "List of my projects dissertation"
+msgstr "List of dissertations which I am linked to"
 
 msgid "desc_lnk_propositions_dissertations"
-msgstr "List of available subjects"
+msgstr "Dissertation subjects submitted by teachers"
 
 msgid "description"
 msgstr "Description"
@@ -77,6 +98,12 @@ msgstr "Submit"
 msgid "dissertation"
 msgstr "Dissertation"
 
+msgid "dissertations"
+msgstr "Dissertations"
+
+msgid "dissertation_confirmation_message"
+msgstr "Confirm dissertation"
+
 msgid "dissertation_history"
 msgstr "Dissertation history"
 
@@ -84,13 +111,22 @@ msgid "dissertation_informations"
 msgstr "Dissertation informations"
 
 msgid "dissertation_jury"
-msgstr "Jury"
+msgstr "Dissertation jury"
+
+msgid "dissertation_location"
+msgstr "Dissertation location"
+
+msgid "dissertation_updates"
+msgstr "Dissertation updates"
 
 msgid "domain"
 msgstr "Domain"
 
 msgid "draft"
 msgstr "Draft"
+
+msgid "edit"
+msgstr "Edit"
 
 msgid "ended"
 msgstr "End"
@@ -107,6 +143,15 @@ msgstr "Forbidden"
 msgid "history"
 msgstr "History"
 
+msgid "information"
+msgstr "Information"
+
+msgid "INTERNSHIP"
+msgstr "Internship Master"
+
+msgid "internship_master"
+msgstr "Internship Master"
+
 msgid "january"
 msgstr "January"
 
@@ -116,11 +161,20 @@ msgstr "June"
 msgid "justification_confirmation_message"
 msgstr "Confirm justification"
 
+msgid "justification_instructions"
+msgstr "The status update is nearly done. This update is detailed just after. Please add your explanation for this update."
+
 msgid "level"
 msgstr "Level"
 
+msgid "link"
+msgstr "Link"
+
 msgid "literature_review"
 msgstr "Literature Review"
+
+msgid "main"
+msgstr "Main"
 
 msgid "manager"
 msgstr "Course manager"
@@ -129,7 +183,7 @@ msgid "max_students_number"
 msgstr "Maximum number of student"
 
 msgid "memories_list"
-msgstr "Dissertation List"
+msgstr "Dissertations"
 
 msgid "next_status"
 msgstr "Next status"
@@ -137,8 +191,14 @@ msgstr "Next status"
 msgid "no_result"
 msgstr "No result"
 
-msgid "offer_propositions"
+msgid "offer_proposition"
 msgstr "Offer"
+
+msgid "offer_propositions"
+msgstr "Offers"
+
+msgid "offer_year_start"
+msgstr "Offer year start"
 
 msgid "optional"
 msgstr "Optional"
@@ -149,20 +209,35 @@ msgstr "Person"
 msgid "possible"
 msgstr "Possible"
 
+msgid "PRESIDENT"
+msgstr "President"
+
+msgid "president"
+msgstr "President"
+
 msgid "professor"
 msgstr "Professor"
 
+msgid "PROMOTEUR"
+msgstr "Promotor"
+
 msgid "promotor"
 msgstr "Promoter"
+
+msgid "proposition_dissertation"
+msgstr "Dissertation subject"
 
 msgid "proposition_dissertation_informations"
 msgstr "Subject informations"
 
 msgid "proposition_dissertation_jury"
-msgstr "Suggested jury"
+msgstr "Dissertation subject jury"
 
 msgid "question"
 msgstr "Question"
+
+msgid "READER"
+msgstr "Reader"
 
 msgid "reader"
 msgstr "Reader"
@@ -179,6 +254,9 @@ msgstr "Refused by first year evaluation"
 msgid "required"
 msgstr "Required"
 
+msgid "save"
+msgstr "Save"
+
 msgid "search"
 msgstr "Search"
 
@@ -189,7 +267,7 @@ msgid "status"
 msgstr "Status"
 
 msgid "subjects_list"
-msgstr "Subject List"
+msgstr "Dissertation subjects"
 
 msgid "submitted_to_commission"
 msgstr "Submitted to commission"
@@ -201,7 +279,7 @@ msgid "submitted_to_first_year_evaluation"
 msgstr "Submitted to first year evaluation "
 
 msgid "taken_places"
-msgstr "Interest"
+msgstr "Taken places"
 
 msgid "theme"
 msgstr "Theme"
@@ -220,6 +298,9 @@ msgstr "Warning : you will submit the draft memorandum to the promotor. Are you 
 
 msgid "type"
 msgstr "Type"
+
+msgid "visibility"
+msgstr "Visibility"
 
 msgid "work"
 msgstr "Work"

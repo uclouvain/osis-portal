@@ -24,8 +24,6 @@
 #
 ##############################################################################
 
-from django.utils.translation import ugettext_lazy as _
-
 
 ID_CARD = 'ID_CARD'
 LETTER_MOTIVATION = 'LETTER_MOTIVATION'
@@ -44,6 +42,7 @@ TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO = 'TRANSLATED_HIGH_SCHOOL_SCORES_
 EQUIVALENCE = 'EQUIVALENCE'
 ADMISSION_EXAM_CERTIFICATE = 'ADMISSION_EXAM_CERTIFICATE'
 PROFESSIONAL_EXAM_CERTIFICATE = 'PROFESSIONAL_EXAM_CERTIFICATE'
+LANGUAGE_EXAM_CERTIFICATE = 'LANGUAGE_EXAM_CERTIFICATE'
 RESIDENT_LONG_DURATION = 'RESIDENT_LONG_DURATION'
 ID_FOREIGN_UNLIMITED = 'ID_FOREIGN_UNLIMITED'
 ATTACHMENT_26 = 'ATTACHMENT_26'
@@ -55,12 +54,19 @@ STATELESS_CERTIFICATE = 'STATELESS_CERTIFICATE'
 FOREIGN_INSCRIPTION_CERTIFICATE = 'FOREIGN_INSCRIPTION_CERTIFICATE'
 SUBSIDIARY_PROTECTION_DECISION = 'SUBSIDIARY_PROTECTION_DECISION'
 RESIDENCE_PERMIT = 'RESIDENCE_PERMIT'
-PAYCHECK = 'PAYCHECK'
+PAYCHECK_1 = 'PAYCHECK_1'
+PAYCHECK_2 = 'PAYCHECK_2'
+PAYCHECK_3 = 'PAYCHECK_3'
+PAYCHECK_4 = 'PAYCHECK_4'
+PAYCHECK_5 = 'PAYCHECK_5'
+PAYCHECK_6 = 'PAYCHECK_6'
 CPAS = 'CPAS'
 TUTORSHIP_CERTIFICATE = 'TUTORSHIP_CERTIFICATE'
 OTHER = 'OTHER'
 SCHOLARSHIP_CFWB = 'SCHOLARSHIP_CFWB'
 SCHOLARSHIP_DEVELOPMENT_COOPERATION = 'SCHOLARSHIP_DEVELOPMENT_COOPERATION'
+
+CURRICULUM = 'CURRICULUM'
 
 DOCUMENT_TYPE_CHOICES = ((ID_CARD, 'identity_card', '', ''),
                          (LETTER_MOTIVATION, 'letter_motivation', '', ''),
@@ -80,22 +86,34 @@ DOCUMENT_TYPE_CHOICES = ((ID_CARD, 'identity_card', '', ''),
                          (EQUIVALENCE, 'equivalence', '', ''),
                          (ADMISSION_EXAM_CERTIFICATE, 'admission_exam_certificate', '', ''),
                          (PROFESSIONAL_EXAM_CERTIFICATE, 'professional_exam_certificate', '', ''),
-                         (RESIDENT_LONG_DURATION, '', '', ''),
-                         (ID_FOREIGN_UNLIMITED, '', '', ''),
-                         (ATTACHMENT_26, '', '', ''),
-                         (REFUGEE_CARD, '', '', ''),
-                         (FAMILY_COMPOSITION, '', '', ''),
-                         (BIRTH_CERTIFICATE, '', '', ''),
-                         (RESIDENT_CERTIFICATE, '', '', ''),
-                         (STATELESS_CERTIFICATE, '', '', ''),
-                         (FOREIGN_INSCRIPTION_CERTIFICATE, '', '', ''),
-                         (SUBSIDIARY_PROTECTION_DECISION, '', '', ''),
-                         (RESIDENCE_PERMIT, '', '', ''),
-                         (PAYCHECK, '', '', ''),
-                         (CPAS, '', '', ''),
-                         (TUTORSHIP_CERTIFICATE, '', '', ''),
-                         (OTHER, '', '', ''),  # Hang va vérifier la signification de "les documents demandés pour l’étudiant à adapter pour la personne concernée. "
-                         (SCHOLARSHIP_CFWB, '', '', ''),
-                         (SCHOLARSHIP_DEVELOPMENT_COOPERATION, '', '', ''))
+                         (LANGUAGE_EXAM_CERTIFICATE, 'language_exam_certificate', '', ''),
+                         (RESIDENT_LONG_DURATION, 'resident_long_duration', '', ''),
+                         (ID_FOREIGN_UNLIMITED, 'id_foreign_unlimited', '', ''),
+                         (ATTACHMENT_26, 'attachment_26', '', ''),
+                         (REFUGEE_CARD, 'refugee_card', '', ''),
+                         (FAMILY_COMPOSITION, 'family_composition', '', ''),
+                         (BIRTH_CERTIFICATE, 'birth_certificate', '', ''),
+                         (RESIDENT_CERTIFICATE, 'resident_certificate', '', ''),
+                         (STATELESS_CERTIFICATE, 'stateless_certificate', '', ''),
+                         (FOREIGN_INSCRIPTION_CERTIFICATE, 'foreign_inscription_certificate', '', ''),
+                         (SUBSIDIARY_PROTECTION_DECISION, 'subsidiary_protection_decision', '', ''),
+                         (RESIDENCE_PERMIT, 'residence_permit', '', ''),
+                         (PAYCHECK_1, 'paycheck_1', '', ''),
+                         (PAYCHECK_2, 'paycheck_2', '', ''),
+                         (PAYCHECK_3, 'paycheck_3', '', ''),
+                         (PAYCHECK_4, 'paycheck_4', '', ''),
+                         (PAYCHECK_5, 'paycheck_5', '', ''),
+                         (PAYCHECK_6, 'paycheck_6', '', ''),
+                         (CPAS, 'cpas', '', ''),
+                         (TUTORSHIP_CERTIFICATE, 'tutorship_certificate', '', ''),
+                         (OTHER, 'other', '', ''),
+                         (SCHOLARSHIP_CFWB, 'scholarship_cfwb', '', ''),
+                         (SCHOLARSHIP_DEVELOPMENT_COOPERATION, 'scholarship_development_cooperation', '', ''),
+                         (CURRICULUM, 'curriculum', '', ''))
 
+
+def find(document_type):
+    for l in DOCUMENT_TYPE_CHOICES:
+        if document_type in l:
+            return l
 

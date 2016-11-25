@@ -33,3 +33,6 @@
 
 ### Pull request :
 - Ne fournir qu'un seul fichier de migration par issue/branche (fusionner tous les fichiers de migrations que vous avez en local en un seul fichier)
+
+### App 'reference' :
+- Tout modèle implémenté dans l'application 'reference' ne peut pas posséder de clé étrangère vers une autre app. Elle doit fonctionner seule, indépendemment des autres apps.
