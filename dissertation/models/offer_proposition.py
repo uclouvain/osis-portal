@@ -33,6 +33,7 @@ from base.models import offer
 class OfferPropositionAdmin(admin.ModelAdmin):
     list_display = ('acronym', 'offer')
     raw_id_fields = ('offer',)
+    search_fields = ('acronym',)
 
 
 class OfferProposition(SerializableModel):

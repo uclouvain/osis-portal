@@ -26,21 +26,16 @@
 from osis_common.models.serializable_model import SerializableModel
 from django.contrib import admin
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from .enums import status_types
 
 
 class PropositionRoleAdmin(admin.ModelAdmin):
     list_display = ('adviser', 'status', 'proposition_dissertation')
+    raw_id_fields = ('adviser', 'proposition_dissertation')
 
 
 class PropositionRole(SerializableModel):
-    STATUS_CHOICES = (
-        ('PROMOTEUR', _('promotor')),
-        ('CO_PROMOTEUR', _('copromotor')),
-        ('READER', _('reader')),
-    )
-
-    status = models.CharField(max_length=12, choices=STATUS_CHOICES, default="PROMOTEUR")
+    status = models.CharField(max_length=12, choices=status_types.STATUS_CHOICES, default=status_types.PROMOTEUR)
     adviser = models.ForeignKey('Adviser')
     proposition_dissertation = models.ForeignKey('PropositionDissertation')
 
