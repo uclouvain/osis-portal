@@ -24,7 +24,13 @@
 #
 ##############################################################################
 
+from django.contrib import admin
 from django.db import models
+
+
+class ApplicationDocumentFileAdmin(admin.ModelAdmin):
+    list_display = ('application', 'document_file')
+
 
 class ApplicationDocumentFile(models.Model):
     application = models.ForeignKey('Application')
@@ -54,4 +60,12 @@ def find_by_document(document_file):
     return ApplicationDocumentFile.objects.filter(document_file=document_file)
 
 
+def find_document_by_application(application):
+    return ApplicationDocumentFile.objects.filter(application=application)
 
+
+def find_document_by_application_description(application, description):
+    return ApplicationDocumentFile.objects\
+        .filter(application=application)\
+        .filter(document_file__description=description)\
+        .order_by('document_file__creation_date')

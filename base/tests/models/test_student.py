@@ -24,33 +24,18 @@
 #
 ##############################################################################
 from django.test import TestCase
-from admission.views import sociological
-import admission.tests.data_for_tests as data_model
-
-PROFESSION_EMPLOYEE = 'Employee'
-CHECKED_STATUS = 'on'
-UNCHECKED_STATUS = 'off'
+from admission.tests import data_for_tests
+from base.models import student as mdl_student
 
 
-class SociologicalTest(TestCase):
-
+class TestModelStudent(TestCase):
     def setUp(self):
-        self.profession = data_model.create_profession(PROFESSION_EMPLOYEE, False)
+        self.student = data_for_tests.create_student()
 
-    def test_get_boolean_status(self):
-        self.assertTrue(sociological.get_boolean_status(CHECKED_STATUS))
-        self.assertFalse(sociological.get_boolean_status(UNCHECKED_STATUS))
-        self.assertFalse(sociological.get_boolean_status(''))
+    def test_get_student_by_registration_id(self):
+        student = mdl_student.get_student_by_registration_id("64641200")
+        self.assertEqual(student, self.student, "Wrong student returned")
 
-    def get_existing_profession(self):
-        id = self.profession.id
-        id_str = str(id)
-        self.assertIs(get_profession(id, ''), self.profession)
-        self.assertIs(get_profession(id_str, ''), self.profession)
+        student = mdl_student.get_student_by_registration_id("6587984")
+        self.assertIsNone(student, "Should return none")
 
-    def get_non_existing_profession(self):
-        self.assertIsNot(get_profession('11', ''), self.profession)
-
-    def get_profession_by_name(self):
-        self.assertIs(get_other_profession(PROFESSION_EMPLOYEE), self.profession)
-        self.assertIsNot(get_other_profession(PROFESSION_EMPLOYEE+' de poste'), self.profession)

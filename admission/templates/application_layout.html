@@ -228,7 +228,6 @@
 
         $('body').ajaxComplete(function(e, xhr, settings) {
             if (xhr.status == 278) {
-                alert('kk');
                 window.location.href = xhr.getResponseHeader("Location").replace(/\?.*$/, "?next="+window.location.pathname);
             }
         });
@@ -272,7 +271,7 @@
                 }
             });
             $('#slt_domain option').each(function(){
-                if($(this).attr('value')==$('#hdn_application_domain_id').val()){
+                if($(this).attr('value')==$('#hdn_application_parent_domain_id').val()){
                     $(this).prop('selected', true);
                 }
             });
@@ -442,7 +441,7 @@
         $('#txt_message_error_profile_up').css('visibility', 'hidden').css('display','none');
         $('#txt_message_error_profile_up').html('');
         if ($("#txt_offer_year_id").val()==''
-            || ($('#rdb_offer_localdegree_true').prop("checked") == false && $('#rdb_offer_localdegree_false').prop("checked") == false) ){
+            || ($('#rdb_offer_national_coverage_degree_true').prop("checked") == false && $('#rdb_offer_national_coverage_degree_false').prop("checked") == false) ){
             $("#txt_message_error_offer_up").text(gettext('msg_next_offer'));
             $('#txt_message_error_offer_up').css('visibility', 'visible').css('display','block');
             $("#txt_message_error_offer_down").text(gettext('msg_next_offer'));
@@ -481,10 +480,10 @@
 
     function display_known_offer(offer_year_id){
         ajax_grade_choice($('#hdn_application_grade_type_id').val());
-        $('#slt_domain').val($('#hdn_application_domain_id').val());
+        $('#slt_domain').val($('#hdn_application_parent_domain_id').val());
         ajax_offers($('#hdn_application_grade_type_id').val(),$('#hdn_application_offer_year_id').val());
         display_dynamic_form(offer_year_id);
-        ajax_static_questions(offer_year_id,$('#hdn_applied_to_sameprogram').val(),$('#hdn_local_degree').val(),$('#hdn_started_samestudies').val(),$('#hdn_valuation_possible').val());
+        ajax_static_questions(offer_year_id,$('#hdn_applied_to_sameprogram').val(),$('#hdn_coverage_access_degree').val(),$('#hdn_started_samestudies').val(),$('#hdn_valuation_possible').val());
     }
 
     //***************************
@@ -553,12 +552,6 @@
         $('#lbl_description_label').text(gettext(description.toLowerCase()));
         $('#txt_file').val('');
     }
-
-    $("#txt_file").on("change", function(){
-       var file = this.files[0];
-       fileName = file.name;
-       $("#hdn_filename").val(fileName);
-    });
 
     $('[id^="bt_load_doc_"]').click(function(event) {
         var target = $(event.target);
@@ -660,8 +653,13 @@
             .remove()
             .end()
         $("#pnl_modal_upload").find("span").remove();
+        application = $('#hdn_current_application_id').val();
+        var url_str = "/admission/document_application?description=" + description + "&application=" + application;
+        if(description == 'ID_CARD' || description == 'ID_PICTURE'){
+            url_str = "/admission/document?description=" + description;
+        }
         $.ajax({
-            url: "/admission/document?description=" + description
+                url: url_str
         }).then(function(data) {
             if(data.length > 0 ){
                 $('#pnl_existing_files').append("<br>");
@@ -928,8 +926,13 @@
 
     function valid_profile_navigation(){
         var message = new String("");
-        if (($("#slt_nationality").prop('selectedIndex') <= 0
-            || $("#slt_legal_adr_country").prop('selectedIndex') <= 0) || ($("#slt_nationality").val()=='-1' || $("#slt_legal_adr_country").val()=='-1')){
+
+        if ($("#slt_nationality").prop('selectedIndex') <= 0 || $("#slt_nationality").val()=='-1' ){
+            $('#spn_nationality_error').text(gettext('mandatory_field'));
+            message = gettext('msg_next_profil');
+        }
+        if ($("#slt_legal_adr_country").prop('selectedIndex') <= 0 || $("#slt_legal_adr_country").val()=='-1' ){
+            $('#spn_legal_adr_country').text(gettext('mandatory_field'));
             message = gettext('msg_next_profil');
         }
 
@@ -956,7 +959,7 @@
         var enableMyLink = true;
         var valid_localdegree = true;
         if($('#hdn_tab_active').val() < "2"){
-            if ($('#hdn_local_degree').val()==''){
+            if ($('#hdn_coverage_access_degree').val()==''){
                 valid_localdegree = false;
             }
 
@@ -1050,6 +1053,50 @@
         set_following_tab(SOCIOLOGICAL_SURVEY_TAB );
         return true;
     });
+
+    $("#txt_professional_exam_date").datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+        orientation: "bottom auto"
+    });
+
+    $("#txt_admission_exam_date").datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+        orientation: "bottom auto"
+
+    });
+
+    $("#txt_local_language_exam_date").datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+        orientation: "bottom auto"
+    });
+
+    $('[id="txt_last_name"]').focus(function() {
+        $('#hdn_original_last_name').val($('#txt_last_name').val());
+    });
+
+    $('[id="txt_last_name"]').blur(function() {
+        $("#spn_last_name_error").text('');
+        if($('#txt_last_name').val().trim()==''){
+            $("#spn_last_name_error").text(gettext('mandatory_field'));
+            $('#txt_last_name').val($('#hdn_original_last_name').val());
+        }
+    });
+
+    $('[id="txt_first_name"]').focus(function() {
+        $('#hdn_original_first_name').val($('#txt_first_name').val());
+    });
+
+    $('[id="txt_first_name"]').blur(function() {
+        $("#spn_first_name_error").text('');
+        if($('#txt_first_name').val().trim()==''){
+            $("#spn_first_name_error").text(gettext('mandatory_field'));
+            $('#txt_first_name').val($('#hdn_original_first_name').val());
+        }
+    });
+
 
     </script>
 {% endblock %}

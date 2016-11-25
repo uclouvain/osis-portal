@@ -94,8 +94,8 @@ urlpatterns = [
     url(r'^applications/(?:([0-9]+)/)?$', application.applications, name='applications'),
     url(r'^sociological/(?:([0-9]+)/)?$', sociological.update, name='sociological_survey'),
     url(r'^attachments/(?:([0-9]+)/)?$', attachments.update, name='attachments'),
-    url(r'^attachments/remove_attachment/$',
-        attachments.remove_attachment, name='remove_attachment'),
+    url(r'^attachments/remove_attachment/(?:([0-9]+)/)?$', attachments.remove_attachment, name='remove_attachment'),
+    url(r'^attachments/save_attachments/(?:([0-9]+)/)?$', attachments.save_attachments, name='save_attachments'),
     url(r'^admission/application/submission/(?:([0-9]+)/)?$', application.submission, name='submission'),
     url(r'^admission/application/delete/([0-9]+)/$', application.application_delete, name='application_delete'),
     url(r'^admission/offer_change/([0-9]+)/$', application.change_application_offer, name='change_application_offer'),
@@ -107,6 +107,8 @@ urlpatterns = [
 
     url(r'^upload/delete/$', upload_file.delete_document_file, name='delete_document_file'),
     url(r'^document/$', upload_file.find_by_description),
+    url(r'^document_application/$', upload_file.find_by_description_application),
+
     url(r'^upload/save/$', upload_file.save_uploaded_file, name="save_uploaded_file"),
     url(r'^picture/$', common.get_picture),
     url(r'^postalcodes/$', places.find_postal_codes_by_city),

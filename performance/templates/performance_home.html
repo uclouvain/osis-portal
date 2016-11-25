@@ -69,14 +69,14 @@
             </tr>
             {% for row in programs %}
             <tr>
-                <td>{{row.year}}</td>
+                <td>{{row.academic_year}}</td>
                 <td>
                     {% if perms.base.is_faculty_administrator %}
-                        <a href="{% url 'performance_student_result' registration_id=student.registration_id offer_year_id=row.program_id %}">
+                        <a href="{% url 'performance_student_result' row.pk %}">
                             {{row.acronym}}
                         </a>
                     {% else %}
-                        <a href="{% url 'performance_result' offer_year_id=row.program_id %}">
+                        <a href="{% url 'performance_result' row.pk %}">
                             {{row.acronym}}
                         </a>
                     {% endif %}

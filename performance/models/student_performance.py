@@ -27,40 +27,47 @@ from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
-from osis_common.models.serializable_model import SerializableModel
 from performance.queue.student_performance import fetch_and_save
-import datetime
+from django.utils import timezone
 
 
 class StudentPerformanceAdmin(admin.ModelAdmin):
-    list_display = ('student', 'offer_year', 'update_date', 'creation_date')
-    list_filter = ('student__registration_id',)
-    fieldsets = ((None, {'fields': ('student', 'offer_year', 'update_date', 'creation_date')}),)
+    list_display = ('registration_id', 'academic_year', 'acronym', 'update_date', 'creation_date')
+    list_filter = ('registration_id', 'academic_year', 'acronym', )
+    fieldsets = ((None, {'fields': ('registration_id', 'academic_year', 'acronym', 'update_date', 'creation_date')}),)
+    readonly_fields = ('creation_date', )
 
 
-class StudentPerformance(SerializableModel):
-    student = models.ForeignKey('base.Student')
-    offer_year = models.ForeignKey('base.OfferYear')
+class StudentPerformance(models.Model):
+    registration_id = models.CharField(max_length=10)
+    academic_year = models.IntegerField()
+    acronym = models.CharField(max_length=15)
     data = JSONField()
-    update_date = models.DateField()
+    update_date = models.DateTimeField()
     creation_date = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        unique_together = ('registration_id', 'academic_year', 'acronym')
+
     def __str__(self):
-        return
+        return '{} - {} - {}'.format(self.registration_id, self.acronym, self.academic_year)
 
 
-def search(student=None, offer_year=None):
+def search(registration_id=None, academic_year=None, acronym=None):
     """
         Search students by optional arguments. At least one argument should be informed
         otherwise it returns empty.
     """
     has_criteria = False
-    student_performances = StudentPerformance.objects
-    if student:
-        student_performances.filter(student=student)
+    student_performances = StudentPerformance.objects.all()
+    if registration_id:
+        student_performances = student_performances.filter(registration_id=registration_id)
         has_criteria = True
-    if offer_year:
-        student_performances.filter(offer_year=offer_year)
+    if academic_year:
+        student_performances = student_performances.filter(academic_year=academic_year)
+        has_criteria = True
+    if acronym:
+        student_performances = student_performances.filter(acronym=acronym)
         has_criteria = True
 
     if has_criteria:
@@ -69,30 +76,48 @@ def search(student=None, offer_year=None):
         return None
 
 
-def update_or_create(student, offer_year, fields):
-    obj, created = StudentPerformance.objects.update_or_create(student=student, offer_year=offer_year, defaults=fields)
+def update_or_create(registration_id, academic_year, acronym, fields):
+    obj, created = StudentPerformance.objects.update_or_create(registration_id=registration_id, academic_year=academic_year,
+                                                               acronym=acronym, defaults=fields)
     return obj
 
 
-def find_by_student_and_offer_year(student, offer_year):
+def find_by_student_and_offer_year(registration_id, academic_year, acronym):
     try:
-        result = StudentPerformance.objects.get(student=student, offer_year=offer_year)
+        result = StudentPerformance.objects.get(registration_id=registration_id, academic_year=academic_year,
+                                                               acronym=acronym)
     except ObjectDoesNotExist:
         result = None
     return result
 
 
-def find_or_fetch(student, offer_year):
-    result = find_by_student_and_offer_year(student, offer_year)
+def find_or_fetch(registration_id, academic_year, acronym):
+    result = find_by_student_and_offer_year(registration_id, academic_year, acronym)
     if result is None or has_expired(result):
-        new_result = fetch_and_save(student, offer_year)
+        new_result = fetch_and_save(registration_id, academic_year, acronym)
         result = new_result if new_result else result
     return result
 
 
 def has_expired(student_performance):
-    today = datetime.date.today()
+    now = timezone.now()
     expiration_date = student_performance.update_date
-    return expiration_date < today
+    return expiration_date < now
+
+
+def find_actual_by_pk(student_performance_pk):
+    result = find_by_pk(student_performance_pk)
+    if result and has_expired(result):
+        new_result = fetch_and_save(result.registration_id, result.academic_year, result.acronym)
+        result = new_result if new_result else result
+    return result
+
+
+def find_by_pk(student_performance_pk):
+    try:
+        result = StudentPerformance.objects.get(pk=student_performance_pk)
+    except ObjectDoesNotExist:
+        result = None
+    return result
 
 

@@ -46,8 +46,8 @@ def create_person():
     return a_person
 
 
-def create_student():
-    a_student = mdl_base.student.Student(registration_id="64641200", person=create_person())
+def create_student(registration_id="64641200"):
+    a_student = mdl_base.student.Student(registration_id=registration_id, person=create_person())
     a_student.save()
     return a_student
 
@@ -56,6 +56,29 @@ def create_student_with_specific_registration_id(registration_id):
     a_student = mdl_base.student.Student(registration_id=registration_id, person=create_person())
     a_student.save()
     return a_student
+
+
+def get_or_create_user():
+    a_user, created = User.objects.get_or_create(username='testo', password='testopw')
+    if created:
+        a_user.save()
+    return a_user
+
+
+def get_or_create_applicant():
+    an_applicant = mdl.applicant.find_by_user(user=get_or_create_user())
+    if not an_applicant:
+        an_applicant = mdl.applicant.Applicant(user=get_or_create_user())
+        an_applicant.save()
+    return an_applicant
+
+
+def get_or_create_profession(name, adhoc):
+    a_profession = mdl.profession.find_by_name(name)
+    if not a_profession:
+        a_profession = mdl.profession.Profession(name=name, adhoc=adhoc)
+        a_profession.save()
+    return a_profession
 
 
 def create_applicant_by_user(user):
@@ -161,9 +184,11 @@ def create_application_document_file(an_application, update_by, description=None
 def create_student_performance():
     with open("performance/tests/ressources/points.json") as f:
         data = json.load(f)
-    a_student_performance = mdl_performance.\
-        student_performance.StudentPerformance(offer_year=create_offer_year_with_acronym("SINF2MS/G"), student=create_student(),
-                                               update_date=datetime.date.today(), data=data)
+    a_student_performance = mdl_performance.student_performance.StudentPerformance(acronym="SINF2MS/G",
+                                                                                   registration_id="64641200",
+                                                                                   academic_year=2016,
+                                                                                   update_date=datetime.datetime.now(),
+                                                                                   data=data)
     a_student_performance.save()
     return a_student_performance
 
@@ -178,3 +203,19 @@ def create_applicant_assimilation_criteria(an_applicant):
         criteria=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES[0][0],
         additional_criteria=None,
         selected=False)
+
+
+def create_applicant_document_file(an_applicant, description):
+    a_document_file = create_document_file(an_applicant.user.username, description)
+    an_applicant_document_file = mdl.applicant_document_file.ApplicantDocumentFile()
+    an_applicant_document_file.applicant = an_applicant
+    an_applicant_document_file.document_file = a_document_file
+    an_applicant_document_file.save()
+    return an_applicant_document_file
+
+
+def create_offer_enrollment(student, offer_year):
+    offer_enrollment = mdl_base.offer_enrollment.OfferEnrollment(student=student, offer_year=offer_year,
+                                                                 date_enrollment=datetime.date.today())
+    offer_enrollment.save()
+    return offer_enrollment

@@ -43,9 +43,10 @@ class DomainSerializer(serializers.ModelSerializer):
 
 
 def find_subdomains(request):
-    domain = request.GET['domain']
-    if domain and domain != "-":
-        subdomains = mdl_reference.domain.find_subdomains_by_domain_id(int(domain))
+    domain_id = request.GET['domain']
+    if domain_id and domain_id != "-":
+        domain = mdl_reference.domain.Domain(id=domain_id)
+        subdomains = mdl_reference.domain.find_subdomains(domain)
         serializer = DomainSerializer(subdomains, many=True)
         return JSONResponse(serializer.data)
     return None

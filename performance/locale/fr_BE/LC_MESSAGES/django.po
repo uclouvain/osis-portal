@@ -56,7 +56,7 @@ msgstr "TV - Evaluation satisfaisante (la note ne compte pas)"
 msgid "explanation_W"
 msgstr "W - Evaluation non satisfaisante (la note ne compte pas)"
 
-msgid "explanation_y"
+msgid "explanation_Y"
 msgstr "Y - Deuxième inscription"
 
 msgid "first_name"

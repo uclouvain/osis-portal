@@ -1,121 +1,572 @@
-{ "registration_id": "64641200",
-  "first_name": "Eddy",
-  "last_name": "Ndiz",
-  "academic_years": [
-    {
-      "year": "2016 - 2017",
-      "anac": "2016",
-      "programs": [
+{
+  "message": null,
+  "etudiant": {
+    "noma": "64641200",
+    "nom": "Ndizera",
+    "prenom": "Eddy",
+    "dateNaissance": "06/05/1994"
+  },
+  "inscrExam": null,
+  "typeInscr": null,
+  "monAnnee": {
+    "anac": "2016",
+    "anneeAcademique": "2016 - 2017",
+    "monOffre": {
+      "offre": {
+        "numOffre": "13128",
+        "sigleComplet": "SINF2MS/G",
+        "intituleComplet": " Master [120] en sciences informatiques, à finalité spécialisée "
+      },
+      "resultats": {
+        "session": [
+          {
+            "mois": "janvier",
+            "maxEval": " 20",
+            "verrou": "non",
+            "suiviInscExam": "1",
+            "pourcentage": "-",
+            "moyenne": "-",
+            "inscription": "IS",
+            "note": null,
+            "mention": "-",
+            "etatExam": null,
+            "etatToInscr": null
+          },
+          {
+            "mois": "juin",
+            "maxEval": " 20",
+            "verrou": "non",
+            "suiviInscExam": "1",
+            "pourcentage": "69.27",
+            "moyenne": "13.85",
+            "inscription": "EP",
+            "note": null,
+            "mention": "R",
+            "etatExam": null,
+            "etatToInscr": null
+          },
+          {
+            "mois": "septembre",
+            "maxEval": " 20",
+            "verrou": "non",
+            "suiviInscExam": "-",
+            "pourcentage": "-",
+            "moyenne": "-",
+            "inscription": "-",
+            "note": null,
+            "mention": "-",
+            "etatExam": null,
+            "etatToInscr": null
+          }
+        ],
+        "pourcentageFinal": 69.27
+      },
+      "cours": [
         {
-          "mention_explanation": "",
-          "acronym": "SINF2MS/G",
-          "program_id": "13128",
-          "title": "Master [120] en sciences informatiques, à finalité spécialisée",
-          "total_ECTS": "62.0",
-          "results": [
+          "numEle": "26912",
+          "sigleComplet": "LINGI2132",
+          "intituleComplet": "Languages and translators",
+          "validite": "2015",
+          "insc": "I",
+          "poids": "6.0",
+          "creditReport": "K",
+          "session": [
             {
-              "month": "janvier",
-              "mean": "-",
+              "mois": "janvier",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "-",
               "mention": "-",
-              "insc": "IS"
+              "etatExam": "-",
+              "etatToInscr": null
             },
             {
-              "month": "juin",
-              "mean": "13.85",
-              "mention": "R",
-              "insc": "EP"
+              "mois": "juin",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "15.0",
+              "mention": "-",
+              "etatExam": "I",
+              "etatToInscr": null
             },
             {
-              "month": "septembre",
-              "mean": "-",
+              "mois": "septembre",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "-",
               "mention": "-",
-              "insc": "-"
-            }
-          ],
-          "learning_units": [
-            {
-              "acronym": "LINGI2132",
-              "title": "Languages and translators",
-              "insc": "I",
-              "credit_report": "K",
-              "credits": "6.0",
-              "exams": [
-                {
-                  "session": "janvier",
-                  "score": "-",
-                  "status_exam": "-"
-                },
-                {
-                  "session": "juin",
-                  "score": "15.0",
-                  "status_exam": "I"
-                },
-                {
-                  "session": "septembre",
-                  "score": "-",
-                  "status_exam": "-"
-                }
-              ]
-
+              "etatExam": "-",
+              "etatToInscr": null
             }
           ]
         },
         {
-          "mention_explanation": "",
-          "acronym": "SINF2BA/G",
-          "program_id": "13128",
-          "title": "Bachelier[180] en sciences informatiques, à finalité spécialisée",
-          "total_ECTS": "62.0",
-          "results": [
+          "numEle": "26917",
+          "sigleComplet": "LINGI2142",
+          "intituleComplet": "Computer networks: configuration and management",
+          "validite": "2015",
+          "insc": "I",
+          "poids": "5.0",
+          "creditReport": "K",
+          "session": [
             {
-              "month": "janvier",
-              "mean": "-",
+              "mois": "janvier",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "-",
               "mention": "-",
-              "insc": "IS"
+              "etatExam": "-",
+              "etatToInscr": null
             },
             {
-              "month": "juin",
-              "mean": "13.85",
-              "mention": "R",
-              "insc": "EP"
+              "mois": "juin",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "15.0",
+              "mention": "-",
+              "etatExam": "I",
+              "etatToInscr": null
             },
             {
-              "month": "septembre",
-              "mean": "-",
+              "mois": "septembre",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "-",
               "mention": "-",
-              "insc": "-"
+              "etatExam": "-",
+              "etatToInscr": null
             }
-          ],
-          "learning_units": [
+          ]
+        },
+        {
+          "numEle": "414940",
+          "sigleComplet": "LINGI2145",
+          "intituleComplet": "Cloud Computing",
+          "validite": "2015",
+          "insc": "I",
+          "poids": "5.0",
+          "creditReport": "K",
+          "session": [
             {
-              "acronym": "LINGI2132",
-              "title": "Languages and translators",
-              "insc": "I",
-              "credit_report": "K",
-              "credits": "6.0",
-              "exams": [
-                {
-                  "session": "janvier",
-                  "score": "-",
-                  "status_exam": "-"
-                },
-                {
-                  "session": "juin",
-                  "score": "15.0",
-                  "status_exam": "I"
-                },
-                {
-                  "session": "septembre",
-                  "score": "-",
-                  "status_exam": "-"
-                }
-              ]
-
+              "mois": "janvier",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "13.0",
+              "mention": "-",
+              "etatExam": "I",
+              "etatToInscr": null
+            },
+            {
+              "mois": "juin",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "13.0",
+              "mention": "-",
+              "etatExam": "R",
+              "etatToInscr": null
+            },
+            {
+              "mois": "septembre",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "-",
+              "mention": "-",
+              "etatExam": "-",
+              "etatToInscr": null
+            }
+          ]
+        },
+        {
+          "numEle": "416922",
+          "sigleComplet": "LINGI2146",
+          "intituleComplet": "Mobile and Embedded Computing",
+          "validite": "2015",
+          "insc": "I",
+          "poids": "5.0",
+          "creditReport": "K",
+          "session": [
+            {
+              "mois": "janvier",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "-",
+              "mention": "-",
+              "etatExam": "-",
+              "etatToInscr": null
+            },
+            {
+              "mois": "juin",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "12.0",
+              "mention": "-",
+              "etatExam": "I",
+              "etatToInscr": null
+            },
+            {
+              "mois": "septembre",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "-",
+              "mention": "-",
+              "etatExam": "-",
+              "etatToInscr": null
+            }
+          ]
+        },
+        {
+          "numEle": "33073",
+          "sigleComplet": "LINGI2172",
+          "intituleComplet": "Databases",
+          "validite": "2015",
+          "insc": "I",
+          "poids": "6.0",
+          "creditReport": "K",
+          "session": [
+            {
+              "mois": "janvier",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "-",
+              "mention": "-",
+              "etatExam": "-",
+              "etatToInscr": null
+            },
+            {
+              "mois": "juin",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "10.0",
+              "mention": "-",
+              "etatExam": "I",
+              "etatToInscr": null
+            },
+            {
+              "mois": "septembre",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "-",
+              "mention": "-",
+              "etatExam": "-",
+              "etatToInscr": null
+            }
+          ]
+        },
+        {
+          "numEle": "424950",
+          "sigleComplet": "LINGI2241",
+          "intituleComplet": "Architecture and performance of computer systems",
+          "validite": "2015",
+          "insc": "I",
+          "poids": "6.0",
+          "creditReport": "K",
+          "session": [
+            {
+              "mois": "janvier",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "15.0",
+              "mention": "-",
+              "etatExam": "I",
+              "etatToInscr": null
+            },
+            {
+              "mois": "juin",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "15.0",
+              "mention": "-",
+              "etatExam": "R",
+              "etatToInscr": null
+            },
+            {
+              "mois": "septembre",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "-",
+              "mention": "-",
+              "etatExam": "-",
+              "etatToInscr": null
+            }
+          ]
+        },
+        {
+          "numEle": "26910",
+          "sigleComplet": "LINGI2261",
+          "intituleComplet": "Artificial intelligence : representation and reasoning",
+          "validite": "2015",
+          "insc": "I",
+          "poids": "6.0",
+          "creditReport": "K",
+          "session": [
+            {
+              "mois": "janvier",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "12.0",
+              "mention": "-",
+              "etatExam": "I",
+              "etatToInscr": null
+            },
+            {
+              "mois": "juin",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "12.0",
+              "mention": "-",
+              "etatExam": "R",
+              "etatToInscr": null
+            },
+            {
+              "mois": "septembre",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "-",
+              "mention": "-",
+              "etatExam": "-",
+              "etatToInscr": null
+            }
+          ]
+        },
+        {
+          "numEle": "26926",
+          "sigleComplet": "LINGI2347",
+          "intituleComplet": "Computer system security",
+          "validite": "2015",
+          "insc": "I",
+          "poids": "5.0",
+          "creditReport": "K",
+          "session": [
+            {
+              "mois": "janvier",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "-",
+              "mention": "-",
+              "etatExam": "-",
+              "etatToInscr": null
+            },
+            {
+              "mois": "juin",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "14.0",
+              "mention": "-",
+              "etatExam": "I",
+              "etatToInscr": null
+            },
+            {
+              "mois": "septembre",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "-",
+              "mention": "-",
+              "etatExam": "-",
+              "etatToInscr": null
+            }
+          ]
+        },
+        {
+          "numEle": "26929",
+          "sigleComplet": "LINGI2365",
+          "intituleComplet": "Constraint programming",
+          "validite": "2015",
+          "insc": "I",
+          "poids": "5.0",
+          "creditReport": "K",
+          "session": [
+            {
+              "mois": "janvier",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "-",
+              "mention": "-",
+              "etatExam": "-",
+              "etatToInscr": null
+            },
+            {
+              "mois": "juin",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "16.0",
+              "mention": "-",
+              "etatExam": "I",
+              "etatToInscr": null
+            },
+            {
+              "mois": "septembre",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "-",
+              "mention": "-",
+              "etatExam": "-",
+              "etatToInscr": null
+            }
+          ]
+        },
+        {
+          "numEle": "40459",
+          "sigleComplet": "LTECO2100",
+          "intituleComplet": "Questions de sciences religieuses : lectures bibliques",
+          "validite": "2015",
+          "insc": "I",
+          "poids": "2.0",
+          "creditReport": "K",
+          "session": [
+            {
+              "mois": "janvier",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "16.0",
+              "mention": "-",
+              "etatExam": "I",
+              "etatToInscr": null
+            },
+            {
+              "mois": "juin",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "16.0",
+              "mention": "-",
+              "etatExam": "R",
+              "etatToInscr": null
+            },
+            {
+              "mois": "septembre",
+              "maxEval": null,
+              "verrou": null,
+              "suiviInscExam": null,
+              "pourcentage": null,
+              "moyenne": null,
+              "inscription": null,
+              "note": "-",
+              "mention": "-",
+              "etatExam": "-",
+              "etatToInscr": null
             }
           ]
         }
-      ]
+      ],
+      "totalECTS": "62.0"
     }
-  ]
-
+  },
+  "legende": {
+    "explicationMention": "(Session de  juin)  Vous avez acquis la totalité des crédits de votre programme annuel. "
+  }
 }

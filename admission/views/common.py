@@ -33,9 +33,10 @@ from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 
 from admission import models as mdl
-from admission.forms import ApplicantForm
+from admission.forms.applicant import ApplicantForm
 from reference import models as mdl_ref
-from admission.views import demande_validation, assimilation_criteria as assimilation_criteria_view, navigation
+from admission.views import demande_validation, assimilation_criteria as assimilation_criteria_view, navigation, \
+    upload_file
 from osis_common import models as mdl_osis_common
 from admission.models.enums import document_type
 from osis_common.forms import UploadDocumentFileForm
@@ -267,10 +268,7 @@ def profile(request, application_id=None, message_success=None):
             applicant.phone = request.POST['phone']
         else:
             applicant.phone = None
-        if request.POST['additional_email']:
-            applicant.additional_email = request.POST['additional_email']
-        else:
-            applicant.additional_email = None
+
         if request.POST['previous_enrollment'] == "true":
             if request.POST['registration_id']:
                 applicant.registration_id = request.POST['registration_id']
@@ -359,14 +357,14 @@ def profile(request, application_id=None, message_success=None):
                                                                       document_type.ID_CARD])
                                 if request.POST.get("criteria_5") == assimilation_criteria_enum.CRITERIA_4:
                                     list_document_type_needed.extend([document_type.CPAS])
-                            applicant = mdl.applicant.find_by_user(request.user)
+
                             for basic_doc_description in assimilation_basic_documents:
                                 if basic_doc_description not in list_document_type_needed:
-                                    docs = mdl.applicant_document_file.\
-                                        find_document_by_applicant_and_description(applicant, basic_doc_description)
-                                    for document_to_be_deleted in docs:
+                                    app_doc_files = mdl.applicant_document_file.\
+                                        find_by_applicant_and_description(applicant, basic_doc_description)
+                                    for app_doc_file in app_doc_files:
                                         # delete unnecessary documents
-                                        document_to_be_deleted.delete()
+                                        app_doc_file.document_file.delete()
 
                             applicant_assimilation_criteria.additional_criteria = \
                                 define_additional_criteria(request.POST.get("criteria_5"))
@@ -408,7 +406,7 @@ def profile(request, application_id=None, message_success=None):
         person_legal_address.save()
         applicant.user.save()
         if application:
-            application.application_type = mdl.application.define_application_type(application.national_degree,
+            application.application_type = mdl.application.define_application_type(application.coverage_access_degree,
                                                                                    request.user)
             application.save()
         request.user = applicant.user  # Otherwise it was not refreshed while going back to home page
@@ -469,7 +467,7 @@ def profile(request, application_id=None, message_success=None):
         'assimilation_documents_existing': get_assimilation_documents_existing(request.user),
         'document_formset': document_formset,
         'message_info': message_info}
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data.update(demande_validation.get_validation_status(application, applicant))
     return render(request, "admission_home.html", data)
 
 
@@ -508,29 +506,28 @@ def validated_extra(secondary_education, application):
 
 def get_picture_id(user):
     applicant = mdl.applicant.find_by_user(user)
-    pictures = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, document_type.ID_PICTURE)
-    if pictures:
-        picture = pictures[-1]
-        return ''.join(('/admission', picture.file.url))
+    app_doc_file = mdl.applicant_document_file.find_last_by_applicant_and_description(
+        applicant, document_type.ID_PICTURE)
+    if app_doc_file:
+        return ''.join(('/admission', app_doc_file.document_file.file.url))
 
     return None
 
 
 def get_id_document(user):
     applicant = mdl.applicant.find_by_user(user)
-    id_cards = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, document_type.ID_CARD)
-    if id_cards:
-        id_card = id_cards[-1]
-        return ''.join(('/admission', id_card.file.url))
+    app_doc_file = mdl.applicant_document_file.find_last_by_applicant_and_description(applicant,
+                                                                                          document_type.ID_CARD)
+    if app_doc_file:
+        return ''.join(('/admission', app_doc_file.document_file.file.url))
     return None
 
 
 def get_document_assimilation(user, description):
     applicant = mdl.applicant.find_by_user(user)
-    documents = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
-    if documents:
-        document = documents[-1]
-        return ''.join(('/admission', document.file.url))
+    app_doc_file = mdl.applicant_document_file.find_last_by_applicant_and_description(applicant, description)
+    if app_doc_file:
+        return ''.join(('/admission', app_doc_file.document_file.file.url))
     return None
 
 
@@ -539,10 +536,13 @@ def get_assimilation_documents_existing(user):
     assimilation_basic_documents = assimilation_criteria_view.find_list_assimilation_basic_documents()
     docs = []
     for document_type_description in assimilation_basic_documents:
-        documents = mdl.applicant_document_file\
-                       .find_document_by_applicant_and_description(applicant, document_type_description)
-        if documents:
-            docs.extend(documents)
+        app_doc_files = mdl.applicant_document_file\
+                       .find_by_applicant_and_description(applicant, document_type_description)
+        if app_doc_files:
+            document_files = []
+            for app_doc_file in app_doc_files:
+                document_files.append(app_doc_file.document_file)
+            docs.extend(document_files)
 
     return docs
 
@@ -576,20 +576,20 @@ def documents_upload(request):
                     fn = request.POST["uploaded_file_name_"+file_description]
                     file = request.FILES["uploaded_file_"+file_description]
                     if file_description in prerequisites_uploads:
-                        documents = mdl.applicant_document_file\
-                            .find_document_by_applicant_and_description(applicant, file_description)
-                        for document in documents:
-                            document.delete()
+                        app_doc_files = mdl.applicant_document_file\
+                            .find_by_applicant_and_description(applicant, file_description)
+                        for app_doc_file in app_doc_files:
+                            app_doc_file.document_file.delete()
 
                     if file_description == document_type.ID_PICTURE \
                         or file_description == document_type.ID_CARD \
                         or file_description in prerequisites_uploads \
                             or file_description in assimilation_uploads:
                         # Delete older file with the same description
-                        documents = mdl.applicant_document_file\
-                            .find_document_by_applicant_and_description(applicant, file_description)
-                        for document in documents:
-                            document.delete()
+                        app_doc_files = mdl.applicant_document_file\
+                            .find_by_applicant_and_description(applicant, file_description)
+                        for app_doc_file in app_doc_files:
+                            app_doc_file.document_file.delete()
 
                         storage_duration = 0
                         content_type = file.content_type
@@ -639,9 +639,9 @@ class DocumentFileSerializer(serializers.ModelSerializer):
 def get_picture(request):
     applicant = mdl.applicant.find_by_user(request.user)
     description = request.GET['description']
-    pictures = mdl.applicant_document_file.find_document_by_applicant_and_description(applicant, description)
-    if pictures:
-        serializer = DocumentFileSerializer(pictures[0])
+    app_doc_files = mdl.applicant_document_file.find_by_applicant_and_description(applicant, description)
+    if app_doc_files:
+        serializer = DocumentFileSerializer(app_doc_files[0].document_file)
         return JSONResponse(serializer.data)
     return None
 
@@ -654,6 +654,8 @@ def delete_previous_criteria(applicant, application):
         criteria_list = mdl.application_assimilation_criteria.find_by_application(application)
         for c in criteria_list:
             c.delete()
+    for description in assimilation_criteria_view.find_list_only_assimilation_documents():
+        upload_file.delete_existing_applicant_documents(applicant, description)
 
 
 def is_local_language_exam_needed(user):

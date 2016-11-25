@@ -27,12 +27,11 @@ from django.shortcuts import render
 
 from admission import models as mdl
 from base import models as mdl_base
-from admission.forms import AccountingForm
+from admission.forms.accounting import AccountingForm
 from admission.views import demande_validation, navigation
 
 
 def accounting(request, application_id=None):
-    print('accoutning')
     if application_id:
         application = mdl.application.find_by_id(application_id)
     else:
@@ -57,7 +56,7 @@ def accounting(request, application_id=None):
         "tab_active": navigation.ACCOUNTING_TAB,
         "applications": mdl.application.find_by_user(request.user),
     }
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data.update(demande_validation.get_validation_status(application, applicant))
     return render(request, "admission_home.html", data)
 
 
@@ -100,7 +99,7 @@ def accounting_update(request, application_id=None):
         "applications": mdl.application.find_by_user(request.user),
     }
     applicant = mdl.applicant.find_by_user(request.user)
-    data.update(demande_validation.get_validation_status(application, applicant, request.user))
+    data.update(demande_validation.get_validation_status(application, applicant))
     return render(request, "admission_home.html", data)
 
 

@@ -15,10 +15,10 @@ function fillPage(studentJson) {
  * studentJson: a json containing the student results.
  */
 function fillStudentInfo(studentJson) {
-  var firstName = studentJson.first_name;
-  var lastName = studentJson.last_name;
-  var academicYear = studentJson.academic_years[0].year;
-  var programTitle = studentJson.academic_years[0].programs[0].title;
+  var firstName = studentJson.etudiant.nom;
+  var lastName = studentJson.etudiant.prenom;
+  var academicYear = studentJson.monAnnee.anneeAcademique;
+  var programTitle = studentJson.monAnnee.monOffre.offre.intituleComplet;
   $("#student_name").append("<br>");
   $("#student_name").append(lastName + ", " + firstName);
   $("#academic_year").append("<br>");
@@ -36,18 +36,19 @@ function fillStudentInfo(studentJson) {
  * studentJson: a json containing the student results.
  */
 function fillSessionSummaryTable(studentJson) {
-  var program = studentJson.academic_years[0].programs[0];
+  var program = studentJson.monAnnee.monOffre.resultats;
 
-  fillRowTotalECTSInscription(program);
+  fillRowTotalECTSInscription(studentJson);
   fillRowMean(program);
   fillRowMention(program);
 }
 
-function fillRowTotalECTSInscription(programJson) {
-  var totalECTS = programJson.total_ECTS;
-  var janvInscription = programJson.results[0].insc;
-  var juinInscription = programJson.results[1].insc;
-  var septInscription = programJson.results[2].insc;
+function fillRowTotalECTSInscription(studentJson) {
+  var totalECTS = studentJson.monAnnee.monOffre.totalECTS;
+  var programJson = studentJson.monAnnee.monOffre.resultats;
+  var janvInscription = programJson.session[0].inscription;
+  var juinInscription = programJson.session[1].inscription;
+  var septInscription = programJson.session[2].inscription;
 
   var $frag = $(document.createDocumentFragment());
   createJQObject("<td/>", {}, totalECTS, $frag);
@@ -58,9 +59,9 @@ function fillRowTotalECTSInscription(programJson) {
 }
 
 function fillRowMean(programJson) {
-  var meanJanv = programJson.results[0].mean;
-  var meanJuin = programJson.results[1].mean;
-  var meanSept = programJson.results[2].mean;
+  var meanJanv = programJson.session[0].moyenne;
+  var meanJuin = programJson.session[1].moyenne;
+  var meanSept = programJson.session[2].moyenne;
 
   var $rowMean = $("#summary_mean");
 
@@ -73,9 +74,9 @@ function fillRowMean(programJson) {
 }
 
 function fillRowMention(programJson) {
-  var mentionJanv = programJson.results[0].mention;
-  var mentionJuin = programJson.results[1].mention;
-  var mentionSept = programJson.results[2].mention;
+  var mentionJanv = programJson.session[0].mention;
+  var mentionJuin = programJson.session[1].mention;
+  var mentionSept = programJson.session[2].mention;
 
   var $rowMention = $("#summary_mention");
 
@@ -97,7 +98,7 @@ function fillRowMention(programJson) {
  */
 
 function fillCoursesTable(studentJson) {
-  var arrayCourses = studentJson.academic_years[0].programs[0].learning_units;
+  var arrayCourses = studentJson.monAnnee.monOffre.cours;
 
   var $frag = $(document.createDocumentFragment());
   $.each(arrayCourses, function(index, course) {
@@ -108,14 +109,14 @@ function fillCoursesTable(studentJson) {
 }
 
 function addRowCourse(courseJson, $row) {
-  var acronym = courseJson.acronym;
-  var title = courseJson.title;
-  var ects = courseJson.credits;
+  var acronym = courseJson.sigleComplet;
+  var title = courseJson.intituleComplet;
+  var ects = courseJson.poids;
   var inscr = inscrToString(courseJson.insc);
-  var janv = examScoreToString(courseJson.exams[0]);
-  var juin = examScoreToString(courseJson.exams[1]);
-  var sept = examScoreToString(courseJson.exams[2]);
-  var credit = creditToString(courseJson.credit_report);
+  var janv = examScoreToString(courseJson.session[0]);
+  var juin = examScoreToString(courseJson.session[1]);
+  var sept = examScoreToString(courseJson.session[2]);
+  var credit = creditToString(courseJson.creditReport);
 
   createJQObject("<td/>", {}, acronym, $row);
   createJQObject("<td/>", {}, title, $row);
@@ -128,34 +129,108 @@ function addRowCourse(courseJson, $row) {
 }
 
 function examScoreToString(examJson) {
-  var score = examJson.score;
-  if (examJson.status_exam == "-") {
+
+  var etatExam = etatExamToString(examJson);
+  if (etatExam != ""){
+    return etatExam;
+  }
+
+  var mention = mentionToString(examJson);
+  if (mention != ""){
+    return mention;
+  }
+
+  return scoreToString(examJson);
+}
+
+function etatExamToString(examJson){
+  if(examJson.etatExam == "D") {
+    return "Disp.";
+  }
+  return "";
+}
+
+function mentionToString(examJson){
+  switch (examJson.mention) {
+    case "M":
+      return "Exc.";
+    case "S":
+      if (examJson.etatExam == "R"){
+        return "Abs.(R)"
+      }
+      else {
+        return "Abs.";
+      }
+    case "A":
+      if (examJson.etatExam == "R"){
+        return "Abs.(R)"
+      }
+      else {
+        return "Abs.";
+      }
+    default:
+      return "";
+  }
+}
+
+function scoreToString(examJson){
+  var score = examJson.note;
+  if (examJson.etatExam == "-") {
     return score;
   }
   else if(score == "-") {
-    return examJson.status_exam;
+    return examJson.etatExam;
   }
-  return score + examJson.status_exam;
+  return score + examJson.etatExam;
 }
 
 function inscrToString(inscr) {
-  if (inscr == "I") {
-    return "Inscr";
+  switch (inscr) {
+    case "I":
+      return "Inscr";
+    case "R":
+      return "Rep.";
+    case "D":
+      return "Dsip.";
+    case "B":
+      return "Créd.";
+    case "K":
+      return "K94";
+    case "C":
+      return "C94";
+    case "N":
+      return "RIP";
+    case "Q":
+      return "Q94";
+    case "S":
+      return "EPM";
+    case "T":
+      return "T94";
+    default:
+      return inscr;
   }
-  return "-";
 }
 
 function creditToString(creditReport) {
-  if (creditReport == "K") {
-    return "Crédit";
+  switch (creditReport) {
+    case "K":
+      return "Crédit";
+    case "R":
+      return "Report";
+    case "S":
+      return "EPM";
+    case "P":
+      return "Postposé";
+    default:
+      return creditReport;
+
   }
-  return "-";
 }
 
 /***************************** MENTION EXPLANATION PARAGRAPH ************/
 
 function fillMentionExplanation(studentJson) {
-  var mentionExplanation = studentJson.academic_years[0].programs[0].mention_explanation;
+  var mentionExplanation = studentJson.legende.explicationMention;
   $("#paragraph_mention_explanation").html(mentionExplanation);
 }
 
