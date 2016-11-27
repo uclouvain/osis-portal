@@ -286,6 +286,10 @@ CKEDITOR_CONFIGS = {
 
 try:
     from frontoffice.server_settings import *
+    try:
+        LOCALE_PATHS = LOCALE_PATHS + SERVER_LOCALE_PATHS
+    except NameError:
+        pass
 except ImportError:
     pass
 
