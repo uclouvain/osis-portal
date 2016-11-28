@@ -27,11 +27,14 @@ from django.contrib import admin
 
 from admission.models import *
 
-admin.site.register(academic_year.AcademicYear,
-                    academic_year.AcademicYearAdmin)
-
 admin.site.register(admission_exam_type.AdmissionExamType,
                     admission_exam_type.AdmissionExamTypeAdmin)
+
+admin.site.register(application_document_file.ApplicationDocumentFile,
+                    application_document_file.ApplicationDocumentFileAdmin)
+
+admin.site.register(applicant_document_file.ApplicantDocumentFile,
+                    applicant_document_file.ApplicantDocumentFileAdmin)
 
 admin.site.register(answer.Answer,
                     answer.AnswerAdmin)
@@ -54,17 +57,13 @@ admin.site.register(curriculum.Curriculum,
 admin.site.register(form.Form,
                     form.FormAdmin)
 
-admin.site.register(message_template.MessageTemplate,
-                    message_template.MessageTemplateAdmin)
-
-admin.site.register(offer_year.OfferYear,
-                    offer_year.OfferYearAdmin)
-
 admin.site.register(option.Option,
                     option.OptionAdmin)
 
 admin.site.register(person_address.PersonAddress,
                     person_address.PersonAddressAdmin)
+
+admin.site.register(profession.Profession)
 
 admin.site.register(properties.Properties,
                     properties.PropertiesAdmin)
@@ -77,3 +76,9 @@ admin.site.register(secondary_education.SecondaryEducation,
 
 admin.site.register(secondary_education_exam.SecondaryEducationExam,
                     secondary_education_exam.SecondaryEducationExamAdmin)
+
+admin.site.register(sociological_survey.SociologicalSurvey,
+                    sociological_survey.SociologicalSurveyAdmin)
+
+admin.site.register(offer_admission_exam_type.OfferAdmissionExamType,
+                    offer_admission_exam_type.OfferAdmissionExamTypeAdmin)

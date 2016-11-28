@@ -14,45 +14,50 @@
                          name="admission_exam"
                          id="rdb_admission_exam_true"
                          value="true"
-                         onclick="display('pnl_admission_exam_detail',true);"> {% trans 'yes' %}
+                         onclick="display('pnl_admission_exam_detail');"> {% trans 'yes' %}
                 </label>
                 <label class="radio-inline">
                   <input type="radio"
                          name="admission_exam"
                          id="rdb_admission_exam_false"
                          value="false"
-                         onclick="display('pnl_admission_exam_detail',false);"> {% trans 'no' %}
+                         onclick="hide('pnl_admission_exam_detail');"> {% trans 'no' %}
                 </label>
                 {%if validation_messages and validation_messages|get_item:'admission_exam'%}
-                    <br><br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam'}}</font>
+                    <br><br><span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam'}}</span>
                 {% endif %}
             </div>
         </div>
         <div id="pnl_admission_exam_detail"
              style="{%if admission_exam %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
-            <div class="form-inline">
-                <br>
-                <label>{% trans 'question_date_session' %} *</label>
-                <input class="form-control"
-                       id="txt_admission_exam_date"
-                       name="admission_exam_date"
-                       value="{{admission_exam.exam_date | default_if_none:''|date:"j/m/Y"}}">
-                {%if validation_messages and validation_messages|get_item:'admission_exam_date'%}
-                    <br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_date'}}</font>
-                {% endif %}
-                <br>
-                <br>
-                <label>{% trans 'question_institution_name' %} *</label>
-                <input class="form-control"
-                       id="txt_admission_exam_institution"
-                       name="admission_exam_institution">
-
-                {%if validation_messages and validation_messages|get_item:'admission_exam_institution'%}
-                    <br><font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_institution'}}</font>
-                {% endif %}
-
-            </div>
             <br>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="txt_admission_exam_date">{% trans 'question_date_session' %} *</label>
+                    <input class="form-control"
+                           id="txt_admission_exam_date"
+                           name="admission_exam_date"
+                           value="{{admission_exam.exam_date | default_if_none:''|date:"j/m/Y"}}"
+                           maxlength="10"
+                           type="date">
+                    <p class="caption">(format : {% trans 'format_date'%})</p>
+
+                    {%if validation_messages and validation_messages|get_item:'admission_exam_date'%}
+                        <br><span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_date'}}</span>
+                    {% endif %}
+                </div>
+                <div class="col-md-9">
+                    <label>{% trans 'question_institution_name' %} *</label>
+                    <input class="form-control"
+                           id="txt_admission_exam_institution"
+                           name="admission_exam_institution"
+                           maxlength="100">
+                    {%if validation_messages and validation_messages|get_item:'admission_exam_institution'%}
+                        <br><span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_institution'}}</span>
+                    {% endif %}
+                </div>
+            </div>
+            
             <label>{% trans 'question_exam_type' %} *</label>
             <br>
             {% for exam_type in exam_types %}
@@ -70,35 +75,33 @@
             {% endfor %}
             <br>
             <div class="row">
-
-                <div class="col-md-3">
-                                <label>{% trans 'question_other_exam_type' %}
-              <input type="checkbox"
-                     id="chb_admission_exam_type"
-                     name="chb_admission_exam_type_other"
-                     onclick="reset_radio('admission_exam_type');disabled_field('txt_admission_exam_type_other', this);if(!this.checked){reset_input('txt_admission_exam_type_other')}"
-                     {% if admission_exam.admission_exam_type.adhoc == True %}checked{%endif%}>
-            </label>
-
-                    </div>
-                    <div class="col-md-9">
-                         <label>{% trans 'specify_name' %} :</label>
-                        <input class="form-control"
-                               id="txt_admission_exam_type_other"
-                               name="admission_exam_type_other"
-                               value="{% if admission_exam.admission_exam_type.adhoc = True %}{{admission_exam.admission_exam_type.name| default_if_none:''}}{%endif%}"
-                               {% if admission_exam.admission_exam_type.adhoc = False %}
-                                        disabled
-                               {%else%}
-                                    {{admission_exam.admission_exam_type | default_if_none:"disabled"}}
-                               {%endif%}>
-                    </div>
+                <div class="col-md-4">
+                    <input type="checkbox"
+                           id="chb_admission_exam_type"
+                           name="chb_admission_exam_type_other"
+                           onclick="reset_radio('admission_exam_type');disabled_field('txt_admission_exam_type_other', this);if(!this.checked){reset_input('txt_admission_exam_type_other')}"
+                           {% if admission_exam.admission_exam_type.adhoc == True %}checked{%endif%}>
+                    <label>{% trans 'question_other_exam_type' %}</label>
+                </div>
+                <div class="col-md-8">
+                     <label>{% trans 'specify_name' %} :</label>
+                    <input class="form-control"
+                           id="txt_admission_exam_type_other"
+                           name="admission_exam_type_other"
+                           value="{% if admission_exam.admission_exam_type.adhoc = True %}{{admission_exam.admission_exam_type.name| default_if_none:''}}{%endif%}"
+                           {% if admission_exam.admission_exam_type.adhoc = False %}
+                                    disabled
+                           {%else%}
+                                {{admission_exam.admission_exam_type | default_if_none:"disabled"}}
+                           {%endif%}
+                           maxlength="100" >
+                </div>
             </div>
 
 
             {%if validation_messages and validation_messages|get_item:'admission_exam_type'%}
                 <br>
-                <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_type'}}</font><br>
+                <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_type'}}</span><br>
             {% endif %}
             <br>
             <label>{% trans 'which_result' %} *</label>
@@ -108,29 +111,52 @@
                      name="admission_exam_result"
                      id="rdb_admission_exam_result_low"
                      value="LOW"
-                     {%if admission_exam.result = 'LOW' %}checked{%endif%}> {% trans 'low_result' %}
+                     > {% trans 'low_result' %}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="admission_exam_result"
                      id="rdb_admission_exam_result_middle"
                      value="MIDDLE"
-                     {%if admission_exam.result = 'MIDDLE'%}checked{%endif%}>  {% trans 'middle_result' %}
+                    >  {% trans 'middle_result' %}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="admission_exam_result"
                      id="rdb_admission_exam_result_high"
-                     value="HIGH"
-                     {%if admission_exam.result  = 'HIGH' %}checked{%endif%}>  {% trans 'high_result' %}
+                     value="HIGH">  {% trans 'high_result' %}
+            </label>
+            <label class="radio-inline">
+                <input type="radio"
+                       name="admission_exam_result"
+                       id="rdb_admission_exam_no_result"
+                       value="NO_RESULT">  {% trans 'no_result_yet' %}
             </label>
             <br>
             {%if validation_messages and validation_messages|get_item:'admission_exam_result'%}
-                <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_result'}}</font>
+                <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'admission_exam_result'}}</span>
             {% endif %}
             <br>
-            <label> {% trans 'add_enrollment_file' %} </label>
-            &nbsp;&nbsp;<input type="button" value="{% trans 'click_to_add' %}"/>
+         
+             {%if admission_exam_file%}
+                <button type="button"
+                        class="btn btn-success"
+                        title="{% trans 'modify'%} {% trans 'admission_exam_certificate_document' %}"
+                        id="bt_load_doc_ADMISSION_EXAM_CERTIFICATE"
+                        data-toggle="modal" data-target="#pnl_upload_documents">
+                        <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"
+                              id="spn_bt_load_doc_ADMISSION_EXAM_CERTIFICATE"></span> {% trans 'add_enrollment_file' %}
+                </button>
+             {%else%}
+                <button type="button"
+                        class="btn btn-default"
+                        title="{% trans 'add'%} {% trans 'admission_exam_certificate_document' %}"
+                        id="bt_load_doc_ADMISSION_EXAM_CERTIFICATE"
+                        data-toggle="modal" data-target="#pnl_upload_documents">
+                        <span class="glyphicon glyphicon-upload" aria-hidden="true"
+                              id="spn_bt_load_doc_ADMISSION_EXAM_CERTIFICATE"></span> {% trans 'add_enrollment_file' %}
+                </button>
+             {%endif%}
         </div>
 
     </div>

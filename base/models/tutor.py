@@ -23,10 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import logging
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.contrib import admin
-from base.models import person
+from base.models import person as model_person
+from osis_common.models.serializable_model import SerializableModel
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 class TutorAdmin(admin.ModelAdmin):
@@ -36,7 +41,7 @@ class TutorAdmin(admin.ModelAdmin):
     search_fields = ['person__first_name', 'person__last_name']
 
 
-class Tutor(models.Model):
+class Tutor(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     changed = models.DateTimeField(null=True)
     person = models.OneToOneField('Person')
@@ -55,13 +60,18 @@ def find_by_person(a_person):
 
 def find_by_user(a_user):
     try:
-        pers = person.find_by_user(a_user)
+        pers = model_person.find_by_user(a_user)
         tutor = Tutor.objects.get(person=pers)
         return tutor
     except ObjectDoesNotExist:
         return None
 
+
 def is_tutor(a_user):
     if find_by_user(a_user):
         return True
     return False
+
+
+def find_by_person_global_id(global_id):
+    return Tutor.objects.get(person__global_id=global_id) if global_id is not None else None

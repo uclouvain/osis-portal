@@ -25,27 +25,27 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
 from admission.models import applicant
 from localflavor.generic.models import IBANField, BICField
 from localflavor.generic.countries.sepa import IBAN_SEPA_COUNTRIES
+from admission.models.enums import application_type, coverage_access_degree
 
 
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = ('applicant', 'offer_year', 'creation_date', 'application_type')
-    fieldsets = ((None, {'fields': ('applicant', 'offer_year', 'application_type')}),)
+    fieldsets = ((None, {'fields': ('applicant', 'offer_year', 'application_type', 'applied_to_sameprogram',
+                                    'coverage_access_degree', 'valuation_possible')}),)
 
 
 class Application(models.Model):
-    APPLICATION_TYPE = (('ADMISSION', _('admission')),
-                        ('INSCRIPTION', _('inscription')))
 
     applicant = models.ForeignKey('Applicant')
-    offer_year = models.ForeignKey('OfferYear')
+    offer_year = models.ForeignKey('base.OfferYear')
     creation_date = models.DateTimeField(auto_now=True)
-    application_type = models.CharField(max_length=20, choices=APPLICATION_TYPE)
-    national_degree = models.NullBooleanField(default=None)
+    application_type = models.CharField(max_length=20, choices=application_type.APPLICATION_TYPE_CHOICES)
+    coverage_access_degree = models.CharField(max_length=30, blank=True, null=True,
+                                              choices=coverage_access_degree.COVERAGE_ACCESS_DEGREE_CHOICES)
     valuation_possible = models.NullBooleanField(default=None)
     started_similar_studies = models.NullBooleanField(default=None)
     credits_to_value = models.NullBooleanField(default=None)
@@ -65,15 +65,15 @@ class Application(models.Model):
     bank_account_name = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return u"%s" % self.offer_year
+        return u"%s %s" % (self.applicant, self.offer_year)
 
 
 def find_by_user(user):
     try:
-        applic = applicant.Applicant.objects.get(user=user)
+        an_applicant = applicant.Applicant.objects.get(user=user)
 
-        if applic:
-            return Application.objects.filter(applicant=applic)
+        if an_applicant:
+            return Application.objects.filter(applicant=an_applicant)
         else:
             return None
     except ObjectDoesNotExist:
@@ -86,10 +86,10 @@ def find_by_id(application_id):
 
 def find_first_by_user(user):
     try:
-        person_application = applicant.Applicant.objects.get(user=user)
+        an_applicant = applicant.Applicant.objects.get(user=user)
 
-        if person_application:
-            return Application.objects.filter(applicant=person_application).first()
+        if an_applicant:
+            return Application.objects.filter(applicant=an_applicant).first()
         else:
             return None
     except ObjectDoesNotExist:
@@ -97,7 +97,18 @@ def find_first_by_user(user):
 
 
 def init_application(user):
-    person_application = applicant.Applicant.objects.get(user=user)
+    an_applicant = applicant.Applicant.objects.get(user=user)
     application = Application()
-    application.applicant = person_application
+    application.applicant = an_applicant
     return application
+
+
+def define_application_type(a_coverage_access_degree, user):
+    an_applicant = applicant.Applicant.objects.get(user=user)
+
+    if an_applicant.nationality and \
+            an_applicant.nationality.european_union and \
+                    a_coverage_access_degree == coverage_access_degree.NATIONAL:
+        return application_type.INSCRIPTION
+    return application_type.ADMISSION
+

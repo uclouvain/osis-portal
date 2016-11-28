@@ -23,20 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.models import User
-from admission.forms import NewAccountForm, AccountForm, NewPasswordForm
-from admission.utils import send_mail
-from random import randint
-from admission import models as mdl
+from django.shortcuts import render
 
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import login
-from admission.forms import AccountingForm
-from admission.views import demande_validation
-from admission.views import tabs
+from admission import models as mdl
+from base import models as mdl_base
+from admission.forms.accounting import AccountingForm
+from admission.views import demande_validation, navigation
 
 
 def accounting(request, application_id=None):
@@ -44,14 +36,14 @@ def accounting(request, application_id=None):
         application = mdl.application.find_by_id(application_id)
     else:
         application = mdl.application.init_application(request.user)
-    academic_yr = mdl.academic_year.current_academic_year()
-    previous_academic_year = mdl.academic_year.find_by_year(academic_yr.year - 1)
+    academic_yr = mdl_base.academic_year.current_academic_year()
+    previous_academic_year = mdl_base.academic_year.find_by_year(academic_yr.year - 1)
     sport_affiliation_amount = 0
     culture_affiliation_amount = 0
     solidary_affiliation_amount = 0
     applicant = mdl.applicant.find_by_user(request.user)
-    tab_status = tabs.init(request)
-    return render(request, "admission_home.html", {
+
+    data = {
         "academic_year": academic_yr,
         "previous_academic_year": previous_academic_year,
         "sport_affiliation_amount": sport_affiliation_amount,
@@ -61,29 +53,17 @@ def accounting(request, application_id=None):
         "debts_check": debts_check(application),
         "reduction_possible": reduction_possible(application),
         "third_cycle": third_cycle(application),
-        "tab_active": 4,
+        "tab_active": navigation.ACCOUNTING_TAB,
         "applications": mdl.application.find_by_user(request.user),
-        "validated_profil": demande_validation.validate_profil(applicant),
-        "validated_diploma": demande_validation.validate_diploma(application),
-        "validated_curriculum": demande_validation.validate_curriculum(application),
-        "validated_application": demande_validation.validate_application(application),
-        "validated_accounting": demande_validation.validate_accounting(),
-        "validated_sociological": demande_validation.validate_sociological(),
-        "validated_attachments": demande_validation.validate_attachments(),
-        "validated_submission": demande_validation.validate_submission(),
-        'tab_profile': tab_status['tab_profile'],
-        'tab_applications': tab_status['tab_applications'],
-        'tab_diploma': tab_status['tab_diploma'],
-        'tab_curriculum': tab_status['tab_curriculum'],
-        'tab_accounting': tab_status['tab_accounting'],
-        'tab_sociological': tab_status['tab_sociological'],
-        'tab_attachments': tab_status['tab_attachments'],
-        'tab_submission': tab_status['tab_submission']})
+    }
+    data.update(demande_validation.get_validation_status(application, applicant))
+    return render(request, "admission_home.html", data)
 
 
 def accounting_update(request, application_id=None):
-    academic_yr = mdl.academic_year.current_academic_year()
-    previous_academic_year = mdl.academic_year.find_by_year(academic_yr.year - 1)
+    next_tab = navigation.ACCOUNTING_TAB
+    academic_yr = mdl_base.academic_year.current_academic_year()
+    previous_academic_year = mdl_base.academic_year.find_by_year(academic_yr.year - 1)
     sport_affiliation_amount = 0
     culture_affiliation_amount = 0
     solidary_affiliation_amount = 0
@@ -95,33 +75,32 @@ def accounting_update(request, application_id=None):
         application = mdl.application.find_by_id(application_id)
     else:
         application = mdl.application.init_application(request.user)
-    application = populate_application(request, application)
+
     try:
         if application.offer_year and application.applicant:
             application.save()
     except:
         pass
-    tab_status = tabs.init(request)
-    return render(request, "admission_home.html", {"academic_year": academic_yr,
-                                                   "previous_academic_year": previous_academic_year,
-                                                   "sport_affiliation_amount": sport_affiliation_amount,
-                                                   "culture_affiliation_amount": culture_affiliation_amount,
-                                                   "solidary_affiliation_amount": solidary_affiliation_amount,
-                                                   "application": application,
-                                                   "form": accounting_form,
-                                                   "debts_check": debts_check(application),
-                                                   "reduction_possible": reduction_possible(application),
-                                                   "third_cycle": third_cycle(application),
-                                                   "tab_active": 4,
-                                                   "applications": mdl.application.find_by_user(request.user),
-                                                   "tab_profile": tab_status['tab_profile'],
-                                                   "tab_applications": tab_status['tab_applications'],
-                                                   "tab_diploma": tab_status['tab_diploma'],
-                                                   "tab_curriculum": tab_status['tab_curriculum'],
-                                                   "tab_accounting": tab_status['tab_accounting'],
-                                                   "tab_sociological": tab_status['tab_sociological'],
-                                                   "tab_attachments": tab_status['tab_attachments'],
-                                                   "tab_submission": tab_status['tab_submission']})
+    following_tab = navigation.get_following_tab(request, 'accounting', application)
+    if following_tab:
+        return following_tab
+    data = {
+        "academic_year": academic_yr,
+        "previous_academic_year": previous_academic_year,
+        "sport_affiliation_amount": sport_affiliation_amount,
+        "culture_affiliation_amount": culture_affiliation_amount,
+        "solidary_affiliation_amount": solidary_affiliation_amount,
+        "application": application,
+        "form": accounting_form,
+        "debts_check": debts_check(application),
+        "reduction_possible": reduction_possible(application),
+        "third_cycle": third_cycle(application),
+        "tab_active": next_tab,
+        "applications": mdl.application.find_by_user(request.user),
+    }
+    applicant = mdl.applicant.find_by_user(request.user)
+    data.update(demande_validation.get_validation_status(application, applicant))
+    return render(request, "admission_home.html", data)
 
 
 def populate_application(request, application):
@@ -164,9 +143,9 @@ def populate_application(request, application):
 
 def debts_check(application):
     if application:
-        academic_yr = mdl.academic_year.current_academic_year()
-        previous_academic_year = mdl.academic_year.find_by_year(academic_yr.year - 1)
-        secondary_curriculum = mdl.curriculum.find_belgian_french(application.applicant, previous_academic_year)
+        academic_yr = mdl_base.academic_year.current_academic_year()
+        previous_academic_year = academic_yr.year - 1
+        secondary_curriculum = mdl.curriculum.find_local_french(application.applicant, previous_academic_year)
         if secondary_curriculum:
             return True
 

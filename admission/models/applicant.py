@@ -34,8 +34,8 @@ from django.conf import settings
 
 
 class ApplicantAdmin(admin.ModelAdmin):
-    list_display = ('user', 'birth_date', 'gender')
-    fieldsets = ((None, {'fields': ('user', 'birth_date', 'gender', 'language')}),)
+    list_display = ('user', 'birth_date', 'gender', 'activation_code')
+    fieldsets = ((None, {'fields': ('user', 'birth_date', 'gender', 'language', 'nationality', 'registration_id')}),)
 
 
 class Applicant(models.Model):
@@ -59,7 +59,8 @@ class Applicant(models.Model):
     birth_place = models.CharField(max_length=255, blank=True, null=True)
     birth_country = models.ForeignKey('reference.Country', blank=True, null=True)
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES, blank=True, null=True)
-    civil_status = models.CharField(max_length=20, choices=CIVIL_STATUS_CHOICES, default='UNKNOWN', blank=True, null=True)
+    civil_status = models.CharField(max_length=20, choices=CIVIL_STATUS_CHOICES, default='UNKNOWN', blank=True,
+                                    null=True)
     number_children = models.IntegerField(blank=True, null=True)
     spouse_name = models.CharField(max_length=50, blank=True, null=True)
     nationality = models.ForeignKey('reference.Country', related_name='person_nationality', blank=True, null=True)

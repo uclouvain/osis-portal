@@ -1,5 +1,5 @@
 $('document').ready(function(){
-    // for secondary_education and diplomas screen
+
     if ($('#form_accounting')){
 
         $('#pnl_study_grant_number').css('visibility', 'hidden').css('display','none');

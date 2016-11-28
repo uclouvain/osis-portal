@@ -37,6 +37,8 @@
     <link rel="stylesheet" href="{% static 'css/armata.css' %}" type='text/css'>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/custom.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker3.min.css' %}" type='text/css'>
+    <script src="{% static 'js/utils.js' %}"></script>
     {% block style %}
     {% endblock %}
 </head>
@@ -81,7 +83,7 @@
 
     <div class="container">
         {% if message_info%}
-            <div id="message_info" class="alert alert-success">{{message_info}}</div>
+            <div id="message_info" class="alert alert-success">{{message_info| default_if_none:''}}</div>
         {%endif%}
         {% block content %}
         {% endblock %}
@@ -99,33 +101,32 @@
     <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/osis-portal.js' %}"></script>
-    <script src="{% static 'js/secondary_education.js' %}"></script>
+    <script src="{% static 'js/prerequisites.js' %}"></script>
     <script src="{% static 'js/accounting.js' %}"></script>
+    <script src="{% static 'js/profile.js' %}"></script>
+    <script src="{% static 'js/attachments.js' %}"></script>
+    <script src="{% static 'js/sociological.js' %}"></script>
+    <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
     {% block script %}
         <script type="text/javascript">
-        // To avoid cut and paste on the email fields
-        $(document).ready(function () {
-            $('#id_email_new').bind('paste', function (e) {
-                e.preventDefault();
+            // To avoid cut and paste on the email fields
+            $(document).ready(function () {
+                $('#id_email_new').bind('paste', function (e) {
+                    e.preventDefault();
+                });
+                $('#id_email_new_confirm').bind('paste', function (e) {
+                    e.preventDefault();
+                });
             });
-            $('#id_email_new_confirm').bind('paste', function (e) {
-                e.preventDefault();
+            // To avoid cut and paste on the password fields
+            $(document).ready(function () {
+                $('#id_password_new').bind('paste', function (e) {
+                    e.preventDefault();
+                });
+                $('#id_password_new_confirm').bind('paste', function (e) {
+                    e.preventDefault();
+                });
             });
-        });
-        // To avoid cut and paste on the password fields
-        $(document).ready(function () {
-            $('#id_password_new').bind('paste', function (e) {
-                e.preventDefault();
-            });
-            $('#id_password_new_confirm').bind('paste', function (e) {
-                e.preventDefault();
-            });
-        });
-        //If information message is on the screen it will disappear after 5s
-        $(document).ready(function () {
-            $('#message_info').fadeOut(5000);
-        });
-
         </script>
     {% endblock %}
 </body>

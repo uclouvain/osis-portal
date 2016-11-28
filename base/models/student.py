@@ -23,11 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import logging
+from django.conf import settings
 from django.db import models
 from django.contrib import admin
-from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
 from base.models import person as model_person
+from osis_common.models.serializable_model import SerializableModel
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 class StudentAdmin(admin.ModelAdmin):
@@ -37,7 +41,7 @@ class StudentAdmin(admin.ModelAdmin):
     search_fields = ['person__first_name', 'person__last_name', 'registration_id']
 
 
-class Student(models.Model):
+class Student(SerializableModel):
     registration_id = models.CharField(max_length=10, unique=True)
     person = models.ForeignKey('Person')
 
@@ -45,18 +49,22 @@ class Student(models.Model):
         return u"%s (%s)" % (self.person, self.registration_id)
 
 
-def find_by(registration_id=None, person_name=None, person_username=None, person_first_name=None, full_registration = None):
+def find_by_registration_id(registration_id):
+    return Student.objects.get(registration_id=registration_id)
+
+
+def search(registration_id=None, person_name=None, person_username=None, person_first_name=None, full_registration=None):
     """
-    Find students by optional arguments. At least one argument should be informed
+    Search students by optional arguments. At least one argument should be informed
     otherwise it returns empty.
     """
     has_criteria = False
     queryset = Student.objects
 
     if registration_id:
-        if (full_registration):
+        if full_registration:
             queryset = queryset.filter(registration_id=registration_id)
-        else :
+        else:
             queryset = queryset.filter(registration_id__icontains=registration_id)
         has_criteria = True
 

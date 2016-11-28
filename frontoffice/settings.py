@@ -27,6 +27,8 @@ import os
 from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import sys
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -41,6 +43,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+
+ADMIN_URL = 'admin/'
 
 # Application definition
 
@@ -61,7 +65,18 @@ INSTALLED_APPS = (
     'localflavor',
     'performance',
     'dissertation',
+    'statici18n',
+    'ckeditor',
 )
+
+# check if we are testing right now
+TESTING = 'test' in sys.argv
+
+if TESTING:
+    # add test packages that have specific models for tests
+    INSTALLED_APPS = INSTALLED_APPS + (
+        'osis_common.tests',
+    )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -97,6 +112,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
                 'base.views.common.installed_applications_context_processor',
             ],
         },
@@ -116,6 +132,41 @@ DATABASES = {
     },
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(asctime)s %(levelname)s %(module)s %(process)d %(thread)d %(message)s',
+            'datefmt': '%d-%m-%Y %H:%M:%S'
+        },
+        'simple': {
+            'format': '%(asctime)s %(levelname)s %(message)s',
+            'datefmt': '%d-%m-%Y %H:%M:%S'
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            'level':'DEBUG',
+        },
+    },
+    'loggers': {
+        'default': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        }
+    },
+}
+
+DEFAULT_LOGGER = 'default'
 
 COUCHBASE_CONNECTION_STRING='couchbase://localhost/'
 COUCHBASE_PASSWORD=''
@@ -176,11 +227,22 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, "base/tests/sent_mails")
 DEFAULT_FROM_EMAIL = 'osis@localhost.be'
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
-QUEUE_URL = 'localhost'
-QUEUE_USER = 'guest'
-QUEUE_PASSWORD = 'guest'
-QUEUE_PORT = 5672
-QUEUE_CONTEXT_ROOT = '/'
+# Queues Definition
+# Uncomment the configuration if you want to use the queue system
+# The queue system uses RabbitMq queues to communicate with other application (ex : osis)
+# QUEUES = {
+#    'QUEUE_URL': 'localhost',
+#    'QUEUE_USER': 'guest',
+#    'QUEUE_PASSWORD': 'guest',
+#    'QUEUE_PORT': 5672,
+#    'QUEUE_CONTEXT_ROOT': '/',
+#    'QUEUES_NAME': {
+#        'MIGRATIONS_TO_PRODUCE': 'osis',
+#        'MIGRATIONS_TO_CONSUME': 'osis_portal',
+#        'PAPER_SHEET': 'paper_sheet',
+#        'PERFORMANCE': 'performance'
+#    }
+# }
 
 LOGIN_URL=reverse_lazy('login')
 OVERRIDED_LOGOUT_URL=''
@@ -191,8 +253,43 @@ OVERRIDED_LOGIN_URL=''
 # A relative URL will work on local , but not out of the box on the servers.
 LOGO_INSTITUTION_URL = os.path.join(BASE_DIR, "base/static/img/logo_institution.jpg")
 
+LOGO_EMAIL_SIGNATURE_URL = ''
+LOGO_OSIS_URL = ''
+
+LOCALE_PATHS = (
+    "/admission/locale",
+)
+
+EMAIL_PRODUCTION_SENDING = False
+COMMON_EMAIL_RECEIVER = 'osis@localhost.org'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            {'name': 'basicstyles', 'items': ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat']},
+            {'name': 'links', 'items': ['Link']},
+            {'name': 'styles', 'items': ['Styles', 'Format', 'Font', 'FontSize', 'Source']},
+            {'name': 'colors', 'items': ['TextColor', 'BGColor']},
+            '/',
+            {'name': 'insert', 'items': ['Table']},
+            {'name': 'paragraph',
+             'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-',
+                       'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
+            {'name': 'forms',
+             'items': ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton',
+                       'HiddenField']},
+            {'name': 'about', 'items': ['About']},
+        ],
+    },
+}
+
 try:
     from frontoffice.server_settings import *
+    try:
+        LOCALE_PATHS = LOCALE_PATHS + SERVER_LOCALE_PATHS
+    except NameError:
+        pass
 except ImportError:
     pass
 

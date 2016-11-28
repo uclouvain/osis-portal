@@ -24,49 +24,54 @@
 #
 ##############################################################################
 from couchbase.exceptions import ValueFormatError
+from django.conf import settings
 from osis_common.document import paper_sheet
 from dashboard import models as mdl
-from frontoffice.queue.queue import ScoresSheetClient
+from osis_common.queue.queue_listener import ScoresSheetClient
 import datetime
 import json
+import logging
+
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 def get_score_sheet(global_id):
-    print("Instanciating the QueueConnection ScoresSheetClient...")
+    logger.debug("Instanciating the QueueConnection ScoresSheetClient...")
     scores_sheets_cli = ScoresSheetClient()
-    print("Done.")
+    logger.debug("Done.")
 
-    print("Sending the global id in the queue and waiting for a response...")
+    logger.debug("Sending the global id in the queue and waiting for a response...")
     json_data = scores_sheets_cli.call(global_id)
-    print("Done.")
-    print("Json.loads data consumed in the queue...")
+    logger.debug("Done.")
+    logger.debug("Json.loads data consumed in the queue...")
     updated_document = json.loads(json_data.decode("utf-8"))
-    print("Done.")
+    logger.debug("Done.")
     try:
-        print("Updating/inserting the document in Couchbase...")
+        logger.debug("Updating/inserting the document in Couchbase...")
         mdl.score_encoding.insert_or_update_document(global_id, updated_document)
-        print("Done.")
+        logger.debug("Done.")
     except ValueFormatError:
-        print("Document already in couchbase and last updated today.")
+        logger.debug("Document already in couchbase and last updated today.")
         return None
     return updated_document
 
 
 def print_scores(request, global_id):
-    print("Searching document in couchbase (global id = " + global_id + ")")
+    logger.debug("Searching document in couchbase (global id = " + global_id + ")")
     document = mdl.score_encoding.get_document(global_id)
     document = document.value if document else None
     if document:
-        print("Document found")
+        logger.debug("Document found")
         now = datetime.datetime.now()
         now_str = '%s/%s/%s' % (now.day, now.month, now.year)
         if document.get('publication_date', None) != now_str:
             document = get_score_sheet(global_id)
     else:
-        print("No document found in couchbase")
+        logger.debug("No document found in couchbase")
         document = get_score_sheet(global_id)
     if document:
-        print("Calling build_pdf() method to generate the pdf...")
+        logger.debug("Calling build_pdf() method to generate the pdf...")
         return paper_sheet.build_pdf(document)
     else:
         return None

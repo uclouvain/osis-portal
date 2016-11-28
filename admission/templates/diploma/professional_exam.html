@@ -13,18 +13,18 @@
                              name="professional_exam"
                              id="rdb_professional_experience_true"
                              value="true"
-                             onclick="display('pnl_professional_experience_detail',true);"> {% trans 'yes' %}
+                             onclick="display('pnl_professional_experience_detail');"> {% trans 'yes' %}
                     </label>
                     <label class="radio-inline">
                       <input type="radio"
                              name="professional_exam"
                              id="rdb_professional_experience_false"
                              value="false"
-                             onclick="display('pnl_professional_experience_detail',false);"> {% trans 'no' %}
+                             onclick="hide('pnl_professional_experience_detail');"> {% trans 'no' %}
                     </label>
                     {%if validation_messages and validation_messages|get_item:'professional_experience'%}
                         <br>
-                        <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'professional_experience'}}</font><br>
+                        <span class="error" style="margin-left:5px;">{{ validation_messages|get_item:'professional_experience'}}</span><br>
                     {% endif %}
                 </div>
             </div>
@@ -33,26 +33,31 @@
                 {% trans 'vae_information' %} : <a href="https://www.uclouvain.be/vae.html">{{local_language_exam_link.value}}</a>
             {%endif%}
         <div id="pnl_professional_experience_detail"
-             style="{% if professional_exam == True %}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
-            <div class="form-inline">
-                <br>
-                <label>{% trans 'question_date_session'%} *</label>
-                <input class="form-control"
-                       id="txt_professional_exam_date"
-                       name="professional_exam_date">
-                 {%if validation_messages and validation_messages|get_item:'professional_exam_date'%}
-                    <br>
-                    <font class="error" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'professional_exam_date'}}</font>
-                {% endif %}
-                <br><br>
-                <label>{% trans 'question_institution_name_nice' %} *</label>
-                <input class="form-control"
-                       id="txt_professional_exam_institution"
-                       name="professional_exam_institution">
-                <br>
-                {%if validation_messages and validation_messages|get_item:'professional_exam_institution'%}
-                    <font class="error" style="margin-left:5px;">{{ validation_messages|get_item:'professional_exam_institution'}}</font><br>
-                {% endif %}
+             style="{% if professional_exam%}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+            <div class="row">
+                <div class="col-md-3">
+                    <label>{% trans 'question_date_session'%} *</label>
+                    <input class="form-control"
+                           id="txt_professional_exam_date"
+                           name="professional_exam_date"
+                           type="date"
+                           maxlength="10">
+                     {%if validation_messages and validation_messages|get_item:'professional_exam_date'%}
+                        <br>
+                        <span class="error" role="alert" style="margin-left:5px;" id="professional_exam_date_error">{{ validation_messages|get_item:'professional_exam_date'}}</span>
+                    {% endif %}
+                </div>
+                <div class="col-md-9">
+                    <label>{% trans 'question_institution_name_nice' %} *</label>
+                    <input class="form-control"
+                           id="txt_professional_exam_institution"
+                           name="professional_exam_institution"
+                           maxlength="100" >
+                    {%if validation_messages and validation_messages|get_item:'professional_exam_institution'%}
+                        <br>
+                        <span class="error" style="margin-left:5px;" id="professional_exam_institution_error">{{ validation_messages|get_item:'professional_exam_institution'}}</span><br>
+                    {% endif %}
+                </div>
             </div>
             <br>
             <label>{% trans 'which_result' %} *</label>
@@ -62,31 +67,53 @@
                      name="professional_exam_result"
                      id="rdb_professional_exam_result_result_low"
                      value="LOW"
-                     {%if professional_exam.result = 'LOW' %}checked{%endif%}> {% trans 'low_result' %}
+                     {%if professional_exam.result = 'LOW' %}checked{%endif%}>&nbsp;{% trans 'low_result' %}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="professional_exam_result"
                      id="rdb_professional_exam_result_middle"
                      value="MIDDLE"
-                     {%if professional_exam.result = 'MIDDLE'%}checked{%endif%}> {% trans 'middle_result' %}
+                     {%if professional_exam.result = 'MIDDLE'%}checked{%endif%}>&nbsp;{% trans 'middle_result' %}
             </label>
             <label class="radio-inline">
               <input type="radio"
                      name="professional_exam_result"
                      id="rdb_professional_exam_result_high" value="HIGH"
-                     {%if professional_exam.result = 'HIGH' %}checked{%endif%}> {% trans 'high_result' %}
+                     {%if professional_exam.result = 'HIGH' %}checked{%endif%}>&nbsp;{% trans 'high_result' %}
+            </label>
+            <label class="radio-inline">
+                <input type="radio"
+                       name="professional_exam_result"
+                       id="rdb_professional_exam_no_result_high"
+                       value="NO_RESULT"
+                       {%if professional_exam.result = 'NO_RESULT' %}checked{%endif%}>&nbsp;{% trans 'no_result_yet' %}
             </label>
             <br>
             {%if validation_messages and validation_messages|get_item:'professional_exam_result'%}
-                <font class="error" role="alert" style="margin-left:5px;">{{ validation_messages|get_item:'professional_exam_result'}}</font>
+                <span class="error" role="alert" style="margin-left:5px;" id="professional_exam_result_error">{{ validation_messages|get_item:'professional_exam_result'}}</span>
             {% endif %}
             <br>
-            <button type="button" class="btn btn-default" data-toggle="modal"
-                    data-target="#pnl_upload_file_modal"
-                    title="{% trans 'add_professional_exam_file' %}" id="bt_upload_file_certificat">
-                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> {% trans 'add_professional_exam_file' %}
-            </button>
+            {%if professional_exam_file%}
+                <button type="button" class="btn btn-success"
+                        title="{% trans 'add_professional_exam_file' %}"
+                        id="bt_load_doc_PROFESSIONAL_EXAM_CERTIFICATE"
+                        data-toggle="modal" data-target="#pnl_upload_documents">
+                        <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"
+                              id="spn_bt_load_doc_PROFESSIONAL_EXAM_CERTIFICATE"></span> {% trans 'add_professional_exam_file' %}
+                </button>
+            {%else%}
+                <button type="button" class="btn btn-default"
+                        title="{% trans 'add_professional_exam_file' %}"
+                        id="bt_load_doc_PROFESSIONAL_EXAM_CERTIFICATE"
+                        data-toggle="modal" data-target="#pnl_upload_documents">
+                        <span class="glyphicon glyphicon-upload" aria-hidden="true"
+                              id="spn_bt_load_doc_PROFESSIONAL_EXAM_CERTIFICATE"></span> {% trans 'add_professional_exam_file' %}
+                </button>
+            {%endif%}
+            {%if validation_messages and validation_messages|get_item:'professional_exam_doc'%}
+            <br><br><span class="error" style="margin-left:5px;" id="professional_exam_doc_error">{{ validation_messages|get_item:'professional_exam_doc'}}</span><br>
+            {% endif %}
         </div>
 
     </div>

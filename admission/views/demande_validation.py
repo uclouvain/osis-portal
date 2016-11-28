@@ -23,12 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.models import User
 from admission import models as mdl
 
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from admission.views import assimilation_criteria as assimilation_criteria_view
+from django.utils.translation import ugettext_lazy as _
+from admission.models.enums import document_type
+from admission.models.enums import application_type
+
+
+ALERT_MANDATORY_FIELD = _('mandatory_field')
+ALERT_MANDATORY_FILE = _('mandatory_file')
+ALERT_MANDATORY_FILE_RECTO_VERSO = _('mandatory_file_recto_verso')
+PROFESSIONAL_TYPE = 'PROFESSIONAL'
+ADMISSION_EXAM_TYPE = 'ADMISSION'
+LANGUAGE_EXAM_TYPE = 'LANGUAGE'
 
 
 def validate_profil(applicant):
@@ -40,54 +48,285 @@ def validate_profil(applicant):
         or applicant.gender is None\
         or applicant.civil_status is None\
         or applicant.nationality is None \
-        or applicant.additional_email is None:
+        or applicant.additional_email is None \
+            or applicant.additional_email.strip() == '':
         return False
     if (applicant.registration_id and applicant.last_academic_year is None) \
-        or (applicant.registration_id is None and applicant.last_academic_year):
+            or (applicant.registration_id is None and applicant.last_academic_year):
         return False
 
     applicant_legal_adress = mdl.person_address.find_by_person_type(applicant, 'LEGAL')
-    if applicant_legal_adress is None:
-        return False
-    else:
-        if applicant_legal_adress.street is None \
+    if applicant_legal_adress is None \
+            or (applicant_legal_adress.street is None \
                 or applicant_legal_adress.number is None \
                 or applicant_legal_adress.postal_code is None \
                 or applicant_legal_adress.city is None \
-                or applicant_legal_adress.country is None:
+                or applicant_legal_adress.country is None):
+        return False
+    if applicant.nationality and not applicant.nationality.european_union:
+        applicant_assimilation_criterias = mdl.applicant_assimilation_criteria.find_by_applicant(applicant)
+        if not applicant_assimilation_criterias:
             return False
-
+        else:
+            criteria_doc_ok = False
+            for applicant_assimilation_criteria in applicant_assimilation_criterias:
+                list_document_type = assimilation_criteria_view.\
+                    find_list_document_type_by_criteria(applicant_assimilation_criteria.criteria)
+                for l in list_document_type:
+                    nb_necessary_doc = len(list_document_type)
+                    nb_doc = 0
+                    for document_typ in l.descriptions:
+                        app_doc_files = mdl.applicant_document_file.\
+                            find_by_applicant_and_description(applicant, document_typ)
+                        if app_doc_files:
+                            nb_doc = nb_doc+1
+                    if nb_necessary_doc == nb_doc:
+                        criteria_doc_ok = True
+                        break
+                if criteria_doc_ok:
+                    break
+            if not criteria_doc_ok:
+                return False
+    assimilation_criteria_list = mdl.applicant_assimilation_criteria.find_by_applicant(applicant)
+    for assimilation_criteria in assimilation_criteria_list:
+        docs_needed = assimilation_criteria_view.get_list_documents_descriptions(assimilation_criteria.criteria)
+        for doc_needed in docs_needed:
+            app_doc_files = mdl.applicant_document_file. \
+                find_by_applicant_and_description(applicant, doc_needed)
+            if not app_doc_files:
+                return False
     return True
 
 
-def validate_application(application):
+def validate_diploma(application, secondary_education):
+    validation_messages = {}
+
+    if secondary_education:
+        validate_prerequisites_data(application, secondary_education, validation_messages)
+
+    return validation_messages
+
+
+def validate_prerequisites_data(application, secondary_education, validation_messages):
+    admission_exam = mdl.secondary_education_exam.find_by_type(secondary_education_id=secondary_education.id,
+                                                               type='ADMISSION')
+    professional_exam = mdl.secondary_education_exam.find_by_type(secondary_education_id=secondary_education.id,
+                                                                  type='PROFESSIONAL')
+    local_language_exam = mdl.secondary_education_exam.find_by_type(secondary_education_id=secondary_education.id,
+                                                                    type='LANGUAGE')
+    if secondary_education.diploma is not True \
+            and admission_exam is None \
+            and professional_exam is None \
+            and local_language_exam is None:
+        validation_messages['diploma'] = _('msg_one_prerequisite')
+    else:
+        if secondary_education.diploma is True:
+            if secondary_education.national is True:
+                if secondary_education.academic_year is None:
+                    validation_messages['academic_year'] = ALERT_MANDATORY_FIELD
+                if secondary_education.national_community is None:
+                    validation_messages['local_community'] = ALERT_MANDATORY_FIELD
+                else:
+                    if secondary_education.national_community == 'FRENCH' \
+                            and secondary_education.academic_year < 1994 \
+                            and secondary_education.dipl_acc_high_educ is None:
+                        validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
+
+                    if secondary_education.national_community == 'DUTCH' \
+                            and secondary_education.academic_year < 1992 \
+                            and secondary_education.dipl_acc_high_educ is None:
+                        validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
+
+                if secondary_education.national_institution is None:
+                    validation_messages['school'] = _('msg_school_name')
+                else:
+                    if secondary_education.national_institution.national_community == 'FRENCH' \
+                            and secondary_education.education_type is None:
+                        validation_messages['pnl_teaching_type'] = _('msg_error_education_type')
+
+                if secondary_education.path_repetition is None:
+                    validation_messages['path_repetition'] = ALERT_MANDATORY_FIELD
+                if secondary_education.path_reorientation is None:
+                    validation_messages['path_reorientation'] = ALERT_MANDATORY_FIELD
+                if secondary_education.result is None:
+                    validation_messages['result'] = ALERT_MANDATORY_FIELD
+                # Validation of the needed documents
+                validation_messages.update(validate_needed_docs(application))
+            else:
+                if secondary_education.national is False:
+                    if secondary_education.international_diploma_language is None:
+                        validation_messages['language_regime'] = ALERT_MANDATORY_FIELD
+
+                    if secondary_education.result is None:
+                        validation_messages['foreign_result'] = ALERT_MANDATORY_FIELD
+
+                    validation_messages.update(validate_needed_docs_list(application,
+                                                                         [document_type.INTERNATIONAL_DIPLOMA_RECTO,
+                                                                          document_type.INTERNATIONAL_DIPLOMA_VERSO],
+                                                                         'international_diploma_file'))
+                    validation_messages.update(
+                        validate_needed_docs_list(application,
+                                                  [document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
+                                                   document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO],
+                                                  'high_school_scores_transcript'))
+                    if secondary_education.international_diploma_language \
+                            and secondary_education.international_diploma_language.recognized is False:
+
+                            validation_messages.update(
+                                validate_needed_docs_list(application,
+                                                          [document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO,
+                                                           document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO],
+                                                          'translated_international_diploma'))
+                            validation_messages.update(
+                                validate_needed_docs_list(application,
+                                                          [document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
+                                                           document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO],
+                                                          'translated_high_school_scores_transcript'))
+        validation_messages.update(validate_professional_exam(professional_exam, application))
+        validation_messages.update(validate_admission_exam(admission_exam, application))
+        validation_messages.update(validate_local_language_exam(local_language_exam))
+
+
+def _validate_application():
     return False
 
 
-
-def validate_application(application):
+def _validate_curriculum():
     return False
 
 
-def validate_diploma(application):
+def _validate_accounting():
     return False
 
 
-def validate_curriculum(application):
+def _validate_sociological():
     return False
 
 
-def validate_accounting():
+def _validate_attachments(application):
+    if application is None or application.application_type is None:
+        return False
+    else:
+        if application.application_type ==  application_type.ADMISSION:
+            letter_motivation_doc_present = False
+            curriculum_doc_present = False
+            application_document_files = mdl.application_document_file.find_document_by_application(application)
+            for p in application_document_files:
+                if p.document_file.description == 'letter_motivation':
+                    letter_motivation_doc_present=True
+                if p.document_file.description == 'curriculum':
+                    curriculum_doc_present=True
+            if letter_motivation_doc_present and curriculum_doc_present:
+                return True
     return False
 
 
-def validate_sociological():
+def _validate_submission():
     return False
 
 
-def validate_attachments():
-    return False
+def get_validation_status(application, applicant):
+    secondary_education = mdl.secondary_education.find_by_person(applicant)
+    if secondary_education:
+        validated_diploma = True
+        if len(validate_diploma(application, secondary_education)) > 0:
+            validated_diploma = False
+    else:
+        validated_diploma = False
+    return {
+        "validated_profil":             validate_profil(applicant),
+        "validated_diploma":            validated_diploma,
+        "validated_curriculum":         _validate_curriculum(),
+        "validated_application":        _validate_application(),
+        "validated_accounting":         _validate_accounting(),
+        "validated_sociological":       _validate_sociological(),
+        "validated_attachments":        _validate_attachments(application),
+        "validated_submission":         _validate_submission(),
+        "validation_message":           None}
 
 
-def validate_submission():
-    return False
+def validate_needed_docs(application):
+    validation_messages = {}
+    doc_recto = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_RECTO)
+    doc_verso = mdl.application_document_file.search(application, document_type.NATIONAL_DIPLOMA_VERSO)
+    if doc_recto.exists() is False or doc_verso.exists() is False:
+        validation_messages['national_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
+    if application and application.application_type == application_type.ADMISSION:
+        doc_recto = mdl.application_document_file.search(application,
+                                                         document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO)
+        doc_verso = mdl.application_document_file.search(application,
+                                                         document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO)
+        if doc_recto.exists() is False or doc_verso.exists() is False:
+            validation_messages['high_school_diploma_doc'] = ALERT_MANDATORY_FILE_RECTO_VERSO
+    return validation_messages
+
+
+def validate_professional_exam(professional_exam, application):
+    validation_messages = {}
+    if professional_exam:
+        if professional_exam.exam_date is None:
+            validation_messages['professional_exam_date'] = ALERT_MANDATORY_FIELD
+        if professional_exam.institution is None:
+            validation_messages['professional_exam_institution'] = ALERT_MANDATORY_FIELD
+        if professional_exam.result is None:
+            validation_messages['professional_exam_result'] = ALERT_MANDATORY_FIELD
+        doc = mdl.application_document_file.search(application, document_type.PROFESSIONAL_EXAM_CERTIFICATE)
+        if doc.exists() is False:
+            validation_messages['professional_exam_doc'] = ALERT_MANDATORY_FIELD
+    return validation_messages
+
+
+def validate_admission_exam(admission_exam, application):
+    validation_messages = {}
+    if admission_exam:
+        if admission_exam.exam_date is None:
+            validation_messages['admission_exam_date'] = ALERT_MANDATORY_FIELD
+        if admission_exam.institution is None:
+            validation_messages['admission_exam_institution'] = ALERT_MANDATORY_FIELD
+        if admission_exam.admission_exam_type is None:
+            validation_messages['admission_exam_type'] = ALERT_MANDATORY_FIELD
+        else:
+            offer_year = get_application_offer_year(application)
+            if offer_year:
+                offer_admission_exam_type = mdl.offer_admission_exam_type.find_by_offer_year(offer_year)
+                if offer_admission_exam_type and \
+                        (offer_admission_exam_type.admission_exam_type != admission_exam.admission_exam_type):
+                    validation_messages['admission_exam_type'] = "{0} '{1}' {2} {3}"\
+                        .format(_('the_exam_type'),
+                                offer_admission_exam_type.admission_exam_type.name,
+                                _('is_required_for'),
+                                application.offer_year.acronym)
+        if admission_exam.result is None:
+            validation_messages['admission_exam_result'] = ALERT_MANDATORY_FIELD
+
+    return validation_messages
+
+
+def validate_local_language_exam(local_language_exam):
+    validation_messages = {}
+    if local_language_exam:
+        if local_language_exam.exam_date is None:
+            validation_messages['local_language_exam_date'] = ALERT_MANDATORY_FIELD
+        if local_language_exam.institution is None:
+            validation_messages['local_language_exam_institution'] = ALERT_MANDATORY_FIELD
+        if local_language_exam.result is None:
+            validation_messages['local_language_exam_result'] = ALERT_MANDATORY_FIELD
+    return validation_messages
+
+
+def get_application_offer_year(application):
+    if application:
+        try:
+            return application.offer_year
+        except:
+            return None
+    return None
+
+
+def validate_needed_docs_list(application, document_types, msg_txt_field):
+    validation_messages = {}
+    for doc_type in document_types:
+        doc = mdl.application_document_file.search(application, doc_type)
+        if doc.exists() is False or doc.exists() is False:
+            validation_messages[msg_txt_field] = ALERT_MANDATORY_FILE
+    return validation_messages

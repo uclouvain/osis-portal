@@ -23,3 +23,47 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+
+from django import forms
+from django.forms import ModelForm
+from dissertation.models.dissertation import Dissertation
+from dissertation.models.dissertation_update import DissertationUpdate
+from dissertation.models.dissertation_role import DissertationRole
+
+
+class DissertationForm(ModelForm):
+    class Meta:
+        model = Dissertation
+        fields = ('title', 'author', 'offer_year_start', 'proposition_dissertation', 'description', 'defend_year',
+                  'defend_periode', 'location')
+        widgets = {'author': forms.HiddenInput()}
+
+
+class DissertationEditForm(ModelForm):
+    class Meta:
+        model = Dissertation
+        fields = ('title', 'author', 'offer_year_start', 'proposition_dissertation', 'description', 'defend_year',
+                  'defend_periode', 'location')
+        widgets = {'author': forms.HiddenInput(),
+                   'offer_year_start': forms.HiddenInput(),
+                   'proposition_dissertation': forms.HiddenInput()}
+
+
+class DissertationRoleForm(ModelForm):
+    class Meta:
+        model = DissertationRole
+        fields = ('dissertation', 'status', 'adviser')
+        widgets = {'dissertation': forms.HiddenInput(),
+                   'status': forms.HiddenInput()}
+
+
+class DissertationTitleForm(ModelForm):
+    class Meta:
+        model = Dissertation
+        fields = ('title',)
+
+
+class DissertationUpdateForm(ModelForm):
+    class Meta:
+        model = DissertationUpdate
+        fields = ('justification',)

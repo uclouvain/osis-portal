@@ -42,5 +42,21 @@ class Answer(models.Model):
         return u"%s" % self.value
 
 
-def find_by_application(application_id):
-    return Answer.objects.filter(application=application_id)
+def find_by_application(application):
+    return Answer.objects.filter(application=application)
+
+
+def find_by_option(option):
+    return Answer.objects.filter(option=option)
+
+
+def find_by_user_and_option(user, option):
+    return Answer.objects.filter(application__applicant__user=user).filter(option=option)
+
+
+def find_by_application_and_option(application, option):
+    return Answer.objects.filter(application=application).filter(option=option)
+
+
+def find_by_id(answer_id):
+    return Answer.objects.get(id=answer_id)

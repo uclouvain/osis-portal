@@ -35,7 +35,8 @@ class SecondaryEducationExamAdmin(admin.ModelAdmin):
 class SecondaryEducationExam(models.Model):
     RESULT_TYPE = (('LOW', 'Moins de 65%'),
                    ('MIDDLE', 'entre 65% et 75%'),
-                   ('HIGH', 'plus de 75%'))
+                   ('HIGH', 'plus de 75%'),
+                   ('NO_RESULT', 'pas encore de résultat'))
 
     LOCAL_LANGUAGE_EXAM_RESULT_TYPE = (('SUCCEED', _('succeeded')),
                                        ('FAILED', _('failed')),
@@ -46,11 +47,11 @@ class SecondaryEducationExam(models.Model):
                   ('PROFESSIONAL', _('professional')))
 
     secondary_education = models.ForeignKey('SecondaryEducation')
-    admission_exam_type = models.ForeignKey('AdmissionExamType')
+    admission_exam_type = models.ForeignKey('AdmissionExamType', blank=True, null=True)
     type = models.CharField(max_length=20, choices=EXAM_TYPES)
     exam_date = models.DateField(blank=True, null=True)
     institution = models.CharField(max_length=100, blank=True, null=True)
-    result = models.CharField(max_length=20, choices=RESULT_TYPE+LOCAL_LANGUAGE_EXAM_RESULT_TYPE, blank=True, null=True)
+    result = models.CharField(max_length=30, choices=RESULT_TYPE+LOCAL_LANGUAGE_EXAM_RESULT_TYPE, blank=True, null=True)
 
 
 def search(pk=None, secondary_education_id=None, type=None):
@@ -66,3 +67,11 @@ def search(pk=None, secondary_education_id=None, type=None):
         queryset = queryset.filter(type=type)
 
     return queryset
+
+
+def find_by_type(secondary_education_id=None, type=None):
+    results = search(None, secondary_education_id, type)
+    if results and results.exists():
+        return results[0]
+    return None
+

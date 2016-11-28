@@ -26,16 +26,25 @@
 from django.db import models
 from django.contrib import admin
 
+from reference.enums import domain_type
+from osis_common.models.serializable_model import SerializableModel
+from . import decree
+
 
 class DomainAdmin(admin.ModelAdmin):
-    list_display = ('name','parent')
-    fieldsets = ((None, {'fields': ('name',)}),)
+    list_display = ('name', 'parent', 'decree', 'type')
+    fieldsets = ((None, {'fields': ('name', 'parent', 'decree', 'type')}),)
+    search_fields = ['name']
 
 
-class Domain(models.Model):
+class Domain(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     name = models.CharField(max_length=255)
     parent = models.ForeignKey('self', null=True, blank=True)
+    decree = models.ForeignKey('Decree', null=True, blank=True)
+    type = models.CharField(max_length=50, choices=domain_type.TYPES, default=domain_type.UNKNOWN)
+    national = models.BooleanField(default=False) # True if is Belgian else False
+    reference = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -48,21 +57,21 @@ class Domain(models.Model):
         return Domain.objects.filter(parent=self)
 
 
-def find_all():
-    return Domain.objects.all()
-
-
 def find_by_id(an_id):
     return Domain.objects.get(pk=an_id)
 
 
-def find_all_domains():
-    return Domain.objects.filter(parent=None)
+def find_current_domains():
+    current_decree = decree.find_current_decree()
+    return Domain.objects.filter(decree=current_decree)\
+                         .filter(type=domain_type.UNIVERSITY)\
+                         .filter(parent__isnull=True)\
+                         .order_by("name")
 
 
-def find_all_subdomains():
+def find_parent_domains():
     return Domain.objects.exclude(parent=None)
 
 
-def find_subdomains_by_domain_id(a_domain_id):
-    return Domain.objects.filter(parent=a_domain_id)
+def find_subdomains(domain):
+    return Domain.objects.filter(parent=domain)

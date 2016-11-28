@@ -1,0 +1,24 @@
+[
+{
+    "model": "osis_common.messagetemplate",
+    "pk": 1,
+    "fields": {
+        "reference": "account_activation_html",
+        "subject": "UCL - Votre code d'activation de compte",
+        "template": "<p>{% autoescape off %}</p>\r\n\r\n<p><em>Ceci est un message automatique g&eacute;n&eacute;r&eacute; par le serveur OSIS &ndash; Merci de ne pas y r&eacute;pondre.</em></p>\r\n\r\n<p><br/>{{ title }},\r\nVous venez d&#39;introduire une demande de cr&eacute;ation d&#39;un compte pour acc&egrave;der &agrave; la demande d&#39;inscription en ligne {{ academic_year }} de l&#39;Universit&eacute; catholique de Louvain, ce dont nous vous remercions.\r\n\r\nPour activer ce compte, veuillez cliquer sur le lien suivant :\r\n\r\n {{ activation_link }} \r\n\r\nLe service des inscriptions de l&#39;UCL{{ signature }}</p>\r\n\r\n<p>{% endautoescape %}</p>",
+        "format": "HTML",
+        "language": "fr-be"
+    }
+},
+{
+    "model": "osis_common.messagetemplate",
+    "pk": 2,
+    "fields": {
+        "reference": "account_activation_txt",
+        "subject": "UCL - Votre code d'activation de compte",
+        "template": "<p><em>Ceci est un message automatique g&eacute;n&eacute;r&eacute; par le serveur OSIS &ndash; Merci de ne pas y r&eacute;pondre.</em><br />\r\n<br />\r\n{{ title }}, \r\n\r\nVous venez d&#39;introduire une demande de cr&eacute;ation d&#39;un compte pour acc&egrave;der &agrave; la demande d&#39;inscription en ligne {{ academic_year }} de l&#39;Universit&eacute; catholique de Louvain, ce dont nous vous remercions.\r\n\r\n Pour activer ce compte, veuillez cliquer sur le lien suivant :\r\n\r\n{{ activation_link }}\r\n\r\n<p>Le service des inscriptions de l&#39;UCL{{ signature }}</p>",
+        "format": "PLAIN",
+        "language": "fr-be"
+    }
+}
+]

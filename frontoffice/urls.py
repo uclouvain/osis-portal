@@ -28,12 +28,28 @@ from django.contrib import admin
 from django.conf.urls import url, include
 from base.views import common
 
+
+js_info_dict = {
+    'domain': 'djangojs',
+    'packages': ('admission',),
+}
+
+
+js_info_dict = {
+    'domain': 'djangojs',
+    'packages': ('admission',),
+}
+
 urlpatterns = (
-    url(r'^admin/', admin.site.urls),
+    url(r'^'+settings.ADMIN_URL, admin.site.urls),
+    url(r'', include('base.urls')),
     url(r'^login/$', common.login, name='login'),
     url(r'^logout/$', common.log_out, name='logout'),
     url(r'^logged_out/$', common.logged_out, name='logged_out'),
+    url(r'^403/$', common.access_denied, name="error_403"),
+    url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict, name='javascript-catalog'),
 )
+
 
 if 'admission' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^admission/', include('admission.urls')), )
@@ -46,10 +62,11 @@ if 'performance' in settings.INSTALLED_APPS:
 if 'dissertation' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^dissertation/', include('dissertation.urls')),)
 
+
 handler404 = 'base.views.common.page_not_found'
 handler403 = 'base.views.common.access_denied'
 handler500 = 'base.views.common.server_error'
 
 admin.site.site_header = 'Osis-studies'
-admin.site.site_title  = 'Osis-studies'
+admin.site.site_title = 'Osis-studies'
 admin.site.index_title = 'Louvain'

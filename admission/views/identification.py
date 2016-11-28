@@ -36,9 +36,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 
 from admission import models as mdl
-from admission.forms import NewAccountForm, NewPasswordForm, AccessAccountForm
+from admission.forms.account import NewPasswordForm, AccessAccountForm, NewAccountForm
 from admission.utils import send_mail
 from reference import models as reference_mdl
+from base import models as mdl_base
+
+TEMPLATE_MSG_ACTIVATION = "account_activation"
 
 
 def home_error(request, message, form):
@@ -60,8 +63,6 @@ def home_error(request, message, form):
 def new_user(request):
     """
     To create a new user for the admission
-    :param request:
-    :return:
     """
     form_new = NewAccountForm(data=request.POST)
     number1 = request.POST['number1']
@@ -100,14 +101,14 @@ def new_user(request):
         user = User.objects.get(pk=user.id)
         applicant = mdl.applicant.Applicant()
         applicant.user = user
+        applicant.additional_email = user.email
         applicant.save()
         # send an activation email
-        send_mail.send_mail_activation(request, str(applicant.activation_code), form_new['email_new'].value())
+        send_mail.send_mail_activation(request, str(applicant.activation_code), applicant, TEMPLATE_MSG_ACTIVATION)
         user_id = user.id
         return HttpResponseRedirect(reverse('account_confirm', args=(user_id,)))
     else:
-        extra_context = {}
-        extra_context['form_new'] = form_new
+        extra_context = {'form_new': form_new}
         number1 = randint(1, 20)
         extra_context['number1'] = number1
         number2 = randint(1, 20)
@@ -118,12 +119,12 @@ def new_user(request):
             number3 = randint(1, 20)
         extra_context['number3'] = number3
 
-        extra_context['first_name_new']=form_new['first_name_new'].value()
-        extra_context['last_name_new']=form_new['last_name_new'].value()
-        extra_context['email_new']=form_new['email_new'].value()
-        extra_context['email_new_confirm']=form_new['email_new_confirm'].value()
-        extra_context['password_new']=form_new['password_new'].value()
-        return login(request, extra_context=extra_context,template_name='registration/admission_login.html')
+        extra_context['first_name_new'] = form_new['first_name_new'].value()
+        extra_context['last_name_new'] = form_new['last_name_new'].value()
+        extra_context['email_new'] = form_new['email_new'].value()
+        extra_context['email_new_confirm'] = form_new['email_new_confirm'].value()
+        extra_context['password_new'] = form_new['password_new'].value()
+        return login(request, extra_context=extra_context, template_name='registration/admission_registration.html')
 
 
 def activation_mail(request, user_id):
@@ -137,8 +138,8 @@ def activation_mail(request, user_id):
         user = User.objects.get(pk=user_id)
         applicant = mdl.applicant.find_by_user(user)
         if applicant:
-            send_mail.send_mail_activation(request, str(applicant.activation_code), user.email)
-            return HttpResponseRedirect(reverse('admission'))
+            send_mail.send_mail_activation(request, str(applicant.activation_code), applicant, TEMPLATE_MSG_ACTIVATION)
+            return HttpResponseRedirect(reverse('account_confirm', args=(user_id,)))
         else:
             return HttpResponseRedirect(reverse('admission'))
     return HttpResponseRedirect(reverse('admission'))
@@ -279,7 +280,7 @@ def offer_selection(request):
     grade_choices = reference_mdl.grade_type.GRADE_CHOICES
     return render(request, "offer_selection.html",
                           {"gradetypes":    reference_mdl.grade_type.find_all(),
-                           "domains":       reference_mdl.domain.find_all_domains(),
+                           "domains":       reference_mdl.domain.find_current_domains(),
                            "offers":        offers,
                            "offer":         None,
                            "application":   application,
@@ -323,14 +324,16 @@ def save_offer_selection(request):
             application.applicant = applicant
 
         if offer_year_id:
-            offer_year = mdl.offer_year.find_by_id(offer_year_id)
+            offer_year = mdl_base.offer_year.find_by_id(offer_year_id)
 
         application.offer_year = offer_year
+        application.application_type = mdl.application.define_application_type(application.coverage_access_degree,
+                                                                               request.user)
         application.save()
 
     return render(request, "offer_selection.html",
                   {"gradetypes": reference_mdl.grade_type.find_all(),
-                   "domains": reference_mdl.domain.find_all_domains(),
+                   "domains": reference_mdl.domain.find_current_domains(),
                    "offers": None,
                    "offer_type": None,
                    "domain": mdl})
@@ -343,16 +346,3 @@ def application_update(request, application_id):
                            "offer":       application.offer_year,
                            "application": application})
 
-
-def selection_offer(request, offer_id):
-    offer_year = get_object_or_404(mdl.offer_year.OfferYear, pk=offer_id)
-    grade = _get_offer_type(request)
-    domain = _get_domain(request)
-
-    return render(request, "offer_selection.html",
-                  {"gradetypes": reference_mdl.grade_type.find_all(),
-                   "domains": reference_mdl.domain.find_all_domains(),
-                   "offers": None,
-                   "offer": offer_year,
-                   "offer_type": grade,
-                   "domain": domain})

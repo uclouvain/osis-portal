@@ -28,14 +28,16 @@ from django.contrib import admin
 
 
 class FormAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description')
+    list_display = ('title', 'description', 'offer_year')
     fieldsets = ((None, {'fields': ('title', 'description', 'offer_year')}),)
+    raw_id_fields = ('offer_year',)
+    search_fields = ['offer_year']
 
 
 class Form(models.Model):
     title = models.CharField(max_length=255)
-    description = models.TextField()
-    offer_year = models.ForeignKey('OfferYear')
+    description = models.TextField(blank=True, null=True)
+    offer_year = models.ForeignKey('base.OfferYear')
 
     def __str__(self):
         return u"%s" % self.title

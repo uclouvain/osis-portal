@@ -23,13 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from admission.utils import pdf_utils
 from reportlab.platypus import SimpleDocTemplate, Image
 import os
 from django.conf import settings
 import io as io
+from admission.utils import send_mail
+from admission.models import applicant
+from django.core.management import call_command
+from django.contrib.auth.models import User
 
 ASSETS_PATH = os.path.join(settings.BASE_DIR, 'admission/tests/assets/')
 PDF1 = "pdf1.pdf"
@@ -106,3 +109,28 @@ class PdfTest(TestCase):
         image_file = ASSETS_PATH + "gif_2625_2154.GIF"
         self.assertIsNone(pdf_utils.resize_image(image_file))
 
+
+class SendMailTest(TestCase):
+
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user = User.objects.create_user(
+            username='jacob', email='person@localhost', password='top_secret')
+        applicant.Applicant.objects.create(user=self.user, gender="MALE")
+        call_command("loaddata", "message_templates.json", verbosity=0)
+
+    def test_send_mail_activation(self):
+
+        request = self.factory.get('application/accounting/')
+        request.user = self.user
+        activation_code = "uuu"
+        an_applicant = applicant.Applicant.objects.get(user=request.user)
+
+        self.assertIsNotNone(send_mail.send_mail_activation(request,
+                                                            activation_code,
+                                                            an_applicant,
+                                                            'account_activation_bidon'))
+        self.assertIsNone(send_mail.send_mail_activation(request,
+                                                         activation_code,
+                                                         an_applicant,
+                                                         'account_activation'))

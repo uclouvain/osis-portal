@@ -25,15 +25,19 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from reference.enums import assimilation_criteria as assimilation_criteria_enum
 
 
 class ApplicationAssimilationCriteriaAdmin(admin.ModelAdmin):
-    list_display = ('application', 'criteria')
+    list_display = ('application', 'criteria', 'selected')
 
 
 class ApplicationAssimilationCriteria(models.Model):
     application = models.ForeignKey('Application')
-    criteria = models.ForeignKey('reference.AssimilationCriteria')
+    criteria = models.CharField(max_length=50, choices=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES)
+    additional_criteria = models.CharField(max_length=50, blank=True, null=True,
+                                           choices=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES)
+    selected = models.NullBooleanField(null=True, blank=True)
 
 
 def find_by_application(application):
@@ -42,3 +46,35 @@ def find_by_application(application):
 
 def find_by_criteria(criteria):
     return ApplicationAssimilationCriteria.objects.get(criteria=criteria)
+
+
+def search(application=None, criteria=None):
+    out = None
+    queryset = ApplicationAssimilationCriteria.objects
+    if application:
+        queryset = queryset.filter(application=application)
+    if criteria:
+        queryset = queryset.filter(criteria=criteria)
+    if application or criteria:
+        out = queryset
+    return out
+
+
+def find_first(application=None, criteria=None):
+    results = search(application, criteria)
+    if results.exists():
+        return results[0]
+    return None
+
+
+def copy_from_applicant_assimilation_criteria(applicant_assimilation_criteria, application):
+    application_assimilation_criteria = ApplicationAssimilationCriteria()
+    application_assimilation_criteria.application = application
+    application_assimilation_criteria.criteria = applicant_assimilation_criteria.criteria
+    if applicant_assimilation_criteria.additional_criteria:
+        application_assimilation_criteria.additional_criteria = \
+            applicant_assimilation_criteria.additional_criteria
+    else:
+        application_assimilation_criteria.additional_criteria = None
+    application_assimilation_criteria.selected = applicant_assimilation_criteria.selected
+    application_assimilation_criteria.save()
