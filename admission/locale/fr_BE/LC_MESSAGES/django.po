@@ -1607,3 +1607,28 @@ msgstr "Attestation de réussite ou la preuve d'inscription"
 
 msgid "question_need_to_save"
 msgstr "Sûr?  Vous n'avez pas besoin de sauvegarder vos données?"
+
+
+msgid "msg_activation_failed"
+msgstr "Problème lors de l'activation de votre compte!"
+
+msgid "detail_activation_failed"
+msgstr "Peut-être avez-vous déjà activé votre compte"
+
+msgid "click"
+msgstr "Cliquez"
+
+msgid "here"
+msgstr "ici"
+
+msgid "to_connect"
+msgstr "pour vous connecter"
+
+msgid "contact_service_desk"
+msgstr "contactez le support UCL à l'adresse suivante :"
+
+msgid "call"
+msgstr "téléphonez au"
+
+msgid "technical_failure"
+msgstr "En cas de problème technique,"
