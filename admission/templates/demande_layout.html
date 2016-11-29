@@ -120,23 +120,7 @@
     <div id="pnl_offers">
         <input type="hidden" id="hdn_offers_available">
     </div>
-    <!--Dynamic questions :-->
-    <div id="pnl_questions"></div>
-
-    {% if message%}
-    <div>
-        <br>
-        <div class="row">
-        </div>
-    </div>
-    {% endif %}
-
-
-    <input type="hidden" id="txt_offer_year_id" name="offer_year_id" value="{{offer.id}}"/>
-    <input type="hidden" id="txt_application_id" name="application_id" value="{{ application.id }}"/>
-    {% csrf_token %}
     <br>
-
     <!--Static questions :-->
     <div id="pnl_static_questions">
         <div id="pnl_offer_localdegree" style="visibility:hidden;display:none;">
@@ -312,7 +296,12 @@
             </div>
         </div>
     </div>
-
+    <br>
+    <!--Dynamic questions :-->
+    <div id="pnl_questions"></div>
+    <input type="hidden" id="txt_offer_year_id" name="offer_year_id" value="{{offer.id}}"/>
+    <input type="hidden" id="txt_application_id" name="application_id" value="{{ application.id }}"/>
+    {% csrf_token %}
     <br>
     <span id="txt_message_error_offer_down"
            class="alert alert-warning"

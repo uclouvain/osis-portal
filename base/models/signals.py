@@ -24,12 +24,13 @@
 #
 ##############################################################################
 from django.contrib.auth.models import Group
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch.dispatcher import receiver, Signal
 from base.models import student, tutor
 from base.models.person import find_by_global_id, find_by_user, Person
 from base.models.student import Student
 from base.models.tutor import Tutor
+from osis_common.models.serializable_model import SerializableModel
 
 person_created = Signal(providing_args=['person'])
 
@@ -41,8 +42,8 @@ try:
         user = kwargs.get('user')
         user_infos = kwargs.get('user_infos')
         person = find_by_global_id(user_infos.get('USER_FGS'))
-        person = __create_update_person(user, person, user_infos)
-        __add_person_to_group(person)
+        person = _create_update_person(user, person, user_infos)
+        _add_person_to_group(person)
         return person
 
     @receiver(user_updated_signal)
@@ -50,7 +51,7 @@ try:
         user = kwargs.get('user')
         user_infos = kwargs.get('user_infos')
         person = find_by_global_id(user_infos.get('USER_FGS'))
-        person = __create_update_person(user, person, user_infos)
+        person = _create_update_person(user, person, user_infos)
         return person
 
 
@@ -61,25 +62,39 @@ except Exception:
 @receiver(post_save, sender=Student)
 def add_to_students_group(sender, instance, **kwargs):
     if kwargs.get('created', True) and instance.person.user:
-        assign_group(instance.person, "students")
+        _assign_group(instance.person, "students")
 
 
 @receiver(post_save, sender=Tutor)
 def add_to_tutors_group(sender, instance, **kwargs):
     if kwargs.get('created', True) and instance.person.user:
-        assign_group(instance.person, "tutors")
+        _assign_group(instance.person, "tutors")
 
 
-def __add_person_to_group(person):
+@receiver(post_delete, sender=Tutor)
+def remove_from_tutor_group(sender, instance, **kwargs):
+    if instance.person.user:
+        tutors_group = Group.objects.get(name='tutors')
+        instance.person.user.groups.remove(tutors_group)
+
+
+@receiver(post_delete, sender=Student)
+def remove_from_student_group(sender, instance, **kwargs):
+    if instance.person.user:
+        students_group = Group.objects.get(name='students')
+        instance.person.user.groups.remove(students_group)
+
+
+def _add_person_to_group(person):
     # Check Student
     if student.find_by_person(person):
-        assign_group(person, "students")
+        _assign_group(person, "students")
     # Check tutor
     if tutor.find_by_person(person):
-        assign_group(person, "tutors")
+        _assign_group(person, "tutors")
 
 
-def assign_group(person, group_name):
+def _assign_group(person, group_name):
     """
     Assign the "person" to the group named "group_name"
     :param person: != none, an object person
@@ -92,7 +107,7 @@ def assign_group(person, group_name):
         person.user.groups.add(group)
 
 
-def __create_update_person(user, person, user_infos):
+def _create_update_person(user, person, user_infos):
     if not person:
         person = find_by_user(user)
     if not person:
@@ -101,13 +116,32 @@ def __create_update_person(user, person, user_infos):
                         first_name=user_infos.get('USER_FIRST_NAME'),
                         last_name=user_infos.get('USER_LAST_NAME'),
                         email=user_infos.get('USER_EMAIL'))
-        person.save()
+        super(SerializableModel, person).save()
         person_created.send(sender=None, person=person)
     else:
-        person.user = user
-        person.first_name = user.first_name
-        person.last_name = user.last_name
-        person.email = user.email
-        person.global_id = user_infos.get('USER_FGS')
-        person.save()
+        updated, person = _update_person_if_necessary(person, user, user_infos.get('USER_FGS'))
     return person
+
+
+def _update_person_if_necessary(person, user, global_id):
+    updated = False
+    if user:
+        if user != person.user:
+            person.user = user
+            updated = True
+        if user.first_name and person.first_name != user.first_name:
+            person.first_name = user.first_name
+            updated = True
+        if user.last_name and person.last_name != user.last_name:
+            person.last_name = user.last_name
+            updated = True
+        if user.email and person.email != user.email:
+            person.email = user.email
+            updated = True
+    if global_id and person.global_id != global_id:
+        person.global_id = global_id
+        updated = True
+    if updated:
+        super(SerializableModel, person).save()
+    return updated, person
+

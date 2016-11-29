@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,18 +23,3 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModel
-from django.db import models
-from django.contrib import admin
-
-
-class DissertationLocationAdmin(admin.ModelAdmin):
-    list_display = ('name', )
-    search_fields = ('name', )
-
-
-class DissertationLocation(SerializableModel):
-    name = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.name
