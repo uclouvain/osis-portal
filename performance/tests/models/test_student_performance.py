@@ -29,7 +29,6 @@ from django.test import TestCase
 
 import base.tests.models.test_offer_year
 from performance import models as mdl_performance
-from performance.tests import data_for_tests as utility_data
 from performance.models import student_performance as mdl_perf
 import datetime
 from django.core.exceptions import ObjectDoesNotExist
@@ -47,11 +46,16 @@ def create_student_performance():
     return a_student_performance
 
 
+def load_json_file(json_path):
+    with open(json_path) as json_file:
+        return json_file.read()
+
+
 class TestModelStudentPerformance(TestCase):
     def setUp(self):
         self.student_performance = create_student_performance()
         self.offer_year = base.tests.models.test_offer_year.create_offer_year()
-        self.json_points = utility_data.load_json_file("performance/tests/ressources/points2.json")
+        self.json_points = load_json_file("performance/tests/ressources/points2.json")
 
     def test_search(self):
         student_performances = mdl_perf.search(registration_id=self.student_performance.registration_id)
@@ -112,3 +116,6 @@ class TestModelStudentPerformance(TestCase):
                                                     acronym=self.student_performance.acronym)
         except ObjectDoesNotExist:
             self.fail("Object should be created")
+
+
+

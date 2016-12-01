@@ -37,7 +37,7 @@ import json
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
-def display_performance_home(request):
+def view_performance_home(request):
     """
     Display the academic programs of the student.
     """
@@ -51,7 +51,7 @@ def display_performance_home(request):
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
-def display_result_for_specific_year_and_program(request, pk):
+def display_result_for_specific_student_performance(request, pk):
     """
     Display the student result for a particular year and program.
     """

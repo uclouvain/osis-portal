@@ -28,8 +28,6 @@ from django.test import TestCase
 import base.tests.models.test_offer_year
 import base.tests.models.test_student
 import performance.tests.models.test_student_performance
-from admission.tests import data_for_tests
-from performance.tests import data_for_tests as utility_data
 from performance.views import main
 
 
@@ -37,8 +35,8 @@ class TestMain(TestCase):
     def setUp(self):
         self.student_performance = performance.tests.models.test_student_performance.create_student_performance()
         self.offer_year = base.tests.models.test_offer_year.create_offer_year()
-        self.json_points = utility_data.load_json_file("performance/tests/ressources/points2.json")
-        self.json_points_2 = utility_data.load_json_file("performance/tests/ressources/points3.json")
+        self.json_points = performance.tests.models.test_student_performance.load_json_file("performance/tests/ressources/points2.json")
+        self.json_points_2 = performance.tests.models.test_student_performance.load_json_file("performance/tests/ressources/points3.json")
 
     def test_convert_student_performance_to_dic(self):
         student_performance_dic = main.convert_student_performance_to_dic(self.student_performance)
