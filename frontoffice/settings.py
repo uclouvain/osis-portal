@@ -64,6 +64,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'localflavor',
     'performance',
+    'attribution',
     'dissertation',
     'statici18n',
     'ckeditor',
