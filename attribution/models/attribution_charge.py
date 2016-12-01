@@ -23,45 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models import *
+from django.db import models
 from django.contrib import admin
+from osis_common.models.serializable_model import SerializableModel
 
 
-admin.site.register(academic_year.AcademicYear,
-                    academic_year.AcademicYearAdmin)
+class AttributionChargeAdmin(admin.ModelAdmin):
+    list_display = ('attribution', 'learning_unit_component', 'allocation_charge')
 
-admin.site.register(campus.Campus,
-                    campus.CampusAdmin)
 
-admin.site.register(learning_unit_year.LearningUnitYear,
-                    learning_unit_year.LearningUnitYearAdmin)
+class AttributionCharge(SerializableModel):
+    attribution = models.ForeignKey('Attribution')
+    learning_unit_component = models.ForeignKey('base.LearningUnitComponent')
+    allocation_charge = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
-admin.site.register(learning_unit_component.LearningUnitComponent,
-                    learning_unit_component.LearningUnitComponentAdmin)
 
-admin.site.register(offer.Offer,
-                    offer.OfferAdmin)
 
-admin.site.register(offer_enrollment.OfferEnrollment,
-                    offer_enrollment.OfferEnrollmentAdmin)
-
-admin.site.register(external_offer.ExternalOffer,
-                    external_offer.ExternalOfferAdmin)
-
-admin.site.register(offer_year.OfferYear,
-                    offer_year.OfferYearAdmin)
-
-admin.site.register(offer_year_domain.OfferYearDomain,
-                    offer_year_domain.OfferYearDomainAdmin)
-
-admin.site.register(organization.Organization,
-                    organization.OrganizationAdmin)
-
-admin.site.register(person.Person,
-                    person.PersonAdmin)
-
-admin.site.register(student.Student,
-                    student.StudentAdmin)
-
-admin.site.register(tutor.Tutor,
-                    tutor.TutorAdmin)

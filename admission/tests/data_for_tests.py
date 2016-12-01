@@ -24,7 +24,9 @@
 #
 ##############################################################################
 from django.contrib.auth.models import User
+
 from admission import models as mdl
+from attribution import models as mdl_attribution
 from base import models as mdl_base
 from reference import models as mdl_reference
 from osis_common import models as mdl_osis_common
@@ -161,3 +163,62 @@ def create_applicant_document_file(an_applicant, description):
     an_applicant_document_file.document_file = a_document_file
     an_applicant_document_file.save()
     return an_applicant_document_file
+
+
+def create_learning_unit_year(data):
+    learning_unit_year = mdl_base.learning_unit_year.LearningUnitYear()
+    if 'acronym' in data:
+        learning_unit_year.acronym = data['acronym']
+    if 'title' in data:
+        learning_unit_year.title = data['title']
+    if 'academic_year' in data:
+        learning_unit_year.academic_year = data['academic_year']
+    learning_unit_year.save()
+    return learning_unit_year
+
+
+def create_learning_unit_component(data):
+    learning_unit_component = mdl_base.learning_unit_component.LearningUnitComponent()
+    if 'learning_unit_year' in data:
+        learning_unit_component.learning_unit_year = data['learning_unit_year']
+    if 'type' in data:
+        learning_unit_component.type = data['type']
+    if 'duration' in data:
+        learning_unit_component.duration = data['duration']
+    learning_unit_component.save()
+    return learning_unit_component
+
+
+def create_attribution(data):
+    attribution = attribution.models.attribution.Attribution()
+    if 'function' in data:
+        attribution.function = data['function']
+    if 'learning_unit_year' in data:
+        attribution.learning_unit_year = data['learning_unit_year']
+    if 'tutor' in data:
+        attribution.tutor = data['tutor']
+    attribution.save()
+    return attribution
+
+
+def create_person(a_user):
+    person = mdl_base.person.Person()
+    person.save()
+    return person
+
+
+def create_tutor(a_person):
+    tutor = mdl_base.tutor.Tutor(person=a_person)
+    tutor.save()
+    return tutor
+
+def create_attribution_charge(data):
+    attribution_charge = mdl_attribution.attribution_charge.AttributionCharge()
+    if 'attribution' in data:
+        attribution_charge.attribution = data['attribution']
+    if 'learning_unit_component' in data:
+        attribution_charge.learning_unit_component = data['learning_unit_component']
+    if 'allocation_charge' in data:
+        attribution_charge.allocation_charge = data['allocation_charge']
+    attribution_charge.save()
+    return attribution_charge

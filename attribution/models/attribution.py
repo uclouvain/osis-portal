@@ -23,45 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models import *
+from django.db import models
 from django.contrib import admin
+from osis_common.models.serializable_model import SerializableModel
+
+from attribution.models.enums import function
 
 
-admin.site.register(academic_year.AcademicYear,
-                    academic_year.AcademicYearAdmin)
+class AttributionAdmin(admin.ModelAdmin):
+    list_display = ('tutor', 'function', 'learning_unit_year')
+    list_filter = ('function',)
+    fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function')}),)
+    raw_id_fields = ('learning_unit_year', 'tutor')
+    search_fields = ['tutor__person__first_name', 'tutor__person__last_name', 'learning_unit_year__acronym']
 
-admin.site.register(campus.Campus,
-                    campus.CampusAdmin)
 
-admin.site.register(learning_unit_year.LearningUnitYear,
-                    learning_unit_year.LearningUnitYearAdmin)
+class Attribution(SerializableModel):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
+    function = models.CharField(max_length=15, blank=True, null=True, choices=function.FUNCTIONS, db_index=True)
+    learning_unit_year = models.ForeignKey('base.LearningUnitYear', blank=True, null=True, default=None)
+    tutor = models.ForeignKey('base.Tutor')
 
-admin.site.register(learning_unit_component.LearningUnitComponent,
-                    learning_unit_component.LearningUnitComponentAdmin)
-
-admin.site.register(offer.Offer,
-                    offer.OfferAdmin)
-
-admin.site.register(offer_enrollment.OfferEnrollment,
-                    offer_enrollment.OfferEnrollmentAdmin)
-
-admin.site.register(external_offer.ExternalOffer,
-                    external_offer.ExternalOfferAdmin)
-
-admin.site.register(offer_year.OfferYear,
-                    offer_year.OfferYearAdmin)
-
-admin.site.register(offer_year_domain.OfferYearDomain,
-                    offer_year_domain.OfferYearDomainAdmin)
-
-admin.site.register(organization.Organization,
-                    organization.OrganizationAdmin)
-
-admin.site.register(person.Person,
-                    person.PersonAdmin)
-
-admin.site.register(student.Student,
-                    student.StudentAdmin)
-
-admin.site.register(tutor.Tutor,
-                    tutor.TutorAdmin)
+    def __str__(self):
+        return u"%s - %s" % (self.tutor.person, self.function)

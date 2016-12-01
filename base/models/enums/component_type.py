@@ -23,4 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-default_app_config = 'attribution.apps.AttributionConfig'
+
+LECTURING = "LECTURING"
+PRACTICAL_EXERCISES = "PRACTICAL_EXERCISES"
+
+COMPONENT_TYPES = (
+    (LECTURING, LECTURING),
+    (PRACTICAL_EXERCISES, PRACTICAL_EXERCISES))
+
+

@@ -23,4 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-default_app_config = 'attribution.apps.AttributionConfig'
+
+COORDINATOR = "COORDINATOR"
+HOLDER = "HOLDER"
+CO_HOLDER = "CO_HOLDER"
+DEPUTY = "DEPUTY"
+
+FUNCTIONS = ((COORDINATOR, COORDINATOR),
+             (HOLDER, HOLDER),
+             (CO_HOLDER, CO_HOLDER),
+             (DEPUTY, DEPUTY))
+

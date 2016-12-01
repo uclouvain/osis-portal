@@ -23,4 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-default_app_config = 'attribution.apps.AttributionConfig'
+from django.conf.urls import url
+from admission.views import application, common, identification, offer, level, question, option, country, curriculum, \
+    education_institution, language, domain, secondary_education, accounting, upload_file, sociological, attachments, \
+    places
+from django.conf.urls.static import static
+from django.conf import settings
+
+js_info_dict = {
+    'packages': ('attribution', )
+}
+urlpatterns = [
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

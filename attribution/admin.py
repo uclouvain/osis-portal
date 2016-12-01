@@ -25,4 +25,11 @@
 ##############################################################################
 from django.contrib import admin
 
-# Register your models here.
+from attribution.models import *
+
+
+admin.site.register(attribution.Attribution,
+                    attribution.AttributionAdmin)
+
+admin.site.register(attribution_charge.AttributionCharge,
+                    attribution_charge.AttributionChargeAdmin)
