@@ -26,6 +26,9 @@
 from django.contrib.auth.models import User
 from django.test import TestCase, RequestFactory
 import admission.tests.data_for_tests as data_model
+import admission.tests.models.test_applicant
+import admission.tests.models.test_application
+import admission.tests.models.test_application_assimilation_criteria
 from admission.views import application
 
 
@@ -34,11 +37,11 @@ class ApplicationTest(TestCase):
     def setUp(self):
         a_user = User.objects.create_user(
             username='jacob', email='jacob@localhost', password='top_secret')
-        self.applicant = data_model.create_applicant_by_user(a_user)
-        self.application = data_model.create_application(self.applicant)
+        self.applicant = admission.tests.models.test_applicant.create_applicant_by_user(a_user)
+        self.application = admission.tests.models.test_application.create_application(self.applicant)
 
     def test_create_application_assimilation_criteria_from_applicant_assimilation_criteria(self):
-        data_model.create_applicant_assimilation_criteria(self.applicant)
+        admission.tests.models.test_application_assimilation_criteria.create_applicant_assimilation_criteria(self.applicant)
         try:
             application.create_application_assimilation_criteria(self.application)
         except Exception:

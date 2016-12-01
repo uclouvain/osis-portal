@@ -23,31 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-from django.contrib.auth.models import User
-
-from osis_common import models as mdl_osis_common
-
-
-def create_user():
-    a_user = User.objects.create_user('testo', password='testopw')
-    a_user.save()
-    return a_user
+from admission import models as mdl
+from admission.tests.models.test_secondary_education_exam import create_secondary_education_exam
+from admission.tests.models.test_applicant import create_applicant
 
 
-def get_or_create_user():
-    a_user, created = User.objects.get_or_create(username='testo', password='testopw')
-    if created:
-        a_user.save()
-    return a_user
+def create_secondary_education():
+    a_secondary_education = mdl.secondary_education.SecondaryEducation(person=create_applicant())
+    a_secondary_education.save()
+    return a_secondary_education
 
 
-def create_document_file(update_by, description=None):
-    a_document_file = mdl_osis_common.document_file.DocumentFile(description=description)
-    a_document_file.file_name = "test.jpg"
-    a_document_file.storage_duration = 1
-    a_document_file.update_by = update_by
-    a_document_file.save()
-    return a_document_file
-
-
+def create_secondary_education_with_exams():
+    secondary_education = create_secondary_education()
+    create_secondary_education_exam(secondary_education, 'ADMISSION')
+    create_secondary_education_exam(secondary_education, 'PROFESSIONAL')
+    create_secondary_education_exam(secondary_education, 'LANGUAGE')
+    return secondary_education

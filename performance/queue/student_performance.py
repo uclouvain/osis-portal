@@ -39,7 +39,7 @@ def callback(json_data):
         academic_year = extract_academic_year_from_json(json_data)
         acronym = extract_acronym_from_json(json_data)
         save(registration_id, academic_year, acronym, json_data)
-    except RuntimeError:
+    except Exception:
         pass
 
 

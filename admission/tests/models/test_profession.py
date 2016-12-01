@@ -23,31 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-from django.contrib.auth.models import User
-
-from osis_common import models as mdl_osis_common
+from admission import models as mdl
 
 
-def create_user():
-    a_user = User.objects.create_user('testo', password='testopw')
-    a_user.save()
-    return a_user
+def get_or_create_profession(name, adhoc):
+    a_profession = mdl.profession.find_by_name(name)
+    if not a_profession:
+        a_profession = mdl.profession.Profession(name=name, adhoc=adhoc)
+        a_profession.save()
+    return a_profession
 
 
-def get_or_create_user():
-    a_user, created = User.objects.get_or_create(username='testo', password='testopw')
-    if created:
-        a_user.save()
-    return a_user
-
-
-def create_document_file(update_by, description=None):
-    a_document_file = mdl_osis_common.document_file.DocumentFile(description=description)
-    a_document_file.file_name = "test.jpg"
-    a_document_file.storage_duration = 1
-    a_document_file.update_by = update_by
-    a_document_file.save()
-    return a_document_file
-
-
+def create_profession(a_name, an_adhoc):
+    return mdl.profession.Profession(name=a_name, adhoc=an_adhoc)

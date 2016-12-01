@@ -24,6 +24,9 @@
 #
 ##############################################################################
 from unittest import TestCase
+
+import admission.tests.models.test_applicant
+import admission.tests.models.test_profession
 from admission.forms.sociological_survey import SociologicalSurveyForm
 from admission.models.sociological_survey import SociologicalSurvey
 from admission.tests import data_for_tests as data_model
@@ -42,7 +45,7 @@ class NumberBrotherSistersValidation(TestCase):
     @classmethod
     def setUpClass(cls):
         super(NumberBrotherSistersValidation, cls).setUpClass()
-        cls.applicant = data_model.get_or_create_applicant()
+        cls.applicant = admission.tests.models.test_applicant.get_or_create_applicant()
 
     def init_form(self, num_brothers_sisters=None):
         return init_form(data={
@@ -71,8 +74,8 @@ class StudentProfessionValidation(TestCase):
     @classmethod
     def setUpClass(cls):
         super(StudentProfessionValidation, cls).setUpClass()
-        cls.applicant = data_model.get_or_create_applicant()
-        cls.profession = data_model.get_or_create_profession(PROFESSION_EMPLOYEE, False)
+        cls.applicant = admission.tests.models.test_applicant.get_or_create_applicant()
+        cls.profession = admission.tests.models.test_profession.get_or_create_profession(PROFESSION_EMPLOYEE, False)
 
     def init_form(self, student_profession_id=None, other_profession=None, adhoc=False):
         return init_form(data={
@@ -114,8 +117,8 @@ class FatherProfessionValidation(TestCase):
     @classmethod
     def setUpClass(cls):
         super(FatherProfessionValidation, cls).setUpClass()
-        cls.applicant = data_model.get_or_create_applicant()
-        cls.profession = data_model.get_or_create_profession(PROFESSION_EMPLOYEE, False)
+        cls.applicant = admission.tests.models.test_applicant.get_or_create_applicant()
+        cls.profession = admission.tests.models.test_profession.get_or_create_profession(PROFESSION_EMPLOYEE, False)
 
     def init_form(self, father_profession_id=None, other_profession=None, adhoc=False):
         return init_form(data={
@@ -157,8 +160,8 @@ class MotherProfessionValidation(TestCase):
     @classmethod
     def setUpClass(cls):
         super(MotherProfessionValidation, cls).setUpClass()
-        cls.applicant = data_model.get_or_create_applicant()
-        cls.profession = data_model.get_or_create_profession(PROFESSION_EMPLOYEE, False)
+        cls.applicant = admission.tests.models.test_applicant.get_or_create_applicant()
+        cls.profession = admission.tests.models.test_profession.get_or_create_profession(PROFESSION_EMPLOYEE, False)
 
     def init_form(self, mother_profession_id=None, other_profession=None, adhoc=False):
         return init_form(data={
@@ -200,8 +203,8 @@ class ConjointProfessionValidation(TestCase):
     @classmethod
     def setUpClass(cls):
         super(ConjointProfessionValidation, cls).setUpClass()
-        cls.applicant = data_model.get_or_create_applicant()
-        cls.profession = data_model.get_or_create_profession(PROFESSION_EMPLOYEE, False)
+        cls.applicant = admission.tests.models.test_applicant.get_or_create_applicant()
+        cls.profession = admission.tests.models.test_profession.get_or_create_profession(PROFESSION_EMPLOYEE, False)
 
     def init_form(self, conjoint_profession_id=None, other_profession=None, adhoc=False):
         return init_form(data={
@@ -244,8 +247,8 @@ class PaternalGrandfatherProfessionValidation(TestCase):
     @classmethod
     def setUpClass(cls):
         super(PaternalGrandfatherProfessionValidation, cls).setUpClass()
-        cls.applicant = data_model.get_or_create_applicant()
-        cls.profession = data_model.get_or_create_profession(PROFESSION_EMPLOYEE, False)
+        cls.applicant = admission.tests.models.test_applicant.get_or_create_applicant()
+        cls.profession = admission.tests.models.test_profession.get_or_create_profession(PROFESSION_EMPLOYEE, False)
 
     def init_form(self, paternal_grandfather_profession_id=None, other_profession=None, adhoc=False):
         return init_form(data={
@@ -288,8 +291,8 @@ class MaternalGrandfatherProfessionValidation(TestCase):
     @classmethod
     def setUpClass(cls):
         super(MaternalGrandfatherProfessionValidation, cls).setUpClass()
-        cls.applicant = data_model.get_or_create_applicant()
-        cls.profession = data_model.get_or_create_profession(PROFESSION_EMPLOYEE, False)
+        cls.applicant = admission.tests.models.test_applicant.get_or_create_applicant()
+        cls.profession = admission.tests.models.test_profession.get_or_create_profession(PROFESSION_EMPLOYEE, False)
 
     def init_form(self, maternal_grandfather_profession_id=None, other_profession=None, adhoc=False):
         return init_form(data={
@@ -340,8 +343,8 @@ class StudentProfesionnalActivityProfessionValidation(TestCase):
     @classmethod
     def setUpClass(cls):
         super(StudentProfesionnalActivityProfessionValidation, cls).setUpClass()
-        cls.applicant = data_model.get_or_create_applicant()
-        cls.profession = data_model.get_or_create_profession(PROFESSION_EMPLOYEE, False)
+        cls.applicant = admission.tests.models.test_applicant.get_or_create_applicant()
+        cls.profession = admission.tests.models.test_profession.get_or_create_profession(PROFESSION_EMPLOYEE, False)
 
     def test_professional_activity_none_and_profession_none(self):
         form = self.init_form_proff()
@@ -379,8 +382,8 @@ class ConjointProfesionnalActivityProfessionValidation(TestCase):
     @classmethod
     def setUpClass(cls):
         super(ConjointProfesionnalActivityProfessionValidation, cls).setUpClass()
-        cls.applicant = data_model.get_or_create_applicant()
-        cls.profession = data_model.get_or_create_profession(PROFESSION_EMPLOYEE, False)
+        cls.applicant = admission.tests.models.test_applicant.get_or_create_applicant()
+        cls.profession = admission.tests.models.test_profession.get_or_create_profession(PROFESSION_EMPLOYEE, False)
 
     def test_professional_activity_none_and_profession_none(self):
         form = self.init_form_proff()
@@ -412,9 +415,9 @@ class InitNotFoundAndOther(TestCase):
     @classmethod
     def setUpClass(cls):
         super(InitNotFoundAndOther, cls).setUpClass()
-        cls.applicant = data_model.get_or_create_applicant()
-        cls.profession = data_model.get_or_create_profession(PROFESSION_EMPLOYEE, False)
-        cls.profession_adhoc = data_model.get_or_create_profession('Balayeur', True)
+        cls.applicant = admission.tests.models.test_applicant.get_or_create_applicant()
+        cls.profession = admission.tests.models.test_profession.get_or_create_profession(PROFESSION_EMPLOYEE, False)
+        cls.profession_adhoc = admission.tests.models.test_profession.get_or_create_profession('Balayeur', True)
 
     def test_with_profession_not_adhoc(self):
         sociological_survey = SociologicalSurvey(
@@ -484,9 +487,9 @@ class TestCleanProfessionBeforeSave(TestCase):
     @classmethod
     def setUpClass(cls):
         super(TestCleanProfessionBeforeSave, cls).setUpClass()
-        cls.applicant = data_model.get_or_create_applicant()
-        cls.profession = data_model.get_or_create_profession(PROFESSION_EMPLOYEE, False)
-        cls.profession_adhoc = data_model.get_or_create_profession('Balayeur', True)
+        cls.applicant = admission.tests.models.test_applicant.get_or_create_applicant()
+        cls.profession = admission.tests.models.test_profession.get_or_create_profession(PROFESSION_EMPLOYEE, False)
+        cls.profession_adhoc = admission.tests.models.test_profession.get_or_create_profession('Balayeur', True)
 
     def test_clean_form_from_view(self):
         given_conjoint_profession_name = "Nez"

@@ -23,31 +23,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-from django.contrib.auth.models import User
-
-from osis_common import models as mdl_osis_common
+from admission import models as mdl
+from admission.tests.data_for_tests import get_or_create_user, create_user
 
 
-def create_user():
-    a_user = User.objects.create_user('testo', password='testopw')
-    a_user.save()
-    return a_user
+def get_or_create_applicant():
+    an_applicant = mdl.applicant.find_by_user(user=get_or_create_user())
+    if not an_applicant:
+        an_applicant = mdl.applicant.Applicant(user=get_or_create_user())
+        an_applicant.save()
+    return an_applicant
 
 
-def get_or_create_user():
-    a_user, created = User.objects.get_or_create(username='testo', password='testopw')
-    if created:
-        a_user.save()
-    return a_user
+def create_applicant_by_user(user):
+    an_applicant = mdl.applicant.Applicant(user=user)
+    an_applicant.save()
+    return an_applicant
 
 
-def create_document_file(update_by, description=None):
-    a_document_file = mdl_osis_common.document_file.DocumentFile(description=description)
-    a_document_file.file_name = "test.jpg"
-    a_document_file.storage_duration = 1
-    a_document_file.update_by = update_by
-    a_document_file.save()
-    return a_document_file
-
-
+def create_applicant():
+    an_applicant = mdl.applicant.Applicant(user=create_user())
+    an_applicant.save()
+    return an_applicant

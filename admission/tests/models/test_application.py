@@ -23,31 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-from django.contrib.auth.models import User
-
-from osis_common import models as mdl_osis_common
+from admission import models as mdl
+from base.tests.models.test_offer_year import create_offer_year
 
 
-def create_user():
-    a_user = User.objects.create_user('testo', password='testopw')
-    a_user.save()
-    return a_user
-
-
-def get_or_create_user():
-    a_user, created = User.objects.get_or_create(username='testo', password='testopw')
-    if created:
-        a_user.save()
-    return a_user
-
-
-def create_document_file(update_by, description=None):
-    a_document_file = mdl_osis_common.document_file.DocumentFile(description=description)
-    a_document_file.file_name = "test.jpg"
-    a_document_file.storage_duration = 1
-    a_document_file.update_by = update_by
-    a_document_file.save()
-    return a_document_file
-
-
+def create_application(an_applicant):
+    an_application = mdl.application.Application(applicant=an_applicant,
+                                                 offer_year=create_offer_year(),
+                                                 application_type='ADMISSION')
+    an_application.save()
+    return an_application

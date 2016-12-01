@@ -23,18 +23,34 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import json
+
 from django.test import TestCase
-from admission.tests import data_for_tests
+
+import base.tests.models.test_offer_year
+from performance import models as mdl_performance
 from performance.tests import data_for_tests as utility_data
 from performance.models import student_performance as mdl_perf
 import datetime
 from django.core.exceptions import ObjectDoesNotExist
 
 
+def create_student_performance():
+    with open("performance/tests/ressources/points.json") as f:
+        data = json.load(f)
+    a_student_performance = mdl_performance.student_performance.StudentPerformance(acronym="SINF2MS/G",
+                                                                                   registration_id="64641200",
+                                                                                   academic_year=2016,
+                                                                                   update_date=datetime.datetime.now(),
+                                                                                   data=data)
+    a_student_performance.save()
+    return a_student_performance
+
+
 class TestModelStudentPerformance(TestCase):
     def setUp(self):
-        self.student_performance = data_for_tests.create_student_performance()
-        self.offer_year = data_for_tests.create_offer_year()
+        self.student_performance = create_student_performance()
+        self.offer_year = base.tests.models.test_offer_year.create_offer_year()
         self.json_points = utility_data.load_json_file("performance/tests/ressources/points2.json")
 
     def test_search(self):

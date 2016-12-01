@@ -24,13 +24,14 @@
 #
 ##############################################################################
 from django.test import TestCase
-from admission.tests import data_for_tests
+from base.tests.models.test_person import create_person
+from base import models as mdl_base
 from base.models import student as mdl_student
 
 
 class TestModelStudent(TestCase):
     def setUp(self):
-        self.student = data_for_tests.create_student()
+        self.student = create_student()
 
     def test_get_student_by_registration_id(self):
         student = mdl_student.get_student_by_registration_id("64641200")
@@ -39,3 +40,14 @@ class TestModelStudent(TestCase):
         student = mdl_student.get_student_by_registration_id("6587984")
         self.assertIsNone(student, "Should return none")
 
+
+def create_student(registration_id="64641200"):
+    a_student = mdl_base.student.Student(registration_id=registration_id, person=create_person())
+    a_student.save()
+    return a_student
+
+
+def create_student_with_specific_registration_id(registration_id):
+    a_student = mdl_base.student.Student(registration_id=registration_id, person=create_person())
+    a_student.save()
+    return a_student
