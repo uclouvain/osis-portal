@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,3 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.utils.translation import ugettext_lazy as _
+
+PROMOTEUR = 'PROMOTEUR'
+CO_PROMOTEUR = 'CO_PROMOTEUR'
+READER = 'READER'
+ACCOMPANIST = 'ACCOMPANIST'
+INTERNSHIP = 'INTERNSHIP'
+PRESIDENT = 'PRESIDENT'
+
+STATUS_CHOICES = (
+    (PROMOTEUR, _(PROMOTEUR)),
+    (CO_PROMOTEUR, _(CO_PROMOTEUR)),
+    (READER, _(READER)),
+    (ACCOMPANIST, _(ACCOMPANIST)),
+    (INTERNSHIP, _(INTERNSHIP)),
+    (PRESIDENT, _(PRESIDENT)),
+)

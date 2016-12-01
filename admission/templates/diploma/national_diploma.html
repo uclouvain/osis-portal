@@ -87,41 +87,48 @@
 
             <div id="pnl_other_school" >
                 <div class="row">
-                <div class="col-md-1">
-                    &nbsp;
+                    <div class="col-md-1">
+                        &nbsp;
+                    </div>
+                    <div class="col-md-11">
+                        <label>{% trans 'institution_name'%}</label>
+                        <input type="text"
+                               class="form-control"
+                               id="txt_CESS_other_school_name"
+                               name="CESS_other_school_name"
+                               maxlength="100">
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <label>{% trans 'name' %}</label>
-                    <input type="text"
-                           class="form-control"
-                           id="txt_CESS_other_school_name"
-                           name="CESS_other_school_name"
-                           maxlength="100">
-                </div>
-                <div class="col-md-4">
-                    <label>{% trans 'city'%}</label>
-                    <input type="text"
-                           class="form-control"
-                           id="txt_CESS_other_school_city"
-                           name="CESS_other_school_city"
-                           maxlength="255">
-                </div>
-                <div class="col-md-3">
-                    <label>{% trans 'postal_code'%}</label>
-                    <input class="form-control"
-                           id="txt_CESS_other_school_postal_code"
-                           name="CESS_other_school_postal_code"
-                           style="max-width:100px;"
-                           maxlength="20">
-                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-1">
+                        &nbsp;
+                    </div>
+                    <div class="col-md-7">
+                        <label>{% trans 'city'%}</label>
+                        <input type="text"
+                               class="form-control"
+                               id="txt_CESS_other_school_city"
+                               name="CESS_other_school_city"
+                               maxlength="255">
+                    </div>
+                    <div class="col-md-4">
+                        <label>{% trans 'postal_code'%}</label>
+                        <input class="form-control"
+                               id="txt_CESS_other_school_postal_code"
+                               name="CESS_other_school_postal_code"
+                               style="max-width:100px;"
+                               maxlength="20">
+                    </div>
                 </div>
                 <br>
             </div>
             {%if validation_messages and validation_messages|get_item:'school'%}
                 <span class="error" style="margin-left:5px;"
                       id="national_diploma_school_error">{{ validation_messages|get_item:'school'}}</span>
+                <br>
             {% endif %}
-            <br>
+
         </div>
             </div>
     </div>

@@ -26,7 +26,7 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<form action="{% url 'save_attachments' application.id %}" id="form_save" method="post" enctype="multipart/form-data">
+<form action="{%if application.id%}{% url 'save_attachments' application.id %}{% else %}{% url 'save_attachments'%}{% endif %}" id="form_save" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="row">
         <div class="col-md-8">
@@ -58,6 +58,22 @@
         </div>
     </div>
     <br/>
+
+    {% if application.application_type == 'ADMISSION'%}
+        <br>
+        <label>{% trans 'attachments_admission_mandatory' %}</label> *
+        {% if not letter_motivation_doc_present %}
+            <br>
+            <span class="error">{% trans 'letter_motivation_doc_missing' %}</span>
+        {% endif %}
+        {% if not curriculum_doc_present%}
+            <br>
+            <span class="error">{% trans 'curriculum_doc_missing' %}</span>
+        {% endif %}
+        <br>
+    {% endif %}
+
+    <br>
     <button id="button_add_form"  type="button" class="btn btn-default">
     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
     </button>
@@ -72,21 +88,23 @@
 <!-- HEADER -->
 <div class="row">
     <div class="col-md-4"><strong>{% trans 'description' %}</strong></div>
-    <div class="col-md-4"><strong>{% trans 'file' %}</strong></div>
+    <div class="col-md-2"><strong>{% trans 'file' %}</strong></div>
     <div class="col-md-4"><strong>{% trans 'type' %}</strong></div>
+    <div class="col-md-2"></div>
 </div>
 <!-- PREVIOUS UPLOADED ATTACHMENTS -->
 {% for attachment in attachments %}
 <br>
 <div class="row">
     <div class="col-md-4">{{ attachment.file_name }}</div>
-    <div class="col-md-4">
+    <div class="col-md-2">
         <a href="{% url 'download' attachment.pk %}">
             <span class="glyphicon glyphicon-open-file"></span>
         </a> </div>
-    <div class="col-md-2">
+    <div class="col-md-4">
         {{ attachment.description }}
     </div>
+    <div class="col-md-2">
     <form action="{% url 'remove_attachment' application.id %}" name="remove_attachment_{{attachment.pk}}" method="post"
           id="form_attachements">
         {% csrf_token %}
@@ -122,6 +140,7 @@
             </div>
         </div>
     </form>
+    </div>
 </div>
 {% endfor %}
 <br>
