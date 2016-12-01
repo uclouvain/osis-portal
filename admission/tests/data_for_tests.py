@@ -37,6 +37,29 @@ def create_user():
     return a_user
 
 
+def get_or_create_user():
+    a_user, created = User.objects.get_or_create(username='testo', password='testopw')
+    if created:
+        a_user.save()
+    return a_user
+
+
+def get_or_create_applicant():
+    an_applicant = mdl.applicant.find_by_user(user=get_or_create_user())
+    if not an_applicant:
+        an_applicant = mdl.applicant.Applicant(user=get_or_create_user())
+        an_applicant.save()
+    return an_applicant
+
+
+def get_or_create_profession(name, adhoc):
+    a_profession = mdl.profession.find_by_name(name)
+    if not a_profession:
+        a_profession = mdl.profession.Profession(name=name, adhoc=adhoc)
+        a_profession.save()
+    return a_profession
+
+
 def create_applicant_by_user(user):
     an_applicant = mdl.applicant.Applicant(user=user)
     an_applicant.save()

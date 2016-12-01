@@ -41,7 +41,7 @@ class UploadFileTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.user = User.objects.create_user(
-            username='jacob', email='jacob@gmail.com', password='top_secret')
+            username='jacob', email='jacob@localhost', password='top_secret')
         self.applicant = data_model.create_applicant_by_user(self.user)
         self.application = data_model.create_application(self.applicant)
         self.application_document_file = data_model.create_application_document_file(self.application,

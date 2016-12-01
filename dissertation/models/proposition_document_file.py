@@ -25,6 +25,12 @@
 ##############################################################################
 from osis_common.models.serializable_model import SerializableModel
 from django.db import models
+from django.contrib import admin
+
+
+class PropositionDocumentFileAdmin(admin.ModelAdmin):
+    list_display = ('proposition', 'document_file')
+    raw_id_fields = ('proposition', 'document_file')
 
 
 class PropositionDocumentFile(SerializableModel):

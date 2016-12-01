@@ -66,6 +66,8 @@ OTHER = 'OTHER'
 SCHOLARSHIP_CFWB = 'SCHOLARSHIP_CFWB'
 SCHOLARSHIP_DEVELOPMENT_COOPERATION = 'SCHOLARSHIP_DEVELOPMENT_COOPERATION'
 
+CURRICULUM = 'CURRICULUM'
+
 DOCUMENT_TYPE_CHOICES = ((ID_CARD, 'identity_card', '', ''),
                          (LETTER_MOTIVATION, 'letter_motivation', '', ''),
                          (ID_PICTURE, 'id_picture', '', ''),
@@ -106,7 +108,8 @@ DOCUMENT_TYPE_CHOICES = ((ID_CARD, 'identity_card', '', ''),
                          (TUTORSHIP_CERTIFICATE, 'tutorship_certificate', '', ''),
                          (OTHER, 'other', '', ''),
                          (SCHOLARSHIP_CFWB, 'scholarship_cfwb', '', ''),
-                         (SCHOLARSHIP_DEVELOPMENT_COOPERATION, 'scholarship_development_cooperation', '', ''))
+                         (SCHOLARSHIP_DEVELOPMENT_COOPERATION, 'scholarship_development_cooperation', '', ''),
+                         (CURRICULUM, 'curriculum', '', ''))
 
 
 def find(document_type):
