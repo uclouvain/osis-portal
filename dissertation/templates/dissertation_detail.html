@@ -454,19 +454,6 @@
     }
 
     function click_bt_delete_document_file(){
-        var document_file_id = $('#hdn_delete_document_file').val();
-        var description = $("#hdn_description").val();
-        var data = new FormData();
-        data.append('document_file_id', document_file_id);
-        $.ajax({
-            url: "{% url 'delete_document_file' %}",
-            type: 'POST',
-            data : data,
-            processData: false,
-            contentType: false
-
-        });
-        update_upload_btn_class('',description);
         return true;
     }
 
