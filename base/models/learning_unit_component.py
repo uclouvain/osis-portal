@@ -36,7 +36,7 @@ class LearningUnitComponentAdmin(admin.ModelAdmin):
 class LearningUnitComponent(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     learning_unit_year = models.ForeignKey('LearningUnitYear')
-    type = models.CharField(max_length=15, blank=True, null=True, choices=component_type.COMPONENT_TYPES, db_index=True)
+    type = models.CharField(max_length=25, blank=True, null=True, choices=component_type.COMPONENT_TYPES, db_index=True)
     duration = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
@@ -48,4 +48,24 @@ class LearningUnitComponent(models.Model):
         )
 
 
+def search(a_learning_unit_year=None, a_type=None):
+    out = None
+    queryset = LearningUnitComponent.objects
+
+    if a_learning_unit_year:
+        queryset = queryset.filter(learning_unit_year=a_learning_unit_year)
+
+    if a_type:
+        queryset = queryset.filter(type=a_type)
+
+    if a_learning_unit_year or a_type:
+        out = queryset
+
+    return out
+
+def find_one(a_learning_unit_year=None, a_type=None):
+    learning_unit_components = search(a_learning_unit_year, a_type)
+    if learning_unit_components:
+        return learning_unit_components[0]
+    return None
 

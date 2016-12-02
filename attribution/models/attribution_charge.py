@@ -38,4 +38,26 @@ class AttributionCharge(SerializableModel):
     allocation_charge = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
 
+def search(attribution=None, learning_unit_component=None):
+    out = None
+    queryset = AttributionCharge.objects
 
+    if attribution:
+        queryset = queryset.filter(attribution=attribution)
+
+    if learning_unit_component:
+        queryset = queryset.filter(learning_unit_component=learning_unit_component)
+
+    if attribution or learning_unit_component:
+        out = queryset
+
+    return out
+
+
+def find_one(an_attribution=None, a_learning_unit_component=None):
+    attribution_charges = search(an_attribution, a_learning_unit_component)
+
+    if attribution_charges:
+        return attribution_charges[0]
+
+    return None

@@ -190,7 +190,7 @@ def create_learning_unit_component(data):
 
 
 def create_attribution(data):
-    attribution = attribution.models.attribution.Attribution()
+    attribution = mdl_attribution.attribution.Attribution()
     if 'function' in data:
         attribution.function = data['function']
     if 'learning_unit_year' in data:
@@ -200,16 +200,27 @@ def create_attribution(data):
     attribution.save()
     return attribution
 
+def create_attribution2(function, learning_unit_year, tutor):
+    attribution = attribution.models.attribution.Attribution()
+
+    attribution.function = function
+
+    attribution.learning_unit_year = learning_unit_year
+
+    attribution.tutor = tutor
+    attribution.save()
+    return attribution
 
 def create_person(a_user):
     person = mdl_base.person.Person()
+    person.user = a_user
     person.save()
     return person
 
 
 def create_tutor(a_person):
-    tutor = mdl_base.tutor.Tutor(person=a_person)
-    tutor.save()
+    tutor = mdl_base.tutor.Tutor.objects.create(person=a_person)
+
     return tutor
 
 def create_attribution_charge(data):

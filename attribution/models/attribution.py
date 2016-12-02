@@ -46,3 +46,15 @@ class Attribution(SerializableModel):
 
     def __str__(self):
         return u"%s - %s" % (self.tutor.person, self.function)
+
+
+def search(tutor=None, learning_unit_year=None):
+    queryset = Attribution.objects
+
+    if tutor:
+        queryset = queryset.filter(tutor=tutor)
+
+    if learning_unit_year:
+        queryset = queryset.filter(learning_unit_year=learning_unit_year)
+
+    return queryset.select_related('tutor', 'learning_unit_year')
