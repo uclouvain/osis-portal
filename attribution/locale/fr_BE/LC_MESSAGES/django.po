@@ -19,3 +19,39 @@ msgstr ""
 
 msgid "teaching_load"
 msgstr "Charge d'enseignement"
+
+msgid "code"
+msgstr "Code"
+
+msgid "title"
+msgstr "Intitulé"
+
+msgid "lecturing_hours"
+msgstr "Cours magistral"
+
+msgid "practical_hours"
+msgstr "Travaux pratique"
+
+msgid "students"
+msgstr "Etudiants"
+
+msgid "schedule"
+msgstr "Horaire"
+
+msgid "email"
+msgstr "Email"
+
+msgid "function"
+msgstr "Fonction"
+
+msgid "COORDINATOR"
+msgstr "Coordinateur"
+
+msgid "HOLDER"
+msgstr "Titulaire"
+
+msgid "CO_HOLDER"
+msgstr "Co-titulaire"
+
+msgid "DEPUTY"
+msgstr "Suppléant"

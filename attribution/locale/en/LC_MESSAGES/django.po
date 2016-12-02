@@ -19,3 +19,40 @@ msgstr ""
 
 msgid "teaching_load"
 msgstr "Teaching load"
+
+msgid "code"
+msgstr "Code"
+
+msgid "title"
+msgstr "Title"
+
+msgid "lecturing_hours"
+msgstr "Lecturing hours"
+
+msgid "practical_hours"
+msgstr "Pratical hours"
+
+msgid "students"
+msgstr "Students"
+
+msgid "schedule"
+msgstr "Schecule"
+
+msgid "email"
+msgstr "Email"
+
+msgid "function"
+msgstr "Function"
+
+msgid "COORDINATOR"
+msgstr "Coordinator"
+
+msgid "HOLDER"
+msgstr "Holder"
+
+msgid "CO_HOLDER"
+msgstr "Co holder"
+
+msgid "DEPUTY"
+msgstr "Deputy"
+

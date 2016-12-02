@@ -40,7 +40,7 @@ class LearningUnitComponent(models.Model):
     duration = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
-        return u"%s - %s" % (self.acronym, self.title)
+        return u"%s" % self.type
 
     class Meta:
         permissions = (
@@ -62,10 +62,4 @@ def search(a_learning_unit_year=None, a_type=None):
         out = queryset
 
     return out
-
-def find_one(a_learning_unit_year=None, a_type=None):
-    learning_unit_components = search(a_learning_unit_year, a_type)
-    if learning_unit_components:
-        return learning_unit_components[0]
-    return None
 

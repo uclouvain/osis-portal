@@ -298,4 +298,4 @@ if 'admission' in INSTALLED_APPS:
     ADMISSION_LOGIN_URL=reverse_lazy('admission_login')
     ADMISSION_LOGIN_REDIRECT_URL=reverse_lazy('admission')
 
-ADE_MAIN_URL='http://horairev6.uclouvain.be'
+ADE_MAIN_URL='http://horairev6.uclouvain.be/direct/index.jsp?displayConfName=WEB&showTree=false&showOptions=false&weeks=0&login=enseignant&password=prof&projectId={0}&code={1}'

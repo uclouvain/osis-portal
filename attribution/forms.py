@@ -23,12 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
-from attribution.views import common, teaching_load
+from django import forms
 
-urlpatterns = [
-    url(r'^$', common.home, name='home'),
-    url(r'^attribution/$', common.home, name='attribution'),
-    url(r'^load/([0-9]+)/$', teaching_load.by_year, name='attributions_by_year'),
 
-      ]
+class AttributionForm(forms.Form):
+    year = forms.IntegerField()

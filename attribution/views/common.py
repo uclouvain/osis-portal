@@ -23,12 +23,28 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
-from attribution.views import common, teaching_load
+from django.shortcuts import render
+from django.forms import formset_factory
 
-urlpatterns = [
-    url(r'^$', common.home, name='home'),
-    url(r'^attribution/$', common.home, name='attribution'),
-    url(r'^load/([0-9]+)/$', teaching_load.by_year, name='attributions_by_year'),
+from attribution.views import teaching_load
+from base import models as mdl_base
+from attribution.forms import AttributionForm
 
-      ]
+
+def home(request):
+    a_person = mdl_base.person.find_by_global_id('1234567890')
+    AttributionFormSet = formset_factory(AttributionForm, extra=0)
+    attributions_representation = teaching_load.list_teaching_load_attribution_representation(a_person)
+    initial_data = []
+    year = None
+    for attribution in attributions_representation:
+        initial_data.append({'acronym': attribution.acronym,
+                             'year':    attribution.year})
+        year = attribution.year
+    formset = AttributionFormSet(initial=initial_data)
+
+    return render(request, "teaching_load.html", {
+        'user': a_person.user,
+        'attributions_representation': attributions_representation,
+        'formset': formset,
+        'year': year})

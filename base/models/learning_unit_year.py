@@ -29,7 +29,7 @@ from django.contrib import admin
 
 class LearningUnitYearAdmin(admin.ModelAdmin):
     list_display = ('acronym', 'title', 'academic_year', 'credits')
-    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'credits', 'decimal_scores')}),)
+    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'credits')}),)
     list_filter = ('academic_year__year',)
     search_fields = ['acronym']
 

@@ -173,6 +173,8 @@ def create_learning_unit_year(data):
         learning_unit_year.title = data['title']
     if 'academic_year' in data:
         learning_unit_year.academic_year = data['academic_year']
+    if 'credits' in data:
+        learning_unit_year.credits = data['credits']
     learning_unit_year.save()
     return learning_unit_year
 
