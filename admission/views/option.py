@@ -63,11 +63,11 @@ def find_by_offer(request):
                                           'option_description': option.description,
                                           'option_value': option.value,
                                           'option_order': option.order,
-                                          'question_id': option.question.id,
-                                          'question_label': option.question.label,
-                                          'question_type': option.question.type,
-                                          'question_required': option.question.required,
-                                          'question_description': option.question.description,
+                                          'question_id': question.id,
+                                          'question_label': question.label,
+                                          'question_type': question.type,
+                                          'question_required': question.required,
+                                          'question_description': question.description,
                                           'options_max_number': options_max_number})
             else:
                 question_list.append({'position': position,
