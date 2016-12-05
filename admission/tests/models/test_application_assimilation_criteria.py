@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,6 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase
+from admission import models as mdl
+from reference.enums import assimilation_criteria as assimilation_criteria_enum
 
-# Create your tests here.
+
+def create_applicant_assimilation_criteria(an_applicant):
+    return mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria(
+        applicant=an_applicant,
+        criteria=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES[0][0],
+        additional_criteria=None,
+        selected=False)

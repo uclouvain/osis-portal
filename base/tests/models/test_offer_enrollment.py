@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,8 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from performance.models import *
-from django.contrib import admin
+import datetime
 
-admin.site.register(student_performance.StudentPerformance,
-                    student_performance.StudentPerformanceAdmin)
+from base import models as mdl_base
+
+
+def create_offer_enrollment(student, offer_year):
+    offer_enrollment = mdl_base.offer_enrollment.OfferEnrollment(student=student, offer_year=offer_year,
+                                                                 date_enrollment=datetime.date.today())
+    offer_enrollment.save()
+    return offer_enrollment

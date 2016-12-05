@@ -23,118 +23,101 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import logging
-import time
-from couchbase.bucket import Bucket, NotFoundError, N1QLQuery
-from couchbase.exceptions import CouchbaseError, BucketNotFoundError, AuthError, TemporaryFailError
-
-from django.conf import settings
-import re
-
-# Helper functions to interact (connection, fetch, upsert) with the CouchBase bucket containing
-# student academic results.
+from django.db import models
+from django.contrib.postgres.fields import JSONField
+from django.contrib import admin
+from django.core.exceptions import ObjectDoesNotExist
+from performance.queue.student_performance import fetch_and_save
+from django.utils import timezone
 
 
-bucket_name = "performance"
+class StudentPerformanceAdmin(admin.ModelAdmin):
+    list_display = ('registration_id', 'academic_year', 'acronym', 'update_date', 'creation_date')
+    list_filter = ('registration_id', 'academic_year', 'acronym', )
+    fieldsets = ((None, {'fields': ('registration_id', 'academic_year', 'acronym', 'update_date', 'creation_date')}),)
+    readonly_fields = ('creation_date', )
 
-logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
-def connect_db():
+class StudentPerformance(models.Model):
+    registration_id = models.CharField(max_length=10)
+    academic_year = models.IntegerField()
+    acronym = models.CharField(max_length=15)
+    data = JSONField()
+    update_date = models.DateTimeField()
+    creation_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('registration_id', 'academic_year', 'acronym')
+
+    def __str__(self):
+        return '{} - {} - {}'.format(self.registration_id, self.acronym, self.academic_year)
+
+
+def search(registration_id=None, academic_year=None, acronym=None):
     """
-    Connect to the bucket "bucket_name" located on the server at address "COUCHBASE_CONNECTION_STRING"
-    :return: the bucket
+        Search students by optional arguments. At least one argument should be informed
+        otherwise it returns empty.
     """
-    bucket_name = "performance"
+    has_criteria = False
+    student_performances = StudentPerformance.objects.all()
+    if registration_id:
+        student_performances = student_performances.filter(registration_id=registration_id)
+        has_criteria = True
+    if academic_year:
+        student_performances = student_performances.filter(academic_year=academic_year)
+        has_criteria = True
+    if acronym:
+        student_performances = student_performances.filter(acronym=acronym)
+        has_criteria = True
+
+    if has_criteria:
+        return student_performances
+    else:
+        return None
+
+
+def update_or_create(registration_id, academic_year, acronym, fields):
+    obj, created = StudentPerformance.objects.update_or_create(registration_id=registration_id, academic_year=academic_year,
+                                                               acronym=acronym, defaults=fields)
+    return obj
+
+
+def find_by_student_and_offer_year(registration_id, academic_year, acronym):
     try:
-        if settings.COUCHBASE_PASSWORD:
-            cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name, password=settings.COUCHBASE_PASSWORD)
-        else:
-            cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name)
-        return cb
-    except (BucketNotFoundError, AuthError):
-        return None
+        result = StudentPerformance.objects.get(registration_id=registration_id, academic_year=academic_year,
+                                                               acronym=acronym)
+    except ObjectDoesNotExist:
+        result = None
+    return result
 
-cb = connect_db()
-# cb.bucket_manager().create_n1ql_primary_index(ignore_exists=True)
-# cb.bucket_manager().create_n1ql_index('index_global_id', fields=['global_id'])
 
-def fetch_document(document_id):
-    """
-    Fetch the document having id (key) "document_id" from the bucket "cb".
-    :param document_id: The key of the document
-    :return: the document if exists, None if not.
-    """
-    if not cb:
-        return None
+def find_or_fetch(registration_id, academic_year, acronym):
+    result = find_by_student_and_offer_year(registration_id, academic_year, acronym)
+    if result is None or has_expired(result):
+        new_result = fetch_and_save(registration_id, academic_year, acronym)
+        result = new_result if new_result else result
+    return result
+
+
+def has_expired(student_performance):
+    now = timezone.now()
+    expiration_date = student_performance.update_date
+    return expiration_date < now
+
+
+def find_actual_by_pk(student_performance_pk):
+    result = find_by_pk(student_performance_pk)
+    if result and has_expired(result):
+        new_result = fetch_and_save(result.registration_id, result.academic_year, result.acronym)
+        result = new_result if new_result else result
+    return result
+
+
+def find_by_pk(student_performance_pk):
     try:
-        return cb.get(document_id)
-    except NotFoundError:
-        return None
+        result = StudentPerformance.objects.get(pk=student_performance_pk)
+    except ObjectDoesNotExist:
+        result = None
+    return result
 
-def save_document(key, data):
-    """
-    Insert a new document if the key passed in parameter doesn't exist in CouchDB.
-    :param key: The key of the document
-    :param data: The document (JSON) to insert/update in Couchbase
-    """
-    if not cb:
-        return None
-    try:
-        cb.upsert(key, data)
-    except TemporaryFailError as te:
-        try:
-            logger.warning(''.join(["TemporaryFailError updating/inserting ", key,
-                                    " in couchbase, waiting 1 s and retry: \n", str(te)]))
-            time.sleep(1)
-            cb.upsert(key,data)
-        except CouchbaseError as ce:
-            logger.error(''.join(["Error updating/inserting ", key, " in couchbase : \n", str(ce)]))
-    except CouchbaseError as ce:
-        logger.error(''.join(["Error updating/inserting ", key, " in couchbase : \n", str(ce)]))
 
-def select_where_registration_id_is(registration_id):
-    """
-    Query the bucket for all documents where the global_id is equal to "global_id".
-    :param global_id: a string
-    :return: result of query
-    """
-    query_string = "SELECT * FROM " + bucket_name + " WHERE registration_id=$1"
-    query = N1QLQuery(query_string, registration_id)
-    return cb.n1ql_query(query)
-
-def key_from_json(json):
-    """
-    Return a key for the json
-    :param json: a json object
-    :return: a string key
-    """
-    registration_id = json["registration_id"]
-    academic_year = json["academic_years"][0]["anac"]
-    program_acronym = format_acronym(json["academic_years"][0]["programs"][0]["acronym"])
-    key = "" + registration_id + "_" + academic_year + "_" + program_acronym
-    return key
-
-def format_acronym(program_acronym):
-    """
-    Format the program acronym by removing all non alphanumeric characters and
-    by lowering all characters case.
-    :param program_acronym: a string
-    :return: a formatted program acronym
-    """
-    lower_case_program_acronym = program_acronym.lower()
-
-    return alpha_numeric_only(lower_case_program_acronym)
-
-def alpha_numeric_only(s):
-    """
-    Return the string obtained by removing all non alphanumeric characters
-    from the stirng "s".
-    Ex: SINF2MS\G -> SINFMSG
-        alpha_numeric -> alphanumeric
-    :param s: a string
-    :return: a alphanumeric only version of s
-    """
-    # Matches all non alphanumeric strings
-    pattern = re.compile('[\W_]+')
-
-    return pattern.sub('', s)

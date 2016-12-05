@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,8 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from performance.models import *
-from django.contrib import admin
+from admission import models as mdl
+from admission.tests.models.test_secondary_education_exam import create_secondary_education_exam
+from admission.tests.models.test_applicant import create_applicant
 
-admin.site.register(student_performance.StudentPerformance,
-                    student_performance.StudentPerformanceAdmin)
+
+def create_secondary_education():
+    a_secondary_education = mdl.secondary_education.SecondaryEducation(person=create_applicant())
+    a_secondary_education.save()
+    return a_secondary_education
+
+
+def create_secondary_education_with_exams():
+    secondary_education = create_secondary_education()
+    create_secondary_education_exam(secondary_education, 'ADMISSION')
+    create_secondary_education_exam(secondary_education, 'PROFESSIONAL')
+    create_secondary_education_exam(secondary_education, 'LANGUAGE')
+    return secondary_education
