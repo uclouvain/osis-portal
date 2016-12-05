@@ -35,9 +35,12 @@ from base.models.enums import component_type
 from attribution.forms import AttributionForm
 from django.contrib.auth.decorators import login_required
 
+TWO_DECIMAL_FORMAT = "%0.2f"
 
 MAIL_TO = 'mailto:'
 STUDENT_LIST_EMAIL_END = '@listes-student.uclouvain.be'
+DURATION_NUL = 0
+ALLOCATION_CHARGE_NUL = 0
 
 
 @login_required
@@ -57,7 +60,7 @@ def get_title_uppercase(learning_unit_year):
 
 def get_attribution_allocation_charge(a_tutor, a_learning_unit_year, a_component_type):
     attribution_list = mdl_attribution.attribution.search(a_tutor, a_learning_unit_year)
-    tot_allocation_charge = 0
+    tot_allocation_charge = ALLOCATION_CHARGE_NUL
     for an_attribution in attribution_list:
         a_learning_unit_components = mdl_base.learning_unit_component.search(a_learning_unit_year, a_component_type)
         for a_learning_unit_component in a_learning_unit_components:
@@ -69,7 +72,7 @@ def get_attribution_allocation_charge(a_tutor, a_learning_unit_year, a_component
 
 
 def sum_learning_unit_year_duration(a_learning_unit_year):
-    tot_duration = 0
+    tot_duration = DURATION_NUL
     for learning_unit_component in mdl_base.learning_unit_component.search(a_learning_unit_year, None):
         if learning_unit_component.duration:
             tot_duration += learning_unit_component.duration
@@ -82,70 +85,75 @@ def sum_learning_unit_year_allocation_charge(a_tutor, a_learning_unit_year):
 
 def calculate_format_percentage_allocation_charge(a_tutor, a_learning_unit_year):
     duration = sum_learning_unit_year_duration(a_learning_unit_year)
-    if duration > 0:
+    if duration > DURATION_NUL:
         percentage = sum_learning_unit_year_allocation_charge(a_tutor, a_learning_unit_year) * 100 / duration
-        return "%0.2f" % (percentage,)
+        return TWO_DECIMAL_FORMAT % (percentage,)
     return None
 
+def is_string_not_null_empty(an_acronym):
+    if an_acronym and len(an_acronym.strip()) > 0:
+        return True
+    return False
 
 def get_email_students(an_acronym):
-    if an_acronym and len(an_acronym.strip()) > 0:
+    if is_string_not_null_empty(an_acronym):
         return "{0}{1}{2}".format(MAIL_TO, an_acronym.lower(), STUDENT_LIST_EMAIL_END)
     return None
 
 
 def get_schedule_url(an_acronym):
-    if an_acronym and len(an_acronym.strip()) > 0:
+    if is_string_not_null_empty(an_acronym):
         return settings.ADE_MAIN_URL.format(settings.ADE_PROJET_NUMBER, an_acronym.lower())
     return None
 
 
 def list_attributions(a_person, an_academic_year):
-    a_tutor = mdl_base.tutor.find_by_person(a_person)
-    return mdl_attribution.attribution.find_by_tutor_year_order_by_acronym_fonction(a_tutor, an_academic_year)
+    return mdl_attribution.attribution\
+        .find_by_tutor_year_order_by_acronym_fonction(mdl_base.tutor.find_by_person(a_person), an_academic_year)
 
 
 def list_teaching_load_attribution_representation(a_person, an_academic_year):
-    list = []
+    attribution_list = []
     a_tutor = mdl_base.tutor.find_by_person(a_person)
     for an_attribution in list_attributions(a_person, an_academic_year):
         a_learning_unit_year = an_attribution.learning_unit_year
-        teaching_load_attribution_representation = {
-            'acronym': a_learning_unit_year.acronym,
-            'title': get_title_uppercase(a_learning_unit_year),
-            'lecturing_allocation_charge': "%0.2f" % (get_attribution_allocation_charge(a_tutor,
-                                                                                        a_learning_unit_year,
-                                                                                        component_type.LECTURING),),
-            'practice_allocation_charge': "%0.2f" % (get_attribution_allocation_charge(a_tutor,
-                                                                                       a_learning_unit_year,
-                                                                                       component_type.PRACTICAL_EXERCISES),),
-            'percentage_allocation_charge': calculate_format_percentage_allocation_charge(a_tutor, a_learning_unit_year),
-            'weight': a_learning_unit_year.weight,
-            'url_schedule': get_schedule_url(a_learning_unit_year.acronym),
-            'url_students_list_email': get_email_students(a_learning_unit_year.acronym),
-            'function': an_attribution.function,
-            'year': a_learning_unit_year.academic_year.year}
-        list.append(teaching_load_attribution_representation)
-    return list
+        attribution_list.append(
+            {'acronym': a_learning_unit_year.acronym,
+             'title': get_title_uppercase(a_learning_unit_year),
+             'lecturing_allocation_charge':
+                 TWO_DECIMAL_FORMAT % (get_attribution_allocation_charge(a_tutor,
+                                                                         a_learning_unit_year,
+                                                                         component_type.LECTURING),),
+             'practice_allocation_charge':
+                 TWO_DECIMAL_FORMAT % (get_attribution_allocation_charge(a_tutor,
+                                                                         a_learning_unit_year,
+                                                                         component_type.PRACTICAL_EXERCISES),),
+             'percentage_allocation_charge':
+                 calculate_format_percentage_allocation_charge(a_tutor, a_learning_unit_year),
+             'weight': a_learning_unit_year.weight,
+             'url_schedule': get_schedule_url(a_learning_unit_year.acronym),
+             'url_students_list_email': get_email_students(a_learning_unit_year.acronym),
+             'function': an_attribution.function,
+             'year': a_learning_unit_year.academic_year.year})
+    return attribution_list
 
 
 def by_year(request, year):
-    a_person = mdl_base.person.find_by_user(request.user)
+    a_person = get_person(request.user)
     an_academic_year = None
     if year:
         an_academic_year = mdl_base.academic_year.find_by_year(year)
     attributions = list_teaching_load_attribution_representation(a_person, an_academic_year)
 
     return render(request, "teaching_load.html", {
-        'user': a_person.user,
+        'user': request.user,
         'attributions': attributions,
         'formset': set_formset_years(a_person),
         'year': int(year)})
 
 
 def get_attribution_years(a_person):
-    a_tutor = mdl_base.tutor.find_by_person(a_person)
-    return list(mdl_attribution.attribution.find_distinct_years(a_tutor))
+    return list(mdl_attribution.attribution.find_distinct_years(mdl_base.tutor.find_by_person(a_person)))
 
 
 def set_formset_years(a_person):
