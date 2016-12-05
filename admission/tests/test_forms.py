@@ -24,6 +24,8 @@
 #
 ##############################################################################
 from django.test import TestCase
+
+import admission.tests.models.test_applicant
 from admission import models as mdl
 import admission.tests.data_for_tests as data_model
 from admission.forms.sociological_survey import SociologicalSurveyForm
@@ -36,7 +38,7 @@ PROFESSION_EMPLOYEE = 'Employee'
 class SociologicalSurveyFormTest(TestCase):
 
     def setUp(self):
-        self.applicant = data_model.create_applicant()
+        self.applicant = admission.tests.models.test_applicant.create_applicant()
 
     def test_valid_form(self):
         data = init_data()

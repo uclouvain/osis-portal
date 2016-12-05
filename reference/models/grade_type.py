@@ -47,6 +47,7 @@ class GradeType(SerializableModel):
                                                 choices=enum_institutional_grade_type.INSTITUTIONAL_GRADE_CHOICES,
                                                 blank=True,
                                                 null=True)
+    language_exam_required = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

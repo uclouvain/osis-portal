@@ -28,8 +28,8 @@ import os,sys
 import logging
 from django.core.wsgi import get_wsgi_application
 from osis_common.queue import callbacks, queue_listener
-from performance.queue import callbacks as perf_callbacks
 from pika.exceptions import ConnectionClosed, AMQPConnectionError, ChannelClosed
+from performance.queue.student_performance import callback
 
 # The two following lines are mandatory for working with mod_wsgi on the servers
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..' )
@@ -49,9 +49,10 @@ if hasattr(settings, 'QUEUES'):
     except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
         LOGGER.exception("Couldn't connect to the QueueServer")
 
-    # Thread in which is running the listening of the queue used to print exams scores of students
+    # Thread in which is running the listening of the queue used to received student points
     try:
-        queue_listener.listen_queue(settings.QUEUES.get('QUEUES_NAME').get('PERFORMANCE')
-                                    , perf_callbacks.couchbase_insert_or_update)
+        queue_listener.SynchronousConsumerThread(settings.QUEUES.get('QUEUES_NAME').get('PERFORMANCE'),
+                                                 callback).start()
     except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
         LOGGER.exception("Couldn't connect to the QueueServer")
+
