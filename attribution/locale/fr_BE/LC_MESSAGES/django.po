@@ -55,3 +55,6 @@ msgstr "Co-titulaire"
 
 msgid "DEPUTY"
 msgstr "Suppléant"
+
+msgid "weight"
+msgstr "Weight"

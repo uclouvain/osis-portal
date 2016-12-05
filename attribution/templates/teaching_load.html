@@ -39,7 +39,7 @@
             </div>
         {% endfor %}
     </div>
-    {% if attributions_representation %}
+    {% if attributions %}
         <table class="table table-striped table-hover">
         <tr>
             <th>{% trans 'code'%}</th>
@@ -47,22 +47,22 @@
             <th>{% trans 'lecturing_hours'%}</th>
             <th>{% trans 'practical_hours'%}</th>
             <th>%</th>
-            <th>ECT</th>
+            <th>{% trans 'weight' %}</th>
             <th>{% trans 'schedule'%}</th>
             <th>{% trans 'email'%}</th>
             <th>{% trans 'function'%}</th>
         </tr>
-        {% for attribution_representation in attributions_representation %}
+        {% for attribution in attributions %}
             <tr>
-                <td>{{ attribution_representation.acronym }}</td>
-                <td>{{ attribution_representation.title }}</td>
-                <td>{{ attribution_representation.lecturing_allocation_charge }}</td>
-                <td>{{ attribution_representation.practice_allocation_charge }}</td>
-                <td>{{ attribution_representation.percentage_allocation_charge }}</td>
-                <td>{{ attribution_representation.credits }}</td>
-                <td><a target="_blank" href="{{ attribution_representation.url_schedule }}"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span></a></td>
-                <td><a href="{{ attribution_representation.url_students_list_email }}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a></td>
-                <td>{{ attribution_representation.function }}</td>
+                <td>{{ attribution.acronym }}</td>
+                <td>{{ attribution.title }}</td>
+                <td>{{ attribution.lecturing_allocation_charge | default_if_none:''}}</td>
+                <td>{{ attribution.practice_allocation_charge | default_if_none:''}}</td>
+                <td>{{ attribution.percentage_allocation_charge | default_if_none:''}}</td>
+                <td>{{ attribution.weight | default_if_none:''}}</td>
+                <td><a target="_blank" href="{{ attribution.url_schedule }}"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span></a></td>
+                <td><a href="{{ attribution.url_students_list_email }}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a></td>
+                <td>{% trans attribution.function %}</td>
             </tr>
         {% endfor %}
 

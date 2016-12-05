@@ -42,7 +42,7 @@ class AttributionCharge(SerializableModel):
 
 
 def search(attribution=None, learning_unit_component=None):
-    out = None
+
     queryset = AttributionCharge.objects
 
     if attribution:
@@ -51,7 +51,5 @@ def search(attribution=None, learning_unit_component=None):
     if learning_unit_component:
         queryset = queryset.filter(learning_unit_component=learning_unit_component)
 
-    if attribution or learning_unit_component:
-        out = queryset
 
-    return out
+    return queryset

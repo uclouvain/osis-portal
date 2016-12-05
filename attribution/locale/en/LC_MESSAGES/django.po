@@ -36,7 +36,7 @@ msgid "students"
 msgstr "Students"
 
 msgid "schedule"
-msgstr "Schecule"
+msgstr "Schedule"
 
 msgid "email"
 msgstr "Email"
@@ -56,3 +56,5 @@ msgstr "Co holder"
 msgid "DEPUTY"
 msgstr "Deputy"
 
+msgid "weight"
+msgstr "Weight"

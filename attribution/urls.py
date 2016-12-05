@@ -24,11 +24,11 @@
 #
 ##############################################################################
 from django.conf.urls import url
-from attribution.views import common, teaching_load
+from attribution.views import teaching_load
 
 urlpatterns = [
-    url(r'^$', common.home, name='home'),
-    url(r'^attribution/$', common.home, name='attribution'),
+    url(r'^$', teaching_load.home, name='home'),
+    url(r'^attribution/$', teaching_load.by_year, name='attribution'),
     url(r'^load/([0-9]+)/$', teaching_load.by_year, name='attributions_by_year'),
 
       ]

@@ -25,7 +25,7 @@
 ##############################################################################
 from django.contrib import admin
 
-from attribution.models import *
+from attribution.models import attribution, attribution_charge
 
 
 admin.site.register(attribution.Attribution,

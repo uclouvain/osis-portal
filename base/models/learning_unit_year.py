@@ -28,8 +28,8 @@ from django.contrib import admin
 
 
 class LearningUnitYearAdmin(admin.ModelAdmin):
-    list_display = ('acronym', 'title', 'academic_year', 'credits')
-    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'credits')}),)
+    list_display = ('acronym', 'title', 'academic_year', 'weight')
+    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'weight')}),)
     list_filter = ('academic_year__year',)
     search_fields = ['acronym']
 
@@ -39,6 +39,7 @@ class LearningUnitYear(models.Model):
     acronym = models.CharField(max_length=15, db_index=True)
     title = models.CharField(max_length=255)
     credits = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     academic_year = models.ForeignKey('AcademicYear')
 
     def __str__(self):

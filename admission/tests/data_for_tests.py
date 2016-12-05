@@ -173,8 +173,8 @@ def create_learning_unit_year(data):
         learning_unit_year.title = data['title']
     if 'academic_year' in data:
         learning_unit_year.academic_year = data['academic_year']
-    if 'credits' in data:
-        learning_unit_year.credits = data['credits']
+    if 'weight' in data:
+        learning_unit_year.weight = data['weight']
     learning_unit_year.save()
     return learning_unit_year
 
@@ -235,3 +235,11 @@ def create_attribution_charge(data):
         attribution_charge.allocation_charge = data['allocation_charge']
     attribution_charge.save()
     return attribution_charge
+
+
+
+def create_academic_year_with_year(a_year):
+    an_academic_year = mdl_base.academic_year.AcademicYear()
+    an_academic_year.year = a_year
+    an_academic_year.save()
+    return an_academic_year

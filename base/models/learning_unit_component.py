@@ -29,7 +29,7 @@ from base.models.enums import component_type
 
 
 class LearningUnitComponentAdmin(admin.ModelAdmin):
-    list_display = ('learning_unit_year', 'type')
+    list_display = ('learning_unit_year', 'type', 'duration')
     fieldsets = ((None, {'fields': ('learning_unit_year', 'type', 'duration')}),)
 
 
@@ -40,7 +40,7 @@ class LearningUnitComponent(models.Model):
     duration = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
-        return u"%s" % self.type
+        return u"%s - %s" % (self.type, self.learning_unit_year)
 
     class Meta:
         permissions = (
@@ -49,7 +49,6 @@ class LearningUnitComponent(models.Model):
 
 
 def search(a_learning_unit_year=None, a_type=None):
-    out = None
     queryset = LearningUnitComponent.objects
 
     if a_learning_unit_year:
@@ -57,9 +56,6 @@ def search(a_learning_unit_year=None, a_type=None):
 
     if a_type:
         queryset = queryset.filter(type=a_type)
+    return queryset
 
-    if a_learning_unit_year or a_type:
-        out = queryset
-
-    return out
 
