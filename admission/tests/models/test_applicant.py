@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,8 +23,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from performance.models import *
-from django.contrib import admin
+from admission import models as mdl
+from admission.tests.data_for_tests import get_or_create_user, create_user
 
-admin.site.register(student_performance.StudentPerformance,
-                    student_performance.StudentPerformanceAdmin)
+
+def get_or_create_applicant():
+    an_applicant = mdl.applicant.find_by_user(user=get_or_create_user())
+    if not an_applicant:
+        an_applicant = mdl.applicant.Applicant(user=get_or_create_user())
+        an_applicant.save()
+    return an_applicant
+
+
+def create_applicant_by_user(user):
+    an_applicant = mdl.applicant.Applicant(user=user)
+    an_applicant.save()
+    return an_applicant
+
+
+def create_applicant():
+    an_applicant = mdl.applicant.Applicant(user=create_user())
+    an_applicant.save()
+    return an_applicant
