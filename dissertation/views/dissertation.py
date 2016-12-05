@@ -81,43 +81,32 @@ def dissertation_detail(request, pk):
         for file in files:
             filename = file.document_file.file_name
 
+        count_dissertation_role = dissertation_role.count_by_dissertation(memory)
+        count_reader = dissertation_role.count_reader_by_dissertation(memory)
+        count_proposition_role = proposition_role.count_by_dissertation(memory)
+        proposition_roles = proposition_role.search_by_dissertation(memory)
+        jury_visibility = offer_pro.start_jury_visibility <= timezone.now().date() <= offer_pro.end_jury_visibility
         check_edit = offer_pro.start_edit_title <= timezone.now().date() <= offer_pro.end_edit_title
 
-        if offer_pro.start_jury_visibility <= timezone.now().date() <= offer_pro.end_jury_visibility:
-            jury_visibility = True
-            count_dissertation_role = dissertation_role.count_by_dissertation(memory)
-            count_reader = dissertation_role.count_reader_by_dissertation(memory)
-            count_proposition_role = proposition_role.count_by_dissertation(memory)
-            proposition_roles = proposition_role.search_by_dissertation(memory)
+        if count_dissertation_role == 0:
             if count_proposition_role == 0:
-                if count_dissertation_role == 0:
-                    dissertation_role.add('PROMOTEUR', memory.proposition_dissertation.author, memory)
+                dissertation_role.add('PROMOTEUR', memory.proposition_dissertation.author, memory)
             else:
-                if count_dissertation_role == 0:
-                    for role in proposition_roles:
-                        dissertation_role.add(role.status, role.adviser, memory)
-            dissertation_roles = dissertation_role.search_by_dissertation(memory)
-            return layout.render(request, 'dissertation_detail.html',
-                                 {'check_edit': check_edit,
-                                  'count': count,
-                                  'count_reader': count_reader,
-                                  'count_dissertation_role': count_dissertation_role,
-                                  'dissertation': memory,
-                                  'dissertation_roles': dissertation_roles,
-                                  'jury_visibility': jury_visibility,
-                                  'manage_readers': offer_pro.student_can_manage_readers,
-                                  'filename': filename,
-                                  'offer_propositions': offer_propositions})
-        else:
-            jury_visibility = False
-            return layout.render(request, 'dissertation_detail.html',
-                                 {'check_edit': check_edit,
-                                  'count': count,
-                                  'dissertation': memory,
-                                  'jury_visibility': jury_visibility,
-                                  'student': student,
-                                  'filename': filename,
-                                  'offer_propositions': offer_propositions})
+                for role in proposition_roles:
+                    dissertation_role.add(role.status, role.adviser, memory)
+
+        dissertation_roles = dissertation_role.search_by_dissertation(memory)
+        return layout.render(request, 'dissertation_detail.html',
+                             {'check_edit': check_edit,
+                              'count': count,
+                              'count_reader': count_reader,
+                              'count_dissertation_role': count_dissertation_role,
+                              'dissertation': memory,
+                              'dissertation_roles': dissertation_roles,
+                              'jury_visibility': jury_visibility,
+                              'manage_readers': offer_pro.student_can_manage_readers,
+                              'filename': filename,
+                              'offer_propositions': offer_propositions})
     else:
         return redirect('dissertations')
 
