@@ -23,13 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
-
-from attribution.models import attribution, attribution_charge
+from django import forms
 
 
-admin.site.register(attribution.Attribution,
-                    attribution.AttributionAdmin)
-
-admin.site.register(attribution_charge.AttributionCharge,
-                    attribution_charge.AttributionChargeAdmin)
+class AttributionForm(forms.Form):
+    year = forms.IntegerField()

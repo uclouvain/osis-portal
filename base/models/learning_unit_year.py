@@ -23,45 +23,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models import *
+from django.db import models
 from django.contrib import admin
 
 
-admin.site.register(academic_year.AcademicYear,
-                    academic_year.AcademicYearAdmin)
+class LearningUnitYearAdmin(admin.ModelAdmin):
+    list_display = ('acronym', 'title', 'academic_year', 'weight')
+    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'weight')}),)
+    list_filter = ('academic_year__year',)
+    search_fields = ['acronym']
 
-admin.site.register(campus.Campus,
-                    campus.CampusAdmin)
 
-admin.site.register(learning_unit_year.LearningUnitYear,
-                    learning_unit_year.LearningUnitYearAdmin)
+class LearningUnitYear(models.Model):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
+    acronym = models.CharField(max_length=15, db_index=True)
+    title = models.CharField(max_length=255)
+    credits = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    academic_year = models.ForeignKey('AcademicYear')
 
-admin.site.register(learning_unit_component.LearningUnitComponent,
-                    learning_unit_component.LearningUnitComponentAdmin)
+    def __str__(self):
+        return u"%s - %s" % (self.academic_year, self.acronym)
 
-admin.site.register(offer.Offer,
-                    offer.OfferAdmin)
-
-admin.site.register(offer_enrollment.OfferEnrollment,
-                    offer_enrollment.OfferEnrollmentAdmin)
-
-admin.site.register(external_offer.ExternalOffer,
-                    external_offer.ExternalOfferAdmin)
-
-admin.site.register(offer_year.OfferYear,
-                    offer_year.OfferYearAdmin)
-
-admin.site.register(offer_year_domain.OfferYearDomain,
-                    offer_year_domain.OfferYearDomainAdmin)
-
-admin.site.register(organization.Organization,
-                    organization.OrganizationAdmin)
-
-admin.site.register(person.Person,
-                    person.PersonAdmin)
-
-admin.site.register(student.Student,
-                    student.StudentAdmin)
-
-admin.site.register(tutor.Tutor,
-                    tutor.TutorAdmin)

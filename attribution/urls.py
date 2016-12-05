@@ -23,13 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
+from django.conf.urls import url
+from attribution.views import teaching_load
 
-from attribution.models import attribution, attribution_charge
+urlpatterns = [
+    url(r'^$', teaching_load.home, name='home'),
+    url(r'^attribution/$', teaching_load.by_year, name='attribution'),
+    url(r'^load/([0-9]+)/$', teaching_load.by_year, name='attributions_by_year'),
 
-
-admin.site.register(attribution.Attribution,
-                    attribution.AttributionAdmin)
-
-admin.site.register(attribution_charge.AttributionCharge,
-                    attribution_charge.AttributionChargeAdmin)
+      ]
