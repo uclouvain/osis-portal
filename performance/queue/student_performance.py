@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from csv import excel
 import json
 from frontoffice.queue.queue_listener import PerformanceClient
 import datetime
