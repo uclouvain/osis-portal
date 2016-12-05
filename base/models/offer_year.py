@@ -62,3 +62,7 @@ def find_by_domain_grade(domain, grade):
 
 def find_by_offer(offers):
     return OfferYear.objects.filter(offer__in=offers)
+
+
+def find_by_student_enrollment(student):
+    return OfferYear.objects.filter(offerenrollment__student=student).order_by("academic_year__year", "acronym")
