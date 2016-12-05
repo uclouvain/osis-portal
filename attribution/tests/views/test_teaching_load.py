@@ -111,7 +111,7 @@ class TeachingLoadTest(TestCase):
         tot_allocation_charge = ATTRIBUTION_CHARGE_LECTURING_DURATION + ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION
         tot_learning_unit_duration = LEARNING_UNIT_LECTURING_DURATION + LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION
         percentange_expected = tot_allocation_charge * 100 / tot_learning_unit_duration
-        return "%0.2f" % (percentange_expected,)
+        return teaching_load.ONE_DECIMAL_FORMAT % (percentange_expected,)
 
     def create_learning_unit_year_without_duration(self):
         a_learning_unit_year_without_duration = data_model.create_learning_unit_year({
@@ -192,8 +192,8 @@ class TeachingLoadTest(TestCase):
         teaching_load_attribution_representation = {
             'acronym' :a_learning_unit_year.acronym,
             'title': TITLE.upper(),
-            'lecturing_allocation_charge': "%0.2f" % (ATTRIBUTION_CHARGE_LECTURING_DURATION,),
-            'practice_allocation_charge': "%0.2f" % (ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION,),
+            'lecturing_allocation_charge': teaching_load.ONE_DECIMAL_FORMAT % (ATTRIBUTION_CHARGE_LECTURING_DURATION,),
+            'practice_allocation_charge': teaching_load.ONE_DECIMAL_FORMAT % (ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION,),
             'percentage_allocation_charge': self.calculate_formatted_percentage(),
             'weight': a_learning_unit_year.weight,
             'url_schedule': settings.ADE_MAIN_URL.format(settings.ADE_PROJET_NUMBER, ACRONYM.lower()),
@@ -201,10 +201,16 @@ class TeachingLoadTest(TestCase):
                                                           ACRONYM.lower(),
                                                           teaching_load.STUDENT_LIST_EMAIL_END),
             'function': self.get_data('attribution').function,
-            'year': a_learning_unit_year.academic_year.year}
+            'year': a_learning_unit_year.academic_year.year,
+            'learning_unit_year_url': settings.UCL_URL.format(a_learning_unit_year.academic_year.year, ACRONYM.lower()) }
         list_attributions.append(teaching_load_attribution_representation)
         self.assertEqual(teaching_load.list_teaching_load_attribution_representation(self.a_person, a_learning_unit_year.academic_year), list_attributions)
 
     def test_attribution_years(self):
         list_years = [NEXT_YEAR, CURRENT_YEAR]
         self.assertEqual(teaching_load.get_attribution_years(self.a_person), list_years)
+
+    def test_get_url_learning_unit_year(self):
+        a_learning_unit_year = self.get_data('learning_unit_year')
+        url_learning_unit = settings.UCL_URL.format(a_learning_unit_year.academic_year.year, ACRONYM.lower())
+        self.assertEqual(teaching_load.get_url_learning_unit_year(a_learning_unit_year), url_learning_unit)

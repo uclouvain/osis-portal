@@ -35,7 +35,7 @@ from base.models.enums import component_type
 from attribution.forms import AttributionForm
 from django.contrib.auth.decorators import login_required
 
-TWO_DECIMAL_FORMAT = "%0.2f"
+ONE_DECIMAL_FORMAT = "%0.1f"
 
 MAIL_TO = 'mailto:'
 STUDENT_LIST_EMAIL_END = '@listes-student.uclouvain.be'
@@ -87,11 +87,11 @@ def calculate_format_percentage_allocation_charge(a_tutor, a_learning_unit_year)
     duration = sum_learning_unit_year_duration(a_learning_unit_year)
     if duration > DURATION_NUL:
         percentage = sum_learning_unit_year_allocation_charge(a_tutor, a_learning_unit_year) * 100 / duration
-        return TWO_DECIMAL_FORMAT % (percentage,)
+        return ONE_DECIMAL_FORMAT % (percentage,)
     return None
 
-def is_string_not_null_empty(an_acronym):
-    if an_acronym and len(an_acronym.strip()) > 0:
+def is_string_not_null_empty(string):
+    if string and len(string.strip()) > 0:
         return True
     return False
 
@@ -121,11 +121,11 @@ def list_teaching_load_attribution_representation(a_person, an_academic_year):
             {'acronym': a_learning_unit_year.acronym,
              'title': get_title_uppercase(a_learning_unit_year),
              'lecturing_allocation_charge':
-                 TWO_DECIMAL_FORMAT % (get_attribution_allocation_charge(a_tutor,
+                 ONE_DECIMAL_FORMAT % (get_attribution_allocation_charge(a_tutor,
                                                                          a_learning_unit_year,
                                                                          component_type.LECTURING),),
              'practice_allocation_charge':
-                 TWO_DECIMAL_FORMAT % (get_attribution_allocation_charge(a_tutor,
+                 ONE_DECIMAL_FORMAT % (get_attribution_allocation_charge(a_tutor,
                                                                          a_learning_unit_year,
                                                                          component_type.PRACTICAL_EXERCISES),),
              'percentage_allocation_charge':
@@ -134,7 +134,8 @@ def list_teaching_load_attribution_representation(a_person, an_academic_year):
              'url_schedule': get_schedule_url(a_learning_unit_year.acronym),
              'url_students_list_email': get_email_students(a_learning_unit_year.acronym),
              'function': an_attribution.function,
-             'year': a_learning_unit_year.academic_year.year})
+             'year': a_learning_unit_year.academic_year.year,
+             'learning_unit_year_url': get_url_learning_unit_year(a_learning_unit_year)})
     return attribution_list
 
 
@@ -165,5 +166,9 @@ def set_formset_years(a_person):
     return AttributionFormSet(initial=initial_data)
 
 
-
+def get_url_learning_unit_year(a_learning_unit_year):
+    if a_learning_unit_year:
+        if is_string_not_null_empty(a_learning_unit_year.acronym):
+            return settings.UCL_URL.format(a_learning_unit_year.academic_year.year, a_learning_unit_year.acronym.lower())
+    return None
 

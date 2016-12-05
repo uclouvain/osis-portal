@@ -27,7 +27,8 @@
 {% endcomment %}
 
 {% block content %}
-    <h3>{{ user.first_name }} {{ user.last_name }} - {% trans 'teaching_load' %}</h3>
+    <h1>{% trans 'teaching_load' %}</h1>
+    <h2>{{ user.first_name }} {{ user.last_name }}</h2>
     <ul class="nav nav-tabs">
     {%  for form in formset%}
         <li {% if year ==  form.year.value%}class="active"{% endif %}><a href="{% url 'attributions_by_year'  form.year.value  %}" >{{ form.year.value }}</a></li>
@@ -54,7 +55,7 @@
         </tr>
         {% for attribution in attributions %}
             <tr>
-                <td>{{ attribution.acronym }}</td>
+                <td>{% if  attribution.learning_unit_year_url%}<a href="{{ attribution.learning_unit_year_url }}" target="_blank">{{ attribution.acronym }}</a>{% else %}{{ attribution.acronym }}{% endif %}</td>
                 <td>{{ attribution.title }}</td>
                 <td>{{ attribution.lecturing_allocation_charge | default_if_none:''}}</td>
                 <td>{{ attribution.practice_allocation_charge | default_if_none:''}}</td>

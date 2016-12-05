@@ -39,7 +39,7 @@ class LearningUnitYear(models.Model):
     acronym = models.CharField(max_length=15, db_index=True)
     title = models.CharField(max_length=255)
     credits = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
-    weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    weight = models.IntegerField(blank=True, null=True)
     academic_year = models.ForeignKey('AcademicYear')
 
     def __str__(self):
