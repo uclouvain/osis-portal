@@ -39,10 +39,6 @@ class ScoreEncoding(SerializableModel):
     global_id = models.CharField(max_length=10, unique=True)
     document = JSONField()
 
-    @property
-    def name(self):
-        return self.__str__()
-
     def __str__(self):
         return u"%s" % self.global_id
 
