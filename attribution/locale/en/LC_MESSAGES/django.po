@@ -58,3 +58,27 @@ msgstr "Deputy"
 
 msgid "weight"
 msgstr "Weight"
+
+msgid "students_learning_unit"
+msgstr " students enrolled from "
+
+msgid "program"
+msgstr "Pgrm"
+
+msgid "student"
+msgstr "Student"
+
+msgid "registration_id"
+msgstr "Registration id"
+
+msgid "january"
+msgstr "Jan."
+
+msgid "status"
+msgstr "Status"
+
+msgid "june"
+msgstr "June"
+
+msgid "september"
+msgstr "Sept."

@@ -31,6 +31,7 @@ from base import models as mdl_base
 from reference import models as mdl_reference
 from osis_common import models as mdl_osis_common
 from reference.enums import assimilation_criteria as assimilation_criteria_enum
+import datetime
 
 
 def create_user():
@@ -225,6 +226,7 @@ def create_tutor(a_person):
 
     return tutor
 
+
 def create_attribution_charge(data):
     attribution_charge = mdl_attribution.attribution_charge.AttributionCharge()
     if 'attribution' in data:
@@ -237,9 +239,36 @@ def create_attribution_charge(data):
     return attribution_charge
 
 
-
 def create_academic_year_with_year(a_year):
     an_academic_year = mdl_base.academic_year.AcademicYear()
     an_academic_year.year = a_year
     an_academic_year.save()
     return an_academic_year
+
+
+def create_student(a_registration_id, a_person):
+    a_student = mdl_base.student.Student()
+    a_student.registration_id = a_registration_id
+    a_student.person = a_person
+    a_student.save()
+    return a_student
+
+
+def create_offer_enrollment(an_offer_year, a_student, an_academic_year):
+    an_offer_enrollment = mdl_base.offer_enrollment.OfferEnrollment()
+    an_offer_enrollment.student = a_student
+    an_offer_enrollment.offer_year = an_offer_year
+    an_offer_enrollment.academic_year = an_academic_year
+    an_offer_enrollment.date_enrollment = datetime.datetime.now()
+    an_offer_enrollment.save()
+
+    return an_offer_enrollment
+
+
+def create_learning_unit_enrollment(an_offer_enrollment, a_learning_unit_year):
+    learning_unit_enrollment = mdl_base.learning_unit_enrollment.LearningUnitEnrollment()
+    learning_unit_enrollment.offer_enrollment = an_offer_enrollment
+    learning_unit_enrollment.learning_unit_year = a_learning_unit_year
+    learning_unit_enrollment.date_enrollment = datetime.datetime.now()
+    learning_unit_enrollment.save()
+    return learning_unit_enrollment

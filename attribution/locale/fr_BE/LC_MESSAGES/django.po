@@ -58,3 +58,27 @@ msgstr "Suppléant"
 
 msgid "weight"
 msgstr "Weight"
+
+msgid "students_learning_unit"
+msgstr "  étudiants inscrits au cours "
+
+msgid "program"
+msgstr "Pgrm"
+
+msgid "student"
+msgstr "Nom"
+
+msgid "registration_id"
+msgstr "Noma"
+
+msgid "january"
+msgstr "Jan."
+
+msgid "status"
+msgstr "Etat"
+
+msgid "june"
+msgstr "Juin"
+
+msgid "september"
+msgstr "Sept."

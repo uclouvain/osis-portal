@@ -90,10 +90,12 @@ def calculate_format_percentage_allocation_charge(a_tutor, a_learning_unit_year)
         return ONE_DECIMAL_FORMAT % (percentage,)
     return None
 
+
 def is_string_not_null_empty(string):
     if string and len(string.strip()) > 0:
         return True
     return False
+
 
 def get_email_students(an_acronym):
     if is_string_not_null_empty(an_acronym):
@@ -135,7 +137,8 @@ def list_teaching_load_attribution_representation(a_person, an_academic_year):
              'url_students_list_email': get_email_students(a_learning_unit_year.acronym),
              'function': an_attribution.function,
              'year': a_learning_unit_year.academic_year.year,
-             'learning_unit_year_url': get_url_learning_unit_year(a_learning_unit_year)})
+             'learning_unit_year_url': get_url_learning_unit_year(a_learning_unit_year),
+             'learning_unit_year': a_learning_unit_year})
     return attribution_list
 
 
@@ -172,3 +175,29 @@ def get_url_learning_unit_year(a_learning_unit_year):
             return settings.UCL_URL.format(a_learning_unit_year.academic_year.year, a_learning_unit_year.acronym.lower())
     return None
 
+
+def get_students(a_learning_unit_year):
+
+    return mdl_base.learning_unit_enrollment.find_by_learningunit_enrollment(a_learning_unit_year)
+
+
+def show_students(request, a_learning_unit_year):
+
+    students_list=[]
+    for learning_unit_enrollment in get_students(a_learning_unit_year):
+        students_list.append({
+            'name': "{0}, {1}".format(learning_unit_enrollment.offer_enrollment.student.person.last_name, learning_unit_enrollment.offer_enrollment.student.person.first_name),
+            'program': learning_unit_enrollment.offer_enrollment.offer_year.acronym,
+            'registration_id': learning_unit_enrollment.offer_enrollment.student.registration_id,
+            'january_note': None,
+            'january_status': None,
+            'june_note': None,
+            'june_status': None,
+            'september_note': None,
+            'september_status': None,
+        })
+    return render(request, "students_list.html", {
+        'students': students_list,
+        'learning_unit_year': a_learning_unit_year
+
+        })

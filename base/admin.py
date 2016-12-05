@@ -39,6 +39,9 @@ admin.site.register(learning_unit_year.LearningUnitYear,
 admin.site.register(learning_unit_component.LearningUnitComponent,
                     learning_unit_component.LearningUnitComponentAdmin)
 
+admin.site.register(learning_unit_enrollment.LearningUnitEnrollment,
+                    learning_unit_enrollment.LearningUnitEnrollmentAdmin)
+
 admin.site.register(offer.Offer,
                     offer.OfferAdmin)
 
