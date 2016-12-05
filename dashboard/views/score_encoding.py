@@ -23,55 +23,55 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from couchbase.exceptions import ValueFormatError
 from django.conf import settings
 from osis_common.document import paper_sheet
 from dashboard import models as mdl
-from osis_common.queue.queue_listener import ScoresSheetClient
+from frontoffice.queue.queue_listener import ScoresSheetClient
 import datetime
-import json
 import logging
+import json
 
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 def get_score_sheet(global_id):
-    logger.debug("Instanciating the QueueConnection ScoresSheetClient...")
-    scores_sheets_cli = ScoresSheetClient()
-    logger.debug("Done.")
+    score_encoding = mdl.score_encoding.find_by_global_id(global_id)
+    document = None
+    if score_encoding:
+        document = score_encoding.document
+    if not document or is_outdated(document):
+        document = fetch_document(global_id)
+    return document
 
-    logger.debug("Sending the global id in the queue and waiting for a response...")
-    json_data = scores_sheets_cli.call(global_id)
-    logger.debug("Done.")
-    logger.debug("Json.loads data consumed in the queue...")
-    updated_document = json.loads(json_data.decode("utf-8"))
-    logger.debug("Done.")
-    try:
-        logger.debug("Updating/inserting the document in Couchbase...")
-        mdl.score_encoding.insert_or_update_document(global_id, updated_document)
-        logger.debug("Done.")
-    except ValueFormatError:
-        logger.debug("Document already in couchbase and last updated today.")
+
+def fetch_document(global_id):
+    json_data = fetch_json(global_id)
+    if not json_data:
         return None
-    return updated_document
+    return mdl.score_encoding.insert_or_update_document(global_id, json_data).document
+
+
+def fetch_json(global_id):
+    scores_sheets_cli = ScoresSheetClient()
+    json_data = scores_sheets_cli.call(global_id)
+    if json_data:
+        json_data = json_data.decode("utf-8")
+    return json_data
+
+
+def is_outdated(document):
+    json_document = json.loads(document)
+    now = datetime.datetime.now()
+    now_str = '%s/%s/%s' % (now.day, now.month, now.year)
+    if json_document.get('publication_date', None) != now_str:
+            return True
+    return False
 
 
 def print_scores(request, global_id):
-    logger.debug("Searching document in couchbase (global id = " + global_id + ")")
-    document = mdl.score_encoding.get_document(global_id)
-    document = document.value if document else None
+    document = get_score_sheet(global_id)
     if document:
-        logger.debug("Document found")
-        now = datetime.datetime.now()
-        now_str = '%s/%s/%s' % (now.day, now.month, now.year)
-        if document.get('publication_date', None) != now_str:
-            document = get_score_sheet(global_id)
-    else:
-        logger.debug("No document found in couchbase")
-        document = get_score_sheet(global_id)
-    if document:
-        logger.debug("Calling build_pdf() method to generate the pdf...")
+        document = json.loads(document)
         return paper_sheet.build_pdf(document)
-    else:
-        return None
+    return None

@@ -24,7 +24,8 @@
 #
 ##############################################################################
 
-import os,sys
+import os
+import sys
 import logging
 from django.core.wsgi import get_wsgi_application
 from osis_common.queue import callbacks, queue_listener
