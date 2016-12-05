@@ -33,11 +33,11 @@ class TestModelStudent(TestCase):
     def setUp(self):
         self.student = create_student()
 
-    def test_get_student_by_registration_id(self):
-        student = mdl_student.get_student_by_registration_id("64641200")
+    def test_find_by_registration_id(self):
+        student = mdl_student.find_by_registration_id("64641200")
         self.assertEqual(student, self.student, "Wrong student returned")
 
-        student = mdl_student.get_student_by_registration_id("6587984")
+        student = mdl_student.find_by_registration_id("6587984")
         self.assertIsNone(student, "Should return none")
 
 
