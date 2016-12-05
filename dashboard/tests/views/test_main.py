@@ -24,24 +24,29 @@
 #
 ##############################################################################
 from django.test import TestCase, Client
-from dashboard.tests import data_for_tests
+from dashboard.tests.models import test_score_encoding
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Permission
 from django.utils.translation import ugettext_lazy as _
-from admission.tests import data_for_tests as global_data
+from admission.tests import data_for_tests
 from django.utils import html
+from base.tests.models import test_tutor
 from dashboard.views import score_encoding
 
 
 class DownloadPaperSheetTest(TestCase):
     def setUp(self):
-        self.score_encoding = data_for_tests.create_score_encoding()
+        self.score_encoding = test_score_encoding.create_score_encoding()
         self.global_id = self.score_encoding.global_id
-        self.tutor = global_data.create_tutor()
+        self.tutor = test_tutor.create_tutor()
+        self.tutor.person.user = data_for_tests.create_user()
+        self.tutor.person.save()
         perm = Permission.objects.get(codename="is_tutor")
         self.tutor.person.user.user_permissions.add(perm)
 
     def test_when_score_sheet(self):
+        self.tutor.person.global_id = self.global_id
+        self.tutor.person.save()
         c = Client()
         c.force_login(self.tutor.person.user)
         url = reverse('scores_download')

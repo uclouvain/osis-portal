@@ -24,14 +24,14 @@
 #
 ##############################################################################
 from django.test import TestCase
-from dashboard.tests import data_for_tests
+from dashboard.tests.models import test_score_encoding
 from dashboard.views import score_encoding
 from unittest.mock import patch
 
 
 class ScoreSheetTest(TestCase):
     def setUp(self):
-        self.score_encoding = data_for_tests.create_score_encoding()
+        self.score_encoding = test_score_encoding.create_score_encoding()
         self.global_id = self.score_encoding.global_id
 
     def test_get_score_sheet_if_present_in_db(self):
@@ -41,11 +41,11 @@ class ScoreSheetTest(TestCase):
     @patch('frontoffice.queue.queue_listener.Client.call')
     def test_get_score_sheet_if_present_in_db_but_outdated(self, mock_client_call):
         global_id = "12012"
-        new_score_encoding = data_for_tests.create_score_encoding(global_id=global_id)
-        new_score_encoding.document = data_for_tests.get_old_sample()
+        new_score_encoding = test_score_encoding.create_score_encoding(global_id=global_id)
+        new_score_encoding.document = test_score_encoding.get_old_sample()
         new_score_encoding.save()
 
-        expected = data_for_tests.get_sample()
+        expected = test_score_encoding.get_sample()
         mock_client_call.return_value = expected.encode("utf-8")
         document = score_encoding.get_score_sheet(global_id)
         self.assertJSONEqual(document, expected, "Should fetch document from queue")
@@ -58,7 +58,7 @@ class ScoreSheetTest(TestCase):
 
     @patch('frontoffice.queue.queue_listener.Client.call')
     def test_get_score_sheet_if_not_present_in_db_and_fetch(self, mock_client_call):
-        expected = data_for_tests.get_sample()
+        expected = test_score_encoding.get_sample()
         mock_client_call.return_value = expected.encode("utf-8")
         document = score_encoding.get_score_sheet("12012")
         self.assertJSONEqual(document, expected, "Should fetch document from queue")
@@ -66,7 +66,7 @@ class ScoreSheetTest(TestCase):
 
 class PrintScoreSheetTest(TestCase):
     def setUp(self):
-        self.score_encoding = data_for_tests.create_score_encoding()
+        self.score_encoding = test_score_encoding.create_score_encoding()
         self.global_id = self.score_encoding.global_id
 
     def test_when_no_scores_sheet(self):

@@ -36,7 +36,10 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 def get_score_sheet(global_id):
-    document = mdl.score_encoding.get_document(global_id)
+    score_encoding = mdl.score_encoding.find_by_global_id(global_id)
+    document = None
+    if score_encoding:
+        document = score_encoding.document
     if not document or is_outdated(document):
         document = fetch_document(global_id)
     return document
