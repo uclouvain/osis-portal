@@ -48,8 +48,11 @@ class OfferEnrollment(SerializableModel):
 
 
 def find_by_student(a_student):
-    enrollments = OfferEnrollment.objects.filter(student=a_student)
-    return enrollments
+    return OfferEnrollment.objects.filter(student=a_student)
+
+
+def find_by_student_ordered(a_student):
+    return find_by_student(a_student).order_by("-offer_year__academic_year__year")
 
 
 def find_by_student_offer(a_student, offer_year):

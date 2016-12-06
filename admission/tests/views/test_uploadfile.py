@@ -29,6 +29,10 @@ from django.contrib.auth.models import User
 from django.test import TestCase, RequestFactory
 
 import admission.tests.data_for_tests as data_model
+import admission.tests.models.test_applicant
+import admission.tests.models.test_applicant_document_file
+import admission.tests.models.test_application
+import admission.tests.models.test_applicaton_document_file
 from admission.models import applicant
 from admission.models.enums import document_type
 from admission.views import upload_file
@@ -42,11 +46,11 @@ class UploadFileTest(TestCase):
         self.factory = RequestFactory()
         self.user = User.objects.create_user(
             username='jacob', email='jacob@localhost', password='top_secret')
-        self.applicant = data_model.create_applicant_by_user(self.user)
-        self.application = data_model.create_application(self.applicant)
-        self.application_document_file = data_model.create_application_document_file(self.application,
-                                                                                     self.applicant.user.username,
-                                                                                     DESCRIPTION)
+        self.applicant = admission.tests.models.test_applicant.create_applicant_by_user(self.user)
+        self.application = admission.tests.models.test_application.create_application(self.applicant)
+        self.application_document_file = admission.tests.models.test_applicaton_document_file.create_application_document_file(self.application,
+                                                                                                                               self.applicant.user.username,
+                                                                                                                               DESCRIPTION)
 
     def test_delete_existing_application_documents(self):
         try:
@@ -55,7 +59,7 @@ class UploadFileTest(TestCase):
             self.fail("delete_existing_application_documents raised ExceptionType unexpectedly!")
 
     def test_delete_existing_applicant_documents(self):
-        data_model.create_applicant_document_file(self.applicant, DESCRIPTION)
+        admission.tests.models.test_applicant_document_file.create_applicant_document_file(self.applicant, DESCRIPTION)
         try:
             upload_file.delete_existing_applicant_documents(self.applicant, DESCRIPTION)
         except Exception:

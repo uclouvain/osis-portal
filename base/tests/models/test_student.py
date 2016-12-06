@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,8 +23,31 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from performance.models import *
-from django.contrib import admin
+from django.test import TestCase
+from base.tests.models.test_person import create_person
+from base import models as mdl_base
+from base.models import student as mdl_student
 
-admin.site.register(student_performance.StudentPerformance,
-                    student_performance.StudentPerformanceAdmin)
+
+class TestModelStudent(TestCase):
+    def setUp(self):
+        self.student = create_student()
+
+    def test_find_by_registration_id(self):
+        student = mdl_student.find_by_registration_id("64641200")
+        self.assertEqual(student, self.student, "Wrong student returned")
+
+        student = mdl_student.find_by_registration_id("6587984")
+        self.assertIsNone(student, "Should return none")
+
+
+def create_student(registration_id="64641200"):
+    a_student = mdl_base.student.Student(registration_id=registration_id, person=create_person())
+    a_student.save()
+    return a_student
+
+
+def create_student_with_specific_registration_id(registration_id):
+    a_student = mdl_base.student.Student(registration_id=registration_id, person=create_person())
+    a_student.save()
+    return a_student
