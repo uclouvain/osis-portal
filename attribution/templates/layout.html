@@ -80,9 +80,12 @@
 </nav>
 
 <div class="container">
-oooo
+
+    {% if request.user.is_authenticated %}
+        {% block breadcrumb_area %}
+        {% endblock %}
+    {% endif %}
     {% block content %}
-        dddd
     {% endblock %}
     <br>
     <br>

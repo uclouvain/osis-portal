@@ -48,6 +48,11 @@ ALLOCATION_CHARGE_NUL = 0
 JSON_LEARNING_UNIT_NOTE = 'note'
 JSON_LEARNING_UNIT_STATUS = 'etatExam'
 
+JANUARY = "janvier"
+JUNE = "juin"
+SEPTEMBER = "septembre"
+
+
 @login_required
 def home(request):
     return by_year(request, datetime.datetime.now().year)
@@ -187,24 +192,16 @@ def get_students(a_learning_unit_year):
 
 
 def show_students(request, a_learning_unit_year):
-    students_list=[]
+    students_list = []
     for learning_unit_enrollment in get_students(a_learning_unit_year):
-        students_list.append({
-            'name': "{0}, {1}".format(learning_unit_enrollment.offer_enrollment.student.person.last_name, learning_unit_enrollment.offer_enrollment.student.person.first_name),
-            'program': learning_unit_enrollment.offer_enrollment.offer_year.acronym,
-            'registration_id': learning_unit_enrollment.offer_enrollment.student.registration_id,
-            'january_note': None,
-            'january_status': None,
-            'june_note': None,
-            'june_status': None,
-            'september_note': None,
-            'september_status': None,
-        })
+        students_list.append(set_student_for_display(learning_unit_enrollment))
     return render(request, "students_list.html", {
         'students': students_list,
-        'learning_unit_year': mdl_base.learning_unit_year.find_by_id(a_learning_unit_year)})
+        'learning_unit_year': mdl_base.learning_unit_year.find_by_id(a_learning_unit_year), })
 
-def get_note(a_registration_id, a_learning_unit, offer_acronym, month_session, data_type):
+
+def get_sessions_results(a_registration_id, a_learning_unit, offer_acronym):
+    results = {}
     academic_year = a_learning_unit.academic_year.year    
     a_student_performance = mdl_performance.student_performance\
         .find_by_student_and_offer_year(a_registration_id, academic_year, offer_acronym)
@@ -215,26 +212,60 @@ def get_note(a_registration_id, a_learning_unit, offer_acronym, month_session, d
         if student_data['etudiant']['noma'] == a_registration_id and monAnnee['anac'] == str(academic_year):
             monOffre = monAnnee['monOffre']
             offre = monOffre['offre']
-            if offre['sigleComplet']==offer_acronym:
+            if offre['sigleComplet'] == offer_acronym:
                 cours_list = monOffre['cours']
                 nb_cours = 0
                 while nb_cours < len(cours_list):
                     cours = cours_list[nb_cours]
                     if cours['sigleComplet'] == a_learning_unit.acronym:
-                        sessions = cours['session']
-                        nb_session = 0
-                        while nb_session < len(sessions):
-                            if sessions[nb_session]['mois'] == month_session:
-                                return sessions[nb_session][data_type]
-                            nb_session = nb_session + 1
+                        get_student_results(cours, results)
                     nb_cours = nb_cours + 1
+    return results
 
 
-    return None
+def get_student_results(cours, results):
+    sessions = cours['session']
+    nb_session = 0
+    while nb_session < len(sessions):
+        results.update({sessions[nb_session]['mois']: {
+            JSON_LEARNING_UNIT_NOTE: get_value(sessions[nb_session], JSON_LEARNING_UNIT_NOTE),
+            JSON_LEARNING_UNIT_STATUS: get_value(sessions[nb_session], JSON_LEARNING_UNIT_STATUS)}})
+        nb_session = nb_session + 1
 
 
 def get_student_data_dict(a_student_performance):
     if a_student_performance:
-        input = json.dumps(a_student_performance.data)
-        return json.loads(input)
+        data_input = json.dumps(a_student_performance.data)
+        return json.loads(data_input)
     return None
+
+
+def get_value(session, variable_name):
+    try:
+        return session[variable_name]
+    except KeyError:
+        return None
+
+
+def get_session_value(session_results, month_session, variable_to_get):
+    try:
+        return session_results[month_session][variable_to_get]
+    except KeyError:
+        return None
+
+
+def set_student_for_display(learning_unit_enrollment):
+    session_results = get_sessions_results(learning_unit_enrollment.offer_enrollment.student.registration_id,
+                                           learning_unit_enrollment.learning_unit_year,
+                                           learning_unit_enrollment.offer_enrollment.offer_year.acronym)
+    return{
+        'name': "{0}, {1}".format(learning_unit_enrollment.offer_enrollment.student.person.last_name,
+                                  learning_unit_enrollment.offer_enrollment.student.person.first_name),
+        'program': learning_unit_enrollment.offer_enrollment.offer_year.acronym,
+        'registration_id': learning_unit_enrollment.offer_enrollment.student.registration_id,
+        'january_note': get_session_value(session_results, JANUARY, JSON_LEARNING_UNIT_NOTE),
+        'january_status': get_session_value(session_results, JANUARY, JSON_LEARNING_UNIT_STATUS),
+        'june_note': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE),
+        'june_status': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_STATUS),
+        'september_note': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE),
+        'september_status': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS,),}

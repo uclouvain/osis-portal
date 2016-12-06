@@ -33,11 +33,8 @@ import admission.tests.data_for_tests as data_model
 from attribution.views import teaching_load
 from base.models.enums import component_type
 from attribution.models.enums import function
-from  performance.tests.models import test_student_performance
+from performance.tests.models import test_student_performance
 
-JANUARY = "janvier"
-JUNE = "juin"
-SEPTEMBER = "september"
 
 REGISTRATION_ID = '64641200'
 
@@ -264,80 +261,18 @@ class TeachingLoadTest(TestCase):
             'title': TITLE,
             'academic_year': an_academic_yr,
             'weight': WEIGHT})
-        self.assertEqual(teaching_load.get_note(student_performance.registration_id,
-                                                a_learning_unit_year,
-                                                student_performance.acronym,
-                                                JANUARY,
-                                                teaching_load.JSON_LEARNING_UNIT_NOTE),'13.0')
-
-    def test_find_january_note_without_student_performance(self):
-        an_academic_yr = data_model.create_academic_year_with_year(self.get_data('academic_year').year)
-        a_learning_unit_year = data_model.create_learning_unit_year({
-            'acronym': 'LINGI2145',
-            'title': TITLE,
-            'academic_year': an_academic_yr,
-            'weight': WEIGHT})
-        self.assertIsNone(teaching_load.get_note(REGISTRATION_ID,
-                                                 a_learning_unit_year,
-                                                 "SINF2MS/G",
-                                                 JANUARY,
-                                                 teaching_load.JSON_LEARNING_UNIT_NOTE))
-    def test_find_january_note_on_wrong_cours(self):
-        student_performance = test_student_performance.create_student_performance()
-        an_academic_yr = data_model.create_academic_year_with_year(student_performance.academic_year)
-        a_learning_unit_year = data_model.create_learning_unit_year({
-            'acronym': 'LINGI21455',
-            'title': TITLE,
-            'academic_year': an_academic_yr,
-            'weight': WEIGHT})
-        self.assertIsNone(teaching_load.get_note(student_performance.registration_id,
-                                                a_learning_unit_year,
-                                                student_performance.acronym,
-                                                JANUARY,
-                                                teaching_load.JSON_LEARNING_UNIT_NOTE))
-
-
-    def test_find_january_status(self):
-        student_performance = test_student_performance.create_student_performance()
-        an_academic_yr = data_model.create_academic_year_with_year(student_performance.academic_year)
-        a_learning_unit_year = data_model.create_learning_unit_year({
-            'acronym': 'LINGI2145',
-            'title': TITLE,
-            'academic_year': an_academic_yr,
-            'weight': WEIGHT})
-        self.assertEqual(teaching_load.get_note(student_performance.registration_id,
-                                                a_learning_unit_year,
-                                                student_performance.acronym,
-                                                JANUARY,
-                                                teaching_load.JSON_LEARNING_UNIT_STATUS),'I')
-
-    def test_find_january_status_without_student_performance(self):
-        an_academic_yr = data_model.create_academic_year_with_year(self.get_data('academic_year').year)
-        a_learning_unit_year = data_model.create_learning_unit_year({
-            'acronym': 'LINGI2145',
-            'title': TITLE,
-            'academic_year': an_academic_yr,
-            'weight': WEIGHT})
-        self.assertIsNone(teaching_load.get_note(REGISTRATION_ID,
-                                                 a_learning_unit_year,
-                                                 "SINF2MS/G",
-                                                 JANUARY,
-                                                 teaching_load.JSON_LEARNING_UNIT_STATUS))
-
-    def test_find_january_status_on_wrong_cours(self):
-        student_performance = test_student_performance.create_student_performance()
-        an_academic_yr = data_model.create_academic_year_with_year(student_performance.academic_year)
-        a_learning_unit_year = data_model.create_learning_unit_year({
-            'acronym': 'LINGI21455',
-            'title': TITLE,
-            'academic_year': an_academic_yr,
-            'weight': WEIGHT})
-        self.assertIsNone(teaching_load.get_note(student_performance.registration_id,
-                                                 a_learning_unit_year,
-                                                 student_performance.acronym,
-                                                 JANUARY,
-                                                 teaching_load.JSON_LEARNING_UNIT_STATUS))
-
+        self.assertEqual(teaching_load.get_sessions_results(student_performance.registration_id,
+                                                            a_learning_unit_year,
+                                                            student_performance.acronym)
+                         , {teaching_load.JANUARY:
+                                {teaching_load.JSON_LEARNING_UNIT_NOTE: '13.0',
+                                 teaching_load.JSON_LEARNING_UNIT_STATUS: 'I'},
+                            teaching_load.JUNE:
+                                {teaching_load.JSON_LEARNING_UNIT_NOTE: '13.0',
+                                 teaching_load.JSON_LEARNING_UNIT_STATUS: 'R'},
+                            teaching_load.SEPTEMBER:
+                                {teaching_load.JSON_LEARNING_UNIT_NOTE: '-',
+                                 teaching_load.JSON_LEARNING_UNIT_STATUS: '-'}})
 
     def test_get_student_performance_data_dict(self):
         student_performance = test_student_performance.create_student_performance()

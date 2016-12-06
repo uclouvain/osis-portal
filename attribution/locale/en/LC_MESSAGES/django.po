@@ -82,3 +82,51 @@ msgstr "June"
 
 msgid "september"
 msgstr "Sept."
+
+msgid "I"
+msgstr "Inscrit"
+
+msgid "S"
+msgstr "Epreuve modifiée"
+
+msgid "R"
+msgstr "Report"
+
+msgid "Y"
+msgstr "Deuxième inscription"
+
+msgid "V"
+msgstr "A satisfait"
+
+msgid "W"
+msgstr "N'a pas satisfait"
+
+msgid "B"
+msgstr "Crédit bologne de l'année avant"
+
+msgid "D"
+msgstr "Dispense"
+
+msgid "J"
+msgstr "Report note de janvier"
+
+msgid "Q"
+msgstr "Q94"
+
+msgid "C"
+msgstr "C94"
+
+msgid "N"
+msgstr "N94"
+
+msgid "K"
+msgstr "K94"
+
+msgid "T"
+msgstr "Test"
+
+msgid "X"
+msgstr "Externe"
+
+msgid "P"
+msgstr "Partielle"
