@@ -27,7 +27,7 @@
 {% endcomment %}
 
 {% block content %}
-    <h1>{{ student|length }}{% trans 'students_learning_unit' %} {{ learning_unit_year.acronym }}</h1>
+    <h1>{{ students|length }}{% trans 'students_learning_unit' %} {{ learning_unit_year }}</h1>
 
     {% if students %}
         <table class="table table-striped table-hover">

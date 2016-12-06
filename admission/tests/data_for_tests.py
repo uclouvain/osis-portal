@@ -192,3 +192,26 @@ def create_learning_unit_enrollment(an_offer_enrollment, a_learning_unit_year):
     learning_unit_enrollment.date_enrollment = datetime.datetime.now()
     learning_unit_enrollment.save()
     return learning_unit_enrollment
+
+
+def create_application(an_applicant):
+    an_application = mdl.application.Application(applicant=an_applicant,
+                                                 offer_year=create_offer_year(),
+                                                 application_type='ADMISSION')
+    an_application.save()
+    return an_application
+
+
+def create_offer_year():
+    an_offer_year = mdl_base.offer_year.OfferYear()
+    an_offer_year.academic_year = create_academic_year()
+    an_offer_year.acronym = "VETE11BA"
+    an_offer_year.title = "Première année de bachelier en médecine vétérinaire"
+    an_offer_year.save()
+    return an_offer_year
+
+def create_academic_year():
+    an_academic_year = mdl_base.academic_year.AcademicYear()
+    an_academic_year.year = 2016
+    an_academic_year.save()
+    return an_academic_year

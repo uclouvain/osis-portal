@@ -45,3 +45,6 @@ class LearningUnitYear(models.Model):
     def __str__(self):
         return u"%s - %s" % (self.academic_year, self.acronym)
 
+
+def find_by_id(learning_unit_year_id):
+    return LearningUnitYear.objects.get(pk=learning_unit_year_id)

@@ -29,11 +29,14 @@ from django.conf import settings
 from django.forms import formset_factory
 from django.shortcuts import render
 
+from performance import models as mdl_performance
 from base import models as mdl_base
 from attribution import models as mdl_attribution
 from base.models.enums import component_type
 from attribution.forms import AttributionForm
 from django.contrib.auth.decorators import login_required
+import json
+
 
 ONE_DECIMAL_FORMAT = "%0.1f"
 
@@ -42,6 +45,8 @@ STUDENT_LIST_EMAIL_END = '@listes-student.uclouvain.be'
 DURATION_NUL = 0
 ALLOCATION_CHARGE_NUL = 0
 
+JSON_LEARNING_UNIT_NOTE = 'note'
+JSON_LEARNING_UNIT_STATUS = 'etatExam'
 
 @login_required
 def home(request):
@@ -182,7 +187,6 @@ def get_students(a_learning_unit_year):
 
 
 def show_students(request, a_learning_unit_year):
-
     students_list=[]
     for learning_unit_enrollment in get_students(a_learning_unit_year):
         students_list.append({
@@ -198,6 +202,39 @@ def show_students(request, a_learning_unit_year):
         })
     return render(request, "students_list.html", {
         'students': students_list,
-        'learning_unit_year': a_learning_unit_year
+        'learning_unit_year': mdl_base.learning_unit_year.find_by_id(a_learning_unit_year)})
 
-        })
+def get_note(a_registration_id, a_learning_unit, offer_acronym, month_session, data_type):
+    academic_year = a_learning_unit.academic_year.year    
+    a_student_performance = mdl_performance.student_performance\
+        .find_by_student_and_offer_year(a_registration_id, academic_year, offer_acronym)
+
+    if a_student_performance:
+        student_data = get_student_data_dict(a_student_performance)
+        monAnnee = student_data['monAnnee']
+        if student_data['etudiant']['noma'] == a_registration_id and monAnnee['anac'] == str(academic_year):
+            monOffre = monAnnee['monOffre']
+            offre = monOffre['offre']
+            if offre['sigleComplet']==offer_acronym:
+                cours_list = monOffre['cours']
+                nb_cours = 0
+                while nb_cours < len(cours_list):
+                    cours = cours_list[nb_cours]
+                    if cours['sigleComplet'] == a_learning_unit.acronym:
+                        sessions = cours['session']
+                        nb_session = 0
+                        while nb_session < len(sessions):
+                            if sessions[nb_session]['mois'] == month_session:
+                                return sessions[nb_session][data_type]
+                            nb_session = nb_session + 1
+                    nb_cours = nb_cours + 1
+
+
+    return None
+
+
+def get_student_data_dict(a_student_performance):
+    if a_student_performance:
+        input = json.dumps(a_student_performance.data)
+        return json.loads(input)
+    return None

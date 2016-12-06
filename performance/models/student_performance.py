@@ -34,7 +34,7 @@ from django.utils import timezone
 class StudentPerformanceAdmin(admin.ModelAdmin):
     list_display = ('registration_id', 'academic_year', 'acronym', 'update_date', 'creation_date')
     list_filter = ('registration_id', 'academic_year', 'acronym', )
-    fieldsets = ((None, {'fields': ('registration_id', 'academic_year', 'acronym', 'update_date', 'creation_date')}),)
+    fieldsets = ((None, {'fields': ('registration_id', 'academic_year', 'acronym', 'update_date', 'creation_date', 'data')}),)
     readonly_fields = ('creation_date', )
 
 
