@@ -26,14 +26,15 @@
 from base import models as mdl_base
 
 
-def create_person():
-    a_person = mdl_base.person.Person(first_name="first", last_name="last")
-    a_person.save()
-    return a_person
-
-
-def create_person_with_user(a_user):
-    person = mdl_base.person.Person()
-    person.user = a_user
-    person.save()
-    return person
+def create_learning_unit_year(data):
+    learning_unit_year = mdl_base.learning_unit_year.LearningUnitYear()
+    if 'acronym' in data:
+        learning_unit_year.acronym = data['acronym']
+    if 'title' in data:
+        learning_unit_year.title = data['title']
+    if 'academic_year' in data:
+        learning_unit_year.academic_year = data['academic_year']
+    if 'weight' in data:
+        learning_unit_year.weight = data['weight']
+    learning_unit_year.save()
+    return learning_unit_year

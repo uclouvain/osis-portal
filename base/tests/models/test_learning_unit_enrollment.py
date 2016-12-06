@@ -23,17 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
+
 from base import models as mdl_base
 
 
-def create_person():
-    a_person = mdl_base.person.Person(first_name="first", last_name="last")
-    a_person.save()
-    return a_person
-
-
-def create_person_with_user(a_user):
-    person = mdl_base.person.Person()
-    person.user = a_user
-    person.save()
-    return person
+def create_learning_unit_enrollment(an_offer_enrollment, a_learning_unit_year):
+    learning_unit_enrollment = mdl_base.learning_unit_enrollment.LearningUnitEnrollment()
+    learning_unit_enrollment.offer_enrollment = an_offer_enrollment
+    learning_unit_enrollment.learning_unit_year = a_learning_unit_year
+    learning_unit_enrollment.date_enrollment = datetime.datetime.now()
+    learning_unit_enrollment.save()
+    return learning_unit_enrollment

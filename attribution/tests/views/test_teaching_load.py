@@ -29,11 +29,13 @@ from django.contrib.auth.models import User, Group
 from django.test import TestCase
 from django.conf import settings
 
-import admission.tests.data_for_tests as data_model
 from attribution.views import teaching_load
 from base.models.enums import component_type
 from attribution.models.enums import function
 from performance.tests.models import test_student_performance
+from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
+    test_learning_unit_component, test_offer_enrollment, test_learning_unit_enrollment, test_offer_year, test_student
+from attribution.tests.models import test_attribution_charge, test_attribution
 
 
 REGISTRATION_ID = '64641200'
@@ -65,9 +67,9 @@ class TeachingLoadTest(TestCase):
         Group.objects.get_or_create(name='students')
 
     def create_learning_unit_year_annual_data(self, a_year):
-        an_academic_yr = data_model.create_academic_year_with_year(a_year)
+        an_academic_yr = test_academic_year.create_academic_year_with_year(a_year)
         an_academic_yr.year = a_year
-        a_learning_unit_year = data_model.create_learning_unit_year({
+        a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
             'acronym': ACRONYM,
             'title': TITLE,
             'academic_year': an_academic_yr,
@@ -79,14 +81,14 @@ class TeachingLoadTest(TestCase):
             self.create_learning_unit_component(component_type.PRACTICAL_EXERCISES,
                                                 LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION,
                                                 a_learning_unit_year)
-        an_attribution = data_model.create_attribution({'function': function.CO_HOLDER,
+        an_attribution = test_attribution.create_attribution({'function': function.CO_HOLDER,
                                                         'learning_unit_year': a_learning_unit_year,
                                                         'tutor': self.a_tutor})
-        data_model.create_attribution_charge(
+        test_attribution_charge.create_attribution_charge(
             {'attribution': an_attribution,
              'learning_unit_component': a_learning_unit_component_lecture,
              'allocation_charge': ATTRIBUTION_CHARGE_LECTURING_DURATION})
-        data_model.create_attribution_charge(
+        test_attribution_charge.create_attribution_charge(
             {'attribution': an_attribution,
              'learning_unit_component': a_learning_unit_component_practice,
              'allocation_charge': ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION})
@@ -99,12 +101,12 @@ class TeachingLoadTest(TestCase):
 
     def create_tutor(self):
         self.a_user = self.create_user(username='jacob', email='jacob@localhost', password='top_secret')
-        self.a_person = data_model.create_person(self.a_user)
+        self.a_person = test_person.create_person_with_user(self.a_user)
         Group.objects.get_or_create(name='tutors')
-        self.a_tutor = data_model.create_tutor(self.a_person)
+        self.a_tutor = test_tutor.create_tutor_with_person(self.a_person)
 
     def create_learning_unit_component(self, a_component_type, duration, a_learning_unit_year):
-        return data_model.create_learning_unit_component({
+        return test_learning_unit_component.create_learning_unit_component({
             'learning_unit_year': a_learning_unit_year,
             'type': a_component_type,
             'duration': duration})
@@ -119,17 +121,17 @@ class TeachingLoadTest(TestCase):
         return teaching_load.ONE_DECIMAL_FORMAT % (percentange_expected,)
 
     def create_learning_unit_year_without_duration(self):
-        a_learning_unit_year_without_duration = data_model.create_learning_unit_year({
+        a_learning_unit_year_without_duration = test_learning_unit_year.create_learning_unit_year({
             'acronym': ACRONYM,
             'title': TITLE,
-            'academic_year': data_model.create_academic_year_with_year(2016)})
+            'academic_year': test_academic_year.create_academic_year_with_year(2016)})
         return a_learning_unit_year_without_duration
 
     def create_student(self, cpt):
         a_student_user = self.create_user(username='student{0}'.format(cpt),
                                           email='student{0}@localhost'.format(cpt),
                                           password='top_student')
-        return data_model.create_student(cpt, data_model.create_person(a_student_user))
+        return test_student.create_student_with_registration_person(cpt, test_person.create_person_with_user(a_student_user))
 
     def test_get_person_from_user(self):
         self.assertEqual(teaching_load.get_person(self.a_user), self.a_person)
@@ -242,12 +244,14 @@ class TeachingLoadTest(TestCase):
     def test_find_enrollments(self):
         a_learning_unit_year = self.get_data('learning_unit_year')
         list_learning_unit_enrollment = []
-        offer_year = data_model.create_offer_year()
+        offer_year = test_offer_year.create_offer_year()
         i = 0
         while i < 5:
             student1 = self.create_student(i)
-            offer_enrollment = data_model.create_offer_enrollment(offer_year, student1, a_learning_unit_year.academic_year)
-            learning_unit_enrollment = data_model.create_learning_unit_enrollment(offer_enrollment, a_learning_unit_year)
+            offer_enrollment = test_offer_enrollment\
+                .create_offer_enrollment_with_academic_year(offer_year, student1, a_learning_unit_year.academic_year)
+            learning_unit_enrollment = test_learning_unit_enrollment\
+                .create_learning_unit_enrollment(offer_enrollment, a_learning_unit_year)
             list_learning_unit_enrollment.append(learning_unit_enrollment)
             i = i + 1
 
@@ -255,8 +259,8 @@ class TeachingLoadTest(TestCase):
 
     def test_find_january_note(self):
         student_performance = test_student_performance.create_student_performance()
-        an_academic_yr = data_model.create_academic_year_with_year(student_performance.academic_year)
-        a_learning_unit_year = data_model.create_learning_unit_year({
+        an_academic_yr = test_academic_year.create_academic_year_with_year(student_performance.academic_year)
+        a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
             'acronym': 'LINGI2145',
             'title': TITLE,
             'academic_year': an_academic_yr,

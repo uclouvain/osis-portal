@@ -23,17 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
+from dashboard.models import score_encoding as mdl_score_encoding
+import json
+import datetime
 
 
-def create_person():
-    a_person = mdl_base.person.Person(first_name="first", last_name="last")
-    a_person.save()
-    return a_person
-
-
-def create_person_with_user(a_user):
-    person = mdl_base.person.Person()
-    person.user = a_user
-    person.save()
-    return person

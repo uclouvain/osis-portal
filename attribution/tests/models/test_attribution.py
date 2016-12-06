@@ -23,17 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
+from attribution import models as mdl_attribution
 
-
-def create_person():
-    a_person = mdl_base.person.Person(first_name="first", last_name="last")
-    a_person.save()
-    return a_person
-
-
-def create_person_with_user(a_user):
-    person = mdl_base.person.Person()
-    person.user = a_user
-    person.save()
-    return person
+def create_attribution(data):
+    attribution = mdl_attribution.attribution.Attribution()
+    if 'function' in data:
+        attribution.function = data['function']
+    if 'learning_unit_year' in data:
+        attribution.learning_unit_year = data['learning_unit_year']
+    if 'tutor' in data:
+        attribution.tutor = data['tutor']
+    attribution.save()
+    return attribution

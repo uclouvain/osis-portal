@@ -26,14 +26,13 @@
 from base import models as mdl_base
 
 
-def create_person():
-    a_person = mdl_base.person.Person(first_name="first", last_name="last")
-    a_person.save()
-    return a_person
-
-
-def create_person_with_user(a_user):
-    person = mdl_base.person.Person()
-    person.user = a_user
-    person.save()
-    return person
+def create_learning_unit_component(data):
+    learning_unit_component = mdl_base.learning_unit_component.LearningUnitComponent()
+    if 'learning_unit_year' in data:
+        learning_unit_component.learning_unit_year = data['learning_unit_year']
+    if 'type' in data:
+        learning_unit_component.type = data['type']
+    if 'duration' in data:
+        learning_unit_component.duration = data['duration']
+    learning_unit_component.save()
+    return learning_unit_component

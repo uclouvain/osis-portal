@@ -23,17 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
+from base.models import tutor
+from base.tests.models import test_person
 
 
-def create_person():
-    a_person = mdl_base.person.Person(first_name="first", last_name="last")
-    a_person.save()
-    return a_person
+def create_tutor():
+    a_tutor = tutor.Tutor(person=test_person.create_person())
+    a_tutor.save()
+    return a_tutor
 
 
-def create_person_with_user(a_user):
-    person = mdl_base.person.Person()
-    person.user = a_user
-    person.save()
-    return person
+def create_tutor_with_person(a_person):
+    a_tutor = tutor.Tutor.objects.create(person=a_person)
+    return a_tutor
