@@ -1,0 +1,70 @@
+{
+  "link_to_regulation": "https://www.uclouvain.be/enseignement-reglements.html",
+  "tutor_global_id": "",
+  "institution": "Universit\u00e9 catholique de Louvain",
+  "publication_date": "15/11/2016",
+  "learning_unit_years": [
+    {
+      "title": "Elektrische actuatoren: gevorderde aspecten en toepassingen m.i.v. transport (Katholieke Universiteit te Leuven)",
+      "programs": [
+        {
+          "deadline": "",
+          "deliberation_date": "Not passed",
+          "enrollments": [
+            {
+              "registration_id": "3",
+              "first_name": "Martin",
+              "last_name": "Student3",
+              "score": "16",
+              "justification": ""
+            }
+          ],
+          "acronym": "DROI1BA",
+          "address": {
+            "fax": null,
+            "recipient": null,
+            "city": null,
+            "postal_code": null,
+            "phone": null,
+            "location": null
+          }
+        },
+        {
+          "deadline": "",
+          "deliberation_date": "Not passed",
+          "enrollments": [
+            {
+              "registration_id": "5",
+              "first_name": "Armand",
+              "last_name": "Student5",
+              "score": "15",
+              "justification": ""
+            }
+          ],
+          "acronym": "SINF2MA",
+          "address": {
+            "fax": null,
+            "recipient": null,
+            "city": null,
+            "postal_code": null,
+            "phone": null,
+            "location": null
+          }
+        }
+      ],
+      "session_number": 1,
+      "decimal_scores": false,
+      "coordinator": {
+        "address": {
+          "postal_code": "",
+          "city": "",
+          "location": ""
+        },
+        "first_name": "",
+        "last_name": ""
+      },
+      "acronym": "LDUAL4355",
+      "academic_year": "2016-2017"
+    }
+  ]
+}
