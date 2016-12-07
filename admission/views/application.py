@@ -32,6 +32,7 @@ from admission.views import common, demande_validation, navigation
 from admission.views.common import extra_information
 from admission.views.common import get_picture_id, get_id_document
 from base import models as mdl_base
+from osis_common import models as mdl_osis_common
 from reference import models as mdl_reference
 from reference.enums import institutional_grade_type as enum_institutional_grade_type
 
@@ -244,6 +245,34 @@ def delete_existing_answers(application):
 
 
 def create_answers(application, request):
+    for key, value in request.FILES.items():
+        if "txt_file_" in key:
+            file_selected = request.FILES[key]
+            file = file_selected
+            file_name = file_selected.name
+            content_type = file_selected.content_type
+            size = file_selected.size
+            description = "offer_selection"
+            new_document = mdl_osis_common.document_file.DocumentFile(file_name=file_name,
+                                                                      file=file,
+                                                                      description=description,
+                                                                      storage_duration=720,
+                                                                      application_name='admission',
+                                                                      content_type=content_type,
+                                                                      size=size,
+                                                                      update_by=request.user)
+            new_document.save()
+            option_id = key.replace("txt_file_", "")
+            old_answer = mdl.answer.find_by_application_and_option(application.id, option_id)
+            if not old_answer:
+                answer = mdl.answer.Answer()
+                answer.application = application
+                answer.option = mdl.option.find_by_id(int(option_id))
+                answer.value = new_document.uuid
+            else:
+                answer = mdl.answer.find_by_id(old_answer)
+                answer.value = new_document.uuid
+            answer.save()
     for key, value in request.POST.items():
         if "txt_answer_question_" in key:
             # INPUT OR LABEL

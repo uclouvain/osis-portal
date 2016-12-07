@@ -23,10 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
 from admission import models as mdl
 from base import models as mdl_base
+from osis_common import models as mdl_osis_common
 
 
 class JSONResponse(HttpResponse):
@@ -36,6 +38,7 @@ class JSONResponse(HttpResponse):
         super(JSONResponse, self).__init__(content, **kwargs)
 
 
+@login_required
 def find_by_offer(request):
     offer_yr_id = request.GET['offer']
     offer_yr = mdl_base.offer_year.find_by_id(offer_yr_id)
@@ -51,11 +54,15 @@ def find_by_offer(request):
                 if option.question.type == 'RADIO_BUTTON' or option.question.type == 'CHECKBOX' \
                         or option.question.type == 'DROPDOWN_LIST':
                     options_max_number = mdl.option.find_number_options_by_question_id(option.question)
-                answers = mdl.answer.find_by_user_and_option(request.user, option.id)
+                answers = mdl.answer.find_by_user_and_option(request.user, option)
                 answer = ""
+                document_file = None
                 if answers.exists():
                     answer = answers[0].value
+                    if option.question.type == 'UPLOAD_BUTTON':
+                        document_file = mdl_osis_common.document_file.DocumentFile.objects.filter(uuid=answer)
                 question_list.append({'answer': answer,
+                                      'document_file': document_file,
                                       'position': position,
                                       'option_id': option.id,
                                       'option_label': option.label,
