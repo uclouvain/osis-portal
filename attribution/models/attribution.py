@@ -26,8 +26,7 @@
 from django.db import models
 from django.contrib import admin
 from osis_common.models.serializable_model import SerializableModel
-
-from attribution.models.enums import function
+from attribution.models.enums import function, application_status
 
 
 class AttributionAdmin(admin.ModelAdmin):
@@ -43,6 +42,13 @@ class Attribution(SerializableModel):
     function = models.CharField(max_length=15, blank=True, null=True, choices=function.FUNCTIONS, db_index=True)
     learning_unit_year = models.ForeignKey('base.LearningUnitYear', blank=True, null=True, default=None)
     tutor = models.ForeignKey('base.Tutor')
+    # type = models.CharField(max_length=25, blank=True, null=True,
+    #                         choices=application_type.APPLICATION_TYPE, db_index=True)
+    # remark = models.TextField(blank=True, null=True)
+    # course_summary = models.TextField(blank=True, null=True)
+    # online_application =  models.BooleanField(default=False)
+    # application_status = models.CharField(max_length=25, blank=True, null=True,
+    #                                       choices=application_status.APPLICATION_STATUS, db_index=True)
 
     def __str__(self):
         return u"%s - %s" % (self.tutor.person, self.function)
