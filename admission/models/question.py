@@ -35,7 +35,7 @@ QUESTION_TYPES = (
     ('RADIO_BUTTON', _('radio_button')),
     ('CHECKBOX', _('checkbox')),
     ('DROPDOWN_LIST', _('dropdown_list')),
-    ('UPLOAD_BUTTON', _('Upuload_button')),
+    ('UPLOAD_BUTTON', _('upload_button')),
     ('DOWNLOAD_LINK', _('download_link')),
     ('HTTP_LINK', _('HTTP_link')))
 

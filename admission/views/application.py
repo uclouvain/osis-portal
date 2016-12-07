@@ -117,7 +117,6 @@ def save_application_offer(request):
 
         if application.id:
             create_application_assimilation_criteria(application)
-            delete_existing_answers(application)
             create_answers(application, request)
     applicant = mdl.applicant.find_by_user(request.user)
 
@@ -263,14 +262,16 @@ def create_answers(application, request):
                                                                       update_by=request.user)
             new_document.save()
             option_id = key.replace("txt_file_", "")
-            old_answer = mdl.answer.find_by_application_and_option(application.id, option_id)
-            if not old_answer:
+            asw = mdl.answer.find_by_application_and_option(application.id, option_id)
+            if asw:
+                answer = mdl.answer.find_by_id(asw)
+                old_document_file = mdl_osis_common.document_file.DocumentFile.objects.filter(uuid=answer.value)
+                old_document_file.delete()
+                answer.value = new_document.uuid
+            else:
                 answer = mdl.answer.Answer()
                 answer.application = application
                 answer.option = mdl.option.find_by_id(int(option_id))
-                answer.value = new_document.uuid
-            else:
-                answer = mdl.answer.find_by_id(old_answer)
                 answer.value = new_document.uuid
             answer.save()
     for key, value in request.POST.items():

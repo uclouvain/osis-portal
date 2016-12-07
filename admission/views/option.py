@@ -56,13 +56,15 @@ def find_by_offer(request):
                     options_max_number = mdl.option.find_number_options_by_question_id(option.question)
                 answers = mdl.answer.find_by_user_and_option(request.user, option)
                 answer = ""
-                document_file = None
+                document_name = ""
                 if answers.exists():
                     answer = answers[0].value
                     if option.question.type == 'UPLOAD_BUTTON':
                         document_file = mdl_osis_common.document_file.DocumentFile.objects.filter(uuid=answer)
+                        if document_file.exists():
+                            document_name = document_file[0].file_name
                 question_list.append({'answer': answer,
-                                      'document_file': document_file,
+                                      'document_file': document_name,
                                       'position': position,
                                       'option_id': option.id,
                                       'option_label': option.label,
