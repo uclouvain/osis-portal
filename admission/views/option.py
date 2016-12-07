@@ -27,6 +27,7 @@ from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
 from admission import models as mdl
 from base import models as mdl_base
+from admission.models.enums import question_type
 
 
 class JSONResponse(HttpResponse):
@@ -44,15 +45,15 @@ def find_by_offer(request):
     if questions:
         for question in questions:
             position = 0
-            options_by_question = mdl.option.find_options_by_question_id(question.id)
+            options_by_question = mdl.option.find_options_by_question_id(question)
             if options_by_question:
                 for option in options_by_question:
                     options_max_number = 1
                     position += 1
-                    if option.question.type == 'RADIO_BUTTON' or option.question.type == 'CHECKBOX' \
-                            or option.question.type == 'DROPDOWN_LIST':
+                    if option.question.type == question_type.RADIO_BUTTON or option.question.type == question_type.CHECKBOX \
+                            or option.question.type == question_type.DROPDOWN_LIST:
                         options_max_number = mdl.option.find_number_options_by_question_id(option.question)
-                    answers = mdl.answer.find_by_user_and_option(request.user, option.id)
+                    answers = mdl.answer.find_by_user_and_option(request.user, option)
                     answer = ""
                     if answers.exists():
                         answer = answers[0].value
