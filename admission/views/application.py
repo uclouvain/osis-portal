@@ -32,6 +32,7 @@ from admission.views import common, demande_validation, navigation
 from admission.views.common import extra_information
 from admission.views.common import get_picture_id, get_id_document
 from base import models as mdl_base
+from osis_common import models as mdl_osis_common
 from reference import models as mdl_reference
 from reference.enums import institutional_grade_type as enum_institutional_grade_type
 
@@ -116,7 +117,6 @@ def save_application_offer(request):
 
         if application.id:
             create_application_assimilation_criteria(application)
-            delete_existing_answers(application)
             create_answers(application, request)
     applicant = mdl.applicant.find_by_user(request.user)
 
@@ -244,18 +244,48 @@ def delete_existing_answers(application):
 
 
 def create_answers(application, request):
+    for key, value in request.FILES.items():
+        if "txt_file_" in key:
+            file_selected = request.FILES[key]
+            file = file_selected
+            file_name = file_selected.name
+            content_type = file_selected.content_type
+            size = file_selected.size
+            description = "offer_selection"
+            new_document = mdl_osis_common.document_file.DocumentFile(file_name=file_name,
+                                                                      file=file,
+                                                                      description=description,
+                                                                      storage_duration=720,
+                                                                      application_name='admission',
+                                                                      content_type=content_type,
+                                                                      size=size,
+                                                                      update_by=request.user)
+            new_document.save()
+            option_id = key.replace("txt_file_", "")
+            asw = mdl.answer.find_by_application_and_option(application.id, option_id)
+            if asw:
+                answer = mdl.answer.find_by_id(asw)
+                old_document_file = mdl_osis_common.document_file.DocumentFile.objects.filter(uuid=answer.value)
+                old_document_file.delete()
+                answer.value = new_document.uuid
+            else:
+                answer = mdl.answer.Answer()
+                answer.application = application
+                answer.option = mdl.option.find_by_id(int(option_id))
+                answer.value = new_document.uuid
+            answer.save()
     for key, value in request.POST.items():
         if "txt_answer_question_" in key:
             # INPUT OR LABEL
             option_id = key.replace("txt_answer_question_", "")
             asw = mdl.answer.find_by_application_and_option(application.id, option_id)
-            if not asw:
+            if asw:
+                answer = mdl.answer.find_by_id(asw)
+                answer.value = value
+            else:
                 answer = mdl.answer.Answer()
                 answer.application = application
                 answer.option = mdl.option.find_by_id(int(option_id))
-                answer.value = value
-            else:
-                answer = mdl.answer.find_by_id(asw)
                 answer.value = value
             answer.save()
         if "txt_answer_radio_" in key:
@@ -267,29 +297,36 @@ def create_answers(application, request):
                 for opt in options:
                     asw = mdl.answer.find_by_application_and_option(application.id, opt.id)
                     asw.delete()
-                answer = mdl.answer.Answer()
-                answer.application = application
-                answer.option = option
-                answer.value = option.value
-                answer.save()
+                create_new_answer(application, option)
         if "txt_answer_checkbox_" in key:
             # CHECK_BOX
             if "on" == value:
-                answer = mdl.answer.Answer()
-                answer.application = application
                 option_id = key.replace("txt_answer_checkbox_", "")
                 option = mdl.option.find_by_id(int(option_id))
-                answer.option = option
-                answer.value = option.value
-                answer.save()
+                options = mdl.option.find_options_by_question_id(option.question.id)
+                if options:
+                    for opt in options:
+                        asw = mdl.answer.find_by_application_and_option(application.id, opt.id)
+                        asw.delete()
+                create_new_answer(application, option)
         if "slt_question_" in key:
             if value != "0":
-                answer = mdl.answer.Answer()
-                answer.application = application
-                option = mdl.option.find_by_id(value)
-                answer.option = option
-                answer.value = option.value
-                answer.save()
+                option_id = key.replace("slt_question_", "")
+                option = mdl.option.find_by_id(int(option_id))
+                options = mdl.option.find_options_by_question_id(option.question.id)
+                if options:
+                    for opt in options:
+                        asw = mdl.answer.find_by_application_and_option(application.id, opt.id)
+                        asw.delete()
+                create_new_answer(application, option)
+
+
+def create_new_answer(application, option):
+    answer = mdl.answer.Answer()
+    answer.application = application
+    answer.option = option
+    answer.value = option.value
+    answer.save()
 
 
 def delete_application_assimilation_criteria(application):
