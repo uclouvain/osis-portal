@@ -116,7 +116,7 @@ def _create_update_person(user, person, user_infos):
                         first_name=user_infos.get('USER_FIRST_NAME'),
                         last_name=user_infos.get('USER_LAST_NAME'),
                         email=user_infos.get('USER_EMAIL'))
-        super(SerializableModel, person).save()
+        person.save()
         person_created.send(sender=None, person=person)
     else:
         updated, person = _update_person_if_necessary(person, user, user_infos.get('USER_FGS'))

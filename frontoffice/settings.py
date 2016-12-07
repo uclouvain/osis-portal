@@ -64,6 +64,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'localflavor',
     'performance',
+    'attribution',
     'dissertation',
     'statici18n',
     'ckeditor',
@@ -240,9 +241,12 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL
 #        'MIGRATIONS_TO_PRODUCE': 'osis',
 #        'MIGRATIONS_TO_CONSUME': 'osis_portal',
 #        'PAPER_SHEET': 'paper_sheet',
-#        'PERFORMANCE': 'performance'
+#        'PERFORMANCE': 'performance_to_client',
+#        'STUDENT_PERFORMANCE': 'rpc_performance_from_client',
+#        'STUDENT_POINTS': 'rpc_performance_to_client'
 #    }
 # }
+
 
 LOGIN_URL=reverse_lazy('login')
 OVERRIDED_LOGOUT_URL=''
