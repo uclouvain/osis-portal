@@ -24,19 +24,22 @@
 #
 ##############################################################################
 
-from django.utils.translation import ugettext_lazy as _
+LABEL = "LABEL"
+SHORT_INPUT_TEXT = "SHORT_INPUT_TEXT"
+LONG_INPUT_TEXT = "LONG_INPUT_TEXT"
+RADIO_BUTTON = "RADIO_BUTTON"
+CHECKBOX = "CHECKBOX"
+DROPDOWN_LIST = "DROPDOWN_LIST"
+UPLOAD_BUTTON = "UPLOAD_BUTTON"
+DOWNLOAD_LINK = "DOWNLOAD_LINK"
+HTTP_LINK = "HTTP_LINK"
 
-CHECKBOX = 'CHECKBOX'
-DROPDOWN_LIST = 'DROPDOWN_LIST'
-RADIO_BUTTON = 'RADIO_BUTTON'
-
-QUESTION_TYPES = (
-    ('LABEL', _('label')),
-    ('SHORT_INPUT_TEXT', _('short_input_text')),
-    ('LONG_INPUT_TEXT', _('long_input_text')),
-    ('RADIO_BUTTON', _('radio_button')),
-    ('CHECKBOX', _('checkbox')),
-    ('DROPDOWN_LIST', _('dropdown_list')),
-    ('UPLOAD_BUTTON', _('Upuload_button')),
-    ('DOWNLOAD_LINK', _('download_link')),
-    ('HTTP_LINK', _('HTTP_link')))
+QUESTION_TYPES = ((LABEL, LABEL),
+                  (SHORT_INPUT_TEXT, SHORT_INPUT_TEXT),
+                  (LONG_INPUT_TEXT, LONG_INPUT_TEXT),
+                  (RADIO_BUTTON, RADIO_BUTTON),
+                  (CHECKBOX, CHECKBOX),
+                  (DROPDOWN_LIST, DROPDOWN_LIST),
+                  (UPLOAD_BUTTON, UPLOAD_BUTTON),
+                  (DOWNLOAD_LINK, DOWNLOAD_LINK),
+                  (HTTP_LINK, HTTP_LINK))
