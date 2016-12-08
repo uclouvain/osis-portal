@@ -11,21 +11,25 @@
                 <input type="radio"
                        name="local_community"
                        id="rdb_local_community_french"
-                       value="FRENCH" onclick="show_hide_pnl_dipl_acc_high_educ();"> {%trans 'french_belgian_community'%}
+                       value="FRENCH"
+                       onclick="show_hide_pnl_dipl_acc_high_educ();display('pnl_teaching_type');">
+                       {%trans 'french_belgian_community'%}
             </label>
             <br>
             <label>
               <input type="radio"
                      name="local_community"
                      id="rdb_local_community_dutch"
-                     value="DUTCH" onclick="show_hide_pnl_dipl_acc_high_educ();"> {%trans 'dutch_belgian_community'%}
+                     value="DUTCH" onclick="show_hide_pnl_dipl_acc_high_educ();display('pnl_teaching_type');">
+                     {%trans 'dutch_belgian_community'%}
             </label>
             <br>
             <label>
               <input type="radio"
                      name="local_community"
                      id="rdb_local_community_german"
-                     value="GERMAN" onclick="show_hide_pnl_dipl_acc_high_educ();"> {%trans 'german_belgian_community'%}
+                     value="GERMAN" onclick="show_hide_pnl_dipl_acc_high_educ();display('pnl_teaching_type');">
+                     {%trans 'german_belgian_community'%}
             </label>
             {%if validation_messages and validation_messages|get_item:'local_community'%}
                 <br><span class="error" style="margin-left:5px;" id="national_diploma_local_community_error">{{ validation_messages|get_item:'local_community'}}</span>
@@ -71,79 +75,60 @@
             </div>
             <br>
             <div >
-            <label>{% trans 'institution_not_found_question'%}</label>
+
             <input type="checkbox"
                    id="chb_other_school"
                    name="other_school"
                    onclick="disabled_field('txt_CESS_other_school_name',this);disabled_field('txt_CESS_other_school_city',this);disabled_field('txt_CESS_other_school_postal_code',this);
                             reset_input('txt_CESS_other_school_name');reset_input('txt_CESS_other_school_city');reset_input('txt_CESS_other_school_postal_code');">
+                <label>{% trans 'institution_not_found_question'%}</label>
             </div>
             <br>
 
             <div id="pnl_other_school" >
                 <div class="row">
-                <div class="col-md-1">
-                    &nbsp;
-                </div>
-                <div class="col-md-4">
-                    <label>{% trans 'institution_name'%}</label>
-                    <input type="text"
-                           class="form-control"
-                           id="txt_CESS_other_school_name"
-                           name="CESS_other_school_name">
-                </div>
-                <div class="col-md-4">
-                    <label>{% trans 'city'%}</label>
-                    <input type="text"
-                           class="form-control"
-                           id="txt_CESS_other_school_city"
-                           name="CESS_other_school_city">
-                </div>
-                <div class="col-md-3">
-                    <label>{% trans 'postal_code'%}</label>
-                    <input class="form-control"
-                           id="txt_CESS_other_school_postal_code"
-                           name="CESS_other_school_postal_code"
-                           style="max-width:100px;">
-                </div>
+                    <div class="col-md-1">
+                        &nbsp;
+                    </div>
+                    <div class="col-md-11">
+                        <label>{% trans 'institution_name'%}</label>
+                        <input type="text"
+                               class="form-control"
+                               id="txt_CESS_other_school_name"
+                               name="CESS_other_school_name"
+                               maxlength="100">
+                    </div>
                 </div>
                 <br>
                 <div class="row">
                     <div class="col-md-1">
                         &nbsp;
                     </div>
-                    <div class="col-md-11">
-                        <label>
-                            <input type="radio"
-                                   name="school_local_community"
-                                   id="rdb_school_local_community_french"
-                                   value="FRENCH"
-                                   onclick="display('pnl_teaching_type')"> {%trans 'french_belgian_community'%}
-                        </label>
-                        <br>
-                        <label>
-                          <input type="radio"
-                                 name="school_local_community"
-                                 id="rdb_school_local_community_dutch"
-                                 value="DUTCH"
-                                 onclick="hide('pnl_teaching_type')"> {%trans 'dutch_belgian_community'%}
-                        </label>
-                        <br>
-                        <label>
-                          <input type="radio"
-                                 name="school_local_community"
-                                 id="rdb_school_local_community_german"
-                                 value="GERMAN"
-                                 onclick="hide('pnl_teaching_type')"> {%trans 'german_belgian_community'%}
-                        </label>
+                    <div class="col-md-7">
+                        <label>{% trans 'city'%}</label>
+                        <input type="text"
+                               class="form-control"
+                               id="txt_CESS_other_school_city"
+                               name="CESS_other_school_city"
+                               maxlength="255">
+                    </div>
+                    <div class="col-md-4">
+                        <label>{% trans 'postal_code'%}</label>
+                        <input class="form-control"
+                               id="txt_CESS_other_school_postal_code"
+                               name="CESS_other_school_postal_code"
+                               style="max-width:100px;"
+                               maxlength="20">
                     </div>
                 </div>
+                <br>
             </div>
             {%if validation_messages and validation_messages|get_item:'school'%}
                 <span class="error" style="margin-left:5px;"
                       id="national_diploma_school_error">{{ validation_messages|get_item:'school'}}</span>
+                <br>
             {% endif %}
-            <br>
+
         </div>
             </div>
     </div>
@@ -161,8 +146,8 @@
                    value="{{edtype_transition.id}}"
                    onclick="reset_rdb('rdb_education_technic_type');reset_chb('other_education');disabled_reset_field_txt('txt_other_education_type','True');">&nbsp;{{edtype_transition.name}}
                 </label>
+                <br>
             {%endfor%}
-            <br>
             <br>
             <label>{%trans 'educational_qualification'%}</label>
             <br>
@@ -180,17 +165,19 @@
             <br>
             <div class="row">
                 <div class="col-md-4">
+                    <input type="checkbox"
+                           id="chb_other_education"
+                           name="other_education">
                     <label>{% trans 'other_education_type' %}</label>
-                      <input type="checkbox"
-                             id="chb_other_education"
-                             name="other_education">
+
                 </div>
                 <div >
                     <div class="col-md-8">
                         <label>{%trans 'to_specify'%}</label>
                         <input class="form-control"
                                id="txt_other_education_type"
-                               name="other_education_type">
+                               name="other_education_type"
+                               maxlength="100" >
                     </div>
                 </div>
             </div>
@@ -284,6 +271,12 @@
                      name="result"
                      id="rdb_result_more_75"
                      value="HIGH">&nbsp;{% trans 'high_result'%}
+            </label>
+            <label class="radio-inline">
+                <input type="radio"
+                       name="result"
+                       id="rdb_no_result"
+                       value="NO_RESULT">  {% trans 'no_result_yet' %}
             </label>
             {%if validation_messages and validation_messages|get_item:'result'%}
                 <br><br><span class="error" style="margin-left:5px;" id="national_diploma_result_error">{{ validation_messages|get_item:'result'}}</span><br>

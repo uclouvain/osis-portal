@@ -27,6 +27,8 @@ import os
 from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import sys
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -62,10 +64,20 @@ INSTALLED_APPS = (
     'rest_framework',
     'localflavor',
     'performance',
+    'attribution',
     'dissertation',
     'statici18n',
     'ckeditor',
 )
+
+# check if we are testing right now
+TESTING = 'test' in sys.argv
+
+if TESTING:
+    # add test packages that have specific models for tests
+    INSTALLED_APPS = INSTALLED_APPS + (
+        'osis_common.tests',
+    )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -219,7 +231,7 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL
 # Queues Definition
 # Uncomment the configuration if you want to use the queue system
 # The queue system uses RabbitMq queues to communicate with other application (ex : osis)
-#QUEUES = {
+# QUEUES = {
 #    'QUEUE_URL': 'localhost',
 #    'QUEUE_USER': 'guest',
 #    'QUEUE_PASSWORD': 'guest',
@@ -229,9 +241,12 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL
 #        'MIGRATIONS_TO_PRODUCE': 'osis',
 #        'MIGRATIONS_TO_CONSUME': 'osis_portal',
 #        'PAPER_SHEET': 'paper_sheet',
-#        'PERFORMANCE': 'performance'
+#        'PERFORMANCE': 'performance_to_client',
+#        'STUDENT_PERFORMANCE': 'rpc_performance_from_client',
+#        'STUDENT_POINTS': 'rpc_performance_to_client'
 #    }
-#}
+# }
+
 
 LOGIN_URL=reverse_lazy('login')
 OVERRIDED_LOGOUT_URL=''
@@ -275,6 +290,10 @@ CKEDITOR_CONFIGS = {
 
 try:
     from frontoffice.server_settings import *
+    try:
+        LOCALE_PATHS = LOCALE_PATHS + SERVER_LOCALE_PATHS
+    except NameError:
+        pass
 except ImportError:
     pass
 

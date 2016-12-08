@@ -26,6 +26,15 @@ msgstr "Accepté par le promoteur"
 msgid "accepted_by_first_year_evaluation"
 msgstr "Validation de première année validée"
 
+msgid "ACCOMPANIST"
+msgstr "Accompagnateur"
+
+msgid "accompanist"
+msgstr "Accompagnateur"
+
+msgid "add_justification"
+msgstr "Ajouter une justification"
+
 msgid "add_reader"
 msgstr "Ajouter un lecteur"
 
@@ -43,6 +52,9 @@ msgstr "Changement"
 
 msgid "collaboration"
 msgstr "Collaboration"
+
+msgid "CO_PROMOTEUR"
+msgstr "Co-Promoteur"
 
 msgid "copromotor"
 msgstr "Co-promoteur"
@@ -82,6 +94,9 @@ msgstr "Description"
 
 msgid "dir_submit"
 msgstr "Soumettre au professeur"
+
+msgid "dissertation"
+msgstr "Mémoire"
 
 msgid "dissertations"
 msgstr "Mémoires"
@@ -128,6 +143,15 @@ msgstr "Interdite"
 msgid "history"
 msgstr "Historique"
 
+msgid "information"
+msgstr "Information"
+
+msgid "INTERNSHIP"
+msgstr "Maître de stage"
+
+msgid "internship_master"
+msgstr "Maître de stage"
+
 msgid "january"
 msgstr "Janvier"
 
@@ -136,6 +160,9 @@ msgstr "Juin"
 
 msgid "justification_confirmation_message"
 msgstr "Confirmer la justification"
+
+msgid "justification_instructions"
+msgstr "La mise-à-jour de l'état du mémoire est sur le point d'être effectuée. Le changement d'état qui sera appliqué est renseigné ci-dessous. Veuillez indiquer un message d'explication."
 
 msgid "level"
 msgstr "Niveau de développment du sujet"
@@ -182,8 +209,17 @@ msgstr "Personne"
 msgid "possible"
 msgstr "Possible"
 
+msgid "PRESIDENT"
+msgstr "Président"
+
+msgid "president"
+msgstr "Président"
+
 msgid "professor"
 msgstr "Professeur"
+
+msgid "PROMOTEUR"
+msgstr "Promoteur"
 
 msgid "promotor"
 msgstr "Promoteur"
@@ -199,6 +235,9 @@ msgstr "Jury du sujet de mémoire"
 
 msgid "question"
 msgstr "Question"
+
+msgid "READER"
+msgstr "Lecteur"
 
 msgid "reader"
 msgstr "Lecteur"

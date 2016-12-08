@@ -25,6 +25,12 @@
 ##############################################################################
 from django.test import TestCase
 from django.contrib.auth.models import User
+
+import admission.tests.models.test_applicant
+import admission.tests.models.test_application
+import admission.tests.models.test_applicaton_document_file
+import admission.tests.models.test_secondary_education
+import admission.tests.models.test_secondary_education_exam
 from admission.views import secondary_education
 import admission.tests.data_for_tests as data_model
 
@@ -34,7 +40,7 @@ class SecondaryEducationTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username='jacob', email='jacob@localhost', password='top_secret')
-        self.applicant = data_model.create_applicant_by_user(self.user)
+        self.applicant = admission.tests.models.test_applicant.create_applicant_by_user(self.user)
 
     def test_get_secondary_education_exams_data_size(self):
         secondary_education_record = None
@@ -42,15 +48,15 @@ class SecondaryEducationTest(TestCase):
             get_secondary_education_exams(secondary_education_record)
         self.assertTrue(len(list_secondary_education_exams) == 0)
 
-        secondary_education_record = data_model.create_secondary_education_with_exams()
+        secondary_education_record = admission.tests.models.test_secondary_education.create_secondary_education_with_exams()
         list_secondary_education_exams = secondary_education.\
             get_secondary_education_exams(secondary_education_record)
         self.assertTrue(len(list_secondary_education_exams) == 3)
 
     def test_secondary_education_exam_update(self):
-        secondary_education_record = data_model.create_secondary_education_with_exams()
+        secondary_education_record = admission.tests.models.test_secondary_education.create_secondary_education_with_exams()
         type = 'ADMISSION'
-        secondary_education_exam = data_model.create_secondary_education_exam(secondary_education_record, type)
+        secondary_education_exam = admission.tests.models.test_secondary_education_exam.create_secondary_education_exam(secondary_education_record, type)
 
         try:
             secondary_education.secondary_education_exam_update(secondary_education_record,
@@ -79,14 +85,14 @@ class SecondaryEducationTest(TestCase):
             secondary_education.get_secondary_education_files(None)
         except Exception:
             self.fail("get_secondary_education_files_data raised ExceptionType unexpectedly!")
-        an_application = data_model.create_application(self.applicant)
+        an_application = admission.tests.models.test_application.create_application(self.applicant)
         try:
             secondary_education.get_secondary_education_files(an_application)
         except Exception:
             self.fail("get_secondary_education_files_data raised ExceptionType unexpectedly!")
 
-        an_application_document_file = data_model.create_application_document_file(an_application,
-                                                                                   self.user.username,
+        an_application_document_file = admission.tests.models.test_applicaton_document_file.create_application_document_file(an_application,
+                                                                                                                             self.user.username,
                                                                                    'NATIONAL_DIPLOMA_VERSO')
 
         dict = secondary_education.get_secondary_education_files(an_application)

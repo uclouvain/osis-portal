@@ -26,7 +26,7 @@
 from django.http import HttpRequest
 from django.test import TestCase
 
-import admission.tests.data_for_tests as data_model
+from reference.tests.models import test_education_institution
 from admission.views import places
 from reference import models as mdl_reference
 from reference.enums import education_institution_type
@@ -61,8 +61,8 @@ class PlacesTest(TestCase):
 
 
 def create_education_institutions_from_postal_code(postal_code):
-    return [data_model.create_education_institution_from_postal_code(postal_code)]
+    return [test_education_institution.create_education_institution_from_postal_code(postal_code)]
 
 
 def create_education_institutions_from_city(city):
-    return [data_model.create_education_institution_from_city(city)]
+    return [test_education_institution.create_education_institution_from_city(city)]
