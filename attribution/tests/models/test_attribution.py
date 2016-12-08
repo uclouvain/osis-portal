@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
 from attribution import models as mdl_attribution
 
 def create_attribution(data):
@@ -31,6 +32,9 @@ def create_attribution(data):
         attribution.function = data['function']
     if 'learning_unit_year' in data:
         attribution.learning_unit_year = data['learning_unit_year']
+        year_yr = attribution.learning_unit_year.academic_year.year
+        attribution.start_date = datetime.datetime(year_yr, 9, 15)
+        attribution.end_date = datetime.datetime(year_yr+1, 9, 14)
     if 'tutor' in data:
         attribution.tutor = data['tutor']
     attribution.save()

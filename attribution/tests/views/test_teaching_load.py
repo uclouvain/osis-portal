@@ -82,8 +82,8 @@ class TeachingLoadTest(TestCase):
                                                 LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION,
                                                 a_learning_unit_year)
         an_attribution = test_attribution.create_attribution({'function': function.CO_HOLDER,
-                                                        'learning_unit_year': a_learning_unit_year,
-                                                        'tutor': self.a_tutor})
+                                                              'learning_unit_year': a_learning_unit_year,
+                                                              'tutor': self.a_tutor})
         test_attribution_charge.create_attribution_charge(
             {'attribution': an_attribution,
              'learning_unit_component': a_learning_unit_component_lecture,
@@ -93,7 +93,7 @@ class TeachingLoadTest(TestCase):
              'learning_unit_component': a_learning_unit_component_practice,
              'allocation_charge': ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION})
 
-        return {'academic_year':                   an_academic_yr,
+        return {'academic_year':                    an_academic_yr,
                 'learning_unit_year':               a_learning_unit_year,
                 'learning_unit_component_lecture':  a_learning_unit_component_lecture,
                 'learning_unit_component_practice': a_learning_unit_component_practice,
@@ -248,9 +248,9 @@ class TeachingLoadTest(TestCase):
         i = 0
         while i < 5:
             student1 = self.create_student(i)
-            offer_enrollment = test_offer_enrollment\
+            offer_enrollment = test_offer_enrollment \
                 .create_offer_enrollment_with_academic_year(offer_year, student1, a_learning_unit_year.academic_year)
-            learning_unit_enrollment = test_learning_unit_enrollment\
+            learning_unit_enrollment = test_learning_unit_enrollment \
                 .create_learning_unit_enrollment(offer_enrollment, a_learning_unit_year)
             list_learning_unit_enrollment.append(learning_unit_enrollment)
             i = i + 1

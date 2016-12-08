@@ -25,27 +25,29 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from osis_common.models.serializable_model import SerializableModel
+from attribution.models.enums import function
 
 
-class LearningUnitYearAdmin(admin.ModelAdmin):
-    list_display = ('acronym', 'title', 'academic_year', 'weight')
-    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'weight')}),)
-    list_filter = ('academic_year__year',)
-    search_fields = ['acronym']
+class TutorApplicationAdmin(admin.ModelAdmin):
+    list_display = ('tutor', 'function', 'learning_unit_year')
+    list_filter = ('function',)
+    fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function')}),)
+    raw_id_fields = ('learning_unit_year', 'tutor')
+    search_fields = ['tutor__person__first_name', 'tutor__person__last_name', 'learning_unit_year__acronym']
 
 
-class LearningUnitYear(models.Model):
+class TutorApplication(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    acronym = models.CharField(max_length=15, db_index=True)
-    title = models.CharField(max_length=255)
-    credits = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
-    weight = models.IntegerField(blank=True, null=True)
-    academic_year = models.ForeignKey('AcademicYear')
-    team = models.BooleanField(default=False)
+    function = models.CharField(max_length=15, blank=True, null=True, choices=function.FUNCTIONS, db_index=True)
+    learning_unit_year = models.ForeignKey('base.LearningUnitYear', blank=True, null=True, default=None)
+    tutor = models.ForeignKey('base.Tutor')
+    remark = models.TextField(blank=True, null=True)
+    course_summary = models.TextField(blank=True, null=True)
+    start_date = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)
+    end_date = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)
+
 
     def __str__(self):
-        return u"%s - %s" % (self.academic_year, self.acronym)
+        return u"%s - %s" % (self.tutor.person, self.function)
 
-
-def find_by_id(learning_unit_year_id):
-    return LearningUnitYear.objects.get(pk=learning_unit_year_id)

@@ -23,12 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.db import models
+from django.contrib import admin
+from osis_common.models.serializable_model import SerializableModel
 
-SUBMITTED = "SUBMITTED"
-TO_BE_SIGNED = "TO_BE_SIGNED"
-REFUSED = "REFUSED"
 
-APPLICATION_STATUS = ((SUBMITTED, SUBMITTED),
-                      (TO_BE_SIGNED, TO_BE_SIGNED),
-                      (REFUSED, REFUSED))
+class ApplicationChargeAdmin(admin.ModelAdmin):
+    list_display = ('tutor_application', 'learning_unit_component', 'allocation_charge')
+
+
+class ApplicationCharge(SerializableModel):
+    tutor_application = models.ForeignKey('TutorApplication')
+    learning_unit_component = models.ForeignKey('base.LearningUnitComponent')
+    allocation_charge = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+
+    def __str__(self):
+        return u"%s" % str(self.tutor_application)
+
+
 
