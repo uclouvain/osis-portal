@@ -145,6 +145,10 @@
             </div>
         </div>
 
+        <div class="row container-fluid text-right">
+            <small> {% trans 'generated' %} : {{ creation_date }}</small>
+        </div>
+
         <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
         <script src="{% static 'js/performance_result.js' %}"></script>
         <script type="text/javascript">
@@ -155,5 +159,6 @@
         </script>
         {% endif %}
     </div>
+
 </div>
 {% endblock %}

@@ -27,6 +27,12 @@ from osis_common.models.serializable_model import SerializableModel
 from django.db import models
 from django.utils import timezone
 from django.db.models import Q
+from django.contrib import admin
+
+
+class PropositionOfferAdmin(admin.ModelAdmin):
+    list_display = ('proposition_dissertation', 'offer_proposition')
+    raw_id_fields = ('proposition_dissertation', 'offer_proposition')
 
 
 class PropositionOffer(SerializableModel):
@@ -41,8 +47,9 @@ def search_by_offers(offers):
     return PropositionOffer.objects.filter(proposition_dissertation__active=True,
                                            proposition_dissertation__visibility=True,
                                            offer_proposition__offer__in=offers,
-                                           offer_proposition__start_visibility_proposition__lte=timezone.now())\
-        .distinct()
+                                           offer_proposition__start_visibility_proposition__lte=timezone.now(),
+                                           offer_proposition__end_visibility_proposition__gte=timezone.now()
+                                           )
 
 
 def search_by_proposition_dissertation(proposition_dissertation):

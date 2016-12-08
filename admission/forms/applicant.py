@@ -25,93 +25,8 @@
 ##############################################################################
 from django import forms
 from django.core.validators import MinValueValidator
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 from admission.validators import date_validator
-from admission.models.sociological_survey import SociologicalSurvey
-from admission.models.enums import professional_activity
-from localflavor.generic.forms import BICFormField, IBANFormField
-from osis_common.models.document_file import DocumentFile
-
-
-class NewAccountForm(forms.Form):
-    first_name_new = forms.CharField(required=True, max_length=30)
-    last_name_new = forms.CharField(required=True, max_length=30)
-    email_new = forms.EmailField(required=True)
-    email_new_confirm = forms.EmailField(required=True)
-    password_new = forms.CharField(widget=forms.PasswordInput, required=True)
-    password_new_confirm = forms.CharField(widget=forms.PasswordInput, required=True)
-    verification = forms.CharField(required=True, label=_(''))
-
-    def __init__(self, *args, **kwargs):
-        super(NewAccountForm, self).__init__(*args, **kwargs)
-
-    def clean(self):
-        cleaned_data = super(NewAccountForm, self).clean()
-        email_new = cleaned_data.get("email_new")
-        email_new_confirm = cleaned_data.get("email_new_confirm")
-        if email_new != email_new_confirm:
-            self.errors['email_new_confirm'] = _('different_emails')
-
-        password_new = cleaned_data.get("password_new")
-        password_new_confirm = cleaned_data.get("password_new_confirm")
-        if password_new != password_new_confirm:
-            self.errors['password_new_confirm'] = _('different_passwords')
-        if password_new and len(password_new) < 8:
-            self.errors['password_new'] = _('password_too_short')
-        return cleaned_data
-
-    def clean_password_new(self):
-        data = self.cleaned_data['password_new']
-        return data.strip()
-
-    def clean_password_new_confirm(self):
-        data = self.cleaned_data['password_new_confirm']
-        return data.strip()
-
-
-class AccountForm(forms.Form):
-    email =    forms.EmailField(required=True)
-    password = forms.CharField(widget=forms.PasswordInput, required=True)
-
-    def __init__(self, *args, **kwargs):
-        super(AccountForm, self).__init__(*args, **kwargs)
-
-    def clean_email(self):
-        data = self.cleaned_data['email']
-        if data is None or len(data) == 0:
-            self.errors['email'] = _('mandatory_field')
-        return data.strip()
-
-    def clean_password(self):
-        data = self.cleaned_data['password']
-        return data.strip()
-
-
-class NewPasswordForm(forms.Form):
-    password_new =         forms.CharField(widget=forms.PasswordInput, required=True)
-    password_new_confirm = forms.CharField(widget=forms.PasswordInput, required=True)
-
-    def __init__(self, *args, **kwargs):
-        super(NewPasswordForm, self).__init__(*args, **kwargs)
-
-    def clean(self):
-        cleaned_data = super(NewPasswordForm, self).clean()
-        password_new = cleaned_data.get("password_new")
-        password_new_confirm = cleaned_data.get("password_new_confirm")
-        if password_new != password_new_confirm:
-            self.errors['password_new_confirm'] = _('different_passwords')
-        if password_new and len(password_new) < 8:
-            self.errors['password_new'] = _('password_too_short')
-        return cleaned_data
-
-    def clean_password_new(self):
-        data = self.cleaned_data['password_new']
-        return data.strip()
-
-    def clean_password_new_confirm(self):
-        data = self.cleaned_data['password_new_confirm']
-        return data.strip()
 
 
 class ApplicantForm(forms.Form):
@@ -140,10 +55,12 @@ class ApplicantForm(forms.Form):
     contact_adr_postal_code = forms.CharField(required=False)
     contact_adr_city        = forms.CharField(required=False)
     contact_adr_country     = forms.CharField(required=False)
-    additional_email        = forms.EmailField(required=True)
     previous_enrollment     = forms.CharField(required=False)
     registration_id         = forms.CharField(required=False)
     last_academic_year      = forms.IntegerField(required=False)
+    national_id             = forms.CharField(required=False)
+    id_card_number          = forms.CharField(required=False)
+    passport_number         = forms.CharField(required=False)
 
     def __init__(self, *args, **kwargs):
         super(ApplicantForm, self).__init__(*args, **kwargs)
@@ -162,7 +79,6 @@ class ApplicantForm(forms.Form):
         self.fields['legal_adr_city'].error_messages = {'required': _('mandatory_field')}
         self.fields['legal_adr_country'].error_messages = {'required': _('mandatory_field')}
         self.fields['same_contact_legal_addr'].error_messages = {'required': _('mandatory_field')}
-        self.fields['additional_email'].error_messages = {'required': _('mandatory_field')}
         self._initial_data = self.__dict__.copy()
 
     def clean(self):
@@ -204,78 +120,18 @@ class ApplicantForm(forms.Form):
             if last_academic_year is None or last_academic_year <= 0:
                 self.errors['last_academic_year'] = _('numeric_field')
 
-        return cleaned_data
+        nationality = cleaned_data.get("nationality")
+        if nationality == '-1':
+            self.errors['nationality'] = _('mandatory_field')
 
+        birth_country = cleaned_data.get("birth_country")
+        if birth_country == '-1':
+            self.errors['birth_country'] = _('mandatory_field')
 
-class AccessAccountForm(forms.Form):
-    email = forms.EmailField(required=True)
+        national_id = cleaned_data.get("national_id")
+        id_card_number = cleaned_data.get("id_card_number")
+        passport_number = cleaned_data.get("passport_number")
 
-    def __init__(self, *args, **kwargs):
-        super(AccessAccountForm, self).__init__(*args, **kwargs)
-
-    def clean_email(self):
-        data = self.cleaned_data['email']
-        if data is None or len(data) == 0:
-            self.errors['email'] = _('mandatory_field')
-        return data.strip()
-
-
-class AccountingForm(forms.Form):
-    scholarship = forms.BooleanField()
-    scholarship_organization = forms.CharField()
-    bank_account_iban = IBANFormField()
-    bank_account_bic = BICFormField()
-
-    def __init__(self, *args, **kwargs):
-        super(AccountingForm, self).__init__(*args, **kwargs)
-
-    def clean(self):
-        cleaned_data = super(AccountingForm, self).clean()
-        data = cleaned_data.get('scholarship_organization')
-        data_scholarship = cleaned_data.get('scholarship')
-        if data_scholarship and (data is None or len(data) == 0):
-            self.errors['scholarship_organization'] = _('mandatory_field')
-        return cleaned_data
-
-
-class RemoveAttachmentForm(forms.Form):
-    attachment_id = forms.IntegerField(min_value=0)
-
-    def clean(self):
-        cleaned_data = super(RemoveAttachmentForm, self).clean()
-        attachment_id = cleaned_data.get('attachment_id')
-        if attachment_id:
-            try:
-                DocumentFile.objects.get(pk=attachment_id)
-            except ObjectDoesNotExist:
-                self.add_error('attachment_id', _('attachment_does_not_exist'))
-
-
-class SociologicalSurveyForm(forms.ModelForm):
-    class Meta:
-        model = SociologicalSurvey
-        exclude = ['applicant']
-
-    def clean(self):
-        cleaned_data = super(SociologicalSurveyForm, self).clean()
-
-        #  The user must filled either both or neither professional activity and profession
-        student_professional_activity = cleaned_data.get('student_professional_activity')
-        student_profession = cleaned_data.get('student_profession')
-
-        if student_profession is None and student_professional_activity is not None:
-            if student_professional_activity != professional_activity.NO_PROFESSION:
-                self.add_error('student_profession', _('field_is_required'))
-        if student_profession is not None and student_professional_activity is None:
-            self.add_error('student_professional_activity', _('field_is_required'))
-
-        conjoint_professional_activity = cleaned_data.get('conjoint_professional_activity')
-        conjoint_profession = cleaned_data.get('conjoint_profession')
-
-        if conjoint_profession is None and conjoint_professional_activity is not None:
-            if conjoint_professional_activity != professional_activity.NO_PROFESSION:
-                self.add_error('conjoint_profession', _('field_is_required'))
-        if conjoint_profession is not None and conjoint_professional_activity is None:
-            self.add_error('conjoint_professional_activity', _('field_is_required'))
-
+        if national_id == '' and id_card_number =='' and passport_number == '' :
+            self.errors['passport_number'] = _('no_identification_number')
         return cleaned_data

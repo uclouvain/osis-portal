@@ -76,9 +76,9 @@ def validate_profil(applicant):
                     nb_necessary_doc = len(list_document_type)
                     nb_doc = 0
                     for document_typ in l.descriptions:
-                        docs = mdl.applicant_document_file.\
-                            find_document_by_applicant_and_description(applicant, document_typ)
-                        if docs:
+                        app_doc_files = mdl.applicant_document_file.\
+                            find_by_applicant_and_description(applicant, document_typ)
+                        if app_doc_files:
                             nb_doc = nb_doc+1
                     if nb_necessary_doc == nb_doc:
                         criteria_doc_ok = True
@@ -91,9 +91,9 @@ def validate_profil(applicant):
     for assimilation_criteria in assimilation_criteria_list:
         docs_needed = assimilation_criteria_view.get_list_documents_descriptions(assimilation_criteria.criteria)
         for doc_needed in docs_needed:
-            doc = mdl.applicant_document_file. \
-                find_document_by_applicant_and_description(applicant, doc_needed)
-            if not doc.exists():
+            app_doc_files = mdl.applicant_document_file. \
+                find_by_applicant_and_description(applicant, doc_needed)
+            if not app_doc_files:
                 return False
     return True
 
@@ -120,38 +120,68 @@ def validate_prerequisites_data(application, secondary_education, validation_mes
             and local_language_exam is None:
         validation_messages['diploma'] = _('msg_one_prerequisite')
     else:
-        if secondary_education.diploma is True and secondary_education.national is True:
-            if secondary_education.academic_year is None:
-                validation_messages['academic_year'] = ALERT_MANDATORY_FIELD
-            if secondary_education.national_community is None:
-                validation_messages['local_community'] = ALERT_MANDATORY_FIELD
+        if secondary_education.diploma is True:
+            if secondary_education.national is True:
+                if secondary_education.academic_year is None:
+                    validation_messages['academic_year'] = ALERT_MANDATORY_FIELD
+                if secondary_education.national_community is None:
+                    validation_messages['local_community'] = ALERT_MANDATORY_FIELD
+                else:
+                    if secondary_education.national_community == 'FRENCH' \
+                            and secondary_education.academic_year < 1994 \
+                            and secondary_education.dipl_acc_high_educ is None:
+                        validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
+
+                    if secondary_education.national_community == 'DUTCH' \
+                            and secondary_education.academic_year < 1992 \
+                            and secondary_education.dipl_acc_high_educ is None:
+                        validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
+
+                if secondary_education.national_institution is None:
+                    validation_messages['school'] = _('msg_school_name')
+                else:
+                    if secondary_education.national_institution.national_community == 'FRENCH' \
+                            and secondary_education.education_type is None:
+                        validation_messages['pnl_teaching_type'] = _('msg_error_education_type')
+
+                if secondary_education.path_repetition is None:
+                    validation_messages['path_repetition'] = ALERT_MANDATORY_FIELD
+                if secondary_education.path_reorientation is None:
+                    validation_messages['path_reorientation'] = ALERT_MANDATORY_FIELD
+                if secondary_education.result is None:
+                    validation_messages['result'] = ALERT_MANDATORY_FIELD
+                # Validation of the needed documents
+                validation_messages.update(validate_needed_docs(application))
             else:
-                if secondary_education.national_community == 'FRENCH' \
-                        and secondary_education.academic_year < 1994 \
-                        and secondary_education.dipl_acc_high_educ is None:
-                    validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
+                if secondary_education.national is False:
+                    if secondary_education.international_diploma_language is None:
+                        validation_messages['language_regime'] = ALERT_MANDATORY_FIELD
 
-                if secondary_education.national_community == 'DUTCH' \
-                        and secondary_education.academic_year < 1992 \
-                        and secondary_education.dipl_acc_high_educ is None:
-                    validation_messages['dipl_acc_high_educ'] = ALERT_MANDATORY_FIELD
+                    if secondary_education.result is None:
+                        validation_messages['foreign_result'] = ALERT_MANDATORY_FIELD
 
-            if secondary_education.national_institution is None:
-                validation_messages['school'] = _('msg_school_name')
-            else:
-                if secondary_education.national_institution.national_community == 'FRENCH' \
-                        and secondary_education.education_type is None:
-                    validation_messages['pnl_teaching_type'] = _('msg_error_education_type')
+                    validation_messages.update(validate_needed_docs_list(application,
+                                                                         [document_type.INTERNATIONAL_DIPLOMA_RECTO,
+                                                                          document_type.INTERNATIONAL_DIPLOMA_VERSO],
+                                                                         'international_diploma_file'))
+                    validation_messages.update(
+                        validate_needed_docs_list(application,
+                                                  [document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
+                                                   document_type.HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO],
+                                                  'high_school_scores_transcript'))
+                    if secondary_education.international_diploma_language \
+                            and secondary_education.international_diploma_language.recognized is False:
 
-            if secondary_education.path_repetition is None:
-                validation_messages['path_repetition'] = ALERT_MANDATORY_FIELD
-            if secondary_education.path_reorientation is None:
-                validation_messages['path_reorientation'] = ALERT_MANDATORY_FIELD
-            if secondary_education.result is None:
-                validation_messages['result'] = ALERT_MANDATORY_FIELD
-            # Validation of the needed documents
-            validation_messages.update(validate_needed_docs(application))
-
+                            validation_messages.update(
+                                validate_needed_docs_list(application,
+                                                          [document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_RECTO,
+                                                           document_type.TRANSLATED_INTERNATIONAL_DIPLOMA_VERSO],
+                                                          'translated_international_diploma'))
+                            validation_messages.update(
+                                validate_needed_docs_list(application,
+                                                          [document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_RECTO,
+                                                           document_type.TRANSLATED_HIGH_SCHOOL_SCORES_TRANSCRIPT_VERSO],
+                                                          'translated_high_school_scores_transcript'))
         validation_messages.update(validate_professional_exam(professional_exam, application))
         validation_messages.update(validate_admission_exam(admission_exam, application))
         validation_messages.update(validate_local_language_exam(local_language_exam))
@@ -173,7 +203,21 @@ def _validate_sociological():
     return False
 
 
-def _validate_attachments():
+def _validate_attachments(application):
+    if application is None or application.application_type is None:
+        return False
+    else:
+        if application.application_type ==  application_type.ADMISSION:
+            letter_motivation_doc_present = False
+            curriculum_doc_present = False
+            application_document_files = mdl.application_document_file.find_document_by_application(application)
+            for p in application_document_files:
+                if p.document_file.description == 'letter_motivation':
+                    letter_motivation_doc_present=True
+                if p.document_file.description == 'curriculum':
+                    curriculum_doc_present=True
+            if letter_motivation_doc_present and curriculum_doc_present:
+                return True
     return False
 
 
@@ -196,7 +240,7 @@ def get_validation_status(application, applicant):
         "validated_application":        _validate_application(),
         "validated_accounting":         _validate_accounting(),
         "validated_sociological":       _validate_sociological(),
-        "validated_attachments":        _validate_attachments(),
+        "validated_attachments":        _validate_attachments(application),
         "validated_submission":         _validate_submission(),
         "validation_message":           None}
 
@@ -277,3 +321,12 @@ def get_application_offer_year(application):
         except:
             return None
     return None
+
+
+def validate_needed_docs_list(application, document_types, msg_txt_field):
+    validation_messages = {}
+    for doc_type in document_types:
+        doc = mdl.application_document_file.search(application, doc_type)
+        if doc.exists() is False or doc.exists() is False:
+            validation_messages[msg_txt_field] = ALERT_MANDATORY_FILE
+    return validation_messages

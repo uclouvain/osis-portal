@@ -62,10 +62,6 @@
            id="hdn_secondary_education_national_institution_adhoc"
            value="{{secondary_education.national_institution.adhoc| default_if_none:'False'}}" >
     <input type="hidden"
-           id="hdn_secondary_education_national_institution_national_community"
-           name="secondary_education_national_institution_national_community"
-           value="{{secondary_education.national_institution.national_community| default_if_none:''}}" >
-    <input type="hidden"
            id="hdn_secondary_education_education_type_id"
            name="secondary_education_education_type_id"
            value="{{secondary_education.education_type.id| default_if_none:''}}" >
@@ -491,5 +487,6 @@
         update_upload_btn_class('',description);
         return true;
     }
+
 
     </script>

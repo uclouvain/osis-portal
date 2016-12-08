@@ -33,6 +33,7 @@ class OfferYearAdmin(admin.ModelAdmin):
     list_filter = ('grade_type__institutional_grade_type', 'subject_to_quota', 'enrollment_enabled')
     fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'grade_type',
                                     'subject_to_quota', 'offer', 'enrollment_enabled')}),)
+    search_fields = ['acronym']
 
 
 class OfferYear(SerializableModel):
@@ -61,3 +62,7 @@ def find_by_domain_grade(domain, grade):
 
 def find_by_offer(offers):
     return OfferYear.objects.filter(offer__in=offers)
+
+
+def find_by_acronym_academic_year(acronym, academic_year):
+    return OfferYear.objects.get(acronym=acronym, academic_year=academic_year)

@@ -29,16 +29,19 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 class OptionAdmin(admin.ModelAdmin):
-    list_display = ('label', 'description')
+    list_display = ('label', 'description', 'question')
     fieldsets = ((None, {'fields': ('label', 'value', 'order', 'description', 'question')}),)
     list_filter = ('question',)
+    raw_id_fields = ('question',)
+    search_fields = ['question']
+
 
 
 class Option(models.Model):
     label = models.CharField(max_length=255)
-    value = models.TextField()
-    order = models.IntegerField()
-    description = models.TextField()
+    value = models.TextField(blank=True, null=True)
+    order = models.IntegerField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     question = models.ForeignKey('Question')
 
     def __str__(self):
@@ -63,9 +66,6 @@ def find_by_id(option_id):
         return None
 
 
-def find_number_options_by_question_id(question_id):
-    opt = Option.objects.filter(question=question_id).order_by("order")
-
-    if opt:
-        return opt.reverse().first().order
-    return 0
+def find_number_options_by_question_id(question):
+    option = Option.objects.filter(question=question).count()
+    return option

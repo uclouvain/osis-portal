@@ -23,34 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase
-from admission.views import sociological
-import admission.tests.data_for_tests as data_model
-
-PROFESSION_EMPLOYEE = 'Employee'
-CHECKED_STATUS = 'on'
-UNCHECKED_STATUS = 'off'
+from admission import models as mdl
+from reference.enums import assimilation_criteria as assimilation_criteria_enum
 
 
-class SociologicalTest(TestCase):
-
-    def setUp(self):
-        self.profession = data_model.create_profession(PROFESSION_EMPLOYEE, False)
-
-    def test_get_boolean_status(self):
-        self.assertTrue(sociological.get_boolean_status(CHECKED_STATUS))
-        self.assertFalse(sociological.get_boolean_status(UNCHECKED_STATUS))
-        self.assertFalse(sociological.get_boolean_status(''))
-
-    def get_existing_profession(self):
-        id = self.profession.id
-        id_str = str(id)
-        self.assertIs(get_profession(id, ''), self.profession)
-        self.assertIs(get_profession(id_str, ''), self.profession)
-
-    def get_non_existing_profession(self):
-        self.assertIsNot(get_profession('11', ''), self.profession)
-
-    def get_profession_by_name(self):
-        self.assertIs(get_other_profession(PROFESSION_EMPLOYEE), self.profession)
-        self.assertIsNot(get_other_profession(PROFESSION_EMPLOYEE+' de poste'), self.profession)
+def create_applicant_assimilation_criteria(an_applicant):
+    return mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria(
+        applicant=an_applicant,
+        criteria=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES[0][0],
+        additional_criteria=None,
+        selected=False)

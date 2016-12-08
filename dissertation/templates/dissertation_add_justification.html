@@ -37,6 +37,10 @@
     <div class="panel-body">
       <form method="POST" class="post-form">
         {% csrf_token %}
+        <div>
+            {% trans 'justification_instructions' %}
+        </div>
+        <br>
         <div class="row">
             <div class="col-md-4">
                 {% trans 'dissertation' %} :
@@ -54,36 +58,26 @@
             </div>
         </div>
         <br>
-        <div class="row">
-            <div class="col-md-4">
-                {% trans 'current_status' %} :
+        <div class="row" style="margin:10px;">
+            <div class="col-md-5 well">
+                {% trans 'current_status' %} : {{ dissertation.get_status_display }}
             </div>
-            <div class="col-md-8">
-                {{ old_status }}
+            <div class="col-md-2" style="text-align: center; padding: 1em;">
+                <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                {% trans 'next_status' %} :
-            </div>
-            <div class="col-md-8">
-                {{ new_status }}
+            <div class="col-md-5 well">
+                {% trans 'next_status' %} : {{ new_status_display }}
             </div>
         </div>
         <br>
-        <div class="row">
-            <div class="col-md-12">
-                <textarea class="form-control" id="txt_justification"  name="justification"></textarea>
+        <div>
+            <div class="form-group">
+                <label>{% trans 'justification' %}</label>
+                <textarea class="form-control" id="txt_justification"  name="justification" style=""></textarea>
             </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-2">
-                <button type="submit" class="save btn btn-default"
-                        onclick="return confirm('{% trans 'justification_confirmation_message' %}')">
-                    {% trans 'save' %}
-                </button>
-            </div>
+            <button type="submit" class="save btn btn-primary">
+                {% trans 'save' %}
+            </button>
         </div>
 
       </form>

@@ -1,201 +1,37 @@
 $('document').ready(function(){
-    var adhoc = $('#hdn_father_profession_adhoc').val();
-    display_hide_other_profession('#slt_father_profession',
-                                  '#chb_father_profession_other',
-                                  '#div_father_profession_other',
-                                  '#txt_father_profession_other',
-                                  adhoc,
-                                  '');
-
-    if($('#hdn_father_profession_adhoc').val() == 'True'){
-        display_hide_other_profession('#slt_father_profession',
-                                      '#chb_father_profession_other',
-                                      '#div_father_profession_other',
-                                      '#txt_father_profession_other',
-                                      adhoc,
-                                      $('#hdn_father_profession_name').val());
-    }
-    //
-    adhoc = $('#hdn_mother_profession_adhoc').val();
-    display_hide_other_profession('#slt_mother_profession',
-                                  '#chb_mother_profession_other',
-                                  '#div_mother_profession_other',
-                                  '#txt_mother_profession_other',
-                                  adhoc,
-                                  '');
-
-    if($('#hdn_mother_profession_adhoc').val() == 'True'){
-        display_hide_other_profession('#slt_mother_profession',
-                                      '#chb_mother_profession_other',
-                                      '#div_mother_profession_other',
-                                      '#txt_mother_profession_other',
-                                      adhoc,
-                                      $('#hdn_mother_profession_name').val());
-    }
-    //
-    adhoc = $('#hdn_student_profession_adhoc').val();
-    display_hide_other_profession('#slt_student_profession',
-                                  '#chb_student_profession_other',
-                                  '#div_student_profession_other',
-                                  '#txt_student_profession_other',
-                                  adhoc,
-                                  '');
-
-    if($('#hdn_student_profession_adhoc').val() == 'True'){
-        display_hide_other_profession('#slt_student_profession',
-                                      '#chb_student_profession_other',
-                                      '#div_student_profession_other',
-                                      '#txt_student_profession_other',
-                                      adhoc,
-                                      $('#hdn_student_profession_name').val());
-
-    }
-    //
-    adhoc = $('#hdn_conjoint_profession_adhoc').val();
-    display_hide_other_profession('#slt_conjoint_profession',
-                                  '#chb_conjoint_profession_other',
-                                  '#div_conjoint_profession_other',
-                                  '#txt_conjoint_profession_other',
-                                  adhoc,
-                                  '');
-
-    if($('#hdn_conjoint_profession_adhoc').val() == 'True'){
-        display_hide_other_profession('#slt_conjoint_profession',
-                                      '#chb_conjoint_profession_other',
-                                      '#div_conjoint_profession_other',
-                                      '#txt_conjoint_profession_other',
-                                      adhoc,
-                                      $('#hdn_conjoint_profession_name').val());
-
-    }
-    //
-    adhoc = $('#hdn_paternal_grandfather_profession_adhoc').val();
-    display_hide_other_profession('#slt_paternal_grandfather_profession',
-                                  '#chb_paternal_grandfather_profession_other',
-                                  '#div_paternal_grandfather_profession_other',
-                                  '#txt_paternal_grandfather_profession_other',
-                                  adhoc,
-                                  '');
-
-    if($('#hdn_paternal_grandfather_profession_adhoc').val() == 'True'){
-        display_hide_other_profession('#slt_paternal_grandfather_profession',
-                                      '#chb_paternal_grandfather_profession_other',
-                                      '#div_paternal_grandfather_profession_other',
-                                      '#txt_paternal_grandfather_profession_other',
-                                      adhoc,
-                                      $('#hdn_paternal_grandfather_profession_name').val());
-
-    }
-    //
-    adhoc = $('#hdn_maternal_grandfather_profession_adhoc').val();
-    display_hide_other_profession('#slt_maternal_grandfather_profession',
-                                  '#chb_maternal_grandfather_profession_other',
-                                  '#div_maternal_grandfather_profession_other',
-                                  '#txt_maternal_grandfather_profession_other',
-                                  adhoc,
-                                  '');
-
-    if($('#hdn_maternal_grandfather_profession_adhoc').val() == 'True'){
-        display_hide_other_profession('#slt_maternal_grandfather_profession',
-                                      '#chb_maternal_grandfather_profession_other',
-                                      '#div_maternal_grandfather_profession_other',
-                                      '#txt_maternal_grandfather_profession_other',
-                                      adhoc,
-                                      $('#hdn_maternal_grandfather_profession_name').val());
-
-    }
-
+    init_profession_fields();
 });
 
-function display_hide_other_profession(slt, chb, div, txt, adhoc, name){
-    if(adhoc == 'True'){
-        $(slt).prop( "disabled", true);
-        $(slt).prop("selectedIndex",-1);
-        $(chb).prop('checked', true);
-        $(div).css('visibility', 'visible').css('display','block');
-    }else{
-        $(slt).prop( "disabled", false);
-        $(chb).prop('checked', false);
-        $(div).css('visibility', 'hidden').css('display','none');
-    }
-    $(txt).val(name);
-
+function init_profession_fields(){
+    init_profession_field('father_profession');
+    init_profession_field('mother_profession');
+    init_profession_field('student_profession');
+    init_profession_field('conjoint_profession');
+    init_profession_field('paternal_grandfather_profession');
+    init_profession_field('maternal_grandfather_profession');
 }
 
-$("#chb_father_profession_other").change(function() {
-    $('#hdn_father_profession_adhoc').val('');
-    var adhoc = 'False';
-    if ($('#chb_father_profession_other').prop( "checked")){
-        adhoc = 'True';
-    }
-    display_hide_other_profession('#slt_father_profession',
-                                  '#chb_father_profession_other',
-                                  '#div_father_profession_other',
-                                  '#txt_father_profession_other',
-                                  adhoc);
-});
+function init_profession_field(profession){
+    chb_profession_other = $('#chb_'+profession+'_other');
+    adhoc = chb_profession_other.prop( "checked")?'True':'False';
+    display_hide_other_profession(profession, adhoc);
+}
 
-$("#chb_mother_profession_other").change(function() {
-    $('#hdn_mother_profession_adhoc').val('');
-    var adhoc = 'False';
-    if ($('#chb_mother_profession_other').prop( "checked")){
-        adhoc = 'True';
+function display_hide_other_profession(profession,adhoc){
+    prof_slt = $("#slt_"+profession);
+    prof_other_div = $("#div_"+profession+"_other");
+    if(adhoc == 'True'){
+        prof_slt.prop( "disabled", true);
+        prof_slt.prop("selectedIndex",-1);
+        prof_other_div.css('visibility', 'visible').css('display','block');
+    }else{
+        prof_slt.prop( "disabled", false);
+        prof_other_div.css('visibility', 'hidden').css('display','none');
     }
-    display_hide_other_profession('#slt_mother_profession',
-                                  '#chb_mother_profession_other',
-                                  '#div_mother_profession_other',
-                                  '#txt_mother_profession_other',
-                                  adhoc);
-});
+}
 
-$("#chb_student_profession_other").change(function() {
-    $('#hdn_student_profession_adhoc').val('');
-    var adhoc = 'False';
-    if ($('#chb_student_profession_other').prop( "checked")){
-        adhoc = 'True';
-    }
-    display_hide_other_profession('#slt_student_profession',
-                                  '#chb_student_profession_other',
-                                  '#div_student_profession_other',
-                                  '#txt_student_profession_other',
-                                  adhoc);
-});
-
-$("#chb_conjoint_profession_other").change(function() {
-    $('#hdn_conjoint_profession_adhoc').val('');
-    var adhoc = 'False';
-    if ($('#chb_conjoint_profession_other').prop( "checked")){
-        adhoc = 'True';
-    }
-    display_hide_other_profession('#slt_conjoint_profession',
-                                  '#chb_conjoint_profession_other',
-                                  '#div_conjoint_profession_other',
-                                  '#txt_conjoint_profession_other',
-                                  adhoc);
-});
-
-$("#chb_maternal_grandfather_profession_other").change(function() {
-    $('#hdn_maternal_grandfather_profession_adhoc').val('');
-    var adhoc = 'False';
-    if ($('#chb_maternal_grandfather_profession_other').prop( "checked")){
-        adhoc = 'True';
-    }
-    display_hide_other_profession('#slt_maternal_grandfather_profession',
-                                  '#chb_maternal_grandfather_profession_other',
-                                  '#div_maternal_grandfather_profession_other',
-                                  '#txt_maternal_grandfather_profession_other',
-                                  adhoc);
-});
-
-$("#chb_paternal_grandfather_profession_other").change(function() {
-    $('#hdn_paternal_grandfather_profession_adhoc').val('');
-    var adhoc = 'False';
-    if ($('#chb_paternal_grandfather_profession_other').prop( "checked")){
-        adhoc = 'True';
-    }
-    display_hide_other_profession('#slt_paternal_grandfather_profession',
-                                  '#chb_paternal_grandfather_profession_other',
-                                  '#div_paternal_grandfather_profession_other',
-                                  '#txt_paternal_grandfather_profession_other',
-                                  adhoc);
+$('[id^="chb_"][id$="_other"]').change(function() {
+     profession = this.id.replace('chb_','').replace('_other','');
+     adhoc = this.checked?'True':'False';
+     display_hide_other_profession(profession, adhoc);
 });

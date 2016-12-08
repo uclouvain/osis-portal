@@ -23,14 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+
 from django.contrib.auth.models import User
-from admission import models as mdl
-from base import models as mdl_base
-from reference import models as mdl_reference
+
 from osis_common import models as mdl_osis_common
-from reference.enums import assimilation_criteria as assimilation_criteria_enum, education_institution_type, \
-    education_institution_national_comunity
-from datetime import datetime
 
 
 def create_user():
@@ -39,68 +35,11 @@ def create_user():
     return a_user
 
 
-def create_applicant_by_user(user):
-    an_applicant = mdl.applicant.Applicant(user=user)
-    an_applicant.save()
-    return an_applicant
-
-
-def create_applicant():
-    an_applicant = mdl.applicant.Applicant(user=create_user())
-    an_applicant.save()
-    return an_applicant
-
-
-def create_secondary_education():
-    a_secondary_education = mdl.secondary_education.SecondaryEducation(person=create_applicant())
-    a_secondary_education.save()
-    return a_secondary_education
-
-
-def create_secondary_education_exam(secondary_education, a_type):
-        an_admission_exam = mdl.secondary_education_exam.SecondaryEducationExam(
-            secondary_education=secondary_education,
-            type=a_type)
-        an_admission_exam.save()
-        return an_admission_exam
-
-
-def create_secondary_education_with_exams():
-    secondary_education = create_secondary_education()
-    create_secondary_education_exam(secondary_education, 'ADMISSION')
-    create_secondary_education_exam(secondary_education, 'PROFESSIONAL')
-    create_secondary_education_exam(secondary_education, 'LANGUAGE')
-    return secondary_education
-
-
-def create_application(an_applicant):
-    an_application = mdl.application.Application(applicant=an_applicant,
-                                                 offer_year=create_offer_year(),
-                                                 application_type='ADMISSION')
-    an_application.save()
-    return an_application
-
-
-def create_offer_year():
-    an_offer_year = mdl_base.offer_year.OfferYear()
-    an_offer_year.academic_year = create_academic_year()
-    an_offer_year.acronym = "VETE11BA"
-    an_offer_year.title = "Première année de bachelier en médecine vétérinaire"
-    an_offer_year.save()
-    return an_offer_year
-
-
-def create_academic_year():
-    an_academic_year = mdl_base.academic_year.AcademicYear()
-    an_academic_year.year = 2016
-    an_academic_year.save()
-    return an_academic_year
-
-
-def create_grade_type(a_name, an_institutional_grade_type):
-    a_grade_type = mdl_reference.grade_type.GradeType(name=a_name, institutional_grade_type=an_institutional_grade_type)
-    a_grade_type.save()
-    return a_grade_type
+def get_or_create_user():
+    a_user, created = User.objects.get_or_create(username='testo', password='testopw')
+    if created:
+        a_user.save()
+    return a_user
 
 
 def create_document_file(update_by, description=None):
@@ -111,97 +50,3 @@ def create_document_file(update_by, description=None):
     a_document_file.save()
     return a_document_file
 
-
-def create_application_document_file(an_application, update_by, description=None):
-    a_document_file = create_document_file(update_by, description)
-    an_application_document_file = mdl.application_document_file.ApplicationDocumentFile()
-    an_application_document_file.application = an_application
-    an_application_document_file.document_file = a_document_file
-    an_application_document_file.save()
-    return an_application_document_file
-
-
-def create_profession(a_name, an_adhoc):
-    return mdl.profession.Profession(name=a_name, adhoc=an_adhoc)
-
-
-def create_applicant_assimilation_criteria(an_applicant):
-    return mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria(
-        applicant=an_applicant,
-        criteria=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES[0][0],
-        additional_criteria=None,
-        selected=False)
-
-
-def create_applicant_document_file(an_applicant, description):
-    a_document_file = create_document_file(an_applicant.user.username, description)
-    an_applicant_document_file = mdl.applicant_document_file.ApplicantDocumentFile()
-    an_applicant_document_file.applicant = an_applicant
-    an_applicant_document_file.document_file = a_document_file
-    an_applicant_document_file.save()
-    return an_applicant_document_file
-
-
-def create_academic_year_by_year(a_year):
-    an_academic_year = mdl_base.academic_year.AcademicYear()
-    an_academic_year.year = a_year
-    an_academic_year.save()
-    return an_academic_year
-
-
-def create_academic_year_current():
-    an_academic_year = mdl_base.academic_year.AcademicYear()
-    an_academic_year.year = datetime.now().year
-    an_academic_year.start_date = datetime.now()
-    an_academic_year.end_date = datetime.now()
-    an_academic_year.save()
-    return an_academic_year
-
-
-def create_curriculum(data):
-    a_curriculum = mdl.curriculum.Curriculum()
-    if data['applicant']:
-        a_curriculum.person = data['applicant']
-
-    if data['academic_year']:
-        a_curriculum.academic_year = data['academic_year']
-
-    if data['path_type']:
-        a_curriculum.path_type = data['path_type']
-
-    if data['national_education']:
-        a_curriculum.national_education = data['national_education']
-
-    if data['national_institution']:
-        a_curriculum.national_institution = data['national_institution']
-
-    a_curriculum.save()
-
-    return a_curriculum
-
-
-def create_education_institution():
-    an_education_institution = mdl_reference.education_institution.EducationInstitution(
-        name='name',
-        institution_type=education_institution_type.HIGHER_NON_UNIVERSITY,
-        national_community=education_institution_national_comunity.FRENCH,
-        country=create_country(),
-        adhoc=False)
-    an_education_institution.save()
-    return an_education_institution
-
-
-def create_country():
-    a_country = mdl_reference.country.Country(iso_code="BE",
-                                              name="Belgium")
-    a_country.save()
-    return a_country
-
-
-def create_offer_year_by_acronym(an_acronym):
-    an_offer_year = mdl_base.offer_year.OfferYear()
-    an_offer_year.academic_year = create_academic_year()
-    an_offer_year.acronym = an_acronym
-    an_offer_year.title = "Première année de " + an_acronym
-    an_offer_year.save()
-    return an_offer_year

@@ -27,10 +27,13 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.test import TestCase, RequestFactory
 
-import admission.tests.data_for_tests as data_model
 from admission.views import accounting
 from reference.enums import education_institution_national_comunity
 from django.http import HttpRequest
+from admission.tests.models import test_applicant, test_application, test_curriculum
+from base.tests.models import test_offer_year, test_academic_year
+from reference.tests.models import test_education_institution
+
 
 NON_THIRD_CYCLE_ACRONYM = 'SPO11BA'
 THIRD_CYCLE_ACRONYM = 'SPO2MC'
@@ -42,8 +45,8 @@ class AccountingTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.user = User.objects.create_user(username='jacob', email='jacob@localhost', password='top_secret')
-        self.applicant = data_model.create_applicant_by_user(self.user)
-        self.application = data_model.create_application(self.applicant)
+        self.applicant = test_applicant.create_applicant_by_user(self.user)
+        self.application = test_application.create_application(self.applicant)
 
     def test_populate_an_existing_application(self):
         my_request = self.factory.get("", {'study_grant':              'true',
@@ -105,11 +108,11 @@ class AccountingTest(TestCase):
         self.assertTrue(application.deduction_children and application.study_grant is False)
 
     def test_debts_check_true(self):
-        current_academic_year = data_model.create_academic_year_current()
+        current_academic_year = test_academic_year.create_academic_year_current()
         current_year = current_academic_year.year
-        previous_academic_yr = data_model.create_academic_year_by_year(current_year-1)
-        education_institution = data_model.create_education_institution()
-        data_model.create_curriculum({'applicant':            self.applicant,
+        previous_academic_yr = test_academic_year.create_academic_year_by_year(current_year-1)
+        education_institution = test_education_institution.create_education_institution()
+        test_curriculum.create_curriculum({'applicant':            self.applicant,
                                       'academic_year':        previous_academic_yr.year,
                                       'path_type':            'LOCAL_UNIVERSITY',
                                       'national_education':   education_institution_national_comunity.FRENCH,
@@ -119,7 +122,7 @@ class AccountingTest(TestCase):
     def test_debts_check_false(self):
         self.assertFalse(accounting.debts_check(self.application))
 
-        data_model.create_curriculum({'applicant': self.applicant,
+        test_curriculum.create_curriculum({'applicant': self.applicant,
                                       'academic_year': None,
                                       'path_type': 'LOCAL_UNIVERSITY',
                                       'national_education':  education_institution_national_comunity.GERMAN,
@@ -130,22 +133,22 @@ class AccountingTest(TestCase):
         self.assertTrue(accounting.reduction_possible(self.application))
 
     def test_reduction_possible_false(self):
-        an_offer_year_reduction_impossible = data_model.create_offer_year_by_acronym(INVALID_ACRONYM)
-        an_application_reduction_impossible = data_model.create_application(self.applicant)
+        an_offer_year_reduction_impossible = test_offer_year.create_offer_year_with_acronym(INVALID_ACRONYM)
+        an_application_reduction_impossible = test_application.create_application(self.applicant)
         an_application_reduction_impossible.offer_year = an_offer_year_reduction_impossible
         an_application_reduction_impossible.save()
         self.assertFalse(accounting.reduction_possible(an_application_reduction_impossible))
 
     def test_third_cycle_true(self):
-        an_offer_year_third_cycle = data_model.create_offer_year_by_acronym(THIRD_CYCLE_ACRONYM)
-        an_application_third_cycle = data_model.create_application(self.applicant)
+        an_offer_year_third_cycle = test_offer_year.create_offer_year_with_acronym(THIRD_CYCLE_ACRONYM)
+        an_application_third_cycle = test_application.create_application(self.applicant)
         an_application_third_cycle.offer_year = an_offer_year_third_cycle
         an_application_third_cycle.save()
         self.assertTrue(accounting.third_cycle(an_application_third_cycle))
 
     def test_third_cycle_false(self):
-        an_offer_year_no_third_cycle = data_model.create_offer_year_by_acronym(NON_THIRD_CYCLE_ACRONYM)
-        an_application_no_third_cycle = data_model.create_application(self.applicant)
+        an_offer_year_no_third_cycle = test_offer_year.create_offer_year_with_acronym(NON_THIRD_CYCLE_ACRONYM)
+        an_application_no_third_cycle = test_application.create_application(self.applicant)
         an_application_no_third_cycle.offer_year = an_offer_year_no_third_cycle
         an_application_no_third_cycle.save()
         self.assertFalse(accounting.third_cycle(an_application_no_third_cycle))
