@@ -46,10 +46,6 @@ def find_by_application(application):
     return Answer.objects.filter(application=application)
 
 
-def find_by_option(option):
-    return Answer.objects.filter(option=option)
-
-
 def find_by_user_and_option(user, option):
     return Answer.objects.filter(application__applicant__user=user).filter(option=option)
 

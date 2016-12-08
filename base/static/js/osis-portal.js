@@ -1283,7 +1283,7 @@ function display_dynamic_form(offer_year_id){
                                                    .attr("type","radio")
                                                    .attr("value",value.option_id)
                                                    .attr("name","txt_answer_radio_"+value.question_id)
-                                                   .attr("id","txt_answer_radio_"+value.option_id))
+                                                   .attr("id","txt_answer_radio_"+value.question_id))
                                                    .append("&nbsp;&nbsp;"+value.option_value)
                                                    .prop("required",value.question_required));
                                 if(value.option_description != ""){
@@ -1299,7 +1299,7 @@ function display_dynamic_form(offer_year_id){
                                                    .attr("type","radio")
                                                    .attr("value",value.option_id)
                                                    .attr("name","txt_answer_radio_"+value.question_id)
-                                                   .attr("id","txt_answer_radio_"+value.option_id))
+                                                   .attr("id","txt_answer_radio_"+value.question_id))
                                                    .append("&nbsp;&nbsp;"+value.option_value)
                                                    .prop("required",value.question_required));
                                 if(value.option_description != ""){
@@ -1319,7 +1319,7 @@ function display_dynamic_form(offer_year_id){
                                                    .attr("type","radio")
                                                    .attr("value",value.option_id)
                                                    .attr("name","txt_answer_radio_"+value.question_id)
-                                                   .attr("id","txt_answer_radio_"+value.option_id))
+                                                   .attr("id","txt_answer_radio_"+value.question_id))
                                                    .append("&nbsp;&nbsp;"+value.option_value)
                                                    .prop("required",value.question_required));
                                 if(value.option_description != ""){
@@ -1336,7 +1336,7 @@ function display_dynamic_form(offer_year_id){
                                                    .attr("type","radio")
                                                    .attr("value",value.option_id)
                                                    .attr("name","txt_answer_radio_"+value.question_id)
-                                                   .attr("id","txt_answer_radio_"+value.option_id))
+                                                   .attr("id","txt_answer_radio_"+value.question_id))
                                                    .append("&nbsp;&nbsp;"+value.option_value)
                                                    .prop("required",value.question_required));
                                 if(value.option_description != ""){
@@ -1446,8 +1446,8 @@ function display_dynamic_form(offer_year_id){
                             if(value.option_value == value.answer){
                                 $('#pnl_questions').append($("<select></select>")
                                                    .attr("class", "form-control")
-                                                   .attr("name","slt_question_"+value.option_id)
-                                                   .attr("id","slt_question_"+value.option_id)
+                                                   .attr("name","slt_question_"+value.question_id)
+                                                   .attr("id","slt_question_"+value.question_id)
                                                    .prop("required",value.question_required)
                                                    .append($("<option></option")
                                                    .attr("value", 0)
@@ -1459,8 +1459,8 @@ function display_dynamic_form(offer_year_id){
                             }else{
                                 $('#pnl_questions').append($("<select></select>")
                                                    .attr("class", "form-control")
-                                                   .attr("name","slt_question_"+value.option_id)
-                                                   .attr("id","slt_question_"+value.option_id)
+                                                   .attr("name","slt_question_"+value.question_id)
+                                                   .attr("id","slt_question_"+value.question_id)
                                                    .prop("required",value.question_required)
                                                    .append($("<option></option")
                                                    .attr("value", 0)
