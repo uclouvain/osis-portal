@@ -23,32 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
 from attribution import models as mdl_attribution
 
-def create_attribution(data):
-    attribution = mdl_attribution.attribution.Attribution()
-    start = None
-    if 'start' in data:
-        start = data['start']
-    end = None
-    if 'end' in data:
-        end = data['end']
-    if 'function' in data:
-        attribution.function = data['function']
-    if 'learning_unit_year' in data:
-        attribution.learning_unit_year = data['learning_unit_year']
-        year_yr = attribution.learning_unit_year.academic_year.year
-        if start is None:
-            attribution.start_date = datetime.datetime(year_yr, 9, 15)
-        if end is None:
-            attribution.end_date = datetime.datetime(year_yr+1, 9, 14)
-    if start:
-        attribution.start_date = datetime.datetime(start, 9, 15)
-    if end:
-        attribution.end_date = datetime.datetime(end+1, 9, 14)
-    if 'tutor' in data:
-        attribution.tutor = data['tutor']
-    attribution.save()
-    return attribution
 
+def create_application_charge(data):
+    application_charge = mdl_attribution.application_charge.ApplicationCharge()
+    if 'tutor_application' in data:
+        application_charge.tutor_application = data['tutor_application']
+    if 'learning_unit_component' in data:
+        application_charge.learning_unit_component = data['learning_unit_component']
+    if 'allocation_charge' in data:
+        application_charge.allocation_charge = data['allocation_charge']
+    application_charge.save()
+    return application_charge

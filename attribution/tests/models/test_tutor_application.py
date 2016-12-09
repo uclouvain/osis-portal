@@ -26,8 +26,8 @@
 import datetime
 from attribution import models as mdl_attribution
 
-def create_attribution(data):
-    attribution = mdl_attribution.attribution.Attribution()
+def create_tutor_application(data):
+    tutor_application = mdl_attribution.tutor_application.TutorApplication()
     start = None
     if 'start' in data:
         start = data['start']
@@ -35,20 +35,19 @@ def create_attribution(data):
     if 'end' in data:
         end = data['end']
     if 'function' in data:
-        attribution.function = data['function']
+        tutor_application.function = data['function']
     if 'learning_unit_year' in data:
-        attribution.learning_unit_year = data['learning_unit_year']
-        year_yr = attribution.learning_unit_year.academic_year.year
+        tutor_application.learning_unit_year = data['learning_unit_year']
+        year_yr = tutor_application.learning_unit_year.academic_year.year
         if start is None:
-            attribution.start_date = datetime.datetime(year_yr, 9, 15)
+            tutor_application.start_date = datetime.datetime(year_yr, 9, 15)
         if end is None:
-            attribution.end_date = datetime.datetime(year_yr+1, 9, 14)
+            tutor_application.end_date = datetime.datetime(year_yr+1, 9, 14)
     if start:
-        attribution.start_date = datetime.datetime(start, 9, 15)
+        tutor_application.start_date = datetime.datetime(start, 9, 15)
     if end:
-        attribution.end_date = datetime.datetime(end+1, 9, 14)
+        tutor_application.end_date = datetime.datetime(end, 9, 15)
     if 'tutor' in data:
-        attribution.tutor = data['tutor']
-    attribution.save()
-    return attribution
-
+        tutor_application.tutor = data['tutor']
+    tutor_application.save()
+    return tutor_application

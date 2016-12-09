@@ -47,5 +47,19 @@ class LearningUnitYear(models.Model):
         return u"%s - %s" % (self.academic_year, self.acronym)
 
 
+def search(academic_year_id=None, acronym=None, learning_unit=None, title=None):
+    queryset = LearningUnitYear.objects
+
+    if academic_year_id:
+        queryset = queryset.filter(academic_year=academic_year_id)
+
+
+
+    return queryset
+
+def search_order_by_acronym(academic_year_id=None):
+    return search(academic_year_id).order_by('acronym')
+
+
 def find_by_id(learning_unit_year_id):
     return LearningUnitYear.objects.get(pk=learning_unit_year_id)
