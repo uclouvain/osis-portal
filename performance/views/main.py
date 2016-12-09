@@ -26,25 +26,43 @@
 ############################################################################
 
 
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
-from django.core.exceptions import ObjectDoesNotExist
-from base.models.student import find_by_user, Student
-from performance import models as mdl
+from base.models import student
+from performance import models as mdl_performance
 from performance.forms import RegistrationIdForm
 from base.views import layout
+import json
+
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
-def home(request):
+def view_performance_home(request):
     """
     Display the academic programs of the student.
     """
-    stud = find_by_user(request.user)
-    list_student_programs = fetch_student_programs_list(stud)
-
+    stud = student.find_by_user(request.user)
+    list_student_programs = None
+    if stud:
+        list_student_programs = get_student_programs_list(stud)
     return layout.render(request, "performance_home.html", {"student": stud,
-                                                     "programs": list_student_programs})
+                                                            "programs": list_student_programs})
+
+
+@login_required
+@permission_required('base.is_student', raise_exception=True)
+def display_result_for_specific_student_performance(request, pk):
+    """
+    Display the student result for a particular year and program.
+    """
+    stud = student.find_by_user(request.user)
+    stud_perf = mdl_performance.student_performance.find_by_pk(pk)
+    if not check_right_access(stud_perf, stud):
+        stud_perf = None
+    document = json.dumps(stud_perf.data) if stud_perf else None
+    creation_date = stud_perf.creation_date if stud_perf else None
+
+    return layout.render(request, "performance_result.html", {"results": document, "creation_date": creation_date})
 
 
 @login_required
@@ -52,30 +70,19 @@ def home(request):
 def performance_administration(request):
     return layout.render(request, 'admin/performance_administration.html')
 
-@login_required
-@permission_required('base.is_student', raise_exception=True)
-def result_by_year_and_program(request, anac, program_acronym):
-    """
-    Display the student result for a particular year and program.
-    """
-    stud = find_by_user(request.user)
-    query_result = mdl.student_performance.select_where_registration_id_is(stud.registration_id)
-    document = filter_by_anac_and_program_acronym(query_result, anac, program_acronym)
-    return layout.render(request, "performance_result.html", {"results": document})
-
 
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def select_student(request):
     """
     View to select a student to visualize his/her results.
-    !!! Should only be open for staff having the rights.
+    !!! Should only be accessible for staff having the rights.
     """
     if request.method == "POST":
         form = RegistrationIdForm(request.POST)
         if form.is_valid():
             registration_id = form.cleaned_data['registration_id']
-            return redirect(student_programs, registration_id=registration_id)
+            return redirect(visualize_student_programs, registration_id=registration_id)
     else:
         form = RegistrationIdForm()
     return layout.render(request, "admin/performance_select_student.html", {"form": form})
@@ -83,93 +90,60 @@ def select_student(request):
 
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
-def student_programs(request, registration_id):
+def visualize_student_programs(request, registration_id):
     """
     View to visualize a particular student list of academic programs.
-    !!! Should only be open for staff having the rights.
+    !!! Should only be accessible for staff having the rights.
     """
-    try:
-        stud = Student.objects.get(registration_id=registration_id)
-    except ObjectDoesNotExist:
-        stud = None
-
-    list_student_programs = fetch_student_programs_list(stud)
+    stud = student.find_by_registration_id(registration_id)
+    list_student_programs = None
+    if stud:
+        list_student_programs = get_student_programs_list(stud)
 
     return layout.render(request, "performance_home.html", {"student": stud,
-                                                     "programs": list_student_programs})
+                                                            "programs": list_student_programs})
 
 
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
-def student_result(request, registration_id, anac, program_acronym):
+def visualize_student_result(request, pk):
     """
     View to visualize a particular student program courses result.
-    !!! Should only be open for staff having the rights.
+    !!! Should only be accessible for staff having the rights.
     """
-    try:
-        stud = Student.objects.get(registration_id=registration_id)
-    except ObjectDoesNotExist:
-        stud = None
+    stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
+    document = json.dumps(stud_perf.data) if stud_perf else None
+    creation_date = stud_perf.creation_date if stud_perf else None
 
-    query_result = mdl.student_performance.select_where_registration_id_is(stud.registration_id)
-    document = filter_by_anac_and_program_acronym(query_result, anac, program_acronym)
-
-    return layout.render(request, "performance_result.html", {"results": document})
+    return layout.render(request, "performance_result.html", {"results": document, "creation_date": creation_date})
 
 
 # *************************** UTILITY FUNCTIONS
 
-
-def fetch_student_programs_list(stud):
-    """
-    Fetch the student programs of the student "stud"
-    :param stud: a student object
-    :return: a list of dictionnary (see query_result_to_list for the format)
-    """
-    list_student_programs = None
-
-    if stud:
-        query_result = mdl.student_performance.select_where_registration_id_is(stud.registration_id)
-        list_student_programs = query_result_to_list(query_result)
+def get_student_programs_list(stud):
+    query_result = mdl_performance.student_performance.search(registration_id=stud.registration_id)
+    list_student_programs = query_result_to_list(query_result)
     return list_student_programs
 
 
 def query_result_to_list(query_result):
-    """
-    Parse the query result (a select all on the bucket performance),
-    to a list of dictonnary.
-    :param query_result: a n1ql query object
-    :return: a list of dictionaries
-    """
     l = []
     for row in query_result:
-        d = {}
-        academic_year = row["performance"]["academic_years"][0]
-        program = academic_year["programs"][0]
-        d["year"] =  academic_year["year"]
-        d["anac"] = academic_year["anac"]
-        d["acronym"] = program["acronym"]
-        d["formatted_acronym"] = mdl.student_performance.format_acronym(program["acronym"])
-        d["title"] = program["title"]
-        d["program_id"] = program["program_id"]
+        d = convert_student_performance_to_dic(row)
         l.append(d)
     return l
 
 
-def filter_by_anac_and_program_acronym(query_result, anac, program_acronym):
-    """
-    Return the document which have anac equals to "anac" and program id
-    equals to "program_id" from the query_results.
-    :param query_result: a n1ql query object
-    :param anac: a string
-    :param program_acronym: a string
-    :return: a json document
-    """
-    for row in query_result:
-        academic_year = row["performance"]["academic_years"][0]
-        program = academic_year["programs"][0]
-        if academic_year["anac"] == anac and \
-                        mdl.student_performance.format_acronym(program["acronym"]) \
-                        == mdl.student_performance.format_acronym(program_acronym):
-            return row["performance"]
-    return None
+def convert_student_performance_to_dic(student_performance_obj):
+    d = dict()
+    d["academic_year"] = student_performance_obj.academic_year
+    d["acronym"] = student_performance_obj.acronym
+    d["title"] = json.loads(json.dumps(student_performance_obj.data))["monAnnee"]["monOffre"]["offre"]["intituleComplet"]
+    d["pk"] = student_performance_obj.pk
+    return d
+
+
+def check_right_access(student_performance, student):
+    return student_performance.registration_id == student.registration_id
+
+

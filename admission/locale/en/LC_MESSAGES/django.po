@@ -1591,3 +1591,26 @@ msgstr "Language exam certificate"
 msgid "question_need_to_save"
 msgstr "Sure?  Don't you need to save some data?"
 
+msgid "msg_activation_failed"
+msgstr "Problem occurred during account validation"
+
+msgid "detail_activation_failed"
+msgstr "Maybe you have already activated your account"
+
+msgid "click"
+msgstr "Click"
+
+msgid "here"
+msgstr "here"
+
+msgid "to_connect"
+msgstr "to get to the login page"
+
+msgid "contact_service_desk"
+msgstr "contact the service desk : "
+
+msgid "call"
+msgstr "call"
+
+msgid "technical_failure"
+msgstr "Technical problems?"
