@@ -36,8 +36,8 @@ from attribution.models.enums import function
 now = datetime.datetime.now()
 
 PREVIOUS_YEAR = now.year - 1
-CURRENT_YEAR = now.year + 1
-NEXT_YEAR = now.year + 2
+CURRENT_YEAR = now.year
+NEXT_YEAR = now.year + 1
 
 
 LEARNING_UNIT_LECTURING_DURATION = 15.00
@@ -53,6 +53,8 @@ ACRONYM2 = 'LFSAB1104'
 TITLE2 = 'Coordination du quadrimestre 3'
 WEIGHT = 5
 
+START = PREVIOUS_YEAR
+END = NEXT_YEAR
 
 class OnlineApplicationTest(TestCase):
 
@@ -64,6 +66,8 @@ class OnlineApplicationTest(TestCase):
         a_previous_academic_yr = test_academic_year.create_academic_year_with_year(PREVIOUS_YEAR)
         a_current_academic_yr = test_academic_year.create_academic_year_with_year(CURRENT_YEAR)
         a_next_academic_yr = test_academic_year.create_academic_year_with_year(NEXT_YEAR)
+        start = PREVIOUS_YEAR
+        end = NEXT_YEAR
         self.learning_unit_year1_previous = self.create_learning_unit_year_annual_data(ACRONYM, TITLE, a_previous_academic_yr)
         self.learning_unit_year1_current = self.create_learning_unit_year_annual_data(ACRONYM, TITLE, a_current_academic_yr)
         self.learning_unit_year1_next = self.create_learning_unit_year_annual_data(ACRONYM, TITLE, a_next_academic_yr)
@@ -88,7 +92,9 @@ class OnlineApplicationTest(TestCase):
                 'duration': LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION})
         an_attribution = test_attribution.create_attribution({'function': function.CO_HOLDER,
                                                               'learning_unit_year': a_learning_unit_year,
-                                                              'tutor': self.a_tutor})
+                                                              'tutor': self.a_tutor,
+                                                              'start': START,
+                                                              'end': END})
         test_attribution_charge.create_attribution_charge(
             {'attribution': an_attribution,
              'learning_unit_component': a_learning_unit_component_lecture,
@@ -111,8 +117,8 @@ class OnlineApplicationTest(TestCase):
                  online_application.TITLE:                        TITLE,
                  online_application.LECTURING_DURATION:           online_application.TWO_DECIMAL_FORMAT % (LEARNING_UNIT_LECTURING_DURATION,),
                  online_application.PRACTICAL_DURATION:           online_application.TWO_DECIMAL_FORMAT % (LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION,),
-                 online_application.START:                        self.learning_unit_year1_current.academic_year.year,
-                 online_application.END:                          self.learning_unit_year1_current.academic_year.year+1,
+                 online_application.START:                        START,
+                 online_application.END:                          END,
                  online_application.ATTRIBUTION_CHARGE_LECTURING: online_application.TWO_DECIMAL_FORMAT % (ATTRIBUTION_CHARGE_LECTURING_DURATION,),
                  online_application.ATTRIBUTION_CHARGE_PRACTICAL: online_application.TWO_DECIMAL_FORMAT % (ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION,),
                  online_application.FUNCTION:                     function.CO_HOLDER
@@ -121,13 +127,12 @@ class OnlineApplicationTest(TestCase):
                  online_application.TITLE:                        TITLE2,
                  online_application.LECTURING_DURATION:           online_application.TWO_DECIMAL_FORMAT % (LEARNING_UNIT_LECTURING_DURATION,),
                  online_application.PRACTICAL_DURATION:           online_application.TWO_DECIMAL_FORMAT % (LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION,),
-                 online_application.START:                        self.learning_unit_year1_current.academic_year.year,
-                 online_application.END:                          self.learning_unit_year1_current.academic_year.year+1,
+                 online_application.START:                        START,
+                 online_application.END:                          END,
                  online_application.ATTRIBUTION_CHARGE_LECTURING: online_application.TWO_DECIMAL_FORMAT % (ATTRIBUTION_CHARGE_LECTURING_DURATION,),
                  online_application.ATTRIBUTION_CHARGE_PRACTICAL: online_application.TWO_DECIMAL_FORMAT % (ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION,),
                  online_application.FUNCTION:                     function.CO_HOLDER
                }
         data = [data1, data2]
-        print(data)
-        print('go')
+
         self.assertEqual(online_application.get_attributions_allocated(CURRENT_YEAR, self.a_tutor), data)

@@ -41,6 +41,10 @@ FUNCTION = 'function'
 
 TWO_DECIMAL_FORMAT = "%0.2f"
 
+def get_year(a_year):
+    if a_year:
+        return a_year.year
+    return None
 
 def get_attributions_allocated(a_year, a_tutor):
     attributions_results = []
@@ -53,8 +57,8 @@ def get_attributions_allocated(a_year, a_tutor):
              TITLE: attribution.learning_unit_year.title,
              LECTURING_DURATION: format_duration(get_learning_unit_component_duration(attribution.learning_unit_year, component_type.LECTURING)),
              PRACTICAL_DURATION: format_duration(get_learning_unit_component_duration(attribution.learning_unit_year, component_type.PRACTICAL_EXERCISES)),
-             START: attribution.start_date.year,
-             END: attribution.end_date.year,
+             START: get_year(attribution.start_date),
+             END: get_year(attribution.end_date),
              ATTRIBUTION_CHARGE_LECTURING:
                  format_duration(teaching_load.get_attribution_allocation_charge(a_tutor,
                                                                                  attribution.learning_unit_year,
