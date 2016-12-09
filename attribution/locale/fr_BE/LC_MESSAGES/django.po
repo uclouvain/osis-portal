@@ -130,3 +130,24 @@ msgstr "Externe"
 
 msgid "P"
 msgstr "Partielle"
+
+msgid "my_charges"
+msgstr "Mes charges"
+
+msgid "my_applications"
+msgstr "Mes applications"
+
+msgid "delete"
+msgstr "Supprimer"
+
+msgid "create_an_tutor_application"
+msgstr "Nouvelle candidature"
+
+msgid "my_charges_vacant"
+msgstr "Mes charges échues"
+
+msgid "renew"
+msgstr "Reconduire"
+
+msgid "renewal"
+msgstr "Reconduction"

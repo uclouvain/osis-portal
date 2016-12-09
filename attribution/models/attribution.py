@@ -32,7 +32,7 @@ from attribution.models.enums import function
 class AttributionAdmin(admin.ModelAdmin):
     list_display = ('tutor', 'function', 'learning_unit_year')
     list_filter = ('function',)
-    fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function')}),)
+    fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function', 'start_date', 'end_date')}),)
     raw_id_fields = ('learning_unit_year', 'tutor')
     search_fields = ['tutor__person__first_name', 'tutor__person__last_name', 'learning_unit_year__acronym']
 
@@ -47,6 +47,10 @@ class Attribution(SerializableModel):
 
     def __str__(self):
         return u"%s - %s" % (self.tutor.person, self.function)
+
+
+def find_by_id(an_id):
+    return Attribution.objects.get(pk=an_id)
 
 
 def search(tutor=None, learning_unit_year=None):

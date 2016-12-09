@@ -41,4 +41,16 @@ class ApplicationCharge(SerializableModel):
         return u"%s" % str(self.tutor_application)
 
 
+def search(a_tutor_application=None, learning_unit_component=None):
+
+    queryset = ApplicationCharge.objects
+
+    if tutor_application:
+        queryset = queryset.filter(tutor_application=a_tutor_application)
+
+    if learning_unit_component:
+        queryset = queryset.filter(learning_unit_component=learning_unit_component)
+
+
+    return queryset
 

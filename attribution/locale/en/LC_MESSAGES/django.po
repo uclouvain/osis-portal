@@ -130,3 +130,24 @@ msgstr "Externe"
 
 msgid "P"
 msgstr "Partielle"
+
+msgid "my_charges"
+msgstr "My charges"
+
+msgid "my_applications"
+msgstr "My applications"
+
+msgid "delete"
+msgstr "Delete"
+
+msgid "create_an_tutor_application"
+msgstr "New application"
+
+msgid "my_charges_vacant"
+msgstr "My charges now vacant"
+
+msgid "renew"
+msgstr "Renew"
+
+msgid "renewal"
+msgstr "Renewal"

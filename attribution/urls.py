@@ -24,11 +24,19 @@
 #
 ##############################################################################
 from django.conf.urls import url
-from attribution.views import teaching_load
+from attribution.views import teaching_load, online_application
 
 urlpatterns = [
     url(r'^$', teaching_load.home, name='home'),
     url(r'^attribution/$', teaching_load.by_year, name='attribution'),
     url(r'^load/([0-9]+)/$', teaching_load.by_year, name='attributions_by_year'),
     url(r'^students/([0-9]+)/$', teaching_load.show_students, name='students'),
+    url(r'^attribution/attribution_applications/$', online_application.home, name='attribution_applications'),
+    url(r'^attribution/delete_application/([0-9]+)/$', online_application.delete, name='delete_tutor_application'),
+    url(r'^attribution/new_application/$', online_application.attribution_application_form, name='tutor_application_create'),
+    url(r'^attribution/search/$', online_application.search, name='vacant_learning_unit_search'),
+    url(r'^attribution/renew/$', online_application.renew, name='renew'),
+
+
+
 ]

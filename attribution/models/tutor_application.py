@@ -32,7 +32,7 @@ from attribution.models.enums import function
 class TutorApplicationAdmin(admin.ModelAdmin):
     list_display = ('tutor', 'function', 'learning_unit_year')
     list_filter = ('function',)
-    fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function')}),)
+    fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function', 'start_date', 'end_date')}),)
     raw_id_fields = ('learning_unit_year', 'tutor')
     search_fields = ['tutor__person__first_name', 'tutor__person__last_name', 'learning_unit_year__acronym']
 
@@ -52,7 +52,25 @@ class TutorApplication(SerializableModel):
         return u"%s - %s" % (self.tutor.person, self.function)
 
 
+def find_by_id(a_tutor_application_id):
+    return TutorApplication.objects.get(id=a_tutor_application_id)
+
+
+def search(tutor=None, learning_unit_year=None):
+    queryset = TutorApplication.objects
+
+    if tutor:
+        queryset = queryset.filter(tutor=tutor)
+
+    if learning_unit_year:
+        queryset = queryset.filter(learning_unit_year=learning_unit_year)
+
+    return queryset.select_related('tutor', 'learning_unit_year')
+
+
 def find_by_dates_tutor(a_start_date, an_end_date, a_tutor):
+    print('find_by_dates_tutor')
+    print(a_start_date, an_end_date)
     return TutorApplication.objects.filter(start_date__gte=a_start_date, end_date__lte=an_end_date, tutor=a_tutor)
 
 

@@ -33,6 +33,7 @@ from base.tests.models import test_person, test_tutor,test_academic_year, test_l
 from attribution.tests.models import test_attribution_charge, test_attribution, test_application_charge, test_tutor_application
 from attribution.models.enums import function
 from base import models as mdl_base
+from attribution import models as mdl_attribution
 
 now = datetime.datetime.now()
 
@@ -73,19 +74,19 @@ class OnlineApplicationTest(TestCase):
         a_next_academic_yr = test_academic_year.create_academic_year_with_year(NEXT_YEAR)
 
 
-        self.learning_unit_year1_partially_vacant_previous = self.create_learning_unit_year_annual_data(ACRONYM, TITLE, a_previous_academic_yr, self.a_tutor)
-        self.learning_unit_year1_partially_vacant_current = self.create_learning_unit_year_annual_data(ACRONYM, TITLE, a_current_academic_yr, self.a_tutor)
-        self.learning_unit_year1_partially_vacant_next = self.create_learning_unit_year_annual_data(ACRONYM, TITLE, a_next_academic_yr, self.a_tutor)
-        self.learning_unit_year2_partially_vacant_previous = self.create_learning_unit_year_annual_data(ACRONYM2, TITLE2, a_previous_academic_yr, self.a_tutor)
-        self.learning_unit_year2_partially_vacant_current = self.create_learning_unit_year_annual_data(ACRONYM2, TITLE2, a_current_academic_yr, self.a_tutor)
-        self.learning_unit_year2_partially_vacant_next = self.create_learning_unit_year_annual_data(ACRONYM2, TITLE2, a_next_academic_yr, self.a_tutor)
+        self.learning_unit_year1_partially_vacant_previous = self.create_learning_unit_year_annual_data(ACRONYM, TITLE, a_previous_academic_yr, self.a_tutor,START,END)
+        self.learning_unit_year1_partially_vacant_current = self.create_learning_unit_year_annual_data(ACRONYM, TITLE, a_current_academic_yr, self.a_tutor,START,END)
+        self.learning_unit_year1_partially_vacant_next = self.create_learning_unit_year_annual_data(ACRONYM, TITLE, a_next_academic_yr, self.a_tutor,START,END)
+        self.learning_unit_year2_partially_vacant_previous = self.create_learning_unit_year_annual_data(ACRONYM2, TITLE2, a_previous_academic_yr, self.a_tutor,START,END)
+        self.learning_unit_year2_partially_vacant_current = self.create_learning_unit_year_annual_data(ACRONYM2, TITLE2, a_current_academic_yr, self.a_tutor,START,END)
+        self.learning_unit_year2_partially_vacant_next = self.create_learning_unit_year_annual_data(ACRONYM2, TITLE2, a_next_academic_yr, self.a_tutor,START,END)
 
         self.learning_unit_year_totally_vacant_next = self.create_learning_unit_year_annual_data(ACRONYM_VACANT_LEARNING_UNIT,
                                                                                          TITLE_VACANT_LEARNING_UNIT,
                                                                                          a_next_academic_yr,
-                                                                                         None)
+                                                                                         None,START,END)
 
-    def create_learning_unit_year_annual_data(self, an_acronym, a_title, an_academic_yr, a_tutor):
+    def create_learning_unit_year_annual_data(self, an_acronym, a_title, an_academic_yr, a_tutor, start, end):
         a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
             'acronym': an_acronym,
             'title': a_title,
@@ -104,8 +105,8 @@ class OnlineApplicationTest(TestCase):
             an_attribution = test_attribution.create_attribution({'function': function.CO_HOLDER,
                                                                   'learning_unit_year': a_learning_unit_year,
                                                                   'tutor': a_tutor,
-                                                                  'start': START,
-                                                                  'end': END})
+                                                                  'start': start,
+                                                                  'end': end})
             test_attribution_charge.create_attribution_charge(
                 {'attribution': an_attribution,
                  'learning_unit_component': a_learning_unit_component_lecture,
@@ -131,30 +132,41 @@ class OnlineApplicationTest(TestCase):
 
 
     def test_get_current_attributions(self):
+        unused_year = CURRENT_YEAR+10
+        an_new_academic_year = test_academic_year.create_academic_year_with_year(unused_year)
+        acronym_1='LMECA2125'
+        learning_unit_year_1 = self.create_learning_unit_year_annual_data(acronym_1, TITLE, an_new_academic_year, self.a_tutor,unused_year, unused_year+1)
+        attribution_1 = mdl_attribution.attribution.search(self.a_tutor, learning_unit_year_1)
 
-        data1 = {online_application.ACRONYM:                      ACRONYM,
+        data1 = {online_application.ATTRIBUTION_ID:               attribution_1[0].id,
+                 online_application.ACRONYM:                      acronym_1,
                  online_application.TITLE:                        TITLE,
                  online_application.LECTURING_DURATION:           online_application.TWO_DECIMAL_FORMAT % (LEARNING_UNIT_LECTURING_DURATION,),
                  online_application.PRACTICAL_DURATION:           online_application.TWO_DECIMAL_FORMAT % (LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION,),
-                 online_application.START:                        START,
-                 online_application.END:                          END+1,
+                 online_application.START:                        unused_year,
+                 online_application.END:                          unused_year+1,
                  online_application.ATTRIBUTION_CHARGE_LECTURING: online_application.TWO_DECIMAL_FORMAT % (ATTRIBUTION_CHARGE_LECTURING_DURATION,),
                  online_application.ATTRIBUTION_CHARGE_PRACTICAL: online_application.TWO_DECIMAL_FORMAT % (ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION,),
                  online_application.FUNCTION:                     function.CO_HOLDER
         }
-        data2 = {online_application.ACRONYM:                      ACRONYM2,
-                 online_application.TITLE:                        TITLE2,
+        acronym_2='LSTAT8125'
+        learning_unit_year_2 = self.create_learning_unit_year_annual_data(acronym_2, TITLE, an_new_academic_year, self.a_tutor,unused_year, unused_year+1)
+        attribution_2 = mdl_attribution.attribution.search(self.a_tutor,learning_unit_year_2)
+        data2 = {online_application.ATTRIBUTION_ID:               attribution_2[0].id,
+                 online_application.ACRONYM:                      acronym_2,
+                 online_application.TITLE:                        TITLE,
                  online_application.LECTURING_DURATION:           online_application.TWO_DECIMAL_FORMAT % (LEARNING_UNIT_LECTURING_DURATION,),
                  online_application.PRACTICAL_DURATION:           online_application.TWO_DECIMAL_FORMAT % (LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION,),
-                 online_application.START:                        START,
-                 online_application.END:                          END+1,
+                 online_application.START:                        unused_year,
+                 online_application.END:                          unused_year+1,
                  online_application.ATTRIBUTION_CHARGE_LECTURING: online_application.TWO_DECIMAL_FORMAT % (ATTRIBUTION_CHARGE_LECTURING_DURATION,),
                  online_application.ATTRIBUTION_CHARGE_PRACTICAL: online_application.TWO_DECIMAL_FORMAT % (ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION,),
                  online_application.FUNCTION:                     function.CO_HOLDER
                }
         data = [data1, data2]
-
-        self.assertEqual(online_application.get_attributions_allocated(CURRENT_YEAR, self.a_tutor), data)
+        print(data1)
+        print(data2)
+        self.assertEqual(online_application.get_attributions_allocated(an_new_academic_year.year, self.a_tutor), data)
 
     def test_sum_attribution_allocation_charges(self):
         self.assertEqual(online_application.sum_attribution_allocation_charges(self.learning_unit_year1_partially_vacant_current), ATTRIBUTION_CHARGE_LECTURING_DURATION + ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION)
@@ -226,10 +238,10 @@ class OnlineApplicationTest(TestCase):
             online_application.ATTRIBUTION_CHARGE_PRACTICAL: online_application.TWO_DECIMAL_FORMAT % (application_charge_duration,)
         }]
         self.assertEquals(len(online_application.get_applications(NEXT_YEAR ,self.a_tutor)),1)
-
-    def test_no_terminating_charges(self):
-        print('test_no_terminating_charges')
-        self.assertEquals(len(online_application.get_terminating_charges(CURRENT_YEAR ,self.a_tutor)),0)
+    #
+    # def test_no_terminating_charges(self):
+    #     print('test_no_terminating_charges')
+    #     self.assertEquals(len(online_application.get_terminating_charges(CURRENT_YEAR ,self.a_tutor)),0)
 
     # def test_get_terminating_charges(self):
     #     print('test_get_terminating_charges')

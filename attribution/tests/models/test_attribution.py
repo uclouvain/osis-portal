@@ -46,7 +46,7 @@ def create_attribution(data):
     if start:
         attribution.start_date = datetime.datetime(start, 9, 15)
     if end:
-        attribution.end_date = datetime.datetime(end+1, 9, 14)
+        attribution.end_date = datetime.datetime(end, 9, 14)
     if 'tutor' in data:
         attribution.tutor = data['tutor']
     attribution.save()
