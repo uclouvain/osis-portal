@@ -55,22 +55,13 @@
                     </div>
                 </form>
             </div>
-            <br>
-            <br>
+        <br><br><br>
+            <div >
             {% if attributions %}
                 {% include "attributions_renewal.html" %}
             {% endif %}
-
-        </div>
-    </div>
-    {% if application %}
-        <div class="panel panel-default"
-             id="pnl_charges">
-            <div class="panel-heading">{% trans 'application'%}</div>
-            <div class="panel-body">
-                {% include "application_form.html" %}
             </div>
         </div>
+    </div>
 
-    {% endif %}
 {% endblock %}

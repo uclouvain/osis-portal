@@ -27,44 +27,44 @@ from django.db import models
 from django.contrib import admin
 
 
-class LearningUnitYearAdmin(admin.ModelAdmin):
-    list_display = ('acronym', 'title', 'academic_year', 'weight')
-    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'weight', 'learning_unit')}),)
-    list_filter = ('academic_year__year',)
+class LearningUnitAdmin(admin.ModelAdmin):
+    list_display = ('acronym', 'title', 'start_year', 'end_year', 'changed')
+    fieldsets = ((None, {'fields': ('acronym','title','description','start_year','end_year')}),)
     search_fields = ['acronym']
 
 
-class LearningUnitYear(models.Model):
+class LearningUnit(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    acronym = models.CharField(max_length=15, db_index=True)
+    changed = models.DateTimeField(null=True)
+    acronym = models.CharField(max_length=15)
     title = models.CharField(max_length=255)
-    credits = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
-    weight = models.IntegerField(blank=True, null=True)
-    academic_year = models.ForeignKey('AcademicYear')
-    learning_unit = models.ForeignKey('LearningUnit', blank=True, null=True)
-    team = models.BooleanField(default=False)
+    description = models.TextField(blank=True, null=True)
+    start_year = models.IntegerField()
+    end_year = models.IntegerField(blank=True, null=True)
+    progress = None
 
     def __str__(self):
-        return u"%s - %s" % (self.academic_year, self.acronym)
+        return u"%s - %s" % (self.acronym, self.title)
+
+    class Meta:
+        permissions = (
+            ("can_access_learningunit", "Can access learning unit"),
+        )
 
 
-def search(academic_year_id=None, acronym=None, a_learning_unit=None, title=None):
-    queryset = LearningUnitYear.objects
+def find_by_id(learning_unit_id):
+    return LearningUnit.objects.get(pk=learning_unit_id)
 
-    if academic_year_id:
-        queryset = queryset.filter(academic_year=academic_year_id)
+
+def find_by_ids(learning_unit_ids):
+    return LearningUnit.objects.filter(pk__in=learning_unit_ids)
+
+
+def search(acronym=None):
+    queryset = LearningUnit.objects
 
     if acronym:
-        queryset = queryset.filter(acronym__iexact=acronym)
-
-    if a_learning_unit:
-        queryset = queryset.filter(learning_unit=a_learning_unit)
+        queryset = queryset.filter(acronym=acronym)
 
     return queryset
 
-def search_order_by_acronym(academic_year_id=None):
-    return search(academic_year_id).order_by('acronym')
-
-
-def find_by_id(learning_unit_year_id):
-    return LearningUnitYear.objects.get(pk=learning_unit_year_id)

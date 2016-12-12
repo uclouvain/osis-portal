@@ -195,3 +195,9 @@ msgstr "Must be positive"
 msgid "entering"
 msgstr "You've entered"
 
+msgid "250_characters_max"
+msgstr "Max 250 characters for a remark"
+
+msgid "too_much"
+msgstr "Too much"
+

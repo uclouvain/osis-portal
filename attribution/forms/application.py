@@ -26,38 +26,64 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
+MAXIMUM_REMARK_LENGTH = 250
+
 
 class ApplicationForm(forms.Form):
 
-    charge_lecturing = forms.DecimalField(max_digits=5, decimal_places=2, initial=0, localize=True, required=False)
-    charge_practical = forms.DecimalField(max_digits=5, decimal_places=2, initial=0, localize=True, required=False)
-    course_summary = forms.Textarea()
-    remark = forms.Textarea() #250
+    charge_lecturing = forms.DecimalField(max_digits=5, decimal_places=2, initial=0, required=False)
+    charge_practical = forms.DecimalField(max_digits=5, decimal_places=2, initial=0, required=False)
+    course_summary = forms.CharField(widget=forms.Textarea, required=False)
+    remark = forms.CharField(widget=forms.Textarea, required=False)
+    max_charge_lecturing = forms.DecimalField(max_digits=5, decimal_places=2)
+    max_charge_practical = forms.DecimalField(max_digits=5, decimal_places=2)
+
 
     def __init__(self, *args, **kwargs):
         super(ApplicationForm, self).__init__(*args, **kwargs)
         self._initial_data = self.__dict__.copy()
 
 
-    def clean(self):
-        cleaned_data = super(ApplicationForm, self).clean()
-        charge_lecturing = cleaned_data.get("charge_lecturing")
-        if charge_lecturing and charge_lecturing < 0:
-            self.errors['charge_lecturing'] = _('not_positive')
-        charge_practical = cleaned_data.get("charge_practical")
-        if charge_practical and charge_practical < 0:
-            self.errors['charge_practical'] = _('not_positive')
-        return cleaned_data
-
-
-    def clean_charge_lecturing(self):
-        return self.validate_charge('charge_lecturing')
-
-    def validate_charge(self, field_name):
+    def value_if_empty(self, field_name):
         if not self[field_name].html_name in self.data or \
                         self.cleaned_data.get(field_name) is None:
             return self.fields[field_name].initial
         return self.cleaned_data.get(field_name)
 
+
+    def clean(self):
+        print('clearn')
+        cleaned_data = super(ApplicationForm, self).clean()
+        charge_lecturing = cleaned_data.get("charge_lecturing")
+        if charge_lecturing:
+            if charge_lecturing < 0:
+                self.errors['charge_lecturing'] = _('not_positive')
+            else:
+                max_charge_lecturing = cleaned_data.get("max_charge_lecturing")
+                print(max_charge_lecturing)
+                if charge_lecturing > max_charge_lecturing:
+                    self.errors['charge_lecturing'] = "{0} (max: {1})".format(_('too_much'),max_charge_lecturing)
+
+        charge_practical = cleaned_data.get("charge_practical")
+        if charge_practical:
+            if charge_practical < 0:
+                self.errors['charge_practical'] = _('not_positive')
+            else:
+                max_charge_practical = cleaned_data.get("max_charge_practical")
+
+                if charge_practical > max_charge_practical:
+                    self.errors['charge_practical'] = "{0} (max: {1})".format(_('too_much'),max_charge_practical)
+        remark = cleaned_data.get("remark")
+        if remark and len(remark) > MAXIMUM_REMARK_LENGTH:
+            self.errors['remark'] = _('250_characters_max')
+
+        return cleaned_data
+
+
+    def clean_charge_lecturing(self):
+        return self.value_if_empty('charge_lecturing')
+
+
     def clean_charge_practical(self):
-        return self.validate_charge('charge_practical')
+        return self.value_if_empty('charge_practical')
+

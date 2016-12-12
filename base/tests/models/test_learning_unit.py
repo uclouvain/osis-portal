@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,18 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models import academic_year
-from base.models import campus
-from base.models import external_offer
-from base.models import learning_unit
-from base.models import learning_unit_component
-from base.models import learning_unit_enrollment
-from base.models import learning_unit_year
-from base.models import offer
-from base.models import offer_enrollment
-from base.models import offer_year
-from base.models import offer_year_domain
-from base.models import organization
-from base.models import person
-from base.models import student
-from base.models import tutor
+from base import models as mdl_base
+
+
+def create_learning_unit(data):
+    learning_unit = mdl_base.learning_unit.LearningUnit()
+    if 'acronym' in data:
+        learning_unit.acronym = data['acronym']
+    if 'title' in data:
+        learning_unit.title = data['title']
+    if 'description' in data:
+        learning_unit.description = data['description']
+    if 'start_year' in data:
+        learning_unit.start_year = data['start_year']
+    if 'end_year' in data:
+        learning_unit.end_year = data['end_year']
+    learning_unit.save()
+    return learning_unit

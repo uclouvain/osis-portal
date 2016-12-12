@@ -29,7 +29,7 @@ from django.test import TestCase
 from attribution.tests.views import test_teaching_load
 from attribution.views import online_application, teaching_load
 from base.models.enums import component_type
-from base.tests.models import test_person, test_tutor,test_academic_year, test_learning_unit_year, test_learning_unit_component
+from base.tests.models import test_person, test_tutor,test_academic_year, test_learning_unit_year, test_learning_unit_component, test_learning_unit
 from attribution.tests.models import test_attribution_charge, test_attribution, test_application_charge, test_tutor_application
 from attribution.models.enums import function
 from base import models as mdl_base
@@ -147,8 +147,10 @@ class OnlineApplicationTest(TestCase):
                  online_application.END:                          unused_year+1,
                  online_application.ATTRIBUTION_CHARGE_LECTURING: online_application.TWO_DECIMAL_FORMAT % (ATTRIBUTION_CHARGE_LECTURING_DURATION,),
                  online_application.ATTRIBUTION_CHARGE_PRACTICAL: online_application.TWO_DECIMAL_FORMAT % (ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION,),
-                 online_application.FUNCTION:                     function.CO_HOLDER
-        }
+                 online_application.FUNCTION:                     function.CO_HOLDER,
+                 online_application.RENEW:                        False
+
+                 }
         acronym_2='LSTAT8125'
         learning_unit_year_2 = self.create_learning_unit_year_annual_data(acronym_2, TITLE, an_new_academic_year, self.a_tutor,unused_year, unused_year+1)
         attribution_2 = mdl_attribution.attribution.search(self.a_tutor,learning_unit_year_2)
@@ -161,8 +163,9 @@ class OnlineApplicationTest(TestCase):
                  online_application.END:                          unused_year+1,
                  online_application.ATTRIBUTION_CHARGE_LECTURING: online_application.TWO_DECIMAL_FORMAT % (ATTRIBUTION_CHARGE_LECTURING_DURATION,),
                  online_application.ATTRIBUTION_CHARGE_PRACTICAL: online_application.TWO_DECIMAL_FORMAT % (ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION,),
-                 online_application.FUNCTION:                     function.CO_HOLDER
-               }
+                 online_application.FUNCTION:                     function.CO_HOLDER,
+                 online_application.RENEW:                        False
+                }
         data = [data1, data2]
         self.assertEqual(online_application.get_attributions_allocated(an_new_academic_year.year, self.a_tutor), data)
 
@@ -236,6 +239,35 @@ class OnlineApplicationTest(TestCase):
             online_application.ATTRIBUTION_CHARGE_PRACTICAL: online_application.TWO_DECIMAL_FORMAT % (application_charge_duration,)
         }]
         self.assertEquals(len(online_application.get_applications(NEXT_YEAR ,self.a_tutor)),1)
+
+    def test_define_renew_unexisting_academic_year(self):
+        a_learning_unit = test_learning_unit.create_learning_unit({'acronym': 'LSTAT2121',
+                                                                        'title':'Statistiques',
+                                                                        'start_year' : 2015,
+                                                                        'end_year' : 2019})
+        a_next_academic_yr = test_academic_year.create_academic_year_with_year(NEXT_YEAR + 10)
+        a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
+            'acronym': a_learning_unit.acronym,
+            'academic_year': a_next_academic_yr,
+        'learning_unit': a_learning_unit})
+        self.assertEquals(online_application.define_renew(self.a_tutor, a_learning_unit_year), False)
+
+    def test_define_renew_existing_academic_year_true(self):
+        a_learning_unit = test_learning_unit.create_learning_unit({'acronym': 'LSTAT2121',
+                                                                   'title':'Statistiques',
+                                                                   'start_year' : 2015,
+                                                                   'end_year' : 2019})
+        a_next_academic_yr_plus_4 = test_academic_year.create_academic_year_with_year(NEXT_YEAR + 4)
+        a_learning_unit_year_plus_4  = test_learning_unit_year.create_learning_unit_year({
+            'acronym': a_learning_unit.acronym,
+            'academic_year': a_next_academic_yr_plus_4,
+            'learning_unit': a_learning_unit})
+        a_next_academic_yr_plus_5 = test_academic_year.create_academic_year_with_year(NEXT_YEAR + 5)
+        a_learning_unit_year_plus_5 = test_learning_unit_year.create_learning_unit_year({
+            'acronym': a_learning_unit.acronym,
+            'academic_year': a_next_academic_yr_plus_5,
+            'learning_unit': a_learning_unit})
+        self.assertEquals(online_application.define_renew(self.a_tutor, a_learning_unit_year_plus_4), True)
     #
     # def test_no_terminating_charges(self):
     #     print('test_no_terminating_charges')

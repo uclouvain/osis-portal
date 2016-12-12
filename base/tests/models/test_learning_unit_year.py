@@ -36,5 +36,7 @@ def create_learning_unit_year(data):
         learning_unit_year.academic_year = data['academic_year']
     if 'weight' in data:
         learning_unit_year.weight = data['weight']
+    if 'learning_unit' in data:
+        learning_unit_year.learning_unit = data['learning_unit']
     learning_unit_year.save()
     return learning_unit_year

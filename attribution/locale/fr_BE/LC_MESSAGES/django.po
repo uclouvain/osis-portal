@@ -194,4 +194,8 @@ msgstr "Doit être positif"
 msgid "entering"
 msgstr "Vous avez introduit"
 
+msgid "250_characters_max"
+msgstr "Max 250 caractères pour une remarque"
 
+msgid "too_much"
+msgstr "Trop élevé"
