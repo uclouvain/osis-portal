@@ -25,7 +25,7 @@
 ##############################################################################
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from admission import models as mdl
 from admission.models.enums import coverage_access_degree as coverage_access_degree_choices
 from admission.models.enums import question_type
@@ -259,6 +259,12 @@ def create_answers(application, request):
             save_answer_from_checkbox(application, key, value)
         if "slt_question_" in key:
             save_answer_from_dropdownlist(application, value)
+        if "delete_document_file_" in key:
+            option_id = key.replace("delete_document_file_", "")
+            answer = mdl.answer.find_by_application_and_option(application.id, option_id)
+            document_file = mdl_osis_common.document_file.DocumentFile.objects.filter(uuid=answer[0].value)
+            answer.delete()
+            document_file[0].delete()
 
 
 def save_answer_from_upload(application, key, request):

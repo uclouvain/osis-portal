@@ -1507,10 +1507,24 @@ function display_dynamic_form(offer_year_id){
                                                .attr("class","description"));
                         $('#pnl_questions').append("<br>");
                         }
-                        $('#pnl_questions').append($("<input>")
-                                           .attr("name","txt_file_"+value.option_id)
-                                           .attr("id","txt_file_"+value.option_id)
-                                           .attr("type","file"));
+                        if(value.document_file != ""){
+                            $('#pnl_questions').append($("<input>")
+                                               .attr("name","txt_file_"+value.option_id)
+                                               .attr("id","txt_file_"+value.option_id)
+                                               .attr("type","file"))
+                                               .append(" "+value.document_file+" ")
+                                               .append($("<button></button>")
+                                               .attr("name","delete_document_file_"+value.option_id)
+                                               .attr("id","delete_document_file_"+value.option_id)
+                                               .attr("class", "glyphicon glyphicon-trash"));
+                        }else{
+                            $('#pnl_questions').append($("<input>")
+                                               .attr("name","txt_file_"+value.option_id)
+                                               .attr("id","txt_file_"+value.option_id)
+                                               .attr("type","file"));
+                        }
+
+                        $('#pnl_questions').append("<br>");
                     }
                     if(value.position == value.options_max_number){
                         $('#pnl_questions').append("<br>");
