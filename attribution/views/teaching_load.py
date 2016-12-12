@@ -33,7 +33,7 @@ from performance import models as mdl_performance
 from base import models as mdl_base
 from attribution import models as mdl_attribution
 from base.models.enums import component_type
-from attribution.forms import AttributionForm
+from attribution.forms.attribution import AttributionForm
 from django.contrib.auth.decorators import login_required
 import json
 

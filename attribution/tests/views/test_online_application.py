@@ -164,8 +164,6 @@ class OnlineApplicationTest(TestCase):
                  online_application.FUNCTION:                     function.CO_HOLDER
                }
         data = [data1, data2]
-        print(data1)
-        print(data2)
         self.assertEqual(online_application.get_attributions_allocated(an_new_academic_year.year, self.a_tutor), data)
 
     def test_sum_attribution_allocation_charges(self):

@@ -151,3 +151,47 @@ msgstr "Renew"
 
 msgid "renewal"
 msgstr "Renewal"
+
+msgid "lecturing_hours_allocated"
+msgstr "Lecturing hours allocated"
+
+msgid "practical_hours_allocated"
+msgstr "Pratical hours allocated"
+
+
+msgid "start"
+msgstr "Start"
+
+msgid "end"
+msgstr "End"
+
+msgid "lecturing_hours_asked"
+msgstr "Lecturing hours asked"
+
+msgid "practical_hours_asked"
+msgstr "Pratical hours asked"
+
+msgid "lecturing_hours_vacant"
+msgstr "Lecturing vacant hours "
+
+msgid "practical_hours_vacant"
+msgstr "Pratical vacant hours"
+
+msgid "application"
+msgstr "Application"
+
+msgid "remark"
+msgstr "Remark"
+
+msgid "course_summary"
+msgstr "Course summary"
+
+msgid "submit"
+msgstr "Submit"
+
+msgid "not_positive"
+msgstr "Must be positive"
+
+msgid "entering"
+msgstr "You've entered"
+

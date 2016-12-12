@@ -88,6 +88,4 @@ def find_distinct_years(a_tutor):
 
 
 def find_by_tutor_dates(a_tutor, a_start_date, an_end_date):
-    print(a_start_date)
-    print(an_end_date)
     return Attribution.objects.filter(end_date=an_end_date, tutor=a_tutor)

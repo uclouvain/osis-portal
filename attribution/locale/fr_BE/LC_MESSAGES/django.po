@@ -151,3 +151,47 @@ msgstr "Reconduire"
 
 msgid "renewal"
 msgstr "Reconduction"
+
+msgid "lecturing_hours_allocated"
+msgstr "Cours magistral attribution"
+
+msgid "practical_hours_allocated"
+msgstr "Travaux pratiques attribution"
+
+msgid "start"
+msgstr "Début"
+
+msgid "end"
+msgstr "Fin"
+
+msgid "lecturing_hours_asked"
+msgstr "Cours magistral heures demandées"
+
+msgid "practical_hours_asked"
+msgstr "Travaux pratiques heures demandées"
+
+msgid "lecturing_hours_vacant"
+msgstr "Cours magistral heures vacantes"
+
+msgid "practical_hours_vacant"
+msgstr "Travaux pratiques heures vacantes"
+
+msgid "application"
+msgstr "Candidature"
+
+msgid "remark"
+msgstr "Remarque"
+
+msgid "course_summary"
+msgstr "Résumé de cours"
+
+msgid "submit"
+msgstr "Soumettre"
+
+msgid "not_positive"
+msgstr "Doit être positif"
+
+msgid "entering"
+msgstr "Vous avez introduit"
+
+
