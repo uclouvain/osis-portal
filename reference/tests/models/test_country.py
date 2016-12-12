@@ -23,27 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
-from datetime import datetime
-
-def create_academic_year():
-    an_academic_year = mdl_base.academic_year.AcademicYear()
-    an_academic_year.year = 2016
-    an_academic_year.save()
-    return an_academic_year
+from reference import models as mdl_reference
 
 
-def create_academic_year_current():
-    an_academic_year = mdl_base.academic_year.AcademicYear()
-    an_academic_year.year = datetime.now().year
-    an_academic_year.start_date = datetime.now()
-    an_academic_year.end_date = datetime.now()
-    an_academic_year.save()
-    return an_academic_year
-
-
-def create_academic_year_by_year(a_year):
-    an_academic_year = mdl_base.academic_year.AcademicYear()
-    an_academic_year.year = a_year
-    an_academic_year.save()
-    return an_academic_year
+def create_country():
+    a_country = mdl_reference.country.Country(iso_code="BE",
+                                              name="Belgium")
+    a_country.save()
+    return a_country

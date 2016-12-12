@@ -23,27 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
-from datetime import datetime
+from reference import models as mdl_reference
+from reference.enums import education_institution_type, education_institution_national_comunity
+from reference.tests.models import test_country
 
-def create_academic_year():
-    an_academic_year = mdl_base.academic_year.AcademicYear()
-    an_academic_year.year = 2016
-    an_academic_year.save()
-    return an_academic_year
-
-
-def create_academic_year_current():
-    an_academic_year = mdl_base.academic_year.AcademicYear()
-    an_academic_year.year = datetime.now().year
-    an_academic_year.start_date = datetime.now()
-    an_academic_year.end_date = datetime.now()
-    an_academic_year.save()
-    return an_academic_year
-
-
-def create_academic_year_by_year(a_year):
-    an_academic_year = mdl_base.academic_year.AcademicYear()
-    an_academic_year.year = a_year
-    an_academic_year.save()
-    return an_academic_year
+def create_education_institution():
+    an_education_institution = mdl_reference.education_institution.EducationInstitution(
+        name='name',
+        institution_type=education_institution_type.HIGHER_NON_UNIVERSITY,
+        national_community=education_institution_national_comunity.FRENCH,
+        country=test_country.create_country(),
+        adhoc=False)
+    an_education_institution.save()
+    return an_education_institution

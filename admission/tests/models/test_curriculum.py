@@ -23,27 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
-from datetime import datetime
-
-def create_academic_year():
-    an_academic_year = mdl_base.academic_year.AcademicYear()
-    an_academic_year.year = 2016
-    an_academic_year.save()
-    return an_academic_year
+from admission import models as mdl
 
 
-def create_academic_year_current():
-    an_academic_year = mdl_base.academic_year.AcademicYear()
-    an_academic_year.year = datetime.now().year
-    an_academic_year.start_date = datetime.now()
-    an_academic_year.end_date = datetime.now()
-    an_academic_year.save()
-    return an_academic_year
+def create_curriculum(data):
+    a_curriculum = mdl.curriculum.Curriculum()
+    if data['applicant']:
+        a_curriculum.person = data['applicant']
 
+    if data['academic_year']:
+        a_curriculum.academic_year = data['academic_year']
 
-def create_academic_year_by_year(a_year):
-    an_academic_year = mdl_base.academic_year.AcademicYear()
-    an_academic_year.year = a_year
-    an_academic_year.save()
-    return an_academic_year
+    if data['path_type']:
+        a_curriculum.path_type = data['path_type']
+
+    if data['national_education']:
+        a_curriculum.national_education = data['national_education']
+
+    if data['national_institution']:
+        a_curriculum.national_institution = data['national_institution']
+
+    a_curriculum.save()
+
+    return a_curriculum
