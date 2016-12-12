@@ -108,5 +108,5 @@ def find_by_id(proposition_id):
 
 
 def search_by_offers(offers):
-    proposition_ids = proposition_offer.search_by_offers(offers).values('proposition_dissertation_id')
+    proposition_ids = proposition_offer.find_by_offers(offers).values('proposition_dissertation_id')
     return PropositionDissertation.objects.filter(pk__in=proposition_ids, active=True, visibility=True)
