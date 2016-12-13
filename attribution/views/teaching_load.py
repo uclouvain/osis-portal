@@ -82,11 +82,13 @@ def get_attribution_allocation_charge(a_tutor, a_learning_unit_year, a_component
 
 
 def sum_learning_unit_year_duration(a_learning_unit_year):
-    tot_duration = DURATION_NUL
+    tot_duration = None
     for learning_unit_component in mdl_base.learning_unit_component.search(a_learning_unit_year, None):
         if learning_unit_component.duration:
-            tot_duration += learning_unit_component.duration
-    print(tot_duration)
+            if tot_duration:
+                tot_duration += learning_unit_component.duration
+            else:
+                tot_duration = learning_unit_component.duration
     return tot_duration
 
 

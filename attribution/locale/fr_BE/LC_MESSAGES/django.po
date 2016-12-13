@@ -27,10 +27,10 @@ msgid "title"
 msgstr "Intitulé"
 
 msgid "lecturing_hours"
-msgstr "Cours magistral"
+msgstr "Vol.1"
 
 msgid "practical_hours"
-msgstr "Travaux pratique"
+msgstr "Vol.2"
 
 msgid "students"
 msgstr "Etudiants"
@@ -153,10 +153,10 @@ msgid "renewal"
 msgstr "Reconduction"
 
 msgid "lecturing_hours_allocated"
-msgstr "Cours magistral attribution"
+msgstr "Vol.1"
 
 msgid "practical_hours_allocated"
-msgstr "Travaux pratiques attribution"
+msgstr "Vol.2"
 
 msgid "start"
 msgstr "Début"
@@ -165,16 +165,16 @@ msgid "end"
 msgstr "Fin"
 
 msgid "lecturing_hours_asked"
-msgstr "Cours magistral heures demandées"
+msgstr "Vol.1"
 
 msgid "practical_hours_asked"
-msgstr "Travaux pratiques heures demandées"
+msgstr "Vol.2"
 
 msgid "lecturing_hours_vacant"
-msgstr "Cours magistral heures vacantes"
+msgstr "Vol.1 vacant"
 
 msgid "practical_hours_vacant"
-msgstr "Travaux pratiques heures vacantes"
+msgstr "Vol.2 vacant"
 
 msgid "application"
 msgstr "Candidature"
@@ -199,3 +199,6 @@ msgstr "Max 250 caractères pour une remarque"
 
 msgid "too_much"
 msgstr "Trop élevé"
+
+msgid "learning_unit_vacant"
+msgstr "Cours vacant"

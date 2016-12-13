@@ -24,30 +24,22 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
-<table class="table">
-    <tr>
-        <th>{% trans 'code'%}</th>
-        <th>{% trans 'title'%}</th>
-        <th>{% trans 'lecturing_hours'%}</th>
-        <th>{% trans 'practical_hours'%}</th>
-        <th>{% trans 'start' %}</th>
-        <th>{% trans 'end' %}</th>
-        <th>{% trans 'lecturing_hours_allocated'%}</th>
-        <th>{% trans 'practical_hours_allocated'%}</th>
-        <th>{% trans 'function'%}</th>
-    </tr>
-    {% for attribution in attributions %}
-        <tr>
-            <td>{{ attribution.acronym }}</td>
-            <td>{{ attribution.title }}</td>
-            <td>{{ attribution.lecturing_duration | default_if_none:''}}</td>
-            <td>{{ attribution.practice_duration | default_if_none:''}}</td>
-            <td>{{ attribution.start | default_if_none:''}}</td>
-            <td>{{ attribution.end | default_if_none:''}}</td>
-            <td>{{ attribution.attribution_charge_lecturing }}</td>
-            <td>{{ attribution.attribution_charge_practical }}</td>
-            <td>{% trans attribution.function %}</td>
-        </tr>
-    {% endfor %}
-
-</table>
+<div class="row pull-right">
+    <form method="get" action="{% url 'vacant_learning_unit_search'%}">
+        <div class="col-md-5">
+            <label for="txt_acronym">{% trans 'code' %}</label>
+            <input class="form-control" id="txt_acronym" placeholder="{% trans 'acronym' %}"
+                   name="learning_unit_acronym"
+                   value="{{ acronym | default_if_none:'' }}" style="text-transform:uppercase" maxlength="15">
+        </div>
+        <div class="col-md-3">
+            <br>
+            <button type="submit" id="bt_submit_vacant_learning_unit_search" class="btn btn-primary" role="button"
+                    title="{% trans 'vacant_learning_unit_year_search' %}">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+        </div>
+    </form>
+</div>
+<br>
+<br>
+<br>

@@ -27,10 +27,10 @@ msgid "title"
 msgstr "Title"
 
 msgid "lecturing_hours"
-msgstr "Lecturing hours"
+msgstr "Vol.1"
 
 msgid "practical_hours"
-msgstr "Pratical hours"
+msgstr "Vol.2"
 
 msgid "students"
 msgstr "Students"
@@ -153,11 +153,10 @@ msgid "renewal"
 msgstr "Renewal"
 
 msgid "lecturing_hours_allocated"
-msgstr "Lecturing hours allocated"
+msgstr "Vol.1"
 
 msgid "practical_hours_allocated"
-msgstr "Pratical hours allocated"
-
+msgstr "Vol.2"
 
 msgid "start"
 msgstr "Start"
@@ -166,16 +165,16 @@ msgid "end"
 msgstr "End"
 
 msgid "lecturing_hours_asked"
-msgstr "Lecturing hours asked"
+msgstr "Vol.1"
 
 msgid "practical_hours_asked"
-msgstr "Pratical hours asked"
+msgstr "Vol.2"
 
 msgid "lecturing_hours_vacant"
-msgstr "Lecturing vacant hours "
+msgstr "Vol.1 vacant "
 
 msgid "practical_hours_vacant"
-msgstr "Pratical vacant hours"
+msgstr "Vol.2 vacant"
 
 msgid "application"
 msgstr "Application"
@@ -201,3 +200,5 @@ msgstr "Max 250 characters for a remark"
 msgid "too_much"
 msgstr "Too much"
 
+msgid "learning_unit_vacant"
+msgstr "Vacant learning unit"

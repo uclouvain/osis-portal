@@ -28,111 +28,121 @@
 {% endcomment %}
 {% block breadcrumb_area %}
     <ol class="breadcrumb">
-        <li><a href="{% url 'attribution_applications' %}" id="lnk_home_attribution_applications"><span class="glyphicon glyphicon-home"
+        <li><a href="{% url 'applications' %}" id="lnk_home_attribution_applications"><span class="glyphicon glyphicon-home"
                                                                                                         aria-hidden="true"></span></a></li>
-        <li><a href="{% url 'attribution_applications' %}" id="lnk_applications">{% trans 'teaching_load' %}</a></li>
+        <li><a href="{% url 'applications' %}" id="lnk_applications">{% trans 'teaching_load' %}</a></li>
         {% block breadcrumb %}
         {% endblock %}
     </ol>
 {% endblock %}
 {% block content %}
-    <form action="{% url 'save_tutor_application' application.tutor_application.id %}"
-          method="post"
-          class="form" role="form">
-        {% csrf_token %}
-        <input type="hidden"
-               id="hdn_application_charge_lecturing_id"
-               name="application_charge_lecturing_id"
-               value="{{ application.application_charge_lecturing.id }}">
-        <input type="hidden"
-               id="hdn_application_charge_practical_id"
-               name="application_charge_practical_id"
-               value="{{ application.application_charge_practical.id }}">
+    <div class="panel panel-default"
+         id="pnl_application_form">
+        <div class="panel-heading">{% trans 'application'%}</div>
+        <div class="panel-body">
+            <form action="{% if application.tutor_application.id %}{% url 'save_tutor_application' application.tutor_application.id %}{% else %}{% url 'save_new_tutor_application' %}{% endif%}"
+                  method="post"
+                  class="form" role="form">
+                <input type="text" id="hdn_learning_unit_year_id" name="learning_unit_year_id" value="{{application.tutor_application.learning_unit_year.id }}">
+                {% csrf_token %}
+                <input type="hidden"
+                       id="hdn_application_charge_lecturing_id"
+                       name="application_charge_lecturing_id"
+                       value="{{ application.application_charge_lecturing.id }}">
+                <input type="hidden"
+                       id="hdn_application_charge_practical_id"
+                       name="application_charge_practical_id"
+                       value="{{ application.application_charge_practical.id }}">
 
-        <div class="row">
-            <div class="col-md-3">
-                <label>{% trans 'code' %}</label>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>{% trans 'code' %}</label>
+                        <br>
+                        {{ application.tutor_application.learning_unit_year.acronym }}
+                    </div>
+                    <div class="col-md-9">
+                        <label>{% trans 'title' %}</label>
+                        <br>
+                        {{ application.tutor_application.learning_unit_year.title }}
+                    </div>
+                </div>
                 <br>
-                {{ application.tutor_application.learning_unit_year.acronym }}
-            </div>
-            <div class="col-md-9">
-                <label>{% trans 'title' %}</label>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>{% trans 'lecturing_hours' %}</label>
+                        <br>
+                        {{ application.lecturing_duration | default_if_none:''}}
+                    </div>
+                    <div class="col-md-2">
+                        <label>{% trans 'practical_hours' %}</label>
+                        <br>
+                        {{ application.practice_duration | default_if_none:'' }}
+                    </div>
+                    <div class="col-md-2">
+                        <label>{% trans 'lecturing_hours_vacant' %}</label>
+                        <br>
+                        <span name="max_charge_lecturing" style="visibility:hidden;display:none;">{{ form.max_charge_lecturing }}</span>
+                        {{ application.vacant_attribution_charge_lecturing | default_if_none:''}}
+                    </div>
+                    <div class="col-md-2">
+                        <label>{% trans 'practical_hours_vacant' %}</label>
+                        <br>
+                        <span name="max_charge_practical" style="visibility:hidden;display:none;">{{ form.max_charge_practical}}</span>
+                        {{ application.vacant_attribution_charge_practical | default_if_none:'' }}
+                    </div>
+                </div>
                 <br>
-                {{ application.tutor_application.learning_unit_year.title }}
-            </div>
+
+                {% if  application.tutor_application.learning_unit_year.team %}
+                {% else %}
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>{% trans 'lecturing_hours_asked' %}</label>
+                            <br>
+                            <input class="form-control"
+                                   id="txt_charge_lecturing"
+                                   name="charge_lecturing"
+                                   value="{{ form.charge_lecturing.value | default_if_none:'' }}">
+                            {% if  form.charge_lecturing.errors %}<span class="error">{{ form.charge_lecturing.errors|striptags }}</span>{% endif %}
+                        </div>
+                        <div class="col-md-2">
+                            <label>{% trans 'practical_hours_asked' %}</label>
+                            <br>
+                            <input class="form-control"
+                                   id="txt_charge_practical"
+                                   name="charge_practical"
+                                   value="{{ form.charge_practical.value | default_if_none:'' }}">
+                            {% if form.charge_practical.errors %}<span class="error">{{ form.charge_practical.errors|striptags }}</span>{% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <label>{% trans 'function' %}</label>
+                            <br>
+                            {% if application.tutor_application.function  %}
+                                {% trans application.tutor_application.function %}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+                <br>
+                <label>{% trans 'course_summary' %}</label>
+                <br>
+                <textarea id="txt_course_summary"
+                          name="course_summary"
+                          class="form-control"
+                        >{{form.course_summary.value | default_if_none:''}}</textarea>
+                <br>
+                <label>{% trans 'remark' %}</label>
+                <br>
+                <textarea id="txt_remark"
+                          name="remark"
+                          class="form-control">{{form.remark.value | default_if_none:''}}</textarea>
+                {% if form.remark.errors %}<span class="error">{{ form.remark.errors|striptags }}</span>{% endif %}
+                <br>
+                <button class="btn btn-primary" id="bt_submit" >
+                    <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> {% trans 'submit' %}</button>
+            </form>
         </div>
-        <br>
-        <div class="row">
-            <div class="col-md-3">
-                <label>{% trans 'lecturing_hours' %}</label>
-                <br>
-                {{ application.lecturing_duration | default_if_none:''}}
-            </div>
-            <div class="col-md-3">
-                <label>{% trans 'practical_hours' %}</label>
-                <br>
-                {{ application.practice_duration | default_if_none:'' }}
-            </div>
-            <div class="col-md-3">
-                <label>{% trans 'lecturing_hours_vacant' %}</label>
-                <br>
-                <span name="max_charge_lecturing" style="visibility:hidden">{{ form.max_charge_lecturing }}</span>
-                {{ application.vacant_attribution_charge_lecturing | default_if_none:''}}
-            </div>
-            <div class="col-md-3">
-                <label>{% trans 'practical_hours_vacant' %}</label>
-                <br>
-                <span name="max_charge_practical" style="visibility:hidden">{{ form.max_charge_practical}}</span>
-                {{ application.vacant_attribution_charge_practical | default_if_none:'' }}
-            </div>
-        </div>
-        <br>
-
-        {% if  application.tutor_application.learning_unit_year.team %}
-        {% else %}
-
-            <div class="row">
-                <div class="col-md-4">
-                    <label>{% trans 'lecturing_hours_asked' %}</label>
-                    <br>
-                    <input class="form-control"
-                           id="txt_charge_lecturing"
-                           name="charge_lecturing"
-                           value="{{ form.charge_lecturing.value | default_if_none:'' }}">
-                    {% if  form.charge_lecturing.errors %}<span class="error">{{ form.charge_lecturing.errors|striptags }}</span>{% endif %}
-                </div>
-                <div class="col-md-4">
-                    <label>{% trans 'practical_hours_asked' %}</label>
-                    <br>
-                    <input class="form-control"
-                           id="txt_charge_practical"
-                           name="charge_practical"
-                           value="{{ form.charge_practical.value | default_if_none:'' }}">
-                    {% if form.charge_practical.errors %}<span class="error">{{ form.charge_practical.errors|striptags }}</span>{% endif %}
-                </div>
-                <div class="col-md-4">
-                    <label>{% trans 'function' %}</label>
-                    <br>
-                    {% trans application.tutor_application.function %}
-                </div>
-            </div>
-        {% endif %}
-        <br>
-        <label>{% trans 'course_summary' %}</label>
-        <br>
-        <textarea id="txt_course_summary"
-                  name="course_summary"
-                  class="form-control"
-                >{{form.course_summary.value | default_if_none:''}}</textarea>
-        <br>
-        <label>{% trans 'remark' %}</label>
-        <br>
-        <textarea id="txt_remark"
-                  name="remark"
-                  class="form-control">{{form.remark.value | default_if_none:''}}</textarea>
-        {% if form.remark.errors %}<span class="error">{{ form.remark.errors|striptags }}</span>{% endif %}
-        <br>
-        <button class="btn btn-primary" id="bt_submit" >
-            <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> {% trans 'submit' %}</button>
-    </form>
+    </div>
 {% endblock %}

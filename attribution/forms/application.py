@@ -31,8 +31,8 @@ MAXIMUM_REMARK_LENGTH = 250
 
 class ApplicationForm(forms.Form):
 
-    charge_lecturing = forms.DecimalField(max_digits=5, decimal_places=2, initial=0, required=False)
-    charge_practical = forms.DecimalField(max_digits=5, decimal_places=2, initial=0, required=False)
+    charge_lecturing = forms.DecimalField(max_digits=5, decimal_places=2, initial=0, required=False, localize=True)
+    charge_practical = forms.DecimalField(max_digits=5, decimal_places=2, initial=0, required=False, localize=True)
     course_summary = forms.CharField(widget=forms.Textarea, required=False)
     remark = forms.CharField(widget=forms.Textarea, required=False)
     max_charge_lecturing = forms.DecimalField(max_digits=5, decimal_places=2)
@@ -48,11 +48,11 @@ class ApplicationForm(forms.Form):
         if not self[field_name].html_name in self.data or \
                         self.cleaned_data.get(field_name) is None:
             return self.fields[field_name].initial
+
         return self.cleaned_data.get(field_name)
 
 
     def clean(self):
-        print('clearn')
         cleaned_data = super(ApplicationForm, self).clean()
         charge_lecturing = cleaned_data.get("charge_lecturing")
         if charge_lecturing:
@@ -60,7 +60,6 @@ class ApplicationForm(forms.Form):
                 self.errors['charge_lecturing'] = _('not_positive')
             else:
                 max_charge_lecturing = cleaned_data.get("max_charge_lecturing")
-                print(max_charge_lecturing)
                 if charge_lecturing > max_charge_lecturing:
                     self.errors['charge_lecturing'] = "{0} (max: {1})".format(_('too_much'),max_charge_lecturing)
 

@@ -40,6 +40,7 @@ class ApplicationCharge(SerializableModel):
     def __str__(self):
         return u"%s" % str(self.tutor_application)
 
+
 def find_by_id(an_id):
     return ApplicationCharge.objects.get(pk=an_id)
 
@@ -55,4 +56,3 @@ def search(a_tutor_application=None, a_learning_unit_component=None):
         queryset = queryset.filter(learning_unit_component=a_learning_unit_component)
 
     return queryset
-
