@@ -25,7 +25,7 @@
 ##############################################################################
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from admission import models as mdl
 from admission.models.enums import coverage_access_degree as coverage_access_degree_choices
 from admission.models.enums import question_type
