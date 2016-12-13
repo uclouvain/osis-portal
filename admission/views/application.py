@@ -260,11 +260,15 @@ def create_answers(application, request):
         if "slt_question_" in key:
             save_answer_from_dropdownlist(application, value)
         if "delete_document_file_" in key:
-            option_id = key.replace("delete_document_file_", "")
-            answer = mdl.answer.find_by_application_and_option(application.id, option_id)
-            document_file = mdl_osis_common.document_file.DocumentFile.objects.filter(uuid=answer[0].value)
-            answer.delete()
-            document_file[0].delete()
+            delete_document_file(application, key)
+
+
+def delete_document_file(application, key):
+    option_id = key.replace("delete_document_file_", "")
+    answer = mdl.answer.find_by_application_and_option(application.id, option_id)
+    document_file = mdl_osis_common.document_file.DocumentFile.objects.filter(uuid=answer[0].value)
+    answer.delete()
+    document_file[0].delete()
 
 
 def save_answer_from_upload(application, key, request):
