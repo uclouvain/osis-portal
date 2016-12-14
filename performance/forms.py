@@ -34,7 +34,6 @@ class RegistrationIdForm(forms.Form):
         cleaned_data = super(RegistrationIdForm, self).clean()
         registration_id = cleaned_data.get('registration_id')
         if registration_id:
-            try:
-                std_model.find_by_registration_id(registration_id)
-            except std_model.Student.DoesNotExist:
+            student = std_model.find_by_registration_id(registration_id)
+            if student is None:
                 self.add_error('registration_id', _('no_student_with_this_registration_id'))

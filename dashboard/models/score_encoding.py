@@ -23,32 +23,36 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from couchbase.bucket import Bucket, NotFoundError
-from django.conf import settings
+from django.db import models
+from django.contrib import admin
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.postgres.fields import JSONField
+from osis_common.models.serializable_model import SerializableModel
 
 
-def connect_db():
-    bucket_name = "score_encoding"
-    if settings.COUCHBASE_PASSWORD:
-        cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name, password=settings.COUCHBASE_PASSWORD)
-    else:
-        cb = Bucket(settings.COUCHBASE_CONNECTION_STRING+bucket_name)
-    return cb
-
-cb = connect_db()
+class ScoreEncodingAdmin(admin.ModelAdmin):
+    list_display = ('global_id',)
+    fieldsets = ((None, {'fields': ('global_id', 'document')}),)
 
 
-def get_document(global_id):
+class ScoreEncoding(SerializableModel):
+    global_id = models.CharField(max_length=10, unique=True)
+    document = JSONField()
+
+    def __str__(self):
+        return u"%s" % self.global_id
+
+
+def find_by_global_id(global_id):
     try:
-        return cb.get(global_id)
-    except NotFoundError:
+        return ScoreEncoding.objects.get(global_id=global_id)
+    except ObjectDoesNotExist:
         return None
 
 
-def insert_or_update_document(key, data):
-    """
-    Insert a new document if the key passed in parameter doesn't exist in CouchDB.
-    :param key: The key of the document
-    :param data: The document (JSON) to insert/update in Couchbase
-    """
-    cb.set(key, data)
+def insert_or_update_document(global_id, document):
+    score_encoding_object, created = ScoreEncoding.objects.update_or_create(
+        global_id=global_id, defaults={"document": document}
+    )
+    return score_encoding_object
+
