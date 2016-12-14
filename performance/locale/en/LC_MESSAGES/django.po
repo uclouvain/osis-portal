@@ -62,6 +62,9 @@ msgstr "Y - Second inscription"
 msgid "first_name"
 msgstr "First Name"
 
+msgid "generated"
+msgstr "generated on"
+
 msgid "inscr"
 msgstr "Inscr."
 

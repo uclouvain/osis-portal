@@ -50,7 +50,10 @@ class Student(SerializableModel):
 
 
 def find_by_registration_id(registration_id):
-    return Student.objects.get(registration_id=registration_id)
+    try:
+        return Student.objects.get(registration_id=registration_id)
+    except ObjectDoesNotExist:
+        return None
 
 
 def search(registration_id=None, person_name=None, person_username=None, person_first_name=None, full_registration=None):
