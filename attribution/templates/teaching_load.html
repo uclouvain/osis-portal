@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "attribution_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -26,7 +26,7 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 {% block content %}
-    <h1>{% trans 'teaching_load' %}</h1>
+    <h1>{% trans 'teaching_charge' %}</h1>
     <h2>{{ user.first_name }} {{ user.last_name }}</h2>
     <ul class="nav nav-tabs">
     {%  for form in formset%}

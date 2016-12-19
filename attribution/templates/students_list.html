@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "attribution_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -29,41 +29,60 @@
     <ol class="breadcrumb">
         <li><a href="{% url 'home' %}" id="lnk_home_attribution"><span class="glyphicon glyphicon-home"
                                                                 aria-hidden="true"></span></a></li>
-        <li><a href="{% url 'attributions_by_year' learning_unit_year.academic_year.year %}" id="lnk_home_attribution">{% trans 'teaching_load' %}</a></li>
+        <li><a href="{% url 'attributions_by_year' learning_unit_year.academic_year.year %}" id="lnk_home_attribution">{% trans 'teaching_charge' %}</a></li>
         {% block breadcrumb %}
         {% endblock %}
     </ol>
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap.min.css' %}">
 {% endblock %}
 {% block content %}
     <h1>{{ students|length }}{% trans 'students_learning_unit' %} {{ learning_unit_year }}</h1>
 
     {% if students %}
-        <table class="table table-striped table-hover">
-            <tr>
-                <th>{% trans 'program'%}</th>
-                <th>{% trans 'student'%}</th>
-                <th>{% trans 'registration_id'%}</th>
-                <th>{% trans 'january'%}</th>
-                <th>{% trans 'status' %}</th>
-                <th>{% trans 'june'%}</th>
-                <th>{% trans 'status' %}</th>
-                <th>{% trans 'september'%}</th>
-                <th>{% trans 'status' %}</th>
-            </tr>
-            {% for student in students %}
+        <table class="table table-striped table-hover" id="students_table">
+            <thead>
                 <tr>
-                    <td>{{ student.program }}</td>
-                    <td>{{ student.name }}</td>
-                    <td>{{ student.registration_id | default_if_none:''}}</td>
-                    <td>{{ student.january_note | default_if_none:''}}</td>
-                    <td>{{ student.january_status| default_if_none:''}}</td>
-                    <td>{{ student.june_note | default_if_none:''}}</td>
-                    <td>{{ student.june_status| default_if_none:''}}</td>
-                    <td>{{ student.september_note | default_if_none:''}}</td>
-                    <td>{{ student.september_status| default_if_none:''}}</td>
+                    <th>{% trans 'program'%}</th>
+                    <th>{% trans 'student'%}</th>
+                    <th>{% trans 'registration_id'%}</th>
+                    <th>{% trans 'january'%}</th>
+                    <th>{% trans 'status' %}</th>
+                    <th>{% trans 'june'%}</th>
+                    <th>{% trans 'status' %}</th>
+                    <th>{% trans 'september'%}</th>
+                    <th>{% trans 'status' %}</th>
                 </tr>
-            {% endfor %}
-
+            </thead>
+            <tbody>
+                {% for student in students %}
+                    <tr>
+                        <td>{{ student.program }}</td>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.registration_id | default_if_none:''}}</td>
+                        <td>{{ student.january_note | default_if_none:''}}</td>
+                        <td>{{ student.january_status| default_if_none:''}}</td>
+                        <td>{{ student.june_note | default_if_none:''}}</td>
+                        <td>{{ student.june_status| default_if_none:''}}</td>
+                        <td>{{ student.september_note | default_if_none:''}}</td>
+                        <td>{{ student.september_status| default_if_none:''}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
     {% endif %}
+{% endblock %}
+{% block script %}
+
+    <script>
+        $(document).ready(function() {
+            alert('kk1');
+            $('#students_table').DataTable( {
+                paging:   false,
+                stateSave: true
+            } );
+        } );
+    </script>
 {% endblock %}

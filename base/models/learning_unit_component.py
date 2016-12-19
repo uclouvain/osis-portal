@@ -37,7 +37,7 @@ class LearningUnitComponent(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     learning_unit_year = models.ForeignKey('LearningUnitYear')
     type = models.CharField(max_length=25, blank=True, null=True, choices=component_type.COMPONENT_TYPES, db_index=True)
-    duration = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    duration = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
         return u"%s - %s" % (self.type, self.learning_unit_year)

@@ -30,12 +30,16 @@ from osis_common.models.serializable_model import SerializableModel
 
 class AttributionChargeAdmin(admin.ModelAdmin):
     list_display = ('attribution', 'learning_unit_component', 'allocation_charge')
-
+    raw_id_fields = ('attribution', 'learning_unit_component')
+    search_fields = ['attribution__tutor__person__first_name',
+                     'attribution__tutor__person__last_name',
+                     'learning_unit_component__learning_unit_year__acronym']
 
 class AttributionCharge(SerializableModel):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
     attribution = models.ForeignKey('Attribution')
     learning_unit_component = models.ForeignKey('base.LearningUnitComponent')
-    allocation_charge = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    allocation_charge = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
         return u"%s" % str(self.attribution)
