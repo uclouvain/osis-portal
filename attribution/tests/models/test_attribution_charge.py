@@ -23,16 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models import tutor
-from base.tests.models import test_person
+from attribution import models as mdl_attribution
 
 
-def create_tutor():
-    a_tutor = tutor.Tutor(person=test_person.create_person())
-    a_tutor.save()
-    return a_tutor
-
-
-def create_tutor_with_person(a_person):
-    a_tutor = tutor.Tutor.objects.create(person=a_person)
-    return a_tutor
+def create_attribution_charge(data):
+    attribution_charge = mdl_attribution.attribution_charge.AttributionCharge()
+    if 'attribution' in data:
+        attribution_charge.attribution = data['attribution']
+    if 'learning_unit_component' in data:
+        attribution_charge.learning_unit_component = data['learning_unit_component']
+    if 'allocation_charge' in data:
+        attribution_charge.allocation_charge = data['allocation_charge']
+    attribution_charge.save()
+    return attribution_charge

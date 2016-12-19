@@ -25,35 +25,37 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-
-from base.models.offer_year import OfferYear
-from osis_common.models.serializable_model import SerializableModel
+from base.models.enums import component_type
 
 
-class OfferEnrollmentAdmin(admin.ModelAdmin):
-    list_display = ('offer_year', 'student', 'date_enrollment')
-    fieldsets = ((None, {'fields': ('offer_year', 'student', 'date_enrollment')}),)
-    raw_id_fields = ('offer_year', 'student')
-    search_fields = ['offer_year__acronym', 'student__person__first_name', 'student__person__last_name']
+class LearningUnitComponentAdmin(admin.ModelAdmin):
+    list_display = ('learning_unit_year', 'type', 'duration')
+    fieldsets = ((None, {'fields': ('learning_unit_year', 'type', 'duration')}),)
 
 
-class OfferEnrollment(SerializableModel):
+class LearningUnitComponent(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    date_enrollment = models.DateField()
-    offer_year = models.ForeignKey(OfferYear)
-    student = models.ForeignKey('Student')
+    learning_unit_year = models.ForeignKey('LearningUnitYear')
+    type = models.CharField(max_length=25, blank=True, null=True, choices=component_type.COMPONENT_TYPES, db_index=True)
+    duration = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
-        return u"%s - %s" % (self.student, self.offer_year)
+        return u"%s - %s" % (self.type, self.learning_unit_year)
+
+    class Meta:
+        permissions = (
+            ("can_access_learningunit", "Can access learning unit"),
+        )
 
 
-def find_by_student(a_student):
-    return OfferEnrollment.objects.filter(student=a_student)
+def search(a_learning_unit_year=None, a_type=None):
+    queryset = LearningUnitComponent.objects
+
+    if a_learning_unit_year:
+        queryset = queryset.filter(learning_unit_year=a_learning_unit_year)
+
+    if a_type:
+        queryset = queryset.filter(type=a_type)
+    return queryset
 
 
-def find_by_student_ordered(a_student):
-    return find_by_student(a_student).order_by("-offer_year__academic_year__year")
-
-
-def find_by_student_offer(a_student, offer_year):
-    return OfferEnrollment.objects.filter(student=a_student, offer_year=offer_year)
