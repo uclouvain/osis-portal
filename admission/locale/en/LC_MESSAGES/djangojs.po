@@ -231,3 +231,15 @@ msgstr "Other"
 
 msgid "curriculum"
 msgstr "Curriculum"
+
+msgid "search"
+msgstr "Search:"
+
+msgid "showing_page"
+msgstr "Showing page"
+
+msgid "of"
+msgstr "of"
+
+msgid "no_record"
+msgstr "No record"

@@ -75,12 +75,18 @@
     {% endif %}
 {% endblock %}
 {% block script %}
-
     <script>
         $(document).ready(function() {
             $('#students_table').DataTable( {
                 paging:   false,
-                stateSave: true
+                stateSave: true,
+                language: {
+                    search: gettext('search'),
+                    info: gettext('showing_page') +  " _PAGE_ " + gettext('of') + " _PAGES_ ",
+                    infoEmpty: gettext('no_record'),
+                    zeroRecords: gettext('no_record'),
+
+                }
             } );
         } );
     </script>

@@ -36,15 +36,16 @@ from performance.tests.models import test_student_performance
 from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
     test_learning_unit_component, test_offer_enrollment, test_learning_unit_enrollment, test_offer_year, test_student
 from attribution.tests.models import test_attribution_charge, test_attribution
+from decimal import *
 
 
 REGISTRATION_ID = '64641200'
 
-LEARNING_UNIT_LECTURING_DURATION = 15.00
-LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION = 30.00
+LEARNING_UNIT_LECTURING_DURATION = 15.0
+LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION = 30.0
 
-ATTRIBUTION_CHARGE_LECTURING_DURATION = 15.00
-ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION = 15.00
+ATTRIBUTION_CHARGE_LECTURING_DURATION = 15.0
+ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION = 15.0
 
 ACRONYM = 'LELEC1530'
 TITLE = 'Circ. Electro. Analog. & Digit. Fondam.'
@@ -183,15 +184,13 @@ class TeachingLoadTest(TestCase):
     def test_sum_learning_unit_year_with_no_duration(self):
         self.assertEqual(teaching_load.sum_learning_unit_year_duration(self.create_learning_unit_year_without_duration()), 0)
 
-    def test_sum_learning_unit_year_allocation_charg(self):
-        self.assertEqual(teaching_load.sum_learning_unit_year_allocation_charge(self.a_tutor, self.get_data('learning_unit_year')), ATTRIBUTION_CHARGE_LECTURING_DURATION + ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION)
-
     def test_calculate_percentage_allocation_charge(self):
-        self.assertEqual(teaching_load.calculate_format_percentage_allocation_charge(self.a_tutor, self.get_data('learning_unit_year')), self.calculate_formatted_percentage())
+        self.assertEqual(teaching_load.calculate_attribution_format_percentage_allocation_charge(self.get_data('learning_unit_year'), self.get_data('attribution')), self.calculate_formatted_percentage())
 
     def test_calculate_percentage_allocation_charge_with_no_duration(self):
-        self.assertIsNone(teaching_load.calculate_format_percentage_allocation_charge(self.a_tutor,
-                                                                                      self.create_learning_unit_year_without_duration()))
+        self.assertIsNone(teaching_load.calculate_attribution_format_percentage_allocation_charge(
+            self.create_learning_unit_year_without_duration(),
+            self.get_data('attribution')))
 
     def test_format_students_email(self):
         email_expected = "{0}{1}{2}".format(teaching_load.MAIL_TO, ACRONYM.lower(), teaching_load.STUDENT_LIST_EMAIL_END)
@@ -211,27 +210,6 @@ class TeachingLoadTest(TestCase):
         list_attributions = [self.get_data('attribution')]
         self.assertEqual(list(teaching_load.list_attributions(self.a_person, self.get_data('academic_year'))), list_attributions)
 
-    def test_list_teaching_load_attribution_representation(self):
-        list_attributions = []
-        a_learning_unit_year = self.get_data('learning_unit_year')
-        teaching_load_attribution_representation = {
-            'acronym': a_learning_unit_year.acronym,
-            'title': TITLE.upper(),
-            'lecturing_allocation_charge': teaching_load.ONE_DECIMAL_FORMAT % (ATTRIBUTION_CHARGE_LECTURING_DURATION,),
-            'practice_allocation_charge': teaching_load.ONE_DECIMAL_FORMAT % (ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION,),
-            'percentage_allocation_charge': self.calculate_formatted_percentage(),
-            'weight': a_learning_unit_year.weight,
-            'url_schedule': settings.ADE_MAIN_URL.format(settings.ADE_PROJET_NUMBER, ACRONYM.lower()),
-            'url_students_list_email': "{0}{1}{2}".format(teaching_load.MAIL_TO,
-                                                          ACRONYM.lower(),
-                                                          teaching_load.STUDENT_LIST_EMAIL_END),
-            'function': self.get_data('attribution').function,
-            'year': a_learning_unit_year.academic_year.year,
-            'learning_unit_year_url': settings.UCL_URL.format(a_learning_unit_year.academic_year.year, ACRONYM.lower()),
-            'learning_unit_year': a_learning_unit_year}
-        list_attributions.append(teaching_load_attribution_representation)
-        self.assertEqual(teaching_load.list_teaching_load_attribution_representation(self.a_person, a_learning_unit_year.academic_year), list_attributions)
-
     def test_attribution_years(self):
         list_years = [NEXT_YEAR, CURRENT_YEAR]
         self.assertEqual(teaching_load.get_attribution_years(self.a_person), list_years)
@@ -240,22 +218,6 @@ class TeachingLoadTest(TestCase):
         a_learning_unit_year = self.get_data('learning_unit_year')
         url_learning_unit = settings.UCL_URL.format(a_learning_unit_year.academic_year.year, ACRONYM.lower())
         self.assertEqual(teaching_load.get_url_learning_unit_year(a_learning_unit_year), url_learning_unit)
-
-    def test_find_enrollments(self):
-        a_learning_unit_year = self.get_data('learning_unit_year')
-        list_learning_unit_enrollment = []
-        offer_year = test_offer_year.create_offer_year()
-        i = 0
-        while i < 5:
-            student1 = self.create_student(i)
-            offer_enrollment = test_offer_enrollment\
-                .create_offer_enrollment_with_academic_year(offer_year, student1, a_learning_unit_year.academic_year)
-            learning_unit_enrollment = test_learning_unit_enrollment\
-                .create_learning_unit_enrollment(offer_enrollment, a_learning_unit_year)
-            list_learning_unit_enrollment.append(learning_unit_enrollment)
-            i = i + 1
-
-        self.assertEqual(list(teaching_load.get_students(a_learning_unit_year)), list_learning_unit_enrollment)
 
     def test_find_january_note(self):
         student_performance = test_student_performance.create_student_performance()

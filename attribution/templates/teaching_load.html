@@ -67,7 +67,12 @@
                 <td>{% trans attribution.function %}</td>
             </tr>
         {% endfor %}
-
+            <tr>
+                <td colspan="2"></td>
+                <td>{{ tot_lecturing }}</td>
+                <td>{{ tot_practical }}</td>
+                <td colspan="6"></td>
+            </tr>
         </table>
     {% endif %}
 {% endblock %}
