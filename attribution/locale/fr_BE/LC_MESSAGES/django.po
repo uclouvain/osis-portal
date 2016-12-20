@@ -57,7 +57,7 @@ msgid "DEPUTY"
 msgstr "Suppléant"
 
 msgid "weight"
-msgstr "Weight"
+msgstr "ECT"
 
 msgid "students_learning_unit"
 msgstr "  étudiants inscrits au cours "
@@ -130,3 +130,6 @@ msgstr "Externe"
 
 msgid "P"
 msgstr "Partielle"
+
+msgid "no_student_learning_unit"
+msgstr "Aucun étudiant inscrit au cours"

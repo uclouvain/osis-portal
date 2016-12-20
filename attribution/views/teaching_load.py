@@ -36,8 +36,7 @@ from base.models.enums import component_type
 from attribution.forms import AttributionForm
 from django.contrib.auth.decorators import login_required
 import json
-from django.contrib.auth import logout
-from django.shortcuts import redirect
+
 
 ONE_DECIMAL_FORMAT = "%0.1f"
 
@@ -213,12 +212,14 @@ def show_students(request, a_learning_unit_year):
 
 
 def get_sessions_results(a_registration_id, a_learning_unit, offer_acronym):
+    print('get_sessions_results')
     results = {}
     academic_year = a_learning_unit.academic_year.year    
     a_student_performance = mdl_performance.student_performance\
         .find_by_student_and_offer_year(a_registration_id, academic_year, offer_acronym)
 
     if a_student_performance:
+        print('ici')
         student_data = get_student_data_dict(a_student_performance)
         monAnnee = student_data['monAnnee']
         if student_data['etudiant']['noma'] == a_registration_id and monAnnee['anac'] == str(academic_year):
@@ -309,6 +310,3 @@ def calculate_attribution_format_percentage_allocation_charge(a_learning_unit_ye
         return ONE_DECIMAL_FORMAT % (percentage,)
     return None
 
-def logout_attribution(request):
-    logout(request)
-    return redirect('attribution')

@@ -130,3 +130,6 @@ msgstr "Externe"
 
 msgid "P"
 msgstr "Partielle"
+
+msgid "no_student_learning_unit"
+msgstr "No students enrolled"

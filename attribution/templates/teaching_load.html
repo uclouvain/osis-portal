@@ -61,7 +61,7 @@
                 <td>{{ attribution.practice_allocation_charge | default_if_none:''}}</td>
                 <td>{{ attribution.percentage_allocation_charge | default_if_none:''}}</td>
                 <td>{{ attribution.weight | default_if_none:''}}</td>
-                <td><a href="{% url 'students' attribution.learning_unit_year.id %}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a></td>
+                <td><a href="{% url 'students' attribution.learning_unit_year.id %}"><span class="fa fa-group" aria-hidden="true"></span></a></td>
                 <td><a target="_blank" href="{{ attribution.url_schedule }}"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span></a></td>
                 <td><a href="{{ attribution.url_students_list_email }}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a></td>
                 <td>{% trans attribution.function %}</td>
