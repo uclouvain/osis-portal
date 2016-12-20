@@ -212,7 +212,6 @@ def show_students(request, a_learning_unit_year):
 
 
 def get_sessions_results(a_registration_id, a_learning_unit, offer_acronym):
-    print('get_sessions_results')
     results = {}
     academic_year = a_learning_unit.academic_year.year    
     a_student_performance = mdl_performance.student_performance\
