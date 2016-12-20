@@ -36,7 +36,8 @@ from base.models.enums import component_type
 from attribution.forms import AttributionForm
 from django.contrib.auth.decorators import login_required
 import json
-
+from django.contrib.auth import logout
+from django.shortcuts import redirect
 
 ONE_DECIMAL_FORMAT = "%0.1f"
 
@@ -308,3 +309,6 @@ def calculate_attribution_format_percentage_allocation_charge(a_learning_unit_ye
         return ONE_DECIMAL_FORMAT % (percentage,)
     return None
 
+def logout_attribution(request):
+    logout(request)
+    return redirect('attribution')

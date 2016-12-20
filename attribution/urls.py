@@ -31,4 +31,6 @@ urlpatterns = [
     url(r'^charge/$', teaching_load.by_year, name='attributions_by_year'),
     url(r'^load/([0-9]+)/$', teaching_load.by_year, name='attributions_by_year'),
     url(r'^students/([0-9]+)/$', teaching_load.show_students, name='students'),
+    url(r'^attribution/$', teaching_load.home, name='attribution'),
+    url(r'^logout/$', teaching_load.logout_attribution, name='attribution_logout'),
 ]
