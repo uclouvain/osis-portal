@@ -140,7 +140,7 @@ def list_teaching_load_attribution_representation(a_person, an_academic_year):
              'percentage_allocation_charge':
                  calculate_attribution_format_percentage_allocation_charge(a_learning_unit_year,
                                                                            an_attribution),
-             'weight': a_learning_unit_year.weight,
+             'weight': a_learning_unit_year.credits,
              'url_schedule': get_schedule_url(a_learning_unit_year.acronym),
              'url_students_list_email': get_email_students(a_learning_unit_year.acronym),
              'function': an_attribution.function,
