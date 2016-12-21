@@ -33,6 +33,7 @@ from osis_common.models.serializable_model import SerializableModel
 class ScoreEncodingAdmin(admin.ModelAdmin):
     list_display = ('global_id',)
     fieldsets = ((None, {'fields': ('global_id', 'document')}),)
+    search_fields = ['global_id']
 
 
 class ScoreEncoding(SerializableModel):
