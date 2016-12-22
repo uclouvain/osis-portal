@@ -29,8 +29,8 @@ from django.contrib import admin
 
 
 class DissertationLocationAdmin(admin.ModelAdmin):
-    list_display = ('name', )
-    search_fields = ('name', )
+    list_display = ('uuid', 'name')
+    search_fields = ('uuid', 'name')
 
 
 class DissertationLocation(SerializableModel):
