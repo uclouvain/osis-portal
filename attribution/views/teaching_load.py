@@ -218,7 +218,6 @@ def get_sessions_results(a_registration_id, a_learning_unit, offer_acronym):
         .find_by_student_and_offer_year(a_registration_id, academic_year, offer_acronym)
 
     if a_student_performance:
-        print('ici')
         student_data = get_student_data_dict(a_student_performance)
         monAnnee = student_data['monAnnee']
         if student_data['etudiant']['noma'] == a_registration_id and monAnnee['anac'] == str(academic_year):
