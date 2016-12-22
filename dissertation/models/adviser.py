@@ -32,6 +32,7 @@ from django.contrib import admin
 class AdviserAdmin(admin.ModelAdmin):
     list_display = ('person', 'type')
     raw_id_fields = ('person', )
+    search_fields = ('uuid', 'person__last_name', 'person__first_name')
 
 
 class Adviser(SerializableModel):
