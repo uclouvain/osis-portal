@@ -24,10 +24,10 @@
 #
 ##############################################################################
 from django.conf.urls import url
-from dashboard.views import main
+from dashboard.views import main, score_encoding
 
 urlpatterns = [
     url(r'^$', main.home, name='dashboard_home'),
-    url(r'^scores_encoding/$', main.score_encoding, name='scores_encoding'),
-    url(r'^scores_encoding/download/$', main.download_papersheet, name='scores_download'),
+    url(r'^scores_encoding/$', score_encoding.score_encoding, name='scores_encoding'),
+    url(r'^scores_encoding/download/$', score_encoding.download_papersheet, name='scores_download'),
 ]
