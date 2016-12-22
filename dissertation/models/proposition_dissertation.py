@@ -33,9 +33,12 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class PropositionDissertationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'creator', 'visibility', 'active', 'creator')
+    list_display = ('title', 'author', 'visibility', 'active', 'creator')
     raw_id_fields = ('creator', 'author')
-    search_fields = ('title', )
+    search_fields = ('uuid',
+                     'title',
+                     'author__person__last_name',
+                     'author__person__first_name')
 
 
 class PropositionDissertation(SerializableModel):

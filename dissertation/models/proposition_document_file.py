@@ -29,8 +29,9 @@ from django.contrib import admin
 
 
 class PropositionDocumentFileAdmin(admin.ModelAdmin):
-    list_display = ('proposition', 'document_file')
+    list_display = ('uuid', 'proposition', 'document_file')
     raw_id_fields = ('proposition', 'document_file')
+    search_fields = ('uuid', 'proposition', 'document_file')
 
 
 class PropositionDocumentFile(SerializableModel):
