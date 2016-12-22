@@ -232,19 +232,19 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL
 # Uncomment the configuration if you want to use the queue system
 # The queue system uses RabbitMq queues to communicate with other application (ex : osis)
 QUEUES = {
-   'QUEUE_URL': 'localhost',
-   'QUEUE_USER': 'guest',
-   'QUEUE_PASSWORD': 'guest',
-   'QUEUE_PORT': 5672,
-   'QUEUE_CONTEXT_ROOT': '/',
-   'QUEUES_NAME': {
-       'MIGRATIONS_TO_PRODUCE': 'osis',
-       'MIGRATIONS_TO_CONSUME': 'osis_portal',
-       'PAPER_SHEET': 'paper_sheet',
-       'PERFORMANCE': 'performance_to_client',
-       'STUDENT_PERFORMANCE': 'rpc_performance_from_client',
-       'STUDENT_POINTS': 'rpc_performance_to_client'
-   }
+    'QUEUE_URL': 'localhost',
+    'QUEUE_USER': 'guest',
+    'QUEUE_PASSWORD': 'guest',
+    'QUEUE_PORT': 5672,
+    'QUEUE_CONTEXT_ROOT': '/',
+    'QUEUES_NAME': {
+        'MIGRATIONS_TO_PRODUCE': 'osis',
+        'MIGRATIONS_TO_CONSUME': 'osis_portal',
+        'PAPER_SHEET': 'paper_sheet',
+        'PERFORMANCE': 'performance_to_client',
+        'STUDENT_PERFORMANCE': 'rpc_performance_from_client',
+        'STUDENT_POINTS': 'rpc_performance_to_client'
+    }
 }
 
 
@@ -300,7 +300,3 @@ except ImportError:
 if 'admission' in INSTALLED_APPS:
     ADMISSION_LOGIN_URL=reverse_lazy('admission_login')
     ADMISSION_LOGIN_REDIRECT_URL=reverse_lazy('admission')
-
-ADE_MAIN_URL='http://horairev6.uclouvain.be/direct/index.jsp?displayConfName=WEB&showTree=false&showOptions=false&weeks=0&login=enseignant&password=prof&projectId={0}&code={1}'
-ADE_PROJET_NUMBER = '21'
-UCL_URL="http://www.uclouvain.be/cours-{0}-{1}.html"
