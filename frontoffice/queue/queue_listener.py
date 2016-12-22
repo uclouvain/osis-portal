@@ -68,8 +68,7 @@ class Client(object):
                                    properties=pika.BasicProperties(
                                        reply_to=self.callback_queue,
                                        correlation_id=self.corr_id,
-                                       content_type='application/json',
-                                   ),
+                                       content_type='application/json'),
                                    body=message)
         while self.response is None and not self.timed_out:
             self.connection.process_data_events()
