@@ -32,7 +32,7 @@ from django.contrib import admin
 class DissertationGroupAdmin(admin.ModelAdmin):
     list_display = ('dissertation',)
     raw_id_fields = ('dissertation',)
-    search_fields = ('uuid', 'dissertation')
+    search_fields = ('uuid',)
 
 
 class DissertationGroup(SerializableModel):
