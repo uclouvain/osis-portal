@@ -29,8 +29,9 @@ from django.contrib import admin
 
 
 class DissertationDocumentFileAdmin(admin.ModelAdmin):
-    list_display = ('dissertation', 'document_file')
+    list_display = ('uuid', 'dissertation', 'document_file')
     raw_id_fields = ('dissertation', 'document_file')
+    search_fields = ('uuid', 'dissertation', 'document_file')
 
 
 class DissertationDocumentFile(SerializableModel):
