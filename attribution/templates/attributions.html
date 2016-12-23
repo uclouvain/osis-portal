@@ -28,6 +28,7 @@
     <tr>
         <th>{% trans 'code'%}</th>
         <th>{% trans 'title'%}</th>
+        <th>{% trans 'team'%}</th>
         <th>{% trans 'lecturing_hours'%}</th>
         <th>{% trans 'practical_hours'%}</th>
         <th>{% trans 'start' %}</th>
@@ -40,14 +41,21 @@
         <tr>
             <td>{{ attribution.acronym }}</td>
             <td>{{ attribution.title }}</td>
-            <td>{{ attribution.lecturing_duration | default_if_none:''}}</td>
-            <td>{{ attribution.practice_duration | default_if_none:''}}</td>
-            <td>{{ attribution.start | default_if_none:''}}</td>
-            <td>{{ attribution.end | default_if_none:''}}</td>
-            <td>{{ attribution.attribution_charge_lecturing }}</td>
-            <td>{{ attribution.attribution_charge_practical }}</td>
+            <td>{% if attribution.team %}<input type='checkbox' checked readonly>{% else %}{% endif %}</td>
+            <td>{% if attribution.lecturing_duration > 0 %}{{ attribution.lecturing_duration | default_if_none:''}}{% endif %}</td>
+            <td>{% if attribution.practice_duration > 0 %}{{ attribution.practice_duration | default_if_none:''}}{% endif %}</td>
+            <td>{{ attribution.start_academic_year | default_if_none:''}}</td>
+            <td>{{ attribution.end_academic_year | default_if_none:''}}</td>
+            <td>{% if attribution.attribution_charge_lecturing > 0 %}{{ attribution.attribution_charge_lecturing }}{% endif %}</td>
+            <td>{% if attribution.attribution_charge_practical > 0 %}{{ attribution.attribution_charge_practical }}{% endif %}</td>
             <td>{% trans attribution.function %}</td>
         </tr>
-    {% endfor %}
 
+    {% endfor %}
+    <tr>
+        <td colspan="7" ><label class="pull-right">Tot.</label></td>
+        <td>{{ tot_lecturing }}</td>
+        <td>{{ tot_practical }}</td>
+        <td></td>
+    </tr>
 </table>

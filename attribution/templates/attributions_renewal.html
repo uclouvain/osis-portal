@@ -39,6 +39,7 @@
             <th>{% trans 'lecturing_hours_allocated'%}</th>
             <th>{% trans 'practical_hours_allocated'%}</th>
             <th>{% trans 'function'%}</th>
+            <th></th>
         </tr>
         {% for attribution in attributions %}
             <tr>
@@ -53,13 +54,18 @@
                 </td>
                 <td>{{ attribution.acronym }}</td>
                 <td>{{ attribution.title }}</td>
-                <td>{{ attribution.lecturing_duration | default_if_none:''}}</td>
-                <td>{{ attribution.practice_duration | default_if_none:''}}</td>
-                <td>{{ attribution.start | default_if_none:''}}</td>
-                <td>{{ attribution.end | default_if_none:''}}</td>
-                <td>{{ attribution.attribution_charge_lecturing }}</td>
-                <td>{{ attribution.attribution_charge_practical }}</td>
+                <td>{% if attribution.lecturing_duration > 0 %}{{ attribution.lecturing_duration | default_if_none:''}}{% endif %}</td>
+                <td>{% if attribution.practice_duration > 0%}{{ attribution.practice_duration | default_if_none:''}}{% endif %}</td>
+                <td>{{ attribution.start_academic_year}}</td>
+                <td>{{ attribution.end_academic_year}}</td>
+                <td>{% if attribution.attribution_charge_lecturing > 0 %}{{ attribution.attribution_charge_lecturing }}{% endif %}</td>
+                <td>{% if attribution.attribution_charge_practical > 0 %}{{ attribution.attribution_charge_practical }}{% endif %}</td>
                 <td>{% trans attribution.function %}</td>
+                <td>{% if attribution.already_candidated %}
+                        <span class="glyphicon glyphicon-wrench"
+                              style="color:green"
+                              title="{% trans 'already_candidated' %}"></span>
+                    {% endif %}</td>
 
             </tr>
         {% endfor %}

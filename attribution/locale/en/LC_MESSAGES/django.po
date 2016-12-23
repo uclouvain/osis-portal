@@ -202,3 +202,14 @@ msgstr "Too much"
 
 msgid "learning_unit_vacant"
 msgstr "Vacant learning unit"
+
+msgid "team"
+msgstr "Team"
+
+msgid "PROFESSOR"
+msgstr "Professor"
+
+msgid "already_candidated"
+msgstr "Already candidated"
+
+

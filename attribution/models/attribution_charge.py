@@ -35,7 +35,7 @@ class AttributionChargeAdmin(admin.ModelAdmin):
 class AttributionCharge(SerializableModel):
     attribution = models.ForeignKey('Attribution')
     learning_unit_component = models.ForeignKey('base.LearningUnitComponent')
-    allocation_charge = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    allocation_charge = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
         return u"%s" % str(self.attribution)

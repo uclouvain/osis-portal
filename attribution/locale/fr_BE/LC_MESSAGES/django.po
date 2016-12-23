@@ -202,3 +202,13 @@ msgstr "Trop élevé"
 
 msgid "learning_unit_vacant"
 msgstr "Cours vacant"
+
+msgid "team"
+msgstr "Equipe"
+
+msgid "PROFESSOR"
+msgstr "Professeur"
+
+msgid "already_candidated"
+msgstr "Candidature déjà existante"
+

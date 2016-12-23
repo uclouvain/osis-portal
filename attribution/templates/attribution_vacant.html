@@ -43,7 +43,7 @@
     {% include "learning_unit_year_search.html" %}
 <br>
 
-<form action="{% url 'new' attribution.learning_unit_year_id %}"
+<form action="{% if attribution %}{% url 'new' attribution.learning_unit_year_id %}{% else %}{% url 'new'  %}{% endif %}"
       method="post">
 
     {% csrf_token %}

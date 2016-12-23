@@ -87,5 +87,5 @@ def find_distinct_years(a_tutor):
         .values_list('learning_unit_year__academic_year__year',flat=True).distinct()
 
 
-def find_by_tutor_dates(a_tutor, a_start_date, an_end_date):
-    return Attribution.objects.filter(end_date=an_end_date, tutor=a_tutor)
+def find_by_tutor_end_date(a_tutor, an_end_date):
+    return Attribution.objects.filter(end_date=an_end_date, tutor=a_tutor).order_by('learning_unit_year__acronym')

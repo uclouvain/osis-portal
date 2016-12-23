@@ -43,7 +43,10 @@
             <form action="{% if application.tutor_application.id %}{% url 'save_tutor_application' application.tutor_application.id %}{% else %}{% url 'save_new_tutor_application' %}{% endif%}"
                   method="post"
                   class="form" role="form">
-                <input type="text" id="hdn_learning_unit_year_id" name="learning_unit_year_id" value="{{application.tutor_application.learning_unit_year.id }}">
+                <input type="hidden"
+                       id="hdn_learning_unit_year_id"
+                       name="learning_unit_year_id"
+                       value="{{application.tutor_application.learning_unit_year.id }}">
                 {% csrf_token %}
                 <input type="hidden"
                        id="hdn_application_charge_lecturing_id"
