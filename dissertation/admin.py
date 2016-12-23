@@ -31,7 +31,7 @@ admin.site.register(adviser.Adviser, adviser.AdviserAdmin)
 admin.site.register(dissertation.Dissertation, dissertation.DissertationAdmin)
 admin.site.register(dissertation_document_file.DissertationDocumentFile,
                     dissertation_document_file.DissertationDocumentFileAdmin)
-admin.site.register(dissertation_group.DissertationGroup)
+admin.site.register(dissertation_group.DissertationGroup, dissertation_group.DissertationGroupAdmin)
 admin.site.register(dissertation_location.DissertationLocation, dissertation_location.DissertationLocationAdmin)
 admin.site.register(dissertation_role.DissertationRole, dissertation_role.DissertationRoleAdmin)
 admin.site.register(dissertation_update.DissertationUpdate, dissertation_update.DissertationUpdateAdmin)
