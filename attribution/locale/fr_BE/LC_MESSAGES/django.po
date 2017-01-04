@@ -213,7 +213,7 @@ msgid "already_candidated"
 msgstr "Candidature déjà existante"
 
 msgid "select_all"
-msgstr "Sélectionne/déselection toutes les attributions pour reconduire"
+msgstr "Sélectionne/déselectionne toutes les attributions pour reconduire"
 
 msgid "total"
 msgstr "Total"

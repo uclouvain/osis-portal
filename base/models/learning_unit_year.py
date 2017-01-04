@@ -53,7 +53,6 @@ class LearningUnitYear(SerializableModel):
 
 
 def search(academic_year_id=None, acronym=None, a_learning_unit=None, title=None):
-    print('search', academic_year_id , ' ' ,a_learning_unit)
     queryset = LearningUnitYear.objects
 
     if academic_year_id:

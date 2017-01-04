@@ -96,38 +96,36 @@
                 </div>
                 <br>
 
-                {% if  application.tutor_application.learning_unit_year.team %}
-                {% else %}
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label>{% trans 'lecturing_hours_asked' %}</label>
-                            <br>
-                            <input class="form-control"
-                                   id="txt_charge_lecturing"
-                                   name="charge_lecturing"
-                                   value="{{ form.charge_lecturing.value | default_if_none:'' }}">
-                            {% if  form.charge_lecturing.errors %}<span class="error">{{ form.charge_lecturing.errors|striptags }}</span>{% endif %}
-                        </div>
-                        <div class="col-md-2">
-                            <label>{% trans 'practical_hours_asked' %}</label>
-                            <br>
-                            <input class="form-control"
-                                   id="txt_charge_practical"
-                                   name="charge_practical"
-                                   value="{{ form.charge_practical.value | default_if_none:'' }}">
-                            {% if form.charge_practical.errors %}<span class="error">{{ form.charge_practical.errors|striptags }}</span>{% endif %}
-                        </div>
-                        <div class="col-md-4">
-                            <label>{% trans 'function' %}</label>
-                            <br>
-                            {% if application.tutor_application.function  %}
-                                {% trans application.tutor_application.function %}
-                            {% else %}
-                                -
-                            {% endif %}
-                        </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>{% trans 'lecturing_hours_asked' %}</label>
+                        <br>
+                        <input class="form-control"
+                               id="txt_charge_lecturing"
+                               name="charge_lecturing"
+                               value="{{ form.charge_lecturing.value | default_if_none:'' }}">
+                        {% if  form.charge_lecturing.errors %}<span class="error">{{ form.charge_lecturing.errors|striptags }}</span>{% endif %}
                     </div>
-                {% endif %}
+                    <div class="col-md-2">
+                        <label>{% trans 'practical_hours_asked' %}</label>
+                        <br>
+                        <input class="form-control"
+                               id="txt_charge_practical"
+                               name="charge_practical"
+                               value="{{ form.charge_practical.value | default_if_none:'' }}">
+                        {% if form.charge_practical.errors %}<span class="error">{{ form.charge_practical.errors|striptags }}</span>{% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label>{% trans 'function' %}</label>
+                        <br>
+                        {% if application.tutor_application.function  %}
+                            {% trans application.tutor_application.function %}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </div>
+                </div>
+
                 <br>
                 <label>{% trans 'course_summary' %}</label>
                 <br>

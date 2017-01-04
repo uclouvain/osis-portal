@@ -474,12 +474,17 @@ def save_on_new_learning_unit(request):
             new_tutor_application.course_summary = form['course_summary'].value()
             new_tutor_application.remark = form['remark'].value()
             new_tutor_application.save()
-
+        charge = 0
+        if form['charge_lecturing'].value():
+            charge = form['charge_lecturing'].value().replace(',', '.')
         application_charge_create(new_tutor_application,
-                                  form['charge_lecturing'].value().replace(',', '.'),
+                                  charge,
                                   component_type.LECTURING)
+        charge = 0
+        if form['charge_practical'].value():
+            charge = form['charge_practical'].value().replace(',', '.')
         application_charge_create(new_tutor_application,
-                                  form['charge_practical'].value().replace(',', '.'),
+                                  charge,
                                   component_type.PRACTICAL_EXERCISES)
 
         new_tutor_application.function = define_tutor_application_function(new_tutor_application.learning_unit_year,
@@ -554,23 +559,8 @@ def get_learning_unit_year_vacant(a_year, an_acronym):
     attribution_charges = []
     new_attribution_charges = []
     for a_learning_unit_year in learning_unit_years:
-        attributions = mdl_attribution.attribution.search(None, a_learning_unit_year)
-        if attributions.exists():
-            lecturing_charge_vacant = get_vacant_attribution_allocation_charge(a_learning_unit_year,
-                                                                               component_type.LECTURING)
-            practical_charge_vacant = get_vacant_attribution_allocation_charge(a_learning_unit_year,
-                                                                               component_type.PRACTICAL_EXERCISES)
-            if lecturing_charge_vacant > 0 or practical_charge_vacant > 0:
-                vacant_learning_units.append(a_learning_unit_year)
-                attribution_charges.append(attributions[0])
-        else:
-            vacant_learning_units.append(a_learning_unit_year)
-            new_attribution_charges.append(a_learning_unit_year)
-
-    attributions = get_attribution_data(attribution_charges)
-    for a_learning_unit_year in new_attribution_charges:
-        return get_new_attribution_informations(a_learning_unit_year)
-
+        if a_learning_unit_year.vacant:
+            return get_new_attribution_informations(a_learning_unit_year)
     return None
 
 
@@ -581,7 +571,12 @@ def get_new_attribution_informations(a_learning_unit_year):
                                                                   component_type.LECTURING),
          PRACTICAL_DURATION: get_learning_unit_component_duration(a_learning_unit_year,
                                                                   component_type.PRACTICAL_EXERCISES),
-
+         ATTRIBUTION_CHARGE_PRACTICAL: get_learning_unit_component_duration(a_learning_unit_year,
+                                                                           component_type.PRACTICAL_EXERCISES),
+         ATTRIBUTION_CHARGE_LECTURING: get_learning_unit_component_duration(a_learning_unit_year,
+                                                                            component_type.LECTURING),
+         VACANT_ATTRIBUTION_CHARGE_LECTURING: get_vacant_attribution_allocation_charge(a_learning_unit_year, component_type.LECTURING),
+         VACANT_ATTRIBUTION_CHARGE_PRACTICAL: get_vacant_attribution_allocation_charge(a_learning_unit_year, component_type.PRACTICAL_EXERCISES),
          LEARNING_UNIT_YEAR_ID: a_learning_unit_year.id}
     return d
 

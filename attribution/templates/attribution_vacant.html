@@ -48,29 +48,31 @@
 
     {% csrf_token %}
     <table class="table table-striped table-hover">
-        <tr>
-            <th>{% trans 'code'%}</th>
-            <th>{% trans 'title'%}</th>
-            <th>{% trans 'lecturing_hours'%}</th>
-            <th>{% trans 'practical_hours'%}</th>
-
-            <th>{% trans 'lecturing_hours_vacant'%}</th>
-            <th>{% trans 'practical_hours_vacant'%}</th>
-            <th></th>
-        </tr>
-        <tr>
-            <td>{{ attribution.acronym }}</td>
-            <td>{{ attribution.title }}</td>
-            <td>{{ attribution.lecturing_duration | default_if_none:''}}</td>
-            <td>{{ attribution.practice_duration | default_if_none:''}}</td>
-            <td>{{ attribution.attribution_charge_lecturing }}</td>
-            <td>{{ attribution.attribution_charge_practical }}</td>
-            <td>
-                <button id="bt_submit_attribution_new" class="btn btn-primary pull-right" role="button">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-            </td>
-        </tr>
-
+        <thead>
+            <tr>
+                <th>{% trans 'code'%}</th>
+                <th>{% trans 'title'%}</th>
+                <th>{% trans 'lecturing_hours'%}</th>
+                <th>{% trans 'practical_hours'%}</th>
+                <th>{% trans 'lecturing_hours_vacant'%}</th>
+                <th>{% trans 'practical_hours_vacant'%}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ attribution.acronym }}</td>
+                <td>{{ attribution.title }}</td>
+                <td>{% if attribution.lecturing_duration > 0 %}{{ attribution.lecturing_duration }}{% endif %}</td>
+                <td>{% if attribution.practice_duration > 0 %}{{ attribution.practice_duration }}{% endif %}</td>
+                <td>{% if attribution.vacant_attribution_charge_lecturing > 0 %}{{ attribution.vacant_attribution_charge_lecturing }}{% endif %}</td>
+                <td>{% if attribution.vacant_attribution_charge_practical > 0 %}{{ attribution.vacant_attribution_charge_practical }}{% endif %}</td>
+                <td>
+                    <button id="bt_submit_attribution_new" class="btn btn-primary pull-right" role="button">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                </td>
+            </tr>
+        </tbody>
     </table>
 </form>
             </div>

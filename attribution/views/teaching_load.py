@@ -77,7 +77,6 @@ def get_attribution_allocation_charge(a_tutor, a_learning_unit_year, a_component
             attribution_charges = mdl_attribution.attribution_charge.search(an_attribution, a_learning_unit_component)
             for attribution_charge in attribution_charges:
                 tot_allocation_charge += attribution_charge.allocation_charge
-
     return tot_allocation_charge
 
 

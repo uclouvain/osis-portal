@@ -81,12 +81,20 @@
                             {{ application.tutor_application.learning_unit_year.title }}
                             </a>
                         </td>
-                        <td style="border-left-style: solid;border-left-width:1px;">{{ application.lecturing_duration | default_if_none:''}}</td>
-                        <td>{{ application.practice_duration | default_if_none:''}}</td>
-                        <td style="border-left-style: solid;border-left-width:1px;">{{ application.vacant_attribution_charge_lecturing | default_if_none:''}}</td>
-                        <td>{{ application.vacant_attribution_charge_practical | default_if_none:''}}</td>
-                        <td style="border-left-style: solid;border-left-width:1px;">{{ application.application_charge_lecturing.allocation_charge | default_if_none:''}}</td>
-                        <td>{{ application.application_charge_practical.allocation_charge | default_if_none:''}}</td>
+                        <td style="border-left-style: solid;border-left-width:1px;">
+                            {% if application.lecturing_duration > 0 %}
+                                {{ application.lecturing_duration }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if application.practice_duration > 0 %}
+                                {{ application.practice_duration }}
+                            {% endif %}
+                        </td>
+                        <td style="border-left-style: solid;border-left-width:1px;">{% if application.vacant_attribution_charge_lecturing > 0 %}{{ application.vacant_attribution_charge_lecturing}}{% endif %}</td>
+                        <td>{% if application.vacant_attribution_charge_practical > 0 %}{{ application.vacant_attribution_charge_practical }}{% endif %}</td>
+                        <td style="border-left-style: solid;border-left-width:1px;">{% if  application.application_charge_lecturing.allocation_charge > 0 %}{{ application.application_charge_lecturing.allocation_charge | default_if_none:''}}{% endif %}</td>
+                        <td>{% if application.application_charge_practical.allocation_charge > 0 %}{{ application.application_charge_practical.allocation_charge}}{% endif %}</td>
                         <td>{% if application.tutor_application.function  %}{% trans application.tutor_application.function %}{% endif %}</td>
                         <td>
                             <a title="{%trans 'delete'%}"

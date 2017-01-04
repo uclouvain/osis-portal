@@ -30,12 +30,12 @@
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th colspan="3"></th>
+                <th colspan="4"></th>
                 <th colspan="4" style="border-left-style: solid;border-left-width:1px;">2017 - 2018</th>
                 <th colspan="5" style="border-left-style: solid;border-left-width:1px;">{{ over_academic_year }}</th>
             </tr>
             <tr >
-                <th colspan="3"></th>
+                <th colspan="4"></th>
                 <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'total' %}</th>
                 <th colspan="2" style="border-left-style: solid;border-left-width:1px;" >{% trans 'vacant' %}</th>
                 <th colspan="4" style="border-left-style: solid;border-left-width:1px;"></th>
@@ -51,6 +51,7 @@
                 </th>
                 <th style="vertical-align: top">{% trans 'code'%}</th>
                 <th style="vertical-align: top" >{% trans 'title'%}</th>
+                <th style="vertical-align: top" >{% trans 'team'%}</th>
                 <th style="border-left-style: solid;border-left-width:1px;vertical-align: top;">{% trans 'lecturing_hours'%}</th>
                 <th style="vertical-align: top">{% trans 'practical_hours'%}</th>
                 <th style="border-left-style: solid;border-left-width:1px;vertical-align: top;">{% trans 'lecturing_hours'%}</th>
@@ -74,6 +75,7 @@
                     </td>
                     <td>{{ attribution.acronym }}</td>
                     <td>{{ attribution.title }}</td>
+                    <td>{% if attribution.team %}<input type='checkbox' checked readonly>{% else %}{% endif %}</td>
                     <td style="border-left-style: solid;border-left-width:1px;">{% if attribution.lecturing_duration > 0 %}{{ attribution.lecturing_duration | default_if_none:''}}{% endif %}</td>
                     <td>{% if attribution.practice_duration > 0%}{{ attribution.practice_duration | default_if_none:''}}{% endif %}</td>
                     <td style="border-left-style: solid;border-left-width:1px;">{% if attribution.vacant_attribution_charge_lecturing > 0 %}{{ attribution.vacant_attribution_charge_lecturing }}{% endif %}</td>
