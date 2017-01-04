@@ -72,3 +72,7 @@ def find_by_dates_tutor(a_start_date, an_end_date, a_tutor):
     return TutorApplication.objects.filter(start_date__gte=a_start_date, end_date__lte=an_end_date, tutor=a_tutor)
 
 
+def find_first(tutor=None, learning_unit_year=None):
+    return search(tutor, learning_unit_year).first()
+
+

@@ -86,7 +86,6 @@ def sum_learning_unit_year_duration(a_learning_unit_year):
     for learning_unit_component in mdl_base.learning_unit_component.search(a_learning_unit_year, None):
         if learning_unit_component.duration:
             tot_duration += learning_unit_component.duration
-    print('LU',tot_duration)
     return tot_duration
 
 
@@ -197,7 +196,6 @@ def get_url_learning_unit_year(a_learning_unit_year):
 
 def get_students(a_learning_unit_year):
     l= mdl_base.learning_unit_enrollment.find_by_learningunit_enrollment(a_learning_unit_year)
-    print(list(l))
     return l
 
 

@@ -212,3 +212,14 @@ msgstr "Professeur"
 msgid "already_candidated"
 msgstr "Candidature déjà existante"
 
+msgid "select_all"
+msgstr "Sélectionne/déselection toutes les attributions pour reconduire"
+
+msgid "total"
+msgstr "Total"
+
+msgid "vacant"
+msgstr "Vacant"
+
+msgid "charge"
+msgstr "Charge"

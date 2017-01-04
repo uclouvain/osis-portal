@@ -33,6 +33,7 @@ from attribution.models.enums import function
 from django.contrib.auth.decorators import login_required
 from attribution.forms.application import ApplicationForm
 
+
 ATTRIBUTION_ID_NAME = 'attribution_id_'
 
 ATTRIBUTION_ID = 'attribution_id'
@@ -52,6 +53,8 @@ VACANT_ATTRIBUTION_CHARGE_PRACTICAL = 'vacant_attribution_charge_practical'
 
 APPLICATION_CHARGE_LECTURING = 'application_charge_lecturing'
 APPLICATION_CHARGE_PRACTICAL = 'application_charge_practical'
+
+TUTOR_APPLICATION="tutor_application"
 
 RENEW = "renew"
 TUTOR_APPLICATION = 'tutor_application'
@@ -98,6 +101,12 @@ def get_attribution_data(attributions):
 def get_attribution_informations(a_learning_unit_year, a_start_date, an_end_date, a_tutor, a_function, an_attribution):
     start = get_year(a_start_date)
     end = get_year(an_end_date)
+    next_learning_unit_year = None
+    next_academic_year = mdl_base.academic_year.find_by_year(a_learning_unit_year.academic_year.year+1)
+    if next_academic_year:
+        next_learning_unit_year = mdl_base.learning_unit_year.find_first(next_academic_year, a_learning_unit_year.learning_unit)
+
+
     d = {ATTRIBUTION_ID: an_attribution.id,
          ACRONYM: a_learning_unit_year.acronym,
          TITLE: a_learning_unit_year.title,
@@ -121,7 +130,12 @@ def get_attribution_informations(a_learning_unit_year, a_start_date, an_end_date
          START_ACADEMIC_YEAR:  "{0}-{1}".format(start, start+1),
          END_ACADEMIC_YEAR: "{0}-{1}".format(end-1, end),
          ALREADY_CANDIDATED: define_already_candidated(a_tutor,
-                                                       a_learning_unit_year)}
+                                                       a_learning_unit_year),
+        VACANT_ATTRIBUTION_CHARGE_LECTURING:
+             get_vacant_attribution_allocation_charge(next_learning_unit_year, component_type.LECTURING),
+        VACANT_ATTRIBUTION_CHARGE_PRACTICAL:
+             get_vacant_attribution_allocation_charge(next_learning_unit_year, component_type.PRACTICAL_EXERCISES),
+        TUTOR_APPLICATION: get_first_application_tutor(a_tutor, a_learning_unit_year)}
 
     return d
 
@@ -214,7 +228,9 @@ def sum_tutor_application_charges(a_learning_unit_year, a_tutor):
 
 
 def get_vacant_attribution_allocation_charge(a_learning_unit_year, a_component_type):
-    return get_learning_unit_component_duration(a_learning_unit_year, a_component_type) - teaching_load.get_attribution_allocation_charge(None, a_learning_unit_year, a_component_type)
+    if a_learning_unit_year:
+        return get_learning_unit_component_duration(a_learning_unit_year, a_component_type) - teaching_load.get_attribution_allocation_charge(None, a_learning_unit_year, a_component_type)
+    return CHARGE_NUL
 
 
 def get_applications(a_year, a_tutor):
@@ -287,10 +303,13 @@ def create_application_charge(a_new_tutor_application, charge_duration, a_compon
         a_new_application_charge.save()
 
 
-def is_vacant(a_learning_unit):
-    if a_learning_unit:
-        if teaching_load.sum_learning_unit_year_duration(a_learning_unit) > sum_attribution_allocation_charges(a_learning_unit):
-            return True
+def is_vacant(a_learning_unit_year):
+    # if a_learning_unit_year:
+    #     if teaching_load.sum_learning_unit_year_duration(a_learning_unit_year) > sum_attribution_allocation_charges(a_learning_unit_year):
+    #         return True
+    # return False
+    if a_learning_unit_year:
+        return a_learning_unit_year.vacant
     return False
 
 
@@ -307,7 +326,9 @@ def get_terminating_charges(a_year, a_tutor):
                                                                                  get_end_date(an_academic_year))
         attributions_vacant = []
         for attribution in attribution_charges:
-            attributions_vacant.append(attribution)
+            next_learning_unit_year = get_learning_unit_for_next_year(attribution.learning_unit_year)
+            if next_learning_unit_year.in_charge and attribution.function != function.DEPUTY:
+                attributions_vacant.append(attribution)
 
         return get_attribution_data(attributions_vacant)
     return []
@@ -358,7 +379,8 @@ def attribution_application_form(request):
     attributions = get_terminating_charges(YEAR_OVER, a_tutor)
     return render(request, "attribution_application_form.html", {
         'application': None,
-        'attributions': attributions})
+        'attributions': attributions,
+        'over_academic_year': "{0}-{1}".format(YEAR_OVER, YEAR_OVER + 1)})
 
 
 def search(request):
@@ -526,7 +548,6 @@ def allocation_charge_update(an_application_charge_id, a_field_value):
 
 
 def get_learning_unit_year_vacant(a_year, an_acronym):
-    print('get_learning_unit_year_vacant')
     an_academic_year = mdl_base.academic_year.find_by_year(a_year)
     learning_unit_years = mdl_base.learning_unit_year.search(an_academic_year, an_acronym, None, None)
     vacant_learning_units = []
@@ -646,3 +667,9 @@ def define_already_candidated(a_tutor, a_learning_unit_year):
     if tutor_applications:
         return True
     return False
+
+def get_first_application_tutor(a_tutor, a_learning_unit_year):
+    next_learning_unit_year = get_learning_unit_for_next_year(a_learning_unit_year)
+
+    return mdl_attribution.tutor_application.find_first(a_tutor, next_learning_unit_year)
+

@@ -212,4 +212,16 @@ msgstr "Professor"
 msgid "already_candidated"
 msgstr "Already candidated"
 
+msgid "select_all"
+msgstr "Select/deselect all attributions to renew"
+
+msgid "total"
+msgstr "Total"
+
+msgid "vacant"
+msgstr "Vacant"
+
+msgid "charge"
+msgstr "Charge"
+
 
