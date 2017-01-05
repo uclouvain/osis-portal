@@ -68,7 +68,7 @@ def search(tutor=None, learning_unit_year=None):
 
 
 def find_by_dates_tutor(a_start_date, an_end_date, a_tutor):
-    return TutorApplication.objects.filter(start_date__gte=a_start_date, end_date__lte=an_end_date, tutor=a_tutor).order_by('learning_unit_year__acronym')
+    return TutorApplication.objects.filter(start_date__gte=a_start_date, end_date__lte=an_end_date, tutor=a_tutor).order_by('learning_unit_year__acronym', 'id')
 
 
 def find_first(tutor=None, learning_unit_year=None):
