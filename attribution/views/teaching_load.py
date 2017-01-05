@@ -62,12 +62,6 @@ def get_person(a_user):
     return mdl_base.person.find_by_user(a_user)
 
 
-def get_title_uppercase(learning_unit_year):
-    if learning_unit_year and learning_unit_year.title:
-        return learning_unit_year.title.upper()
-    return ''
-
-
 def get_attribution_allocation_charge(a_tutor, a_learning_unit_year, a_component_type):
     attribution_list = mdl_attribution.attribution.search(a_tutor, a_learning_unit_year)
     tot_allocation_charge = ALLOCATION_CHARGE_NUL
@@ -128,7 +122,7 @@ def list_teaching_load_attribution_representation(a_person, an_academic_year):
         tot_practical = tot_practical + tot_attribution_practical
         attribution_list.append(
             {'acronym': a_learning_unit_year.acronym,
-             'title': get_title_uppercase(a_learning_unit_year),
+             'title': a_learning_unit_year.title,
              'lecturing_allocation_charge':
                  ONE_DECIMAL_FORMAT % (tot_attribution_lecturing,),
              'practice_allocation_charge':
@@ -180,7 +174,8 @@ def set_formset_years(a_person):
     AttributionFormSet = formset_factory(AttributionForm, extra=0)
     initial_data = []
     for yr in get_attribution_years(a_person):
-        initial_data.append({'year': yr})
+        initial_data.append({'year': yr,
+                             'next_year': yr+1})
 
     return AttributionFormSet(initial=initial_data)
 

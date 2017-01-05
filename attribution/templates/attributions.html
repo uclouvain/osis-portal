@@ -28,7 +28,7 @@
     <thead>
         <tr>
             <th colspan="7"></th>
-            <th colspan="3" style="border-left-style: solid;border-left-width:1px;">{% trans 'charge' %}</th>
+            <th colspan="3" style="border-left-style: solid;border-left-width:1px;">{% trans 'charge' %} </th>
         </tr>
         <tr>
             <th>{% trans 'code'%}</th>
@@ -60,7 +60,7 @@
     {% endfor %}
     <tfoot>
         <tr>
-            <td colspan="7" ><label class="pull-right">Tot.</label></td>
+            <td colspan="7" ><label class="pull-right">{% trans 'total' %}</label></td>
             <td>{{ tot_lecturing }}</td>
             <td>{{ tot_practical }}</td>
             <td></td>

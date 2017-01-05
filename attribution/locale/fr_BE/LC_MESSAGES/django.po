@@ -21,7 +21,7 @@ msgid "teaching_load"
 msgstr "Charge d'enseignement"
 
 msgid "code"
-msgstr "Code"
+msgstr "Sigle"
 
 msgid "title"
 msgstr "Intitulé"
@@ -57,7 +57,7 @@ msgid "DEPUTY"
 msgstr "Suppléant"
 
 msgid "weight"
-msgstr "Weight"
+msgstr "Poids"
 
 msgid "students_learning_unit"
 msgstr "  étudiants inscrits au cours "
@@ -135,7 +135,7 @@ msgid "my_charges"
 msgstr "Mes charges"
 
 msgid "my_applications"
-msgstr "Mes applications"
+msgstr "Mes candidatures"
 
 msgid "delete"
 msgstr "Supprimer"
@@ -223,3 +223,21 @@ msgstr "Vacant"
 
 msgid "charge"
 msgstr "Charge"
+
+msgid "no_activity"
+msgstr "Pas d'activité vacante correspondante"
+
+msgid "team_mngt_no_application_possible"
+msgstr "Ce cours est géré en équipe. La candidature des équipes d'enseignants s'effectue via la procédure papier."
+
+msgid "desc_lnk_my_applications"
+msgstr "Posez des candidatures aux cours vacants."
+
+msgid "my_teaching_charge"
+msgstr "Ma charge d'enseignement"
+
+msgid "desc_lnk_my_teaching_charge"
+msgstr "Consultez la charge d'enseignement."
+
+msgid "my_application"
+msgstr "Ma candidature"

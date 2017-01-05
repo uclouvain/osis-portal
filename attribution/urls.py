@@ -27,10 +27,11 @@ from django.conf.urls import url
 from attribution.views import teaching_load, online_application
 
 urlpatterns = [
-    url(r'^$', teaching_load.home, name='home'),
+
+    url(r'^$', teaching_load.home, name='attribution_home'),
     url(r'^charge/([0-9]+)/$', teaching_load.by_year, name='attributions_by_year'),
     url(r'^students/([0-9]+)/$', teaching_load.show_students, name='students'),
-    url(r'^applications/$', online_application.home, name='applications'),
+    url(r'^applications/$', online_application.home, name='learning_unit_applications'),
     url(r'^applications/([0-9]+)/delete/$', online_application.delete, name='delete_tutor_application'),
     url(r'^applications/([0-9]+)/edit/$', online_application.edit, name='edit_tutor_application'),
     url(r'^applications/([0-9]+)/save/$', online_application.save, name='save_tutor_application'),
@@ -40,5 +41,4 @@ urlpatterns = [
     url(r'^search/$', online_application.search, name='vacant_learning_unit_search'),
     url(r'^applications/renew/$', online_application.renew, name='renew'),
     url(r'^applications/new/(?:([0-9]+)/)?$', online_application.new, name='new'),
-
 ]

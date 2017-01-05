@@ -224,4 +224,23 @@ msgstr "Vacant"
 msgid "charge"
 msgstr "Charge"
 
+msgid "no_vacant_activity"
+msgstr "No vacant corresponding activity"
+
+msgid "team_mngt_no_application_possible"
+msgstr "This activity is team-managed. The application to this activity is based on a paper transmission."
+
+msgid "desc_lnk_my_applications"
+msgstr "Apply to vacant courses."
+
+msgid "my_teaching_charge"
+msgstr "My teaching charge."
+
+msgid "desc_lnk_my_teaching_charge"
+msgstr "Consult my teaching charge."
+
+msgid "my_application"
+msgstr "My application"
+
+
 

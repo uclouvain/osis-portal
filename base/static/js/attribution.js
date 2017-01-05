@@ -27,3 +27,7 @@ function bt_submit_attribution_renew_activation() {
         $('#bt_submit_attribution_renew').prop("disabled", false);
     });
 }
+
+$("a[id^='lnk_application_delete_']").click(function() {
+    return confirm(gettext('confirm_application_delete'));
+});

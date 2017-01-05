@@ -231,3 +231,6 @@ msgstr "Other"
 
 msgid "curriculum"
 msgstr "Curriculum"
+
+msgid "confirm_application_delete"
+msgstr "Are you sure you want to delete the application?"

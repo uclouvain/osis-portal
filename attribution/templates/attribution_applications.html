@@ -25,8 +25,14 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
+
+{% block breadcrumb %}
+    <li>{% trans 'my_applications' %}</li>
+{% endblock %}
+
+
 {% block content %}
-    <h1>{% trans 'teaching_load' %} {{ academic_year }}</h1>
+    <h1>{% trans 'my_applications' %} {{ academic_year }}</h1>
     <h2>{{ user.first_name }} {{ user.last_name }}</h2>
     <div class="panel panel-default"
          id="pnl_applications">
@@ -99,7 +105,8 @@
                         <td>
                             <a title="{%trans 'delete'%}"
                                href="{% url 'delete_tutor_application' application.tutor_application.id %}"
-                               class="btn btn-default" role="button" id="lnk_application_delete">
+                               class="btn btn-warning" role="button"
+                               id="lnk_application_delete_{{ application.tutor_application.id }}">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                             </a>
                         </td>
@@ -108,11 +115,10 @@
             </table>
             <br>
         {% endif %}
-
     </div>
     <div class="panel panel-default"
          id="pnl_charges">
-        <div class="panel-heading">{% trans 'my_charges'%}</div>
+        <div class="panel-heading">{% trans 'my_charges'%} {{ academic_year }}</div>
         <div class="panel-body"></div>
         {% if attributions %}
             <!--It's normal that the table is outside of the body.  It's for a better display -->
