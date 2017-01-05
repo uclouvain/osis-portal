@@ -157,17 +157,6 @@ class TeachingLoadTest(TestCase):
         a_student_performance.save()
         return a_student_performance
 
-    def test_get_title(self):
-        self.assertEqual(teaching_load.get_title(self.get_data('learning_unit_year')), TITLE.upper())
-
-    def test_get_title_non_existing_learning_unit_year(self):
-        self.assertEqual(teaching_load.get_title(None), '')
-
-    def test_get_title_non_existing_title(self):
-        a_learning_unit_year_without_title = self.get_data('learning_unit_year')
-        a_learning_unit_year_without_title.title = None
-        self.assertEqual(teaching_load.get_title(a_learning_unit_year_without_title), '')
-
     def test_get_attribution_charge_lecturing_duration(self):
         self.assertEqual(teaching_load.get_attribution_allocation_charge(self.a_tutor,
                                                                          self.get_data('learning_unit_year'),

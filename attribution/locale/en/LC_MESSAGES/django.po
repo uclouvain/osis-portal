@@ -242,5 +242,6 @@ msgstr "Consult my teaching charge."
 msgid "my_application"
 msgstr "My application"
 
-
+msgid "without_application"
+msgstr "(without application)"
 

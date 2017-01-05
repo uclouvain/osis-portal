@@ -56,3 +56,7 @@ def search(a_tutor_application=None, a_learning_unit_component=None):
         queryset = queryset.filter(learning_unit_component=a_learning_unit_component)
 
     return queryset
+
+
+def find_first(a_tutor_application=None, a_learning_unit_component=None):
+    return search(a_tutor_application, a_learning_unit_component).first()

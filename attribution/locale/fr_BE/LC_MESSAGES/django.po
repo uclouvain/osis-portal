@@ -241,3 +241,6 @@ msgstr "Consultez la charge d'enseignement."
 
 msgid "my_application"
 msgstr "Ma candidature"
+
+msgid "without_application"
+msgstr "(sans candidature)"

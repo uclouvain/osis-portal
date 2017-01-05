@@ -107,7 +107,6 @@ def list_attributions(a_person, an_academic_year):
 
 def list_teaching_load_attribution_representation(a_person, an_academic_year):
     attribution_list = []
-    a_tutor = mdl_base.tutor.find_by_person(a_person)
     tot_lecturing = ALLOCATION_CHARGE_NUL
     tot_practical = ALLOCATION_CHARGE_NUL
     for an_attribution in list_attributions(a_person, an_academic_year):
@@ -189,8 +188,7 @@ def get_url_learning_unit_year(a_learning_unit_year):
 
 
 def get_students(a_learning_unit_year):
-    l= mdl_base.learning_unit_enrollment.find_by_learningunit_enrollment(a_learning_unit_year)
-    return l
+    return mdl_base.learning_unit_enrollment.find_by_learningunit_enrollment(a_learning_unit_year)
 
 
 def show_students(request, a_learning_unit_year):
@@ -270,7 +268,7 @@ def set_student_for_display(learning_unit_enrollment):
         'june_note': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE),
         'june_status': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_STATUS),
         'september_note': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE),
-        'september_status': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS,) ,}
+        'september_status': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS,), }
 
 
 def is_tutor(a_person):

@@ -31,14 +31,14 @@
         <thead>
             <tr>
                 <th colspan="4"></th>
-                <th colspan="4" style="border-left-style: solid;border-left-width:1px;">2017 - 2018</th>
+                <th colspan="4" style="border-left-style: solid;border-left-width:1px;">{{ application_academic_year }}</th>
                 <th colspan="5" style="border-left-style: solid;border-left-width:1px;">{{ over_academic_year }}</th>
             </tr>
             <tr >
                 <th colspan="4"></th>
                 <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'total' %}</th>
                 <th colspan="2" style="border-left-style: solid;border-left-width:1px;" >{% trans 'vacant' %}</th>
-                <th colspan="4" style="border-left-style: solid;border-left-width:1px;"></th>
+                <th colspan="3" style="border-left-style: solid;border-left-width:1px;"></th>
             </tr>
             <tr >
                 <th><span id="spn_renew_title">
@@ -61,7 +61,7 @@
                 <th style="vertical-align: top">{% trans 'lecturing_hours_allocated'%} </th>
                 <th style="vertical-align: top">{% trans 'practical_hours_allocated'%}</th>
                 <th style="vertical-align: top">{% trans 'function'%}</th>
-                <th></th>
+
             </tr>
         </thead>
         <tbody>
@@ -85,21 +85,12 @@
                     <td>{% if attribution.attribution_charge_lecturing > 0 %}{{ attribution.attribution_charge_lecturing }}{% endif %}</td>
                     <td >{% if attribution.attribution_charge_practical > 0 %}{{ attribution.attribution_charge_practical }}{% endif %}</td>
                     <td>{% trans attribution.function %}</td>
-                    <td>{% if attribution.already_candidated %}
-                            <a href="{% url 'edit_tutor_application' attribution.tutor_application.id %}">
-                                <span class="glyphicon glyphicon-wrench"
-                                      style="color:green"
-                                      title="{% trans 'already_candidated' %}"></span>
-                            </a>
-                        {% endif %}
-                    </td>
-
                 </tr>
             {% endfor %}
         </tbody>
         <tfoot>
             <tr >
-                <td colspan="14">
+                <td colspan="13">
                 <button id="bt_submit_attribution_renew"
                         class="btn btn-primary pull-right"
                         role="button"

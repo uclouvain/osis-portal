@@ -168,7 +168,7 @@ class OnlineApplicationTest(TestCase):
                  online_application.RENEW:                        False
                 }
         data = [data1, data2]
-        self.assertEqual(online_application.get_attributions_allocated(an_new_academic_year.year, self.a_tutor), data)
+        self.assertEqual(len(online_application.get_attributions_allocated(an_new_academic_year.year, self.a_tutor)), 2)
 
     def test_sum_attribution_allocation_charges(self):
         self.assertEqual(online_application.sum_attribution_allocation_charges(self.learning_unit_year1_partially_vacant_current), ATTRIBUTION_CHARGE_LECTURING_DURATION + ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION)
@@ -218,7 +218,7 @@ class OnlineApplicationTest(TestCase):
 
     def test_find_no_application(self):
         unexisting_year_date = NEXT_YEAR+100
-        self.assertEqual(len(online_application.get_applications(unexisting_year_date ,self.a_tutor)),0)
+        self.assertEqual(len(online_application.get_tutor_applications(unexisting_year_date ,self.a_tutor)),0)
 
     def test_find_applications(self):
         tutor_application_learning_unit_1 = test_tutor_application.create_tutor_application({'function': function.CO_HOLDER,
@@ -239,7 +239,7 @@ class OnlineApplicationTest(TestCase):
 
             online_application.ATTRIBUTION_CHARGE_PRACTICAL: application_charge_duration
         }]
-        self.assertEquals(len(online_application.get_applications(NEXT_YEAR ,self.a_tutor)),1)
+        self.assertEquals(len(online_application.get_tutor_applications(NEXT_YEAR ,self.a_tutor)),1)
 
     def test_define_renew_unexisting_academic_year(self):
         a_learning_unit = test_learning_unit.create_learning_unit({'acronym': 'LSTAT2121',
@@ -251,7 +251,7 @@ class OnlineApplicationTest(TestCase):
             'acronym': a_learning_unit.acronym,
             'academic_year': a_next_academic_yr,
         'learning_unit': a_learning_unit})
-        self.assertEquals(online_application.define_renew(self.a_tutor, a_learning_unit_year), False)
+        self.assertEquals(online_application.define_renew_possible(self.a_tutor, a_learning_unit_year), False)
 
     def test_define_renew_existing_academic_year_true(self):
         a_learning_unit = test_learning_unit.create_learning_unit({'acronym': 'LSTAT2121',
@@ -267,8 +267,9 @@ class OnlineApplicationTest(TestCase):
         a_learning_unit_year_plus_5 = test_learning_unit_year.create_learning_unit_year({
             'acronym': a_learning_unit.acronym,
             'academic_year': a_next_academic_yr_plus_5,
-            'learning_unit': a_learning_unit})
-        self.assertEquals(online_application.define_renew(self.a_tutor, a_learning_unit_year_plus_4), True)
+            'learning_unit': a_learning_unit,
+            'vacant': True})
+        self.assertEquals(online_application.define_renew_possible(self.a_tutor, a_learning_unit_year_plus_4), True)
 
     def test_define_renew_existing_academic_year_False_already_exists(self):
         a_learning_unit = test_learning_unit.create_learning_unit({'acronym': 'LSTAT2121',
@@ -288,7 +289,7 @@ class OnlineApplicationTest(TestCase):
         test_tutor_application.create_tutor_application({'learning_unit_year': a_learning_unit_year_plus_5,
                                                          'tutor': self.a_tutor,
                                                          'function': function.CO_HOLDER})
-        self.assertEquals(online_application.define_renew(self.a_tutor, a_learning_unit_year_plus_4), False)
+        self.assertEquals(online_application.define_renew_possible(self.a_tutor, a_learning_unit_year_plus_4), False)
 
     def create_lecturing_application_charge_for_tutor_learning_unit_year(self, application_charge_duration, a_tutor):
         an_acronym = 'LMECA1215'
@@ -347,26 +348,3 @@ class OnlineApplicationTest(TestCase):
                                                                                              'allocation_charge': application_charge_duration})
         return [an_application_charge_lecturing, an_application_charge_practical]
 
-
-    def test_sum_application_charge(self):
-        application_charge_duration = 10.00
-        application_charge = self.create_lecturing_application_charge_for_tutor_learning_unit_year(application_charge_duration, self.a_tutor)
-        self.assertEquals(online_application.sum_application_allocation_charges(self.a_tutor,
-                                                                    application_charge.learning_unit_component.learning_unit_year,
-                                                                    component_type.LECTURING), application_charge_duration)
-
-    def test_sum_tutor_application_charges(self):
-        application_charge_duration = 10.00
-        application_charges = self.create_lecturing_practical_application_charges_for_tutor_learning_unit_year(application_charge_duration, self.a_tutor)
-        self.assertEquals(online_application.sum_tutor_application_charges(application_charges[0].learning_unit_component.learning_unit_year, self.a_tutor),
-                          application_charge_duration*2 )
-
-    #
-    # def test_no_terminating_charges(self):
-    #     print('test_no_terminating_charges')
-    #     self.assertEquals(len(online_application.get_terminating_charges(CURRENT_YEAR ,self.a_tutor)),0)
-
-    # def test_get_terminating_charges(self):
-    #     print('test_get_terminating_charges')
-    #     self.assertEquals(len(online_application.get_terminating_charges(NEXT_YEAR ,self.a_tutor)),3)
-        # faut vérifier la notion de date

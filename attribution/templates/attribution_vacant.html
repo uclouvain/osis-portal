@@ -26,14 +26,9 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
-{% block breadcrumb_area %}
-    <ol class="breadcrumb">
-        <li><a href="{% url 'applications' %}" id="lnk_home_attribution_applications"><span class="glyphicon glyphicon-home"
-                                                                                            aria-hidden="true"></span></a></li>
-        <li><a href="{% url 'applications' %}" id="lnk_applications">{% trans 'teaching_load' %}</a></li>
-        {% block breadcrumb %}
-        {% endblock %}
-    </ol>
+{% block breadcrumb %}
+    <li><a href="{% url 'learning_unit_applications' %}" id="lnk_applications">{% trans 'my_applications' %}</a></li>
+    <li>{% trans 'my_charges_vacant' %}</li>
 {% endblock %}
 {% block content %}
     <div class="panel panel-default"

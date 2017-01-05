@@ -73,7 +73,7 @@
 
                 {% for application in applications %}
                     <tr>
-                        <td>
+                        <td>{{ application.id }}
                             <a title="{%trans 'edit'%}"
                                href="{% url 'edit_tutor_application' application.tutor_application.id %}"
                                id="lnk_application_edit">
