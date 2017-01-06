@@ -348,3 +348,6 @@ class OnlineApplicationTest(TestCase):
                                                                                              'allocation_charge': application_charge_duration})
         return [an_application_charge_lecturing, an_application_charge_practical]
 
+
+
+

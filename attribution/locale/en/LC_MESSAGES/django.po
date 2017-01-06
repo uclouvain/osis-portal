@@ -225,10 +225,10 @@ msgid "charge"
 msgstr "Charge"
 
 msgid "no_vacant_activity"
-msgstr "No vacant corresponding activity"
+msgstr "No vacant corresponding course"
 
 msgid "team_mngt_no_application_possible"
-msgstr "This activity is team-managed. The application to this activity is based on a paper transmission."
+msgstr "This course is team-managed. The application to this activity is based on a paper transmission."
 
 msgid "desc_lnk_my_applications"
 msgstr "Apply to vacant courses."
@@ -244,4 +244,14 @@ msgstr "My application"
 
 msgid "without_application"
 msgstr "(without application)"
+
+msgid "no_application_possible"
+msgstr "You already apply to this course."
+
+msgid "course_search"
+msgstr "Vacant course search"
+
+msgid "vacant_learning_unit_year_search"
+msgstr "Please enter the code of the course to which you would like to apply"
+
 

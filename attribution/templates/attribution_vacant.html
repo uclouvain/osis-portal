@@ -28,7 +28,7 @@
 {% endcomment %}
 {% block breadcrumb %}
     <li><a href="{% url 'learning_unit_applications' %}" id="lnk_applications">{% trans 'my_applications' %}</a></li>
-    <li>{% trans 'my_charges_vacant' %}</li>
+    <li>{% trans 'course_search' %}</li>
 {% endblock %}
 {% block content %}
     <div class="panel panel-default"
@@ -74,7 +74,7 @@
                     <td>{% if attribution.vacant_attribution_charge_practical > 0 %}{{ attribution.vacant_attribution_charge_practical }}{% endif %}</td>
                     <td>
                         <button id="bt_submit_attribution_new" class="btn btn-primary pull-right" role="button"
-                                {% if not attribution.application_possible %} disabled{% endif %}>
+                                {% if not attribution.team_application_possible or not attribution.application_possible %} disabled{% endif %}>
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </button>
 
@@ -82,8 +82,11 @@
                 </tr>
             </tbody>
         </table>
-        {% if not attribution.application_possible %}
+        {% if not attribution.team_application_possible %}
             <div class="alert alert-info pull-right" role="alert">{% trans 'team_mngt_no_application_possible' %}</div>
+        {% endif %}
+        {% if not attribution.application_possible %}
+            <div class="alert alert-info pull-right" role="alert">{% trans 'no_application_possible' %}</div>
         {% endif %}
     {% else %}
         <div class="alert alert-info" role="alert">{% trans 'no_activity' %}</div>

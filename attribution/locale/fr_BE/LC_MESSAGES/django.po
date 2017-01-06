@@ -244,3 +244,12 @@ msgstr "Ma candidature"
 
 msgid "without_application"
 msgstr "(sans candidature)"
+
+msgid "no_application_possible"
+msgstr "Vous avez déjà candidaté pour ce cours."
+
+msgid "course_search"
+msgstr "Recherche de cours vacant"
+
+msgid "vacant_learning_unit_year_search"
+msgstr "Veuillez introduire le sigle du cours pour lequel vous voulez postuler"
