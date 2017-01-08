@@ -28,9 +28,7 @@ import os
 import sys
 import logging
 from django.core.wsgi import get_wsgi_application
-from osis_common.queue import queue_listener as common_queue_listener, callbacks as common_callback
 from pika.exceptions import ConnectionClosed, AMQPConnectionError, ChannelClosed
-from performance.queue.student_performance import callback as perf_callback
 
 # The two following lines are mandatory for working with mod_wsgi on the servers
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..' )
@@ -38,6 +36,9 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../frontoffice')
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "frontoffice.settings")
 application = get_wsgi_application()
+
+from osis_common.queue import queue_listener as common_queue_listener, callbacks as common_callback
+from performance.queue.student_performance import callback as perf_callback, update_exp_date_callback
 
 from django.conf import settings
 LOGGER = logging.getLogger(settings.DEFAULT_LOGGER)
@@ -57,3 +58,9 @@ if hasattr(settings, 'QUEUES'):
     except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
         LOGGER.exception("Couldn't connect to the QueueServer")
 
+    # Thread in wich is running the listening of the queue used to update the expiration date of the students points
+    try:
+        common_queue_listener.SynchronousConsumerThread(settings.QUEUES.get('QUEUES_NAME').get('PERFORMANCE_UPDATE_EXP_DATE'),
+                                                        update_exp_date_callback).start()
+    except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
+        LOGGER.exception("Couldn't connect to the QueueServer")
