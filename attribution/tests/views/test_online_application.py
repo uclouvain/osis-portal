@@ -26,8 +26,8 @@
 import datetime
 from django.contrib.auth.models import User, Group
 from django.test import TestCase
-from attribution.tests.views import test_teaching_load
-from attribution.views import online_application, teaching_load
+from attribution.tests.views import test_tutor_charge
+from attribution.views import online_application, tutor_charge
 from base.models.enums import component_type
 from base.tests.models import test_person, test_tutor,test_academic_year, test_learning_unit_year, test_learning_unit_component, test_learning_unit
 from attribution.tests.models import test_attribution_charge, test_attribution, test_application_charge, test_tutor_application

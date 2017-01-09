@@ -26,11 +26,11 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 {% block breadcrumb %}
-    <li>{% trans 'teaching_load' %}</li>
+    <li>{% trans 'teaching_charge' %}</li>
 {% endblock %}
 
 {% block content %}
-    <h1>{% trans 'teaching_load' %}</h1>
+    <h1>{% trans 'teaching_charge' %}</h1>
     <h2>{{ user.first_name }} {{ user.last_name }}</h2>
     <ul class="nav nav-tabs">
     {%  for form in formset%}
@@ -39,7 +39,7 @@
     </ul>
     <div class="tab-content">
         {%  for form in formset%}
-            <div id="tab_profile" class="tab-pane fade">
+            <div id="tab_profile_{{ forloop.counter }}" class="tab-pane fade">
             </div>
         {% endfor %}
     </div>
@@ -65,7 +65,7 @@
                 <td>{{ attribution.practice_allocation_charge | default_if_none:''}}</td>
                 <td>{{ attribution.percentage_allocation_charge | default_if_none:''}}</td>
                 <td>{{ attribution.weight | default_if_none:''}}</td>
-                <td><a href="{% url 'students' attribution.learning_unit_year.id %}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a></td>
+                <td><a href="{% url 'attribution_students' attribution.learning_unit_year.id %}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a></td>
                 <td><a target="_blank" href="{{ attribution.url_schedule }}"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span></a></td>
                 <td><a href="{{ attribution.url_students_list_email }}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a></td>
                 <td>{% trans attribution.function %}</td>
