@@ -36,7 +36,6 @@ class AttributionChargeAdmin(admin.ModelAdmin):
                      'learning_unit_component__learning_unit_year__acronym']
 
 class AttributionCharge(SerializableModel):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
     attribution = models.ForeignKey('Attribution')
     learning_unit_component = models.ForeignKey('base.LearningUnitComponent')
     allocation_charge = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
@@ -54,6 +53,4 @@ def search(attribution=None, learning_unit_component=None):
 
     if learning_unit_component:
         queryset = queryset.filter(learning_unit_component=learning_unit_component)
-
-
     return queryset
