@@ -24,11 +24,11 @@
 #
 ##############################################################################
 from django.conf.urls import url
-from attribution.views import teaching_load
+from attribution.views import tutor_charge
 
 urlpatterns = [
-    url(r'^$', teaching_load.home, name='home'),
-    url(r'^charge/$', teaching_load.by_year, name='attributions_by_year'),
-    url(r'^load/([0-9]+)/$', teaching_load.by_year, name='attributions_by_year'),
-    url(r'^students/([0-9]+)/$', teaching_load.show_students, name='students'),
+    url(r'^$', tutor_charge.home, name='attribution_home'),
+    url(r'^charge/$', tutor_charge.by_year, name='attributions_by_year'),
+    url(r'^load/([0-9]+)/$', tutor_charge.by_year, name='attributions_by_year'),
+    url(r'^students/([0-9]+)/$', tutor_charge.show_students, name='attribution_students'),
 ]

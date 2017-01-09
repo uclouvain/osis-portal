@@ -72,11 +72,11 @@ def find_by_tutor_year(tutor=None, an_academic_year=None):
     return queryset.select_related('tutor', 'learning_unit_year')
 
 
-def find_by_tutor_year_order_by_acronym_fonction(tutor=None, an_academic_year=None):
-    results = find_by_tutor_year(tutor,an_academic_year )
+def find_by_tutor_year_order_by_acronym_function(tutor=None, an_academic_year=None):
+    results = find_by_tutor_year(tutor, an_academic_year)
     return results.order_by('learning_unit_year__acronym', 'function')
 
 
 def find_distinct_years(a_tutor):
     return Attribution.objects.filter(tutor=a_tutor).order_by('-learning_unit_year__academic_year__year')\
-        .values_list('learning_unit_year__academic_year__year',flat=True).distinct()
+        .values_list('learning_unit_year__academic_year__year', flat=True).distinct()

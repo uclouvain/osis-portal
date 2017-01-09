@@ -110,11 +110,10 @@ def get_schedule_url(an_acronym):
 
 def list_attributions(a_person, an_academic_year):
     return mdl_attribution.attribution\
-        .find_by_tutor_year_order_by_acronym_fonction(mdl_base.tutor.find_by_person(a_person), an_academic_year)
+        .find_by_tutor_year_order_by_acronym_function(mdl_base.tutor.find_by_person(a_person), an_academic_year)
 
 
-def list_teaching_load_attribution_representation(a_person, an_academic_year):
-    print('list_teaching_load_attribution_representation')
+def list_teaching_charge_attribution_representation(a_person, an_academic_year):
     attribution_list = []
     a_tutor = mdl_base.tutor.find_by_person(a_person)
     tot_lecturing = ALLOCATION_CHARGE_NUL
@@ -152,6 +151,7 @@ def list_teaching_load_attribution_representation(a_person, an_academic_year):
             'tot_practical': tot_practical}
 
 
+@login_required
 def by_year(request, year):
     a_person = get_person(request.user)
     an_academic_year = None
@@ -161,12 +161,12 @@ def by_year(request, year):
     tot_lecturing = None
     tot_practical = None
     if is_tutor(a_person):
-        attributions_dict = list_teaching_load_attribution_representation(a_person, an_academic_year)
+        attributions_dict = list_teaching_charge_attribution_representation(a_person, an_academic_year)
         attributions = attributions_dict['attributions']
         tot_lecturing = attributions_dict['tot_lecturing']
         tot_practical = attributions_dict['tot_practical']
 
-    return render(request, "teaching_load.html", {
+    return render(request, "tutor_charge.html", {
         'user': request.user,
         'attributions': attributions,
         'formset': set_formset_years(a_person),
@@ -197,11 +197,10 @@ def get_url_learning_unit_year(a_learning_unit_year):
 
 
 def get_students(a_learning_unit_year):
-    l= mdl_base.learning_unit_enrollment.find_by_learningunit_enrollment(a_learning_unit_year)
-    print(list(l))
-    return l
+    return mdl_base.learning_unit_enrollment.find_by_learningunit_enrollment(a_learning_unit_year)
 
 
+@login_required
 def show_students(request, a_learning_unit_year):
     students_list = []
     for learning_unit_enrollment in get_students(a_learning_unit_year):
