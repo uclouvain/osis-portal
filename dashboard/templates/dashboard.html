@@ -34,20 +34,52 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="row">
-        {% if perms.base.is_tutor %}
-            <div class="col-md-1"><i class="fa fa-hashtag" style="font-size: 400%; color: #6699FF;"></i></div>
-            <div class="col-md-5">
-                <h4 class="media-heading"><a href="{% url 'scores_encoding' %}" id="lnk_score_encoding">{% trans 'scores_encoding' %}</a></h4>
-                <p>{% trans 'desc_lnk_scores_encoding' %}</p>
+            <div class="col-md-6">
+                {% if 'performance' in installed_apps and perms.base.is_student %}
+                    <div class="row">
+                        <div class="col-md-2"><i class="fa fa-line-chart" style="font-size: 400%; color: #6699FF;"></i></div>
+                        <div class="col-md-10">
+                            <h4 class="media-heading"><a href="{% url 'performance_home'  %}" id="lnk_performance">{% trans 'performance' %}</a></h4>
+                            <p>{% trans 'desc_lnk_performance' %}</p>
+                        </div>
+                    </div>
+                    <br>
+                {% endif %}
+
+                {% if perms.base.is_tutor %}
+                    <div class="row">
+                        <div class="col-md-2"><i class="fa fa-hashtag" style="font-size: 400%; color: #6699FF;"></i></div>
+                        <div class="col-md-10">
+                            <h4 class="media-heading"><a href="{% url 'scores_encoding' %}" id="lnk_score_encoding">{% trans 'scores_encoding' %}</a></h4>
+                            <p>{% trans 'desc_lnk_scores_encoding' %}</p>
+                        </div>
+                    </div>
+                    <br>
+                {% endif %}
+
+                {% if perms.base.is_tutor %}
+                    <div class="row">
+                        <div class="col-md-2"><i class="fa fa-address-card-o" style="font-size: 400%; color: #6699FF;"></i></div>
+                        <div class="col-md-10">
+                            <h4 class="media-heading"><a href="{% url 'learning_unit_applications' %}" id="lnk_my_applications">{% trans 'my_applications' %}</a></h4>
+                            <p>{% trans 'desc_lnk_my_applications' %}</p>
+                        </div>
+                    </div>
+                    <br>
+                {% endif %}
             </div>
-        {% endif %}
-        {% if 'performance' in installed_apps and perms.base.is_student %}
-            <div class="col-md-1"><i class="fa fa-line-chart " style="font-size: 400%; color: #6699FF;"></i></div>
-            <div class="col-md-5">
-                <h4 class="media-heading"><a href="{% url 'performance_home'  %}" id="lnk_performance">{% trans 'performance' %}</a></h4>
-                <p>{% trans 'desc_lnk_performance' %}</p>
+            <div class="col-md-6">
+                {% if perms.base.is_tutor %}
+                    <div class="row">
+                        <div class="col-md-2"><i class="fa fa-list-alt" style="font-size: 400%; color: #6699FF;"></i></div>
+                        <div class="col-md-10">
+                            <h4 class="media-heading"><a href="{% url 'attribution_home' %}" id="lnk_my_teaching_charge">{% trans 'my_teaching_charge' %}</a></h4>
+                            <p>{% trans 'desc_lnk_my_teaching_charge' %}</p>
+                        </div>
+                    </div>
+                    <br>
+                {% endif %}
             </div>
-        {% endif %}
         </div>
     </div>
 </div>

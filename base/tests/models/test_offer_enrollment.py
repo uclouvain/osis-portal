@@ -33,3 +33,14 @@ def create_offer_enrollment(student, offer_year):
                                                                  date_enrollment=datetime.date.today())
     offer_enrollment.save()
     return offer_enrollment
+
+
+def create_offer_enrollment_with_academic_year(an_offer_year, a_student, an_academic_year):
+    an_offer_enrollment = mdl_base.offer_enrollment.OfferEnrollment()
+    an_offer_enrollment.student = a_student
+    an_offer_enrollment.offer_year = an_offer_year
+    an_offer_enrollment.academic_year = an_academic_year
+    an_offer_enrollment.date_enrollment = datetime.datetime.now()
+    an_offer_enrollment.save()
+
+    return an_offer_enrollment

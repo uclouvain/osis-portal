@@ -1,0 +1,129 @@
+{% extends "attribution_layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block breadcrumb %}
+    <li>{% trans 'my_applications' %}</li>
+{% endblock %}
+
+
+{% block content %}
+    <h1>{% trans 'my_applications' %} {{ academic_year }}</h1>
+    <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+    <div class="panel panel-default"
+         id="pnl_applications">
+        <div class="panel-heading">{% trans 'my_applications'%}</div>
+        <div class="panel-body">
+            <a href="{% url 'tutor_application_create' %}"
+               id="lnk_tutor_application_create"
+               class="btn btn-default pull-right"
+               role="button" title="{% trans 'create_an_tutor_application'%}">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </a>
+            <br>
+            <br>
+        </div>
+        {% if applications %}
+            <!--It's normal that the table is outside of the body.  It's for a better display -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="2"></th>
+                        <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'total' %}</th>
+                        <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'vacant' %}</th>
+                        <th colspan="4" style="border-left-style: solid;border-left-width:1px;">{% trans 'charge' %}</th>
+                    </tr>
+                    <tr>
+                        <th>{% trans 'code'%}</th>
+                        <th>{% trans 'title'%}</th>
+                        <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours'%}</th>
+                        <th>{% trans 'practical_hours'%}</th>
+                        <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours'%}</th>
+                        <th>{% trans 'practical_hours'%}</th>
+                        <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours_asked'%}</th>
+                        <th>{% trans 'practical_hours_asked'%}</th>
+                        <th>{% trans 'function'%}</th>
+                        <th></th>
+                    </tr>
+                <thead>
+
+                {% for application in applications %}
+                    <tr>
+                        <td>{{ application.id }}
+                            <a title="{%trans 'edit'%}"
+                               href="{% url 'edit_tutor_application' application.tutor_application.id %}"
+                               id="lnk_application_edit">
+                                {{ application.tutor_application.learning_unit_year.acronym }}
+                            </a>
+                        </td>
+                        <td>
+                            <a title="{%trans 'edit'%}"
+                               href="{% url 'edit_tutor_application' application.tutor_application.id %}"
+                              id="lnk_application_edit">
+                            {{ application.tutor_application.learning_unit_year.title }}
+                            </a>
+                        </td>
+                        <td style="border-left-style: solid;border-left-width:1px;">
+                            {% if application.lecturing_duration > 0 %}
+                                {{ application.lecturing_duration }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if application.practice_duration > 0 %}
+                                {{ application.practice_duration }}
+                            {% endif %}
+                        </td>
+                        <td style="border-left-style: solid;border-left-width:1px;">{% if application.vacant_attribution_charge_lecturing > 0 %}{{ application.vacant_attribution_charge_lecturing}}{% endif %}</td>
+                        <td>{% if application.vacant_attribution_charge_practical > 0 %}{{ application.vacant_attribution_charge_practical }}{% endif %}</td>
+                        <td style="border-left-style: solid;border-left-width:1px;">{% if  application.application_charge_lecturing.allocation_charge > 0 %}{{ application.application_charge_lecturing.allocation_charge | default_if_none:''}}{% endif %}</td>
+                        <td>{% if application.application_charge_practical.allocation_charge > 0 %}{{ application.application_charge_practical.allocation_charge}}{% endif %}</td>
+                        <td>{% if application.tutor_application.function  %}{% trans application.tutor_application.function %}{% endif %}</td>
+                        <td>
+                            <a title="{%trans 'delete'%}"
+                               href="{% url 'delete_tutor_application' application.tutor_application.id %}"
+                               class="btn btn-warning" role="button"
+                               id="lnk_application_delete_{{ application.tutor_application.id }}">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <br>
+        {% endif %}
+    </div>
+    <div class="panel panel-default"
+         id="pnl_charges">
+        <div class="panel-heading">{% trans 'my_charges'%} {{ academic_year }}</div>
+        <div class="panel-body"></div>
+        {% if attributions %}
+            <!--It's normal that the table is outside of the body.  It's for a better display -->
+            {% include "attributions.html" %}
+            <br>
+        {% endif %}
+    </div>
+{% endblock %}
