@@ -1,4 +1,4 @@
-{% extends "attribution_layout.html" %}
+{% extends "layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -25,11 +25,16 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
-{% block breadcrumb %}
-    <li><a href="{% url 'attributions_by_year' learning_unit_year.academic_year.year %}" id="lnk_home_attribution">{% trans 'teaching_charge' %}</a></li>
-    <li>{% trans 'students' %}</li>
+{% block breadcrumb_area %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
+                                                                      aria-hidden="true"></span></a></li>
+    {% block breadcrumb %}
+        <li><a href="{% url 'attributions_by_year' learning_unit_year.academic_year.year %}" id="lnk_home_attribution">{% trans 'teaching_charge' %}</a></li>
+        <li>{% trans 'students' %}</li>
+    {% endblock %}
+</ol>
 {% endblock %}
-
 {% block content %}
     <h1>{{ students|length }}{% trans 'students_learning_unit' %} {{ learning_unit_year }}</h1>
 
