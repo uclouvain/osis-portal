@@ -32,7 +32,8 @@ from base.models.enums import component_type
 from attribution.models.enums import function
 from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
     test_learning_unit_component
-from attribution.tests.models import test_attribution_charge, test_attribution, test_application_charge, test_tutor_application
+from attribution.tests.models import test_attribution_charge, test_attribution, test_application_charge, \
+    test_tutor_application
 
 now = datetime.datetime.now()
 WEIGHT = 5
@@ -43,6 +44,7 @@ CURRENT_YEAR = now.year
 
 LEARNING_UNIT_LECTURING_DURATION = 15.00
 LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION = 30.00
+CHARGE_NULL = 0
 
 
 class TestTest(TestCase):
@@ -67,32 +69,34 @@ class TestTest(TestCase):
                 'learning_unit_year': self.a_learning_unit_year,
                 'type': component_type.PRACTICAL_EXERCISES,
                 'duration': LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION})
-        self.a_tutor_application = test_tutor_application.create_tutor_application({'function': function.CO_HOLDER,
-                                                                               'tutor': self.a_tutor,
-                                                                               'learning_unit_year':self.a_learning_unit_year})
+        self.a_tutor_application = test_tutor_application.create_tutor_application(
+            {'function': function.CO_HOLDER,
+             'tutor': self.a_tutor,
+             'learning_unit_year': self.a_learning_unit_year})
 
-        self.an_application_charge_lecturing = test_application_charge.create_application_charge({'tutor_application': self.a_tutor_application,
-                                                                                             'learning_unit_component':self.a_learning_unit_component_lecture,
-                                                                                             'allocation_charge': 15})
-        self.an_application_charge_practical = test_application_charge.create_application_charge({'tutor_application': self.a_tutor_application,
-                                                                                             'learning_unit_component':self.a_learning_unit_component_practice,
-                                                                                             'allocation_charge': 20})
-
-    # def test_creation_message(self):
-    #     try:
-    #
-    #         generating_message.generate_message_by_tutor_application_list([self.a_tutor_application])
-    #     except Exception:
-    #         self.fail("{0} raised ExceptionType unexpectedly!"
-    #                   .format("test_creation_message"))
-
+        self.an_application_charge_lecturing = test_application_charge.create_application_charge(
+            {'tutor_application': self.a_tutor_application,
+             'learning_unit_component': self.a_learning_unit_component_lecture,
+             'allocation_charge': 15})
+        self.an_application_charge_practical = test_application_charge.create_application_charge(
+            {'tutor_application': self.a_tutor_application,
+             'learning_unit_component': self.a_learning_unit_component_practice,
+             'allocation_charge': 20})
 
     def test_creation_message_from_application_charge(self):
         try:
-            generating_message.generate_message_from_application_charge(self.an_application_charge_lecturing)
+            generating_message.generate_message_from_application_charge(self.an_application_charge_lecturing, 'update')
         except Exception:
             self.fail("{0} raised ExceptionType unexpectedly!"
                       .format("test_creation_message_from_application_charge"))
 
+    def test_creation_message_from_application_charge_with_unexpected_external_id_format(self):
+        try:
+            self.an_application_charge_lecturing.learning_unit_component.learning_unit_year.external_id = '428750.2017'
+            generating_message.generate_message_from_application_charge(self.an_application_charge_lecturing, 'update')
+        except Exception:
+            self.fail("{0} raised ExceptionType unexpectedly!"
+                      .format("test_creation_message_from_application_charge"))
 
-
+    def test_get_allocation_charge_with_no_component_type_define(self):
+        self.assertEqual(generating_message.get_allocation_charge(self.a_tutor_application, None), CHARGE_NULL)

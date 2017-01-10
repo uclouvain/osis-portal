@@ -243,7 +243,8 @@ QUEUES = {
         'PAPER_SHEET': 'paper_sheet',
         'PERFORMANCE': 'performance_to_client',
         'STUDENT_PERFORMANCE': 'rpc_performance_from_client',
-        'STUDENT_POINTS': 'rpc_performance_to_client'
+        'STUDENT_POINTS': 'rpc_performance_to_client',
+        'ATTRIBUTION' : 'attribution'
     }
 }
 

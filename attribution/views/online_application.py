@@ -33,6 +33,10 @@ from attribution.models.enums import function
 from django.contrib.auth.decorators import login_required
 from attribution.forms.application import ApplicationForm
 from django.conf import settings
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
+from osis_common.queue import queue_sender
+from attribution.utils import generating_message
 
 
 ATTRIBUTION_ID_NAME = 'attribution_id_'
@@ -224,7 +228,7 @@ def get_tutor_applications(a_year, a_tutor):
     return application_list
 
 
-def define_tutor_application_function(a_tutor_application, request):
+def define_tutor_application_function(a_tutor_application):
     a_learning_unit_year = a_tutor_application.learning_unit_year
     if sum_tutor_application_allocated_charges(a_tutor_application) == tutor_charge.sum_learning_unit_year_duration(a_learning_unit_year):
         return function.HOLDER
@@ -261,6 +265,9 @@ def create_application_charge(a_new_tutor_application, charge_duration, a_compon
                               learning_unit_component=a_learning_unit_component,
                               allocation_charge=charge_duration)
         a_new_application_charge.save()
+        queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
+                                  generating_message.generate_message_from_application_charge(a_new_application_charge,
+                                                                                              'update'))
 
 
 def is_vacant(a_learning_unit_year):
@@ -317,25 +324,29 @@ def get_tutor_application_charge(a_component_type, a_tutor_application):
 
 
 def get_application_charge(a_tutor, a_learning_unit_year, a_component_type):
-    print('get_application_charge')
     for an_tutor_application in mdl_attribution.tutor_application.search(a_tutor, a_learning_unit_year):
         for a_learning_unit_component in mdl_base.learning_unit_component.search(a_learning_unit_year, a_component_type):
             application_charges = mdl_attribution.application_charge.search(an_tutor_application,
                                                                             a_learning_unit_component)
             for application_charge in application_charges:
-                print('before return', len(application_charges))
                 return application_charge
 
     return None
 
 
+@login_required
 def delete(request, tutor_application_id):
     tutor_application_to_delete = mdl_attribution.tutor_application.find_by_id(tutor_application_id)
     if tutor_application_to_delete:
+        queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
+                                  generating_message.generate_message_from_a_tutor_application(tutor_application_to_delete))
+
         tutor_application_to_delete.delete()
-    return home(request)
+
+    return HttpResponseRedirect(reverse('learning_unit_applications'))
 
 
+@login_required
 def attribution_application_form(request):
     a_tutor = mdl_base.tutor.find_by_user(request.user)
 
@@ -347,6 +358,7 @@ def attribution_application_form(request):
         'over_academic_year': "{0}-{1}".format(YEAR_OVER, YEAR_OVER + 1)})
 
 
+@login_required
 def search(request):
     learning_unit_acronym = request.GET['learning_unit_acronym']
     a_tutor = mdl_base.tutor.find_by_user(request.user)
@@ -361,6 +373,7 @@ def search(request):
             'attributions': attributions})
 
 
+@login_required
 def renew(request):
     for key, value in request.POST.items():
         if key.startswith(ATTRIBUTION_ID_NAME):
@@ -369,7 +382,7 @@ def renew(request):
             if an_attribution_to_renew:
                 create_tutor_application_from_attribution(an_attribution_to_renew)
 
-    return home(request)
+    return HttpResponseRedirect(reverse('learning_unit_applications'))
 
 
 def create_tutor_application_from_attribution(an_attribution):
@@ -398,6 +411,8 @@ def create_tutor_application_from_attribution(an_attribution):
     a_new_tutor_application.end_date = get_end_date(next_learning_unit_year.academic_year)
     a_new_tutor_application.save()
 
+
+
     create_application_charge(a_new_tutor_application,
                               attribution_lecturing_duration,
                               component_type.LECTURING)
@@ -407,6 +422,7 @@ def create_tutor_application_from_attribution(an_attribution):
     return a_new_tutor_application
 
 
+@login_required
 def edit(request, tutor_application_id):
     form = ApplicationForm()
     application = get_application_informations(mdl_attribution.tutor_application.find_by_id(tutor_application_id))
@@ -430,8 +446,10 @@ def format_charge(value):
     return 0
 
 
+@login_required
 def save_on_new_learning_unit(request):
-    new_tutor_application = create_tutor_application_from_user_learning_unit_year(request)
+    new_tutor_application = create_tutor_application_from_user_learning_unit_year(
+        request.user,request.POST.get('learning_unit_year_id'))
     form = ApplicationForm(data=request.POST)
 
     if form.is_valid():
@@ -448,11 +466,10 @@ def save_on_new_learning_unit(request):
                                   format_charge(form['charge_practical'].value()),
                                   component_type.PRACTICAL_EXERCISES)
 
-        new_tutor_application.function = define_tutor_application_function(new_tutor_application,
-                                                                           request)
+        new_tutor_application.function = define_tutor_application_function(new_tutor_application)
         new_tutor_application.save()
 
-        return home(request)
+        return HttpResponseRedirect(reverse('learning_unit_applications'))
     else:
         return render(request, "application_form.html", {
             'application': get_application_informations(new_tutor_application),
@@ -460,16 +477,16 @@ def save_on_new_learning_unit(request):
             'form': form})
 
 
-def create_tutor_application_from_user_learning_unit_year(request):
+def create_tutor_application_from_user_learning_unit_year(a_user, a_learning_unit_year_id):
     new_tutor_application = mdl_attribution.tutor_application.TutorApplication()
-    new_tutor_application.tutor = mdl_base.tutor.find_by_user(request.user)
-    new_tutor_application.learning_unit_year = mdl_base.learning_unit_year.find_by_id(
-        request.POST.get('learning_unit_year_id'))
+    new_tutor_application.tutor = mdl_base.tutor.find_by_user(a_user)
+    new_tutor_application.learning_unit_year = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year_id)
     new_tutor_application.start_date = get_start_date(new_tutor_application.learning_unit_year.academic_year)
     new_tutor_application.end_date = get_end_date(new_tutor_application.learning_unit_year.academic_year)
     return new_tutor_application
 
 
+@login_required
 def save(request, tutor_application_id):
     tutor_application_to_save = mdl_attribution.tutor_application.find_by_id(tutor_application_id)
     form = ApplicationForm(data=request.POST)
@@ -483,10 +500,10 @@ def save(request, tutor_application_id):
         if tutor_application_to_save:
             tutor_application_to_save.course_summary = form['course_summary'].value()
             tutor_application_to_save.remark = form['remark'].value()
-            tutor_application_to_save.function = define_tutor_application_function(tutor_application_to_save,
-                                                                                   request)
+            tutor_application_to_save.function = define_tutor_application_function(tutor_application_to_save)
             tutor_application_to_save.save()
-        return home(request)
+        return HttpResponseRedirect(reverse('learning_unit_applications'))
+
     else:
         return render(request, "application_form.html", {
             'application': get_application_informations(tutor_application_to_save),
@@ -503,6 +520,9 @@ def application_charge_create(a_tutor_application, a_charge, a_component_type):
                                learning_unit_component=a_learning_unit_component,
                                allocation_charge=a_charge)
         application_charge.save()
+        queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
+                                  generating_message.generate_message_from_application_charge(application_charge,
+                                                                                              'update'))
 
 
 def allocation_charge_update(an_application_charge_id, a_field_value):
@@ -511,6 +531,9 @@ def allocation_charge_update(an_application_charge_id, a_field_value):
         if application_charge and a_field_value:
             application_charge.allocation_charge = a_field_value
             application_charge.save()
+            queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
+                                      generating_message.generate_message_from_application_charge(application_charge,
+                                                                                                  'update'))
 
 
 def get_learning_unit_year_vacant(a_year, an_acronym, a_tutor):
@@ -572,12 +595,13 @@ def define_renew_possible(a_tutor, a_learning_unit_year):
     return False
 
 
+@login_required
 def new(request, a_learning_unit_year_id=None):
     learning_unit_year = None
     tutor_application_to_save = None
     if a_learning_unit_year_id:
         learning_unit_year = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year_id)
-        tutor_application_to_save = create_tutor_application_from_learning_unit_year(learning_unit_year, request)
+        tutor_application_to_save = create_tutor_application_from_learning_unit_year(learning_unit_year, request.user)
     form = ApplicationForm()
     if tutor_application_to_save:
         data = {'charge_lecturing': get_vacant_attribution_allocation_charge(learning_unit_year, component_type.LECTURING),
@@ -592,16 +616,16 @@ def new(request, a_learning_unit_year_id=None):
         'form': form})
 
 
-def create_tutor_application_from_learning_unit_year(learning_unit_year, request):
-    if learning_unit_year:
+def create_tutor_application_from_learning_unit_year(a_learning_unit_year=None, a_user=None):
+    if a_learning_unit_year:
         a_new_tutor_application = mdl_attribution.tutor_application.TutorApplication()
-        a_new_tutor_application.tutor = mdl_base.tutor.find_by_user(request.user)
+        a_new_tutor_application.tutor = mdl_base.tutor.find_by_user(a_user)
 
-        a_new_tutor_application.learning_unit_year = learning_unit_year
+        a_new_tutor_application.learning_unit_year = a_learning_unit_year
         a_new_tutor_application.remark = None
         a_new_tutor_application.course_summary = None
-        a_new_tutor_application.start_date = get_start_date(learning_unit_year.academic_year)
-        a_new_tutor_application.end_date = get_end_date(learning_unit_year.academic_year)
+        a_new_tutor_application.start_date = get_start_date(a_learning_unit_year.academic_year)
+        a_new_tutor_application.end_date = get_end_date(a_learning_unit_year.academic_year)
 
         return a_new_tutor_application
     return None
@@ -626,5 +650,4 @@ def existing_tutor_application_for_next_year(a_tutor, a_learning_unit_year):
 
 
 def get_first_application_tutor(a_tutor, a_learning_unit_year):
-    next_learning_unit_year = get_learning_unit_for_next_year(a_learning_unit_year)
-    return mdl_attribution.tutor_application.find_first(a_tutor, next_learning_unit_year)
+    return mdl_attribution.tutor_application.find_first(a_tutor, get_learning_unit_for_next_year(a_learning_unit_year))
