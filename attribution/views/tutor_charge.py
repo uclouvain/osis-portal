@@ -101,8 +101,13 @@ def get_schedule_url(an_acronym):
 
 
 def list_attributions(a_person, an_academic_year):
-    return mdl_attribution.attribution \
+    results_in_charge = []
+    results = mdl_attribution.attribution \
         .find_by_tutor_year_order_by_acronym_function(mdl_base.tutor.find_by_person(a_person), an_academic_year)
+    for attribution in results:
+        if attribution.learning_unit_year.in_charge:
+            results_in_charge.append(attribution)
+    return results_in_charge
 
 
 def list_teaching_charge_attribution_representation(a_person, an_academic_year):
