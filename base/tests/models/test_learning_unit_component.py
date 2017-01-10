@@ -23,16 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models import tutor
-from base.tests.models import test_person
+from base import models as mdl_base
 
 
-def create_tutor():
-    a_tutor = tutor.Tutor(person=test_person.create_person())
-    a_tutor.save()
-    return a_tutor
-
-
-def create_tutor_with_person(a_person):
-    a_tutor = tutor.Tutor.objects.create(person=a_person)
-    return a_tutor
+def create_learning_unit_component(data):
+    learning_unit_component = mdl_base.learning_unit_component.LearningUnitComponent()
+    if 'learning_unit_year' in data:
+        learning_unit_component.learning_unit_year = data['learning_unit_year']
+    if 'type' in data:
+        learning_unit_component.type = data['type']
+    if 'duration' in data:
+        learning_unit_component.duration = data['duration']
+    learning_unit_component.save()
+    return learning_unit_component

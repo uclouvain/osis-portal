@@ -228,3 +228,15 @@ msgstr "Autre"
 
 msgid "curriculum"
 msgstr "Curriculum"
+
+msgid "search"
+msgstr "Chercher:"
+
+msgid "showing_page"
+msgstr "Page"
+
+msgid "of"
+msgstr "de"
+
+msgid "no_record"
+msgstr "Pas d'enregistrement"

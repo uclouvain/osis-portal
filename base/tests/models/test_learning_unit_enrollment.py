@@ -23,16 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models import tutor
-from base.tests.models import test_person
+import datetime
+
+from base import models as mdl_base
 
 
-def create_tutor():
-    a_tutor = tutor.Tutor(person=test_person.create_person())
-    a_tutor.save()
-    return a_tutor
-
-
-def create_tutor_with_person(a_person):
-    a_tutor = tutor.Tutor.objects.create(person=a_person)
-    return a_tutor
+def create_learning_unit_enrollment(an_offer_enrollment, a_learning_unit_year):
+    learning_unit_enrollment = mdl_base.learning_unit_enrollment.LearningUnitEnrollment()
+    learning_unit_enrollment.offer_enrollment = an_offer_enrollment
+    learning_unit_enrollment.learning_unit_year = a_learning_unit_year
+    learning_unit_enrollment.date_enrollment = datetime.datetime.now()
+    learning_unit_enrollment.save()
+    return learning_unit_enrollment

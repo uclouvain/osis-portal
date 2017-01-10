@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+{% block breadcrumb_area %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
+                                                                      aria-hidden="true"></span></a></li>
+    {% block breadcrumb %}
+        <li>{% trans 'tutor_charge' %}</li>
+    {% endblock %}
+</ol>
+{% endblock %}
+{% block content %}
+    <h1>{% trans 'tutor_charge' %}</h1>
+    <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+    <ul class="nav nav-tabs">
+    {%  for form in formset%}
+        <li {% if year ==  form.year.value%}class="active"{% endif %}><a href="{% url 'attributions_by_year'  form.year.value  %}" >{{ form.year.value }}</a></li>
+    {% endfor %}
+    </ul>
+    <div class="tab-content">
+        {%  for form in formset%}
+            <div id="tab_profile_{{ forloop.counter }}" class="tab-pane fade">
+            </div>
+        {% endfor %}
+    </div>
+    {% if attributions %}
+        <table class="table table-striped table-hover">
+        <tr>
+            <th>{% trans 'code'%}</th>
+            <th>{% trans 'title'%}</th>
+            <th>{% trans 'lecturing_hours'%}</th>
+            <th>{% trans 'practical_hours'%}</th>
+            <th>%</th>
+            <th>{% trans 'weight' %}</th>
+            <th>{% trans 'students' %}</th>
+            <th>{% trans 'schedule'%}</th>
+            <th>{% trans 'email'%}</th>
+            <th>{% trans 'function'%}</th>
+        </tr>
+        {% for attribution in attributions %}
+            <tr>
+                <td>{% if  attribution.learning_unit_year_url%}<a href="{{ attribution.learning_unit_year_url }}" target="_blank">{{ attribution.acronym }}</a>{% else %}{{ attribution.acronym }}{% endif %}</td>
+                <td>{{ attribution.title }}</td>
+                <td>{{ attribution.lecturing_allocation_charge | default_if_none:''}}</td>
+                <td>{{ attribution.practice_allocation_charge | default_if_none:''}}</td>
+                <td>{{ attribution.percentage_allocation_charge | default_if_none:''}}</td>
+                <td>{{ attribution.weight | default_if_none:''}}</td>
+                <td><a href="{% url 'attribution_students' attribution.learning_unit_year.id %}"><span class="fa fa-group" aria-hidden="true"></span></a></td>
+                <td><a target="_blank" href="{{ attribution.url_schedule }}"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span></a></td>
+                <td><a href="{{ attribution.url_students_list_email }}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a></td>
+                <td>{% trans attribution.function %}</td>
+            </tr>
+        {% endfor %}
+            <tr>
+                <td colspan="2"></td>
+                <td>{{ tot_lecturing }}</td>
+                <td>{{ tot_practical }}</td>
+                <td colspan="6"></td>
+            </tr>
+        </table>
+    {% endif %}
+{% endblock %}

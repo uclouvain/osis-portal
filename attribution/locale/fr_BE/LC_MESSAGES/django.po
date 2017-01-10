@@ -1,0 +1,141 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-05-03 08:56+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "tutor_charge"
+msgstr "Charge d'enseignement"
+
+msgid "code"
+msgstr "Code"
+
+msgid "title"
+msgstr "Intitulé"
+
+msgid "lecturing_hours"
+msgstr "Cours magistral"
+
+msgid "practical_hours"
+msgstr "Travaux pratique"
+
+msgid "students"
+msgstr "Etudiants"
+
+msgid "schedule"
+msgstr "Horaire"
+
+msgid "email"
+msgstr "Email"
+
+msgid "function"
+msgstr "Fonction"
+
+msgid "COORDINATOR"
+msgstr "Coordinateur"
+
+msgid "HOLDER"
+msgstr "Titulaire"
+
+msgid "CO_HOLDER"
+msgstr "Co-titulaire"
+
+msgid "DEPUTY"
+msgstr "Suppléant"
+
+msgid "weight"
+msgstr "ECT"
+
+msgid "students_learning_unit"
+msgstr "  étudiants inscrits au cours "
+
+msgid "program"
+msgstr "Pgrm"
+
+msgid "student"
+msgstr "Nom"
+
+msgid "registration_id"
+msgstr "Noma"
+
+msgid "january"
+msgstr "Jan."
+
+msgid "status"
+msgstr "Etat"
+
+msgid "june"
+msgstr "Juin"
+
+msgid "september"
+msgstr "Sept."
+
+msgid "I"
+msgstr "Inscrit"
+
+msgid "S"
+msgstr "Epreuve modifiée"
+
+msgid "R"
+msgstr "Report"
+
+msgid "Y"
+msgstr "Deuxième inscription"
+
+msgid "V"
+msgstr "A satisfait"
+
+msgid "W"
+msgstr "N'a pas satisfait"
+
+msgid "B"
+msgstr "Crédit bologne de l'année avant"
+
+msgid "D"
+msgstr "Dispense"
+
+msgid "J"
+msgstr "Report note de janvier"
+
+msgid "Q"
+msgstr "Q94"
+
+msgid "C"
+msgstr "C94"
+
+msgid "N"
+msgstr "N94"
+
+msgid "K"
+msgstr "K94"
+
+msgid "T"
+msgstr "Test"
+
+msgid "X"
+msgstr "Externe"
+
+msgid "P"
+msgstr "Partielle"
+
+msgid "no_student_learning_unit"
+msgstr "Aucun étudiant inscrit au cours"
+
+msgid "my_teaching_charge"
+msgstr "Ma charge d'enseignement"
+
+msgid "desc_lnk_my_teaching_charge"
+msgstr "Consultez la charge d'enseignement."
