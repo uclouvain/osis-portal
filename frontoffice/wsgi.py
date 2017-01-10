@@ -57,3 +57,9 @@ if hasattr(settings, 'QUEUES'):
     except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
         LOGGER.exception("Couldn't connect to the QueueServer")
 
+    # Thread in wich is running the listening of the queue used to update the expiration date of the students points
+    try:
+        common_queue_listener.SynchronousConsumerThread(settings.QUEUES.get('QUEUES_NAME').get('PERFORMANCE_UPDATE_EXP_DATE'),
+                                                        update_exp_date_callback).start()
+    except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
+        LOGGER.exception("Couldn't connect to the QueueServer")

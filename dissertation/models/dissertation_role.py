@@ -30,8 +30,10 @@ from .enums import status_types
 
 
 class DissertationRoleAdmin(admin.ModelAdmin):
-    list_display = ('adviser', 'status', 'dissertation', 'author', 'dissertation_status')
+    list_display = ('adviser', 'status', 'dissertation')
     raw_id_fields = ('adviser', 'dissertation')
+    search_fields = ('uuid', 'dissertation__author__person__last_name', 'dissertation__author__person__first_name',
+                     'dissertation__title', 'adviser__person__last_name', 'adviser__person__first_name')
 
 
 class DissertationRole(SerializableModel):

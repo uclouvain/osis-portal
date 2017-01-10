@@ -30,7 +30,7 @@ from django.contrib import admin
 
 class DissertationLocationAdmin(admin.ModelAdmin):
     list_display = ('name', )
-    search_fields = ('name', )
+    search_fields = ('uuid', 'name')
 
 
 class DissertationLocation(SerializableModel):

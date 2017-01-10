@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "teaching_charge"
+msgid "tutor_charge"
 msgstr "Charge d'enseignement"
 
 msgid "code"
@@ -57,7 +57,7 @@ msgid "DEPUTY"
 msgstr "Suppléant"
 
 msgid "weight"
-msgstr "Poids"
+msgstr "ECT"
 
 msgid "students_learning_unit"
 msgstr "  étudiants inscrits au cours "
@@ -130,6 +130,15 @@ msgstr "Externe"
 
 msgid "P"
 msgstr "Partielle"
+
+msgid "no_student_learning_unit"
+msgstr "Aucun étudiant inscrit au cours"
+
+msgid "my_teaching_charge"
+msgstr "Ma charge d'enseignement"
+
+msgid "desc_lnk_my_teaching_charge"
+msgstr "Consultez la charge d'enseignement."
 
 msgid "my_charges"
 msgstr "Mes charges"
@@ -233,11 +242,6 @@ msgstr "Ce cours est géré en équipe. La candidature des équipes d'enseignant
 msgid "desc_lnk_my_applications"
 msgstr "Posez des candidatures aux cours vacants."
 
-msgid "my_teaching_charge"
-msgstr "Ma charge d'enseignement"
-
-msgid "desc_lnk_my_teaching_charge"
-msgstr "Consultez la charge d'enseignement."
 
 msgid "my_application"
 msgstr "Ma candidature"

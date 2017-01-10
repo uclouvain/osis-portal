@@ -40,6 +40,7 @@ def create_learning_unit_year(data):
         learning_unit_year.learning_unit = data['learning_unit']
     if 'vacant' in data:
         learning_unit_year.vacant = data['vacant']
-
+    if 'in_charge' in data:
+        learning_unit_year.in_charge = data['in_charge']
     learning_unit_year.save()
     return learning_unit_year

@@ -30,16 +30,16 @@
     <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                       aria-hidden="true"></span></a></li>
     {% block breadcrumb %}
-        <li>{% trans 'teaching_charge' %}</li>
+        <li>{% trans 'tutor_charge' %}</li>
     {% endblock %}
 </ol>
 {% endblock %}
 {% block content %}
-    <h1>{% trans 'teaching_charge' %}</h1>
+    <h1>{% trans 'tutor_charge' %}</h1>
     <h2>{{ user.first_name }} {{ user.last_name }}</h2>
     <ul class="nav nav-tabs">
     {%  for form in formset%}
-        <li {% if year ==  form.year.value%}class="active"{% endif %}><a href="{% url 'attributions_by_year'  form.year.value  %}" >{{ form.year.value }}-{{ form.next_year.value }}</a></li>
+        <li {% if year ==  form.year.value%}class="active"{% endif %}><a href="{% url 'attributions_by_year'  form.year.value  %}" >{{ form.year.value }}</a></li>
     {% endfor %}
     </ul>
     <div class="tab-content">
@@ -70,13 +70,19 @@
                 <td>{{ attribution.practice_allocation_charge | default_if_none:''}}</td>
                 <td>{{ attribution.percentage_allocation_charge | default_if_none:''}}</td>
                 <td>{{ attribution.weight | default_if_none:''}}</td>
-                <td><a href="{% url 'attribution_students' attribution.learning_unit_year.id %}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a></td>
+                <td><a href="{% url 'attribution_students' attribution.learning_unit_year.id %}"><span class="fa fa-group" aria-hidden="true"></span></a></td>
                 <td><a target="_blank" href="{{ attribution.url_schedule }}"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span></a></td>
                 <td><a href="{{ attribution.url_students_list_email }}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a></td>
                 <td>{% trans attribution.function %}</td>
             </tr>
         {% endfor %}
-
+            <tr>
+                <td></td>
+                <td ><label>{% trans 'total' %}</label></td>
+                <td>{{ tot_lecturing }}</td>
+                <td>{{ tot_practical }}</td>
+                <td colspan="6"></td>
+            </tr>
         </table>
     {% endif %}
 {% endblock %}

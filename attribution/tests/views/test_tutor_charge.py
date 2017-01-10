@@ -74,7 +74,9 @@ class TutorChargeTest(TestCase):
             'acronym': ACRONYM,
             'title': TITLE,
             'academic_year': an_academic_yr,
-            'weight': WEIGHT})
+            'weight': WEIGHT,
+            'vacant' : True,
+            'in_charge': True})
         a_learning_unit_component_lecture = self.create_learning_unit_component(component_type.LECTURING,
                                                                                 LEARNING_UNIT_LECTURING_DURATION,
                                                                                 a_learning_unit_year)

@@ -112,6 +112,7 @@ def list_attributions(a_person, an_academic_year):
 
 def list_teaching_charge_attribution_representation(a_person, an_academic_year):
     attribution_list = []
+    a_tutor = mdl_base.tutor.find_by_person(a_person)
     tot_lecturing = ALLOCATION_CHARGE_NUL
     tot_practical = ALLOCATION_CHARGE_NUL
     for an_attribution in list_attributions(a_person, an_academic_year):
@@ -146,8 +147,6 @@ def list_teaching_charge_attribution_representation(a_person, an_academic_year):
             'tot_lecturing': tot_lecturing,
             'tot_practical': tot_practical}
 
-
-@login_required
 def by_year(request, year):
     a_person = get_person(request.user)
     an_academic_year = None
@@ -275,7 +274,7 @@ def set_student_for_display(learning_unit_enrollment):
         'june_note': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE),
         'june_status': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_STATUS),
         'september_note': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE),
-        'september_status': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS,), }
+        'september_status': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS,) ,}
 
 
 def is_tutor(a_person):
@@ -303,3 +302,4 @@ def calculate_attribution_format_percentage_allocation_charge(a_learning_unit_ye
         percentage = attribution_allocation_charge(a_learning_unit_year, None, an_attribution) * 100 / duration
         return ONE_DECIMAL_FORMAT % (percentage,)
     return None
+
