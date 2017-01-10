@@ -36,7 +36,7 @@ class StudentPerformanceAdmin(admin.ModelAdmin):
     list_filter = ('registration_id', 'academic_year', 'acronym', )
     fieldsets = ((None, {'fields': ('registration_id', 'academic_year', 'acronym', 'update_date', 'creation_date', 'data')}),)
     readonly_fields = ('creation_date', )
-
+    search_fields = ['registration_id', 'academic_year', 'acronym']
 
 class StudentPerformance(models.Model):
     registration_id = models.CharField(max_length=10)
@@ -119,5 +119,9 @@ def find_by_pk(student_performance_pk):
     except ObjectDoesNotExist:
         result = None
     return result
+
+
+def find_by_acronym_and_academic_year(acronym, academic_year):
+    return StudentPerformance.objects.filter(acronym=acronym, academic_year=academic_year)
 
 
