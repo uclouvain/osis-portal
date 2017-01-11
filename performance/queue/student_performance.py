@@ -47,9 +47,9 @@ def callback(json_data):
 def update_exp_date_callback(json_data):
     try:
         json_data = json.loads(json_data.decode("utf-8"))
-        academic_year = json_data["academicYear"]
-        acronym = json_data["acronym"]
-        new_exp_date = json_data["expirationDate"]
+        academic_year = json_data.get("academicYear")
+        acronym = json_data.get("acronym")
+        new_exp_date = json_data.get("expirationDate")
         update_exp_date(academic_year, acronym, new_exp_date)
     except Exception:
         pass
@@ -112,7 +112,11 @@ def get_creation_date():
 
 def save(registration_id, academic_year, acronym, json_data):
     from performance.models.student_performance import update_or_create
-    update_date = get_expiration_date(academic_year)
+    if json_data.get("expirationDate"):
+        update_date = json_data.pop("expirationDate")
+        update_date = datetime.datetime.fromtimestamp(update_date / 1e3)
+    else:
+        update_date = get_expiration_date(academic_year)
     creation_date = get_creation_date()
     fields = {"data": json_data, "update_date": update_date, "creation_date": creation_date}
     try:
