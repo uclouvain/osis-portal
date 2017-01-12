@@ -74,7 +74,9 @@ class TutorChargeTest(TestCase):
             'acronym': ACRONYM,
             'title': TITLE,
             'academic_year': an_academic_yr,
-            'weight': WEIGHT})
+            'weight': WEIGHT,
+            'vacant' : True,
+            'in_charge': True})
         a_learning_unit_component_lecture = self.create_learning_unit_component(component_type.LECTURING,
                                                                                 LEARNING_UNIT_LECTURING_DURATION,
                                                                                 a_learning_unit_year)
@@ -83,8 +85,8 @@ class TutorChargeTest(TestCase):
                                                 LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION,
                                                 a_learning_unit_year)
         an_attribution = test_attribution.create_attribution({'function': function.CO_HOLDER,
-                                                        'learning_unit_year': a_learning_unit_year,
-                                                        'tutor': self.a_tutor})
+                                                              'learning_unit_year': a_learning_unit_year,
+                                                              'tutor': self.a_tutor})
         test_attribution_charge.create_attribution_charge(
             {'attribution': an_attribution,
              'learning_unit_component': a_learning_unit_component_lecture,
@@ -156,17 +158,6 @@ class TutorChargeTest(TestCase):
                                                                                        data=data)
         a_student_performance.save()
         return a_student_performance
-
-    def test_get_title(self):
-        self.assertEqual(tutor_charge.get_title_uppercase(self.get_data('learning_unit_year')), TITLE.upper())
-
-    def test_get_title_non_existing_learning_unit_year(self):
-        self.assertEqual(tutor_charge.get_title_uppercase(None), '')
-
-    def test_get_title_non_existing_title(self):
-        a_learning_unit_year_without_title = self.get_data('learning_unit_year')
-        a_learning_unit_year_without_title.title = None
-        self.assertEqual(tutor_charge.get_title_uppercase(a_learning_unit_year_without_title), '')
 
     def test_get_attribution_charge_lecturing_duration(self):
         self.assertEqual(tutor_charge.get_attribution_allocation_charge(self.a_tutor,

@@ -23,24 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
+from attribution import models as mdl_attribution
 
 
-def create_learning_unit_year(data):
-    learning_unit_year = mdl_base.learning_unit_year.LearningUnitYear()
-    if 'acronym' in data:
-        learning_unit_year.acronym = data['acronym']
-    if 'title' in data:
-        learning_unit_year.title = data['title']
-    if 'academic_year' in data:
-        learning_unit_year.academic_year = data['academic_year']
-    if 'weight' in data:
-        learning_unit_year.weight = data['weight']
-    if 'learning_unit' in data:
-        learning_unit_year.learning_unit = data['learning_unit']
-    if 'vacant' in data:
-        learning_unit_year.vacant = data['vacant']
-    if 'in_charge' in data:
-        learning_unit_year.in_charge = data['in_charge']
-    learning_unit_year.save()
-    return learning_unit_year
+def create_application_charge(data):
+    application_charge = mdl_attribution.application_charge.ApplicationCharge()
+    if 'tutor_application' in data:
+        application_charge.tutor_application = data['tutor_application']
+    if 'learning_unit_component' in data:
+        application_charge.learning_unit_component = data['learning_unit_component']
+    if 'allocation_charge' in data:
+        application_charge.allocation_charge = data['allocation_charge']
+    application_charge.save()
+    return application_charge

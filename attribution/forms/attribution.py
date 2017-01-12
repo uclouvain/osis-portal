@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,24 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
+from django import forms
 
 
-def create_learning_unit_year(data):
-    learning_unit_year = mdl_base.learning_unit_year.LearningUnitYear()
-    if 'acronym' in data:
-        learning_unit_year.acronym = data['acronym']
-    if 'title' in data:
-        learning_unit_year.title = data['title']
-    if 'academic_year' in data:
-        learning_unit_year.academic_year = data['academic_year']
-    if 'weight' in data:
-        learning_unit_year.weight = data['weight']
-    if 'learning_unit' in data:
-        learning_unit_year.learning_unit = data['learning_unit']
-    if 'vacant' in data:
-        learning_unit_year.vacant = data['vacant']
-    if 'in_charge' in data:
-        learning_unit_year.in_charge = data['in_charge']
-    learning_unit_year.save()
-    return learning_unit_year
+class AttributionForm(forms.Form):
+    year = forms.IntegerField()
+    next_year = forms.IntegerField()
+

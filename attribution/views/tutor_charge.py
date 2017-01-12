@@ -33,7 +33,7 @@ from performance import models as mdl_performance
 from base import models as mdl_base
 from attribution import models as mdl_attribution
 from base.models.enums import component_type
-from attribution.forms import AttributionForm
+from attribution.forms.attribution import AttributionForm
 from django.contrib.auth.decorators import login_required
 import json
 
@@ -43,7 +43,7 @@ ONE_DECIMAL_FORMAT = "%0.1f"
 MAIL_TO = 'mailto:'
 STUDENT_LIST_EMAIL_END = '@listes-student.uclouvain.be'
 DURATION_NUL = 0
-ALLOCATION_CHARGE_NUL = 0
+NO_ALLOCATION_CHARGE = 0
 
 JSON_LEARNING_UNIT_NOTE = 'note'
 JSON_LEARNING_UNIT_STATUS = 'etatExam'
@@ -62,23 +62,15 @@ def get_person(a_user):
     return mdl_base.person.find_by_user(a_user)
 
 
-def get_title_uppercase(learning_unit_year):
-    if learning_unit_year and learning_unit_year.title:
-        return learning_unit_year.title.upper()
-    return ''
-
-
 def get_attribution_allocation_charge(a_tutor, a_learning_unit_year, a_component_type):
-
     attribution_list = mdl_attribution.attribution.search(a_tutor, a_learning_unit_year)
-    tot_allocation_charge = ALLOCATION_CHARGE_NUL
+    tot_allocation_charge = NO_ALLOCATION_CHARGE
     for an_attribution in attribution_list:
         a_learning_unit_components = mdl_base.learning_unit_component.search(a_learning_unit_year, a_component_type)
         for a_learning_unit_component in a_learning_unit_components:
             attribution_charges = mdl_attribution.attribution_charge.search(an_attribution, a_learning_unit_component)
             for attribution_charge in attribution_charges:
                 tot_allocation_charge += attribution_charge.allocation_charge
-
     return tot_allocation_charge
 
 
@@ -109,15 +101,20 @@ def get_schedule_url(an_acronym):
 
 
 def list_attributions(a_person, an_academic_year):
-    return mdl_attribution.attribution\
+    results_in_charge = []
+    results = mdl_attribution.attribution \
         .find_by_tutor_year_order_by_acronym_function(mdl_base.tutor.find_by_person(a_person), an_academic_year)
+    for attribution in results:
+        if attribution.learning_unit_year.in_charge:
+            results_in_charge.append(attribution)
+    return results_in_charge
 
 
 def list_teaching_charge_attribution_representation(a_person, an_academic_year):
     attribution_list = []
     a_tutor = mdl_base.tutor.find_by_person(a_person)
-    tot_lecturing = ALLOCATION_CHARGE_NUL
-    tot_practical = ALLOCATION_CHARGE_NUL
+    tot_lecturing = NO_ALLOCATION_CHARGE
+    tot_practical = NO_ALLOCATION_CHARGE
     for an_attribution in list_attributions(a_person, an_academic_year):
         a_learning_unit_year = an_attribution.learning_unit_year
         tot_attribution_lecturing = attribution_allocation_charge(a_learning_unit_year,
@@ -130,7 +127,7 @@ def list_teaching_charge_attribution_representation(a_person, an_academic_year):
         tot_practical = tot_practical + tot_attribution_practical
         attribution_list.append(
             {'acronym': a_learning_unit_year.acronym,
-             'title': get_title_uppercase(a_learning_unit_year),
+             'title': a_learning_unit_year.title,
              'lecturing_allocation_charge':
                  ONE_DECIMAL_FORMAT % (tot_attribution_lecturing,),
              'practice_allocation_charge':
@@ -183,7 +180,8 @@ def set_formset_years(a_person):
     AttributionFormSet = formset_factory(AttributionForm, extra=0)
     initial_data = []
     for yr in get_attribution_years(a_person):
-        initial_data.append({'year': yr})
+        initial_data.append({'year': yr,
+                             'next_year': yr+1})
 
     return AttributionFormSet(initial=initial_data)
 
@@ -212,8 +210,8 @@ def show_students(request, a_learning_unit_year):
 
 def get_sessions_results(a_registration_id, a_learning_unit, offer_acronym):
     results = {}
-    academic_year = a_learning_unit.academic_year.year    
-    a_student_performance = mdl_performance.student_performance\
+    academic_year = a_learning_unit.academic_year.year
+    a_student_performance = mdl_performance.student_performance \
         .find_by_student_and_offer_year(a_registration_id, academic_year, offer_acronym)
 
     if a_student_performance:
@@ -289,7 +287,7 @@ def is_tutor(a_person):
 
 def attribution_allocation_charge(a_learning_unit_year, a_component_type, an_attribution):
 
-    tot_allocation_charge = ALLOCATION_CHARGE_NUL
+    tot_allocation_charge = NO_ALLOCATION_CHARGE
 
     a_learning_unit_components = mdl_base.learning_unit_component.search(a_learning_unit_year, a_component_type)
     for a_learning_unit_component in a_learning_unit_components:

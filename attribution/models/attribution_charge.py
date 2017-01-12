@@ -30,10 +30,9 @@ from osis_common.models.serializable_model import SerializableModel
 
 class AttributionChargeAdmin(admin.ModelAdmin):
     list_display = ('attribution', 'learning_unit_component', 'allocation_charge')
+    search_fields = ['attribution__tutor__person__first_name', 'attribution__tutor__person__last_name', 'attribution__learning_unit_year__acronym']
     raw_id_fields = ('attribution', 'learning_unit_component')
-    search_fields = ['attribution__tutor__person__first_name',
-                     'attribution__tutor__person__last_name',
-                     'learning_unit_component__learning_unit_year__acronym']
+
 
 class AttributionCharge(SerializableModel):
     attribution = models.ForeignKey('Attribution')
@@ -53,4 +52,4 @@ def search(attribution=None, learning_unit_component=None):
 
     if learning_unit_component:
         queryset = queryset.filter(learning_unit_component=learning_unit_component)
-    return queryset
+    return queryset.select_related('attribution', 'learning_unit_component')

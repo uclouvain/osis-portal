@@ -33,6 +33,9 @@ admin.site.register(academic_year.AcademicYear,
 admin.site.register(campus.Campus,
                     campus.CampusAdmin)
 
+admin.site.register(learning_unit.LearningUnit,
+                    learning_unit.LearningUnitAdmin)
+
 admin.site.register(learning_unit_year.LearningUnitYear,
                     learning_unit_year.LearningUnitYearAdmin)
 

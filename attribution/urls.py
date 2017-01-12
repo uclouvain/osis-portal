@@ -24,11 +24,21 @@
 #
 ##############################################################################
 from django.conf.urls import url
-from attribution.views import tutor_charge
+from attribution.views import tutor_charge, online_application
 
 urlpatterns = [
+
     url(r'^$', tutor_charge.home, name='attribution_home'),
-    url(r'^charge/$', tutor_charge.by_year, name='attributions_by_year'),
-    url(r'^load/([0-9]+)/$', tutor_charge.by_year, name='attributions_by_year'),
+    url(r'^charge/([0-9]+)/$', tutor_charge.by_year, name='attributions_by_year'),
     url(r'^students/([0-9]+)/$', tutor_charge.show_students, name='attribution_students'),
+    url(r'^applications/$', online_application.home, name='learning_unit_applications'),
+    url(r'^applications/([0-9]+)/delete/$', online_application.delete, name='delete_tutor_application'),
+    url(r'^applications/([0-9]+)/edit/$', online_application.edit, name='edit_tutor_application'),
+    url(r'^applications/([0-9]+)/save/$', online_application.save, name='save_tutor_application'),
+    url(r'^applications/create/$', online_application.save_on_new_learning_unit, name='save_new_tutor_application'),
+
+    url(r'^applications/new/$', online_application.attribution_application_form, name='tutor_application_create'),
+    url(r'^search/$', online_application.search, name='vacant_learning_unit_search'),
+    url(r'^applications/renew/$', online_application.renew, name='renew'),
+    url(r'^applications/new/(?:([0-9]+)/)?$', online_application.new, name='new'),
 ]

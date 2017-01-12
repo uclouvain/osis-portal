@@ -240,3 +240,6 @@ msgstr "de"
 
 msgid "no_record"
 msgstr "Pas d'enregistrement"
+
+msgid "confirm_application_delete"
+msgstr "Etes-vous sûr de vouloir supprimer la candidature?"

@@ -21,16 +21,16 @@ msgid "tutor_charge"
 msgstr "Charge d'enseignement"
 
 msgid "code"
-msgstr "Code"
+msgstr "Sigle"
 
 msgid "title"
 msgstr "Intitulé"
 
 msgid "lecturing_hours"
-msgstr "Cours magistral"
+msgstr "Vol.1"
 
 msgid "practical_hours"
-msgstr "Travaux pratique"
+msgstr "Vol.2"
 
 msgid "students"
 msgstr "Etudiants"
@@ -139,3 +139,121 @@ msgstr "Ma charge d'enseignement"
 
 msgid "desc_lnk_my_teaching_charge"
 msgstr "Consultez la charge d'enseignement."
+
+msgid "my_charges"
+msgstr "Mes charges"
+
+msgid "my_applications"
+msgstr "Mes candidatures"
+
+msgid "delete"
+msgstr "Supprimer"
+
+msgid "create_an_tutor_application"
+msgstr "Nouvelle candidature"
+
+msgid "my_charges_vacant"
+msgstr "Mes charges échues"
+
+msgid "renew"
+msgstr "Reconduire"
+
+msgid "renewal"
+msgstr "Reconduction"
+
+msgid "lecturing_hours_allocated"
+msgstr "Vol.1"
+
+msgid "practical_hours_allocated"
+msgstr "Vol.2"
+
+msgid "start"
+msgstr "Début"
+
+msgid "end"
+msgstr "Fin"
+
+msgid "lecturing_hours_asked"
+msgstr "Vol.1"
+
+msgid "practical_hours_asked"
+msgstr "Vol.2"
+
+msgid "lecturing_hours_vacant"
+msgstr "Vol.1 vacant"
+
+msgid "practical_hours_vacant"
+msgstr "Vol.2 vacant"
+
+msgid "application"
+msgstr "Candidature"
+
+msgid "remark"
+msgstr "Remarque"
+
+msgid "course_summary"
+msgstr "Résumé de cours"
+
+msgid "submit"
+msgstr "Soumettre"
+
+msgid "not_positive"
+msgstr "Doit être positif"
+
+msgid "entering"
+msgstr "Vous avez introduit"
+
+msgid "250_characters_max"
+msgstr "Max 250 caractères pour une remarque"
+
+msgid "too_much"
+msgstr "Trop élevé"
+
+msgid "learning_unit_vacant"
+msgstr "Cours vacant"
+
+msgid "team"
+msgstr "Equipe"
+
+msgid "PROFESSOR"
+msgstr "Professeur"
+
+msgid "already_candidated"
+msgstr "Candidature déjà existante"
+
+msgid "select_all"
+msgstr "Sélectionne/déselectionne toutes les attributions pour reconduire"
+
+msgid "total"
+msgstr "Total"
+
+msgid "vacant"
+msgstr "Vacant"
+
+msgid "charge"
+msgstr "Charge"
+
+msgid "no_activity"
+msgstr "Pas d'activité vacante correspondante"
+
+msgid "team_mngt_no_application_possible"
+msgstr "Ce cours est géré en équipe. La candidature des équipes d'enseignants s'effectue via la procédure papier."
+
+msgid "desc_lnk_my_applications"
+msgstr "Posez des candidatures aux cours vacants."
+
+
+msgid "my_application"
+msgstr "Ma candidature"
+
+msgid "without_application"
+msgstr "(sans candidature)"
+
+msgid "no_application_possible"
+msgstr "Vous avez déjà candidaté pour ce cours."
+
+msgid "course_search"
+msgstr "Recherche de cours vacant"
+
+msgid "vacant_learning_unit_year_search"
+msgstr "Veuillez introduire le sigle du cours pour lequel vous voulez postuler"

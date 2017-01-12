@@ -25,49 +25,45 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-from base.models.enums import component_type
 from osis_common.models.serializable_model import SerializableModel
+from django.core.exceptions import ObjectDoesNotExist
 
 
-class LearningUnitComponentAdmin(admin.ModelAdmin):
-    list_display = ('learning_unit_year', 'type', 'duration')
-    fieldsets = ((None, {'fields': ('learning_unit_year', 'type', 'duration')}),)
+class ApplicationChargeAdmin(admin.ModelAdmin):
+    list_display = ('tutor_application', 'learning_unit_component', 'allocation_charge')
 
 
-class LearningUnitComponent(SerializableModel):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    learning_unit_year = models.ForeignKey('LearningUnitYear')
-    type = models.CharField(max_length=25, blank=True, null=True, choices=component_type.COMPONENT_TYPES, db_index=True)
-    duration = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+class ApplicationCharge(SerializableModel):
+    tutor_application = models.ForeignKey('TutorApplication')
+    learning_unit_component = models.ForeignKey('base.LearningUnitComponent')
+    allocation_charge = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
-        return u"%s - %s" % (self.type, self.learning_unit_year)
-
-    class Meta:
-        permissions = (
-            ("can_access_learningunit", "Can access learning unit"),
-        )
+        return u"%s" % str(self.tutor_application)
 
 
-def search(a_learning_unit_year=None, a_type=None):
-    queryset = LearningUnitComponent.objects
+def find_by_id(an_id):
+    return ApplicationCharge.objects.get(pk=an_id)
 
-    if a_learning_unit_year:
-        queryset = queryset.filter(learning_unit_year=a_learning_unit_year)
 
-    if a_type:
-        queryset = queryset.filter(type=a_type)
+def search(a_tutor_application=None, a_learning_unit_component=None):
+
+    queryset = ApplicationCharge.objects
+
+    if a_tutor_application:
+        queryset = queryset.filter(tutor_application=a_tutor_application)
+
+    if a_learning_unit_component:
+        queryset = queryset.filter(learning_unit_component=a_learning_unit_component)
+
     return queryset
 
 
-def find_by_learning_year_type(a_learning_unit_year=None, a_type=None):
-    if a_learning_unit_year and a_type:
+def find_by_tutor_application_learning_unit_component(a_tutor_application, a_learning_unit_component):
+    if a_tutor_application and a_learning_unit_component:
         try:
-            return LearningUnitComponent.objects.get(learning_unit_year=a_learning_unit_year,
-                                                 type=a_type)
+            return ApplicationCharge.objects.get(tutor_application=a_tutor_application,
+                                             learning_unit_component=a_learning_unit_component)
         except ObjectDoesNotExist:
             return None
     return None
-
-
-

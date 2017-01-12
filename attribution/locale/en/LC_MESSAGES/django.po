@@ -27,10 +27,10 @@ msgid "title"
 msgstr "Title"
 
 msgid "lecturing_hours"
-msgstr "Lecturing hours"
+msgstr "Vol.1"
 
 msgid "practical_hours"
-msgstr "Pratical hours"
+msgstr "Vol.2"
 
 msgid "students"
 msgstr "Students"
@@ -139,3 +139,122 @@ msgstr "My teaching charge."
 
 msgid "desc_lnk_my_teaching_charge"
 msgstr "Consult my teaching charge."
+
+msgid "my_charges"
+msgstr "My charges"
+
+msgid "my_applications"
+msgstr "My applications"
+
+msgid "delete"
+msgstr "Delete"
+
+msgid "create_an_tutor_application"
+msgstr "New application"
+
+msgid "my_charges_vacant"
+msgstr "My charges now vacant"
+
+msgid "renew"
+msgstr "Renew"
+
+msgid "renewal"
+msgstr "Renewal"
+
+msgid "lecturing_hours_allocated"
+msgstr "Vol.1"
+
+msgid "practical_hours_allocated"
+msgstr "Vol.2"
+
+msgid "start"
+msgstr "Start"
+
+msgid "end"
+msgstr "End"
+
+msgid "lecturing_hours_asked"
+msgstr "Vol.1"
+
+msgid "practical_hours_asked"
+msgstr "Vol.2"
+
+msgid "lecturing_hours_vacant"
+msgstr "Vol.1 vacant "
+
+msgid "practical_hours_vacant"
+msgstr "Vol.2 vacant"
+
+msgid "application"
+msgstr "Application"
+
+msgid "remark"
+msgstr "Remark"
+
+msgid "course_summary"
+msgstr "Course summary"
+
+msgid "submit"
+msgstr "Submit"
+
+msgid "not_positive"
+msgstr "Must be positive"
+
+msgid "entering"
+msgstr "You've entered"
+
+msgid "250_characters_max"
+msgstr "Max 250 characters for a remark"
+
+msgid "too_much"
+msgstr "Too much"
+
+msgid "learning_unit_vacant"
+msgstr "Vacant learning unit"
+
+msgid "team"
+msgstr "Team"
+
+msgid "PROFESSOR"
+msgstr "Professor"
+
+msgid "already_candidated"
+msgstr "Already candidated"
+
+msgid "select_all"
+msgstr "Select/deselect all attributions to renew"
+
+msgid "total"
+msgstr "Total"
+
+msgid "vacant"
+msgstr "Vacant"
+
+msgid "charge"
+msgstr "Charge"
+
+msgid "no_vacant_activity"
+msgstr "No vacant corresponding course"
+
+msgid "team_mngt_no_application_possible"
+msgstr "This course is team-managed. The application to this activity is based on a paper transmission."
+
+msgid "desc_lnk_my_applications"
+msgstr "Apply to vacant courses."
+
+msgid "my_application"
+msgstr "My application"
+
+msgid "without_application"
+msgstr "(without application)"
+
+msgid "no_application_possible"
+msgstr "You already apply to this course."
+
+msgid "course_search"
+msgstr "Vacant course search"
+
+msgid "vacant_learning_unit_year_search"
+msgstr "Please enter the code of the course to which you would like to apply"
+
+
