@@ -48,12 +48,12 @@
             <td>{{ attribution.acronym }}</td>
             <td>{{ attribution.title }}</td>
             <td>{% if attribution.team %}<input type='checkbox' checked readonly>{% else %}{% endif %}</td>
-            <td>{% if attribution.lecturing_duration > 0 %}{{ attribution.lecturing_duration | default_if_none:''}}{% endif %}</td>
-            <td>{% if attribution.practice_duration > 0 %}{{ attribution.practice_duration | default_if_none:''}}{% endif %}</td>
+            <td>{{ attribution.lecturing_duration | default_if_none:''}}</td>
+            <td>{{ attribution.practice_duration | default_if_none:''}}</td>
             <td>{{ attribution.start_academic_year | default_if_none:''}}</td>
             <td>{{ attribution.end_academic_year | default_if_none:''}}</td>
-            <td style="border-left-style: solid;border-left-width:1px;">{% if attribution.attribution_charge_lecturing > 0 %}{{ attribution.attribution_charge_lecturing }}{% endif %}</td>
-            <td>{% if attribution.attribution_charge_practical > 0 %}{{ attribution.attribution_charge_practical }}{% endif %}</td>
+            <td style="border-left-style: solid;border-left-width:1px;">{{ attribution.attribution_charge_lecturing| default_if_none:'' }}</td>
+            <td>{{ attribution.attribution_charge_practical| default_if_none:'' }}</td>
             <td>{% trans attribution.function %}</td>
         </tr>
 
