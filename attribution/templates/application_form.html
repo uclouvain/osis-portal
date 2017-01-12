@@ -88,13 +88,12 @@
                         <span name="max_charge_lecturing" style="visibility:hidden;display:none;">{{ form.max_charge_lecturing }}</span>
                         {{ application.vacant_attribution_charge_lecturing | default_if_none:''}}
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-6">
                         <label>{% trans 'practical_hours_vacant' %}</label>
                         <br>
                         <span name="max_charge_practical" style="visibility:hidden;display:none;">{{ form.max_charge_practical}}</span>
                         {{ application.vacant_attribution_charge_practical | default_if_none:'' }}
                     </div>
-                    <div class="col-md-4"></div>
                 </div>
                 <br>
 
@@ -117,7 +116,7 @@
                                value="{{ form.charge_practical.value | default_if_none:'' }}">
                         {% if form.charge_practical.errors %}<span class="error">{{ form.charge_practical.errors|striptags }}</span>{% endif %}
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-8">
                         <label>{% trans 'function' %}</label>
                         <br>
                         {% if application.tutor_application.function  %}
@@ -125,8 +124,7 @@
                         {% else %}
                             -
                         {% endif %}
-                    </div>
-                    <div class="col-md-4"></div>
+                    </div>                 
                 </div>
 
                 <br>
