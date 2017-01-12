@@ -49,11 +49,6 @@ class AcademicYear(SerializableModel):
         return u"%s-%s" % (self.year, self.year + 1)
 
 
-def next_academic_year(self):
-    next_year = self.year + 1
-    return AcademicYear.objects.filter(year=next_year)
-
-
 def find_academic_years():
     return AcademicYear.objects.all().order_by('year')
 
@@ -75,4 +70,12 @@ def find_by_year(a_year):
     try:
         return AcademicYear.objects.get(year=a_year)
     except ObjectDoesNotExist:
+        return None
+
+
+def next_academic_year():
+    academic_yr = current_academic_year()
+    if academic_yr:
+        return find_by_year(academic_yr.year+1)
+    else:
         return None
