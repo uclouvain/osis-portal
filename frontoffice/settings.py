@@ -306,4 +306,3 @@ if 'admission' in INSTALLED_APPS:
 ADE_MAIN_URL='http://horairev6.uclouvain.be/direct/index.jsp?displayConfName=WEB&showTree=false&showOptions=false&weeks=0&login=enseignant&password=prof&projectId={0}&code={1}'
 ADE_PROJET_NUMBER = '21'
 UCL_URL="http://www.uclouvain.be/cours-{0}-{1}.html"
-APPLICATION_YEAR = 2017

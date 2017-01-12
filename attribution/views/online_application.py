@@ -66,9 +66,17 @@ RENEW = "renew"
 TEAM = 'team'
 START_ACADEMIC_YEAR = 'start_academic_year'
 END_ACADEMIC_YEAR = 'end_academic_year'
-CHARGE_NUL = 0
+NO_CHARGE = 0
 
-APPLICATION_YEAR = settings.APPLICATION_YEAR
+
+def get_application_year():
+    next_academic_year = mdl_base.academic_year.next_academic_year()
+    if next_academic_year:
+        return next_academic_year.year
+    return None
+
+
+APPLICATION_YEAR = get_application_year()
 YEAR_OVER = APPLICATION_YEAR-1
 
 
@@ -216,7 +224,7 @@ def sum_tutor_application_allocated_charges(a_tutor_application):
 def get_vacant_attribution_allocation_charge(a_learning_unit_year, a_component_type):
     if a_learning_unit_year:
         return get_learning_unit_component_duration(a_learning_unit_year, a_component_type) - tutor_charge.get_attribution_allocation_charge(None, a_learning_unit_year, a_component_type)
-    return CHARGE_NUL
+    return NO_CHARGE
 
 
 def get_tutor_applications(a_year, a_tutor):
@@ -639,7 +647,7 @@ def sum_application_charge_allocation_by_component(a_tutor_application, a_compon
     attribution_charge = mdl_attribution.application_charge.find_by_tutor_application_learning_unit_component(a_tutor_application, a_learning_unit_component)
     if attribution_charge:
         return attribution_charge.allocation_charge
-    return CHARGE_NUL
+    return NO_CHARGE
 
 
 def existing_tutor_application_for_next_year(a_tutor, a_learning_unit_year):
@@ -649,3 +657,5 @@ def existing_tutor_application_for_next_year(a_tutor, a_learning_unit_year):
         return True
 
     return False
+
+

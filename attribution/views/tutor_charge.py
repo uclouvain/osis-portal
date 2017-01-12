@@ -43,7 +43,7 @@ ONE_DECIMAL_FORMAT = "%0.1f"
 MAIL_TO = 'mailto:'
 STUDENT_LIST_EMAIL_END = '@listes-student.uclouvain.be'
 DURATION_NUL = 0
-ALLOCATION_CHARGE_NUL = 0
+NO_ALLOCATION_CHARGE = 0
 
 JSON_LEARNING_UNIT_NOTE = 'note'
 JSON_LEARNING_UNIT_STATUS = 'etatExam'
@@ -64,7 +64,7 @@ def get_person(a_user):
 
 def get_attribution_allocation_charge(a_tutor, a_learning_unit_year, a_component_type):
     attribution_list = mdl_attribution.attribution.search(a_tutor, a_learning_unit_year)
-    tot_allocation_charge = ALLOCATION_CHARGE_NUL
+    tot_allocation_charge = NO_ALLOCATION_CHARGE
     for an_attribution in attribution_list:
         a_learning_unit_components = mdl_base.learning_unit_component.search(a_learning_unit_year, a_component_type)
         for a_learning_unit_component in a_learning_unit_components:
@@ -113,8 +113,8 @@ def list_attributions(a_person, an_academic_year):
 def list_teaching_charge_attribution_representation(a_person, an_academic_year):
     attribution_list = []
     a_tutor = mdl_base.tutor.find_by_person(a_person)
-    tot_lecturing = ALLOCATION_CHARGE_NUL
-    tot_practical = ALLOCATION_CHARGE_NUL
+    tot_lecturing = NO_ALLOCATION_CHARGE
+    tot_practical = NO_ALLOCATION_CHARGE
     for an_attribution in list_attributions(a_person, an_academic_year):
         a_learning_unit_year = an_attribution.learning_unit_year
         tot_attribution_lecturing = attribution_allocation_charge(a_learning_unit_year,
@@ -285,7 +285,7 @@ def is_tutor(a_person):
 
 def attribution_allocation_charge(a_learning_unit_year, a_component_type, an_attribution):
 
-    tot_allocation_charge = ALLOCATION_CHARGE_NUL
+    tot_allocation_charge = NO_ALLOCATION_CHARGE
 
     a_learning_unit_components = mdl_base.learning_unit_component.search(a_learning_unit_year, a_component_type)
     for a_learning_unit_component in a_learning_unit_components:
