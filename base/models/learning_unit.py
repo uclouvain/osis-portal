@@ -54,10 +54,6 @@ def find_by_id(learning_unit_id):
     return LearningUnit.objects.get(pk=learning_unit_id)
 
 
-def find_by_ids(learning_unit_ids):
-    return LearningUnit.objects.filter(pk__in=learning_unit_ids)
-
-
 def search(acronym=None):
     queryset = LearningUnit.objects
 

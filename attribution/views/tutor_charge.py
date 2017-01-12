@@ -147,6 +147,8 @@ def list_teaching_charge_attribution_representation(a_person, an_academic_year):
             'tot_lecturing': tot_lecturing,
             'tot_practical': tot_practical}
 
+
+@login_required
 def by_year(request, year):
     a_person = get_person(request.user)
     an_academic_year = None

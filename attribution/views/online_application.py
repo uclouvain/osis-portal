@@ -77,7 +77,7 @@ def get_application_year():
 
 
 APPLICATION_YEAR = get_application_year()
-YEAR_OVER = APPLICATION_YEAR-1
+LAST_YEAR = APPLICATION_YEAR-1
 
 
 def get_year(a_year):
@@ -266,7 +266,7 @@ def get_end_date(an_academic_year):
 
 
 def create_application_charge(a_new_tutor_application, charge_duration, a_component_type):
-    a_learning_unit_component = mdl_base.learning_unit_component.find_first(a_new_tutor_application.learning_unit_year,
+    a_learning_unit_component = mdl_base.learning_unit_component.find_by_learning_year_type(a_new_tutor_application.learning_unit_year,
                                                                             a_component_type)
 
     if a_learning_unit_component:
@@ -328,7 +328,7 @@ def home(request):
 
 
 def get_tutor_application_charge(a_component_type, a_tutor_application):
-    a_learning_unit_component = mdl_base.learning_unit_component.find_first(a_tutor_application.learning_unit_year,
+    a_learning_unit_component = mdl_base.learning_unit_component.find_by_learning_year_type(a_tutor_application.learning_unit_year,
                                                                             a_component_type)
 
     return mdl_attribution.application_charge.find_by_tutor_application_learning_unit_component(a_tutor_application, a_learning_unit_component)
@@ -362,12 +362,12 @@ def delete(request, tutor_application_id):
 def attribution_application_form(request):
     a_tutor = mdl_base.tutor.find_by_user(request.user)
 
-    attributions = get_terminating_charges(YEAR_OVER, a_tutor)
+    attributions = get_terminating_charges(LAST_YEAR, a_tutor)
     return render(request, "attribution_application_form.html", {
         'application': None,
         'attributions': attributions,
         'application_academic_year': "{0}-{1}".format(APPLICATION_YEAR, APPLICATION_YEAR + 1),
-        'over_academic_year': "{0}-{1}".format(YEAR_OVER, YEAR_OVER + 1)})
+        'over_academic_year': "{0}-{1}".format(LAST_YEAR, LAST_YEAR + 1)})
 
 
 @login_required
@@ -483,7 +483,7 @@ def save_on_new_learning_unit(request):
     else:
         return render(request, "application_form.html", {
             'application': get_application_informations(new_tutor_application),
-            'attributions': get_terminating_charges(YEAR_OVER, new_tutor_application.tutor),
+            'attributions': get_terminating_charges(LAST_YEAR, new_tutor_application.tutor),
             'form': form})
 
 
@@ -517,13 +517,13 @@ def save(request, tutor_application_id):
     else:
         return render(request, "application_form.html", {
             'application': get_application_informations(tutor_application_to_save),
-            'attributions': get_terminating_charges(YEAR_OVER, tutor_application_to_save.tutor),
+            'attributions': get_terminating_charges(LAST_YEAR, tutor_application_to_save.tutor),
             'form': form})
 
 
 def application_charge_create(a_tutor_application, a_charge, a_component_type):
     a_learning_unit_year = a_tutor_application.learning_unit_year
-    a_learning_unit_component = mdl_base.learning_unit_component.find_first(a_learning_unit_year, a_component_type)
+    a_learning_unit_component = mdl_base.learning_unit_component.find_by_learning_year_type(a_learning_unit_year, a_component_type)
     if a_tutor_application and a_learning_unit_component and a_learning_unit_year:
         application_charge = mdl_attribution.application_charge\
             .ApplicationCharge(tutor_application=a_tutor_application,
@@ -642,7 +642,7 @@ def create_tutor_application_from_learning_unit_year(a_learning_unit_year=None, 
 
 
 def sum_application_charge_allocation_by_component(a_tutor_application, a_component_type):
-    a_learning_unit_component = mdl_base.learning_unit_component.find_first(a_tutor_application.learning_unit_year,
+    a_learning_unit_component = mdl_base.learning_unit_component.find_by_learning_year_type(a_tutor_application.learning_unit_year,
                                                                             a_component_type)
     attribution_charge = mdl_attribution.application_charge.find_by_tutor_application_learning_unit_component(a_tutor_application, a_learning_unit_component)
     if attribution_charge:

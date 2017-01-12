@@ -57,7 +57,7 @@ def get_tutor_info(a_tutor_external_id):
 
 def get_allocation_charge(a_tutor_application, a_component_type):
     if a_component_type and a_tutor_application:
-        a_learning_unit_component = mdl_base.learning_unit_component.find_first(a_tutor_application.learning_unit_year,
+        a_learning_unit_component = mdl_base.learning_unit_component.find_by_learning_year_type(a_tutor_application.learning_unit_year,
                                                                                 a_component_type)
         if a_learning_unit_component:
             an_application_charge = mdl_attribution.application_charge.find_by_tutor_application_learning_unit_component(a_tutor_application,
@@ -83,7 +83,6 @@ def get_learning_unit_year(a_learning_unit_year_external_id):
     if a_learning_unit_year_external_id:
         external_id_array = str(a_learning_unit_year_external_id).split('_')
         if len(external_id_array) >= 2:
-
             return external_id_array[-1]
     return None
 
