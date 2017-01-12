@@ -74,7 +74,6 @@ def get_learning_unit_reference(a_learning_unit_year_external_id):
         external_id_array = str(a_learning_unit_year_external_id).split('_')
         if len(external_id_array) >= 2:
             return external_id_array[-2]
-
     return None
 
 

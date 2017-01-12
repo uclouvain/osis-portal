@@ -73,9 +73,9 @@ def find_by_year(a_year):
         return None
 
 
-def next_academic_year():
+def find_next_academic_year():
     academic_yr = current_academic_year()
     if academic_yr:
-        return find_by_year(academic_yr.year+1)
+        return academic_yr.year + 1
     else:
         return None

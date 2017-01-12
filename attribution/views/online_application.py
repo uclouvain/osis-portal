@@ -68,15 +68,7 @@ START_ACADEMIC_YEAR = 'start_academic_year'
 END_ACADEMIC_YEAR = 'end_academic_year'
 NO_CHARGE = 0
 
-
-def get_application_year():
-    next_academic_year = mdl_base.academic_year.next_academic_year()
-    if next_academic_year:
-        return next_academic_year.year
-    return None
-
-
-APPLICATION_YEAR = get_application_year()
+APPLICATION_YEAR = mdl_base.academic_year.find_next_academic_year()
 LAST_YEAR = APPLICATION_YEAR-1
 
 
