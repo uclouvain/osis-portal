@@ -26,7 +26,7 @@
 {% endcomment %}
 <div class="row pull-right">
     <form method="get" action="{% url 'vacant_learning_unit_search'%}">
-        <div class="col-md-5">
+        <div class="col-md-9">
             <label for="txt_acronym">{% trans 'code' %}</label>
             <input class="form-control" id="txt_acronym" placeholder="{% trans 'acronym' %}"
                    name="learning_unit_acronym"
@@ -35,7 +35,7 @@
         <div class="col-md-3">
             <br>
             <button type="submit" id="bt_submit_vacant_learning_unit_search" class="btn btn-primary" role="button"
-                    title="{% trans 'vacant_learning_unit_year_search' %}">
+                    title="{% trans 'vacant_learning_unit_year_search' %}" type="submit">
                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
         </div>
     </form>

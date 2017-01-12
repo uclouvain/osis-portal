@@ -79,7 +79,7 @@
                     <td style="border-left-style: solid;border-left-width:1px;">{% if attribution.vacant_attribution_charge_lecturing > 0 %}{{ attribution.vacant_attribution_charge_lecturing }}{% endif %}</td>
                     <td>{% if attribution.vacant_attribution_charge_practical > 0 %}{{ attribution.vacant_attribution_charge_practical }}{% endif %}</td>
                     <td>
-                        <button id="bt_submit_attribution_new" class="btn btn-primary pull-right" role="button"
+                        <button id="bt_submit_attribution_new" class="btn btn-primary pull-right" role="button" type="submit"
                                 {% if not attribution.team_application_possible or not attribution.application_possible %} disabled{% endif %}>
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </button>
