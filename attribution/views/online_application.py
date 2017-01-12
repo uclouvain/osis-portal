@@ -69,7 +69,7 @@ END_ACADEMIC_YEAR = 'end_academic_year'
 NO_CHARGE = 0
 
 APPLICATION_YEAR = mdl_base.academic_year.find_next_academic_year()
-LAST_YEAR = APPLICATION_YEAR-1
+LAST_YEAR = APPLICATION_YEAR - 1
 NEXT_YEAR = APPLICATION_YEAR + 1
 
 def get_year(a_year):
