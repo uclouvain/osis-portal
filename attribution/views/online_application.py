@@ -68,9 +68,6 @@ START_ACADEMIC_YEAR = 'start_academic_year'
 END_ACADEMIC_YEAR = 'end_academic_year'
 NO_CHARGE = 0
 
-APPLICATION_YEAR = mdl_base.academic_year.find_next_academic_year()
-LAST_YEAR = APPLICATION_YEAR - 1
-NEXT_YEAR = APPLICATION_YEAR + 1
 
 def get_year(a_year):
     if a_year:
@@ -302,8 +299,9 @@ def get_terminating_charges(a_year, a_tutor):
 
 @login_required
 def home(request):
+    application_year = mdl_base.academic_year.find_next_academic_year()
     a_tutor = mdl_base.tutor.find_by_user(request.user)
-    attributions = get_attributions_allocated(APPLICATION_YEAR, a_tutor)
+    attributions = get_attributions_allocated(application_year, a_tutor)
     tot_lecturing = 0
     tot_practical = 0
     if attributions:
@@ -312,9 +310,9 @@ def home(request):
             tot_practical = tot_practical + attribution_informations[ATTRIBUTION_CHARGE_PRACTICAL]
     return render(request, "attribution_applications.html", {
         'user': request.user,
-        'applications': get_tutor_applications(APPLICATION_YEAR, a_tutor),
+        'applications': get_tutor_applications(application_year, a_tutor),
         'attributions': attributions,
-        'academic_year': "{0}-{1}".format(APPLICATION_YEAR, APPLICATION_YEAR+1),
+        'academic_year': "{0}-{1}".format(application_year, application_year + 1),
         'tot_lecturing': tot_lecturing,
         'tot_practical': tot_practical})
 
@@ -353,25 +351,27 @@ def delete(request, tutor_application_id):
 @login_required
 def attribution_application_form(request):
     a_tutor = mdl_base.tutor.find_by_user(request.user)
+    last_year = get_last_year()
 
-    attributions = get_terminating_charges(LAST_YEAR, a_tutor)
+    attributions = get_terminating_charges(last_year, a_tutor)
+    application_year = mdl_base.academic_year.find_next_academic_year()
     return render(request, "attribution_application_form.html", {
         'application': None,
         'attributions': attributions,
-        'application_academic_year': "{0}-{1}".format(APPLICATION_YEAR, NEXT_YEAR),
-        'over_academic_year': "{0}-{1}".format(LAST_YEAR, LAST_YEAR + 1)})
+        'application_academic_year': "{0}-{1}".format(application_year, application_year + 1),
+        'over_academic_year': "{0}-{1}".format(last_year, last_year + 1)})
 
 
 @login_required
 def search(request):
     learning_unit_acronym = request.GET['learning_unit_acronym']
     a_tutor = mdl_base.tutor.find_by_user(request.user)
-
+    application_year = mdl_base.academic_year.find_next_academic_year()
     if learning_unit_acronym and len(learning_unit_acronym.strip()) > 0:
         return render(request, "attribution_vacant.html", {
-            'attribution': get_learning_unit_year_vacant(APPLICATION_YEAR, learning_unit_acronym, a_tutor)})
+            'attribution': get_learning_unit_year_vacant(application_year, learning_unit_acronym, a_tutor)})
     else:
-        attributions = get_terminating_charges(APPLICATION_YEAR, a_tutor)
+        attributions = get_terminating_charges(application_year, a_tutor)
         return render(request, "attribution_application_form.html", {
             'application': None,
             'attributions': attributions})
@@ -475,7 +475,7 @@ def save_on_new_learning_unit(request):
     else:
         return render(request, "application_form.html", {
             'application': get_application_informations(new_tutor_application),
-            'attributions': get_terminating_charges(LAST_YEAR, new_tutor_application.tutor),
+            'attributions': get_terminating_charges(get_last_year(), new_tutor_application.tutor),
             'form': form})
 
 
@@ -509,7 +509,7 @@ def save(request, tutor_application_id):
     else:
         return render(request, "application_form.html", {
             'application': get_application_informations(tutor_application_to_save),
-            'attributions': get_terminating_charges(LAST_YEAR, tutor_application_to_save.tutor),
+            'attributions': get_terminating_charges(get_last_year(), tutor_application_to_save.tutor),
             'form': form})
 
 
@@ -651,3 +651,13 @@ def existing_tutor_application_for_next_year(a_tutor, a_learning_unit_year):
     return False
 
 
+def get_last_year():
+    application_year = mdl_base.academic_year.find_next_academic_year()
+    if application_year:
+        return application_year - 1
+
+
+def get_next_year():
+    application_year = mdl_base.academic_year.find_next_academic_year()
+    if application_year:
+        return application_year + 1
