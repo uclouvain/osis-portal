@@ -130,7 +130,8 @@ def get_attribution_informations(an_attribution):
                 get_vacant_attribution_allocation_charge(next_learning_unit_year, component_type.LECTURING),
             VACANT_ATTRIBUTION_CHARGE_PRACTICAL:
                 get_vacant_attribution_allocation_charge(next_learning_unit_year, component_type.PRACTICAL_EXERCISES),
-            TUTOR_APPLICATION: get_first_application_tutor(a_tutor, a_learning_unit_year)}
+            TUTOR_APPLICATION: mdl_attribution.tutor_application.find_tutor_learning_unit_year(a_tutor,
+                                                                                               next_learning_unit_year)}
 
 
 def get_application_informations(a_tutor_application):
@@ -322,7 +323,7 @@ def get_tutor_application_charge(a_component_type, a_tutor_application):
     a_learning_unit_component = mdl_base.learning_unit_component.find_first(a_tutor_application.learning_unit_year,
                                                                             a_component_type)
 
-    return mdl_attribution.application_charge.find_first(a_tutor_application, a_learning_unit_component)
+    return mdl_attribution.application_charge.find_by_tutor_application_learning_unit_component(a_tutor_application, a_learning_unit_component)
 
 
 def get_application_charge(a_tutor, a_learning_unit_year, a_component_type):
@@ -564,7 +565,7 @@ def is_team_application_possible(a_learning_unit_year):
 
 
 def is_application_possible(a_learning_unit_year, a_tutor):
-    a_tutor_application = mdl_attribution.tutor_application.find_first(a_tutor, a_learning_unit_year)
+    a_tutor_application = mdl_attribution.tutor_application.find_tutor_learning_unit_year(a_tutor, a_learning_unit_year)
     if a_tutor_application:
         return False
     return True
@@ -635,7 +636,7 @@ def create_tutor_application_from_learning_unit_year(a_learning_unit_year=None, 
 def sum_application_charge_allocation_by_component(a_tutor_application, a_component_type):
     a_learning_unit_component = mdl_base.learning_unit_component.find_first(a_tutor_application.learning_unit_year,
                                                                             a_component_type)
-    attribution_charge = mdl_attribution.application_charge.find_first(a_tutor_application, a_learning_unit_component)
+    attribution_charge = mdl_attribution.application_charge.find_by_tutor_application_learning_unit_component(a_tutor_application, a_learning_unit_component)
     if attribution_charge:
         return attribution_charge.allocation_charge
     return CHARGE_NUL
@@ -648,7 +649,3 @@ def existing_tutor_application_for_next_year(a_tutor, a_learning_unit_year):
         return True
 
     return False
-
-
-def get_first_application_tutor(a_tutor, a_learning_unit_year):
-    return mdl_attribution.tutor_application.find_first(a_tutor, get_learning_unit_for_next_year(a_learning_unit_year))

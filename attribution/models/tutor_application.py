@@ -27,6 +27,7 @@ from django.db import models
 from django.contrib import admin
 from osis_common.models.serializable_model import SerializableModel
 from attribution.models.enums import function
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class TutorApplicationAdmin(admin.ModelAdmin):
@@ -71,7 +72,11 @@ def find_by_dates_tutor(a_start_date, an_end_date, a_tutor):
     return TutorApplication.objects.filter(start_date__gte=a_start_date, end_date__lte=an_end_date, tutor=a_tutor).order_by('learning_unit_year__acronym', 'id')
 
 
-def find_first(tutor=None, learning_unit_year=None):
-    return search(tutor, learning_unit_year).first()
-
-
+def find_tutor_learning_unit_year(a_tutor, a_learning_unit_year):
+    if a_tutor and a_learning_unit_year:
+        try:
+            return TutorApplication.objects.get(tutor=a_tutor,
+                                                learning_unit_year=a_learning_unit_year)
+        except ObjectDoesNotExist:
+            return None
+    return None

@@ -60,7 +60,7 @@ def get_allocation_charge(a_tutor_application, a_component_type):
         a_learning_unit_component = mdl_base.learning_unit_component.find_first(a_tutor_application.learning_unit_year,
                                                                                 a_component_type)
         if a_learning_unit_component:
-            an_application_charge = mdl_attribution.application_charge.find_first(a_tutor_application,
+            an_application_charge = mdl_attribution.application_charge.find_by_tutor_application_learning_unit_component(a_tutor_application,
                                                                                   a_learning_unit_component)
 
             if an_application_charge:

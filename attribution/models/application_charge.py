@@ -26,6 +26,7 @@
 from django.db import models
 from django.contrib import admin
 from osis_common.models.serializable_model import SerializableModel
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class ApplicationChargeAdmin(admin.ModelAdmin):
@@ -58,5 +59,11 @@ def search(a_tutor_application=None, a_learning_unit_component=None):
     return queryset
 
 
-def find_first(a_tutor_application=None, a_learning_unit_component=None):
-    return search(a_tutor_application, a_learning_unit_component).first()
+def find_by_tutor_application_learning_unit_component(a_tutor_application, a_learning_unit_component):
+    if a_tutor_application and a_learning_unit_component:
+        try:
+            return ApplicationCharge.objects.get(tutor_application=a_tutor_application,
+                                             learning_unit_component=a_learning_unit_component)
+        except ObjectDoesNotExist:
+            return None
+    return None
