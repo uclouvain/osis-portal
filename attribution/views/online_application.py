@@ -36,7 +36,7 @@ from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from osis_common.queue import queue_sender
-from attribution.utils import generating_message
+from attribution.utils import message_generation
 
 
 ATTRIBUTION_ID_NAME = 'attribution_id_'
@@ -71,6 +71,7 @@ CHARGE_NUL = 0
 APPLICATION_YEAR = settings.APPLICATION_YEAR
 YEAR_OVER = APPLICATION_YEAR-1
 
+
 def get_year(a_year):
     if a_year:
         return a_year.year
@@ -93,7 +94,7 @@ def get_attribution_data(attributions):
 
 
 def get_attribution_informations(an_attribution):
-    a_learning_unit_year= an_attribution.learning_unit_year
+    a_learning_unit_year = an_attribution.learning_unit_year
     a_tutor = an_attribution.tutor
 
     start = get_year(an_attribution.start_date)
@@ -114,12 +115,12 @@ def get_attribution_informations(an_attribution):
             END: end,
             ATTRIBUTION_CHARGE_LECTURING:
                 tutor_charge.attribution_allocation_charge(a_learning_unit_year,
-                                                            component_type.LECTURING,
-                                                            an_attribution),
+                                                           component_type.LECTURING,
+                                                           an_attribution),
             ATTRIBUTION_CHARGE_PRACTICAL:
                 tutor_charge.attribution_allocation_charge(a_learning_unit_year,
-                                                            component_type.PRACTICAL_EXERCISES,
-                                                            an_attribution),
+                                                           component_type.PRACTICAL_EXERCISES,
+                                                           an_attribution),
             FUNCTION: an_attribution.function,
             RENEW: define_renew_possible(a_tutor, a_learning_unit_year),
             TEAM: a_learning_unit_year.team,
@@ -140,11 +141,11 @@ def get_application_informations(a_tutor_application):
     a_practical_duration = get_learning_unit_component_duration(a_learning_unit_year,
                                                                 component_type.PRACTICAL_EXERCISES)
     lecturing_allocated = tutor_charge.get_attribution_allocation_charge(a_tutor,
-                                                                          a_learning_unit_year,
-                                                                          component_type.LECTURING)
+                                                                         a_learning_unit_year,
+                                                                         component_type.LECTURING)
     practical_allocated = tutor_charge.get_attribution_allocation_charge(a_tutor,
-                                                                          a_learning_unit_year,
-                                                                          component_type.PRACTICAL_EXERCISES)
+                                                                         a_learning_unit_year,
+                                                                         component_type.PRACTICAL_EXERCISES)
     return {
         TUTOR_APPLICATION: a_tutor_application,
         LECTURING_DURATION: a_lecturing_duration,
@@ -266,7 +267,7 @@ def create_application_charge(a_new_tutor_application, charge_duration, a_compon
                               allocation_charge=charge_duration)
         a_new_application_charge.save()
         queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
-                                  generating_message.generate_message_from_application_charge(a_new_application_charge,
+                                  message_generation.generate_message_from_application_charge(a_new_application_charge,
                                                                                               'update'))
 
 
@@ -318,7 +319,8 @@ def home(request):
 
 
 def get_tutor_application_charge(a_component_type, a_tutor_application):
-    a_learning_unit_component = mdl_base.learning_unit_component.find_first(a_tutor_application.learning_unit_year, a_component_type)
+    a_learning_unit_component = mdl_base.learning_unit_component.find_first(a_tutor_application.learning_unit_year,
+                                                                            a_component_type)
 
     return mdl_attribution.application_charge.find_first(a_tutor_application, a_learning_unit_component)
 
@@ -338,8 +340,9 @@ def get_application_charge(a_tutor, a_learning_unit_year, a_component_type):
 def delete(request, tutor_application_id):
     tutor_application_to_delete = mdl_attribution.tutor_application.find_by_id(tutor_application_id)
     if tutor_application_to_delete:
-        queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
-                                  generating_message.generate_message_from_a_tutor_application(tutor_application_to_delete))
+        queue_sender\
+            .send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
+                          message_generation.generate_message_from_tutor_application(tutor_application_to_delete))
 
         tutor_application_to_delete.delete()
 
@@ -387,11 +390,11 @@ def renew(request):
 
 def create_tutor_application_from_attribution(an_attribution):
     attribution_lecturing_duration = tutor_charge.get_attribution_allocation_charge(an_attribution.tutor,
-                                                                                     an_attribution.learning_unit_year,
-                                                                                     component_type.LECTURING)
+                                                                                    an_attribution.learning_unit_year,
+                                                                                    component_type.LECTURING)
     attribution_practical_duration = tutor_charge.get_attribution_allocation_charge(an_attribution.tutor,
-                                                                                     an_attribution.learning_unit_year,
-                                                                                     component_type.PRACTICAL_EXERCISES)
+                                                                                    an_attribution.learning_unit_year,
+                                                                                    component_type.PRACTICAL_EXERCISES)
     next_academic_year = mdl_base.academic_year.find_by_year(an_attribution.learning_unit_year.academic_year.year+1)
 
     next_learning_unit_years = mdl_base.learning_unit_year.search(next_academic_year,
@@ -410,8 +413,6 @@ def create_tutor_application_from_attribution(an_attribution):
     a_new_tutor_application.start_date = get_start_date(next_learning_unit_year.academic_year)
     a_new_tutor_application.end_date = get_end_date(next_learning_unit_year.academic_year)
     a_new_tutor_application.save()
-
-
 
     create_application_charge(a_new_tutor_application,
                               attribution_lecturing_duration,
@@ -449,7 +450,7 @@ def format_charge(value):
 @login_required
 def save_on_new_learning_unit(request):
     new_tutor_application = create_tutor_application_from_user_learning_unit_year(
-        request.user,request.POST.get('learning_unit_year_id'))
+        request.user, request.POST.get('learning_unit_year_id'))
     form = ApplicationForm(data=request.POST)
 
     if form.is_valid():
@@ -521,7 +522,7 @@ def application_charge_create(a_tutor_application, a_charge, a_component_type):
                                allocation_charge=a_charge)
         application_charge.save()
         queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
-                                  generating_message.generate_message_from_application_charge(application_charge,
+                                  message_generation.generate_message_from_application_charge(application_charge,
                                                                                               'update'))
 
 
@@ -532,7 +533,7 @@ def allocation_charge_update(an_application_charge_id, a_field_value):
             application_charge.allocation_charge = a_field_value
             application_charge.save()
             queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
-                                      generating_message.generate_message_from_application_charge(application_charge,
+                                      message_generation.generate_message_from_application_charge(application_charge,
                                                                                                   'update'))
 
 
@@ -581,7 +582,7 @@ def get_new_attribution_informations(a_learning_unit_year, a_tutor):
          LEARNING_UNIT_YEAR_ID: a_learning_unit_year.id,
          TEAM: a_learning_unit_year.team,
          TEAM_APPLICATION_POSSIBLE: is_team_application_possible(a_learning_unit_year),
-         APPLICATION_POSSIBLE: is_application_possible(a_learning_unit_year,a_tutor)}
+         APPLICATION_POSSIBLE: is_application_possible(a_learning_unit_year, a_tutor)}
     return d
 
 

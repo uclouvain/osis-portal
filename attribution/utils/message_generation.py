@@ -32,28 +32,7 @@ from base import models as mdl_base
 from attribution import models as mdl_attribution
 from base.models.enums import component_type
 
-CHARGE_NULL = 0
-
-# def generate_message_by_tutor_application_list(tutor_application_list):
-#     print(tutor_application_list)
-#     message = dict()
-#     if tutor_application_list:
-#         for a_tutor_application in tutor_application_list:
-#             line_attribution = dict()
-#             line_attribution['learning_unit_year'] = a_tutor_application.learning_unit_year.id
-#             line_attribution['person'] = a_tutor_application.tutor.external_id
-#             line_attribution['function'] = a_tutor_application.function
-#             line_attribution['remark'] = a_tutor_application.remark
-#             line_attribution['course_summary'] = a_tutor_application.course_summary
-#
-#             application_charges = mdl_attribution.application_charge.search(a_tutor_application, None)
-#             for application_charge in application_charges:
-#                 if application_charge.learning_unit_component.type == component_type.LECTURING:
-#                     line_attribution['lecturing_allocation'] = application_charge.allocation_charge
-#                 if application_charge.learning_unit_component.type == component_type.PRACTICAL_EXERCISES:
-#                     line_attribution['practical_allocation'] = application_charge.allocation_charge
-#
-#     return json.dumps(message)
+CHARGE_OF_ZERO = 0
 
 
 def get_learning_unit_info(a_learning_unit_year_external_id):
@@ -86,22 +65,21 @@ def get_allocation_charge(a_tutor_application, a_component_type):
 
             if an_application_charge:
                 return an_application_charge.allocation_charge
-    return CHARGE_NULL
+    return CHARGE_OF_ZERO
+
 
 def get_learning_unit_reference(a_learning_unit_year_external_id):
     # Example of external_id osis.learning_unit_year_428750_2017
-    learning_unit_year_infos = dict()
     if a_learning_unit_year_external_id:
         external_id_array = str(a_learning_unit_year_external_id).split('_')
         if len(external_id_array) >= 2:
-            return  external_id_array[-2]
+            return external_id_array[-2]
 
     return None
 
 
 def get_learning_unit_year(a_learning_unit_year_external_id):
     # Example of external_id osis.learning_unit_year_428750_2017
-    learning_unit_year_infos = dict()
     if a_learning_unit_year_external_id:
         external_id_array = str(a_learning_unit_year_external_id).split('_')
         if len(external_id_array) >= 2:
@@ -110,7 +88,7 @@ def get_learning_unit_year(a_learning_unit_year_external_id):
     return None
 
 
-def generate_message_from_a_tutor_application(a_tutor_application):
+def generate_message_from_tutor_application(a_tutor_application):
     return generate_message(a_tutor_application, None, "delete")
 
 

@@ -61,9 +61,7 @@ def search(a_learning_unit_year=None, a_type=None):
 
 
 def find_first(a_learning_unit_year=None, a_type=None):
-    results = search(a_learning_unit_year, a_type)
-    if results:
-        return results[0]
-    return None
+    return search(a_learning_unit_year, a_type).first()
+
 
 

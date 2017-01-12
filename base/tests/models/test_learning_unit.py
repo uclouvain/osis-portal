@@ -34,9 +34,5 @@ def create_learning_unit(data):
         learning_unit.title = data['title']
     if 'description' in data:
         learning_unit.description = data['description']
-    if 'start_year' in data:
-        learning_unit.start_year = data['start_year']
-    if 'end_year' in data:
-        learning_unit.end_year = data['end_year']
     learning_unit.save()
     return learning_unit

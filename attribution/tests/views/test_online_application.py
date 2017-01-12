@@ -26,10 +26,10 @@
 import datetime
 from django.contrib.auth.models import User, Group
 from django.test import TestCase
-from attribution.tests.views import test_tutor_charge
-from attribution.views import online_application, tutor_charge
+from attribution.views import online_application
 from base.models.enums import component_type
-from base.tests.models import test_person, test_tutor,test_academic_year, test_learning_unit_year, test_learning_unit_component, test_learning_unit
+from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
+    test_learning_unit_component, test_learning_unit
 from attribution.tests.models import test_attribution_charge, test_attribution, test_application_charge, test_tutor_application
 from attribution.models.enums import function
 from base import models as mdl_base
@@ -55,12 +55,13 @@ ACRONYM2 = 'LFSAB1104'
 TITLE2 = 'Coordination du quadrimestre 3'
 
 ACRONYM_VACANT_LEARNING_UNIT = 'LFSAB1105'
-TITLE_VACANT_LEARNING_UNIT= 'Coordination et mathématiques'
+TITLE_VACANT_LEARNING_UNIT = 'Coordination et mathématiques'
 
 WEIGHT = 5
 
 START = PREVIOUS_YEAR
 END = NEXT_YEAR
+
 
 class OnlineApplicationTest(TestCase):
 
@@ -73,19 +74,14 @@ class OnlineApplicationTest(TestCase):
         self.a_current_academic_yr = test_academic_year.create_academic_year_with_year(CURRENT_YEAR)
         a_next_academic_yr = test_academic_year.create_academic_year_with_year(NEXT_YEAR)
 
+        self.learning_unit_year1_partially_vacant_previous = self.create_learning_unit_year_annual_data(ACRONYM, TITLE, a_previous_academic_yr, self.a_tutor, START, END)
+        self.learning_unit_year1_partially_vacant_current = self.create_learning_unit_year_annual_data(ACRONYM, TITLE, self.a_current_academic_yr, self.a_tutor, START, END)
+        self.learning_unit_year1_partially_vacant_next = self.create_learning_unit_year_annual_data(ACRONYM, TITLE, a_next_academic_yr, self.a_tutor, START, END)
+        self.learning_unit_year2_partially_vacant_previous = self.create_learning_unit_year_annual_data(ACRONYM2, TITLE2, a_previous_academic_yr, self.a_tutor, START, END)
+        self.learning_unit_year2_partially_vacant_current = self.create_learning_unit_year_annual_data(ACRONYM2, TITLE2, self.a_current_academic_yr, self.a_tutor, START, END)
+        self.learning_unit_year2_partially_vacant_next = self.create_learning_unit_year_annual_data(ACRONYM2, TITLE2, a_next_academic_yr, self.a_tutor, START, END)
 
-        self.learning_unit_year1_partially_vacant_previous = self.create_learning_unit_year_annual_data(ACRONYM, TITLE, a_previous_academic_yr, self.a_tutor,START,END)
-        self.learning_unit_year1_partially_vacant_current = self.create_learning_unit_year_annual_data(ACRONYM, TITLE, self.a_current_academic_yr, self.a_tutor,START,END)
-        self.learning_unit_year1_partially_vacant_next = self.create_learning_unit_year_annual_data(ACRONYM, TITLE, a_next_academic_yr, self.a_tutor,START,END)
-        self.learning_unit_year2_partially_vacant_previous = self.create_learning_unit_year_annual_data(ACRONYM2, TITLE2, a_previous_academic_yr, self.a_tutor,START,END)
-        self.learning_unit_year2_partially_vacant_current = self.create_learning_unit_year_annual_data(ACRONYM2, TITLE2, self.a_current_academic_yr, self.a_tutor,START,END)
-        self.learning_unit_year2_partially_vacant_next = self.create_learning_unit_year_annual_data(ACRONYM2, TITLE2, a_next_academic_yr, self.a_tutor,START,END)
-
-        self.learning_unit_year_totally_vacant_next = self.create_learning_unit_year_annual_data(ACRONYM_VACANT_LEARNING_UNIT,
-                                                                                         TITLE_VACANT_LEARNING_UNIT,
-                                                                                         a_next_academic_yr,
-                                                                                         None,START,END)
-
+        self.learning_unit_year_totally_vacant_next = self.create_learning_unit_year_annual_data(ACRONYM_VACANT_LEARNING_UNIT, TITLE_VACANT_LEARNING_UNIT, a_next_academic_yr, None, START, END)
 
     def create_learning_unit_year_annual_data(self, an_acronym, a_title, an_academic_yr, a_tutor, start, end):
         a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
@@ -131,43 +127,13 @@ class OnlineApplicationTest(TestCase):
     def test_get_learning_unit_component_duration(self):
         self.assertEqual(online_application.get_learning_unit_component_duration(self.learning_unit_year1_partially_vacant_current, component_type.LECTURING), LEARNING_UNIT_LECTURING_DURATION)
 
-
     def test_get_current_attributions(self):
         unused_year = CURRENT_YEAR+10
         an_new_academic_year = test_academic_year.create_academic_year_with_year(unused_year)
-        acronym_1='LMECA2125'
-        learning_unit_year_1 = self.create_learning_unit_year_annual_data(acronym_1, TITLE, an_new_academic_year, self.a_tutor,unused_year, unused_year+1)
-        attribution_1 = mdl_attribution.attribution.search(self.a_tutor, learning_unit_year_1)
+        acronym_1 = 'LMECA2125'
+        learning_unit_year_1 = self.create_learning_unit_year_annual_data(acronym_1, TITLE, an_new_academic_year, self.a_tutor, unused_year, unused_year+1)
+        mdl_attribution.attribution.search(self.a_tutor, learning_unit_year_1)
 
-        data1 = {online_application.ATTRIBUTION_ID:               attribution_1[0].id,
-                 online_application.ACRONYM:                      acronym_1,
-                 online_application.TITLE:                        TITLE,
-                 online_application.LECTURING_DURATION:           LEARNING_UNIT_LECTURING_DURATION,
-                 online_application.PRACTICAL_DURATION:           LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION,
-                 online_application.START:                        unused_year,
-                 online_application.END:                          unused_year+1,
-                 online_application.ATTRIBUTION_CHARGE_LECTURING: ATTRIBUTION_CHARGE_LECTURING_DURATION,
-                 online_application.ATTRIBUTION_CHARGE_PRACTICAL: ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION,
-                 online_application.FUNCTION:                     function.CO_HOLDER,
-                 online_application.RENEW:                        False
-
-                 }
-        acronym_2='LSTAT8125'
-        learning_unit_year_2 = self.create_learning_unit_year_annual_data(acronym_2, TITLE, an_new_academic_year, self.a_tutor,unused_year, unused_year+1)
-        attribution_2 = mdl_attribution.attribution.search(self.a_tutor,learning_unit_year_2)
-        data2 = {online_application.ATTRIBUTION_ID:               attribution_2[0].id,
-                 online_application.ACRONYM:                      acronym_2,
-                 online_application.TITLE:                        TITLE,
-                 online_application.LECTURING_DURATION:           LEARNING_UNIT_LECTURING_DURATION,
-                 online_application.PRACTICAL_DURATION:           LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION,
-                 online_application.START:                        unused_year,
-                 online_application.END:                          unused_year+1,
-                 online_application.ATTRIBUTION_CHARGE_LECTURING: ATTRIBUTION_CHARGE_LECTURING_DURATION,
-                 online_application.ATTRIBUTION_CHARGE_PRACTICAL: ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION,
-                 online_application.FUNCTION:                     function.CO_HOLDER,
-                 online_application.RENEW:                        False
-                }
-        data = [data1, data2]
         self.assertEqual(len(online_application.get_attributions_allocated(an_new_academic_year.year, self.a_tutor)), 2)
 
     def test_sum_attribution_allocation_charges(self):
@@ -180,7 +146,7 @@ class OnlineApplicationTest(TestCase):
         self.assertEqual(online_application.get_vacant_attribution_allocation_charge(self.learning_unit_year1_partially_vacant_current, component_type.LECTURING), 0)
 
     def test_get_vacant_attribution_allocation_charge_practical(self):
-        self.assertEqual(online_application.get_vacant_attribution_allocation_charge(self.learning_unit_year1_partially_vacant_current, component_type.PRACTICAL_EXERCISES), 15.00 )
+        self.assertEqual(online_application.get_vacant_attribution_allocation_charge(self.learning_unit_year1_partially_vacant_current, component_type.PRACTICAL_EXERCISES), 15.00)
 
     def test_get_vacant_learning_units(self):
         data1 = {online_application.ACRONYM:                      ACRONYM,
@@ -211,41 +177,29 @@ class OnlineApplicationTest(TestCase):
                  online_application.VACANT_ATTRIBUTION_CHARGE_PRACTICAL: LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION,
                  }
 
-
-        data=[data1, data2, data3]
+        data = [data1, data2, data3]
 
         self.assertEqual(online_application.get_vacant_learning_units(NEXT_YEAR), data)
 
     def test_find_no_application(self):
         unexisting_year_date = NEXT_YEAR+100
-        self.assertEqual(len(online_application.get_tutor_applications(unexisting_year_date ,self.a_tutor)),0)
+        self.assertEqual(len(online_application.get_tutor_applications(unexisting_year_date, self.a_tutor)), 0)
 
     def test_find_applications(self):
-        tutor_application_learning_unit_1 = test_tutor_application.create_tutor_application({'function': function.CO_HOLDER,
-                                                                                      'learning_unit_year': self.learning_unit_year1_partially_vacant_next,
-                                                                                      'tutor': self.a_tutor})
+        tutor_application_learning_unit_1 = test_tutor_application.create_tutor_application(
+            {'function': function.CO_HOLDER,
+             'learning_unit_year': self.learning_unit_year1_partially_vacant_next,
+             'tutor': self.a_tutor})
         application_charge_duration = LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION - ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION
         a_learning_unit_component_practice = self.get_learning_unit_component()
         test_application_charge.create_application_charge(
             {'tutor_application': tutor_application_learning_unit_1,
              'learning_unit_component': a_learning_unit_component_practice,
              'allocation_charge': application_charge_duration})
-
-        data=[{
-            online_application.TUTOR_APPLICATION:            tutor_application_learning_unit_1,
-            online_application.LECTURING_DURATION:           LEARNING_UNIT_LECTURING_DURATION,
-            online_application.PRACTICAL_DURATION:           LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION,
-            online_application.ATTRIBUTION_CHARGE_LECTURING: 0,
-
-            online_application.ATTRIBUTION_CHARGE_PRACTICAL: application_charge_duration
-        }]
-        self.assertEquals(len(online_application.get_tutor_applications(NEXT_YEAR ,self.a_tutor)),1)
+        self.assertEquals(len(online_application.get_tutor_applications(NEXT_YEAR, self.a_tutor)), 1)
 
     def test_define_renew_unexisting_academic_year(self):
-        a_learning_unit = test_learning_unit.create_learning_unit({'acronym': 'LSTAT2121',
-                                                                        'title':'Statistiques',
-                                                                        'start_year' : 2015,
-                                                                        'end_year' : 2019})
+        a_learning_unit = test_learning_unit.create_learning_unit({'acronym': 'LSTAT2121', 'title': 'Statistiques'})
         a_next_academic_yr = test_academic_year.create_academic_year_with_year(NEXT_YEAR + 10)
         a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
             'acronym': a_learning_unit.acronym,
@@ -255,29 +209,24 @@ class OnlineApplicationTest(TestCase):
 
     def test_define_renew_existing_academic_year_true(self):
         a_learning_unit = test_learning_unit.create_learning_unit({'acronym': 'LSTAT2121',
-                                                                   'title':'Statistiques',
-                                                                   'start_year': 2015,
-                                                                   'end_year': 2019})
+                                                                   'title': 'Statistiques'})
         a_next_academic_yr_plus_4 = test_academic_year.create_academic_year_with_year(NEXT_YEAR + 4)
-        a_learning_unit_year_plus_4  = test_learning_unit_year.create_learning_unit_year({
+        a_learning_unit_year_plus_4 = test_learning_unit_year.create_learning_unit_year({
             'acronym': a_learning_unit.acronym,
             'academic_year': a_next_academic_yr_plus_4,
             'learning_unit': a_learning_unit})
-        a_next_academic_yr_plus_5 = test_academic_year.create_academic_year_with_year(NEXT_YEAR + 5)
-        a_learning_unit_year_plus_5 = test_learning_unit_year.create_learning_unit_year({
+        test_learning_unit_year.create_learning_unit_year({
             'acronym': a_learning_unit.acronym,
-            'academic_year': a_next_academic_yr_plus_5,
+            'academic_year': test_academic_year.create_academic_year_with_year(NEXT_YEAR + 5),
             'learning_unit': a_learning_unit,
             'vacant': True})
         self.assertEquals(online_application.define_renew_possible(self.a_tutor, a_learning_unit_year_plus_4), True)
 
     def test_define_renew_existing_academic_year_False_already_exists(self):
         a_learning_unit = test_learning_unit.create_learning_unit({'acronym': 'LSTAT2121',
-                                                                   'title':'Statistiques',
-                                                                   'start_year': 2015,
-                                                                   'end_year': 2019})
+                                                                   'title': 'Statistiques'})
         a_next_academic_yr_plus_4 = test_academic_year.create_academic_year_with_year(NEXT_YEAR + 4)
-        a_learning_unit_year_plus_4  = test_learning_unit_year.create_learning_unit_year({
+        a_learning_unit_year_plus_4 = test_learning_unit_year.create_learning_unit_year({
             'acronym': a_learning_unit.acronym,
             'academic_year': a_next_academic_yr_plus_4,
             'learning_unit': a_learning_unit})
@@ -291,62 +240,7 @@ class OnlineApplicationTest(TestCase):
                                                          'function': function.CO_HOLDER})
         self.assertEquals(online_application.define_renew_possible(self.a_tutor, a_learning_unit_year_plus_4), False)
 
-    def create_lecturing_application_charge_for_tutor_learning_unit_year(self, application_charge_duration, a_tutor):
-        an_acronym = 'LMECA1215'
-        learning_unit_duration = 15.00
-        application_charge_duration = 10.00
-        a_learning_unit = test_learning_unit.create_learning_unit({'acronym': an_acronym,
-                                                                   'title': TITLE,
-                                                                   'start_year': self.a_current_academic_yr.year})
-        a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
-            'acronym': an_acronym,
-            'academic_year': self.a_current_academic_yr,
-            'learning_unit': a_learning_unit})
 
-        a_learning_unit_component_lecture = test_learning_unit_component.create_learning_unit_component({
-            'learning_unit_year': a_learning_unit_year,
-            'type': component_type.LECTURING,
-            'duration': learning_unit_duration})
-
-        a_tutor_application = test_tutor_application.create_tutor_application({'function': function.CO_HOLDER,
-                                                                               'tutor': a_tutor,
-                                                                               'learning_unit_year':a_learning_unit_year})
-        an_application_charge_lecturing = test_application_charge.create_application_charge({'tutor_application': a_tutor_application,
-                                                                                             'learning_unit_component':a_learning_unit_component_lecture,
-                                                                                             'allocation_charge': application_charge_duration})
-        return an_application_charge_lecturing
-
-    def create_lecturing_practical_application_charges_for_tutor_learning_unit_year(self, application_charge_duration, a_tutor):
-        an_acronym = 'LMECA1215'
-        learning_unit_duration = 15.00
-        application_charge_duration = 10.00
-        a_learning_unit = test_learning_unit.create_learning_unit({'acronym': an_acronym,
-                                                                   'title': TITLE,
-                                                                   'start_year': self.a_current_academic_yr.year})
-        a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
-            'acronym': an_acronym,
-            'academic_year': self.a_current_academic_yr,
-            'learning_unit': a_learning_unit})
-
-        a_learning_unit_component_lecture = test_learning_unit_component.create_learning_unit_component({
-            'learning_unit_year': a_learning_unit_year,
-            'type': component_type.LECTURING,
-            'duration': learning_unit_duration})
-        a_learning_unit_component_practical = test_learning_unit_component.create_learning_unit_component({
-            'learning_unit_year': a_learning_unit_year,
-            'type': component_type.PRACTICAL_EXERCISES,
-            'duration': learning_unit_duration})
-
-        a_tutor_application = test_tutor_application.create_tutor_application({'function': function.CO_HOLDER,
-                                                                               'tutor': a_tutor,
-                                                                               'learning_unit_year':a_learning_unit_year})
-        an_application_charge_lecturing = test_application_charge.create_application_charge({'tutor_application': a_tutor_application,
-                                                                                             'learning_unit_component':a_learning_unit_component_lecture,
-                                                                                             'allocation_charge': application_charge_duration})
-        an_application_charge_practical = test_application_charge.create_application_charge({'tutor_application': a_tutor_application,
-                                                                                             'learning_unit_component':a_learning_unit_component_practical,
-                                                                                             'allocation_charge': application_charge_duration})
-        return [an_application_charge_lecturing, an_application_charge_practical]
 
 
 

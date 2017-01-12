@@ -27,13 +27,12 @@ import datetime
 from django.contrib.auth.models import User, Group
 from django.test import TestCase
 
-from attribution.utils import generating_message
+from attribution.utils import message_generation
 from base.models.enums import component_type
 from attribution.models.enums import function
 from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
     test_learning_unit_component
-from attribution.tests.models import test_attribution_charge, test_attribution, test_application_charge, \
-    test_tutor_application
+from attribution.tests.models import test_application_charge, test_tutor_application
 
 now = datetime.datetime.now()
 WEIGHT = 5
@@ -44,10 +43,10 @@ CURRENT_YEAR = now.year
 
 LEARNING_UNIT_LECTURING_DURATION = 15.00
 LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION = 30.00
-CHARGE_NULL = 0
+CHARGE_OF_ZERO = 0
 
 
-class TestTest(TestCase):
+class TestMessageGeneration(TestCase):
 
     def setUp(self):
         self.a_user = User.objects.create_user(username='legat', email='legat@localhost', password='top_secret')
@@ -85,7 +84,7 @@ class TestTest(TestCase):
 
     def test_creation_message_from_application_charge(self):
         try:
-            generating_message.generate_message_from_application_charge(self.an_application_charge_lecturing, 'update')
+            message_generation.generate_message_from_application_charge(self.an_application_charge_lecturing, 'update')
         except Exception:
             self.fail("{0} raised ExceptionType unexpectedly!"
                       .format("test_creation_message_from_application_charge"))
@@ -93,10 +92,10 @@ class TestTest(TestCase):
     def test_creation_message_from_application_charge_with_unexpected_external_id_format(self):
         try:
             self.an_application_charge_lecturing.learning_unit_component.learning_unit_year.external_id = '428750.2017'
-            generating_message.generate_message_from_application_charge(self.an_application_charge_lecturing, 'update')
+            message_generation.generate_message_from_application_charge(self.an_application_charge_lecturing, 'update')
         except Exception:
             self.fail("{0} raised ExceptionType unexpectedly!"
                       .format("test_creation_message_from_application_charge"))
 
     def test_get_allocation_charge_with_no_component_type_define(self):
-        self.assertEqual(generating_message.get_allocation_charge(self.a_tutor_application, None), CHARGE_NULL)
+        self.assertEqual(message_generation.get_allocation_charge(self.a_tutor_application, None), CHARGE_OF_ZERO)
