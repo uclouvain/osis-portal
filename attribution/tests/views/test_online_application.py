@@ -132,8 +132,8 @@ class OnlineApplicationTest(TestCase):
         an_new_academic_year = test_academic_year.create_academic_year_with_year(unused_year)
         acronym_1 = 'LMECA2125'
         learning_unit_year_1 = self.create_learning_unit_year_annual_data(acronym_1, TITLE, an_new_academic_year, self.a_tutor, unused_year, unused_year+1)
-        mdl_attribution.attribution.search(self.a_tutor, learning_unit_year_1)
-
+        acronym_2='LSTAT8125'
+        learning_unit_year_2 = self.create_learning_unit_year_annual_data(acronym_2, TITLE, an_new_academic_year, self.a_tutor,unused_year, unused_year+1)
         self.assertEqual(len(online_application.get_attributions_allocated(an_new_academic_year.year, self.a_tutor)), 2)
 
     def test_sum_attribution_allocation_charges(self):
