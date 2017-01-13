@@ -257,3 +257,6 @@ msgstr "Recherche de cours vacant"
 
 msgid "vacant_learning_unit_year_search"
 msgstr "Veuillez introduire le sigle du cours pour lequel vous voulez postuler"
+
+msgid "no_teaching_charge"
+msgstr "Pas de charge d'enseignement en "

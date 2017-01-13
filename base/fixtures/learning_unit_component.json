@@ -1,0 +1,138 @@
+[
+  {
+    "model": "base.learningunitcomponent",
+    "pk": 3259,
+    "fields": {
+      "type": "LECTURING",
+      "duration": "30.00",
+      "learning_unit_year": 1
+    }
+  },
+  {
+    "model": "base.learningunitcomponent",
+    "pk": 3260,
+    "fields": {
+      "type": "PRACTICAL_EXERCISES",
+      "duration": "0.00",
+      "learning_unit_year": 1
+    }
+  },
+  {
+    "model": "base.learningunitcomponent",
+    "pk": 3261,
+    "fields": {
+      "type": "LECTURING",
+      "duration": "45.00",
+      "learning_unit_year": 2
+    }
+  },
+  {
+    "model": "base.learningunitcomponent",
+    "pk": 3262,
+    "fields": {
+      "type": "PRACTICAL_EXERCISES",
+      "duration": "30.00",
+      "learning_unit_year": 2
+    }
+  },
+
+  {
+    "model": "base.learningunitcomponent",
+    "pk": 3263,
+    "fields": {
+      "type": "LECTURING",
+      "duration": "52.50",
+      "learning_unit_year": 3
+    }
+  },
+  {
+    "model": "base.learningunitcomponent",
+    "pk": 3264,
+    "fields": {
+      "type": "PRACTICAL_EXERCISES",
+      "duration": "37.50",
+      "learning_unit_year": 3
+    }
+  },
+
+  {
+    "model": "base.learningunitcomponent",
+    "pk": 3265,
+    "fields": {
+      "type": "LECTURING",
+      "duration": "30.00",
+      "learning_unit_year": 4
+    }
+  },
+  {
+    "model": "base.learningunitcomponent",
+    "pk": 3266,
+    "fields": {
+      "type": "PRACTICAL_EXERCISES",
+      "duration": "15.00",
+      "learning_unit_year": 4
+    }
+  },
+  {
+    "model": "base.learningunitcomponent",
+    "pk": 5263,
+    "fields": {
+      "type": "LECTURING",
+      "duration": "60.00",
+      "learning_unit_year": 5
+    }
+  },
+  {
+    "model": "base.learningunitcomponent",
+    "pk": 5264,
+    "fields": {
+      "type": "PRACTICAL_EXERCISES",
+      "duration": "60.00",
+      "learning_unit_year": 5
+    }
+  },
+
+  {
+    "model": "base.learningunitcomponent",
+    "pk": 5265,
+    "fields": {
+      "type": "LECTURING",
+      "duration": "30.00",
+      "learning_unit_year": 6
+    }
+  },
+  {
+    "model": "base.learningunitcomponent",
+    "pk": 5266,
+    "fields": {
+      "type": "PRACTICAL_EXERCISES",
+      "duration": "15.00",
+      "learning_unit_year": 6
+    }
+  },
+  {
+    "model": "base.learningunitcomponent",
+    "pk": 5909,
+    "fields": {
+      "type": "LECTURING",
+      "duration": "15.00",
+      "learning_unit_year": 7
+    }
+  },
+  {
+    "model": "base.learningunitcomponent",
+    "pk": 5910,
+    "fields": {
+      "type": "PRACTICAL_EXERCISES",
+      "duration": "15.00",
+      "learning_unit_year": 7
+    }
+  }
+]
+
+
+
+
+
+
+
