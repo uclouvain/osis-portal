@@ -1,0 +1,238 @@
+[
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 1,
+    "fields": {
+      "allocation_charge": "15.00",
+      "learning_unit_component": 3259,
+      "attribution": 1
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 2,
+    "fields": {
+      "allocation_charge": "0.00",
+      "learning_unit_component": 3260,
+      "attribution": 1
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 3,
+    "fields": {
+      "allocation_charge": "15.00",
+      "learning_unit_component": 3259,
+      "attribution": 2
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 4,
+    "fields": {
+      "allocation_charge": "0.00",
+      "learning_unit_component": 3260,
+      "attribution": 2
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 5,
+    "fields": {
+      "allocation_charge": "15.00",
+      "learning_unit_component": 5909,
+      "attribution": 3
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 6,
+    "fields": {
+      "allocation_charge": "15.00",
+      "learning_unit_component": 5910,
+      "attribution": 3
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 7,
+    "fields": {
+      "allocation_charge": "0.00",
+      "learning_unit_component": 3261,
+      "attribution": 4
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 8,
+    "fields": {
+      "allocation_charge": "0.00",
+      "learning_unit_component": 3262,
+      "attribution": 4
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 9,
+    "fields": {
+      "allocation_charge": "22.50",
+      "learning_unit_component": 3261,
+      "attribution": 5
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 10,
+    "fields": {
+      "allocation_charge": "15.00",
+      "learning_unit_component": 3262,
+      "attribution": 5
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 11,
+    "fields": {
+      "allocation_charge": "22.50",
+      "learning_unit_component": 3261,
+      "attribution": 6
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 12,
+    "fields": {
+      "allocation_charge": "15.00",
+      "learning_unit_component": 3262,
+      "attribution": 6
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 13,
+    "fields": {
+      "allocation_charge": "35.00",
+      "learning_unit_component": 3263,
+      "attribution": 7
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 14,
+    "fields": {
+      "allocation_charge": "25.00",
+      "learning_unit_component": 3264,
+      "attribution": 7
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 15,
+    "fields": {
+      "allocation_charge": "17.50",
+      "learning_unit_component": 3263,
+      "attribution": 8
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 16,
+    "fields": {
+      "allocation_charge": "12.50",
+      "learning_unit_component": 3264,
+      "attribution": 8
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 17,
+    "fields": {
+      "allocation_charge": "30.00",
+      "learning_unit_component": 3265,
+      "attribution": 9
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 18,
+    "fields": {
+      "allocation_charge": "15.00",
+      "learning_unit_component": 3266,
+      "attribution": 9
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 19,
+    "fields": {
+      "allocation_charge": "30.00",
+      "learning_unit_component": 5263,
+      "attribution": 10
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 20,
+    "fields": {
+      "allocation_charge": "30.00",
+      "learning_unit_component": 5264,
+      "attribution": 10
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 21,
+    "fields": {
+      "allocation_charge": "30.00",
+      "learning_unit_component": 5263,
+      "attribution": 11
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 22,
+    "fields": {
+      "allocation_charge": "30.00",
+      "learning_unit_component": 5264,
+      "attribution": 11
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 23,
+    "fields": {
+      "allocation_charge": "9.00",
+      "learning_unit_component": 5265,
+      "attribution": 12
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 24,
+    "fields": {
+      "allocation_charge": "15.00",
+      "learning_unit_component": 5266,
+      "attribution": 12
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 25,
+    "fields": {
+      "allocation_charge": "0.00",
+      "learning_unit_component": 5265,
+      "attribution": 13
+    }
+  },
+  {
+    "model": "attribution.attributioncharge",
+    "pk": 26,
+    "fields": {
+      "allocation_charge": "0.00",
+      "learning_unit_component": 5266,
+      "attribution": 13
+    }
+  }
+]
+
+

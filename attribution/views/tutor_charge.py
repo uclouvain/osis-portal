@@ -142,7 +142,8 @@ def list_teaching_charge_attribution_representation(a_person, an_academic_year):
              'year': a_learning_unit_year.academic_year.year,
              'learning_unit_year_url': get_url_learning_unit_year(a_learning_unit_year),
              'learning_unit_year': a_learning_unit_year})
-
+    if len(attribution_list) == 0:
+        attribution_list=None
     return {'attributions': attribution_list,
             'tot_lecturing': tot_lecturing,
             'tot_practical': tot_practical}
@@ -169,7 +170,8 @@ def by_year(request, year):
         'formset': set_formset_years(a_person),
         'year': int(year),
         'tot_lecturing': tot_lecturing,
-        'tot_practical': tot_practical})
+        'tot_practical': tot_practical,
+        'academic_year': "{0}-{1}".format(str(an_academic_year.year),str(an_academic_year.year + 1))})
 
 
 def get_attribution_years(a_person):
@@ -304,4 +306,5 @@ def calculate_attribution_format_percentage_allocation_charge(a_learning_unit_ye
         percentage = attribution_allocation_charge(a_learning_unit_year, None, an_attribution) * 100 / duration
         return ONE_DECIMAL_FORMAT % (percentage,)
     return None
+
 
