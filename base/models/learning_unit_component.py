@@ -33,6 +33,8 @@ from django.core.exceptions import ObjectDoesNotExist
 class LearningUnitComponentAdmin(admin.ModelAdmin):
     list_display = ('learning_unit_year', 'type', 'duration')
     fieldsets = ((None, {'fields': ('learning_unit_year', 'type', 'duration')}),)
+    raw_id_fields = ('learning_unit_year', )
+    search_fields = ['learning_unit_year__acronym']
 
 
 class LearningUnitComponent(SerializableModel):
