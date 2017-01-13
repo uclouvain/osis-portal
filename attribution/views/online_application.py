@@ -290,7 +290,7 @@ def get_terminating_charges(a_year, a_tutor):
         attributions_vacant = []
         for attribution in attribution_charges:
             next_learning_unit_year = get_learning_unit_for_next_year(attribution.learning_unit_year)
-            if not existing_tutor_application_for_next_year(a_tutor, attribution.learning_unit_year):
+            if next_learning_unit_year and not existing_tutor_application_for_next_year(a_tutor, attribution.learning_unit_year):
                 if next_learning_unit_year.in_charge and attribution.function != function.DEPUTY:
                     attributions_vacant.append(attribution)
         return get_attribution_data(attributions_vacant)

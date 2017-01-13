@@ -27,6 +27,7 @@ from django.db import models
 from django.contrib import admin
 from base.models.enums import component_type
 from osis_common.models.serializable_model import SerializableModel
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class LearningUnitComponentAdmin(admin.ModelAdmin):
