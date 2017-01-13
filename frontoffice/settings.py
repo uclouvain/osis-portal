@@ -169,9 +169,6 @@ LOGGING = {
 
 DEFAULT_LOGGER = 'default'
 
-COUCHBASE_CONNECTION_STRING='couchbase://localhost/'
-COUCHBASE_PASSWORD=''
-
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
