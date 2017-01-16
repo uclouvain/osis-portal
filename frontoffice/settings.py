@@ -287,6 +287,12 @@ CKEDITOR_CONFIGS = {
     },
 }
 
+
+TIME_TABLE_URL= ""
+TIME_TABLE_NUMBER = ""
+CATALOG_URL = ""
+
+
 try:
     from frontoffice.server_settings import *
     try:
@@ -299,7 +305,3 @@ except ImportError:
 if 'admission' in INSTALLED_APPS:
     ADMISSION_LOGIN_URL=reverse_lazy('admission_login')
     ADMISSION_LOGIN_REDIRECT_URL=reverse_lazy('admission')
-
-TIME_TABLE_URL= ""
-TIME_TABLE_NUMBER = ""
-CATALOG_URL = ""
