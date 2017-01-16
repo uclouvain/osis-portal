@@ -260,3 +260,6 @@ msgstr "Veuillez introduire le sigle du cours pour lequel vous voulez postuler"
 
 msgid "no_teaching_charge"
 msgstr "Pas de charge d'enseignement en "
+
+msgid "application_denied"
+msgstr "La période d'encodage des candidatures en ligne est fermée pour le moment."

@@ -37,6 +37,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from osis_common.queue import queue_sender
 from attribution.utils import message_generation
+from dashboard.utils import permission_utils
 
 
 ATTRIBUTION_ID_NAME = 'attribution_id_'
@@ -70,6 +71,7 @@ NO_CHARGE = 0
 
 UPDATE_OPERATION = "update"
 DELETE_OPERATION = "delete"
+
 
 def get_year(a_year):
     if a_year:
@@ -269,6 +271,7 @@ def create_application_charge(a_new_tutor_application, charge_duration, a_compon
         return a_new_application_charge
     return None
 
+
 def is_vacant(a_learning_unit_year):
     if a_learning_unit_year:
         return a_learning_unit_year.vacant
@@ -299,22 +302,26 @@ def get_terminating_charges(a_year, a_tutor):
 
 @login_required
 def home(request):
-    application_year = mdl_base.academic_year.find_next_academic_year()
-    a_tutor = mdl_base.tutor.find_by_user(request.user)
-    attributions = get_attributions_allocated(application_year, a_tutor)
-    tot_lecturing = 0
-    tot_practical = 0
-    if attributions:
-        for attribution_informations in attributions:
-            tot_lecturing = tot_lecturing + attribution_informations[ATTRIBUTION_CHARGE_LECTURING]
-            tot_practical = tot_practical + attribution_informations[ATTRIBUTION_CHARGE_PRACTICAL]
-    return render(request, "attribution_applications.html", {
-        'user': request.user,
-        'applications': get_tutor_applications(application_year, a_tutor),
-        'attributions': attributions,
-        'academic_year': "{0}-{1}".format(application_year, application_year + 1),
-        'tot_lecturing': tot_lecturing,
-        'tot_practical': tot_practical})
+    if permission_utils.is_online_application_opened():
+        application_year = mdl_base.academic_year.find_next_academic_year()
+        a_tutor = mdl_base.tutor.find_by_user(request.user)
+        attributions = get_attributions_allocated(application_year, a_tutor)
+        tot_lecturing = 0
+        tot_practical = 0
+        if attributions:
+            for attribution_informations in attributions:
+                tot_lecturing = tot_lecturing + attribution_informations[ATTRIBUTION_CHARGE_LECTURING]
+                tot_practical = tot_practical + attribution_informations[ATTRIBUTION_CHARGE_PRACTICAL]
+        return render(request, "attribution_applications.html", {
+            'user': request.user,
+            'applications': get_tutor_applications(application_year, a_tutor),
+            'attributions': attributions,
+            'academic_year': "{0}-{1}".format(application_year, application_year + 1),
+            'tot_lecturing': tot_lecturing,
+            'tot_practical': tot_practical,
+            'online_application_opened': permission_utils.is_online_application_opened()})
+    else:
+        return acces_denied(request)
 
 
 def get_tutor_application_charge(a_component_type, a_tutor_application):
@@ -344,7 +351,7 @@ def delete(request, tutor_application_id):
                           message_generation.generate_message_from_tutor_application(
                               tutor_application_to_delete,
                               tutor_application_to_delete.function,
-                              DELETE_OPERATION ))
+                              DELETE_OPERATION))
 
         tutor_application_to_delete.delete()
 
@@ -353,16 +360,19 @@ def delete(request, tutor_application_id):
 
 @login_required
 def attribution_application_form(request):
-    a_tutor = mdl_base.tutor.find_by_user(request.user)
-    last_year = get_last_year()
+    if permission_utils.is_online_application_opened():
+        a_tutor = mdl_base.tutor.find_by_user(request.user)
+        last_year = get_last_year()
 
-    attributions = get_terminating_charges(last_year, a_tutor)
-    application_year = mdl_base.academic_year.find_next_academic_year()
-    return render(request, "attribution_application_form.html", {
-        'application': None,
-        'attributions': attributions,
-        'application_academic_year': "{0}-{1}".format(application_year, application_year + 1),
-        'over_academic_year': "{0}-{1}".format(last_year, last_year + 1)})
+        attributions = get_terminating_charges(last_year, a_tutor)
+        application_year = mdl_base.academic_year.find_next_academic_year()
+        return render(request, "attribution_application_form.html", {
+            'application': None,
+            'attributions': attributions,
+            'application_academic_year': "{0}-{1}".format(application_year, application_year + 1),
+            'over_academic_year': "{0}-{1}".format(last_year, last_year + 1)})
+    else:
+        return acces_denied(request)
 
 
 @login_required
@@ -382,14 +392,17 @@ def search(request):
 
 @login_required
 def renew(request):
-    for key, value in request.POST.items():
-        if key.startswith(ATTRIBUTION_ID_NAME):
-            attribution_id = int(key.replace(ATTRIBUTION_ID_NAME, ''))
-            an_attribution_to_renew = mdl_attribution.attribution.find_by_id(int(attribution_id))
-            if an_attribution_to_renew:
-                create_tutor_application_from_attribution(an_attribution_to_renew)
+    if permission_utils.is_online_application_opened():
+        for key, value in request.POST.items():
+            if key.startswith(ATTRIBUTION_ID_NAME):
+                attribution_id = int(key.replace(ATTRIBUTION_ID_NAME, ''))
+                an_attribution_to_renew = mdl_attribution.attribution.find_by_id(int(attribution_id))
+                if an_attribution_to_renew:
+                    create_tutor_application_from_attribution(an_attribution_to_renew)
 
-    return HttpResponseRedirect(reverse('learning_unit_applications'))
+        return HttpResponseRedirect(reverse('learning_unit_applications'))
+    else:
+        return acces_denied(request)
 
 
 def create_tutor_application_from_attribution(an_attribution):
@@ -429,20 +442,23 @@ def create_tutor_application_from_attribution(an_attribution):
 
 @login_required
 def edit(request, tutor_application_id):
-    form = ApplicationForm()
-    application = get_application_informations(mdl_attribution.tutor_application.find_by_id(tutor_application_id))
-    if application:
-        data = {'charge_lecturing': application[APPLICATION_CHARGE_LECTURING].allocation_charge,
-                'charge_practical': application[APPLICATION_CHARGE_PRACTICAL].allocation_charge,
-                'remark': application[TUTOR_APPLICATION].remark,
-                'course_summary': application[TUTOR_APPLICATION].course_summary,
-                'max_charge_lecturing': application[VACANT_ATTRIBUTION_CHARGE_LECTURING],
-                'max_charge_practical': application[VACANT_ATTRIBUTION_CHARGE_PRACTICAL]}
-        form = ApplicationForm(initial=data)
+    if permission_utils.is_online_application_opened():
+        form = ApplicationForm()
+        application = get_application_informations(mdl_attribution.tutor_application.find_by_id(tutor_application_id))
+        if application:
+            data = {'charge_lecturing': application[APPLICATION_CHARGE_LECTURING].allocation_charge,
+                    'charge_practical': application[APPLICATION_CHARGE_PRACTICAL].allocation_charge,
+                    'remark': application[TUTOR_APPLICATION].remark,
+                    'course_summary': application[TUTOR_APPLICATION].course_summary,
+                    'max_charge_lecturing': application[VACANT_ATTRIBUTION_CHARGE_LECTURING],
+                    'max_charge_practical': application[VACANT_ATTRIBUTION_CHARGE_PRACTICAL]}
+            form = ApplicationForm(initial=data)
 
-    return render(request, "application_form.html", {
-        'application': application,
-        'form': form})
+        return render(request, "application_form.html", {
+            'application': application,
+            'form': form})
+    else:
+        return acces_denied(request)
 
 
 def format_charge(value):
@@ -453,46 +469,48 @@ def format_charge(value):
 
 @login_required
 def save_on_new_learning_unit(request):
-    new_tutor_application = create_tutor_application_from_user_learning_unit_year(
-        request.user, request.POST.get('learning_unit_year_id'))
-    form = ApplicationForm(data=request.POST)
+    if permission_utils.is_online_application_opened():
+        new_tutor_application = create_tutor_application_from_user_learning_unit_year(
+            request.user, request.POST.get('learning_unit_year_id'))
+        form = ApplicationForm(data=request.POST)
 
-    if form.is_valid():
-        if new_tutor_application:
-            new_tutor_application.course_summary = form['course_summary'].value()
-            new_tutor_application.remark = form['remark'].value()
+        if form.is_valid():
+            if new_tutor_application:
+                new_tutor_application.course_summary = form['course_summary'].value()
+                new_tutor_application.remark = form['remark'].value()
+                new_tutor_application.save()
+
+            application_charge_lecturing = application_charge_create(new_tutor_application,
+                                                                     format_charge(form['charge_lecturing'].value()),
+                                                                     component_type.LECTURING)
+
+            application_charge_practical = application_charge_create(new_tutor_application,
+                                                                     format_charge(form['charge_practical'].value()),
+                                                                     component_type.PRACTICAL_EXERCISES)
+
+            new_tutor_application.function = define_tutor_application_function(new_tutor_application)
             new_tutor_application.save()
+            queue_sender.send_message(
+                settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
+                message_generation.generate_message_from_application_charge(
+                    application_charge_lecturing,
+                    UPDATE_OPERATION,
+                    define_tutor_application_function(new_tutor_application)))
 
-        application_charge_lecturing = application_charge_create(new_tutor_application,
-                                                                 format_charge(form['charge_lecturing'].value()),
-                                                                 component_type.LECTURING)
+            queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
+                                      message_generation.generate_message_from_application_charge(
+                                          application_charge_practical,
+                                          UPDATE_OPERATION,
+                                          define_tutor_application_function(new_tutor_application)))
 
-        application_charge_practical = application_charge_create(new_tutor_application,
-                                                                 format_charge(form['charge_practical'].value()),
-                                                                 component_type.PRACTICAL_EXERCISES)
-
-
-        new_tutor_application.function = define_tutor_application_function(new_tutor_application)
-        new_tutor_application.save()
-        queue_sender.send_message(
-            settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
-            message_generation.generate_message_from_application_charge(
-                application_charge_lecturing,
-                UPDATE_OPERATION,
-                define_tutor_application_function(new_tutor_application)))
-
-        queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
-                                  message_generation.generate_message_from_application_charge(
-                                      application_charge_practical,
-                                      UPDATE_OPERATION,
-                                      define_tutor_application_function(new_tutor_application)))
-
-        return HttpResponseRedirect(reverse('learning_unit_applications'))
+            return HttpResponseRedirect(reverse('learning_unit_applications'))
+        else:
+            return render(request, "application_form.html", {
+                'application': get_application_informations(new_tutor_application),
+                'attributions': get_terminating_charges(get_last_year(), new_tutor_application.tutor),
+                'form': form})
     else:
-        return render(request, "application_form.html", {
-            'application': get_application_informations(new_tutor_application),
-            'attributions': get_terminating_charges(get_last_year(), new_tutor_application.tutor),
-            'form': form})
+        return acces_denied(request)
 
 
 def create_tutor_application_from_user_learning_unit_year(a_user, a_learning_unit_year_id):
@@ -506,38 +524,41 @@ def create_tutor_application_from_user_learning_unit_year(a_user, a_learning_uni
 
 @login_required
 def save(request, tutor_application_id):
-    tutor_application_to_save = mdl_attribution.tutor_application.find_by_id(tutor_application_id)
-    form = ApplicationForm(data=request.POST)
+    if permission_utils.is_online_application_opened():
+        tutor_application_to_save = mdl_attribution.tutor_application.find_by_id(tutor_application_id)
+        form = ApplicationForm(data=request.POST)
 
-    if form.is_valid():
-        application_charge_lecturing = allocation_charge_update(request.POST.get('application_charge_lecturing_id'),
-                                 form['charge_lecturing'].value().replace(',', '.'))
-        application_charge_practical = allocation_charge_update(request.POST.get('application_charge_practical_id'),
-                                 form['charge_practical'].value().replace(',', '.'))
+        if form.is_valid():
+            application_charge_lecturing = allocation_charge_update(request.POST.get('application_charge_lecturing_id'),
+                                     form['charge_lecturing'].value().replace(',', '.'))
+            application_charge_practical = allocation_charge_update(request.POST.get('application_charge_practical_id'),
+                                     form['charge_practical'].value().replace(',', '.'))
 
-        if tutor_application_to_save:
-            tutor_application_to_save.course_summary = form['course_summary'].value()
-            tutor_application_to_save.remark = form['remark'].value()
-            tutor_application_to_save.function = define_tutor_application_function(tutor_application_to_save)
-            tutor_application_to_save.save()
-            application_charge_lecturing.tutor_application = tutor_application_to_save
-            application_charge_practical.tutor_application = tutor_application_to_save
-        queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
-                                  message_generation.generate_message_from_application_charge(application_charge_lecturing,
-                                                                                              UPDATE_OPERATION,
-                                                                                              tutor_application_to_save.function))
-        queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
-                                  message_generation.generate_message_from_application_charge(application_charge_practical,
-                                                                                              UPDATE_OPERATION,
-                                                                                              tutor_application_to_save.function))
+            if tutor_application_to_save:
+                tutor_application_to_save.course_summary = form['course_summary'].value()
+                tutor_application_to_save.remark = form['remark'].value()
+                tutor_application_to_save.function = define_tutor_application_function(tutor_application_to_save)
+                tutor_application_to_save.save()
+                application_charge_lecturing.tutor_application = tutor_application_to_save
+                application_charge_practical.tutor_application = tutor_application_to_save
+            queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
+                                      message_generation.generate_message_from_application_charge(application_charge_lecturing,
+                                                                                                  UPDATE_OPERATION,
+                                                                                                  tutor_application_to_save.function))
+            queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
+                                      message_generation.generate_message_from_application_charge(application_charge_practical,
+                                                                                                  UPDATE_OPERATION,
+                                                                                                  tutor_application_to_save.function))
 
-        return HttpResponseRedirect(reverse('learning_unit_applications'))
+            return HttpResponseRedirect(reverse('learning_unit_applications'))
 
+        else:
+            return render(request, "application_form.html", {
+                'application': get_application_informations(tutor_application_to_save),
+                'attributions': get_terminating_charges(get_last_year(), tutor_application_to_save.tutor),
+                'form': form})
     else:
-        return render(request, "application_form.html", {
-            'application': get_application_informations(tutor_application_to_save),
-            'attributions': get_terminating_charges(get_last_year(), tutor_application_to_save.tutor),
-            'form': form})
+        return acces_denied(request)
 
 
 def application_charge_create(a_tutor_application, a_charge, a_component_type):
@@ -561,7 +582,6 @@ def allocation_charge_update(an_application_charge_id, a_field_value):
             application_charge.save()
             return application_charge
     return None
-
 
 
 def get_learning_unit_year_vacant(a_year, an_acronym, a_tutor):
@@ -687,3 +707,7 @@ def get_next_year():
     application_year = mdl_base.academic_year.find_next_academic_year()
     if application_year:
         return application_year + 1
+
+
+def acces_denied(request):
+    return render(request, "attribution_access_denied.html")

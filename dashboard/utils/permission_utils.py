@@ -23,17 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib.auth.decorators import login_required
-from base.views import layout
-from dashboard.utils import permission_utils
+from base import models as mdl_base
 
 
-@login_required
-def home(request):
-    # Adapt layout depending on the type of user (student, professor)
-    return layout.render(request, "dashboard.html",
-                         {'online_application_opened': permission_utils.is_online_application_opened()})
+def is_online_application_opened():
+    application_year = mdl_base.academic_year.find_next_academic_year()
+    if application_year:
+        an_academic_year = mdl_base.academic_year.find_by_year(application_year)
+        if an_academic_year:
+            return mdl_base.academic_calendar.is_academic_calendar_by_academic_year_title_opened(an_academic_year,
+                                                                                                 'Application session')
 
-
-
-
+    return False
