@@ -30,41 +30,39 @@ from admission.views import demande_validation, navigation
 from admission.forms.attachement import RemoveAttachmentForm
 from osis_common.forms import UploadDocumentFileForm
 from osis_common.models.document_file import DocumentFile
-from django.forms import formset_factory
-from admission.models.enums import application_type
 from django.utils.translation import ugettext_lazy as _
 
 
 def update(request, application_id=None):
     application = mdl.application.find_by_id(application_id)
-    past_attachments = list_attachments(application)
-    UploadDocumentFileFormSet = formset_factory(UploadDocumentFileForm, extra=0)
-    document_formset = UploadDocumentFileFormSet()
+    curriculum_doc_present, letter_motivation_doc_present, past_attachments = check_document_type(application)
     applicant = mdl.applicant.find_by_user(request.user)
-    remove_attachment_form = RemoveAttachmentForm()
-    list_choices = [x[1] for x in document_type.DOCUMENT_TYPE_CHOICES]
+    form = UploadDocumentFileForm(initial={'storage_duration': 0, 'update_by': applicant})
+    list_choices = [_(x[1]) for x in document_type.FILE_TYPE_CHOICES]
     data = {
+        "form": form,
         "tab_active": navigation.ATTACHMENTS_TAB,
         "application": application,
         "applications": mdl.application.find_by_user(request.user),
-        "document_formset": document_formset,
         "attachments": past_attachments,
-        "removeAttachmentForm": remove_attachment_form,
-        "list_choices": list_choices
+        'document_type_choices': list_choices,
+        "letter_motivation_doc_present": letter_motivation_doc_present,
+        "curriculum_doc_present": curriculum_doc_present,
     }
     data.update(demande_validation.get_validation_status(application, applicant))
-    letter_motivation_doc_present = False
-    curriculum_doc_present = False
-
-    if application.application_type ==  application_type.ADMISSION:
-        for p in past_attachments:
-            if p.description == 'letter_motivation':
-                letter_motivation_doc_present=True
-            if p.description == 'curriculum':
-                curriculum_doc_present=True
-    data.update({'letter_motivation_doc_present': letter_motivation_doc_present,
-                 'curriculum_doc_present': curriculum_doc_present})
     return render(request, "admission_home.html", data)
+
+
+def check_document_type(application):
+    past_attachments = list_attachments(application)
+    letter_motivation_doc_present = None
+    curriculum_doc_present = None
+    for attachment in past_attachments:
+        if attachment.description == _("letter_motivation"):
+            letter_motivation_doc_present = True
+        if attachment.description == _("curriculum"):
+            curriculum_doc_present = True
+    return curriculum_doc_present, letter_motivation_doc_present, past_attachments
 
 
 def remove_attachment(request, application_id=None):
@@ -82,38 +80,43 @@ def safe_document_removal(application_name, document):
         document.delete()
 
 
-def list_attachments(application):
-    application_document_files = mdl.application_document_file.find_document_by_application(application)
-    document_files =[application_document_file.document_file for application_document_file
-            in application_document_files]
-
-    for doc in document_files:
-        doc.description = _(doc.description)
-
-    return document_files
-
-
 def save_attachments(request, application_id):
     application = mdl.application.find_by_id(application_id)
-    UploadDocumentFileFormSet = formset_factory(UploadDocumentFileForm, extra=0)
+    data = request.POST
     if request.method == "POST":
-        document_formset = UploadDocumentFileFormSet(request.POST, request.FILES)
-        if document_formset.is_valid():
-            for document in document_formset:
-                file_name = document.cleaned_data['file_name']
-                file = document.cleaned_data['file']
-                description = document.cleaned_data['description']
-                storage_duration = 720
-                application_name = "admission_attachments"
-                content_type = file.content_type
-                size = file.size
-                doc_file = DocumentFile(file_name=file_name, file=file,
-                                        description=description, storage_duration=storage_duration,
-                                        application_name=application_name, content_type=content_type,
-                                        size=size, update_by=request.user.username)
-                doc_file.save()
-                application_file = mdl.application_document_file.ApplicationDocumentFile()
-                application_file.application = application
-                application_file.document_file = doc_file
-                application_file.save()
+        document_form = UploadDocumentFileForm(request.POST, request.FILES)
+        if document_form.is_valid():
+            file = request.FILES['file']
+            file_name = file.name
+            description = data['description']
+            storage_duration = 720
+            application_name = "admission_attachments"
+            content_type = file.content_type
+            size = file.size
+            doc_file = create_document_file(application_name, content_type, description, file, file_name, request, size,
+                                            storage_duration)
+            create_application_file(application, doc_file)
     return redirect("attachments", application_id)
+
+
+def create_document_file(application_name, content_type, description, file, file_name, request, size, storage_duration):
+    doc_file = DocumentFile(file_name=file_name, file=file,
+                            description=description, storage_duration=storage_duration,
+                            application_name=application_name, content_type=content_type,
+                            size=size, update_by=request.user.username)
+    doc_file.save()
+    return doc_file
+
+
+def create_application_file(application, doc_file):
+    application_file = mdl.application_document_file.ApplicationDocumentFile()
+    application_file.application = application
+    application_file.document_file = doc_file
+    application_file.save()
+
+
+def list_attachments(application):
+    application_document_files = mdl.application_document_file.find_document_by_application(application)
+    document_files = [application_document_file.document_file for application_document_file
+                      in application_document_files]
+    return document_files

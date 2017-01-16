@@ -40,3 +40,4 @@ class RemoveAttachmentForm(forms.Form):
                 DocumentFile.objects.get(pk=attachment_id)
             except ObjectDoesNotExist:
                 self.add_error('attachment_id', _('attachment_does_not_exist'))
+
