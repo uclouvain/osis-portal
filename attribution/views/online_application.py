@@ -341,9 +341,10 @@ def delete(request, tutor_application_id):
     if tutor_application_to_delete:
         queue_sender\
             .send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
-                          message_generation.generate_message_from_tutor_application(tutor_application_to_delete,
-                                                                                     tutor_application_to_delete.function
-                                                                                     DELETE_OPERATION ))
+                          message_generation.generate_message_from_tutor_application(
+                              tutor_application_to_delete,
+                              tutor_application_to_delete.function,
+                              DELETE_OPERATION ))
 
         tutor_application_to_delete.delete()
 
@@ -519,6 +520,8 @@ def save(request, tutor_application_id):
             tutor_application_to_save.remark = form['remark'].value()
             tutor_application_to_save.function = define_tutor_application_function(tutor_application_to_save)
             tutor_application_to_save.save()
+            application_charge_lecturing.tutor_application = tutor_application_to_save
+            application_charge_practical.tutor_application = tutor_application_to_save
         queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
                                   message_generation.generate_message_from_application_charge(application_charge_lecturing,
                                                                                               UPDATE_OPERATION,
