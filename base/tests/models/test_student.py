@@ -51,3 +51,10 @@ def create_student_with_specific_registration_id(registration_id):
     a_student = mdl_base.student.Student(registration_id=registration_id, person=create_person())
     a_student.save()
     return a_student
+
+def create_student_with_registration_person(a_registration_id, a_person):
+    a_student = mdl_base.student.Student()
+    a_student.registration_id = a_registration_id
+    a_student.person = a_person
+    a_student.save()
+    return a_student

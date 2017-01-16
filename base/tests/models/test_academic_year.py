@@ -31,3 +31,10 @@ def create_academic_year():
     an_academic_year.year = 2016
     an_academic_year.save()
     return an_academic_year
+
+
+def create_academic_year_with_year(a_year):
+    an_academic_year = mdl_base.academic_year.AcademicYear()
+    an_academic_year.year = a_year
+    an_academic_year.save()
+    return an_academic_year

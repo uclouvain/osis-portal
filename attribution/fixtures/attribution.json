@@ -1,0 +1,158 @@
+[
+  {
+    "model": "attribution.attribution",
+    "pk": 1,
+    "fields": {
+      "external_id": null,
+      "start_date": "2016-03-07",
+      "end_date": "2016-03-07",
+      "function": "PROFESSOR",
+      "learning_unit_year": 1,
+      "tutor": 1
+    }
+  },
+  {
+    "model": "attribution.attribution",
+    "pk": 2,
+    "fields": {
+      "external_id": null,
+      "start_date": "2016-03-07",
+      "end_date": "2016-03-07",
+      "function": "PROFESSOR",
+      "learning_unit_year": 2,
+      "tutor": 1
+    }
+  },
+  {
+    "model": "attribution.attribution",
+    "pk": 3,
+    "fields": {
+      "external_id": null,
+      "start_date": "2016-03-07",
+      "end_date": "2016-03-07",
+      "function": "PROFESSOR",
+      "learning_unit_year": 3,
+      "tutor": 1
+    }
+  },
+  {
+    "model": "attribution.attribution",
+    "pk": 4,
+    "fields": {
+      "external_id": null,
+      "start_date": "2016-03-07",
+      "end_date": "2016-03-07",
+      "function": "PROFESSOR",
+      "learning_unit_year": 4,
+      "tutor": 2
+    }
+  },
+  {
+    "model": "attribution.attribution",
+    "pk": 5,
+    "fields": {
+      "external_id": null,
+      "start_date": "2016-03-07",
+      "end_date": "2016-03-07",
+      "function": "PROFESSOR",
+      "learning_unit_year": 5,
+      "tutor": 2
+    }
+  },
+  {
+    "model": "attribution.attribution",
+    "pk": 6,
+    "fields": {
+      "external_id": null,
+      "start_date": "2016-03-07",
+      "end_date": "2016-03-07",
+      "function": "PROFESSOR",
+      "learning_unit_year": 6,
+      "tutor": 3
+    }
+  },
+  {
+    "model": "attribution.attribution",
+    "pk": 7,
+    "fields": {
+      "external_id": null,
+      "start_date": "2016-03-07",
+      "end_date": "2016-03-07",
+      "function": "PROFESSOR",
+      "learning_unit_year": 7,
+      "tutor": 4
+    }
+  },
+  {
+    "model": "attribution.attribution",
+    "pk": 8,
+    "fields": {
+      "external_id": null,
+      "start_date": "2016-03-07",
+      "end_date": "2016-03-07",
+      "function": "PROFESSOR",
+      "learning_unit_year": 8,
+      "tutor": 5
+    }
+  },
+  {
+    "model": "attribution.attribution",
+    "pk": 9,
+    "fields": {
+      "external_id": null,
+      "start_date": "2016-03-07",
+      "end_date": "2016-03-07",
+      "function": "PROFESSOR",
+      "learning_unit_year": 9,
+      "tutor": 5
+    }
+  },
+  {
+    "model": "attribution.attribution",
+    "pk": 10,
+    "fields": {
+      "external_id": null,
+      "start_date": "2016-03-07",
+      "end_date": "2016-03-07",
+      "function": "PROFESSOR",
+      "learning_unit_year": 10,
+      "tutor": 6
+    }
+  },
+  {
+    "model": "attribution.attribution",
+    "pk": 11,
+    "fields": {
+      "external_id": null,
+      "start_date": "2016-03-07",
+      "end_date": "2016-03-07",
+      "function": "COORDINATOR",
+      "learning_unit_year": 1,
+      "tutor": 7
+    }
+  },
+  {
+    "model": "attribution.attribution",
+    "pk": 12,
+    "fields": {
+      "external_id": null,
+      "start_date": "2016-03-07",
+      "end_date": "2016-03-07",
+      "function": "COORDINATOR",
+      "learning_unit_year": 5,
+      "tutor": 8
+    }
+  },
+  {
+    "model": "attribution.attribution",
+    "pk": 13,
+    "fields": {
+      "external_id": null,
+      "start_date": "2016-03-07",
+      "end_date": "2016-03-07",
+      "function": "COORDINATOR",
+      "learning_unit_year": 7,
+      "tutor": 9
+    }
+  }
+]

@@ -1,0 +1,152 @@
+{% extends "layout.html" %}
+
+{% load staticfiles %}
+{% load i18n %}
+{% load l10n %}
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+{% block breadcrumb_area %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
+                                                                          aria-hidden="true"></span></a></li>
+    {% block breadcrumb %}
+        <li><a href="{% url 'learning_unit_applications' %}" id="lnk_applications">{% trans 'my_applications' %}</a></li>
+        <li>{% trans 'my_application' %}</li>
+    {% endblock %}
+    </ol>
+{% endblock %}
+{% block content %}
+    <div class="panel panel-default"
+         id="pnl_application_form">
+        <div class="panel-heading">{% trans 'application'%}</div>
+        <div class="panel-body">
+            <form action="{% if application.tutor_application.id %}{% url 'save_tutor_application' application.tutor_application.id %}{% else %}{% url 'save_new_tutor_application' %}{% endif%}"
+                  method="post"
+                  class="form" role="form">
+                <input type="hidden"
+                       id="hdn_learning_unit_year_id"
+                       name="learning_unit_year_id"
+                       value="{{application.tutor_application.learning_unit_year.id }}">
+                {% csrf_token %}
+                <input type="hidden"
+                       id="hdn_application_charge_lecturing_id"
+                       name="application_charge_lecturing_id"
+                       value="{{ application.application_charge_lecturing.id }}">
+                <input type="hidden"
+                       id="hdn_application_charge_practical_id"
+                       name="application_charge_practical_id"
+                       value="{{ application.application_charge_practical.id }}">
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>{% trans 'code' %}</label>
+                        <br>
+                        {{ application.tutor_application.learning_unit_year.acronym }}
+                    </div>
+                    <div class="col-md-10">
+                        <label>{% trans 'title' %}</label>
+                        <br>
+                        {{ application.tutor_application.learning_unit_year.title }}
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>{% trans 'lecturing_hours' %}</label>
+                        <br>
+                        {{ application.lecturing_duration | default_if_none:''}}
+                    </div>
+                    <div class="col-md-2">
+                        <label>{% trans 'practical_hours' %}</label>
+                        <br>
+                        {{ application.practice_duration | default_if_none:'' }}
+                    </div>
+                    <div class="col-md-2">
+                        <label>{% trans 'lecturing_hours_vacant' %}</label>
+                        <br>
+                        <span name="max_charge_lecturing" style="visibility:hidden;display:none;">{{ form.max_charge_lecturing }}</span>
+                        {{ application.vacant_attribution_charge_lecturing | default_if_none:''}}
+                    </div>
+                    <div class="col-md-6">
+                        <label>{% trans 'practical_hours_vacant' %}</label>
+                        <br>
+                        <span name="max_charge_practical" style="visibility:hidden;display:none;">{{ form.max_charge_practical}}</span>
+                        {{ application.vacant_attribution_charge_practical | default_if_none:'' }}
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>{% trans 'lecturing_hours_asked' %}</label>
+                        <br>
+                        <input class="form-control"
+                               id="txt_charge_lecturing"
+                               name="charge_lecturing"
+                               value="{{ form.charge_lecturing.value | default_if_none:'' }}">
+                        {% if  form.charge_lecturing.errors %}<span class="error">{{ form.charge_lecturing.errors|striptags }}</span>{% endif %}
+                    </div>
+                    <div class="col-md-2">
+                        <label>{% trans 'practical_hours_asked' %}</label>
+                        <br>
+                        <input class="form-control"
+                               id="txt_charge_practical"
+                               name="charge_practical"
+                               value="{{ form.charge_practical.value | default_if_none:'' }}">
+                        {% if form.charge_practical.errors %}<span class="error">{{ form.charge_practical.errors|striptags }}</span>{% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <label>{% trans 'function' %}</label>
+                        <br>
+                        {% if application.tutor_application.function  %}
+                            {% trans application.tutor_application.function %}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </div>
+                </div>
+
+                <br>
+                <label>{% trans 'course_summary' %}</label>
+                <br>
+                <textarea id="txt_course_summary"
+                          name="course_summary"
+                          class="form-control"
+                        >{{form.course_summary.value | default_if_none:''}}</textarea>
+                <br>
+                <label>{% trans 'remark' %}</label>
+                <br>
+                <textarea id="txt_remark"
+                          name="remark"
+                          class="form-control">{{form.remark.value | default_if_none:''}}</textarea>
+                {% if form.remark.errors %}<span class="error">{{ form.remark.errors|striptags }}</span>{% endif %}
+                <br>
+                <button class="btn btn-primary" id="bt_submit" type="submit">
+                    <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> {% trans 'submit' %}</button>
+                <a class="btn btn-default" href="{% url 'learning_unit_applications' %}">{% trans 'cancel' %}</a>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -169,9 +169,6 @@ LOGGING = {
 
 DEFAULT_LOGGER = 'default'
 
-COUCHBASE_CONNECTION_STRING='couchbase://localhost/'
-COUCHBASE_PASSWORD=''
-
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
@@ -243,7 +240,9 @@ QUEUES = {
         'PAPER_SHEET': 'paper_sheet',
         'PERFORMANCE': 'performance_to_client',
         'STUDENT_PERFORMANCE': 'rpc_performance_from_client',
-        'STUDENT_POINTS': 'rpc_performance_to_client'
+        'STUDENT_POINTS': 'rpc_performance_to_client',
+        'PERFORMANCE_UPDATE_EXP_DATE': 'performance_exp_date',
+        'ATTRIBUTION' : 'attribution'
     }
 }
 
@@ -287,6 +286,12 @@ CKEDITOR_CONFIGS = {
         ],
     },
 }
+
+
+TIME_TABLE_URL= ""
+TIME_TABLE_NUMBER = ""
+CATALOG_URL = ""
+
 
 try:
     from frontoffice.server_settings import *

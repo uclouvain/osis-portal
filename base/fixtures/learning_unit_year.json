@@ -1,0 +1,262 @@
+[
+  {
+    "model": "base.learningunityear",
+    "pk": 1,
+    "fields": {
+      "external_id": null,
+      "acronym": "LULBG2454",
+      "title": "Spectroscopie atmosph\u00e9rique et t\u00e9l\u00e9d\u00e9tection spatiale (ULB)",
+      "credits": "4.00",
+      "academic_year": 1,
+      "learning_unit": 1,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 2,
+    "fields": {
+      "external_id": null,
+      "acronym": "LMEM2110",
+      "title": "Recent Continental Philosophy",
+      "credits": "7.00",
+      "academic_year": 1,
+      "learning_unit": 2,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 3,
+    "fields": {
+      "external_id": null,
+      "acronym": "LELTR7911",
+      "title": "Traduccion espanol-franc\u00e9s (105620) (6)",
+      "credits": "2.00",
+      "academic_year": 1,
+      "learning_unit": 3,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 4,
+    "fields": {
+      "external_id": null,
+      "acronym": "LPSPG1021",
+      "title": "S\u00e9minaire approfondi: Questions approfondies de psychologie de la personnalit\u00e9",
+      "credits": "7.00",
+      "academic_year": 1,
+      "learning_unit": 4,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 5,
+    "fields": {
+      "external_id": null,
+      "acronym": "LSINF1211",
+      "title": "Introduction aux syst\u00e8mes d'information",
+      "credits": "8.00",
+      "academic_year": 1,
+      "learning_unit": 5,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 6,
+    "fields": {
+      "external_id": null,
+      "acronym": "LBIR1320B",
+      "title": "S\u00e9minaires de chimie analytique",
+      "credits": "2.00",
+      "academic_year": 1,
+      "learning_unit": 6,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 7,
+    "fields": {
+      "external_id": null,
+      "acronym": "LBIR2000A",
+      "title": "Stage en Master: partim A",
+      "credits": "2.00",
+      "academic_year": 1,
+      "learning_unit": 7,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 8,
+    "fields": {
+      "external_id": null,
+      "acronym": "LDUAL4367",
+      "title": "Ontwerp van constructiecomponenten: beton, deel 2 (Katholieke Universiteit te Leuven)",
+      "credits": "2.00",
+      "academic_year": 1,
+      "learning_unit": 8,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 9,
+    "fields": {
+      "external_id": null,
+      "acronym": "XUPMA1104",
+      "title": "Estudios de mercado y gesti\u00f3n de calidad en la industria alimentaria",
+      "credits": "3.00",
+      "academic_year": 1,
+      "learning_unit": 9,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 10,
+    "fields": {
+      "external_id": null,
+      "acronym": "LDUAL4355",
+      "title": "Elektrische actuatoren: gevorderde aspecten en toepassingen m.i.v. transport (Katholieke Universiteit te Leuven)",
+      "credits": "6.00",
+      "academic_year": 1,
+      "learning_unit": 10,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 11,
+    "fields": {
+      "external_id": null,
+      "acronym": "LULBG2454",
+      "title": "Spectroscopie atmosph\u00e9rique et t\u00e9l\u00e9d\u00e9tection spatiale (ULB)",
+      "credits": "4.00",
+      "academic_year": 2,
+      "learning_unit": 1,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 12,
+    "fields": {
+      "external_id": null,
+      "acronym": "LMEM2110",
+      "title": "Recent Continental Philosophy",
+      "credits": "7.00",
+      "academic_year": 2,
+      "learning_unit": 2,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 13,
+    "fields": {
+      "external_id": null,
+      "acronym": "LELTR7911",
+      "title": "Traduccion espanol-franc\u00e9s (105620) (6)",
+      "credits": "2.00",
+      "academic_year": 2,
+      "learning_unit": 3,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 14,
+    "fields": {
+      "external_id": null,
+      "acronym": "LPSPG1021",
+      "title": "S\u00e9minaire approfondi: Questions approfondies de psychologie de la personnalit\u00e9",
+      "credits": "7.00",
+      "academic_year": 2,
+      "learning_unit": 4,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 15,
+    "fields": {
+      "external_id": null,
+      "acronym": "LSINF1211",
+      "title": "Introduction aux syst\u00e8mes d'information",
+      "credits": "8.00",
+      "academic_year": 2,
+      "learning_unit": 5,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 16,
+    "fields": {
+      "external_id": null,
+      "acronym": "LBIR1320B",
+      "title": "S\u00e9minaires de chimie analytique",
+      "credits": "2.00",
+      "academic_year": 2,
+      "learning_unit": 6,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 17,
+    "fields": {
+      "external_id": null,
+      "acronym": "LBIR2000A",
+      "title": "Stage en Master: partim A",
+      "credits": "2.00",
+      "academic_year": 2,
+      "learning_unit": 7,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 18,
+    "fields": {
+      "external_id": null,
+      "acronym": "LDUAL4367",
+      "title": "Ontwerp van constructiecomponenten: beton, deel 2 (Katholieke Universiteit te Leuven)",
+      "credits": "2.00",
+      "academic_year": 2,
+      "learning_unit": 8,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 19,
+    "fields": {
+      "external_id": null,
+      "acronym": "XUPMA1104",
+      "title": "Estudios de mercado y gesti\u00f3n de calidad en la industria alimentaria",
+      "credits": "3.00",
+      "academic_year": 2,
+      "learning_unit": 9,
+      "in_charge": true
+    }
+  },
+  {
+    "model": "base.learningunityear",
+    "pk": 20,
+    "fields": {
+      "external_id": null,
+      "acronym": "LDUAL4355",
+      "title": "Elektrische actuatoren: gevorderde aspecten en toepassingen m.i.v. transport (Katholieke Universiteit te Leuven)",
+      "credits": "6.00",
+      "academic_year": 2,
+      "learning_unit": 10,
+      "in_charge": true
+    }
+  }
+]
