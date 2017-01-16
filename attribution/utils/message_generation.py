@@ -112,5 +112,5 @@ def generate_message(a_tutor_application, an_application_charge, operation, func
         if an_application_charge.learning_unit_component.type == component_type.PRACTICAL_EXERCISES:
             line_attribution['practical_allocation'] = str(an_application_charge.allocation_charge)
             line_attribution['lecturing_allocation'] = str(get_allocation_charge(a_tutor_application,
-                                                                                   component_type.LECTURING))
+                                                                                 component_type.LECTURING))
     return json.dumps(line_attribution, cls=DjangoJSONEncoder)
