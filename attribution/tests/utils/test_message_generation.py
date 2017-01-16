@@ -84,7 +84,9 @@ class TestMessageGeneration(TestCase):
 
     def test_creation_message_from_application_charge(self):
         try:
-            message_generation.generate_message_from_application_charge(self.an_application_charge_lecturing, 'update')
+            message_generation.generate_message_from_application_charge(self.an_application_charge_lecturing,
+                                                                        'update',
+                                                                        function.CO_HOLDER)
         except Exception:
             self.fail("{0} raised ExceptionType unexpectedly!"
                       .format("test_creation_message_from_application_charge"))
@@ -92,7 +94,9 @@ class TestMessageGeneration(TestCase):
     def test_creation_message_from_application_charge_with_unexpected_external_id_format(self):
         try:
             self.an_application_charge_lecturing.learning_unit_component.learning_unit_year.external_id = '428750.2017'
-            message_generation.generate_message_from_application_charge(self.an_application_charge_lecturing, 'update')
+            message_generation.generate_message_from_application_charge(self.an_application_charge_lecturing,
+                                                                        'update',
+                                                                        function.CO_HOLDER)
         except Exception:
             self.fail("{0} raised ExceptionType unexpectedly!"
                       .format("test_creation_message_from_application_charge"))

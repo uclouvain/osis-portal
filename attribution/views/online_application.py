@@ -68,6 +68,8 @@ START_ACADEMIC_YEAR = 'start_academic_year'
 END_ACADEMIC_YEAR = 'end_academic_year'
 NO_CHARGE = 0
 
+UPDATE_OPERATION = "update"
+DELETE_OPERATION = "delete"
 
 def get_year(a_year):
     if a_year:
@@ -264,10 +266,8 @@ def create_application_charge(a_new_tutor_application, charge_duration, a_compon
                               learning_unit_component=a_learning_unit_component,
                               allocation_charge=charge_duration)
         a_new_application_charge.save()
-        queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
-                                  message_generation.generate_message_from_application_charge(a_new_application_charge,
-                                                                                              'update'))
-
+        return a_new_application_charge
+    return None
 
 def is_vacant(a_learning_unit_year):
     if a_learning_unit_year:
@@ -341,7 +341,10 @@ def delete(request, tutor_application_id):
     if tutor_application_to_delete:
         queue_sender\
             .send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
-                          message_generation.generate_message_from_tutor_application(tutor_application_to_delete))
+                          message_generation.generate_message_from_tutor_application(
+                              tutor_application_to_delete,
+                              tutor_application_to_delete.function,
+                              DELETE_OPERATION ))
 
         tutor_application_to_delete.delete()
 
@@ -460,16 +463,29 @@ def save_on_new_learning_unit(request):
             new_tutor_application.remark = form['remark'].value()
             new_tutor_application.save()
 
-        application_charge_create(new_tutor_application,
-                                  format_charge(form['charge_lecturing'].value()),
-                                  component_type.LECTURING)
+        application_charge_lecturing = application_charge_create(new_tutor_application,
+                                                                 format_charge(form['charge_lecturing'].value()),
+                                                                 component_type.LECTURING)
 
-        application_charge_create(new_tutor_application,
-                                  format_charge(form['charge_practical'].value()),
-                                  component_type.PRACTICAL_EXERCISES)
+        application_charge_practical = application_charge_create(new_tutor_application,
+                                                                 format_charge(form['charge_practical'].value()),
+                                                                 component_type.PRACTICAL_EXERCISES)
+
 
         new_tutor_application.function = define_tutor_application_function(new_tutor_application)
         new_tutor_application.save()
+        queue_sender.send_message(
+            settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
+            message_generation.generate_message_from_application_charge(
+                application_charge_lecturing,
+                UPDATE_OPERATION,
+                define_tutor_application_function(new_tutor_application)))
+
+        queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
+                                  message_generation.generate_message_from_application_charge(
+                                      application_charge_practical,
+                                      UPDATE_OPERATION,
+                                      define_tutor_application_function(new_tutor_application)))
 
         return HttpResponseRedirect(reverse('learning_unit_applications'))
     else:
@@ -494,9 +510,9 @@ def save(request, tutor_application_id):
     form = ApplicationForm(data=request.POST)
 
     if form.is_valid():
-        allocation_charge_update(request.POST.get('application_charge_lecturing_id'),
+        application_charge_lecturing = allocation_charge_update(request.POST.get('application_charge_lecturing_id'),
                                  form['charge_lecturing'].value().replace(',', '.'))
-        allocation_charge_update(request.POST.get('application_charge_practical_id'),
+        application_charge_practical = allocation_charge_update(request.POST.get('application_charge_practical_id'),
                                  form['charge_practical'].value().replace(',', '.'))
 
         if tutor_application_to_save:
@@ -504,6 +520,17 @@ def save(request, tutor_application_id):
             tutor_application_to_save.remark = form['remark'].value()
             tutor_application_to_save.function = define_tutor_application_function(tutor_application_to_save)
             tutor_application_to_save.save()
+            application_charge_lecturing.tutor_application = tutor_application_to_save
+            application_charge_practical.tutor_application = tutor_application_to_save
+        queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
+                                  message_generation.generate_message_from_application_charge(application_charge_lecturing,
+                                                                                              UPDATE_OPERATION,
+                                                                                              tutor_application_to_save.function))
+        queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
+                                  message_generation.generate_message_from_application_charge(application_charge_practical,
+                                                                                              UPDATE_OPERATION,
+                                                                                              tutor_application_to_save.function))
+
         return HttpResponseRedirect(reverse('learning_unit_applications'))
 
     else:
@@ -515,16 +542,15 @@ def save(request, tutor_application_id):
 
 def application_charge_create(a_tutor_application, a_charge, a_component_type):
     a_learning_unit_year = a_tutor_application.learning_unit_year
-    a_learning_unit_component = mdl_base.learning_unit_component.find_by_learning_year_type(a_learning_unit_year, a_component_type)
+    a_learning_unit_component = mdl_base.learning_unit_component.find_by_learning_year_type(a_learning_unit_year,
+                                                                                            a_component_type)
     if a_tutor_application and a_learning_unit_component and a_learning_unit_year:
         application_charge = mdl_attribution.application_charge\
             .ApplicationCharge(tutor_application=a_tutor_application,
                                learning_unit_component=a_learning_unit_component,
                                allocation_charge=a_charge)
         application_charge.save()
-        queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
-                                  message_generation.generate_message_from_application_charge(application_charge,
-                                                                                              'update'))
+        return application_charge
 
 
 def allocation_charge_update(an_application_charge_id, a_field_value):
@@ -533,9 +559,9 @@ def allocation_charge_update(an_application_charge_id, a_field_value):
         if application_charge and a_field_value:
             application_charge.allocation_charge = a_field_value
             application_charge.save()
-            queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
-                                      message_generation.generate_message_from_application_charge(application_charge,
-                                                                                                  'update'))
+            return application_charge
+    return None
+
 
 
 def get_learning_unit_year_vacant(a_year, an_acronym, a_tutor):

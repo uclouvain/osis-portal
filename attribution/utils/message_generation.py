@@ -86,22 +86,22 @@ def get_learning_unit_year(a_learning_unit_year_external_id):
     return None
 
 
-def generate_message_from_tutor_application(a_tutor_application):
-    return generate_message(a_tutor_application, None, "delete")
+def generate_message_from_tutor_application(a_tutor_application, function, operation):
+    return generate_message(a_tutor_application, None, operation, function)
 
 
-def generate_message_from_application_charge(an_application_charge, operation=None):
+def generate_message_from_application_charge(an_application_charge, operation, function):
     a_tutor_application = an_application_charge.tutor_application
-    return generate_message(a_tutor_application, an_application_charge, operation)
+    return generate_message(a_tutor_application, an_application_charge, operation, function)
 
 
-def generate_message(a_tutor_application, an_application_charge, operation):
+def generate_message(a_tutor_application, an_application_charge, operation, function):
     line_attribution = dict()
     if operation:
         line_attribution['operation'] = operation
     line_attribution['learning_unit_year'] = get_learning_unit_info(a_tutor_application.learning_unit_year.external_id)
     line_attribution['tutor'] = get_tutor_info(a_tutor_application.tutor.external_id)
-    line_attribution['function'] = a_tutor_application.function
+    line_attribution['function'] = function
     line_attribution['remark'] = a_tutor_application.remark
     line_attribution['course_summary'] = a_tutor_application.course_summary
     if an_application_charge:
