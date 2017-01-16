@@ -30,7 +30,6 @@ from admission.views import demande_validation, navigation
 from admission.forms.attachement import RemoveAttachmentForm
 from osis_common.forms import UploadDocumentFileForm
 from osis_common.models.document_file import DocumentFile
-from django.utils.translation import ugettext_lazy as _
 
 
 def update(request, application_id=None):
@@ -38,7 +37,7 @@ def update(request, application_id=None):
     curriculum_doc_present, letter_motivation_doc_present, past_attachments = check_document_type(application)
     applicant = mdl.applicant.find_by_user(request.user)
     form = UploadDocumentFileForm(initial={'storage_duration': 0, 'update_by': applicant})
-    list_choices = [_(x[1]) for x in document_type.FILE_TYPE_CHOICES]
+    list_choices = document_type.FILE_TYPE_CHOICES
     data = {
         "form": form,
         "tab_active": navigation.ATTACHMENTS_TAB,
@@ -58,9 +57,9 @@ def check_document_type(application):
     letter_motivation_doc_present = None
     curriculum_doc_present = None
     for attachment in past_attachments:
-        if attachment.description == _("letter_motivation"):
+        if attachment.description == "letter_motivation":
             letter_motivation_doc_present = True
-        if attachment.description == _("curriculum"):
+        if attachment.description == "curriculum":
             curriculum_doc_present = True
     return curriculum_doc_present, letter_motivation_doc_present, past_attachments
 
@@ -88,7 +87,10 @@ def save_attachments(request, application_id):
         if document_form.is_valid():
             file = request.FILES['file']
             file_name = file.name
-            description = data['description']
+            if data['input_description']:
+                description = data['input_description']
+            else:
+                description = data['description']
             storage_duration = 720
             application_name = "admission_attachments"
             content_type = file.content_type

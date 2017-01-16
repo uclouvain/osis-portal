@@ -74,8 +74,6 @@
     <a class="btn btn-default" data-toggle="modal" data-target="#pnl_upload_files"
        id="btn_add_file" style="margin-right: 5px;" title="{% trans 'add_file'%}">
         <span class="glyphicon glyphicon-plus" aria-hidden="true" id="spn_add_file"></span></a>
-    <br><br>
-    <!-- UploadFile modal -->
     <div class="modal fade" id="pnl_upload_files"
          tabindex="-1" role="dialog" >
         <div class="modal-dialog" role="document">
@@ -87,25 +85,23 @@
                     </h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="txt_file">{% trans 'file' %}</label>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="file" id="txt_file" name="file">
-                        </div>
+                    <div class="panel-group">
+                        <label for="txt_file">{% trans 'file' %}</label>
+                        <input type="file" id="txt_file" name="file">
                     </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="txt_description">{% trans 'description' %}</label>
-                        </div>
-                        <div class="col-md-4">
-                            <select id="txt_description"  name="description" style="margin:-6px;">
-                                {% for document_type in document_type_choices %}
-                                    <option value="{{ document_type  }}">{{ document_type }}</option>
-                                {% endfor %}
-                            </select>
+                    <div class="panel-group">
+                        <label for="txt_description">{% trans 'description' %}</label>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <select id="txt_description"  name="description" onchange="showDiv(this)">
+                                    {% for document_type in document_type_choices %}
+                                        <option value="{{ document_type.1  }}">{% trans document_type.1 %}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-8" id="hidden_div" style="display: none;">
+                                <input id="input_description"  name="input_description">
+                            </div>
                         </div>
                     </div>
                     {{ form.storage_duration }}{{ form.application_name }}{{ form.content_type }}{{ form.update_by }}
@@ -118,62 +114,42 @@
         </div>
     </div>
 </form>
-<!-- HEADER -->
-<div class="row">
-    <div class="col-md-4"><strong>{% trans 'file_name' %}</strong></div>
-    <div class="col-md-2"><strong>{% trans 'file' %}</strong></div>
-    <div class="col-md-4"><strong>{% trans 'description' %}</strong></div>
-</div>
-<!-- PREVIOUS UPLOADED ATTACHMENTS -->
-{% for attachment in attachments %}
-<br>
-<div class="row">
-    <div class="col-md-4">{{ attachment.file_name }}</div>
-    <div class="col-md-2">
-        <a href="{% url 'download' attachment.pk %}">
-            <span class="glyphicon glyphicon-open-file"></span>
-        </a> </div>
-    <div class="col-md-4">
-        {{ attachment.description }}
-    </div>
-    <div class="col-md-2">
-    <form action="{% url 'remove_attachment' application.id %}" name="remove_attachment_{{attachment.pk}}" method="post"
-          id="form_attachements">
-        {% csrf_token %}
-        {% if removeAttachmentForm.errors %}
-        <div class="alert alert-danger" role="alert">
-            <ul style="list-style-type: none">
-                {% for field in removeAttachmentForm %}
-                {% for error in field.errors %}
-                <li>{{ error | escape }}</li>
-                {% endfor %}
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-        <input name="attachment_id" class="form-control" type="hidden" value="{{ attachment.pk }}">
-        <!-- Button to triger modal -->
-        <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#btn_remove_{{attachment.pk}}">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-        </button>
-        <!-- Modal -->
-        <div class="modal fade" id="btn_remove_{{attachment.pk}}" tabindex="-1" role="dialog" aria-labelledby="modal_{{attachment.pk}}">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        {% trans 'remove_validation'%}Are you sure want to remove the file (<b>{{ attachment.file_name }}</b>) ?
+<table class="table table-hover" style="width:90%;margin-left:5%;">
+    <tr>
+        <th>{% trans 'file_name'%}</th>
+        <th>{% trans 'description'%}</th>
+        <th></th>
+    </tr>
+    {% for attachment in attachments %}
+        <tr>
+            <td><a href="{% url 'download' attachment.pk %}">{{ attachment.file_name }}</a></td>
+            <td>{% trans attachment.description %}</td>
+            <td>
+                <form action="{% url 'remove_attachment' application.id %}" name="remove_attachment_{{attachment.pk}}"
+                      method="post" id="form_attachments">
+                    {% csrf_token %}
+                    <input name="attachment_id" class="form-control" type="hidden" value="{{ attachment.pk }}">
+                    <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#btn_remove_{{attachment.pk}}">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+                    <div class="modal fade" id="btn_remove_{{attachment.pk}}" tabindex="-1" role="dialog" aria-labelledby="modal_{{attachment.pk}}">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    {% trans 'remove_validation'%}Are you sure want to remove the file (<b>{{ attachment.file_name }}</b>) ?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                                    <button type="submit" class="btn btn-default btn-sm">Yes</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                        <button type="submit" class="btn btn-default btn-sm">Yes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-    </div>
-</div>
-{% endfor %}
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
 <br>
 <div class="row">
     <div class="col-md-6">
@@ -192,3 +168,12 @@
             <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span></a>
     </div>
 </div>
+<script type="text/javascript">
+   function showDiv(elem){
+        if(elem.value == "other"){
+            document.getElementById('hidden_div').style.display = "block";
+        }else{
+            document.getElementById('hidden_div').style.display = "none";
+        }
+   }
+</script>
