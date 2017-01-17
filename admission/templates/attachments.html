@@ -136,11 +136,11 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-body">
-                                    {% trans 'remove_validation'%}(<b>{{ attachment.file_name }}</b>)
+                                    {% trans 'remove_validation'%}
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                                    <button type="submit" class="btn btn-default btn-sm">Yes</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'no'%}</button>
+                                    <button type="submit" class="btn btn-default btn-sm">{% trans 'yes'%}</button>
                                 </div>
                             </div>
                         </div>
