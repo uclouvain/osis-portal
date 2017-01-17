@@ -29,7 +29,7 @@ from base import models as mdl_base
 APPLICATION_SESSION_TITLE = "Application session"
 
 
-def is_online_application_opened():
+def is_online_application_opened(user):
     application_year = mdl_base.academic_year.find_next_academic_year()
     if application_year:
         an_academic_year = mdl_base.academic_year.find_by_year(application_year)

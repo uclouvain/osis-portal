@@ -27,6 +27,8 @@ import datetime
 from django.test import TestCase
 from dashboard.utils import permission
 from base.tests.models import test_academic_year, test_academic_calendar
+from django.contrib.auth.models import User
+
 
 now = datetime.datetime.now()
 
@@ -36,13 +38,16 @@ NEXT_YEAR = now.year + 1
 
 class TestPermission(TestCase):
 
+    def setUp(self):
+        self.a_user = User.objects.create_user(username='legat', email='legat@localhost', password='top_secret')
+
     def test_permission_is_undefined_no_academic_year(self):
-        self.assertEqual(permission.is_online_application_opened(), False)
+        self.assertEqual(permission.is_online_application_opened(self.a_user), False)
 
     def test_permission_is_undefined_no_academic_calendar(self):
         test_academic_year.create_academic_year_with_year(CURRENT_YEAR)
         test_academic_year.create_academic_year_with_year(NEXT_YEAR)
-        self.assertEqual(permission.is_online_application_opened(), False)
+        self.assertEqual(permission.is_online_application_opened(self.a_user), False)
 
     def test_application_session_period_opened(self):
         test_academic_year.create_academic_year_with_year(CURRENT_YEAR)
@@ -50,7 +55,7 @@ class TestPermission(TestCase):
         test_academic_calendar.create_academic_calendar(next_academic_year, permission.APPLICATION_SESSION_TITLE,
                                                         datetime.datetime(now.year, now.month, 1),
                                                         datetime.datetime(now.year, now.month+2, 1))
-        self.assertEqual(permission.is_online_application_opened(), True)
+        self.assertEqual(permission.is_online_application_opened(self.a_user), True)
 
     def test_application_session_period_closed(self):
         test_academic_year.create_academic_year_with_year(CURRENT_YEAR)
@@ -59,5 +64,5 @@ class TestPermission(TestCase):
         test_academic_calendar.create_academic_calendar(next_academic_year, permission.APPLICATION_SESSION_TITLE,
                                                         datetime.datetime(two_weeks_ago.year, two_weeks_ago.month, two_weeks_ago.day),
                                                         datetime.datetime(two_weeks_ago.year, two_weeks_ago.month, two_weeks_ago.day+1))
-        self.assertEqual(permission.is_online_application_opened(), False)
+        self.assertEqual(permission.is_online_application_opened(self.a_user), False)
 
