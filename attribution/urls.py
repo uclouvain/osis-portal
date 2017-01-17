@@ -41,6 +41,5 @@ urlpatterns = [
     url(r'^search/$', online_application.search, name='vacant_learning_unit_search'),
     url(r'^applications/renew/$', online_application.renew, name='renew'),
     url(r'^applications/new/(?:([0-9]+)/)?$', online_application.new, name='new'),
-    url(r'^applications/outside_period/$',
-        online_application.outside_period, name='outside_applications_period'),
+    url(r'^applications/outside_period/$', online_application.outside_period, name='outside_applications_period'),
 ]
