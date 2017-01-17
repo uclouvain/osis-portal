@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,23 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
 from base import models as mdl_base
 
 
-now = datetime.datetime.now()
+APPLICATION_SESSION_TITLE = "Application session"
 
 
-def create_academic_year():
-    an_academic_year = mdl_base.academic_year.AcademicYear()
-    an_academic_year.year = 2016
-    an_academic_year.save()
-    return an_academic_year
-
-
-def create_academic_year_with_year(a_year):
-    an_academic_year = mdl_base.academic_year.AcademicYear(year=a_year,
-                                                           start_date=datetime.datetime(a_year, now.month, 1),
-                                                           end_date=datetime.datetime(a_year, now.month, 28))
-    an_academic_year.save()
-    return an_academic_year
+def is_online_application_opened():
+    application_year = mdl_base.academic_year.find_next_academic_year()
+    if application_year:
+        an_academic_year = mdl_base.academic_year.find_by_year(application_year)
+        if an_academic_year:
+            return mdl_base.academic_calendar\
+                .is_academic_calendar_by_academic_year_title_opened(an_academic_year, APPLICATION_SESSION_TITLE)
+    return False

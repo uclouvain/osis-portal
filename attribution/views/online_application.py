@@ -37,7 +37,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from osis_common.queue import queue_sender
 from attribution.utils import message_generation
-from dashboard.utils import permission_utils
+from dashboard.utils import permission
 
 
 ATTRIBUTION_ID_NAME = 'attribution_id_'
@@ -302,7 +302,7 @@ def get_terminating_charges(a_year, a_tutor):
 
 @login_required
 def home(request):
-    if permission_utils.is_online_application_opened():
+    if permission.is_online_application_opened():
         application_year = mdl_base.academic_year.find_next_academic_year()
         a_tutor = mdl_base.tutor.find_by_user(request.user)
         attributions = get_attributions_allocated(application_year, a_tutor)
@@ -319,7 +319,7 @@ def home(request):
             'academic_year': "{0}-{1}".format(application_year, application_year + 1),
             'tot_lecturing': tot_lecturing,
             'tot_practical': tot_practical,
-            'online_application_opened': permission_utils.is_online_application_opened()})
+            'online_application_opened': permission.is_online_application_opened()})
     else:
         return acces_denied(request)
 
@@ -360,7 +360,7 @@ def delete(request, tutor_application_id):
 
 @login_required
 def attribution_application_form(request):
-    if permission_utils.is_online_application_opened():
+    if permission.is_online_application_opened():
         a_tutor = mdl_base.tutor.find_by_user(request.user)
         last_year = get_last_year()
 
@@ -392,7 +392,7 @@ def search(request):
 
 @login_required
 def renew(request):
-    if permission_utils.is_online_application_opened():
+    if permission.is_online_application_opened():
         for key, value in request.POST.items():
             if key.startswith(ATTRIBUTION_ID_NAME):
                 attribution_id = int(key.replace(ATTRIBUTION_ID_NAME, ''))
@@ -442,7 +442,7 @@ def create_tutor_application_from_attribution(an_attribution):
 
 @login_required
 def edit(request, tutor_application_id):
-    if permission_utils.is_online_application_opened():
+    if permission.is_online_application_opened():
         form = ApplicationForm()
         application = get_application_informations(mdl_attribution.tutor_application.find_by_id(tutor_application_id))
         if application:
@@ -469,7 +469,7 @@ def format_charge(value):
 
 @login_required
 def save_on_new_learning_unit(request):
-    if permission_utils.is_online_application_opened():
+    if permission.is_online_application_opened():
         new_tutor_application = create_tutor_application_from_user_learning_unit_year(
             request.user, request.POST.get('learning_unit_year_id'))
         form = ApplicationForm(data=request.POST)
@@ -524,7 +524,7 @@ def create_tutor_application_from_user_learning_unit_year(a_user, a_learning_uni
 
 @login_required
 def save(request, tutor_application_id):
-    if permission_utils.is_online_application_opened():
+    if permission.is_online_application_opened():
         tutor_application_to_save = mdl_attribution.tutor_application.find_by_id(tutor_application_id)
         form = ApplicationForm(data=request.POST)
 

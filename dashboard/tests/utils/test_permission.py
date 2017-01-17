@@ -24,22 +24,29 @@
 #
 ##############################################################################
 import datetime
-from base import models as mdl_base
-
+from django.test import TestCase
+from dashboard.utils import permission
+from base.tests.models import test_academic_year, test_academic_calendar
 
 now = datetime.datetime.now()
+CURRENT_YEAR = now.year
+NEXT_YEAR = now.year + 1
 
 
-def create_academic_year():
-    an_academic_year = mdl_base.academic_year.AcademicYear()
-    an_academic_year.year = 2016
-    an_academic_year.save()
-    return an_academic_year
+class TestPermission(TestCase):
 
+    def test_permission_is_undefined_no_academic_year(self):
+        self.assertEqual(permission.is_online_application_opened(), False)
 
-def create_academic_year_with_year(a_year):
-    an_academic_year = mdl_base.academic_year.AcademicYear(year=a_year,
-                                                           start_date=datetime.datetime(a_year, now.month, 1),
-                                                           end_date=datetime.datetime(a_year, now.month, 28))
-    an_academic_year.save()
-    return an_academic_year
+    def test_permission_is_undefined_no_academic_calendar(self):
+        test_academic_year.create_academic_year_with_year(CURRENT_YEAR)
+        test_academic_year.create_academic_year_with_year(NEXT_YEAR)
+        self.assertEqual(permission.is_online_application_opened(), False)
+
+    def test_permission_is_undefined(self):
+        test_academic_year.create_academic_year_with_year(CURRENT_YEAR)
+        next_academic_year = test_academic_year.create_academic_year_with_year(NEXT_YEAR)
+        test_academic_calendar.create_academic_calendar(next_academic_year, permission.APPLICATION_SESSION_TITLE,
+                                                        datetime.datetime(now.year, now.month, 1),
+                                                        datetime.datetime(now.year, now.month+2, 1))
+        self.assertEqual(permission.is_online_application_opened(), True)

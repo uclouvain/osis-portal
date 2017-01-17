@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,15 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
+from base.models import academic_calendar
 
 
-def is_online_application_opened():
-    application_year = mdl_base.academic_year.find_next_academic_year()
-    if application_year:
-        an_academic_year = mdl_base.academic_year.find_by_year(application_year)
-        if an_academic_year:
-            return mdl_base.academic_calendar.is_academic_calendar_by_academic_year_title_opened(an_academic_year,
-                                                                                                 'Application session')
+def create_academic_calendar(an_academic_year, a_title, a_start_date, a_end_date):
+    an_academic_calendar = academic_calendar.AcademicCalendar(academic_year=an_academic_year,
+                                                              start_date=a_start_date,
+                                                              end_date=a_end_date,
+                                                              title=a_title)
+    an_academic_calendar.save()
+    return an_academic_calendar
 
-    return False
+
