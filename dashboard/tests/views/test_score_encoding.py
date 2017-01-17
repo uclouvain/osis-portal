@@ -70,11 +70,11 @@ class PrintScoreSheetTest(TestCase):
         self.global_id = self.score_encoding.global_id
 
     def test_when_no_scores_sheet(self):
-        pdf = score_encoding.print_scores(None, "014")
+        pdf = score_encoding.print_scores("014")
         self.assertIsNone(pdf, "Should not create any pdf")
 
     def test_when_scores_sheet(self):
-        pdf = score_encoding.print_scores(None, self.global_id)
+        pdf = score_encoding.print_scores(self.global_id)
         self.assertTrue(pdf, "Should generate a pdf")
 
 

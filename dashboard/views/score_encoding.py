@@ -87,8 +87,8 @@ def get_score_sheet(global_id):
     document = None
     if scor_encoding:
         document = scor_encoding.document
-    if not document or is_outdated(document):
-        document = fetch_document(global_id)
+        if not document or is_outdated(document):
+            document = fetch_document(global_id)
     return document
 
 
