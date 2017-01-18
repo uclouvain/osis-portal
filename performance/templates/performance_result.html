@@ -99,7 +99,9 @@
             </tr>
         </table>
 
-        <small class="text-warning pull-right">* {% trans 'text_mean_exprimed_for_20' %}</small>
+        <div class="row container-fluid text-right">
+            <small class="text-warning">* {% trans 'text_mean_exprimed_for_20' %}</small>
+        </div>
 
         <!-- Text explaining the mention attributed for the session. -->
         <div class="row center-block">
@@ -107,46 +109,14 @@
         </div>
 
         <!-- Legend explaining letters signification -->
-        <div class="row">
-            <div class="col-md-6">
-                <p><b>{% trans 'legend'%}</b></p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <p>{% trans 'explanation_P'%}</p>
-            </div>
-            <div class="col-md-6">
-                <p>{% trans 'explanation_T'%}</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <p>{% trans 'explanation_I'%}</p>
-            </div>
-            <div class="col-md-6">
-                <p>{% trans 'explanation_TV'%}</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <p>{% trans 'explanation_Y'%}</p>
-            </div>
-            <div class="col-md-6">
-                <p>{% trans 'explanation_W'%}</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <p>{% trans 'explanation_RJ'%}</p>
-            </div>
-            <div class="col-md-6">
-                <p>{% trans 'explanation_EPM'%}</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <p>{% trans 'explanation_B'%}</p>
+
+        <div class="panel panel-default" >
+            <div class="panel-body" id="body_legend_explanation">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><b>{% trans 'legend'%}</b></p>
+                    </div>
+                </div>
             </div>
         </div>
 

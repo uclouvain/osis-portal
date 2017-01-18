@@ -5,6 +5,7 @@ function fillPage(studentJson) {
   fillSessionSummaryTable(studentJson);
   fillCoursesTable(studentJson);
   fillMentionExplanation(studentJson);
+  fillLegendExplanation(studentJson);
 }
 
 /***************************** STUDENT INFORMATION ********************/
@@ -179,12 +180,6 @@ function makeScoreCell(examJson, row){
 
 }
 
-function examScoreToString(examJson) {
-
-
-
-  return scoreToString(examJson);
-}
 
 function etatExamToString(examJson){
   if(examJson.etatExam == "D") {
@@ -216,43 +211,6 @@ function mentionToString(examJson){
   }
 }
 
-function scoreToString(examJson){
-  var score = examJson.note;
-  if (examJson.etatExam == "-") {
-    return score;
-  }
-  else if(score == "-") {
-    return examJson.etatExam;
-  }
-  return score + "  " + examJson.etatExam;
-}
-
-function inscrToString(inscr) {
-  switch (inscr) {
-    case "I":
-      return "Inscr";
-    case "R":
-      return "Rep.";
-    case "D":
-      return "Dsip.";
-    case "B":
-      return "Créd.";
-    case "K":
-      return "K94";
-    case "C":
-      return "C94";
-    case "N":
-      return "RIP";
-    case "Q":
-      return "Q94";
-    case "S":
-      return "EPM";
-    case "T":
-      return "T94";
-    default:
-      return inscr;
-  }
-}
 
 function creditToString(creditReport) {
   switch (creditReport) {
@@ -270,11 +228,32 @@ function creditToString(creditReport) {
   }
 }
 
-/***************************** MENTION EXPLANATION PARAGRAPH ************/
+/***************************** MENTION AND LEGEND EXPLANATION PARAGRAPH ************/
 
 function fillMentionExplanation(studentJson) {
   var mentionExplanation = studentJson.legende.explicationMention;
   $("#paragraph_mention_explanation").html(mentionExplanation);
+}
+
+
+function fillLegendExplanation(studentJson) {
+  var legendExplanation = studentJson.legende.explicationLettresLegende
+
+  var $frag = $(document.createDocumentFragment());
+  var $row;
+  $.each(legendExplanation, function(index, letter_explanation) {
+    if(index == 0 || index%2 == 0){
+      $row = createJQObjectNoText("<div/>", {'class':'row'}, $frag);
+      var $col = createJQObjectNoText("<div/>", {'class':'col-md-6'}, $row);
+      createJQObject("<p/>", {}, letter_explanation, $col);
+    }
+    else{
+      var $col = createJQObjectNoText("<div/>", {'class':'col-md-6'}, $row);
+      createJQObject("<p/>", {}, letter_explanation, $col);
+    }
+
+  });
+  $frag.appendTo($("#body_legend_explanation"));
 }
 
 /***************************** UTILITY FUNCTIONS ***********************/
