@@ -39,7 +39,7 @@ function fillSessionSummaryTable(studentJson) {
   var program = studentJson.monAnnee.monOffre.resultats;
 
   fillRowTotalECTSInscription(studentJson);
-  fillRowMean(program);
+  fillRowsMean(program);
   fillRowMention(program);
 }
 
@@ -58,19 +58,47 @@ function fillRowTotalECTSInscription(studentJson) {
   $frag.appendTo($("#summary_ects"));
 }
 
-function fillRowMean(programJson) {
-  var meanJanv = programJson.session[0].moyenne;
-  var meanJuin = programJson.session[1].moyenne;
-  var meanSept = programJson.session[2].moyenne;
 
-  var $rowMean = $("#summary_mean");
+function createMeanFrangment(meanJanv, meanJuin, meanSept, rowMean) {
+  var $fragGen = $(document.createDocumentFragment());
+  createJQObject("<td/>", {}, "", $fragGen);
+  createJQObject("<td/>", {}, meanJanv, $fragGen);
+  createJQObject("<td/>", {}, meanJuin, $fragGen);
+  createJQObject("<td/>", {}, meanSept, $fragGen);
+  $fragGen.appendTo(rowMean);
+}
 
-  var $frag = $(document.createDocumentFragment());
-  createJQObject("<td/>", {}, "", $frag);
-  createJQObject("<td/>", {}, meanJanv, $frag);
-  createJQObject("<td/>", {}, meanJuin, $frag);
-  createJQObject("<td/>", {}, meanSept, $frag);
-  $frag.appendTo($rowMean);
+function fillRowsMean(programJson) {
+  if(programJson.session[0].hasOwnProperty('moyenneGenerale')
+     && programJson.session[0].moyenneGenerale != null){
+    $("#summary_mean").hide();
+
+    var meanSuccJanv = programJson.session[0].moyenne;
+    var meanSuccJuin = programJson.session[1].moyenne;
+    var meanSuccSept = programJson.session[2].moyenne;
+    var $rowSuccessMean = $("#summary_success_mean");
+
+    createMeanFrangment(meanSuccJanv, meanSuccJuin, meanSuccSept, $rowSuccessMean);
+
+    var meanGenJanv = programJson.session[0].moyenneGenerale;
+    var meanGenJuin = programJson.session[1].moyenneGenerale;
+    var meanGenSept = programJson.session[2].moyenneGenerale;
+    var $rowGenMean = $("#summary_general_mean");
+
+    createMeanFrangment(meanGenJanv, meanGenJuin, meanGenSept, $rowGenMean);
+  }
+  else{
+    $("#summary_success_mean").hide();
+    $("#summary_general_mean").hide();
+
+    var meanJanv = programJson.session[0].moyenne;
+    var meanJuin = programJson.session[1].moyenne;
+    var meanSept = programJson.session[2].moyenne;
+    var $rowMean = $("#summary_mean");
+
+    createMeanFrangment(meanJanv, meanJuin, meanSept, $rowMean);
+  }
+
 }
 
 function fillRowMention(programJson) {
@@ -112,33 +140,48 @@ function addRowCourse(courseJson, $row) {
   var acronym = courseJson.sigleComplet;
   var title = courseJson.intituleComplet;
   var ects = courseJson.poids;
-  var inscr = inscrToString(courseJson.insc);
-  var janv = examScoreToString(courseJson.session[0]);
-  var juin = examScoreToString(courseJson.session[1]);
-  var sept = examScoreToString(courseJson.session[2]);
+  var janv = courseJson.session[0];
+  var juin = courseJson.session[1];
+  var sept = courseJson.session[2];
   var credit = creditToString(courseJson.creditReport);
 
   createJQObject("<td/>", {}, acronym, $row);
   createJQObject("<td/>", {}, title, $row);
   createJQObject("<td/>", {}, ects, $row);
-  createJQObject("<td/>", {}, inscr, $row);
-  createJQObject("<td/>", {}, janv, $row);
-  createJQObject("<td/>", {}, juin, $row);
-  createJQObject("<td/>", {}, sept, $row);
+  makeScoreCell(janv, $row);
+  makeScoreCell(juin, $row);
+  makeScoreCell(sept, $row);
   createJQObject("<td/>", {}, credit, $row);
+}
+
+function makeScoreCell(examJson, row){
+  var $score = examJson.note;
+  var $etatExam = etatExamToString(examJson);
+  var $mention = mentionToString(examJson);
+  if ($etatExam != ""){
+    createJQObject("<td/>", {}, $etatExam, row);
+  }
+  else if ($mention != ""){
+    createJQObject("<td/>", {}, $mention, row);
+  }
+  else if (examJson.etatExam == "-") {
+    createJQObject("<td/>", {}, $score, row);
+  }
+  else if($score == "-") {
+    createJQObject("<td/>", {}, examJson.etatExam, row);
+  }
+  else{
+    var $cell = createJQObject("<td/>", {},"", row);
+    var $row = createJQObject("<div/>", {'class': 'row'},"", $cell);
+    createJQObject("<div/>", {'class': 'col-md-8'},$score, $row);
+    createJQObject("<div/>", {'class': 'col-md-4 text-right'},examJson.etatExam, $row);
+  }
+
 }
 
 function examScoreToString(examJson) {
 
-  var etatExam = etatExamToString(examJson);
-  if (etatExam != ""){
-    return etatExam;
-  }
 
-  var mention = mentionToString(examJson);
-  if (mention != ""){
-    return mention;
-  }
 
   return scoreToString(examJson);
 }
@@ -181,7 +224,7 @@ function scoreToString(examJson){
   else if(score == "-") {
     return examJson.etatExam;
   }
-  return score + examJson.etatExam;
+  return score + "  " + examJson.etatExam;
 }
 
 function inscrToString(inscr) {
@@ -214,9 +257,9 @@ function inscrToString(inscr) {
 function creditToString(creditReport) {
   switch (creditReport) {
     case "K":
-      return "Crédit";
+      return "Crédité";
     case "R":
-      return "Report";
+      return "Reporté";
     case "S":
       return "EPM";
     case "P":
