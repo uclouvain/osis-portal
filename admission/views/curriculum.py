@@ -152,8 +152,6 @@ def update(request, application_id=None):
         application = mdl.application.init_application(request.user)
     curricula = []
     message = None
-    if application.application_type == application_type.INSCRIPTION:
-        CURRICULUM_YEARS_REQUIRED = 5
     applicant = mdl.applicant.find_by_user(request.user)
     secondary_education = mdl.secondary_education.find_by_person(applicant)
     current_academic_year = None
@@ -162,8 +160,12 @@ def update(request, application_id=None):
     admission = is_admission(applicant, secondary_education)
     year_secondary = None
     year = None
+    if application.application_type == application_type.INSCRIPTION:
+        curriculum_years_required = 5
+    if application.application_type == application_type.ADMISSION:
+        curriculum_years_required = current_academic_year - secondary_education.academic_year
     if current_academic_year:
-        year = current_academic_year - CURRICULUM_YEARS_REQUIRED
+        year = current_academic_year - curriculum_years_required
     if secondary_education is None:
         pass
     else:
