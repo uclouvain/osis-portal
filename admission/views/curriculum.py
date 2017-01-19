@@ -160,10 +160,11 @@ def update(request, application_id=None):
     admission = is_admission(applicant, secondary_education)
     year_secondary = None
     year = None
-    if application.application_type == application_type.INSCRIPTION:
-        curriculum_years_required = 5
     if application.application_type == application_type.ADMISSION:
         curriculum_years_required = current_academic_year - secondary_education.academic_year
+    else:
+        curriculum_years_required = 5
+
     if current_academic_year:
         year = current_academic_year - curriculum_years_required
     if secondary_education is None:
