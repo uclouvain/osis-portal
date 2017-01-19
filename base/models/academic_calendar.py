@@ -46,7 +46,7 @@ class AcademicCalendar(SerializableModel):
         )
 
 
-def find_academic_calendar_by_academic_year_reference_date(academic_year_id, a_reference, a_date):
+def find_academic_calendar(academic_year_id, a_reference, a_date):
     try:
         if academic_year_id and a_reference:
             return AcademicCalendar.objects.get(academic_year=academic_year_id,
@@ -58,10 +58,10 @@ def find_academic_calendar_by_academic_year_reference_date(academic_year_id, a_r
     return None
 
 
-def is_academic_calendar_by_academic_year_reference_opened(an_academic_year_id, a_reference):
-    an_academic_calendar = find_academic_calendar_by_academic_year_reference_date(an_academic_year_id,
-                                                                                  a_reference,
-                                                                                  timezone.now())
+def is_academic_calendar_opened(an_academic_year_id, a_reference):
+    an_academic_calendar = find_academic_calendar(an_academic_year_id,
+                                                  a_reference,
+                                                  timezone.now())
     if an_academic_calendar:
         return True
     return False
