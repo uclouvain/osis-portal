@@ -26,7 +26,7 @@
 from base import models as mdl_base
 
 
-APPLICATION_SESSION_TITLE = "Application session"
+TEACHING_CHARGE_APPLICATION = "TEACHING_CHARGE_APPLICATION"
 
 
 def is_online_application_opened(user):
@@ -35,5 +35,5 @@ def is_online_application_opened(user):
         an_academic_year = mdl_base.academic_year.find_by_year(application_year)
         if an_academic_year:
             return mdl_base.academic_calendar\
-                .is_academic_calendar_by_academic_year_title_opened(an_academic_year, APPLICATION_SESSION_TITLE)
+                .is_academic_calendar_by_academic_year_reference_opened(an_academic_year, TEACHING_CHARGE_APPLICATION)
     return False

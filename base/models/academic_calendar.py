@@ -35,6 +35,7 @@ class AcademicCalendar(SerializableModel):
     title = models.CharField(max_length=50, blank=True, null=True)
     start_date = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)
     end_date = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)
+    reference = models.CharField(max_length=25, blank=True, null=True)
 
     def __str__(self):
         return u"%s %s" % (self.academic_year, self.title)
@@ -45,11 +46,11 @@ class AcademicCalendar(SerializableModel):
         )
 
 
-def find_academic_calendar_by_academic_year_title_date(academic_year_id, a_title, a_date):
+def find_academic_calendar_by_academic_year_reference_date(academic_year_id, a_reference, a_date):
     try:
-        if academic_year_id and a_title:
+        if academic_year_id and a_reference:
             return AcademicCalendar.objects.get(academic_year=academic_year_id,
-                                                title=a_title,
+                                                reference=a_reference,
                                                 start_date__lte=a_date,
                                                 end_date__gte=a_date)
     except ObjectDoesNotExist:
@@ -57,10 +58,10 @@ def find_academic_calendar_by_academic_year_title_date(academic_year_id, a_title
     return None
 
 
-def is_academic_calendar_by_academic_year_title_opened(an_academic_year_id, a_title):
-    an_academic_calendar = find_academic_calendar_by_academic_year_title_date(an_academic_year_id,
-                                                                              a_title,
-                                                                              timezone.now())
+def is_academic_calendar_by_academic_year_reference_opened(an_academic_year_id, a_reference):
+    an_academic_calendar = find_academic_calendar_by_academic_year_reference_date(an_academic_year_id,
+                                                                                  a_reference,
+                                                                                  timezone.now())
     if an_academic_calendar:
         return True
     return False

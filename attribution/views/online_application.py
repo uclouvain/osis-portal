@@ -24,23 +24,24 @@
 #
 ##############################################################################
 import datetime
+
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
+from django.conf import settings
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.contrib import messages
+from django.utils.translation import ugettext as trans
+
 from attribution import models as mdl_attribution
 from attribution.views import tutor_charge
 from base import models as mdl_base
 from base.models.enums import component_type
 from attribution.models.enums import function
-from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
 from attribution.forms.application import ApplicationForm
-from django.conf import settings
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse, reverse_lazy
 from osis_common.queue import queue_sender
-from attribution.utils import message_generation
-from dashboard.utils import permission
-from django.contrib import messages
-from django.utils.translation import ugettext as trans
-
+from attribution.utils import message_generation, permission
+from attribution.utils import permission
 
 ATTRIBUTION_ID_NAME = 'attribution_id_'
 

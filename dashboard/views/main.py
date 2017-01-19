@@ -25,7 +25,7 @@
 ##############################################################################
 from django.contrib.auth.decorators import login_required
 from base.views import layout
-from dashboard.utils import permission
+from attribution.utils import permission
 
 
 @login_required
