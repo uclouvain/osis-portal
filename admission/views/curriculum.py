@@ -25,18 +25,16 @@
 ##############################################################################
 import locale
 from functools import cmp_to_key
-
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
-
 from admission import models as mdl
+from admission.models.enums import application_type
 from base import models as mdl_base
 from admission.views import common, navigation
 from reference import models as mdl_reference
 from admission.views import demande_validation
 from reference.enums import education_institution_type, education_institution_national_comunity as national_cmunity_type
 
-CURRICULUM_YEARS_REQUIRED = 5
 MAX_CREDITS = 75
 
 
@@ -154,6 +152,8 @@ def update(request, application_id=None):
         application = mdl.application.init_application(request.user)
     curricula = []
     message = None
+    if application.application_type == application_type.INSCRIPTION:
+        CURRICULUM_YEARS_REQUIRED = 5
     applicant = mdl.applicant.find_by_user(request.user)
     secondary_education = mdl.secondary_education.find_by_person(applicant)
     current_academic_year = None
