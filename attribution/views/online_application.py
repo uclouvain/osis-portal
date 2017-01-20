@@ -24,20 +24,24 @@
 #
 ##############################################################################
 import datetime
+
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
+from django.conf import settings
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.contrib import messages
+from django.utils.translation import ugettext as trans
+
 from attribution import models as mdl_attribution
 from attribution.views import tutor_charge
 from base import models as mdl_base
 from base.models.enums import component_type
 from attribution.models.enums import function
-from django.contrib.auth.decorators import login_required
 from attribution.forms.application import ApplicationForm
-from django.conf import settings
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
 from osis_common.queue import queue_sender
-from attribution.utils import message_generation
-
+from attribution.utils import message_generation, permission
+from attribution.utils import permission
 
 ATTRIBUTION_ID_NAME = 'attribution_id_'
 
@@ -70,6 +74,7 @@ NO_CHARGE = 0
 
 UPDATE_OPERATION = "update"
 DELETE_OPERATION = "delete"
+
 
 def get_year(a_year):
     if a_year:
@@ -269,6 +274,7 @@ def create_application_charge(a_new_tutor_application, charge_duration, a_compon
         return a_new_application_charge
     return None
 
+
 def is_vacant(a_learning_unit_year):
     if a_learning_unit_year:
         return a_learning_unit_year.vacant
@@ -298,6 +304,8 @@ def get_terminating_charges(a_year, a_tutor):
 
 
 @login_required
+@user_passes_test(permission.is_online_application_opened, login_url=reverse_lazy('outside_applications_period'))
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def home(request):
     application_year = mdl_base.academic_year.find_next_academic_year()
     a_tutor = mdl_base.tutor.find_by_user(request.user)
@@ -344,7 +352,7 @@ def delete(request, tutor_application_id):
                           message_generation.generate_message_from_tutor_application(
                               tutor_application_to_delete,
                               tutor_application_to_delete.function,
-                              DELETE_OPERATION ))
+                              DELETE_OPERATION))
 
         tutor_application_to_delete.delete()
 
@@ -352,6 +360,8 @@ def delete(request, tutor_application_id):
 
 
 @login_required
+@user_passes_test(permission.is_online_application_opened, login_url=reverse_lazy('outside_applications_period'))
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def attribution_application_form(request):
     a_tutor = mdl_base.tutor.find_by_user(request.user)
     last_year = get_last_year()
@@ -381,6 +391,8 @@ def search(request):
 
 
 @login_required
+@user_passes_test(permission.is_online_application_opened, login_url=reverse_lazy('outside_applications_period'))
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def renew(request):
     for key, value in request.POST.items():
         if key.startswith(ATTRIBUTION_ID_NAME):
@@ -428,6 +440,8 @@ def create_tutor_application_from_attribution(an_attribution):
 
 
 @login_required
+@user_passes_test(permission.is_online_application_opened, login_url=reverse_lazy('outside_applications_period'))
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def edit(request, tutor_application_id):
     form = ApplicationForm()
     application = get_application_informations(mdl_attribution.tutor_application.find_by_id(tutor_application_id))
@@ -452,6 +466,8 @@ def format_charge(value):
 
 
 @login_required
+@user_passes_test(permission.is_online_application_opened, login_url=reverse_lazy('outside_applications_period'))
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def save_on_new_learning_unit(request):
     new_tutor_application = create_tutor_application_from_user_learning_unit_year(
         request.user, request.POST.get('learning_unit_year_id'))
@@ -470,7 +486,6 @@ def save_on_new_learning_unit(request):
         application_charge_practical = application_charge_create(new_tutor_application,
                                                                  format_charge(form['charge_practical'].value()),
                                                                  component_type.PRACTICAL_EXERCISES)
-
 
         new_tutor_application.function = define_tutor_application_function(new_tutor_application)
         new_tutor_application.save()
@@ -505,6 +520,8 @@ def create_tutor_application_from_user_learning_unit_year(a_user, a_learning_uni
 
 
 @login_required
+@user_passes_test(permission.is_online_application_opened, login_url=reverse_lazy('outside_applications_period'))
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def save(request, tutor_application_id):
     tutor_application_to_save = mdl_attribution.tutor_application.find_by_id(tutor_application_id)
     form = ApplicationForm(data=request.POST)
@@ -561,7 +578,6 @@ def allocation_charge_update(an_application_charge_id, a_field_value):
             application_charge.save()
             return application_charge
     return None
-
 
 
 def get_learning_unit_year_vacant(a_year, an_acronym, a_tutor):
@@ -687,3 +703,11 @@ def get_next_year():
     application_year = mdl_base.academic_year.find_next_academic_year()
     if application_year:
         return application_year + 1
+
+
+@login_required
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
+def outside_period(request):
+    text = trans('application_denied')
+    messages.add_message(request, messages.WARNING, "%s" % text)
+    return render(request, "attribution_access_denied.html")

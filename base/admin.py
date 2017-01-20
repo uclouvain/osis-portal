@@ -26,6 +26,7 @@
 from base.models import *
 from django.contrib import admin
 
+admin.site.register(academic_calendar.AcademicCalendar)
 
 admin.site.register(academic_year.AcademicYear,
                     academic_year.AcademicYearAdmin)
