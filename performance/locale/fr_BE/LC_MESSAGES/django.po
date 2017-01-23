@@ -96,7 +96,7 @@ msgid "no_student_with_this_registration_id"
 msgstr "Aucun étudiant avec ce noma!"
 
 msgid "performance"
-msgstr "Performance"
+msgstr "Mes notes"
 
 msgid "performance_administration"
 msgstr "Administration de performance"
@@ -127,3 +127,12 @@ msgstr "Total ECTS / Inscription"
 
 msgid "year"
 msgstr "Année"
+
+msgid "success_mean"
+msgstr "Moyenne de réussite"
+
+msgid "general_mean"
+msgstr "Moyenne générale"
+
+msgid "credited"
+msgstr "Crédité"
