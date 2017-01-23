@@ -103,12 +103,13 @@
                         <td>{{ application.application_charge_practical.allocation_charge | default_if_none:''}}</td>
                         <td>{% if application.tutor_application.function  %}{% trans application.tutor_application.function %}{% endif %}</td>
                         <td>
-                            <a title="{%trans 'delete'%}"
-                               href="{% url 'delete_tutor_application' application.tutor_application.id %}"
-                               class="btn btn-warning" role="button"
-                               id="lnk_application_delete_{{ application.tutor_application.id }}">
-                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                            </a>
+                            <form action="{% url 'delete_tutor_application' application.tutor_application.id %}"
+                                  id="form_delete_"{{ application.tutor_application.id }}>
+                                <button class="btn btn-warning"
+                                        id="lnk_application_delete_{{ application.tutor_application.id }}"
+                                        type="submit" title="{%trans 'remove'%}">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                            </form>
                         </td>
                     </tr>
                 {% endfor %}

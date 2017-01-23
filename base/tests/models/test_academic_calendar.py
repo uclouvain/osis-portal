@@ -26,11 +26,11 @@
 from base.models import academic_calendar
 
 
-def create_academic_calendar(an_academic_year, a_title, a_start_date, a_end_date):
+def create_academic_calendar(an_academic_year, a_reference, a_start_date, a_end_date):
     an_academic_calendar = academic_calendar.AcademicCalendar(academic_year=an_academic_year,
                                                               start_date=a_start_date,
                                                               end_date=a_end_date,
-                                                              title=a_title)
+                                                              reference=a_reference)
     an_academic_calendar.save()
     return an_academic_calendar
 
