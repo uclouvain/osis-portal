@@ -336,6 +336,7 @@ def get_application_charge(a_tutor, a_learning_unit_year, a_component_type):
 
 
 @login_required
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def delete(request, tutor_application_id):
     tutor_application_to_delete = mdl_attribution.tutor_application.find_by_id(tutor_application_id)
     if tutor_application_to_delete:
