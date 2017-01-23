@@ -102,8 +102,8 @@ class OnlineApplicationTest(TestCase):
             an_attribution = test_attribution.create_attribution({'function': function.CO_HOLDER,
                                                                   'learning_unit_year': a_learning_unit_year,
                                                                   'tutor': a_tutor,
-                                                                  'start': start,
-                                                                  'end': end})
+                                                                  'start_year': start,
+                                                                  'end_year': end})
             test_attribution_charge.create_attribution_charge(
                 {'attribution': an_attribution,
                  'learning_unit_component': a_learning_unit_component_lecture,

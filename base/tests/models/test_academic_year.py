@@ -40,6 +40,6 @@ def create_academic_year():
 def create_academic_year_with_year(a_year):
     an_academic_year = mdl_base.academic_year.AcademicYear(year=a_year,
                                                            start_date=datetime.datetime(a_year, now.month, 1),
-                                                           end_date=datetime.datetime(a_year, now.month, 28))
+                                                           end_date=datetime.datetime(a_year+1, now.month, 28))
     an_academic_year.save()
     return an_academic_year
