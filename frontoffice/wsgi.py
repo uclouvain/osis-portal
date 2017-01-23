@@ -46,8 +46,8 @@ LOGGER = logging.getLogger(settings.DEFAULT_LOGGER)
 if hasattr(settings, 'QUEUES'):
     # Thread in which is running the listening of the queue used to migrate data (from Osis to Osis-portal)
     try:
-        common_queue_listener.SynchronousConsumerThread(settings.QUEUES.get('QUEUES_NAME').get('MIGRATIONS_TO_CONSUME')
-                                                 , common_callback.insert_or_update).start()
+        common_queue_listener.SynchronousConsumerThread(settings.QUEUES.get('QUEUES_NAME').get('MIGRATIONS_TO_CONSUME'),
+                                                        common_callback.process_message).start()
     except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
         LOGGER.exception("Couldn't connect to the QueueServer")
 
