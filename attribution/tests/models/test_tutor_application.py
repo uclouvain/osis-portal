@@ -41,11 +41,11 @@ def create_tutor_application(data):
         tutor_application.learning_unit_year = data['learning_unit_year']
         year_yr = tutor_application.learning_unit_year.academic_year.year
         if start is None:
-            tutor_application.start_date = datetime.datetime(year_yr, 1, 1)
+            tutor_application.start_year = datetime.datetime(year_yr, 1, 1)
         if end is None:
             tutor_application.end_date = datetime.datetime(year_yr+1, 1, 1)
     if start:
-        tutor_application.start_date = datetime.datetime(start, 1, 1)
+        tutor_application.start_year = datetime.datetime(start, 1, 1)
     if end:
         tutor_application.end_date = datetime.datetime(end, 1, 1)
     if 'tutor' in data:

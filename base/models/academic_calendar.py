@@ -34,7 +34,7 @@ class AcademicCalendar(SerializableModel):
     title = models.CharField(max_length=50, blank=True, null=True)
     start_date = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)
     end_date = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)
-    reference = models.CharField(max_length=25, blank=True, null=True)
+    reference = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return u"%s %s" % (self.academic_year, self.title)

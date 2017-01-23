@@ -26,6 +26,7 @@
 import datetime
 from attribution import models as mdl_attribution
 
+
 def create_attribution(data):
     attribution = mdl_attribution.attribution.Attribution()
     start = None
@@ -40,13 +41,13 @@ def create_attribution(data):
         attribution.learning_unit_year = data['learning_unit_year']
         year_yr = attribution.learning_unit_year.academic_year.year
         if start is None:
-            attribution.start_date = datetime.datetime(year_yr, 1, 1)
+            attribution.start_year = datetime.datetime(year_yr, 1, 1)
         if end is None:
-            attribution.end_date = datetime.datetime(year_yr+1, 1, 1)
+            attribution.end_year = datetime.datetime(year_yr+1, 1, 1)
     if start:
-        attribution.start_date = datetime.datetime(start, 1, 1)
+        attribution.start_year = datetime.datetime(start, 1, 1)
     if end:
-        attribution.end_date = datetime.datetime(end, 1, 1)
+        attribution.end_year = datetime.datetime(end, 1, 1)
     if 'tutor' in data:
         attribution.tutor = data['tutor']
     attribution.save()

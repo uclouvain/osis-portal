@@ -33,7 +33,7 @@ from django.core.exceptions import ObjectDoesNotExist
 class TutorApplicationAdmin(admin.ModelAdmin):
     list_display = ('tutor', 'function', 'learning_unit_year')
     list_filter = ('function',)
-    fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function', 'start_date', 'end_date')}),)
+    fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function')}),)
     raw_id_fields = ('learning_unit_year', 'tutor')
     search_fields = ['tutor__person__first_name', 'tutor__person__last_name', 'learning_unit_year__acronym']
 
@@ -45,8 +45,6 @@ class TutorApplication(SerializableModel):
     tutor = models.ForeignKey('base.Tutor')
     remark = models.TextField(blank=True, null=True)
     course_summary = models.TextField(blank=True, null=True)
-    start_date = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)
-    end_date = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)
 
     class Meta:
         permissions = (
@@ -73,8 +71,10 @@ def search(tutor=None, learning_unit_year=None):
     return queryset.select_related('tutor', 'learning_unit_year')
 
 
-def find_by_dates_tutor(a_start_date, an_end_date, a_tutor):
-    return TutorApplication.objects.filter(start_date__gte=a_start_date, end_date__lte=an_end_date, tutor=a_tutor).order_by('learning_unit_year__acronym', 'id')
+def find_by_dates_tutor(a_start_year, an_end_year, a_tutor):
+    return TutorApplication.objects.filter(start_year__gte=a_start_year,
+                                           end_year__lte=an_end_year,
+                                           tutor=a_tutor).order_by('learning_unit_year__acronym', 'id')
 
 
 def find_tutor_learning_unit_year(a_tutor, a_learning_unit_year):
@@ -82,6 +82,16 @@ def find_tutor_learning_unit_year(a_tutor, a_learning_unit_year):
         try:
             return TutorApplication.objects.get(tutor=a_tutor,
                                                 learning_unit_year=a_learning_unit_year)
+        except ObjectDoesNotExist:
+            return None
+    return None
+
+
+def find_tutor_by_tutor_year(a_tutor, an_academic_year):
+    if a_tutor and an_academic_year:
+        try:
+            return TutorApplication.objects.filter(tutor=a_tutor,
+                                                   learning_unit_year__academic_year=an_academic_year)
         except ObjectDoesNotExist:
             return None
     return None
