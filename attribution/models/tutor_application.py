@@ -48,6 +48,11 @@ class TutorApplication(SerializableModel):
     start_date = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)
     end_date = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)
 
+    class Meta:
+        permissions = (
+            ("can_access_attribution_application", "Can access attribution application"),
+        )
+
     def __str__(self):
         return u"%s - %s" % (self.tutor.person, self.function)
 

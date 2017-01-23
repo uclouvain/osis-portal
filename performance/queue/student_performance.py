@@ -24,13 +24,11 @@
 #
 ##############################################################################
 import json
+from django.conf import settings
 from frontoffice.queue.queue_listener import PerformanceClient
 import datetime
 from django.utils.datetime_safe import datetime as safe_datetime
 from base.models import academic_year as mdl_academic_year
-
-UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR = 12
-UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR = 24
 
 
 def callback(json_data):
@@ -100,7 +98,9 @@ def get_expiration_date(academic_year):
     now = safe_datetime.now()
     current_academic_year = mdl_academic_year.current_academic_year()
     current_year = current_academic_year.year if current_academic_year else None
-    timedelta = datetime.timedelta(hours=UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR if current_year == academic_year else UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR)
+    timedelta = datetime.timedelta(hours=settings.PERFORMANCE_CONFIG.get('UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR')
+                                   if current_year == academic_year
+                                   else settings.PERFORMANCE_CONFIG.get('UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR'))
     expiration_date = now + timedelta
     return expiration_date
 

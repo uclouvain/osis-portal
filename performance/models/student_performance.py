@@ -39,7 +39,7 @@ class StudentPerformanceAdmin(admin.ModelAdmin):
     search_fields = ['registration_id', 'academic_year', 'acronym']
 
 class StudentPerformance(models.Model):
-    registration_id = models.CharField(max_length=10)
+    registration_id = models.CharField(max_length=10, db_index=True)
     academic_year = models.IntegerField()
     acronym = models.CharField(max_length=15)
     data = JSONField()
@@ -71,7 +71,7 @@ def search(registration_id=None, academic_year=None, acronym=None):
         has_criteria = True
 
     if has_criteria:
-        return student_performances
+        return student_performances.order_by('-academic_year')
     else:
         return None
 

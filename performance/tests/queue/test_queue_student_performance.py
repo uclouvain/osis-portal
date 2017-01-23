@@ -45,13 +45,13 @@ class TestQueueStudentPerformance(TestCase):
         registration_id = self.student_performance.registration_id
         academic_year = self.student_performance.academic_year
         acronym = self.student_performance.acronym
-        stud_perf = queue_stud_perf.save(registration_id, academic_year, acronym, self.json_points)
+        stud_perf = queue_stud_perf.save(registration_id, academic_year, acronym, json.loads(self.json_points))
 
         self.student_performance.refresh_from_db()
 
         self.assertEqual(stud_perf, self.student_performance, "Object should be updated")
 
-        queue_stud_perf.save("4549841", academic_year, acronym, self.json_points)
+        queue_stud_perf.save("4549841", academic_year, acronym, json.loads(self.json_points))
         try:
             mdl_perf.StudentPerformance.objects.get(registration_id="4549841",
                                                     academic_year=self.student_performance.academic_year,
