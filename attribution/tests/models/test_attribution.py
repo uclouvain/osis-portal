@@ -30,24 +30,24 @@ from attribution import models as mdl_attribution
 def create_attribution(data):
     attribution = mdl_attribution.attribution.Attribution()
     start = None
-    if 'start' in data:
-        start = data['start']
+    if 'start_year' in data:
+        start = data['start_year']
     end = None
-    if 'end' in data:
-        end = data['end']
+    if 'end_year' in data:
+        end = data['end_year']
     if 'function' in data:
         attribution.function = data['function']
     if 'learning_unit_year' in data:
         attribution.learning_unit_year = data['learning_unit_year']
         year_yr = attribution.learning_unit_year.academic_year.year
         if start is None:
-            attribution.start_year = datetime.datetime(year_yr, 1, 1)
+            attribution.start_year = year_yr
         if end is None:
-            attribution.end_year = datetime.datetime(year_yr+1, 1, 1)
+            attribution.end_year = year_yr+1
     if start:
-        attribution.start_year = datetime.datetime(start, 1, 1)
+        attribution.start_year = start
     if end:
-        attribution.end_year = datetime.datetime(end, 1, 1)
+        attribution.end_year = end
     if 'tutor' in data:
         attribution.tutor = data['tutor']
     attribution.save()

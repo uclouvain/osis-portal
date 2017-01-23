@@ -38,8 +38,8 @@ from base.models.enums import component_type
 from attribution.models.enums import function
 from attribution.forms.application import ApplicationForm
 from osis_common.queue import queue_sender
-from attribution.utils import message_generation
-from attribution.utils import permission
+from attribution.utils import message_generation, permission
+
 
 ATTRIBUTION_ID_NAME = 'attribution_id_'
 

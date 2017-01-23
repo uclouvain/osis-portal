@@ -31,9 +31,12 @@ TEACHING_CHARGE_APPLICATION = "TEACHING_CHARGE_APPLICATION"
 
 def is_online_application_opened(user):
     application_year = mdl_base.academic_year.find_next_academic_year()
+    print('ici 0')
     if application_year:
+        print('ici 1')
         an_academic_year = mdl_base.academic_year.find_by_year(application_year)
         if an_academic_year:
+            print('ici 2', an_academic_year.year)
             return mdl_base.academic_calendar\
                 .is_academic_calendar_opened(an_academic_year, TEACHING_CHARGE_APPLICATION)
     return False

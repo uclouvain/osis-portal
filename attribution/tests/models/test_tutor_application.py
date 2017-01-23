@@ -29,9 +29,6 @@ from attribution import models as mdl_attribution
 
 def create_tutor_application(data):
     tutor_application = mdl_attribution.tutor_application.TutorApplication()
-    start = None
-    if 'start' in data:
-        start = data['start']
     end = None
     if 'end' in data:
         end = data['end']
@@ -40,14 +37,6 @@ def create_tutor_application(data):
     if 'learning_unit_year' in data:
         tutor_application.learning_unit_year = data['learning_unit_year']
         year_yr = tutor_application.learning_unit_year.academic_year.year
-        if start is None:
-            tutor_application.start_year = datetime.datetime(year_yr, 1, 1)
-        if end is None:
-            tutor_application.end_date = datetime.datetime(year_yr+1, 1, 1)
-    if start:
-        tutor_application.start_year = datetime.datetime(start, 1, 1)
-    if end:
-        tutor_application.end_date = datetime.datetime(end, 1, 1)
     if 'tutor' in data:
         tutor_application.tutor = data['tutor']
     tutor_application.save()
