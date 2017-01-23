@@ -44,8 +44,12 @@
     {% include "learning_unit_year_search.html" %}
 <br>
 {% if attribution %}
-    <form action="{% url 'new' attribution.learning_unit_year_id %}"
+    <form action="{% url 'new' %}"
           method="post">
+    <input type="hidden"
+           id="hdn_learning_unit_year_id"
+           name="learning_unit_year_id"
+           value="{{ attribution.learning_unit_year_id }}"/>
 
         {% csrf_token %}
 

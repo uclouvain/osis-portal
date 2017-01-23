@@ -37,9 +37,9 @@ urlpatterns = [
     url(r'^applications/([0-9]+)/save/$', online_application.save, name='save_tutor_application'),
     url(r'^applications/create/$', online_application.save_on_new_learning_unit, name='save_new_tutor_application'),
 
-    url(r'^applications/new/$', online_application.attribution_application_form, name='tutor_application_create'),
+    url(r'^applications/form/$', online_application.attribution_application_form, name='tutor_application_create'),
     url(r'^search/$', online_application.search, name='vacant_learning_unit_search'),
     url(r'^applications/renew/$', online_application.renew, name='renew'),
-    url(r'^applications/new/([0-9]+)/$', online_application.new, name='new'),
+    url(r'^applications/new/$', online_application.new, name='new'),
     url(r'^applications/outside_period/$', online_application.outside_period, name='outside_applications_period'),
 ]

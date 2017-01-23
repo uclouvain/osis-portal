@@ -633,8 +633,8 @@ def define_renew_possible(a_tutor, a_learning_unit_year):
 
 
 @login_required
-def new(request, a_learning_unit_year_id=None):
-    learning_unit_year = None
+def new(request):
+    a_learning_unit_year_id = request.POST.get('learning_unit_year_id')
     tutor_application_to_save = None
     if a_learning_unit_year_id:
         learning_unit_year = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year_id)
