@@ -31,7 +31,7 @@ import threading
 import logging
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
-TIMEOUT = 25
+TIMEOUT = 30
 
 
 class Client(object):
