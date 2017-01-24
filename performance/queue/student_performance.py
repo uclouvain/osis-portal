@@ -127,14 +127,14 @@ def save(registration_id, academic_year, acronym, json_data):
     return obj
 
 
-def get_performance_to_update_for_student(registration_id, academic_year, acronym):
+def get_performances_by_registration_id_and_offer(registration_id, academic_year, acronym):
     from performance.models.student_performance import search
     return search(registration_id=registration_id,
                   academic_year=academic_year,
                   acronym=acronym)
 
 
-def get_performances_to_update_for_offer(acronym, academic_year):
+def get_performances_by_offer(acronym, academic_year):
     from performance.models.student_performance import find_by_acronym_and_academic_year
     return find_by_acronym_and_academic_year(acronym=acronym, academic_year=academic_year)
 
