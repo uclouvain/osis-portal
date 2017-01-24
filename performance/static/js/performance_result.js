@@ -161,13 +161,7 @@ function makeScoreCell(examJson, row){
   var $score = examJson.note;
   var $disp = ifDispToString(examJson);
   var $mention = mentionToString(examJson);
-  if ($disp != ""){
-    var $cell = createJQObject("<td/>", {},"", row);
-    var $row = createJQObject("<div/>", {'class': 'row'},"", $cell);
-    createJQObject("<div/>", {'class': 'col-md-8'},$disp, $row);
-    createJQObject("<div/>", {'class': 'col-md-4 text-right'},examJson.etatExam, $row);
-  }
-  else if ($mention != ""){
+  if ($mention != ""){
     createJQObject("<td/>", {}, $mention, row);
   }
   else if (examJson.etatExam == "-") {
