@@ -45,11 +45,12 @@ def callback(json_data):
 def update_exp_date_callback(json_data):
     try:
         json_data = json.loads(json_data.decode("utf-8"))
+        registration_id = get_registration_id_for_update(json_data)
         academic_year = json_data.get("academicYear")
         acronym = json_data.get("acronym")
         new_exp_date = json_data.get("expirationDate")
-        update_exp_date(academic_year, acronym, new_exp_date)
-    except Exception:
+        update_exp_date(registration_id, academic_year, acronym, new_exp_date)
+    except Exception as e:
         pass
 
 
@@ -126,9 +127,22 @@ def save(registration_id, academic_year, acronym, json_data):
     return obj
 
 
-def update_exp_date(academic_year, acronym, new_exp_date):
-    from performance.models.student_performance import  find_by_acronym_and_academic_year
-    performances_to_update = find_by_acronym_and_academic_year(acronym=acronym, academic_year=academic_year)
+def update_exp_date(registration_id, academic_year, acronym, new_exp_date):
+    if registration_id and registration_id != 'null':
+        from performance.models.student_performance import search
+        performances_to_update = search(registration_id=registration_id,
+                                        academic_year=academic_year,
+                                        acronym=acronym)
+    else:
+        from performance.models.student_performance import find_by_acronym_and_academic_year
+        performances_to_update = find_by_acronym_and_academic_year(acronym=acronym, academic_year=academic_year)
     for performance in performances_to_update:
         performance.update_date = datetime.datetime.fromtimestamp(new_exp_date / 1e3)
         performance.save()
+
+
+def get_registration_id_for_update(json_data):
+    registration_id = json_data.get("registrationId")
+    if not registration_id or registration_id == 'null':
+        registration_id = None
+    return registration_id

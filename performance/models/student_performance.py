@@ -123,5 +123,3 @@ def find_by_pk(student_performance_pk):
 
 def find_by_acronym_and_academic_year(acronym, academic_year):
     return StudentPerformance.objects.filter(acronym=acronym, academic_year=academic_year)
-
-
