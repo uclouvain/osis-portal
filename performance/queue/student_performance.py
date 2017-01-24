@@ -127,15 +127,26 @@ def save(registration_id, academic_year, acronym, json_data):
     return obj
 
 
+def get_performance_to_update_for_student(registration_id, academic_year, acronym):
+    from performance.models.student_performance import search
+    return search(registration_id=registration_id,
+                  academic_year=academic_year,
+                  acronym=acronym)
+
+
+def get_performances_to_update_for_offer(acronym, academic_year):
+    from performance.models.student_performance import find_by_acronym_and_academic_year
+    return find_by_acronym_and_academic_year(acronym=acronym, academic_year=academic_year)
+
+
 def update_expiration_date(registration_id, academic_year, acronym, new_exp_date):
     if registration_id and registration_id != 'null':
-        from performance.models.student_performance import search
-        performances_to_update = search(registration_id=registration_id,
-                                        academic_year=academic_year,
-                                        acronym=acronym)
+        performances_to_update = get_performance_to_update_for_student(registration_id=registration_id,
+                                                                       academic_year=academic_year,
+                                                                       acronym=acronym)
     else:
-        from performance.models.student_performance import find_by_acronym_and_academic_year
-        performances_to_update = find_by_acronym_and_academic_year(acronym=acronym, academic_year=academic_year)
+        performances_to_update = get_performances_to_update_for_offer(acronym=acronym, academic_year=academic_year)
+
     for performance in performances_to_update:
         performance.update_date = datetime.datetime.fromtimestamp(new_exp_date / 1e3)
         performance.save()
