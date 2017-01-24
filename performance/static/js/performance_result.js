@@ -159,19 +159,19 @@ function addRowCourse(courseJson, $row) {
 
 function makeScoreCell(examJson, row){
   var $score = examJson.note;
-  var $etatExam = etatExamToString(examJson);
+  var $disp = ifDispToString(examJson);
   var $mention = mentionToString(examJson);
-  if ($etatExam != ""){
-    createJQObject("<td/>", {}, $etatExam, row);
+  if ($disp != ""){
+    var $cell = createJQObject("<td/>", {},"", row);
+    var $row = createJQObject("<div/>", {'class': 'row'},"", $cell);
+    createJQObject("<div/>", {'class': 'col-md-8'},$disp, $row);
+    createJQObject("<div/>", {'class': 'col-md-4 text-right'},examJson.etatExam, $row);
   }
   else if ($mention != ""){
     createJQObject("<td/>", {}, $mention, row);
   }
   else if (examJson.etatExam == "-") {
     createJQObject("<td/>", {}, $score, row);
-  }
-  else if($score == "-") {
-    createJQObject("<td/>", {}, examJson.etatExam, row);
   }
   else{
     var $cell = createJQObject("<td/>", {},"", row);
@@ -183,7 +183,7 @@ function makeScoreCell(examJson, row){
 }
 
 
-function etatExamToString(examJson){
+function ifDispToString(examJson){
   if(examJson.etatExam == "D") {
     return "Disp.";
   }
