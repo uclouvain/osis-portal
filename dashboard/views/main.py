@@ -25,11 +25,15 @@
 ##############################################################################
 from django.contrib.auth.decorators import login_required
 from base.views import layout
+from attribution.utils import permission
 
 
 @login_required
 def home(request):
     # Adapt layout depending on the type of user (student, professor)
-    return layout.render(request, "dashboard.html")
+    return layout.render(request, "dashboard.html",
+                         {'online_application_opened': permission.is_online_application_opened(request.user)})
+
+
 
 

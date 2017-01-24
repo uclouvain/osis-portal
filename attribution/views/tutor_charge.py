@@ -34,7 +34,7 @@ from base import models as mdl_base
 from attribution import models as mdl_attribution
 from base.models.enums import component_type
 from attribution.forms.attribution import AttributionForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 import json
 
 
@@ -54,6 +54,7 @@ SEPTEMBER = "septembre"
 
 
 @login_required
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def home(request):
     return by_year(request, datetime.datetime.now().year)
 
@@ -112,7 +113,6 @@ def list_attributions(a_person, an_academic_year):
 
 def list_teaching_charge_attribution_representation(a_person, an_academic_year):
     attribution_list = []
-    a_tutor = mdl_base.tutor.find_by_person(a_person)
     tot_lecturing = NO_ALLOCATION_CHARGE
     tot_practical = NO_ALLOCATION_CHARGE
     for an_attribution in list_attributions(a_person, an_academic_year):
@@ -143,13 +143,14 @@ def list_teaching_charge_attribution_representation(a_person, an_academic_year):
              'learning_unit_year_url': get_url_learning_unit_year(a_learning_unit_year),
              'learning_unit_year': a_learning_unit_year})
     if len(attribution_list) == 0:
-        attribution_list=None
+        attribution_list = None
     return {'attributions': attribution_list,
             'tot_lecturing': tot_lecturing,
             'tot_practical': tot_practical}
 
 
 @login_required
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def by_year(request, year):
     a_person = get_person(request.user)
     an_academic_year = None
@@ -171,7 +172,7 @@ def by_year(request, year):
         'year': int(year),
         'tot_lecturing': tot_lecturing,
         'tot_practical': tot_practical,
-        'academic_year': "{0}-{1}".format(str(an_academic_year.year),str(an_academic_year.year + 1))})
+        'academic_year': "{0}-{1}".format(str(an_academic_year.year), str(an_academic_year.year + 1))})
 
 
 def get_attribution_years(a_person):
@@ -192,7 +193,7 @@ def get_url_learning_unit_year(a_learning_unit_year):
     if a_learning_unit_year:
         if is_string_not_null_empty(a_learning_unit_year.acronym):
             return settings.CATALOG_URL.format(a_learning_unit_year.academic_year.year,
-                                           a_learning_unit_year.acronym.lower())
+                                               a_learning_unit_year.acronym.lower())
     return None
 
 
@@ -201,6 +202,7 @@ def get_students(a_learning_unit_year):
 
 
 @login_required
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def show_students(request, a_learning_unit_year):
     students_list = []
     for learning_unit_enrollment in get_students(a_learning_unit_year):
@@ -278,7 +280,7 @@ def set_student_for_display(learning_unit_enrollment):
         'june_note': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE),
         'june_status': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_STATUS),
         'september_note': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE),
-        'september_status': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS,) ,}
+        'september_status': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS,), }
 
 
 def is_tutor(a_person):

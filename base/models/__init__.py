@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from base.models import academic_calendar
 from base.models import academic_year
 from base.models import campus
 from base.models import external_offer
