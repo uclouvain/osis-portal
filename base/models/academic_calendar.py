@@ -23,10 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from django.contrib import admin
 from django.utils import timezone
 from osis_common.models.serializable_model import SerializableModel
+
+
+class AcademicCalendarAdmin(admin.ModelAdmin):
+    list_display = ('academic_year', 'reference')
+    search_fields = ['reference']
 
 
 class AcademicCalendar(SerializableModel):
@@ -46,14 +51,13 @@ class AcademicCalendar(SerializableModel):
 
 
 def find_academic_calendar(academic_year_id, a_reference, a_date):
-    try:
-        if academic_year_id and a_reference:
-            return AcademicCalendar.objects.get(academic_year=academic_year_id,
-                                                reference=a_reference,
-                                                start_date__lte=a_date,
-                                                end_date__gte=a_date)
-    except ObjectDoesNotExist:
-        return None
+    if academic_year_id and a_reference:
+        results = AcademicCalendar.objects.filter(academic_year=academic_year_id,
+                                                  reference=a_reference,
+                                                  start_date__lte=a_date,
+                                                  end_date__gte=a_date).order_by('start_date')
+        if results:
+            return results[0]
     return None
 
 
