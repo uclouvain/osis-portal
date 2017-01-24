@@ -141,11 +141,11 @@ def get_performances_by_offer(acronym, academic_year):
 
 def update_expiration_date(registration_id, academic_year, acronym, new_exp_date):
     if registration_id and registration_id != 'null':
-        performances_to_update = get_performance_to_update_for_student(registration_id=registration_id,
+        performances_to_update = get_performances_by_registration_id_and_offer(registration_id=registration_id,
                                                                        academic_year=academic_year,
                                                                        acronym=acronym)
     else:
-        performances_to_update = get_performances_to_update_for_offer(acronym=acronym, academic_year=academic_year)
+        performances_to_update = get_performances_by_offer(acronym=acronym, academic_year=academic_year)
 
     for performance in performances_to_update:
         performance.update_date = datetime.datetime.fromtimestamp(new_exp_date / 1e3)
