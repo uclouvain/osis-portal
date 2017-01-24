@@ -141,6 +141,7 @@ function addRowCourse(courseJson, $row) {
   var acronym = courseJson.sigleComplet;
   var title = courseJson.intituleComplet;
   var ects = courseJson.poids;
+  var inscr = inscrToString(courseJson.insc);
   var janv = courseJson.session[0];
   var juin = courseJson.session[1];
   var sept = courseJson.session[2];
@@ -149,6 +150,7 @@ function addRowCourse(courseJson, $row) {
   createJQObject("<td/>", {}, acronym, $row);
   createJQObject("<td/>", {}, title, $row);
   createJQObject("<td/>", {}, ects, $row);
+  createJQObject("<td/>", {}, inscr, $row);
   makeScoreCell(janv, $row);
   makeScoreCell(juin, $row);
   makeScoreCell(sept, $row);
@@ -191,26 +193,55 @@ function etatExamToString(examJson){
 function mentionToString(examJson){
   switch (examJson.mention) {
     case "M":
-      return "Exc.";
+      return "Excusé";
     case "S":
       if (examJson.etatExam == "R"){
-        return "Abs.(R)"
+        return "Absent(R)"
       }
       else {
-        return "Abs.";
+        return "Absent";
       }
     case "A":
       if (examJson.etatExam == "R"){
-        return "Abs.(R)"
+        return "Absent(R)"
       }
       else {
-        return "Abs.";
+        return "Absent";
       }
+    case "T":
+          return "Tricherie";
     default:
       return "";
   }
 }
 
+
+function inscrToString(inscr) {
+  switch (inscr) {
+    case "I":
+      return "Inscr";
+    case "R":
+      return "Rep.";
+    case "D":
+      return "Dsip.";
+    case "B":
+      return "Créd.";
+    case "K":
+      return "K94";
+    case "C":
+      return "C94";
+    case "N":
+      return "RIP";
+    case "Q":
+      return "Q94";
+    case "S":
+      return "EPM";
+    case "T":
+      return "T94";
+    default:
+      return inscr;
+  }
+}
 
 function creditToString(creditReport) {
   switch (creditReport) {
