@@ -423,12 +423,24 @@ def create_tutor_application_from_attribution(an_attribution):
     a_new_tutor_application.end_year = next_learning_unit_year.academic_year.year
     a_new_tutor_application.save()
 
-    create_application_charge(a_new_tutor_application,
+    application_charge_lecturing = create_application_charge(a_new_tutor_application,
                               attribution_lecturing_duration,
                               component_type.LECTURING)
-    create_application_charge(a_new_tutor_application,
+    application_charge_practical = create_application_charge(a_new_tutor_application,
                               attribution_practical_duration,
                               component_type.PRACTICAL_EXERCISES)
+    queue_sender.send_message(
+        settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
+        message_generation.generate_message_from_application_charge(
+            application_charge_lecturing,
+            UPDATE_OPERATION,
+            define_tutor_application_function(a_new_tutor_application)))
+
+    queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
+                              message_generation.generate_message_from_application_charge(
+                                  application_charge_practical,
+                                  UPDATE_OPERATION,
+                                  define_tutor_application_function(a_new_tutor_application)))
     return a_new_tutor_application
 
 
