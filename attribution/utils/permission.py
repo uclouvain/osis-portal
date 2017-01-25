@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,33 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
-from attribution import models as mdl_attribution
+from base import models as mdl_base
 
 
-def create_attribution(data):
-    attribution = mdl_attribution.attribution.Attribution()
-    start = None
-    if 'start_year' in data:
-        start = data['start_year']
-    end = None
-    if 'end_year' in data:
-        end = data['end_year']
-    if 'function' in data:
-        attribution.function = data['function']
-    if 'learning_unit_year' in data:
-        attribution.learning_unit_year = data['learning_unit_year']
-        year_yr = attribution.learning_unit_year.academic_year.year
-        if start is None:
-            attribution.start_year = year_yr
-        if end is None:
-            attribution.end_year = year_yr+1
-    if start:
-        attribution.start_year = start
-    if end:
-        attribution.end_year = end
-    if 'tutor' in data:
-        attribution.tutor = data['tutor']
-    attribution.save()
-    return attribution
+TEACHING_CHARGE_APPLICATION = "TEACHING_CHARGE_APPLICATION"
 
+
+def is_online_application_opened(user):
+    application_year = mdl_base.academic_year.find_next_academic_year()
+    if application_year:
+        an_academic_year = mdl_base.academic_year.find_by_year(application_year)
+        if an_academic_year:
+            return mdl_base.academic_calendar\
+                .is_academic_calendar_opened(an_academic_year, TEACHING_CHARGE_APPLICATION)
+    return False

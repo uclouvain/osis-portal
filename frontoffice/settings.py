@@ -55,19 +55,20 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'analytical',
     'osis_common',
+    'rest_framework',
+    'localflavor',
+    'statici18n',
+    'ckeditor',
     'reference',
     'base',
     'admission',
     'enrollments',
     'dashboard',
-    'rest_framework',
-    'localflavor',
     'performance',
     'attribution',
     'dissertation',
-    'statici18n',
-    'ckeditor',
 )
 
 # check if we are testing right now
@@ -197,7 +198,7 @@ LANGUAGES = [
     ('en', _('English')),
 ]
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Brussels'
 
 USE_I18N = True
 
@@ -292,6 +293,10 @@ TIME_TABLE_URL= ""
 TIME_TABLE_NUMBER = ""
 CATALOG_URL = ""
 
+PERFORMANCE_CONFIG = {
+    'UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR': 12,
+    'UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR': 24
+}
 
 try:
     from frontoffice.server_settings import *

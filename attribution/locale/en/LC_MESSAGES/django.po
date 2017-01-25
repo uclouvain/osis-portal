@@ -259,3 +259,6 @@ msgstr "Please enter the code of the course to which you would like to apply"
 
 msgid "no_teaching_charge"
 msgstr "No teaching charge in "
+
+msgid "application_denied"
+msgstr "The period of online application is closed."
