@@ -231,3 +231,18 @@ msgstr "Other"
 
 msgid "curriculum"
 msgstr "Curriculum"
+
+msgid "search"
+msgstr "Search:"
+
+msgid "showing_page"
+msgstr "Showing page"
+
+msgid "of"
+msgstr "of"
+
+msgid "no_record"
+msgstr "No record"
+
+msgid "confirm_application_delete"
+msgstr "Are you sure you want to delete the application?"

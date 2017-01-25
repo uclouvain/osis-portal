@@ -24,11 +24,11 @@
 #
 ##############################################################################
 import json
+from django.conf import settings
 from frontoffice.queue.queue_listener import PerformanceClient
 import datetime
 from django.utils.datetime_safe import datetime as safe_datetime
-
-UPDATE_DELTA_HOURS = 12
+from base.models import academic_year as mdl_academic_year
 
 
 def callback(json_data):
@@ -39,6 +39,18 @@ def callback(json_data):
         acronym = extract_acronym_from_json(json_data)
         save(registration_id, academic_year, acronym, json_data)
     except Exception:
+        pass
+
+
+def update_exp_date_callback(json_data):
+    try:
+        json_data = json.loads(json_data.decode("utf-8"))
+        registration_id = json_data.get("registrationId")
+        academic_year = json_data.get("academicYear")
+        acronym = json_data.get("acronym")
+        new_exp_date = json_data.get("expirationDate")
+        update_expiration_date(registration_id, academic_year, acronym, new_exp_date)
+    except Exception as e:
         pass
 
 
@@ -83,9 +95,13 @@ def fetch_json_data(registration_id, academic_year, acronym):
     return json_student_perf
 
 
-def get_expiration_date():
+def get_expiration_date(academic_year):
     now = safe_datetime.now()
-    timedelta = datetime.timedelta(hours=UPDATE_DELTA_HOURS)
+    current_academic_year = mdl_academic_year.current_academic_year()
+    current_year = current_academic_year.year if current_academic_year else None
+    timedelta = datetime.timedelta(hours=settings.PERFORMANCE_CONFIG.get('UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR')
+                                   if current_year == academic_year
+                                   else settings.PERFORMANCE_CONFIG.get('UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR'))
     expiration_date = now + timedelta
     return expiration_date
 
@@ -97,7 +113,11 @@ def get_creation_date():
 
 def save(registration_id, academic_year, acronym, json_data):
     from performance.models.student_performance import update_or_create
-    update_date = get_expiration_date()
+    if json_data.get("expirationDate"):
+        update_date = json_data.pop("expirationDate")
+        update_date = datetime.datetime.fromtimestamp(update_date / 1e3)
+    else:
+        update_date = get_expiration_date(academic_year)
     creation_date = get_creation_date()
     fields = {"data": json_data, "update_date": update_date, "creation_date": creation_date}
     try:
@@ -106,3 +126,27 @@ def save(registration_id, academic_year, acronym, json_data):
         obj = None
     return obj
 
+
+def get_performances_by_registration_id_and_offer(registration_id, academic_year, acronym):
+    from performance.models.student_performance import search
+    return search(registration_id=registration_id,
+                  academic_year=academic_year,
+                  acronym=acronym)
+
+
+def get_performances_by_offer(acronym, academic_year):
+    from performance.models.student_performance import find_by_acronym_and_academic_year
+    return find_by_acronym_and_academic_year(acronym=acronym, academic_year=academic_year)
+
+
+def update_expiration_date(registration_id, academic_year, acronym, new_exp_date):
+    if registration_id and registration_id != 'null':
+        performances_to_update = get_performances_by_registration_id_and_offer(registration_id=registration_id,
+                                                                       academic_year=academic_year,
+                                                                       acronym=acronym)
+    else:
+        performances_to_update = get_performances_by_offer(acronym=acronym, academic_year=academic_year)
+
+    for performance in performances_to_update:
+        performance.update_date = datetime.datetime.fromtimestamp(new_exp_date / 1e3)
+        performance.save()

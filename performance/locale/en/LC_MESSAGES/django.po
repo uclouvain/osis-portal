@@ -127,3 +127,12 @@ msgstr "Total ECTS / Enrollment"
 
 msgid "year"
 msgstr "Year"
+
+msgid "success_mean"
+msgstr "Success mean"
+
+msgid "general_mean"
+msgstr "General mean"
+
+msgid "credited"
+msgstr "Credited"

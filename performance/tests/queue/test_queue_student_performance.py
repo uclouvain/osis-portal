@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
+from unittest import skip
 from django.test import TestCase
 
 import base.tests.models.test_offer_year
@@ -45,13 +47,13 @@ class TestQueueStudentPerformance(TestCase):
         registration_id = self.student_performance.registration_id
         academic_year = self.student_performance.academic_year
         acronym = self.student_performance.acronym
-        stud_perf = queue_stud_perf.save(registration_id, academic_year, acronym, self.json_points)
+        stud_perf = queue_stud_perf.save(registration_id, academic_year, acronym, json.loads(self.json_points))
 
         self.student_performance.refresh_from_db()
 
         self.assertEqual(stud_perf, self.student_performance, "Object should be updated")
 
-        queue_stud_perf.save("4549841", academic_year, acronym, self.json_points)
+        queue_stud_perf.save("4549841", academic_year, acronym, json.loads(self.json_points))
         try:
             mdl_perf.StudentPerformance.objects.get(registration_id="4549841",
                                                     academic_year=self.student_performance.academic_year,
@@ -109,4 +111,38 @@ class TestQueueStudentPerformance(TestCase):
         self.assertEqual(self.student_performance.registration_id, obj.registration_id, "Incorrect student")
         self.assertEqual(self.student_performance.academic_year, obj.academic_year, "Incorrect academic_year")
         self.assertEqual(self.student_performance.acronym, obj.acronym, "Incorrect acronym")
+
+
+class TestUpdateExpDate(TestCase):
+
+    def setUp(self):
+        self.json_update_with_registration_id = performance.tests.models.test_student_performance.\
+            load_json_file("performance/tests/ressources/update_expate_with_registration_id.json")
+        self.json_update_without_registration_id = performance.tests.models.test_student_performance.\
+            load_json_file("performance/tests/ressources/update_expate_without_registration_id.json")
+        self.student_performance_1 = performance.tests.models.test_student_performance.\
+            create_student_performance('DROI1BA', '1111111', 2016, datetime.datetime.now())
+        self.student_performance_2 = performance.tests.models.test_student_performance.\
+            create_student_performance('DROI1BA', '2222222', 2016, datetime.datetime.now())
+
+    @skip
+    def test_update_with_registration_id(self):
+        queue_stud_perf.update_exp_date_callback(self.json_update_with_registration_id)
+        student_perf_1 = mdl_perf.search(registration_id='1111111',
+                                         academic_year=2016,
+                                         acronym="DROI1BA").first()
+        student_perf_2 = mdl_perf.search(registration_id='2222222',
+                                         academic_year=2016,
+                                         acronym="DROI1BA").first()
+        self.assertNotEqual(student_perf_1.update_date.replace(microsecond=0),
+                            student_perf_2.update_date.replace(microsecond=0))
+
+    @skip
+    def test_update_without_registration_id(self):
+        queue_stud_perf.update_exp_date_callback(self.json_update_without_registration_id)
+        student_perf_1 = mdl_perf.find_by_pk(self.student_performance_1.pk)
+        student_perf_2 = mdl_perf.find_by_pk(self.student_performance_2.pk)
+        self.assertEqual(student_perf_1.update_date.replace(microsecond=0),
+                         student_perf_2.update_date.replace(microsecond=0))
+
 

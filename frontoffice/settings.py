@@ -55,19 +55,20 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'analytical',
     'osis_common',
+    'rest_framework',
+    'localflavor',
+    'statici18n',
+    'ckeditor',
     'reference',
     'base',
     'admission',
     'enrollments',
     'dashboard',
-    'rest_framework',
-    'localflavor',
     'performance',
     'attribution',
     'dissertation',
-    'statici18n',
-    'ckeditor',
 )
 
 # check if we are testing right now
@@ -169,9 +170,6 @@ LOGGING = {
 
 DEFAULT_LOGGER = 'default'
 
-COUCHBASE_CONNECTION_STRING='couchbase://localhost/'
-COUCHBASE_PASSWORD=''
-
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
@@ -200,7 +198,7 @@ LANGUAGES = [
     ('en', _('English')),
 ]
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Brussels'
 
 USE_I18N = True
 
@@ -243,7 +241,9 @@ QUEUES = {
         'PAPER_SHEET': 'paper_sheet',
         'PERFORMANCE': 'performance_to_client',
         'STUDENT_PERFORMANCE': 'rpc_performance_from_client',
-        'STUDENT_POINTS': 'rpc_performance_to_client'
+        'STUDENT_POINTS': 'rpc_performance_to_client',
+        'PERFORMANCE_UPDATE_EXP_DATE': 'performance_exp_date',
+        'ATTRIBUTION' : 'attribution'
     }
 }
 
@@ -286,6 +286,16 @@ CKEDITOR_CONFIGS = {
             {'name': 'about', 'items': ['About']},
         ],
     },
+}
+
+
+TIME_TABLE_URL= ""
+TIME_TABLE_NUMBER = ""
+CATALOG_URL = ""
+
+PERFORMANCE_CONFIG = {
+    'UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR': 12,
+    'UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR': 24
 }
 
 try:

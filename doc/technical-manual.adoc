@@ -31,7 +31,6 @@ the development environment in it. Follow the steps below:
 
 - <<installing-git>>
 - <<installing-postgresql>>
-- <<installing-couchbase>>
 - <<installing-django>>
 - <<installing-application>>
 
@@ -185,28 +184,6 @@ to PostgreSQL:
 
     $ sudo apt-get install python3-dev libpq-dev
 
-[[installing-couchbase]]
-=== Installing CouchBase
-
-Access http://www.couchbase.com[CouchBase website] and download CouchBase
-Community Edition 4.0. To install it, execute:
-
-    $ sudo dpkg -i couchbase-server-community_4.0.0-ubuntu14.04_amd64.deb
-
-After the installation process, access http://localhost:8091 to configure the local
-instance. Just accept all default values for development purposes. Then, install
-the libraries used by Python to connect to CouchBase:
-
-    $ wget http://packages.couchbase.com/clients/c/libcouchbase-2.5.7_ubuntu1404_amd64.tar
-    $ tar -xf libcouchbase-2.5.7_ubuntu1404_amd64.tar
-    $ cd libcouchbase-2.5.7_ubuntu1404_amd64
-    $ sudo dpkg -i libcouchbase2-core_2.5.7-1_amd64.deb
-    $ sudo dpkg -i libcouchbase2-bin_2.5.7-1_amd64.deb
-    $ sudo dpkg -i libcouchbase-dev_2.5.7-1_amd64.deb
-
-The following buckets should be created:
-
-- score_encoding
 
 [[installing-django]]
 === Installing and Configuring Django
