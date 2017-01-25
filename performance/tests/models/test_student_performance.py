@@ -34,13 +34,14 @@ import datetime
 from django.core.exceptions import ObjectDoesNotExist
 
 
-def create_student_performance():
+def create_student_performance(acronym="SINF2MS/G", registration_id="64641200",
+                               academic_year=2016, update_date=datetime.datetime.now()):
     with open("performance/tests/ressources/points.json") as f:
         data = json.load(f)
-    a_student_performance = mdl_performance.student_performance.StudentPerformance(acronym="SINF2MS/G",
-                                                                                   registration_id="64641200",
-                                                                                   academic_year=2016,
-                                                                                   update_date=datetime.datetime.now(),
+    a_student_performance = mdl_performance.student_performance.StudentPerformance(acronym=acronym,
+                                                                                   registration_id=registration_id,
+                                                                                   academic_year=academic_year,
+                                                                                   update_date=update_date,
                                                                                    data=data)
     a_student_performance.save()
     return a_student_performance
