@@ -734,17 +734,11 @@ def format_end_academic_year(a_year):
     return ""
 
 
-def is_learning_unit_year_duplicated(current_attribution, attributions):
+def duplicated_function(current_attribution, attributions):
     for attribution in attributions:
         if attribution != current_attribution \
                 and attribution.learning_unit_year == current_attribution.learning_unit_year:
-            return True
-    return False
-
-
-def duplicated_function(attribution, attributions):
-    if is_learning_unit_year_duplicated(attribution, attributions):
-        return attribution.function
+            return current_attribution.function
     return None
 
 
