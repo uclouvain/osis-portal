@@ -56,7 +56,11 @@ SEPTEMBER = "septembre"
 @login_required
 @permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def home(request):
-    return by_year(request, datetime.datetime.now().year)
+    a_year = datetime.datetime.now().year
+    current_academic_year = mdl_base.academic_year.current_academic_year()
+    if current_academic_year:
+        a_year = current_academic_year.year
+    return by_year(request, a_year)
 
 
 def get_person(a_user):
