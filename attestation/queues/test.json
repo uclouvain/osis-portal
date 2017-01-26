@@ -1,0 +1,620 @@
+{
+  "monAnnee": {
+    "monOffre": {
+      "resultats": {
+        "pourcentageFinal": 57.78,
+        "session": [
+          {
+            "mention": "PRST",
+            "suiviInscExam": "1",
+            "etatToInscr": null,
+            "etatExam": null,
+            "moyenneGenerale": "-",
+            "pourcentage": "57.78",
+            "maxEval": " 20",
+            "verrou": "non",
+            "note": null,
+            "mois": "janvier",
+            "moyenne": "11.56",
+            "inscription": "SEP"
+          },
+          {
+            "mention": "-",
+            "suiviInscExam": "1",
+            "etatToInscr": null,
+            "etatExam": null,
+            "moyenneGenerale": "16.53",
+            "pourcentage": "-",
+            "maxEval": " 20",
+            "verrou": "non",
+            "note": null,
+            "mois": "juin",
+            "moyenne": "-",
+            "inscription": "IS"
+          },
+          {
+            "mention": "-",
+            "suiviInscExam": "-",
+            "etatToInscr": null,
+            "etatExam": null,
+            "moyenneGenerale": "-",
+            "pourcentage": "-",
+            "maxEval": " 20",
+            "verrou": "non",
+            "note": null,
+            "mois": "septembre",
+            "moyenne": "-",
+            "inscription": "-"
+          }
+        ]
+      },
+      "offre": {
+        "intituleComplet": " Premi\u00e8re ann\u00e9e de bachelier en sciences dentaires ",
+        "numOffre": "4690",
+        "sigleComplet": "DENT11BA"
+      },
+      "cours": [
+        {
+          "validite": "2016",
+          "poids": "4.0",
+          "intituleComplet": "El\u00e9ments de statistiques appliqu\u00e9s \u00e0 l'\u00e9pid\u00e9miologie et la pr\u00e9vention dentaire",
+          "insc": "I",
+          "creditReport": "-",
+          "sigleComplet": "WDENT1108",
+          "numEle": "416272",
+          "session": [
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "janvier",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "juin",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "septembre",
+              "moyenne": null,
+              "inscription": null
+            }
+          ]
+        },
+        {
+          "validite": "2016",
+          "poids": "5.0",
+          "intituleComplet": "Anatomie dentaire",
+          "insc": "I",
+          "creditReport": "-",
+          "sigleComplet": "WDENT1121",
+          "numEle": "1326",
+          "session": [
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "janvier",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "juin",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "septembre",
+              "moyenne": null,
+              "inscription": null
+            }
+          ]
+        },
+        {
+          "validite": "2016",
+          "poids": "10.0",
+          "intituleComplet": "Physique",
+          "insc": "I",
+          "creditReport": "K",
+          "sigleComplet": "WMDS1100",
+          "numEle": "206884",
+          "session": [
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "I",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "12.0",
+              "mois": "janvier",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "juin",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "septembre",
+              "moyenne": null,
+              "inscription": null
+            }
+          ]
+        },
+        {
+          "validite": "2016",
+          "poids": "11.0",
+          "intituleComplet": "Chimie g\u00e9n\u00e9rale et organique",
+          "insc": "I",
+          "creditReport": "K",
+          "sigleComplet": "WMDS1101",
+          "numEle": "206886",
+          "session": [
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "I",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "12.0",
+              "mois": "janvier",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "juin",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "septembre",
+              "moyenne": null,
+              "inscription": null
+            }
+          ]
+        },
+        {
+          "validite": "2016",
+          "poids": "6.0",
+          "intituleComplet": "Biologie et embryologie g\u00e9n\u00e9rale",
+          "insc": "I",
+          "creditReport": "K",
+          "sigleComplet": "WMDS1102",
+          "numEle": "206888",
+          "session": [
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "I",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "10.0",
+              "mois": "janvier",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "juin",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "septembre",
+              "moyenne": null,
+              "inscription": null
+            }
+          ]
+        },
+        {
+          "validite": "2016",
+          "poids": "5.0",
+          "intituleComplet": "Anatomie g\u00e9n\u00e9rale et fonctionnelle",
+          "insc": "I",
+          "creditReport": "-",
+          "sigleComplet": "WMDS1103",
+          "numEle": "206890",
+          "session": [
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "janvier",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "X",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "20.0",
+              "mois": "juin",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "septembre",
+              "moyenne": null,
+              "inscription": null
+            }
+          ]
+        },
+        {
+          "validite": "2016",
+          "poids": "5.0",
+          "intituleComplet": "Histologie g\u00e9n\u00e9rale",
+          "insc": "I",
+          "creditReport": "-",
+          "sigleComplet": "WMDS1105",
+          "numEle": "206892",
+          "session": [
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "janvier",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "W",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "18.0",
+              "mois": "juin",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "septembre",
+              "moyenne": null,
+              "inscription": null
+            }
+          ]
+        },
+        {
+          "validite": "2016",
+          "poids": "3.0",
+          "intituleComplet": "Philosophie",
+          "insc": "I",
+          "creditReport": "-",
+          "sigleComplet": "WMDS1106",
+          "numEle": "206894",
+          "session": [
+            {
+              "mention": "?",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "I",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "janvier",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "Y",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "5.0",
+              "mois": "juin",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "septembre",
+              "moyenne": null,
+              "inscription": null
+            }
+          ]
+        },
+        {
+          "validite": "2016",
+          "poids": "4.0",
+          "intituleComplet": "Epid\u00e9miologie et sant\u00e9 publique",
+          "insc": "I",
+          "creditReport": "-",
+          "sigleComplet": "WMDS1107",
+          "numEle": "206896",
+          "session": [
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "janvier",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "juin",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "septembre",
+              "moyenne": null,
+              "inscription": null
+            }
+          ]
+        },
+        {
+          "validite": "2016",
+          "poids": "7.0",
+          "intituleComplet": "Biologie mol\u00e9culaire",
+          "insc": "I",
+          "creditReport": "-",
+          "sigleComplet": "WMDS1109",
+          "numEle": "206902",
+          "session": [
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "janvier",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "I",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "19.0",
+              "mois": "juin",
+              "moyenne": null,
+              "inscription": null
+            },
+            {
+              "mention": "-",
+              "suiviInscExam": null,
+              "etatToInscr": null,
+              "etatExam": "-",
+              "moyenneGenerale": null,
+              "pourcentage": null,
+              "maxEval": null,
+              "verrou": null,
+              "note": "-",
+              "mois": "septembre",
+              "moyenne": null,
+              "inscription": null
+            }
+          ]
+        }
+      ],
+      "totalECTS": "60.0"
+    },
+    "anac": "2016",
+    "anneeAcademique": "2016 - 2017"
+  },
+  "typeInscr": null,
+  "etudiant": {
+    "noma": "29331600",
+    "nom": "Abbassi",
+    "dateNaissance": "14/05/1998",
+    "prenom": "Kamil"
+  },
+  "legende": {
+    "explicationMention": "(Session de  janvier) PRST : Poursuite des \u00e9tudes : vous avez pr\u00e9sent\u00e9 tous les examens requis au cours de la session de janvier et vous \u00eates autoris\u00e9(e) \u00e0 poursuivre votre ann\u00e9e d'\u00e9tudes.<BR><BR>Conform\u00e9ment au prescrit de l'article 110/2 du d\u00e9cret du 7 novembre 2013 d\u00e9finissant le paysage de l'enseignement sup\u00e9rieur et l'organisation acad\u00e9mique des \u00e9tudes, dit 'd\u00e9cret Paysage', seuls les \u00e9tudiants porteurs de l'attestation d'acc\u00e8s \u00e0 la suite du programme du cycle pourront inscrire dans leur programme d'\u00e9tudes les unit\u00e9s d'enseignement de la suite du programme du premier cycle en sciences dentaires.  ",
+    "explicationLettresLegende": [
+      "P - Examen partiel",
+      "I - Premi\u00e8re inscription",
+      "Y - Deuxi\u00e8me inscription",
+      "J - Report de note de janvier vers septembre",
+      "R - Report de note de la session pr\u00e9c\u00e9dente",
+      "B - Cr\u00e9dit",
+      "T - Note r\u00e9sultant d\u2019un test",
+      "V - Evaluation satisfaisante (la note ne compte pas)",
+      "W - Evaluation non satisfaisante (la note ne compte pas)",
+      "D - Dispense",
+      "X - Note obtenue \u00e0 l'ext\u00e9rieur"
+    ]
+  },
+  "message": null,
+  "inscrExam": null,
+  "expirationDate": null,
+  "sendMail": null
+}

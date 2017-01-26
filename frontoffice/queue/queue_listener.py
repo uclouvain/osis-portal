@@ -87,6 +87,18 @@ class PerformanceClient(Client):
         super(PerformanceClient, self).__init__(queue_name=queue_name)
 
 
+class AttestationListClient(Client):
+    def __init__(self):
+        queue_name = settings.QUEUES.get('QUEUES_NAME').get('ATTESTATION_LIST')
+        super(AttestationListClient, self).__init__(queue_name=queue_name)
+
+
+class AttestationClient(Client):
+    def __init__(self):
+        queue_name = settings.QUEUES.get('QUEUES_NAME').get('ATTESTATION')
+        super(AttestationListClient, self).__init__(queue_name=queue_name)
+
+
 class SynchronousConsumerThread(threading.Thread):
     def __init__(self, queue_name, callback, *args, **kwargs):
         super(SynchronousConsumerThread, self).__init__(*args, **kwargs)
