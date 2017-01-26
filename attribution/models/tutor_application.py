@@ -59,7 +59,7 @@ def find_by_id(a_tutor_application_id):
     return TutorApplication.objects.get(id=a_tutor_application_id)
 
 
-def search(tutor=None, learning_unit_year=None):
+def search(tutor=None, learning_unit_year=None, a_function=None):
     queryset = TutorApplication.objects
 
     if tutor:
@@ -67,6 +67,9 @@ def search(tutor=None, learning_unit_year=None):
 
     if learning_unit_year:
         queryset = queryset.filter(learning_unit_year=learning_unit_year)
+
+    if a_function:
+        queryset = queryset.filter(function=a_function)
 
     return queryset.select_related('tutor', 'learning_unit_year')
 
