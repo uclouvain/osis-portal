@@ -10,5 +10,6 @@ psycopg2==2.6.2
 PyPDF2==1.26.0
 reportlab==3.2.0
 selenium==2.48.0
+django-analytical==2.2.2
 
 -r ./osis_common/requirements.txt

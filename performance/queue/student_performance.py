@@ -45,11 +45,12 @@ def callback(json_data):
 def update_exp_date_callback(json_data):
     try:
         json_data = json.loads(json_data.decode("utf-8"))
+        registration_id = json_data.get("registrationId")
         academic_year = json_data.get("academicYear")
         acronym = json_data.get("acronym")
         new_exp_date = json_data.get("expirationDate")
-        update_exp_date(academic_year, acronym, new_exp_date)
-    except Exception:
+        update_expiration_date(registration_id, academic_year, acronym, new_exp_date)
+    except Exception as e:
         pass
 
 
@@ -126,9 +127,26 @@ def save(registration_id, academic_year, acronym, json_data):
     return obj
 
 
-def update_exp_date(academic_year, acronym, new_exp_date):
-    from performance.models.student_performance import  find_by_acronym_and_academic_year
-    performances_to_update = find_by_acronym_and_academic_year(acronym=acronym, academic_year=academic_year)
+def get_performances_by_registration_id_and_offer(registration_id, academic_year, acronym):
+    from performance.models.student_performance import search
+    return search(registration_id=registration_id,
+                  academic_year=academic_year,
+                  acronym=acronym)
+
+
+def get_performances_by_offer(acronym, academic_year):
+    from performance.models.student_performance import find_by_acronym_and_academic_year
+    return find_by_acronym_and_academic_year(acronym=acronym, academic_year=academic_year)
+
+
+def update_expiration_date(registration_id, academic_year, acronym, new_exp_date):
+    if registration_id and registration_id != 'null':
+        performances_to_update = get_performances_by_registration_id_and_offer(registration_id=registration_id,
+                                                                       academic_year=academic_year,
+                                                                       acronym=acronym)
+    else:
+        performances_to_update = get_performances_by_offer(acronym=acronym, academic_year=academic_year)
+
     for performance in performances_to_update:
         performance.update_date = datetime.datetime.fromtimestamp(new_exp_date / 1e3)
         performance.save()

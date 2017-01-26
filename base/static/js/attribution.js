@@ -4,6 +4,7 @@ $("input[id^='chb_attribution_renew_'").click(function() {
 
 $('document').ready(function(){
     $('#bt_submit_attribution_renew').css('visibility', 'hidden').css('display','none');
+    $('#bt_submit_attribution_renew').prop('disabled', 'true');
     $('#spn_renew_title').css('visibility', 'hidden').css('display','none');
     $('input:checkbox[id^="chb_attribution_renew_"]').each(function(){
         $('#bt_submit_attribution_renew').css('visibility', 'visible').css('display','block');

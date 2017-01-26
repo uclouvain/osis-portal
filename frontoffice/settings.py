@@ -55,19 +55,20 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'analytical',
     'osis_common',
+    'rest_framework',
+    'localflavor',
+    'statici18n',
+    'ckeditor',
     'reference',
     'base',
     'admission',
     'enrollments',
     'dashboard',
-    'rest_framework',
-    'localflavor',
     'performance',
     'attribution',
     'dissertation',
-    'statici18n',
-    'ckeditor',
 )
 
 # check if we are testing right now
@@ -197,7 +198,7 @@ LANGUAGES = [
     ('en', _('English')),
 ]
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Brussels'
 
 USE_I18N = True
 
