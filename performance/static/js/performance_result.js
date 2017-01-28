@@ -151,26 +151,38 @@ function addRowCourse(courseJson, $row) {
   createJQObject("<td/>", {}, title, $row);
   createJQObject("<td/>", {}, ects, $row);
   createJQObject("<td/>", {}, inscr, $row);
-  makeScoreCell(janv, $row);
-  makeScoreCell(juin, $row);
-  makeScoreCell(sept, $row);
+  makeScoreCell(janv, $row, "th_jan");
+  makeScoreCell(juin, $row, "th_june");
+  makeScoreCell(sept, $row, "th_sept");
   createJQObject("<td/>", {}, credit, $row);
 }
 
-function makeScoreCell(examJson, row){
+function cleanEtatExam(etatExam) {
+  if (etatExam == null
+      || etatExam.trim() == "-"
+      || etatExam.trim() == ""
+      || etatExam.trim() == "null"){
+    return null;
+  } else {
+    return etatExam.trim();
+  }
+}
+
+function makeScoreCell(examJson, row, month_th){
   var $score = examJson.note;
+  var $etatExam = cleanEtatExam(examJson.etatExam);
   var $mention = mentionToString(examJson);
   if ($mention != ""){
-    createJQObject("<td/>", {}, $mention, row);
+    createJQObject("<td/>", {"colspan" : 2, "class": "text-center"}, $mention, row);
   }
-  else if (examJson.etatExam == "-") {
-    createJQObject("<td/>", {}, $score, row);
+  else if ($etatExam == null){
+    createJQObject("<td/>", {"colspan" : 2, "class": "text-center"}, $score, row);
   }
   else{
-    var $cell = createJQObject("<td/>", {},"", row);
-    var $row = createJQObject("<div/>", {'class': 'row'},"", $cell);
-    createJQObject("<div/>", {'class': 'col-md-8'},$score, $row);
-    createJQObject("<div/>", {'class': 'col-md-4 text-right'},examJson.etatExam, $row);
+    var elem_id = "#"+month_th;
+    createJQObject("<td/>", {"style": "border-right:none;"}, $score, row);
+    createJQObject("<td/>", {"class": "text-right",
+                             "style": "border-left:none;"}, $etatExam, row);
   }
 
 }

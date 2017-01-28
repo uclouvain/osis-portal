@@ -55,7 +55,12 @@
                 <label><b>{% trans 'program' %}</b></label>
             </div>
         </div>
-
+        <br/>
+        <div class="row">
+            <div class="col-md-12 text-left" >
+                <b id="next_update">{% trans 'next_update' %} : {{ update_date }}</b>
+            </div>
+        </div>
         <hr>
         <div class="row container-fluid">
             <!-- Student sessions summary-->
@@ -93,9 +98,9 @@
                 <th>{% trans 'title' %}</th>
                 <th>{% trans 'ects' %}</th>
                 <th>{% trans 'inscr' %}</th>
-                <th>{% trans 'jan' %} *</th>
-                <th>{% trans 'june' %} *</th>
-                <th>{% trans 'sept' %} *</th>
+                <th colspan="2">{% trans 'jan' %} *</th>
+                <th colspan="2">{% trans 'june' %} *</th>
+                <th colspan="2">{% trans 'sept' %} *</th>
                 <th>{% trans 'credited' %}</th>
             </tr>
         </table>

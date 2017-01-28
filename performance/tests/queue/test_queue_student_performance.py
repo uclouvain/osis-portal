@@ -115,31 +115,29 @@ class TestQueueStudentPerformance(TestCase):
 
 class TestUpdateExpDate(TestCase):
 
+    def get_update_exp_date_json_with_reg_id_as_byte(self):
+        return b'{"registrationId": "1111111","academicYear": 2016,"acronym": \
+        "DROI1BA","expirationDate": 1485267376419,"forceUpdate": false}'
+
+    def get_update_exp_date_json_without_reg_id_as_byte(self):
+        return b'{"academicYear":2016,"acronym":\
+        "DROI1BA","expirationDate":1485267376419,"forceUpdate":false}'
+
     def setUp(self):
-        self.json_update_with_registration_id = performance.tests.models.test_student_performance.\
-            load_json_file("performance/tests/ressources/update_expate_with_registration_id.json")
-        self.json_update_without_registration_id = performance.tests.models.test_student_performance.\
-            load_json_file("performance/tests/ressources/update_expate_without_registration_id.json")
         self.student_performance_1 = performance.tests.models.test_student_performance.\
             create_student_performance('DROI1BA', '1111111', 2016, datetime.datetime.now())
         self.student_performance_2 = performance.tests.models.test_student_performance.\
             create_student_performance('DROI1BA', '2222222', 2016, datetime.datetime.now())
 
-    @skip
     def test_update_with_registration_id(self):
-        queue_stud_perf.update_exp_date_callback(self.json_update_with_registration_id)
-        student_perf_1 = mdl_perf.search(registration_id='1111111',
-                                         academic_year=2016,
-                                         acronym="DROI1BA").first()
-        student_perf_2 = mdl_perf.search(registration_id='2222222',
-                                         academic_year=2016,
-                                         acronym="DROI1BA").first()
+        queue_stud_perf.update_exp_date_callback(self.get_update_exp_date_json_with_reg_id_as_byte())
+        student_perf_1 = mdl_perf.find_by_pk(self.student_performance_1.pk)
+        student_perf_2 = mdl_perf.find_by_pk(self.student_performance_2.pk)
         self.assertNotEqual(student_perf_1.update_date.replace(microsecond=0),
                             student_perf_2.update_date.replace(microsecond=0))
 
-    @skip
     def test_update_without_registration_id(self):
-        queue_stud_perf.update_exp_date_callback(self.json_update_without_registration_id)
+        queue_stud_perf.update_exp_date_callback(self.get_update_exp_date_json_without_reg_id_as_byte())
         student_perf_1 = mdl_perf.find_by_pk(self.student_performance_1.pk)
         student_perf_2 = mdl_perf.find_by_pk(self.student_performance_2.pk)
         self.assertEqual(student_perf_1.update_date.replace(microsecond=0),

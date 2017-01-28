@@ -136,3 +136,6 @@ msgstr "General mean"
 
 msgid "credited"
 msgstr "Credited"
+
+msgid "next_update"
+msgstr "Date of the next document regeneration"

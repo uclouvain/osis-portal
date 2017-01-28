@@ -35,7 +35,7 @@ class StudentPerformanceAdmin(admin.ModelAdmin):
     list_display = ('registration_id', 'academic_year', 'acronym', 'update_date', 'creation_date')
     list_filter = ('registration_id', 'academic_year', 'acronym', )
     fieldsets = ((None, {'fields': ('registration_id', 'academic_year', 'acronym', 'update_date', 'creation_date', 'data')}),)
-    readonly_fields = ('creation_date', )
+    readonly_fields = ('creation_date', 'data')
     search_fields = ['registration_id', 'academic_year', 'acronym']
 
 class StudentPerformance(models.Model):

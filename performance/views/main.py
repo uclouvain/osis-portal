@@ -114,8 +114,11 @@ def visualize_student_result(request, pk):
     stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
     document = json.dumps(stud_perf.data) if stud_perf else None
     creation_date = stud_perf.creation_date if stud_perf else None
+    update_date = stud_perf.update_date if stud_perf else None
 
-    return layout.render(request, "performance_result.html", {"results": document, "creation_date": creation_date})
+    return layout.render(request, "performance_result.html", {"results": document,
+                                                              "creation_date": creation_date,
+                                                              "update_date": update_date})
 
 
 # *************************** UTILITY FUNCTIONS
