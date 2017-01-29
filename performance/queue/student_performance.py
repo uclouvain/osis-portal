@@ -153,5 +153,6 @@ def update_expiration_date(registration_id, academic_year, acronym, new_exp_date
         performances_to_update = get_performances_by_offer(acronym=acronym, academic_year=academic_year)
 
     for performance in performances_to_update:
-        performance.update_date = datetime.datetime.fromtimestamp(new_exp_date / 1e3)
-        performance.save()
+        if new_exp_date and new_exp_date != 'null':
+            performance.update_date = datetime.datetime.fromtimestamp(new_exp_date / 1e3)
+            performance.save()
