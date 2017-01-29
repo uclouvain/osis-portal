@@ -55,7 +55,22 @@
                 <label><b>{% trans 'program' %}</b></label>
             </div>
         </div>
-
+        <br/>
+        {% if fetch_timed_out %}
+        <div class="row">
+            <div class="col-md-12 alert alert-warning">
+                {% trans 'performance_result_fetch_timed_out' %}
+            </div>
+        </div>
+        {% endif %}
+        <div class="row container-fluid">
+            <div class="col-md-6 text-left">
+                <small><b>{% trans 'next_update' %}:</b> {{ update_date }}</small>
+            </div>
+            <div class="col-md-6 text-right">
+                <small><b>{% trans 'generated' %}:</b> {{ creation_date }}</small>
+            </div>
+        </div>
         <hr>
         <div class="row container-fluid">
             <!-- Student sessions summary-->
@@ -93,9 +108,9 @@
                 <th>{% trans 'title' %}</th>
                 <th>{% trans 'ects' %}</th>
                 <th>{% trans 'inscr' %}</th>
-                <th>{% trans 'jan' %} *</th>
-                <th>{% trans 'june' %} *</th>
-                <th>{% trans 'sept' %} *</th>
+                <th colspan="2">{% trans 'jan' %} *</th>
+                <th colspan="2">{% trans 'june' %} *</th>
+                <th colspan="2">{% trans 'sept' %} *</th>
                 <th>{% trans 'credited' %}</th>
             </tr>
         </table>
@@ -120,11 +135,7 @@
                 </div>
             </div>
         </div>
-
-        <div class="row container-fluid text-right">
-            <small> {% trans 'generated' %} : {{ creation_date }}</small>
-        </div>
-
+            
         <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
         <script src="{% static 'js/performance_result.js' %}"></script>
         <script type="text/javascript">
