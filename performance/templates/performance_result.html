@@ -63,6 +63,14 @@
             </div>
         </div>
         {% endif %}
+        <div class="row container-fluid">
+            <div class="col-md-6 text-left">
+                <small><b>{% trans 'next_update' %}:</b> {{ update_date }}</small>
+            </div>
+            <div class="col-md-6 text-right">
+                <small><b>{% trans 'generated' %}:</b> {{ creation_date }}</small>
+            </div>
+        </div>
         <hr>
         <div class="row container-fluid">
             <!-- Student sessions summary-->
@@ -127,16 +135,7 @@
                 </div>
             </div>
         </div>
-
-        <div class="row container-fluid">
-            <div class="col-md-6 text-left">
-                <small><b>{% trans 'next_update' %}:</b> {{ update_date }}</small>
-            </div>
-            <div class="col-md-6 text-right">
-                <small><b>{% trans 'generated' %}:</b> {{ creation_date }}</small>
-            </div>
-        </div>
-
+            
         <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
         <script src="{% static 'js/performance_result.js' %}"></script>
         <script type="text/javascript">
