@@ -139,3 +139,6 @@ msgstr "Credited"
 
 msgid "next_update"
 msgstr "Date of the next document regeneration"
+
+msgid "performance_result_fetch_timed_out"
+msgstr "The server is actually overloaded. Please excuse us and try again later."

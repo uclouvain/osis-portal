@@ -139,3 +139,6 @@ msgstr "Crédité"
 
 msgid "next_update"
 msgstr "Date de la prochaine mise à jour du document"
+
+msgid "performance_result_fetch_timed_out"
+msgstr "Une surcharge ponctuelle du serveur empêche la mise à jour du document. Veuillez nous en excuser et réessayer un peu plus tard."

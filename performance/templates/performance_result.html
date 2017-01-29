@@ -56,11 +56,13 @@
             </div>
         </div>
         <br/>
+        {% if fetch_timed_out %}
         <div class="row">
-            <div class="col-md-12 text-left" >
-                <b id="next_update">{% trans 'next_update' %} : {{ update_date }}</b>
+            <div class="col-md-12 alert alert-warning">
+                {% trans 'performance_result_fetch_timed_out' %}
             </div>
         </div>
+        {% endif %}
         <hr>
         <div class="row container-fluid">
             <!-- Student sessions summary-->
@@ -126,8 +128,13 @@
             </div>
         </div>
 
-        <div class="row container-fluid text-right">
-            <small> {% trans 'generated' %} : {{ creation_date }}</small>
+        <div class="row container-fluid">
+            <div class="col-md-6 text-left">
+                <small><b>{% trans 'next_update' %} :</b>{{ creation_date }}</small>
+            </div>
+            <div class="col-md-6 text-right">
+                <small> {% trans 'generated' %} : {{ creation_date }}</small>
+            </div>
         </div>
 
         <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
