@@ -1414,7 +1414,7 @@ msgid "MASTER_180_OR_240"
 msgstr "Master 180 or 240"
 
 msgid "ADVANCED_MASTER"
-msgstr "Master spécialisé"
+msgstr "Master de spécialisation"
 
 msgid "CAPAES"
 msgstr "Capaes"

@@ -24,11 +24,14 @@
 #
 ##############################################################################
 import json
+import logging
 from django.conf import settings
 from frontoffice.queue.queue_listener import PerformanceClient
 import datetime
 from django.utils.datetime_safe import datetime as safe_datetime
 from base.models import academic_year as mdl_academic_year
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 def callback(json_data):
@@ -38,7 +41,8 @@ def callback(json_data):
         academic_year = extract_academic_year_from_json(json_data)
         acronym = extract_acronym_from_json(json_data)
         save(registration_id, academic_year, acronym, json_data)
-    except Exception:
+    except Exception as e:
+        logger.error('Error callback performance : {}'.format(e))
         pass
 
 
@@ -51,6 +55,7 @@ def update_exp_date_callback(json_data):
         new_exp_date = json_data.get("expirationDate")
         update_expiration_date(registration_id, academic_year, acronym, new_exp_date)
     except Exception as e:
+        logger.error('Error callback update_exp_date performance : {}'.format(e))
         pass
 
 
@@ -142,11 +147,12 @@ def get_performances_by_offer(acronym, academic_year):
 def update_expiration_date(registration_id, academic_year, acronym, new_exp_date):
     if registration_id and registration_id != 'null':
         performances_to_update = get_performances_by_registration_id_and_offer(registration_id=registration_id,
-                                                                       academic_year=academic_year,
-                                                                       acronym=acronym)
+                                                                               academic_year=academic_year,
+                                                                               acronym=acronym)
     else:
         performances_to_update = get_performances_by_offer(acronym=acronym, academic_year=academic_year)
 
     for performance in performances_to_update:
-        performance.update_date = datetime.datetime.fromtimestamp(new_exp_date / 1e3)
-        performance.save()
+        if new_exp_date and new_exp_date != 'null':
+            performance.update_date = datetime.datetime.fromtimestamp(new_exp_date / 1e3)
+            performance.save()

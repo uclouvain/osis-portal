@@ -24,7 +24,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
-
+from django.core.exceptions import PermissionDenied
 
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
@@ -56,13 +56,18 @@ def display_result_for_specific_student_performance(request, pk):
     Display the student result for a particular year and program.
     """
     stud = student.find_by_user(request.user)
-    stud_perf = mdl_performance.student_performance.find_by_pk(pk)
+    stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
     if not check_right_access(stud_perf, stud):
-        stud_perf = None
+        raise PermissionDenied
     document = json.dumps(stud_perf.data) if stud_perf else None
     creation_date = stud_perf.creation_date if stud_perf else None
+    update_date = stud_perf.update_date if stud_perf else None
+    fetch_timed_out = stud_perf.fetch_timed_out if stud_perf else None
 
-    return layout.render(request, "performance_result.html", {"results": document, "creation_date": creation_date})
+    return layout.render(request, "performance_result.html", {"results": document,
+                                                              "creation_date": creation_date,
+                                                              "update_date": update_date,
+                                                              "fetch_timed_out": fetch_timed_out})
 
 
 @login_required
@@ -114,8 +119,13 @@ def visualize_student_result(request, pk):
     stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
     document = json.dumps(stud_perf.data) if stud_perf else None
     creation_date = stud_perf.creation_date if stud_perf else None
+    update_date = stud_perf.update_date if stud_perf else None
+    fetch_timed_out = stud_perf.fetch_timed_out if stud_perf else None
 
-    return layout.render(request, "performance_result.html", {"results": document, "creation_date": creation_date})
+    return layout.render(request, "performance_result.html", {"results": document,
+                                                              "creation_date": creation_date,
+                                                              "update_date": update_date,
+                                                              "fetch_timed_out": fetch_timed_out})
 
 
 # *************************** UTILITY FUNCTIONS
