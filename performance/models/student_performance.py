@@ -38,6 +38,7 @@ class StudentPerformanceAdmin(admin.ModelAdmin):
     readonly_fields = ('creation_date', 'data')
     search_fields = ['registration_id', 'academic_year', 'acronym']
 
+
 class StudentPerformance(models.Model):
     registration_id = models.CharField(max_length=10, db_index=True)
     academic_year = models.IntegerField()
@@ -45,6 +46,8 @@ class StudentPerformance(models.Model):
     data = JSONField()
     update_date = models.DateTimeField()
     creation_date = models.DateTimeField(auto_now=True)
+
+    fetch_timed_out = False
 
     class Meta:
         unique_together = ('registration_id', 'academic_year', 'acronym')
@@ -99,14 +102,12 @@ def has_expired(student_performance):
 
 def find_actual_by_pk(student_performance_pk):
     result = find_by_pk(student_performance_pk)
-    if result:
-        result.timed_out = False
-        if has_expired(result):
+    if result and has_expired(result):
             new_result = fetch_and_save(result.registration_id, result.academic_year, result.acronym)
             if new_result:
                 result = new_result
             else:
-                result.timed_out = True
+                result.fetch_timed_out = True
     return result
 
 

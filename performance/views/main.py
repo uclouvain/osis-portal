@@ -62,7 +62,7 @@ def display_result_for_specific_student_performance(request, pk):
     document = json.dumps(stud_perf.data) if stud_perf else None
     creation_date = stud_perf.creation_date if stud_perf else None
     update_date = stud_perf.update_date if stud_perf else None
-    fetch_timed_out = stud_perf.timed_out if stud_perf and stud_perf.timed_out else None
+    fetch_timed_out = stud_perf.fetch_timed_out if stud_perf else None
 
     return layout.render(request, "performance_result.html", {"results": document,
                                                               "creation_date": creation_date,
@@ -120,7 +120,7 @@ def visualize_student_result(request, pk):
     document = json.dumps(stud_perf.data) if stud_perf else None
     creation_date = stud_perf.creation_date if stud_perf else None
     update_date = stud_perf.update_date if stud_perf else None
-    fetch_timed_out = stud_perf.timed_out if stud_perf and stud_perf.timed_out else None
+    fetch_timed_out = stud_perf.fetch_timed_out if stud_perf else None
 
     return layout.render(request, "performance_result.html", {"results": document,
                                                               "creation_date": creation_date,

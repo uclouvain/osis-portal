@@ -33,6 +33,7 @@ from base.models import academic_year as mdl_academic_year
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
+
 def callback(json_data):
     try:
         json_data = json.loads(json_data.decode("utf-8"))

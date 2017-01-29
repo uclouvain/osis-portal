@@ -63,7 +63,7 @@ msgid "first_name"
 msgstr "First Name"
 
 msgid "generated"
-msgstr "generated on"
+msgstr "Generated on"
 
 msgid "inscr"
 msgstr "Inscr."

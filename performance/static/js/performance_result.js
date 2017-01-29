@@ -154,7 +154,11 @@ function addRowCourse(courseJson, $row) {
   makeScoreCell(janv, $row);
   makeScoreCell(juin, $row);
   makeScoreCell(sept, $row);
-  createJQObject("<td/>", {}, credit, $row);
+  if(credit.trim() == '-'){
+    createJQObject("<td/>", {"class": "text-center"}, credit, $row);
+  } else {
+    createJQObject("<td/>", {}, credit, $row);
+  }
 }
 
 function cleanEtatExam(etatExam) {
