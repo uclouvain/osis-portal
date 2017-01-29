@@ -27,7 +27,7 @@ msgid "credits"
 msgstr "Crédits"
 
 msgid "dont_have_the_score_yet"
-msgstr "Vous n'avez pas encore les résultats de vos études."
+msgstr "Vos résultats ne sont pas encore disponibles."
 
 msgid "ects"
 msgstr "ECTS"
@@ -63,7 +63,7 @@ msgid "first_name"
 msgstr "Prénom"
 
 msgid "generated"
-msgstr "générée le"
+msgstr "Générée le"
 
 msgid "inscr"
 msgstr "Inscr."
@@ -136,3 +136,9 @@ msgstr "Moyenne générale"
 
 msgid "credited"
 msgstr "Crédité"
+
+msgid "next_update"
+msgstr "Date de la prochaine mise à jour du document"
+
+msgid "performance_result_fetch_timed_out"
+msgstr "Une surcharge ponctuelle du serveur empêche la mise à jour du document. Veuillez nous en excuser et réessayer un peu plus tard."
