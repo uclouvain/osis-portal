@@ -46,6 +46,5 @@ class Attestation(models.Model):
         )
 
 
-
 def find_by_student_id(student_id):
-   return Attestation.objects.filter(student__id=student_id)
+    return Attestation.objects.filter(student__id=student_id)

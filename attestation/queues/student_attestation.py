@@ -31,24 +31,26 @@ def fetch_json_attestation_statuses(registration_id):
     message = generate_registration_id_message(registration_id)
     client = AttestationListClient()
     json_data = client.call(message)
-    json_attestation_list = None
+    json_attestation_statuses = None
     if json_data:
-        json_attestation_list = json.loads(json_data.decode("utf-8"))
-    return json_attestation_list
+        json_attestation_statuses = json.loads(json_data.decode("utf-8"))
+    return json_attestation_statuses
 
 
 def fetch_json_attestation(registration_id, academic_year):
-    message = generate_message(registration_id, academic_year)
-    client = AttestationClient()
-    json_data = client.call(message)
     json_attestation = None
-    if json_data:
-        json_attestation = json.loads(json_data.decode("utf-8"))
+    message = generate_registration_id_message(registration_id)
+    if message:
+        client = AttestationClient()
+        json_data = client.call(message)
+        if json_data:
+            json_attestation = json.loads(json_data.decode("utf-8"))
     return json_attestation
 
 
 def generate_registration_id_message(registration_id):
-    message = dict()
-    message['registration_id'] = registration_id
-    message["academic_year"] = str(academic_year)
-    return json.dumps(message)
+    if registration_id:
+        message = dict()
+        message['registration_id'] = registration_id
+        return json.dumps(message)
+    return None

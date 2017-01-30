@@ -23,19 +23,3 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib.auth.decorators import login_required, permission_required
-
-from base.models import student as student_mdl
-from attestation.queues import student_attestation
-from base.views import layout
-
-
-@login_required
-@permission_required('attestation.can_access_attestation', raise_exception=True)
-def home(request):
-    student = student_mdl.find_by_user(request.user)
-    attestations_list_json = student_attestation.fetch_json_attestation_statuses(student.registration_id)
-    return layout.render(request, "attestation.html", {'attestations': attestations_list_json.get('attestations')})
-
-
-

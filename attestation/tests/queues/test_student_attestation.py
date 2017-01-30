@@ -23,19 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib.auth.decorators import login_required, permission_required
-
-from base.models import student as student_mdl
-from attestation.queues import student_attestation
-from base.views import layout
+import json
+from django.test import TestCase
+from attestation.queues import student_attestation as std_att_queue
 
 
-@login_required
-@permission_required('attestation.can_access_attestation', raise_exception=True)
-def home(request):
-    student = student_mdl.find_by_user(request.user)
-    attestations_list_json = student_attestation.fetch_json_attestation_statuses(student.registration_id)
-    return layout.render(request, "attestation.html", {'attestations': attestations_list_json.get('attestations')})
+class TestRegistartionIdMessage(TestCase):
 
+    def test_generate_message_with_registration_id(self):
+        given_json_message = std_att_queue.generate_registration_id_message('1111111')
+        expected_json_message = json.loads('{"registration_id" : "1111111"}')
+        self.assertJSONEqual(given_json_message, expected_json_message)
+
+    def test_generate_message_without_registration_id(self):
+        given_json_message = std_att_queue.generate_registration_id_message(None)
+        self.assertIsNone(given_json_message)
 
 
