@@ -80,6 +80,18 @@
                     <br>
                 {% endif %}
             </div>
+            <div class="col-md-6">
+                {% if perms.base.is_student %}
+                    <div class="row">
+                        <div class="col-md-2"><i class="fa fa-list-alt" style="font-size: 400%; color: #6699FF;"></i></div>
+                        <div class="col-md-10">
+                            <h4 class="media-heading"><a href="{% url 'exam_enrollment_offer_choice' %}" id="lnk_exam_enrollment_offer_choice">{% trans 'exams_enrollment' %}</a></h4>
+                            <p>{% trans 'desc_lnk_exam_enrollment' %}</p>
+                        </div>
+                    </div>
+                    <br>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
