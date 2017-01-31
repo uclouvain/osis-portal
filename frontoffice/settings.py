@@ -163,7 +163,7 @@ LOGGING = {
         'queue_exception': {
             'handlers': ['console'],
             'level': 'DEBUG',
-            'propagate': True,
+            'propagate': False,
         },
         'django': {
             'handlers': ['console'],
