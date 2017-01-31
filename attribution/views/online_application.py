@@ -583,7 +583,7 @@ def allocation_charge_update(an_application_charge_id, a_field_value):
 
 def get_learning_unit_year_vacant(a_year, an_acronym, a_tutor):
     an_academic_year = mdl_base.academic_year.find_by_year(a_year)
-    learning_unit_years = mdl_base.learning_unit_year.search(an_academic_year, an_acronym, None, None)
+    learning_unit_years = mdl_base.learning_unit_year.search(an_academic_year, an_acronym, None)
     for a_learning_unit_year in learning_unit_years:
         if a_learning_unit_year.vacant:
             return get_new_attribution_informations(a_learning_unit_year, a_tutor)
