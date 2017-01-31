@@ -263,3 +263,6 @@ msgstr "Pas de charge d'enseignement en "
 
 msgid "application_denied"
 msgstr "La période d'encodage des candidatures en ligne est fermée pour le moment."
+
+msgid "activity"
+msgstr "Activité"

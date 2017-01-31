@@ -50,6 +50,7 @@
             <thead>
                 <tr>
                     <th>{% trans 'program'%}</th>
+                    <th>{% trans 'activity'%}</th>
                     <th>{% trans 'student'%}</th>
                     <th>{% trans 'registration_id'%}</th>
                     <th>{% trans 'january'%}</th>
@@ -64,6 +65,7 @@
                 {% for student in students %}
                     <tr>
                         <td>{{ student.program }}</td>
+                        <td>{{ student.acronym }}</td>
                         <td>{{ student.name }}</td>
                         <td>{{ student.registration_id | default_if_none:''}}</td>
                         <td>{{ student.january_note | default_if_none:''}}</td>

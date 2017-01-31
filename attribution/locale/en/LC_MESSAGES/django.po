@@ -262,3 +262,6 @@ msgstr "No teaching charge in "
 
 msgid "application_denied"
 msgstr "The period of online application is closed."
+
+msgid "activity"
+msgstr "Activity"
