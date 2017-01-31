@@ -405,8 +405,7 @@ def create_tutor_application_from_attribution(an_attribution):
 
     next_learning_unit_years = mdl_base.learning_unit_year.search(next_academic_year,
                                                                   None,
-                                                                  an_attribution.learning_unit_year.learning_unit,
-                                                                  None)
+                                                                  an_attribution.learning_unit_year.learning_unit)
     next_learning_unit_year = None
     if next_learning_unit_years:
         next_learning_unit_year = next_learning_unit_years[0]
