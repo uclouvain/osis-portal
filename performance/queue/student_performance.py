@@ -25,6 +25,7 @@
 ##############################################################################
 import json
 import logging
+import traceback
 from django.conf import settings
 from frontoffice.queue.queue_listener import PerformanceClient
 import datetime
@@ -91,12 +92,17 @@ def fetch_and_save(registration_id, academic_year, acronym):
 
 
 def fetch_json_data(registration_id, academic_year, acronym):
-    message = generate_message(registration_id, academic_year, acronym)
-    client = PerformanceClient()
-    json_data = client.call(message)
-    json_student_perf = None
-    if json_data:
-        json_student_perf = json.loads(json_data.decode("utf-8"))
+    try:
+        message = generate_message(registration_id, academic_year, acronym)
+        client = PerformanceClient()
+        json_data = client.call(message)
+        json_student_perf = None
+        if json_data:
+            json_student_perf = json.loads(json_data.decode("utf-8"))
+    except Exception:
+        json_student_perf = None
+        trace = traceback.format_exc()
+        logger.error(trace)
     return json_student_perf
 
 

@@ -101,10 +101,16 @@ def fetch_document(global_id):
 
 
 def fetch_json(global_id):
-    scores_sheets_cli = queue_listener.ScoresSheetClient()
-    json_data = scores_sheets_cli.call(global_id)
-    if json_data:
-        json_data = json_data.decode("utf-8")
+    try:
+        scores_sheets_cli = queue_listener.ScoresSheetClient()
+        json_data = scores_sheets_cli.call(global_id)
+        if json_data:
+            json_data = json_data.decode("utf-8")
+    except Exception:
+        json_data = None
+        trace = traceback.format_exc()
+        logger.error(trace)
+
     return json_data
 
 
