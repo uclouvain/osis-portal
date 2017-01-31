@@ -160,6 +160,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'queue_exception': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'django': {
             'handlers': ['console'],
             'level': 'INFO',
@@ -169,6 +174,7 @@ LOGGING = {
 }
 
 DEFAULT_LOGGER = 'default'
+QUEUE_EXCEPTION_LOGGER = 'queue_exception'
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
