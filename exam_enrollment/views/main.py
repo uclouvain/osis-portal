@@ -23,13 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from base.views import layout
 from base.models import student, offer_enrollment
 
 
 @login_required
-@permission_required('exam_enrollment.can_access_exam_enrollment_application', raise_exception=True)
 def choose_offer(request):
     stud = student.find_by_user(request.user)
     student_programs = None
