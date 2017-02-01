@@ -25,7 +25,7 @@
 ##############################################################################
 from django.contrib.auth.decorators import login_required
 from base.views import layout
-from base.models import student, offer_enrollment
+from base.models import student, offer_enrollment, academic_year, offer_year
 
 
 @login_required
@@ -38,5 +38,27 @@ def choose_offer(request):
                                                         'student': stud})
 
 
+def _fetch_exam_enrollment_form(registration_id):
+    import json
+    import os
+    script_dir = os.path.dirname(__file__)
+    rel_path = "exam_enrollment_form_example.json"
+    abs_file_path = os.path.join(script_dir, rel_path)
+    json_data = open(abs_file_path)
+    data1 = json.load(json_data) # deserialises it
+    # data2 = json.dumps(json_data) # json formatted string
+    return data1
 
 
+@login_required
+def exam_enrollment_form(request, offer_year_id):
+    stud = student.find_by_user(request.user)
+    data = None
+    if stud:
+        data = _fetch_exam_enrollment_form(stud.registration_id)
+    return layout.render(request, 'exam_enrollment_form.html', {'exam_enrollments': data.get('exam_enrollments'),
+                                                                'student': stud,
+                                                                'current_number_session': data.get('current_number_session'),
+                                                                'academic_year': academic_year.current_academic_year(),
+                                                                'program': offer_year.find_by_id(offer_year_id),
+                                                                'legend': data.get('legend')})

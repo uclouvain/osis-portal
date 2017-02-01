@@ -73,13 +73,13 @@
                         </tr>
                         {% for prog in programs %}
                             <tr>
-                                <td>{{prog.academic_year}}</td>
+                                <td>{{ prog.academic_year }}</td>
                                 <td>
-                                    <a href="#">
-                                        {{prog.acronym}}
+                                    <a href="{% url 'exam_enrollment_form' prog.id %}">
+                                        {{ prog.acronym }}
                                     </a>
                                 </td>
-                                <td>{{prog.title}}</td>
+                                <td>{{ prog.title }}</td>
                             </tr>
                         {% endfor %}
                     </table>
