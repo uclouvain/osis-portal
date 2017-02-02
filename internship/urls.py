@@ -23,8 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.apps import AppConfig
+from django.conf.urls import url
+from internship.views import main
 
+urlpatterns = [
+    url(r'^$', main.view_internship_home, name='internship_home'),
+]
 
-class InternshipConfig(AppConfig):
-    name = 'internship'

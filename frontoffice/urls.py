@@ -63,6 +63,8 @@ if 'dissertation' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^dissertation/', include('dissertation.urls')),)
 if 'attribution' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^attribution/', include('attribution.urls')), )
+if 'internship' in settings.INSTALLED_APPS:
+    urlpatterns = urlpatterns + (url(r'^internship/', include('internship.urls')), )
 
 handler404 = 'base.views.common.page_not_found'
 handler403 = 'base.views.common.access_denied'

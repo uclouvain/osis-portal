@@ -1,4 +1,5 @@
-##############################################################################
+# -*- coding: utf-8 -*-
+############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -22,9 +23,14 @@
 #    at the root of the source code of this program.  If not,
 #    see http://www.gnu.org/licenses/.
 #
-##############################################################################
-from django.apps import AppConfig
+############################################################################
+from django.contrib.auth.decorators import login_required, permission_required
+from base.views import layout
 
 
-class InternshipConfig(AppConfig):
-    name = 'internship'
+@login_required
+@permission_required('base.is_student', raise_exception=True)  # TODO access only for medicine students
+def view_internship_home(request):
+
+    return layout.render(request, "internship_home.html")
+
