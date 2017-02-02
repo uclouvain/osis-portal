@@ -35,11 +35,6 @@ js_info_dict = {
 }
 
 
-js_info_dict = {
-    'domain': 'djangojs',
-    'packages': ('admission',),
-}
-
 urlpatterns = (
     url(r'^'+settings.ADMIN_URL, admin.site.urls),
     url(r'', include('base.urls')),
