@@ -53,6 +53,11 @@ class StudentPerformance(models.Model):
 
     fetch_timed_out = False
 
+    def __get_academic_year_template_formated(self):
+        return '{} - {}'.format(self.academic_year, self.academic_year + 1)
+
+    academic_year_template_formated = property(__get_academic_year_template_formated())
+
     class Meta:
         unique_together = ('registration_id', 'academic_year', 'acronym')
 

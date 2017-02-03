@@ -73,7 +73,7 @@
             </tr>
             {% for row in programs %}
             <tr>
-                <td>{{row.academic_year}}</td>
+                <td>{{row.academic_year_template_formated}}</td>
                 <td>
                     {% if perms.base.is_faculty_administrator %}
                         <a href="{% url 'performance_student_result' row.pk %}">
