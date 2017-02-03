@@ -240,6 +240,11 @@ class OnlineApplicationTest(TestCase):
                                                          'function': function.CO_HOLDER})
         self.assertEquals(online_application.define_renew_possible(self.a_tutor, a_learning_unit_year_plus_4, None), False)
 
+    def test_is_deputy_function(self):
+        self.assertEquals(online_application.is_deputy_function(function.DEPUTY_TEMPORARY), True)
+
+    def test_is_not_deputy_function(self):
+        self.assertEquals(online_application.is_deputy_function(function.COORDINATOR), False)
 
 
 

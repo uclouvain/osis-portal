@@ -266,3 +266,18 @@ msgstr "La période d'encodage des candidatures en ligne est fermée pour le mom
 
 msgid "activity"
 msgstr "Activité"
+
+msgid "DEPUTY_AUTHORITY"
+msgstr "Suppléant d'autorité"
+
+msgid "DEPUTY_SABBATICAL"
+msgstr "Suppléant sabbatique"
+
+msgid "DEPUTY_TEMPORARY"
+msgstr "Suppléant temporaire"
+
+msgid "INTERNSHIP_SUPERVISOR"
+msgstr "Directeur de stage"
+
+msgid "INTERNSHIP_CO_SUPERVISOR"
+msgstr "Co-directeur de stage"

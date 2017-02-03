@@ -265,3 +265,18 @@ msgstr "The period of online application is closed."
 
 msgid "activity"
 msgstr "Activity"
+
+msgid "DEPUTY_AUTHORITY"
+msgstr "Deputy authority"
+
+msgid "DEPUTY_SABBATICAL"
+msgstr "Deputy sabbatical"
+
+msgid "DEPUTY_TEMPORARY"
+msgstr "Deputy temporary"
+
+msgid "INTERNSHIP_SUPERVISOR"
+msgstr "Internship supervisor"
+
+msgid "INTERNSHIP_CO_SUPERVISOR"
+msgstr "Internship co-supervisor"
