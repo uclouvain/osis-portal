@@ -45,9 +45,10 @@ class StudentPerformance(models.Model):
     acronym = models.CharField(max_length=15)
     data = JSONField()
     update_date = models.DateTimeField()
-    creation_date = models.DateTimeField(auto_now=True)
+    creation_date = models.DateTimeField()
 
     fetch_timed_out = False
+    not_authorized = False
 
     class Meta:
         unique_together = ('registration_id', 'academic_year', 'acronym')

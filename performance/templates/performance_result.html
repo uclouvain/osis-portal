@@ -38,6 +38,10 @@
 
 {% include "template_messages.html" %}
 
+<div class="alert alert-info" role="alert">
+    {% trans 'performance_result_note_legal_announcement' %}
+</div>
+
 <div class="panel panel-default">
     <div class="panel-body">
         {% if not results %}
@@ -62,6 +66,10 @@
                 {% trans 'performance_result_fetch_timed_out' %}
             </div>
         </div>
+        {% elif results_not_authorized %}
+            <div class="alert alert-danger" role="alert">
+                {% trans 'performance_result_note_not_autorized' %}
+            </div>
         {% endif %}
         <div class="row container-fluid">
             <div class="col-md-6 text-left">
