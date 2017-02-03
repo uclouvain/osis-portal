@@ -66,7 +66,7 @@
                 {% trans 'performance_result_fetch_timed_out' %}
             </div>
         </div>
-        {% elif results_not_authorized %}
+        {% elif not authorized %}
             <div class="alert alert-danger" role="alert">
                 {% trans 'performance_result_note_not_autorized' %}
             </div>

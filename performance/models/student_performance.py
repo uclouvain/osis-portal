@@ -46,9 +46,9 @@ class StudentPerformance(models.Model):
     data = JSONField()
     update_date = models.DateTimeField()
     creation_date = models.DateTimeField()
+    authorized = models.BooleanField(default=True)
 
     fetch_timed_out = False
-    not_authorized = False
 
     class Meta:
         unique_together = ('registration_id', 'academic_year', 'acronym')
@@ -81,15 +81,18 @@ def search(registration_id=None, academic_year=None, acronym=None):
 
 
 def update_or_create(registration_id, academic_year, acronym, fields):
-    obj, created = StudentPerformance.objects.update_or_create(registration_id=registration_id, academic_year=academic_year,
-                                                               acronym=acronym, defaults=fields)
+    obj, created = StudentPerformance.objects.update_or_create(registration_id=registration_id,
+                                                               academic_year=academic_year,
+                                                               acronym=acronym,
+                                                               defaults=fields)
     return obj
 
 
 def find_by_student_and_offer_year(registration_id, academic_year, acronym):
     try:
-        result = StudentPerformance.objects.get(registration_id=registration_id, academic_year=academic_year,
-                                                               acronym=acronym)
+        result = StudentPerformance.objects.get(registration_id=registration_id,
+                                                academic_year=academic_year,
+                                                acronym=acronym)
     except ObjectDoesNotExist:
         result = None
     return result

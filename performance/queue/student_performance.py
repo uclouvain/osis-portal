@@ -41,7 +41,7 @@ def callback(json_data):
         registration_id = extract_student_from_json(json_data)
         academic_year = extract_academic_year_from_json(json_data)
         acronym = extract_acronym_from_json(json_data)
-        save(registration_id, academic_year, acronym, json_data)
+        save_consumed(registration_id, academic_year, acronym, json_data)
     except Exception as e:
         logger.error('Error callback performance : {}'.format(e))
         pass
@@ -87,7 +87,7 @@ def fetch_and_save(registration_id, academic_year, acronym):
     data = fetch_json_data(registration_id, academic_year, acronym)
     obj = None
     if data:
-        obj = save(registration_id, academic_year, acronym, data)
+        obj = save_fetched(registration_id, academic_year, acronym, data)
     return obj
 
 
@@ -106,15 +106,24 @@ def fetch_json_data(registration_id, academic_year, acronym):
     return json_student_perf
 
 
-def get_expiration_date(academic_year):
+def get_expiration_date(academic_year, consumed):
     now = safe_datetime.now()
     current_academic_year = mdl_academic_year.current_academic_year()
     current_year = current_academic_year.year if current_academic_year else None
-    timedelta = datetime.timedelta(hours=settings.PERFORMANCE_CONFIG.get('UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR')
-                                   if current_year == academic_year
-                                   else settings.PERFORMANCE_CONFIG.get('UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR'))
+    timedelta = get_time_delta(academic_year, consumed, current_year)
     expiration_date = now + timedelta
     return expiration_date
+
+
+def get_time_delta(academic_year, consumed, current_year):
+    if consumed:
+        update_delta_hours = settings.PERFORMANCE_CONFIG.get('UPDATE_DELTA_HOURS_AFTER_CONSUMPTION')
+    elif current_year == academic_year:
+        update_delta_hours = settings.PERFORMANCE_CONFIG.get('UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR')
+    else:
+        update_delta_hours = settings.PERFORMANCE_CONFIG.get('UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR')
+    timedelta = datetime.timedelta(update_delta_hours)
+    return timedelta
 
 
 def get_creation_date():
@@ -122,15 +131,23 @@ def get_creation_date():
     return today
 
 
-def save(registration_id, academic_year, acronym, json_data):
+def save_consumed(registration_id, academic_year, acronym, json_data):
+    default_update_date = get_expiration_date(academic_year=academic_year, consumed=True)
+    return save(registration_id, academic_year, acronym, json_data, default_update_date)
+
+
+def save_fetched(registration_id, academic_year, acronym, json_data):
+    default_update_date = get_expiration_date(academic_year=academic_year, consumed=False)
+    return save(registration_id, academic_year, acronym, json_data, default_update_date)
+
+
+def save(registration_id, academic_year, acronym, json_data, default_update_date):
     from performance.models.student_performance import update_or_create
-    if json_data.get("expirationDate"):
-        update_date = json_data.pop("expirationDate")
-        update_date = datetime.datetime.fromtimestamp(update_date / 1e3)
-    else:
-        update_date = get_expiration_date(academic_year)
+    update_date = datetime.datetime.fromtimestamp(json_data.pop("expirationDate") / 1e3) \
+        if json_data.get("expirationDate") else default_update_date
+    authorized = json_data.pop("authorized") if json_data.get("authorized") is not None else False
     creation_date = get_creation_date()
-    fields = {"data": json_data, "update_date": update_date, "creation_date": creation_date}
+    fields = {"data": json_data, "update_date": update_date, "creation_date": creation_date, "authorized": authorized}
     try:
         obj = update_or_create(registration_id, academic_year, acronym, fields)
     except Exception:

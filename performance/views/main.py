@@ -63,13 +63,13 @@ def display_result_for_specific_student_performance(request, pk):
     creation_date = stud_perf.creation_date if stud_perf else None
     update_date = stud_perf.update_date if stud_perf else None
     fetch_timed_out = stud_perf.fetch_timed_out if stud_perf else None
-    results_not_authorized = stud_perf.not_authorized if stud_perf else None
+    authorized = stud_perf.authorized if stud_perf else None
 
     return layout.render(request, "performance_result.html", {"results": document,
                                                               "creation_date": creation_date,
                                                               "update_date": update_date,
                                                               "fetch_timed_out": fetch_timed_out,
-                                                              "results_not_authorized": results_not_authorized})
+                                                              "authorized": authorized})
 
 
 @login_required
@@ -123,13 +123,13 @@ def visualize_student_result(request, pk):
     creation_date = stud_perf.creation_date if stud_perf else None
     update_date = stud_perf.update_date if stud_perf else None
     fetch_timed_out = stud_perf.fetch_timed_out if stud_perf else None
-    results_not_authorized = stud_perf.not_authorized if stud_perf else None
+    authorized = stud_perf.authorized if stud_perf else None
 
     return layout.render(request, "performance_result.html", {"results": document,
                                                               "creation_date": creation_date,
                                                               "update_date": update_date,
                                                               "fetch_timed_out": fetch_timed_out,
-                                                              "results_not_authorized": results_not_authorized})
+                                                              "authorized": authorized})
 
 
 # *************************** UTILITY FUNCTIONS
