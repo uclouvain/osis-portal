@@ -146,8 +146,14 @@ def save(registration_id, academic_year, acronym, json_data, default_update_date
     update_date = datetime.datetime.fromtimestamp(json_data.pop("expirationDate") / 1e3) \
         if json_data.get("expirationDate") else default_update_date
     authorized = json_data.pop("authorized") if json_data.get("authorized") is not None else False
+    offer_registration_state = json_data.pop("offer_registration_state") \
+        if json_data.get("offer_registration_state") is not None else False
     creation_date = get_creation_date()
-    fields = {"data": json_data, "update_date": update_date, "creation_date": creation_date, "authorized": authorized}
+    fields = {"data": json_data,
+              "update_date": update_date,
+              "creation_date": creation_date,
+              "authorized": authorized,
+              "offer_registration_state": offer_registration_state}
     try:
         obj = update_or_create(registration_id, academic_year, acronym, fields)
     except Exception:

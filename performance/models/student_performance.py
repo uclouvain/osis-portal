@@ -29,7 +29,7 @@ from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from performance.queue.student_performance import fetch_and_save
 from django.utils import timezone
-
+from performance.models.enums import offer_registration_state;
 
 class StudentPerformanceAdmin(admin.ModelAdmin):
     list_display = ('registration_id', 'academic_year', 'acronym', 'update_date', 'creation_date')
@@ -47,6 +47,9 @@ class StudentPerformance(models.Model):
     update_date = models.DateTimeField()
     creation_date = models.DateTimeField()
     authorized = models.BooleanField(default=True)
+    offer_registration_state = models.CharField(max_length=50,
+                                                choices=offer_registration_state.OFFER_REGISTRAION_STATES,
+                                                null=True)
 
     fetch_timed_out = False
 

@@ -77,7 +77,7 @@
                 <td>
                     {% if perms.base.is_faculty_administrator %}
                         <a href="{% url 'performance_student_result' row.pk %}">
-                            {{row.acronym}}
+                            {{row.acronym}} {% if row.offer_registration_state in registration_states_to_show %}{% trans  row.offer_registration_state %}{% endif %}
                         </a>
                     {% else %}
                         <a href="{% url 'performance_result' row.pk %}">

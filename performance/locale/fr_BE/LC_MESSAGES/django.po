@@ -69,7 +69,7 @@ msgid "inscr"
 msgstr "Inscr."
 
 msgid "jan"
-msgstr "Jan."
+msgstr "Janv."
 
 msgid "june"
 msgstr "Juin"
@@ -151,3 +151,16 @@ msgstr "Cette feuille de résultats est destinée à la communication entre la f
 
 msgid "performance_result_note_not_autorized"
 msgstr "La diffusion des résultats de la (des) session(s) de janvier n'a pas encore été autorisée par votre faculté."
+
+msgid "CESSATION"
+msgstr "Cessation"
+
+msgid "CYCLE"
+msgstr "Cycle"
+
+msgid "CONDITION"
+msgstr "Condition"
+
+msgid "REGISTERED"
+msgstr "Inscrit"
+

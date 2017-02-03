@@ -33,6 +33,7 @@ from performance import models as mdl_performance
 from performance.forms import RegistrationIdForm
 from base.views import layout
 import json
+from performance.models.enums import offer_registration_state
 
 
 @login_required
@@ -45,8 +46,10 @@ def view_performance_home(request):
     list_student_programs = None
     if stud:
         list_student_programs = get_student_programs_list(stud)
-    return layout.render(request, "performance_home.html", {"student": stud,
-                                                            "programs": list_student_programs})
+    data = {"student": stud,
+            "programs": list_student_programs,
+            "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE}
+    return layout.render(request, "performance_home.html", data)
 
 
 @login_required

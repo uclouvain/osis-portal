@@ -23,3 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+
+REGISTERED = 'INSCRIT'
+CYCLE = 'CYCLE'
+CONDITIONAL = 'CONDITION'
+CESSATION = 'CESSATION'
+
+OFFER_REGISTRAION_STATES = ((REGISTERED, REGISTERED),
+                            (CYCLE, CYCLE),
+                            (CONDITIONAL, CONDITIONAL),
+                            (CESSATION, CESSATION))
+
+STATES_TO_SHOW_ON_PAGE = [CESSATION]
