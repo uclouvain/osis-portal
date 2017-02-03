@@ -281,3 +281,14 @@ msgstr "Directeur de stage"
 
 msgid "INTERNSHIP_CO_SUPERVISOR"
 msgstr "Co-directeur de stage"
+
+msgid "no_tutor_application"
+msgstr "Aucune candidature"
+
+msgid "lu_search_explanation"
+msgstr ""
+"Pour poser une candidature à un cours vacant dont vous n'assuriez pas la charge, veuillez introduire ci-après le "
+"sigle du cours et cliquer sur le bouton 'loupe'"
+
+msgid "remove"
+msgstr "Annuler la candidature"

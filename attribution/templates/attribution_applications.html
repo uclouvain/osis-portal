@@ -43,9 +43,9 @@
         <div class="panel-body">
             <a href="{% url 'tutor_application_create' %}"
                id="lnk_tutor_application_create"
-               class="btn btn-default pull-right"
+               class="btn btn-primary pull-right"
                role="button" title="{% trans 'create_an_tutor_application'%}">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> {% trans 'create_an_tutor_application' %}
             </a>
             <br>
             <br>
@@ -116,6 +116,8 @@
                 </tbody>
             </table>
             <br>
+        {% else %}
+            <div class="alert alert-info">{%  trans 'no_tutor_application' %}</div>
         {% endif %}
     </div>
     <div class="panel panel-default"

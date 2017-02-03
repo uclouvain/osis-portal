@@ -280,3 +280,12 @@ msgstr "Internship supervisor"
 
 msgid "INTERNSHIP_CO_SUPERVISOR"
 msgstr "Internship co-supervisor"
+
+msgid "no_tutor_application"
+msgstr "No application"
+
+msgid "lu_search_explanation"
+msgstr "To find a vacant learning unit to candidate to, introduce the code and click on the button"
+
+msgid "remove"
+msgstr "Cancel the application"
