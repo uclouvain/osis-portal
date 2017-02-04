@@ -26,13 +26,19 @@
 import json
 import logging
 import traceback
-from django.conf import settings
-from frontoffice.queue.queue_listener import PerformanceClient
 import datetime
+
+from django.conf import settings
+from psycopg2._psycopg import OperationalError, InterfaceError
 from django.utils.datetime_safe import datetime as safe_datetime
+from django.db import connection
+
+from frontoffice.queue.queue_listener import PerformanceClient
 from base.models import academic_year as mdl_academic_year
+from osis_common.models.queue_exception import QueueException
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
+queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
 
 
 def callback(json_data):
@@ -42,9 +48,30 @@ def callback(json_data):
         academic_year = extract_academic_year_from_json(json_data)
         acronym = extract_acronym_from_json(json_data)
         save(registration_id, academic_year, acronym, json_data)
+    except (OperationalError, InterfaceError) as ep:
+        trace = traceback.format_exc()
+        try:
+            data = json.loads(json_data.decode("utf-8"))
+            queue_exception = QueueException(queue_name=settings.QUEUES.get('QUEUES_NAME').get('PERFORMANCE'),
+                                             message=data,
+                                             exception_title='[Catched and retried] - {}'.format(type(ep).__name__),
+                                             exception=trace)
+            queue_exception_logger.error(queue_exception.to_exception_log())
+        except Exception:
+            logger.error(trace)
+        connection.close()
+        callback(json_data)
     except Exception as e:
-        logger.error('Error callback performance : {}'.format(e))
-        pass
+        trace = traceback.format_exc()
+        try:
+            data = json.loads(json_data.decode("utf-8"))
+            queue_exception = QueueException(queue_name=settings.QUEUES.get('QUEUES_NAME').get('PERFORMANCE'),
+                                             message=data,
+                                             exception_title=type(e).__name__,
+                                             exception=trace)
+            queue_exception_logger.error(queue_exception.to_exception_log())
+        except Exception:
+            logger.error(trace)
 
 
 def update_exp_date_callback(json_data):
@@ -55,9 +82,30 @@ def update_exp_date_callback(json_data):
         acronym = json_data.get("acronym")
         new_exp_date = json_data.get("expirationDate")
         update_expiration_date(registration_id, academic_year, acronym, new_exp_date)
+    except (OperationalError, InterfaceError) as ep:
+        trace = traceback.format_exc()
+        try:
+            data = json.loads(json_data.decode("utf-8"))
+            queue_exception = QueueException(queue_name=settings.QUEUES.get('QUEUES_NAME').get('PERFORMANCE_UPDATE_EXP_DATE'),
+                                             message=data,
+                                             exception_title='[Catched and retried] - {}'.format(type(ep).__name__),
+                                             exception=trace)
+            queue_exception_logger.error(queue_exception.to_exception_log())
+        except Exception:
+            logger.error(trace)
+        connection.close()
+        update_exp_date_callback(json_data)
     except Exception as e:
-        logger.error('Error callback update_exp_date performance : {}'.format(e))
-        pass
+        trace = traceback.format_exc()
+        try:
+            data = json.loads(json_data.decode("utf-8"))
+            queue_exception = QueueException(queue_name=settings.QUEUES.get('QUEUES_NAME').get('PERFORMANCE_UPDATE_EXP_DATE'),
+                                             message=data,
+                                             exception_title=type(e).__name__,
+                                             exception=trace)
+            queue_exception_logger.error(queue_exception.to_exception_log())
+        except Exception:
+            logger.error(trace)
 
 
 def extract_student_from_json(json_data):
@@ -84,25 +132,46 @@ def generate_message(registration_id, academic_year, acronym):
 
 
 def fetch_and_save(registration_id, academic_year, acronym):
-    data = fetch_json_data(registration_id, academic_year, acronym)
     obj = None
-    if data:
-        obj = save(registration_id, academic_year, acronym, data)
+    try:
+        data = fetch_json_data(registration_id, academic_year, acronym)
+        if data:
+            try:
+                obj = save(registration_id, academic_year, acronym, data)
+            except (OperationalError, InterfaceError) as ep:
+                trace = traceback.format_exc()
+                try:
+                    data = generate_message(registration_id, academic_year, acronym)
+                    queue_exception = QueueException(queue_name=settings.QUEUES.get('QUEUES_NAME').get('STUDENT_PERFORMANCE'),
+                                                     message=data,
+                                                     exception_title='[Catched and retried] - {}'.format(type(ep).__name__),
+                                                     exception=trace)
+                    queue_exception_logger.error(queue_exception.to_exception_log())
+                except Exception:
+                    logger.error(trace)
+                connection.close()
+                obj = save(registration_id, academic_year, acronym, data)
+    except Exception as e:
+        trace = traceback.format_exc()
+        try:
+            data = generate_message(registration_id, academic_year, acronym)
+            queue_exception = QueueException(queue_name=settings.QUEUES.get('QUEUES_NAME').get('STUDENT_PERFORMANCE'),
+                                             message=data,
+                                             exception_title=type(e).__name__,
+                                             exception=trace)
+            queue_exception_logger.error(queue_exception.to_exception_log())
+        except Exception:
+            logger.error(trace)
     return obj
 
 
 def fetch_json_data(registration_id, academic_year, acronym):
-    try:
-        message = generate_message(registration_id, academic_year, acronym)
-        client = PerformanceClient()
-        json_data = client.call(message)
-        json_student_perf = None
-        if json_data:
-            json_student_perf = json.loads(json_data.decode("utf-8"))
-    except Exception:
-        json_student_perf = None
-        trace = traceback.format_exc()
-        logger.error(trace)
+    json_student_perf = None
+    message = generate_message(registration_id, academic_year, acronym)
+    client = PerformanceClient()
+    json_data = client.call(message)
+    if json_data:
+        json_student_perf = json.loads(json_data.decode("utf-8"))
     return json_student_perf
 
 
