@@ -299,13 +299,14 @@ CKEDITOR_CONFIGS = {
 }
 
 
-TIME_TABLE_URL= ""
+TIME_TABLE_URL = ""
 TIME_TABLE_NUMBER = ""
 CATALOG_URL = ""
 
 PERFORMANCE_CONFIG = {
     'UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR': 12,
-    'UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR': 24
+    'UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR': 720,
+    'UPDATE_DELTA_HOURS_AFTER_CONSUMPTION': 24,
 }
 
 try:
@@ -318,5 +319,5 @@ except ImportError:
     pass
 
 if 'admission' in INSTALLED_APPS:
-    ADMISSION_LOGIN_URL=reverse_lazy('admission_login')
-    ADMISSION_LOGIN_REDIRECT_URL=reverse_lazy('admission')
+    ADMISSION_LOGIN_URL = reverse_lazy('admission_login')
+    ADMISSION_LOGIN_REDIRECT_URL = reverse_lazy('admission')

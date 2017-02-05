@@ -29,7 +29,8 @@ import traceback
 import datetime
 
 from django.conf import settings
-from psycopg2._psycopg import OperationalError, InterfaceError
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
+from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
 from django.utils.datetime_safe import datetime as safe_datetime
 from django.db import connection
 
@@ -43,12 +44,12 @@ queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
 
 def callback(json_data):
     try:
-        json_data = json.loads(json_data.decode("utf-8"))
-        registration_id = extract_student_from_json(json_data)
-        academic_year = extract_academic_year_from_json(json_data)
-        acronym = extract_acronym_from_json(json_data)
-        save(registration_id, academic_year, acronym, json_data)
-    except (OperationalError, InterfaceError) as ep:
+        json_data_dict = json.loads(json_data.decode("utf-8"))
+        registration_id = extract_student_from_json(json_data_dict)
+        academic_year = extract_academic_year_from_json(json_data_dict)
+        acronym = extract_acronym_from_json(json_data_dict)
+        save_consumed(registration_id, academic_year, acronym, json_data_dict)
+    except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError) as ep:
         trace = traceback.format_exc()
         try:
             data = json.loads(json_data.decode("utf-8"))
@@ -59,6 +60,8 @@ def callback(json_data):
             queue_exception_logger.error(queue_exception.to_exception_log())
         except Exception:
             logger.error(trace)
+            log_trace = traceback.format_exc()
+            logger.warning('Error during queue logging and retry:\n {}'.format(log_trace))
         connection.close()
         callback(json_data)
     except Exception as e:
@@ -72,17 +75,19 @@ def callback(json_data):
             queue_exception_logger.error(queue_exception.to_exception_log())
         except Exception:
             logger.error(trace)
+            log_trace = traceback.format_exc()
+            logger.warning('Error during queue logging :\n {}'.format(log_trace))
 
 
 def update_exp_date_callback(json_data):
     try:
-        json_data = json.loads(json_data.decode("utf-8"))
-        registration_id = json_data.get("registrationId")
-        academic_year = json_data.get("academicYear")
-        acronym = json_data.get("acronym")
-        new_exp_date = json_data.get("expirationDate")
+        json_data_dict = json.loads(json_data.decode("utf-8"))
+        registration_id = json_data_dict.get("registrationId")
+        academic_year = json_data_dict.get("academicYear")
+        acronym = json_data_dict.get("acronym")
+        new_exp_date = json_data_dict.get("expirationDate")
         update_expiration_date(registration_id, academic_year, acronym, new_exp_date)
-    except (OperationalError, InterfaceError) as ep:
+    except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError) as ep:
         trace = traceback.format_exc()
         try:
             data = json.loads(json_data.decode("utf-8"))
@@ -93,6 +98,8 @@ def update_exp_date_callback(json_data):
             queue_exception_logger.error(queue_exception.to_exception_log())
         except Exception:
             logger.error(trace)
+            log_trace = traceback.format_exc()
+            logger.warning('Error during queue logging and retry:\n {}'.format(log_trace))
         connection.close()
         update_exp_date_callback(json_data)
     except Exception as e:
@@ -105,6 +112,8 @@ def update_exp_date_callback(json_data):
                                              exception=trace)
             queue_exception_logger.error(queue_exception.to_exception_log())
         except Exception:
+            log_trace = traceback.format_exc()
+            logger.warning('Error during queue logging :\n {}'.format(log_trace))
             logger.error(trace)
 
 
@@ -137,8 +146,8 @@ def fetch_and_save(registration_id, academic_year, acronym):
         data = fetch_json_data(registration_id, academic_year, acronym)
         if data:
             try:
-                obj = save(registration_id, academic_year, acronym, data)
-            except (OperationalError, InterfaceError) as ep:
+                obj = save_fetched(registration_id, academic_year, acronym, data)
+            except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError) as ep:
                 trace = traceback.format_exc()
                 try:
                     data = generate_message(registration_id, academic_year, acronym)
@@ -149,8 +158,10 @@ def fetch_and_save(registration_id, academic_year, acronym):
                     queue_exception_logger.error(queue_exception.to_exception_log())
                 except Exception:
                     logger.error(trace)
+                    log_trace = traceback.format_exc()
+                    logger.warning('Error during queue logging and retry:\n {}'.format(log_trace))
                 connection.close()
-                obj = save(registration_id, academic_year, acronym, data)
+                obj = save_fetched(registration_id, academic_year, acronym, data)
     except Exception as e:
         trace = traceback.format_exc()
         try:
@@ -162,6 +173,8 @@ def fetch_and_save(registration_id, academic_year, acronym):
             queue_exception_logger.error(queue_exception.to_exception_log())
         except Exception:
             logger.error(trace)
+            log_trace = traceback.format_exc()
+            logger.warning('Error during queue logging :\n {}'.format(log_trace))
     return obj
 
 
@@ -175,15 +188,24 @@ def fetch_json_data(registration_id, academic_year, acronym):
     return json_student_perf
 
 
-def get_expiration_date(academic_year):
+def get_expiration_date(academic_year, consumed):
     now = safe_datetime.now()
     current_academic_year = mdl_academic_year.current_academic_year()
     current_year = current_academic_year.year if current_academic_year else None
-    timedelta = datetime.timedelta(hours=settings.PERFORMANCE_CONFIG.get('UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR')
-                                   if current_year == academic_year
-                                   else settings.PERFORMANCE_CONFIG.get('UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR'))
+    timedelta = get_time_delta(academic_year, consumed, current_year)
     expiration_date = now + timedelta
     return expiration_date
+
+
+def get_time_delta(academic_year, consumed, current_year):
+    if consumed and current_year == academic_year:
+        update_delta_hours = settings.PERFORMANCE_CONFIG.get('UPDATE_DELTA_HOURS_AFTER_CONSUMPTION')
+    elif current_year == academic_year:
+        update_delta_hours = settings.PERFORMANCE_CONFIG.get('UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR')
+    else:
+        update_delta_hours = settings.PERFORMANCE_CONFIG.get('UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR')
+    timedelta = datetime.timedelta(hours=update_delta_hours)
+    return timedelta
 
 
 def get_creation_date():
@@ -191,15 +213,31 @@ def get_creation_date():
     return today
 
 
-def save(registration_id, academic_year, acronym, json_data):
+def save_consumed(registration_id, academic_year, acronym, json_data):
+    default_update_date = get_expiration_date(academic_year=academic_year, consumed=True)
+    return save(registration_id, academic_year, acronym, json_data, default_update_date)
+
+
+def save_fetched(registration_id, academic_year, acronym, json_data):
+    default_update_date = get_expiration_date(academic_year=academic_year, consumed=False)
+    return save(registration_id, academic_year, acronym, json_data, default_update_date)
+
+
+def save(registration_id, academic_year, acronym, json_data, default_update_date):
     from performance.models.student_performance import update_or_create
-    if json_data.get("expirationDate"):
-        update_date = json_data.pop("expirationDate")
-        update_date = datetime.datetime.fromtimestamp(update_date / 1e3)
+    expiration_date = json_data.pop("expirationDate", None)
+    if expiration_date:
+        update_date = datetime.datetime.fromtimestamp(expiration_date / 1e3)
     else:
-        update_date = get_expiration_date(academic_year)
+        update_date = default_update_date
+    authorized = json_data.pop("authorized", False)
+    offer_registration_state = json_data.pop("etatInscr", None)
     creation_date = get_creation_date()
-    fields = {"data": json_data, "update_date": update_date, "creation_date": creation_date}
+    fields = {"data": json_data,
+              "update_date": update_date,
+              "creation_date": creation_date,
+              "authorized": authorized,
+              "offer_registration_state": offer_registration_state}
     try:
         obj = update_or_create(registration_id, academic_year, acronym, fields)
     except Exception:
