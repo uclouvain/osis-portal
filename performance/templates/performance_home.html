@@ -73,11 +73,11 @@
             </tr>
             {% for row in programs %}
             <tr>
-                <td>{{row.academic_year_template_formated}}</td>
+                <td>{{row.academic_year}}</td>
                 <td>
                     {% if perms.base.is_faculty_administrator %}
                         <a href="{% url 'performance_student_result' row.pk %}">
-                            {{row.acronym}} {% if row.offer_registration_state in registration_states_to_show %}{% trans  row.offer_registration_state %}{% endif %}
+                            {{row.acronym}}
                         </a>
                     {% else %}
                         <a href="{% url 'performance_result' row.pk %}">
@@ -85,7 +85,7 @@
                         </a>
                     {% endif %}
                 </td>
-                <td>{{row.title}}</td>
+                <td>{{row.title}} {% if row.offer_registration_state in registration_states_to_show %}<i style="color: red">({% trans  row.offer_registration_state %})</i>{% endif %}</td>
             </tr>
             {% endfor %}
         </table>

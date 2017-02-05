@@ -32,9 +32,11 @@ from django.utils import timezone
 from performance.models.enums import offer_registration_state;
 
 class StudentPerformanceAdmin(admin.ModelAdmin):
-    list_display = ('registration_id', 'academic_year', 'acronym', 'update_date', 'creation_date')
+    list_display = ('registration_id', 'academic_year',
+                    'acronym', 'update_date', 'creation_date', 'authorized', 'offer_registration_state')
     list_filter = ('academic_year',)
-    fieldsets = ((None, {'fields': ('registration_id', 'academic_year', 'acronym', 'update_date', 'creation_date', 'data')}),)
+    fieldsets = ((None, {'fields': ('registration_id', 'academic_year', 'acronym', 'update_date',
+                                    'creation_date', 'data')}),)
     readonly_fields = ('creation_date', 'data')
     search_fields = ['registration_id', 'academic_year', 'acronym']
 
@@ -53,10 +55,10 @@ class StudentPerformance(models.Model):
 
     fetch_timed_out = False
 
-    def __get_academic_year_template_formated(self):
+    def _get_academic_year_template_formated(self):
         return '{} - {}'.format(self.academic_year, self.academic_year + 1)
 
-    academic_year_template_formated = property(__get_academic_year_template_formated)
+    academic_year_template_formated = property(_get_academic_year_template_formated)
 
     class Meta:
         unique_together = ('registration_id', 'academic_year', 'acronym')

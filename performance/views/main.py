@@ -109,9 +109,10 @@ def visualize_student_programs(request, registration_id):
     list_student_programs = None
     if stud:
         list_student_programs = get_student_programs_list(stud)
-
-    return layout.render(request, "performance_home.html", {"student": stud,
-                                                            "programs": list_student_programs})
+    data = {"student": stud,
+            "programs": list_student_programs,
+            "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE}
+    return layout.render(request, "performance_home.html", data)
 
 
 @login_required
@@ -153,10 +154,11 @@ def query_result_to_list(query_result):
 
 def convert_student_performance_to_dic(student_performance_obj):
     d = dict()
-    d["academic_year"] = student_performance_obj.academic_year
+    d["academic_year"] = student_performance_obj.academic_year_template_formated
     d["acronym"] = student_performance_obj.acronym
     d["title"] = json.loads(json.dumps(student_performance_obj.data))["monAnnee"]["monOffre"]["offre"]["intituleComplet"]
     d["pk"] = student_performance_obj.pk
+    d["offer_registration_state"] = student_performance_obj.offer_registration_state
     return d
 
 
