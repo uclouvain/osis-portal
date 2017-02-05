@@ -250,6 +250,10 @@ QUEUES = {
         'STUDENT_POINTS': 'rpc_performance_to_client',
         'PERFORMANCE_UPDATE_EXP_DATE': 'performance_exp_date',
         'ATTRIBUTION': 'attribution'
+    },
+    'RPC_QUEUES_TIMEOUT': {
+        'PAPER_SHEET': 60,
+        'STUDENT_PERFORMANCE': 15
     }
 }
 

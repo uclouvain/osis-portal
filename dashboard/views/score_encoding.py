@@ -27,19 +27,24 @@ import datetime
 import logging
 import json
 import traceback
+
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
+from psycopg2._psycopg import OperationalError, InterfaceError
+from django.db import connection
+
 from osis_common.document import paper_sheet
 from frontoffice.queue import queue_listener
 from base import models as mdl_base
 from base.views import layout
 from dashboard import models as mdl
-
+from osis_common.models.queue_exception import QueueException
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
+queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
 
 
 @login_required
@@ -93,24 +98,44 @@ def get_score_sheet(global_id):
 
 
 def fetch_document(global_id):
-    json_data = fetch_json(global_id)
-    if json_data:
-        return mdl.score_encoding.insert_or_update_document(global_id, json_data).document
-    else:
-        return None
+    document = None
+    try:
+        json_data = fetch_json(global_id)
+        if json_data:
+                try:
+                    document = mdl.score_encoding.insert_or_update_document(global_id, json_data).document
+                except (OperationalError, InterfaceError) as ep:
+                    trace = traceback.format_exc()
+                    try:
+                        data = json.dumps({'global_id': str(global_id)})
+                        queue_exception = QueueException(queue_name=settings.QUEUES.get('QUEUES_NAME').get('PAPER_SHEET'),
+                                                         message=data,
+                                                         exception_title='[Catched and retried] - {}'.format(type(ep).__name__),
+                                                         exception=trace)
+                        queue_exception_logger.error(queue_exception.to_exception_log())
+                    except Exception:
+                        logger.error(trace)
+                    connection.close()
+                    document = mdl.score_encoding.insert_or_update_document(global_id, json_data).document
+    except Exception as e:
+        trace = traceback.format_exc()
+        try:
+            data = json.dumps({'global_id': str(global_id)})
+            queue_exception = QueueException(queue_name=settings.QUEUES.get('QUEUES_NAME').get('PAPER_SHEET'),
+                                             message=data,
+                                             exception_title=type(e).__name__,
+                                             exception=trace)
+            queue_exception_logger.error(queue_exception.to_exception_log())
+        except Exception:
+            logger.error(trace)
+    return document
 
 
 def fetch_json(global_id):
-    try:
-        scores_sheets_cli = queue_listener.ScoresSheetClient()
-        json_data = scores_sheets_cli.call(global_id)
-        if json_data:
-            json_data = json_data.decode("utf-8")
-    except Exception:
-        json_data = None
-        trace = traceback.format_exc()
-        logger.error(trace)
-
+    scores_sheets_cli = queue_listener.ScoresSheetClient()
+    json_data = scores_sheets_cli.call(global_id)
+    if json_data:
+        json_data = json_data.decode("utf-8")
     return json_data
 
 
