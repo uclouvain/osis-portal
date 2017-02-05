@@ -33,7 +33,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
-from psycopg2._psycopg import OperationalError, InterfaceError
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
+from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
 from django.db import connection
 
 from osis_common.document import paper_sheet
@@ -104,7 +105,7 @@ def fetch_document(global_id):
         if json_data:
                 try:
                     document = mdl.score_encoding.insert_or_update_document(global_id, json_data).document
-                except (OperationalError, InterfaceError) as ep:
+                except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError) as ep:
                     trace = traceback.format_exc()
                     try:
                         data = json.dumps({'global_id': str(global_id)})
@@ -115,6 +116,8 @@ def fetch_document(global_id):
                         queue_exception_logger.error(queue_exception.to_exception_log())
                     except Exception:
                         logger.error(trace)
+                        log_trace = traceback.format_exc()
+                        logger.warning('Error during queue logging :\n {}'.format(log_trace))
                     connection.close()
                     document = mdl.score_encoding.insert_or_update_document(global_id, json_data).document
     except Exception as e:
@@ -128,6 +131,8 @@ def fetch_document(global_id):
             queue_exception_logger.error(queue_exception.to_exception_log())
         except Exception:
             logger.error(trace)
+            log_trace = traceback.format_exc()
+            logger.warning('Error during queue logging :\n {}'.format(log_trace))
     return document
 
 
