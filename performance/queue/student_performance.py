@@ -44,11 +44,11 @@ queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
 
 def callback(json_data):
     try:
-        json_data = json.loads(json_data.decode("utf-8"))
-        registration_id = extract_student_from_json(json_data)
-        academic_year = extract_academic_year_from_json(json_data)
-        acronym = extract_acronym_from_json(json_data)
-        save_consumed(registration_id, academic_year, acronym, json_data)
+        json_data_dict = json.loads(json_data.decode("utf-8"))
+        registration_id = extract_student_from_json(json_data_dict)
+        academic_year = extract_academic_year_from_json(json_data_dict)
+        acronym = extract_acronym_from_json(json_data_dict)
+        save_consumed(registration_id, academic_year, acronym, json_data_dict)
     except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError) as ep:
         trace = traceback.format_exc()
         try:
@@ -61,7 +61,7 @@ def callback(json_data):
         except Exception:
             logger.error(trace)
             log_trace = traceback.format_exc()
-            logger.warning('Error during queue logging :\n {}'.format(log_trace))
+            logger.warning('Error during queue logging and retry:\n {}'.format(log_trace))
         connection.close()
         callback(json_data)
     except Exception as e:
@@ -81,11 +81,11 @@ def callback(json_data):
 
 def update_exp_date_callback(json_data):
     try:
-        json_data = json.loads(json_data.decode("utf-8"))
-        registration_id = json_data.get("registrationId")
-        academic_year = json_data.get("academicYear")
-        acronym = json_data.get("acronym")
-        new_exp_date = json_data.get("expirationDate")
+        json_data_dict = json.loads(json_data.decode("utf-8"))
+        registration_id = json_data_dict.get("registrationId")
+        academic_year = json_data_dict.get("academicYear")
+        acronym = json_data_dict.get("acronym")
+        new_exp_date = json_data_dict.get("expirationDate")
         update_expiration_date(registration_id, academic_year, acronym, new_exp_date)
     except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError) as ep:
         trace = traceback.format_exc()
@@ -99,7 +99,7 @@ def update_exp_date_callback(json_data):
         except Exception:
             logger.error(trace)
             log_trace = traceback.format_exc()
-            logger.warning('Error during queue logging :\n {}'.format(log_trace))
+            logger.warning('Error during queue logging and retry:\n {}'.format(log_trace))
         connection.close()
         update_exp_date_callback(json_data)
     except Exception as e:
@@ -159,7 +159,7 @@ def fetch_and_save(registration_id, academic_year, acronym):
                 except Exception:
                     logger.error(trace)
                     log_trace = traceback.format_exc()
-                    logger.warning('Error during queue logging :\n {}'.format(log_trace))
+                    logger.warning('Error during queue logging and retry:\n {}'.format(log_trace))
                 connection.close()
                 obj = save_fetched(registration_id, academic_year, acronym, data)
     except Exception as e:
