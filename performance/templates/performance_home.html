@@ -38,6 +38,10 @@
 
 {% include "template_messages.html" %}
 
+<div class="alert alert-info" role="alert">
+    {% trans 'performance_results_general_legal_announcement' %}
+</div>
+
 <div class="panel panel-default">
     <div class="panel-body">
         <!-- Student info -->
@@ -45,7 +49,7 @@
             <div class="col-md-6">
                 <label>{% trans 'last_name' %}, {% trans 'first_name' %}</label>
                 <br>
-                {{ student.person.last_name}}, {{ student.person.first_name }}
+                {{ student.person.last_name }}, {{ student.person.first_name }}
             </div>
             <div class="col-md-6">
                 <label>{% trans 'matricule_number' %}</label>
@@ -81,7 +85,7 @@
                         </a>
                     {% endif %}
                 </td>
-                <td>{{row.title}}</td>
+                <td>{{row.title}} {% if row.offer_registration_state in registration_states_to_show %}<i style="color: red">({% trans  row.offer_registration_state %})</i>{% endif %}</td>
             </tr>
             {% endfor %}
         </table>
