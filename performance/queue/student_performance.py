@@ -29,7 +29,8 @@ import traceback
 import datetime
 
 from django.conf import settings
-from psycopg2._psycopg import OperationalError, InterfaceError
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
+from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
 from django.utils.datetime_safe import datetime as safe_datetime
 from django.db import connection
 
@@ -48,7 +49,7 @@ def callback(json_data):
         academic_year = extract_academic_year_from_json(json_data)
         acronym = extract_acronym_from_json(json_data)
         save_consumed(registration_id, academic_year, acronym, json_data)
-    except (OperationalError, InterfaceError) as ep:
+    except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError) as ep:
         trace = traceback.format_exc()
         try:
             data = json.loads(json_data.decode("utf-8"))
@@ -59,6 +60,8 @@ def callback(json_data):
             queue_exception_logger.error(queue_exception.to_exception_log())
         except Exception:
             logger.error(trace)
+            log_trace = traceback.format_exc()
+            logger.warning('Error during queue logging :\n {}'.format(log_trace))
         connection.close()
         callback(json_data)
     except Exception as e:
@@ -72,6 +75,8 @@ def callback(json_data):
             queue_exception_logger.error(queue_exception.to_exception_log())
         except Exception:
             logger.error(trace)
+            log_trace = traceback.format_exc()
+            logger.warning('Error during queue logging :\n {}'.format(log_trace))
 
 
 def update_exp_date_callback(json_data):
@@ -82,7 +87,7 @@ def update_exp_date_callback(json_data):
         acronym = json_data.get("acronym")
         new_exp_date = json_data.get("expirationDate")
         update_expiration_date(registration_id, academic_year, acronym, new_exp_date)
-    except (OperationalError, InterfaceError) as ep:
+    except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError) as ep:
         trace = traceback.format_exc()
         try:
             data = json.loads(json_data.decode("utf-8"))
@@ -93,6 +98,8 @@ def update_exp_date_callback(json_data):
             queue_exception_logger.error(queue_exception.to_exception_log())
         except Exception:
             logger.error(trace)
+            log_trace = traceback.format_exc()
+            logger.warning('Error during queue logging :\n {}'.format(log_trace))
         connection.close()
         update_exp_date_callback(json_data)
     except Exception as e:
@@ -105,6 +112,8 @@ def update_exp_date_callback(json_data):
                                              exception=trace)
             queue_exception_logger.error(queue_exception.to_exception_log())
         except Exception:
+            log_trace = traceback.format_exc()
+            logger.warning('Error during queue logging :\n {}'.format(log_trace))
             logger.error(trace)
 
 
@@ -138,7 +147,7 @@ def fetch_and_save(registration_id, academic_year, acronym):
         if data:
             try:
                 obj = save_fetched(registration_id, academic_year, acronym, data)
-            except (OperationalError, InterfaceError) as ep:
+            except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError) as ep:
                 trace = traceback.format_exc()
                 try:
                     data = generate_message(registration_id, academic_year, acronym)
@@ -149,6 +158,8 @@ def fetch_and_save(registration_id, academic_year, acronym):
                     queue_exception_logger.error(queue_exception.to_exception_log())
                 except Exception:
                     logger.error(trace)
+                    log_trace = traceback.format_exc()
+                    logger.warning('Error during queue logging :\n {}'.format(log_trace))
                 connection.close()
                 obj = save_fetched(registration_id, academic_year, acronym, data)
     except Exception as e:
@@ -162,6 +173,8 @@ def fetch_and_save(registration_id, academic_year, acronym):
             queue_exception_logger.error(queue_exception.to_exception_log())
         except Exception:
             logger.error(trace)
+            log_trace = traceback.format_exc()
+            logger.warning('Error during queue logging :\n {}'.format(log_trace))
     return obj
 
 
