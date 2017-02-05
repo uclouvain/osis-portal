@@ -237,7 +237,9 @@ function inscrToString(inscr) {
     case "S":
       return "EPM";
     case "T":
-      return "T94";
+      return "Test";
+    case "X":
+          return "Ext.";
     default:
       return inscr;
   }
