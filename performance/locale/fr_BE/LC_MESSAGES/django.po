@@ -161,6 +161,6 @@ msgstr "Cycle"
 msgid "CONDITION"
 msgstr "Condition"
 
-msgid "REGISTERED"
+msgid "INSCRIT"
 msgstr "Inscrit"
 
