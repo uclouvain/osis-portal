@@ -109,6 +109,7 @@ def visualize_student_programs(request, registration_id):
     list_student_programs = None
     if stud:
         list_student_programs = get_student_programs_list(stud)
+
     data = {"student": stud,
             "programs": list_student_programs,
             "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE}
@@ -148,7 +149,9 @@ def query_result_to_list(query_result):
     l = []
     for row in query_result:
         d = convert_student_performance_to_dic(row)
-        l.append(d)
+        allowed_registration_states = [value for key, value in offer_registration_state.OFFER_REGISTRAION_STATES]
+        if d.get("offer_registration_state") in allowed_registration_states:
+            l.append(d)
     return l
 
 
