@@ -29,6 +29,6 @@ function bt_submit_attribution_renew_activation() {
     });
 }
 
-$("a[id^='lnk_application_delete_']").click(function() {
+$("button[id^='lnk_application_delete_']").click(function() {
     return confirm(gettext('confirm_application_delete'));
 });

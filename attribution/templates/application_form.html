@@ -142,9 +142,12 @@
                           class="form-control">{{form.remark.value | default_if_none:''}}</textarea>
                 {% if form.remark.errors %}<span class="error">{{ form.remark.errors|striptags }}</span>{% endif %}
                 <br>
-                <button class="btn btn-primary" id="bt_submit" type="submit">
-                    <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> {% trans 'submit' %}</button>
-                <a class="btn btn-default" href="{% url 'learning_unit_applications' %}">{% trans 'cancel' %}</a>
+                <button class="btn btn-primary" id="bt_submit" type="submit" title="{% trans 'submit' %}">
+                    <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
+                    {% trans 'submit' %}</button>
+                <a class="btn btn-default"
+                   href="{% url 'learning_unit_applications' %}"
+                   title="{% trans 'cancel' %}">{% trans 'cancel' %}</a>
 
             </form>
         </div>

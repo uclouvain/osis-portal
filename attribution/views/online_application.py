@@ -287,7 +287,7 @@ def get_terminating_charges(a_year, a_tutor):
             if next_learning_unit_year and not existing_tutor_application_for_next_year(a_tutor,
                                                                                         attribution.learning_unit_year,
                                                                                         a_function):
-                if next_learning_unit_year.in_charge and attribution.function != function.DEPUTY:
+                if next_learning_unit_year.in_charge and not is_function_deputy(attribution.function):
                     attributions_vacant.append(attribution)
         return get_attribution_data(attributions_vacant)
     return []
@@ -405,8 +405,7 @@ def create_tutor_application_from_attribution(an_attribution):
 
     next_learning_unit_years = mdl_base.learning_unit_year.search(next_academic_year,
                                                                   None,
-                                                                  an_attribution.learning_unit_year.learning_unit,
-                                                                  None)
+                                                                  an_attribution.learning_unit_year.learning_unit)
     next_learning_unit_year = None
     if next_learning_unit_years:
         next_learning_unit_year = next_learning_unit_years[0]
@@ -584,7 +583,7 @@ def allocation_charge_update(an_application_charge_id, a_field_value):
 
 def get_learning_unit_year_vacant(a_year, an_acronym, a_tutor):
     an_academic_year = mdl_base.academic_year.find_by_year(a_year)
-    learning_unit_years = mdl_base.learning_unit_year.search(an_academic_year, an_acronym, None, None)
+    learning_unit_years = mdl_base.learning_unit_year.search(an_academic_year, an_acronym, None)
     for a_learning_unit_year in learning_unit_years:
         if a_learning_unit_year.vacant:
             return get_new_attribution_informations(a_learning_unit_year, a_tutor)
@@ -751,3 +750,13 @@ def get_attribution_allocation_charge(an_attribution, a_component_type):
         for attribution_charge in attribution_charges:
             tot_allocation_charge += attribution_charge.allocation_charge
     return tot_allocation_charge
+
+
+def is_deputy_function(a_function):
+    if a_function and \
+        (a_function == function.DEPUTY or
+        a_function == function.DEPUTY_AUTHORITY or
+        a_function == function.DEPUTY_SABBATICAL or
+        a_function == function.DEPUTY_TEMPORARY):
+        return True
+    return False

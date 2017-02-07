@@ -161,6 +161,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'queue_exception': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'django': {
             'handlers': ['console'],
             'level': 'INFO',
@@ -170,6 +175,7 @@ LOGGING = {
 }
 
 DEFAULT_LOGGER = 'default'
+QUEUE_EXCEPTION_LOGGER = 'queue_exception'
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -244,7 +250,11 @@ QUEUES = {
         'STUDENT_PERFORMANCE': 'rpc_performance_from_client',
         'STUDENT_POINTS': 'rpc_performance_to_client',
         'PERFORMANCE_UPDATE_EXP_DATE': 'performance_exp_date',
-        'ATTRIBUTION' : 'attribution'
+        'ATTRIBUTION': 'attribution'
+    },
+    'RPC_QUEUES_TIMEOUT': {
+        'PAPER_SHEET': 60,
+        'STUDENT_PERFORMANCE': 15
     }
 }
 
@@ -290,13 +300,14 @@ CKEDITOR_CONFIGS = {
 }
 
 
-TIME_TABLE_URL= ""
+TIME_TABLE_URL = ""
 TIME_TABLE_NUMBER = ""
 CATALOG_URL = ""
 
 PERFORMANCE_CONFIG = {
     'UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR': 12,
-    'UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR': 24
+    'UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR': 720,
+    'UPDATE_DELTA_HOURS_AFTER_CONSUMPTION': 24,
 }
 
 try:
@@ -309,5 +320,5 @@ except ImportError:
     pass
 
 if 'admission' in INSTALLED_APPS:
-    ADMISSION_LOGIN_URL=reverse_lazy('admission_login')
-    ADMISSION_LOGIN_REDIRECT_URL=reverse_lazy('admission')
+    ADMISSION_LOGIN_URL = reverse_lazy('admission_login')
+    ADMISSION_LOGIN_REDIRECT_URL = reverse_lazy('admission')

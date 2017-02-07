@@ -40,7 +40,7 @@ class TutorApplicationAdmin(admin.ModelAdmin):
 
 class TutorApplication(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    function = models.CharField(max_length=15, blank=True, null=True, choices=function_enum.FUNCTIONS, db_index=True)
+    function = models.CharField(max_length=35, blank=True, null=True, choices=function_enum.FUNCTIONS, db_index=True)
     learning_unit_year = models.ForeignKey('base.LearningUnitYear', blank=True, null=True, default=None)
     tutor = models.ForeignKey('base.Tutor')
     remark = models.TextField(blank=True, null=True)
