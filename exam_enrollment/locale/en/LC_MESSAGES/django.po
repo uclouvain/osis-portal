@@ -28,6 +28,45 @@ msgstr "Choose which exam you want to take for the next session exam."
 msgid "exams_enrollment"
 msgstr "Exams enrollment"
 
+msgid "info_exam_enrollment_by_default"
+msgstr "<b>By default, you are already enrolled to all checked exams below. "
+       "<br>If it fit to your needs, you don't have any action to perform. </b>"
+       "<br>To modify your exam enrollments, "
+       "please check/uncheck boxes below and then click on 'Validate changes'."
+
+msgid "legend_exam_enrol_b"
+msgstr "B - Credit"
+
+msgid "legend_exam_enrol_d"
+msgstr "D - Dispensation"
+
+msgid "legend_exam_enrol_i"
+msgstr "I - First enrollment"
+
+msgid "legend_exam_enrol_j"
+msgstr "J - Score's adjournment from January to September"
+
+msgid "legend_exam_enrol_p"
+msgstr "P - Partial exam"
+
+msgid "legend_exam_enrol_r"
+msgstr "R - Score's adjournment from last session exam"
+
+msgid "legend_exam_enrol_t"
+msgstr "T - Score result from a test"
+
+msgid "legend_exam_enrol_v"
+msgstr "V - Satifactory evaluation (score doesn't matter)"
+
+msgid "legend_exam_enrol_w"
+msgstr "W - Unsatisfactory evaluation (score doesn't matter)"
+
+msgid "legend_exam_enrol_x"
+msgstr "X - Law and administrative penalty"
+
+msgid "legend_exam_enrol_y"
+msgstr "Y - Second enrollment"
+
 msgid "no_offer_enrollment_found"
 msgstr "Sorry, you're not enrolled to any program for this academic year."
 
@@ -42,6 +81,9 @@ msgstr "Registration id"
 
 msgid "student"
 msgstr "Student"
+
+msgid "validate_changes"
+msgstr "Validate changes"
 
 msgid "year"
 msgstr "Year"

@@ -23,9 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import json
 from django.contrib.auth.decorators import login_required
 from base.views import layout
 from base.models import student, offer_enrollment, academic_year, offer_year
+from frontoffice.queue import queue_listener
 
 
 @login_required
@@ -38,7 +40,24 @@ def choose_offer(request):
                                                         'student': stud})
 
 
-def _fetch_exam_enrollment_form(registration_id):
+@login_required
+def exam_enrollment_form(request, offer_year_id):
+    stud = student.find_by_user(request.user)
+    off_year = offer_year.find_by_id(offer_year_id)
+    data = None
+    if stud:
+        data = _fetch_exam_enrollment_form_example()
+        # data = _fetch_json(stud.registration_id, off_year.acronym, off_year.academic_year.year)
+    return layout.render(request, 'exam_enrollment_form.html', {'exam_enrollments': data.get('exam_enrollments'),
+                                                                'student': stud,
+                                                                'current_number_session': data.get('current_number_session'),
+                                                                'academic_year': academic_year.current_academic_year(),
+                                                                'program': offer_year.find_by_id(offer_year_id),
+                                                                'legend': data.get('legend')})
+
+
+# To delete when the queue is working
+def _fetch_exam_enrollment_form_example():
     import json
     import os
     script_dir = os.path.dirname(__file__)
@@ -50,15 +69,19 @@ def _fetch_exam_enrollment_form(registration_id):
     return data1
 
 
-@login_required
-def exam_enrollment_form(request, offer_year_id):
-    stud = student.find_by_user(request.user)
-    data = None
-    if stud:
-        data = _fetch_exam_enrollment_form(stud.registration_id)
-    return layout.render(request, 'exam_enrollment_form.html', {'exam_enrollments': data.get('exam_enrollments'),
-                                                                'student': stud,
-                                                                'current_number_session': data.get('current_number_session'),
-                                                                'academic_year': academic_year.current_academic_year(),
-                                                                'program': offer_year.find_by_id(offer_year_id),
-                                                                'legend': data.get('legend')})
+def _fetch_json(registration_id, offer_year_acronym, year):
+    exam_enrol_client = queue_listener.ExamEnrollmentClient()
+    message = _generate_message(registration_id, offer_year_acronym, year)
+    json_data = exam_enrol_client.call(message)
+    if json_data:
+        json_data = json_data.decode("utf-8")
+    return json_data
+
+
+def _generate_message(registration_id, offer_year_acronym, year):
+    message = {
+        'registration_id': registration_id,
+        'offer_year_acronym': offer_year_acronym,
+        'year': year,
+    }
+    return json.dumps(message)

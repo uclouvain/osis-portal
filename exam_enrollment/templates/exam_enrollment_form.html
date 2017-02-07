@@ -36,8 +36,6 @@
         <h2>{% trans 'exams_enrollment' %}</h2>
     </div>
 
-    {% include "template_messages.html" %}
-
     <div class="panel panel-default">
         <div class="panel-body">
             {% if not exam_enrollments %}
@@ -83,8 +81,8 @@
                         <th>{% trans 'title' %}</th>
                         <th>{% trans 'ects' %}</th>
                         <th>{% trans 'inscr' %}</th>
-                        <th {% if current_number_session != 1 %} colspan="2" {% endif %} class="text-nowrap">{% trans 'jan' %} *</th>
-                        <th {% if current_number_session != 2 %} colspan="2" {% endif %} class="text-nowrap">{% trans 'june' %} *</th>
+                        <th {% if current_number_session > 1 %} colspan="2" {% endif %} class="text-nowrap">{% trans 'jan' %} *</th>
+                        <th {% if current_number_session > 2 %} colspan="2" {% endif %} class="text-nowrap">{% trans 'june' %} *</th>
                         <th class="text-nowrap">{% trans 'sept' %} *</th>
                         <th>{% trans 'credited' %}</th>
                     </tr>
@@ -103,7 +101,7 @@
                                 </td>
                             {% else %}
                                 <td>{{ exam_enrol.session_1.score | default_if_none:"-" }}</td>
-                                <td>{{ exam_enrol.session_1.enrollment_state | default_if_none:" " }}</td>
+                                <td>{{ exam_enrol.session_1.enrollment_state | default_if_none:"-" }}</td>
                             {% endif %}
                             {% if current_number_session == 2 %}
                                 <td class="text-center">
@@ -116,7 +114,6 @@
                                 <td>{{ exam_enrol.session_2.score | default_if_none:"-" }}</td>
                                 <td>{{ exam_enrol.session_2.enrollment_state | default_if_none:" " }}</td>
                             {% else %}
-                                <td>&nbsp;</td>
                                 <td>&nbsp;</td>
                             {% endif %}
                             {% if current_number_session == 3 %}
@@ -134,31 +131,47 @@
                     {% endfor %}
                 </table>
 
-                <div class="row container-fluid text-right">
-                    <small class="text-warning">* {% trans 'text_mean_exprimed_for_20' %}</small>
+                <div class="row">
+                    <div class="text-center">
+                        <button class="btn btn-primary" id="bt_validate_exam_enrol_form"
+                                data-toggle="tooltip" data-placement="bottom" title="{% trans 'validate_exam_enrol_form_description' %}">
+                            <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> {% trans 'validate_changes' %}</button>
+                    </div>
                 </div>
 
-                <!-- Text explaining the mention attributed for the session. -->
-                <div class="row center-block">
-                    <p class="bg-info" id="paragraph_mention_explanation"></p>
-                </div>
+                <br>ATTENTION PAS DE COL-MD-6 DANS TABLE
 
                 <!-- Legend explaining letters signification -->
 
                 <div class="panel panel-default" >
                     <div class="panel-body" id="body_legend_explanation">
-                        <p><b>{% trans 'legend'%}</b></p>
-                        <table>
-                            {% for l in legend %}
-                                {% if forloop.counter0|divisibleby:2 or forloop.first %}
-                                    <tr>
-                                {% endif %}
-                                <td class="col-md-6">{{ l }}</td>
-                                {% if not forloop.counter0|divisibleby:2 %}
-                                    </tr>
-                                {% endif %}
-                            {% endfor %}
-                        </table>
+                        <b>{% trans 'legend'%}</b>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-6">{% trans 'legend_exam_enrol_p' %}</div>
+                                <div class="col-md-6">{% trans 'legend_exam_enrol_i' %}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">{% trans 'legend_exam_enrol_y' %}</div>
+                                <div class="col-md-6">{% trans 'legend_exam_enrol_j' %}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">{% trans 'legend_exam_enrol_r' %}</div>
+                                <div class="col-md-6">{% trans 'legend_exam_enrol_b' %}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">{% trans 'legend_exam_enrol_t' %}</div>
+                                <div class="col-md-6">{% trans 'legend_exam_enrol_v' %}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">{% trans 'legend_exam_enrol_w' %}</div>
+                                <div class="col-md-6">{% trans 'legend_exam_enrol_d' %}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">{% trans 'legend_exam_enrol_x' %}</div>
+                                <div class="col-md-6"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

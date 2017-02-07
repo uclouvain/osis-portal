@@ -38,26 +38,25 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-
-            <div class="row">
-                <div class="col-md-6">
-                    <label>{% trans 'student' %}</label>
-                    <br>
-                    {{ student.person.last_name}} {{ student.person.first_name }}
-                </div>
-                <div class="col-md-6">
-                    <label>{% trans 'registration_id' %}</label>
-                    <br>
-                    {{ student.registration_id }}
-                </div>
-            </div>
-
-            <br>
             {% if programs %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>{% trans 'student' %}</label>
+                        <br>
+                        {{ student.person.last_name}} {{ student.person.first_name }}
+                    </div>
+                    <div class="col-md-6">
+                        <label>{% trans 'registration_id' %}</label>
+                        <br>
+                        {{ student.registration_id }}
+                    </div>
+                </div>
+                <br>
                 <div class="alert alert-info" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>  {% trans 'choose_offer_for_exams_enrollment' %}
                 </div>
             {% else %}
+                <br>
                 <div class="alert alert-warning" style="display:inline-block;">
                     <p>{% trans 'no_offer_enrollment_found' %}</p>
                 </div>

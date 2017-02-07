@@ -76,6 +76,13 @@ class Client(object):
         return self.response
 
 
+class ExamEnrollmentClient(Client):
+    def __init__(self):
+        queue_name = settings.QUEUES.get('QUEUES_NAME').get('PAPER_SHEET')
+        score_sheet_timeout = settings.QUEUES.get('RPC_QUEUES_TIMEOUT').get('EXAM_ENROLLMENT_FORM')
+        super(ExamEnrollmentClient, self).__init__(queue_name=queue_name, call_timeout=score_sheet_timeout)
+
+
 class ScoresSheetClient(Client):
     def __init__(self):
         queue_name = settings.QUEUES.get('QUEUES_NAME').get('PAPER_SHEET')
