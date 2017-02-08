@@ -84,8 +84,9 @@
                         <td>{% if attribution.vacant_attribution_charge_practical > 0 %}{{ attribution.vacant_attribution_charge_practical }}{% endif %}</td>
                         <td>
                             <button id="bt_submit_attribution_new" class="btn btn-primary pull-right" role="button" type="submit"
+                                    title="{% trans 'create_an_tutor_application'%}"
                                     {% if not attribution.team_application_possible or not attribution.application_possible %} disabled{% endif %}>
-                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> {% trans 'create_an_tutor_application' %}
                             </button>
 
                         </td>

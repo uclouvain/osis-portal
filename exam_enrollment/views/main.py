@@ -23,26 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.contrib.auth.decorators import login_required
+from base.views import layout
+from base.models import student, offer_enrollment
 
-COORDINATOR = "COORDINATOR"
-HOLDER = "HOLDER"
-CO_HOLDER = "CO_HOLDER"
-DEPUTY = "DEPUTY"
-DEPUTY_AUTHORITY = "DEPUTY_AUTHORITY"
-DEPUTY_SABBATICAL = "DEPUTY_SABBATICAL"
-DEPUTY_TEMPORARY = "DEPUTY_TEMPORARY"
-PROFESSOR = "PROFESSOR"  # To remove afterwards.
-INTERNSHIP_SUPERVISOR = "INTERNSHIP_SUPERVISOR"
-INTERNSHIP_CO_SUPERVISOR = "INTERNSHIP_CO_SUPERVISOR"
 
-FUNCTIONS = ((COORDINATOR, COORDINATOR),
-             (HOLDER, HOLDER),
-             (CO_HOLDER, CO_HOLDER),
-             (DEPUTY, DEPUTY),
-             (DEPUTY_AUTHORITY, DEPUTY_AUTHORITY),
-             (DEPUTY_SABBATICAL, DEPUTY_SABBATICAL),
-             (DEPUTY_TEMPORARY, DEPUTY_TEMPORARY),
-             (PROFESSOR, PROFESSOR),
-             (INTERNSHIP_SUPERVISOR, INTERNSHIP_SUPERVISOR),
-             (INTERNSHIP_CO_SUPERVISOR, INTERNSHIP_CO_SUPERVISOR),)
+@login_required
+def choose_offer(request):
+    stud = student.find_by_user(request.user)
+    student_programs = None
+    if stud:
+        student_programs = [enrol.offer_year for enrol in list(offer_enrollment.find_by_student(stud))]
+    return layout.render(request, 'offer_choice.html', {'programs': student_programs,
+                                                        'student': stud})
+
+
+
 

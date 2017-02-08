@@ -23,26 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.conf.urls import url
+from exam_enrollment.views import main
 
-COORDINATOR = "COORDINATOR"
-HOLDER = "HOLDER"
-CO_HOLDER = "CO_HOLDER"
-DEPUTY = "DEPUTY"
-DEPUTY_AUTHORITY = "DEPUTY_AUTHORITY"
-DEPUTY_SABBATICAL = "DEPUTY_SABBATICAL"
-DEPUTY_TEMPORARY = "DEPUTY_TEMPORARY"
-PROFESSOR = "PROFESSOR"  # To remove afterwards.
-INTERNSHIP_SUPERVISOR = "INTERNSHIP_SUPERVISOR"
-INTERNSHIP_CO_SUPERVISOR = "INTERNSHIP_CO_SUPERVISOR"
-
-FUNCTIONS = ((COORDINATOR, COORDINATOR),
-             (HOLDER, HOLDER),
-             (CO_HOLDER, CO_HOLDER),
-             (DEPUTY, DEPUTY),
-             (DEPUTY_AUTHORITY, DEPUTY_AUTHORITY),
-             (DEPUTY_SABBATICAL, DEPUTY_SABBATICAL),
-             (DEPUTY_TEMPORARY, DEPUTY_TEMPORARY),
-             (PROFESSOR, PROFESSOR),
-             (INTERNSHIP_SUPERVISOR, INTERNSHIP_SUPERVISOR),
-             (INTERNSHIP_CO_SUPERVISOR, INTERNSHIP_CO_SUPERVISOR),)
-
+urlpatterns = [
+    url(r'^$', main.choose_offer, name='exam_enrollment_offer_choice'),
+]
