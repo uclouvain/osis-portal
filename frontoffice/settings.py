@@ -69,6 +69,8 @@ INSTALLED_APPS = (
     'performance',
     'attribution',
     'dissertation',
+    'internship',
+    'exam_enrollment'
 )
 
 # check if we are testing right now

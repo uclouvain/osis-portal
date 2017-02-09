@@ -56,5 +56,10 @@ class LearningUnitEnrollment(SerializableModel):
 
 
 def find_by_learningunit_enrollment(learning_unit_year):
-    return LearningUnitEnrollment.objects.filter(learning_unit_year=learning_unit_year).order_by('offer_enrollment__student__person__last_name',
-                                                                                                 'offer_enrollment__student__person__first_name')
+    return LearningUnitEnrollment.objects.filter(learning_unit_year=learning_unit_year)\
+        .order_by('offer_enrollment__student__person__last_name', 'offer_enrollment__student__person__first_name')
+
+
+def find_by_learning_unit_years(learning_unit_years):
+    return LearningUnitEnrollment.objects.filter(learning_unit_year__in=learning_unit_years) \
+        .order_by('offer_enrollment__student__person__last_name', 'offer_enrollment__student__person__first_name')

@@ -113,4 +113,5 @@ def generate_message(a_tutor_application, an_application_charge, operation, func
             line_attribution['practical_allocation'] = str(an_application_charge.allocation_charge)
             line_attribution['lecturing_allocation'] = str(get_allocation_charge(a_tutor_application,
                                                                                  component_type.LECTURING))
+    line_attribution['uuid_osis'] = str(a_tutor_application.uuid)
     return json.dumps(line_attribution, cls=DjangoJSONEncoder)

@@ -26,7 +26,7 @@
 from django.db import models
 from django.contrib import admin
 from osis_common.models.serializable_model import SerializableModel
-from attribution.models.enums import function
+from attribution.models.enums import function as function_enum
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -40,7 +40,7 @@ class TutorApplicationAdmin(admin.ModelAdmin):
 
 class TutorApplication(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    function = models.CharField(max_length=15, blank=True, null=True, choices=function.FUNCTIONS, db_index=True)
+    function = models.CharField(max_length=35, blank=True, null=True, choices=function_enum.FUNCTIONS, db_index=True)
     learning_unit_year = models.ForeignKey('base.LearningUnitYear', blank=True, null=True, default=None)
     tutor = models.ForeignKey('base.Tutor')
     remark = models.TextField(blank=True, null=True)
@@ -59,7 +59,7 @@ def find_by_id(a_tutor_application_id):
     return TutorApplication.objects.get(id=a_tutor_application_id)
 
 
-def search(tutor=None, learning_unit_year=None):
+def search(tutor=None, learning_unit_year=None, function=None):
     queryset = TutorApplication.objects
 
     if tutor:
@@ -67,6 +67,9 @@ def search(tutor=None, learning_unit_year=None):
 
     if learning_unit_year:
         queryset = queryset.filter(learning_unit_year=learning_unit_year)
+
+    if function:
+        queryset = queryset.filter(function=function)
 
     return queryset.select_related('tutor', 'learning_unit_year')
 
