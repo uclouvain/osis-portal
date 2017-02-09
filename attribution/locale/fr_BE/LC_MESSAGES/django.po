@@ -260,3 +260,35 @@ msgstr "Veuillez introduire le sigle du cours pour lequel vous voulez postuler"
 
 msgid "no_teaching_charge"
 msgstr "Pas de charge d'enseignement en "
+
+msgid "application_denied"
+msgstr "La période d'encodage des candidatures en ligne est fermée pour le moment."
+
+msgid "activity"
+msgstr "Activité"
+
+msgid "DEPUTY_AUTHORITY"
+msgstr "Suppléant d'autorité"
+
+msgid "DEPUTY_SABBATICAL"
+msgstr "Suppléant sabbatique"
+
+msgid "DEPUTY_TEMPORARY"
+msgstr "Suppléant temporaire"
+
+msgid "INTERNSHIP_SUPERVISOR"
+msgstr "Directeur de stage"
+
+msgid "INTERNSHIP_CO_SUPERVISOR"
+msgstr "Co-directeur de stage"
+
+msgid "no_tutor_application"
+msgstr "Aucune candidature"
+
+msgid "lu_search_explanation"
+msgstr ""
+"Pour poser une candidature à un cours vacant dont vous n'assuriez pas la charge, veuillez introduire ci-après le "
+"sigle du cours et cliquer sur le bouton 'loupe'"
+
+msgid "remove"
+msgstr "Annuler la candidature"

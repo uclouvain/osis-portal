@@ -31,11 +31,12 @@ import threading
 import logging
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
-TIMEOUT = 5
+DEFAULT_TIMEOUT = 30
 
 
 class Client(object):
-    def __init__(self, queue_name):
+
+    def __init__(self, queue_name, call_timeout=DEFAULT_TIMEOUT):
         self.paper_sheet_queue = queue_name
         credentials = pika.PlainCredentials(settings.QUEUES.get('QUEUE_USER'),
                                             settings.QUEUES.get('QUEUE_PASSWORD'))
@@ -44,7 +45,7 @@ class Client(object):
                                                                             settings.QUEUES.get('QUEUE_CONTEXT_ROOT'),
                                                                             credentials))
         self.timed_out = False
-        self.connection.add_timeout(TIMEOUT, self.on_timed_out)
+        self.connection.add_timeout(call_timeout, self.on_timed_out)
         self.channel = self.connection.channel()
 
         result = self.channel.queue_declare(exclusive=True)
@@ -78,13 +79,15 @@ class Client(object):
 class ScoresSheetClient(Client):
     def __init__(self):
         queue_name = settings.QUEUES.get('QUEUES_NAME').get('PAPER_SHEET')
-        super(ScoresSheetClient, self).__init__(queue_name=queue_name)
+        score_sheet_timeout = settings.QUEUES.get('RPC_QUEUES_TIMEOUT').get('PAPER_SHEET')
+        super(ScoresSheetClient, self).__init__(queue_name=queue_name, call_timeout=score_sheet_timeout)
 
 
 class PerformanceClient(Client):
     def __init__(self):
         queue_name = settings.QUEUES.get('QUEUES_NAME').get('STUDENT_PERFORMANCE')
-        super(PerformanceClient, self).__init__(queue_name=queue_name)
+        performance_timeout = settings.QUEUES.get('RPC_QUEUES_TIMEOUT').get('STUDENT_PERFORMANCE')
+        super(PerformanceClient, self).__init__(queue_name=queue_name, call_timeout=performance_timeout)
 
 
 class SynchronousConsumerThread(threading.Thread):

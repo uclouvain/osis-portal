@@ -259,3 +259,33 @@ msgstr "Please enter the code of the course to which you would like to apply"
 
 msgid "no_teaching_charge"
 msgstr "No teaching charge in "
+
+msgid "application_denied"
+msgstr "The period of online application is closed."
+
+msgid "activity"
+msgstr "Activity"
+
+msgid "DEPUTY_AUTHORITY"
+msgstr "Deputy authority"
+
+msgid "DEPUTY_SABBATICAL"
+msgstr "Deputy sabbatical"
+
+msgid "DEPUTY_TEMPORARY"
+msgstr "Deputy temporary"
+
+msgid "INTERNSHIP_SUPERVISOR"
+msgstr "Internship supervisor"
+
+msgid "INTERNSHIP_CO_SUPERVISOR"
+msgstr "Internship co-supervisor"
+
+msgid "no_tutor_application"
+msgstr "No application"
+
+msgid "lu_search_explanation"
+msgstr "To find a vacant learning unit to candidate to, introduce the code and click on the button"
+
+msgid "remove"
+msgstr "Cancel the application"

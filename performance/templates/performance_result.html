@@ -38,6 +38,10 @@
 
 {% include "template_messages.html" %}
 
+<div class="alert alert-info" role="alert">
+    {% trans 'performance_result_note_legal_announcement' %}
+</div>
+
 <div class="panel panel-default">
     <div class="panel-body">
         {% if not results %}
@@ -55,7 +59,26 @@
                 <label><b>{% trans 'program' %}</b></label>
             </div>
         </div>
-
+        <br/>
+        {% if fetch_timed_out %}
+        <div class="row">
+            <div class="col-md-12 alert alert-warning">
+                {% trans 'performance_result_fetch_timed_out' %}
+            </div>
+        </div>
+        {% elif not authorized %}
+            <div class="alert alert-danger" role="alert">
+                {% trans 'performance_result_note_not_autorized' %}
+            </div>
+        {% endif %}
+        <div class="row container-fluid">
+            <div class="col-md-6 text-left">
+                <small><b>{% trans 'next_update' %}:</b> {{ update_date }}</small>
+            </div>
+            <div class="col-md-6 text-right">
+                <small><b>{% trans 'generated' %}:</b> {{ creation_date }}</small>
+            </div>
+        </div>
         <hr>
         <div class="row container-fluid">
             <!-- Student sessions summary-->
@@ -72,7 +95,13 @@
                         <td><strong>{% trans 'total_ects_inscription' %}</strong></td>
                     </tr>
                     <tr id="summary_mean">
-                        <td><strong>{% trans 'mean' %} *</strong></td>
+                        <td><strong>{% trans 'mean' %}</strong></td>
+                    </tr>
+                    <tr id="summary_success_mean">
+                        <td><strong>{% trans 'success_mean' %}</strong></td>
+                    </tr>
+                    <tr id="summary_general_mean">
+                        <td><strong>{% trans 'general_mean' %}</strong></td>
                     </tr>
                     <tr id="summary_mention">
                         <td><strong>{% trans 'mention' %}</strong></td>
@@ -87,14 +116,16 @@
                 <th>{% trans 'title' %}</th>
                 <th>{% trans 'ects' %}</th>
                 <th>{% trans 'inscr' %}</th>
-                <th>{% trans 'jan' %} *</th>
-                <th>{% trans 'june' %} *</th>
-                <th>{% trans 'sept' %} *</th>
-                <th>{% trans 'credits' %}</th>
+                <th colspan="2">{% trans 'jan' %}</th>
+                <th colspan="2">{% trans 'june' %}</th>
+                <th colspan="2">{% trans 'sept' %}</th>
+                <th>{% trans 'credited' %}</th>
             </tr>
         </table>
 
-        <small class="text-warning pull-right">* {% trans 'text_mean_exprimed_for_20' %}</small>
+        <div class="row container-fluid text-right">
+            <small class="text-warning">* {% trans 'text_mean_exprimed_for_20' %}</small>
+        </div>
 
         <!-- Text explaining the mention attributed for the session. -->
         <div class="row center-block">
@@ -102,51 +133,15 @@
         </div>
 
         <!-- Legend explaining letters signification -->
-        <div class="row">
-            <div class="col-md-6">
-                <p><b>{% trans 'legend'%}</b></p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <p>{% trans 'explanation_P'%}</p>
-            </div>
-            <div class="col-md-6">
-                <p>{% trans 'explanation_T'%}</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <p>{% trans 'explanation_I'%}</p>
-            </div>
-            <div class="col-md-6">
-                <p>{% trans 'explanation_TV'%}</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <p>{% trans 'explanation_Y'%}</p>
-            </div>
-            <div class="col-md-6">
-                <p>{% trans 'explanation_W'%}</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <p>{% trans 'explanation_RJ'%}</p>
-            </div>
-            <div class="col-md-6">
-                <p>{% trans 'explanation_EPM'%}</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <p>{% trans 'explanation_B'%}</p>
-            </div>
-        </div>
 
-        <div class="row container-fluid text-right">
-            <small> {% trans 'generated' %} : {{ creation_date }}</small>
+        <div class="panel panel-default" >
+            <div class="panel-body" id="body_legend_explanation">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><b>{% trans 'legend'%}</b></p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
