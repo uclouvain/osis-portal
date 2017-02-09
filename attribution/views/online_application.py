@@ -287,7 +287,7 @@ def get_terminating_charges(a_year, a_tutor):
             if next_learning_unit_year and not existing_tutor_application_for_next_year(a_tutor,
                                                                                         attribution.learning_unit_year,
                                                                                         a_function):
-                if next_learning_unit_year.in_charge and not is_function_deputy(attribution.function):
+                if next_learning_unit_year.in_charge and not is_deputy_function(attribution.function):
                     attributions_vacant.append(attribution)
         return get_attribution_data(attributions_vacant)
     return []
