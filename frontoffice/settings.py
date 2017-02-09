@@ -69,6 +69,7 @@ INSTALLED_APPS = (
     'performance',
     'attribution',
     'dissertation',
+    'internship',
     'exam_enrollment'
 )
 
