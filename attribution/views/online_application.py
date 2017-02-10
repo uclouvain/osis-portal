@@ -131,9 +131,7 @@ def get_attribution_informations(an_attribution):
             VACANT_ATTRIBUTION_CHARGE_LECTURING:
                 get_vacant_attribution_allocation_charge(next_learning_unit_year, component_type.LECTURING),
             VACANT_ATTRIBUTION_CHARGE_PRACTICAL:
-                get_vacant_attribution_allocation_charge(next_learning_unit_year, component_type.PRACTICAL_EXERCISES),
-            TUTOR_APPLICATION: mdl_attribution.tutor_application.find_tutor_learning_unit_year(a_tutor,
-                                                                                               next_learning_unit_year)}
+                get_vacant_attribution_allocation_charge(next_learning_unit_year, component_type.PRACTICAL_EXERCISES)}
 
 
 def get_application_informations(a_tutor_application):
@@ -532,9 +530,9 @@ def save(request, tutor_application_id):
 
     if form.is_valid():
         application_charge_lecturing = allocation_charge_update(request.POST.get('application_charge_lecturing_id'),
-                                 form['charge_lecturing'].value().replace(',', '.'))
+                                                                form['charge_lecturing'].value().replace(',', '.'))
         application_charge_practical = allocation_charge_update(request.POST.get('application_charge_practical_id'),
-                                 form['charge_practical'].value().replace(',', '.'))
+                                                                form['charge_practical'].value().replace(',', '.'))
 
         if tutor_application_to_save:
             tutor_application_to_save.course_summary = form['course_summary'].value()
@@ -611,8 +609,8 @@ def is_team_application_possible(a_learning_unit_year):
 
 
 def is_application_possible(a_learning_unit_year, a_tutor):
-    a_tutor_application = mdl_attribution.tutor_application.find_tutor_learning_unit_year(a_tutor, a_learning_unit_year)
-    if a_tutor_application:
+    tutor_applications = mdl_attribution.tutor_application.search(a_tutor, a_learning_unit_year, None)
+    if tutor_applications.exists():
         return False
     return True
 

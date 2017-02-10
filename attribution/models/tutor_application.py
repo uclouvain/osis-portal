@@ -80,16 +80,6 @@ def find_by_dates_tutor(a_start_year, an_end_year, a_tutor):
                                            tutor=a_tutor).order_by('learning_unit_year__acronym', 'id')
 
 
-def find_tutor_learning_unit_year(a_tutor, a_learning_unit_year):
-    if a_tutor and a_learning_unit_year:
-        try:
-            return TutorApplication.objects.get(tutor=a_tutor,
-                                                learning_unit_year=a_learning_unit_year)
-        except ObjectDoesNotExist:
-            return None
-    return None
-
-
 def find_tutor_by_tutor_year(a_tutor, an_academic_year):
     if a_tutor and an_academic_year:
         try:
