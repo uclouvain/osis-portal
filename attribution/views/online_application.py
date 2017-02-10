@@ -425,18 +425,21 @@ def create_tutor_application_from_attribution(an_attribution):
     application_charge_practical = create_application_charge(a_new_tutor_application,
                                                              attribution_practical_duration,
                                                              component_type.PRACTICAL_EXERCISES)
+    a_new_tutor_application.function = define_tutor_application_function(a_new_tutor_application)
+    a_new_tutor_application.save()
+
     queue_sender.send_message(
         settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
         message_generation.generate_message_from_application_charge(
             application_charge_lecturing,
             UPDATE_OPERATION,
-            define_tutor_application_function(a_new_tutor_application)))
+            a_new_tutor_application.function))
 
     queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
                               message_generation.generate_message_from_application_charge(
                                   application_charge_practical,
                                   UPDATE_OPERATION,
-                                  define_tutor_application_function(a_new_tutor_application)))
+                                  a_new_tutor_application.function))
     return a_new_tutor_application
 
 
