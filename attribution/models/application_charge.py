@@ -31,6 +31,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 class ApplicationChargeAdmin(admin.ModelAdmin):
     list_display = ('tutor_application', 'learning_unit_component', 'allocation_charge')
+    raw_id_fields = ('learning_unit_component', 'tutor_application')
 
 
 class ApplicationCharge(SerializableModel):
