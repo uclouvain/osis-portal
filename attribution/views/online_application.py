@@ -131,9 +131,7 @@ def get_attribution_informations(an_attribution):
             VACANT_ATTRIBUTION_CHARGE_LECTURING:
                 get_vacant_attribution_allocation_charge(next_learning_unit_year, component_type.LECTURING),
             VACANT_ATTRIBUTION_CHARGE_PRACTICAL:
-                get_vacant_attribution_allocation_charge(next_learning_unit_year, component_type.PRACTICAL_EXERCISES),
-            TUTOR_APPLICATION: mdl_attribution.tutor_application.find_tutor_learning_unit_year(a_tutor,
-                                                                                               next_learning_unit_year)}
+                get_vacant_attribution_allocation_charge(next_learning_unit_year, component_type.PRACTICAL_EXERCISES)}
 
 
 def get_application_informations(a_tutor_application):
@@ -287,7 +285,7 @@ def get_terminating_charges(a_year, a_tutor):
             if next_learning_unit_year and not existing_tutor_application_for_next_year(a_tutor,
                                                                                         attribution.learning_unit_year,
                                                                                         a_function):
-                if next_learning_unit_year.in_charge and attribution.function != function.DEPUTY:
+                if next_learning_unit_year.in_charge and not is_deputy_function(attribution.function):
                     attributions_vacant.append(attribution)
         return get_attribution_data(attributions_vacant)
     return []
@@ -425,18 +423,21 @@ def create_tutor_application_from_attribution(an_attribution):
     application_charge_practical = create_application_charge(a_new_tutor_application,
                                                              attribution_practical_duration,
                                                              component_type.PRACTICAL_EXERCISES)
+    a_new_tutor_application.function = define_tutor_application_function(a_new_tutor_application)
+    a_new_tutor_application.save()
+
     queue_sender.send_message(
         settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
         message_generation.generate_message_from_application_charge(
             application_charge_lecturing,
             UPDATE_OPERATION,
-            define_tutor_application_function(a_new_tutor_application)))
+            a_new_tutor_application.function))
 
     queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
                               message_generation.generate_message_from_application_charge(
                                   application_charge_practical,
                                   UPDATE_OPERATION,
-                                  define_tutor_application_function(a_new_tutor_application)))
+                                  a_new_tutor_application.function))
     return a_new_tutor_application
 
 
@@ -529,9 +530,9 @@ def save(request, tutor_application_id):
 
     if form.is_valid():
         application_charge_lecturing = allocation_charge_update(request.POST.get('application_charge_lecturing_id'),
-                                 form['charge_lecturing'].value().replace(',', '.'))
+                                                                form['charge_lecturing'].value().replace(',', '.'))
         application_charge_practical = allocation_charge_update(request.POST.get('application_charge_practical_id'),
-                                 form['charge_practical'].value().replace(',', '.'))
+                                                                form['charge_practical'].value().replace(',', '.'))
 
         if tutor_application_to_save:
             tutor_application_to_save.course_summary = form['course_summary'].value()
@@ -608,8 +609,8 @@ def is_team_application_possible(a_learning_unit_year):
 
 
 def is_application_possible(a_learning_unit_year, a_tutor):
-    a_tutor_application = mdl_attribution.tutor_application.find_tutor_learning_unit_year(a_tutor, a_learning_unit_year)
-    if a_tutor_application:
+    tutor_applications = mdl_attribution.tutor_application.search(a_tutor, a_learning_unit_year, None)
+    if tutor_applications.exists():
         return False
     return True
 
@@ -750,3 +751,13 @@ def get_attribution_allocation_charge(an_attribution, a_component_type):
         for attribution_charge in attribution_charges:
             tot_allocation_charge += attribution_charge.allocation_charge
     return tot_allocation_charge
+
+
+def is_deputy_function(a_function):
+    if a_function and \
+        (a_function == function.DEPUTY or
+        a_function == function.DEPUTY_AUTHORITY or
+        a_function == function.DEPUTY_SABBATICAL or
+        a_function == function.DEPUTY_TEMPORARY):
+        return True
+    return False
