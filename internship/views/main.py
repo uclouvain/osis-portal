@@ -29,7 +29,7 @@ from base.views import layout
 
 
 @login_required
-@permission_required('base.is_student', raise_exception=True)  # TODO access only for medicine students
+@permission_required('base.is_student', raise_exception=True)
 def view_internship_home(request):
 
     return layout.render(request, "internship_home.html")
