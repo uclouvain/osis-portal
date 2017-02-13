@@ -1,4 +1,4 @@
-{% extends "dashboard_layout.html" %}
+{% extends "layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -27,19 +27,90 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-        <li class="active">{% trans 'internship' %}</li>
+    <li><a href="{% url 'studies' %}">{% trans 'studies' %}</a></li>
+    <li><a href="{% url 'internships_home' %}">{% trans 'internships_managment' %}</a></li>
+    <li class="active">{% trans 'all_internships' %}</li>
 {% endblock %}
-
-
 {% block content %}
 <div class="page-header">
-    <h2>{% trans 'internship' %}</h2>
+    <h2>{% trans 'internships' %}</h2>
 </div>
-
-
 <div class="panel panel-default">
-    <div class="panel panel-body">
-        INTERNSHIP SELECTION
+    <div class="panel-body">
+
+        <div class="row">
+
+            <ul class="nav nav-tabs">
+                {% for non_mandatory_id in number_non_mandatory_internships %}
+                    <li role="presentation" {% if non_mandatory_id == 1 %} class="active" {% endif %}><a href="#">{% trans 'internship_choice'%} {{ non_mandatory_id }}</a></li>
+                {% endfor %}
+            </ul>
+
+        </div>
+
+        <br>
+
+        <div class="row">
+            <form id="select_internship" method="get" action="{% url 'internship_selection' %}">
+
+                <div class="col-md-4 form-group">
+                    <label for="speciality_type">Choose a speciality:</label>
+                    <select id="speciality_type" class="form-control">
+                        {% for speciality in specialities %}
+                            <option value="{{ speciality.id }}">{{ speciality.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <br>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-ok"></span>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+        <br>
+
+       <div class="row">
+
+           <form id="assign_preference" method="post">
+
+               <table class="table table-striped">
+                   <thead>
+                       <th>organization</th>
+                       <th>student_max</th>
+                       <th>number_first_choice</th>
+                       <th>preference</th>
+                   </thead>
+                    {% for offer in  internships_offers %}
+                   <tr>
+                        <td>{{ offer.organization }}</td>
+                        <td>{{ offer.maximum_enrollments }}</td>
+                        <td>0</td>
+                        <td>
+                            <select id="offer_{{ offer.id }}" class="form-control">
+                                <option>--</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                            </select>
+                        </td>
+                   </tr>
+                    {% endfor %}
+               </table>
+
+                <button type="submit" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Submit choices
+                </button>
+           </form>
+
+       </div>
+
     </div>
 </div>
 {% endblock %}

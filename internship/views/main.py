@@ -26,6 +26,7 @@
 ############################################################################
 from django.contrib.auth.decorators import login_required, permission_required
 from base.views import layout
+import internship.models as mdl_internship
 
 
 @login_required
@@ -38,5 +39,12 @@ def view_internship_home(request):
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def view_internship_selection(request):
+    NUMBER_NON_MANDATORY_INTERNSHIPS = 6
+    specialities = mdl_internship.internship_speciality.InternshipSpeciality.objects.all()
+    internships_offers = mdl_internship.internship_offer.InternshipOffer.objects.all()
 
-    return layout.render(request, "internship_selection.html")
+    return layout.render(request, "internship_selection.html",
+                         {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1),
+                          "specialities": specialities,
+                          "internships_offers": internships_offers})
+
