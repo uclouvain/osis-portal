@@ -57,9 +57,14 @@
                 <div class="fieldWrapper col-md-4 form-group">
                     {{ speciality_form.speciality.errors }}
                     <label for="{{ speciality_form.speciality.id_for_label }}">Choose a speciality:</label>
-                    <select id="{{ speciality_form.speciality.id_for_label }}" name="{{ speciality_form.speciality.html_name }}" class="form-control">
+                    <select id="{{ speciality_form.speciality.id_for_label }}"
+                            name="{{ speciality_form.speciality.html_name }}"
+                            class="form-control">
                         {% for x,y in speciality_form.fields.speciality.choices %}
-                            <option value="{{ x }}">{{ y }}</option>
+                            <option value="{{ x }}"
+                                    {% if speciality_form.speciality.value == x|stringformat:"i" %} selected {% endif %}>
+                                {{ y }}
+                            </option>
                         {% endfor %}
                     </select>
                 </div>
