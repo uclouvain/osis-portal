@@ -23,18 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.db import models
 from django.contrib import admin
 
-from internship.models import *
 
-admin.site.register(internship_offer.InternshipOffer,
-                    internship_offer.InternshipOfferAdmin)
+class InternshipChoiceAdmin(admin.ModelAdmin):
+    list_display = ('student', 'organization', 'speciality', 'choice', 'internship_choice', 'priority')
+    fieldsets = ((None, {'fields': ('student', 'organization', 'speciality', 'choice', 'internship_choice',
+                                    'priority')}),)
+    raw_id_fields = ('student', 'organization', 'speciality')
 
-admin.site.register(internship_speciality.InternshipSpeciality,
-                    internship_speciality.InternshipSpecialityAdmin)
 
-admin.site.register(organization.Organization,
-                    organization.OrganizationAdmin)
+class InternshipChoice(models.Model):
+    student = models.ForeignKey('base.Student')
+    organization = models.ForeignKey('internship.Organization')
+    speciality = models.ForeignKey('internship.InternshipSpeciality', null=True)
+    choice = models.IntegerField()
+    internship_choice = models.IntegerField(default=0)
+    priority = models.BooleanField()
 
-admin.site.register(internship_choice.InternshipChoice,
-                    internship_choice.InternshipChoiceAdmin)
