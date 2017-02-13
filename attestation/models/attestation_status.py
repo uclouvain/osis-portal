@@ -23,17 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from attestation.models.enums import attestation_type
 from django.utils import timezone
-from attestation.queues import student_attestation
+
 
 class AttestationStatus(models.Model):
 
     student = models.ForeignKey('Student')
-    type = models.CharField(max_length=30, choices=attestation_type.ATTESTATION_TYPES)
+    attestation_type = models.CharField(max_length=30, choices=attestation_type.ATTESTATION_TYPES)
     printed = models.BooleanField(default=False)
     available = models.BooleanField(default=False)
     creation_date = models.DateTimeField(editable=False)
@@ -49,37 +50,19 @@ class AttestationStatus(models.Model):
 
 
 class AttestationStatusAdmin(admin.ModelAdmin):
-    list_display = ('student', 'type', 'printed', 'available', 'update_date','creation_date')
+    list_display = ('student', 'type', 'printed', 'available', 'update_date', 'creation_date')
     fieldsets = ((None, {'fields': ('student', 'type', 'printed', 'available', 'update_date','creation_date')}), )
+    list_filter = ('type',)
     raw_id_fields = ('student',)
     search_fields = ['student__registartion_id', 'student__last_name', 'type']
 
 
-def save_data_from_json(json_attestation_statuses):
-    attestation_statuses = json_attestation_statuses.get("")
-    for attestation_status_dict in attestation_statuses:
-        registration_id = attestation_status_dict.get('registration_id')
-        type = attestation_status_dict.get('type')
-
-
-
-
-
-def has_to_be_updated(attestation_statuses):
-    pass
-
-
-def get_or_fetch(registration_id):
-    attestation_statuses = AttestationStatus.objects.filter(student__registration_id=registration_id)
-    if not attestation_statuses or has_to_be_updated(attestation_statuses):
-        json_attestation_statuses = student_attestation.fetch_json_attestation_statuses(registration_id)
-        if json_attestation_statuses:
-            attestation_statuses = save_data_from_json(json_attestation_statuses)
-    return attestation_statuses
-
-
-def get_by_registration_id_and_type(registration_id, type):
+def find_by_registration_id_and_type(registration_id, a_type):
     try:
-        return AttestationStatus.objects.get(student__registration_id=registration_id, type=type)
+        return AttestationStatus.objects.get(student__registration_id=registration_id, attestation_type=a_type)
     except ObjectDoesNotExist:
         return None
+
+
+def find_by_student(student):
+    return AttestationStatus.objects.filter(student=student)

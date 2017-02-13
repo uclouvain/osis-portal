@@ -26,17 +26,16 @@
 from django.contrib.auth.decorators import login_required, permission_required
 
 from base.models import student as student_mdl
-from attestation.queues import student_attestation
+from attestation.queues import student_attestation_status
 from base.views import layout
 
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
-@permission_required('attestation.can_access_attestation', raise_exception=True)
 def home(request):
     student = student_mdl.find_by_user(request.user)
-    attestations_list_json = student_attestation.fetch_json_attestation_statuses(student.registration_id)
-    return layout.render(request, "attestation.html", {'attestations': attestations_list_json.get('attestations')})
+    attestation_statuses = student_attestation_status.get_or_fetch(student)
+    return layout.render(request, "attestation.html", {'attestation_statuses': attestation_statuses})
 
 
 

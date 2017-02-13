@@ -24,22 +24,14 @@
 #
 ##############################################################################
 import json
-from frontoffice.queue.queue_listener import AttestationListClient, AttestationClient
+import datetime
+from django.conf import settings
+from frontoffice.queue.queue_listener import AttestationClient
 
 
-def fetch_json_attestation_statuses(registration_id):
-    message = generate_registration_id_message(registration_id)
-    client = AttestationListClient()
-    json_data = client.call(message)
-    json_attestation_statuses = None
-    if json_data:
-        json_attestation_statuses = json.loads(json_data.decode("utf-8"))
-    return json_attestation_statuses
-
-
-def fetch_json_attestation(registration_id):
+def fetch_json_attestation(registration_id, attestation_type):
     json_attestation = None
-    message = generate_registration_id_message(registration_id)
+    message = generate_fetch_message(registration_id, attestation_type)
     if message:
         client = AttestationClient()
         json_data = client.call(message)
@@ -48,7 +40,8 @@ def fetch_json_attestation(registration_id):
     return json_attestation
 
 
-def generate_registration_id_message(registration_id):
+def generate_fetch_message(registration_id, attestation_type):
     if registration_id:
-        return json.dumps({'registration_id': registration_id})
+        return json.dumps({'registration_id': registration_id,
+                           'attestation_type': attestation_type})
     return None

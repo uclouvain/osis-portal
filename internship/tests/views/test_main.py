@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,20 +23,30 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import json
-from django.test import TestCase
-from attestation.queues import student_attestation as std_att_queue
+from django.test import TestCase, Client
+
+import base.tests.models.test_student
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 
-class TestRegistartionIdMessage(TestCase):
+class TestMain(TestCase):
+    def setUp(self):
+        self.c = Client()
+        self.student = base.tests.models.test_student.create_student("45451298")
+        self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
+        self.student.person.user = self.user
+        self.student.person.save()
 
-    def test_generate_message_with_registration_id(self):
-        given_json_message = std_att_queue.generate_registration_id_message('1111111')
-        expected_json_message = json.loads('{"registration_id" : "1111111"}')
-        self.assertJSONEqual(given_json_message, expected_json_message)
+    def test_can_access_internship_home(self):
+        home_url = reverse("internship_home")
+        response = self.c.get(home_url)
+        self.assertEqual(response.status_code, 302)
 
-    def test_generate_message_without_registration_id(self):
-        given_json_message = std_att_queue.generate_registration_id_message(None)
-        self.assertIsNone(given_json_message)
+        self.c.force_login(self.user)
+        response = self.c.get(home_url)
+        self.assertEqual(response.status_code, 200)
+
+
 
 

@@ -254,11 +254,13 @@ QUEUES = {
         'PERFORMANCE_UPDATE_EXP_DATE': 'performance_exp_date',
         'ATTRIBUTION': 'attribution',
         'ATTESTATION': 'rpc_attestation',
-        'ATTESTATION_LIST': 'rpc_attestation_list',
+        'ATTESTATION_STATUS': 'rpc_attestation_status',
     },
     'RPC_QUEUES_TIMEOUT': {
         'PAPER_SHEET': 60,
-        'STUDENT_PERFORMANCE': 15
+        'STUDENT_PERFORMANCE': 15,
+        'ATTESTATION_STATUS': 10,
+        'ATTESTATION': 60
     }
 }
 
@@ -312,6 +314,10 @@ PERFORMANCE_CONFIG = {
     'UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR': 12,
     'UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR': 720,
     'UPDATE_DELTA_HOURS_AFTER_CONSUMPTION': 24,
+}
+
+ATTESTATION_CONFIG = {
+    'UPDATE_DELTA_HOURS_DEFAULT': 72
 }
 
 try:

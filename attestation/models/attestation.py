@@ -40,11 +40,6 @@ class Attestation(models.Model):
     document_file = models.ForeignKey('osis_common.DocumentFile')
     type = models.CharField(max_length=30, choices=attestation_type.ATTESTATION_TYPES)
 
-    class Meta:
-        permissions = (
-            ("can_access_attestation", "Can access attestation"),
-        )
-
 
 def find_by_student_id(student_id):
     return Attestation.objects.filter(student__id=student_id)
