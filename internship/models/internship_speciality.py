@@ -44,25 +44,3 @@ class InternshipSpeciality(models.Model):
         return self.name
 
 
-def search(**kwargs):
-    kwargs = {k: v for k, v in kwargs.items() if v}
-    return InternshipSpeciality.objects.filter(**kwargs).select_related("learning_unit").order_by('acronym', 'name')
-
-
-def search_order_by_position(**kwargs):
-    kwargs = {k: v for k, v in kwargs.items() if v}
-    return InternshipSpeciality.objects.filter(**kwargs).select_related("learning_unit").order_by('order_postion')
-
-
-def find_all():
-    return InternshipSpeciality.objects.all().select_related("learning_unit").order_by('acronym', 'name')
-
-
-def find_by_id(speciality_id):
-    return InternshipSpeciality.objects.get(pk=speciality_id)
-
-
-def find_non_mandatory():
-    return InternshipSpeciality.objects.filter(mandatory=False)\
-                                       .select_related("learning_unit")\
-                                       .order_by('acronym', 'name')

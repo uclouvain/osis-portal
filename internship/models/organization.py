@@ -48,11 +48,3 @@ class Organization(models.Model):
         super(Organization, self).save(*args, **kwargs)
 
 
-def search(**kwargs):
-    kwargs = {k: v for k, v in kwargs.items() if v}
-    queryset = Organization.objects.filter(**kwargs).select_related()
-    return queryset
-
-
-def find_by_id(organization_id):
-    return Organization.objects.get(pk=organization_id)
