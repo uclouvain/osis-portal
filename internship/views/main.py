@@ -27,6 +27,7 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from base.views import layout
 import internship.models as mdl_internship
+from internship.forms import form_select_speciality
 
 
 @login_required
@@ -43,8 +44,11 @@ def view_internship_selection(request):
     specialities = mdl_internship.internship_speciality.InternshipSpeciality.objects.all()
     internships_offers = mdl_internship.internship_offer.InternshipOffer.objects.all()
 
+    speciality_form = form_select_speciality.SpecialityForm()
+
     return layout.render(request, "internship_selection.html",
                          {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1),
                           "specialities": specialities,
+                          "speciality_form": speciality_form,
                           "internships_offers": internships_offers})
 
