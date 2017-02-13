@@ -47,6 +47,14 @@ class TestMain(TestCase):
         response = self.c.get(home_url)
         self.assertEqual(response.status_code, 200)
 
+    def test_can_access_internship_selection(self):
+        selection_url = reverse("internship_selection")
+        response = self.c.get(selection_url)
+        self.assertEqual(response.status_code, 302)
+
+        self.c.force_login(self.user)
+        response = self.c.get(selection_url)
+        self.assertEqual(response.status_code, 200)
 
 
 

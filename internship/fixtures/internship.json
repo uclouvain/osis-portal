@@ -1,0 +1,168 @@
+[
+  {
+    "model": "internship.organization",
+    "pk": 1,
+    "fields": {
+      "name": "Cliniques Universitaires Saint Luc - Bruxelles",
+      "acronym": "Cliniques Univ",
+      "website": "http://www.saintluc.be",
+      "reference": "02",
+      "type": "service partner"
+    }
+  },
+  {
+    "model": "internship.organization",
+    "pk": 2,
+    "fields": {
+      "name": "Clinique Saint  Jean - Bruxelles",
+      "acronym": "Cliniques Saint",
+      "reference": "03",
+      "type": "service partner"
+    }
+  },
+  {
+    "model": "internship.organization",
+    "pk": 3,
+    "fields": {
+      "name": "Clinique Saint  Pierre - Ottignies",
+      "acronym": "Cliniques Saint",
+      "reference": "15",
+      "type": "service partner"
+    }
+  },
+  {
+    "model": "internship.organization",
+    "pk": 4,
+    "fields": {
+      "name": "Centre Hospitalier de Tubize-Nivelles",
+      "acronym": "Cliniques Hospi",
+      "reference": "32",
+      "type": "service partner"
+    }
+  },
+  {
+    "model": "internship.organization",
+    "pk": 5,
+    "fields": {
+      "name": "Centre Hospitalier du Luxembourg",
+      "acronym": "Centre Hospi",
+      "reference": "67",
+      "type": "service partner"
+    }
+  },
+  {
+    "model": "internship.organization",
+    "pk": 6,
+    "fields": {
+      "name": "Hôpital Enfants de la Timone - Marseille",
+      "acronym": "Hôpital Enfant",
+      "website": "http://www.saintluc.be",
+      "reference": "71",
+      "type": "service partner"
+    }
+  },
+  {
+    "model": "internship.organization",
+    "pk": 7,
+    "fields": {
+      "name": "Hôpital Saint Antoine - Lille",
+      "acronym": "Hôpital Saint ",
+      "reference": "75",
+      "type": "service partner"
+    }
+  },
+
+
+
+
+
+
+
+  {
+    "model": "internship.internshipspeciality",
+    "pk": 1,
+    "fields": {
+      "learning_unit": 1,
+      "name": "State en Pédiatrie",
+      "acronym": "PE",
+      "mandatory": true
+    }
+  },
+  {
+    "model": "internship.internshipspeciality",
+    "pk": 2,
+    "fields": {
+      "learning_unit": 1,
+      "name": "State en en Chirurgie",
+      "acronym": "CH",
+      "mandatory": true
+    }
+  },
+  {
+    "model": "internship.internshipspeciality",
+    "pk": 3,
+    "fields": {
+      "learning_unit": 1,
+      "name": "State en Radiologie",
+      "acronym": "CH1",
+      "mandatory": false
+    }
+  },
+  {
+    "model": "internship.internshipspeciality",
+    "pk": 4,
+    "fields": {
+      "learning_unit": 1,
+      "name": "State en ??",
+      "acronym": "CH2",
+      "mandatory": false
+    }
+  },
+
+
+
+  {
+    "model": "internship.internshipoffer",
+    "pk": 1,
+    "fields": {
+      "organization": 1,
+      "speciality": 1,
+      "title": "Stage en Pédiatrie",
+      "maximum_enrollments": 40,
+      "master": "Dr. Marc Hoselaus"
+    }
+  },
+  {
+    "model": "internship.internshipoffer",
+    "pk": 2,
+    "fields": {
+      "organization": 1,
+      "speciality": 2,
+      "title": "Stage en Chirurgie",
+      "maximum_enrollments": 40,
+      "master": "Dr. Marc Hoselaus"
+    }
+  },
+  {
+    "model": "internship.internshipoffer",
+    "pk": 3,
+    "fields": {
+      "organization": 2,
+      "speciality": 1,
+      "title": "Stage en Pédiatrie",
+      "maximum_enrollments": 40,
+      "master": "Dr. Marc Hoselaus"
+    }
+  },
+  {
+    "model": "internship.internshipoffer",
+    "pk": 4,
+    "fields": {
+      "organization": 3,
+      "speciality": 2,
+      "title": "Stage en Chirurgie",
+      "maximum_enrollments": 40,
+      "master": "Dr. Marc Hoselaus"
+    }
+  }
+]

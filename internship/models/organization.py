@@ -24,14 +24,35 @@
 #
 ##############################################################################
 from django.contrib import admin
+from django.db import models
 
-from internship.models import *
 
-admin.site.register(internship_offer.InternshipOffer,
-                    internship_offer.InternshipOfferAdmin)
+class OrganizationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'acronym', 'reference', 'type')
+    fieldsets = ((None, {'fields': ('name', 'acronym', 'reference', 'website', 'type')}),)
+    search_fields = ['acronym']
 
-admin.site.register(internship_speciality.InternshipSpeciality,
-                    internship_speciality.InternshipSpecialityAdmin)
 
-admin.site.register(organization.Organization,
-                    organization.OrganizationAdmin)
+class Organization(models.Model):
+    name = models.CharField(max_length=255)
+    acronym = models.CharField(max_length=15, blank=True)
+    website = models.URLField(max_length=255, blank=True, null=True)
+    reference = models.CharField(max_length=30, blank=True, null=True)
+    type = models.CharField(max_length=30, blank=True, null=True, default="service partner")
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        self.acronym = self.name[:14]
+        super(Organization, self).save(*args, **kwargs)
+
+
+def search(**kwargs):
+    kwargs = {k: v for k, v in kwargs.items() if v}
+    queryset = Organization.objects.filter(**kwargs).select_related()
+    return queryset
+
+
+def find_by_id(organization_id):
+    return Organization.objects.get(pk=organization_id)
