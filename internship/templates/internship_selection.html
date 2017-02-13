@@ -51,7 +51,8 @@
         <br>
 
         <div class="row">
-            <form action="{% url 'internship_selection' %}" method="get">
+            <form action="{% url 'internship_selection' %}" method="post">
+                {% csrf_token %}
                 {{ speciality_form.non_field_errors }}
                 <div class="fieldWrapper col-md-4 form-group">
                     {{ speciality_form.speciality.errors }}
@@ -65,7 +66,7 @@
 
                 <div class="col-md-2">
                     <br>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary" name="select_speciality">
                         <span class="glyphicon glyphicon-ok"></span>
                     </button>
                 </div>
@@ -103,10 +104,14 @@
                     {% endfor %}
                </table>
 
+                <br>
+
+           {% if internships_offers %}
                 <button type="submit" class="btn btn-primary">
                     <span class="glyphicon glyphicon-ok"></span>
                     Submit choices
                 </button>
+           {% endif %}
            </form>
 
        </div>

@@ -52,3 +52,5 @@ class InternshipOffer(models.Model):
         )
 
 
+def find_by_speciality(speciality):
+    return InternshipOffer.objects.filter(speciality=speciality)
