@@ -28,5 +28,6 @@ from internship.views import main
 
 urlpatterns = [
     url(r'^$', main.view_internship_home, name='internship_home'),
+    url(r'^selection/$', main.view_internship_selection, name='internship_selection'),
 ]
 
