@@ -31,6 +31,7 @@ from base.views import layout
 
 
 @login_required
+@permission_required('base.is_student', raise_exception=True)
 @permission_required('attestation.can_access_attestation', raise_exception=True)
 def home(request):
     student = student_mdl.find_by_user(request.user)

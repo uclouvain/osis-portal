@@ -37,7 +37,7 @@ def fetch_json_attestation_statuses(registration_id):
     return json_attestation_statuses
 
 
-def fetch_json_attestation(registration_id, academic_year):
+def fetch_json_attestation(registration_id):
     json_attestation = None
     message = generate_registration_id_message(registration_id)
     if message:
@@ -50,7 +50,5 @@ def fetch_json_attestation(registration_id, academic_year):
 
 def generate_registration_id_message(registration_id):
     if registration_id:
-        message = dict()
-        message['registration_id'] = registration_id
-        return json.dumps(message)
+        return json.dumps({'registration_id': registration_id})
     return None

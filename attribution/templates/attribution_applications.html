@@ -32,6 +32,11 @@
     {% block breadcrumb %}
         <li>{% trans 'my_applications' %}</li>
     {% endblock %}
+    <a href="http://uclouvain.github.io/osis/assets/user_manual_portal_fr.pdf"
+       target="help" id="lnk_user_manual_section"><span
+            class="glyphicon glyphicon-question-sign pull-right"
+            style="font-size: 14pt; color: green"
+            aria-hidden="true"></span></a>
 </ol>
 {% endblock %}
 {% block content %}
@@ -43,16 +48,16 @@
         <div class="panel-body">
             <a href="{% url 'tutor_application_create' %}"
                id="lnk_tutor_application_create"
-               class="btn btn-default pull-right"
+               class="btn btn-primary pull-right"
                role="button" title="{% trans 'create_an_tutor_application'%}">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> {% trans 'create_an_tutor_application' %}
             </a>
             <br>
             <br>
         </div>
         {% if applications %}
             <!--It's normal that the table is outside of the body.  It's for a better display -->
-            <table class="table">
+            <table class="table table-striped">
                 <thead>
                     <tr>
                         <th colspan="2"></th>
@@ -73,48 +78,51 @@
                         <th></th>
                     </tr>
                 <thead>
+                <tbody>
+                    {% for application in applications %}
+                        <tr>
+                            <td>{{ application.id }}
+                                <a title="{%trans 'edit'%}"
+                                   href="{% url 'edit_tutor_application' application.tutor_application.id %}"
+                                   id="lnk_application_edit">
+                                    {{ application.tutor_application.learning_unit_year.acronym }}
+                                </a>
+                            </td>
+                            <td>
+                                <a title="{%trans 'edit'%}"
+                                   href="{% url 'edit_tutor_application' application.tutor_application.id %}"
+                                  id="lnk_application_edit">
+                                {{ application.tutor_application.learning_unit_year.title }}
+                                </a>
+                            </td>
+                            <td style="border-left-style: solid;border-left-width:1px;">
+                                {{ application.lecturing_duration | default_if_none:''}}
+                            </td>
+                            <td>
+                                {{ application.practice_duration | default_if_none:''}}
 
-                {% for application in applications %}
-                    <tr>
-                        <td>{{ application.id }}
-                            <a title="{%trans 'edit'%}"
-                               href="{% url 'edit_tutor_application' application.tutor_application.id %}"
-                               id="lnk_application_edit">
-                                {{ application.tutor_application.learning_unit_year.acronym }}
-                            </a>
-                        </td>
-                        <td>
-                            <a title="{%trans 'edit'%}"
-                               href="{% url 'edit_tutor_application' application.tutor_application.id %}"
-                              id="lnk_application_edit">
-                            {{ application.tutor_application.learning_unit_year.title }}
-                            </a>
-                        </td>
-                        <td style="border-left-style: solid;border-left-width:1px;">
-                            {{ application.lecturing_duration | default_if_none:''}}
-                        </td>
-                        <td>
-                            {{ application.practice_duration | default_if_none:''}}
-
-                        </td>
-                        <td style="border-left-style: solid;border-left-width:1px;">{{ application.vacant_attribution_charge_lecturing | default_if_none:''}}</td>
-                        <td>{{ application.vacant_attribution_charge_practical | default_if_none:''}}</td>
-                        <td style="border-left-style: solid;border-left-width:1px;">{{ application.application_charge_lecturing.allocation_charge | default_if_none:''}}</td>
-                        <td>{{ application.application_charge_practical.allocation_charge | default_if_none:''}}</td>
-                        <td>{% if application.tutor_application.function  %}{% trans application.tutor_application.function %}{% endif %}</td>
-                        <td>
-                            <form action="{% url 'delete_tutor_application' application.tutor_application.id %}"
-                                  id="form_delete_"{{ application.tutor_application.id }}>
-                                <button class="btn btn-warning"
-                                        id="lnk_application_delete_{{ application.tutor_application.id }}"
-                                        type="submit" title="{%trans 'remove'%}">
-                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                            </form>
-                        </td>
-                    </tr>
-                {% endfor %}
+                            </td>
+                            <td style="border-left-style: solid;border-left-width:1px;">{{ application.vacant_attribution_charge_lecturing | default_if_none:''}}</td>
+                            <td>{{ application.vacant_attribution_charge_practical | default_if_none:''}}</td>
+                            <td style="border-left-style: solid;border-left-width:1px;">{{ application.application_charge_lecturing.allocation_charge | default_if_none:''}}</td>
+                            <td>{{ application.application_charge_practical.allocation_charge | default_if_none:''}}</td>
+                            <td>{% if application.tutor_application.function  %}{% trans application.tutor_application.function %}{% endif %}</td>
+                            <td>
+                                <form action="{% url 'delete_tutor_application' application.tutor_application.id %}"
+                                      id="form_delete_{{ application.tutor_application.id }}">
+                                    <button class="btn btn-warning"
+                                            id="lnk_application_delete_{{ application.tutor_application.id }}"
+                                            type="submit" title="{%trans 'remove'%}">
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </table>
             <br>
+        {% else %}
+            <div class="alert alert-info">{%  trans 'no_tutor_application' %}</div>
         {% endif %}
     </div>
     <div class="panel panel-default"

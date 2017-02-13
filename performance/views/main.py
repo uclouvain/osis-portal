@@ -24,7 +24,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
-
+from django.core.exceptions import PermissionDenied
 
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
@@ -33,6 +33,7 @@ from performance import models as mdl_performance
 from performance.forms import RegistrationIdForm
 from base.views import layout
 import json
+from performance.models.enums import offer_registration_state
 
 
 @login_required
@@ -45,8 +46,10 @@ def view_performance_home(request):
     list_student_programs = None
     if stud:
         list_student_programs = get_student_programs_list(stud)
-    return layout.render(request, "performance_home.html", {"student": stud,
-                                                            "programs": list_student_programs})
+    data = {"student": stud,
+            "programs": list_student_programs,
+            "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE}
+    return layout.render(request, "performance_home.html", data)
 
 
 @login_required
@@ -56,13 +59,20 @@ def display_result_for_specific_student_performance(request, pk):
     Display the student result for a particular year and program.
     """
     stud = student.find_by_user(request.user)
-    stud_perf = mdl_performance.student_performance.find_by_pk(pk)
+    stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
     if not check_right_access(stud_perf, stud):
-        stud_perf = None
+        raise PermissionDenied
     document = json.dumps(stud_perf.data) if stud_perf else None
     creation_date = stud_perf.creation_date if stud_perf else None
+    update_date = stud_perf.update_date if stud_perf else None
+    fetch_timed_out = stud_perf.fetch_timed_out if stud_perf else None
+    authorized = stud_perf.authorized if stud_perf else None
 
-    return layout.render(request, "performance_result.html", {"results": document, "creation_date": creation_date})
+    return layout.render(request, "performance_result.html", {"results": document,
+                                                              "creation_date": creation_date,
+                                                              "update_date": update_date,
+                                                              "fetch_timed_out": fetch_timed_out,
+                                                              "authorized": authorized})
 
 
 @login_required
@@ -100,8 +110,10 @@ def visualize_student_programs(request, registration_id):
     if stud:
         list_student_programs = get_student_programs_list(stud)
 
-    return layout.render(request, "performance_home.html", {"student": stud,
-                                                            "programs": list_student_programs})
+    data = {"student": stud,
+            "programs": list_student_programs,
+            "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE}
+    return layout.render(request, "performance_home.html", data)
 
 
 @login_required
@@ -114,8 +126,15 @@ def visualize_student_result(request, pk):
     stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
     document = json.dumps(stud_perf.data) if stud_perf else None
     creation_date = stud_perf.creation_date if stud_perf else None
+    update_date = stud_perf.update_date if stud_perf else None
+    fetch_timed_out = stud_perf.fetch_timed_out if stud_perf else None
+    authorized = stud_perf.authorized if stud_perf else None
 
-    return layout.render(request, "performance_result.html", {"results": document, "creation_date": creation_date})
+    return layout.render(request, "performance_result.html", {"results": document,
+                                                              "creation_date": creation_date,
+                                                              "update_date": update_date,
+                                                              "fetch_timed_out": fetch_timed_out,
+                                                              "authorized": authorized})
 
 
 # *************************** UTILITY FUNCTIONS
@@ -130,16 +149,19 @@ def query_result_to_list(query_result):
     l = []
     for row in query_result:
         d = convert_student_performance_to_dic(row)
-        l.append(d)
+        allowed_registration_states = [value for key, value in offer_registration_state.OFFER_REGISTRAION_STATES]
+        if d.get("offer_registration_state") in allowed_registration_states:
+            l.append(d)
     return l
 
 
 def convert_student_performance_to_dic(student_performance_obj):
     d = dict()
-    d["academic_year"] = student_performance_obj.academic_year
+    d["academic_year"] = student_performance_obj.academic_year_template_formated
     d["acronym"] = student_performance_obj.acronym
     d["title"] = json.loads(json.dumps(student_performance_obj.data))["monAnnee"]["monOffre"]["offre"]["intituleComplet"]
     d["pk"] = student_performance_obj.pk
+    d["offer_registration_state"] = student_performance_obj.offer_registration_state
     return d
 
 

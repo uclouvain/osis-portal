@@ -124,16 +124,14 @@ def get_attribution_informations(an_attribution):
                                                            component_type.PRACTICAL_EXERCISES,
                                                            an_attribution),
             FUNCTION: an_attribution.function,
-            RENEW: define_renew_possible(a_tutor, a_learning_unit_year),
+            RENEW: define_renew_possible(a_tutor, a_learning_unit_year, an_attribution.function),
             TEAM: a_learning_unit_year.team,
             START_ACADEMIC_YEAR: format_academic_year(start),
             END_ACADEMIC_YEAR: format_end_academic_year(end),
             VACANT_ATTRIBUTION_CHARGE_LECTURING:
                 get_vacant_attribution_allocation_charge(next_learning_unit_year, component_type.LECTURING),
             VACANT_ATTRIBUTION_CHARGE_PRACTICAL:
-                get_vacant_attribution_allocation_charge(next_learning_unit_year, component_type.PRACTICAL_EXERCISES),
-            TUTOR_APPLICATION: mdl_attribution.tutor_application.find_tutor_learning_unit_year(a_tutor,
-                                                                                               next_learning_unit_year)}
+                get_vacant_attribution_allocation_charge(next_learning_unit_year, component_type.PRACTICAL_EXERCISES)}
 
 
 def get_application_informations(a_tutor_application):
@@ -239,17 +237,13 @@ def get_tutor_applications(a_year, a_tutor):
 
 
 def define_tutor_application_function(a_tutor_application):
-    a_learning_unit_year = a_tutor_application.learning_unit_year
-    if sum_tutor_application_allocated_charges(a_tutor_application) == tutor_charge.sum_learning_unit_year_duration(a_learning_unit_year):
-        return function.HOLDER
-
-    return function.CO_HOLDER
-
-
-def define_function(a_learning_unit_year):
-    if sum_attribution_allocation_charges(a_learning_unit_year) == tutor_charge.sum_learning_unit_year_duration(a_learning_unit_year):
-        return function.HOLDER
-    return function.CO_HOLDER
+    if a_tutor_application.function and a_tutor_application.function == function.COORDINATOR:
+        return function.COORDINATOR
+    else:
+        a_learning_unit_year = a_tutor_application.learning_unit_year
+        if sum_tutor_application_allocated_charges(a_tutor_application) == tutor_charge.sum_learning_unit_year_duration(a_learning_unit_year):
+            return function.HOLDER
+        return function.CO_HOLDER
 
 
 def create_application_charge(a_new_tutor_application, charge_duration, a_component_type):
@@ -282,13 +276,16 @@ def get_terminating_charges(a_year, a_tutor):
     an_academic_year = mdl_base.academic_year.find_by_year(a_year)
 
     if an_academic_year:
-        attribution_charges = mdl_attribution.attribution\
+        attributions = mdl_attribution.attribution\
             .find_by_tutor_year_order_by_acronym_function(a_tutor, an_academic_year)
         attributions_vacant = []
-        for attribution in attribution_charges:
+        for attribution in attributions:
             next_learning_unit_year = get_learning_unit_for_next_year(attribution.learning_unit_year)
-            if next_learning_unit_year and not existing_tutor_application_for_next_year(a_tutor, attribution.learning_unit_year):
-                if next_learning_unit_year.in_charge and attribution.function != function.DEPUTY:
+            a_function = duplicated_function(attribution, attributions)
+            if next_learning_unit_year and not existing_tutor_application_for_next_year(a_tutor,
+                                                                                        attribution.learning_unit_year,
+                                                                                        a_function):
+                if next_learning_unit_year.in_charge and not is_deputy_function(attribution.function):
                     attributions_vacant.append(attribution)
         return get_attribution_data(attributions_vacant)
     return []
@@ -325,7 +322,7 @@ def get_tutor_application_charge(a_component_type, a_tutor_application):
 
 
 def get_application_charge(a_tutor, a_learning_unit_year, a_component_type):
-    for an_tutor_application in mdl_attribution.tutor_application.search(a_tutor, a_learning_unit_year):
+    for an_tutor_application in mdl_attribution.tutor_application.search(a_tutor, a_learning_unit_year, None):
         for a_learning_unit_component in mdl_base.learning_unit_component.search(a_learning_unit_year, a_component_type):
             application_charges = mdl_attribution.application_charge.search(an_tutor_application,
                                                                             a_learning_unit_component)
@@ -398,18 +395,15 @@ def renew(request):
 
 
 def create_tutor_application_from_attribution(an_attribution):
-    attribution_lecturing_duration = tutor_charge.get_attribution_allocation_charge(an_attribution.tutor,
-                                                                                    an_attribution.learning_unit_year,
-                                                                                    component_type.LECTURING)
-    attribution_practical_duration = tutor_charge.get_attribution_allocation_charge(an_attribution.tutor,
-                                                                                    an_attribution.learning_unit_year,
-                                                                                    component_type.PRACTICAL_EXERCISES)
+    attribution_lecturing_duration = get_attribution_allocation_charge(an_attribution,
+                                                                       component_type.LECTURING)
+    attribution_practical_duration = get_attribution_allocation_charge(an_attribution,
+                                                                       component_type.PRACTICAL_EXERCISES)
     next_academic_year = mdl_base.academic_year.find_by_year(an_attribution.learning_unit_year.academic_year.year+1)
 
     next_learning_unit_years = mdl_base.learning_unit_year.search(next_academic_year,
                                                                   None,
-                                                                  an_attribution.learning_unit_year.learning_unit,
-                                                                  None)
+                                                                  an_attribution.learning_unit_year.learning_unit)
     next_learning_unit_year = None
     if next_learning_unit_years:
         next_learning_unit_year = next_learning_unit_years[0]
@@ -424,23 +418,26 @@ def create_tutor_application_from_attribution(an_attribution):
     a_new_tutor_application.save()
 
     application_charge_lecturing = create_application_charge(a_new_tutor_application,
-                              attribution_lecturing_duration,
-                              component_type.LECTURING)
+                                                             attribution_lecturing_duration,
+                                                             component_type.LECTURING)
     application_charge_practical = create_application_charge(a_new_tutor_application,
-                              attribution_practical_duration,
-                              component_type.PRACTICAL_EXERCISES)
+                                                             attribution_practical_duration,
+                                                             component_type.PRACTICAL_EXERCISES)
+    a_new_tutor_application.function = define_tutor_application_function(a_new_tutor_application)
+    a_new_tutor_application.save()
+
     queue_sender.send_message(
         settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
         message_generation.generate_message_from_application_charge(
             application_charge_lecturing,
             UPDATE_OPERATION,
-            define_tutor_application_function(a_new_tutor_application)))
+            a_new_tutor_application.function))
 
     queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
                               message_generation.generate_message_from_application_charge(
                                   application_charge_practical,
                                   UPDATE_OPERATION,
-                                  define_tutor_application_function(a_new_tutor_application)))
+                                  a_new_tutor_application.function))
     return a_new_tutor_application
 
 
@@ -533,9 +530,9 @@ def save(request, tutor_application_id):
 
     if form.is_valid():
         application_charge_lecturing = allocation_charge_update(request.POST.get('application_charge_lecturing_id'),
-                                 form['charge_lecturing'].value().replace(',', '.'))
+                                                                form['charge_lecturing'].value().replace(',', '.'))
         application_charge_practical = allocation_charge_update(request.POST.get('application_charge_practical_id'),
-                                 form['charge_practical'].value().replace(',', '.'))
+                                                                form['charge_practical'].value().replace(',', '.'))
 
         if tutor_application_to_save:
             tutor_application_to_save.course_summary = form['course_summary'].value()
@@ -587,7 +584,7 @@ def allocation_charge_update(an_application_charge_id, a_field_value):
 
 def get_learning_unit_year_vacant(a_year, an_acronym, a_tutor):
     an_academic_year = mdl_base.academic_year.find_by_year(a_year)
-    learning_unit_years = mdl_base.learning_unit_year.search(an_academic_year, an_acronym, None, None)
+    learning_unit_years = mdl_base.learning_unit_year.search(an_academic_year, an_acronym, None)
     for a_learning_unit_year in learning_unit_years:
         if a_learning_unit_year.vacant:
             return get_new_attribution_informations(a_learning_unit_year, a_tutor)
@@ -612,8 +609,8 @@ def is_team_application_possible(a_learning_unit_year):
 
 
 def is_application_possible(a_learning_unit_year, a_tutor):
-    a_tutor_application = mdl_attribution.tutor_application.find_tutor_learning_unit_year(a_tutor, a_learning_unit_year)
-    if a_tutor_application:
+    tutor_applications = mdl_attribution.tutor_application.search(a_tutor, a_learning_unit_year, None)
+    if tutor_applications.exists():
         return False
     return True
 
@@ -634,10 +631,10 @@ def get_new_attribution_informations(a_learning_unit_year, a_tutor):
     return d
 
 
-def define_renew_possible(a_tutor, a_learning_unit_year):
+def define_renew_possible(a_tutor, a_learning_unit_year, a_function):
     next_learning_unit_year = get_learning_unit_for_next_year(a_learning_unit_year)
     if is_vacant(next_learning_unit_year) and is_team_application_possible(next_learning_unit_year):
-        tutor_applications = mdl_attribution.tutor_application.search(a_tutor, next_learning_unit_year)
+        tutor_applications = mdl_attribution.tutor_application.search(a_tutor, next_learning_unit_year, a_function)
         if tutor_applications:
             return False
         return True
@@ -648,6 +645,7 @@ def define_renew_possible(a_tutor, a_learning_unit_year):
 def new(request):
     a_learning_unit_year_id = request.POST.get('learning_unit_year_id')
     tutor_application_to_save = None
+    learning_unit_year = None
     if a_learning_unit_year_id:
         learning_unit_year = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year_id)
         tutor_application_to_save = create_tutor_application_from_learning_unit_year(learning_unit_year, request.user)
@@ -694,9 +692,10 @@ def sum_application_charge_allocation_by_component(a_tutor_application, a_compon
     return NO_CHARGE
 
 
-def existing_tutor_application_for_next_year(a_tutor, a_learning_unit_year):
+def existing_tutor_application_for_next_year(a_tutor, a_learning_unit_year, a_function):
     tutor_applications = mdl_attribution.tutor_application.search(a_tutor,
-                                                                  get_learning_unit_for_next_year(a_learning_unit_year))
+                                                                  get_learning_unit_for_next_year(a_learning_unit_year),
+                                                                  a_function)
     if tutor_applications:
         return True
 
@@ -733,3 +732,32 @@ def format_end_academic_year(a_year):
     if a_year:
         return "{0}-{1}".format(a_year, a_year+1)
     return ""
+
+
+def duplicated_function(current_attribution, attributions):
+    for attribution in attributions:
+        if attribution != current_attribution \
+                and attribution.learning_unit_year == current_attribution.learning_unit_year:
+            return current_attribution.function
+    return None
+
+
+def get_attribution_allocation_charge(an_attribution, a_component_type):
+    a_learning_unit_year = an_attribution.learning_unit_year
+    tot_allocation_charge = NO_CHARGE
+    a_learning_unit_components = mdl_base.learning_unit_component.search(a_learning_unit_year, a_component_type)
+    for a_learning_unit_component in a_learning_unit_components:
+        attribution_charges = mdl_attribution.attribution_charge.search(an_attribution, a_learning_unit_component)
+        for attribution_charge in attribution_charges:
+            tot_allocation_charge += attribution_charge.allocation_charge
+    return tot_allocation_charge
+
+
+def is_deputy_function(a_function):
+    if a_function and \
+        (a_function == function.DEPUTY or
+        a_function == function.DEPUTY_AUTHORITY or
+        a_function == function.DEPUTY_SABBATICAL or
+        a_function == function.DEPUTY_TEMPORARY):
+        return True
+    return False

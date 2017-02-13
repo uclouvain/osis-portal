@@ -56,7 +56,11 @@ SEPTEMBER = "septembre"
 @login_required
 @permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def home(request):
-    return by_year(request, datetime.datetime.now().year)
+    a_year = datetime.datetime.now().year
+    current_academic_year = mdl_base.academic_year.current_academic_year()
+    if current_academic_year:
+        a_year = current_academic_year.year
+    return by_year(request, a_year)
 
 
 def get_person(a_user):
@@ -197,15 +201,16 @@ def get_url_learning_unit_year(a_learning_unit_year):
     return None
 
 
-def get_students(a_learning_unit_year):
-    return mdl_base.learning_unit_enrollment.find_by_learningunit_enrollment(a_learning_unit_year)
+def get_students(a_learning_unit_year_id, a_person):
+    a_learning_unit_year = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year_id)
+    return get_learning_unit_years_list(a_learning_unit_year, mdl_base.tutor.find_by_person(a_person))
 
 
 @login_required
 @permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def show_students(request, a_learning_unit_year):
     students_list = []
-    for learning_unit_enrollment in get_students(a_learning_unit_year):
+    for learning_unit_enrollment in get_students(a_learning_unit_year, get_person(request.user)):
         students_list.append(set_student_for_display(learning_unit_enrollment))
     return render(request, "students_list.html", {
         'students': students_list,
@@ -274,6 +279,7 @@ def set_student_for_display(learning_unit_enrollment):
         'name': "{0}, {1}".format(learning_unit_enrollment.offer_enrollment.student.person.last_name,
                                   learning_unit_enrollment.offer_enrollment.student.person.first_name),
         'program': learning_unit_enrollment.offer_enrollment.offer_year.acronym,
+        'acronym': learning_unit_enrollment.learning_unit_year.acronym,
         'registration_id': learning_unit_enrollment.offer_enrollment.student.registration_id,
         'january_note': get_session_value(session_results, JANUARY, JSON_LEARNING_UNIT_NOTE),
         'january_status': get_session_value(session_results, JANUARY, JSON_LEARNING_UNIT_STATUS),
@@ -310,3 +316,14 @@ def calculate_attribution_format_percentage_allocation_charge(a_learning_unit_ye
     return None
 
 
+def get_learning_unit_years_list(a_learning_unit_year, a_tutor):
+    # Pour trouver les inscriptions aux partims/classe identifiables dans learning_unit_year par leurs
+    # Par exemple l'acronym du partim pour lu LCOPS1124 c'est LCOPS1124L
+    learning_unit_years_allocated = []
+    for lu in mdl_base.learning_unit_year.find_by_acronym(a_learning_unit_year.acronym,
+                                                          a_learning_unit_year.academic_year):
+        attribution = mdl_attribution.attribution.search(a_tutor, lu)
+        if attribution.exists():
+            learning_unit_years_allocated.append(lu)
+
+    return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(learning_unit_years_allocated)
