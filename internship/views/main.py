@@ -43,6 +43,7 @@ def view_internship_selection(request):
     NUMBER_NON_MANDATORY_INTERNSHIPS = 6
     internships_offers = None
     speciality_form = SpecialityForm()
+
     if request.method == 'POST':
         if "select_speciality" in request.POST:
             speciality_form = SpecialityForm(request.POST)

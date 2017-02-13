@@ -29,4 +29,4 @@ from internship.models.internship_speciality import InternshipSpeciality
 
 
 class SpecialityForm(forms.Form):
-    speciality = forms.ModelChoiceField(queryset=InternshipSpeciality.objects.all())
+    speciality = forms.ModelChoiceField(queryset=InternshipSpeciality.objects.all(), required=False)
