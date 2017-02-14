@@ -83,7 +83,7 @@
        <div class="row">
 
            <form id="assign_preference" method="post">
-
+                {{ formset.management_form }}
                <table class="table table-striped">
                    <thead>
                        <th>organization</th>
@@ -91,21 +91,27 @@
                        <th>number_first_choice</th>
                        <th>preference</th>
                    </thead>
-                    {% for offer in  internships_offers %}
+
+                    {% for offer_form in  offers_forms %}
+                        {% with offer=offer_form.0 %}
+                            {% with form=offer_form.1 %}
                    <tr>
                         <td>{{ offer.organization }}</td>
                         <td>{{ offer.maximum_enrollments }}</td>
-                        <td>0</td>
+                        <td> {{ formset.counter.preference }} </td>
                         <td>
-                            <select id="offer_{{ offer.id }}" class="form-control">
-                                <option>--</option>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
+                            <select id="{{ form.id_for_label }}" name="{{ form.html_name }}" class="form-control">
+                                {% for x,y in form.fields.preference.choices %}
+                                    <option value="{{ x }}"
+                                    {% if form.speciality.value == x|stringformat:"i" %} selected {% endif %}>
+                                {{ y }}
+                            </option>
+                        {% endfor %}
                             </select>
                         </td>
                    </tr>
+                                {% endwith %}
+                        {% endwith %}
                     {% endfor %}
                </table>
 

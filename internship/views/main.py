@@ -28,6 +28,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 from base.views import layout
 import internship.models as mdl_internship
 from internship.forms.form_select_speciality import SpecialityForm
+from internship.forms.form_offer_preference import OfferPreferenceFormSet, OfferPreferenceForm
+from django.forms import formset_factory
 
 
 @login_required
@@ -41,7 +43,7 @@ def view_internship_home(request):
 @permission_required('base.is_student', raise_exception=True)
 def view_internship_selection(request):
     NUMBER_NON_MANDATORY_INTERNSHIPS = 6
-    internships_offers = None
+    internships_offers = []
     speciality_form = SpecialityForm()
 
     if request.method == 'POST':
@@ -51,8 +53,12 @@ def view_internship_selection(request):
                 speciality_selected = speciality_form.cleaned_data["speciality"]
                 internships_offers = mdl_internship.internship_offer.find_by_speciality(speciality_selected)
 
+    offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet, extra=2)
+    formset = offer_preference_formset()
+
     return layout.render(request, "internship_selection.html",
                          {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1),
                           "speciality_form": speciality_form,
-                          "internships_offers": internships_offers})
+                          "formset": formset,
+                          "offers_forms": zip(internships_offers, formset)})
 
