@@ -166,10 +166,11 @@ def get_learning_unit_component_duration(a_learning_unit_year, a_component_type)
     a_learning_unit_components = mdl_base.learning_unit_component.search(a_learning_unit_year, a_component_type)
     tot_duration = 0
     for a_learning_unit_component in a_learning_unit_components:
-        coefficient_repetition = 1
-        if a_learning_unit_component.coefficient_repetition:
-            coefficient_repetition = a_learning_unit_component.coefficient_repetition
-        tot_duration += (a_learning_unit_component.duration * coefficient_repetition)
+        if a_learning_unit_component.duration:
+            coefficient_repetition = 1
+            if a_learning_unit_component.coefficient_repetition:
+                coefficient_repetition = a_learning_unit_component.coefficient_repetition
+            tot_duration += (a_learning_unit_component.duration * coefficient_repetition)
     return tot_duration
 
 
