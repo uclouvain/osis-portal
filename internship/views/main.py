@@ -43,8 +43,12 @@ def view_internship_home(request):
 @permission_required('base.is_student', raise_exception=True)
 def view_internship_selection(request):
     NUMBER_NON_MANDATORY_INTERNSHIPS = 6
-    internships_offers = []
+
+    internships_offers = None
+
     speciality_form = SpecialityForm()
+    offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet, extra=2)
+    formset = offer_preference_formset()
 
     if request.method == 'POST':
         if "select_speciality" in request.POST:
@@ -52,13 +56,17 @@ def view_internship_selection(request):
             if speciality_form.is_valid():
                 speciality_selected = speciality_form.cleaned_data["speciality"]
                 internships_offers = mdl_internship.internship_offer.find_by_speciality(speciality_selected)
+        elif "select_offers" in request.POST:
+            formset = offer_preference_formset(request.POST)
+            if formset.is_valid():
+                print("pass")
 
-    offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet, extra=2)
-    formset = offer_preference_formset()
-
+    zipped_data = None
+    if internships_offers:
+        zipped_data = zip(internships_offers, formset)
     return layout.render(request, "internship_selection.html",
                          {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1),
                           "speciality_form": speciality_form,
                           "formset": formset,
-                          "offers_forms": zip(internships_offers, formset)})
+                          "offers_forms": zipped_data})
 

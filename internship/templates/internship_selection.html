@@ -83,6 +83,7 @@
        <div class="row">
 
            <form id="assign_preference" method="post">
+               {% csrf_token %}
                 {{ formset.management_form }}
                <table class="table table-striped">
                    <thead>
@@ -117,7 +118,7 @@
 
                 <br>
 
-           {% if internships_offers %}
+           {% if offers_forms  %}
                 <button type="submit" class="btn btn-primary" name="select_offers">
                     <span class="glyphicon glyphicon-ok"></span>
                     Submit choices
