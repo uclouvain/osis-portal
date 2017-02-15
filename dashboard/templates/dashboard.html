@@ -90,7 +90,7 @@
                     </div>
                     <br>
                 {% endif %}
-                {% if perms.base.is_student %}
+                {% if 'exam_enrollment' in installed_apps and perms.base.is_student %}
                     <div class="row">
                         <div class="col-md-2"><i class="fa fa-list-alt" style="font-size: 400%; color: #6699FF;"></i></div>
                         <div class="col-md-10">
