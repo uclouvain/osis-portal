@@ -24,12 +24,12 @@
 #
 ##############################################################################
 from django.db import models
-from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+from django.contrib import admin
 from attribution.models.enums import function as function_enum
 from django.core.exceptions import ObjectDoesNotExist
 
 
-class TutorApplicationAdmin(SerializableModelAdmin):
+class TutorApplicationAdmin(admin.ModelAdmin):
     list_display = ('tutor', 'function', 'learning_unit_year')
     list_filter = ('function',)
     fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function')}),)
@@ -37,7 +37,7 @@ class TutorApplicationAdmin(SerializableModelAdmin):
     search_fields = ['tutor__person__first_name', 'tutor__person__last_name', 'learning_unit_year__acronym']
 
 
-class TutorApplication(SerializableModel):
+class TutorApplication(models.Model):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     function = models.CharField(max_length=35, blank=True, null=True, choices=function_enum.FUNCTIONS, db_index=True)
     learning_unit_year = models.ForeignKey('base.LearningUnitYear', blank=True, null=True, default=None)
