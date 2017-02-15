@@ -25,12 +25,11 @@
 #
 ##############################################################################
 from django.db import models
-from django.contrib import admin
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from reference import models as mdl_reference
 
 
-class OfferYearDomainAdmin(admin.ModelAdmin):
+class OfferYearDomainAdmin(SerializableModelAdmin):
     list_display = ('domain', 'offer_year')
     fieldsets = ((None, {'fields': ('domain', 'offer_year')}),)
     raw_id_fields = ('domain', 'offer_year')

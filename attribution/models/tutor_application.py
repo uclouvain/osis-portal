@@ -24,13 +24,12 @@
 #
 ##############################################################################
 from django.db import models
-from django.contrib import admin
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from attribution.models.enums import function as function_enum
 from django.core.exceptions import ObjectDoesNotExist
 
 
-class TutorApplicationAdmin(admin.ModelAdmin):
+class TutorApplicationAdmin(SerializableModelAdmin):
     list_display = ('tutor', 'function', 'learning_unit_year')
     list_filter = ('function',)
     fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function')}),)
