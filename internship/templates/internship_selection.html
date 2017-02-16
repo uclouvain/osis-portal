@@ -51,7 +51,7 @@
         <br>
 
         <div class="row">
-            <form action="{% url 'internship_selection' %}" method="post">
+            <form method="post">
                 {% csrf_token %}
                 {{ speciality_form.non_field_errors }}
                 <div class="fieldWrapper col-md-4 form-group">
