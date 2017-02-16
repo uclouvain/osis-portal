@@ -66,12 +66,13 @@ def view_internship_selection(request, internship_id="1"):
     zipped_data = None
     if internships_offers:
         zipped_data = zip(internships_offers, formset)
+
     return layout.render(request, "internship_selection.html",
                          {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1),
                           "speciality_form": speciality_form,
                           "formset": formset,
                           "offers_forms": zipped_data,
-                          "internship_id": int(internship_id)})
+                          "intern_id": int(internship_id)})
 
 
 def save_student_choices(formset, student, internship_id):
