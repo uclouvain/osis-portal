@@ -61,18 +61,7 @@ def view_internship_selection(request):
             formset = offer_preference_formset(request.POST)
             if formset.is_valid():
                 student = mdl_base.student.find_by_user(request.user)
-                for form in formset:
-                    if form.cleaned_data:
-                        offer_pk = form.cleaned_data["offer"]
-                        preference_value = form.cleaned_data["preference"]
-                        if preference_value != 0:
-                            offer = mdl_internship.internship_offer.find_by_pk(offer_pk)
-                            internship_choice = mdl_internship.internship_choice.InternshipChoice(student=student,
-                                                                                                  organization=offer.organization,
-                                                                                                  choice=preference_value,
-                                                                                                  internship_choice=1,
-                                                                                                  priority=False)
-                            internship_choice.save()
+                save_student_choices(formset, student)
 
     zipped_data = None
     if internships_offers:
@@ -82,4 +71,23 @@ def view_internship_selection(request):
                           "speciality_form": speciality_form,
                           "formset": formset,
                           "offers_forms": zipped_data})
+
+
+def save_student_choices(formset, student):
+    for form in formset:
+        if form.cleaned_data:
+            offer_pk = form.cleaned_data["offer"]
+            preference_value = form.cleaned_data["preference"]
+            if has_been_selected(preference_value):
+                offer = mdl_internship.internship_offer.find_by_pk(offer_pk)
+                internship_choice = mdl_internship.internship_choice.InternshipChoice(student=student,
+                                                                                      organization=offer.organization,
+                                                                                      choice=preference_value,
+                                                                                      internship_choice=1,
+                                                                                      priority=False)
+                internship_choice.save()
+
+
+def has_been_selected(preference_value):
+    return preference_value != 0
 
