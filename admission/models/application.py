@@ -73,7 +73,7 @@ def find_by_user(user):
         an_applicant = applicant.Applicant.objects.get(user=user)
 
         if an_applicant:
-            return Application.objects.filter(applicant=an_applicant)
+            return Application.objects.filter(applicant=an_applicant).order_by('-creation_date')
         else:
             return None
     except ObjectDoesNotExist:

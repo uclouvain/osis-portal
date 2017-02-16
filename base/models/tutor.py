@@ -27,14 +27,13 @@ import logging
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.contrib import admin
 from base.models import person as model_person
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class TutorAdmin(admin.ModelAdmin):
+class TutorAdmin(SerializableModelAdmin):
     list_display = ('person', 'changed')
     fieldsets = ((None, {'fields': ('person',)}),)
     raw_id_fields = ('person', )
