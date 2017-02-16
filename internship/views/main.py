@@ -42,7 +42,7 @@ def view_internship_home(request):
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
-def view_internship_selection(request):
+def view_internship_selection(request, internship_id="1"):
     NUMBER_NON_MANDATORY_INTERNSHIPS = 6
 
     internships_offers = None
@@ -61,7 +61,7 @@ def view_internship_selection(request):
             formset = offer_preference_formset(request.POST)
             if formset.is_valid():
                 student = mdl_base.student.find_by_user(request.user)
-                save_student_choices(formset, student)
+                save_student_choices(formset, student, int(internship_id))
 
     zipped_data = None
     if internships_offers:
@@ -70,10 +70,11 @@ def view_internship_selection(request):
                          {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1),
                           "speciality_form": speciality_form,
                           "formset": formset,
-                          "offers_forms": zipped_data})
+                          "offers_forms": zipped_data,
+                          "internship_id": int(internship_id)})
 
 
-def save_student_choices(formset, student):
+def save_student_choices(formset, student, internship_id):
     for form in formset:
         if form.cleaned_data:
             offer_pk = form.cleaned_data["offer"]
@@ -83,7 +84,7 @@ def save_student_choices(formset, student):
                 internship_choice = mdl_internship.internship_choice.InternshipChoice(student=student,
                                                                                       organization=offer.organization,
                                                                                       choice=preference_value,
-                                                                                      internship_choice=1,
+                                                                                      internship_choice=internship_id,
                                                                                       priority=False)
                 internship_choice.save()
 

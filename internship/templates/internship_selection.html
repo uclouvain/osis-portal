@@ -42,7 +42,7 @@
 
             <ul class="nav nav-tabs">
                 {% for non_mandatory_id in number_non_mandatory_internships %}
-                    <li role="presentation" {% if non_mandatory_id == 1 %} class="active" {% endif %}><a href="#">{% trans 'internship_choice'%} {{ non_mandatory_id }}</a></li>
+                    <li role="presentation" {% if non_mandatory_id == internship_id %} class="active" {% endif %}><a href="{% url 'internship_selection_specific' non_mandatory_id %}">{% trans 'internship_choice'%} {{ non_mandatory_id }}</a></li>
                 {% endfor %}
             </ul>
 

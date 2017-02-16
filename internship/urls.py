@@ -29,5 +29,6 @@ from internship.views import main
 urlpatterns = [
     url(r'^$', main.view_internship_home, name='internship_home'),
     url(r'^selection/$', main.view_internship_selection, name='internship_selection'),
+    url(r'^selection/(?P<internship_id>[0-9]+)/$', main.view_internship_selection, name='internship_selection_specific'),
 ]
 
