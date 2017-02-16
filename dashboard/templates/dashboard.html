@@ -57,7 +57,7 @@
                     <br>
                 {% endif %}
 
-                {% if perms.base.is_tutor and online_application_opened %}
+                {% if 'attribution' in installed_apps and  perms.base.is_tutor and online_application_opened %}
                     <div class="row">
                         <div class="col-md-2"><i class="fa fa-address-card-o" style="font-size: 400%; color: #6699FF;"></i></div>
                         <div class="col-md-10">
@@ -80,7 +80,7 @@
                     <br>
                 {% endif %}
 
-                {% if perms.base.is_tutor %}
+                {% if 'attribution' in installed_apps and perms.base.is_tutor %}
                     <div class="row">
                         <div class="col-md-2"><i class="fa fa-list-alt" style="font-size: 400%; color: #6699FF;"></i></div>
                         <div class="col-md-10">
