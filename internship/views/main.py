@@ -26,6 +26,7 @@
 ############################################################################
 from django.contrib.auth.decorators import login_required, permission_required
 from base.views import layout
+import base.models as mdl_base
 import internship.models as mdl_internship
 from internship.forms.form_select_speciality import SpecialityForm
 from internship.forms.form_offer_preference import OfferPreferenceFormSet, OfferPreferenceForm
@@ -59,10 +60,19 @@ def view_internship_selection(request):
         elif "select_offers" in request.POST:
             formset = offer_preference_formset(request.POST)
             if formset.is_valid():
+                student = mdl_base.student.find_by_user(request.user)
                 for form in formset:
                     if form.cleaned_data:
-                        print(form)
-                        print(form.cleaned_data['offer'])
+                        offer_pk = form.cleaned_data["offer"]
+                        preference_value = form.cleaned_data["preference"]
+                        if preference_value != 0:
+                            offer = mdl_internship.internship_offer.find_by_pk(offer_pk)
+                            internship_choice = mdl_internship.internship_choice.InternshipChoice(student=student,
+                                                                                                  organization=offer.organization,
+                                                                                                  choice=preference_value,
+                                                                                                  internship_choice=1,
+                                                                                                  priority=False)
+                            internship_choice.save()
 
     zipped_data = None
     if internships_offers:

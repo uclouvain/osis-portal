@@ -25,6 +25,7 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class InternshipOfferAdmin(admin.ModelAdmin):
@@ -54,3 +55,10 @@ class InternshipOffer(models.Model):
 
 def find_by_speciality(speciality):
     return InternshipOffer.objects.filter(speciality=speciality)
+
+
+def find_by_pk(a_pk):
+    try:
+        return InternshipOffer.objects.get(pk=a_pk)
+    except ObjectDoesNotExist:
+        return None

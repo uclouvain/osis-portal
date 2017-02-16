@@ -100,7 +100,9 @@
                         <td>{{ offer.organization }}</td>
                         <td>{{ offer.maximum_enrollments }}</td>
                         <td> {{ formset.counter.preference }} </td>
-                        <td hidden>TODO put numeric input</td>
+                        <td hidden>
+                            <input type="number" id="{{ form.offer.id_for_label }}" name="{{ form.offer.html_name }}" class="form-control" value="{{ offer.organization.pk }}">
+                        </td>
                         <td>
                             <select id="{{ form.preference.id_for_label }}" name="{{ form.preference.html_name }}" class="form-control">
                                 {% for x,y in form.fields.preference.choices %}
