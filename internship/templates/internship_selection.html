@@ -100,11 +100,12 @@
                         <td>{{ offer.organization }}</td>
                         <td>{{ offer.maximum_enrollments }}</td>
                         <td> {{ formset.counter.preference }} </td>
+                        <td hidden>TODO put numeric input</td>
                         <td>
-                            <select id="{{ form.id_for_label }}" name="{{ form.html_name }}" class="form-control">
+                            <select id="{{ form.preference.id_for_label }}" name="{{ form.preference.html_name }}" class="form-control">
                                 {% for x,y in form.fields.preference.choices %}
                                     <option value="{{ x }}"
-                                    {% if form.speciality.value == x|stringformat:"i" %} selected {% endif %}>
+                                    {% if form.preference.value == x|stringformat:"i" %} selected {% endif %}>
                                 {{ y }}
                             </option>
                         {% endfor %}

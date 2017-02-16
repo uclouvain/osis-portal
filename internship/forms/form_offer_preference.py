@@ -37,7 +37,7 @@ class OfferPreferenceForm(forms.Form):
         ('4', _('fourth_choice'))
     )
     offer = forms.IntegerField()
-    preference = forms.ChoiceField(choices=PREFERENCE_CHOICES, required=False)
+    preference = forms.ChoiceField(choices=PREFERENCE_CHOICES, required=True)
 
 
 class OfferPreferenceFormSet(forms.BaseFormSet):

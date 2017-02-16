@@ -59,7 +59,10 @@ def view_internship_selection(request):
         elif "select_offers" in request.POST:
             formset = offer_preference_formset(request.POST)
             if formset.is_valid():
-                print("pass")
+                for form in formset:
+                    if form.cleaned_data:
+                        print(form)
+                        print(form.cleaned_data['offer'])
 
     zipped_data = None
     if internships_offers:
