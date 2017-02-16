@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,28 +23,30 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
-from django.utils import timezone
-from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+from django.test import TestCase, Client
+
+import base.tests.models.test_student
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 
-class DecreeAdmin(SerializableModelAdmin):
-    list_display = ('name', 'start_date', 'end_date')
-    fieldsets = ((None, {'fields': ('name', 'start_date', 'end_date')}),)
-    ordering = ('name',)
-    search_fields = ['name']
+class TestMain(TestCase):
+    def setUp(self):
+        self.c = Client()
+        self.student = base.tests.models.test_student.create_student("45451298")
+        self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
+        self.student.person.user = self.user
+        self.student.person.save()
+
+    def test_can_access_internship_home(self):
+        home_url = reverse("internship_home")
+        response = self.c.get(home_url)
+        self.assertEqual(response.status_code, 302)
+
+        self.c.force_login(self.user)
+        response = self.c.get(home_url)
+        self.assertEqual(response.status_code, 200)
 
 
-class Decree(SerializableModel):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    name = models.CharField(max_length=80, unique=True)
-    start_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
-
-    def __str__(self):
-        return self.name
 
 
-def find_current_decree():
-    return Decree.objects.filter(start_date__lte=timezone.now())\
-                         .filter(end_date__gte=timezone.now()).first()

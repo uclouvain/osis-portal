@@ -23,8 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModel
-from django.contrib import admin
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.db import models
 from base import models as mdl
 from dissertation.models import dissertation
@@ -42,7 +41,7 @@ INVISIBLE_JUSTIFICATION_KEYWORDS = ('auto_add_jury',
                                     )
 
 
-class DissertationUpdateAdmin(admin.ModelAdmin):
+class DissertationUpdateAdmin(SerializableModelAdmin):
     list_display = ('dissertation', 'author', 'status_from', 'status_to', 'person', 'created')
     raw_id_fields = ('person', 'dissertation')
     search_fields = ('uuid',)
