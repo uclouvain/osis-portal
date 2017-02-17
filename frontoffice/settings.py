@@ -255,7 +255,8 @@ QUEUES = {
     },
     'RPC_QUEUES_TIMEOUT': {
         'PAPER_SHEET': 60,
-        'STUDENT_PERFORMANCE': 15
+        'STUDENT_PERFORMANCE': 15,
+        'EXAM_ENROLLMENT_FORM': 15
     }
 }
 

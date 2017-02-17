@@ -33,6 +33,9 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
+
+        {% include "template_messages.html" %}
+
         <div class="row">
             <div class="col-md-6">
                 {% if 'performance' in installed_apps and perms.base.is_student %}
