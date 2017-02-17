@@ -25,7 +25,6 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-from osis_common.models.serializable_model import SerializableModel
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -34,7 +33,7 @@ class ApplicationChargeAdmin(admin.ModelAdmin):
     raw_id_fields = ('learning_unit_component', 'tutor_application')
 
 
-class ApplicationCharge(SerializableModel):
+class ApplicationCharge(models.Model):
     tutor_application = models.ForeignKey('TutorApplication')
     learning_unit_component = models.ForeignKey('base.LearningUnitComponent')
     allocation_charge = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)

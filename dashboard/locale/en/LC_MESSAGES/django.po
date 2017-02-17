@@ -43,6 +43,9 @@ msgstr "Dashboard"
 msgid "deliberation_date"
 msgstr "Deliberation date"
 
+msgid "desc_lnk_internships"
+msgstr "This process controls students internships."
+
 msgid "desc_lnk_performance"
 msgstr "Show the student results."
 
