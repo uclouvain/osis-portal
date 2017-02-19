@@ -24,11 +24,10 @@
 #
 ##############################################################################
 from django.db import models
-from django.contrib import admin
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
-class LearningUnitAdmin(admin.ModelAdmin):
+class LearningUnitAdmin(SerializableModelAdmin):
     list_display = ('acronym', 'title')
     fieldsets = ((None, {'fields': ('acronym', 'title', 'description')}),)
     search_fields = ['acronym']

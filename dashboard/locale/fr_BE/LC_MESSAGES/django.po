@@ -43,6 +43,9 @@ msgstr "Tableau de bord"
 msgid "deliberation_date"
 msgstr "Date de délibération"
 
+msgid "desc_lnk_internships"
+msgstr "Gestion des stages des étudiants."
+
 msgid "desc_lnk_performance"
 msgstr "Résultats de l'étudiant."
 
