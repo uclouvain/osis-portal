@@ -25,6 +25,7 @@
 ##############################################################################
 from django.contrib import admin
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class InternshipSpecialityAdmin(admin.ModelAdmin):
@@ -44,3 +45,8 @@ class InternshipSpeciality(models.Model):
         return self.name
 
 
+def find_by_id(a_id):
+    try:
+        return InternshipSpeciality.objects.get(id=a_id)
+    except ObjectDoesNotExist:
+        return None

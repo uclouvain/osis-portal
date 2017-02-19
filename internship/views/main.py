@@ -25,6 +25,7 @@
 #
 ############################################################################
 from django.contrib.auth.decorators import login_required, permission_required
+from django.shortcuts import redirect
 from base.views import layout
 import base.models as mdl_base
 import internship.models as mdl_internship
@@ -42,26 +43,21 @@ def view_internship_home(request):
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
-def view_internship_selection(request, internship_id="1"):
+def view_internship_selection(request, internship_id="1", speciality_id="-1"):
     NUMBER_NON_MANDATORY_INTERNSHIPS = 6
 
-    internships_offers = None
+    speciality = mdl_internship.internship_speciality.find_by_id(speciality_id)
+    internships_offers = mdl_internship.internship_offer.find_by_speciality(speciality)
 
     speciality_form = SpecialityForm()
-    offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet, extra=2)
+    offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet, extra=1)
     formset = offer_preference_formset()
 
     if request.method == 'POST':
-        if "select_speciality" in request.POST:
-            speciality_form = SpecialityForm(request.POST)
-            if speciality_form.is_valid():
-                speciality_selected = speciality_form.cleaned_data["speciality"]
-                internships_offers = mdl_internship.internship_offer.find_by_speciality(speciality_selected)
-        elif "select_offers" in request.POST:
-            formset = offer_preference_formset(request.POST)
-            if formset.is_valid():
-                student = mdl_base.student.find_by_user(request.user)
-                save_student_choices(formset, student, int(internship_id))
+        formset = offer_preference_formset(request.POST)
+        if formset.is_valid():
+            student = mdl_base.student.find_by_user(request.user)
+            save_student_choices(formset, student, int(internship_id))
 
     zipped_data = None
     if internships_offers:
@@ -73,6 +69,18 @@ def view_internship_selection(request, internship_id="1"):
                           "formset": formset,
                           "offers_forms": zipped_data,
                           "intern_id": int(internship_id)})
+
+
+@login_required
+@permission_required('base.is_student', raise_exception=True)
+def assign_speciality_for_internship(request, internship_id):
+    speciality_id = None
+    if request.method == "POST":
+        speciality_form = SpecialityForm(request.POST)
+        if speciality_form.is_valid():
+            speciality_selected = speciality_form.cleaned_data["speciality"]
+            speciality_id = speciality_selected.id
+    return redirect("select_internship_speciality", internship_id=internship_id, speciality_id=speciality_id)
 
 
 def save_student_choices(formset, student, internship_id):

@@ -42,7 +42,7 @@
 
             <ul class="nav nav-tabs">
                 {% for non_mandatory_id in number_non_mandatory_internships %}
-                    <li role="presentation" {% if non_mandatory_id == intern_id %} class="active" {% endif %}><a href="{% url 'internship_selection_specific' internship_id=non_mandatory_id  %}">{% trans 'internship_choice'%} {{ non_mandatory_id }}</a></li>
+                    <li role="presentation" {% if non_mandatory_id == intern_id %} class="active" {% endif %}><a href="{% url 'select_internship' internship_id=non_mandatory_id  %}">{% trans 'internship_choice'%} {{ non_mandatory_id }}</a></li>
                 {% endfor %}
             </ul>
 
@@ -51,7 +51,7 @@
         <br>
 
         <div class="row">
-            <form method="post">
+            <form action="{% url 'assign_speciality' internship_id=intern_id %}"  method="post">
                 {% csrf_token %}
                 {{ speciality_form.non_field_errors }}
                 <div class="fieldWrapper col-md-4 form-group">
@@ -71,7 +71,7 @@
 
                 <div class="col-md-2">
                     <br>
-                    <button type="submit" class="btn btn-primary" name="select_speciality">
+                    <button type="submit" class="btn btn-primary">
                         <span class="glyphicon glyphicon-ok"></span>
                     </button>
                 </div>
@@ -122,7 +122,7 @@
                 <br>
 
            {% if offers_forms  %}
-                <button type="submit" class="btn btn-primary" name="select_offers">
+                <button type="submit" class="btn btn-primary">
                     <span class="glyphicon glyphicon-ok"></span>
                     Submit choices
                 </button>
