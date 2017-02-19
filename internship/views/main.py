@@ -45,6 +45,7 @@ def view_internship_home(request):
 @permission_required('base.is_student', raise_exception=True)
 def view_internship_selection(request, internship_id="1", speciality_id="-1"):
     NUMBER_NON_MANDATORY_INTERNSHIPS = 6
+    student = mdl_base.student.find_by_user(request.user)
 
     speciality = mdl_internship.internship_speciality.find_by_id(speciality_id)
     internships_offers = mdl_internship.internship_offer.find_by_speciality(speciality)
@@ -57,9 +58,8 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
     if request.method == 'POST':
         formset = offer_preference_formset(request.POST)
         if formset.is_valid():
-            student = mdl_base.student.find_by_user(request.user)
             remove_previous_choices(student, internship_id)
-            save_student_choices(formset, student, int(internship_id))
+            save_student_choices(formset, student, int(internship_id), speciality)
 
     zipped_data = None
     if internships_offers:
@@ -91,7 +91,7 @@ def remove_previous_choices(student, internship_id):
         previous_choices.delete()
 
 
-def save_student_choices(formset, student, internship_id):
+def save_student_choices(formset, student, internship_id, speciality):
     for form in formset:
         if form.cleaned_data:
             offer_pk = form.cleaned_data["offer"]
@@ -100,6 +100,7 @@ def save_student_choices(formset, student, internship_id):
                 offer = mdl_internship.internship_offer.find_by_pk(offer_pk)
                 internship_choice = mdl_internship.internship_choice.InternshipChoice(student=student,
                                                                                       organization=offer.organization,
+                                                                                      speciality=speciality,
                                                                                       choice=preference_value,
                                                                                       internship_choice=internship_id,
                                                                                       priority=False)

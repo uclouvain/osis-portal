@@ -62,3 +62,4 @@ def find_by_pk(a_pk):
         return InternshipOffer.objects.get(pk=a_pk)
     except ObjectDoesNotExist:
         return None
+
