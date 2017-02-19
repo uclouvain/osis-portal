@@ -23,10 +23,23 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.db import models
+from django.contrib import admin
 
-from internship.models import internship_offer
-from internship.models import internship_speciality
-from internship.models import organization
-from internship.models import internship_choice
-from internship.models import organization_address
 
+class OrganizationAddressAdmin(admin.ModelAdmin):
+    list_display = ('organization', 'label', 'location', 'postal_code', 'city', 'country', 'latitude', 'longitude')
+    fieldsets = ((None, {'fields': ('organization', 'label', 'location', 'postal_code', 'city', 'country', 'latitude',
+                                    'longitude')}),)
+    raw_id_fields = ('organization',)
+
+
+class OrganizationAddress(models.Model):
+    organization = models.ForeignKey('Organization')
+    label = models.CharField(max_length=20)
+    location = models.CharField(max_length=255)
+    postal_code = models.CharField(max_length=20)
+    city = models.CharField(max_length=255)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+    country = models.CharField(max_length=255)

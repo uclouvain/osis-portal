@@ -24,9 +24,11 @@
 #
 ##############################################################################
 
-from internship.models import internship_offer
-from internship.models import internship_speciality
-from internship.models import organization
-from internship.models import internship_choice
-from internship.models import organization_address
+from django import forms
+from django.utils.translation import ugettext_lazy as _
+
+
+class SearchHospitalForm(forms.Form):
+    name = forms.CharField(max_length=255)
+    city = forms.ChoiceField()
 
