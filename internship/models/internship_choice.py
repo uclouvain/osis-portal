@@ -42,3 +42,20 @@ class InternshipChoice(models.Model):
     internship_choice = models.IntegerField(default=0)
     priority = models.BooleanField()
 
+
+def search(student=None, internship_choice=None):
+    has_criteria = False
+    queryset = InternshipChoice.objects
+
+    if student:
+        queryset = queryset.filter(student=student)
+        has_criteria = True
+
+    if internship_choice:
+        queryset = queryset.filter(internship_choice=internship_choice)
+        has_criteria = True
+
+    if has_criteria:
+        return queryset
+    else:
+        return None

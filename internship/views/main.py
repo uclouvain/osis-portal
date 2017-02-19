@@ -50,13 +50,15 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
     internships_offers = mdl_internship.internship_offer.find_by_speciality(speciality)
 
     speciality_form = SpecialityForm()
-    offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet, extra=1)
+    offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet,
+                                               extra=internships_offers.count())
     formset = offer_preference_formset()
 
     if request.method == 'POST':
         formset = offer_preference_formset(request.POST)
         if formset.is_valid():
             student = mdl_base.student.find_by_user(request.user)
+            remove_previous_choices(student, internship_id)
             save_student_choices(formset, student, int(internship_id))
 
     zipped_data = None
@@ -81,6 +83,12 @@ def assign_speciality_for_internship(request, internship_id):
             speciality_selected = speciality_form.cleaned_data["speciality"]
             speciality_id = speciality_selected.id
     return redirect("select_internship_speciality", internship_id=internship_id, speciality_id=speciality_id)
+
+
+def remove_previous_choices(student, internship_id):
+    previous_choices = mdl_internship.internship_choice.search(student, internship_id)
+    if previous_choices:
+        previous_choices.delete()
 
 
 def save_student_choices(formset, student, internship_id):
