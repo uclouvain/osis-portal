@@ -33,7 +33,7 @@ msgid "download"
 msgstr "Télécharger"
 
 msgid "ABC"
-msgstr "Inscription régulière (le cas échént, allocation familiales, mutuelles, ...)"
+msgstr "Inscription régulière (le cas échént, allocations familiales, mutuelles, ...)"
 
 msgid "DE"
 msgstr "Carte étudiant provisoire et transport en commun"

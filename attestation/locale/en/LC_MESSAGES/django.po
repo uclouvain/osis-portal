@@ -33,22 +33,22 @@ msgid "download"
 msgstr "Download"
 
 msgid "ABC"
-msgstr "Inscription régulière (le cas échént, allocation familiales, mutuelles, ...)"
+msgstr "Regular registration (family allowances, health mutual, ...)"
 
 msgid "DE"
-msgstr "Carte étudiant provisoire et transport en commun"
+msgstr "Provisional student card and public transport notice"
 
 msgid "AVIS"
-msgstr "Avis d'enregistrement et facture"
+msgstr "Notice of registration and invoice"
 
 msgid "ECHEANCE"
-msgstr "Avis d'échéance"
+msgstr "Notice of maturity"
 
 msgid "desc_lnk_my_attestations"
 msgstr "Download your attestation as pdf"
 
 msgid "attestation_administration"
-msgstr "Attesatation administration"
+msgstr "Attestation administration"
 
 msgid "student_attestations"
 msgstr "Student attestations"
