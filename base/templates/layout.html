@@ -96,11 +96,13 @@
                                 <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                                 {{ request.user.first_name }}
                                 <span class="caret"></span></a>
+                            {% if debug %}
                             <ul class="dropdown-menu">
                                 <li><a href="{% url 'logout' %}" id="lnk_logout">
                                     <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                                     Logout</a></li>
                             </ul>
+                            {% endif %}
                         </li>
                     {% endif %}
                 </ul>
