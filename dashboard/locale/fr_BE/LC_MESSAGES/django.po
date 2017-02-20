@@ -126,3 +126,6 @@ msgstr "le"
 
 msgid "unauthorized_decimal"
 msgstr "Attention : décimales non autorisées pour ce cours"
+
+msgid "faculty_administration"
+msgstr "Administration facultaire"

@@ -23,25 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import json
-import datetime
+import urllib
 from django.conf import settings
-from frontoffice.queue.queue_listener import AttestationClient
 
 
-def fetch_json_attestation(registration_id, attestation_type):
-    json_attestation = None
-    message = generate_fetch_message(registration_id, attestation_type)
-    if message:
-        client = AttestationClient()
-        json_data = client.call(message)
-        if json_data:
-            json_attestation = json.loads(json_data.decode("utf-8"))
-    return json_attestation
-
-
-def generate_fetch_message(registration_id, attestation_type):
-    if registration_id:
-        return json.dumps({'registration_id': registration_id,
-                           'attestation_type': attestation_type})
+def fetch_student_attestation(registration_id, attestation_type):
+    document_base_url = settings.ATTESTATION_CONFIG.get('ATTESTATION_URL')
+    if document_base_url:
+        document_url = document_base_url.format(registration_id, attestation_type)
+        with urllib.request.urlopen(document_url) as response:
+            return response.read()
     return None
+

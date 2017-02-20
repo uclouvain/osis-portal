@@ -126,3 +126,6 @@ msgstr "the"
 
 msgid "unauthorized_decimal"
 msgstr "Unauthorized decimal for this learning unit"
+
+msgid "faculty_administration"
+msgstr "Faculty administration"

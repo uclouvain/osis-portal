@@ -42,6 +42,7 @@ def create_student_performance(acronym="SINF2MS/G", registration_id="64641200",
                                                                                    registration_id=registration_id,
                                                                                    academic_year=academic_year,
                                                                                    update_date=update_date,
+                                                                                   creation_date=datetime.datetime.now(),
                                                                                    data=data)
     a_student_performance.save()
     return a_student_performance

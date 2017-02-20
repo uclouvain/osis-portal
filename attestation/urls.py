@@ -29,6 +29,9 @@ from attestation.views import main as attestation_main
 urlpatterns = [
 
     url(r'^$', attestation_main.home, name='attestation_home'),
-    url(r'^download', attestation_main.download_attestation, name='download_attestation'),
+    url(r'^administration/$', attestation_main.attestation_administration, name='attestation_administration'),
+    url(r'^administration/select_student/$', attestation_main.select_student_attestations,
+        name='attesation_admin_select_student'),
+    url(r'^download/(?P<attestation_type>.+)/$', attestation_main.download_attestation, name='download_attestation'),
 
 ]

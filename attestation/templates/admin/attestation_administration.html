@@ -1,4 +1,4 @@
-{% extends "admin/administration_layout.html" %}
+{% extends "dashboard_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -27,7 +27,8 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li class="active">{% trans 'performance' %}</li>
+    <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'faculty_administration' %}</a></li>
+    <li class="active">{% trans 'attestation_administration' %}</li>
 {% endblock %}
 
 
@@ -35,10 +36,10 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans 'student_performance' %}
+            {% trans 'student_attestations' %}
         </div>
         <div class="panel-body">
-            <form action="{% url 'performance_select_student' %}" name="select_student" method="post">
+            <form action="{% url 'attesation_admin_select_student' %}" name="attestation_administration" method="post">
                 {% csrf_token %}
                 {% if form.errors %}
                     <div class="alert alert-danger" role="alert">

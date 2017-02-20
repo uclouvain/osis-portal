@@ -23,23 +23,3 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
-from django.db import models
-from attestation.models.enums import attestation_type
-
-
-class AttestationAdmin(admin.ModelAdmin):
-    list_display = ('student', 'document_file', 'type')
-    fieldsets = ((None, {'fields': ('student', 'document_file', 'type')}),)
-    raw_id_fields = ('student', 'document_file')
-    search_fields = ['student__registartion_id', 'student__last_name', '']
-
-
-class Attestation(models.Model):
-    student = models.ForeignKey('Student')
-    document_file = models.ForeignKey('osis_common.DocumentFile')
-    type = models.CharField(max_length=30, choices=attestation_type.ATTESTATION_TYPES)
-
-
-def find_by_student_id(student_id):
-    return Attestation.objects.filter(student__id=student_id)

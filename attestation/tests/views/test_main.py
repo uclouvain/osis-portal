@@ -23,39 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib.auth.models import User, AnonymousUser, Permission
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
 from attestation.views import main as v_main
+import json
 
-class TestHome(TestCase):
 
-    ACCESS_DENIED_STATUS = 403
-    OK_STATUS = 200
-    LOGIN_REQUIRED_STATUS = 302
+class TestRegistartionIdMessage(TestCase):
 
-    @classmethod
-    def setUpTestData(cls):
-        cls.anonymous = AnonymousUser()
-        cls.student_permission = Permission.objects.get(name='Is student')
-        cls.user1 = User.objects.create_user(username='user1', password='password1')
-        cls.user2 = User.objects.create_user(username='user2', password='password2')
-        cls.user2.user_permissions.add(cls.student_permission)
+    def test_generate_message_with_registration_id(self):
+        given_json_message = v_main._make_registration_json_message('1111111')
+        expected_json_message = json.loads('{"registration_id" : "1111111"}')
+        self.assertJSONEqual(given_json_message, expected_json_message)
 
-    def setUp(self):
-        self.factory = RequestFactory()
-        self.request = self.factory.get('/attestation/')
+    def test_generate_message_without_registration_id(self):
+        given_json_message = v_main._make_registration_json_message(None)
+        self.assertIsNone(given_json_message)
 
-    def test_not_anonymous(self):
-        self.request.user = self.anonymous
-        response = v_main.home(self.request)
-        self.assertEqual(response.status_code, self.LOGIN_REQUIRED_STATUS)
-
-    def test_not_student(self):
-        self.request.user = self.anonymous
-        response = v_main.home(self.request)
-        self.assertEqual(response.status_code, self.ACCESS_DENIED_STATUS)
-
-    def test_student(self):
-        self.request.user = self.user2
-        response = v_main.home(self.request)
-        self.assertEqual(response.status_code, self.OK_STATUS)

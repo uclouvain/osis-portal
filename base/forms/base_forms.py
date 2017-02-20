@@ -24,8 +24,9 @@
 #
 ##############################################################################
 from django import forms
-from base.models import student as std_model
 from django.utils.translation import ugettext_lazy as _
+from base.models import student as std_model
+
 
 class RegistrationIdForm(forms.Form):
     registration_id = forms.CharField()
