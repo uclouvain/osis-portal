@@ -24,8 +24,11 @@
 #
 ##############################################################################
 from unittest import skip
+
 from django.test import TestCase
+
 from mock import patch
+
 from attestation.queues import student_attestation_status as std_att_stat
 from attestation.views import main as v_main
 
@@ -36,7 +39,6 @@ class TestFetchSutentAttestationStatuses(TestCase):
     def setUpTestData(cls):
         cls.json_message = v_main._make_registration_json_message('1111111')
 
-    @skip
     def test_fetch_with_message_none(self):
         attestation_statuses = std_att_stat.fetch_json_attestation_statuses(None)
         self.assertIsNone(attestation_statuses)
@@ -48,19 +50,22 @@ class TestFetchSutentAttestationStatuses(TestCase):
         attestation_statuses = std_att_stat.fetch_json_attestation_statuses(self.json_message)
         self.assertIsNone(attestation_statuses)
 
+    @skip
     @patch('frontoffice.queue.queue_listener.Client.call')
     def test_fetch_with_results(self, mock_client_call):
         mock_client_call.return_value = self._get_test_attesatation_statuses_as_byte()
         attestation_statuses = std_att_stat.fetch_json_attestation_statuses(self.json_message)
         attesatation_statuses_expected = self._get_test_attestation_statuses_as_dict()
-        self.assertEquals(attesatation_statuses_expected.get('attestation_statuses'), attestation_statuses)
+        self.assertDictEqual(attesatation_statuses_expected, attestation_statuses)
 
     def _get_test_attesatation_statuses_as_byte(self):
-        return b'{"attestation_statuses": [{"type": "REGISTRATION","printed": true,"available": false},{"type": "STUDENT_CARD","printed": false,"available": false},{"type": "REGULAR_REGISTRATION","printed": true,"available": true}]}'
+        return b'{"available": true,"academicYear": 2016,"attestationStatuses": [{"type": "REGISTRATION","printed": true,"available": false},{"type": "STUDENT_CARD","printed": false,"available": false},{"type": "REGULAR_REGISTRATION","printed": true,"available": true}]}'
 
     def _get_test_attestation_statuses_as_dict(self):
         return {
-            'attestation_statuses': [
+            'available': True,
+            'academicYear': 2016,
+            'attestationStatuses': [
                 {
                     'type': 'REGISTRATION',
                     'printed': True,

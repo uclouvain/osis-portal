@@ -24,14 +24,32 @@
 #
 ##############################################################################
 import urllib
+
 from django.conf import settings
 
 
-def fetch_student_attestation(registration_id, attestation_type):
-    document_base_url = settings.ATTESTATION_CONFIG.get('ATTESTATION_URL')
-    if document_base_url:
-        document_url = document_base_url.format(registration_id, attestation_type)
-        with urllib.request.urlopen(document_url) as response:
-            return response.read()
+def fetch_student_attestation(global_id, academic_year, attestation_type):
+    server_top_url = settings.ATTESTATION_CONFIG.get('SERVER_TO_FETCH_URL')
+    document_base_path = server_top_url + settings.ATTESTATION_CONFIG.get('ATTESTATION_PATH')
+    if document_base_path:
+        try:
+            document_url = document_base_path.format(global_id=global_id,
+                                                     academic_year=academic_year,
+                                                     attestation_type=attestation_type)
+            return _fetch_with_basic_auth(server_top_url, document_url)
+        except Exception as e:
+            pass
     return None
+
+
+def _fetch_with_basic_auth(server_top_url, document_url):
+    password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+    username = settings.ATTESTATION_CONFIG.get('SERVER_TO_FETCH_USER')
+    password = settings.ATTESTATION_CONFIG.get('SERVER_TO_FETCH_PASSWORD')
+    password_mgr.add_password(None, server_top_url, username, password)
+    handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
+    opener = urllib.request.build_opener(handler)
+
+    with opener.open(document_url) as response:
+        return response.read()
 

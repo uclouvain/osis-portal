@@ -24,14 +24,14 @@
 #
 ##############################################################################
 import json
+
 from django.contrib import messages
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required, permission_required
-from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
-from base.forms.base_forms import RegistrationIdForm
 
-from base.models import student as student_mdl
+from base.forms.base_forms import RegistrationIdForm
+from base.models import student as student_mdl, person as person_mdl
 from attestation.queues import student_attestation_status, student_attestation
 from base.views import layout
 
@@ -42,26 +42,19 @@ def home(request):
     student = student_mdl.find_by_user(request.user)
     json_message = _make_registration_json_message(student.registration_id)
     attestation_statuses_json_dict = student_attestation_status.fetch_json_attestation_statuses(json_message)
-    attestation_statuses = attestation_statuses_json_dict.get('attestationStatuses')
-    attestation_anac = _make_anac_for_template(attestation_statuses_json_dict.get('academicYear'))
-    attestation_available = attestation_statuses_json_dict.get('available')
-    return layout.render(request, "attestation_home.html", {'attestation_statuses': attestation_statuses,
-                                                            'academic_year': attestation_anac,
-                                                            'available': attestation_available,
-                                                            'student': student})
+    data = _make_attestation_data(attestation_statuses_json_dict, student)
+    return layout.render(request, "attestation_home.html", data)
 
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
-def download_attestation(request, attestation_type):
+def download_attestation(request, academic_year, attestation_type):
     student = student_mdl.find_by_user(request.user)
-    attestation_pdf = student_attestation.fetch_student_attestation(student.regitration_id, attestation_type)
+    attestation_pdf = student_attestation.fetch_student_attestation(student.person.global_id,
+                                                                    academic_year,
+                                                                    attestation_type)
     if attestation_pdf:
-        filename = "%s.pdf" % _(attestation_type)
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
-        response.write()
-        return response
+        return _make_pdf_attestation(attestation_pdf, attestation_type)
     else:
         messages.add_message(request, messages.ERROR, _('error_fetching_attestation'))
         return home(request)
@@ -79,13 +72,23 @@ def visualize_student_attestations(request, registration_id):
     student = student_mdl.find_by_registration_id(registration_id)
     json_message = _make_registration_json_message(student.registration_id)
     attestation_statuses_json_dict = student_attestation_status.fetch_json_attestation_statuses(json_message)
-    attestation_statuses = attestation_statuses_json_dict.get('attestationStatuses')
-    attestation_anac = _make_anac_for_template(attestation_statuses_json_dict.get('academicYear'))
-    attestation_available = attestation_statuses_json_dict.get('available')
-    return layout.render(request, "attestation_home.html", {'attestation_statuses': attestation_statuses,
-                                                            'academic_year': attestation_anac,
-                                                            'available': attestation_available,
-                                                            'student': student})
+    data = _make_attestation_data(attestation_statuses_json_dict, student)
+    return layout.render(request, "attestation_home.html", data)
+
+
+@login_required
+@permission_required('base.is_faculty_administrator', raise_exception=True)
+def download_student_attestation(request, global_id, academic_year, attestation_type):
+    attestation_pdf = student_attestation.fetch_student_attestation(global_id,
+                                                                    academic_year,
+                                                                    attestation_type)
+    if attestation_pdf:
+        return _make_pdf_attestation(attestation_pdf, attestation_type)
+    else:
+        person = person_mdl.find_by_global_id(global_id)
+        student = student_mdl.find_by_person(person)
+        messages.add_message(request, messages.ERROR, _('error_fetching_attestation'))
+        return visualize_student_attestations(request, student.registration_id)
 
 
 @login_required
@@ -115,3 +118,29 @@ def _make_anac_for_template(year):
         formated_academic_year = '{} - {}'.format(year, year+1)
     return formated_academic_year
 
+
+def _make_attestation_data(attestation_statuses_json_dict, student):
+    if attestation_statuses_json_dict:
+        attestation_statuses = attestation_statuses_json_dict.get('attestationStatuses')
+        academic_year = attestation_statuses_json_dict.get('academicYear')
+        formated_academic_year = _make_anac_for_template(academic_year)
+        attestation_available = attestation_statuses_json_dict.get('available')
+    else:
+        attestation_statuses = None
+        academic_year = None
+        formated_academic_year = None
+        attestation_available = None
+
+    return {'attestation_statuses': attestation_statuses,
+            'academic_year': academic_year,
+            'formated_academic_year': formated_academic_year,
+            'available': attestation_available,
+            'student': student}
+
+
+def _make_pdf_attestation(attestation_pdf, attestation_type):
+    filename = "%s.pdf" % _(attestation_type)
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+    response.write(attestation_pdf)
+    return response

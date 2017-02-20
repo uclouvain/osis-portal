@@ -266,8 +266,8 @@ QUEUES = {
 
 
 LOGIN_URL=reverse_lazy('login')
-OVERRIDED_LOGOUT_URL=''
-OVERRIDED_LOGIN_URL=''
+OVERRIDED_LOGOUT_URL = ''
+OVERRIDED_LOGIN_URL = ''
 
 # This has to be replaced by the actual url where you institution logo can be found.
 # Ex : LOGO_INSTITUTION_URL = 'https://www.google.be/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'
@@ -318,7 +318,10 @@ PERFORMANCE_CONFIG = {
 
 ATTESTATION_CONFIG = {
     'UPDATE_DELTA_HOURS_DEFAULT': 72,
-    'ATTESTATION_URL': ''
+    'SERVER_TO_FETCH_URL': '',
+    'ATTESTATION_PATH': '',
+    'SERVER_TO_FETCH_USER': '',
+    'SERVER_TO_FETCH_PASSWORD': '',
 }
 
 try:
