@@ -251,7 +251,7 @@ QUEUES = {
         'STUDENT_POINTS': 'rpc_performance_to_client',
         'PERFORMANCE_UPDATE_EXP_DATE': 'performance_exp_date',
         'ATTRIBUTION': 'attribution',
-        'EXAM_ENROLLMENT_FORM': 'exam_enrollment_form'
+        'EXAM_ENROLLMENT_FORM': 'rpc_exam_enrollment_form'
     },
     'RPC_QUEUES_TIMEOUT': {
         'PAPER_SHEET': 60,
