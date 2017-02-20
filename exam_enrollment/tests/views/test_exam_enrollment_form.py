@@ -29,13 +29,8 @@ import random
 
 
 def load_json_file(path):
-    # import os
-    # script_dir = os.path.dirname(__file__)
-    # rel_path = "exam_enrollment_form_example.json"
-    # abs_file_path = os.path.join(script_dir, rel_path)
     json_data = open(path)
     data1 = json.load(json_data) # deserialises it
-    # data2 = json.dumps(json_data) # json formatted string
     return data1
 
 
