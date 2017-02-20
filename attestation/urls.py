@@ -31,7 +31,7 @@ urlpatterns = [
     url(r'^$', attestation_main.home, name='attestation_home'),
     url(r'^administration/attestations/$', attestation_main.attestation_administration, name='attestation_administration'),
     url(r'^administration/select_student/$', attestation_main.select_student_attestations,
-        name='attesation_admin_select_student'),
+        name='attestation_admin_select_student'),
     url(r'^administration/attestations/(?P<global_id>[0-9]+)/(?P<academic_year>[0-9]+)/(?P<attestation_type>.+)/$',
         attestation_main.download_student_attestation,name='attestation_admin_download'),
     url(r'^attestations/(?P<academic_year>[0-9]+)/(?P<attestation_type>.+)/$', attestation_main.download_attestation,

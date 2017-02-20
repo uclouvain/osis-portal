@@ -39,7 +39,7 @@
             {% trans 'student_attestations' %}
         </div>
         <div class="panel-body">
-            <form action="{% url 'attesation_admin_select_student' %}" name="attestation_administration" method="post">
+            <form action="{% url 'attestation_admin_select_student' %}" name="attestation_administration" method="post">
                 {% csrf_token %}
                 {% if form.errors %}
                     <div class="alert alert-danger" role="alert">
