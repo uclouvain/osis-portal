@@ -28,8 +28,50 @@ msgstr "Choisissez à quels examens vous désirez vous inscrire pour la prochain
 msgid "exams_enrollment"
 msgstr "Inscription aux examens"
 
+msgid "info_exam_enrollment_by_default"
+msgstr "<b>Par défaut, vous êtes déjà inscrit à tous les examens cochés ci-dessous. "
+       "<br>Si cela vous convient, vous n'avez aucune action à effectuer.</b>"
+       "<br>Vous pouvez modifier vos inscriptions aux examens en cochant/décochant les cases ci-dessous et "
+       "en cliquant sur 'Valider mes changements'."
+
+msgid "legend_exam_enrol_b"
+msgstr "B - Crédit"
+
+msgid "legend_exam_enrol_d"
+msgstr "D - Dispense"
+
+msgid "legend_exam_enrol_i"
+msgstr "I - Première inscription"
+
+msgid "legend_exam_enrol_j"
+msgstr "J - Report de note de janvier vers septembre"
+
+msgid "legend_exam_enrol_p"
+msgstr "P - Examen partiel"
+
+msgid "legend_exam_enrol_r"
+msgstr "R - Report de note de la session précédente"
+
+msgid "legend_exam_enrol_t"
+msgstr "T - Note résultant d'un test"
+
+msgid "legend_exam_enrol_v"
+msgstr "V - Évaluation satisfaisante (le note ne compte pas)"
+
+msgid "legend_exam_enrol_w"
+msgstr "W - Évaluation non satisfaisante (la note ne compte pas)"
+
+msgid "legend_exam_enrol_x"
+msgstr "X - Droit et sanction"
+
+msgid "legend_exam_enrol_y"
+msgstr "Y - Deuxième inscription"
+
 msgid "no_offer_enrollment_found"
 msgstr "Vous n'êtes inscrit à aucun programme d'étude pour cette année académique."
+
+msgid "outside_exam_enrollment_period"
+msgstr "Les inscriptions aux examens sont actuellement fermées."
 
 msgid "program"
 msgstr "Programme"
@@ -42,6 +84,12 @@ msgstr "Matricule"
 
 msgid "student"
 msgstr "Étudiant"
+
+msgid "validate_exam_enrol_form_description"
+msgstr "En cliquant ici, vous validez vos modifications par rapport à l'inscription par défaut."
+
+msgid "validate_changes"
+msgstr "Valider mes changements"
 
 msgid "year"
 msgstr "Année"
