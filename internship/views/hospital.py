@@ -26,14 +26,16 @@
 ############################################################################
 from django.contrib.auth.decorators import login_required, permission_required
 from base.views import layout
+from internship.forms.form_search_hospital import SearchHospitalForm
+
 
 
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def view_hospitals_list(request):
-
-    return layout.render(request, "hospitals.html")
+    form = SearchHospitalForm()
+    return layout.render(request, "hospitals.html", {'search_form': form})
 
 
 

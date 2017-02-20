@@ -39,7 +39,38 @@
 
 <div class="panel panel-default">
     <div class="panel panel-body">
-        HOSPITALS_LIST
+
+        <div class="row">
+            <form method="post">
+                {% csrf_token %}
+                {{ search_form.non_field_errors }}
+                <div class="fieldWrapper col-md-3 form-group">
+                    {{ search_form.name.errors }}
+                    <label for="{{ search_form.name.id_for_label }}">Organization</label>
+                    <input type="text" class="form-control" id="{{ search_form.name.id_for_label }}"
+                           name="{{ search_form.name.html_name }}" placeholder="Organization">
+                </div>
+                <div class="fieldWrapper col-md-3 form-group">
+                    {{ search_form.name.errors }}
+                    <label for="{{ search_form.city.id_for_label }}">City</label>
+                    <select id="{{ search_form.city.id_for_label }}"
+                            name="{{ search_form.city.html_name }}"
+                            class="form-control">
+                        {% for x,y in search_form.fields.city.choices %}
+                            <option value="{{ x }}">
+                                {{ y }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <br>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
 
     </div>
 </div>
