@@ -33,8 +33,6 @@ from performance.models.enums import offer_registration_state
 import performance.tests.models.test_student_performance
 from performance.views import main
 
-logger = logging.getLogger(settings.DEFAULT_LOGGER)
-
 
 class TestMain(TestCase):
     def setUp(self):
@@ -45,7 +43,6 @@ class TestMain(TestCase):
 
     def test_convert_student_performance_to_dic(self):
         student_performance_dic = main.convert_student_performance_to_dic(self.student_performance)
-        logger.info(str(student_performance_dic))
         expected = {"academic_year": '2016 - 2017',
                     "acronym": "SINF2MS/G",
                     "title": " Master [120] en sciences informatiques, à finalité spécialisée ",

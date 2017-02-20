@@ -255,12 +255,14 @@ QUEUES = {
         'ATTRIBUTION': 'attribution',
         'ATTESTATION': 'rpc_attestation',
         'ATTESTATION_STATUS': 'rpc_attestation_status',
+        'EXAM_ENROLLMENT_FORM': 'rpc_exam_enrollment_form'
     },
     'RPC_QUEUES_TIMEOUT': {
         'PAPER_SHEET': 60,
         'STUDENT_PERFORMANCE': 15,
         'ATTESTATION_STATUS': 10,
-        'ATTESTATION': 60
+        'ATTESTATION': 60,
+        'EXAM_ENROLLMENT_FORM': 15
     }
 }
 
