@@ -23,18 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
 from django.conf.urls import url
-from performance.views import main
+from attestation.views import main as attestation_main
 
 urlpatterns = [
-    url(r'^$', main.view_performance_home, name='performance_home'),
 
-    url(r'^administration/select_student/$', main.select_student, name='performance_administration'),
-    url(r'^result/(?P<pk>[0-9]+)/$',
-        main.display_result_for_specific_student_performance, name='performance_result'),
-    url(r'^student_programs/(?P<registration_id>[0-9]+)/$', main.visualize_student_programs, name='performance_student_programs'),
-    url(r'^student_result/(?P<pk>[0-9]+)/$',
-        main.visualize_student_result, name='performance_student_result'),
+    url(r'^$', attestation_main.home, name='attestation_home'),
+    url(r'^administration/attestations/$', attestation_main.attestation_administration, name='attestation_administration'),
+    url(r'^administration/select_student/$', attestation_main.select_student_attestations,
+        name='attestation_admin_select_student'),
+    url(r'^administration/attestations/(?P<global_id>[0-9]+)/(?P<academic_year>[0-9]+)/(?P<attestation_type>.+)/$',
+        attestation_main.download_student_attestation,name='attestation_admin_download'),
+    url(r'^attestations/(?P<academic_year>[0-9]+)/(?P<attestation_type>.+)/$', attestation_main.download_attestation,
+        name='download_attestation'),
+
 ]
-

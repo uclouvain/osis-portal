@@ -23,18 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import json
+import logging
 from django.conf import settings
-from django.conf.urls import url
-from performance.views import main
+from frontoffice.queue.queue_listener import AttestationStatusClient
 
-urlpatterns = [
-    url(r'^$', main.view_performance_home, name='performance_home'),
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
-    url(r'^administration/select_student/$', main.select_student, name='performance_administration'),
-    url(r'^result/(?P<pk>[0-9]+)/$',
-        main.display_result_for_specific_student_performance, name='performance_result'),
-    url(r'^student_programs/(?P<registration_id>[0-9]+)/$', main.visualize_student_programs, name='performance_student_programs'),
-    url(r'^student_result/(?P<pk>[0-9]+)/$',
-        main.visualize_student_result, name='performance_student_result'),
-]
 
+def fetch_json_attestation_statuses(message):
+    attestation_statuses = None
+    if message:
+        try:
+            client = AttestationStatusClient()
+            json_data = client.call(message)
+            if json_data:
+                attestation_statuses = json.loads(json_data.decode("utf-8"))
+        except Exception as e:
+            logger.error('Error fetching student attestation statuses.\nmessage sent :  {}'.format(str(message)))
+    return attestation_statuses

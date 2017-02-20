@@ -23,18 +23,33 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import urllib
+
 from django.conf import settings
-from django.conf.urls import url
-from performance.views import main
 
-urlpatterns = [
-    url(r'^$', main.view_performance_home, name='performance_home'),
 
-    url(r'^administration/select_student/$', main.select_student, name='performance_administration'),
-    url(r'^result/(?P<pk>[0-9]+)/$',
-        main.display_result_for_specific_student_performance, name='performance_result'),
-    url(r'^student_programs/(?P<registration_id>[0-9]+)/$', main.visualize_student_programs, name='performance_student_programs'),
-    url(r'^student_result/(?P<pk>[0-9]+)/$',
-        main.visualize_student_result, name='performance_student_result'),
-]
+def fetch_student_attestation(global_id, academic_year, attestation_type):
+    server_top_url = settings.ATTESTATION_CONFIG.get('SERVER_TO_FETCH_URL')
+    document_base_path = server_top_url + settings.ATTESTATION_CONFIG.get('ATTESTATION_PATH')
+    if document_base_path:
+        try:
+            document_url = document_base_path.format(global_id=global_id,
+                                                     academic_year=academic_year,
+                                                     attestation_type=attestation_type)
+            return _fetch_with_basic_auth(server_top_url, document_url)
+        except Exception as e:
+            pass
+    return None
+
+
+def _fetch_with_basic_auth(server_top_url, document_url):
+    password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+    username = settings.ATTESTATION_CONFIG.get('SERVER_TO_FETCH_USER')
+    password = settings.ATTESTATION_CONFIG.get('SERVER_TO_FETCH_PASSWORD')
+    password_mgr.add_password(None, server_top_url, username, password)
+    handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
+    opener = urllib.request.build_opener(handler)
+
+    with opener.open(document_url) as response:
+        return response.read()
 

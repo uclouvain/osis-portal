@@ -23,18 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
-from django.conf.urls import url
-from performance.views import main
+from django import forms
+from django.utils.translation import ugettext_lazy as _
+from base.models import student as std_model
 
-urlpatterns = [
-    url(r'^$', main.view_performance_home, name='performance_home'),
 
-    url(r'^administration/select_student/$', main.select_student, name='performance_administration'),
-    url(r'^result/(?P<pk>[0-9]+)/$',
-        main.display_result_for_specific_student_performance, name='performance_result'),
-    url(r'^student_programs/(?P<registration_id>[0-9]+)/$', main.visualize_student_programs, name='performance_student_programs'),
-    url(r'^student_result/(?P<pk>[0-9]+)/$',
-        main.visualize_student_result, name='performance_student_result'),
-]
+class RegistrationIdForm(forms.Form):
+    registration_id = forms.CharField()
 
+    def clean(self):
+        cleaned_data = super(RegistrationIdForm, self).clean()
+        registration_id = cleaned_data.get('registration_id')
+        if registration_id:
+            student = std_model.find_by_registration_id(registration_id)
+            if student is None:
+                self.add_error('registration_id', _('no_student_with_this_registration_id'))

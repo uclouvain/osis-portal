@@ -25,11 +25,6 @@
             [
                 "is_tutor",
                 "base",
-                "person",
-            ],
-            [
-                "can_access_attribution_application",
-                "base",
                 "person"
             ]
         ]
