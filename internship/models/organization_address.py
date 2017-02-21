@@ -43,3 +43,7 @@ class OrganizationAddress(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     country = models.CharField(max_length=255)
+
+
+def get_all_cities():
+    return list(OrganizationAddress.objects.values_list('city', flat=True).distinct('city').order_by('city'))
