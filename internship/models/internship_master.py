@@ -53,3 +53,7 @@ class InternshipMaster(models.Model):
         return u"%s" % self.reference
 
 
+def get_all_specialities():
+    return list(InternshipMaster.objects.values_list('speciality', flat=True).distinct('speciality').order_by('speciality'))
+
+
