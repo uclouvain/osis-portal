@@ -41,7 +41,7 @@ def view_hospitals_list(request):
         if form.is_valid():
             name = form.cleaned_data['name']
             city = form.cleaned_data['city']
-            hospitals = get_hospitals(name=name)
+            hospitals = get_hospitals(name=name, city=city)
 
     else:
         form = SearchHospitalForm(cities)
@@ -50,7 +50,7 @@ def view_hospitals_list(request):
                                                      'hospitals': hospitals})
 
 
-def get_hospitals(name=""):
+def get_hospitals(name="", city=""):
     if name:
         organizations = mdl_internship.organization.search(name)
     else:
@@ -58,7 +58,8 @@ def get_hospitals(name=""):
     hospitals = []
     for organization in organizations:
         organization_address = mdl_internship.organization_address.get_by_organization(organization)
-        hospitals.append((organization, organization_address))
+        if not city or organization_address.city == city:
+            hospitals.append((organization, organization_address))
     return hospitals
 
 

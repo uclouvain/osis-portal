@@ -56,10 +56,10 @@ class TestGetHospitals(TestCase):
             test_organization_address.create_organization_address(self.organization_1, city="city1")
         self.organization_2 = test_organization.create_organization(reference='02')
         self.organization_address_2 = \
-            test_organization_address.create_organization_address(self.organization_2, city="city1")
+            test_organization_address.create_organization_address(self.organization_2, city="city2")
         self.organization_3 = test_organization.create_organization(name="OSAS", reference='03')
         self.organization_address_3 = \
-            test_organization_address.create_organization_address(self.organization_3, city="city3")
+            test_organization_address.create_organization_address(self.organization_3, city="city1")
 
     def test_with_no_criteria(self):
         hospitals = hospital.get_hospitals()
@@ -73,3 +73,15 @@ class TestGetHospitals(TestCase):
         self.assertEqual(len(hospitals), 2)
         self.assertIn((self.organization_1, self.organization_address_1), hospitals)
         self.assertIn((self.organization_2, self.organization_address_2), hospitals)
+
+    def test_with_city(self):
+        hospitals = hospital.get_hospitals(city="city1")
+        self.assertEqual(len(hospitals), 2)
+        self.assertIn((self.organization_1, self.organization_address_1), hospitals)
+        self.assertIn((self.organization_3, self.organization_address_3), hospitals)
+
+    def test_with_name_and_city(self):
+        hospitals = hospital.get_hospitals(name="OSIS", city="city2")
+        self.assertEqual(len(hospitals), 1)
+        self.assertIn((self.organization_2, self.organization_address_2), hospitals)
+
