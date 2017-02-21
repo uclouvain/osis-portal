@@ -23,24 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
 
-from internship.models import *
+from django import forms
+from internship.models import organization as mdl_organization
 
-admin.site.register(internship_offer.InternshipOffer,
-                    internship_offer.InternshipOfferAdmin)
 
-admin.site.register(internship_speciality.InternshipSpeciality,
-                    internship_speciality.InternshipSpecialityAdmin)
+class SearchMasterForm(forms.Form):
+    def __init__(self, speciality_list, *args, **kwargs):
+        super(SearchMasterForm, self).__init__(*args, **kwargs)
+        modified_speciality_list = speciality_list.copy()
+        modified_speciality_list.insert(0, "")
+        self.fields['speciality'].choices = zip(modified_speciality_list, modified_speciality_list)
 
-admin.site.register(organization.Organization,
-                    organization.OrganizationAdmin)
+    name = forms.CharField(max_length=255, required=False)
+    speciality = forms.ChoiceField(required=False)
+    organization = forms.ModelChoiceField(mdl_organization.Organization.objects.all(), required=False)
 
-admin.site.register(internship_choice.InternshipChoice,
-                    internship_choice.InternshipChoiceAdmin)
-
-admin.site.register(organization_address.OrganizationAddress,
-                    organization_address.OrganizationAddressAdmin)
-
-admin.site.register(internship_master.InternshipMaster,
-                    internship_master.InternshipMasterAdmin)

@@ -40,7 +40,37 @@
 
 <div class="panel panel-default">
     <div class="panel panel-body">
-        MASTERS
+
+        <div class="row">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <th>Reference</th>
+                    <th>Civility</th>
+                    <th>Last name</th>
+                    <th>First name</th>
+                    <th>Type</th>
+                    <th>Speciality</th>
+                    <th>Organization</th>
+                </thead>
+                {% for master in masters %}
+                <tr>
+                    <td>{{ master.reference }}</td>
+                    <td>{{ master.civility}}</td>
+                    <td>{{ master.last_name }}</td>
+                    <td>{{ master.first_name }}</td>
+                    <td>{{ master.type }}</td>
+                    <td>{{ master.speciality }}</td>
+                    <td>{% if master.organization.website %}
+                        <a href="{{ master.organization.website }}">{{ master.organization }}</a>
+                        {% else %}
+                        {{ master.organization }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
     </div>
 </div>
 {% endblock %}

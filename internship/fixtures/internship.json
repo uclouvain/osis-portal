@@ -245,5 +245,90 @@
       "maximum_enrollments": 40,
       "master": "Dr. Marc Hoselaus"
     }
+  },
+
+
+  {
+    "model": "internship.internshipmaster",
+    "pk": 1,
+    "fields": {
+      "organization": 1,
+      "first_name": "Henry",
+      "last_name": "Gaillaird",
+      "civility": "Dr",
+      "type_mastery": "généraliste",
+      "speciality": "MEDECINE GENERALE"
+    }
+  },
+  {
+    "model": "internship.internshipmaster",
+    "pk": 2,
+    "fields": {
+      "organization": 2,
+      "first_name": "Harry",
+      "last_name": "Potter",
+      "civility": "Pr",
+      "type_mastery": "spécialiste",
+      "speciality": "RADIOTHERAPIE"
+    }
+  },{
+    "model": "internship.internshipmaster",
+    "pk": 3,
+    "fields": {
+      "organization": 2,
+      "first_name": "Jean",
+      "last_name": "Dujardin",
+      "civility": "Pr",
+      "type_mastery": "spécialiste",
+      "speciality": "PEDIATRIE"
+    }
+  },
+  {
+    "model": "internship.internshipmaster",
+    "pk": 4,
+    "fields": {
+      "organization": 4,
+      "first_name": "Elise",
+      "last_name": "Descamp",
+      "civility": "Dr",
+      "type_mastery": "spécialiste",
+      "speciality": "PSYCHIATRIE"
+    }
+  },
+  {
+    "model": "internship.internshipmaster",
+    "pk": 5,
+    "fields": {
+      "organization": 5,
+      "first_name": "Ornelia",
+      "last_name": "Fleurette",
+      "civility": "Dr",
+      "type_mastery": "généraliste",
+      "speciality": "MEDECINE GENERALE"
+    }
+  },
+  {
+    "model": "internship.internshipmaster",
+    "pk": 6,
+    "fields": {
+      "organization": 6,
+      "first_name": "Mark",
+      "last_name": "Champs",
+      "civility": "Dr",
+      "type_mastery": "généraliste",
+      "speciality": "MEDECINE GENERALE"
+    }
+  },
+  {
+    "model": "internship.internshipmaster",
+    "pk": 7,
+    "fields": {
+      "organization": 6,
+      "first_name": "Laure",
+      "last_name": "De Potter",
+      "civility": "Dr",
+      "type_mastery": "spécialiste",
+      "speciality": "URGENCES"
+    }
   }
 ]

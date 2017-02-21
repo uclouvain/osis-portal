@@ -26,12 +26,13 @@
 ############################################################################
 from django.contrib.auth.decorators import login_required, permission_required
 from base.views import layout
+from internship.models import internship_master
 
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def view_masters_list(request):
-
-    return layout.render(request, "masters.html")
+    masters = internship_master.InternshipMaster.objects.all()
+    return layout.render(request, "masters.html", {"masters": masters})
 
 
