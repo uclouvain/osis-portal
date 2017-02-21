@@ -37,5 +37,5 @@ class SearchMasterForm(forms.Form):
 
     name = forms.CharField(max_length=255, required=False)
     speciality = forms.ChoiceField(required=False)
-    organization = forms.ModelChoiceField(mdl_organization.Organization.objects.all(), required=False)
+    organization = forms.ModelChoiceField(mdl_organization.Organization.objects.all(), required=False, empty_label="")
 

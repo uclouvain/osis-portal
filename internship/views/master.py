@@ -26,13 +26,17 @@
 ############################################################################
 from django.contrib.auth.decorators import login_required, permission_required
 from base.views import layout
-from internship.models import internship_master
+from internship.models import internship_master as mdl_internship_master
+from internship.forms import form_search_master
 
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def view_masters_list(request):
-    masters = internship_master.InternshipMaster.objects.all()
-    return layout.render(request, "masters.html", {"masters": masters})
+    specialities = mdl_internship_master.get_all_specialities()
+    form = form_search_master.SearchMasterForm(specialities)
+    masters = mdl_internship_master.InternshipMaster.objects.all()
+    return layout.render(request, "masters.html", {"masters": masters,
+                                                   "search_form": form})
 
 

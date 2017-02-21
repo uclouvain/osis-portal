@@ -42,7 +42,48 @@
     <div class="panel panel-body">
 
         <div class="row">
-
+            <form method="post">
+                {% csrf_token %}
+                {{ search_form.non_field_errors }}
+                <div class="fieldWrapper col-md-3 form-group">
+                    {{ search_form.name.errors }}
+                    <label for="{{ search_form.name.id_for_label }}">Name</label>
+                    <input type="text" class="form-control" id="{{ search_form.name.id_for_label }}"
+                           name="{{ search_form.name.html_name }}" placeholder="Name">
+                </div>
+                <div class="fieldWrapper col-md-3 form-group">
+                    {{ search_form.speciality.errors }}
+                    <label for="{{ search_form.speciality.id_for_label }}">Speciality</label>
+                    <select id="{{ search_form.speciality.id_for_label }}"
+                            name="{{ search_form.speciality.html_name }}"
+                            class="form-control">
+                        {% for x,y in search_form.fields.speciality.choices %}
+                            <option value="{{ x }}">
+                                {{ y }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="fieldWrapper col-md-3 form-group">
+                    {{ search_form.organization.errors }}
+                    <label for="{{ search_form.organization.id_for_label }}">Organization</label>
+                    <select id="{{ search_form.organization.id_for_label }}"
+                            name="{{ search_form.organization.html_name }}"
+                            class="form-control">
+                        {% for x,y in search_form.fields.organization.choices %}
+                            <option value="{{ x }}">
+                                {{ y }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <br>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </div>
+            </form>
         </div>
 
         <div class="row">
