@@ -26,6 +26,7 @@
 from django.db import models
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
+from osis_common.models.serializable_model import SerializableModel
 
 
 class OptionAdmin(admin.ModelAdmin):
@@ -37,7 +38,7 @@ class OptionAdmin(admin.ModelAdmin):
 
 
 
-class Option(models.Model):
+class Option(SerializableModel):
     label = models.CharField(max_length=255)
     value = models.TextField(blank=True, null=True)
     order = models.IntegerField(blank=True, null=True)
@@ -66,9 +67,6 @@ def find_by_id(option_id):
         return None
 
 
-def find_number_options_by_question_id(question_id):
-    opt = Option.objects.filter(question=question_id).order_by("order")
-
-    if opt:
-        return opt.reverse().first().order
-    return 0
+def find_number_options_by_question_id(question):
+    option = Option.objects.filter(question=question).count()
+    return option

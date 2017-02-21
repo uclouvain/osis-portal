@@ -23,8 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.db import models
+
+
+class PropositionDocumentFileAdmin(SerializableModelAdmin):
+    list_display = ('proposition', 'document_file')
+    raw_id_fields = ('proposition', 'document_file')
+    search_fields = ('uuid',)
 
 
 class PropositionDocumentFile(SerializableModel):

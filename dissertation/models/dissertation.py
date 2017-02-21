@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.contrib import admin
 from django.db import models
 from django.db.models import Q
@@ -32,12 +32,15 @@ from base.models import student, offer_year
 from . import dissertation_location, proposition_dissertation
 from dissertation.models.dissertation_role import get_promoteur_by_dissertation
 from dissertation.utils.emails_dissert import send_mail_to_teacher_new_dissert
+from base import models as mdl
 
 
-class DissertationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'status', 'active', 'proposition_dissertation', 'modification_date')
-    raw_id_fields = ('author', 'offer_year_start')
-
+class DissertationAdmin(SerializableModelAdmin):
+    list_display = ('uuid', 'title', 'author', 'status', 'active', 'proposition_dissertation', 'modification_date')
+    raw_id_fields = ('author', 'offer_year_start', 'proposition_dissertation', 'location')
+    search_fields = ('uuid', 'title', 'author__person__last_name', 'author__person__first_name',
+                     'proposition_dissertation__title', 'proposition_dissertation__author__person__last_name',
+                     'proposition_dissertation__author__person__first_name')
 
 STATUS_CHOICES = (
     ('DRAFT', _('draft')),
@@ -70,7 +73,7 @@ class Dissertation(SerializableModel):
     title = models.CharField(max_length=200)
     author = models.ForeignKey(student.Student)
     status = models.CharField(max_length=12, choices=STATUS_CHOICES, default='DRAFT')
-    defend_periode = models.CharField(max_length=12, choices=DEFEND_PERIODE_CHOICES, default='UNDEFINED')
+    defend_periode = models.CharField(max_length=12, choices=DEFEND_PERIODE_CHOICES, default='UNDEFINED', null=True)
     defend_year = models.IntegerField(blank=True, null=True)
     offer_year_start = models.ForeignKey(offer_year.OfferYear)
     proposition_dissertation = models.ForeignKey(proposition_dissertation.PropositionDissertation)
@@ -104,6 +107,11 @@ class Dissertation(SerializableModel):
     def refuse(self):
         next_status = get_next_status(self, "refuse")
         self.set_status(next_status)
+
+    def author_is_logged_student(self, request):
+        logged_person = mdl.person.find_by_user(request.user)
+        logged_student = mdl.student.find_by_person(logged_person)
+        return logged_student == self.author
 
 
 def count_by_proposition(subject):

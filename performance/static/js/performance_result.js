@@ -5,6 +5,7 @@ function fillPage(studentJson) {
   fillSessionSummaryTable(studentJson);
   fillCoursesTable(studentJson);
   fillMentionExplanation(studentJson);
+  fillLegendExplanation(studentJson);
 }
 
 /***************************** STUDENT INFORMATION ********************/
@@ -15,10 +16,10 @@ function fillPage(studentJson) {
  * studentJson: a json containing the student results.
  */
 function fillStudentInfo(studentJson) {
-  var firstName = studentJson.first_name;
-  var lastName = studentJson.last_name;
-  var academicYear = studentJson.academic_years[0].year;
-  var programTitle = studentJson.academic_years[0].programs[0].title;
+  var firstName = studentJson.etudiant.prenom;
+  var lastName = studentJson.etudiant.nom;
+  var academicYear = studentJson.monAnnee.anneeAcademique;
+  var programTitle = studentJson.monAnnee.monOffre.offre.intituleComplet;
   $("#student_name").append("<br>");
   $("#student_name").append(lastName + ", " + firstName);
   $("#academic_year").append("<br>");
@@ -36,18 +37,19 @@ function fillStudentInfo(studentJson) {
  * studentJson: a json containing the student results.
  */
 function fillSessionSummaryTable(studentJson) {
-  var program = studentJson.academic_years[0].programs[0];
+  var program = studentJson.monAnnee.monOffre.resultats;
 
-  fillRowTotalECTSInscription(program);
-  fillRowMean(program);
+  fillRowTotalECTSInscription(studentJson);
+  fillRowsMean(program);
   fillRowMention(program);
 }
 
-function fillRowTotalECTSInscription(programJson) {
-  var totalECTS = programJson.total_ECTS;
-  var janvInscription = programJson.results[0].insc;
-  var juinInscription = programJson.results[1].insc;
-  var septInscription = programJson.results[2].insc;
+function fillRowTotalECTSInscription(studentJson) {
+  var totalECTS = studentJson.monAnnee.monOffre.totalECTS;
+  var programJson = studentJson.monAnnee.monOffre.resultats;
+  var janvInscription = programJson.session[0].inscription;
+  var juinInscription = programJson.session[1].inscription;
+  var septInscription = programJson.session[2].inscription;
 
   var $frag = $(document.createDocumentFragment());
   createJQObject("<td/>", {}, totalECTS, $frag);
@@ -57,25 +59,53 @@ function fillRowTotalECTSInscription(programJson) {
   $frag.appendTo($("#summary_ects"));
 }
 
-function fillRowMean(programJson) {
-  var meanJanv = programJson.results[0].mean;
-  var meanJuin = programJson.results[1].mean;
-  var meanSept = programJson.results[2].mean;
 
-  var $rowMean = $("#summary_mean");
+function createMeanFrangment(meanJanv, meanJuin, meanSept, rowMean) {
+  var $fragGen = $(document.createDocumentFragment());
+  createJQObject("<td/>", {}, "", $fragGen);
+  createJQObject("<td/>", {}, meanJanv, $fragGen);
+  createJQObject("<td/>", {}, meanJuin, $fragGen);
+  createJQObject("<td/>", {}, meanSept, $fragGen);
+  $fragGen.appendTo(rowMean);
+}
 
-  var $frag = $(document.createDocumentFragment());
-  createJQObject("<td/>", {}, "", $frag);
-  createJQObject("<td/>", {}, meanJanv, $frag);
-  createJQObject("<td/>", {}, meanJuin, $frag);
-  createJQObject("<td/>", {}, meanSept, $frag);
-  $frag.appendTo($rowMean);
+function fillRowsMean(programJson) {
+  if(programJson.session[0].hasOwnProperty('moyenneGenerale')
+     && programJson.session[0].moyenneGenerale != null){
+    $("#summary_mean").hide();
+
+    var meanSuccJanv = programJson.session[0].moyenne;
+    var meanSuccJuin = programJson.session[1].moyenne;
+    var meanSuccSept = programJson.session[2].moyenne;
+    var $rowSuccessMean = $("#summary_success_mean");
+
+    createMeanFrangment(meanSuccJanv, meanSuccJuin, meanSuccSept, $rowSuccessMean);
+
+    var meanGenJanv = programJson.session[0].moyenneGenerale;
+    var meanGenJuin = programJson.session[1].moyenneGenerale;
+    var meanGenSept = programJson.session[2].moyenneGenerale;
+    var $rowGenMean = $("#summary_general_mean");
+
+    createMeanFrangment(meanGenJanv, meanGenJuin, meanGenSept, $rowGenMean);
+  }
+  else{
+    $("#summary_success_mean").hide();
+    $("#summary_general_mean").hide();
+
+    var meanJanv = programJson.session[0].moyenne;
+    var meanJuin = programJson.session[1].moyenne;
+    var meanSept = programJson.session[2].moyenne;
+    var $rowMean = $("#summary_mean");
+
+    createMeanFrangment(meanJanv, meanJuin, meanSept, $rowMean);
+  }
+
 }
 
 function fillRowMention(programJson) {
-  var mentionJanv = programJson.results[0].mention;
-  var mentionJuin = programJson.results[1].mention;
-  var mentionSept = programJson.results[2].mention;
+  var mentionJanv = programJson.session[0].mention;
+  var mentionJuin = programJson.session[1].mention;
+  var mentionSept = programJson.session[2].mention;
 
   var $rowMention = $("#summary_mention");
 
@@ -97,7 +127,7 @@ function fillRowMention(programJson) {
  */
 
 function fillCoursesTable(studentJson) {
-  var arrayCourses = studentJson.academic_years[0].programs[0].learning_units;
+  var arrayCourses = studentJson.monAnnee.monOffre.cours;
 
   var $frag = $(document.createDocumentFragment());
   $.each(arrayCourses, function(index, course) {
@@ -108,78 +138,155 @@ function fillCoursesTable(studentJson) {
 }
 
 function addRowCourse(courseJson, $row) {
-  var acronym = courseJson.acronym;
-  var title = courseJson.title;
-  var ects = courseJson.credits;
+  var acronym = courseJson.sigleComplet;
+  var title = courseJson.intituleComplet;
+  var ects = courseJson.poids;
   var inscr = inscrToString(courseJson.insc);
-  var janv = examScoreToString(courseJson.exams[0]);
-  var juin = examScoreToString(courseJson.exams[1]);
-  var sept = examScoreToString(courseJson.exams[2]);
-  var credit = creditToString(courseJson.credit_report);
+  var janv = courseJson.session[0];
+  var juin = courseJson.session[1];
+  var sept = courseJson.session[2];
+  var credit = creditToString(courseJson.creditReport);
 
   createJQObject("<td/>", {}, acronym, $row);
   createJQObject("<td/>", {}, title, $row);
   createJQObject("<td/>", {}, ects, $row);
   createJQObject("<td/>", {}, inscr, $row);
-  createJQObject("<td/>", {}, janv, $row);
-  createJQObject("<td/>", {}, juin, $row);
-  createJQObject("<td/>", {}, sept, $row);
-  createJQObject("<td/>", {}, credit, $row);
+  makeScoreCell(janv, $row);
+  makeScoreCell(juin, $row);
+  makeScoreCell(sept, $row);
+  if(credit.trim() == '-'){
+    createJQObject("<td/>", {"class": "text-center"}, credit, $row);
+  } else {
+    createJQObject("<td/>", {}, credit, $row);
+  }
 }
 
-function examScoreToString(examJson) {
-  var score = examJson.score;
-  if (examJson.status_exam == "-") {
-    return score;
+function cleanEtatExam(etatExam) {
+  if (etatExam == null
+      || etatExam.trim() == "-"
+      || etatExam.trim() == ""
+      || etatExam.trim() == "null"){
+    return null;
+  } else {
+    return etatExam.trim();
   }
-  else if(score == "-") {
-    return examJson.status_exam;
-  }
-  return score + examJson.status_exam;
 }
+
+function makeScoreCell(examJson, row){
+  var $score = examJson.note;
+  var $etatExam = cleanEtatExam(examJson.etatExam);
+  var $mention = mentionToString(examJson);
+  if ($mention != ""){
+    createJQObject("<td/>", {"colspan" : 2, "class": "text-center"}, $mention, row);
+  }
+  else if ($etatExam == null){
+    createJQObject("<td/>", {"colspan" : 2, "class": "text-center"}, $score, row);
+  }
+  else{
+    createJQObject("<td/>", {"style": "border-right:none;"}, $score, row);
+    createJQObject("<td/>", {"class": "text-right",
+                             "style": "border-left:none;"}, $etatExam, row);
+  }
+
+}
+
+function mentionToString(examJson){
+  switch (examJson.mention) {
+    case "M":
+      return "Excusé";
+    case "S":
+      if (examJson.etatExam == "R"){
+        return "Absent(R)"
+      }
+      else {
+        return "Absent";
+      }
+    case "A":
+      if (examJson.etatExam == "R"){
+        return "Absent(R)"
+      }
+      else {
+        return "Absent";
+      }
+    case "T":
+          return "Tricherie";
+    default:
+      return "";
+  }
+}
+
 
 function inscrToString(inscr) {
-  if (inscr == "I") {
-    return "Inscr";
+  switch (inscr) {
+    case "I":
+      return "Inscr";
+    case "R":
+      return "Rep.";
+    case "D":
+      return "Dsip.";
+    case "B":
+      return "Créd.";
+    case "K":
+      return "K94";
+    case "C":
+      return "C94";
+    case "N":
+      return "RIP";
+    case "Q":
+      return "Q94";
+    case "S":
+      return "EPM";
+    case "T":
+      return "Test";
+    case "X":
+          return "Ext.";
+    default:
+      return inscr;
   }
-  return "-";
 }
 
 function creditToString(creditReport) {
-  if (creditReport == "K") {
-    return "Crédit";
+  switch (creditReport) {
+    case "K":
+      return "Crédité";
+    case "R":
+      return "Reporté";
+    case "S":
+      return "EPM";
+    case "P":
+      return "Postposé";
+    default:
+      return creditReport;
+
   }
-  return "-";
 }
 
-/***************************** MENTION EXPLANATION PARAGRAPH ************/
+/***************************** MENTION AND LEGEND EXPLANATION PARAGRAPH ************/
 
 function fillMentionExplanation(studentJson) {
-  var mentionExplanation = studentJson.academic_years[0].programs[0].mention_explanation;
+  var mentionExplanation = studentJson.legende.explicationMention;
   $("#paragraph_mention_explanation").html(mentionExplanation);
 }
 
-/***************************** UTILITY FUNCTIONS TEMPLATE ***************/
 
+function fillLegendExplanation(studentJson) {
+  var legendExplanation = studentJson.legende.explicationLettresLegende
 
-/*
- * Format the program acronym for the url by lowering the cases of all characters
- * and removing the non alpha numeric characters.
- * programAcronym: a string
- */
-function formatAcronym(programAcronym) {
-    var lowerCaseProgramAcronym = programAcronym.toLowerCase();
-    return onlyAlphaNumeric(lowerCaseProgramAcronym);
-}
+  var $frag = $(document.createDocumentFragment());
+  var $row;
+  $.each(legendExplanation, function(index, letter_explanation) {
+    if(index == 0 || index%2 == 0){
+      $row = createJQObjectNoText("<div/>", {'class':'row'}, $frag);
+      var $col = createJQObjectNoText("<div/>", {'class':'col-md-6'}, $row);
+      createJQObject("<p/>", {}, letter_explanation, $col);
+    }
+    else{
+      var $col = createJQObjectNoText("<div/>", {'class':'col-md-6'}, $row);
+      createJQObject("<p/>", {}, letter_explanation, $col);
+    }
 
-
-/*
- * Return the string obtained by removing all non alphanumeric characters from s
- * s: a string
- */
-function onlyAlphaNumeric(s) {
-    var pattern = /[\W_]/g; // Regexp consisting of all non alphanumeric characters.
-    return s.replace(pattern ,"");
+  });
+  $frag.appendTo($("#body_legend_explanation"));
 }
 
 /***************************** UTILITY FUNCTIONS ***********************/
@@ -209,55 +316,3 @@ function onlyAlphaNumeric(s) {
     $jQObj.appendTo($parent) ;
     return $jQObj;
   }
-
- /*
-  * Creates a new jQuery object representing a DOM document.
-  * tag: string of the form "<HTML_tag/>" which is the DOM type
-  * attributes: object of key/value pairs that are attributes of the DOM
-  */
-  function createJQObjectNoParentNoText(tag, attributes) {
-    var $jQObj = $(tag, attributes);
-    return $jQObj;
-  }
-
-  /*
-   * Creates "n" same jQuery objects that are child of "parent".
-   * tag: string of the form "<HTML_tag/>" which is the DOM type
-   * attributes: object of key/value pairs that are attributes of the DOM
-   * $parent: jQuery object that will be the parent (container)
-   * n: number of objects to create
-   */
-   function createMultipleJQObject(tag, attributes, $parent, n){
-     //Fragment use for efficiency as dom manipulaiton is costy
-     var $frag = $(document.createDocumentFragment());
-     var array_obj = [];
-
-     for(var i = 0; i < n; i++){
-       var obj = createJQObjectNoText(tag, attributes, $frag);
-       array_obj.push(obj);
-     }
-
-     $frag.appendTo($parent);
-     return array_obj;
-   }
-
-  /*
-   * Fill the table with data.
-   * $table: jQuery object representing a table DOM document
-   * data: a two dimension array of data to put in the table
-   */
-   function fillTable($table, data){
-     //Fragment use for efficiency as dom manipulation is costy
-     var $frag = $(document.createDocumentFragment());
-
-     $.each(data, function(row_index, row_data) {
-       var $row = createJQObjectNoText("<tr>", {}, $frag);
-
-       $.each(row_data, function(cell_index, cell_data) {
-         var $cell = createJQObject("<td>", {}, cell_data, $row);
-       });
-
-     });
-
-     $frag.appendTo($table);
-   }

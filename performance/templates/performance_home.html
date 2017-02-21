@@ -27,6 +27,10 @@
 {% endcomment %}
 
 {% block breadcrumb %}
+    {% if perms.base.is_faculty_administrator %}
+        <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'faculty_administration' %}</a></li>
+        <li><a id="lnk_performance_administration" href="{% url 'performance_administration' %}">{% trans 'peformance_administration' %}</a></li>
+    {% endif %}
         <li class="active">{% trans 'performance' %}</li>
 {% endblock %}
 
@@ -38,6 +42,10 @@
 
 {% include "template_messages.html" %}
 
+<div class="alert alert-info" role="alert">
+    {% trans 'performance_results_general_legal_announcement' %}
+</div>
+
 <div class="panel panel-default">
     <div class="panel-body">
         <!-- Student info -->
@@ -45,7 +53,7 @@
             <div class="col-md-6">
                 <label>{% trans 'last_name' %}, {% trans 'first_name' %}</label>
                 <br>
-                {{ student.person.last_name}}, {{ student.person.first_name }}
+                {{ student.person.last_name }}, {{ student.person.first_name }}
             </div>
             <div class="col-md-6">
                 <label>{% trans 'matricule_number' %}</label>
@@ -69,19 +77,19 @@
             </tr>
             {% for row in programs %}
             <tr>
-                <td>{{row.year}}</td>
+                <td>{{row.academic_year}}</td>
                 <td>
                     {% if perms.base.is_faculty_administrator %}
-                        <a href="{% url 'performance_student_result' registration_id=student.registration_id anac=row.anac program_acronym=row.formatted_acronym %}">
+                        <a href="{% url 'performance_student_result' row.pk %}">
                             {{row.acronym}}
                         </a>
                     {% else %}
-                        <a href="{% url 'performance_result' anac=row.anac program_acronym=row.formatted_acronym%}">
+                        <a href="{% url 'performance_result' row.pk %}">
                             {{row.acronym}}
                         </a>
                     {% endif %}
                 </td>
-                <td>{{row.title}}</td>
+                <td>{{row.title}} {% if row.offer_registration_state in registration_states_to_show %}<i style="color: red">({% trans  row.offer_registration_state %})</i>{% endif %}</td>
             </tr>
             {% endfor %}
         </table>

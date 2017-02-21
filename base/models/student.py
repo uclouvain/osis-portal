@@ -26,15 +26,14 @@
 import logging
 from django.conf import settings
 from django.db import models
-from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from base.models import person as model_person
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class StudentAdmin(admin.ModelAdmin):
+class StudentAdmin(SerializableModelAdmin):
     list_display = ('person', 'registration_id')
     fieldsets = ((None, {'fields': ('registration_id', 'person')}),)
     raw_id_fields = ('person', )
@@ -50,7 +49,10 @@ class Student(SerializableModel):
 
 
 def find_by_registration_id(registration_id):
-    return Student.objects.get(registration_id=registration_id)
+    try:
+        return Student.objects.get(registration_id=registration_id)
+    except ObjectDoesNotExist:
+        return None
 
 
 def search(registration_id=None, person_name=None, person_username=None, person_first_name=None, full_registration=None):

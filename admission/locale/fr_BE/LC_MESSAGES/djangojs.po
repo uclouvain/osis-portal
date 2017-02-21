@@ -29,7 +29,7 @@ msgid "criteria"
 msgstr "Critère"
 
 msgid "id_picture"
-msgstr "Identity picture"
+msgstr "Photo d'identité"
 
 msgid "id_card"
 msgstr "Identity card"
@@ -80,7 +80,7 @@ msgid "scholarship_cfwb"
 msgstr "Attestation de bourse délivrée par la CFWB ou la Coopération au développement "
 
 msgid "scholarship_development_cooperation"
-msgstr "scholarship_development_cooperation"
+msgstr "Coopération au développement de bourses d'études"
 
 msgid "change_document"
 msgstr "Changer le document"
@@ -216,3 +216,30 @@ msgstr "Sûr?  Vous n'avez pas besoin de sauvegarder vos données?"
 
 msgid "mandatory_field"
 msgstr "Champ obligatoire"
+
+msgid "identity_card"
+msgstr "Carte d'identité"
+
+msgid "letter_motivation"
+msgstr "Lettre de motivation"
+
+msgid "other"
+msgstr "Autre"
+
+msgid "curriculum"
+msgstr "Curriculum"
+
+msgid "search"
+msgstr "Chercher:"
+
+msgid "showing_page"
+msgstr "Page"
+
+msgid "of"
+msgstr "de"
+
+msgid "no_record"
+msgstr "Pas d'enregistrement"
+
+msgid "confirm_application_delete"
+msgstr "Etes-vous sûr de vouloir supprimer la candidature?"

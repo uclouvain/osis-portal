@@ -25,6 +25,7 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from osis_common.models.serializable_model import SerializableModel
 
 
 class AnswerAdmin(admin.ModelAdmin):
@@ -33,7 +34,7 @@ class AnswerAdmin(admin.ModelAdmin):
     list_filter = ('application', 'option',)
 
 
-class Answer(models.Model):
+class Answer(SerializableModel):
     value = models.TextField()
     option = models.ForeignKey('Option')
     application = models.ForeignKey('Application')

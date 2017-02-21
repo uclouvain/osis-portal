@@ -24,13 +24,12 @@
 #
 ##############################################################################
 from django.db import models
-from django.contrib import admin
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
-class AcademicYearAdmin(admin.ModelAdmin):
+class AcademicYearAdmin(SerializableModelAdmin):
     list_display = ('name', 'start_date', 'end_date')
     fieldsets = ((None, {'fields': ('year', 'start_date', 'end_date')}),)
 
@@ -47,11 +46,6 @@ class AcademicYear(SerializableModel):
 
     def __str__(self):
         return u"%s-%s" % (self.year, self.year + 1)
-
-
-def next_academic_year(self):
-    next_year = self.year + 1
-    return AcademicYear.objects.filter(year=next_year)
 
 
 def find_academic_years():
@@ -75,4 +69,12 @@ def find_by_year(a_year):
     try:
         return AcademicYear.objects.get(year=a_year)
     except ObjectDoesNotExist:
+        return None
+
+
+def find_next_academic_year():
+    academic_yr = current_academic_year()
+    if academic_yr:
+        return academic_yr.year + 1
+    else:
         return None

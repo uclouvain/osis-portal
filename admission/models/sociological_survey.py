@@ -32,14 +32,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.contrib import admin
 from admission.models.enums import education, professional_activity
+from osis_common.models.serializable_model import SerializableModel
 
 
 class SociologicalSurveyAdmin(admin.ModelAdmin):
     list_display = ('applicant', 'student_professional_activity', 'student_profession')
 
 
-class SociologicalSurvey(models.Model):
-    applicant = models.OneToOneField('Applicant', on_delete=models.CASCADE, primary_key=True)
+class SociologicalSurvey(SerializableModel):
+    applicant = models.OneToOneField('Applicant', on_delete=models.CASCADE)
 
     number_brothers_sisters = models.IntegerField(default=0)
 

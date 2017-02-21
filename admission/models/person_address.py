@@ -26,6 +26,7 @@
 from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+from osis_common.models.serializable_model import SerializableModel
 
 
 class PersonAddressAdmin(admin.ModelAdmin):
@@ -33,7 +34,7 @@ class PersonAddressAdmin(admin.ModelAdmin):
     fieldsets = ((None, {'fields': ('person', 'type', 'street', 'postal_code', 'city', 'country')}),)
 
 
-class PersonAddress(models.Model):
+class PersonAddress(SerializableModel):
     ADDRESS_TYPE = (('LEGAL', _('Legal')),
                     ('CONTACT', _('Contact')))
 

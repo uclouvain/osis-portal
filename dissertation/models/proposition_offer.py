@@ -23,16 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.db import models
 from django.utils import timezone
 from django.db.models import Q
-from django.contrib import admin
 
 
-class PropositionOfferAdmin(admin.ModelAdmin):
+class PropositionOfferAdmin(SerializableModelAdmin):
     list_display = ('proposition_dissertation', 'offer_proposition')
     raw_id_fields = ('proposition_dissertation', 'offer_proposition')
+    search_fields = ('uuid', 'proposition_dissertation__title', 'offer_proposition__acronym',
+                     'proposition_dissertation__author__person__last_name',
+                     'proposition_dissertation__author__person__first_name')
 
 
 class PropositionOffer(SerializableModel):
@@ -43,12 +45,17 @@ class PropositionOffer(SerializableModel):
         return str(self.offer_proposition)
 
 
-def search_by_offers(offers):
+def find_by_offers(offers):
     return PropositionOffer.objects.filter(proposition_dissertation__active=True,
                                            proposition_dissertation__visibility=True,
                                            offer_proposition__offer__in=offers,
-                                           offer_proposition__start_visibility_proposition__lte=timezone.now())\
-        .distinct()
+                                           offer_proposition__start_visibility_proposition__lte=timezone.now(),
+                                           offer_proposition__end_visibility_proposition__gte=timezone.now()
+                                           )
+
+
+def find_by_offers_ordered_by_proposition_dissertation(offers):
+    return find_by_offers(offers).order_by('proposition_dissertation')
 
 
 def search_by_proposition_dissertation(proposition_dissertation):

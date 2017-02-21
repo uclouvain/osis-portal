@@ -23,24 +23,23 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModel
-from django.contrib import admin
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from .enums import status_types
 
 
-class PropositionRoleAdmin(admin.ModelAdmin):
+class PropositionRoleAdmin(SerializableModelAdmin):
     list_display = ('adviser', 'status', 'proposition_dissertation')
+    raw_id_fields = ('adviser', 'proposition_dissertation')
+    search_fields = ('uuid', 'proposition_dissertation__author__person__last_name',
+                     'proposition_dissertation__author__person__first_name',
+                     'proposition_dissertation__title',
+                     'adviser__person__last_name',
+                     'adviser__person__first_name')
 
 
 class PropositionRole(SerializableModel):
-    STATUS_CHOICES = (
-        ('PROMOTEUR', _('promotor')),
-        ('CO_PROMOTEUR', _('copromotor')),
-        ('READER', _('reader')),
-    )
-
-    status = models.CharField(max_length=12, choices=STATUS_CHOICES, default="PROMOTEUR")
+    status = models.CharField(max_length=12, choices=status_types.STATUS_CHOICES, default=status_types.PROMOTEUR)
     adviser = models.ForeignKey('Adviser')
     proposition_dissertation = models.ForeignKey('PropositionDissertation')
 

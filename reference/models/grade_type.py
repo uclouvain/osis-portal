@@ -24,16 +24,14 @@
 #
 ##############################################################################
 from django.db import models
-from django.contrib import admin
 from reference.enums import grade_type_coverage
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from reference.enums import institutional_grade_type as enum_institutional_grade_type
 
 
-class GradeTypeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'institutional_grade_type', 'coverage', 'adhoc', 'institutional')
-    fieldsets = ((None, {'fields': ('name', 'institutional_grade_type', 'coverage', 'adhoc', 'institutional',
-                                    'language_exam_required')}),)
+class GradeTypeAdmin(SerializableModelAdmin):
+    list_display = ('name', 'institutional_grade_type', 'coverage', 'adhoc', 'institutional', 'language_exam_required')
+    fieldsets = ((None, {'fields': ('name', 'institutional_grade_type', 'coverage', 'adhoc', 'institutional', 'language_exam_required')}),)
 
 
 class GradeType(SerializableModel):
