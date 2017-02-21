@@ -27,7 +27,8 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-        <li class="active">{% trans 'internship' %}</li>
+    <li> <a href="{% url 'internship_home' %}">{% trans 'internship' %}</a> </li>
+    <li class="active">{% trans 'hospitals' %}</li>
 {% endblock %}
 
 
