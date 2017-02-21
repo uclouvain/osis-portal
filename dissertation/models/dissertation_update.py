@@ -23,18 +23,28 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModel
-from django.contrib import admin
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.db import models
 from base import models as mdl
 from dissertation.models import dissertation
 
 JUSTIFICATION_LINK = "_set_to_"
+INVISIBLE_JUSTIFICATION_KEYWORDS = ('auto_add_jury',
+                                    'manager_add_jury',
+                                    'manager_creation_dissertation',
+                                    'manager_delete_jury',
+                                    'manager_edit_dissertation',
+                                    'manager_set_active_false',
+                                    'teacher_add_jury',
+                                    'teacher_delete_jury',
+                                    'teacher_set_active_false'
+                                    )
 
 
-class DissertationUpdateAdmin(admin.ModelAdmin):
+class DissertationUpdateAdmin(SerializableModelAdmin):
     list_display = ('dissertation', 'author', 'status_from', 'status_to', 'person', 'created')
-    raw_id_fields = ('person',)
+    raw_id_fields = ('person', 'dissertation')
+    search_fields = ('uuid',)
 
 
 class DissertationUpdate(SerializableModel):
@@ -55,7 +65,10 @@ class DissertationUpdate(SerializableModel):
 
 
 def search_by_dissertation(memory):
-    return DissertationUpdate.objects.filter(dissertation=memory).order_by('created')
+    queryset = DissertationUpdate.objects.filter(dissertation=memory).order_by('created')
+    for keyword in INVISIBLE_JUSTIFICATION_KEYWORDS:
+        queryset = queryset.exclude(justification__contains=keyword)
+    return queryset
 
 
 def add(request, memory, old_status, justification=None):

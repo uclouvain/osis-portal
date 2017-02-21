@@ -28,6 +28,7 @@ Model containing the sociological background of an applicant.
 This contains informations on the numbers of sisters and brothers,
 father and mother's profession and so on.
 """
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.contrib import admin
 from admission.models.enums import education, professional_activity
@@ -65,3 +66,10 @@ class SociologicalSurvey(SerializableModel):
                                                         related_name='paternal_grandfather_profession')
     maternal_grandfather_profession = models.ForeignKey('Profession', blank=True, null=True,
                                                         related_name="maternal_grandfather_profession")
+
+
+def find_by_applicant(applicant):
+    try:
+        return SociologicalSurvey.objects.get(applicant=applicant)
+    except ObjectDoesNotExist:
+        return None

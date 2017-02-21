@@ -41,7 +41,8 @@ class SecondaryEducationAdmin(admin.ModelAdmin):
 class SecondaryEducation(SerializableModel):
     RESULT_TYPE = (('LOW', _('low_result')),
                    ('MIDDLE', _('middle_result')),
-                   ('HIGH', _('high_result')))
+                   ('HIGH', _('high_result')),
+                   ('NO_RESULT', _('pas encore de résultat')))
 
     INTERNATIONAL_DIPLOMA_TYPE = ((NATIONAL, _('baccalaureat_national')),
                                   (EUROPEAN, _('baccalaureat_european')),

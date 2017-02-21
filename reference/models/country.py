@@ -24,11 +24,10 @@
 #
 ##############################################################################
 from django.db import models
-from django.contrib import admin
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
-class CountryAdmin(admin.ModelAdmin):
+class CountryAdmin(SerializableModelAdmin):
     list_display = ('external_id', 'name', 'iso_code', 'nationality', 'european_union', 'dialing_code', 'cref_code')
     fieldsets = ((None, {'fields': ('iso_code', 'name', 'nationality', 'european_union', 'dialing_code', 'cref_code')}),)
     ordering = ('name',)

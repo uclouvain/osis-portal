@@ -23,13 +23,23 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.db import models
+
+
+class DissertationDocumentFileAdmin(SerializableModelAdmin):
+    list_display = ('dissertation', 'document_file')
+    raw_id_fields = ('dissertation', 'document_file')
+    search_fields = ('uuid',)
 
 
 class DissertationDocumentFile(SerializableModel):
     dissertation = models.ForeignKey('Dissertation')
     document_file = models.ForeignKey('osis_common.documentFile')
+
+    def __str__(self):
+        return u"%s %s" % (self.dissertation if self.dissertation else "",
+                           self.document_file if self.document_file else "")
 
 
 def search(dissertation=None, description=None):

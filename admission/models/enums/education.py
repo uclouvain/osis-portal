@@ -38,5 +38,5 @@ EDUCATION_TYPE_CHOICES = ((UNKNOWN, _(UNKNOWN)),
                           (PRIMARY, _(PRIMARY)),
                           (SECONDARY_INFERIOR, _(SECONDARY_INFERIOR)),
                           (SECONDARY_SUPERIOR, _(SECONDARY_SUPERIOR)),
-                          (SUPERIOR_NON_UNIVERSITY, _(SECONDARY_SUPERIOR)),
+                          (SUPERIOR_NON_UNIVERSITY, _(SUPERIOR_NON_UNIVERSITY)),
                           (UNIVERSITY, _(UNIVERSITY)))

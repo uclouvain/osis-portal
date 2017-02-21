@@ -1,0 +1,90 @@
+{% extends "dashboard_layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block breadcrumb %}
+    <li class="active">{% trans 'program_choice' %}</li>
+{% endblock %}
+
+
+{% block content %}
+    <div class="page-header">
+        <h2>{% trans 'exams_enrollment' %}</h2>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            {% if programs %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>{% trans 'student' %}</label>
+                        <br>
+                        {{ student.person.last_name}} {{ student.person.first_name }}
+                    </div>
+                    <div class="col-md-6">
+                        <label>{% trans 'registration_id' %}</label>
+                        <br>
+                        {{ student.registration_id }}
+                    </div>
+                </div>
+                <br>
+                <div class="alert alert-info" style="display:inline-block;">
+                    <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>  {% trans 'choose_offer_for_exams_enrollment' %}
+                </div>
+            {% else %}
+                <br>
+                <div class="alert alert-warning" style="display:inline-block;">
+                    <p>{% trans 'no_offer_enrollment_found' %}</p>
+                </div>
+            {% endif %}
+
+            <div class="row">
+                {% if programs %}
+                    <table id="table_exam_enrollment_offer_choice" class="table table-striped table-hover">
+                        <tr>
+                            <th>{% trans 'year' %}</th>
+                            <th>{% trans 'acronym' %}</th>
+                            <th>{% trans 'program' %}</th>
+                        </tr>
+                        {% for prog in programs %}
+                            <tr>
+                                <td>{{ prog.academic_year }}</td>
+                                <td>
+                                    <a href="{% url 'exam_enrollment_form' prog.id %}">
+                                        {{ prog.acronym }}
+                                    </a>
+                                </td>
+                                <td>{{ prog.title }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

@@ -52,3 +52,7 @@ def find_by_adoc(an_adhoc):
 
 def find_by_name(a_name):
     return Profession.objects.filter(name=a_name).first()
+
+
+def find_distinct_by_adoc(is_adhoc):
+    return Profession.objects.filter(adhoc=is_adhoc).order_by('name').distinct('name')

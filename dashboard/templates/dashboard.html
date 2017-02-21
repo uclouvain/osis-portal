@@ -33,22 +33,13 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <div class="row">
         {% if perms.base.is_tutor %}
-            <div class="col-md-1"><i class="fa fa-hashtag" style="font-size: 400%; color: #6699FF;"></i></div>
-            <div class="col-md-5">
-                <h4 class="media-heading"><a href="{% url 'scores_encoding' %}" id="lnk_score_encoding">{% trans 'scores_encoding' %}</a></h4>
-                <p>{% trans 'desc_lnk_scores_encoding' %}</p>
-            </div>
+            {% include 'tutor_dashboard.html' %}
         {% endif %}
-        {% if 'performance' in installed_apps and perms.base.is_student %}
-            <div class="col-md-1"><i class="fa fa-line-chart " style="font-size: 400%; color: #6699FF;"></i></div>
-            <div class="col-md-5">
-                <h4 class="media-heading"><a href="{% url 'performance_home'  %}" id="lnk_performance">{% trans 'performance' %}</a></h4>
-                <p>{% trans 'desc_lnk_performance' %}</p>
-            </div>
+
+        {% if perms.base.is_student %}
+            {% include 'student_dashboard.html' %}
         {% endif %}
-        </div>
     </div>
 </div>
 {% endblock %}

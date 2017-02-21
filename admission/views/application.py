@@ -23,16 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
 from admission import models as mdl
+from admission.models.enums import coverage_access_degree as coverage_access_degree_choices
+from admission.views import common, demande_validation, navigation
+from admission.views.common import extra_information
+from admission.views.common import get_picture_id, get_id_document
+from base import models as mdl_base
 from reference import models as mdl_reference
 from reference.enums import institutional_grade_type as enum_institutional_grade_type
-from base import models as mdl_base
-from admission.views.common import get_picture_id, get_id_document
-from admission.views.common import extra_information
-from admission.views import common, demande_validation, navigation
-from django.http import HttpResponseRedirect
 
 
 def application_update(request, application_id):
@@ -74,11 +75,11 @@ def save_application_offer(request):
             offer_year = mdl_base.offer_year.find_by_id(offer_year_id)
             application.offer_year = offer_year
 
-        if request.POST.get('rdb_offer_localdegree'):
-            if request.POST.get('rdb_offer_localdegree') == "true":
-                application.national_degree = True
+        if request.POST.get('national_coverage_degree'):
+            if request.POST.get('national_coverage_degree') == "true":
+                application.coverage_access_degree = coverage_access_degree_choices.NATIONAL
             else:
-                application.national_degree = False
+                application.coverage_access_degree = coverage_access_degree_choices.NON_NATIONAL
 
         if request.POST.get('valuation_possible'):
             if request.POST.get('valuation_possible') == "true":
@@ -107,7 +108,7 @@ def save_application_offer(request):
                 application.resident = False
         if request.POST.get('txt_offer_lottery'):
             application.raffle_number = request.POST.get('txt_offer_lottery')
-        application.application_type = mdl.application.define_application_type(application.national_degree,
+        application.application_type = mdl.application.define_application_type(application.coverage_access_degree,
                                                                                request.user)
         if offer_year_id:
             application.save()
@@ -197,7 +198,8 @@ def application_delete(request, application_id):
 
 def change_application_offer(request, application_id=None):
     application = mdl.application.find_by_id(application_id)
-    application.application_type = mdl.application.define_application_type(application.national_degree, request.user)
+    application.application_type = mdl.application.define_application_type(application.coverage_access_degree,
+                                                                           request.user)
     application.save()
     application_list = mdl.application.find_by_user(request.user)
     applicant = mdl.applicant.find_by_user(request.user)
@@ -281,12 +283,13 @@ def create_answers(application, request):
                 answer.value = option.value
                 answer.save()
         if "slt_question_" in key:
-            answer = mdl.answer.Answer()
-            answer.application = application
-            option = mdl.option.find_by_id(value)
-            answer.option = option
-            answer.value = option.value
-            answer.save()
+            if value != "0":
+                answer = mdl.answer.Answer()
+                answer.application = application
+                option = mdl.option.find_by_id(value)
+                answer.option = option
+                answer.value = option.value
+                answer.save()
 
 
 def delete_application_assimilation_criteria(application):
@@ -294,4 +297,3 @@ def delete_application_assimilation_criteria(application):
         # delete all existing application_assimilation_criteria
         for a in mdl.application_assimilation_criteria.find_by_application(application):
             a.delete()
-

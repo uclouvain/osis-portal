@@ -36,7 +36,8 @@ class SecondaryEducationExamAdmin(admin.ModelAdmin):
 class SecondaryEducationExam(SerializableModel):
     RESULT_TYPE = (('LOW', 'Moins de 65%'),
                    ('MIDDLE', 'entre 65% et 75%'),
-                   ('HIGH', 'plus de 75%'))
+                   ('HIGH', 'plus de 75%'),
+                   ('NO_RESULT', 'pas encore de résultat'))
 
     LOCAL_LANGUAGE_EXAM_RESULT_TYPE = (('SUCCEED', _('succeeded')),
                                        ('FAILED', _('failed')),
