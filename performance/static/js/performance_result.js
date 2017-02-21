@@ -16,8 +16,8 @@ function fillPage(studentJson) {
  * studentJson: a json containing the student results.
  */
 function fillStudentInfo(studentJson) {
-  var firstName = studentJson.etudiant.nom;
-  var lastName = studentJson.etudiant.prenom;
+  var firstName = studentJson.etudiant.prenom;
+  var lastName = studentJson.etudiant.nom;
   var academicYear = studentJson.monAnnee.anneeAcademique;
   var programTitle = studentJson.monAnnee.monOffre.offre.intituleComplet;
   $("#student_name").append("<br>");

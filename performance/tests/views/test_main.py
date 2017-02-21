@@ -23,10 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import logging
+from django.conf import settings
 from django.test import TestCase
 
 import base.tests.models.test_offer_year
 import base.tests.models.test_student
+from performance.models.enums import offer_registration_state
 import performance.tests.models.test_student_performance
 from performance.views import main
 
@@ -40,10 +43,11 @@ class TestMain(TestCase):
 
     def test_convert_student_performance_to_dic(self):
         student_performance_dic = main.convert_student_performance_to_dic(self.student_performance)
-        expected = {"academic_year": 2016,
+        expected = {"academic_year": '2016 - 2017',
                     "acronym": "SINF2MS/G",
                     "title": " Master [120] en sciences informatiques, à finalité spécialisée ",
-                    "pk": self.student_performance.pk}
+                    "pk": self.student_performance.pk,
+                    "offer_registration_state": offer_registration_state.REGISTERED}
         self.assertDictEqual(student_performance_dic, expected)
 
     def test_check_right_access(self):
