@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
 
@@ -51,6 +52,27 @@ class InternshipMaster(models.Model):
 
     def __str__(self):
         return u"%s" % self.reference
+
+
+def search(name="", speciality="", organization=None):
+    query = InternshipMaster.objects
+    has_criteria = False
+    if name:
+        query = query.filter(Q(first_name__contains=name) | Q(last_name__contains=name))
+        has_criteria = True
+
+    if speciality:
+        query = query.filter(speciality=speciality)
+        has_criteria = True
+
+    if organization:
+        query = query.filter(organization=organization)
+        has_criteria = True
+
+    if has_criteria:
+        return query
+    else:
+        return None
 
 
 def get_all_specialities():

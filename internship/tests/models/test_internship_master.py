@@ -35,6 +35,62 @@ def create_internship_master(organization, name="Master", speciality="radiologie
     return master
 
 
+class TestSearch(TestCase):
+    def setUp(self):
+        self.organization = test_organization.create_organization()
+        self.organization_2 = test_organization.create_organization(reference="02")
+        self.master_1 = create_internship_master(self.organization, name="master_1")
+        self.master_2 = create_internship_master(self.organization, name="master_2", speciality="medecine")
+        self.master_3 = create_internship_master(self.organization_2, name="master_3")
+
+    def test_with_specific_name(self):
+        masters = list(mdl_internship_master.search(name="master_1"))
+        self.assertListEqual(masters, [self.master_1])
+
+    def test_with_prefix_name(self):
+        masters = list(mdl_internship_master.search(name="master"))
+        self.assertEqual(len(masters), 3)
+        self.assertIn(self.master_1, masters)
+        self.assertIn(self.master_2, masters)
+        self.assertIn(self.master_3, masters)
+
+    def test_with_no_criteria(self):
+        masters = mdl_internship_master.search()
+        self.assertFalse(masters)
+
+    def test_with_speciality(self):
+        masters = list(mdl_internship_master.search(speciality="radiologie"))
+        self.assertEqual(len(masters), 2)
+        self.assertIn(self.master_1, masters)
+        self.assertIn(self.master_3, masters)
+
+    def test_with_organization(self):
+        masters = list(mdl_internship_master.search(organization=self.organization))
+        self.assertEqual(len(masters), 2)
+        self.assertIn(self.master_1, masters)
+        self.assertIn(self.master_2, masters)
+
+    def test_with_two_criteria(self):
+        masters = list(mdl_internship_master.search(name="master", speciality="radiologie"))
+        self.assertEqual(len(masters), 2)
+        self.assertIn(self.master_1, masters)
+        self.assertIn(self.master_3, masters)
+
+        masters = list(mdl_internship_master.search(name="master", organization=self.organization_2))
+        self.assertEqual(len(masters), 1)
+        self.assertIn(self.master_3, masters)
+
+        masters = list(mdl_internship_master.search(speciality="radiologie", organization=self.organization))
+        self.assertEqual(len(masters), 1)
+        self.assertIn(self.master_1, masters)
+
+    def test_with_all_criteria(self):
+        masters = list(mdl_internship_master.search(name="master_1", speciality="radiologie",
+                                                    organization=self.organization))
+        self.assertEqual(len(masters), 1)
+        self.assertIn(self.master_1, masters)
+
+
 class TestGetAllSpecialities(TestCase):
     def setUp(self):
         self.organization = test_organization.create_organization()

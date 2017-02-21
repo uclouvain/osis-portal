@@ -34,8 +34,18 @@ from internship.forms import form_search_master
 @permission_required('base.is_student', raise_exception=True)
 def view_masters_list(request):
     specialities = mdl_internship_master.get_all_specialities()
-    form = form_search_master.SearchMasterForm(specialities)
-    masters = mdl_internship_master.InternshipMaster.objects.all()
+    masters = []
+    if request.method == "POST":
+        form = form_search_master.SearchMasterForm(specialities, request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            speciality = form.cleaned_data['speciality']
+            organization = form.cleaned_data['organization']
+            masters = mdl_internship_master.search(name=name, speciality=speciality, organization=organization)
+
+    else:
+        form = form_search_master.SearchMasterForm(specialities)
+
     return layout.render(request, "masters.html", {"masters": masters,
                                                    "search_form": form})
 
