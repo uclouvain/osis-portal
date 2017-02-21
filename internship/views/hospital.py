@@ -34,17 +34,20 @@ from internship import models as mdl_internship
 @permission_required('base.is_student', raise_exception=True)
 def view_hospitals_list(request):
     cities = mdl_internship.organization_address.get_all_cities()
+    hospitals = []
 
     if request.method == 'POST':
         form = SearchHospitalForm(cities, request.POST)
         if form.is_valid():
             name = form.cleaned_data['name']
             city = form.cleaned_data['city']
+            hospitals = get_hospitals()
 
     else:
         form = SearchHospitalForm(cities)
 
-    return layout.render(request, "hospitals.html", {'search_form': form})
+    return layout.render(request, "hospitals.html", {'search_form': form,
+                                                     'hospitals': hospitals})
 
 
 def get_hospitals():

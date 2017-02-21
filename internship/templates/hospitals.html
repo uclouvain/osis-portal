@@ -72,6 +72,31 @@
             </form>
         </div>
 
+        <div class="row">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <th>Reference</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Postal Code</th>
+                    <th>City</th>
+                    <th>Country</th>
+                    <th>Url</th>
+                </thead>
+                {% for organization, address in hospitals %}
+                <tr>
+                    <td>{{ organization.reference }}</td>
+                    <td>{{ organization.name }}</td>
+                    <td>{{ address.location }}</td>
+                    <td>{{ address.postal_code }}</td>
+                    <td>{{ address.city }}</td>
+                    <td>{{ address.country }}</td>
+                    <td>{{ organization.website }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
     </div>
 </div>
 {% endblock %}
