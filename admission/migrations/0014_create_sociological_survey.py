@@ -8,7 +8,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('admission', '0009_sociological_survey_delete'),
+        ('admission', '0013_sociological_survey_delete'),
     ]
 
     operations = [

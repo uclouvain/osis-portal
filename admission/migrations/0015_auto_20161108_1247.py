@@ -9,88 +9,88 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('admission', '0007_create_and_populate_applicant_document_file'),
+        ('admission', '0014_create_sociological_survey'),
     ]
 
     operations = [
         migrations.AddField(
             model_name='admissionexamtype',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='answer',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='applicant',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='applicantdocumentfile',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='application',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='applicationassimilationcriteria',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='applicationdocumentfile',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='curriculum',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='form',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='option',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='personaddress',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='profession',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='question',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='secondaryeducation',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='secondaryeducationexam',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
         migrations.AddField(
             model_name='sociologicalsurvey',
             name='uuid',
-            field=models.UUIDField(db_index=True, default=uuid.uuid4, unique=True),
+            field=models.UUIDField(db_index=True, default=uuid.uuid4, null=True),
         ),
     ]
