@@ -41,10 +41,19 @@ def view_hospitals_list(request):
             name = form.cleaned_data['name']
             city = form.cleaned_data['city']
 
-    if request.method == 'GET':
+    else:
         form = SearchHospitalForm(cities)
 
     return layout.render(request, "hospitals.html", {'search_form': form})
+
+
+def get_hospitals():
+    organizations = mdl_internship.organization.Organization.objects.all()
+    hospitals = []
+    for organization in organizations:
+        organization_address = mdl_internship.organization_address.get_by_organization(organization)
+        hospitals.append((organization, organization_address))
+    return hospitals
 
 
 
