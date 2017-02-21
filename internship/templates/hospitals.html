@@ -91,12 +91,14 @@
                     <td>{{ address.postal_code }}</td>
                     <td>{{ address.city }}</td>
                     <td>{{ address.country }}</td>
-                    <td>{{ organization.website }}</td>
+                    <td>{% if organization.website %}
+                        <a href="{{ organization.website }}">{{ organization.website }}</a>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </table>
         </div>
-
     </div>
 </div>
 {% endblock %}
