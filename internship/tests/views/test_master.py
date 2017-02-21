@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,19 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
-from internship.views import main, hospital, master
+from django.test import TestCase, Client
 
-urlpatterns = [
-    url(r'^$', main.view_internship_home, name='internship_home'),
-    url(r'^speciality_assignment/(?P<internship_id>[0-9]+)/$', main.assign_speciality_for_internship,
-        name='assign_speciality'),
-    url(r'^selection/(?P<internship_id>[0-9]+)/$', main.view_internship_selection, name='select_internship'),
-    url(r'^selection/(?P<internship_id>[0-9]+)/(?P<speciality_id>[0-9]+)/$', main.view_internship_selection,
-        name='select_internship_speciality'),
+import base.tests.models.test_student
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
-    url(r'^hospitals/$', hospital.view_hospitals_list, name='hospitals_list'),
 
-    url(r'^masters/$', master.view_masters_list, name='masters_list'),
-]
+class TestMasterUrl(TestCase):
+    def setUp(self):
+        self.c = Client()
+        self.student = base.tests.models.test_student.create_student("45451298")
+        self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
+        self.student.person.user = self.user
+        self.student.person.save()
 
+    def test_can_access_masters_list(self):
+        url = reverse("masters_list")
+        response = self.c.get(url)
+        self.assertEqual(response.status_code, 302)
+
+        self.c.force_login(self.user)
+        response = self.c.get(url)
+        self.assertEqual(response.status_code, 200)
