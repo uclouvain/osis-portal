@@ -36,10 +36,25 @@ def create_organization_address(organization, city="test"):
     return an_organization_address
 
 
+class TestGetByOrganization(TestCase):
+    def setUp(self):
+        self.organization = test_organization.create_organization()
+
+    def test_with_no_match(self):
+        organization_address = mdl_organization_address.get_by_organization(self.organization)
+        self.assertFalse(organization_address)
+
+    def test_with_match(self):
+        organization_address_expected = create_organization_address(self.organization, city="city1")
+        organization_address_actual = mdl_organization_address.get_by_organization(self.organization)
+        self.assertEqual(organization_address_actual, organization_address_expected)
+
+
 class TestGetAllCities(TestCase):
     def setUp(self):
         self.organization = test_organization.create_organization()
         self.organization_2 = test_organization.create_organization(reference='02')
+        self.organization_3 = test_organization.create_organization(reference='03')
 
     def test_with_no_data(self):
         cities = mdl_organization_address.get_all_cities()
@@ -53,7 +68,9 @@ class TestGetAllCities(TestCase):
     def test_with_two_same_cities(self):
         create_organization_address(self.organization)
         create_organization_address(self.organization_2)
-        create_organization_address(self.organization, city="city")
+        create_organization_address(self.organization_3, city="city")
         cities = mdl_organization_address.get_all_cities()
         self.assertListEqual(["city", "test"], cities)
+
+
 
