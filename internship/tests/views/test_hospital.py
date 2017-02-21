@@ -67,3 +67,9 @@ class TestGetHospitals(TestCase):
         self.assertIn((self.organization_1, self.organization_address_1), hospitals)
         self.assertIn((self.organization_2, self.organization_address_2), hospitals)
         self.assertIn((self.organization_3, self.organization_address_3), hospitals)
+
+    def test_with_name(self):
+        hospitals = hospital.get_hospitals(name="OSIS")
+        self.assertEqual(len(hospitals), 2)
+        self.assertIn((self.organization_1, self.organization_address_1), hospitals)
+        self.assertIn((self.organization_2, self.organization_address_2), hospitals)

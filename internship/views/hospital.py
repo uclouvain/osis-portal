@@ -41,7 +41,7 @@ def view_hospitals_list(request):
         if form.is_valid():
             name = form.cleaned_data['name']
             city = form.cleaned_data['city']
-            hospitals = get_hospitals()
+            hospitals = get_hospitals(name=name)
 
     else:
         form = SearchHospitalForm(cities)
@@ -50,8 +50,11 @@ def view_hospitals_list(request):
                                                      'hospitals': hospitals})
 
 
-def get_hospitals():
-    organizations = mdl_internship.organization.Organization.objects.all()
+def get_hospitals(name=""):
+    if name:
+        organizations = mdl_internship.organization.search(name)
+    else:
+        organizations = mdl_internship.organization.Organization.objects.all()
     hospitals = []
     for organization in organizations:
         organization_address = mdl_internship.organization_address.get_by_organization(organization)

@@ -30,8 +30,10 @@ from django import forms
 class SearchHospitalForm(forms.Form):
     def __init__(self, city_list, *args, **kwargs):
         super(SearchHospitalForm, self).__init__(*args, **kwargs)
-        self.fields['city'].choices = zip(city_list, city_list)
+        modified_city_list = city_list.copy()
+        modified_city_list.insert(0, "")
+        self.fields['city'].choices = zip(modified_city_list, modified_city_list)
 
-    name = forms.CharField(max_length=255)
-    city = forms.ChoiceField()
+    name = forms.CharField(max_length=255, required=False)
+    city = forms.ChoiceField(required=False)
 

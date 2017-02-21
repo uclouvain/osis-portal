@@ -29,7 +29,7 @@ from internship.forms import form_search_hospital
 
 class TestSearchHospitalForm(TestCase):
     def test_init(self):
-        cities = ('Anvers', 'Bruxelles', 'Ottignies')
+        cities = ['Anvers', 'Bruxelles', 'Ottignies']
         form = form_search_hospital.SearchHospitalForm(cities)
         self.assertListEqual(form.fields['city'].choices,
-                             [('Anvers', 'Anvers'), ('Bruxelles', 'Bruxelles'), ('Ottignies', 'Ottignies')])
+                             [('', ''), ('Anvers', 'Anvers'), ('Bruxelles', 'Bruxelles'), ('Ottignies', 'Ottignies')])
