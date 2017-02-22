@@ -28,6 +28,9 @@ msgstr "Choose which exam you want to take for the next session exam."
 msgid "exams_enrollment"
 msgstr "Exams enrollment"
 
+msgid "exam_enrollment_form_submitted"
+msgstr "Exam enrollment form successfully submitted."
+
 msgid "info_exam_enrollment_by_default"
 msgstr "<b>By default, you are already enrolled to all checked exams below. "
        "<br>If it fit to your needs, you don't have any action to perform. </b>"
