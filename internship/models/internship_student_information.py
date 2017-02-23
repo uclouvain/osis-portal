@@ -25,6 +25,7 @@
 ##############################################################################
 from django.contrib import admin
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class InternshipStudentInformationAdmin(admin.ModelAdmin):
@@ -46,3 +47,10 @@ class InternshipStudentInformation(models.Model):
     longitude = models.FloatField(blank=True, null=True)
     email = models.EmailField(max_length=255, blank=True, null=True)
     phone_mobile = models.CharField(max_length=100, blank=True, null=True)
+
+
+def find_by_user(a_user):
+    try:
+        return InternshipStudentInformation.objects.get(person__user=a_user)
+    except ObjectDoesNotExist:
+        return None
