@@ -24,26 +24,25 @@
 #
 ##############################################################################
 from django.contrib import admin
+from django.db import models
 
-from internship.models import *
 
-admin.site.register(internship_offer.InternshipOffer,
-                    internship_offer.InternshipOfferAdmin)
+class InternshipStudentInformationAdmin(admin.ModelAdmin):
+    list_display = ('person', 'location', 'postal_code', 'city', 'country', 'latitude', 'longitude', 'email',
+                    'phone_mobile')
+    fieldsets = ((None, {'fields': ('person', 'location', 'postal_code', 'city', 'latitude', 'longitude', 'country',
+                                    'email', 'phone_mobile')}),)
+    raw_id_fields = ('person',)
+    search_fields = ['person__user__username', 'person__last_name', 'person__first_name']
 
-admin.site.register(internship_speciality.InternshipSpeciality,
-                    internship_speciality.InternshipSpecialityAdmin)
 
-admin.site.register(organization.Organization,
-                    organization.OrganizationAdmin)
-
-admin.site.register(internship_choice.InternshipChoice,
-                    internship_choice.InternshipChoiceAdmin)
-
-admin.site.register(organization_address.OrganizationAddress,
-                    organization_address.OrganizationAddressAdmin)
-
-admin.site.register(internship_master.InternshipMaster,
-                    internship_master.InternshipMasterAdmin)
-
-admin.site.register(internship_student_information.InternshipStudentInformation,
-                    internship_student_information.InternshipStudentInformationAdmin)
+class InternshipStudentInformation(models.Model):
+    person = models.ForeignKey('base.Person')
+    location = models.CharField(max_length=255)
+    postal_code = models.CharField(max_length=20)
+    city = models.CharField(max_length=255)
+    country = models.CharField(max_length=255)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+    email = models.EmailField(max_length=255, blank=True, null=True)
+    phone_mobile = models.CharField(max_length=100, blank=True, null=True)

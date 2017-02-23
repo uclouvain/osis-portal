@@ -30,4 +30,5 @@ from internship.models import organization
 from internship.models import internship_choice
 from internship.models import organization_address
 from internship.models import internship_master
+from internship.models import internship_student_information
 
