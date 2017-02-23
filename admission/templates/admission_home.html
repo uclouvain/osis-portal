@@ -30,7 +30,9 @@
 <div id="pnl_admission_errors"></div>
 <div class="tab-content">
     <div id="tab_profile" class="tab-pane fade {% if tab_active == '0' %} in active{%endif%}">
-        {% include "profile.html" %}
+        {% if tab_active == '0' %}
+            {% include "profile.html" %}
+        {% endif %}
     </div>
     <div id="tab_application" class="tab-pane fade {% if tab_active == '1' %} in active{%endif%}">
         {% if tab_active == '1' %}
