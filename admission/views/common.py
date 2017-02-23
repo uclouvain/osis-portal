@@ -291,7 +291,7 @@ def profile(request, application_id=None, message_success=None):
                 existing_crit = mdl.applicant_assimilation_criteria.find_first(applicant, crit)
                 if existing_crit is None:
                     applicant_assimilation_criteria = \
-                                    mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria()
+                        mdl.applicant_assimilation_criteria.ApplicantAssimilationCriteria()
                     applicant_assimilation_criteria.criteria = crit
                     applicant_assimilation_criteria.applicant = applicant
                     applicant_assimilation_criteria.additional_criteria = None
@@ -477,33 +477,6 @@ def home_retour(request):
     return render(request, "admission_home.html", {'applications': applications, 'message_info': _('msg_info_saved')})
 
 
-def extra_information(application):
-    try:
-        if application.offer_year:
-            admission_exam_offer_yr = mdl.admission_exam_offer_year.find_by_offer_year(application.offer_year)
-            if admission_exam_offer_yr:
-                return True
-        return False
-    except:  # RelatedObjectDoesNotExist
-        return False
-
-
-def validated_extra(secondary_education, application):
-    if secondary_education:
-        try:
-            if application.offer_year:
-                admission_exam_offer_yr = mdl.admission_exam_offer_year.find_by_offer_year(application.offer_year)
-                if secondary_education.admission_exam_type == admission_exam_offer_yr.admission_exam_type \
-                        and secondary_education.admission_exam and secondary_education.admission_exam_date \
-                        and secondary_education.admission_exam_institution \
-                        and secondary_education.admission_exam_result:
-                    return True
-        except:
-            return True
-
-    return False
-
-
 def get_picture_id(user):
     applicant = mdl.applicant.find_by_user(user)
     app_doc_file = mdl.applicant_document_file.find_last_by_applicant_and_description(
@@ -516,8 +489,7 @@ def get_picture_id(user):
 
 def get_id_document(user):
     applicant = mdl.applicant.find_by_user(user)
-    app_doc_file = mdl.applicant_document_file.find_last_by_applicant_and_description(applicant,
-                                                                                          document_type.ID_CARD)
+    app_doc_file = mdl.applicant_document_file.find_last_by_applicant_and_description(applicant, document_type.ID_CARD)
     if app_doc_file:
         return ''.join(('/admission', app_doc_file.document_file.file.url))
     return None
@@ -537,7 +509,7 @@ def get_assimilation_documents_existing(user):
     docs = []
     for document_type_description in assimilation_basic_documents:
         app_doc_files = mdl.applicant_document_file\
-                       .find_by_applicant_and_description(applicant, document_type_description)
+            .find_by_applicant_and_description(applicant, document_type_description)
         if app_doc_files:
             document_files = []
             for app_doc_file in app_doc_files:
@@ -658,13 +630,7 @@ def delete_previous_criteria(applicant, application):
         upload_file.delete_existing_applicant_documents(applicant, description)
 
 
-def is_local_language_exam_needed(user):
-    applications = mdl.application.find_by_user(user)
-    if applications:
-        for application in applications:
-            if application.offer_year.grade_type and application.offer_year.grade_type.institutional_grade_type and \
-                    (application.offer_year.grade_type.institutional_grade_type == 'BACHELOR' or \
-                     application.offer_year.grade_type.institutional_grade_type.startswith('MASTER') or \
-                     application.offer_year.grade_type.institutional_grade_type == 'TRAINING_CERTIFICATE'):
-                return True
+def is_local_language_exam_needed(application):
+    if application and application.offer_year.grade_type:
+        return application.offer_year.grade_type.language_exam_required
     return False

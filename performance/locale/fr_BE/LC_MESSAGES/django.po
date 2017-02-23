@@ -27,7 +27,7 @@ msgid "credits"
 msgstr "Crédits"
 
 msgid "dont_have_the_score_yet"
-msgstr "Vous n'avez pas encore les résultats de vos études."
+msgstr "Vos résultats ne sont pas encore disponibles."
 
 msgid "ects"
 msgstr "ECTS"
@@ -63,13 +63,13 @@ msgid "first_name"
 msgstr "Prénom"
 
 msgid "generated"
-msgstr "générée le"
+msgstr "Générée le"
 
 msgid "inscr"
 msgstr "Inscr."
 
 msgid "jan"
-msgstr "Jan."
+msgstr "Janv."
 
 msgid "june"
 msgstr "Juin"
@@ -90,7 +90,7 @@ msgid "mention"
 msgstr "Mention"
 
 msgid "no_results"
-msgstr "Aucun résultats à afficher."
+msgstr "Vous n'avez aucune note."
 
 msgid "no_student_with_this_registration_id"
 msgstr "Aucun étudiant avec ce noma!"
@@ -136,3 +136,31 @@ msgstr "Moyenne générale"
 
 msgid "credited"
 msgstr "Crédité"
+
+msgid "next_update"
+msgstr "Date de la prochaine mise à jour du document"
+
+msgid "performance_result_fetch_timed_out"
+msgstr "Le nombre important d'utilisateurs empêche momentanément la mise à jour de vos notes. Veuillez nous en excuser et réessayer un peu plus tard."
+
+msgid "performance_results_general_legal_announcement"
+msgstr "Ce composant reflète l'état des informations enregistrées dans les bases de données officielles de l'université au moment de leur affichage et selon des modalités de diffusion décidées par le secrétariat de votre faculté."
+
+msgid "performance_result_note_legal_announcement"
+msgstr "Cette feuille de résultats est destinée à la communication entre la faculté et les éudiants. Seule l'annexe au diplôme que l'étudiant reçoit avec celui-ci et qui reprend la liste de tous les cours suivis durant un programme d'étude et des points obtenus peut être considérée comme un transcript officiel."
+
+msgid "performance_result_note_not_autorized"
+msgstr "La diffusion des résultats de la (des) session(s) de janvier n'a pas encore été autorisée par votre faculté."
+
+msgid "CESSATION"
+msgstr "Cessation"
+
+msgid "CYCLE"
+msgstr "Cycle"
+
+msgid "CONDITION"
+msgstr "Condition"
+
+msgid "INSCRIT"
+msgstr "Inscrit"
+

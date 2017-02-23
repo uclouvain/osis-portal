@@ -24,12 +24,11 @@
 #
 ##############################################################################
 from django.db import models
-from django.contrib import admin
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from attribution.models.enums import function
 
 
-class AttributionAdmin(admin.ModelAdmin):
+class AttributionAdmin(SerializableModelAdmin):
     list_display = ('tutor', 'function', 'learning_unit_year')
     list_filter = ('function',)
     fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function', 'start_year', 'end_year')}),)
@@ -39,7 +38,7 @@ class AttributionAdmin(admin.ModelAdmin):
 
 class Attribution(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    function = models.CharField(max_length=15, blank=True, null=True, choices=function.FUNCTIONS, db_index=True)
+    function = models.CharField(max_length=35, blank=True, null=True, choices=function.FUNCTIONS, db_index=True)
     learning_unit_year = models.ForeignKey('base.LearningUnitYear', blank=True, null=True, default=None)
     tutor = models.ForeignKey('base.Tutor')
     start_year = models.IntegerField(blank=True, null=True)

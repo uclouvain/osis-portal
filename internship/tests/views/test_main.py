@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,17 +23,30 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django import forms
-from base.models import student as std_model
-from django.utils.translation import ugettext_lazy as _
+from django.test import TestCase, Client
 
-class RegistrationIdForm(forms.Form):
-    registration_id = forms.CharField()
+import base.tests.models.test_student
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
-    def clean(self):
-        cleaned_data = super(RegistrationIdForm, self).clean()
-        registration_id = cleaned_data.get('registration_id')
-        if registration_id:
-            student = std_model.find_by_registration_id(registration_id)
-            if student is None:
-                self.add_error('registration_id', _('no_student_with_this_registration_id'))
+
+class TestMain(TestCase):
+    def setUp(self):
+        self.c = Client()
+        self.student = base.tests.models.test_student.create_student("45451298")
+        self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
+        self.student.person.user = self.user
+        self.student.person.save()
+
+    def test_can_access_internship_home(self):
+        home_url = reverse("internship_home")
+        response = self.c.get(home_url)
+        self.assertEqual(response.status_code, 302)
+
+        self.c.force_login(self.user)
+        response = self.c.get(home_url)
+        self.assertEqual(response.status_code, 200)
+
+
+
+

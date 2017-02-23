@@ -24,12 +24,11 @@
 #
 ##############################################################################
 from django.db import models
-from django.contrib import admin
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from base.models import offer_enrollment
 
 
-class OfferAdmin(admin.ModelAdmin):
+class OfferAdmin(SerializableModelAdmin):
     fieldsets = ((None, {'fields': ('title',)}),)
     search_fields = ['title']
 

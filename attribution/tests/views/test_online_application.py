@@ -205,7 +205,7 @@ class OnlineApplicationTest(TestCase):
             'acronym': a_learning_unit.acronym,
             'academic_year': a_next_academic_yr,
         'learning_unit': a_learning_unit})
-        self.assertEquals(online_application.define_renew_possible(self.a_tutor, a_learning_unit_year), False)
+        self.assertEquals(online_application.define_renew_possible(self.a_tutor, a_learning_unit_year, None), False)
 
     def test_define_renew_existing_academic_year_true(self):
         a_learning_unit = test_learning_unit.create_learning_unit({'acronym': 'LSTAT2121',
@@ -220,7 +220,7 @@ class OnlineApplicationTest(TestCase):
             'academic_year': test_academic_year.create_academic_year_with_year(NEXT_YEAR + 5),
             'learning_unit': a_learning_unit,
             'vacant': True})
-        self.assertEquals(online_application.define_renew_possible(self.a_tutor, a_learning_unit_year_plus_4), True)
+        self.assertEquals(online_application.define_renew_possible(self.a_tutor, a_learning_unit_year_plus_4, None), True)
 
     def test_define_renew_existing_academic_year_False_already_exists(self):
         a_learning_unit = test_learning_unit.create_learning_unit({'acronym': 'LSTAT2121',
@@ -238,8 +238,13 @@ class OnlineApplicationTest(TestCase):
         test_tutor_application.create_tutor_application({'learning_unit_year': a_learning_unit_year_plus_5,
                                                          'tutor': self.a_tutor,
                                                          'function': function.CO_HOLDER})
-        self.assertEquals(online_application.define_renew_possible(self.a_tutor, a_learning_unit_year_plus_4), False)
+        self.assertEquals(online_application.define_renew_possible(self.a_tutor, a_learning_unit_year_plus_4, None), False)
 
+    def test_is_deputy_function(self):
+        self.assertEquals(online_application.is_deputy_function(function.DEPUTY_TEMPORARY), True)
+
+    def test_is_not_deputy_function(self):
+        self.assertEquals(online_application.is_deputy_function(function.COORDINATOR), False)
 
 
 

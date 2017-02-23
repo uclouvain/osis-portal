@@ -24,11 +24,10 @@
 #
 ##############################################################################
 from django.db import models
-from django.contrib import admin
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
-class CampusAdmin(admin.ModelAdmin):
+class CampusAdmin(SerializableModelAdmin):
     list_display = ('name', 'organization')
     list_filter = ('organization',)
     fieldsets = ((None, {'fields': ('name', 'organization')}),)
