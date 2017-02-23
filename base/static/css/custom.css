@@ -40,3 +40,17 @@ body {
 .not-validated {
     color: orange;
 }
+
+.dashboard-grid .grid-item {
+    width : 45%;
+    margin-bottom: 10px;
+}
+.dashboard-grid .grid-item i {
+    font-size: 400%;
+    color: #6699FF;
+    width: 70px;
+}
+.dashboard-grid .grid-item .description {
+    width: 80%;
+    display: inline-block;
+}
