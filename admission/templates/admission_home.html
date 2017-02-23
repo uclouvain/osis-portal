@@ -42,23 +42,34 @@
         {%endif%}
     </div>
     <div id="tab_diploma" class="tab-pane fade {% if tab_active == '2' %} in active{%endif%}">
-        {% include "diploma.html" %}
+        {% if tab_active == '2' %}
+            {% include "diploma.html" %}
+        {% endif %}
     </div>
     <div id="tab_curriculum" class="tab-pane fade {% if tab_active == '3' %} in active{%endif%}">
-        {% include "curriculum.html" %}
+        {% if tab_active == '3' %}
+            {% include "curriculum.html" %}
+        {% endif %}
     </div>
     <div id="tab_accounting" class="tab-pane fade {% if tab_active == '4' %} in active{%endif%}">
-
-        {% include "accounting.html" %}
+        {% if tab_active == '4' %}
+            {% include "accounting.html" %}
+        {% endif %}
     </div>
     <div id="tab_sociological" class="tab-pane fade {% if tab_active == '5' %} in active{%endif%}">
-        {% include "sociological.html" %}
+        {% if tab_active == '5' %}
+            {% include "sociological.html" %}
+        {% endif %}
     </div>
     <div id="tab_attachment" class="tab-pane fade {% if tab_active == '6' %} in active{%endif%}">
-        {% include "attachments.html" %}
+        {% if tab_active == '6' %}
+            {% include "attachments.html" %}
+        {% endif %}
     </div>
     <div id="tab_submission" class="tab-pane fade {% if tab_active == '7' %} in active{%endif%}">
-        {% include "demande_submission.html" %}
+        {% if tab_active == '7' %}
+            {% include "demande_submission.html" %}
+        {% endif %}
     </div>
 </div>
 
