@@ -64,6 +64,7 @@
         <div class="tab-content">
 
             <div role="tabpanel" class="tab-pane active" id="student_info">
+                <br>
                 <div class="row">
                     <div class="col-md-4">
                         <strong>Last Name</strong>
@@ -121,9 +122,16 @@
             </div>
 
             <div role="tabpanel" class="tab-pane" id="affectation">
+                {% for affectation, address in student_affectations_with_address %}
                 <div class="row">
-                    AFFECTATION
+                <br>
+                    <strong>{{ affectation.period.name }}</strong> ({{ affectation.period.date_start }} - {{ affectation.period.date_end }})
+                    <br>
+                    {{ affectation.speciality.name }} | {{ affectation.organization }}
+                    <br>
+                    Address: {{ address.location }}
                 </div>
+                {% endfor %}
             </div>
 
         </div>

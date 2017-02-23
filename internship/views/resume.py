@@ -27,7 +27,8 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from base.views import layout
 from internship.models import internship_student_information as mdl_student_information
-from internship.models import internship_choice as mdl_internship_choice
+from internship.models import internship_student_affectation_stat as mdl_student_affectation
+from internship.models import organization_address as mdl_organization_address
 from base.models import student as mdl_student
 
 
@@ -36,6 +37,11 @@ from base.models import student as mdl_student
 def view_student_resume(request):
     student = mdl_student.find_by_user(request.user)
     student_information = mdl_student_information.find_by_user(request.user)
-    student_choices = mdl_internship_choice.search(student=student)
+    student_affectations = mdl_student_affectation.search(student=student)
+    student_affectations_with_address = \
+        [(affectation, mdl_organization_address.get_by_organization(affectation.organization)) for affectation in
+         student_affectations]
     return layout.render(request, "student_resume.html", {"student": student,
-                                                          "student_information": student_information})
+                                                          "student_information": student_information,
+                                                          "student_affectations_with_address":
+                                                              student_affectations_with_address})

@@ -24,32 +24,27 @@
 #
 ##############################################################################
 from django.contrib import admin
+from django.db import models
 
-from internship.models import *
 
-admin.site.register(internship_offer.InternshipOffer,
-                    internship_offer.InternshipOfferAdmin)
+class InternshipStudentAffectationStatAdmin(admin.ModelAdmin):
+    list_display = ('student', 'organization', 'speciality', 'period', 'choice', 'cost', 'consecutive_month',
+                    'type_of_internship')
+    fieldsets = ((None, {'fields': ('student', 'organization', 'speciality', 'period', 'choice', 'cost',
+                                    'consecutive_month', 'type_of_internship')}),)
+    raw_id_fields = ('student', 'organization', 'speciality', 'period')
 
-admin.site.register(internship_speciality.InternshipSpeciality,
-                    internship_speciality.InternshipSpecialityAdmin)
 
-admin.site.register(organization.Organization,
-                    organization.OrganizationAdmin)
+class InternshipStudentAffectationStat(models.Model):
+    student = models.ForeignKey('base.Student')
+    organization = models.ForeignKey('internship.Organization')
+    speciality = models.ForeignKey('internship.InternshipSpeciality')
+    period = models.ForeignKey('internship.Period')
+    choice = models.CharField(max_length=1, blank=False, null=False, default='0')
+    cost = models.IntegerField(blank=False, null=False)
+    consecutive_month = models.BooleanField(default=False, null=False)
+    type_of_internship = models.CharField(max_length=1, blank=False, null=False, default='N')
 
-admin.site.register(internship_choice.InternshipChoice,
-                    internship_choice.InternshipChoiceAdmin)
 
-admin.site.register(organization_address.OrganizationAddress,
-                    organization_address.OrganizationAddressAdmin)
-
-admin.site.register(internship_master.InternshipMaster,
-                    internship_master.InternshipMasterAdmin)
-
-admin.site.register(internship_student_information.InternshipStudentInformation,
-                    internship_student_information.InternshipStudentInformationAdmin)
-
-admin.site.register(period.Period,
-                    period.PeriodAdmin)
-
-admin.site.register(internship_student_affectation_stat.InternshipStudentAffectationStat,
-                    internship_student_affectation_stat.InternshipStudentAffectationStatAdmin)
+def search(student=None):
+    return InternshipStudentAffectationStat.objects.filter(student=student).order_by('period__date_start')

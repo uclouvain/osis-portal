@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -24,13 +24,13 @@
 #
 ##############################################################################
 
-from internship.models import internship_offer
-from internship.models import internship_speciality
-from internship.models import organization
-from internship.models import internship_choice
-from internship.models import organization_address
-from internship.models import internship_master
-from internship.models import internship_student_information
-from internship.models import period
-from internship.models import internship_student_affectation_stat
+from internship.models import period as mdl_period
+import datetime
+
+
+def create_period(name="P1", start=datetime.date(2010, 1, 1), end=datetime.date(2010, 1, 20)):
+    period = mdl_period.Period(name=name, date_start=start, date_end=end)
+    period.save()
+    return period
+
 

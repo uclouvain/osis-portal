@@ -24,32 +24,18 @@
 #
 ##############################################################################
 from django.contrib import admin
+from django.db import models
 
-from internship.models import *
 
-admin.site.register(internship_offer.InternshipOffer,
-                    internship_offer.InternshipOfferAdmin)
+class PeriodAdmin(admin.ModelAdmin):
+    list_display = ('name', 'date_start', 'date_end')
+    fieldsets = ((None, {'fields': ('name', 'date_start', 'date_end')}),)
 
-admin.site.register(internship_speciality.InternshipSpeciality,
-                    internship_speciality.InternshipSpecialityAdmin)
 
-admin.site.register(organization.Organization,
-                    organization.OrganizationAdmin)
+class Period(models.Model):
+    name = models.CharField(max_length=255)
+    date_start = models.DateField(blank=False)
+    date_end = models.DateField(blank=False)
 
-admin.site.register(internship_choice.InternshipChoice,
-                    internship_choice.InternshipChoiceAdmin)
-
-admin.site.register(organization_address.OrganizationAddress,
-                    organization_address.OrganizationAddressAdmin)
-
-admin.site.register(internship_master.InternshipMaster,
-                    internship_master.InternshipMasterAdmin)
-
-admin.site.register(internship_student_information.InternshipStudentInformation,
-                    internship_student_information.InternshipStudentInformationAdmin)
-
-admin.site.register(period.Period,
-                    period.PeriodAdmin)
-
-admin.site.register(internship_student_affectation_stat.InternshipStudentAffectationStat,
-                    internship_student_affectation_stat.InternshipStudentAffectationStatAdmin)
+    def __str__(self):
+        return u"%s" % self.name
