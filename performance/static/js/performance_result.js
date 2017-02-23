@@ -16,8 +16,8 @@ function fillPage(studentJson) {
  * studentJson: a json containing the student results.
  */
 function fillStudentInfo(studentJson) {
-  var firstName = studentJson.etudiant.nom;
-  var lastName = studentJson.etudiant.prenom;
+  var firstName = studentJson.etudiant.prenom;
+  var lastName = studentJson.etudiant.nom;
   var academicYear = studentJson.monAnnee.anneeAcademique;
   var programTitle = studentJson.monAnnee.monOffre.offre.intituleComplet;
   $("#student_name").append("<br>");
@@ -154,23 +154,38 @@ function addRowCourse(courseJson, $row) {
   makeScoreCell(janv, $row);
   makeScoreCell(juin, $row);
   makeScoreCell(sept, $row);
-  createJQObject("<td/>", {}, credit, $row);
+  if(credit.trim() == '-'){
+    createJQObject("<td/>", {"class": "text-center"}, credit, $row);
+  } else {
+    createJQObject("<td/>", {}, credit, $row);
+  }
+}
+
+function cleanEtatExam(etatExam) {
+  if (etatExam == null
+      || etatExam.trim() == "-"
+      || etatExam.trim() == ""
+      || etatExam.trim() == "null"){
+    return null;
+  } else {
+    return etatExam.trim();
+  }
 }
 
 function makeScoreCell(examJson, row){
   var $score = examJson.note;
+  var $etatExam = cleanEtatExam(examJson.etatExam);
   var $mention = mentionToString(examJson);
   if ($mention != ""){
-    createJQObject("<td/>", {}, $mention, row);
+    createJQObject("<td/>", {"colspan" : 2, "class": "text-center"}, $mention, row);
   }
-  else if (examJson.etatExam == "-") {
-    createJQObject("<td/>", {}, $score, row);
+  else if ($etatExam == null){
+    createJQObject("<td/>", {"colspan" : 2, "class": "text-center"}, $score, row);
   }
   else{
-    var $cell = createJQObject("<td/>", {},"", row);
-    var $row = createJQObject("<div/>", {'class': 'row'},"", $cell);
-    createJQObject("<div/>", {'class': 'col-md-8'},$score, $row);
-    createJQObject("<div/>", {'class': 'col-md-4 text-right'},examJson.etatExam, $row);
+    createJQObject("<td/>", {"style": "border-right:none;"}, $score, row);
+    createJQObject("<td/>", {"class": "text-right",
+                             "style": "border-left:none;"}, $etatExam, row);
   }
 
 }
@@ -222,7 +237,9 @@ function inscrToString(inscr) {
     case "S":
       return "EPM";
     case "T":
-      return "T94";
+      return "Test";
+    case "X":
+          return "Ext.";
     default:
       return inscr;
   }

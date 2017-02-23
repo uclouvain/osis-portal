@@ -24,16 +24,16 @@
 #
 ##############################################################################
 from django.db import models
-from django.contrib import admin
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
-class LearningUnitYearAdmin(admin.ModelAdmin):
+class LearningUnitYearAdmin(SerializableModelAdmin):
     list_display = ('acronym', 'title', 'academic_year', 'weight', 'learning_unit', 'vacant')
     fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'weight', 'learning_unit', 'team', 'vacant',
                                     'in_charge')}),)
     list_filter = ('academic_year__year', 'vacant')
     search_fields = ['acronym']
+    raw_id_fields = ('learning_unit',)
 
 
 class LearningUnitYear(SerializableModel):
@@ -52,7 +52,7 @@ class LearningUnitYear(SerializableModel):
         return u"%s - %s" % (self.academic_year, self.acronym)
 
 
-def search(academic_year_id=None, acronym=None, a_learning_unit=None, title=None):
+def search(academic_year_id=None, acronym=None, a_learning_unit=None):
     queryset = LearningUnitYear.objects
 
     if academic_year_id:
@@ -66,6 +66,7 @@ def search(academic_year_id=None, acronym=None, a_learning_unit=None, title=None
 
     return queryset
 
+
 def search_order_by_acronym(academic_year_id=None):
     return search(academic_year_id).order_by('acronym')
 
@@ -76,3 +77,8 @@ def find_by_id(learning_unit_year_id):
 
 def find_first(an_academic_year=None, a_learning_unit=None):
     return LearningUnitYear.objects.filter(academic_year=an_academic_year, learning_unit=a_learning_unit).first()
+
+
+def find_by_acronym(acronym, academic_year):
+    return LearningUnitYear.objects.filter(acronym__startswith=acronym,
+                                           academic_year=academic_year)
