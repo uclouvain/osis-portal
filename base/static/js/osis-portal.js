@@ -11,14 +11,6 @@ $("#slt_offer_type").change(function() {
     //Cancel the previous selection
     document.getElementById("txt_offer_year_id").value = "";
 
-    if($("#slt_offer_type").val()=="BACHELOR" || $("#slt_offer_type").val()=="MASTER" || $("#slt_offer_type").val()=="TRAINING_CERTIFICATE"){
-        $("#hdn_local_language_exam_needed").val('True')
-         $('#pnl_local_exam').css('visibility', 'visible').css('display','block');
-    }else{
-        $("#hdn_local_language_exam_needed").val('False')
-        $('#pnl_local_exam').css('visibility', 'hidden').css('display','none');
-    }
-
     $('#bt_save').prop("disabled",true);
     var i=0;
 
