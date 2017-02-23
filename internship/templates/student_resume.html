@@ -41,7 +41,54 @@
 <div class="panel panel-default">
     <div class="panel panel-body">
 
-        STUDENT RESUME
+        <div class="row">
+            <div class="col-md-4">
+                <strong>Last Name</strong>
+                <br>
+                {{ student.person.last_name }}
+            </div>
+            <div class="col-md-4">
+                <strong>First Name</strong>
+                <br>
+                {{ student.person.first_name }}
+            </div>
+            <div class="col-md-4">
+                <strong>Noma</strong>
+                <br>
+                {{ student.registration_id }}
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-4">
+                <strong>Gender</strong>
+                <br>
+                {{ student.person.gender}}
+            </div>
+            <div class="col-md-4">
+                <strong>Email</strong>
+                <br>
+                {{ student.person.email }}
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-4">
+                <strong>Mobile Phone</strong>
+                <br>
+                {{ student.person.phone_mobile }}
+            </div>
+            <div class="col-md-4">
+                <strong>Language</strong>
+                <br>
+                {{ student.person.language }}
+            </div>
+            <div class="col-md-4">
+                <strong>Address</strong>
+                <br>
+                {{ student_information.location }}
+            </div>
+        </div>
 
     </div>
 </div>

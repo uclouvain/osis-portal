@@ -26,10 +26,14 @@
 ############################################################################
 from django.contrib.auth.decorators import login_required, permission_required
 from base.views import layout
+from internship.models import internship_student_information as mdl_student_information
+from base.models import student as mdl_student
 
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def view_student_resume(request):
-
-    return layout.render(request, "student_resume.html")
+    student = mdl_student.find_by_user(request.user)
+    student_information = mdl_student_information.find_by_user(request.user)
+    return layout.render(request, "student_resume.html", {"student": student,
+                                                          "student_information": student_information})
