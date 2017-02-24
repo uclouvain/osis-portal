@@ -54,6 +54,9 @@ class SecondaryEducationExam(SerializableModel):
     institution = models.CharField(max_length=100, blank=True, null=True)
     result = models.CharField(max_length=30, choices=RESULT_TYPE+LOCAL_LANGUAGE_EXAM_RESULT_TYPE, blank=True, null=True)
 
+    def __str__(self):
+        return self.institution
+
 
 def search(pk=None, secondary_education_id=None, type=None):
     queryset = SecondaryEducationExam.objects

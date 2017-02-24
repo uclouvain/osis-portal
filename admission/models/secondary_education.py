@@ -73,6 +73,9 @@ class SecondaryEducation(SerializableModel):
     international_diploma_language = models.ForeignKey('reference.Language', blank=True, null=True)
     international_equivalence = models.CharField(max_length=20, choices=EQUIVALENCE_TYPE, blank=True, null=True)
 
+    def __str__(self):
+        return "{}".format(self.national_institution)
+
 
 def find_by_person(an_applicant):
     return SecondaryEducation.objects.filter(person=an_applicant).first()
