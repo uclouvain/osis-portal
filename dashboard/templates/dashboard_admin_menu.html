@@ -25,9 +25,8 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-
-{% if 'performance'  in installed_apps and perms.base.is_faculty_administrator %}
-    <li><a href="{% url 'performance_administration' %}" role="button" id="bt_faculty_administration">
-        <span class="glyphicon glyphicon-tower" aria-hidden="true"></span>
-        {% trans 'performance_administration' %}</a></li>
+{% if perms.base.is_faculty_administrator %}
+<li><a href="{% url 'faculty_administration' %}" role="button" id="bt_faculty_administration">
+    <span class="glyphicon glyphicon-tower" aria-hidden="true"></span>
+    {% trans 'faculty_administration' %}</a></li>
 {% endif %}

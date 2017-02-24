@@ -28,5 +28,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(add_users_to_group),
     ]

@@ -24,16 +24,16 @@
 #
 ##############################################################################
 import datetime
-from unittest import skip
+import json
+from unittest.mock import patch
+
 from django.test import TestCase
+from django.core.exceptions import ObjectDoesNotExist
 
 import base.tests.models.test_offer_year
 import performance.tests.models.test_student_performance
 from performance.models import student_performance as mdl_perf
 from performance.queue import student_performance as queue_stud_perf
-from django.core.exceptions import ObjectDoesNotExist
-import json
-from unittest.mock import patch
 
 
 class TestQueueStudentPerformance(TestCase):
@@ -47,13 +47,16 @@ class TestQueueStudentPerformance(TestCase):
         registration_id = self.student_performance.registration_id
         academic_year = self.student_performance.academic_year
         acronym = self.student_performance.acronym
-        stud_perf = queue_stud_perf.save(registration_id, academic_year, acronym, json.loads(self.json_points))
+        default_update_date = queue_stud_perf.get_expiration_date(academic_year=academic_year, consumed=True)
+        stud_perf = queue_stud_perf.save(registration_id, academic_year, acronym, json.loads(self.json_points),
+                                         default_update_date=default_update_date)
 
         self.student_performance.refresh_from_db()
 
         self.assertEqual(stud_perf, self.student_performance, "Object should be updated")
 
-        queue_stud_perf.save("4549841", academic_year, acronym, json.loads(self.json_points))
+
+        queue_stud_perf.save("4549841", academic_year, acronym, json.loads(self.json_points), default_update_date)
         try:
             mdl_perf.StudentPerformance.objects.get(registration_id="4549841",
                                                     academic_year=self.student_performance.academic_year,

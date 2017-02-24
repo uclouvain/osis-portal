@@ -24,11 +24,10 @@
 #
 ##############################################################################
 from django.db import models
-from django.contrib import admin
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
-class LearningUnitEnrollmentAdmin(admin.ModelAdmin):
+class LearningUnitEnrollmentAdmin(SerializableModelAdmin):
     list_display = ('student', 'learning_unit_year', 'date_enrollment', 'changed')
     fieldsets = ((None, {'fields': ('offer_enrollment', 'learning_unit_year', 'date_enrollment')}),)
     list_filter = ('learning_unit_year__academic_year__year',)

@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.contrib import admin
 from django.db import models
 from django.db.models import Q
@@ -35,7 +35,7 @@ from dissertation.utils.emails_dissert import send_mail_to_teacher_new_dissert
 from base import models as mdl
 
 
-class DissertationAdmin(admin.ModelAdmin):
+class DissertationAdmin(SerializableModelAdmin):
     list_display = ('uuid', 'title', 'author', 'status', 'active', 'proposition_dissertation', 'modification_date')
     raw_id_fields = ('author', 'offer_year_start', 'proposition_dissertation', 'location')
     search_fields = ('uuid', 'title', 'author__person__last_name', 'author__person__first_name',

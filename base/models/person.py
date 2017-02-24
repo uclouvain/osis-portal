@@ -26,16 +26,15 @@
 import logging
 
 from django.db import models
-from django.contrib import admin
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class PersonAdmin(admin.ModelAdmin):
+class PersonAdmin(SerializableModelAdmin):
     list_display = ('first_name', 'middle_name', 'last_name', 'username', 'email', 'gender', 'global_id', 'national_id',
                     'changed')
     search_fields = ['first_name', 'middle_name', 'last_name', 'user__username', 'email']

@@ -1,0 +1,39 @@
+{% load staticfiles %}
+{% load i18n %}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-2"><i class="fa fa-hashtag" style="font-size: 400%; color: #6699FF;"></i></div>
+            <div class="col-md-10">
+                <h4 class="media-heading"><a href="{% url 'scores_encoding' %}" id="lnk_score_encoding">{% trans 'my_score_sheets' %}</a></h4>
+                <p>{% trans 'desc_lnk_scores_encoding' %}</p>
+            </div>
+        </div>
+        <br>
+        {% if 'attribution' in installed_apps  %}
+            {% if online_application_opened %}
+                <div class="row">
+                    <div class="col-md-2"><i class="fa fa-address-card-o" style="font-size: 400%; color: #6699FF;"></i></div>
+                    <div class="col-md-10">
+                        <h4 class="media-heading"><a href="{% url 'learning_unit_applications' %}" id="lnk_my_applications">{% trans 'my_applications' %}</a></h4>
+                        <p>{% trans 'desc_lnk_my_applications' %}</p>
+                    </div>
+                </div>
+                <br>
+            {% endif %}
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        {% if 'attribution' in installed_apps  %}
+            <div class="row">
+                <div class="col-md-2"><i class="fa fa-list-alt" style="font-size: 400%; color: #6699FF;"></i></div>
+                <div class="col-md-10">
+                    <h4 class="media-heading"><a href="{% url 'attribution_home' %}" id="lnk_my_teaching_charge">{% trans 'my_teaching_charge' %}</a></h4>
+                    <p>{% trans 'desc_lnk_my_teaching_charge' %}</p>
+                </div>
+            </div>
+            <br>
+        {% endif %}
+    </div>
+</div>
