@@ -23,15 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
+import json
+from unittest.mock import patch
+
 from django.test import TestCase
+from django.core.exceptions import ObjectDoesNotExist
 
 import base.tests.models.test_offer_year
 import performance.tests.models.test_student_performance
 from performance.models import student_performance as mdl_perf
 from performance.queue import student_performance as queue_stud_perf
-from django.core.exceptions import ObjectDoesNotExist
-import json
-from unittest.mock import patch
 
 
 class TestQueueStudentPerformance(TestCase):
@@ -45,13 +47,16 @@ class TestQueueStudentPerformance(TestCase):
         registration_id = self.student_performance.registration_id
         academic_year = self.student_performance.academic_year
         acronym = self.student_performance.acronym
-        stud_perf = queue_stud_perf.save(registration_id, academic_year, acronym, self.json_points)
+        default_update_date = queue_stud_perf.get_expiration_date(academic_year=academic_year, consumed=True)
+        stud_perf = queue_stud_perf.save(registration_id, academic_year, acronym, json.loads(self.json_points),
+                                         default_update_date=default_update_date)
 
         self.student_performance.refresh_from_db()
 
         self.assertEqual(stud_perf, self.student_performance, "Object should be updated")
 
-        queue_stud_perf.save("4549841", academic_year, acronym, self.json_points)
+
+        queue_stud_perf.save("4549841", academic_year, acronym, json.loads(self.json_points), default_update_date)
         try:
             mdl_perf.StudentPerformance.objects.get(registration_id="4549841",
                                                     academic_year=self.student_performance.academic_year,
@@ -109,4 +114,36 @@ class TestQueueStudentPerformance(TestCase):
         self.assertEqual(self.student_performance.registration_id, obj.registration_id, "Incorrect student")
         self.assertEqual(self.student_performance.academic_year, obj.academic_year, "Incorrect academic_year")
         self.assertEqual(self.student_performance.acronym, obj.acronym, "Incorrect acronym")
+
+
+class TestUpdateExpDate(TestCase):
+
+    def get_update_exp_date_json_with_reg_id_as_byte(self):
+        return b'{"registrationId": "1111111","academicYear": 2016,"acronym": \
+        "DROI1BA","expirationDate": 1485267376419,"forceUpdate": false}'
+
+    def get_update_exp_date_json_without_reg_id_as_byte(self):
+        return b'{"academicYear":2016,"acronym":\
+        "DROI1BA","expirationDate":1485267376419,"forceUpdate":false}'
+
+    def setUp(self):
+        self.student_performance_1 = performance.tests.models.test_student_performance.\
+            create_student_performance('DROI1BA', '1111111', 2016, datetime.datetime.now())
+        self.student_performance_2 = performance.tests.models.test_student_performance.\
+            create_student_performance('DROI1BA', '2222222', 2016, datetime.datetime.now())
+
+    def test_update_with_registration_id(self):
+        queue_stud_perf.update_exp_date_callback(self.get_update_exp_date_json_with_reg_id_as_byte())
+        student_perf_1 = mdl_perf.find_by_pk(self.student_performance_1.pk)
+        student_perf_2 = mdl_perf.find_by_pk(self.student_performance_2.pk)
+        self.assertNotEqual(student_perf_1.update_date.replace(microsecond=0),
+                            student_perf_2.update_date.replace(microsecond=0))
+
+    def test_update_without_registration_id(self):
+        queue_stud_perf.update_exp_date_callback(self.get_update_exp_date_json_without_reg_id_as_byte())
+        student_perf_1 = mdl_perf.find_by_pk(self.student_performance_1.pk)
+        student_perf_2 = mdl_perf.find_by_pk(self.student_performance_2.pk)
+        self.assertEqual(student_perf_1.update_date.replace(microsecond=0),
+                         student_perf_2.update_date.replace(microsecond=0))
+
 

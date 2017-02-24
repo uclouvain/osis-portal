@@ -27,6 +27,7 @@ from django.db import models
 from django.contrib import admin
 from admission.models import form
 from admission.models.enums import question_type
+from osis_common.models.serializable_model import SerializableModel
 
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -37,7 +38,7 @@ class QuestionAdmin(admin.ModelAdmin):
     search_fields = ['form']
 
 
-class Question(models.Model):
+class Question(SerializableModel):
     label = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     type = models.CharField(max_length=20, choices=question_type.QUESTION_TYPES)

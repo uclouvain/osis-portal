@@ -1,0 +1,101 @@
+[
+  {
+    "model": "base.learningunit",
+    "pk": 1,
+    "fields": {
+      "external_id": "",
+      "acronym": "LULBG2454",
+      "title": "Spectroscopie atmosph\u00e9rique et t\u00e9l\u00e9d\u00e9tection spatiale (ULB)",
+      "description": null
+    }
+  },
+  {
+    "model": "base.learningunit",
+    "pk": 2,
+    "fields": {
+      "external_id": "",
+      "acronym": "LMEM2110",
+      "title": "Recent Continental Philosophy",
+      "description": null
+    }
+  },
+  {
+    "model": "base.learningunit",
+    "pk": 3,
+    "fields": {
+      "external_id": "osis.learning_unit_119116_2015",
+      "acronym": "LELTR7911",
+      "title": "Traduccion espanol-franc\u00e9s (105620) (6)",
+      "description": null
+    }
+  },
+  {
+    "model": "base.learningunit",
+    "pk": 4,
+    "fields": {
+      "external_id": "osis.learning_unit_116814_2015",
+      "acronym": "LPSPG1021",
+      "title": "S\u00e9minaire approfondi: Questions approfondies de psychologie de la personnalit\u00e9",
+      "description": null
+    }
+  },
+  {
+    "model": "base.learningunit",
+    "pk": 5,
+    "fields": {
+      "external_id": "osis.learning_unit_203764_2015",
+      "acronym": "LSINF1211",
+      "title": "Introduction aux syst\u00e8mes d'information",
+      "description": null
+    }
+  },
+  {
+    "model": "base.learningunit",
+    "pk": 6,
+    "fields": {
+      "external_id": "osis.learning_unit_116348_2015",
+      "title": "S\u00e9minaires de chimie analytique Partim B",
+      "description": ""
+    }
+  },
+  {
+    "model": "base.learningunit",
+    "pk": 7,
+    "fields": {
+      "external_id": "osis.learning_unit_416502_2015",
+      "acronym": "LBIR2000A",
+      "title": "Stage en Master: partim A",
+      "description": null
+    }
+  },
+  {
+    "model": "base.learningunit",
+    "pk": 8,
+    "fields": {
+      "external_id": "osis.learning_unit_194632_2015",
+      "acronym": "LDUAL4367",
+      "title": "Ontwerp van constructiecomponenten: beton, deel 2 (Katholieke Universiteit te Leuven)\r",
+      "description": null
+    }
+  },
+  {
+    "model": "base.learningunit",
+    "pk": 9,
+    "fields": {
+      "external_id": "osis.learning_unit_206968_2015",
+      "acronym": "XUPMA1104",
+      "title": "Estudios de mercado y gesti\u00f3n de calidad en la industria alimentaria",
+      "description": null
+    }
+  },
+  {
+    "model": "base.learningunit",
+    "pk": 10,
+    "fields": {
+      "external_id": "osis.learning_unit_194034_2015",
+      "acronym": "LDUAL4355",
+      "title": "Elektrische actuatoren: gevorderde aspecten en toepassingen m.i.v. transport (Katholieke Universiteit te Leuven)\r",
+      "description": null
+    }
+  }
+]

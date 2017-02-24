@@ -26,6 +26,7 @@
 from django.db import models
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
+from osis_common.models.serializable_model import SerializableModel
 
 
 class OptionAdmin(admin.ModelAdmin):
@@ -36,7 +37,7 @@ class OptionAdmin(admin.ModelAdmin):
     search_fields = ['question']
 
 
-class Option(models.Model):
+class Option(SerializableModel):
     label = models.CharField(max_length=255)
     value = models.TextField(blank=True, null=True)
     order = models.IntegerField(blank=True, null=True)

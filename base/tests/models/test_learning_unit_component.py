@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,17 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django import forms
-from base.models import student as std_model
-from django.utils.translation import ugettext_lazy as _
+from base import models as mdl_base
 
-class RegistrationIdForm(forms.Form):
-    registration_id = forms.CharField()
 
-    def clean(self):
-        cleaned_data = super(RegistrationIdForm, self).clean()
-        registration_id = cleaned_data.get('registration_id')
-        if registration_id:
-            student = std_model.find_by_registration_id(registration_id)
-            if student is None:
-                self.add_error('registration_id', _('no_student_with_this_registration_id'))
+def create_learning_unit_component(data):
+    learning_unit_component = mdl_base.learning_unit_component.LearningUnitComponent()
+    if 'learning_unit_year' in data:
+        learning_unit_component.learning_unit_year = data['learning_unit_year']
+    if 'type' in data:
+        learning_unit_component.type = data['type']
+    if 'duration' in data:
+        learning_unit_component.duration = data['duration']
+    learning_unit_component.save()
+    return learning_unit_component

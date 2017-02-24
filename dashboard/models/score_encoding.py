@@ -27,15 +27,15 @@ from django.db import models
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.postgres.fields import JSONField
-from osis_common.models.serializable_model import SerializableModel
 
 
 class ScoreEncodingAdmin(admin.ModelAdmin):
     list_display = ('global_id',)
     fieldsets = ((None, {'fields': ('global_id', 'document')}),)
+    search_fields = ['global_id']
 
 
-class ScoreEncoding(SerializableModel):
+class ScoreEncoding(models.Model):
     global_id = models.CharField(max_length=10, unique=True)
     document = JSONField()
 

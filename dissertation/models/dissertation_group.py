@@ -23,9 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.db import models
 from . import dissertation
+
+
+class DissertationGroupAdmin(SerializableModelAdmin):
+    list_display = ('dissertation',)
+    raw_id_fields = ('dissertation',)
+    search_fields = ('uuid',)
 
 
 class DissertationGroup(SerializableModel):

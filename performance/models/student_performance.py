@@ -29,22 +29,36 @@ from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from performance.queue.student_performance import fetch_and_save
 from django.utils import timezone
-
+from performance.models.enums import offer_registration_state;
 
 class StudentPerformanceAdmin(admin.ModelAdmin):
-    list_display = ('registration_id', 'academic_year', 'acronym', 'update_date', 'creation_date')
-    list_filter = ('registration_id', 'academic_year', 'acronym', )
-    fieldsets = ((None, {'fields': ('registration_id', 'academic_year', 'acronym', 'update_date', 'creation_date')}),)
-    readonly_fields = ('creation_date', )
+    list_display = ('registration_id', 'academic_year',
+                    'acronym', 'update_date', 'creation_date', 'authorized', 'offer_registration_state')
+    list_filter = ('academic_year',)
+    fieldsets = ((None, {'fields': ('registration_id', 'academic_year', 'acronym', 'update_date',
+                                    'creation_date', 'data')}),)
+    readonly_fields = ('creation_date',)
+    search_fields = ['registration_id', 'academic_year', 'acronym']
 
 
 class StudentPerformance(models.Model):
-    registration_id = models.CharField(max_length=10)
+    registration_id = models.CharField(max_length=10, db_index=True)
     academic_year = models.IntegerField()
     acronym = models.CharField(max_length=15)
     data = JSONField()
     update_date = models.DateTimeField()
-    creation_date = models.DateTimeField(auto_now=True)
+    creation_date = models.DateTimeField()
+    authorized = models.BooleanField(default=True)
+    offer_registration_state = models.CharField(max_length=50,
+                                                choices=offer_registration_state.OFFER_REGISTRAION_STATES,
+                                                null=True)
+
+    fetch_timed_out = False
+
+    def _get_academic_year_template_formated(self):
+        return '{} - {}'.format(self.academic_year, self.academic_year + 1)
+
+    academic_year_template_formated = property(_get_academic_year_template_formated)
 
     class Meta:
         unique_together = ('registration_id', 'academic_year', 'acronym')
@@ -71,31 +85,26 @@ def search(registration_id=None, academic_year=None, acronym=None):
         has_criteria = True
 
     if has_criteria:
-        return student_performances
+        return student_performances.order_by('-academic_year')
     else:
         return None
 
 
 def update_or_create(registration_id, academic_year, acronym, fields):
-    obj, created = StudentPerformance.objects.update_or_create(registration_id=registration_id, academic_year=academic_year,
-                                                               acronym=acronym, defaults=fields)
+    obj, created = StudentPerformance.objects.update_or_create(registration_id=registration_id,
+                                                               academic_year=academic_year,
+                                                               acronym=acronym,
+                                                               defaults=fields)
     return obj
 
 
 def find_by_student_and_offer_year(registration_id, academic_year, acronym):
     try:
-        result = StudentPerformance.objects.get(registration_id=registration_id, academic_year=academic_year,
-                                                               acronym=acronym)
+        result = StudentPerformance.objects.get(registration_id=registration_id,
+                                                academic_year=academic_year,
+                                                acronym=acronym)
     except ObjectDoesNotExist:
         result = None
-    return result
-
-
-def find_or_fetch(registration_id, academic_year, acronym):
-    result = find_by_student_and_offer_year(registration_id, academic_year, acronym)
-    if result is None or has_expired(result):
-        new_result = fetch_and_save(registration_id, academic_year, acronym)
-        result = new_result if new_result else result
     return result
 
 
@@ -108,8 +117,11 @@ def has_expired(student_performance):
 def find_actual_by_pk(student_performance_pk):
     result = find_by_pk(student_performance_pk)
     if result and has_expired(result):
-        new_result = fetch_and_save(result.registration_id, result.academic_year, result.acronym)
-        result = new_result if new_result else result
+            new_result = fetch_and_save(result.registration_id, result.academic_year, result.acronym)
+            if new_result:
+                result = new_result
+            else:
+                result.fetch_timed_out = True
     return result
 
 
@@ -121,3 +133,5 @@ def find_by_pk(student_performance_pk):
     return result
 
 
+def find_by_acronym_and_academic_year(acronym, academic_year):
+    return StudentPerformance.objects.filter(acronym=acronym, academic_year=academic_year)

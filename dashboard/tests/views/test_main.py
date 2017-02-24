@@ -51,7 +51,7 @@ class DownloadPaperSheetTest(TestCase):
         c.force_login(self.tutor.person.user)
         url = reverse('scores_download')
         response = c.get(url)
-        self.assertEqual(response.content, score_encoding.print_scores(None, self.global_id))
+        self.assertEquals(response.content, score_encoding.print_scores(self.global_id))
 
     def test_when_no_score_sheet(self):
         self.tutor.person.global_id = "0124"
@@ -60,4 +60,4 @@ class DownloadPaperSheetTest(TestCase):
         c.force_login(self.tutor.person.user)
         url = reverse('scores_download')
         response = c.get(url)
-        self.assertContains(response, html.escape(_('no_score_to_encode')))
+        self.assertContains(response,  html.escape(_('no_score_to_encode')))

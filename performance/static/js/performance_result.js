@@ -5,6 +5,7 @@ function fillPage(studentJson) {
   fillSessionSummaryTable(studentJson);
   fillCoursesTable(studentJson);
   fillMentionExplanation(studentJson);
+  fillLegendExplanation(studentJson);
 }
 
 /***************************** STUDENT INFORMATION ********************/
@@ -15,8 +16,8 @@ function fillPage(studentJson) {
  * studentJson: a json containing the student results.
  */
 function fillStudentInfo(studentJson) {
-  var firstName = studentJson.etudiant.nom;
-  var lastName = studentJson.etudiant.prenom;
+  var firstName = studentJson.etudiant.prenom;
+  var lastName = studentJson.etudiant.nom;
   var academicYear = studentJson.monAnnee.anneeAcademique;
   var programTitle = studentJson.monAnnee.monOffre.offre.intituleComplet;
   $("#student_name").append("<br>");
@@ -39,7 +40,7 @@ function fillSessionSummaryTable(studentJson) {
   var program = studentJson.monAnnee.monOffre.resultats;
 
   fillRowTotalECTSInscription(studentJson);
-  fillRowMean(program);
+  fillRowsMean(program);
   fillRowMention(program);
 }
 
@@ -58,19 +59,47 @@ function fillRowTotalECTSInscription(studentJson) {
   $frag.appendTo($("#summary_ects"));
 }
 
-function fillRowMean(programJson) {
-  var meanJanv = programJson.session[0].moyenne;
-  var meanJuin = programJson.session[1].moyenne;
-  var meanSept = programJson.session[2].moyenne;
 
-  var $rowMean = $("#summary_mean");
+function createMeanFrangment(meanJanv, meanJuin, meanSept, rowMean) {
+  var $fragGen = $(document.createDocumentFragment());
+  createJQObject("<td/>", {}, "", $fragGen);
+  createJQObject("<td/>", {}, meanJanv, $fragGen);
+  createJQObject("<td/>", {}, meanJuin, $fragGen);
+  createJQObject("<td/>", {}, meanSept, $fragGen);
+  $fragGen.appendTo(rowMean);
+}
 
-  var $frag = $(document.createDocumentFragment());
-  createJQObject("<td/>", {}, "", $frag);
-  createJQObject("<td/>", {}, meanJanv, $frag);
-  createJQObject("<td/>", {}, meanJuin, $frag);
-  createJQObject("<td/>", {}, meanSept, $frag);
-  $frag.appendTo($rowMean);
+function fillRowsMean(programJson) {
+  if(programJson.session[0].hasOwnProperty('moyenneGenerale')
+     && programJson.session[0].moyenneGenerale != null){
+    $("#summary_mean").hide();
+
+    var meanSuccJanv = programJson.session[0].moyenne;
+    var meanSuccJuin = programJson.session[1].moyenne;
+    var meanSuccSept = programJson.session[2].moyenne;
+    var $rowSuccessMean = $("#summary_success_mean");
+
+    createMeanFrangment(meanSuccJanv, meanSuccJuin, meanSuccSept, $rowSuccessMean);
+
+    var meanGenJanv = programJson.session[0].moyenneGenerale;
+    var meanGenJuin = programJson.session[1].moyenneGenerale;
+    var meanGenSept = programJson.session[2].moyenneGenerale;
+    var $rowGenMean = $("#summary_general_mean");
+
+    createMeanFrangment(meanGenJanv, meanGenJuin, meanGenSept, $rowGenMean);
+  }
+  else{
+    $("#summary_success_mean").hide();
+    $("#summary_general_mean").hide();
+
+    var meanJanv = programJson.session[0].moyenne;
+    var meanJuin = programJson.session[1].moyenne;
+    var meanSept = programJson.session[2].moyenne;
+    var $rowMean = $("#summary_mean");
+
+    createMeanFrangment(meanJanv, meanJuin, meanSept, $rowMean);
+  }
+
 }
 
 function fillRowMention(programJson) {
@@ -113,76 +142,79 @@ function addRowCourse(courseJson, $row) {
   var title = courseJson.intituleComplet;
   var ects = courseJson.poids;
   var inscr = inscrToString(courseJson.insc);
-  var janv = examScoreToString(courseJson.session[0]);
-  var juin = examScoreToString(courseJson.session[1]);
-  var sept = examScoreToString(courseJson.session[2]);
+  var janv = courseJson.session[0];
+  var juin = courseJson.session[1];
+  var sept = courseJson.session[2];
   var credit = creditToString(courseJson.creditReport);
 
   createJQObject("<td/>", {}, acronym, $row);
   createJQObject("<td/>", {}, title, $row);
   createJQObject("<td/>", {}, ects, $row);
   createJQObject("<td/>", {}, inscr, $row);
-  createJQObject("<td/>", {}, janv, $row);
-  createJQObject("<td/>", {}, juin, $row);
-  createJQObject("<td/>", {}, sept, $row);
-  createJQObject("<td/>", {}, credit, $row);
+  makeScoreCell(janv, $row);
+  makeScoreCell(juin, $row);
+  makeScoreCell(sept, $row);
+  if(credit.trim() == '-'){
+    createJQObject("<td/>", {"class": "text-center"}, credit, $row);
+  } else {
+    createJQObject("<td/>", {}, credit, $row);
+  }
 }
 
-function examScoreToString(examJson) {
-
-  var etatExam = etatExamToString(examJson);
-  if (etatExam != ""){
-    return etatExam;
+function cleanEtatExam(etatExam) {
+  if (etatExam == null
+      || etatExam.trim() == "-"
+      || etatExam.trim() == ""
+      || etatExam.trim() == "null"){
+    return null;
+  } else {
+    return etatExam.trim();
   }
-
-  var mention = mentionToString(examJson);
-  if (mention != ""){
-    return mention;
-  }
-
-  return scoreToString(examJson);
 }
 
-function etatExamToString(examJson){
-  if(examJson.etatExam == "D") {
-    return "Disp.";
+function makeScoreCell(examJson, row){
+  var $score = examJson.note;
+  var $etatExam = cleanEtatExam(examJson.etatExam);
+  var $mention = mentionToString(examJson);
+  if ($mention != ""){
+    createJQObject("<td/>", {"colspan" : 2, "class": "text-center"}, $mention, row);
   }
-  return "";
+  else if ($etatExam == null){
+    createJQObject("<td/>", {"colspan" : 2, "class": "text-center"}, $score, row);
+  }
+  else{
+    createJQObject("<td/>", {"style": "border-right:none;"}, $score, row);
+    createJQObject("<td/>", {"class": "text-right",
+                             "style": "border-left:none;"}, $etatExam, row);
+  }
+
 }
 
 function mentionToString(examJson){
   switch (examJson.mention) {
     case "M":
-      return "Exc.";
+      return "Excusé";
     case "S":
       if (examJson.etatExam == "R"){
-        return "Abs.(R)"
+        return "Absent(R)"
       }
       else {
-        return "Abs.";
+        return "Absent";
       }
     case "A":
       if (examJson.etatExam == "R"){
-        return "Abs.(R)"
+        return "Absent(R)"
       }
       else {
-        return "Abs.";
+        return "Absent";
       }
+    case "T":
+          return "Tricherie";
     default:
       return "";
   }
 }
 
-function scoreToString(examJson){
-  var score = examJson.note;
-  if (examJson.etatExam == "-") {
-    return score;
-  }
-  else if(score == "-") {
-    return examJson.etatExam;
-  }
-  return score + examJson.etatExam;
-}
 
 function inscrToString(inscr) {
   switch (inscr) {
@@ -191,7 +223,7 @@ function inscrToString(inscr) {
     case "R":
       return "Rep.";
     case "D":
-      return "Dsip.";
+      return "Disp.";
     case "B":
       return "Créd.";
     case "K":
@@ -205,7 +237,9 @@ function inscrToString(inscr) {
     case "S":
       return "EPM";
     case "T":
-      return "T94";
+      return "Test";
+    case "X":
+          return "Ext.";
     default:
       return inscr;
   }
@@ -214,9 +248,9 @@ function inscrToString(inscr) {
 function creditToString(creditReport) {
   switch (creditReport) {
     case "K":
-      return "Crédit";
+      return "Crédité";
     case "R":
-      return "Report";
+      return "Reporté";
     case "S":
       return "EPM";
     case "P":
@@ -227,11 +261,32 @@ function creditToString(creditReport) {
   }
 }
 
-/***************************** MENTION EXPLANATION PARAGRAPH ************/
+/***************************** MENTION AND LEGEND EXPLANATION PARAGRAPH ************/
 
 function fillMentionExplanation(studentJson) {
   var mentionExplanation = studentJson.legende.explicationMention;
   $("#paragraph_mention_explanation").html(mentionExplanation);
+}
+
+
+function fillLegendExplanation(studentJson) {
+  var legendExplanation = studentJson.legende.explicationLettresLegende
+
+  var $frag = $(document.createDocumentFragment());
+  var $row;
+  $.each(legendExplanation, function(index, letter_explanation) {
+    if(index == 0 || index%2 == 0){
+      $row = createJQObjectNoText("<div/>", {'class':'row'}, $frag);
+      var $col = createJQObjectNoText("<div/>", {'class':'col-md-6'}, $row);
+      createJQObject("<p/>", {}, letter_explanation, $col);
+    }
+    else{
+      var $col = createJQObjectNoText("<div/>", {'class':'col-md-6'}, $row);
+      createJQObject("<p/>", {}, letter_explanation, $col);
+    }
+
+  });
+  $frag.appendTo($("#body_legend_explanation"));
 }
 
 /***************************** UTILITY FUNCTIONS ***********************/
