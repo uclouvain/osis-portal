@@ -223,7 +223,7 @@ function inscrToString(inscr) {
     case "R":
       return "Rep.";
     case "D":
-      return "Dsip.";
+      return "Disp.";
     case "B":
       return "Créd.";
     case "K":

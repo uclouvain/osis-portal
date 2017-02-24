@@ -24,11 +24,8 @@
 #
 ##############################################################################
 from unittest import skip
-
 from django.test import TestCase
-
 from mock import patch
-
 from attestation.queues import student_attestation_status as std_att_stat
 from attestation.views import main as v_main
 

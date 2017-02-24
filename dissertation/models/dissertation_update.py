@@ -44,7 +44,8 @@ INVISIBLE_JUSTIFICATION_KEYWORDS = ('auto_add_jury',
 class DissertationUpdateAdmin(SerializableModelAdmin):
     list_display = ('dissertation', 'author', 'status_from', 'status_to', 'person', 'created')
     raw_id_fields = ('person', 'dissertation')
-    search_fields = ('uuid',)
+    search_fields = ('uuid', 'dissertation__title', 'person__last_name', 'person__first_name',
+                     'dissertation__author__person__last_name', 'dissertation__author__person__first_name')
 
 
 class DissertationUpdate(SerializableModel):
