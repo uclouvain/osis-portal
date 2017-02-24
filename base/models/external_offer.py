@@ -24,11 +24,10 @@
 #
 ##############################################################################
 from django.db import models
-from django.contrib import admin
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
-class ExternalOfferAdmin(admin.ModelAdmin):
+class ExternalOfferAdmin(SerializableModelAdmin):
     list_display = ('name', 'adhoc', 'domain', 'grade_type', 'offer_year', 'changed')
     fieldsets = ((None, {'fields': ('name', 'adhoc', 'domain', 'grade_type', 'offer_year')}),)
     ordering = ('name',)

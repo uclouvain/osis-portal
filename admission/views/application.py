@@ -28,12 +28,14 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from admission import models as mdl
 from admission.models.enums import coverage_access_degree as coverage_access_degree_choices
+from admission.models.enums import question_type
 from admission.views import common, demande_validation, navigation
-from admission.views.common import extra_information
 from admission.views.common import get_picture_id, get_id_document
 from base import models as mdl_base
+from osis_common import models as mdl_osis_common
 from reference import models as mdl_reference
 from reference.enums import institutional_grade_type as enum_institutional_grade_type
+from admission.models.enums import document_type
 
 
 def application_update(request, application_id):
@@ -112,6 +114,8 @@ def save_application_offer(request):
                                                                                request.user)
         if offer_year_id:
             application.save()
+            if not common.is_local_language_exam_needed(application):
+                delete_language_exam_data(application)
         delete_application_assimilation_criteria(application)
 
         if application.id:
@@ -163,7 +167,7 @@ def applications(request, application_id=None):
         "domains": mdl_reference.domain.find_current_domains(),
         'tab_active': navigation.DEMAND_TAB,
         "application": application,
-        "local_language_exam_needed": common.is_local_language_exam_needed(request.user),
+        "local_language_exam_needed": common.is_local_language_exam_needed(application),
         "applicant": applicant,
         "person_legal_address": person_legal_address,
         "countries": countries,
@@ -181,7 +185,6 @@ def submission(request, application_id=None):
         application = mdl.application.init_application(request.user)
     data = {
         'application': application,
-        'display_admission_exam': extra_information(application),
         'tab_active': navigation.SUBMISSION_TAB,
         'applications': mdl.application.find_by_user(request.user)
     }
@@ -215,18 +218,6 @@ def change_application_offer(request, application_id=None):
     return render(request, "admission_home.html", data)
 
 
-def is_local_language_exam_needed(user):
-    local_language_exam_needed = False
-    applications_list = mdl.application.find_by_user(user)
-    for application in applications_list:
-        if application.offer_year.grade_type == 'BACHELOR' or \
-                        application.offer_year.grade_type.startswith('MASTER') or \
-                        application.offer_year.grade_type == 'TRAINING_CERTIFICATE':
-            local_language_exam_needed = True
-            break
-    return local_language_exam_needed
-
-
 def create_application_assimilation_criteria(application):
     # If application assimilation criteria exists copy them to application assimilation criteria
     applicant_assimilation_criteria_list = mdl.applicant_assimilation_criteria. \
@@ -240,56 +231,104 @@ def create_application_assimilation_criteria(application):
 def delete_existing_answers(application):
     answers = mdl.answer.find_by_application(application)
     for answer in answers:
-        answer.delete()
+        if not answer.option.question.type == question_type.UPLOAD_BUTTON:
+            answer.delete()
 
 
 def create_answers(application, request):
+    for key, value in request.FILES.items():
+        if "txt_file_" in key:
+            save_answer_from_upload(application, key, request)
     for key, value in request.POST.items():
         if "txt_answer_question_" in key:
-            # INPUT OR LABEL
-            option_id = key.replace("txt_answer_question_", "")
-            asw = mdl.answer.find_by_application_and_option(application.id, option_id)
-            if not asw:
-                answer = mdl.answer.Answer()
-                answer.application = application
-                answer.option = mdl.option.find_by_id(int(option_id))
-                answer.value = value
-            else:
-                answer = mdl.answer.find_by_id(asw)
-                answer.value = value
-            answer.save()
+            save_answer_from_input(application, key, value)
         if "txt_answer_radio_" in key:
-            # RADIO_BUTTON
-            option_id = request.POST[key]
-            option = mdl.option.find_by_id(int(option_id))
-            options = mdl.option.find_options_by_question_id(option.question.id)
-            if options:
-                for opt in options:
-                    asw = mdl.answer.find_by_application_and_option(application.id, opt.id)
-                    asw.delete()
-                answer = mdl.answer.Answer()
-                answer.application = application
-                answer.option = option
-                answer.value = option.value
-                answer.save()
+            save_answer_from_radio(application, value)
         if "txt_answer_checkbox_" in key:
-            # CHECK_BOX
-            if "on" == value:
-                answer = mdl.answer.Answer()
-                answer.application = application
-                option_id = key.replace("txt_answer_checkbox_", "")
-                option = mdl.option.find_by_id(int(option_id))
-                answer.option = option
-                answer.value = option.value
-                answer.save()
+            save_answer_from_checkbox(application, key, value)
         if "slt_question_" in key:
-            if value != "0":
-                answer = mdl.answer.Answer()
-                answer.application = application
-                option = mdl.option.find_by_id(value)
-                answer.option = option
-                answer.value = option.value
-                answer.save()
+            save_answer_from_dropdownlist(application, value)
+        if "delete_document_file_" in key:
+            delete_document_file(application, key)
+
+
+def delete_document_file(application, key):
+    option_id = key.replace("delete_document_file_", "")
+    answer = mdl.answer.find_by_application_and_option(application.id, option_id)
+    document_file = mdl_osis_common.document_file.DocumentFile.objects.filter(uuid=answer[0].value)
+    answer.delete()
+    document_file[0].delete()
+
+
+def save_answer_from_upload(application, key, request):
+    file_selected = request.FILES[key]
+    new_document = create_new_document_file(file_selected.content_type,
+                                            "offer_selection",
+                                            file_selected,
+                                            file_selected.name,
+                                            request,
+                                            file_selected.size)
+    option_id = key.replace("txt_file_", "")
+    answer = mdl.answer.find_by_application_and_option(application.id, option_id)
+    if answer:
+        answer = mdl.answer.find_by_id(answer)
+        old_document_file = mdl_osis_common.document_file.DocumentFile.objects.filter(uuid=answer.value)
+        old_document_file.delete()
+        answer.value = new_document.uuid
+    else:
+        answer = mdl.answer.Answer()
+        answer.application = application
+        answer.option = mdl.option.find_by_id(int(option_id))
+        answer.value = new_document.uuid
+    answer.save()
+
+
+def create_new_document_file(content_type, description, file, file_name, request, size):
+    new_document = mdl_osis_common.document_file.DocumentFile(file_name=file_name,
+                                                              file=file,
+                                                              description=description,
+                                                              storage_duration=720,
+                                                              application_name='admission',
+                                                              content_type=content_type,
+                                                              size=size,
+                                                              update_by=request.user)
+    new_document.save()
+    return new_document
+
+
+def save_answer_from_input(application, key, value):
+    option_id = key.replace("txt_answer_question_", "")
+    answer = mdl.answer.Answer()
+    answer.application = application
+    answer.option = mdl.option.find_by_id(int(option_id))
+    answer.value = value
+    answer.save()
+
+
+def save_answer_from_radio(application, value):
+    option = mdl.option.find_by_id(value)
+    create_new_answer(application, option)
+
+
+def save_answer_from_checkbox(application, key, value):
+    if "on" == value:
+        option_id = key.replace("txt_answer_checkbox_", "")
+        option = mdl.option.find_by_id(int(option_id))
+        create_new_answer(application, option)
+
+
+def save_answer_from_dropdownlist(application, value):
+    if value != "0":
+        option = mdl.option.find_by_id(value)
+        create_new_answer(application, option)
+
+
+def create_new_answer(application, option):
+    answer = mdl.answer.Answer()
+    answer.application = application
+    answer.option = option
+    answer.value = option.value
+    answer.save()
 
 
 def delete_application_assimilation_criteria(application):
@@ -297,3 +336,23 @@ def delete_application_assimilation_criteria(application):
         # delete all existing application_assimilation_criteria
         for a in mdl.application_assimilation_criteria.find_by_application(application):
             a.delete()
+
+
+def delete_language_exam_data(application):
+    unneeded_secondary_education_exam = find_sec_educ_exam_language(application)
+    if unneeded_secondary_education_exam:
+        unneeded_secondary_education_exam.delete()
+        delete_file(application)
+
+
+def find_sec_educ_exam_language(application):
+    applicant = application.applicant
+    secondary_education = mdl.secondary_education.find_by_person(applicant)
+    unneeded_secondary_education_exam = mdl.secondary_education_exam.find_by_type(secondary_education, 'LANGUAGE')
+    return unneeded_secondary_education_exam
+
+
+def delete_file(application):
+    doc = mdl.application_document_file.search(application, document_type.LANGUAGE_EXAM_CERTIFICATE)
+    if doc:
+        doc[0].delete()

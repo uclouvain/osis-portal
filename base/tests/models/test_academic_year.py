@@ -23,7 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
 from base import models as mdl_base
+
+
+now = datetime.datetime.now()
 
 
 def create_academic_year():
@@ -34,7 +38,17 @@ def create_academic_year():
 
 
 def create_academic_year_with_year(a_year):
+    an_academic_year = mdl_base.academic_year.AcademicYear(year=a_year,
+                                                           start_date=datetime.datetime(a_year, now.month, 1),
+                                                           end_date=datetime.datetime(a_year+1, now.month, 28))
+    an_academic_year.save()
+    return an_academic_year
+
+
+def create_academic_year_current():
     an_academic_year = mdl_base.academic_year.AcademicYear()
-    an_academic_year.year = a_year
+    an_academic_year.year = now.year
+    an_academic_year.start_date = now
+    an_academic_year.end_date = now
     an_academic_year.save()
     return an_academic_year

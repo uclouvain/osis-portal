@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,17 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django import forms
-from base.models import student as std_model
-from django.utils.translation import ugettext_lazy as _
+from admission import models as mdl
 
-class RegistrationIdForm(forms.Form):
-    registration_id = forms.CharField()
 
-    def clean(self):
-        cleaned_data = super(RegistrationIdForm, self).clean()
-        registration_id = cleaned_data.get('registration_id')
-        if registration_id:
-            student = std_model.find_by_registration_id(registration_id)
-            if student is None:
-                self.add_error('registration_id', _('no_student_with_this_registration_id'))
+def create_curriculum(data):
+    a_curriculum = mdl.curriculum.Curriculum()
+    if data['applicant']:
+        a_curriculum.person = data['applicant']
+
+    if data['academic_year']:
+        a_curriculum.academic_year = data['academic_year']
+
+    if data['path_type']:
+        a_curriculum.path_type = data['path_type']
+
+    if data['national_education']:
+        a_curriculum.national_education = data['national_education']
+
+    if data['national_institution']:
+        a_curriculum.national_institution = data['national_institution']
+
+    a_curriculum.save()
+
+    return a_curriculum

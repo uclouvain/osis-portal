@@ -96,7 +96,7 @@ def diploma_save(request):
         secondary_education_exam_update(secondary_education, PROFESSIONAL_TYPE, professional_exam)
         admission_exam = get_admission_exam(request, secondary_education)
         secondary_education_exam_update(secondary_education, ADMISSION_EXAM_TYPE, admission_exam)
-        local_language_exam = get_local_language_exam(request, secondary_education)
+        local_language_exam = get_local_language_exam(request, secondary_education, application)
         secondary_education_exam_update(secondary_education, LANGUAGE_EXAM_TYPE, local_language_exam)
 
         message_success = _('msg_info_saved')
@@ -377,7 +377,7 @@ def get_prerequis_data(request, saved, application_id):
             "education_type_transition":    education_type_transition,
             "education_type_qualification": education_type_qualification,
             "current_academic_year":        current_year,
-            "local_language_exam_needed":   common.is_local_language_exam_needed(request.user),
+            "local_language_exam_needed":   common.is_local_language_exam_needed(application),
             'tab_active':                   navigation.PREREQUISITES_TAB,
             'applications':                 mdl.application.find_by_user(request.user),
             'message_info':                 message_info}
@@ -528,9 +528,9 @@ def get_admission_exam(request, secondary_education):
     return admission_exam
 
 
-def get_local_language_exam(request, secondary_education):
+def get_local_language_exam(request, secondary_education, application):
     local_language_exam = None
-    if not(common.is_local_language_exam_needed(request.user) and request.POST.get('local_language_exam') is None):
+    if not(common.is_local_language_exam_needed(application) and request.POST.get('local_language_exam') is None):
         if request.POST.get('local_language_exam') == FIELD_TRUE_STATUS:
             local_language_exam = mdl.secondary_education_exam.find_by_type(secondary_education, LANGUAGE_EXAM_TYPE)
             if local_language_exam is None:

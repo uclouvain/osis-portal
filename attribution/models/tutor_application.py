@@ -25,28 +25,32 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
-from osis_common.models.serializable_model import SerializableModel
-from attribution.models.enums import function
+from attribution.models.enums import function as function_enum
 from django.core.exceptions import ObjectDoesNotExist
+import uuid
 
 
 class TutorApplicationAdmin(admin.ModelAdmin):
     list_display = ('tutor', 'function', 'learning_unit_year')
     list_filter = ('function',)
-    fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function', 'start_date', 'end_date')}),)
+    fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function')}),)
     raw_id_fields = ('learning_unit_year', 'tutor')
     search_fields = ['tutor__person__first_name', 'tutor__person__last_name', 'learning_unit_year__acronym']
 
 
-class TutorApplication(SerializableModel):
+class TutorApplication(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, db_index=True)
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    function = models.CharField(max_length=15, blank=True, null=True, choices=function.FUNCTIONS, db_index=True)
+    function = models.CharField(max_length=35, blank=True, null=True, choices=function_enum.FUNCTIONS, db_index=True)
     learning_unit_year = models.ForeignKey('base.LearningUnitYear', blank=True, null=True, default=None)
     tutor = models.ForeignKey('base.Tutor')
     remark = models.TextField(blank=True, null=True)
     course_summary = models.TextField(blank=True, null=True)
-    start_date = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)
-    end_date = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)
+
+    class Meta:
+        permissions = (
+            ("can_access_attribution_application", "Can access attribution application"),
+        )
 
     def __str__(self):
         return u"%s - %s" % (self.tutor.person, self.function)
@@ -56,7 +60,7 @@ def find_by_id(a_tutor_application_id):
     return TutorApplication.objects.get(id=a_tutor_application_id)
 
 
-def search(tutor=None, learning_unit_year=None):
+def search(tutor=None, learning_unit_year=None, function=None):
     queryset = TutorApplication.objects
 
     if tutor:
@@ -65,18 +69,23 @@ def search(tutor=None, learning_unit_year=None):
     if learning_unit_year:
         queryset = queryset.filter(learning_unit_year=learning_unit_year)
 
+    if function:
+        queryset = queryset.filter(function=function)
+
     return queryset.select_related('tutor', 'learning_unit_year')
 
 
-def find_by_dates_tutor(a_start_date, an_end_date, a_tutor):
-    return TutorApplication.objects.filter(start_date__gte=a_start_date, end_date__lte=an_end_date, tutor=a_tutor).order_by('learning_unit_year__acronym', 'id')
+def find_by_dates_tutor(a_start_year, an_end_year, a_tutor):
+    return TutorApplication.objects.filter(start_year__gte=a_start_year,
+                                           end_year__lte=an_end_year,
+                                           tutor=a_tutor).order_by('learning_unit_year__acronym', 'id')
 
 
-def find_tutor_learning_unit_year(a_tutor, a_learning_unit_year):
-    if a_tutor and a_learning_unit_year:
+def find_tutor_by_tutor_year(a_tutor, an_academic_year):
+    if a_tutor and an_academic_year:
         try:
-            return TutorApplication.objects.get(tutor=a_tutor,
-                                                learning_unit_year=a_learning_unit_year)
+            return TutorApplication.objects.filter(tutor=a_tutor,
+                                                   learning_unit_year__academic_year=an_academic_year)
         except ObjectDoesNotExist:
             return None
     return None

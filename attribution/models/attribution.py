@@ -24,26 +24,25 @@
 #
 ##############################################################################
 from django.db import models
-from django.contrib import admin
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from attribution.models.enums import function
 
 
-class AttributionAdmin(admin.ModelAdmin):
+class AttributionAdmin(SerializableModelAdmin):
     list_display = ('tutor', 'function', 'learning_unit_year')
     list_filter = ('function',)
-    fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function', 'start_date', 'end_date')}),)
+    fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function', 'start_year', 'end_year')}),)
     raw_id_fields = ('learning_unit_year', 'tutor')
     search_fields = ['tutor__person__first_name', 'tutor__person__last_name', 'learning_unit_year__acronym']
 
 
 class Attribution(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    function = models.CharField(max_length=15, blank=True, null=True, choices=function.FUNCTIONS, db_index=True)
+    function = models.CharField(max_length=35, blank=True, null=True, choices=function.FUNCTIONS, db_index=True)
     learning_unit_year = models.ForeignKey('base.LearningUnitYear', blank=True, null=True, default=None)
     tutor = models.ForeignKey('base.Tutor')
-    start_date = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)
-    end_date = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)
+    start_year = models.IntegerField(blank=True, null=True)
+    end_year = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return u"%s - %s" % (self.tutor.person, self.function)
@@ -85,7 +84,3 @@ def find_by_tutor_year_order_by_acronym_function(tutor=None, an_academic_year=No
 def find_distinct_years(a_tutor):
     return Attribution.objects.filter(tutor=a_tutor, learning_unit_year__in_charge=True).order_by('-learning_unit_year__academic_year__year')\
         .values_list('learning_unit_year__academic_year__year', flat=True).distinct()
-
-
-def find_by_tutor_end_date(a_tutor, an_end_date):
-    return Attribution.objects.filter(end_date=an_end_date, tutor=a_tutor).order_by('learning_unit_year__acronym')

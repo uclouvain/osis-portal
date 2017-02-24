@@ -34,7 +34,7 @@ from base import models as mdl_base
 from attribution import models as mdl_attribution
 from base.models.enums import component_type
 from attribution.forms.attribution import AttributionForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 import json
 
 
@@ -54,8 +54,13 @@ SEPTEMBER = "septembre"
 
 
 @login_required
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def home(request):
-    return by_year(request, datetime.datetime.now().year)
+    a_year = datetime.datetime.now().year
+    current_academic_year = mdl_base.academic_year.current_academic_year()
+    if current_academic_year:
+        a_year = current_academic_year.year
+    return by_year(request, a_year)
 
 
 def get_person(a_user):
@@ -112,7 +117,6 @@ def list_attributions(a_person, an_academic_year):
 
 def list_teaching_charge_attribution_representation(a_person, an_academic_year):
     attribution_list = []
-    a_tutor = mdl_base.tutor.find_by_person(a_person)
     tot_lecturing = NO_ALLOCATION_CHARGE
     tot_practical = NO_ALLOCATION_CHARGE
     for an_attribution in list_attributions(a_person, an_academic_year):
@@ -143,13 +147,14 @@ def list_teaching_charge_attribution_representation(a_person, an_academic_year):
              'learning_unit_year_url': get_url_learning_unit_year(a_learning_unit_year),
              'learning_unit_year': a_learning_unit_year})
     if len(attribution_list) == 0:
-        attribution_list=None
+        attribution_list = None
     return {'attributions': attribution_list,
             'tot_lecturing': tot_lecturing,
             'tot_practical': tot_practical}
 
 
 @login_required
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def by_year(request, year):
     a_person = get_person(request.user)
     an_academic_year = None
@@ -171,7 +176,7 @@ def by_year(request, year):
         'year': int(year),
         'tot_lecturing': tot_lecturing,
         'tot_practical': tot_practical,
-        'academic_year': "{0}-{1}".format(str(an_academic_year.year),str(an_academic_year.year + 1))})
+        'academic_year': "{0}-{1}".format(str(an_academic_year.year), str(an_academic_year.year + 1))})
 
 
 def get_attribution_years(a_person):
@@ -192,18 +197,20 @@ def get_url_learning_unit_year(a_learning_unit_year):
     if a_learning_unit_year:
         if is_string_not_null_empty(a_learning_unit_year.acronym):
             return settings.CATALOG_URL.format(a_learning_unit_year.academic_year.year,
-                                           a_learning_unit_year.acronym.lower())
+                                               a_learning_unit_year.acronym.lower())
     return None
 
 
-def get_students(a_learning_unit_year):
-    return mdl_base.learning_unit_enrollment.find_by_learningunit_enrollment(a_learning_unit_year)
+def get_students(a_learning_unit_year_id, a_person):
+    a_learning_unit_year = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year_id)
+    return get_learning_unit_years_list(a_learning_unit_year, mdl_base.tutor.find_by_person(a_person))
 
 
 @login_required
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def show_students(request, a_learning_unit_year):
     students_list = []
-    for learning_unit_enrollment in get_students(a_learning_unit_year):
+    for learning_unit_enrollment in get_students(a_learning_unit_year, get_person(request.user)):
         students_list.append(set_student_for_display(learning_unit_enrollment))
     return render(request, "students_list.html", {
         'students': students_list,
@@ -272,13 +279,14 @@ def set_student_for_display(learning_unit_enrollment):
         'name': "{0}, {1}".format(learning_unit_enrollment.offer_enrollment.student.person.last_name,
                                   learning_unit_enrollment.offer_enrollment.student.person.first_name),
         'program': learning_unit_enrollment.offer_enrollment.offer_year.acronym,
+        'acronym': learning_unit_enrollment.learning_unit_year.acronym,
         'registration_id': learning_unit_enrollment.offer_enrollment.student.registration_id,
         'january_note': get_session_value(session_results, JANUARY, JSON_LEARNING_UNIT_NOTE),
         'january_status': get_session_value(session_results, JANUARY, JSON_LEARNING_UNIT_STATUS),
         'june_note': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE),
         'june_status': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_STATUS),
         'september_note': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE),
-        'september_status': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS,) ,}
+        'september_status': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS,), }
 
 
 def is_tutor(a_person):
@@ -308,3 +316,14 @@ def calculate_attribution_format_percentage_allocation_charge(a_learning_unit_ye
     return None
 
 
+def get_learning_unit_years_list(a_learning_unit_year, a_tutor):
+    # Pour trouver les inscriptions aux partims/classe identifiables dans learning_unit_year par leurs
+    # Par exemple l'acronym du partim pour lu LCOPS1124 c'est LCOPS1124L
+    learning_unit_years_allocated = []
+    for lu in mdl_base.learning_unit_year.find_by_acronym(a_learning_unit_year.acronym,
+                                                          a_learning_unit_year.academic_year):
+        attribution = mdl_attribution.attribution.search(a_tutor, lu)
+        if attribution.exists():
+            learning_unit_years_allocated.append(lu)
+
+    return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(learning_unit_years_allocated)
