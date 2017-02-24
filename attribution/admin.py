@@ -25,4 +25,16 @@
 ##############################################################################
 from django.contrib import admin
 
-# Register your models here.
+from attribution.models import attribution, attribution_charge, application_charge, tutor_application
+
+admin.site.register(application_charge.ApplicationCharge,
+                    application_charge.ApplicationChargeAdmin)
+
+admin.site.register(attribution.Attribution,
+                    attribution.AttributionAdmin)
+
+admin.site.register(attribution_charge.AttributionCharge,
+                    attribution_charge.AttributionChargeAdmin)
+
+admin.site.register(tutor_application.TutorApplication,
+                    tutor_application.TutorApplicationAdmin)

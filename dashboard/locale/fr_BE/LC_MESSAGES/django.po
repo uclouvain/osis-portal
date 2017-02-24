@@ -43,6 +43,9 @@ msgstr "Tableau de bord"
 msgid "deliberation_date"
 msgstr "Date de délibération"
 
+msgid "desc_lnk_internships"
+msgstr "Gestion des stages des étudiants."
+
 msgid "desc_lnk_performance"
 msgstr "Résultats de l'étudiant."
 
@@ -112,6 +115,9 @@ msgstr "?=Note manquante"
 msgid "scores_encoding"
 msgstr "Encodage des notes"
 
+msgid "my_score_sheets"
+msgstr "Mes feuilles de notes"
+
 msgid "scores_sheet"
 msgstr "Feuille des notes"
 
@@ -123,3 +129,6 @@ msgstr "le"
 
 msgid "unauthorized_decimal"
 msgstr "Attention : décimales non autorisées pour ce cours"
+
+msgid "faculty_administration"
+msgstr "Administration facultaire"

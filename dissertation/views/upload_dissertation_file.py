@@ -27,6 +27,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import *
 from dissertation import models as mdl
 from osis_common import models as mdl_osis_common
+from osis_common.models.enum import storage_duration
 from django.shortcuts import get_object_or_404, redirect
 
 
@@ -56,7 +57,6 @@ def save_uploaded_file(request):
         content_type = file_selected.content_type
         size = file_selected.size
         description = data['description']
-        storage_duration = 0
         documents = mdl.dissertation_document_file.find_by_dissertation(dissertation)
         for document in documents:
             document.delete()
@@ -65,7 +65,7 @@ def save_uploaded_file(request):
         new_document = mdl_osis_common.document_file.DocumentFile(file_name=file_name,
                                                                   file=file,
                                                                   description=description,
-                                                                  storage_duration=storage_duration,
+                                                                  storage_duration=storage_duration.FIVE_YEARS,
                                                                   application_name='dissertation',
                                                                   content_type=content_type,
                                                                   size=size,

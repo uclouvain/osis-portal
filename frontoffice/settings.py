@@ -55,19 +55,23 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'analytical',
     'osis_common',
+    'rest_framework',
+    'localflavor',
+    'statici18n',
+    'ckeditor',
     'reference',
     'base',
     'admission',
     'enrollments',
     'dashboard',
-    'rest_framework',
-    'localflavor',
     'performance',
     'attribution',
     'dissertation',
-    'statici18n',
-    'ckeditor',
+    'internship',
+    'exam_enrollment',
+    'attestation',
 )
 
 # check if we are testing right now
@@ -126,8 +130,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'osis_front_dev',
-        'USER': 'osis_usr',
-        'PASSWORD': 'osis',
+        'USER': "postgres" if os.environ.get("ENV") == "test" else  'osis_usr',
+        'PASSWORD': "" if os.environ.get("ENV") == "test" else 'osis',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     },
@@ -159,6 +163,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'queue_exception': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'django': {
             'handlers': ['console'],
             'level': 'INFO',
@@ -168,9 +177,7 @@ LOGGING = {
 }
 
 DEFAULT_LOGGER = 'default'
-
-COUCHBASE_CONNECTION_STRING='couchbase://localhost/'
-COUCHBASE_PASSWORD=''
+QUEUE_EXCEPTION_LOGGER = 'queue_exception'
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -200,7 +207,7 @@ LANGUAGES = [
     ('en', _('English')),
 ]
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Brussels'
 
 USE_I18N = True
 
@@ -231,26 +238,38 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL
 # Queues Definition
 # Uncomment the configuration if you want to use the queue system
 # The queue system uses RabbitMq queues to communicate with other application (ex : osis)
-# QUEUES = {
-#    'QUEUE_URL': 'localhost',
-#    'QUEUE_USER': 'guest',
-#    'QUEUE_PASSWORD': 'guest',
-#    'QUEUE_PORT': 5672,
-#    'QUEUE_CONTEXT_ROOT': '/',
-#    'QUEUES_NAME': {
-#        'MIGRATIONS_TO_PRODUCE': 'osis',
-#        'MIGRATIONS_TO_CONSUME': 'osis_portal',
-#        'PAPER_SHEET': 'paper_sheet',
-#        'PERFORMANCE': 'performance_to_client',
-#        'STUDENT_PERFORMANCE': 'rpc_performance_from_client',
-#        'STUDENT_POINTS': 'rpc_performance_to_client'
-#    }
-# }
+QUEUES = {
+    'QUEUE_URL': 'localhost',
+    'QUEUE_USER': 'guest',
+    'QUEUE_PASSWORD': 'guest',
+    'QUEUE_PORT': 5672,
+    'QUEUE_CONTEXT_ROOT': '/',
+    'QUEUES_NAME': {
+        'MIGRATIONS_TO_PRODUCE': 'osis',
+        'MIGRATIONS_TO_CONSUME': 'osis_portal',
+        'PAPER_SHEET': 'paper_sheet',
+        'PERFORMANCE': 'performance_to_client',
+        'STUDENT_PERFORMANCE': 'rpc_performance_from_client',
+        'STUDENT_POINTS': 'rpc_performance_to_client',
+        'PERFORMANCE_UPDATE_EXP_DATE': 'performance_exp_date',
+        'ATTRIBUTION': 'attribution',
+        'ATTESTATION': 'rpc_attestation',
+        'ATTESTATION_STATUS': 'rpc_attestation_status',
+        'EXAM_ENROLLMENT_FORM': 'rpc_exam_enrollment_form'
+    },
+    'RPC_QUEUES_TIMEOUT': {
+        'PAPER_SHEET': 60,
+        'STUDENT_PERFORMANCE': 15,
+        'ATTESTATION_STATUS': 10,
+        'ATTESTATION': 60,
+        'EXAM_ENROLLMENT_FORM': 15
+    }
+}
 
 
 LOGIN_URL=reverse_lazy('login')
-OVERRIDED_LOGOUT_URL=''
-OVERRIDED_LOGIN_URL=''
+OVERRIDED_LOGOUT_URL = ''
+OVERRIDED_LOGIN_URL = ''
 
 # This has to be replaced by the actual url where you institution logo can be found.
 # Ex : LOGO_INSTITUTION_URL = 'https://www.google.be/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'
@@ -288,6 +307,25 @@ CKEDITOR_CONFIGS = {
     },
 }
 
+
+TIME_TABLE_URL = ""
+TIME_TABLE_NUMBER = ""
+CATALOG_URL = ""
+
+PERFORMANCE_CONFIG = {
+    'UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR': 12,
+    'UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR': 720,
+    'UPDATE_DELTA_HOURS_AFTER_CONSUMPTION': 24,
+}
+
+ATTESTATION_CONFIG = {
+    'UPDATE_DELTA_HOURS_DEFAULT': 72,
+    'SERVER_TO_FETCH_URL': '',
+    'ATTESTATION_PATH': '',
+    'SERVER_TO_FETCH_USER': '',
+    'SERVER_TO_FETCH_PASSWORD': '',
+}
+
 try:
     from frontoffice.server_settings import *
     try:
@@ -298,5 +336,5 @@ except ImportError:
     pass
 
 if 'admission' in INSTALLED_APPS:
-    ADMISSION_LOGIN_URL=reverse_lazy('admission_login')
-    ADMISSION_LOGIN_REDIRECT_URL=reverse_lazy('admission')
+    ADMISSION_LOGIN_URL = reverse_lazy('admission_login')
+    ADMISSION_LOGIN_REDIRECT_URL = reverse_lazy('admission')
