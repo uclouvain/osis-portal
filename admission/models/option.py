@@ -37,7 +37,6 @@ class OptionAdmin(admin.ModelAdmin):
     search_fields = ['question']
 
 
-
 class Option(SerializableModel):
     label = models.CharField(max_length=255)
     value = models.TextField(blank=True, null=True)
@@ -47,13 +46,6 @@ class Option(SerializableModel):
 
     def __str__(self):
         return u"%s" % self.label
-
-
-def find_by_question_id(question_id):
-    try:
-        return Option.objects.get(question=question_id)
-    except ObjectDoesNotExist:
-        return None
 
 
 def find_options_by_question_id(question_id):

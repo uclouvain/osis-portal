@@ -1275,7 +1275,7 @@ function display_dynamic_form(offer_year_id){
                                                    .attr("type","radio")
                                                    .attr("value",value.option_id)
                                                    .attr("name","txt_answer_radio_"+value.question_id)
-                                                   .attr("id","txt_answer_radio_"+value.option_id))
+                                                   .attr("id","txt_answer_radio_"+value.question_id))
                                                    .append("&nbsp;&nbsp;"+value.option_value)
                                                    .prop("required",value.question_required));
                                 if(value.option_description != ""){
@@ -1291,7 +1291,7 @@ function display_dynamic_form(offer_year_id){
                                                    .attr("type","radio")
                                                    .attr("value",value.option_id)
                                                    .attr("name","txt_answer_radio_"+value.question_id)
-                                                   .attr("id","txt_answer_radio_"+value.option_id))
+                                                   .attr("id","txt_answer_radio_"+value.question_id))
                                                    .append("&nbsp;&nbsp;"+value.option_value)
                                                    .prop("required",value.question_required));
                                 if(value.option_description != ""){
@@ -1311,7 +1311,7 @@ function display_dynamic_form(offer_year_id){
                                                    .attr("type","radio")
                                                    .attr("value",value.option_id)
                                                    .attr("name","txt_answer_radio_"+value.question_id)
-                                                   .attr("id","txt_answer_radio_"+value.option_id))
+                                                   .attr("id","txt_answer_radio_"+value.question_id))
                                                    .append("&nbsp;&nbsp;"+value.option_value)
                                                    .prop("required",value.question_required));
                                 if(value.option_description != ""){
@@ -1328,7 +1328,7 @@ function display_dynamic_form(offer_year_id){
                                                    .attr("type","radio")
                                                    .attr("value",value.option_id)
                                                    .attr("name","txt_answer_radio_"+value.question_id)
-                                                   .attr("id","txt_answer_radio_"+value.option_id))
+                                                   .attr("id","txt_answer_radio_"+value.question_id))
                                                    .append("&nbsp;&nbsp;"+value.option_value)
                                                    .prop("required",value.question_required));
                                 if(value.option_description != ""){
@@ -1438,8 +1438,8 @@ function display_dynamic_form(offer_year_id){
                             if(value.option_value == value.answer){
                                 $('#pnl_questions').append($("<select></select>")
                                                    .attr("class", "form-control")
-                                                   .attr("name","slt_question_"+value.option_id)
-                                                   .attr("id","slt_question_"+value.option_id)
+                                                   .attr("name","slt_question_"+value.question_id)
+                                                   .attr("id","slt_question_"+value.question_id)
                                                    .prop("required",value.question_required)
                                                    .append($("<option></option")
                                                    .attr("value", 0)
@@ -1451,8 +1451,8 @@ function display_dynamic_form(offer_year_id){
                             }else{
                                 $('#pnl_questions').append($("<select></select>")
                                                    .attr("class", "form-control")
-                                                   .attr("name","slt_question_"+value.option_id)
-                                                   .attr("id","slt_question_"+value.option_id)
+                                                   .attr("name","slt_question_"+value.question_id)
+                                                   .attr("id","slt_question_"+value.question_id)
                                                    .prop("required",value.question_required)
                                                    .append($("<option></option")
                                                    .attr("value", 0)
@@ -1499,10 +1499,24 @@ function display_dynamic_form(offer_year_id){
                                                .attr("class","description"));
                         $('#pnl_questions').append("<br>");
                         }
-                        $('#pnl_questions').append($("<input>")
-                                           .attr("name","txt_file_"+value.option_id)
-                                           .attr("id","txt_file_"+value.option_id)
-                                           .attr("type","file"));
+                        if(value.document_file != ""){
+                            $('#pnl_questions').append($("<input>")
+                                               .attr("name","txt_file_"+value.option_id)
+                                               .attr("id","txt_file_"+value.option_id)
+                                               .attr("type","file"))
+                                               .append(" "+value.document_file+" ")
+                                               .append($("<button></button>")
+                                               .attr("name","delete_document_file_"+value.option_id)
+                                               .attr("id","delete_document_file_"+value.option_id)
+                                               .attr("class", "glyphicon glyphicon-trash"));
+                        }else{
+                            $('#pnl_questions').append($("<input>")
+                                               .attr("name","txt_file_"+value.option_id)
+                                               .attr("id","txt_file_"+value.option_id)
+                                               .attr("type","file"));
+                        }
+
+                        $('#pnl_questions').append("<br>");
                     }
                     if(value.position == value.options_max_number){
                         $('#pnl_questions').append("<br>");

@@ -28,6 +28,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from admission import models as mdl
 from admission.models.enums import coverage_access_degree as coverage_access_degree_choices
+from admission.models.enums import question_type
 from admission.views import common, demande_validation, navigation
 from admission.views.common import get_picture_id, get_id_document
 from base import models as mdl_base
@@ -119,6 +120,7 @@ def save_application_offer(request):
 
         if application.id:
             create_application_assimilation_criteria(application)
+            delete_existing_answers(application)
             create_answers(application, request)
     applicant = mdl.applicant.find_by_user(request.user)
 
@@ -229,85 +231,96 @@ def create_application_assimilation_criteria(application):
 def delete_existing_answers(application):
     answers = mdl.answer.find_by_application(application)
     for answer in answers:
-        answer.delete()
+        if not answer.option.question.type == question_type.UPLOAD_BUTTON:
+            answer.delete()
 
 
 def create_answers(application, request):
     for key, value in request.FILES.items():
         if "txt_file_" in key:
-            file_selected = request.FILES[key]
-            file = file_selected
-            file_name = file_selected.name
-            content_type = file_selected.content_type
-            size = file_selected.size
-            description = "offer_selection"
-            new_document = mdl_osis_common.document_file.DocumentFile(file_name=file_name,
-                                                                      file=file,
-                                                                      description=description,
-                                                                      storage_duration=720,
-                                                                      application_name='admission',
-                                                                      content_type=content_type,
-                                                                      size=size,
-                                                                      update_by=request.user)
-            new_document.save()
-            option_id = key.replace("txt_file_", "")
-            asw = mdl.answer.find_by_application_and_option(application.id, option_id)
-            if asw:
-                answer = mdl.answer.find_by_id(asw)
-                old_document_file = mdl_osis_common.document_file.DocumentFile.objects.filter(uuid=answer.value)
-                old_document_file.delete()
-                answer.value = new_document.uuid
-            else:
-                answer = mdl.answer.Answer()
-                answer.application = application
-                answer.option = mdl.option.find_by_id(int(option_id))
-                answer.value = new_document.uuid
-            answer.save()
+            save_answer_from_upload(application, key, request)
     for key, value in request.POST.items():
         if "txt_answer_question_" in key:
-            # INPUT OR LABEL
-            option_id = key.replace("txt_answer_question_", "")
-            asw = mdl.answer.find_by_application_and_option(application.id, option_id)
-            if asw:
-                answer = mdl.answer.find_by_id(asw)
-                answer.value = value
-            else:
-                answer = mdl.answer.Answer()
-                answer.application = application
-                answer.option = mdl.option.find_by_id(int(option_id))
-                answer.value = value
-            answer.save()
+            save_answer_from_input(application, key, value)
         if "txt_answer_radio_" in key:
-            # RADIO_BUTTON
-            option_id = request.POST[key]
-            option = mdl.option.find_by_id(int(option_id))
-            options = mdl.option.find_options_by_question_id(option.question.id)
-            if options:
-                for opt in options:
-                    asw = mdl.answer.find_by_application_and_option(application.id, opt.id)
-                    asw.delete()
-                create_new_answer(application, option)
+            save_answer_from_radio(application, value)
         if "txt_answer_checkbox_" in key:
-            # CHECK_BOX
-            if "on" == value:
-                option_id = key.replace("txt_answer_checkbox_", "")
-                option = mdl.option.find_by_id(int(option_id))
-                options = mdl.option.find_options_by_question_id(option.question.id)
-                if options:
-                    for opt in options:
-                        asw = mdl.answer.find_by_application_and_option(application.id, opt.id)
-                        asw.delete()
-                create_new_answer(application, option)
+            save_answer_from_checkbox(application, key, value)
         if "slt_question_" in key:
-            if value != "0":
-                option_id = key.replace("slt_question_", "")
-                option = mdl.option.find_by_id(int(option_id))
-                options = mdl.option.find_options_by_question_id(option.question.id)
-                if options:
-                    for opt in options:
-                        asw = mdl.answer.find_by_application_and_option(application.id, opt.id)
-                        asw.delete()
-                create_new_answer(application, option)
+            save_answer_from_dropdownlist(application, value)
+        if "delete_document_file_" in key:
+            delete_document_file(application, key)
+
+
+def delete_document_file(application, key):
+    option_id = key.replace("delete_document_file_", "")
+    answer = mdl.answer.find_by_application_and_option(application.id, option_id)
+    document_file = mdl_osis_common.document_file.DocumentFile.objects.filter(uuid=answer[0].value)
+    answer.delete()
+    document_file[0].delete()
+
+
+def save_answer_from_upload(application, key, request):
+    file_selected = request.FILES[key]
+    new_document = create_new_document_file(file_selected.content_type,
+                                            "offer_selection",
+                                            file_selected,
+                                            file_selected.name,
+                                            request,
+                                            file_selected.size)
+    option_id = key.replace("txt_file_", "")
+    answer = mdl.answer.find_by_application_and_option(application.id, option_id)
+    if answer:
+        answer = mdl.answer.find_by_id(answer)
+        old_document_file = mdl_osis_common.document_file.DocumentFile.objects.filter(uuid=answer.value)
+        old_document_file.delete()
+        answer.value = new_document.uuid
+    else:
+        answer = mdl.answer.Answer()
+        answer.application = application
+        answer.option = mdl.option.find_by_id(int(option_id))
+        answer.value = new_document.uuid
+    answer.save()
+
+
+def create_new_document_file(content_type, description, file, file_name, request, size):
+    new_document = mdl_osis_common.document_file.DocumentFile(file_name=file_name,
+                                                              file=file,
+                                                              description=description,
+                                                              storage_duration=720,
+                                                              application_name='admission',
+                                                              content_type=content_type,
+                                                              size=size,
+                                                              update_by=request.user)
+    new_document.save()
+    return new_document
+
+
+def save_answer_from_input(application, key, value):
+    option_id = key.replace("txt_answer_question_", "")
+    answer = mdl.answer.Answer()
+    answer.application = application
+    answer.option = mdl.option.find_by_id(int(option_id))
+    answer.value = value
+    answer.save()
+
+
+def save_answer_from_radio(application, value):
+    option = mdl.option.find_by_id(value)
+    create_new_answer(application, option)
+
+
+def save_answer_from_checkbox(application, key, value):
+    if "on" == value:
+        option_id = key.replace("txt_answer_checkbox_", "")
+        option = mdl.option.find_by_id(int(option_id))
+        create_new_answer(application, option)
+
+
+def save_answer_from_dropdownlist(application, value):
+    if value != "0":
+        option = mdl.option.find_by_id(value)
+        create_new_answer(application, option)
 
 
 def create_new_answer(application, option):

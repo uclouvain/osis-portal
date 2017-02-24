@@ -66,6 +66,7 @@ def find_by_offer(request):
                             if document_file.exists():
                                 document_name = document_file[0].file_name
                     question_list.append({'answer': answer,
+                                          'document_id': answer,
                                           'document_file': document_name,
                                           'position': position,
                                           'option_id': option.id,
