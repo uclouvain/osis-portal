@@ -1340,6 +1340,9 @@ function display_dynamic_form(offer_year_id){
                                 }
                             }
                         }
+                        if(value.position == value.options_max_number){
+                            $('#pnl_questions').append("<br>");
+                        }
                     }
                     if(value.question_type=='CHECKBOX'){
                         if(value.position == 1){
@@ -1421,6 +1424,9 @@ function display_dynamic_form(offer_year_id){
                                 }
                             }
                         }
+                        if(value.position == value.options_max_number){
+                            $('#pnl_questions').append("<br>");
+                        }
                     }
                     if(value.question_type=='DROPDOWN_LIST'){
                         if(value.position == 1){
@@ -1484,6 +1490,7 @@ function display_dynamic_form(offer_year_id){
                                                .attr("target","_blank")
                                                .attr("href",value.question_description));
                             $('#pnl_questions').append("<br>");
+                            $('#pnl_questions').append("<br>");
                         }
                     }
                     if(value.question_type=='UPLOAD_BUTTON'){
@@ -1515,11 +1522,8 @@ function display_dynamic_form(offer_year_id){
                                                .attr("id","txt_file_"+value.option_id)
                                                .attr("type","file"));
                         }
-
-                        $('#pnl_questions').append("<br>");
                     }
                     if(value.position == value.options_max_number){
-                        $('#pnl_questions').append("<br>");
                         $('#pnl_questions').append("<br>");
                     }
 
