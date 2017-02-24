@@ -42,7 +42,7 @@ body {
 }
 
 .dashboard-grid .grid-item {
-    width : 45%;
+    width : 550px;
     margin-bottom: 10px;
 }
 .dashboard-grid .grid-item i {
