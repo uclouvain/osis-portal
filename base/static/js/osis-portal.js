@@ -1516,6 +1516,7 @@ function display_dynamic_form(offer_year_id){
                                                .attr("name","delete_document_file_"+value.option_id)
                                                .attr("id","delete_document_file_"+value.option_id)
                                                .attr("class", "glyphicon glyphicon-trash"));
+                            $('#pnl_questions').append("<br>");
                         }else{
                             $('#pnl_questions').append($("<input>")
                                                .attr("name","txt_file_"+value.option_id)
