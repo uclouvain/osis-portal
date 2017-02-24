@@ -28,6 +28,7 @@ from django.test import TestCase, override_settings
 
 from admission.forms import applicant as app_forms
 
+
 class ApplicantFormTest(TestCase):
     def test_error_messages_are_i18n_compliant(self):
         form = app_forms.ApplicantForm()

@@ -30,26 +30,34 @@ from admission.validators import date_validator
 
 
 class ApplicantForm(forms.Form):
+    REQUIRED_ARGUMENTS = dict(required=True,
+                              error_messages=dict(required=_('mandatory_field')))
     GENDER_CHOICES=(
-            ('MALE', 'MALE'),
-            ('FEMALE', 'FEMALE'))
-    last_name               = forms.CharField(required=True)
-    first_name              = forms.CharField(required=True)
-    birth_date              = forms.DateField(required=True, input_formats=['%d/%m/%Y'],
+        ('MALE', 'MALE'),
+        ('FEMALE', 'FEMALE')
+    )
+    last_name               = forms.CharField(**REQUIRED_ARGUMENTS)
+    first_name              = forms.CharField(**REQUIRED_ARGUMENTS)
+    birth_date              = forms.DateField(input_formats=['%d/%m/%Y'],
                                               widget=forms.DateInput(format='%d/%m/%Y'),
-                                              validators=[date_validator.validate_birth_date])
-    birth_place             = forms.CharField(required=True)
-    birth_country           = forms.CharField(required=True)
-    gender                  = forms.ChoiceField(choices=GENDER_CHOICES, required=True)
-    civil_status            = forms.CharField(required=True)
+                                              validators=[date_validator.validate_birth_date],
+                                              required=True,
+                                              error_messages={
+                                                  'required': _('mandatory_field'),
+                                                  'invalid': _('invalid_date')
+                                              })
+    birth_place             = forms.CharField(**REQUIRED_ARGUMENTS)
+    birth_country           = forms.CharField(**REQUIRED_ARGUMENTS)
+    gender                  = forms.ChoiceField(choices=GENDER_CHOICES, **REQUIRED_ARGUMENTS)
+    civil_status            = forms.CharField(**REQUIRED_ARGUMENTS)
     number_children         = forms.IntegerField(validators=[MinValueValidator(0)], required=False)
-    nationality             = forms.CharField(required=True)
-    legal_adr_street        = forms.CharField(required=True)
-    legal_adr_number        = forms.CharField(required=True)
-    legal_adr_postal_code   = forms.CharField(required=True)
-    legal_adr_city          = forms.CharField(required=True)
-    legal_adr_country       = forms.CharField(required=True)
-    same_contact_legal_addr = forms.CharField(required=True)
+    nationality             = forms.CharField(**REQUIRED_ARGUMENTS)
+    legal_adr_street        = forms.CharField(**REQUIRED_ARGUMENTS)
+    legal_adr_number        = forms.CharField(**REQUIRED_ARGUMENTS)
+    legal_adr_postal_code   = forms.CharField(**REQUIRED_ARGUMENTS)
+    legal_adr_city          = forms.CharField(**REQUIRED_ARGUMENTS)
+    legal_adr_country       = forms.CharField(**REQUIRED_ARGUMENTS)
+    same_contact_legal_addr = forms.CharField(**REQUIRED_ARGUMENTS)
     contact_adr_street      = forms.CharField(required=False)
     contact_adr_number      = forms.CharField(required=False)
     contact_adr_postal_code = forms.CharField(required=False)
@@ -64,22 +72,7 @@ class ApplicantForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(ApplicantForm, self).__init__(*args, **kwargs)
-        self.fields['last_name'].error_messages = {'required': _('mandatory_field')}
-        self.fields['first_name'].error_messages = {'required': _('mandatory_field')}
-        self.fields['birth_date'].error_messages = {'required': _('mandatory_field'),
-                                                    'invalid': _('invalid_date')}
-        self.fields['birth_place'].error_messages = {'required': _('mandatory_field')}
-        self.fields['birth_country'].error_messages = {'required': _('mandatory_field')}
-        self.fields['gender'].error_messages = {'required': _('mandatory_field')}
-        self.fields['civil_status'].error_messages = {'required': _('mandatory_field')}
-        self.fields['nationality'].error_messages = {'required': _('mandatory_field')}
-        self.fields['legal_adr_street'].error_messages = {'required': _('mandatory_field')}
-        self.fields['legal_adr_number'].error_messages = {'required': _('mandatory_field')}
-        self.fields['legal_adr_postal_code'].error_messages = {'required': _('mandatory_field')}
-        self.fields['legal_adr_city'].error_messages = {'required': _('mandatory_field')}
-        self.fields['legal_adr_country'].error_messages = {'required': _('mandatory_field')}
-        self.fields['same_contact_legal_addr'].error_messages = {'required': _('mandatory_field')}
-        self._initial_data = self.__dict__.copy()
+        self._initial_data = dict(self.__dict__)
 
     def clean(self):
         cleaned_data = super(ApplicantForm, self).clean()
