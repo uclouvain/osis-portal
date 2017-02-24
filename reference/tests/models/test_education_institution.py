@@ -37,3 +37,15 @@ def create_education_institution():
         adhoc=False)
     an_education_institution.save()
     return an_education_institution
+
+
+def create_education_institution_from_postal_code(postal_code):
+    an_education_institution = mdl_reference.education_institution.EducationInstitution(postal_code=postal_code)
+    an_education_institution.save()
+    return an_education_institution
+
+
+def create_education_institution_from_city(city):
+    an_education_institution = mdl_reference.education_institution.EducationInstitution(city=city)
+    an_education_institution.save()
+    return an_education_institution
