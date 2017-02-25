@@ -47,6 +47,9 @@ class PersonAddress(SerializableModel):
     city = models.CharField(max_length=255)
     country = models.ForeignKey('reference.Country')
 
+    def __str__(self):
+        return self.street
+
 
 def find_by_person(a_person):
     """ Return a list containing one or more addresses of a person. Returns None if there is no address.
