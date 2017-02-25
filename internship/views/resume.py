@@ -29,6 +29,7 @@ from base.views import layout
 from internship.models import internship_student_information as mdl_student_information
 from internship.models import internship_student_affectation_stat as mdl_student_affectation
 from internship.models import organization_address as mdl_organization_address
+from internship.models import internship_choice as mdl_internship_choice
 from base.models import student as mdl_student
 
 
@@ -41,7 +42,10 @@ def view_student_resume(request):
     student_affectations_with_address = \
         [(affectation, mdl_organization_address.get_by_organization(affectation.organization)) for affectation in
          student_affectations]
+    student_choices = mdl_internship_choice.search(student=student).order_by('internship_choice', 'choice')
     return layout.render(request, "student_resume.html", {"student": student,
                                                           "student_information": student_information,
                                                           "student_affectations_with_address":
-                                                              student_affectations_with_address})
+                                                              student_affectations_with_address,
+                                                          "student_choices": student_choices,
+                                                          "internships": range(1, 7)})

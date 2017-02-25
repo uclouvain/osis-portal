@@ -116,8 +116,19 @@
             </div>
 
             <div role="tabpanel" class="tab-pane" id="choices">
+                <br>
                 <div class="row">
-                    CHOICES
+                    {% for internship in internships %}
+                        <strong>Internship {{ internship }}</strong>
+                        <br>
+                        {% for choice in student_choices %}
+                            {% if choice.internship_choice == internship %}
+                                {{ choice.organization }} | {{ choice.speciality }} |{{ choice.choice }}
+                                <br>
+                            {% endif %}
+                        {% endfor %}
+                        <br>
+                    {% endfor %}
                 </div>
             </div>
 
