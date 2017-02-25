@@ -27,13 +27,14 @@ from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from reference.enums.education_institution_national_comunity import NATIONAL_COMMUNITY_TYPES
+from osis_common.models.serializable_model import SerializableModel
 
 
 class CurriculumAdmin(admin.ModelAdmin):
     list_display = ('person', 'path_type')
 
 
-class Curriculum(models.Model):
+class Curriculum(SerializableModel):
 
     PATH_TYPES = (
             ('LOCAL_UNIVERSITY', _('national_university')),
@@ -86,6 +87,9 @@ class Curriculum(models.Model):
     activity = models.CharField(max_length=255, blank=True, null=True)
     activity_place = models.CharField(max_length=255, blank=True, null=True)
     study_system = models.CharField(max_length=25, choices=STUDY_SYSTEM, blank=True, null=True)
+
+    def __str__(self):
+        return "{}".format(self.person)
 
 
 def find_by_id(an_id):

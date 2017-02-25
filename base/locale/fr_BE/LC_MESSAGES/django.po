@@ -36,4 +36,4 @@ msgid "page_not_found"
 msgstr "Page inexistante"
 
 msgid "server_error"
-msgstr "Une erreur innatendue s'est produite"
+msgstr "Une erreur inatendue s'est produite"
