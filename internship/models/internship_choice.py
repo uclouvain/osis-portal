@@ -24,17 +24,17 @@
 #
 ##############################################################################
 from django.db import models
-from django.contrib import admin
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
-class InternshipChoiceAdmin(admin.ModelAdmin):
+class InternshipChoiceAdmin(SerializableModelAdmin):
     list_display = ('student', 'organization', 'speciality', 'choice', 'internship_choice', 'priority')
     fieldsets = ((None, {'fields': ('student', 'organization', 'speciality', 'choice', 'internship_choice',
                                     'priority')}),)
     raw_id_fields = ('student', 'organization', 'speciality')
 
 
-class InternshipChoice(models.Model):
+class InternshipChoice(SerializableModel):
     student = models.ForeignKey('base.Student')
     organization = models.ForeignKey('internship.Organization')
     speciality = models.ForeignKey('internship.InternshipSpeciality', null=True)

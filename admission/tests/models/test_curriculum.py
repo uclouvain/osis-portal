@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,30 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
-from django.db import models
+from admission import models as mdl
 
 
-class OrganizationAdmin(SerializableModelAdmin):
-    list_display = ('name', 'acronym', 'reference', 'type')
-    fieldsets = ((None, {'fields': ('name', 'acronym', 'reference', 'website', 'type')}),)
-    search_fields = ['acronym']
+def create_curriculum(data):
+    a_curriculum = mdl.curriculum.Curriculum()
+    if data['applicant']:
+        a_curriculum.person = data['applicant']
 
+    if data['academic_year']:
+        a_curriculum.academic_year = data['academic_year']
 
-class Organization(SerializableModel):
-    name = models.CharField(max_length=255)
-    acronym = models.CharField(max_length=15, blank=True)
-    website = models.URLField(max_length=255, blank=True, null=True)
-    reference = models.CharField(max_length=30, blank=True, null=True)
-    type = models.CharField(max_length=30, blank=True, null=True, default="service partner")
+    if data['path_type']:
+        a_curriculum.path_type = data['path_type']
 
-    def __str__(self):
-        return self.name
+    if data['national_education']:
+        a_curriculum.national_education = data['national_education']
 
-    def save(self, *args, **kwargs):
-        self.acronym = self.name[:14]
-        super(Organization, self).save(*args, **kwargs)
+    if data['national_institution']:
+        a_curriculum.national_institution = data['national_institution']
 
+    a_curriculum.save()
 
-def search(name):
-    return Organization.objects.filter(name__contains=name)
+    return a_curriculum
