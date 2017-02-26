@@ -27,16 +27,17 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
-class InternshipMasterAdmin(admin.ModelAdmin):
+class InternshipMasterAdmin(SerializableModelAdmin):
     list_display = ('reference', 'organization', 'first_name', 'last_name', 'civility', 'type_mastery', 'speciality')
     fieldsets = ((None, {'fields': ('reference', 'organization', 'first_name', 'last_name', 'civility', 'type_mastery',
                                     'speciality')}),)
     raw_id_fields = ('organization',)
 
 
-class InternshipMaster(models.Model):
+class InternshipMaster(SerializableModel):
     CIVILITY_CHOICE = (('PROFESSOR', _('Professor')),
                        ('DOCTOR', _('Doctor')))
     TYPE_CHOICE = (('SPECIALIST', _('Specialist')),
@@ -76,6 +77,7 @@ def search(name="", speciality="", organization=None):
 
 
 def get_all_specialities():
-    return list(InternshipMaster.objects.values_list('speciality', flat=True).distinct('speciality').order_by('speciality'))
+    return list(InternshipMaster.objects.values_list('speciality', flat=True).distinct('speciality').
+                order_by('speciality'))
 
 
