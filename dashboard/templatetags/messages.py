@@ -28,32 +28,31 @@ from django.contrib import messages
 
 register = template.Library()
 
-@register.assignment_tag(takes_context=True)
-def as_messages_info(context):
+
+def _is_message_type(context, msg_type):
     request = context['request']
     msgs = messages.get_messages(request)
-
     for m in msgs:
-        if 'info' in m.tags:
+        if msg_type in m.tags:
             return True
     return False
+
+
+@register.assignment_tag(takes_context=True)
+def as_messages_info(context):
+    return _is_message_type(context, 'info')
+
 
 @register.assignment_tag(takes_context=True)
 def as_messages_warning(context):
-    request = context['request']
-    msgs = messages.get_messages(request)
+    return _is_message_type(context, 'warning')
 
-    for m in msgs:
-        if 'warning' in m.tags:
-            return True
-    return False
 
 @register.assignment_tag(takes_context=True)
 def as_messages_error(context):
-    request = context['request']
-    msgs = messages.get_messages(request)
+    return _is_message_type(context, 'error')
 
-    for m in msgs:
-        if 'error' in m.tags:
-            return True
-    return False
+
+@register.assignment_tag(takes_context=True)
+def as_messages_success(context):
+    return _is_message_type(context, 'success')

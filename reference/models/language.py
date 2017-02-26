@@ -24,11 +24,10 @@
 #
 ##############################################################################
 from django.db import models
-from django.contrib import admin
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
-class LanguageAdmin(admin.ModelAdmin):
+class LanguageAdmin(SerializableModelAdmin):
     list_display = ('code', 'name', 'recognized')
     ordering = ('code',)
     search_fields = ['code', 'name']

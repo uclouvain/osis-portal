@@ -43,6 +43,9 @@ msgstr "Dashboard"
 msgid "deliberation_date"
 msgstr "Deliberation date"
 
+msgid "desc_lnk_internships"
+msgstr "This process controls students internships."
+
 msgid "desc_lnk_performance"
 msgstr "Show the student results."
 
@@ -112,6 +115,9 @@ msgstr "?=Score missing"
 msgid "scores_encoding"
 msgstr "Scores Encoding"
 
+msgid "my_score_sheets"
+msgstr "My Score Sheets"
+
 msgid "scores_sheet"
 msgstr "Scores Sheet"
 
@@ -123,3 +129,6 @@ msgstr "the"
 
 msgid "unauthorized_decimal"
 msgstr "Unauthorized decimal for this learning unit"
+
+msgid "faculty_administration"
+msgstr "Faculty administration"

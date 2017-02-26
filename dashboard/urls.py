@@ -28,6 +28,7 @@ from dashboard.views import main, score_encoding
 
 urlpatterns = [
     url(r'^$', main.home, name='dashboard_home'),
+    url('^faculty_administration/$', main.faculty_administration, name='faculty_administration'),
     url(r'^scores_encoding/$', score_encoding.score_encoding, name='scores_encoding'),
     url(r'^scores_encoding/download/$', score_encoding.download_papersheet, name='scores_download'),
 ]

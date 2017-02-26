@@ -24,25 +24,29 @@
 #
 ##############################################################################
 import json
+import datetime
 
 from django.test import TestCase
+from django.core.exceptions import ObjectDoesNotExist
 
 import base.tests.models.test_offer_year
 from performance import models as mdl_performance
 from performance.models import student_performance as mdl_perf
-import datetime
-from django.core.exceptions import ObjectDoesNotExist
+from performance.models.enums import offer_registration_state
 
 
 def create_student_performance(acronym="SINF2MS/G", registration_id="64641200",
                                academic_year=2016, update_date=datetime.datetime.now()):
     with open("performance/tests/ressources/points.json") as f:
         data = json.load(f)
-    a_student_performance = mdl_performance.student_performance.StudentPerformance(acronym=acronym,
-                                                                                   registration_id=registration_id,
-                                                                                   academic_year=academic_year,
-                                                                                   update_date=update_date,
-                                                                                   data=data)
+    a_student_performance = mdl_performance.student_performance.\
+        StudentPerformance(acronym=acronym,
+                           registration_id=registration_id,
+                           academic_year=academic_year,
+                           update_date=update_date,
+                           creation_date=datetime.datetime.now(),
+                           data=data,
+                           offer_registration_state=offer_registration_state.REGISTERED)
     a_student_performance.save()
     return a_student_performance
 
@@ -98,7 +102,8 @@ class TestModelStudentPerformance(TestCase):
         self.assertTrue(self.student_performance, "Should return false as date of update has not been exceeded")
 
     def test_update_or_create(self):
-        fields_value = {"data": self.json_points, "update_date": datetime.date.today()}
+        fields_value = {"data": self.json_points, "update_date": datetime.date.today(),
+                        "creation_date": datetime.date.today()}
         stud_perf = mdl_perf.update_or_create(self.student_performance.registration_id,
                                               self.student_performance.academic_year,
                                               self.student_performance.acronym,

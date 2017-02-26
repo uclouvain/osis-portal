@@ -23,17 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 from django.db import models
 
 
-class OrganizationAdmin(admin.ModelAdmin):
+class OrganizationAdmin(SerializableModelAdmin):
     list_display = ('name', 'acronym', 'reference', 'type')
     fieldsets = ((None, {'fields': ('name', 'acronym', 'reference', 'website', 'type')}),)
     search_fields = ['acronym']
 
 
-class Organization(models.Model):
+class Organization(SerializableModel):
     name = models.CharField(max_length=255)
     acronym = models.CharField(max_length=15, blank=True)
     website = models.URLField(max_length=255, blank=True, null=True)

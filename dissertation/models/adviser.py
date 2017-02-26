@@ -23,13 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.contrib import admin
 
 
-class AdviserAdmin(admin.ModelAdmin):
+class AdviserAdmin(SerializableModelAdmin):
     list_display = ('person', 'type')
     raw_id_fields = ('person', )
     search_fields = ('uuid', 'person__last_name', 'person__first_name')
