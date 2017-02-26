@@ -115,6 +115,9 @@ msgstr "?=Score missing"
 msgid "scores_encoding"
 msgstr "Scores Encoding"
 
+msgid "my_score_sheets"
+msgstr "My Score Sheets"
+
 msgid "scores_sheet"
 msgstr "Scores Sheet"
 

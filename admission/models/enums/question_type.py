@@ -23,42 +23,23 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
-from django.contrib import admin
-from django.core.exceptions import ObjectDoesNotExist
-from osis_common.models.serializable_model import SerializableModel
 
+LABEL = "LABEL"
+SHORT_INPUT_TEXT = "SHORT_INPUT_TEXT"
+LONG_INPUT_TEXT = "LONG_INPUT_TEXT"
+RADIO_BUTTON = "RADIO_BUTTON"
+CHECKBOX = "CHECKBOX"
+DROPDOWN_LIST = "DROPDOWN_LIST"
+UPLOAD_BUTTON = "UPLOAD_BUTTON"
+DOWNLOAD_LINK = "DOWNLOAD_LINK"
+HTTP_LINK = "HTTP_LINK"
 
-class OptionAdmin(admin.ModelAdmin):
-    list_display = ('label', 'description', 'question')
-    fieldsets = ((None, {'fields': ('label', 'value', 'order', 'description', 'question')}),)
-    list_filter = ('question',)
-    raw_id_fields = ('question',)
-    search_fields = ['question']
-
-
-class Option(SerializableModel):
-    label = models.CharField(max_length=255)
-    value = models.TextField(blank=True, null=True)
-    order = models.IntegerField(blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    question = models.ForeignKey('Question')
-
-    def __str__(self):
-        return u"%s" % self.label
-
-
-def find_options_by_question_id(question_id):
-    return Option.objects.filter(question=question_id).order_by("order")
-
-
-def find_by_id(option_id):
-    try:
-        return Option.objects.get(pk=option_id)
-    except ObjectDoesNotExist:
-        return None
-
-
-def find_number_options_by_question_id(question):
-    option = Option.objects.filter(question=question).count()
-    return option
+QUESTION_TYPES = ((LABEL, LABEL),
+                  (SHORT_INPUT_TEXT, SHORT_INPUT_TEXT),
+                  (LONG_INPUT_TEXT, LONG_INPUT_TEXT),
+                  (RADIO_BUTTON, RADIO_BUTTON),
+                  (CHECKBOX, CHECKBOX),
+                  (DROPDOWN_LIST, DROPDOWN_LIST),
+                  (UPLOAD_BUTTON, UPLOAD_BUTTON),
+                  (DOWNLOAD_LINK, DOWNLOAD_LINK),
+                  (HTTP_LINK, HTTP_LINK))

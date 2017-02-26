@@ -67,6 +67,9 @@ class SociologicalSurvey(SerializableModel):
     maternal_grandfather_profession = models.ForeignKey('Profession', blank=True, null=True,
                                                         related_name="maternal_grandfather_profession")
 
+    def __str__(self):
+        return "{}".format(self.applicant)
+
 
 def find_by_applicant(applicant):
     try:

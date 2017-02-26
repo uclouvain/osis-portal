@@ -37,6 +37,9 @@ class ApplicationDocumentFile(SerializableModel):
     application = models.ForeignKey('Application')
     document_file = models.ForeignKey('osis_common.documentFile')
 
+    def __str__(self):
+        return "{}".format(self.document_file)
+
 
 def search(application=None, description=None):
     out = None
