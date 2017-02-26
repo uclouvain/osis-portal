@@ -23,11 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
 from django.db import models
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
-class InternshipStudentAffectationStatAdmin(admin.ModelAdmin):
+class InternshipStudentAffectationStatAdmin(SerializableModelAdmin):
     list_display = ('student', 'organization', 'speciality', 'period', 'choice', 'cost', 'consecutive_month',
                     'type_of_internship')
     fieldsets = ((None, {'fields': ('student', 'organization', 'speciality', 'period', 'choice', 'cost',
@@ -35,7 +35,7 @@ class InternshipStudentAffectationStatAdmin(admin.ModelAdmin):
     raw_id_fields = ('student', 'organization', 'speciality', 'period')
 
 
-class InternshipStudentAffectationStat(models.Model):
+class InternshipStudentAffectationStat(SerializableModel):
     student = models.ForeignKey('base.Student')
     organization = models.ForeignKey('internship.Organization')
     speciality = models.ForeignKey('internship.InternshipSpeciality')

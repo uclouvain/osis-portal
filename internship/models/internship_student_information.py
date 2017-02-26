@@ -23,12 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
-class InternshipStudentInformationAdmin(admin.ModelAdmin):
+class InternshipStudentInformationAdmin(SerializableModelAdmin):
     list_display = ('person', 'location', 'postal_code', 'city', 'country', 'latitude', 'longitude', 'email',
                     'phone_mobile')
     fieldsets = ((None, {'fields': ('person', 'location', 'postal_code', 'city', 'latitude', 'longitude', 'country',
@@ -37,7 +37,7 @@ class InternshipStudentInformationAdmin(admin.ModelAdmin):
     search_fields = ['person__user__username', 'person__last_name', 'person__first_name']
 
 
-class InternshipStudentInformation(models.Model):
+class InternshipStudentInformation(SerializableModel):
     person = models.ForeignKey('base.Person')
     location = models.CharField(max_length=255)
     postal_code = models.CharField(max_length=20)

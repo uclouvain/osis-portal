@@ -23,16 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
 from django.db import models
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
-class PeriodAdmin(admin.ModelAdmin):
+class PeriodAdmin(SerializableModelAdmin):
     list_display = ('name', 'date_start', 'date_end')
     fieldsets = ((None, {'fields': ('name', 'date_start', 'date_end')}),)
 
 
-class Period(models.Model):
+class Period(SerializableModel):
     name = models.CharField(max_length=255)
     date_start = models.DateField(blank=False)
     date_end = models.DateField(blank=False)
