@@ -56,7 +56,7 @@ def button_title(assimilation_documents_existing, document_description):
 @register.filter
 def table_display(assimilation_basic_documents, criteria):
     for doc in assimilation_basic_documents:
-        if doc.criteria == criteria[0]:
+        if doc['criteria'] == criteria[0]:
             return True
     return False
 

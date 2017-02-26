@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,7 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from admission import models as mdl
 
-from django.test import TestCase
 
-# Create your tests here.
+def create_curriculum(data):
+    a_curriculum = mdl.curriculum.Curriculum()
+    if data['applicant']:
+        a_curriculum.person = data['applicant']
+
+    if data['academic_year']:
+        a_curriculum.academic_year = data['academic_year']
+
+    if data['path_type']:
+        a_curriculum.path_type = data['path_type']
+
+    if data['national_education']:
+        a_curriculum.national_education = data['national_education']
+
+    if data['national_institution']:
+        a_curriculum.national_institution = data['national_institution']
+
+    a_curriculum.save()
+
+    return a_curriculum
