@@ -26,13 +26,14 @@
 from django.db import models
 from django.contrib import admin
 from reference.enums import assimilation_criteria as assimilation_criteria_enum
+from osis_common.models.serializable_model import SerializableModel
 
 
 class ApplicationAssimilationCriteriaAdmin(admin.ModelAdmin):
     list_display = ('application', 'criteria', 'selected')
 
 
-class ApplicationAssimilationCriteria(models.Model):
+class ApplicationAssimilationCriteria(SerializableModel):
     application = models.ForeignKey('Application')
     criteria = models.CharField(max_length=50, choices=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES)
     additional_criteria = models.CharField(max_length=50, blank=True, null=True,

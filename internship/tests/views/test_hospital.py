@@ -24,13 +24,14 @@
 #
 ##############################################################################
 from django.test import TestCase, Client
-
 import base.tests.models.test_student
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from internship.tests.models import test_organization_address, test_organization
+from internship.views import hospital
 
 
-class TestMain(TestCase):
+class TestHospitalUrl(TestCase):
     def setUp(self):
         self.c = Client()
         self.student = base.tests.models.test_student.create_student("45451298")
@@ -46,3 +47,41 @@ class TestMain(TestCase):
         self.c.force_login(self.user)
         response = self.c.get(home_url)
         self.assertEqual(response.status_code, 200)
+
+
+class TestGetHospitals(TestCase):
+    def setUp(self):
+        self.organization_1 = test_organization.create_organization()
+        self.organization_address_1 = \
+            test_organization_address.create_organization_address(self.organization_1, city="city1")
+        self.organization_2 = test_organization.create_organization(reference='02')
+        self.organization_address_2 = \
+            test_organization_address.create_organization_address(self.organization_2, city="city2")
+        self.organization_3 = test_organization.create_organization(name="OSAS", reference='03')
+        self.organization_address_3 = \
+            test_organization_address.create_organization_address(self.organization_3, city="city1")
+
+    def test_with_no_criteria(self):
+        hospitals = hospital.get_hospitals()
+        self.assertEqual(len(hospitals), 3)
+        self.assertIn((self.organization_1, self.organization_address_1), hospitals)
+        self.assertIn((self.organization_2, self.organization_address_2), hospitals)
+        self.assertIn((self.organization_3, self.organization_address_3), hospitals)
+
+    def test_with_name(self):
+        hospitals = hospital.get_hospitals(name="OSIS")
+        self.assertEqual(len(hospitals), 2)
+        self.assertIn((self.organization_1, self.organization_address_1), hospitals)
+        self.assertIn((self.organization_2, self.organization_address_2), hospitals)
+
+    def test_with_city(self):
+        hospitals = hospital.get_hospitals(city="city1")
+        self.assertEqual(len(hospitals), 2)
+        self.assertIn((self.organization_1, self.organization_address_1), hospitals)
+        self.assertIn((self.organization_3, self.organization_address_3), hospitals)
+
+    def test_with_name_and_city(self):
+        hospitals = hospital.get_hospitals(name="OSIS", city="city2")
+        self.assertEqual(len(hospitals), 1)
+        self.assertIn((self.organization_2, self.organization_address_2), hospitals)
+

@@ -26,14 +26,41 @@
 ############################################################################
 from django.contrib.auth.decorators import login_required, permission_required
 from base.views import layout
-
+from internship.forms.form_search_hospital import SearchHospitalForm
+from internship import models as mdl_internship
 
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def view_hospitals_list(request):
+    cities = mdl_internship.organization_address.get_all_cities()
+    hospitals = []
 
-    return layout.render(request, "hospitals.html")
+    if request.method == 'POST':
+        form = SearchHospitalForm(cities, request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            city = form.cleaned_data['city']
+            hospitals = get_hospitals(name=name, city=city)
+
+    else:
+        form = SearchHospitalForm(cities)
+
+    return layout.render(request, "hospitals.html", {'search_form': form,
+                                                     'hospitals': hospitals})
+
+
+def get_hospitals(name="", city=""):
+    if name:
+        organizations = mdl_internship.organization.search(name)
+    else:
+        organizations = mdl_internship.organization.Organization.objects.all()
+    hospitals = []
+    for organization in organizations:
+        organization_address = mdl_internship.organization_address.get_by_organization(organization)
+        if not city or organization_address.city == city:
+            hospitals.append((organization, organization_address))
+    return hospitals
 
 
 

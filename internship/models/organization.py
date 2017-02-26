@@ -48,3 +48,5 @@ class Organization(models.Model):
         super(Organization, self).save(*args, **kwargs)
 
 
+def search(name):
+    return Organization.objects.filter(name__contains=name)

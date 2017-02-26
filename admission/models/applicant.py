@@ -31,6 +31,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from osis_common.models.serializable_model import SerializableModel
 
 
 class ApplicantAdmin(admin.ModelAdmin):
@@ -38,7 +39,7 @@ class ApplicantAdmin(admin.ModelAdmin):
     fieldsets = ((None, {'fields': ('user', 'birth_date', 'gender', 'language', 'nationality', 'registration_id')}),)
 
 
-class Applicant(models.Model):
+class Applicant(SerializableModel):
     GENDER_CHOICES = (
         ('FEMALE', _('female')),
         ('MALE', _('male')))

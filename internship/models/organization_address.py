@@ -25,6 +25,7 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class OrganizationAddressAdmin(admin.ModelAdmin):
@@ -43,3 +44,14 @@ class OrganizationAddress(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     country = models.CharField(max_length=255)
+
+
+def get_by_organization(organization):
+    try:
+        return OrganizationAddress.objects.get(organization=organization)
+    except ObjectDoesNotExist:
+        return None
+
+
+def get_all_cities():
+    return list(OrganizationAddress.objects.values_list('city', flat=True).distinct('city').order_by('city'))
