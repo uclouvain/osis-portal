@@ -30,7 +30,6 @@ import admission.tests.models.test_application
 import reference.tests.models.test_grade_type
 from admission.views import common
 from django.contrib.auth.models import User
-import admission.tests.data_for_tests as data_model
 from reference.enums import institutional_grade_type
 
 
@@ -41,18 +40,18 @@ class CommonTest(TestCase):
             username='jacob', email='jacob@localhost', password='top_secret')
         self.applicant = admission.tests.models.test_applicant.create_applicant_by_user(self.user)
 
+        self.application = admission.tests.models.test_application.create_application(self.applicant)
+
     def test_is_local_language_exam_needed_status(self):
         self.assertFalse(common.is_local_language_exam_needed(None))
 
-        self.assertFalse(common.is_local_language_exam_needed(self.user))
+        self.assertFalse(common.is_local_language_exam_needed(self.application))
 
-        an_application = admission.tests.models.test_application.create_application(self.applicant)
-        self.assertFalse(common.is_local_language_exam_needed(self.user))
+        self.application.offer_year.grade_type = reference.tests.models.test_grade_type.create_grade_type('BACHELOR', institutional_grade_type.BACHELOR)
+        self.application.offer_year.grade_type.language_exam_required = True
+        self.application.offer_year.save()
+        self.assertTrue(common.is_local_language_exam_needed(self.application))
 
-        an_application.offer_year.grade_type = reference.tests.models.test_grade_type.create_grade_type('BACHELOR', institutional_grade_type.BACHELOR)
-        an_application.offer_year.save()
-        self.assertTrue(common.is_local_language_exam_needed(self.user))
-
-        an_application.offer_year.grade_type = reference.tests.models.test_grade_type.create_grade_type('BACHELORZ', None)
-        an_application.offer_year.save()
-        self.assertFalse(common.is_local_language_exam_needed(self.user))
+        self.application.offer_year.grade_type = reference.tests.models.test_grade_type.create_grade_type('BACHELORZ', None)
+        self.application.offer_year.save()
+        self.assertFalse(common.is_local_language_exam_needed(self.application))

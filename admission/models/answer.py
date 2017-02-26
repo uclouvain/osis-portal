@@ -25,6 +25,7 @@
 ##############################################################################
 from django.db import models
 from django.contrib import admin
+from osis_common.models.serializable_model import SerializableModel
 
 
 class AnswerAdmin(admin.ModelAdmin):
@@ -33,7 +34,7 @@ class AnswerAdmin(admin.ModelAdmin):
     list_filter = ('application', 'option',)
 
 
-class Answer(models.Model):
+class Answer(SerializableModel):
     value = models.TextField()
     option = models.ForeignKey('Option')
     application = models.ForeignKey('Application')
@@ -44,10 +45,6 @@ class Answer(models.Model):
 
 def find_by_application(application):
     return Answer.objects.filter(application=application)
-
-
-def find_by_option(option):
-    return Answer.objects.filter(option=option)
 
 
 def find_by_user_and_option(user, option):

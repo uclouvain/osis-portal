@@ -24,12 +24,11 @@
 #
 ##############################################################################
 from django.db import models
-from django.contrib import admin
 from base.enums.organization_type import TYPES as ORGANIZATION_TYPES
-from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
-class OrganizationAdmin(admin.ModelAdmin):
+class OrganizationAdmin(SerializableModelAdmin):
     list_display = ('name', 'acronym', 'website', 'reference', 'type')
     fieldsets = ((None, {'fields': ('name', 'acronym', 'reference', 'website', 'type')}),)
     search_fields = ['acronym']

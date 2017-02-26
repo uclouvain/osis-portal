@@ -30,7 +30,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from base.models import student
 from performance import models as mdl_performance
-from performance.forms import RegistrationIdForm
+from base.forms.base_forms import RegistrationIdForm
 from base.views import layout
 import json
 from performance.models.enums import offer_registration_state
@@ -77,12 +77,6 @@ def display_result_for_specific_student_performance(request, pk):
 
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
-def performance_administration(request):
-    return layout.render(request, 'admin/performance_administration.html')
-
-
-@login_required
-@permission_required('base.is_faculty_administrator', raise_exception=True)
 def select_student(request):
     """
     View to select a student to visualize his/her results.
@@ -95,7 +89,7 @@ def select_student(request):
             return redirect(visualize_student_programs, registration_id=registration_id)
     else:
         form = RegistrationIdForm()
-    return layout.render(request, "admin/performance_select_student.html", {"form": form})
+    return layout.render(request, "admin/performance_administration.html", {"form": form})
 
 
 @login_required
