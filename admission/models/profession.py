@@ -28,9 +28,10 @@ Model containing a profession.
 This can be executive, artist, worker and so on.
 """
 from django.db import models
+from osis_common.models.serializable_model import SerializableModel
 
 
-class Profession(models.Model):
+class Profession(SerializableModel):
     name = models.CharField(max_length=255)
     adhoc = models.BooleanField(default=False)
 
@@ -48,8 +49,10 @@ def find_by_id(an_id):
 def find_by_adoc(an_adhoc):
     return Profession.objects.filter(adhoc=an_adhoc).order_by('name')
 
+
 def find_by_name(a_name):
     return Profession.objects.filter(name=a_name).first()
+
 
 def find_distinct_by_adoc(is_adhoc):
     return Profession.objects.filter(adhoc=is_adhoc).order_by('name').distinct('name')

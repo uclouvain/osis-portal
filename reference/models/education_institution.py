@@ -30,7 +30,7 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 
 
 class EducationInstitutionAdmin(SerializableModelAdmin):
-    list_display = ('name', 'institution_type', 'country', 'adhoc', 'city', 'postal_code')
+    list_display = ('name', 'institution_type', 'country', 'adhoc', 'city', 'postal_code', 'address')
     list_filter = ('institution_type', 'postal_code',)
 
 
@@ -42,6 +42,7 @@ class EducationInstitution(SerializableModel):
     country = models.ForeignKey('reference.Country', blank=True, null=True)
     national_community = models.CharField(max_length=20, choices=nat_community.NATIONAL_COMMUNITY_TYPES, blank=True, null=True)
     adhoc = models.BooleanField(default=False)
+    address = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return self.name
