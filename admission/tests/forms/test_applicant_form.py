@@ -36,7 +36,7 @@ class ApplicantFormTest(TestCase):
         error_messages = first_name_field.error_messages
 
         with translation.override('fr-be'):
-            self.assertEqual(error_messages['required'], 'Champ obligatoire')
+            self.assertEqual(str(error_messages['required']), 'Champ obligatoire')
 
         with translation.override('en'):
-            self.assertEqual(error_messages['required'], 'Mandatory field')
+            self.assertEqual(str(error_messages['required']), 'Mandatory field')
