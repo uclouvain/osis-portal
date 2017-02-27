@@ -111,6 +111,10 @@ DOCUMENT_TYPE_CHOICES = ((ID_CARD, 'identity_card', '', ''),
                          (SCHOLARSHIP_DEVELOPMENT_COOPERATION, 'scholarship_development_cooperation', '', ''),
                          (CURRICULUM, 'curriculum', '', ''))
 
+FILE_TYPE_CHOICES = ((LETTER_MOTIVATION, 'letter_motivation', '', ''),
+                     (CURRICULUM, 'curriculum', '', ''),
+                     (OTHER, 'other', '', ''))
+
 
 def find(document_type):
     for l in DOCUMENT_TYPE_CHOICES:
