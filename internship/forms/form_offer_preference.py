@@ -50,8 +50,8 @@ class OfferPreferenceFormSet(forms.BaseFormSet):
         for form in self.forms:
             preference = form.cleaned_data['preference']
             offer = form.cleaned_data['offer']
-            if preference == 0:
-                pass
+            if not int(preference):
+                continue
             preferences_made[preference] = preferences_made.get(preference, 0) + 1
             offers_selected[offer] = offers_selected.get(offer, 0) + 1
             if preferences_made[preference] > 1:

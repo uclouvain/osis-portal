@@ -37,6 +37,13 @@ def create_internship_offer():
     return offer
 
 
+def create_specific_internship_offer(organization, speciality, title="offer_test"):
+    offer = internship_offer.InternshipOffer(speciality=speciality, organization=organization, title=title,
+                                             maximum_enrollments=20)
+    offer.save()
+    return offer
+
+
 class TestInternshipOffer(TestCase):
     def setUp(self):
         self.offer = create_internship_offer()

@@ -35,7 +35,6 @@ from django.forms import formset_factory
 
 
 @login_required
-@permission_required('base.is_student', raise_exception=True)
 def view_internship_home(request):
 
     return layout.render(request, "internship_home.html")
@@ -52,7 +51,8 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
 
     speciality_form = SpecialityForm()
     offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet,
-                                               extra=internships_offers.count())
+                                               extra=internships_offers.count(), min_num=internships_offers.count(),
+                                               max_num=internships_offers.count(), validate_min=True, validate_max=True)
     formset = offer_preference_formset()
 
     if request.method == 'POST':
@@ -96,8 +96,8 @@ def save_student_choices(formset, student, internship_id, speciality):
         if form.cleaned_data:
             offer_pk = form.cleaned_data["offer"]
             preference_value = int(form.cleaned_data["preference"])
-            if has_been_selected(preference_value):
-                offer = mdl_internship.internship_offer.find_by_pk(offer_pk)
+            offer = mdl_internship.internship_offer.find_by_pk(offer_pk)
+            if has_been_selected(preference_value) and is_correct_speciality(offer, speciality):
                 internship_choice = mdl_internship.internship_choice.InternshipChoice(student=student,
                                                                                       organization=offer.organization,
                                                                                       speciality=speciality,
@@ -110,3 +110,6 @@ def save_student_choices(formset, student, internship_id, speciality):
 def has_been_selected(preference_value):
     return bool(preference_value)
 
+
+def is_correct_speciality(offer, speciality):
+    return offer.speciality == speciality
