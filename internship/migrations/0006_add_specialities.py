@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.db import migrations, models
 
 
-def forwards_func(apps, schema_editor):
+def add_internship_data(apps, schema_editor):
     # We get the model from the versioned app registry;
     # if we directly import it, it'll be the wrong version
     LearningUnit = apps.get_model("base", "LearningUnit")
@@ -44,5 +44,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(forwards_func),
+        migrations.RunPython(add_internship_data),
     ]
