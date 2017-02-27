@@ -115,9 +115,9 @@ class ExamEnrollmentFormTest(TestCase):
             "chckbox_exam_enrol_sess1_LPHYS1234": "on",
             "etat_to_inscr_current_session_LPHYS1234": "I",
             "chckbox_exam_enrol_sess1_LBIO4567": "",
-            "etat_to_inscr_current_session_LBIO4567": "Y",
+            "etat_to_inscr_current_session_LBIO4567": "None",
             "chckbox_exam_enrol_sess1_LDROI1111": None,
-            "etat_to_inscr_current_session_LDROI1111": "P",
+            "etat_to_inscr_current_session_LDROI1111": None,
             "current_number_session": 1,
         }
         # from django.contrib.messages.storage import default_storage
@@ -127,10 +127,10 @@ class ExamEnrollmentFormTest(TestCase):
                                       "etat_to_inscr": "I"},
                                      {"acronym": "LBIO4567",
                                       "is_enrolled": False,
-                                      "etat_to_inscr": "Y"},
+                                      "etat_to_inscr": None},
                                      {"acronym": "LDROI1111",
                                       "is_enrolled": False,
-                                      "etat_to_inscr": "P"}]
+                                      "etat_to_inscr": None}]
         expected_result = {
             "registration_id": self.registration_id,
             "offer_year_acronym": self.off_year.acronym,

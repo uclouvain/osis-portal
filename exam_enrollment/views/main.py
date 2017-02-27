@@ -73,7 +73,7 @@ def _get_exam_enrollment_form(off_year, offer_year_id, request, stud):
 def _process_exam_enrollment_form_submission(off_year, request, stud):
     data_to_submit = _exam_enrollment_form_submission_message(off_year, request, stud)
     queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('EXAM_ENROLLMENT_FORM_SUBMISSION'),
-                              json.dumps(data_to_submit))
+                              data_to_submit)
     messages.add_message(request, messages.SUCCESS, _('exam_enrollment_form_submitted'))
     return response.HttpResponseRedirect(reverse('dashboard_home'))
 
@@ -90,14 +90,13 @@ def _exam_enrollment_form_submission_message(off_year, request, stud):
 def _build_enrollments_by_learning_unit(request):
     current_number_session = request.POST['current_number_session']
     enrollments_by_learn_unit = []
-    is_enrolled_acronym_dicts = _build_dicts_is_enrolled_by_acronym(current_number_session, request)
+    is_enrolled_by_acronym = _build_dicts_is_enrolled_by_acronym(current_number_session, request)
     etat_to_inscr_by_acronym = _build_dicts_etat_to_inscr_by_acronym(request)
-    for is_enrol_acronym_dict in is_enrolled_acronym_dicts:
-        acronym = is_enrol_acronym_dict.get('acronym')
+    for acronym, etat_to_inscr in etat_to_inscr_by_acronym.items():
         enrollments_by_learn_unit.append({
-            "acronym": acronym,
-            "is_enrolled": is_enrol_acronym_dict.get('is_enrolled'),
-            "etat_to_inscr": etat_to_inscr_by_acronym[acronym]
+            'acronym': acronym,
+            'is_enrolled': is_enrolled_by_acronym.get(acronym, False),
+            'etat_to_inscr': None if not etat_to_inscr or etat_to_inscr == 'None' else etat_to_inscr
         })
     return enrollments_by_learn_unit
 
@@ -108,9 +107,9 @@ def _build_dicts_etat_to_inscr_by_acronym(request):
 
 
 def _build_dicts_is_enrolled_by_acronym(current_number_session, request):
-    return [{"acronym": _extract_acronym(html_tag_id), "is_enrolled": True if value == "on" else False}
+    return {_extract_acronym(html_tag_id): True if value == "on" else False
             for html_tag_id, value in request.POST.items()
-            if "chckbox_exam_enrol_sess{}_".format(current_number_session) in html_tag_id]
+            if "chckbox_exam_enrol_sess{}_".format(current_number_session) in html_tag_id}
 
 
 def _extract_acronym(html_tag_id):
