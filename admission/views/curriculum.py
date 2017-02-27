@@ -189,7 +189,7 @@ def update(request, application_id=None):
                 curriculum.person = applicant
                 curriculum.academic_year = year
             curricula.append(curriculum)
-            year = year + 1
+            year += 1
     local_universities_french = mdl_reference.education_institution \
         .find_by_institution_type_national_community(education_institution_type.UNIVERSITY,
                                                      national_cmunity_type.FRENCH,
@@ -310,7 +310,7 @@ def validate_fields_form(request, duplicate_year_origin):
                 duplication_possible = False
         curricula.append(curriculum)
 
-        cpt = cpt + 1
+        cpt += 1
 
     return is_valid, validation_messages, curricula, universities_cities, universities, duplication_possible
 
