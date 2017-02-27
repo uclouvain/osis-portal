@@ -88,6 +88,9 @@ class Curriculum(SerializableModel):
     activity_place = models.CharField(max_length=255, blank=True, null=True)
     study_system = models.CharField(max_length=25, choices=STUDY_SYSTEM, blank=True, null=True)
 
+    def __str__(self):
+        return "{}".format(self.person)
+
 
 def find_by_id(an_id):
     return Curriculum.objects.get(pk=an_id)

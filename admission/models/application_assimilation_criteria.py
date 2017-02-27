@@ -40,6 +40,9 @@ class ApplicationAssimilationCriteria(SerializableModel):
                                            choices=assimilation_criteria_enum.ASSIMILATION_CRITERIA_CHOICES)
     selected = models.NullBooleanField(null=True, blank=True)
 
+    def __str__(self):
+        return self.criteria
+
 
 def find_by_application(application):
     return ApplicationAssimilationCriteria.objects.filter(application=application)
