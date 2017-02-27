@@ -16,18 +16,24 @@ def forwards_func(apps, schema_editor):
     personal_speciality, _ = Speciality.objects.using(db_alias).get_or_create(acronym="STAGE PERSONNEL",
                                                      defaults={"name": "Stage personnel",
                                                                "learning_unit": learning_unit_internship})
-    Speciality.objects.using(db_alias).get_or_create(acronym="STAGE A L'ETRANGER",
+    stranger_speciality, _ = Speciality.objects.using(db_alias).get_or_create(acronym="STAGE A L'ETRANGER",
                                                      defaults={"name": "Stage à l'étranger",
                                                                "learning_unit": learning_unit_internship})
 
     Organization = apps.get_model("internship", "Organization")
     personal_organization, _ = Organization.objects.using(db_alias).get_or_create(acronym="STAGE PERSONNEL",
                                                        defaults={"name": "Stage personnel"})
+    stranger_organization, _ = Organization.objects.using(db_alias).get_or_create(acronym="STAGE ETRANGER",
+                                                                            defaults={"name": "Stage à l'étranger"})
 
     InternshipOffer = apps.get_model("internship", "InternshipOffer")
     InternshipOffer.objects.using(db_alias).get_or_create(organization=personal_organization,
                                                           speciality=personal_speciality,
                                                           defaults={"title": "Stage personnel",
+                                                                    "maximum_enrollments": 999})
+    InternshipOffer.objects.using(db_alias).get_or_create(organization=stranger_organization,
+                                                          speciality=stranger_speciality,
+                                                          defaults={"title": "Stage à l'étranger",
                                                                     "maximum_enrollments": 999})
 
 
