@@ -81,7 +81,7 @@
         <br>
 
        <div class="row">
-
+           {% if offers_forms  %}
            <form id="assign_preference" method="post">
                {% csrf_token %}
                 {{ formset.management_form }}
@@ -120,13 +120,13 @@
 
                 <br>
 
-           {% if offers_forms  %}
+
                 <button type="submit" class="btn btn-primary">
                     <span class="glyphicon glyphicon-ok"></span>
                     Submit choices
                 </button>
-           {% endif %}
            </form>
+           {% endif %}
 
        </div>
 

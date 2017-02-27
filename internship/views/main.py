@@ -49,7 +49,6 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
     speciality = mdl_internship.internship_speciality.find_by_id(speciality_id)
     internships_offers = mdl_internship.internship_offer.find_by_speciality(speciality)
 
-    speciality_form = SpecialityForm()
     offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet,
                                                extra=internships_offers.count(), min_num=internships_offers.count(),
                                                max_num=internships_offers.count(), validate_min=True, validate_max=True)
@@ -61,16 +60,19 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
             remove_previous_choices(student, internship_id)
             save_student_choices(formset, student, int(internship_id), speciality)
 
+    return layout.render(request, "internship_selection.html",
+                         {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1),
+                          "speciality_form": SpecialityForm(),
+                          "formset": formset,
+                          "offers_forms": zip_offers_and_formset(formset, internships_offers),
+                          "intern_id": int(internship_id)})
+
+
+def zip_offers_and_formset(formset, internships_offers):
     zipped_data = None
     if internships_offers:
         zipped_data = zip(internships_offers, formset)
-
-    return layout.render(request, "internship_selection.html",
-                         {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1),
-                          "speciality_form": speciality_form,
-                          "formset": formset,
-                          "offers_forms": zipped_data,
-                          "intern_id": int(internship_id)})
+    return zipped_data
 
 
 @login_required
@@ -82,6 +84,7 @@ def assign_speciality_for_internship(request, internship_id):
         if speciality_form.is_valid():
             speciality_selected = speciality_form.cleaned_data["speciality"]
             speciality_id = speciality_selected.id
+
     return redirect("select_internship_speciality", internship_id=internship_id, speciality_id=speciality_id)
 
 
