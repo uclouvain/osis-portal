@@ -59,6 +59,13 @@ class TestSearch(TestCase):
         self.assertIn(self.choice_1, choices)
         self.assertIn(self.choice_3, choices)
 
+    def test_with_only_speciality(self):
+        choices = list(mdl_internship_choice.search(speciality=self.speciality))
+        self.assertEqual(len(choices), 3)
+        self.assertIn(self.choice_1, choices)
+        self.assertIn(self.choice_2, choices)
+        self.assertIn(self.choice_3, choices)
+
     def test_with_student_and_internship_choice(self):
         choices = list(mdl_internship_choice.search(student=self.student, internship_choice=1))
         self.assertListEqual([self.choice_2], choices)

@@ -29,7 +29,8 @@ import base.tests.models.test_student
 from django.contrib.auth.models import User, Permission
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
-from internship.tests.models import test_internship_offer, test_organization, test_internship_speciality
+from internship.tests.models import test_internship_offer, test_organization, test_internship_speciality, \
+    test_internship_choice
 from internship.models import internship_choice as mdl_internship_choice
 
 
@@ -177,11 +178,8 @@ class TestSelectInternship(TestCase):
         self.assertEqual(len(choices), 1)
 
     def test_replace_previous_choices(self):
-        previous_choice = mdl_internship_choice.InternshipChoice(student=self.student, speciality=self.speciality_1,
-                                                                 organization=test_organization.create_organization(),
-                                                                 choice=1, internship_choice=2, priority=False)
-        previous_choice.save()
-
+        previous_choice = test_internship_choice.create_internship_choice(test_organization.create_organization(),
+                                                                          self.student, self.speciality_1, 2)
         selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 2,
                                                                         'speciality_id': self.speciality_2.id})
         self.c.post(selection_url, data={'form-TOTAL_FORMS': '2',
@@ -195,6 +193,28 @@ class TestSelectInternship(TestCase):
         choices = list(mdl_internship_choice.search(student=self.student))
         self.assertEqual(len(choices), 1)
         self.assertNotEqual(previous_choice, choices[0])
+
+    def test_two_personal_internships_at_most(self):
+        organization = test_organization.create_organization(name="Stage personnel")
+        speciality = test_internship_speciality.create_speciality(name="Stage personnel",
+                                                                  acronym="STAGE PERSONNEL")
+        offer = test_internship_offer.create_specific_internship_offer(organization, speciality,
+                                                                       title="Stage personnel")
+        choice_1 = test_internship_choice.create_internship_choice(organization, self.student, speciality, 1)
+        choice_2 = test_internship_choice.create_internship_choice(organization, self.student, speciality, 2)
+
+        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 3,
+                                                                        'speciality_id': speciality.id})
+        self.c.post(selection_url, data={'form-TOTAL_FORMS': '1',
+                                         'form-INITIAL_FORMS': '0',
+                                         'form-MIN_NUM_FORMS': '1',
+                                         'form-MAX_NUM_FORMS': '1',
+                                         'form-0-offer': str(offer.id),
+                                         'form-0-preference': '1'})
+        choices = list(mdl_internship_choice.search(student=self.student))
+        self.assertEqual(len(choices), 2)
+        self.assertIn(choice_1, choices)
+        self.assertIn(choice_2, choices)
 
 
 def add_permission(user, codename):
