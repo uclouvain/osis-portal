@@ -23,20 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
-from internship.views import main, hospital, master, resume
+from django.utils import translation
+from django.test import TestCase, override_settings
 
-urlpatterns = [
-    url(r'^$', main.view_internship_home, name='internship_home'),
-    url(r'^speciality_assignment/(?P<internship_id>[0-9]+)/$', main.assign_speciality_for_internship,
-        name='assign_speciality'),
-    url(r'^selection/(?P<internship_id>[0-9]+)/$', main.view_internship_selection, name='select_internship'),
-    url(r'^selection/(?P<internship_id>[0-9]+)/(?P<speciality_id>[0-9]+)/$', main.view_internship_selection,
-        name='select_internship_speciality'),
+from admission.forms import applicant as app_forms
 
-    url(r'^hospitals/$', hospital.view_hospitals_list, name='hospitals_list'),
 
-    url(r'^masters/$', master.view_masters_list, name='masters_list'),
+class ApplicantFormTest(TestCase):
+    def test_error_messages_are_i18n_compliant(self):
+        form = app_forms.ApplicantForm()
+        first_name_field = form.fields['first_name']
+        error_messages = first_name_field.error_messages
 
-    url(r'^resume/$', resume.view_student_resume, name='student_resume'),
-]
+        with translation.override('fr-be'):
+            self.assertEqual(str(error_messages['required']), 'Champ obligatoire')
+
+        with translation.override('en'):
+            self.assertEqual(str(error_messages['required']), 'Mandatory field')

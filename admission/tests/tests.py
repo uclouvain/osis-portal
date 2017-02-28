@@ -24,90 +24,11 @@
 #
 ##############################################################################
 from django.test import TestCase, RequestFactory
-from admission.utils import pdf_utils
-from reportlab.platypus import SimpleDocTemplate, Image
-import os
-from django.conf import settings
-import io as io
-from admission.utils import send_mail
-from admission.models import applicant
 from django.core.management import call_command
 from django.contrib.auth.models import User
 
-ASSETS_PATH = os.path.join(settings.BASE_DIR, 'admission/tests/assets/')
-PDF1 = "pdf1.pdf"
-PDF2 = "pdf2.pdf"
-
-
-class PdfTest(TestCase):
-
-    def test_allowed_file(self):
-        self.assertEqual(pdf_utils.allowed_file('test.pdf'), False)
-        self.assertEqual(pdf_utils.allowed_file('test.GIF'), True)
-        self.assertEqual(pdf_utils.allowed_file('test.Gif'), True)
-        self.assertEqual(pdf_utils.allowed_file('testGIF'), False)
-        self.assertEqual(pdf_utils.allowed_file('test.jpg'), True)
-
-    def test_convert_image_to_pdf(self):
-        image_file = ASSETS_PATH + "gif_2625_2154.gif"
-        filename = "test.pdf"
-        self.assertIsInstance(pdf_utils.convert_image_to_pdf(image_file, filename), SimpleDocTemplate)
-        filename = "test"
-        self.assertIsNone(pdf_utils.convert_image_to_pdf(image_file, filename))
-        image_file = ASSETS_PATH + "text.txt"
-        filename = "test.pdf"
-        self.assertIsNone(pdf_utils.convert_image_to_pdf(image_file, filename))
-        image_file = ASSETS_PATH + "gif_2625_2154.GIF"
-        filename = "test.pdf"
-        self.assertIsNone(pdf_utils.convert_image_to_pdf(image_file, filename))
-
-    def test_create_cover_sheet(self):
-        document_list = None
-        noma = None
-        self.assertIsNone(pdf_utils.create_cover_sheet(document_list, noma))
-        document_list = []
-        noma = None
-        self.assertIsNone(pdf_utils.create_cover_sheet(document_list, noma))
-        document_list = ['id card', 'score sheet']
-        noma = None
-        self.assertIsNotNone(pdf_utils.create_cover_sheet(document_list, noma))
-        document_list = ['id card', 'score sheet']
-        noma = "12345678"
-        self.assertIsNotNone(pdf_utils.create_cover_sheet(document_list, noma))
-
-    def test_create_pdf_with_cover(self):
-        pdf_list = None
-        document_list = None
-        noma = None
-        self.assertIsNone(pdf_utils.create_pdf_with_cover(document_list, pdf_list, noma))
-        pdf_list = []
-        document_list = ['document1', 'document2', 'document3']
-        noma = '123456789'
-        self.assertIsNotNone(pdf_utils.create_pdf_with_cover(document_list, pdf_list, noma))
-        pdf_list = [ASSETS_PATH + PDF1, ASSETS_PATH + PDF2]
-        self.assertIsInstance(pdf_utils.create_pdf_with_cover(document_list, pdf_list, noma), io.IOBase)
-        pdf_list = [ASSETS_PATH + "pdf1.pdff", ASSETS_PATH + PDF2]
-        self.assertIsInstance(pdf_utils.create_pdf_with_cover(document_list, pdf_list, noma), io.IOBase)
-
-    def test_merge_pdfs(self):
-        pdf_list = None
-        self.assertIsNone(pdf_utils.merge_pdfs(pdf_list))
-        pdf_list = []
-        self.assertIsNone(pdf_utils.merge_pdfs(pdf_list))
-        pdf_list = [ASSETS_PATH + PDF1, ASSETS_PATH + PDF2]
-        self.assertIsInstance(pdf_utils.merge_pdfs(pdf_list), io.IOBase)
-        pdf_list = [ASSETS_PATH + 'pdf1.pdff', ASSETS_PATH + 'pdf2.pdff']
-        self.assertIsNone(pdf_utils.merge_pdfs(pdf_list))
-        pdf_list = [ASSETS_PATH + 'pdf1.pdff', ASSETS_PATH + PDF2]
-        self.assertIsInstance(pdf_utils.merge_pdfs(pdf_list), io.IOBase)
-
-    def test_resize_image(self):
-        image_file = ASSETS_PATH + "gif_2625_2154.gif"
-        self.assertIsInstance(pdf_utils.resize_image(image_file), Image)
-        image_file = ASSETS_PATH + "text.txt"
-        self.assertIsNone(pdf_utils.resize_image(image_file))
-        image_file = ASSETS_PATH + "gif_2625_2154.GIF"
-        self.assertIsNone(pdf_utils.resize_image(image_file))
+from admission.utils import send_mail
+from admission.models import applicant
 
 
 class SendMailTest(TestCase):

@@ -118,9 +118,3 @@ class TestGetAllSpecialities(TestCase):
 
         specialities = mdl_internship_master.get_all_specialities()
         self.assertListEqual(specialities, ['medecine', 'radiologie'])
-
-
-
-
-
-
