@@ -25,6 +25,9 @@ msgstr	 "City"
 msgid	 "civility"
 msgstr	 "Civility"
 
+msgid	 "choices_received_by_administration"
+msgstr	 "Choices received by administration"
+
 msgid	 "choose_internships"
 msgstr	 "Choose your non mandatory internship"
 
@@ -43,11 +46,17 @@ msgstr "internship"
 msgid "internships"
 msgstr "Internships"
 
+msgid "internship_affectation"
+msgstr "Internship affectation"
+
 msgid	 "masters"
 msgstr	 "Internship's masters"
 
 msgid	 "master_list"
 msgstr	 "Internship's masters list"
+
+msgid	 "mobile_phone"
+msgstr	 "Mobile phone"
 
 msgid	 "number_first_choice"
 msgstr	 "Number of first choice"
@@ -66,6 +75,9 @@ msgstr "selection"
 
 msgid "speciality"
 msgstr "Speciality"
+
+msgid "student_information"
+msgstr "Student information"
 
 msgid "student_max"
 msgstr "Maximum number of students"

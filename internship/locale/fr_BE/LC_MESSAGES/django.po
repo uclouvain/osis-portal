@@ -25,6 +25,9 @@ msgstr	 "Ville"
 msgid	 "civility"
 msgstr	 "Civilité"
 
+msgid	 "choices_received_by_administration"
+msgstr	 "Choix reçus de l'administration"
+
 msgid	 "choose_internships"
 msgstr	 "Choisissez vos stages aux choix"
 
@@ -43,11 +46,17 @@ msgstr "stage"
 msgid "internships"
 msgstr "Stages"
 
+msgid "internship_affectation"
+msgstr "Affectation de stages"
+
 msgid	 "masters"
 msgstr	 "Maîtres de stage"
 
 msgid	 "master_list"
 msgstr	 "Liste des maîtres de stage"
+
+msgid	 "mobile_phone"
+msgstr	 "Numéro de téléphone"
 
 msgid	 "number_first_choice"
 msgstr	 "Nombre de 1er choix"
@@ -66,6 +75,9 @@ msgstr "séléction"
 
 msgid "speciality"
 msgstr "Spéciailté"
+
+msgid "student_information"
+msgstr "Information de l'étudiant"
 
 msgid "student_max"
 msgstr "Nombre maximum d'étudiants"
