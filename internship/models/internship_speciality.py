@@ -23,11 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
-from internship.views import main
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
+from django.db import models
 
-urlpatterns = [
-    url(r'^$', main.view_internship_home, name='internship_home'),
-    url(r'^selection/$', main.view_internship_selection, name='internship_selection'),
-]
+
+class InternshipSpecialityAdmin(SerializableModelAdmin):
+    list_display = ('learning_unit', 'name', 'acronym', 'mandatory', 'order_postion')
+    fieldsets = ((None, {'fields': ('learning_unit', 'name', 'acronym', 'mandatory', 'order_postion')}),)
+    raw_id_fields = ('learning_unit',)
+
+
+class InternshipSpeciality(SerializableModel):
+    learning_unit = models.ForeignKey('base.LearningUnit')
+    name = models.CharField(max_length=125, blank=False, null=False)
+    acronym = models.CharField(max_length=125, blank=False, null=False)
+    mandatory = models.BooleanField(default=False)
+    order_postion = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.name
+
 

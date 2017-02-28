@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-############################################################################
+##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -23,7 +22,16 @@
 #    at the root of the source code of this program.  If not,
 #    see http://www.gnu.org/licenses/.
 #
-############################################################################
+##############################################################################
 from django.contrib import admin
 
-# Register your models here.
+from internship.models import *
+
+admin.site.register(internship_offer.InternshipOffer,
+                    internship_offer.InternshipOfferAdmin)
+
+admin.site.register(internship_speciality.InternshipSpeciality,
+                    internship_speciality.InternshipSpecialityAdmin)
+
+admin.site.register(organization.Organization,
+                    organization.OrganizationAdmin)

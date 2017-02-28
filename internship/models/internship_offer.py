@@ -23,11 +23,32 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
-from internship.views import main
+from django.db import models
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
-urlpatterns = [
-    url(r'^$', main.view_internship_home, name='internship_home'),
-    url(r'^selection/$', main.view_internship_selection, name='internship_selection'),
-]
+
+class InternshipOfferAdmin(SerializableModelAdmin):
+    list_display = ('organization', 'speciality', 'title', 'maximum_enrollments', 'master', 'selectable')
+    fieldsets = ((None, {'fields': ('organization', 'speciality', 'title', 'maximum_enrollments', 'master',
+                                    'selectable')}),)
+    raw_id_fields = ('organization', 'speciality')
+
+
+class InternshipOffer(SerializableModel):
+    organization = models.ForeignKey('internship.Organization')
+    speciality = models.ForeignKey('internship.InternshipSpeciality', null=True)
+    title = models.CharField(max_length=255)
+    maximum_enrollments = models.IntegerField()
+    master = models.CharField(max_length=100, blank=True, null=True)
+    selectable = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        permissions = (
+            ("is_internship_manager", "Is Internship Manager"),
+            ("can_access_internship", "Can access internships"),
+        )
+
 

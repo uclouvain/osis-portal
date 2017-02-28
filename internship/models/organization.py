@@ -23,11 +23,28 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
-from internship.views import main
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
+from django.db import models
 
-urlpatterns = [
-    url(r'^$', main.view_internship_home, name='internship_home'),
-    url(r'^selection/$', main.view_internship_selection, name='internship_selection'),
-]
+
+class OrganizationAdmin(SerializableModelAdmin):
+    list_display = ('name', 'acronym', 'reference', 'type')
+    fieldsets = ((None, {'fields': ('name', 'acronym', 'reference', 'website', 'type')}),)
+    search_fields = ['acronym']
+
+
+class Organization(SerializableModel):
+    name = models.CharField(max_length=255)
+    acronym = models.CharField(max_length=15, blank=True)
+    website = models.URLField(max_length=255, blank=True, null=True)
+    reference = models.CharField(max_length=30, blank=True, null=True)
+    type = models.CharField(max_length=30, blank=True, null=True, default="service partner")
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        self.acronym = self.name[:14]
+        super(Organization, self).save(*args, **kwargs)
+
 
