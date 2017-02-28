@@ -65,6 +65,7 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
                           "speciality_form": SpecialityForm(),
                           "formset": formset,
                           "offers_forms": zip_offers_and_formset(formset, internships_offers),
+                          "speciality_id": int(speciality_id),
                           "intern_id": int(internship_id)})
 
 
