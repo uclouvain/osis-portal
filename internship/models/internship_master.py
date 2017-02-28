@@ -38,10 +38,10 @@ class InternshipMasterAdmin(SerializableModelAdmin):
 
 
 class InternshipMaster(SerializableModel):
-    CIVILITY_CHOICE = (('PROFESSOR', _('Professor')),
-                       ('DOCTOR', _('Doctor')))
-    TYPE_CHOICE = (('SPECIALIST', _('Specialist')),
-                   ('GENERALIST', _('Generalist')))
+    CIVILITY_CHOICE = (('PROFESSOR', _('PROFESSOR')),
+                       ('DOCTOR', _('DOCTOR')))
+    TYPE_CHOICE = (('SPECIALIST', _('SPECIALIST')),
+                   ('GENERALIST', _('GENERALIST')))
 
     organization = models.ForeignKey('internship.Organization', null=True)
     first_name = models.CharField(max_length=50, blank=True, null=True, db_index=True)

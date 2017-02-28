@@ -16,6 +16,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "DOCTOR"
+msgstr "Docteur"
+
+msgid "GENERALIST"
+msgstr "Généraliste"
+
+msgid "PROFESSOR"
+msgstr "Professeur"
+
+msgid "SPECIALIST"
+msgstr "Spécialiste"
+
 msgid "address"
 msgstr "Adresse"
 
