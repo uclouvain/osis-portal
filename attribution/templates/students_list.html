@@ -30,8 +30,15 @@
         <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                           aria-hidden="true"></span></a></li>
     {% block breadcrumb %}
-        <li><a href="{% url 'attributions_by_year' learning_unit_year.academic_year.year %}" id="lnk_home_attribution">{% trans 'tutor_charge' %}</a></li>
-        <li>{% trans 'students' %}</li>
+        {% if perms.base.is_faculty_administrator %}
+            <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'faculty_administration' %}</a></li>
+            <li><a href="{% url 'attribution_administration'  %}" id="lnk_attribution_administration">{% trans 'attribution_administration' %}</a></li>
+            <li><a href="{% url 'attribution_admin_visualize_tutor' global_id %}">{% trans 'teaching_charge' %}</a></li>
+            <li class="active">{% trans 'students' %}</li>
+        {% else %}
+            <li><a href="{% url 'attributions_by_year' learning_unit_year.academic_year.year global_id%}" id="lnk_home_attribution">{% trans 'tutor_charge' %}</a></li>
+            <li>{% trans 'students' %}</li>
+        {% endif %}
     {% endblock %}
 </ol>
 {% endblock %}

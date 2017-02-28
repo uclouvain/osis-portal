@@ -141,12 +141,12 @@ def get_application_informations(a_tutor_application):
                                                                 component_type.LECTURING)
     a_practical_duration = get_learning_unit_component_duration(a_learning_unit_year,
                                                                 component_type.PRACTICAL_EXERCISES)
-    lecturing_allocated = tutor_charge.get_attribution_allocation_charge(a_tutor,
-                                                                         a_learning_unit_year,
-                                                                         component_type.LECTURING)
-    practical_allocated = tutor_charge.get_attribution_allocation_charge(a_tutor,
-                                                                         a_learning_unit_year,
-                                                                         component_type.PRACTICAL_EXERCISES)
+    lecturing_allocated = tutor_charge.attribution_allocation_charges(a_tutor,
+                                                                      a_learning_unit_year,
+                                                                      component_type.LECTURING)
+    practical_allocated = tutor_charge.attribution_allocation_charges(a_tutor,
+                                                                      a_learning_unit_year,
+                                                                      component_type.PRACTICAL_EXERCISES)
     return {
         TUTOR_APPLICATION: a_tutor_application,
         LECTURING_DURATION: a_lecturing_duration,
@@ -209,10 +209,10 @@ def get_vacant_learning_units(a_year):
 
 
 def sum_attribution_allocation_charges(a_learning_unit_year):
-    return tutor_charge.get_attribution_allocation_charge(None,
+    return tutor_charge.attribution_allocation_charges(None,
                                                           a_learning_unit_year,
                                                           component_type.LECTURING) \
-           + tutor_charge.get_attribution_allocation_charge(None,
+           + tutor_charge.attribution_allocation_charges(None,
                                                             a_learning_unit_year,
                                                             component_type.PRACTICAL_EXERCISES)
 
@@ -224,7 +224,7 @@ def sum_tutor_application_allocated_charges(a_tutor_application):
 
 def get_vacant_attribution_allocation_charge(a_learning_unit_year, a_component_type):
     if a_learning_unit_year:
-        return get_learning_unit_component_duration(a_learning_unit_year, a_component_type) - tutor_charge.get_attribution_allocation_charge(None, a_learning_unit_year, a_component_type)
+        return get_learning_unit_component_duration(a_learning_unit_year, a_component_type) - tutor_charge.attribution_allocation_charges(None, a_learning_unit_year, a_component_type)
     return NO_CHARGE
 
 
@@ -364,7 +364,7 @@ def attribution_application_form(request):
     application_year = mdl_base.academic_year.find_next_academic_year()
     return render(request, "attribution_application_form.html", {
         'application': None,
-        'attributions': attributions,
+        'attributions': attributions,gi
         'application_academic_year': "{0}-{1}".format(application_year, application_year + 1),
         'over_academic_year': "{0}-{1}".format(last_year, last_year + 1)})
 
@@ -760,8 +760,8 @@ def get_attribution_allocation_charge(an_attribution, a_component_type):
 def is_deputy_function(a_function):
     if a_function and \
         (a_function == function.DEPUTY or
-        a_function == function.DEPUTY_AUTHORITY or
-        a_function == function.DEPUTY_SABBATICAL or
-        a_function == function.DEPUTY_TEMPORARY):
+         a_function == function.DEPUTY_AUTHORITY or
+         a_function == function.DEPUTY_SABBATICAL or
+         a_function == function.DEPUTY_TEMPORARY):
         return True
     return False

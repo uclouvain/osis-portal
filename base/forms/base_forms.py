@@ -26,6 +26,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from base.models import student as std_model
+from base.models import tutor as tutor_model
 
 
 class RegistrationIdForm(forms.Form):
@@ -38,3 +39,15 @@ class RegistrationIdForm(forms.Form):
             student = std_model.find_by_registration_id(registration_id)
             if student is None:
                 self.add_error('registration_id', _('no_student_with_this_registration_id'))
+
+
+class GlobalIdForm(forms.Form):
+    global_id = forms.CharField()
+
+    def clean(self):
+        cleaned_data = super(GlobalIdForm, self).clean()
+        global_id = cleaned_data.get('global_id')
+        if global_id:
+            tutor = tutor_model.find_by_person_global_id(global_id)
+            if tutor is None:
+                self.add_error('global_id', _('no_tutor_with_this_global_id'))
