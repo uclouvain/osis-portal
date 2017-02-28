@@ -56,7 +56,7 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
 
     if request.method == 'POST':
         formset = offer_preference_formset(request.POST)
-        if formset.is_valid() and is_legitimate(speciality, student):
+        if formset.is_valid() and do_not_exceed_maximum_personnal_internship(speciality, student):
             remove_previous_choices(student, internship_id)
             save_student_choices(formset, student, int(internship_id), speciality)
 
@@ -119,7 +119,7 @@ def is_correct_speciality(offer, speciality):
     return offer.speciality == speciality
 
 
-def is_legitimate(speciality, student):
+def do_not_exceed_maximum_personnal_internship(speciality, student):
     if speciality.acronym != "STAGE PERSONNEL":
         return True
     number_choices_personal_internship = \
