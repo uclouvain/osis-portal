@@ -16,5 +16,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid	 "choose_internships"
+msgstr	 "Choisissez vos stages aux choix"
+
+msgid	 "hospital_list"
+msgstr	 "Liste des hôpitaux"
+
 msgid "internships"
 msgstr "Stages"
+
+msgid	 "master_list"
+msgstr	 "Liste des maîtres de stage"
+
+msgid	 "student_resume"
+msgstr	 "Résumé de vos choix et affectations"

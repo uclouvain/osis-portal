@@ -16,5 +16,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid	 "choose_internships"
+msgstr	 "Choose your non mandatory internship"
+
+msgid	 "hospital_list"
+msgstr	 "Hospital list"
+
 msgid "internships"
 msgstr "Internships"
+
+msgid	 "master_list"
+msgstr	 "Internship's masters list"
+
+msgid	 "student_resume"
+msgstr	 "Sump up of your choices and your affectations"
