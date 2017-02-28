@@ -30,45 +30,46 @@ from admission.validators import date_validator
 
 
 class ApplicantForm(forms.Form):
-    REQUIRED_ARGUMENTS = dict(required=True,
-                              error_messages=dict(required=_('mandatory_field')))
-    GENDER_CHOICES=(
+    REQUIRED_ARGUMENTS = dict(required=True, error_messages=dict(required=_('mandatory_field')))
+
+    GENDER_CHOICES = (
         ('MALE', 'MALE'),
         ('FEMALE', 'FEMALE')
     )
-    last_name               = forms.CharField(**REQUIRED_ARGUMENTS)
-    first_name              = forms.CharField(**REQUIRED_ARGUMENTS)
-    birth_date              = forms.DateField(input_formats=['%d/%m/%Y'],
-                                              widget=forms.DateInput(format='%d/%m/%Y'),
-                                              validators=[date_validator.validate_birth_date],
-                                              required=True,
-                                              error_messages={
-                                                  'required': _('mandatory_field'),
-                                                  'invalid': _('invalid_date')
-                                              })
-    birth_place             = forms.CharField(**REQUIRED_ARGUMENTS)
-    birth_country           = forms.CharField(**REQUIRED_ARGUMENTS)
-    gender                  = forms.ChoiceField(choices=GENDER_CHOICES, **REQUIRED_ARGUMENTS)
-    civil_status            = forms.CharField(**REQUIRED_ARGUMENTS)
-    number_children         = forms.IntegerField(validators=[MinValueValidator(0)], required=False)
-    nationality             = forms.CharField(**REQUIRED_ARGUMENTS)
-    legal_adr_street        = forms.CharField(**REQUIRED_ARGUMENTS)
-    legal_adr_number        = forms.CharField(**REQUIRED_ARGUMENTS)
-    legal_adr_postal_code   = forms.CharField(**REQUIRED_ARGUMENTS)
-    legal_adr_city          = forms.CharField(**REQUIRED_ARGUMENTS)
-    legal_adr_country       = forms.CharField(**REQUIRED_ARGUMENTS)
+
+    last_name = forms.CharField(**REQUIRED_ARGUMENTS)
+    first_name = forms.CharField(**REQUIRED_ARGUMENTS)
+    birth_date = forms.DateField(input_formats=['%d/%m/%Y'],
+                                 widget=forms.DateInput(format='%d/%m/%Y'),
+                                 validators=[date_validator.validate_birth_date],
+                                 required=True,
+                                 error_messages={
+                                     'required': _('mandatory_field'),
+                                     'invalid': _('invalid_date')
+                                 })
+    birth_place = forms.CharField(**REQUIRED_ARGUMENTS)
+    birth_country = forms.CharField(**REQUIRED_ARGUMENTS)
+    gender = forms.ChoiceField(choices=GENDER_CHOICES, **REQUIRED_ARGUMENTS)
+    civil_status = forms.CharField(**REQUIRED_ARGUMENTS)
+    number_children = forms.IntegerField(validators=[MinValueValidator(0)], required=False)
+    nationality = forms.CharField(**REQUIRED_ARGUMENTS)
+    legal_adr_street = forms.CharField(**REQUIRED_ARGUMENTS)
+    legal_adr_number = forms.CharField(**REQUIRED_ARGUMENTS)
+    legal_adr_postal_code = forms.CharField(**REQUIRED_ARGUMENTS)
+    legal_adr_city = forms.CharField(**REQUIRED_ARGUMENTS)
+    legal_adr_country = forms.CharField(**REQUIRED_ARGUMENTS)
     same_contact_legal_addr = forms.CharField(**REQUIRED_ARGUMENTS)
-    contact_adr_street      = forms.CharField(required=False)
-    contact_adr_number      = forms.CharField(required=False)
+    contact_adr_street = forms.CharField(required=False)
+    contact_adr_number = forms.CharField(required=False)
     contact_adr_postal_code = forms.CharField(required=False)
-    contact_adr_city        = forms.CharField(required=False)
-    contact_adr_country     = forms.CharField(required=False)
-    previous_enrollment     = forms.CharField(required=False)
-    registration_id         = forms.CharField(required=False)
-    last_academic_year      = forms.IntegerField(required=False)
-    national_id             = forms.CharField(required=False)
-    id_card_number          = forms.CharField(required=False)
-    passport_number         = forms.CharField(required=False)
+    contact_adr_city = forms.CharField(required=False)
+    contact_adr_country = forms.CharField(required=False)
+    previous_enrollment = forms.CharField(required=False)
+    registration_id = forms.CharField(required=False)
+    last_academic_year = forms.IntegerField(required=False)
+    national_id = forms.CharField(required=False)
+    id_card_number = forms.CharField(required=False)
+    passport_number = forms.CharField(required=False)
 
     def __init__(self, *args, **kwargs):
         super(ApplicantForm, self).__init__(*args, **kwargs)
