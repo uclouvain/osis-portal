@@ -24,7 +24,7 @@
 #
 ##############################################################################
 from django.conf.urls import url
-from internship.views import main
+from internship.views import main, hospital
 
 urlpatterns = [
     url(r'^$', main.view_internship_home, name='internship_home'),
@@ -33,5 +33,7 @@ urlpatterns = [
     url(r'^selection/(?P<internship_id>[0-9]+)/$', main.view_internship_selection, name='select_internship'),
     url(r'^selection/(?P<internship_id>[0-9]+)/(?P<speciality_id>[0-9]+)/$', main.view_internship_selection,
         name='select_internship_speciality'),
+
+    url(r'^hospitals/$', hospital.view_hospitals_list, name='hospitals_list'),
 ]
 

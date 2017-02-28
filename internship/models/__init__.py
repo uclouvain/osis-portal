@@ -28,4 +28,5 @@ from internship.models import internship_offer
 from internship.models import internship_speciality
 from internship.models import organization
 from internship.models import internship_choice
+from internship.models import organization_address
 
