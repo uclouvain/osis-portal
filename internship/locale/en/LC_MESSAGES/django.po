@@ -73,6 +73,18 @@ msgstr "Internships"
 msgid "internship_affectation"
 msgstr "Internship affectation"
 
+msgid "internship_selection_warning_message"
+msgstr "<p>By choosing <strong>'Stage personnel'</strong> you declare that you will be able to find on your own an "
+       "internship. The number of <strong>'Stage personnel'</strong> is <strong>limited to 2</strong> at most.</p>"
+       "<p>Only select <strong>'Stage à l'étranger'</strong> if you have already <strong>been selected</strong> to an "
+       "internship in another country (prior approbation).</p>"
+       "<p>If you intent to pass the <strong>contest of 'Médecine générale'</strong>(general medecine) then <strong> "
+       " you can only choose a speciality between the following ones: <br> "
+       "<strong>chirurgie, dermatologie, gieriatrie, gynécologie-obstetrique, médecine interne, médecine physique, "
+       "neurologie adulte, ophtamologie, O.R.L, orthopedie, psychiatrie adulte, soins palliatifs, urgences, urologie."
+       "</strong></p>"
+
+
 msgid	 "masters"
 msgstr	 "Internship's masters"
 

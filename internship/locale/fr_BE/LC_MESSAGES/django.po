@@ -73,6 +73,17 @@ msgstr "Stages"
 msgid "internship_affectation"
 msgstr "Affectation de stages"
 
+msgid "internship_selection_warning_message"
+msgstr "<p>Si vous séléctionnez <strong>'Stage personnel'</strong> alors vous promettez de trouver un stage de votre"
+       "côté. Le nombre de <strong>'Stage personnel'</strong> est <strong>limité à 2 maximum</strong>.</p>"
+       "<p>Séléctionnez <strong>'Stage à l'étranger'</strong> seulement si vous avez <strong>déjà été séléctionné "
+       "</strong> pour un stage dans un autre pays.</p>"
+       "<p>Si vous comptez passer le <strong>'concours de Médecine générale'</strong> alors<strong> "
+       "vous ne pouvez choisir une spécialité que parmis les suivantes: <br> "
+       "<strong>chirurgie, dermatologie, gieriatrie, gynécologie-obstetrique, médecine interne, médecine physique, "
+       "neurologie adulte, ophtamologie, O.R.L, orthopedie, psychiatrie adulte, soins palliatifs, urgences, urologie."
+       "</strong></p>"
+
 msgid	 "masters"
 msgstr	 "Maîtres de stage"
 
