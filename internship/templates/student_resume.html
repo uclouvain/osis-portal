@@ -45,17 +45,17 @@
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active">
                     <a href="#student_info" aria-controls="student_info" role="tab" data-toggle="tab">
-                        Student Info
+                        {% trans 'student_information' %}
                     </a>
                 </li>
                 <li role="presentation">
                     <a href="#choices" aria-controls="choices" role="tab" data-toggle="tab">
-                        Choice receive by administration
+                        {% trans 'choices_received_by_administration' %}
                     </a>
                 </li>
                 <li role="presentation">
                     <a href="#affectation" aria-controls="affectation" role="tab" data-toggle="tab">
-                        Internship's affectation
+                        {% trans 'internship_affectation' %}
                     </a>
                 </li>
             </ul>
@@ -67,17 +67,17 @@
                 <br>
                 <div class="row">
                     <div class="col-md-4">
-                        <strong>Last Name</strong>
+                        <strong>{% trans 'last_name' %}</strong>
                         <br>
                         {{ student.person.last_name }}
                     </div>
                     <div class="col-md-4">
-                        <strong>First Name</strong>
+                        <strong>{% trans 'first_name' %}</strong>
                         <br>
                         {{ student.person.first_name }}
                     </div>
                     <div class="col-md-4">
-                        <strong>Noma</strong>
+                        <strong>{% trans 'registration_id' %}</strong>
                         <br>
                         {{ student.registration_id }}
                     </div>
@@ -85,12 +85,12 @@
                 <br>
                 <div class="row">
                     <div class="col-md-4">
-                        <strong>Gender</strong>
+                        <strong>{% trans 'gender' %}</strong>
                         <br>
                         {{ student.person.gender}}
                     </div>
                     <div class="col-md-4">
-                        <strong>Email</strong>
+                        <strong>{% trans 'email' %}</strong>
                         <br>
                         {{ student.person.email }}
                     </div>
@@ -98,17 +98,17 @@
                 <br>
                 <div class="row">
                     <div class="col-md-4">
-                        <strong>Mobile Phone</strong>
+                        <strong>{% trans 'mobile_phone' %}</strong>
                         <br>
                         {{ student.person.phone_mobile }}
                     </div>
                     <div class="col-md-4">
-                        <strong>Language</strong>
+                        <strong>{% trans 'language' %}</strong>
                         <br>
                         {{ student.person.language }}
                     </div>
                     <div class="col-md-4">
-                        <strong>Address</strong>
+                        <strong>{% trans 'address' %}</strong>
                         <br>
                         {{ student_information.location }}
                     </div>
@@ -119,15 +119,14 @@
                 <br>
                 <div class="row">
                     {% for internship in internships %}
-                        <strong>Internship {{ internship }}</strong>
-                        <br>
+                        <strong>{% trans 'internship' %} {{ internship }}</strong>
+                        <ul>
                         {% for choice in student_choices %}
                             {% if choice.internship_choice == internship %}
-                                {{ choice.organization }} | {{ choice.speciality }} |{{ choice.choice }}
-                                <br>
+                                <li>{{ choice.organization }} | {{ choice.speciality }} |{{ choice.choice }}</li>
                             {% endif %}
                         {% endfor %}
-                        <br>
+                        </ul>
                     {% endfor %}
                 </div>
             </div>
