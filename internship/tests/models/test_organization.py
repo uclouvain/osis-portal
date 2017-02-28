@@ -25,31 +25,9 @@
 ##############################################################################
 
 from internship.models import organization as mdl_organization
-from django.test import TestCase
 
 
 def create_organization(name="OSIS", acronym="OSIS", reference="01"):
     organization = mdl_organization.Organization(name=name, acronym=acronym, reference=reference)
     organization.save()
     return organization
-
-
-class TestSearch(TestCase):
-    def setUp(self):
-        self.organization = create_organization()
-        self.organization2 = create_organization(name="OSAS", reference="02")
-
-    def test_with_specific_name(self):
-        organizations = list(mdl_organization.search("OSIS"))
-        self.assertListEqual(organizations, [self.organization])
-
-    def test_with_no_match(self):
-        organizations = list(mdl_organization.search("NO MATCH"))
-        self.assertFalse(organizations)
-
-    def test_with_prefix(self):
-        organizations = list(mdl_organization.search("OS"))
-        self.assertEqual(len(organizations), 2)
-        self.assertIn(self.organization, organizations)
-        self.assertIn(self.organization2, organizations)
-
