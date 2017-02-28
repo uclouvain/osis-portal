@@ -41,7 +41,68 @@
 
 <div class="panel panel-default">
     <div class="panel panel-body">
-        EDIT INFORMATION
+        <form  method="post">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="row">
+                <div class="fieldWrapper col-md-4 form-group">
+                    {{ form.location.errors }}
+                    <label for="{{ form.location.id_for_label }}">{% trans 'street' %}:</label>
+                    <input type="text" class="form-control" id="{{ form.location.id_for_label }}"
+                           name="{{ form.location.html_name }}">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="fieldWrapper col-md-4 form-group">
+                    {{ form.city.errors }}
+                    <label for="{{ form.city.id_for_label }}">{% trans 'city' %}:</label>
+                    <input type="text" class="form-control" id="{{ form.city.id_for_label }}"
+                           name="{{ form.city.html_name }}">
+                </div>
+
+                <div class="fieldWrapper col-md-4 form-group">
+                    {{ form.postal_code.errors }}
+                    <label for="{{ form.postal_code.id_for_label }}">{% trans 'postal_code' %}:</label>
+                    <input type="text" class="form-control" id="{{ form.postal_code.id_for_label }}"
+                           name="{{ form.postal_code.html_name }}">
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="fieldWrapper col-md-4 form-group">
+                    {{ form.country.errors }}
+                    <label for="{{ form.country.id_for_label }}">{% trans 'country' %}:</label>
+                    <input type="text" class="form-control" id="{{ form.country.id_for_label }}"
+                           name="{{ form.country.html_name }}">
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="fieldWrapper col-md-4 form-group">
+                    {{ form.email.errors }}
+                    <label for="{{ form.email.id_for_label }}">{% trans 'email' %}:</label>
+                    <input type="email" class="form-control" id="{{ form.email.id_for_label }}"
+                           name="{{ form.email.html_name }}">
+                </div>
+
+                <div class="fieldWrapper col-md-4 form-group">
+                    {{ form.phone_mobile.errors }}
+                    <label for="{{ form.phone_mobile.id_for_label }}">{% trans 'phone' %}:</label>
+                    <input type="tel" class="form-control" id="{{ form.phone_mobile.id_for_label }}"
+                           name="{{ form.phone_mobile.html_name }}">
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn btn-info">
+                {% trans 'edit' %}
+            </button>
+
+        </form>
 
     </div>
 </div>
