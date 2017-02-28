@@ -38,3 +38,9 @@ admin.site.register(organization.Organization,
 
 admin.site.register(internship_choice.InternshipChoice,
                     internship_choice.InternshipChoiceAdmin)
+
+admin.site.register(organization_address.OrganizationAddress,
+                    organization_address.OrganizationAddressAdmin)
+
+admin.site.register(internship_master.InternshipMaster,
+                    internship_master.InternshipMasterAdmin)

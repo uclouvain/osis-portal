@@ -23,30 +23,36 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 from django.db import models
+from django.contrib import admin
+from django.core.exceptions import ObjectDoesNotExist
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
-class OrganizationAdmin(SerializableModelAdmin):
-    list_display = ('name', 'acronym', 'reference', 'type')
-    fieldsets = ((None, {'fields': ('name', 'acronym', 'reference', 'website', 'type')}),)
-    search_fields = ['acronym']
+class OrganizationAddressAdmin(SerializableModelAdmin):
+    list_display = ('organization', 'label', 'location', 'postal_code', 'city', 'country', 'latitude', 'longitude')
+    fieldsets = ((None, {'fields': ('organization', 'label', 'location', 'postal_code', 'city', 'country', 'latitude',
+                                    'longitude')}),)
+    raw_id_fields = ('organization',)
 
 
-class Organization(SerializableModel):
-    name = models.CharField(max_length=255)
-    acronym = models.CharField(max_length=15, blank=True)
-    website = models.URLField(max_length=255, blank=True, null=True)
-    reference = models.CharField(max_length=30, blank=True, null=True)
-    type = models.CharField(max_length=30, blank=True, null=True, default="service partner")
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        self.acronym = self.name[:14]
-        super(Organization, self).save(*args, **kwargs)
+class OrganizationAddress(SerializableModel):
+    organization = models.ForeignKey('Organization')
+    label = models.CharField(max_length=20)
+    location = models.CharField(max_length=255)
+    postal_code = models.CharField(max_length=20)
+    city = models.CharField(max_length=255)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+    country = models.CharField(max_length=255)
 
 
-def search(name):
-    return Organization.objects.filter(name__contains=name)
+def get_by_organization(organization):
+    try:
+        return OrganizationAddress.objects.get(organization=organization)
+    except ObjectDoesNotExist:
+        return None
+
+
+def get_all_cities():
+    return list(OrganizationAddress.objects.values_list('city', flat=True).distinct('city').order_by('city'))

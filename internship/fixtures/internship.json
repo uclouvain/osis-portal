@@ -73,9 +73,90 @@
   },
 
 
-
-
-
+  {
+    "model": "internship.organizationaddress",
+    "pk": 1,
+    "fields": {
+      "organization": 1,
+      "label": "AddrCliniques Univ",
+      "location": "avenue Hippocrate 10",
+      "postal_code": "1200",
+      "city": "BRUXELLES",
+      "country": "Belgique"
+    }
+  },
+  {
+    "model": "internship.organizationaddress",
+    "pk": 2,
+    "fields": {
+      "organization": 2,
+      "label": "AddrClinique Saint",
+      "location": "rue du Marais 104",
+      "postal_code": "1000",
+      "city": "BRUXELLES",
+      "country": "Belgique"
+    }
+  },
+  {
+    "model": "internship.organizationaddress",
+    "pk": 3,
+    "fields": {
+      "organization": 3,
+      "label": "AddrClinique Saint",
+      "location": "avenue Reine Fabiola 9",
+      "postal_code": "1340",
+      "city": "OTTIGNIES",
+      "country": "Belgique"
+    }
+  },
+  {
+    "model": "internship.organizationaddress",
+    "pk": 4,
+    "fields": {
+      "organization": 4,
+      "label": "AddrCentre Hospita",
+      "location": "rue Samiette 1",
+      "postal_code": "1400",
+      "city": "NIVELLES",
+      "country": "Belgique"
+    }
+  },
+  {
+    "model": "internship.organizationaddress",
+    "pk": 5,
+    "fields": {
+      "organization": 5,
+      "label": "AddrCentre Hospita",
+      "location": "rue Barblé 4",
+      "postal_code": "1210",
+      "city": "LUXEMBOURG - G.D.L",
+      "country": "Luxembourg"
+    }
+  },
+  {
+    "model": "internship.organizationaddress",
+    "pk": 6,
+    "fields": {
+      "organization": 6,
+      "label": "AddrHôpital Enfant",
+      "location": "boulevard Jean Moulin",
+      "postal_code": "13385",
+      "city": "MARSEILLE",
+      "country": "France"
+    }
+  },
+  {
+    "model": "internship.organizationaddress",
+    "pk": 7,
+    "fields": {
+      "organization": 7,
+      "label": "AddrHôpital Saint ",
+      "location": "boulevard Victor Hugo 329 B 255",
+      "postal_code": "59019",
+      "city": "LILLE",
+      "country": "France"
+    }
+  },
 
 
   {
@@ -163,6 +244,91 @@
       "title": "Stage en Chirurgie",
       "maximum_enrollments": 40,
       "master": "Dr. Marc Hoselaus"
+    }
+  },
+
+
+  {
+    "model": "internship.internshipmaster",
+    "pk": 1,
+    "fields": {
+      "organization": 1,
+      "first_name": "Henry",
+      "last_name": "Gaillaird",
+      "civility": "Dr",
+      "type_mastery": "généraliste",
+      "speciality": "MEDECINE GENERALE"
+    }
+  },
+  {
+    "model": "internship.internshipmaster",
+    "pk": 2,
+    "fields": {
+      "organization": 2,
+      "first_name": "Harry",
+      "last_name": "Potter",
+      "civility": "Pr",
+      "type_mastery": "spécialiste",
+      "speciality": "RADIOTHERAPIE"
+    }
+  },{
+    "model": "internship.internshipmaster",
+    "pk": 3,
+    "fields": {
+      "organization": 2,
+      "first_name": "Jean",
+      "last_name": "Dujardin",
+      "civility": "Pr",
+      "type_mastery": "spécialiste",
+      "speciality": "PEDIATRIE"
+    }
+  },
+  {
+    "model": "internship.internshipmaster",
+    "pk": 4,
+    "fields": {
+      "organization": 4,
+      "first_name": "Elise",
+      "last_name": "Descamp",
+      "civility": "Dr",
+      "type_mastery": "spécialiste",
+      "speciality": "PSYCHIATRIE"
+    }
+  },
+  {
+    "model": "internship.internshipmaster",
+    "pk": 5,
+    "fields": {
+      "organization": 5,
+      "first_name": "Ornelia",
+      "last_name": "Fleurette",
+      "civility": "Dr",
+      "type_mastery": "généraliste",
+      "speciality": "MEDECINE GENERALE"
+    }
+  },
+  {
+    "model": "internship.internshipmaster",
+    "pk": 6,
+    "fields": {
+      "organization": 6,
+      "first_name": "Mark",
+      "last_name": "Champs",
+      "civility": "Dr",
+      "type_mastery": "généraliste",
+      "speciality": "MEDECINE GENERALE"
+    }
+  },
+  {
+    "model": "internship.internshipmaster",
+    "pk": 7,
+    "fields": {
+      "organization": 6,
+      "first_name": "Laure",
+      "last_name": "De Potter",
+      "civility": "Dr",
+      "type_mastery": "spécialiste",
+      "speciality": "URGENCES"
     }
   }
 ]

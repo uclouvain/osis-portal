@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,30 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
-from django.db import models
+from django.test import TestCase, Client
+
+import base.tests.models.test_student
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 
-class OrganizationAdmin(SerializableModelAdmin):
-    list_display = ('name', 'acronym', 'reference', 'type')
-    fieldsets = ((None, {'fields': ('name', 'acronym', 'reference', 'website', 'type')}),)
-    search_fields = ['acronym']
+class TestMasterUrl(TestCase):
+    def setUp(self):
+        self.c = Client()
+        self.student = base.tests.models.test_student.create_student("45451298")
+        self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
+        self.student.person.user = self.user
+        self.student.person.save()
 
+    def test_can_access_masters_list(self):
+        url = reverse("masters_list")
+        response = self.c.get(url)
+        self.assertEqual(response.status_code, 302)
 
-class Organization(SerializableModel):
-    name = models.CharField(max_length=255)
-    acronym = models.CharField(max_length=15, blank=True)
-    website = models.URLField(max_length=255, blank=True, null=True)
-    reference = models.CharField(max_length=30, blank=True, null=True)
-    type = models.CharField(max_length=30, blank=True, null=True, default="service partner")
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        self.acronym = self.name[:14]
-        super(Organization, self).save(*args, **kwargs)
-
-
-def search(name):
-    return Organization.objects.filter(name__contains=name)
+        self.c.force_login(self.user)
+        response = self.c.get(url)
+        self.assertEqual(response.status_code, 200)

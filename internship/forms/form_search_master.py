@@ -23,30 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
-from django.db import models
+
+from django import forms
+from internship.models import organization as mdl_organization
 
 
-class OrganizationAdmin(SerializableModelAdmin):
-    list_display = ('name', 'acronym', 'reference', 'type')
-    fieldsets = ((None, {'fields': ('name', 'acronym', 'reference', 'website', 'type')}),)
-    search_fields = ['acronym']
+class SearchMasterForm(forms.Form):
+    def __init__(self, speciality_list, *args, **kwargs):
+        super(SearchMasterForm, self).__init__(*args, **kwargs)
+        modified_speciality_list = speciality_list.copy()
+        modified_speciality_list.insert(0, "")
+        self.fields['speciality'].choices = zip(modified_speciality_list, modified_speciality_list)
 
+    name = forms.CharField(max_length=255, required=False)
+    speciality = forms.ChoiceField(required=False)
+    organization = forms.ModelChoiceField(mdl_organization.Organization.objects.all(), required=False, empty_label="")
 
-class Organization(SerializableModel):
-    name = models.CharField(max_length=255)
-    acronym = models.CharField(max_length=15, blank=True)
-    website = models.URLField(max_length=255, blank=True, null=True)
-    reference = models.CharField(max_length=30, blank=True, null=True)
-    type = models.CharField(max_length=30, blank=True, null=True, default="service partner")
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        self.acronym = self.name[:14]
-        super(Organization, self).save(*args, **kwargs)
-
-
-def search(name):
-    return Organization.objects.filter(name__contains=name)

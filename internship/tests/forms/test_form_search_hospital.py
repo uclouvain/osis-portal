@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,30 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
-from django.db import models
+from django.test import TestCase
+from internship.forms import form_search_hospital
 
 
-class OrganizationAdmin(SerializableModelAdmin):
-    list_display = ('name', 'acronym', 'reference', 'type')
-    fieldsets = ((None, {'fields': ('name', 'acronym', 'reference', 'website', 'type')}),)
-    search_fields = ['acronym']
-
-
-class Organization(SerializableModel):
-    name = models.CharField(max_length=255)
-    acronym = models.CharField(max_length=15, blank=True)
-    website = models.URLField(max_length=255, blank=True, null=True)
-    reference = models.CharField(max_length=30, blank=True, null=True)
-    type = models.CharField(max_length=30, blank=True, null=True, default="service partner")
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        self.acronym = self.name[:14]
-        super(Organization, self).save(*args, **kwargs)
-
-
-def search(name):
-    return Organization.objects.filter(name__contains=name)
+class TestSearchHospitalForm(TestCase):
+    def test_init(self):
+        cities = ['Anvers', 'Bruxelles', 'Ottignies']
+        form = form_search_hospital.SearchHospitalForm(cities)
+        self.assertListEqual(form.fields['city'].choices,
+                             [('', ''), ('Anvers', 'Anvers'), ('Bruxelles', 'Bruxelles'), ('Ottignies', 'Ottignies')])
