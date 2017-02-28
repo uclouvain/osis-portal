@@ -37,6 +37,12 @@ msgstr "Choisissez une spécialité"
 msgid "doctor"
 msgstr "Docteur"
 
+msgid "edit"
+msgstr "Modifier"
+
+msgid "edit_information"
+msgstr "Modifier information"
+
 msgid "first_choice"
 msgstr "Premier choix"
 

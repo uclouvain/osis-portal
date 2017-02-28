@@ -39,5 +39,7 @@ urlpatterns = [
     url(r'^masters/$', master.view_masters_list, name='masters_list'),
 
     url(r'^resume/$', resume.view_student_resume, name='student_resume'),
+    url(r'^edit_info/$', resume.edit_student_information, name='internship_student_edit'),
+
 ]
 

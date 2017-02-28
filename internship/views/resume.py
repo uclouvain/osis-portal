@@ -49,3 +49,10 @@ def view_student_resume(request):
                                                               student_affectations_with_address,
                                                           "student_choices": student_choices,
                                                           "internships": range(1, 7)})
+
+
+@login_required
+@permission_required('base.is_student', raise_exception=True)
+def edit_student_information(request):
+
+    return layout.render(request, "student_edit_information.html")

@@ -48,6 +48,15 @@ class TestResumeUrl(TestCase):
         response = self.c.get(url)
         self.assertEqual(response.status_code, 200)
 
+    def test_can_access_student_info_modification(self):
+        url = reverse("internship_student_edit")
+        response = self.c.get(url)
+        self.assertEqual(response.status_code, 302)
+
+        self.c.force_login(self.user)
+        response = self.c.get(url)
+        self.assertEqual(response.status_code, 200)
+
 
 def add_permission(user, codename):
     perm = get_permission(codename)
