@@ -48,5 +48,3 @@ class Organization(SerializableModel):
         super(Organization, self).save(*args, **kwargs)
 
 
-def search(name):
-    return Organization.objects.filter(name__contains=name)
