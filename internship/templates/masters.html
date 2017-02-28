@@ -40,7 +40,6 @@
 
 <div class="panel panel-default">
     <div class="panel panel-body">
-
         <div class="row">
             <form method="post">
                 {% csrf_token %}
@@ -106,16 +105,15 @@
                     <td>{{ master.type }}</td>
                     <td>{{ master.speciality }}</td>
                     <td>{% if master.organization.website %}
-                        <a href="{{ master.organization.website }}">{{ master.organization }}</a>
+                          <a href="{{ master.organization.website }}">{{ master.organization }}</a>
                         {% else %}
-                        {{ master.organization }}
+                          {{ master.organization }}
                         {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
             </table>
         </div>
-
     </div>
 </div>
 {% endblock %}

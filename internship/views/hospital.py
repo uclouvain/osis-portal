@@ -61,7 +61,3 @@ def get_hospitals(name="", city=""):
         if not city or organization_address.city == city:
             hospitals.append((organization, organization_address))
     return hospitals
-
-
-
-
