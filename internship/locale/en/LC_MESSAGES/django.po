@@ -16,30 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "DOCTOR"
-msgstr "Doctor"
-
-msgid "FIRST_CHOICE"
-msgstr "First choice"
-
-msgid "FOURTH_CHOICE"
-msgstr "Fourth choice"
-
-msgid "GENERALIST"
-msgstr "Generalist"
-
-msgid "PROFESSOR"
-msgstr "Professor"
-
-msgid "SECOND_CHOICE"
-msgstr "Second choice"
-
-msgid "SPECIALIST"
-msgstr "Specialist"
-
-msgid "THIRD_CHOICE"
-msgstr "Third choice"
-
 msgid "address"
 msgstr "Address"
 
@@ -57,6 +33,18 @@ msgstr	 "Choose your non mandatory internship"
 
 msgid "choose_speciality"
 msgstr "Choose a speciality"
+
+msgid "doctor"
+msgstr "Doctor"
+
+msgid "first_choice"
+msgstr "First choice"
+
+msgid "fourth_choice"
+msgstr "Fourth choice"
+
+msgid "generalist"
+msgstr "Generalist"
 
 msgid	 "hospital_list"
 msgstr	 "Hospital list"
@@ -103,14 +91,24 @@ msgstr	 "Hospital"
 msgid "preference"
 msgstr "Preference"
 
+msgid "professor"
+msgstr "Professor"
+
 msgid "reference"
 msgstr "Reference"
+
+msgid "second_choice"
+msgstr "Second choice"
+
 
 msgid "selection"
 msgstr "selection"
 
 msgid "speciality"
 msgstr "Speciality"
+
+msgid "sepcialist"
+msgstr "Specialist"
 
 msgid "student_information"
 msgstr "Student information"
@@ -123,6 +121,9 @@ msgstr	 "Sump up of your choices and your affectations"
 
 msgid "submit_choices"
 msgstr "Submit choices"
+
+msgid "third_choice"
+msgstr "Third choice"
 
 msgid "website"
 msgstr "Website"

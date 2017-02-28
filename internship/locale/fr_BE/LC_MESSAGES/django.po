@@ -16,30 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "DOCTOR"
-msgstr "Docteur"
-
-msgid "FIRST_CHOICE"
-msgstr "Premier choix"
-
-msgid "FOURTH_CHOICE"
-msgstr "Quatrième choix"
-
-msgid "GENERALIST"
-msgstr "Généraliste"
-
-msgid "PROFESSOR"
-msgstr "Professeur"
-
-msgid "SECOND_CHOICE"
-msgstr "Second choix"
-
-msgid "SPECIALIST"
-msgstr "Spécialiste"
-
-msgid "THIRD_CHOICE"
-msgstr "Troisième choix"
-
 msgid "address"
 msgstr "Adresse"
 
@@ -57,6 +33,18 @@ msgstr	 "Choisissez vos stages aux choix"
 
 msgid "choose_speciality"
 msgstr "Choisissez une spécialité"
+
+msgid "doctor"
+msgstr "Docteur"
+
+msgid "first_choice"
+msgstr "Premier choix"
+
+msgid "fourth_choice"
+msgstr "Quatrième choix"
+
+msgid "generalist"
+msgstr "Généraliste"
 
 msgid	 "hospital_list"
 msgstr	 "Liste des hôpitaux"
@@ -102,11 +90,20 @@ msgstr	 "Hôpital"
 msgid "preference"
 msgstr "Préférence"
 
+msgid "professor"
+msgstr "Professeur"
+
 msgid "reference"
 msgstr "Référence"
 
+msgid "second_choice"
+msgstr "Second choix"
+
 msgid "selection"
 msgstr "séléction"
+
+msgid "specialist"
+msgstr "Spécialiste"
 
 msgid "speciality"
 msgstr "Spéciailté"
@@ -122,6 +119,9 @@ msgstr	 "Résumé de vos choix et affectations"
 
 msgid "submit_choices"
 msgstr "Soumettre vos choix"
+
+msgid "third_choice"
+msgstr "Troisième choix"
 
 msgid "website"
 msgstr "Site web"
