@@ -83,9 +83,9 @@
                             <th>{% trans 'title' %}</th>
                             <th>{% trans 'ects' %}</th>
                             <th>{% trans 'inscr' %}</th>
-                            <th colspan="2" class="text-nowrap">{% trans 'jan' %} *</th>
-                            <th colspan="2" class="text-nowrap">{% trans 'june' %} *</th>
-                            <th class="text-nowrap">{% trans 'sept' %} *</th>
+                            <th {% if current_number_session >= 1 %} colspan="2" {% endif %}  class="text-nowrap">{% trans 'jan' %} *</th>
+                            <th {% if current_number_session >= 2 %} colspan="2" {% endif %}  class="text-nowrap">{% trans 'june' %} *</th>
+                            <th {% if current_number_session >= 3 %} colspan="2" {% endif %} class="text-nowrap">{% trans 'sept' %} *</th>
                             <th>{% trans 'credited' %}</th>
                         </tr>
                         {% for exam_enrol in exam_enrollments %}
