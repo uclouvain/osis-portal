@@ -28,6 +28,8 @@ from django.test import TestCase, Client
 import base.tests.models.test_student
 from django.contrib.auth.models import User, Permission
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
+from internship.models import internship_student_information as mdl_student_information
 
 
 class TestResumeUrl(TestCase):
@@ -56,6 +58,42 @@ class TestResumeUrl(TestCase):
         self.c.force_login(self.user)
         response = self.c.get(url)
         self.assertEqual(response.status_code, 200)
+
+
+class TestEditStudentInformation(TestCase):
+    def setUp(self):
+        self.student = base.tests.models.test_student.create_student("45451298")
+        self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
+        self.student.person.user = self.user
+        self.student.person.save()
+        add_permission(self.student.person.user, "is_student")
+        self.c = Client()
+        self.c.force_login(self.user)
+
+        self.url = reverse("internship_student_edit")
+
+        self.data = {
+            "location": "location",
+            "postal_code": "postal",
+            "city": "city",
+            "country": "country",
+            "email": "test@test.com",
+            "phone_mobile": "0236478987"
+        }
+
+    def test_information_save(self):
+        self.c.post(self.url, data=self.data)
+        try:
+            student_information = mdl_student_information.find_by_user(self.user)
+        except ObjectDoesNotExist:
+            self.fail()
+
+        self.assertEqual(student_information.location, self.data["location"])
+        self.assertEqual(student_information.postal_code, self.data["postal_code"])
+        self.assertEqual(student_information.city, self.data["city"])
+        self.assertEqual(student_information.country, self.data["country"])
+        self.assertEqual(student_information.email, self.data["email"])
+        self.assertEqual(student_information.phone_mobile, self.data["phone_mobile"])
 
 
 def add_permission(user, codename):
