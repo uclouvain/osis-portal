@@ -41,7 +41,7 @@ class Organization(SerializableModel):
     type = models.CharField(max_length=30, blank=True, null=True, default="service partner")
 
     def __str__(self):
-        return self.name
+        return u"%s" % self.name
 
     def save(self, *args, **kwargs):
         self.acronym = self.name[:14]

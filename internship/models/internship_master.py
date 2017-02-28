@@ -52,7 +52,7 @@ class InternshipMaster(SerializableModel):
     speciality = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return u"%s" % self.reference
+        return u"%s - %s %s" % (self.reference, self.last_name, self.first_name)
 
 
 def search(name="", speciality="", organization=None):

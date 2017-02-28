@@ -45,6 +45,9 @@ class OrganizationAddress(SerializableModel):
     longitude = models.FloatField(blank=True, null=True)
     country = models.CharField(max_length=255)
 
+    def __str__(self):
+        return u"%s %s %s" % (self.organization, self.city, self.country)
+
 
 def get_by_organization(organization):
     try:

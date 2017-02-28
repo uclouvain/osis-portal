@@ -48,6 +48,9 @@ class InternshipStudentInformation(SerializableModel):
     email = models.EmailField(max_length=255, blank=True, null=True)
     phone_mobile = models.CharField(max_length=100, blank=True, null=True)
 
+    def __str__(self):
+        return u"%s" % self.person
+
 
 def find_by_user(a_user):
     try:
