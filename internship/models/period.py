@@ -23,20 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
-from internship.views import main, hospital, master, resume
+from django.db import models
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
-urlpatterns = [
-    url(r'^$', main.view_internship_home, name='internship_home'),
-    url(r'^speciality_assignment/(?P<internship_id>[0-9]+)/$', main.assign_speciality_for_internship,
-        name='assign_speciality'),
-    url(r'^selection/(?P<internship_id>[0-9]+)/$', main.view_internship_selection, name='select_internship'),
-    url(r'^selection/(?P<internship_id>[0-9]+)/(?P<speciality_id>[0-9]+)/$', main.view_internship_selection,
-        name='select_internship_speciality'),
 
-    url(r'^hospitals/$', hospital.view_hospitals_list, name='hospitals_list'),
+class PeriodAdmin(SerializableModelAdmin):
+    list_display = ('name', 'date_start', 'date_end')
+    fieldsets = ((None, {'fields': ('name', 'date_start', 'date_end')}),)
 
-    url(r'^masters/$', master.view_masters_list, name='masters_list'),
 
-    url(r'^resume/$', resume.view_student_resume, name='student_resume'),
-]
+class Period(SerializableModel):
+    name = models.CharField(max_length=255)
+    date_start = models.DateField(blank=False)
+    date_end = models.DateField(blank=False)
+
+    def __str__(self):
+        return u"%s" % self.name

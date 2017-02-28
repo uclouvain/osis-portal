@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,20 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
-from internship.views import main, hospital, master, resume
 
-urlpatterns = [
-    url(r'^$', main.view_internship_home, name='internship_home'),
-    url(r'^speciality_assignment/(?P<internship_id>[0-9]+)/$', main.assign_speciality_for_internship,
-        name='assign_speciality'),
-    url(r'^selection/(?P<internship_id>[0-9]+)/$', main.view_internship_selection, name='select_internship'),
-    url(r'^selection/(?P<internship_id>[0-9]+)/(?P<speciality_id>[0-9]+)/$', main.view_internship_selection,
-        name='select_internship_speciality'),
+from internship.models import period as mdl_period
+import datetime
 
-    url(r'^hospitals/$', hospital.view_hospitals_list, name='hospitals_list'),
 
-    url(r'^masters/$', master.view_masters_list, name='masters_list'),
+def create_period(name="P1", start=datetime.date(2010, 1, 1), end=datetime.date(2010, 1, 20)):
+    period = mdl_period.Period(name=name, date_start=start, date_end=end)
+    period.save()
+    return period
 
-    url(r'^resume/$', resume.view_student_resume, name='student_resume'),
-]
+

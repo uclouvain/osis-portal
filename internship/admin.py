@@ -44,3 +44,13 @@ admin.site.register(organization_address.OrganizationAddress,
 
 admin.site.register(internship_master.InternshipMaster,
                     internship_master.InternshipMasterAdmin)
+
+admin.site.register(internship_student_information.InternshipStudentInformation,
+                    internship_student_information.InternshipStudentInformationAdmin)
+
+admin.site.register(period.Period,
+                    period.PeriodAdmin)
+
+admin.site.register(internship_student_affectation_stat.InternshipStudentAffectationStat,
+                    internship_student_affectation_stat.InternshipStudentAffectationStatAdmin)
+

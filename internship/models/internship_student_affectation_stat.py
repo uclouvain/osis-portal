@@ -27,35 +27,24 @@ from django.db import models
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
-class InternshipChoiceAdmin(SerializableModelAdmin):
-    list_display = ('student', 'organization', 'speciality', 'choice', 'internship_choice', 'priority')
-    fieldsets = ((None, {'fields': ('student', 'organization', 'speciality', 'choice', 'internship_choice',
-                                    'priority')}),)
-    raw_id_fields = ('student', 'organization', 'speciality')
+class InternshipStudentAffectationStatAdmin(SerializableModelAdmin):
+    list_display = ('student', 'organization', 'speciality', 'period', 'choice', 'cost', 'consecutive_month',
+                    'type_of_internship')
+    fieldsets = ((None, {'fields': ('student', 'organization', 'speciality', 'period', 'choice', 'cost',
+                                    'consecutive_month', 'type_of_internship')}),)
+    raw_id_fields = ('student', 'organization', 'speciality', 'period')
 
 
-class InternshipChoice(SerializableModel):
+class InternshipStudentAffectationStat(SerializableModel):
     student = models.ForeignKey('base.Student')
     organization = models.ForeignKey('internship.Organization')
-    speciality = models.ForeignKey('internship.InternshipSpeciality', null=True)
-    choice = models.IntegerField()
-    internship_choice = models.IntegerField(default=0)
-    priority = models.BooleanField()
+    speciality = models.ForeignKey('internship.InternshipSpeciality')
+    period = models.ForeignKey('internship.Period')
+    choice = models.CharField(max_length=1, blank=False, null=False, default='0')
+    cost = models.IntegerField(blank=False, null=False)
+    consecutive_month = models.BooleanField(default=False, null=False)
+    type_of_internship = models.CharField(max_length=1, blank=False, null=False, default='N')
 
 
-def search(student=None, internship_choice=None):
-    has_criteria = False
-    queryset = InternshipChoice.objects
-
-    if student:
-        queryset = queryset.filter(student=student)
-        has_criteria = True
-
-    if internship_choice is not None:
-        queryset = queryset.filter(internship_choice=internship_choice)
-        has_criteria = True
-
-    if has_criteria:
-        return queryset
-    else:
-        return None
+def search(student=None):
+    return InternshipStudentAffectationStat.objects.filter(student=student).order_by('period__date_start')
