@@ -42,7 +42,7 @@
 
             <ul class="nav nav-tabs">
                 {% for non_mandatory_id in number_non_mandatory_internships %}
-                    <li role="presentation" {% if non_mandatory_id == 1 %} class="active" {% endif %}><a href="#">{% trans 'internship_choice'%} {{ non_mandatory_id }}</a></li>
+                    <li role="presentation" {% if non_mandatory_id == intern_id %} class="active" {% endif %}><a href="{% url 'select_internship' internship_id=non_mandatory_id  %}">{% trans 'internship_choice'%} {{ non_mandatory_id }}</a></li>
                 {% endfor %}
             </ul>
 
@@ -51,7 +51,7 @@
         <br>
 
         <div class="row">
-            <form action="{% url 'internship_selection' %}" method="post">
+            <form action="{% url 'assign_speciality' internship_id=intern_id %}"  method="post">
                 {% csrf_token %}
                 {{ speciality_form.non_field_errors }}
                 <div class="fieldWrapper col-md-4 form-group">
@@ -71,7 +71,7 @@
 
                 <div class="col-md-2">
                     <br>
-                    <button type="submit" class="btn btn-primary" name="select_speciality">
+                    <button type="submit" class="btn btn-primary">
                         <span class="glyphicon glyphicon-ok"></span>
                     </button>
                 </div>
@@ -83,7 +83,8 @@
        <div class="row">
 
            <form id="assign_preference" method="post">
-
+               {% csrf_token %}
+                {{ formset.management_form }}
                <table class="table table-striped">
                    <thead>
                        <th>organization</th>
@@ -91,27 +92,35 @@
                        <th>number_first_choice</th>
                        <th>preference</th>
                    </thead>
-                    {% for offer in  internships_offers %}
+
+                    {% for offer_form in  offers_forms %}
+                        {% with offer=offer_form.0 %}
+                            {% with form=offer_form.1 %}
                    <tr>
                         <td>{{ offer.organization }}</td>
                         <td>{{ offer.maximum_enrollments }}</td>
-                        <td>0</td>
+                        <td> {{ formset.counter.preference }} </td>
+                        <td hidden>
+                            <input type="number" id="{{ form.offer.id_for_label }}" name="{{ form.offer.html_name }}" class="form-control" value="{{ offer.organization.pk }}">
+                        </td>
                         <td>
-                            <select id="offer_{{ offer.id }}" class="form-control">
-                                <option>--</option>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
+                            <select id="{{ form.preference.id_for_label }}" name="{{ form.preference.html_name }}" class="form-control">
+                                {% for x,y in form.fields.preference.choices %}
+                                    <option value="{{ x }}">
+                                        {{ y }}
+                                    </option>
+                                 {% endfor %}
                             </select>
                         </td>
                    </tr>
+                                {% endwith %}
+                        {% endwith %}
                     {% endfor %}
                </table>
 
                 <br>
 
-           {% if internships_offers %}
+           {% if offers_forms  %}
                 <button type="submit" class="btn btn-primary">
                     <span class="glyphicon glyphicon-ok"></span>
                     Submit choices

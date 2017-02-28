@@ -48,7 +48,17 @@ class TestMain(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_can_access_internship_selection(self):
-        selection_url = reverse("internship_selection")
+        selection_url = reverse("select_internship", kwargs={'internship_id': 0})
+        response = self.c.get(selection_url)
+        self.assertEqual(response.status_code, 302)
+
+        self.c.force_login(self.user)
+        response = self.c.get(selection_url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_can_access_internship_selection_with_speciality(self):
+        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 0,
+                                                                        'speciality_id': 0})
         response = self.c.get(selection_url)
         self.assertEqual(response.status_code, 302)
 

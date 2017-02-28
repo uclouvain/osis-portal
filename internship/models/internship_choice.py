@@ -24,42 +24,38 @@
 #
 ##############################################################################
 from django.db import models
-from django.core.exceptions import ObjectDoesNotExist
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
-class InternshipOfferAdmin(SerializableModelAdmin):
-    list_display = ('organization', 'speciality', 'title', 'maximum_enrollments', 'master', 'selectable')
-    fieldsets = ((None, {'fields': ('organization', 'speciality', 'title', 'maximum_enrollments', 'master',
-                                    'selectable')}),)
-    raw_id_fields = ('organization', 'speciality')
+class InternshipChoiceAdmin(SerializableModelAdmin):
+    list_display = ('student', 'organization', 'speciality', 'choice', 'internship_choice', 'priority')
+    fieldsets = ((None, {'fields': ('student', 'organization', 'speciality', 'choice', 'internship_choice',
+                                    'priority')}),)
+    raw_id_fields = ('student', 'organization', 'speciality')
 
 
-class InternshipOffer(SerializableModel):
+class InternshipChoice(SerializableModel):
+    student = models.ForeignKey('base.Student')
     organization = models.ForeignKey('internship.Organization')
     speciality = models.ForeignKey('internship.InternshipSpeciality', null=True)
-    title = models.CharField(max_length=255)
-    maximum_enrollments = models.IntegerField()
-    master = models.CharField(max_length=100, blank=True, null=True)
-    selectable = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        permissions = (
-            ("is_internship_manager", "Is Internship Manager"),
-            ("can_access_internship", "Can access internships"),
-        )
+    choice = models.IntegerField()
+    internship_choice = models.IntegerField(default=0)
+    priority = models.BooleanField()
 
 
-def find_by_speciality(speciality):
-    return InternshipOffer.objects.filter(speciality=speciality)
+def search(student=None, internship_choice=None):
+    has_criteria = False
+    queryset = InternshipChoice.objects
 
+    if student:
+        queryset = queryset.filter(student=student)
+        has_criteria = True
 
-def find_by_pk(a_pk):
-    try:
-        return InternshipOffer.objects.get(pk=a_pk)
-    except ObjectDoesNotExist:
+    if internship_choice:
+        queryset = queryset.filter(internship_choice=internship_choice)
+        has_criteria = True
+
+    if has_criteria:
+        return queryset
+    else:
         return None
-

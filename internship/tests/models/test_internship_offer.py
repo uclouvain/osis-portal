@@ -49,3 +49,11 @@ class TestInternshipOffer(TestCase):
         speciality = test_internship_speciality.create_speciality(name="radiologie")
         actual_offers = internship_offer.find_by_speciality(speciality)
         self.assertNotIn(self.offer, actual_offers)
+
+    def test_get_py_pk(self):
+        pk = self.offer.pk
+        actual_offer = internship_offer.find_by_pk(pk)
+        self.assertEquals(self.offer, actual_offer)
+
+        pk = 45
+        self.assertFalse(internship_offer.find_by_pk(pk))

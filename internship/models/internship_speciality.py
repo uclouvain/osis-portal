@@ -25,6 +25,7 @@
 ##############################################################################
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class InternshipSpecialityAdmin(SerializableModelAdmin):
@@ -44,3 +45,8 @@ class InternshipSpeciality(SerializableModel):
         return self.name
 
 
+def find_by_id(a_id):
+    try:
+        return InternshipSpeciality.objects.get(id=a_id)
+    except ObjectDoesNotExist:
+        return None
