@@ -19,8 +19,14 @@ msgstr ""
 msgid	 "choose_internships"
 msgstr	 "Choisissez vos stages aux choix"
 
+msgid "choose_speciality"
+msgstr "Choisissez une spécialité"
+
 msgid	 "hospital_list"
 msgstr	 "Liste des hôpitaux"
+
+msgid "internship"
+msgstr "stage"
 
 msgid "internships"
 msgstr "Stages"
@@ -28,5 +34,23 @@ msgstr "Stages"
 msgid	 "master_list"
 msgstr	 "Liste des maîtres de stage"
 
+msgid	 "number_first_choice"
+msgstr	 "Nombre de 1er choix"
+
+msgid	 "organization"
+msgstr	 "Hôpital"
+
+msgid "preference"
+msgstr "Préférence"
+
+msgid "selection"
+msgstr "séléction"
+
+msgid "student_max"
+msgstr "Nombre maximum d'étudiants"
+
 msgid	 "student_resume"
 msgstr	 "Résumé de vos choix et affectations"
+
+msgid "submit_choices"
+msgstr "Soumettre vos choix"

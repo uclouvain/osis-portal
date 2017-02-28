@@ -19,8 +19,14 @@ msgstr ""
 msgid	 "choose_internships"
 msgstr	 "Choose your non mandatory internship"
 
+msgid "choose_speciality"
+msgstr "Choose a speciality"
+
 msgid	 "hospital_list"
 msgstr	 "Hospital list"
+
+msgid "internship"
+msgstr "internship"
 
 msgid "internships"
 msgstr "Internships"
@@ -28,5 +34,23 @@ msgstr "Internships"
 msgid	 "master_list"
 msgstr	 "Internship's masters list"
 
+msgid	 "number_first_choice"
+msgstr	 "Number of first choice"
+
+msgid	 "organization"
+msgstr	 "Hospital"
+
+msgid "preference"
+msgstr "Preference"
+
+msgid "selection"
+msgstr "selection"
+
+msgid "student_max"
+msgstr "Maximum number of students"
+
 msgid	 "student_resume"
 msgstr	 "Sump up of your choices and your affectations"
+
+msgid "submit_choices"
+msgstr "Submit choices"
