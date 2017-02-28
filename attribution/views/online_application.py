@@ -364,7 +364,7 @@ def attribution_application_form(request):
     application_year = mdl_base.academic_year.find_next_academic_year()
     return render(request, "attribution_application_form.html", {
         'application': None,
-        'attributions': attributions,gi
+        'attributions': attributions,
         'application_academic_year': "{0}-{1}".format(application_year, application_year + 1),
         'over_academic_year': "{0}-{1}".format(last_year, last_year + 1)})
 
