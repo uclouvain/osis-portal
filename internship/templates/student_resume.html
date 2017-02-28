@@ -120,14 +120,13 @@
                 <div class="row">
                     {% for internship in internships %}
                         <strong>{% trans 'internship' %} {{ internship }}</strong>
-                        <br>
+                        <ul>
                         {% for choice in student_choices %}
                             {% if choice.internship_choice == internship %}
-                                {{ choice.organization }} | {{ choice.speciality }} |{{ choice.choice }}
-                                <br>
+                                <li>{{ choice.organization }} | {{ choice.speciality }} |{{ choice.choice }}</li>
                             {% endif %}
                         {% endfor %}
-                        <br>
+                        </ul>
                     {% endfor %}
                 </div>
             </div>
