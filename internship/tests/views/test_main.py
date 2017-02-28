@@ -55,6 +55,3 @@ class TestMain(TestCase):
         self.c.force_login(self.user)
         response = self.c.get(selection_url)
         self.assertEqual(response.status_code, 200)
-
-
-

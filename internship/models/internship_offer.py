@@ -52,3 +52,5 @@ class InternshipOffer(SerializableModel):
         )
 
 
+def find_by_speciality(speciality):
+    return InternshipOffer.objects.filter(speciality=speciality)

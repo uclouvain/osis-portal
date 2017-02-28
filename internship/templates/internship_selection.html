@@ -51,24 +51,30 @@
         <br>
 
         <div class="row">
-            <form id="select_internship" method="get" action="{% url 'internship_selection' %}">
-
-                <div class="col-md-4 form-group">
-                    <label for="speciality_type">Choose a speciality:</label>
-                    <select id="speciality_type" class="form-control">
-                        {% for speciality in specialities %}
-                            <option value="{{ speciality.id }}">{{ speciality.name }}</option>
+            <form action="{% url 'internship_selection' %}" method="post">
+                {% csrf_token %}
+                {{ speciality_form.non_field_errors }}
+                <div class="fieldWrapper col-md-4 form-group">
+                    {{ speciality_form.speciality.errors }}
+                    <label for="{{ speciality_form.speciality.id_for_label }}">Choose a speciality:</label>
+                    <select id="{{ speciality_form.speciality.id_for_label }}"
+                            name="{{ speciality_form.speciality.html_name }}"
+                            class="form-control">
+                        {% for x,y in speciality_form.fields.speciality.choices %}
+                            <option value="{{ x }}"
+                                    {% if speciality_form.speciality.value == x|stringformat:"i" %} selected {% endif %}>
+                                {{ y }}
+                            </option>
                         {% endfor %}
                     </select>
                 </div>
 
                 <div class="col-md-2">
                     <br>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary" name="select_speciality">
                         <span class="glyphicon glyphicon-ok"></span>
                     </button>
                 </div>
-
             </form>
         </div>
 
@@ -103,10 +109,14 @@
                     {% endfor %}
                </table>
 
+                <br>
+
+           {% if internships_offers %}
                 <button type="submit" class="btn btn-primary">
                     <span class="glyphicon glyphicon-ok"></span>
                     Submit choices
                 </button>
+           {% endif %}
            </form>
 
        </div>

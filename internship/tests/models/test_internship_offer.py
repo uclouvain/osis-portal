@@ -23,18 +23,29 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
+from django.test import TestCase
+from internship.models import internship_offer
+from internship.tests.models import test_organization, test_internship_speciality
 
 
-def create_learning_unit(data):
-    learning_unit = mdl_base.learning_unit.LearningUnit()
-    if 'acronym' in data:
-        learning_unit.acronym = data['acronym']
-    if 'title' in data:
-        learning_unit.title = data['title']
-    if 'description' in data:
-        learning_unit.description = data['description']
-    learning_unit.save()
-    return learning_unit
+def create_internship_offer():
+    organization = test_organization.create_organization()
+    speciality = test_internship_speciality.create_speciality()
+    offer = internship_offer.InternshipOffer(speciality=speciality, organization=organization, title="offer_test",
+                                             maximum_enrollments=20)
+    offer.save()
+    return offer
 
 
+class TestInternshipOffer(TestCase):
+    def setUp(self):
+        self.offer = create_internship_offer()
+
+    def test_find_by_speciality(self):
+        speciality = self.offer.speciality
+        actual_offers = internship_offer.find_by_speciality(speciality)
+        self.assertIn(self.offer, actual_offers)
+
+        speciality = test_internship_speciality.create_speciality(name="radiologie")
+        actual_offers = internship_offer.find_by_speciality(speciality)
+        self.assertNotIn(self.offer, actual_offers)

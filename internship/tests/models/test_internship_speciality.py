@@ -23,18 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
+from internship.models import internship_speciality as mdl_internship_speciality
+from base.tests.models import test_learning_unit
 
 
-def create_learning_unit(data):
-    learning_unit = mdl_base.learning_unit.LearningUnit()
-    if 'acronym' in data:
-        learning_unit.acronym = data['acronym']
-    if 'title' in data:
-        learning_unit.title = data['title']
-    if 'description' in data:
-        learning_unit.description = data['description']
-    learning_unit.save()
-    return learning_unit
+def create_speciality(name="chirurgie"):
+    learning_unit = test_learning_unit.create_learning_unit({"title": "stage medecine",
+                                                             "acronym": "WSD"})
+    speciality = mdl_internship_speciality.InternshipSpeciality(learning_unit=learning_unit, name=name)
+    speciality.save()
+    return speciality
+
+
+
+
 
 

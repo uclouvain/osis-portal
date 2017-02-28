@@ -23,18 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
+
+from internship.models import organization as mdl_organization
 
 
-def create_learning_unit(data):
-    learning_unit = mdl_base.learning_unit.LearningUnit()
-    if 'acronym' in data:
-        learning_unit.acronym = data['acronym']
-    if 'title' in data:
-        learning_unit.title = data['title']
-    if 'description' in data:
-        learning_unit.description = data['description']
-    learning_unit.save()
-    return learning_unit
-
-
+def create_organization(name="OSIS", acronym="OSIS", reference="01"):
+    organization = mdl_organization.Organization(name=name, acronym=acronym, reference=reference)
+    organization.save()
+    return organization
