@@ -31,10 +31,10 @@ from django.utils.translation import ugettext_lazy as _
 class OfferPreferenceForm(forms.Form):
     PREFERENCE_CHOICES = (
         ('0', '--'),
-        ('1', _('first_choice')),
-        ('2', _('second_choice')),
-        ('3', _('third_choice')),
-        ('4', _('fourth_choice'))
+        ('1', _('FIRST_CHOICE')),
+        ('2', _('SECOND_CHOICE')),
+        ('3', _('THIRD_CHOICE')),
+        ('4', _('FOURTH_CHOICE'))
     )
     offer = forms.IntegerField()
     preference = forms.ChoiceField(choices=PREFERENCE_CHOICES, required=True)

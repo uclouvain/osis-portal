@@ -19,14 +19,26 @@ msgstr ""
 msgid "DOCTOR"
 msgstr "Doctor"
 
+msgid "FIRST_CHOICE"
+msgstr "First choice"
+
+msgid "FOURTH_CHOICE"
+msgstr "Fourth choice"
+
 msgid "GENERALIST"
 msgstr "Generalist"
 
 msgid "PROFESSOR"
 msgstr "Professor"
 
+msgid "SECOND_CHOICE"
+msgstr "Second choice"
+
 msgid "SPECIALIST"
 msgstr "Specialist"
+
+msgid "THIRD_CHOICE"
+msgstr "Third choice"
 
 msgid "address"
 msgstr "Address"
