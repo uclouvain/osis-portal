@@ -16,6 +16,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "address"
+msgstr "Adresse"
+
+msgid	 "city"
+msgstr	 "Ville"
+
 msgid	 "choose_internships"
 msgstr	 "Choisissez vos stages aux choix"
 
@@ -24,6 +30,9 @@ msgstr "Choisissez une spécialité"
 
 msgid	 "hospital_list"
 msgstr	 "Liste des hôpitaux"
+
+msgid	 "hospitals"
+msgstr	 "Hôpitaux"
 
 msgid "internship"
 msgstr "stage"
@@ -43,6 +52,9 @@ msgstr	 "Hôpital"
 msgid "preference"
 msgstr "Préférence"
 
+msgid "reference"
+msgstr "Référence"
+
 msgid "selection"
 msgstr "séléction"
 
@@ -54,3 +66,6 @@ msgstr	 "Résumé de vos choix et affectations"
 
 msgid "submit_choices"
 msgstr "Soumettre vos choix"
+
+msgid "website"
+msgstr "Site web"
