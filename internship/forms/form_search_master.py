@@ -23,18 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
-from internship.views import main, hospital, master
 
-urlpatterns = [
-    url(r'^$', main.view_internship_home, name='internship_home'),
-    url(r'^speciality_assignment/(?P<internship_id>[0-9]+)/$', main.assign_speciality_for_internship,
-        name='assign_speciality'),
-    url(r'^selection/(?P<internship_id>[0-9]+)/$', main.view_internship_selection, name='select_internship'),
-    url(r'^selection/(?P<internship_id>[0-9]+)/(?P<speciality_id>[0-9]+)/$', main.view_internship_selection,
-        name='select_internship_speciality'),
+from django import forms
+from internship.models import organization as mdl_organization
 
-    url(r'^hospitals/$', hospital.view_hospitals_list, name='hospitals_list'),
 
-    url(r'^masters/$', master.view_masters_list, name='masters_list'),
-]
+class SearchMasterForm(forms.Form):
+    def __init__(self, speciality_list, *args, **kwargs):
+        super(SearchMasterForm, self).__init__(*args, **kwargs)
+        modified_speciality_list = speciality_list.copy()
+        modified_speciality_list.insert(0, "")
+        self.fields['speciality'].choices = zip(modified_speciality_list, modified_speciality_list)
+
+    name = forms.CharField(max_length=255, required=False)
+    speciality = forms.ChoiceField(required=False)
+    organization = forms.ModelChoiceField(mdl_organization.Organization.objects.all(), required=False, empty_label="")

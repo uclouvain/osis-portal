@@ -24,7 +24,6 @@
 #
 ##############################################################################
 from django.db import models
-from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 

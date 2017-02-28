@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
@@ -26,38 +25,25 @@
 ############################################################################
 from django.contrib.auth.decorators import login_required, permission_required
 from base.views import layout
-from internship.forms.form_search_hospital import SearchHospitalForm
-from internship import models as mdl_internship
+from internship.models import internship_master as mdl_internship_master
+from internship.forms import form_search_master
 
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
-def view_hospitals_list(request):
-    cities = mdl_internship.organization_address.get_all_cities()
-    hospitals = []
-
-    if request.method == 'POST':
-        form = SearchHospitalForm(cities, request.POST)
+def view_masters_list(request):
+    specialities = mdl_internship_master.get_all_specialities()
+    masters = []
+    if request.method == "POST":
+        form = form_search_master.SearchMasterForm(specialities, request.POST)
         if form.is_valid():
             name = form.cleaned_data['name']
-            city = form.cleaned_data['city']
-            hospitals = get_hospitals(name=name, city=city)
+            speciality = form.cleaned_data['speciality']
+            organization = form.cleaned_data['organization']
+            masters = mdl_internship_master.search(name=name, speciality=speciality, organization=organization)
 
     else:
-        form = SearchHospitalForm(cities)
+        form = form_search_master.SearchMasterForm(specialities)
 
-    return layout.render(request, "hospitals.html", {'search_form': form,
-                                                     'hospitals': hospitals})
-
-
-def get_hospitals(name="", city=""):
-    if name:
-        organizations = mdl_internship.organization.search(name)
-    else:
-        organizations = mdl_internship.organization.Organization.objects.all()
-    hospitals = []
-    for organization in organizations:
-        organization_address = mdl_internship.organization_address.get_by_organization(organization)
-        if not city or organization_address.city == city:
-            hospitals.append((organization, organization_address))
-    return hospitals
+    return layout.render(request, "masters.html", {"masters": masters,
+                                                   "search_form": form})
