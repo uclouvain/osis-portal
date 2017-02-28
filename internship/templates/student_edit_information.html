@@ -50,7 +50,7 @@
                     {{ form.location.errors }}
                     <label for="{{ form.location.id_for_label }}">{% trans 'street' %}:</label>
                     <input type="text" class="form-control" id="{{ form.location.id_for_label }}"
-                           name="{{ form.location.html_name }}">
+                           name="{{ form.location.html_name }}" value="{{ form.location.value }}">
                 </div>
             </div>
 
@@ -59,14 +59,14 @@
                     {{ form.city.errors }}
                     <label for="{{ form.city.id_for_label }}">{% trans 'city' %}:</label>
                     <input type="text" class="form-control" id="{{ form.city.id_for_label }}"
-                           name="{{ form.city.html_name }}">
+                           name="{{ form.city.html_name }}" value="{{ form.city.value }}">
                 </div>
 
                 <div class="fieldWrapper col-md-4 form-group">
                     {{ form.postal_code.errors }}
                     <label for="{{ form.postal_code.id_for_label }}">{% trans 'postal_code' %}:</label>
                     <input type="text" class="form-control" id="{{ form.postal_code.id_for_label }}"
-                           name="{{ form.postal_code.html_name }}">
+                           name="{{ form.postal_code.html_name }}" value="{{ form.postal_code.value }}">
                 </div>
             </div>
 
@@ -76,7 +76,7 @@
                     {{ form.country.errors }}
                     <label for="{{ form.country.id_for_label }}">{% trans 'country' %}:</label>
                     <input type="text" class="form-control" id="{{ form.country.id_for_label }}"
-                           name="{{ form.country.html_name }}">
+                           name="{{ form.country.html_name }}" value="{{ form.country.value }}">
                 </div>
             </div>
 
@@ -86,14 +86,14 @@
                     {{ form.email.errors }}
                     <label for="{{ form.email.id_for_label }}">{% trans 'email' %}:</label>
                     <input type="email" class="form-control" id="{{ form.email.id_for_label }}"
-                           name="{{ form.email.html_name }}">
+                           name="{{ form.email.html_name }}" value="{{ form.email.value }}">
                 </div>
 
                 <div class="fieldWrapper col-md-4 form-group">
                     {{ form.phone_mobile.errors }}
                     <label for="{{ form.phone_mobile.id_for_label }}">{% trans 'phone' %}:</label>
                     <input type="tel" class="form-control" id="{{ form.phone_mobile.id_for_label }}"
-                           name="{{ form.phone_mobile.html_name }}">
+                           name="{{ form.phone_mobile.html_name }}" value="{{ form.phone_mobile.value }}">
                 </div>
 
             </div>

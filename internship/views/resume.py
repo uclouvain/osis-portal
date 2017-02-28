@@ -32,6 +32,7 @@ from internship.models import organization_address as mdl_organization_address
 from internship.models import internship_choice as mdl_internship_choice
 from internship.forms import form_internship_student_information
 from base.models import student as mdl_student
+from base.models import person as mdl_person
 
 
 @login_required
@@ -55,5 +56,14 @@ def view_student_resume(request):
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def edit_student_information(request):
-    form = form_internship_student_information.InternshipStudentInformationForm()
+    if request.method == "POST":
+        form = form_internship_student_information.InternshipStudentInformationForm(request.POST)
+        if form.is_valid():
+            person = mdl_person.find_by_user(request.user)
+            student_information = form.save(commit=False)
+            student_information.person = person
+            student_information.save()
+    else:
+        student_information = mdl_student_information.find_by_user(request.user)
+        form = form_internship_student_information.InternshipStudentInformationForm(instance=student_information)
     return layout.render(request, "student_edit_information.html", {"form": form})
