@@ -58,10 +58,13 @@ def get_hospitals(name="", city=""):
     hospitals = []
     for organization in organizations:
         organization_address = mdl_internship.organization_address.get_by_organization(organization)
-        if not city or organization_address.city == city:
+        if is_in_city(organization_address, city):
             hospitals.append((organization, organization_address))
     return hospitals
 
 
-
+def is_in_city(organization_address, city):
+    if not city:
+        return True
+    return False if not organization_address else organization_address.city == city
 

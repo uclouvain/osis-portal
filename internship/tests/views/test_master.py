@@ -26,7 +26,7 @@
 from django.test import TestCase, Client
 
 import base.tests.models.test_student
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.core.urlresolvers import reverse
 
 
@@ -37,6 +37,7 @@ class TestMasterUrl(TestCase):
         self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
         self.student.person.user = self.user
         self.student.person.save()
+        add_permission(self.student.person.user, "is_student")
 
     def test_can_access_masters_list(self):
         url = reverse("masters_list")
@@ -46,3 +47,12 @@ class TestMasterUrl(TestCase):
         self.c.force_login(self.user)
         response = self.c.get(url)
         self.assertEqual(response.status_code, 200)
+
+
+def add_permission(user, codename):
+    perm = get_permission(codename)
+    user.user_permissions.add(perm)
+
+
+def get_permission(codename):
+    return Permission.objects.get(codename=codename)
