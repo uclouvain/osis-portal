@@ -40,4 +40,3 @@ urlpatterns = [
 
     url(r'^resume/$', resume.view_student_resume, name='student_resume'),
 ]
-
