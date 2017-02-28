@@ -74,7 +74,7 @@
                 </div>
 
                 <br>
-                <form id="exam_enrollment_form" method="POST" action="#">
+                <form id="exam_enrollment_form" method="POST" action="{% url 'exam_enrollment_form' program.id %}">
                     {% csrf_token %}
                     <input type="hidden" name="current_number_session" value="{{ current_number_session }}"/>
                     <table class="table table-striped table-hover table-bordered" id="table_exam_enrollment_choice">

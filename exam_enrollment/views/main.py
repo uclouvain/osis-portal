@@ -34,6 +34,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.http import response
 from osis_common.queue import queue_sender
 from django.conf import settings
+import warnings
 
 
 @login_required
@@ -88,6 +89,13 @@ def _exam_enrollment_form_submission_message(off_year, request, stud):
 
 
 def _build_enrollments_by_learning_unit(request):
+    warnings.warn(
+        "The field named 'etat_to_inscr' is only used to call EPC services. It should be deleted when the exam "
+        "enrollment business will be implemented in Osis (not in EPC anymore). "
+        "The flag 'is_enrolled' should be sufficient for Osis."
+        "Do not forget to delete the hidden input field in the html template.",
+        DeprecationWarning
+    )
     current_number_session = request.POST['current_number_session']
     enrollments_by_learn_unit = []
     is_enrolled_by_acronym = _build_dicts_is_enrolled_by_acronym(current_number_session, request)
