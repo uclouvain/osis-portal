@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,18 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
+
+from django import forms
+from internship.models import organization as mdl_organization
 
 
-def create_learning_unit(data):
-    learning_unit = mdl_base.learning_unit.LearningUnit()
-    if 'acronym' in data:
-        learning_unit.acronym = data['acronym']
-    if 'title' in data:
-        learning_unit.title = data['title']
-    if 'description' in data:
-        learning_unit.description = data['description']
-    learning_unit.save()
-    return learning_unit
+class SearchMasterForm(forms.Form):
+    def __init__(self, speciality_list, *args, **kwargs):
+        super(SearchMasterForm, self).__init__(*args, **kwargs)
+        modified_speciality_list = speciality_list.copy()
+        modified_speciality_list.insert(0, "")
+        self.fields['speciality'].choices = zip(modified_speciality_list, modified_speciality_list)
 
-
+    name = forms.CharField(max_length=255, required=False)
+    speciality = forms.ChoiceField(required=False)
+    organization = forms.ModelChoiceField(mdl_organization.Organization.objects.all(), required=False, empty_label="")

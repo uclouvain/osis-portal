@@ -23,22 +23,30 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
-from internship.views import main, hospital, master, resume
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
+from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 
-urlpatterns = [
-    url(r'^$', main.view_internship_home, name='internship_home'),
-    url(r'^speciality_assignment/(?P<internship_id>[0-9]+)/$', main.assign_speciality_for_internship,
-        name='assign_speciality'),
 
-    url(r'^selection/$', main.view_internship_selection, name='select_internship'),
-    url(r'^selection/(?P<internship_id>[0-9]+)/$', main.view_internship_selection, name='select_specific_internship'),
-    url(r'^selection/(?P<internship_id>[0-9]+)/(?P<speciality_id>[0-9]+)/$', main.view_internship_selection,
-        name='select_internship_speciality'),
+class InternshipSpecialityAdmin(SerializableModelAdmin):
+    list_display = ('learning_unit', 'name', 'acronym', 'mandatory', 'order_postion')
+    fieldsets = ((None, {'fields': ('learning_unit', 'name', 'acronym', 'mandatory', 'order_postion')}),)
+    raw_id_fields = ('learning_unit',)
 
-    url(r'^hospitals/$', hospital.view_hospitals_list, name='hospitals_list'),
 
-    url(r'^masters/$', master.view_masters_list, name='masters_list'),
+class InternshipSpeciality(SerializableModel):
+    learning_unit = models.ForeignKey('base.LearningUnit')
+    name = models.CharField(max_length=125, blank=False, null=False)
+    acronym = models.CharField(max_length=125, blank=False, null=False)
+    mandatory = models.BooleanField(default=False)
+    order_postion = models.IntegerField(default=0)
 
-    url(r'^resume/$', resume.view_student_resume, name='student_resume'),
-]
+    def __str__(self):
+        return self.name
+
+
+def find_by_id(a_id):
+    try:
+        return InternshipSpeciality.objects.get(id=a_id)
+    except ObjectDoesNotExist:
+        return None

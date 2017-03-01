@@ -23,22 +23,38 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
-from internship.views import main, hospital, master, resume
 
-urlpatterns = [
-    url(r'^$', main.view_internship_home, name='internship_home'),
-    url(r'^speciality_assignment/(?P<internship_id>[0-9]+)/$', main.assign_speciality_for_internship,
-        name='assign_speciality'),
+from django import forms
+from django.utils.translation import ugettext_lazy as _
 
-    url(r'^selection/$', main.view_internship_selection, name='select_internship'),
-    url(r'^selection/(?P<internship_id>[0-9]+)/$', main.view_internship_selection, name='select_specific_internship'),
-    url(r'^selection/(?P<internship_id>[0-9]+)/(?P<speciality_id>[0-9]+)/$', main.view_internship_selection,
-        name='select_internship_speciality'),
 
-    url(r'^hospitals/$', hospital.view_hospitals_list, name='hospitals_list'),
+class OfferPreferenceForm(forms.Form):
+    PREFERENCE_CHOICES = (
+        ('0', '--'),
+        ('1', _('first_choice')),
+        ('2', _('second_choice')),
+        ('3', _('third_choice')),
+        ('4', _('fourth_choice'))
+    )
+    offer = forms.IntegerField()
+    preference = forms.ChoiceField(choices=PREFERENCE_CHOICES, required=True)
 
-    url(r'^masters/$', master.view_masters_list, name='masters_list'),
 
-    url(r'^resume/$', resume.view_student_resume, name='student_resume'),
-]
+class OfferPreferenceFormSet(forms.BaseFormSet):
+    def clean(self):
+        if any(self.errors):
+            return
+
+        preferences_made = {}
+        offers_selected = {}
+        for form in self.forms:
+            preference = form.cleaned_data['preference']
+            offer = form.cleaned_data['offer']
+            if not int(preference):
+                continue
+            preferences_made[preference] = preferences_made.get(preference, 0) + 1
+            offers_selected[offer] = offers_selected.get(offer, 0) + 1
+            if preferences_made[preference] > 1:
+                raise forms.ValidationError("Cannot apply same preference on distinct offers")
+            if offers_selected[offer] > 1:
+                raise forms.ValidationError("Cannot select same offer")

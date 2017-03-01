@@ -33,7 +33,7 @@ msgstr "Exam enrollment form successfully submitted."
 
 msgid "info_exam_enrollment_by_default"
 msgstr "<b>By default, you are already enrolled to all checked exams below. "
-       "<br>If it fit to your needs, you don't have any action to perform. </b>"
+       "<br>If it fits your needs, then you don't have to do anything. </b>"
        "<br>To modify your exam enrollments, "
        "please check/uncheck boxes below and then click on 'Validate changes'."
 

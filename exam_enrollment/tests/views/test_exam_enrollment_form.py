@@ -31,6 +31,7 @@ import json
 import random
 from base.tests.models import test_student, test_person, test_academic_year, test_offer_year
 from exam_enrollment.views import main
+import warnings
 
 
 def load_json_file(path):
@@ -110,6 +111,12 @@ class ExamEnrollmentFormTest(TestCase):
 
     @patch("osis_common.queue.queue_sender.send_message")
     def test_exam_enrollment_form_submission_message(self, send_message):
+        warnings.warn(
+            "The field named 'etat_to_inscr' is only used to call EPC services. It should be deleted when the exam "
+            "enrollment business will be implemented in Osis (not in EPC anymore). "
+            "The flag 'is_enrolled' should be sufficient for Osis.",
+            DeprecationWarning
+        )
         send_message.return_value = None
         self.client.force_login(self.user)
         post_data = {

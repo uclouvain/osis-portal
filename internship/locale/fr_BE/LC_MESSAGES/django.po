@@ -1,0 +1,133 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-05-03 08:56+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "address"
+msgstr "Adresse"
+
+msgid	 "city"
+msgstr	 "Ville"
+
+msgid	 "civility"
+msgstr	 "Civilité"
+
+msgid	 "choices_received_by_administration"
+msgstr	 "Choix reçus de l'administration"
+
+msgid	 "choose_internships"
+msgstr	 "Choisissez vos stages aux choix"
+
+msgid "choose_speciality"
+msgstr "Choisissez une spécialité"
+
+msgid "doctor"
+msgstr "Docteur"
+
+msgid "edit"
+msgstr "Modifier"
+
+msgid "edit_information"
+msgstr "Modifier information"
+
+msgid "first_choice"
+msgstr "Premier choix"
+
+msgid "fourth_choice"
+msgstr "Quatrième choix"
+
+msgid "generalist"
+msgstr "Généraliste"
+
+msgid	 "hospital_list"
+msgstr	 "Liste des hôpitaux"
+
+msgid	 "hospitals"
+msgstr	 "Hôpitaux"
+
+msgid "internship"
+msgstr "stage"
+
+msgid "internships"
+msgstr "Stages"
+
+msgid "internship_affectation"
+msgstr "Affectation de stages"
+
+msgid "internship_selection_warning_message"
+msgstr "<p>Si vous séléctionnez <strong>'Stage personnel'</strong> alors vous promettez de trouver un stage de votre"
+       "côté. Le nombre de <strong>'Stage personnel'</strong> est <strong>limité à 2 maximum</strong>.</p>"
+       "<p>Séléctionnez <strong>'Stage à l'étranger'</strong> seulement si vous avez <strong>déjà été séléctionné "
+       "</strong> pour un stage dans un autre pays.</p>"
+       "<p>Si vous comptez passer le <strong>'concours de Médecine générale'</strong> alors<strong> "
+       "vous ne pouvez choisir une spécialité que parmis les suivantes: <br> "
+       "<strong>chirurgie, dermatologie, gieriatrie, gynécologie-obstetrique, médecine interne, médecine physique, "
+       "neurologie adulte, ophtamologie, O.R.L, orthopedie, psychiatrie adulte, soins palliatifs, urgences, urologie."
+       "</strong></p>"
+
+msgid	 "masters"
+msgstr	 "Maîtres de stage"
+
+msgid	 "master_list"
+msgstr	 "Liste des maîtres de stage"
+
+msgid	 "mobile_phone"
+msgstr	 "Numéro de téléphone"
+
+msgid	 "number_first_choice"
+msgstr	 "Nombre de 1er choix"
+
+msgid	 "organization"
+msgstr	 "Hôpital"
+
+msgid "preference"
+msgstr "Préférence"
+
+msgid "professor"
+msgstr "Professeur"
+
+msgid "reference"
+msgstr "Référence"
+
+msgid "second_choice"
+msgstr "Second choix"
+
+msgid "selection"
+msgstr "séléction"
+
+msgid "specialist"
+msgstr "Spécialiste"
+
+msgid "speciality"
+msgstr "Spéciailté"
+
+msgid "student_information"
+msgstr "Information de l'étudiant"
+
+msgid "student_max"
+msgstr "Nombre maximum d'étudiants"
+
+msgid	 "student_resume"
+msgstr	 "Résumé de vos choix et affectations"
+
+msgid "submit_choices"
+msgstr "Soumettre vos choix"
+
+msgid "third_choice"
+msgstr "Troisième choix"
+
+msgid "website"
+msgstr "Site web"

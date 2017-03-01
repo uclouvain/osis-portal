@@ -1,0 +1,143 @@
+{% extends "dashboard_layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'internship_home' %}">{% trans 'internships' %}</a></li>
+    <li class="active">{% trans 'selection' %}</li>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>{% trans 'internships' %}</h2>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+
+        <div class="row">
+
+            <ul class="nav nav-tabs">
+                {% for non_mandatory_id in number_non_mandatory_internships %}
+                    <li role="presentation" {% if non_mandatory_id == intern_id %} class="active" {% endif %}><a href="{% url 'select_specific_internship' internship_id=non_mandatory_id  %}">{% trans 'internship'%} {{ non_mandatory_id }}</a></li>
+                {% endfor %}
+            </ul>
+
+        </div>
+
+        <br>
+
+        <div class="alert alert-warning alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+              {% trans 'internship_selection_warning_message'|safe %}
+        </div>
+
+        <div class="row">
+            <form action="{% url 'assign_speciality' internship_id=intern_id %}"  method="post">
+                {% csrf_token %}
+                {{ speciality_form.non_field_errors }}
+                <div class="fieldWrapper col-md-4 form-group">
+                    {{ speciality_form.speciality.errors }}
+                    <label for="{{ speciality_form.speciality.id_for_label }}">{% trans 'choose_speciality' %}:</label>
+                    <select id="{{ speciality_form.speciality.id_for_label }}"
+                            name="{{ speciality_form.speciality.html_name }}"
+                            class="form-control">
+                        {% for x,y in speciality_form.fields.speciality.choices %}
+                            <option value="{{ x }}"
+                                    {% if speciality_id == x %} selected {% endif %}>
+                                {{ y }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <br>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-ok"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <br>
+
+       <div class="row">
+           {% if offers_forms  %}
+           <form id="assign_preference" method="post">
+               {% csrf_token %}
+                {{ formset.management_form }}
+               <table class="table table-striped">
+                   <thead>
+                       <th>{% trans 'organization' %}</th>
+                       <th>{% trans 'student_max' %}</th>
+                       <th>{% trans 'number_first_choice' %}</th>
+                       <th>{% trans 'preference' %}</th>
+                   </thead>
+
+                    {% for offer_form in  offers_forms %}
+                        {% with offer=offer_form.0 %}
+                            {% with form=offer_form.1 %}
+                   <tr>
+                        <td>{{ offer.organization }}</td>
+                        <td>{{ offer.maximum_enrollments }}</td>
+                        <td> {{ formset.counter.preference }} </td>
+                        <td hidden>
+                            <input type="number" id="{{ form.offer.id_for_label }}" name="{{ form.offer.html_name }}" class="form-control" value="{{ offer.pk }}">
+                        </td>
+                        <td>
+                            <select id="{{ form.preference.id_for_label }}" name="{{ form.preference.html_name }}" class="form-control">
+                                {% for x,y in form.fields.preference.choices %}
+                                    <option value="{{ x }}">
+                                        {{ y }}
+                                    </option>
+                                 {% endfor %}
+                            </select>
+                        </td>
+                   </tr>
+                                {% endwith %}
+                        {% endwith %}
+                    {% endfor %}
+               </table>
+
+                <br>
+
+
+                <button type="submit" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    {% trans 'submit_choices' %}
+                </button>
+           </form>
+           {% endif %}
+
+       </div>
+
+    </div>
+</div>
+{% endblock %}

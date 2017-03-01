@@ -23,18 +23,36 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
+from django.test import TestCase, Client
+
+import base.tests.models.test_student
+from django.contrib.auth.models import User, Permission
+from django.core.urlresolvers import reverse
 
 
-def create_learning_unit(data):
-    learning_unit = mdl_base.learning_unit.LearningUnit()
-    if 'acronym' in data:
-        learning_unit.acronym = data['acronym']
-    if 'title' in data:
-        learning_unit.title = data['title']
-    if 'description' in data:
-        learning_unit.description = data['description']
-    learning_unit.save()
-    return learning_unit
+class TestResumeUrl(TestCase):
+    def setUp(self):
+        self.c = Client()
+        self.student = base.tests.models.test_student.create_student("45451298")
+        self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
+        self.student.person.user = self.user
+        self.student.person.save()
+        add_permission(self.student.person.user, "is_student")
+
+    def test_can_access_student_resume(self):
+        url = reverse("student_resume")
+        response = self.c.get(url)
+        self.assertEqual(response.status_code, 302)
+
+        self.c.force_login(self.user)
+        response = self.c.get(url)
+        self.assertEqual(response.status_code, 200)
 
 
+def add_permission(user, codename):
+    perm = get_permission(codename)
+    user.user_permissions.add(perm)
+
+
+def get_permission(codename):
+    return Permission.objects.get(codename=codename)

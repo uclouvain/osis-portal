@@ -23,18 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
+from django.test import TestCase
+from internship.forms import form_search_hospital
 
 
-def create_learning_unit(data):
-    learning_unit = mdl_base.learning_unit.LearningUnit()
-    if 'acronym' in data:
-        learning_unit.acronym = data['acronym']
-    if 'title' in data:
-        learning_unit.title = data['title']
-    if 'description' in data:
-        learning_unit.description = data['description']
-    learning_unit.save()
-    return learning_unit
-
-
+class TestSearchHospitalForm(TestCase):
+    def test_init(self):
+        cities = ['Anvers', 'Bruxelles', 'Ottignies']
+        form = form_search_hospital.SearchHospitalForm(cities)
+        self.assertListEqual(form.fields['city'].choices,
+                             [('', ''), ('Anvers', 'Anvers'), ('Bruxelles', 'Bruxelles'), ('Ottignies', 'Ottignies')])

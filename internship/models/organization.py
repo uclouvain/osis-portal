@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,18 +23,30 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
+from django.db import models
 
 
-def create_learning_unit(data):
-    learning_unit = mdl_base.learning_unit.LearningUnit()
-    if 'acronym' in data:
-        learning_unit.acronym = data['acronym']
-    if 'title' in data:
-        learning_unit.title = data['title']
-    if 'description' in data:
-        learning_unit.description = data['description']
-    learning_unit.save()
-    return learning_unit
+class OrganizationAdmin(SerializableModelAdmin):
+    list_display = ('name', 'acronym', 'reference', 'type')
+    fieldsets = ((None, {'fields': ('name', 'acronym', 'reference', 'website', 'type')}),)
+    search_fields = ['acronym']
 
 
+class Organization(SerializableModel):
+    name = models.CharField(max_length=255)
+    acronym = models.CharField(max_length=15, blank=True)
+    website = models.URLField(max_length=255, blank=True, null=True)
+    reference = models.CharField(max_length=30, blank=True, null=True)
+    type = models.CharField(max_length=30, blank=True, null=True, default="service partner")
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        self.acronym = self.name[:14]
+        super(Organization, self).save(*args, **kwargs)
+
+
+def search(name):
+    return Organization.objects.filter(name__contains=name)

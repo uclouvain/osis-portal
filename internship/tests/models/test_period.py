@@ -23,18 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
+
+from internship.models import period as mdl_period
+import datetime
 
 
-def create_learning_unit(data):
-    learning_unit = mdl_base.learning_unit.LearningUnit()
-    if 'acronym' in data:
-        learning_unit.acronym = data['acronym']
-    if 'title' in data:
-        learning_unit.title = data['title']
-    if 'description' in data:
-        learning_unit.description = data['description']
-    learning_unit.save()
-    return learning_unit
+def create_period(name="P1", start=datetime.date(2010, 1, 1), end=datetime.date(2010, 1, 20)):
+    period = mdl_period.Period(name=name, date_start=start, date_end=end)
+    period.save()
+    return period
 
 
