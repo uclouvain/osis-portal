@@ -25,7 +25,7 @@
 ##############################################################################
 from django.test import TestCase, Client
 import base.tests.models.test_student
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.core.urlresolvers import reverse
 from internship.tests.models import test_organization_address, test_organization
 from internship.views import hospital
@@ -38,6 +38,7 @@ class TestHospitalUrl(TestCase):
         self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
         self.student.person.user = self.user
         self.student.person.save()
+        add_permission(self.student.person.user, "is_student")
 
     def test_can_access_hospital_list(self):
         home_url = reverse("hospitals_list")
@@ -85,3 +86,20 @@ class TestGetHospitals(TestCase):
         self.assertEqual(len(hospitals), 1)
         self.assertIn((self.organization_2, self.organization_address_2), hospitals)
 
+    def test_with_organization_without_address(self):
+        organization = test_organization.create_organization(name="NO_ADDRESS")
+        hospitals = hospital.get_hospitals(name="NO_ADDRESS")
+        self.assertEqual(len(hospitals), 1)
+        self.assertIn((organization, None), hospitals)
+
+        hospitals = hospital.get_hospitals(name="NO_ADDRESS", city="city")
+        self.assertEqual(len(hospitals), 0)
+
+
+def add_permission(user, codename):
+    perm = get_permission(codename)
+    user.user_permissions.add(perm)
+
+
+def get_permission(codename):
+    return Permission.objects.get(codename=codename)

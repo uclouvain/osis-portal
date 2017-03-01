@@ -43,7 +43,7 @@ class InternshipChoice(SerializableModel):
     priority = models.BooleanField()
 
 
-def search(student=None, internship_choice=None):
+def search(student=None, internship_choice=None, speciality=None):
     has_criteria = False
     queryset = InternshipChoice.objects
 
@@ -53,6 +53,10 @@ def search(student=None, internship_choice=None):
 
     if internship_choice is not None:
         queryset = queryset.filter(internship_choice=internship_choice)
+        has_criteria = True
+
+    if speciality:
+        queryset = queryset.filter(speciality=speciality)
         has_criteria = True
 
     if has_criteria:

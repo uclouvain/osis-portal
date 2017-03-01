@@ -26,8 +26,12 @@
 from django.test import TestCase, Client
 
 import base.tests.models.test_student
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
+from internship.tests.models import test_internship_offer, test_organization, test_internship_speciality, \
+    test_internship_choice
+from internship.models import internship_choice as mdl_internship_choice
 
 
 class TestMain(TestCase):
@@ -37,6 +41,7 @@ class TestMain(TestCase):
         self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
         self.student.person.user = self.user
         self.student.person.save()
+        add_permission(self.student.person.user, "is_student")
 
     def test_can_access_internship_home(self):
         home_url = reverse("internship_home")
@@ -47,8 +52,17 @@ class TestMain(TestCase):
         response = self.c.get(home_url)
         self.assertEqual(response.status_code, 200)
 
+    def test_can_access_specific_internship_selection(self):
+        selection_url = reverse("select_internship")
+        response = self.c.get(selection_url)
+        self.assertEqual(response.status_code, 302)
+
+        self.c.force_login(self.user)
+        response = self.c.get(selection_url)
+        self.assertEqual(response.status_code, 200)
+
     def test_can_access_internship_selection(self):
-        selection_url = reverse("select_internship", kwargs={'internship_id': 0})
+        selection_url = reverse("select_specific_internship", kwargs={'internship_id': 1})
         response = self.c.get(selection_url)
         self.assertEqual(response.status_code, 302)
 
@@ -57,7 +71,7 @@ class TestMain(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_can_access_internship_selection_with_speciality(self):
-        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 0,
+        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 1,
                                                                         'speciality_id': 0})
         response = self.c.get(selection_url)
         self.assertEqual(response.status_code, 302)
@@ -65,3 +79,157 @@ class TestMain(TestCase):
         self.c.force_login(self.user)
         response = self.c.get(selection_url)
         self.assertEqual(response.status_code, 200)
+
+
+class TestSelectInternship(TestCase):
+    def setUp(self):
+        self.student = base.tests.models.test_student.create_student("45451298")
+        user = User.objects.create_user('user', 'user@test.com', 'userpass')
+        self.student.person.user = user
+        self.student.person.save()
+        add_permission(self.student.person.user, "is_student")
+        self.c = Client()
+        self.c.force_login(user)
+
+        self.speciality_1 = test_internship_speciality.create_speciality(name="urgence")
+        self.speciality_2 = test_internship_speciality.create_speciality(name="chirurgie")
+
+        self.organization_1 = test_organization.create_organization(reference="01")
+        self.organization_2 = test_organization.create_organization(reference="02")
+        self.organization_3 = test_organization.create_organization(reference="03")
+        self.organization_4 = test_organization.create_organization(reference="04")
+        self.organization_5 = test_organization.create_organization(reference="05")
+
+        self.offer_1 = test_internship_offer.create_specific_internship_offer(self.organization_1, self.speciality_1)
+        self.offer_2 = test_internship_offer.create_specific_internship_offer(self.organization_2, self.speciality_1)
+        self.offer_3 = test_internship_offer.create_specific_internship_offer(self.organization_3, self.speciality_1)
+        self.offer_4 = test_internship_offer.create_specific_internship_offer(self.organization_4, self.speciality_1)
+
+        self.offer_5 = test_internship_offer.create_specific_internship_offer(self.organization_1, self.speciality_2)
+        self.offer_6 = test_internship_offer.create_specific_internship_offer(self.organization_5, self.speciality_2)
+
+    def test_with_zero_choices(self):
+        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 1,
+                                                                        'speciality_id': self.speciality_1.id})
+        self.assertRaises(ValidationError, self.c.post, selection_url, {})
+
+    def test_with_one_choice(self):
+        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 1,
+                                                                        'speciality_id': self.speciality_2.id})
+        self.c.post(selection_url, data={'form-TOTAL_FORMS': '2',
+                                         'form-INITIAL_FORMS': '0',
+                                         'form-MIN_NUM_FORMS': '2',
+                                         'form-MAX_NUM_FORMS': '2',
+                                         'form-0-offer': str(self.offer_5.id),
+                                         'form-0-preference': '1',
+                                         'form-1-offer': str(self.offer_6.id),
+                                         'form-1-preference': '0'})
+        choices = list(mdl_internship_choice.search(student=self.student))
+
+        self.assertEqual(len(choices), 1)
+        self.assertEqual(choices[0].organization, self.organization_1)
+        self.assertEqual(choices[0].speciality, self.speciality_2)
+        self.assertEqual(choices[0].internship_choice, 1)
+        self.assertEqual(choices[0].choice, 1)
+
+    def test_with_multiple_choice(self):
+        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 1,
+                                                                        'speciality_id': self.speciality_1.id})
+        self.c.post(selection_url, data={'form-TOTAL_FORMS': '4',
+                                         'form-INITIAL_FORMS': '0',
+                                         'form-MIN_NUM_FORMS': '4',
+                                         'form-MAX_NUM_FORMS': '4',
+                                         'form-0-offer': str(self.offer_1.id),
+                                         'form-0-preference': '1',
+                                         'form-1-offer': str(self.offer_2.id),
+                                         'form-1-preference': '2',
+                                         'form-2-offer': str(self.offer_3.id),
+                                         'form-2-preference': '3',
+                                         'form-3-offer': str(self.offer_4.id),
+                                         'form-3-preference': '4'
+                                         })
+        choices = list(mdl_internship_choice.search(student=self.student))
+        self.assertEqual(len(choices), 4)
+
+        self.c.post(selection_url, data={'form-TOTAL_FORMS': '4',
+                                         'form-INITIAL_FORMS': '0',
+                                         'form-MIN_NUM_FORMS': '4',
+                                         'form-MAX_NUM_FORMS': '4',
+                                         'form-0-offer': str(self.offer_1.id),
+                                         'form-0-preference': '1',
+                                         'form-1-offer': str(self.offer_2.id),
+                                         'form-1-preference': '0',
+                                         'form-2-offer': str(self.offer_3.id),
+                                         'form-2-preference': '2',
+                                         'form-3-offer': str(self.offer_4.id),
+                                         'form-3-preference': '0'
+                                         })
+        choices = list(mdl_internship_choice.search(student=self.student))
+        self.assertEqual(len(choices), 2)
+
+    def test_with_incorrect_speciality(self):
+        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 1,
+                                                                        'speciality_id': self.speciality_1.id})
+        self.c.post(selection_url, data={'form-TOTAL_FORMS': '4',
+                                         'form-INITIAL_FORMS': '0',
+                                         'form-MIN_NUM_FORMS': '4',
+                                         'form-MAX_NUM_FORMS': '4',
+                                         'form-0-offer': str(self.offer_1.id),
+                                         'form-0-preference': '1',
+                                         'form-1-offer': str(self.offer_5.id),
+                                         'form-1-preference': '2',
+                                         'form-2-offer': str(self.offer_3.id),
+                                         'form-2-preference': '0',
+                                         'form-3-offer': str(self.offer_4.id),
+                                         'form-3-preference': '0'
+                                         })
+        choices = list(mdl_internship_choice.search(student=self.student))
+        self.assertEqual(len(choices), 1)
+
+    def test_replace_previous_choices(self):
+        previous_choice = test_internship_choice.create_internship_choice(test_organization.create_organization(),
+                                                                          self.student, self.speciality_1, 2)
+        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 2,
+                                                                        'speciality_id': self.speciality_2.id})
+        self.c.post(selection_url, data={'form-TOTAL_FORMS': '2',
+                                         'form-INITIAL_FORMS': '0',
+                                         'form-MIN_NUM_FORMS': '2',
+                                         'form-MAX_NUM_FORMS': '2',
+                                         'form-0-offer': str(self.offer_5.id),
+                                         'form-0-preference': '1',
+                                         'form-1-offer': str(self.offer_6.id),
+                                         'form-1-preference': '0'})
+        choices = list(mdl_internship_choice.search(student=self.student))
+        self.assertEqual(len(choices), 1)
+        self.assertNotEqual(previous_choice, choices[0])
+
+    def test_two_personal_internships_at_most(self):
+        organization = test_organization.create_organization(name="Stage personnel")
+        speciality = test_internship_speciality.create_speciality(name="Stage personnel",
+                                                                  acronym="STAGE PERSONNEL")
+        offer = test_internship_offer.create_specific_internship_offer(organization, speciality,
+                                                                       title="Stage personnel")
+        choice_1 = test_internship_choice.create_internship_choice(organization, self.student, speciality, 1)
+        choice_2 = test_internship_choice.create_internship_choice(organization, self.student, speciality, 2)
+
+        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 3,
+                                                                        'speciality_id': speciality.id})
+        self.c.post(selection_url, data={'form-TOTAL_FORMS': '1',
+                                         'form-INITIAL_FORMS': '0',
+                                         'form-MIN_NUM_FORMS': '1',
+                                         'form-MAX_NUM_FORMS': '1',
+                                         'form-0-offer': str(offer.id),
+                                         'form-0-preference': '1'})
+        choices = list(mdl_internship_choice.search(student=self.student))
+        self.assertEqual(len(choices), 2)
+        self.assertIn(choice_1, choices)
+        self.assertIn(choice_2, choices)
+
+
+def add_permission(user, codename):
+    perm = get_permission(codename)
+    user.user_permissions.add(perm)
+
+
+def get_permission(codename):
+    return Permission.objects.get(codename=codename)

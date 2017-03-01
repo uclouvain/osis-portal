@@ -27,10 +27,10 @@ from internship.models import internship_speciality as mdl_internship_speciality
 from base.tests.models import test_learning_unit
 
 
-def create_speciality(name="chirurgie"):
+def create_speciality(name="chirurgie", acronym="WSD"):
     learning_unit = test_learning_unit.create_learning_unit({"title": "stage medecine",
                                                              "acronym": "WSD"})
-    speciality = mdl_internship_speciality.InternshipSpeciality(learning_unit=learning_unit, name=name)
+    speciality = mdl_internship_speciality.InternshipSpeciality(learning_unit=learning_unit, name=name, acronym=acronym)
     speciality.save()
     return speciality
 

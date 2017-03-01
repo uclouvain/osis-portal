@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "dashboard_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -27,14 +27,15 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}">{% trans 'studies' %}</a></li>
-    <li><a href="{% url 'internships_home' %}">{% trans 'internships_managment' %}</a></li>
-    <li class="active">{% trans 'all_internships' %}</li>
+    <li><a href="{% url 'internship_home' %}">{% trans 'internships' %}</a></li>
+    <li class="active">{% trans 'selection' %}</li>
 {% endblock %}
+
 {% block content %}
 <div class="page-header">
     <h2>{% trans 'internships' %}</h2>
 </div>
+
 <div class="panel panel-default">
     <div class="panel-body">
 
@@ -42,7 +43,7 @@
 
             <ul class="nav nav-tabs">
                 {% for non_mandatory_id in number_non_mandatory_internships %}
-                    <li role="presentation" {% if non_mandatory_id == intern_id %} class="active" {% endif %}><a href="{% url 'select_internship' internship_id=non_mandatory_id  %}">{% trans 'internship_choice'%} {{ non_mandatory_id }}</a></li>
+                    <li role="presentation" {% if non_mandatory_id == intern_id %} class="active" {% endif %}><a href="{% url 'select_specific_internship' internship_id=non_mandatory_id  %}">{% trans 'internship'%} {{ non_mandatory_id }}</a></li>
                 {% endfor %}
             </ul>
 
@@ -50,19 +51,26 @@
 
         <br>
 
+        <div class="alert alert-warning alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+              {% trans 'internship_selection_warning_message'|safe %}
+        </div>
+
         <div class="row">
             <form action="{% url 'assign_speciality' internship_id=intern_id %}"  method="post">
                 {% csrf_token %}
                 {{ speciality_form.non_field_errors }}
                 <div class="fieldWrapper col-md-4 form-group">
                     {{ speciality_form.speciality.errors }}
-                    <label for="{{ speciality_form.speciality.id_for_label }}">Choose a speciality:</label>
+                    <label for="{{ speciality_form.speciality.id_for_label }}">{% trans 'choose_speciality' %}:</label>
                     <select id="{{ speciality_form.speciality.id_for_label }}"
                             name="{{ speciality_form.speciality.html_name }}"
                             class="form-control">
                         {% for x,y in speciality_form.fields.speciality.choices %}
                             <option value="{{ x }}"
-                                    {% if speciality_form.speciality.value == x|stringformat:"i" %} selected {% endif %}>
+                                    {% if speciality_id == x %} selected {% endif %}>
                                 {{ y }}
                             </option>
                         {% endfor %}
@@ -81,16 +89,16 @@
         <br>
 
        <div class="row">
-
+           {% if offers_forms  %}
            <form id="assign_preference" method="post">
                {% csrf_token %}
                 {{ formset.management_form }}
                <table class="table table-striped">
                    <thead>
-                       <th>organization</th>
-                       <th>student_max</th>
-                       <th>number_first_choice</th>
-                       <th>preference</th>
+                       <th>{% trans 'organization' %}</th>
+                       <th>{% trans 'student_max' %}</th>
+                       <th>{% trans 'number_first_choice' %}</th>
+                       <th>{% trans 'preference' %}</th>
                    </thead>
 
                     {% for offer_form in  offers_forms %}
@@ -101,7 +109,7 @@
                         <td>{{ offer.maximum_enrollments }}</td>
                         <td> {{ formset.counter.preference }} </td>
                         <td hidden>
-                            <input type="number" id="{{ form.offer.id_for_label }}" name="{{ form.offer.html_name }}" class="form-control" value="{{ offer.organization.pk }}">
+                            <input type="number" id="{{ form.offer.id_for_label }}" name="{{ form.offer.html_name }}" class="form-control" value="{{ offer.pk }}">
                         </td>
                         <td>
                             <select id="{{ form.preference.id_for_label }}" name="{{ form.preference.html_name }}" class="form-control">
@@ -120,13 +128,13 @@
 
                 <br>
 
-           {% if offers_forms  %}
+
                 <button type="submit" class="btn btn-primary">
                     <span class="glyphicon glyphicon-ok"></span>
-                    Submit choices
+                    {% trans 'submit_choices' %}
                 </button>
-           {% endif %}
            </form>
+           {% endif %}
 
        </div>
 

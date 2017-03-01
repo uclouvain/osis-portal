@@ -35,7 +35,6 @@ from django.forms import formset_factory
 
 
 @login_required
-@permission_required('base.is_student', raise_exception=True)
 def view_internship_home(request):
 
     return layout.render(request, "internship_home.html")
@@ -50,27 +49,31 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
     speciality = mdl_internship.internship_speciality.find_by_id(speciality_id)
     internships_offers = mdl_internship.internship_offer.find_by_speciality(speciality)
 
-    speciality_form = SpecialityForm()
     offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet,
-                                               extra=internships_offers.count())
+                                               extra=internships_offers.count(), min_num=internships_offers.count(),
+                                               max_num=internships_offers.count(), validate_min=True, validate_max=True)
     formset = offer_preference_formset()
 
     if request.method == 'POST':
         formset = offer_preference_formset(request.POST)
-        if formset.is_valid():
+        if formset.is_valid() and do_not_exceed_maximum_personnal_internship(speciality, student):
             remove_previous_choices(student, internship_id)
             save_student_choices(formset, student, int(internship_id), speciality)
 
+    return layout.render(request, "internship_selection.html",
+                         {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1),
+                          "speciality_form": SpecialityForm(),
+                          "formset": formset,
+                          "offers_forms": zip_offers_and_formset(formset, internships_offers),
+                          "speciality_id": int(speciality_id),
+                          "intern_id": int(internship_id)})
+
+
+def zip_offers_and_formset(formset, internships_offers):
     zipped_data = None
     if internships_offers:
         zipped_data = zip(internships_offers, formset)
-
-    return layout.render(request, "internship_selection.html",
-                         {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1),
-                          "speciality_form": speciality_form,
-                          "formset": formset,
-                          "offers_forms": zipped_data,
-                          "intern_id": int(internship_id)})
+    return zipped_data
 
 
 @login_required
@@ -82,6 +85,7 @@ def assign_speciality_for_internship(request, internship_id):
         if speciality_form.is_valid():
             speciality_selected = speciality_form.cleaned_data["speciality"]
             speciality_id = speciality_selected.id
+
     return redirect("select_internship_speciality", internship_id=internship_id, speciality_id=speciality_id)
 
 
@@ -95,9 +99,9 @@ def save_student_choices(formset, student, internship_id, speciality):
     for form in formset:
         if form.cleaned_data:
             offer_pk = form.cleaned_data["offer"]
-            preference_value = form.cleaned_data["preference"]
-            if has_been_selected(preference_value):
-                offer = mdl_internship.internship_offer.find_by_pk(offer_pk)
+            preference_value = int(form.cleaned_data["preference"])
+            offer = mdl_internship.internship_offer.find_by_pk(offer_pk)
+            if has_been_selected(preference_value) and is_correct_speciality(offer, speciality):
                 internship_choice = mdl_internship.internship_choice.InternshipChoice(student=student,
                                                                                       organization=offer.organization,
                                                                                       speciality=speciality,
@@ -108,5 +112,16 @@ def save_student_choices(formset, student, internship_id, speciality):
 
 
 def has_been_selected(preference_value):
-    return preference_value != 0
+    return bool(preference_value)
 
+
+def is_correct_speciality(offer, speciality):
+    return offer.speciality == speciality
+
+
+def do_not_exceed_maximum_personnal_internship(speciality, student):
+    if speciality.acronym != "STAGE PERSONNEL":
+        return True
+    number_choices_personal_internship = \
+        mdl_internship.internship_choice.search(student=student, speciality=speciality).count()
+    return number_choices_personal_internship < 2
