@@ -27,6 +27,12 @@ from base import models as mdl_base
 from base.tests.models.test_academic_year import create_academic_year
 
 
+def create_offer_year_from_kwargs(**kwargs):
+    off = mdl_base.offer_year.OfferYear(**kwargs)
+    off.save()
+    return off
+
+
 def create_offer_year():
     an_offer_year = mdl_base.offer_year.OfferYear()
     an_offer_year.academic_year = create_academic_year()

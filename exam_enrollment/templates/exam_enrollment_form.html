@@ -74,70 +74,76 @@
                 </div>
 
                 <br>
-
-                <table class="table table-striped table-hover table-bordered" id="table_exam_enrollment_choice">
-                    <tr>
-                        <th>{% trans 'course' %}</th>
-                        <th>{% trans 'title' %}</th>
-                        <th>{% trans 'ects' %}</th>
-                        <th>{% trans 'inscr' %}</th>
-                        <th {% if current_number_session > 1 %} colspan="2" {% endif %} class="text-nowrap">{% trans 'jan' %} *</th>
-                        <th {% if current_number_session > 2 %} colspan="2" {% endif %} class="text-nowrap">{% trans 'june' %} *</th>
-                        <th class="text-nowrap">{% trans 'sept' %} *</th>
-                        <th>{% trans 'credited' %}</th>
-                    </tr>
-                    {% for exam_enrol in exam_enrollments %}
+                <form id="exam_enrollment_form" method="POST" action="{% url 'exam_enrollment_form' program.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="current_number_session" value="{{ current_number_session }}"/>
+                    <table class="table table-striped table-hover table-bordered" id="table_exam_enrollment_choice">
                         <tr>
-                            <td>{{ exam_enrol.learning_unit_year.acronym }}</td>
-                            <td>{{ exam_enrol.learning_unit_year.title | default_if_none:"" }}</td>
-                            <td class="text-center">{{ exam_enrol.credits | default_if_none:"-" }}</td>
-                            <td class="text-center">{{ exam_enrol.learning_unit_year.enrollment_state | default_if_none:"-" }}</td>
-                            {% if current_number_session == 1 %}
-                                <td class="text-center">
-                                    <input id="chckbox_exam_enrol__sess1_{{ exam_enrol.learning_unit_year.acronym }}"
-                                            {% if exam_enrol.enrolled_by_default %} checked {% endif %}
-                                           name="exam_enroll_sess_1"
-                                           type="checkbox">
-                                </td>
-                            {% else %}
-                                <td>{{ exam_enrol.session_1.score | default_if_none:"-" }}</td>
-                                <td>{{ exam_enrol.session_1.enrollment_state | default_if_none:"-" }}</td>
-                            {% endif %}
-                            {% if current_number_session == 2 %}
-                                <td class="text-center">
-                                    <input id="chckbox_exam_enrol__sess2_{{ exam_enrol.learning_unit_year.acronym }}"
-                                            {% if exam_enrol.enrolled_by_default %} checked {% endif %}
-                                           name="exam_enroll_sess_2"
-                                           type="checkbox">
-                                </td>
-                            {% elif current_number_session > 2 %}
-                                <td>{{ exam_enrol.session_2.score | default_if_none:"-" }}</td>
-                                <td>{{ exam_enrol.session_2.enrollment_state | default_if_none:" " }}</td>
-                            {% else %}
-                                <td>&nbsp;</td>
-                            {% endif %}
-                            {% if current_number_session == 3 %}
-                                <td class="text-center">
-                                    <input id="chckbox_exam_enrol__sess3_{{ exam_enrol.learning_unit_year.acronym }}"
-                                            {% if exam_enrol.enrolled_by_default %} checked {% endif %}
-                                           name="exam_enroll_sess_3"
-                                           type="checkbox">
-                                </td>
-                            {% else %}
-                                <td>&nbsp;</td>
-                            {% endif %}
-                            <td class="text-center">{{ exam_enrol.credited | default_if_none:"-" }}</td>
+                            <th>{% trans 'course' %}</th>
+                            <th>{% trans 'title' %}</th>
+                            <th>{% trans 'ects' %}</th>
+                            <th>{% trans 'inscr' %}</th>
+                            <th {% if current_number_session > 1 %} colspan="2" {% endif %} class="text-nowrap">{% trans 'jan' %} *</th>
+                            <th {% if current_number_session > 2 %} colspan="2" {% endif %} class="text-nowrap">{% trans 'june' %} *</th>
+                            <th class="text-nowrap">{% trans 'sept' %} *</th>
+                            <th>{% trans 'credited' %}</th>
                         </tr>
-                    {% endfor %}
-                </table>
+                        {% for exam_enrol in exam_enrollments %}
+                            <input type="hidden"
+                                   name="etat_to_inscr_current_session_{{ exam_enrol.learning_unit_year.acronym }}"
+                                   value="{{ exam_enrol.etat_to_inscr_current_session }}"/>
+                            <tr>
+                                <td>{{ exam_enrol.learning_unit_year.acronym }}</td>
+                                <td>{{ exam_enrol.learning_unit_year.title | default_if_none:"" }}</td>
+                                <td class="text-center">{{ exam_enrol.credits | default_if_none:"-" }}</td>
+                                <td class="text-center">{{ exam_enrol.learning_unit_year.enrollment_state | default_if_none:"-" }}</td>
+                                {% if current_number_session == 1 %}
+                                    <td class="text-center">
+                                        <input id="chckbox_exam_enrol_sess1_{{ exam_enrol.learning_unit_year.acronym }}"
+                                                {% if exam_enrol.enrolled_by_default %} checked {% endif %}
+                                               name="chckbox_exam_enrol_sess1_{{ exam_enrol.learning_unit_year.acronym }}"
+                                               type="checkbox">
+                                    </td>
+                                {% else %}
+                                    <td>{{ exam_enrol.session_1.score | default_if_none:"-" }}</td>
+                                    <td>{{ exam_enrol.session_1.enrollment_state | default_if_none:"-" }}</td>
+                                {% endif %}
+                                {% if current_number_session == 2 %}
+                                    <td class="text-center">
+                                        <input id="chckbox_exam_enrol_sess2_{{ exam_enrol.learning_unit_year.acronym }}"
+                                                {% if exam_enrol.enrolled_by_default %} checked {% endif %}
+                                               name="chckbox_exam_enrol_sess2_{{ exam_enrol.learning_unit_year.acronym }}"
+                                               type="checkbox">
+                                    </td>
+                                {% elif current_number_session > 2 %}
+                                    <td>{{ exam_enrol.session_2.score | default_if_none:"-" }}</td>
+                                    <td>{{ exam_enrol.session_2.enrollment_state | default_if_none:" " }}</td>
+                                {% else %}
+                                    <td>&nbsp;</td>
+                                {% endif %}
+                                {% if current_number_session == 3 %}
+                                    <td class="text-center">
+                                        <input id="chckbox_exam_enrol_sess3_{{ exam_enrol.learning_unit_year.acronym }}"
+                                                {% if exam_enrol.enrolled_by_default %} checked {% endif %}
+                                               name="chckbox_exam_enrol_sess3_{{ exam_enrol.learning_unit_year.acronym }}"
+                                               type="checkbox">
+                                    </td>
+                                {% else %}
+                                    <td>&nbsp;</td>
+                                {% endif %}
+                                <td class="text-center">{{ exam_enrol.credited | default_if_none:"-" }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
 
-                <div class="row">
-                    <div class="text-center">
-                        <button class="btn btn-primary" id="bt_validate_exam_enrol_form"
-                                data-toggle="tooltip" data-placement="bottom" title="{% trans 'validate_exam_enrol_form_description' %}">
-                            <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> {% trans 'validate_changes' %}</button>
+                    <div class="row">
+                        <div class="text-center">
+                            <button class="btn btn-primary" id="bt_validate_exam_enrol_form" type="submit"
+                                    data-toggle="tooltip" data-placement="bottom" title="{% trans 'validate_exam_enrol_form_description' %}">
+                                <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> {% trans 'validate_changes' %}</button>
+                        </div>
                     </div>
-                </div>
+                </form>
 
                 <br>
 

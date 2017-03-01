@@ -31,6 +31,8 @@
     <h2>{% trans 'dashboard' %}</h2>
 </div>
 
+    {% include "template_messages.html" %}
+
 <div class="panel panel-default">
     <div class="panel-body dashboard-grid">
         {% if perms.base.is_tutor %}

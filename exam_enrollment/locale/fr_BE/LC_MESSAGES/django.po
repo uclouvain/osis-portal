@@ -28,6 +28,9 @@ msgstr "Choisissez à quels examens vous désirez vous inscrire pour la prochain
 msgid "exams_enrollment"
 msgstr "Inscription aux examens"
 
+msgid "exam_enrollment_form_submitted"
+msgstr "Formulaire d'inscription aux examens soumis avec succès."
+
 msgid "info_exam_enrollment_by_default"
 msgstr "<b>Par défaut, vous êtes déjà inscrit à tous les examens cochés ci-dessous. "
        "<br>Si cela vous convient, vous n'avez aucune action à effectuer.</b>"
