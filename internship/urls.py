@@ -30,7 +30,9 @@ urlpatterns = [
     url(r'^$', main.view_internship_home, name='internship_home'),
     url(r'^speciality_assignment/(?P<internship_id>[0-9]+)/$', main.assign_speciality_for_internship,
         name='assign_speciality'),
-    url(r'^selection/(?P<internship_id>[0-9]+)/$', main.view_internship_selection, name='select_internship'),
+
+    url(r'^selection/$', main.view_internship_selection, name='select_internship'),
+    url(r'^selection/(?P<internship_id>[0-9]+)/$', main.view_internship_selection, name='select_specific_internship'),
     url(r'^selection/(?P<internship_id>[0-9]+)/(?P<speciality_id>[0-9]+)/$', main.view_internship_selection,
         name='select_internship_speciality'),
 
