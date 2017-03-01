@@ -25,18 +25,16 @@
 ##############################################################################
 import locale
 from functools import cmp_to_key
-
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
-
 from admission import models as mdl
+from admission.models.enums import application_type
 from base import models as mdl_base
 from admission.views import common, navigation
 from reference import models as mdl_reference
 from admission.views import demande_validation
 from reference.enums import education_institution_type, education_institution_national_comunity as national_cmunity_type
 
-CURRICULUM_YEARS_REQUIRED = 5
 MAX_CREDITS = 75
 
 
@@ -162,8 +160,13 @@ def update(request, application_id=None):
     admission = is_admission(applicant, secondary_education)
     year_secondary = None
     year = None
+    if application.application_type == application_type.ADMISSION and secondary_education.academic_year:
+        curriculum_years_required = current_academic_year - secondary_education.academic_year + 1
+    else:
+        curriculum_years_required = 5
+
     if current_academic_year:
-        year = current_academic_year - CURRICULUM_YEARS_REQUIRED
+        year = current_academic_year - curriculum_years_required
     if secondary_education is None:
         pass
     else:
@@ -186,7 +189,7 @@ def update(request, application_id=None):
                 curriculum.person = applicant
                 curriculum.academic_year = year
             curricula.append(curriculum)
-            year = year + 1
+            year += 1
     local_universities_french = mdl_reference.education_institution \
         .find_by_institution_type_national_community(education_institution_type.UNIVERSITY,
                                                      national_cmunity_type.FRENCH,
@@ -307,7 +310,7 @@ def validate_fields_form(request, duplicate_year_origin):
                 duplication_possible = False
         curricula.append(curriculum)
 
-        cpt = cpt + 1
+        cpt += 1
 
     return is_valid, validation_messages, curricula, universities_cities, universities, duplication_possible
 
@@ -327,7 +330,7 @@ def validate_local_fields_form(curriculum, curriculum_year, validation_messages,
         else:
             curriculum.national_education = data_dict['national_education']
             if curriculum.national_education == 'FRENCH':
-                curriculum.language = mdl_reference.language.find_by_code('fr')
+                curriculum.language = mdl_reference.language.find_by_code('FR')
                 if data_dict['national_institution_french'] is None \
                         or data_dict['national_institution_french'] == '-':
                     validation_messages['national_institution_french_%s' % curriculum_year] = _('mandatory_field')
@@ -338,7 +341,7 @@ def validate_local_fields_form(curriculum, curriculum_year, validation_messages,
                     curriculum.national_institution = national_institution
             else:
                 if curriculum.national_education == 'DUTCH':
-                    curriculum.language = mdl_reference.language.find_by_code('nl')
+                    curriculum.language = mdl_reference.language.find_by_code('NL')
                     if data_dict['national_institution_dutch'] is None \
                             or data_dict['national_institution_dutch'] == '-':
                         validation_messages['national_institution_dutch_%s' % curriculum_year] = _('mandatory_field')
@@ -376,8 +379,8 @@ def validate_local_fields_form(curriculum, curriculum_year, validation_messages,
             grade_type = mdl_reference.grade_type.find_by_id(int(data_dict['grade_type']))
             curriculum.grade_type = grade_type
         if data_dict['result_national'] is None \
-                and (curriculum.academic_year.year < 2014 or
-                     (curriculum.academic_year.year >= 2014 and curriculum.diploma)):
+                and (int(curriculum.academic_year) < 2014 or
+                     (int(curriculum.academic_year) >= 2014 and curriculum.diploma)):
             validation_messages['result_national_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
         else:
@@ -443,7 +446,7 @@ def validate_local_fields_form(curriculum, curriculum_year, validation_messages,
         if data_dict['diploma'] == "true":
             curriculum.diploma = True
 
-    if curriculum.academic_year.year >= 2014:
+    if int(curriculum.academic_year) >= 2014:
         if data_dict['credits_enrolled'] is None or len(data_dict['credits_enrolled']) == 0:
             validation_messages['credits_enrolled_%s' % curriculum_year] = _('mandatory_field')
             is_valid = False
@@ -463,7 +466,7 @@ def validate_local_fields_form(curriculum, curriculum_year, validation_messages,
             validation_messages['credits_enrolled_%s' % curriculum_year] = _('numeric_field')
             is_valid = False
 
-    if curriculum.academic_year.year >= 2014:
+    if int(curriculum.academic_year) >= 2014:
         if data_dict['credits_obtained'] is None \
                 or len(data_dict['credits_obtained']) == 0:
             validation_messages['credits_obtained_%s' % curriculum_year] = _('mandatory_field')
