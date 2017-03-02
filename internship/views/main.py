@@ -49,10 +49,11 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
 
     speciality = mdl_internship.internship_speciality.find_by_id(speciality_id)
     internships_offers = mdl_internship.internship_offer.find_by_speciality(speciality)
+    selectable_offers = list(filter(lambda x: x.selectable, internships_offers))
 
     offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet,
-                                               extra=internships_offers.count(), min_num=internships_offers.count(),
-                                               max_num=internships_offers.count(), validate_min=True, validate_max=True)
+                                               extra=len(selectable_offers), min_num=len(selectable_offers),
+                                               max_num=len(selectable_offers), validate_min=True, validate_max=True)
     formset = offer_preference_formset()
 
     if request.method == 'POST':
@@ -65,9 +66,10 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
                          {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1),
                           "speciality_form": SpecialityForm(),
                           "formset": formset,
-                          "offers_forms": zip_offers_and_formset(formset, internships_offers),
+                          "offers_forms": zip_offers_and_formset(formset, selectable_offers),
                           "speciality_id": int(speciality_id),
-                          "intern_id": int(internship_id)})
+                          "intern_id": int(internship_id),
+                          "can_submit": len(selectable_offers) > 0})
 
 
 def zip_offers_and_formset(formset, internships_offers):

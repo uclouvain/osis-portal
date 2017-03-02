@@ -128,11 +128,12 @@
 
                 <br>
 
-
+                {% if can_submit%}
                 <button type="submit" class="btn btn-primary">
                     <span class="glyphicon glyphicon-ok"></span>
                     {% trans 'submit_choices' %}
                 </button>
+                {% endif %}
            </form>
            {% endif %}
 
