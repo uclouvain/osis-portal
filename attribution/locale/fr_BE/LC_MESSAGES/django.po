@@ -292,3 +292,18 @@ msgstr ""
 
 msgid "remove"
 msgstr "Annuler la candidature"
+
+msgid "attribution_administration"
+msgstr "Administration des attributions"
+
+msgid "attributions"
+msgstr "Attributions"
+
+msgid "global_id"
+msgstr "Matricule fgs"
+
+msgid "no_tutor_with_this_global_id"
+msgstr "Aucun enseignant avec ce matricule!"
+
+msgid "teaching_charge"
+msgstr "Charge d'enseignement"

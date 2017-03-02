@@ -33,7 +33,7 @@ from base.tests.models import test_person, test_tutor, test_academic_year, test_
 from attribution.tests.models import test_attribution_charge, test_attribution, test_application_charge, test_tutor_application
 from attribution.models.enums import function
 from base import models as mdl_base
-from attribution import models as mdl_attribution
+
 
 now = datetime.datetime.now()
 
@@ -131,9 +131,9 @@ class OnlineApplicationTest(TestCase):
         unused_year = CURRENT_YEAR+10
         an_new_academic_year = test_academic_year.create_academic_year_with_year(unused_year)
         acronym_1 = 'LMECA2125'
-        learning_unit_year_1 = self.create_learning_unit_year_annual_data(acronym_1, TITLE, an_new_academic_year, self.a_tutor, unused_year, unused_year+1)
-        acronym_2='LSTAT8125'
-        learning_unit_year_2 = self.create_learning_unit_year_annual_data(acronym_2, TITLE, an_new_academic_year, self.a_tutor,unused_year, unused_year+1)
+        self.create_learning_unit_year_annual_data(acronym_1, TITLE, an_new_academic_year, self.a_tutor, unused_year, unused_year+1)
+        acronym_2 = 'LSTAT8125'
+        self.create_learning_unit_year_annual_data(acronym_2, TITLE, an_new_academic_year, self.a_tutor, unused_year, unused_year+1)
         self.assertEqual(len(online_application.get_attributions_allocated(an_new_academic_year.year, self.a_tutor)), 2)
 
     def test_sum_attribution_allocation_charges(self):
@@ -204,7 +204,7 @@ class OnlineApplicationTest(TestCase):
         a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
             'acronym': a_learning_unit.acronym,
             'academic_year': a_next_academic_yr,
-        'learning_unit': a_learning_unit})
+            'learning_unit': a_learning_unit})
         self.assertEquals(online_application.define_renew_possible(self.a_tutor, a_learning_unit_year, None), False)
 
     def test_define_renew_existing_academic_year_true(self):

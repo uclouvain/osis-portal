@@ -34,9 +34,8 @@ from base.models.enums import component_type
 from attribution.models.enums import function
 from performance.tests.models import test_student_performance
 from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
-    test_learning_unit_component, test_offer_enrollment, test_learning_unit_enrollment, test_offer_year, test_student
+    test_learning_unit_component
 from attribution.tests.models import test_attribution_charge, test_attribution
-from decimal import *
 
 
 REGISTRATION_ID = '64641200'
@@ -75,7 +74,7 @@ class TutorChargeTest(TestCase):
             'title': TITLE,
             'academic_year': an_academic_yr,
             'weight': WEIGHT,
-            'vacant' : True,
+            'vacant': True,
             'in_charge': True})
         a_learning_unit_component_lecture = self.create_learning_unit_component(component_type.LECTURING,
                                                                                 LEARNING_UNIT_LECTURING_DURATION,
@@ -130,12 +129,6 @@ class TutorChargeTest(TestCase):
             'academic_year': test_academic_year.create_academic_year_with_year(2016)})
         return a_learning_unit_year_without_duration
 
-    def create_student(self, cpt):
-        a_student_user = self.create_user(username='student{0}'.format(cpt),
-                                          email='student{0}@localhost'.format(cpt),
-                                          password='top_student')
-        return test_student.create_student_with_registration_person(cpt, test_person.create_person_with_user(a_student_user))
-
     def test_get_person_from_user(self):
         self.assertEqual(tutor_charge.get_person(self.a_user), self.a_person)
 
@@ -147,36 +140,28 @@ class TutorChargeTest(TestCase):
         data_year = self.data[0]
         return data_year.get(key, None)
 
-    def create_student_performance(a_learning_unit_year):
-        with open("performance/tests/ressources/points.json") as f:
-            data = json.load(f)
-
-        a_student_performance = mdl_performance.student_performance.StudentPerformance(acronym=ACRONYM,
-                                                                                       registration_id=REGISTRATION_ID,
-                                                                                       academic_year=a_learning_unit_year.academic_year.year,
-                                                                                       update_date=datetime.datetime.now(),
-                                                                                       data=data)
-        a_student_performance.save()
-        return a_student_performance
-
     def test_get_attribution_charge_lecturing_duration(self):
-        self.assertEqual(tutor_charge.get_attribution_allocation_charge(self.a_tutor,
-                                                                         self.get_data('learning_unit_year'),
-                                                                         component_type.LECTURING), ATTRIBUTION_CHARGE_LECTURING_DURATION)
+        self.assertEqual(tutor_charge.attribution_allocation_charges(self.a_tutor,
+                                                                     self.get_data('learning_unit_year'),
+                                                                     component_type.LECTURING),
+                         ATTRIBUTION_CHARGE_LECTURING_DURATION)
 
     def test_get_attribution_charge_practice_exercises_duration(self):
-        self.assertEqual(tutor_charge.get_attribution_allocation_charge(self.a_tutor,
-                                                                         self.get_data('learning_unit_year'),
-                                                                         component_type.PRACTICAL_EXERCISES), ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION)
+        self.assertEqual(tutor_charge.attribution_allocation_charges(self.a_tutor,
+                                                                        self.get_data('learning_unit_year'),
+                                                                        component_type.PRACTICAL_EXERCISES),
+                         ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION)
 
     def test_sum_learning_unit_year_duration(self):
-        self.assertEqual(tutor_charge.sum_learning_unit_year_duration(self.get_data('learning_unit_year')), LEARNING_UNIT_LECTURING_DURATION + LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION)
+        self.assertEqual(tutor_charge.sum_learning_unit_year_duration(self.get_data('learning_unit_year')),
+                         LEARNING_UNIT_LECTURING_DURATION + LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION)
 
     def test_sum_learning_unit_year_with_no_duration(self):
         self.assertEqual(tutor_charge.sum_learning_unit_year_duration(self.create_learning_unit_year_without_duration()), 0)
 
     def test_calculate_percentage_allocation_charge(self):
-        self.assertEqual(tutor_charge.calculate_attribution_format_percentage_allocation_charge(self.get_data('learning_unit_year'), self.get_data('attribution')), self.calculate_formatted_percentage())
+        self.assertEqual(tutor_charge.calculate_attribution_format_percentage_allocation_charge(self.get_data('learning_unit_year'),
+                                                                                                self.get_data('attribution')), self.calculate_formatted_percentage())
 
     def test_calculate_percentage_allocation_charge_with_no_duration(self):
         self.assertIsNone(tutor_charge.calculate_attribution_format_percentage_allocation_charge(
@@ -199,7 +184,8 @@ class TutorChargeTest(TestCase):
 
     def test_list_attributions(self):
         list_attributions = [self.get_data('attribution')]
-        self.assertEqual(list(tutor_charge.list_attributions(self.a_person, self.get_data('academic_year'))), list_attributions)
+        self.assertEqual(list(tutor_charge.list_attributions(self.a_person, self.get_data('academic_year'))),
+                         list_attributions)
 
     def test_attribution_years(self):
         list_years = [NEXT_YEAR, CURRENT_YEAR]
@@ -219,8 +205,8 @@ class TutorChargeTest(TestCase):
             'academic_year': an_academic_yr,
             'weight': WEIGHT})
         self.assertEqual(tutor_charge.get_sessions_results(student_performance.registration_id,
-                                                            a_learning_unit_year,
-                                                            student_performance.acronym)
+                                                           a_learning_unit_year,
+                                                           student_performance.acronym)
                          , {tutor_charge.JANUARY:
                                 {tutor_charge.JSON_LEARNING_UNIT_NOTE: '13.0',
                                  tutor_charge.JSON_LEARNING_UNIT_STATUS: 'I'},
@@ -237,3 +223,17 @@ class TutorChargeTest(TestCase):
 
     def test_get_no_student_performance_data_dict(self):
         self.assertIsNone(tutor_charge.get_student_data_dict(None))
+
+    def test_no_current_academic_year(self):
+        a_year = datetime.datetime.now().year
+        self.assertEqual(tutor_charge.get_current_academic_year(), a_year)
+
+    def test_string_none(self):
+        self.assertFalse(tutor_charge.is_string_not_null_empty(None))
+
+    def test_string_empty(self):
+        self.assertFalse(tutor_charge.is_string_not_null_empty(""))
+
+    def test_string_not_empty(self):
+        self.assertTrue(tutor_charge.is_string_not_null_empty("test"))
+

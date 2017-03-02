@@ -25,7 +25,9 @@
             [
                 "is_tutor",
                 "base",
-                "person"
+                "person",
+                "can_access_attribution",
+                "can_access_attribution_application"
             ]
         ]
     }
