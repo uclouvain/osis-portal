@@ -79,7 +79,7 @@ class TestEditStudentInformation(TestCase):
             "country": "country",
             "email": "test@test.com",
             "phone_mobile": "0236478987",
-            "contest": "GENERALIST"
+            "contest": "SSWM",
         }
 
     def test_information_save(self):
