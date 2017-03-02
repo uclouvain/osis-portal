@@ -31,7 +31,7 @@ from internship import models as mdl_internship
 
 
 @login_required
-@permission_required('base.is_student', raise_exception=True)
+@permission_required('internship.can_access_internship', raise_exception=True)
 def view_hospitals_list(request):
     cities = mdl_internship.organization_address.get_all_cities()
     hospitals = []

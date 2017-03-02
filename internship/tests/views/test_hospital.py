@@ -38,7 +38,7 @@ class TestHospitalUrl(TestCase):
         self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
         self.student.person.user = self.user
         self.student.person.save()
-        add_permission(self.student.person.user, "is_student")
+        add_permission(self.student.person.user, "can_access_internship")
 
     def test_can_access_hospital_list(self):
         home_url = reverse("hospitals_list")

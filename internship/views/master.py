@@ -30,7 +30,7 @@ from internship.forms import form_search_master
 
 
 @login_required
-@permission_required('base.is_student', raise_exception=True)
+@permission_required('internship.can_access_internship', raise_exception=True)
 def view_masters_list(request):
     specialities = mdl_internship_master.get_all_specialities()
     masters = []
