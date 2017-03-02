@@ -34,6 +34,9 @@ msgstr	 "Choisissez vos stages aux choix"
 msgid "choose_speciality"
 msgstr "Choisissez une spécialité"
 
+msgid "contest"
+msgstr "Concours"
+
 msgid "doctor"
 msgstr "Docteur"
 
@@ -68,14 +71,14 @@ msgid "internship_affectation"
 msgstr "Affectation de stages"
 
 msgid "internship_selection_warning_message"
-msgstr "<p>Si vous séléctionnez <strong>'Stage personnel'</strong> alors vous promettez de trouver un stage de votre"
-       "côté. Le nombre de <strong>'Stage personnel'</strong> est <strong>limité à 2 maximum</strong>.</p>"
-       "<p>Séléctionnez <strong>'Stage à l'étranger'</strong> seulement si vous avez <strong>déjà été séléctionné "
-       "</strong> pour un stage dans un autre pays.</p>"
-       "<p>Si vous comptez passer le <strong>'concours de Médecine générale'</strong> alors<strong> "
-       "vous ne pouvez choisir une spécialité que parmis les suivantes: <br> "
-       "<strong>chirurgie, dermatologie, gieriatrie, gynécologie-obstetrique, médecine interne, médecine physique, "
-       "neurologie adulte, ophtamologie, O.R.L, orthopedie, psychiatrie adulte, soins palliatifs, urgences, urologie."
+msgstr "<p>Si vous séléctionnez <strong>'Stage personnel'</strong> alors vous vous engagez à trouver un stage par vous"
+       " mêmes. Le nombre de <strong>'Stage personnel'</strong> est <strong>limité à 2 maximum</strong>.</p>"
+       "<p>Séléctionnez <strong>'Stage à l'étranger'</strong> seulement si vous avez <strong>été séléctionné "
+       "</strong> pour un stage à l'étranger et avez confirmé votre départ.</p>"
+       "<p>Si vous envisagez de passer le <strong>'concours de Médecine générale'</strong> en première session,<strong> "
+       " vous ne pouvez choisir une spécialité que parmis les suivantes: <br> "
+       "<strong>chirurgie ou assimilé, dermatologie, gériatrie, gynécologie-obstétrique, médecine interne, médecine physique, "
+       "neurologie, ophtamologie, O.R.L, orthopédie, psychiatrie, soins palliatifs, urgences, urologie."
        "</strong></p>"
 
 msgid	 "masters"
@@ -106,13 +109,18 @@ msgid "second_choice"
 msgstr "Second choix"
 
 msgid "selection"
-msgstr "séléction"
+msgstr "sélection"
+
+msgid "select_contest"
+msgstr "<strong>AVANT</strong> de faire vos choix, suivez le lien pour séléctionner la filière (SG ou SS) que "
+       "vous comptez suivre à ce stade. Si cette donnée n'est pas correcte, le système risque de vous imposer "
+       "des choix non compatibles."
 
 msgid "specialist"
 msgstr "Spécialiste"
 
 msgid "speciality"
-msgstr "Spéciailté"
+msgstr "Spécialité"
 
 msgid "student_information"
 msgstr "Information de l'étudiant"

@@ -1,0 +1,123 @@
+{% extends "dashboard_layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block breadcrumb %}
+    <li> <a href="{% url 'internship_home' %}">{% trans 'internship' %}</a> </li>
+    <li> <a href="{% url 'student_resume' %}">{% trans 'student_resume' %}</a> </li>
+    <li class="active">{% trans 'edit_information' %}</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="page-header">
+    <h2>{% trans 'edit_information' %}</h2>
+</div>
+
+
+<div class="panel panel-default">
+    <div class="panel panel-body">
+        <form  method="post">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="row">
+                <div class="fieldWrapper col-md-4 form-group">
+                    {{ form.location.errors }}
+                    <label for="{{ form.location.id_for_label }}">{% trans 'street' %}:</label>
+                    <input type="text" class="form-control" id="{{ form.location.id_for_label }}"
+                           name="{{ form.location.html_name }}" value="{{ form.location.value }}">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="fieldWrapper col-md-4 form-group">
+                    {{ form.city.errors }}
+                    <label for="{{ form.city.id_for_label }}">{% trans 'city' %}:</label>
+                    <input type="text" class="form-control" id="{{ form.city.id_for_label }}"
+                           name="{{ form.city.html_name }}" value="{{ form.city.value }}">
+                </div>
+
+                <div class="fieldWrapper col-md-4 form-group">
+                    {{ form.postal_code.errors }}
+                    <label for="{{ form.postal_code.id_for_label }}">{% trans 'postal_code' %}:</label>
+                    <input type="text" class="form-control" id="{{ form.postal_code.id_for_label }}"
+                           name="{{ form.postal_code.html_name }}" value="{{ form.postal_code.value }}">
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="fieldWrapper col-md-4 form-group">
+                    {{ form.country.errors }}
+                    <label for="{{ form.country.id_for_label }}">{% trans 'country' %}:</label>
+                    <input type="text" class="form-control" id="{{ form.country.id_for_label }}"
+                           name="{{ form.country.html_name }}" value="{{ form.country.value }}">
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="fieldWrapper col-md-4 form-group">
+                    {{ form.email.errors }}
+                    <label for="{{ form.email.id_for_label }}">{% trans 'email' %}:</label>
+                    <input type="email" class="form-control" id="{{ form.email.id_for_label }}"
+                           name="{{ form.email.html_name }}" value="{{ form.email.value }}">
+                </div>
+
+                <div class="fieldWrapper col-md-4 form-group">
+                    {{ form.phone_mobile.errors }}
+                    <label for="{{ form.phone_mobile.id_for_label }}">{% trans 'phone' %}:</label>
+                    <input type="tel" class="form-control" id="{{ form.phone_mobile.id_for_label }}"
+                           name="{{ form.phone_mobile.html_name }}" value="{{ form.phone_mobile.value }}">
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="fieldWrapper col-md-4 form-group">
+                    {{ form.contest.errors }}
+                    <label for="{{ form.contest.id_for_label }}">{% trans 'contest' %}:</label>
+                    <select id="{{ form.contest.id_for_label }}" name="{{ form.contest.html_name }}" class="form-control">
+                        {% for x,y in form.fields.contest.choices %}
+                            <option value="{{ x }}">
+                                {{ y }}
+                            </option>
+                         {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-info">
+                {% trans 'edit' %}
+            </button>
+
+        </form>
+
+    </div>
+</div>
+{% endblock %}

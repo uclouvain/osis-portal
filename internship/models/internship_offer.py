@@ -44,7 +44,7 @@ class InternshipOffer(SerializableModel):
     selectable = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.title
+        return u"%s" % self.title
 
     class Meta:
         permissions = (

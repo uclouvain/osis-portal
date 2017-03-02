@@ -42,6 +42,9 @@ class InternshipChoice(SerializableModel):
     internship_choice = models.IntegerField(default=0)
     priority = models.BooleanField()
 
+    def __str__(self):
+        return u"%s - %s : %s" % (self.organization.acronym, self.speciality.acronym, self.choice)
+
 
 def search(student=None, internship_choice=None, speciality=None):
     has_criteria = False

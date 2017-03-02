@@ -45,6 +45,9 @@ class InternshipStudentAffectationStat(SerializableModel):
     consecutive_month = models.BooleanField(default=False, null=False)
     type_of_internship = models.CharField(max_length=1, blank=False, null=False, default='N')
 
+    def __str__(self):
+        return u"%s %s %s %s" % (self.student, self.period, self.organization, self.speciality)
+
 
 def search(student=None):
     return InternshipStudentAffectationStat.objects.filter(student=student).order_by('period__date_start')

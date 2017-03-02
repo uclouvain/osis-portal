@@ -26,18 +26,21 @@
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
+from django.utils.translation import ugettext_lazy as _
 
 
 class InternshipStudentInformationAdmin(SerializableModelAdmin):
     list_display = ('person', 'location', 'postal_code', 'city', 'country', 'latitude', 'longitude', 'email',
-                    'phone_mobile')
+                    'phone_mobile', 'contest')
     fieldsets = ((None, {'fields': ('person', 'location', 'postal_code', 'city', 'latitude', 'longitude', 'country',
-                                    'email', 'phone_mobile')}),)
+                                    'email', 'phone_mobile', 'contest')}),)
     raw_id_fields = ('person',)
     search_fields = ['person__user__username', 'person__last_name', 'person__first_name']
 
 
 class InternshipStudentInformation(SerializableModel):
+    TYPE_CHOICE = (('SP', 'SP'),
+                   ('SS', 'SS'))
     person = models.ForeignKey('base.Person')
     location = models.CharField(max_length=255)
     postal_code = models.CharField(max_length=20)
@@ -47,6 +50,10 @@ class InternshipStudentInformation(SerializableModel):
     longitude = models.FloatField(blank=True, null=True)
     email = models.EmailField(max_length=255, blank=True, null=True)
     phone_mobile = models.CharField(max_length=100, blank=True, null=True)
+    contest = models.CharField(max_length=124, choices=TYPE_CHOICE, default="GENERALIST")
+
+    def __str__(self):
+        return u"%s" % self.person
 
 
 def find_by_user(a_user):

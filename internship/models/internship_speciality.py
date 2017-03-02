@@ -42,7 +42,7 @@ class InternshipSpeciality(SerializableModel):
     order_postion = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.name
+        return u"%s" % self.name
 
 
 def find_by_id(a_id):

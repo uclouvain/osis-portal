@@ -113,6 +113,20 @@
                         {{ student_information.location }}
                     </div>
                 </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>{% trans 'contest' %}</strong>
+                        <br>
+                        {{ student_information.contest }}
+                    </div>
+                </div>
+                <br>
+                <a role="button" class="btn btn-info" aria-label="Edit" href="{% url 'internship_student_edit' %}">
+                    <span class="glyphicon glyphicon-edit" aria-hidden="true">
+                    </span>
+                    {% trans 'edit' %}
+                </a>
             </div>
 
             <div role="tabpanel" class="tab-pane" id="choices">

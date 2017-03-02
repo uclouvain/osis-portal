@@ -34,6 +34,9 @@ msgstr	 "Choose your non mandatory internship"
 msgid "choose_speciality"
 msgstr "Choose a speciality"
 
+msgid "contest"
+msgstr "Contest"
+
 msgid "doctor"
 msgstr "Doctor"
 
@@ -108,6 +111,9 @@ msgstr "Second choice"
 
 msgid "selection"
 msgstr "selection"
+
+msgid "select_contest"
+msgstr "!! <strong>Select the contest</strong> that you intent to pass."
 
 msgid "speciality"
 msgstr "Speciality"
