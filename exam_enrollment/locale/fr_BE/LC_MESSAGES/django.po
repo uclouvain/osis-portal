@@ -74,7 +74,7 @@ msgid "no_offer_enrollment_found"
 msgstr "Vous n'êtes inscrit à aucun programme d'étude pour cette année académique."
 
 msgid "outside_exam_enrollment_period"
-msgstr "Les inscriptions aux examens sont actuellement fermées."
+msgstr "Les inscriptions aux examens pour le programme {} sont actuellement fermées."
 
 msgid "program"
 msgstr "Programme"

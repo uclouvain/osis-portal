@@ -74,7 +74,7 @@ msgid "no_offer_enrollment_found"
 msgstr "Sorry, you're not enrolled to any program for this academic year."
 
 msgid "outside_exam_enrollment_period"
-msgstr "Exam enrollment are currently closed."
+msgstr "Exam enrollments for the program {} the  are currently closed."
 
 msgid "program"
 msgstr "Program"
