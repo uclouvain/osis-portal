@@ -289,3 +289,18 @@ msgstr "To find a vacant learning unit to candidate to, introduce the code and c
 
 msgid "remove"
 msgstr "Cancel the application"
+
+msgid "attribution_administration"
+msgstr "Attribution administration"
+
+msgid "attributions"
+msgstr "Attributions"
+
+msgid "global_id"
+msgstr "Global id"
+
+msgid "no_tutor_with_this_global_id"
+msgstr "No tutor with this global id"
+
+msgid "teaching_charge"
+msgstr "Teaching charge"

@@ -73,4 +73,14 @@ def is_tutor(a_user):
 
 
 def find_by_person_global_id(global_id):
-    return Tutor.objects.get(person__global_id=global_id) if global_id is not None else None
+    try:
+        return Tutor.objects.get(person__global_id=global_id) if global_id is not None else None
+    except ObjectDoesNotExist:
+        return None
+
+
+def find_by_id(tutor_id):
+    try:
+        return Tutor.objects.get(pk=tutor_id)
+    except ObjectDoesNotExist:
+        return None

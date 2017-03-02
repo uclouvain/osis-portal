@@ -29,8 +29,9 @@ from attribution.views import tutor_charge, online_application
 urlpatterns = [
 
     url(r'^$', tutor_charge.home, name='attribution_home'),
-    url(r'^charge/([0-9]+)/$', tutor_charge.by_year, name='attributions_by_year'),
-    url(r'^students/([0-9]+)/$', tutor_charge.show_students, name='attribution_students'),
+    url(r'^charge/([0-9]+)/([0-9a-z-]+)/$', tutor_charge.by_year, name='attributions_by_year'),
+    url(r'^students/(?P<a_learning_unit_year>[0-9]+)/(?P<a_tutor>[0-9]+)/$', tutor_charge.show_students,
+        name='attribution_students'),
     url(r'^applications/$', online_application.home, name='learning_unit_applications'),
     url(r'^applications/([0-9]+)/delete/$', online_application.delete, name='delete_tutor_application'),
     url(r'^applications/([0-9]+)/edit/$', online_application.edit, name='edit_tutor_application'),
@@ -42,4 +43,9 @@ urlpatterns = [
     url(r'^applications/renew/$', online_application.renew, name='renew'),
     url(r'^applications/new/$', online_application.new, name='new'),
     url(r'^applications/outside_period/$', online_application.outside_period, name='outside_applications_period'),
+    url(r'^administration/attributions/$', tutor_charge.attribution_administration, name='attribution_administration'),
+    url(r'^administration/select_tutor/$', tutor_charge.select_tutor_attributions,
+        name='attribution_admin_select_tutor'),
+    url(r'^administration/visualize_tutor/([0-9a-z-]+)/$', tutor_charge.visualize_tutor_attributions,
+        name='attribution_admin_visualize_tutor'),
 ]
