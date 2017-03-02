@@ -112,7 +112,7 @@ msgstr "Second choice"
 msgid "selection"
 msgstr "selection"
 
-msgid "select_contest'"
+msgid "select_contest"
 msgstr "!! <strong>Select the contest</strong> that you intent to pass."
 
 msgid "speciality"
