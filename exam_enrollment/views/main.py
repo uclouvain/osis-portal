@@ -34,16 +34,26 @@ from django.utils.translation import ugettext_lazy as _
 from django.http import response
 from osis_common.queue import queue_sender
 from django.conf import settings
+from django.http import HttpResponseRedirect
 import warnings
 
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
-def choose_offer(request):
+def choose_offer(request, navigation_direct):
     stud = student.find_by_user(request.user)
     student_programs = None
     if stud:
-        student_programs = [enrol.offer_year for enrol in list(offer_enrollment.find_by_student(stud))]
+        student_programs = [enrol.offer_year for enrol in list(offer_enrollment.find_by_student_academic_year(stud, academic_year.current_academic_year()))]
+        if student_programs is None:
+            messages.add_message(request, messages.WARNING, _('no_offer_enrollment_found'))
+            return response.HttpResponseRedirect(reverse('dashboard_home'))
+        else:
+            if navigation_direct == "1":
+                student_current_offers = [enrol.offer_year for enrol in list(offer_enrollment.find_by_student_academic_year(stud, academic_year.current_academic_year()))]
+                if len(student_current_offers) == 1:
+                    return _get_exam_enrollment_form(student_current_offers[0], student_current_offers[0].id, request, stud)
+
     return layout.render(request, 'offer_choice.html', {'programs': student_programs,
                                                         'student': stud})
 

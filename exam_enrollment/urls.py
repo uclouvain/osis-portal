@@ -27,6 +27,6 @@ from django.conf.urls import url
 from exam_enrollment.views import main
 
 urlpatterns = [
-    url(r'^$', main.choose_offer, name='exam_enrollment_offer_choice'),
+    url(r'^([0-9]+)/$', main.choose_offer, name='exam_enrollment_offer_choice'),
     url(r'^([0-9]+)/form/$', main.exam_enrollment_form, name='exam_enrollment_form'),
 ]
