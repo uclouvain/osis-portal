@@ -162,7 +162,7 @@ def list_teaching_charge(a_person, an_academic_year):
 
 
 @login_required
-@permission_required('attribution.can_access_attribution_application', raise_exception=True)
+@permission_required('attribution.can_access_attribution', raise_exception=True)
 def by_year(request, year, a_global_id):
     if a_global_id:
         a_person =mdl_base.person.find_by_global_id(a_global_id)
@@ -225,7 +225,7 @@ def get_students(a_learning_unit_year_id, a_person):
 
 
 @login_required
-@permission_required('attribution.can_access_attribution_application', raise_exception=True)
+@permission_required('attribution.can_access_attribution', raise_exception=True)
 def show_students(request, a_learning_unit_year, a_tutor):
     students_list = []
     request_tutor = mdl_base.tutor.find_by_id(a_tutor)
