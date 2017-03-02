@@ -29,6 +29,7 @@ from admission.views import application, common, identification, offer, level, q
     places
 from django.conf.urls.static import static
 from django.conf import settings
+from django.views.i18n import javascript_catalog
 
 js_info_dict = {
     'packages': ('admission', )
@@ -103,7 +104,7 @@ urlpatterns = [
     url(r'^upload/download/(?P<pk>[0-9]+)$', upload_file.download, name='download'),
     url(r'^upload/description/$', upload_file.upload_file_description, name="upload_file_description"),
     url(r'^upload/$', upload_file.upload_document, name='upload_document'),
-    url(r'^jsi18n/', 'django.views.i18n.javascript_catalog', js_info_dict),
+    url(r'^jsi18n/', javascript_catalog, js_info_dict),
 
     url(r'^upload/delete/$', upload_file.delete_document_file, name='delete_document_file'),
     url(r'^document/$', upload_file.find_by_description),

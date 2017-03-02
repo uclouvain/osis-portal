@@ -58,7 +58,7 @@ def search(student=None, internship_choice=None, speciality=None):
         queryset = queryset.filter(internship_choice=internship_choice)
         has_criteria = True
 
-    if speciality is not None:
+    if speciality:
         queryset = queryset.filter(speciality=speciality)
         has_criteria = True
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
@@ -48,5 +47,3 @@ def view_masters_list(request):
 
     return layout.render(request, "masters.html", {"masters": masters,
                                                    "search_form": form})
-
-

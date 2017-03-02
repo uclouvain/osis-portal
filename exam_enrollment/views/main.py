@@ -32,6 +32,9 @@ from frontoffice.queue import queue_listener
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.http import response
+from osis_common.queue import queue_sender
+from django.conf import settings
+import warnings
 
 
 @login_required
@@ -50,34 +53,90 @@ def choose_offer(request):
 def exam_enrollment_form(request, offer_year_id):
     stud = student.find_by_user(request.user)
     off_year = offer_year.find_by_id(offer_year_id)
-    data = None
-    if stud:
-        data = _fetch_json(stud.registration_id, off_year.acronym, off_year.academic_year.year)
-        if not data:
-            messages.add_message(request, messages.WARNING, _('outside_exam_enrollment_period'))
-            return response.HttpResponseRedirect(reverse('dashboard_home'))
+    if request.method == 'POST':
+        return _process_exam_enrollment_form_submission(off_year, request, stud)
+    else:
+        return _get_exam_enrollment_form(off_year, offer_year_id, request, stud)
+
+
+def _get_exam_enrollment_form(off_year, offer_year_id, request, stud):
+    data = _fetch_exam_enrollment_form(stud.registration_id, off_year.acronym, off_year.academic_year.year)
+    if not data:
+        messages.add_message(request, messages.WARNING, _('outside_exam_enrollment_period'))
+        return response.HttpResponseRedirect(reverse('dashboard_home'))
     return layout.render(request, 'exam_enrollment_form.html', {'exam_enrollments': data.get('exam_enrollments'),
                                                                 'student': stud,
                                                                 'current_number_session': data.get('current_number_session'),
                                                                 'academic_year': academic_year.current_academic_year(),
-                                                                'program': offer_year.find_by_id(offer_year_id),
-                                                                'legend': data.get('legend')})
+                                                                'program': offer_year.find_by_id(offer_year_id)})
 
 
-def _fetch_json(registration_id, offer_year_acronym, year):
+def _process_exam_enrollment_form_submission(off_year, request, stud):
+    data_to_submit = _exam_enrollment_form_submission_message(off_year, request, stud)
+    queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('EXAM_ENROLLMENT_FORM_SUBMISSION'),
+                              data_to_submit)
+    messages.add_message(request, messages.SUCCESS, _('exam_enrollment_form_submitted'))
+    return response.HttpResponseRedirect(reverse('dashboard_home'))
+
+
+def _exam_enrollment_form_submission_message(off_year, request, stud):
+    return {
+        'registration_id': stud.registration_id,
+        'offer_year_acronym': off_year.acronym,
+        'year': off_year.academic_year.year,
+        'exam_enrollments': _build_enrollments_by_learning_unit(request)
+    }
+
+
+def _build_enrollments_by_learning_unit(request):
+    warnings.warn(
+        "The field named 'etat_to_inscr' is only used to call EPC services. It should be deleted when the exam "
+        "enrollment business will be implemented in Osis (not in EPC anymore). "
+        "The flag 'is_enrolled' should be sufficient for Osis."
+        "Do not forget to delete the hidden input field in the html template.",
+        DeprecationWarning
+    )
+    current_number_session = request.POST['current_number_session']
+    enrollments_by_learn_unit = []
+    is_enrolled_by_acronym = _build_dicts_is_enrolled_by_acronym(current_number_session, request)
+    etat_to_inscr_by_acronym = _build_dicts_etat_to_inscr_by_acronym(request)
+    for acronym, etat_to_inscr in etat_to_inscr_by_acronym.items():
+        enrollments_by_learn_unit.append({
+            'acronym': acronym,
+            'is_enrolled': is_enrolled_by_acronym.get(acronym, False),
+            'etat_to_inscr': None if not etat_to_inscr or etat_to_inscr == 'None' else etat_to_inscr
+        })
+    return enrollments_by_learn_unit
+
+
+def _build_dicts_etat_to_inscr_by_acronym(request):
+    return {_extract_acronym(html_tag_id): etat_to_inscr for html_tag_id, etat_to_inscr in request.POST.items()
+            if "etat_to_inscr_current_session_" in html_tag_id}
+
+
+def _build_dicts_is_enrolled_by_acronym(current_number_session, request):
+    return {_extract_acronym(html_tag_id): True if value == "on" else False
+            for html_tag_id, value in request.POST.items()
+            if "chckbox_exam_enrol_sess{}_".format(current_number_session) in html_tag_id}
+
+
+def _extract_acronym(html_tag_id):
+    return html_tag_id.split("_")[-1]
+
+
+def _fetch_exam_enrollment_form(registration_id, offer_year_acronym, year):
     exam_enrol_client = queue_listener.ExamEnrollmentClient()
-    message = _generate_message(registration_id, offer_year_acronym, year)
-    json_data = exam_enrol_client.call(message)
+    message = _exam_enrollment_form_message(registration_id, offer_year_acronym, year)
+    json_data = exam_enrol_client.call(json.dumps(message))
     if json_data:
         json_data = json_data.decode("utf-8")
         return json.loads(json_data)
     return json_data
 
 
-def _generate_message(registration_id, offer_year_acronym, year):
-    message = {
+def _exam_enrollment_form_message(registration_id, offer_year_acronym, year):
+    return {
         'registration_id': registration_id,
         'offer_year_acronym': offer_year_acronym,
         'year': year,
     }
-    return json.dumps(message)

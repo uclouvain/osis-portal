@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,17 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
+from django.utils import translation
+from django.test import TestCase, override_settings
+
+from admission.forms import applicant as app_forms
 
 
-def create_person(first_name="first", last_name="last"):
-    a_person = mdl_base.person.Person(first_name=first_name, last_name=last_name)
-    a_person.save()
-    return a_person
+class ApplicantFormTest(TestCase):
+    def test_error_messages_are_i18n_compliant(self):
+        form = app_forms.ApplicantForm()
+        first_name_field = form.fields['first_name']
+        error_messages = first_name_field.error_messages
 
+        with translation.override('fr-be'):
+            self.assertEqual(str(error_messages['required']), 'Champ obligatoire')
 
-def create_person_with_user(a_user, first_name="first", last_name="last"):
-    person = mdl_base.person.Person(first_name=first_name, last_name=last_name)
-    person.user = a_user
-    person.save()
-    return person
+        with translation.override('en'):
+            self.assertEqual(str(error_messages['required']), 'Mandatory field')
