@@ -60,10 +60,23 @@ def edit_student_information(request):
         form = form_internship_student_information.InternshipStudentInformationForm(request.POST)
         if form.is_valid():
             person = mdl_person.find_by_user(request.user)
-            student_information = form.save(commit=False)
-            student_information.person = person
-            student_information.save()
+            save_from_form(form, person)
     else:
         student_information = mdl_student_information.find_by_user(request.user)
         form = form_internship_student_information.InternshipStudentInformationForm(instance=student_information)
     return layout.render(request, "student_edit_information.html", {"form": form})
+
+
+def save_from_form(form, person):
+    defaults = {
+        "location": form.cleaned_data["location"],
+        "postal_code": form.cleaned_data["postal_code"],
+        "city": form.cleaned_data["city"],
+        "country": form.cleaned_data["country"],
+        "email": form.cleaned_data["email"],
+        "phone_mobile": form.cleaned_data["phone_mobile"],
+        "contest": form.cleaned_data["contest"],
+    }
+
+    mdl_student_information.InternshipStudentInformation.objects.update_or_create(person=person,
+                                                                                  defaults=defaults)
