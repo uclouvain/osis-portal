@@ -124,7 +124,8 @@ def new_user(request):
         extra_context['email_new'] = form_new['email_new'].value()
         extra_context['email_new_confirm'] = form_new['email_new_confirm'].value()
         extra_context['password_new'] = form_new['password_new'].value()
-        return login(request, extra_context=extra_context, template_name='registration/admission_registration.html')
+        extra_context['layout'] = "admission_layout.html"
+        return login(request, extra_context=extra_context, template_name='registration/home_registration.html')
 
 
 def activation_mail(request, user_id):
@@ -257,9 +258,10 @@ def login_admission(request, *args, **kwargs):
     if username and password:
         user = authenticate(username=username, password=password)
         if user is None:
+            extra_context['layout'] = "admission_layout.html"
             extra_context['message'] = _('msg_error_username_password_not_matching')
 
-    return login(request, *args, extra_context=extra_context, template_name='registration/admission_login.html', **kwargs)
+    return login(request, *args, extra_context=extra_context, template_name='registration/home_registration.html', **kwargs)
 
 
 def login_admission_error(request, *args, **kwargs):
