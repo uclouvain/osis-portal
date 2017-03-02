@@ -111,6 +111,9 @@ msgstr "Second choix"
 msgid "selection"
 msgstr "séléction"
 
+msgid "select_contest'"
+msgstr "!! <strong>Choisissez le concours</strong> que vous comptez passer."
+
 msgid "specialist"
 msgstr "Spécialiste"
 
