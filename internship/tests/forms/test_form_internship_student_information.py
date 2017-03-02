@@ -36,7 +36,7 @@ class TestSearchHospitalForm(TestCase):
             "country": "country",
             "email": "test@test.com",
             "phone_mobile": "0236478987",
-            "contest": "GENERALIST"
+            "contest": "SS"
         }
 
     def test_null_location(self):
