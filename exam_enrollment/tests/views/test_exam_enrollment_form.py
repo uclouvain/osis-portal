@@ -36,7 +36,7 @@ import warnings
 
 def load_json_file(path):
     json_data = open(path)
-    data1 = json.load(json_data) # deserialises it
+    data1 = json.load(json_data)  # deserialises it
     return data1
 
 
@@ -64,7 +64,7 @@ class ExamEnrollmentFormTest(TestCase):
                                                                          'title': 'Bechelor in informatica',
                                                                          'academic_year': self.academic_year})
         self.url = "/exam_enrollment/{}/form/".format(offer_year_id)
-        self.correct_exam_enrol_form = load_json_file("exam_enrollment/tests/ressources/exam_enrollment_form_example.json")
+        self.correct_exam_enrol_form = load_json_file("exam_enrollment/tests/resources/exam_enrollment_form_example.json")
 
     def test_json_form_content(self):
         form = self.correct_exam_enrol_form
@@ -77,6 +77,7 @@ class ExamEnrollmentFormTest(TestCase):
         self.assertTrue('credits' in random_exam_enrol.keys())
         self.assertTrue('credited' in random_exam_enrol.keys())
         self.assertTrue('enrolled_by_default' in random_exam_enrol.keys())
+        self.assertTrue('can_enrol_to_exam' in random_exam_enrol.keys())
         self.assertTrue('session_1' in random_exam_enrol.keys()
                         or 'session_2' in random_exam_enrol.keys()
                         or 'session_3' in random_exam_enrol.keys())

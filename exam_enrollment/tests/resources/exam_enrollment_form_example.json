@@ -18,6 +18,7 @@
       "credited": null,
       "enrolled_by_default": true,
       "etat_to_inscr_current_session": "I",
+      "can_enrol_to_exam" : true,
       "session_1": {
         "score": "10",
         "enrollment_state": "P"
@@ -41,6 +42,7 @@
       "credited": null,
       "enrolled_by_default": false,
       "etat_to_inscr_current_session": "Y",
+      "can_enrol_to_exam" : false,
       "session_1": {
         "score": "Tricherie",
         "enrollment_state": "I"
@@ -64,6 +66,7 @@
       "credited": "Report",
       "enrolled_by_default": true,
       "etat_to_inscr_current_session": "",
+      "can_enrol_to_exam" : true,
       "session_2": {
         "score": "15",
         "enrollment_state": "I"
@@ -79,6 +82,7 @@
       "credited": null,
       "enrolled_by_default": true,
       "etat_to_inscr_current_session": "P",
+      "can_enrol_to_exam" : false,
       "session_1": {
         "score": null,
         "enrollment_state": "I"
@@ -98,6 +102,7 @@
       "credited": null,
       "enrolled_by_default": false,
       "etat_to_inscr_current_session": null,
+      "can_enrol_to_exam" : true,
       "session_1": {
         "score": "Absent",
         "enrollment_state": null
