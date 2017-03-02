@@ -60,8 +60,7 @@ def exam_enrollment_form(request, offer_year_id):
 
 
 def _get_exam_enrollment_form(off_year, offer_year_id, request, stud):
-    # data = _fetch_exam_enrollment_form(stud.registration_id, off_year.acronym, off_year.academic_year.year)
-    data = None
+    data = _fetch_exam_enrollment_form(stud.registration_id, off_year.acronym, off_year.academic_year.year)
     if not data:
         messages.add_message(request, messages.WARNING, _('outside_exam_enrollment_period').format(off_year.acronym))
         return response.HttpResponseRedirect(reverse('dashboard_home'))
