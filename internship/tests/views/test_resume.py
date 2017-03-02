@@ -78,7 +78,8 @@ class TestEditStudentInformation(TestCase):
             "city": "city",
             "country": "country",
             "email": "test@test.com",
-            "phone_mobile": "0236478987"
+            "phone_mobile": "0236478987",
+            "contest": "GENERALIST"
         }
 
     def test_information_save(self):
@@ -94,6 +95,7 @@ class TestEditStudentInformation(TestCase):
         self.assertEqual(student_information.country, self.data["country"])
         self.assertEqual(student_information.email, self.data["email"])
         self.assertEqual(student_information.phone_mobile, self.data["phone_mobile"])
+        self.assertEqual(student_information.contest, self.data["contest"])
 
 
 def add_permission(user, codename):

@@ -35,7 +35,8 @@ class TestSearchHospitalForm(TestCase):
             "city": "city",
             "country": "country",
             "email": "test@test.com",
-            "phone_mobile": "0236478987"
+            "phone_mobile": "0236478987",
+            "contest": "GENERALIST"
         }
 
     def test_null_location(self):
@@ -55,6 +56,11 @@ class TestSearchHospitalForm(TestCase):
 
     def test_null_country(self):
         self.data["country"] = ""
+        form = form_internship_student_information.InternshipStudentInformationForm(data=self.data)
+        self.assertFalse(form.is_valid())
+
+    def test_null_contest(self):
+        self.data["contest"] = ""
         form = form_internship_student_information.InternshipStudentInformationForm(data=self.data)
         self.assertFalse(form.is_valid())
 
