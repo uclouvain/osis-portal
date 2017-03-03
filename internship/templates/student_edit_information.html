@@ -104,7 +104,7 @@
                     <label for="{{ form.contest.id_for_label }}">{% trans 'contest' %}:</label>
                     <select id="{{ form.contest.id_for_label }}" name="{{ form.contest.html_name }}" class="form-control">
                         {% for x,y in form.fields.contest.choices %}
-                            <option value="{{ x }}">
+                            <option value="{{ x }}" {% if form.contest.value == x %}selected{% endif %}>
                                 {{ y }}
                             </option>
                          {% endfor %}
