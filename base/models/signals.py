@@ -89,8 +89,7 @@ def remove_from_student_group(sender, instance, **kwargs):
 @receiver(post_save, sender=mdl_internship.InternshipStudentInformation)
 def add_to_internship_students_group(sender, instance, **kwargs):
     if kwargs.get('created', True) and instance.person.user:
-        internship_students_group = Group.objects.get(name='internship_students')
-        instance.person.user.groups.add(internship_students_group)
+        _assign_group(instance.person, 'internship_students')
 
 
 @receiver(post_delete, sender=mdl_internship.InternshipStudentInformation)
