@@ -36,7 +36,7 @@ from admission.models.enums import application_type, coverage_access_degree
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = ('applicant', 'offer_year', 'creation_date', 'application_type')
     fieldsets = ((None, {'fields': ('applicant', 'offer_year', 'application_type', 'applied_to_sameprogram',
-                                    'coverage_access_degree', 'valuation_possible')}),)
+                                    'coverage_access_degree', 'valuation_possible', 'reference')}),)
 
 
 class Application(SerializableModel):
