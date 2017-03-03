@@ -44,7 +44,7 @@ def choose_offer(request, not_forcing_page_offer_choice):
     stud = student.find_by_user(request.user)
     student_programs = None
     if stud:
-        student_programs = [enrol.offer_year for enrol in list(offer_enrollment.find_by_student_academic_year(stud, academic_year.current_academic_year()))]
+        student_programs = _get_student_programs(stud)
         if student_programs is None:
             messages.add_message(request, messages.WARNING, _('no_offer_enrollment_found'))
             return response.HttpResponseRedirect(reverse('dashboard_home'))
@@ -148,3 +148,10 @@ def _exam_enrollment_form_message(registration_id, offer_year_acronym, year):
         'offer_year_acronym': offer_year_acronym,
         'year': year,
     }
+
+
+def _get_student_programs(stud):
+    if stud:
+        return [enrol.offer_year for enrol in list(
+            offer_enrollment.find_by_student_academic_year(stud, academic_year.current_academic_year()))]
+    return None
