@@ -61,8 +61,8 @@ class ExamEnrollment(models.Model):
 
 
 def insert_or_update_document(registration_id, offer_year_acronym, document):
-    score_encoding_object, created = ExamEnrollment.objects.update_or_create(
+    exam_enrollment_object, created = ExamEnrollment.objects.update_or_create(
         registration_id=registration_id, offer_year_acronym=offer_year_acronym, defaults={"document": document}
     )
-    return score_encoding_object
+    return exam_enrollment_object
 
