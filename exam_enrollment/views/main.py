@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.core.urlresolvers import reverse
 from base.views import layout
 from base.models import student, offer_enrollment, academic_year, offer_year
+from exam_enrollment import models as mdl_exam_enrollment
 from frontoffice.queue import queue_listener
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
@@ -73,6 +74,13 @@ def _get_exam_enrollment_form(off_year, offer_year_id, request, stud):
 
 def _process_exam_enrollment_form_submission(off_year, request, stud):
     data_to_submit = _exam_enrollment_form_submission_message(off_year, request, stud)
+    json_data = json.dumps(data_to_submit)
+
+    if json_data:
+        mdl_exam_enrollment.exam_enrollment.insert_or_update_document(stud.registration_id,
+                                                                      off_year.acronym,
+                                                                      json_data).document
+
     queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('EXAM_ENROLLMENT_FORM_SUBMISSION'),
                               data_to_submit)
     messages.add_message(request, messages.SUCCESS, _('exam_enrollment_form_submitted'))

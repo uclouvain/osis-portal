@@ -61,3 +61,10 @@ def find_by_user(a_user):
         return InternshipStudentInformation.objects.get(person__user=a_user)
     except ObjectDoesNotExist:
         return None
+
+
+def find_by_person(person):
+    try:
+        return InternshipStudentInformation.objects.get(person=person)
+    except ObjectDoesNotExist:
+        return None
