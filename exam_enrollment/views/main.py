@@ -45,7 +45,7 @@ def choose_offer(request, not_forcing_page_offer_choice):
     student_programs = None
     if stud:
         student_programs = _get_student_programs(stud)
-        if student_programs is None:
+        if student_programs is None or len(student_programs) == 0:
             messages.add_message(request, messages.WARNING, _('no_offer_enrollment_found'))
             return response.HttpResponseRedirect(reverse('dashboard_home'))
         else:

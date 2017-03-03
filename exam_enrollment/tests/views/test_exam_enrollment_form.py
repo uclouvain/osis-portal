@@ -155,6 +155,13 @@ class ExamEnrollmentFormTest(TestCase):
         for index in range(0, len(exam_enrollments)):
             self.assertIn(exam_enrollments[index], exam_enrollments_expected)
 
+    def create_offer_enrollment_for_current_academic_yr(self):
+        off_year_current_academic_year = test_offer_year.create_offer_year_with_academic_year(
+            test_academic_year.create_academic_year_current())
+        student_offer_year_enrollment = test_offer_enrollment.create_offer_enrollment(self.student,
+                                                                                      off_year_current_academic_year)
+        return student_offer_year_enrollment
+
     def test_get_programs_student_is_none(self):
         self.assertIsNone(main._get_student_programs(None))
 
@@ -163,9 +170,10 @@ class ExamEnrollmentFormTest(TestCase):
         student_offer_year_enrollment = self.create_offer_enrollment_for_current_academic_yr()
         self.assertEqual(main._get_student_programs(self.student)[0], student_offer_year_enrollment.offer_year)
 
-    def create_offer_enrollment_for_current_academic_yr(self):
-        off_year_current_academic_year = test_offer_year.create_offer_year_with_academic_year(
-            test_academic_year.create_academic_year_current())
-        student_offer_year_enrollment = test_offer_enrollment.create_offer_enrollment(self.student,
-                                                                                      off_year_current_academic_year)
-        return student_offer_year_enrollment
+    def test_navigation_with_no_offer_in_current_academic_year(self):
+        self.client.force_login(self.user)
+        an_url = reverse('exam_enrollment_offer_choice', args=(1,))
+        response = self.client.get(an_url, follow=True)
+        self.assertRedirects(response, reverse('dashboard_home'))
+        self.assertEqual('dashboard.html', response.templates[0].name)
+
