@@ -60,6 +60,22 @@ class TestFindByUser(TestCase):
         self.assertEqual(expected, actual)
 
 
+class TestFindByPerson(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
+        self.student_information = create_student_information(self.user)
+
+    def test_with_no_information_for_user(self):
+        other_person = test_person.create_person("other", "another")
+
+        student_information = mdl_student_information.find_by_person(other_person)
+        self.assertFalse(student_information)
+
+    def test_with_information_for_user(self):
+        self.assertEqual(mdl_student_information.find_by_person(self.student_information.person),
+                         self.student_information)
+
+
 
 
 
