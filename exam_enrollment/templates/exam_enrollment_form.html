@@ -106,13 +106,13 @@
                                                        type="checkbox">
                                         </td>
                                     {% else %}
-                                        <td>{{ exam_enrol.session_1.score | default_if_none:"-" }}</td>
-                                        <td>{{ exam_enrol.session_1.enrollment_state | default_if_none:"-" }}</td>
+                                        <td>{% if exam_enrol.session_1 %}{{ exam_enrol.session_1.score | default_if_none:"-" }}{% else %}-{% endif %}</td>
+                                        <td>{% if exam_enrol.session_1 %}{{ exam_enrol.session_1.enrollment_state | default_if_none:"-" }}{% else %}-{% endif %}</td>
                                     {% endif %}
 
                                 {% else %}
-                                    <td>{{ exam_enrol.session_1.score | default_if_none:"-" }}</td>
-                                    <td>{{ exam_enrol.session_1.enrollment_state | default_if_none:"-" }}</td>
+                                    <td>{% if exam_enrol.session_1 %}{{ exam_enrol.session_1.score | default_if_none:"-" }}{% else %}-{% endif %}</td>
+                                    <td>{% if exam_enrol.session_1 %}{{ exam_enrol.session_1.enrollment_state | default_if_none:"-" }}{% else %}-{% endif %}</td>
                                 {% endif %}
                                 {% if current_number_session == 2 %}
                                     {% if exam_enrol.can_enrol_to_exam %}
@@ -123,12 +123,12 @@
                                                    type="checkbox">
                                         </td>
                                     {% else %}
-                                        <td>{{ exam_enrol.session_2.score | default_if_none:"-" }}</td>
-                                        <td>{{ exam_enrol.session_2.enrollment_state | default_if_none:"-" }}</td>
+                                        <td>{% if exam_enrol.session_2 %}{{ exam_enrol.session_2.score | default_if_none:"-" }}{% else %}-{% endif %}</td>
+                                        <td>{% if exam_enrol.session_2 %}{{ exam_enrol.session_2.enrollment_state | default_if_none:"-" }}{% else %}-{% endif %}</td>
                                     {% endif %}
                                 {% elif current_number_session > 2 %}
-                                    <td>{{ exam_enrol.session_2.score | default_if_none:"-" }}</td>
-                                    <td>{{ exam_enrol.session_2.enrollment_state | default_if_none:" " }}</td>
+                                    <td>{% if exam_enrol.session_2 %}{{ exam_enrol.session_2.score | default_if_none:"-" }}{% else %}-{% endif %}</td>
+                                    <td>{% if exam_enrol.session_2 %}{{ exam_enrol.session_2.enrollment_state | default_if_none:" " }}{% else %}-{% endif %}</td>
                                 {% else %}
                                     <td>&nbsp;</td>
                                 {% endif %}
@@ -141,8 +141,8 @@
                                                    type="checkbox">
                                         </td>
                                     {% else %}
-                                        <td>{{ exam_enrol.session_3.score | default_if_none:"-" }}</td>
-                                        <td>{{ exam_enrol.session_3.enrollment_state | default_if_none:"-" }}</td>
+                                        <td>{% if exam_enrol.session_3 %}{{ exam_enrol.session_3.score | default_if_none:"-" }}{% else %}-{% endif %}</td>
+                                        <td>{% if exam_enrol.session_3 %}{{ exam_enrol.session_3.enrollment_state | default_if_none:"-" }}{% else %}-{% endif %}</td>
                                     {% endif %}
 
                                 {% else %}
