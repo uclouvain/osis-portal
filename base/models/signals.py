@@ -30,6 +30,7 @@ from base.models import student, tutor
 from base.models.person import find_by_global_id, find_by_user, Person
 from base.models.student import Student
 from base.models.tutor import Tutor
+from internship.models import internship_student_information as mdl_internship
 from osis_common.models.serializable_model import SerializableModel
 
 person_created = Signal(providing_args=['person'])
@@ -85,6 +86,20 @@ def remove_from_student_group(sender, instance, **kwargs):
         instance.person.user.groups.remove(students_group)
 
 
+@receiver(post_save, sender=mdl_internship.InternshipStudentInformation)
+def add_to_internship_students_group(sender, instance, **kwargs):
+    if kwargs.get('created', True) and instance.person.user:
+        internship_students_group = Group.objects.get(name='internship_students')
+        instance.person.user.groups.add(internship_students_group)
+
+
+@receiver(post_delete, sender=mdl_internship.InternshipStudentInformation)
+def remove_internship_students_group(sender, instance, **kwargs):
+    if instance.person.user:
+        internship_students_group = Group.objects.get(name='internship_students')
+        instance.person.user.groups.remove(internship_students_group)
+
+
 def _add_person_to_group(person):
     # Check Student
     if student.find_by_person(person):
@@ -92,6 +107,9 @@ def _add_person_to_group(person):
     # Check tutor
     if tutor.find_by_person(person):
         _assign_group(person, "tutors")
+    # Check if student is internship student
+    if mdl_internship.find_by_person(person):
+        _assign_group(person, 'internship_students')
 
 
 def _assign_group(person, group_name):
