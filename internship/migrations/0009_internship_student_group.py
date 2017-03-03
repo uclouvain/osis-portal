@@ -21,7 +21,7 @@ def add_init_internship_student_group(apps, schema_editor):
 
 def add_users_to_internship_student_group(apps, schema_editor):
     Group = apps.get_model('auth', 'Group')
-    InternshipStudentInformation = apps.get_model('internships', 'InternshipStudentInformation')
+    InternshipStudentInformation = apps.get_model('internship', 'InternshipStudentInformation')
     internship_students_group= Group.objects.get(name='internship_students')
     for student in InternshipStudentInformation.objects.all():
         person = student.person
