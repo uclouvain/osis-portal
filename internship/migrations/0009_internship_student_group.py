@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from django.core.management.sql import emit_post_migrate_signal
 
 from django.db import migrations
-from
 
 
 def add_init_internship_student_group(apps, schema_editor):
@@ -29,7 +28,6 @@ def add_users_to_internship_student_group(apps, schema_editor):
         if person.user:
             user = person.user
             user.groups.add(internship_students_group)
-
 
 
 class Migration(migrations.Migration):
