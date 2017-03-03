@@ -35,13 +35,14 @@ from django.forms import formset_factory
 
 
 @login_required
+@permission_required('internship.can_access_internship', raise_exception=True)
 def view_internship_home(request):
 
     return layout.render(request, "internship_home.html")
 
 
 @login_required
-@permission_required('base.is_student', raise_exception=True)
+@permission_required('internship.can_access_internship', raise_exception=True)
 def view_internship_selection(request, internship_id="1", speciality_id="-1"):
     NUMBER_NON_MANDATORY_INTERNSHIPS = 6
     student = mdl_base.student.find_by_user(request.user)
@@ -77,7 +78,7 @@ def zip_offers_and_formset(formset, internships_offers):
 
 
 @login_required
-@permission_required('base.is_student', raise_exception=True)
+@permission_required('internship.can_access_internship', raise_exception=True)
 def assign_speciality_for_internship(request, internship_id):
     speciality_id = None
     if request.method == "POST":

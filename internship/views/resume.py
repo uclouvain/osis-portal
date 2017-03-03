@@ -36,7 +36,7 @@ from base.models import person as mdl_person
 
 
 @login_required
-@permission_required('base.is_student', raise_exception=True)
+@permission_required('internship.can_access_internship', raise_exception=True)
 def view_student_resume(request):
     student = mdl_student.find_by_user(request.user)
     student_information = mdl_student_information.find_by_user(request.user)
@@ -54,7 +54,7 @@ def view_student_resume(request):
 
 
 @login_required
-@permission_required('base.is_student', raise_exception=True)
+@permission_required('internship.can_access_internship', raise_exception=True)
 def edit_student_information(request):
     if request.method == "POST":
         form = form_internship_student_information.InternshipStudentInformationForm(request.POST)

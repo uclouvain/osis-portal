@@ -39,7 +39,7 @@ class TestResumeUrl(TestCase):
         self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
         self.student.person.user = self.user
         self.student.person.save()
-        add_permission(self.student.person.user, "is_student")
+        add_permission(self.student.person.user, "can_access_internship")
 
     def test_can_access_student_resume(self):
         url = reverse("student_resume")
@@ -66,7 +66,7 @@ class TestEditStudentInformation(TestCase):
         self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
         self.student.person.user = self.user
         self.student.person.save()
-        add_permission(self.student.person.user, "is_student")
+        add_permission(self.student.person.user, "can_access_internship")
         self.c = Client()
         self.c.force_login(self.user)
 
