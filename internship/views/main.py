@@ -62,9 +62,12 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
             remove_previous_choices(student, internship_id)
             save_student_choices(formset, student, int(internship_id), speciality)
 
+    specialities = mdl_internship.internship_speciality.find_all()
+
     return layout.render(request, "internship_selection.html",
                          {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1),
                           "speciality_form": SpecialityForm(),
+                          "all_specialities": specialities,
                           "formset": formset,
                           "offers_forms": zip_offers_and_formset(formset, selectable_offers),
                           "speciality_id": int(speciality_id),
@@ -84,10 +87,7 @@ def zip_offers_and_formset(formset, internships_offers):
 def assign_speciality_for_internship(request, internship_id):
     speciality_id = None
     if request.method == "POST":
-        speciality_form = SpecialityForm(request.POST)
-        if speciality_form.is_valid():
-            speciality_selected = speciality_form.cleaned_data["speciality"]
-            speciality_id = speciality_selected.id
+        speciality_id = int(request.POST.get("speciality_chosen", 0))
 
     return redirect("select_internship_speciality", internship_id=internship_id, speciality_id=speciality_id)
 
