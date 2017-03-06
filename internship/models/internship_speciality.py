@@ -50,3 +50,7 @@ def find_by_id(a_id):
         return InternshipSpeciality.objects.get(id=a_id)
     except ObjectDoesNotExist:
         return None
+
+
+def find_all():
+    return InternshipSpeciality.objects.all()
