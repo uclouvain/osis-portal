@@ -55,6 +55,9 @@ msgstr "Fourth choice"
 msgid "generalist"
 msgstr "Generalist"
 
+msgid "GENERALIST"
+msgstr "Generalist"
+
 msgid	 "hospital_list"
 msgstr	 "Hospital list"
 
@@ -113,10 +116,15 @@ msgid "selection"
 msgstr "selection"
 
 msgid "select_contest"
-msgstr "!! <strong>Select the contest</strong> that you intent to pass."
+msgstr "<strong>BEFORE</strong> choosing your internships, follow the link to choose the contest (generalist "
+       "or specialist)that you intend to pass. If this data is incorrect, the system may assign you internships"
+       "which are not compatible."
 
 msgid "speciality"
 msgstr "Speciality"
+
+msgid "SPECIALIST"
+msgstr "Specialist"
 
 msgid "specialist"
 msgstr "Specialist"

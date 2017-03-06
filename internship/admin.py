@@ -54,3 +54,6 @@ admin.site.register(period.Period,
 admin.site.register(internship_student_affectation_stat.InternshipStudentAffectationStat,
                     internship_student_affectation_stat.InternshipStudentAffectationStatAdmin)
 
+admin.site.register(period_internship_places.PeriodInternshipPlaces,
+                    period_internship_places.PeriodInternshipPlacesAdmin)
+
