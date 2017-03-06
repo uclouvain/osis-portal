@@ -55,6 +55,9 @@ msgstr "Fourth choice"
 msgid "generalist"
 msgstr "Generalist"
 
+msgid "GENERALIST"
+msgstr "Generalist"
+
 msgid	 "hospital_list"
 msgstr	 "Hospital list"
 
@@ -117,6 +120,9 @@ msgstr "!! <strong>Select the contest</strong> that you intent to pass."
 
 msgid "speciality"
 msgstr "Speciality"
+
+msgid "SPECIALIST"
+msgstr "Specialist"
 
 msgid "specialist"
 msgstr "Specialist"
