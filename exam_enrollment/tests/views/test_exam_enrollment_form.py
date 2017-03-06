@@ -32,6 +32,10 @@ import random
 from base.tests.models import test_student, test_person, test_academic_year, test_offer_year, test_offer_enrollment
 from exam_enrollment.views import main
 import warnings
+from exam_enrollment.tests.factories.exam_enrollment_form import ExamEnrollmentFormFactory
+from base.tests.factories.offer_year import OfferYearFactory
+from base.tests.factories.academic_year import AcademicYearFactory
+import datetime
 
 
 def load_json_file(path):
@@ -177,4 +181,33 @@ class ExamEnrollmentFormTest(TestCase):
         response = self.client.get(an_url, follow=True)
         self.assertRedirects(response, reverse('dashboard_home'))
         self.assertEqual('dashboard.html', response.templates[0].name)
+
+    def create_exam_enrollment_form(self, offer_yr,delay):
+        exam_enrollment_form = ExamEnrollmentFormFactory()
+        exam_enrollment_form.updated_date = datetime.datetime.now() - datetime.timedelta(hours=delay)
+        exam_enrollment_form.offer_year_id = offer_yr.id
+        exam_enrollment_form.registration_id = self.student.registration_id
+        exam_enrollment_form.save()
+        return exam_enrollment_form
+
+    def test_call_queue(self):
+        offer_yr = OfferYearFactory()
+        delay_of_48_hours = main.UPDATE_DELAY * 2
+        exam_enrollment_form = self.create_exam_enrollment_form(offer_yr, delay_of_48_hours)
+        self.assertNotEqual(main._fetch_exam_enrollment_form(self.student.registration_id,
+                                         offer_yr.acronym,
+                                         offer_yr.academic_year.year,
+                                         offer_yr.id), json.loads(exam_enrollment_form.form))
+
+    def test_not_calling_queue(self):
+        offer_yr = OfferYearFactory()
+        delay_of_12_hours = main.UPDATE_DELAY -12
+        exam_enrollment_form = self.create_exam_enrollment_form(offer_yr, delay_of_12_hours)
+        self.assertEqual(main._fetch_exam_enrollment_form(self.student.registration_id,
+                                                             offer_yr.acronym,
+                                                             offer_yr.academic_year.year,
+                                                             offer_yr.id), json.loads(exam_enrollment_form.form))
+
+
+
 

@@ -31,7 +31,7 @@ from django.conf import settings
 from django.contrib import admin, messages
 
 
-class ExamEnrollmentAdmin(admin.ModelAdmin):
+class ExamEnrollmentSubmittedAdmin(admin.ModelAdmin):
     list_display = ('registration_id', 'offer_year_acronym', )
     fieldsets = ((None, {'fields': ('registration_id', 'offer_year_acronym', 'document')}),)
     search_fields = ['registration_id']
@@ -51,7 +51,7 @@ class ExamEnrollmentAdmin(admin.ModelAdmin):
         self.message_user(request, "{} message(s) sent.".format(counter), level=messages.SUCCESS)
 
 
-class ExamEnrollment(models.Model):
+class ExamEnrollmentSubmitted(models.Model):
     registration_id = models.CharField(max_length=10, unique=True)
     offer_year_acronym = models.CharField(max_length=10, unique=True)
     document = JSONField()
@@ -61,7 +61,7 @@ class ExamEnrollment(models.Model):
 
 
 def insert_or_update_document(registration_id, offer_year_acronym, document):
-    exam_enrollment_object, created = ExamEnrollment.objects.update_or_create(
+    exam_enrollment_object, created = ExamEnrollmentSubmitted.objects.update_or_create(
         registration_id=registration_id, offer_year_acronym=offer_year_acronym, defaults={"document": document}
     )
     return exam_enrollment_object

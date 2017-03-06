@@ -1,12 +1,12 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,5 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from exam_enrollment.models import exam_enrollment_submitted, exam_enrollment_form
+import factory
+import factory.fuzzy
+import string
+import datetime
+from django.conf import settings
+from django.utils import timezone
 
+def _get_tzinfo():
+    if settings.USE_TZ:
+        return timezone.get_current_timezone()
+    else:
+        return None
+
+class OfferFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = "base.Offer"
+
+    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
+    title = factory.Sequence(lambda n: 'Offer %d' %n)

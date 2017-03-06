@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,5 +23,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from exam_enrollment.models import exam_enrollment_submitted, exam_enrollment_form
+import factory
+import factory.fuzzy
+import string
+import datetime
+from django.conf import settings
+from django.utils import timezone
 
+
+def _get_tzinfo():
+    if settings.USE_TZ:
+        return timezone.get_current_timezone()
+    else:
+        return None
+
+class AcademicYearFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = "base.AcademicYear"
+
+    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
+    year = factory.fuzzy.FuzzyInteger(2000, timezone.now().year)
+    start_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year, 1, 1))
+    end_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year+1, 12, 30))
