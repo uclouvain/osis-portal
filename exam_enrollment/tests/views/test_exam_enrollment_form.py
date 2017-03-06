@@ -29,7 +29,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
 import json
 import random
-from base.tests.models import test_student, test_person, test_academic_year, test_offer_year
+from base.tests.models import test_student, test_person, test_academic_year, test_offer_year, test_offer_enrollment
 from exam_enrollment.views import main
 import warnings
 
@@ -155,3 +155,26 @@ class ExamEnrollmentFormTest(TestCase):
         exam_enrollments_expected = expected_result.get('exam_enrollments')
         for index in range(0, len(exam_enrollments)):
             self.assertIn(exam_enrollments[index], exam_enrollments_expected)
+
+    def create_offer_enrollment_for_current_academic_yr(self):
+        off_year_current_academic_year = test_offer_year.create_offer_year_with_academic_year(
+            test_academic_year.create_academic_year_current())
+        student_offer_year_enrollment = test_offer_enrollment.create_offer_enrollment(self.student,
+                                                                                      off_year_current_academic_year)
+        return student_offer_year_enrollment
+
+    def test_get_programs_student_is_none(self):
+        self.assertIsNone(main._get_student_programs(None))
+
+    def test_get_one_program(self):
+        self.client.force_login(self.user)
+        student_offer_year_enrollment = self.create_offer_enrollment_for_current_academic_yr()
+        self.assertEqual(main._get_student_programs(self.student)[0], student_offer_year_enrollment.offer_year)
+
+    def test_navigation_with_no_offer_in_current_academic_year(self):
+        self.client.force_login(self.user)
+        an_url = reverse('exam_enrollment_form_direct')
+        response = self.client.get(an_url, follow=True)
+        self.assertRedirects(response, reverse('dashboard_home'))
+        self.assertEqual('dashboard.html', response.templates[0].name)
+

@@ -35,16 +35,35 @@ from django.utils.translation import ugettext_lazy as _
 from django.http import response
 from osis_common.queue import queue_sender
 from django.conf import settings
+from django.http import HttpResponseRedirect
 import warnings
 
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def choose_offer(request):
+    return navigation(request, False)
+
+@login_required
+@permission_required('base.is_student', raise_exception=True)
+def choose_offer_direct(request):
+    return navigation(request, True)
+
+
+@login_required
+@permission_required('base.is_student', raise_exception=True)
+def navigation(request, navigate_direct_to_form):
     stud = student.find_by_user(request.user)
     student_programs = None
     if stud:
-        student_programs = [enrol.offer_year for enrol in list(offer_enrollment.find_by_student(stud))]
+        student_programs = _get_student_programs(stud)
+        if student_programs is None or len(student_programs) == 0:
+            messages.add_message(request, messages.WARNING, _('no_offer_enrollment_found'))
+            return response.HttpResponseRedirect(reverse('dashboard_home'))
+        else:
+            if navigate_direct_to_form and len(student_programs) == 1:
+                return _get_exam_enrollment_form(student_programs[0], student_programs[0].id, request, stud)
+
     return layout.render(request, 'offer_choice.html', {'programs': student_programs,
                                                         'student': stud})
 
@@ -148,3 +167,10 @@ def _exam_enrollment_form_message(registration_id, offer_year_acronym, year):
         'offer_year_acronym': offer_year_acronym,
         'year': year,
     }
+
+
+def _get_student_programs(stud):
+    if stud:
+        return [enrol.offer_year for enrol in list(
+            offer_enrollment.find_by_student_academic_year(stud, academic_year.current_academic_year()))]
+    return None
