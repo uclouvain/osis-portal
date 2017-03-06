@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -63,7 +63,6 @@ INSTALLED_APPS = (
     'ckeditor',
     'reference',
     'base',
-    'admission',
     'enrollments',
     'dashboard',
     'performance',
@@ -130,7 +129,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'osis_front_dev',
-        'USER': "postgres" if os.environ.get("ENV") == "test" else  'osis_usr',
+        'USER': "postgres" if os.environ.get("ENV") == "test" else 'osis_usr',
         'PASSWORD': "" if os.environ.get("ENV") == "test" else 'osis',
         'HOST': '127.0.0.1',
         'PORT': '5432',
@@ -154,7 +153,7 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
-            'level':'DEBUG',
+            'level': 'DEBUG',
         },
     },
     'loggers': {
@@ -268,7 +267,7 @@ QUEUES = {
 }
 
 
-LOGIN_URL=reverse_lazy('login')
+LOGIN_URL = reverse_lazy('login')
 OVERRIDED_LOGOUT_URL = ''
 OVERRIDED_LOGIN_URL = ''
 
@@ -335,7 +334,3 @@ try:
         pass
 except ImportError:
     pass
-
-if 'admission' in INSTALLED_APPS:
-    ADMISSION_LOGIN_URL = reverse_lazy('admission_login')
-    ADMISSION_LOGIN_REDIRECT_URL = reverse_lazy('admission')

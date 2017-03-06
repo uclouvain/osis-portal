@@ -1,7 +1,6 @@
 venv/
 *.pyc
 .idea/
-admission/tests/sent_mails/
 base/tests/sent_mails/
 *.mo
 
