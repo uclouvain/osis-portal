@@ -61,17 +61,15 @@
         <div class="row">
             <form action="{% url 'assign_speciality' internship_id=intern_id %}"  method="post">
                 {% csrf_token %}
-                {{ speciality_form.non_field_errors }}
                 <div class="fieldWrapper col-md-4 form-group">
-                    {{ speciality_form.speciality.errors }}
-                    <label for="{{ speciality_form.speciality.id_for_label }}">{% trans 'choose_speciality' %}:</label>
-                    <select id="{{ speciality_form.speciality.id_for_label }}"
-                            name="{{ speciality_form.speciality.html_name }}"
+                    <label for="speciality_selection">{% trans 'choose_speciality' %}:</label>
+                    <select id="speciality_selection"
+                            name="speciality_chosen"
                             class="form-control">
-                        {% for x,y in speciality_form.fields.speciality.choices %}
-                            <option value="{{ x }}"
-                                    {% if speciality_id == x %} selected {% endif %}>
-                                {{ y }}
+                        {% for speciality in all_specialities %}
+                            <option value="{{ speciality.id }}"
+                                    {% if speciality_id == speciality.id %} selected {% endif %}>
+                                {{ speciality.name }}
                             </option>
                         {% endfor %}
                     </select>
