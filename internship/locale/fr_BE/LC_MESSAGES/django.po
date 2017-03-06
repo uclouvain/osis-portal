@@ -115,9 +115,9 @@ msgid "selection"
 msgstr "sélection"
 
 msgid "select_contest"
-msgstr "<strong>AVANT</strong> de faire vos choix, suivez le lien pour séléctionner la filière (SG ou SS) que "
-       "vous comptez suivre à ce stade. Si cette donnée n'est pas correcte, le système risque de vous imposer "
-       "des choix non compatibles."
+msgstr "<strong>AVANT</strong> de faire vos choix, suivez le lien pour séléctionner la filière (généraliste ou "
+       "spécialiste) que vous comptez suivre à ce stade. Si cette donnée n'est pas correcte, le système risque de "
+       "vous imposer des choix non compatibles."
 
 msgid "specialist"
 msgstr "Spécialiste"
