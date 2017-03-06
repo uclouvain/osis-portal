@@ -67,7 +67,7 @@ def current_academic_year():
 
 def find_by_year(a_year):
     try:
-        return AcademicYear.objects.filter(year=a_year).first()
+        return AcademicYear.objects.get(year=a_year)
     except ObjectDoesNotExist:
         return None
 
