@@ -1,6 +1,6 @@
 {
   "registration_id": "12345678",
-  "current_number_session": 3,
+  "current_number_session": 2,
   "legend": [ "P - Examen partiel",
               "I - Première inscription",
               "Y - Deuxième inscription",
@@ -17,6 +17,8 @@
       "credits": 3.0,
       "credited": null,
       "enrolled_by_default": true,
+      "etat_to_inscr_current_session": "I",
+      "can_enrol_to_exam" : true,
       "session_1": {
         "score": "10",
         "enrollment_state": "P"
@@ -33,13 +35,14 @@
         "acronym": "LDROI1004",
         "title": "Introduction au droit pénal",
         "enrollment_state": "Insc."
-      },
-      "": ""
+      }
     },
     {
       "credits": 8.0,
       "credited": null,
       "enrolled_by_default": false,
+      "etat_to_inscr_current_session": "Y",
+      "can_enrol_to_exam" : false,
       "session_1": {
         "score": "Tricherie",
         "enrollment_state": "I"
@@ -62,6 +65,8 @@
       "credits": 10.0,
       "credited": "Report",
       "enrolled_by_default": true,
+      "etat_to_inscr_current_session": "",
+      "can_enrol_to_exam" : true,
       "session_2": {
         "score": "15",
         "enrollment_state": "I"
@@ -76,6 +81,8 @@
       "credits": 5.0,
       "credited": null,
       "enrolled_by_default": true,
+      "etat_to_inscr_current_session": "P",
+      "can_enrol_to_exam" : false,
       "session_1": {
         "score": null,
         "enrollment_state": "I"
@@ -94,6 +101,8 @@
       "credits": null,
       "credited": null,
       "enrolled_by_default": false,
+      "etat_to_inscr_current_session": null,
+      "can_enrol_to_exam" : true,
       "session_1": {
         "score": "Absent",
         "enrollment_state": null

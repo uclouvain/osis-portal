@@ -26,14 +26,14 @@
 from base import models as mdl_base
 
 
-def create_person():
-    a_person = mdl_base.person.Person(first_name="first", last_name="last")
+def create_person(first_name="first", last_name="last"):
+    a_person = mdl_base.person.Person(first_name=first_name, last_name=last_name)
     a_person.save()
     return a_person
 
 
-def create_person_with_user(a_user):
-    person = mdl_base.person.Person()
+def create_person_with_user(a_user, first_name="first", last_name="last"):
+    person = mdl_base.person.Person(first_name=first_name, last_name=last_name)
     person.user = a_user
     person.save()
     return person

@@ -1,0 +1,166 @@
+{% extends "dashboard_layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block breadcrumb %}
+    <li> <a href="{% url 'internship_home' %}">{% trans 'internship' %}</a> </li>
+    <li class="active">{% trans 'student_resume' %}</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="page-header">
+    <h2>{% trans 'student_resume' %}</h2>
+</div>
+
+
+<div class="panel panel-default">
+    <div class="panel panel-body">
+
+        <div class="row">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#student_info" aria-controls="student_info" role="tab" data-toggle="tab">
+                        {% trans 'student_information' %}
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a href="#choices" aria-controls="choices" role="tab" data-toggle="tab">
+                        {% trans 'choices_received_by_administration' %}
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a href="#affectation" aria-controls="affectation" role="tab" data-toggle="tab">
+                        {% trans 'internship_affectation' %}
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="tab-content">
+
+            <div role="tabpanel" class="tab-pane active" id="student_info">
+                <br>
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>{% trans 'last_name' %}</strong>
+                        <br>
+                        {{ student.person.last_name }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>{% trans 'first_name' %}</strong>
+                        <br>
+                        {{ student.person.first_name }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>{% trans 'registration_id' %}</strong>
+                        <br>
+                        {{ student.registration_id }}
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>{% trans 'gender' %}</strong>
+                        <br>
+                        {{ student.person.gender}}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>{% trans 'email' %}</strong>
+                        <br>
+                        {{ student.person.email }}
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>{% trans 'mobile_phone' %}</strong>
+                        <br>
+                        {{ student.person.phone_mobile }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>{% trans 'language' %}</strong>
+                        <br>
+                        {{ student.person.language }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>{% trans 'address' %}</strong>
+                        <br>
+                        {{ student_information.location }}
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>{% trans 'contest' %}</strong>
+                        <br>
+                        {{ student_information.contest }}
+                    </div>
+                </div>
+                <br>
+                <a role="button" class="btn btn-info" aria-label="Edit" href="{% url 'internship_student_edit' %}">
+                    <span class="glyphicon glyphicon-edit" aria-hidden="true">
+                    </span>
+                    {% trans 'edit' %}
+                </a>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="choices">
+                <br>
+                <div class="row">
+                    {% for internship in internships %}
+                        <strong>{% trans 'internship' %} {{ internship }}</strong>
+                        <ul>
+                        {% for choice in student_choices %}
+                            {% if choice.internship_choice == internship %}
+                                <li>{{ choice.organization }} | {{ choice.speciality }} |{{ choice.choice }}</li>
+                            {% endif %}
+                        {% endfor %}
+                        </ul>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="affectation">
+                {% for affectation, address in student_affectations_with_address %}
+                <div class="row">
+                <br>
+                    <strong>{{ affectation.period.name }}</strong> ({{ affectation.period.date_start }} - {{ affectation.period.date_end }})
+                    <br>
+                    {{ affectation.speciality.name }} | {{ affectation.organization }}
+                    <br>
+                    Address: {{ address.location }}
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+{% endblock %}

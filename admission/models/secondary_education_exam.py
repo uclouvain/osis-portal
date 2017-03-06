@@ -79,3 +79,10 @@ def find_by_type(secondary_education_id=None, type=None):
         return results[0]
     return None
 
+
+def find_by_secondary_education(secondary_education=None):
+    results = search(None, secondary_education, None)
+    if results and results.exists():
+        return results[0]
+    return None
+

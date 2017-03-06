@@ -23,9 +23,9 @@
 
 {% if 'exam_enrollment' in installed_apps %}
     <div class="grid-item">
-       <i class="fa fa-list-alt"></i>
+       <i class="fa fa-book"></i>
        <div class="description">
-           <h4 class="media-heading"><a href="{% url 'exam_enrollment_offer_choice' %}" id="lnk_exam_enrollment_offer_choice">{% trans 'exams_enrollment' %}</a></h4>
+           <h4 class="media-heading"><a href="{% url 'exam_enrollment_form_direct' %}" id="lnk_exam_enrollment_offer_choice">{% trans 'exams_enrollment' %}</a></h4>
            <p>{% trans 'desc_lnk_exam_enrollment' %}</p>
        </div>
     </div>
@@ -35,8 +35,8 @@
     <div class="grid-item">
         <i class="fa fa-user-md"></i>
         <div class="description">
-            <h4 class="media-heading"><a href="{% url 'internship_home'  %}" id="lnk_internship">{% trans 'internship' %}</a></h4>
-            <p>{% trans 'desc_lnk_internship' %}</p>
+            <h4 class="media-heading"><a href="{% url 'internship_home'  %}" id="lnk_internship">{% trans 'internships' %}</a></h4>
+            <p>{% trans 'desc_lnk_internships' %}</p>
         </div>
     </div>
 {% endif %}
