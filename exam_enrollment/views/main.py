@@ -40,7 +40,18 @@ import warnings
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
-def choose_offer(request, not_forcing_page_offer_choice):
+def choose_offer(request):
+    return navigation(request, False)
+
+@login_required
+@permission_required('base.is_student', raise_exception=True)
+def choose_offer_direct(request):
+    return navigation(request, True)
+
+
+@login_required
+@permission_required('base.is_student', raise_exception=True)
+def navigation(request, navigate_direct_to_form):
     stud = student.find_by_user(request.user)
     student_programs = None
     if stud:
@@ -49,7 +60,7 @@ def choose_offer(request, not_forcing_page_offer_choice):
             messages.add_message(request, messages.WARNING, _('no_offer_enrollment_found'))
             return response.HttpResponseRedirect(reverse('dashboard_home'))
         else:
-            if not_forcing_page_offer_choice == "1" and len(student_programs) == 1:
+            if navigate_direct_to_form and len(student_programs) == 1:
                 return _get_exam_enrollment_form(student_programs[0], student_programs[0].id, request, stud)
 
     return layout.render(request, 'offer_choice.html', {'programs': student_programs,

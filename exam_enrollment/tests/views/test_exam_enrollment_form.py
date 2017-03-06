@@ -172,7 +172,7 @@ class ExamEnrollmentFormTest(TestCase):
 
     def test_navigation_with_no_offer_in_current_academic_year(self):
         self.client.force_login(self.user)
-        an_url = reverse('exam_enrollment_offer_choice', args=(1,))
+        an_url = reverse('exam_enrollment_form_direct')
         response = self.client.get(an_url, follow=True)
         self.assertRedirects(response, reverse('dashboard_home'))
         self.assertEqual('dashboard.html', response.templates[0].name)
