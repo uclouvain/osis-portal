@@ -28,5 +28,6 @@ from exam_enrollment.views import main
 
 urlpatterns = [
     url(r'^$', main.choose_offer, name='exam_enrollment_offer_choice'),
+    url(r'^direct/$', main.choose_offer_direct, name='exam_enrollment_form_direct'),
     url(r'^([0-9]+)/form/$', main.exam_enrollment_form, name='exam_enrollment_form'),
 ]
