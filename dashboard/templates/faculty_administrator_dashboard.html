@@ -65,5 +65,21 @@
             <br>
     </div>
     {% endif %}
+    {% if 'attribution'  in installed_apps %}
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-2"><i class="fa fa-cogs" style="font-size: 400%; color: #6699FF;"></i></div>
+                <div class="col-md-10">
+                    <h4 class="media-heading">
+                        <a href="{% url 'attribution_administration'  %}" id="lnk_attribution_administration">
+                            <br/>
+                            {% trans 'attribution_administration' %}
+                        </a>
+                    </h4>
+                </div>
+            </div>
+            <br>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

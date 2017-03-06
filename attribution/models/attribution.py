@@ -44,6 +44,11 @@ class Attribution(SerializableModel):
     start_year = models.IntegerField(blank=True, null=True)
     end_year = models.IntegerField(blank=True, null=True)
 
+    class Meta:
+        permissions = (
+            ("can_access_attribution", "Can access attribution"),
+        )
+
     def __str__(self):
         return u"%s - %s" % (self.tutor.person, self.function)
 

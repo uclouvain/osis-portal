@@ -36,7 +36,7 @@ from admission.models.enums import application_type, coverage_access_degree
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = ('applicant', 'offer_year', 'creation_date', 'application_type')
     fieldsets = ((None, {'fields': ('applicant', 'offer_year', 'application_type', 'applied_to_sameprogram',
-                                    'coverage_access_degree', 'valuation_possible')}),)
+                                    'coverage_access_degree', 'valuation_possible', 'reference')}),)
 
 
 class Application(SerializableModel):
@@ -64,6 +64,7 @@ class Application(SerializableModel):
     bank_account_iban = IBANField(include_countries=IBAN_SEPA_COUNTRIES, blank=True, null=True)
     bank_account_bic = BICField(blank=True, null=True)
     bank_account_name = models.CharField(max_length=255, blank=True, null=True)
+    reference = models.CharField(max_length=20, blank=True, null=True, unique=True)
 
     def __str__(self):
         return u"%s %s" % (self.applicant, self.offer_year)

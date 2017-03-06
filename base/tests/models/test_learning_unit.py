@@ -36,3 +36,5 @@ def create_learning_unit(data):
         learning_unit.description = data['description']
     learning_unit.save()
     return learning_unit
+
+

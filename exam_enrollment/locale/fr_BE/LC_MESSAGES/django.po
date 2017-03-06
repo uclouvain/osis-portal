@@ -28,6 +28,9 @@ msgstr "Choisissez à quels examens vous désirez vous inscrire pour la prochain
 msgid "exams_enrollment"
 msgstr "Inscription aux examens"
 
+msgid "exam_enrollment_form_submitted"
+msgstr "Formulaire d'inscription aux examens soumis avec succès."
+
 msgid "info_exam_enrollment_by_default"
 msgstr "<b>Par défaut, vous êtes déjà inscrit à tous les examens cochés ci-dessous. "
        "<br>Si cela vous convient, vous n'avez aucune action à effectuer.</b>"
@@ -71,7 +74,7 @@ msgid "no_offer_enrollment_found"
 msgstr "Vous n'êtes inscrit à aucun programme d'étude pour cette année académique."
 
 msgid "outside_exam_enrollment_period"
-msgstr "Les inscriptions aux examens sont actuellement fermées."
+msgstr "Les inscriptions aux examens pour le programme {} sont actuellement fermées."
 
 msgid "program"
 msgstr "Programme"

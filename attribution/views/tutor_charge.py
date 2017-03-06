@@ -34,6 +34,8 @@ from base import models as mdl_base
 from attribution import models as mdl_attribution
 from base.models.enums import component_type
 from attribution.forms.attribution import AttributionForm
+from base.forms.base_forms import GlobalIdForm
+from base.views import layout
 from django.contrib.auth.decorators import login_required, permission_required
 import json
 
@@ -54,20 +56,25 @@ SEPTEMBER = "septembre"
 
 
 @login_required
-@permission_required('attribution.can_access_attribution_application', raise_exception=True)
+@permission_required('attribution.can_access_attribution', raise_exception=True)
 def home(request):
+    a_person = get_person(request.user)
+    return by_year(request, get_current_academic_year(), a_person.global_id)
+
+
+def get_current_academic_year():
     a_year = datetime.datetime.now().year
     current_academic_year = mdl_base.academic_year.current_academic_year()
     if current_academic_year:
         a_year = current_academic_year.year
-    return by_year(request, a_year)
+    return a_year
 
 
 def get_person(a_user):
     return mdl_base.person.find_by_user(a_user)
 
 
-def get_attribution_allocation_charge(a_tutor, a_learning_unit_year, a_component_type):
+def attribution_allocation_charges(a_tutor, a_learning_unit_year, a_component_type):
     attribution_list = mdl_attribution.attribution.search(a_tutor, a_learning_unit_year)
     tot_allocation_charge = NO_ALLOCATION_CHARGE
     for an_attribution in attribution_list:
@@ -115,7 +122,7 @@ def list_attributions(a_person, an_academic_year):
     return results_in_charge
 
 
-def list_teaching_charge_attribution_representation(a_person, an_academic_year):
+def list_teaching_charge(a_person, an_academic_year):
     attribution_list = []
     tot_lecturing = NO_ALLOCATION_CHARGE
     tot_practical = NO_ALLOCATION_CHARGE
@@ -145,7 +152,8 @@ def list_teaching_charge_attribution_representation(a_person, an_academic_year):
              'function': an_attribution.function,
              'year': a_learning_unit_year.academic_year.year,
              'learning_unit_year_url': get_url_learning_unit_year(a_learning_unit_year),
-             'learning_unit_year': a_learning_unit_year})
+             'learning_unit_year': a_learning_unit_year,
+             'tutor_id': an_attribution.tutor.id})
     if len(attribution_list) == 0:
         attribution_list = None
     return {'attributions': attribution_list,
@@ -154,9 +162,17 @@ def list_teaching_charge_attribution_representation(a_person, an_academic_year):
 
 
 @login_required
-@permission_required('attribution.can_access_attribution_application', raise_exception=True)
-def by_year(request, year):
-    a_person = get_person(request.user)
+@permission_required('attribution.can_access_attribution', raise_exception=True)
+def by_year(request, year, a_global_id):
+    if a_global_id:
+        a_person =mdl_base.person.find_by_global_id(a_global_id)
+    else:
+        a_person = get_person(request.user)
+    data = get_teaching_charge_data(a_person,  year)
+    return render(request, "tutor_charge.html", data)
+
+
+def get_teaching_charge_data(a_person, year):
     an_academic_year = None
     if year:
         an_academic_year = mdl_base.academic_year.find_by_year(year)
@@ -164,19 +180,22 @@ def by_year(request, year):
     tot_lecturing = None
     tot_practical = None
     if is_tutor(a_person):
-        attributions_dict = list_teaching_charge_attribution_representation(a_person, an_academic_year)
+        attributions_dict = list_teaching_charge(a_person, an_academic_year)
         attributions = attributions_dict['attributions']
         tot_lecturing = attributions_dict['tot_lecturing']
         tot_practical = attributions_dict['tot_practical']
-
-    return render(request, "tutor_charge.html", {
-        'user': request.user,
-        'attributions': attributions,
-        'formset': set_formset_years(a_person),
-        'year': int(year),
-        'tot_lecturing': tot_lecturing,
-        'tot_practical': tot_practical,
-        'academic_year': "{0}-{1}".format(str(an_academic_year.year), str(an_academic_year.year + 1))})
+    a_user = None
+    if a_person:
+        a_user = a_person.user
+    data = {'user': a_user,
+            'attributions': attributions,
+            'formset': set_formset_years(a_person),
+            'year': int(year),
+            'tot_lecturing': tot_lecturing,
+            'tot_practical': tot_practical,
+            'academic_year': "{0}-{1}".format(str(an_academic_year.year), str(an_academic_year.year + 1)),
+            'global_id': a_person.global_id}
+    return data
 
 
 def get_attribution_years(a_person):
@@ -194,10 +213,9 @@ def set_formset_years(a_person):
 
 
 def get_url_learning_unit_year(a_learning_unit_year):
-    if a_learning_unit_year:
-        if is_string_not_null_empty(a_learning_unit_year.acronym):
-            return settings.CATALOG_URL.format(a_learning_unit_year.academic_year.year,
-                                               a_learning_unit_year.acronym.lower())
+    if a_learning_unit_year and is_string_not_null_empty(a_learning_unit_year.acronym):
+        return settings.CATALOG_URL.format(a_learning_unit_year.academic_year.year,
+                                           a_learning_unit_year.acronym.lower())
     return None
 
 
@@ -207,12 +225,15 @@ def get_students(a_learning_unit_year_id, a_person):
 
 
 @login_required
-@permission_required('attribution.can_access_attribution_application', raise_exception=True)
-def show_students(request, a_learning_unit_year):
+@permission_required('attribution.can_access_attribution', raise_exception=True)
+def show_students(request, a_learning_unit_year, a_tutor):
     students_list = []
-    for learning_unit_enrollment in get_students(a_learning_unit_year, get_person(request.user)):
+    request_tutor = mdl_base.tutor.find_by_id(a_tutor)
+    for learning_unit_enrollment in get_students(a_learning_unit_year, get_person(request_tutor.person.user)):
         students_list.append(set_student_for_display(learning_unit_enrollment))
+
     return render(request, "students_list.html", {
+        'global_id': request_tutor.person.global_id,
         'students': students_list,
         'learning_unit_year': mdl_base.learning_unit_year.find_by_id(a_learning_unit_year), })
 
@@ -327,3 +348,30 @@ def get_learning_unit_years_list(a_learning_unit_year, a_tutor):
             learning_unit_years_allocated.append(lu)
 
     return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(learning_unit_years_allocated)
+
+
+@login_required
+@permission_required('base.is_faculty_administrator', raise_exception=True)
+def attribution_administration(request):
+    return layout.render(request, 'admin/attribution_administration.html')
+
+
+@login_required
+@permission_required('base.is_faculty_administrator', raise_exception=True)
+def select_tutor_attributions(request):
+    if request.method == "POST":
+        form = GlobalIdForm(request.POST)
+        if form.is_valid():
+            global_id = form.cleaned_data['global_id']
+            return visualize_tutor_attributions(request, global_id)
+    else:
+        form = GlobalIdForm()
+    return layout.render(request, "admin/attribution_administration.html", {"form": form})
+
+
+@login_required
+@permission_required('base.is_faculty_administrator', raise_exception=True)
+def visualize_tutor_attributions(request, global_id):
+    tutor = mdl_base.tutor.find_by_person_global_id(global_id)
+    data = get_teaching_charge_data(tutor.person,  get_current_academic_year())
+    return render(request, "tutor_charge.html", data)
