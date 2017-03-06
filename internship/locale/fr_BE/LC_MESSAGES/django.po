@@ -55,6 +55,9 @@ msgstr "Quatrième choix"
 msgid "generalist"
 msgstr "Généraliste"
 
+msgid "GENERALIST"
+msgstr "Généraliste"
+
 msgid	 "hospital_list"
 msgstr	 "Liste des hôpitaux"
 
@@ -117,6 +120,9 @@ msgstr "<strong>AVANT</strong> de faire vos choix, suivez le lien pour sélécti
        "des choix non compatibles."
 
 msgid "specialist"
+msgstr "Spécialiste"
+
+msgid "SPECIALIST"
 msgstr "Spécialiste"
 
 msgid "speciality"
