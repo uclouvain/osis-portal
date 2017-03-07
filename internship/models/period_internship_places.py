@@ -23,16 +23,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from internship.models import internship_choice
-from internship.models import internship_master
-from internship.models import internship_offer
-from internship.models import internship_speciality
-from internship.models import internship_student_affectation_stat
-from internship.models import internship_student_information
-from internship.models import organization
-from internship.models import organization_address
-from internship.models import internship_master
-from internship.models import internship_student_information
-from internship.models import period
-from internship.models import internship_student_affectation_stat
-from internship.models import period_internship_places
+from django.contrib import admin
+from django.db import models
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+
+
+class PeriodInternshipPlacesAdmin(SerializableModelAdmin):
+    list_display = ('period', 'internship', 'number_places')
+    fieldsets = ((None, {'fields': ('period', 'internship', 'number_places')}),)
+    raw_id_fields = ('period', 'internship')
+
+
+class PeriodInternshipPlaces(SerializableModel):
+    period = models.ForeignKey('internship.Period')
+    internship = models.ForeignKey('internship.InternshipOffer')
+    number_places = models.IntegerField(blank=None, null=False)
+
+    def __str__(self):
+        return u"%s (%s)" % (self.internship, self.period)
+
+
+def find_all():
+    return PeriodInternshipPlaces.objects.all()

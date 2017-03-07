@@ -30,8 +30,9 @@ from django.contrib.auth.models import User, Permission
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from internship.tests.models import test_internship_offer, test_organization, test_internship_speciality, \
-    test_internship_choice
+    test_internship_choice, test_period
 from internship.models import internship_choice as mdl_internship_choice
+from internship.models import period_internship_places as mdl_period_places
 
 
 class TestMain(TestCase):
@@ -107,6 +108,14 @@ class TestSelectInternship(TestCase):
 
         self.offer_5 = test_internship_offer.create_specific_internship_offer(self.organization_1, self.speciality_2)
         self.offer_6 = test_internship_offer.create_specific_internship_offer(self.organization_5, self.speciality_2)
+
+        period_9 = test_period.create_period("P9")
+        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship=self.offer_1, number_places=5).save()
+        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship=self.offer_2, number_places=5).save()
+        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship=self.offer_3, number_places=5).save()
+        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship=self.offer_4, number_places=5).save()
+        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship=self.offer_5, number_places=5).save()
+        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship=self.offer_6, number_places=5).save()
 
     def test_with_zero_choices(self):
         selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 1,
@@ -206,7 +215,7 @@ class TestSelectInternship(TestCase):
     def test_two_personal_internships_at_most(self):
         organization = test_organization.create_organization(name="Stage personnel")
         speciality = test_internship_speciality.create_speciality(name="Stage personnel",
-                                                                  acronym="STAGE PERSONNEL")
+                                                                  acronym="SP")
         offer = test_internship_offer.create_specific_internship_offer(organization, speciality,
                                                                        title="Stage personnel")
         choice_1 = test_internship_choice.create_internship_choice(organization, self.student, speciality, 1)
