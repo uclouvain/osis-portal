@@ -61,6 +61,7 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
             save_student_choices(formset, student, int(internship_id), speciality)
 
     specialities = mdl_internship.internship_speciality.find_non_mandatory()
+    first_choices = mdl_internship.internship_choice.get_number_first_choice_by_internship()
 
     return layout.render(request, "internship_selection.html",
                          {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1),

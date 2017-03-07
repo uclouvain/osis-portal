@@ -57,4 +57,4 @@ def find_all():
 
 
 def find_non_mandatory():
-    return InternshipSpeciality.objects.filter(mandatory=False)
+    return InternshipSpeciality.objects.filter(mandatory=False).order_by("name")
