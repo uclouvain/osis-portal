@@ -54,3 +54,7 @@ def find_by_id(a_id):
 
 def find_all():
     return InternshipSpeciality.objects.all()
+
+
+def find_non_mandatory():
+    return InternshipSpeciality.objects.filter(mandatory=False)

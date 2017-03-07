@@ -53,6 +53,24 @@ class InternshipOffer(SerializableModel):
         )
 
 
+def search(speciality=None, selectable=None):
+    has_criteria = False
+    queryset = InternshipOffer.objects
+
+    if speciality:
+        queryset = queryset.filter(speciality=speciality)
+        has_criteria = True
+
+    if selectable is not None:
+        queryset = queryset.filter(selectable=selectable)
+        has_criteria = True
+
+    if has_criteria:
+        return queryset
+    else:
+        return None
+
+
 def find_by_speciality(speciality):
     return InternshipOffer.objects.filter(speciality=speciality)
 
