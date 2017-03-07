@@ -33,6 +33,7 @@ class InternshipOfferAdmin(SerializableModelAdmin):
     fieldsets = ((None, {'fields': ('organization', 'speciality', 'title', 'maximum_enrollments', 'master',
                                     'selectable')}),)
     raw_id_fields = ('organization', 'speciality')
+    search_fields = ['organization__name', 'speciality__name']
 
 
 class InternshipOffer(SerializableModel):
