@@ -48,7 +48,7 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
     student = mdl_base.student.find_by_user(request.user)
 
     speciality = mdl_internship.internship_speciality.find_by_id(speciality_id)
-    selectable_offers = mdl_internship.internship_offer.search(speciality=speciality, selectable=True)
+    selectable_offers = mdl_internship.internship_offer.find_selectable_by_speciality(speciality=speciality)
     offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet,
                                                extra=len(selectable_offers), min_num=len(selectable_offers),
                                                max_num=len(selectable_offers), validate_min=True, validate_max=True)
@@ -61,7 +61,8 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
             save_student_choices(formset, student, int(internship_id), speciality)
 
     specialities = mdl_internship.internship_speciality.find_non_mandatory()
-    first_choices = mdl_internship.internship_choice.get_number_first_choice_by_internship()
+    first_choices = mdl_internship.internship_choice.get_number_first_choice_by_speciality(speciality)
+    print(list(first_choices))
 
     return layout.render(request, "internship_selection.html",
                          {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1),

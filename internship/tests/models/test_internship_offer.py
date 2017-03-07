@@ -66,20 +66,20 @@ class TestInternshipOffer(TestCase):
         pk = 45
         self.assertFalse(internship_offer.find_by_pk(pk))
 
-    def test_search(self):
+    def test_find_selectable_by_speciality(self):
         speciality = test_internship_speciality.create_speciality("OTHER", "OTHER")
         organization = test_organization.create_organization("ORG", "ORG", "02")
         other_offer = create_specific_internship_offer(organization, speciality, "other_offer")
 
-        actual = list(internship_offer.search(speciality=self.offer.speciality))
+        actual = list(internship_offer.find_selectable_by_speciality(self.offer.speciality))
         self.assertEqual(len(actual), 1)
         self.assertIn(self.offer, actual)
 
-        actual = list(internship_offer.search(selectable=True))
-        self.assertEqual(len(actual), 2)
-        self.assertIn(self.offer, actual)
-        self.assertIn(other_offer, actual)
+        self.offer.selectable = False
+        self.offer.save()
+        actual = list(internship_offer.find_selectable_by_speciality(speciality=self.offer.speciality))
+        self.assertEqual(len(actual), 0)
 
-        actual = list(internship_offer.search(speciality=speciality, selectable=True))
+        actual = list(internship_offer.find_selectable_by_speciality(speciality))
         self.assertEqual(len(actual), 1)
         self.assertIn(other_offer, actual)

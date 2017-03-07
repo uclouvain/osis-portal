@@ -68,6 +68,6 @@ def search(student=None, internship_choice=None, speciality=None):
         return None
 
 
-def get_number_first_choice_by_internship():
-    return InternshipChoice.objects.filter(choice=1).values("organization", "speciality")\
-        .annotate(models.Count("organization"), models.Count("speciality"))
+def get_number_first_choice_by_speciality(speciality):
+    return InternshipChoice.objects.filter(choice=1, speciality=speciality).values("organization")\
+        .annotate(models.Count("organization"))
