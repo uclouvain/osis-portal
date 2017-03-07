@@ -52,7 +52,7 @@ def find_by_id(an_education_institution_id):
     return EducationInstitution.objects.get(pk=an_education_institution_id)
 
 
-def find_education_institution_by_adhoc(adhoc_type):
+def find_by_adhoc(adhoc_type):
     return EducationInstitution.objects.filter(adhoc=adhoc_type).order_by('name')
 
 
@@ -69,7 +69,7 @@ def find_by_institution_type(an_institution_type, an_adhoc):
                                                institution_type=an_institution_type)
 
 
-def find_by_institution_type_national_community(an_institution_type, a_national_community, an_adhoc):
+def find_by_type_national_community(an_institution_type, a_national_community, an_adhoc):
     return EducationInstitution.objects.filter(adhoc=an_adhoc,
                                                institution_type=an_institution_type,
                                                national_community=a_national_community)
