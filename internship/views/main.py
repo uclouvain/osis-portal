@@ -61,33 +61,35 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
             save_student_choices(formset, student, int(internship_id), speciality)
 
     specialities = mdl_internship.internship_speciality.find_non_mandatory()
-    dict_number_first_choices = get_first_choices_by_organization(speciality)
+    number_first_choices_by_organization = get_first_choices_by_organization(speciality)
 
     return layout.render(request, "internship_selection.html",
                          {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1),
                           "speciality_form": SpecialityForm(),
                           "all_specialities": specialities,
                           "formset": formset,
-                          "offers_forms": zip_offers_formset_and_first_choices(formset, selectable_offers, dict_number_first_choices),
+                          "offers_forms": zip_offers_formset_and_first_choices(formset, selectable_offers,
+                                                                               number_first_choices_by_organization),
                           "speciality_id": int(speciality_id),
                           "intern_id": int(internship_id),
                           "can_submit": len(selectable_offers) > 0})
 
 
 def get_first_choices_by_organization(speciality):
-    list_number_first_choices = mdl_internship.internship_choice.get_number_first_choice_by_organization(speciality)
-    dict_number_first_choices_by_organization = dict()
-    for number_first_choices in list_number_first_choices:
-        dict_number_first_choices_by_organization[number_first_choices["organization"]] = number_first_choices["organization__count"]
-    return dict_number_first_choices_by_organization
+    list_number_choices = mdl_internship.internship_choice.get_number_first_choice_by_organization(speciality)
+    dict_number_choices_by_organization = dict()
+    for number_first_choices in list_number_choices:
+        dict_number_choices_by_organization[number_first_choices["organization"]] = \
+            number_first_choices["organization__count"]
+    return dict_number_choices_by_organization
 
 
-def zip_offers_formset_and_first_choices(formset, internships_offers, dict_number_first_choices):
+def zip_offers_formset_and_first_choices(formset, internships_offers, number_choices_by_organization):
     zipped_data = None
     if internships_offers:
         zipped_data = []
         for offer, form in zip(internships_offers, formset):
-            zipped_data.append((offer, form, dict_number_first_choices.get(offer.organization.id, 0)))
+            zipped_data.append((offer, form, number_choices_by_organization.get(offer.organization.id, 0)))
     return zipped_data
 
 
