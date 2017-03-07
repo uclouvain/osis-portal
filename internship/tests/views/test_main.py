@@ -215,7 +215,7 @@ class TestSelectInternship(TestCase):
     def test_two_personal_internships_at_most(self):
         organization = test_organization.create_organization(name="Stage personnel")
         speciality = test_internship_speciality.create_speciality(name="Stage personnel",
-                                                                  acronym="STAGE PERSONNEL")
+                                                                  acronym="SP")
         offer = test_internship_offer.create_specific_internship_offer(organization, speciality,
                                                                        title="Stage personnel")
         choice_1 = test_internship_choice.create_internship_choice(organization, self.student, speciality, 1)
