@@ -33,6 +33,7 @@ class InternshipStudentAffectationStatAdmin(SerializableModelAdmin):
     fieldsets = ((None, {'fields': ('student', 'organization', 'speciality', 'period', 'choice', 'cost',
                                     'consecutive_month', 'type_of_internship')}),)
     raw_id_fields = ('student', 'organization', 'speciality', 'period')
+    search_fields = ['student__first_name', 'student__last_name']
 
 
 class InternshipStudentAffectationStat(SerializableModel):
