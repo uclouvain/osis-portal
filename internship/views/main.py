@@ -133,7 +133,7 @@ def is_correct_speciality(offer, speciality):
 
 
 def do_not_exceed_maximum_personnal_internship(speciality, student):
-    if speciality.acronym != "STAGE PERSONNEL":
+    if speciality.acronym != "SP":
         return True
     number_choices_personal_internship = \
         mdl_internship.internship_choice.search(student=student, speciality=speciality).count()
