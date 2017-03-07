@@ -55,6 +55,9 @@ msgstr "Quatrième choix"
 msgid "generalist"
 msgstr "Généraliste"
 
+msgid "GENERALIST"
+msgstr "Généraliste"
+
 msgid	 "hospital_list"
 msgstr	 "Liste des hôpitaux"
 
@@ -112,11 +115,14 @@ msgid "selection"
 msgstr "sélection"
 
 msgid "select_contest"
-msgstr "<strong>AVANT</strong> de faire vos choix, suivez le lien pour séléctionner la filière (SG ou SS) que "
-       "vous comptez suivre à ce stade. Si cette donnée n'est pas correcte, le système risque de vous imposer "
-       "des choix non compatibles."
+msgstr "<strong>AVANT</strong> de faire vos choix, suivez le lien pour séléctionner la filière (généraliste ou "
+       "spécialiste) que vous comptez suivre à ce stade. Si cette donnée n'est pas correcte, le système risque de "
+       "vous imposer des choix non compatibles."
 
 msgid "specialist"
+msgstr "Spécialiste"
+
+msgid "SPECIALIST"
 msgstr "Spécialiste"
 
 msgid "speciality"
