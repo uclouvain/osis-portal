@@ -63,3 +63,6 @@ def find_by_pk(a_pk):
     except ObjectDoesNotExist:
         return None
 
+
+def get_number_selectable():
+    return InternshipOffer.objects.filter(selectable=True).count()

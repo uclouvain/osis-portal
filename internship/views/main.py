@@ -47,6 +47,10 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
     NUMBER_NON_MANDATORY_INTERNSHIPS = 6
     student = mdl_base.student.find_by_user(request.user)
 
+    is_open = mdl_internship.internship_offer.get_number_selectable() > 0
+    if not is_open:
+        return layout.render(request, "internship_selection_closed.html")
+
     speciality = mdl_internship.internship_speciality.find_by_id(speciality_id)
     internships_offers = mdl_internship.internship_offer.find_by_speciality(speciality)
     selectable_offers = list(filter(lambda x: x.selectable, internships_offers))
