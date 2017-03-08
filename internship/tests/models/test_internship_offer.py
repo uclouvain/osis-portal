@@ -48,6 +48,7 @@ class TestInternshipOffer(TestCase):
     def setUp(self):
         self.offer = create_internship_offer()
 
+
     def test_find_by_speciality(self):
         speciality = self.offer.speciality
         actual_offers = internship_offer.find_by_speciality(speciality)
@@ -75,3 +76,21 @@ class TestInternshipOffer(TestCase):
         expected = 0
         actual = internship_offer.get_number_selectable()
         self.assertEqual(expected, actual)
+
+    def test_find_selectable_by_speciality(self):
+        speciality = test_internship_speciality.create_speciality("OTHER", "OTHER")
+        organization = test_organization.create_organization("ORG", "ORG", "02")
+        other_offer = create_specific_internship_offer(organization, speciality, "other_offer")
+
+        actual = list(internship_offer.find_selectable_by_speciality(self.offer.speciality))
+        self.assertEqual(len(actual), 1)
+        self.assertIn(self.offer, actual)
+
+        self.offer.selectable = False
+        self.offer.save()
+        actual = list(internship_offer.find_selectable_by_speciality(speciality=self.offer.speciality))
+        self.assertEqual(len(actual), 0)
+
+        actual = list(internship_offer.find_selectable_by_speciality(speciality))
+        self.assertEqual(len(actual), 1)
+        self.assertIn(other_offer, actual)
