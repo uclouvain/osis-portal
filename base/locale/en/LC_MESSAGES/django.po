@@ -37,3 +37,9 @@ msgstr "Page not found"
 
 msgid "server_error"
 msgstr "A server error occured."
+
+msgid "server_error_message"
+msgstr ""
+  "We have been automatically informed about this problem. Do not hesitate to help us to solve this problem by "
+  "contacting the <a href='https://uclouvain.be/ServiceDesk' target='_blank'>Service Desk</a> to describe what you "
+  "intended to do in more details."
