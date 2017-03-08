@@ -25,6 +25,7 @@
 ##############################################################################
 from internship.models import internship_speciality as mdl_internship_speciality
 from base.tests.models import test_learning_unit
+from django.test import TestCase
 
 
 def create_speciality(name="chirurgie", acronym="WSD"):
@@ -33,6 +34,19 @@ def create_speciality(name="chirurgie", acronym="WSD"):
     speciality = mdl_internship_speciality.InternshipSpeciality(learning_unit=learning_unit, name=name, acronym=acronym)
     speciality.save()
     return speciality
+
+
+class TestInternshipSpeciality(TestCase):
+    def setUp(self):
+        self.speciality_1 = create_speciality(name="spec1")
+        self.speciality_2 = create_speciality(name="spec2")
+        self.speciality_2.mandatory = True
+        self.speciality_2.save()
+
+    def test_find_non_mandatory(self):
+        actual = list(mdl_internship_speciality.find_non_mandatory())
+        self.assertEqual(len(actual), 1)
+        self.assertIn(self.speciality_1, actual)
 
 
 
