@@ -99,13 +99,11 @@
                        <th>{% trans 'preference' %}</th>
                    </thead>
 
-                    {% for offer_form in  offers_forms %}
-                        {% with offer=offer_form.0 %}
-                            {% with form=offer_form.1 %}
+                    {% for offer, form, number_first_choices in  offers_forms %}
                    <tr>
                         <td>{{ offer.organization }}</td>
                         <td>{{ offer.maximum_enrollments }}</td>
-                        <td> {{ formset.counter.preference }} </td>
+                        <td> {{ number_first_choices }} </td>
                         <td hidden>
                             <input type="number" id="{{ form.offer.id_for_label }}" name="{{ form.offer.html_name }}" class="form-control" value="{{ offer.pk }}">
                         </td>
@@ -119,8 +117,6 @@
                             </select>
                         </td>
                    </tr>
-                                {% endwith %}
-                        {% endwith %}
                     {% endfor %}
                </table>
 
