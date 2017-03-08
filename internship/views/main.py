@@ -48,10 +48,7 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
     student = mdl_base.student.find_by_user(request.user)
 
     speciality = mdl_internship.internship_speciality.find_by_id(speciality_id)
-    internships_offers = mdl_internship.internship_offer.find_by_speciality(speciality)
-    selectable_offers = list(filter(lambda x: x.selectable, internships_offers))
-    non_mandatory_periods_by_offers = get_non_mandatory_periods_for_offers()
-    selectable_offers = list(filter(lambda x: x.id in non_mandatory_periods_by_offers, selectable_offers))
+    selectable_offers = mdl_internship.internship_offer.find_selectable_by_speciality(speciality=speciality)
     offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet,
                                                extra=len(selectable_offers), min_num=len(selectable_offers),
                                                max_num=len(selectable_offers), validate_min=True, validate_max=True)
@@ -63,32 +60,36 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
             remove_previous_choices(student, internship_id)
             save_student_choices(formset, student, int(internship_id), speciality)
 
-    specialities = mdl_internship.internship_speciality.find_all()
+    specialities = mdl_internship.internship_speciality.find_non_mandatory()
+    number_first_choices_by_organization = get_first_choices_by_organization(speciality)
 
     return layout.render(request, "internship_selection.html",
                          {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1),
                           "speciality_form": SpecialityForm(),
                           "all_specialities": specialities,
                           "formset": formset,
-                          "offers_forms": zip_offers_and_formset(formset, selectable_offers),
+                          "offers_forms": zip_offers_formset_and_first_choices(formset, selectable_offers,
+                                                                               number_first_choices_by_organization),
                           "speciality_id": int(speciality_id),
                           "intern_id": int(internship_id),
                           "can_submit": len(selectable_offers) > 0})
 
 
-def get_non_mandatory_periods_for_offers():
-    list_periods_places = mdl_internship.period_internship_places.find_all()
-    periods_by_offers = dict()
-    for period_places in list_periods_places:
-        if period_places.period.name in ["P9", "P10", "P11", "P12"] and period_places.number_places > 0:
-            periods_by_offers[period_places.internship.id] = True
-    return periods_by_offers
+def get_first_choices_by_organization(speciality):
+    list_number_choices = mdl_internship.internship_choice.get_number_first_choice_by_organization(speciality)
+    dict_number_choices_by_organization = dict()
+    for number_first_choices in list_number_choices:
+        dict_number_choices_by_organization[number_first_choices["organization"]] = \
+            number_first_choices["organization__count"]
+    return dict_number_choices_by_organization
 
 
-def zip_offers_and_formset(formset, internships_offers):
+def zip_offers_formset_and_first_choices(formset, internships_offers, number_choices_by_organization):
     zipped_data = None
     if internships_offers:
-        zipped_data = zip(internships_offers, formset)
+        zipped_data = []
+        for offer, form in zip(internships_offers, formset):
+            zipped_data.append((offer, form, number_choices_by_organization.get(offer.organization.id, 0)))
     return zipped_data
 
 
