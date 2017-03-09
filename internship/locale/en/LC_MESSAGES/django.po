@@ -120,6 +120,9 @@ msgstr "<strong>BEFORE</strong> choosing your internships, follow the link to ch
        "or specialist)that you intend to pass. If this data is incorrect, the system may assign you internships"
        "which are not compatible."
 
+msgid "selection_is_closed"
+msgstr "The selection is closed."
+
 msgid "speciality"
 msgstr "Speciality"
 
