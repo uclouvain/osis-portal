@@ -13,18 +13,33 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='ExamEnrollmentForm',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('registration_id', models.CharField(max_length=10, unique=True)),
-                ('offer_year_id', models.BigIntegerField()),
-                ('updated_date', models.DateTimeField()),
-                ('form', django.contrib.postgres.fields.jsonb.JSONField()),
-            ],
-        ),
         migrations.RenameModel(
             old_name='ExamEnrollment',
             new_name='ExamEnrollmentSubmitted',
         ),
+        migrations.RemoveField(
+            model_name='examenrollmentsubmitted',
+            name='offer_year_acronym',
+        ),
+        migrations.RemoveField(
+            model_name='examenrollmentsubmitted',
+            name='registration_id',
+        ),
+        migrations.AddField(
+            model_name='examenrollmentsubmitted',
+            name='offer_enrollment',
+            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='base.OfferEnrollment'),
+        ),
+        migrations.CreateModel(
+            name='ExamEnrollmentForm',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('offer_enrollment', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='base.OfferEnrollment')),
+                ('updated_date', models.DateTimeField(auto_now=True)),
+                ('form', django.contrib.postgres.fields.jsonb.JSONField()),
+            ],
+        ),
+
     ]
+
+

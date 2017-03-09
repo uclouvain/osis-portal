@@ -28,42 +28,34 @@ from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.contrib import admin
 
+UPDATE_DELAY = 24
 
 class ExamEnrollmentFormAdmin(admin.ModelAdmin):
-    list_display = ('registration_id', 'offer_year_id', 'updated_date', )
-    fieldsets = ((None, {'fields': ('registration_id', 'offer_year_id', 'updated_date', 'form')}),)
-    search_fields = ['registration_id']
+    list_display = ('offer_enrollment', 'updated_date', )
+    fieldsets = ((None, {'fields': ('offer_enrollment', 'form')}),)
+    search_fields = ['offer_enrollment']
+    raw_id_fields = ('offer_enrollment', )
     actions = ['resend_messages_to_queue']
 
 
 class ExamEnrollmentForm(models.Model):
-    registration_id = models.CharField(max_length=10, unique=True)
-    offer_year_id = models.BigIntegerField(unique=True)
-    updated_date = models.DateTimeField(auto_now=False, blank=False, null=False)
+    offer_enrollment = models.ForeignKey('base.OfferEnrollment')
+    updated_date = models.DateTimeField(auto_now=True)
     form = JSONField()
 
     def __str__(self):
-        return "{}{}".format(self.registration_id, self.offer_year_id)
+        return "{}".format(self.offer_enrollment)
 
 
-def insert_or_update_form(registration_id, offer_year_id, form):
+def insert_or_update_form(an_offer_enrollment, form):
     exam_enrollment_form_object, created = ExamEnrollmentForm.objects.update_or_create(
-        registration_id=registration_id,
-        offer_year_id=offer_year_id,
-        defaults={"form": form, "updated_date": datetime.datetime.now()}
+        offer_enrollment=an_offer_enrollment,
+        defaults={"form": form}
     )
     return exam_enrollment_form_object
 
 
-def search(registration_id=None, offer_year_id=None, min_date=None):
-    out = None
-    queryset = ExamEnrollmentForm.objects
-    if registration_id:
-        queryset = queryset.filter(registration_id=registration_id)
-    if offer_year_id:
-        queryset = queryset.filter(offer_year_id=offer_year_id)
-    if min_date:
-        queryset = queryset.filter(updated_date__gte=min_date)
-    if registration_id or offer_year_id or min_date:
-        out = queryset
-    return out
+def get_form(an_offer_enrollment):
+    min_date = datetime.datetime.now() - datetime.timedelta(hours=UPDATE_DELAY)
+    return ExamEnrollmentForm.objects.filter(offer_enrollment=an_offer_enrollment,updated_date__gte=min_date).first()
+

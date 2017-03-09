@@ -24,39 +24,10 @@
 #
 ##############################################################################
 import factory
-import factory.fuzzy
-import string
-import datetime
-import operator
-import sys
-import json
-from django.conf import settings
-from django.utils import timezone
-from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 
 
-def _get_tzinfo():
-    if settings.USE_TZ:
-        return timezone.get_current_timezone()
-    else:
-        return None
-
-class JSONFactory(factory.DictFactory):
-    """
-    Use with factory.Dict to make JSON strings.
-    """
-    @classmethod
-    def _generate(cls, create, attrs):
-        obj = super()._generate(create, attrs)
-        return json.dumps(obj)
-
-
-class ExamEnrollmentFormFactory(factory.django.DjangoModelFactory):
+class UserFactory(factory.DjangoModelFactory):
     class Meta:
-        model = "exam_enrollment.ExamEnrollmentForm"
+        model = 'auth.User'
 
-    offer_enrollment = factory.SubFactory(OfferEnrollmentFactory)
-
-    form = factory.Dict({
-        "acronym": ["L{0}".format(factory.fuzzy.FuzzyText(length=8, chars=string.digits))],
-    }, dict_factory=JSONFactory)
+    username = factory.Faker('user_name')

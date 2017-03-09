@@ -23,16 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import operator
+import datetime
 import factory
 import factory.fuzzy
-import string
-import datetime
-import operator
-import sys
-import json
 from django.conf import settings
 from django.utils import timezone
-from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
+from base import models as mdl
+from base.tests.factories.user import UserFactory
 
 
 def _get_tzinfo():
@@ -41,22 +39,21 @@ def _get_tzinfo():
     else:
         return None
 
-class JSONFactory(factory.DictFactory):
-    """
-    Use with factory.Dict to make JSON strings.
-    """
-    @classmethod
-    def _generate(cls, create, attrs):
-        obj = super()._generate(create, attrs)
-        return json.dumps(obj)
+
+def generate_person_email(person, domain=None):
+    if domain is None:
+        domain = factory.Faker('domain_name').generate({})
+    return '{0.first_name}.{0.last_name}@{1}'.format(person, domain).lower()
 
 
-class ExamEnrollmentFormFactory(factory.django.DjangoModelFactory):
+class PersonFactory(factory.DjangoModelFactory):
     class Meta:
-        model = "exam_enrollment.ExamEnrollmentForm"
+        model = 'base.Person'
 
-    offer_enrollment = factory.SubFactory(OfferEnrollmentFactory)
-
-    form = factory.Dict({
-        "acronym": ["L{0}".format(factory.fuzzy.FuzzyText(length=8, chars=string.digits))],
-    }, dict_factory=JSONFactory)
+    first_name = factory.Faker('first_name')
+    last_name = factory.Faker('last_name')
+    email = factory.LazyAttribute(generate_person_email)
+    phone = factory.Faker('phone_number')
+    language = factory.Iterator(settings.LANGUAGES, getter=operator.itemgetter(0))
+    gender = factory.Iterator(mdl.person.Person.GENDER_CHOICES, getter=operator.itemgetter(0))
+    user = factory.SubFactory(UserFactory)
