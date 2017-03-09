@@ -52,8 +52,6 @@ def choose_offer_direct(request):
     return navigation(request, True)
 
 
-@login_required
-@permission_required('base.is_student', raise_exception=True)
 def navigation(request, navigate_direct_to_form):
     stud = student.find_by_user(request.user)
     student_programs = _get_student_programs(stud)
