@@ -66,6 +66,17 @@ class TestInternshipOffer(TestCase):
         pk = 45
         self.assertFalse(internship_offer.find_by_pk(pk))
 
+    def test_get_number_selectable(self):
+        expected = 1
+        actual = internship_offer.get_number_selectable()
+        self.assertEqual(expected, actual)
+
+        self.offer.selectable = False
+        self.offer.save()
+        expected = 0
+        actual = internship_offer.get_number_selectable()
+        self.assertEqual(expected, actual)
+
     def test_find_selectable_by_speciality(self):
         speciality = test_internship_speciality.create_speciality("OTHER", "OTHER")
         organization = test_organization.create_organization("ORG", "ORG", "02")
