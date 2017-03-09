@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -24,20 +24,11 @@
 #
 ##############################################################################
 import operator
-import datetime
 import factory
 import factory.fuzzy
 from django.conf import settings
-from django.utils import timezone
 from base import models as mdl
 from base.tests.factories.user import UserFactory
-
-
-def _get_tzinfo():
-    if settings.USE_TZ:
-        return timezone.get_current_timezone()
-    else:
-        return None
 
 
 def generate_person_email(person, domain=None):
