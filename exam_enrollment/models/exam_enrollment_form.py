@@ -33,7 +33,7 @@ UPDATE_DELAY = 24
 class ExamEnrollmentFormAdmin(admin.ModelAdmin):
     list_display = ('offer_enrollment', 'updated_date', )
     fieldsets = ((None, {'fields': ('offer_enrollment', 'form')}),)
-    search_fields = ['offer_enrollment']
+    search_fields = ['offer_enrollment__student__registration_id', 'offer_enrollment__offer_year__acronym']
     raw_id_fields = ('offer_enrollment', )
     actions = ['resend_messages_to_queue']
 

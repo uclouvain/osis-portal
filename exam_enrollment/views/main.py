@@ -55,7 +55,7 @@ def choose_offer_direct(request):
 def navigation(request, navigate_direct_to_form):
     stud = student.find_by_user(request.user)
     student_programs = _get_student_programs(stud)
-    if student_programs :
+    if student_programs:
         if navigate_direct_to_form and len(student_programs) == 1:
             return _get_exam_enrollment_form(student_programs[0], student_programs[0].id, request, stud)
         else:
@@ -149,17 +149,16 @@ def _extract_acronym(html_tag_id):
 
 
 def _fetch_exam_enrollment_form(stud, offer_yr):
-    exam_enrollment_form = mdl_exam_enrollment.exam_enrollment_form\
+    ex_enrollment_form = mdl_exam_enrollment.exam_enrollment_form\
         .get_form(offer_enrollment.find_by_student_offer(stud, offer_yr))
-    if exam_enrollment_form:
-        json_data = exam_enrollment_form.form
+    if ex_enrollment_form:
+        json_data = ex_enrollment_form.form
+        return json.loads(json_data)
     else:
         json_data = listening_exam_enrollment_client(offer_yr, stud)
         if json_data:
             json_data = json_data.decode("utf-8")
-
-    if json_data:
-        return insert_update_form(json_data, offer_yr, stud)
+            return insert_update_form(json_data, offer_yr, stud)
     return None
 
 
