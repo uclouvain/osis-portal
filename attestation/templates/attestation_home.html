@@ -47,11 +47,13 @@
         </div>
         <div class="panel-body">
         <div class="row">
-            <div class="col-md-6" id="student_name">
-                <b>{{ student.person.first_name }}, {{ student.person.last_name }}</b>
+            <div class="col-md-6">
+                <label><b>{% trans 'last_name' %}, {% trans 'first_name' %}</b></label><br>
+                {{ student.person.first_name }}, {{ student.person.last_name }}
             </div>
-            <div class="col-md-6" id="academic_year">
-                <b>{% trans 'registration_id' %}: </b>{{ student.registration_id }}
+            <div class="col-md-6">
+                <b>{% trans 'registration_id' %}</b><br>
+                {{ student.registration_id }}
             </div>
         </div>
         <br/>
@@ -99,5 +101,4 @@
         {% endif %}
         </div>
     </div>
-
 {% endblock %}
