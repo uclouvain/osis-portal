@@ -33,6 +33,7 @@ class OrganizationAddressAdmin(SerializableModelAdmin):
     fieldsets = ((None, {'fields': ('organization', 'label', 'location', 'postal_code', 'city', 'country', 'latitude',
                                     'longitude')}),)
     raw_id_fields = ('organization',)
+    search_fields = ['organization__name', 'city']
 
 
 class OrganizationAddress(SerializableModel):

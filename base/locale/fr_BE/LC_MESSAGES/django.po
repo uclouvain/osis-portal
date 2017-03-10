@@ -37,3 +37,9 @@ msgstr "Page inexistante"
 
 msgid "server_error"
 msgstr "Une erreur inatendue s'est produite"
+
+msgid "server_error_message"
+msgstr ""
+  "Nous avons été automatiquement informé du problème. N'hésitez pas à nous aider en contactant le "
+  "<a href='https://uclouvain.be/ServiceDesk' target='_blank'>Service Desk</a> et en décrivant l'opération effectuée "
+  "de manière plus détaillée."

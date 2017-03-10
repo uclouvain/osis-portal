@@ -30,7 +30,7 @@ from django.db import models
 class OrganizationAdmin(SerializableModelAdmin):
     list_display = ('name', 'acronym', 'reference', 'type')
     fieldsets = ((None, {'fields': ('name', 'acronym', 'reference', 'website', 'type')}),)
-    search_fields = ['acronym']
+    search_fields = ['acronym', 'name']
 
 
 class Organization(SerializableModel):
