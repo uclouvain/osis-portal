@@ -30,14 +30,11 @@ from django.test import TestCase, Client
 import json
 import random
 from base.tests.models import test_student, test_person, test_academic_year, test_offer_year, test_offer_enrollment
-import exam_enrollment.models.exam_enrollment_form
 from exam_enrollment.views import main
 import warnings
 from exam_enrollment.tests.factories.exam_enrollment_form import ExamEnrollmentFormFactory
-from base.tests.factories.offer_year import OfferYearFactory
-from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
-import datetime
+from exam_enrollment import models
 
 
 def load_json_file(path):
@@ -184,25 +181,24 @@ class ExamEnrollmentFormTest(TestCase):
         self.assertEqual('dashboard.html', response.templates[0].name)
 
     @patch('exam_enrollment.models.exam_enrollment_form.get_form')
-    @patch('exam_enrollment.views.main.listening_exam_enrollment_client')
-    @patch('exam_enrollment.views.main.insert_update_form')
+    @patch('exam_enrollment.views.main.call_exam_enrollment_client')
+    @patch('exam_enrollment.models.exam_enrollment_form.insert_or_update_form')
     def test_get_form_case_update_date_greater_than_24_hours(self,
-                                                             mock_insert_update_form,
-                                                             mock_listening_exam_enrollment_client,
+                                                             mock_insert_or_update_form,
+                                                             mock_call_exam_enrollment_client,
                                                              mock_get_form):
-
+        mock_insert_or_update_form.return_value = None
+        mock_call_exam_enrollment_client.return_value = None
         offer_enrollment = OfferEnrollmentFactory()
         mock_get_form.return_value = None
         main._fetch_exam_enrollment_form(offer_enrollment.student, offer_enrollment.offer_year)
-        self.assertTrue(mock_listening_exam_enrollment_client.called)
-
+        self.assertTrue(mock_call_exam_enrollment_client.called)
 
     def test_get_form_case_update_date_lower_than_24_hours(self):
         exam_enrollment_form = ExamEnrollmentFormFactory()
         exam_enrollment_form.save()
         self.assertTrue(main._fetch_exam_enrollment_form(exam_enrollment_form.offer_enrollment.student,
                                                          exam_enrollment_form.offer_enrollment.offer_year))
-
 
     @patch('base.models.student.find_by_user')
     def test_choose_offer_no_student_for_current_user(self, mock_find_by_user):
@@ -212,9 +208,7 @@ class ExamEnrollmentFormTest(TestCase):
 
         an_url = reverse('exam_enrollment_offer_choice')
         response = self.client.get(an_url, follow=True)
-        print(response.templates)
         self.assertEqual('dashboard.html', response.templates[0].name)
-
 
     @patch('exam_enrollment.views.main._get_student_programs')
     def test_navigation_student_has_no_programs(self, mock_student_programs):
@@ -224,7 +218,6 @@ class ExamEnrollmentFormTest(TestCase):
         response = self.client.get(an_url, follow=True)
         self.assertRedirects(response, reverse('dashboard_home'))
         self.assertEqual('dashboard.html', response.templates[0].name)
-
 
     @patch('exam_enrollment.views.main._get_student_programs')
     @patch('exam_enrollment.views.main._fetch_exam_enrollment_form')
@@ -271,3 +264,13 @@ class ExamEnrollmentFormTest(TestCase):
 
         self.assertTrue(mock_current_academic_year.called)
         self.assertEqual('exam_enrollment_form.html', response.templates[0].name)
+
+    @patch('django.contrib.messages.add_message')
+    @patch('exam_enrollment.views.main._exam_enrollment_form_submission_message')
+    @patch("osis_common.queue.queue_sender.send_message")
+    def test_initial_exam_enrollment_form_is_removed_after_submission(self, mock_send_message, mock_message, mock_add_message):
+        mock_message.return_value = "Form successfully submitted"
+        offer_enrol = self.create_offer_enrollment_for_current_academic_yr()
+        models.exam_enrollment_form.insert_or_update_form(offer_enrol, self.correct_exam_enrol_form)
+        main._process_exam_enrollment_form_submission(offer_enrol.offer_year, None, offer_enrol.student)
+        self.assertFalse(models.exam_enrollment_form.ExamEnrollmentForm.objects.filter(offer_enrollment=offer_enrol))

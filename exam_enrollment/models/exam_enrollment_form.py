@@ -30,6 +30,7 @@ from django.contrib import admin
 
 UPDATE_DELAY = 24
 
+
 class ExamEnrollmentFormAdmin(admin.ModelAdmin):
     list_display = ('offer_enrollment', 'updated_date', )
     fieldsets = ((None, {'fields': ('offer_enrollment', 'form')}),)
@@ -58,4 +59,8 @@ def insert_or_update_form(an_offer_enrollment, form):
 def get_form(an_offer_enrollment):
     min_date = datetime.datetime.now() - datetime.timedelta(hours=UPDATE_DELAY)
     return ExamEnrollmentForm.objects.filter(offer_enrollment=an_offer_enrollment,updated_date__gte=min_date).first()
+
+
+def remove_form(offer_enrollment):
+    ExamEnrollmentForm.objects.filter(offer_enrollment=offer_enrollment).delete()
 

@@ -26,9 +26,6 @@
 import factory
 import factory.fuzzy
 import string
-import datetime
-import operator
-import sys
 import json
 from django.conf import settings
 from django.utils import timezone
@@ -40,6 +37,7 @@ def _get_tzinfo():
         return timezone.get_current_timezone()
     else:
         return None
+
 
 class JSONFactory(factory.DictFactory):
     """
