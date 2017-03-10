@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,5 +23,21 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from exam_enrollment.models import exam_enrollment_submitted, exam_enrollment_form
+import factory
+import factory.fuzzy
+from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.offer import OfferFactory
 
+
+def generate_title(offer_year):
+    return '{obj.academic_year} {obj.acronym}'.format(obj=offer_year).lower()
+
+
+class OfferYearFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = "base.OfferYear"
+
+    offer = factory.SubFactory(OfferFactory)
+    academic_year = factory.SubFactory(AcademicYearFactory)
+    acronym = factory.Sequence(lambda n: 'Offer %d' % n)
+    title = factory.LazyAttribute(generate_title)

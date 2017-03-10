@@ -33,13 +33,13 @@ msgid "download"
 msgstr "Télécharger"
 
 msgid "ABC"
-msgstr "Inscription régulière (le cas échént, allocations familiales, mutuelles, ...)"
+msgstr "Inscription régulière (le cas échéant, allocations familiales, mutuelles, etc.)"
 
 msgid "DE"
 msgstr "Carte étudiant provisoire et transport en commun"
 
 msgid "AVIS"
-msgstr "Avis d'enregistrement et facture"
+msgstr "Avis d'enregistrement (facture)"
 
 msgid "ECHEANCE"
 msgstr "Avis d'échéance"
