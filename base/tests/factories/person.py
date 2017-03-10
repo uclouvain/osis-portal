@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,5 +23,28 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from exam_enrollment.models import exam_enrollment_submitted, exam_enrollment_form
+import operator
+import factory
+import factory.fuzzy
+from django.conf import settings
+from base import models as mdl
+from base.tests.factories.user import UserFactory
 
+
+def generate_person_email(person, domain=None):
+    if domain is None:
+        domain = factory.Faker('domain_name').generate({})
+    return '{0.first_name}.{0.last_name}@{1}'.format(person, domain).lower()
+
+
+class PersonFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = 'base.Person'
+
+    first_name = factory.Faker('first_name')
+    last_name = factory.Faker('last_name')
+    email = factory.LazyAttribute(generate_person_email)
+    phone = factory.Faker('phone_number')
+    language = factory.Iterator(settings.LANGUAGES, getter=operator.itemgetter(0))
+    gender = factory.Iterator(mdl.person.Person.GENDER_CHOICES, getter=operator.itemgetter(0))
+    user = factory.SubFactory(UserFactory)
