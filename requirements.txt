@@ -12,5 +12,7 @@ PyPDF2==1.26.0
 reportlab==3.2.0
 selenium==2.48.0
 django-analytical==2.2.2
+factory-boy==2.8.1
+django-dotenv==1.4.1
 
 -r ./osis_common/requirements.txt

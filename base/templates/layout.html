@@ -60,13 +60,12 @@
                     <span class="icon-bar"></span>
                 </button>
 
-                <a class="navbar-brand"
-                        {% if 'dashboard' in installed_apps %}
-                            href="{% url 'dashboard_home' %}"
-                        {% else %} href="#"
-                        {% endif %}
-                            id="lnk_home">
-                    <img src="{% static 'img/logo_institution.jpg' %}" style="margin-top: -10px;"></a>
+                <a class="navbar-brand" {% if 'dashboard' in installed_apps %}
+                                            href="{% url 'dashboard_home' %}"
+                                        {% else %}
+                                            href="#"
+                                        {% endif %} id="lnk_home">
+                <img src="{% static 'img/logo_institution.jpg' %}" style="margin-top: -10px;"></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->

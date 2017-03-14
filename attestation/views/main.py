@@ -41,14 +41,11 @@ from django.contrib.auth.models import Group
 @permission_required('base.is_student', raise_exception=True)
 def home(request):
     student = student_mdl.find_by_user(request.user)
-    data = None
-    if student:
-        json_message = _make_registration_json_message(student.registration_id)
-        attestation_statuses_json_dict = student_attestation_status.fetch_json_attestation_statuses(json_message)
-        data = _make_attestation_data(attestation_statuses_json_dict, student)
-        return layout.render(request, "attestation_home_student.html", data)
-    else:
-        return layout.render(request, 'admin/attestation_administration.html')
+    json_message = _make_registration_json_message(student.registration_id)
+    attestation_statuses_json_dict = student_attestation_status.fetch_json_attestation_statuses(json_message)
+    data = _make_attestation_data(attestation_statuses_json_dict, student)
+    return layout.render(request, "attestation_home_student.html", data)
+
 
 
 @login_required
