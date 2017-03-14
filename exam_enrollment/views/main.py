@@ -80,7 +80,10 @@ def exam_enrollment_form(request, offer_year_id):
 def _get_exam_enrollment_form(off_year, offer_year_id, request, stud):
     data = _fetch_exam_enrollment_form(stud, off_year)
     if not data:
-        messages.add_message(request, messages.WARNING, _('outside_exam_enrollment_period').format(off_year.acronym))
+        messages.add_message(request, messages.WARNING, _('exam_enrollment_form_unavalaible_for_the_moment').format(off_year.acronym))
+        return response.HttpResponseRedirect(reverse('dashboard_home'))
+    elif data.get('error_message'):
+        messages.add_message(request, messages.WARNING, _(data.get('error_message')).format(off_year.acronym))
         return response.HttpResponseRedirect(reverse('dashboard_home'))
     return layout.render(request, 'exam_enrollment_form.html', {'exam_enrollments': data.get('exam_enrollments'),
                                                                 'student': stud,

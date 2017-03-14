@@ -208,7 +208,7 @@ class ExamEnrollmentFormTest(TestCase):
 
         an_url = reverse('exam_enrollment_offer_choice')
         response = self.client.get(an_url, follow=True)
-        self.assertEqual('dashboard.html', response.templates[0].name)
+        self.assertRedirects(response, reverse('dashboard_home'))
 
     @patch('exam_enrollment.views.main._get_student_programs')
     def test_navigation_student_has_no_programs(self, mock_student_programs):
@@ -223,11 +223,11 @@ class ExamEnrollmentFormTest(TestCase):
     @patch('exam_enrollment.views.main._fetch_exam_enrollment_form')
     @patch('base.models.academic_year.current_academic_year')
     @patch('base.models.offer_year.find_by_id')
-    def test_navigation_student_has_programs_but_no_data(self,
-                                                         mock_find_by_id,
-                                                         mock_current_academic_year,
-                                                         mock_fetch_exam_form,
-                                                         mock_get_student_programs):
+    def test_navigation_student_has_programs_but_returned_form_is_none(self,
+                                                                       mock_find_by_id,
+                                                                       mock_current_academic_year,
+                                                                       mock_fetch_exam_form,
+                                                                       mock_get_student_programs):
         mock_find_by_id.return_value = Mock()
         mock_current_academic_year.return_value = None
         mock_get_student_programs.return_value = [MagicMock(id=1)]
@@ -238,6 +238,15 @@ class ExamEnrollmentFormTest(TestCase):
         response = self.client.get(an_url, follow=True)
 
         self.assertTrue(mock_current_academic_year.called)
+        self.assertRedirects(response, reverse('dashboard_home'))
+
+    @patch("exam_enrollment.views.main._fetch_exam_enrollment_form")
+    def test_case_exam_enrollment_form_contains_error_message(self, mock_fetch_json):
+        form = self.correct_exam_enrol_form
+        form['error_message'] = "an_error_message_key"
+        mock_fetch_json.return_value = form
+        self.client.force_login(self.user)
+        response = self.client.get(self.url, follow=True)
         self.assertRedirects(response, reverse('dashboard_home'))
 
     @patch('exam_enrollment.views.main._get_student_programs')

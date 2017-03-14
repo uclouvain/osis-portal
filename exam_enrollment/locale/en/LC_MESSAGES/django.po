@@ -31,6 +31,9 @@ msgstr "Exams enrollment"
 msgid "exam_enrollment_form_submitted"
 msgstr "Exam enrollment form successfully submitted."
 
+msgid "exam_enrollment_form_currently_unavalaible"
+msgstr "Your exam enrollment form is currently unavalaible. Please retry later."
+
 msgid "info_exam_enrollment_by_default"
 msgstr "<b>By default, you are already enrolled to all checked exams below. "
        "<br>If it fits your needs, then you don't have to do anything. </b>"
@@ -69,6 +72,9 @@ msgstr "X - Law and administrative penalty"
 
 msgid "legend_exam_enrol_y"
 msgstr "Y - Second enrollment"
+
+msgid "no_exam_enrollment_found"
+msgstr "No exam enrollment found."
 
 msgid "no_offer_enrollment_found"
 msgstr "Sorry, you're not enrolled to any program for this academic year."
