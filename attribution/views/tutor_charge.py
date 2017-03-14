@@ -38,8 +38,6 @@ from base.forms.base_forms import GlobalIdForm
 from base.views import layout
 from django.contrib.auth.decorators import login_required, permission_required
 import json
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
 
 
 ONE_DECIMAL_FORMAT = "%0.1f"
@@ -60,7 +58,7 @@ SEPTEMBER = "septembre"
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
 def home(request):
-    a_person = mdl_base.person.find_by_user(request.user)
+    a_person = get_person(request.user)
     return by_year(request, get_current_academic_year(), a_person.global_id)
 
 
@@ -242,7 +240,6 @@ def load_students(a_learning_unit_year, a_tutor, request):
     for learning_unit_enrollment in get_students(a_learning_unit_year, get_person(request_tutor.person.user)):
         students_list.append(set_student_for_display(learning_unit_enrollment))
     a_person = mdl_base.person.find_by_user(request.user)
-    tutor = mdl_base.tutor.find_by_person(a_person)
     return {'global_id': request_tutor.person.global_id,
             'students': students_list,
             'learning_unit_year': mdl_base.learning_unit_year.find_by_id(a_learning_unit_year), }

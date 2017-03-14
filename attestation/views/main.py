@@ -34,7 +34,6 @@ from base.forms.base_forms import RegistrationIdForm
 from base.models import student as student_mdl, person as person_mdl
 from attestation.queues import student_attestation_status, student_attestation
 from base.views import layout
-from django.contrib.auth.models import Group
 
 
 @login_required
@@ -45,7 +44,6 @@ def home(request):
     attestation_statuses_json_dict = student_attestation_status.fetch_json_attestation_statuses(json_message)
     data = _make_attestation_data(attestation_statuses_json_dict, student)
     return layout.render(request, "attestation_home_student.html", data)
-
 
 
 @login_required
