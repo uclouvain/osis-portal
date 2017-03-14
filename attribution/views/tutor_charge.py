@@ -38,6 +38,8 @@ from base.forms.base_forms import GlobalIdForm
 from base.views import layout
 from django.contrib.auth.decorators import login_required, permission_required
 import json
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 
 
 ONE_DECIMAL_FORMAT = "%0.1f"
@@ -58,7 +60,7 @@ SEPTEMBER = "septembre"
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
 def home(request):
-    a_person = get_person(request.user)
+    a_person = mdl_base.person.find_by_user(request.user)
     return by_year(request, get_current_academic_year(), a_person.global_id)
 
 
@@ -164,12 +166,22 @@ def list_teaching_charge(a_person, an_academic_year):
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
 def by_year(request, year, a_global_id):
+    return render(request, "tutor_charge.html", load_teaching_charge_data(a_global_id, request, year))
+
+
+@login_required
+@permission_required('base.is_faculty_administrator', raise_exception=True)
+def by_year_admin(request, year, a_global_id):
+    return render(request, "tutor_charge_admin.html", load_teaching_charge_data(a_global_id, request, year))
+
+
+def load_teaching_charge_data(a_global_id, request, year):
     if a_global_id:
-        a_person =mdl_base.person.find_by_global_id(a_global_id)
+        a_person = mdl_base.person.find_by_global_id(a_global_id)
     else:
         a_person = get_person(request.user)
-    data = get_teaching_charge_data(a_person,  year)
-    return render(request, "tutor_charge.html", data)
+    data = get_teaching_charge_data(a_person, year)
+    return data
 
 
 def get_teaching_charge_data(a_person, year):
@@ -224,18 +236,30 @@ def get_students(a_learning_unit_year_id, a_person):
     return get_learning_unit_years_list(a_learning_unit_year, mdl_base.tutor.find_by_person(a_person))
 
 
-@login_required
-@permission_required('attribution.can_access_attribution', raise_exception=True)
-def show_students(request, a_learning_unit_year, a_tutor):
+def load_students(a_learning_unit_year, a_tutor, request):
     students_list = []
     request_tutor = mdl_base.tutor.find_by_id(a_tutor)
     for learning_unit_enrollment in get_students(a_learning_unit_year, get_person(request_tutor.person.user)):
         students_list.append(set_student_for_display(learning_unit_enrollment))
+    a_person = mdl_base.person.find_by_user(request.user)
+    tutor = mdl_base.tutor.find_by_person(a_person)
+    return {'global_id': request_tutor.person.global_id,
+            'students': students_list,
+            'learning_unit_year': mdl_base.learning_unit_year.find_by_id(a_learning_unit_year), }
 
-    return render(request, "students_list.html", {
-        'global_id': request_tutor.person.global_id,
-        'students': students_list,
-        'learning_unit_year': mdl_base.learning_unit_year.find_by_id(a_learning_unit_year), })
+
+@login_required
+@permission_required('base.is_faculty_administrator', raise_exception=True)
+def show_students_admin(request, a_learning_unit_year, a_tutor):
+    return render(request, "students_list_admin.html",
+                  load_students(a_learning_unit_year, a_tutor, request))
+
+
+@login_required
+@permission_required('attribution.can_access_attribution', raise_exception=True)
+def show_students(request, a_learning_unit_year, a_tutor):
+    return render(request, "students_list.html",
+                  load_students(a_learning_unit_year, a_tutor, request))
 
 
 def get_sessions_results(a_registration_id, a_learning_unit, offer_acronym):
@@ -374,4 +398,4 @@ def select_tutor_attributions(request):
 def visualize_tutor_attributions(request, global_id):
     tutor = mdl_base.tutor.find_by_person_global_id(global_id)
     data = get_teaching_charge_data(tutor.person,  get_current_academic_year())
-    return render(request, "tutor_charge.html", data)
+    return render(request, "tutor_charge_admin.html", data)

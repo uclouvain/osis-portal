@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -30,8 +30,11 @@ urlpatterns = [
 
     url(r'^$', tutor_charge.home, name='attribution_home'),
     url(r'^charge/([0-9]+)/([0-9a-z-]+)/$', tutor_charge.by_year, name='attributions_by_year'),
+    url(r'^administration/charge/([0-9]+)/([0-9a-z-]+)/$', tutor_charge.by_year_admin, name='attributions_by_year_admin'),
     url(r'^students/(?P<a_learning_unit_year>[0-9]+)/(?P<a_tutor>[0-9]+)/$', tutor_charge.show_students,
         name='attribution_students'),
+    url(r'^administration/students/(?P<a_learning_unit_year>[0-9]+)/(?P<a_tutor>[0-9]+)/$', tutor_charge.show_students_admin,
+        name='attribution_students_admin'),
     url(r'^applications/$', online_application.home, name='learning_unit_applications'),
     url(r'^applications/([0-9]+)/delete/$', online_application.delete, name='delete_tutor_application'),
     url(r'^applications/([0-9]+)/edit/$', online_application.edit, name='edit_tutor_application'),

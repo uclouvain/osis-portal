@@ -29,13 +29,35 @@
     <ol class="breadcrumb">
         <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                           aria-hidden="true"></span></a></li>
+    {% block breadcrumb %}
+            <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'faculty_administration' %}</a></li>
+            <li><a href="{% url 'attribution_administration'  %}" id="lnk_attribution_administration">{% trans 'attribution_administration' %}</a></li>
+            <li><a href="{% url 'attribution_admin_visualize_tutor' global_id %}">{% trans 'teaching_charge' %}</a></li>
 
-        {% block breadcrumb %}
-            <li>{% trans 'tutor_charge' %}</li>
-        {% endblock %}
-
-    </ol>
+        <li class="active">{% trans 'students' %}</li>
+    {% endblock %}
+</ol>
+{% endblock %}
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap.min.css' %}">
 {% endblock %}
 {% block content %}
-    {% include 'tutor_charge_content.html' %}
+    {% include 'students_list_content.html' %}
+{% endblock %}
+{% block script %}
+    <script>
+        $(document).ready(function() {
+            $('#students_table').DataTable( {
+                paging:   false,
+                stateSave: true,
+                info:false,
+                language: {
+                    search: gettext('search'),
+                    infoEmpty: gettext('no_record'),
+                    zeroRecords: gettext('no_record'),
+
+                }
+            } );
+        } );
+    </script>
 {% endblock %}
