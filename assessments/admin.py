@@ -23,11 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
+from django.contrib import admin
+from assessments.models import *
 
-from dashboard.views import main
-
-urlpatterns = [
-    url(r'^$', main.home, name='dashboard_home'),
-    url('^faculty_administration/$', main.faculty_administration, name='faculty_administration')
-]
+admin.site.register(score_encoding.ScoreEncoding,
+                    score_encoding.ScoreEncodingAdmin)

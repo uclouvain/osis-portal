@@ -23,10 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase
-from dashboard.tests.models import test_score_encoding
-from dashboard.views import score_encoding
 from unittest.mock import patch
+
+from django.test import TestCase
+
+from assessments.tests.models import test_score_encoding
+from assessments.views import score_encoding
 
 
 class ScoreSheetTest(TestCase):
