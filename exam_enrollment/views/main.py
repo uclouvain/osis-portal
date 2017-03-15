@@ -154,8 +154,6 @@ def _fetch_exam_enrollment_form(stud, offer_yr):
     json_data = call_exam_enrollment_client(offer_yr, stud)
     if json_data:
         json_data = json_data.decode("utf-8")
-        mdl.exam_enrollment_form.insert_or_update_form(offer_enrollment.find_by_student_offer(stud, offer_yr),
-                                                       json_data)
         return json.loads(json_data)
     return None
 
