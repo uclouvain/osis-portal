@@ -94,6 +94,9 @@ msgstr "Registration id"
 msgid "student"
 msgstr "Student"
 
+msgid "student_can_not_enrol_to_exam"
+msgstr "You can't enrol to your exams for the moment. Please contact your program manager to get more informations."
+
 msgid "validate_changes"
 msgstr "Validate changes"
 
