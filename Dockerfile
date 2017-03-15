@@ -5,7 +5,6 @@ RUN mkdir /code
 RUN mkdir /code/osis_common
 WORKDIR /code
 ADD requirements.txt /code/
-ADD /osis_common/requirements.txt /code/osis_common/
 RUN git submodule init && git submodule update
 RUN cp .env.example .env
 RUN pip install -r requirements.txt
