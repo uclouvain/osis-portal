@@ -5,6 +5,6 @@ RUN mkdir /code
 ADD requirements.txt /code/
 ADD . /code/
 WORKDIR /code
-RUN git submodule init && git submodule update
+RUN git submodule update --init --recursive
 RUN cp .env.example .env
 RUN pip install -r requirements.txt
