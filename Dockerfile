@@ -1,5 +1,5 @@
 FROM python:3.4
-RUN apt-get update && apt-get upgrade -y && apt-get install gettext -y
+RUN apt-get update && apt-get upgrade -y && apt-get install gettext git -y
 ENV PYTHONUNBUFFERED 1
 RUN mkdir /code
 RUN mkdir /code/osis_common
