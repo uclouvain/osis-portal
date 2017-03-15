@@ -35,7 +35,7 @@ from django.conf import settings
 
 from base.views import layout
 from base.models import student, offer_enrollment, academic_year, offer_year
-from exam_enrollment import models as mdl
+from exam_enrollment.models import exam_enrollment_submitted
 from frontoffice.queue import queue_listener
 from osis_common.queue import queue_sender
 
@@ -97,9 +97,8 @@ def _process_exam_enrollment_form_submission(off_year, request, stud):
     json_data = json.dumps(data_to_submit)
     offer_enrol = offer_enrollment.find_by_student_offer(stud, off_year)
     if json_data and offer_enrol:
-        mdl.exam_enrollment_submitted.insert_or_update_document(offer_enrol, json_data)
+        exam_enrollment_submitted.insert_or_update_document(offer_enrol, json_data)
     queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('EXAM_ENROLLMENT_FORM_SUBMISSION'), data_to_submit)
-    mdl.exam_enrollment_form.remove_form(offer_enrol)
     messages.add_message(request, messages.SUCCESS, _('exam_enrollment_form_submitted'))
     return response.HttpResponseRedirect(reverse('dashboard_home'))
 
@@ -152,17 +151,12 @@ def _extract_acronym(html_tag_id):
 
 
 def _fetch_exam_enrollment_form(stud, offer_yr):
-    ex_enrollment_form = mdl.exam_enrollment_form.get_form(offer_enrollment.find_by_student_offer(stud, offer_yr))
-    if ex_enrollment_form:
-        json_data = ex_enrollment_form.form
+    json_data = call_exam_enrollment_client(offer_yr, stud)
+    if json_data:
+        json_data = json_data.decode("utf-8")
+        mdl.exam_enrollment_form.insert_or_update_form(offer_enrollment.find_by_student_offer(stud, offer_yr),
+                                                       json_data)
         return json.loads(json_data)
-    else:
-        json_data = call_exam_enrollment_client(offer_yr, stud)
-        if json_data:
-            json_data = json_data.decode("utf-8")
-            mdl.exam_enrollment_form.insert_or_update_form(offer_enrollment.find_by_student_offer(stud, offer_yr),
-                                                           json_data)
-            return json.loads(json_data)
     return None
 
 

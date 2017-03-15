@@ -94,6 +94,10 @@ msgstr "Matricule"
 msgid "student"
 msgstr "Étudiant"
 
+msgid "student_can_not_enrol_to_exam"
+msgstr "Vous ne pouvez pas vous inscrire aux examens pour le moment. "
+       "Veuillez contacter votre gestionnaire pour plus d'informations."
+
 msgid "validate_exam_enrol_form_description"
 msgstr "En cliquant ici, vous validez vos modifications par rapport à l'inscription par défaut."
 
