@@ -246,27 +246,21 @@ class ExamEnrollmentFormTest(TestCase):
             "etat_to_inscr_current_session_LDROI1111": None,
             "current_number_session": 1,
         }
+        response = self.client.post(self.url, post_data)
+        result = main._exam_enrollment_form_submission_message(self.off_year, response.wsgi_request, self.student)
+        self.assert_correct_data_structure(result)
+        self.assert_none_etat_to_inscr_not_in_submitted_form(result.get('exam_enrollments'))
+
+    def assert_correct_data_structure(self, result):
         exam_enrollment_expected = {"acronym": "LPHYS1234",
-                                     "is_enrolled": True,
-                                     "etat_to_inscr": "I"}
-        exam_enrollments_unexpected = [{"acronym": "LBIO4567",
-                                        "is_enrolled": False,
-                                        "etat_to_inscr": None},
-                                       {"acronym": "LDROI1111",
-                                        "is_enrolled": False,
-                                        "etat_to_inscr": None}]
+                                    "is_enrolled": True,
+                                    "etat_to_inscr": "I"}
         expected_result = {
             "registration_id": self.student.registration_id,
             "offer_year_acronym": self.off_year.acronym,
             "year": self.off_year.academic_year.year,
             "exam_enrollments": [exam_enrollment_expected]
         }
-        response = self.client.post(self.url, post_data)
-        result = main._exam_enrollment_form_submission_message(self.off_year, response.wsgi_request, self.student)
-        self.assert_correct_data_structure(expected_result, result)
-        self.assert_none_etat_to_inscr_not_in_submitted_form(result.get('exam_enrollments'), exam_enrollments_unexpected)
-
-    def assert_correct_data_structure(self, expected_result, result):
         self.assertEqual(len(result), len(expected_result))
         self.assertEqual(expected_result.get('registration_id'), result.get('registration_id'))
         self.assertEqual(expected_result.get('offer_year_acronym'), result.get('offer_year_acronym'))
@@ -276,7 +270,13 @@ class ExamEnrollmentFormTest(TestCase):
         for exam_enrol in expected_result.get('exam_enrollments'):
             self.assertIn(exam_enrol, exam_enrollments)
 
-    def assert_none_etat_to_inscr_not_in_submitted_form(self, exam_enrollments, exam_enrollments_unexpected):
+    def assert_none_etat_to_inscr_not_in_submitted_form(self, exam_enrollments):
+        exam_enrollments_unexpected = [{"acronym": "LBIO4567",
+                                        "is_enrolled": False,
+                                        "etat_to_inscr": None},
+                                       {"acronym": "LDROI1111",
+                                        "is_enrolled": False,
+                                        "etat_to_inscr": None}]
         for index in range(0, len(exam_enrollments_unexpected)):
             self.assertNotIn(exam_enrollments_unexpected[index], exam_enrollments)
 
