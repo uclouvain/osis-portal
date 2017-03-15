@@ -64,7 +64,6 @@ INSTALLED_APPS = (
     'reference',
     'base',
     'admission',
-    'enrollments',
     'dashboard',
     'performance',
     'attribution',
