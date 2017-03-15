@@ -48,6 +48,14 @@ def _create_group(name):
     return group
 
 
+def create_offer_enrollment_for_current_academic_yr(student):
+    off_year_current_academic_year = test_offer_year.create_offer_year_with_academic_year(
+        test_academic_year.create_academic_year_current())
+    student_offer_year_enrollment = test_offer_enrollment.create_offer_enrollment(student,
+                                                                                  off_year_current_academic_year)
+    return student_offer_year_enrollment
+
+
 class ExamEnrollmentFormTest(TestCase):
     def setUp(self):
         self.client = Client()
@@ -58,8 +66,7 @@ class ExamEnrollmentFormTest(TestCase):
         self.user_not_student = User.objects.create_user(username='pjashar', email='pjashar@localhost', password='secret')
         self.user.groups.add(group)
         self.person = test_person.create_person_with_user(self.user, first_name="James", last_name="Smith")
-        self.registration_id = "12345678"
-        self.student = test_student.create_student_with_registration_person(self.registration_id, self.person)
+        self.student = test_student.create_student_with_registration_person("12345678", self.person)
         offer_year_id = 1234
         self.off_year = test_offer_year.create_offer_year_from_kwargs(**{'id': offer_year_id,
                                                                          'acronym': 'SINF1BA',
@@ -111,66 +118,12 @@ class ExamEnrollmentFormTest(TestCase):
         response = self.client.get(self.url, follow=True)
         self.assertTemplateUsed(response, 'access_denied.html')
 
-    @patch("osis_common.queue.queue_sender.send_message")
-    def test_exam_enrollment_form_submission_message(self, send_message):
-        warnings.warn(
-            "The field named 'etat_to_inscr' is only used to call EPC services. It should be deleted when the exam "
-            "enrollment business will be implemented in Osis (not in EPC anymore). "
-            "The flag 'is_enrolled' should be sufficient for Osis.",
-            DeprecationWarning
-        )
-        send_message.return_value = None
-        self.client.force_login(self.user)
-        post_data = {
-            "chckbox_exam_enrol_sess1_LPHYS1234": "on",
-            "etat_to_inscr_current_session_LPHYS1234": "I",
-            "chckbox_exam_enrol_sess1_LBIO4567": "",
-            "etat_to_inscr_current_session_LBIO4567": "None",
-            "chckbox_exam_enrol_sess1_LDROI1111": None,
-            "etat_to_inscr_current_session_LDROI1111": None,
-            "current_number_session": 1,
-        }
-        # from django.contrib.messages.storage import default_storage
-        # request._messages = default_storage(request)
-        exam_enrollments_expected = [{"acronym": "LPHYS1234",
-                                      "is_enrolled": True,
-                                      "etat_to_inscr": "I"},
-                                     {"acronym": "LBIO4567",
-                                      "is_enrolled": False,
-                                      "etat_to_inscr": None},
-                                     {"acronym": "LDROI1111",
-                                      "is_enrolled": False,
-                                      "etat_to_inscr": None}]
-        expected_result = {
-            "registration_id": self.registration_id,
-            "offer_year_acronym": self.off_year.acronym,
-            "year": self.off_year.academic_year.year,
-            "exam_enrollments": exam_enrollments_expected
-        }
-        response = self.client.post(self.url, post_data)
-        result = main._exam_enrollment_form_submission_message(self.off_year, response.wsgi_request, self.student)
-        self.assertEqual(len(result), len(expected_result))
-        self.assertEqual(expected_result.get('registration_id'), result.get('registration_id'))
-        self.assertEqual(expected_result.get('offer_year_acronym'), result.get('offer_year_acronym'))
-        self.assertEqual(expected_result.get('year'), result.get('year'))
-        exam_enrollments = result.get('exam_enrollments')
-        exam_enrollments_expected = expected_result.get('exam_enrollments')
-        for index in range(0, len(exam_enrollments)):
-            self.assertIn(exam_enrollments[index], exam_enrollments_expected)
-
-    def create_offer_enrollment_for_current_academic_yr(self):
-        off_year_current_academic_year = test_offer_year.create_offer_year_with_academic_year(
-            test_academic_year.create_academic_year_current())
-        student_offer_year_enrollment = test_offer_enrollment.create_offer_enrollment(self.student,
-                                                                                      off_year_current_academic_year)
-        return student_offer_year_enrollment
-
     def test_get_programs_student_is_none(self):
         self.assertIsNone(main._get_student_programs(None))
 
     def test_get_one_program(self):
         self.client.force_login(self.user)
-        student_offer_year_enrollment = self.create_offer_enrollment_for_current_academic_yr()
+        student_offer_year_enrollment = create_offer_enrollment_for_current_academic_yr(self.student)
         self.assertEqual(main._get_student_programs(self.student)[0], student_offer_year_enrollment.offer_year)
 
     def test_navigation_with_no_offer_in_current_academic_year(self):
@@ -274,12 +227,65 @@ class ExamEnrollmentFormTest(TestCase):
         self.assertTrue(mock_current_academic_year.called)
         self.assertEqual('exam_enrollment_form.html', response.templates[0].name)
 
+    @patch("osis_common.queue.queue_sender.send_message")
+    def test_exam_enrollment_form_submission_message(self, send_message):
+        warnings.warn(
+            "The field named 'etat_to_inscr' is only used to call EPC services. It should be deleted when the exam "
+            "enrollment business will be implemented in Osis (not in EPC anymore). "
+            "The flag 'is_enrolled' should be sufficient for Osis.",
+            DeprecationWarning
+        )
+        send_message.return_value = None
+        self.client.force_login(self.user)
+        post_data = {
+            "chckbox_exam_enrol_sess1_LPHYS1234": "on",
+            "etat_to_inscr_current_session_LPHYS1234": "I",
+            "chckbox_exam_enrol_sess1_LBIO4567": "",
+            "etat_to_inscr_current_session_LBIO4567": "None",
+            "chckbox_exam_enrol_sess1_LDROI1111": None,
+            "etat_to_inscr_current_session_LDROI1111": None,
+            "current_number_session": 1,
+        }
+        response = self.client.post(self.url, post_data)
+        result = main._exam_enrollment_form_submission_message(self.off_year, response.wsgi_request, self.student)
+        self.assert_correct_data_structure(result)
+        self.assert_none_etat_to_inscr_not_in_submitted_form(result.get('exam_enrollments'))
+
+    def assert_correct_data_structure(self, result):
+        exam_enrollment_expected = {"acronym": "LPHYS1234",
+                                    "is_enrolled": True,
+                                    "etat_to_inscr": "I"}
+        expected_result = {
+            "registration_id": self.student.registration_id,
+            "offer_year_acronym": self.off_year.acronym,
+            "year": self.off_year.academic_year.year,
+            "exam_enrollments": [exam_enrollment_expected]
+        }
+        self.assertEqual(len(result), len(expected_result))
+        self.assertEqual(expected_result.get('registration_id'), result.get('registration_id'))
+        self.assertEqual(expected_result.get('offer_year_acronym'), result.get('offer_year_acronym'))
+        self.assertEqual(expected_result.get('year'), result.get('year'))
+        exam_enrollments = result.get('exam_enrollments')
+        self.assertEqual(len(exam_enrollments), 1)
+        for exam_enrol in expected_result.get('exam_enrollments'):
+            self.assertIn(exam_enrol, exam_enrollments)
+
+    def assert_none_etat_to_inscr_not_in_submitted_form(self, exam_enrollments):
+        exam_enrollments_unexpected = [{"acronym": "LBIO4567",
+                                        "is_enrolled": False,
+                                        "etat_to_inscr": None},
+                                       {"acronym": "LDROI1111",
+                                        "is_enrolled": False,
+                                        "etat_to_inscr": None}]
+        for index in range(0, len(exam_enrollments_unexpected)):
+            self.assertNotIn(exam_enrollments_unexpected[index], exam_enrollments)
+
     @patch('django.contrib.messages.add_message')
     @patch('exam_enrollment.views.main._exam_enrollment_form_submission_message')
     @patch("osis_common.queue.queue_sender.send_message")
     def test_initial_exam_enrollment_form_is_removed_after_submission(self, mock_send_message, mock_message, mock_add_message):
         mock_message.return_value = "Form successfully submitted"
-        offer_enrol = self.create_offer_enrollment_for_current_academic_yr()
+        offer_enrol = create_offer_enrollment_for_current_academic_yr(self.student)
         models.exam_enrollment_form.insert_or_update_form(offer_enrol, self.correct_exam_enrol_form)
         main._process_exam_enrollment_form_submission(offer_enrol.offer_year, None, offer_enrol.student)
         self.assertFalse(models.exam_enrollment_form.ExamEnrollmentForm.objects.filter(offer_enrollment=offer_enrol))

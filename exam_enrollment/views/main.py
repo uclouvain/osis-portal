@@ -126,11 +126,13 @@ def _build_enrollments_by_learning_unit(request):
     is_enrolled_by_acronym = _build_dicts_is_enrolled_by_acronym(current_number_session, request)
     etat_to_inscr_by_acronym = _build_dicts_etat_to_inscr_by_acronym(request)
     for acronym, etat_to_inscr in etat_to_inscr_by_acronym.items():
-        enrollments_by_learn_unit.append({
-            'acronym': acronym,
-            'is_enrolled': is_enrolled_by_acronym.get(acronym, False),
-            'etat_to_inscr': None if not etat_to_inscr or etat_to_inscr == 'None' else etat_to_inscr
-        })
+        etat_to_inscr = None if not etat_to_inscr or etat_to_inscr == 'None' else etat_to_inscr
+        if etat_to_inscr:
+            enrollments_by_learn_unit.append({
+                'acronym': acronym,
+                'is_enrolled': is_enrolled_by_acronym.get(acronym, False),
+                'etat_to_inscr': etat_to_inscr
+            })
     return enrollments_by_learn_unit
 
 
