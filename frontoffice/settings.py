@@ -64,13 +64,13 @@ INSTALLED_APPS = (
     'reference',
     'base',
     'admission',
-    'enrollments',
     'dashboard',
     'performance',
     'attribution',
     'dissertation',
     'internship',
-    'exam_enrollment'
+    'exam_enrollment',
+    'attestation',
 )
 
 # check if we are testing right now
@@ -129,9 +129,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'osis_front_dev',
-        'USER': 'osis_usr',
-        'PASSWORD': 'osis',
-        'HOST': '127.0.0.1',
+        'USER': os.environ.get("POSTGRES_USER") or "osis_usr",
+        'PASSWORD': os.environ.get("POSTGRES_PASSWORD") or "osis",
+        'HOST': os.environ.get("POSTGRES_HOST") or "127.0.0.1",
         'PORT': '5432',
     },
 }
@@ -238,9 +238,9 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL
 # Uncomment the configuration if you want to use the queue system
 # The queue system uses RabbitMq queues to communicate with other application (ex : osis)
 QUEUES = {
-    'QUEUE_URL': 'localhost',
-    'QUEUE_USER': 'guest',
-    'QUEUE_PASSWORD': 'guest',
+    'QUEUE_URL': os.environ.get("RABBITMQ_HOST") or 'localhost',
+    'QUEUE_USER': os.environ.get("RABBITMQ_USER") or 'guest',
+    'QUEUE_PASSWORD': os.environ.get("RABBITMQ_PASSWORD") or 'guest',
     'QUEUE_PORT': 5672,
     'QUEUE_CONTEXT_ROOT': '/',
     'QUEUES_NAME': {
@@ -252,19 +252,24 @@ QUEUES = {
         'STUDENT_POINTS': 'rpc_performance_to_client',
         'PERFORMANCE_UPDATE_EXP_DATE': 'performance_exp_date',
         'ATTRIBUTION': 'attribution',
-        'EXAM_ENROLLMENT_FORM': 'rpc_exam_enrollment_form'
+        'ATTESTATION': 'rpc_attestation',
+        'ATTESTATION_STATUS': 'rpc_attestation_status',
+        'EXAM_ENROLLMENT_FORM': 'rpc_exam_enrollment_form',
+        'EXAM_ENROLLMENT_FORM_SUBMISSION': 'exam_enrollment_form_submission',
     },
     'RPC_QUEUES_TIMEOUT': {
         'PAPER_SHEET': 60,
         'STUDENT_PERFORMANCE': 15,
+        'ATTESTATION_STATUS': 10,
+        'ATTESTATION': 60,
         'EXAM_ENROLLMENT_FORM': 15
     }
 }
 
 
 LOGIN_URL=reverse_lazy('login')
-OVERRIDED_LOGOUT_URL=''
-OVERRIDED_LOGIN_URL=''
+OVERRIDED_LOGOUT_URL = ''
+OVERRIDED_LOGIN_URL = ''
 
 # This has to be replaced by the actual url where you institution logo can be found.
 # Ex : LOGO_INSTITUTION_URL = 'https://www.google.be/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'
@@ -311,6 +316,14 @@ PERFORMANCE_CONFIG = {
     'UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR': 12,
     'UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR': 720,
     'UPDATE_DELTA_HOURS_AFTER_CONSUMPTION': 24,
+}
+
+ATTESTATION_CONFIG = {
+    'UPDATE_DELTA_HOURS_DEFAULT': 72,
+    'SERVER_TO_FETCH_URL': '',
+    'ATTESTATION_PATH': '',
+    'SERVER_TO_FETCH_USER': '',
+    'SERVER_TO_FETCH_PASSWORD': '',
 }
 
 try:

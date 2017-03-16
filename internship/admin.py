@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-############################################################################
+##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -23,7 +22,38 @@
 #    at the root of the source code of this program.  If not,
 #    see http://www.gnu.org/licenses/.
 #
-############################################################################
+##############################################################################
 from django.contrib import admin
 
-# Register your models here.
+from internship.models import *
+
+admin.site.register(internship_offer.InternshipOffer,
+                    internship_offer.InternshipOfferAdmin)
+
+admin.site.register(internship_speciality.InternshipSpeciality,
+                    internship_speciality.InternshipSpecialityAdmin)
+
+admin.site.register(organization.Organization,
+                    organization.OrganizationAdmin)
+
+admin.site.register(internship_choice.InternshipChoice,
+                    internship_choice.InternshipChoiceAdmin)
+
+admin.site.register(organization_address.OrganizationAddress,
+                    organization_address.OrganizationAddressAdmin)
+
+admin.site.register(internship_master.InternshipMaster,
+                    internship_master.InternshipMasterAdmin)
+
+admin.site.register(internship_student_information.InternshipStudentInformation,
+                    internship_student_information.InternshipStudentInformationAdmin)
+
+admin.site.register(period.Period,
+                    period.PeriodAdmin)
+
+admin.site.register(internship_student_affectation_stat.InternshipStudentAffectationStat,
+                    internship_student_affectation_stat.InternshipStudentAffectationStatAdmin)
+
+admin.site.register(period_internship_places.PeriodInternshipPlaces,
+                    period_internship_places.PeriodInternshipPlacesAdmin)
+

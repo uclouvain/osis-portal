@@ -107,7 +107,7 @@ msgid "applications_list"
 msgstr "Vos demandes d'inscription"
 
 msgid "attachments"
-msgstr "Pïèces jointes"
+msgstr "Pièces jointes"
 
 msgid "awarding_country"
 msgstr "Pays organisateur"
@@ -1632,6 +1632,9 @@ msgstr "téléphonez au"
 
 msgid "technical_failure"
 msgstr "En cas de problème technique,"
+
+msgid "remove_validation"
+msgstr "Êtes-vous sûr de de vouloir supprimer le fichier ?"
 
 msgid "modification"
 msgstr "Modification"

@@ -26,6 +26,7 @@
 from django.conf import settings
 from django.contrib import admin
 from django.conf.urls import url, include
+from django.views.i18n import javascript_catalog
 from base.views import common
 
 
@@ -42,7 +43,7 @@ urlpatterns = (
     url(r'^logout/$', common.log_out, name='logout'),
     url(r'^logged_out/$', common.logged_out, name='logged_out'),
     url(r'^403/$', common.access_denied, name="error_403"),
-    url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict, name='javascript-catalog'),
+    url(r'^jsi18n/$', javascript_catalog, js_info_dict, name='javascript-catalog'),
 )
 
 
@@ -50,8 +51,6 @@ if 'admission' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^admission/', include('admission.urls')), )
 if 'dashboard' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^dashboard/', include('dashboard.urls')), )
-if 'catalog' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^catalog/', include('catalog.urls')), )
 if 'performance' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^performance/', include('performance.urls')), )
 if 'dissertation' in settings.INSTALLED_APPS:
@@ -62,6 +61,8 @@ if 'internship' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^internship/', include('internship.urls')), )
 if 'exam_enrollment' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^exam_enrollment/', include('exam_enrollment.urls')), )
+if 'attestation' in settings.INSTALLED_APPS:
+    urlpatterns = urlpatterns + (url(r'^attestation/', include('attestation.urls')), )
 
 handler404 = 'base.views.common.page_not_found'
 handler403 = 'base.views.common.access_denied'

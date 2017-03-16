@@ -28,9 +28,15 @@ msgstr "Choose which exam you want to take for the next session exam."
 msgid "exams_enrollment"
 msgstr "Exams enrollment"
 
+msgid "exam_enrollment_form_submitted"
+msgstr "Exam enrollment form successfully submitted."
+
+msgid "exam_enrollment_form_currently_unavalaible"
+msgstr "Your exam enrollment form is currently unavalaible. Please retry later."
+
 msgid "info_exam_enrollment_by_default"
 msgstr "<b>By default, you are already enrolled to all checked exams below. "
-       "<br>If it fit to your needs, you don't have any action to perform. </b>"
+       "<br>If it fits your needs, then you don't have to do anything. </b>"
        "<br>To modify your exam enrollments, "
        "please check/uncheck boxes below and then click on 'Validate changes'."
 
@@ -67,11 +73,14 @@ msgstr "X - Law and administrative penalty"
 msgid "legend_exam_enrol_y"
 msgstr "Y - Second enrollment"
 
+msgid "no_exam_enrollment_found"
+msgstr "No exam enrollment found."
+
 msgid "no_offer_enrollment_found"
 msgstr "Sorry, you're not enrolled to any program for this academic year."
 
 msgid "outside_exam_enrollment_period"
-msgstr "Exam enrollment are currently closed."
+msgstr "Exam enrollments for the program {} the  are currently closed."
 
 msgid "program"
 msgstr "Program"
@@ -84,6 +93,9 @@ msgstr "Registration id"
 
 msgid "student"
 msgstr "Student"
+
+msgid "student_can_not_enrol_to_exam"
+msgstr "You can't enrol to your exams for the moment. Please contact your program manager to get more informations."
 
 msgid "validate_changes"
 msgstr "Validate changes"

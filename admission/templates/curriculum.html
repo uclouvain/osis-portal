@@ -215,32 +215,16 @@
                         {%endif%}
                     </div>
                     <div class="col-md-1">
-                           <button type="button"
-                                   class="btn btn-default"
-                                   title="{% trans 'show_detail'%}"
-                                   id="bt_show_data_{{curriculum.academic_year}}"
-                                   onclick="display('pnl_detail_{{curriculum.academic_year}}',true);display('bt_hide_data_{{curriculum.academic_year}}',true);display('bt_show_data_{{curriculum.academic_year}}',false);"
-                                   data-toggle="tooltip"
-                                   data-placement="bottom"
-                                   style="{%if pnl_national_detail_error%}visibility:hidden;display:none;{%else%}visibility:visible;display:block;{%endif%}">
-                                   <span class="glyphicon glyphicon-chevron-down"></span>
-                           </button>
-                           <button type="button"
-                                   class="btn btn-default"
-                                   title="{% trans 'hide_detail'%}"
-                                   id="bt_hide_data_{{curriculum.academic_year}}"
-                                   onclick="display('pnl_detail_{{curriculum.academic_year}}',false);display('bt_hide_data_{{curriculum.academic_year}}',false);display('bt_show_data_{{curriculum.academic_year}}',true)"
-                                   data-toggle="tooltip"
-                                   data-placement="bottom"
-                                   style="{%if pnl_national_detail_error%}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
-                                   <span class="glyphicon glyphicon-chevron-up"></span>
-                           </button>
+                        <button type="button"
+                                class="btn btn-default"
+                                title="{% trans 'hide_detail'%}"
+                                onclick="ShowHide('pnl_detail_{{curriculum.academic_year}}')">
+                            <span class="glyphicon glyphicon-chevron-down"></span>
+                        </button>
                     </div>
                 </div>
             </div>
-            <div class="panel-body"
-                 id="pnl_detail_{{curriculum.academic_year}}"
-                 style="{%if pnl_national_detail_error or  pnl_foreign_detail_error%}visibility:visible;display:block;{%else%}visibility:hidden;display:none;{%endif%}">
+            <div class="panel-body" id="pnl_detail_{{curriculum.academic_year}}" style="display:none;">
                 <input type="hidden" id="hdn_curriculum_year_{{curriculum.academic_year}}" name="curriculum_year_{{curriculum.academic_year}}" value="{{curriculum.academic_year}}">
                 <label> {% trans 'path_type'%} *</label>
                 <br>
@@ -279,7 +263,7 @@
                 {% include "curriculum/national.html" %}
                 {% include "curriculum/foreign.html" %}
                 {% include "curriculum/other.html" %}
-              </div>
+            </div>
         </div>
     {%endfor%}
     <div>
@@ -309,3 +293,13 @@
         </div>
     </div>
 </form>
+<script type="text/javascript">
+function ShowHide(id) {
+    var x = document.getElementById(id);
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+    } else {
+        x.style.display = 'none';
+    }
+}
+</script>

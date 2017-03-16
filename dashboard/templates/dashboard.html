@@ -31,80 +31,29 @@
     <h2>{% trans 'dashboard' %}</h2>
 </div>
 
+    {% include "template_messages.html" %}
+
 <div class="panel panel-default">
-    <div class="panel-body">
+    <div class="panel-body dashboard-grid">
+        {% if perms.base.is_tutor %}
+            {% include 'tutor_dashboard.html' %}
+        {% endif %}
 
-        {% include "template_messages.html" %}
-
-        <div class="row">
-            <div class="col-md-6">
-                {% if 'performance' in installed_apps and perms.base.is_student %}
-                    <div class="row">
-                        <div class="col-md-2"><i class="fa fa-line-chart" style="font-size: 400%; color: #6699FF;"></i></div>
-                        <div class="col-md-10">
-                            <h4 class="media-heading"><a href="{% url 'performance_home'  %}" id="lnk_performance">{% trans 'performance' %}</a></h4>
-                            <p>{% trans 'desc_lnk_performance' %}</p>
-                        </div>
-                    </div>
-                    <br>
-                {% endif %}
-
-                {% if perms.base.is_tutor %}
-                    <div class="row">
-                        <div class="col-md-2"><i class="fa fa-hashtag" style="font-size: 400%; color: #6699FF;"></i></div>
-                        <div class="col-md-10">
-                            <h4 class="media-heading"><a href="{% url 'scores_encoding' %}" id="lnk_score_encoding">{% trans 'scores_encoding' %}</a></h4>
-                            <p>{% trans 'desc_lnk_scores_encoding' %}</p>
-                        </div>
-                    </div>
-                    <br>
-                {% endif %}
-
-                {% if 'attribution' in installed_apps and  perms.base.is_tutor and online_application_opened %}
-                    <div class="row">
-                        <div class="col-md-2"><i class="fa fa-address-card-o" style="font-size: 400%; color: #6699FF;"></i></div>
-                        <div class="col-md-10">
-                            <h4 class="media-heading"><a href="{% url 'learning_unit_applications' %}" id="lnk_my_applications">{% trans 'my_applications' %}</a></h4>
-                            <p>{% trans 'desc_lnk_my_applications' %}</p>
-                        </div>
-                    </div>
-                    <br>
-                {% endif %}
-            </div>
-            <div class="col-md-6">
-                {% if 'internship' in installed_apps and perms.base.is_student %}
-                    <div class="row">
-                        <div class="col-md-2"><i class="fa fa-user-md" style="font-size: 400%; color: #6699FF;"></i></div>
-                        <div class="col-md-10">
-                            <h4 class="media-heading"><a href="{% url 'internship_home'  %}" id="lnk_performance">{% trans 'internship' %}</a></h4>
-                            <p>{% trans 'desc_lnk_internship' %}</p>
-                        </div>
-                    </div>
-                    <br>
-                {% endif %}
-
-                {% if 'attribution' in installed_apps and perms.base.is_tutor %}
-                    <div class="row">
-                        <div class="col-md-2"><i class="fa fa-list-alt" style="font-size: 400%; color: #6699FF;"></i></div>
-                        <div class="col-md-10">
-                            <h4 class="media-heading"><a href="{% url 'attribution_home' %}" id="lnk_my_teaching_charge">{% trans 'my_teaching_charge' %}</a></h4>
-                            <p>{% trans 'desc_lnk_my_teaching_charge' %}</p>
-                        </div>
-                    </div>
-                    <br>
-                {% endif %}
-                {% if 'exam_enrollment' in installed_apps and perms.base.is_student %}
-                    <div class="row">
-                        <div class="col-md-2"><i class="fa fa-list-alt" style="font-size: 400%; color: #6699FF;"></i></div>
-                        <div class="col-md-10">
-                            <h4 class="media-heading"><a href="{% url 'exam_enrollment_offer_choice' %}" id="lnk_exam_enrollment_offer_choice">{% trans 'exams_enrollment' %}</a></h4>
-                            <p>{% trans 'desc_lnk_exam_enrollment' %}</p>
-                        </div>
-                    </div>
-                    <br>
-                {% endif %}
-            </div>
-        </div>
+        {% if perms.base.is_student %}
+            {% include 'student_dashboard.html' %}
+        {% endif %}
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+         $(document).ready(function () {
+            $('.dashboard-grid').masonry({
+               itemSelector : '.grid-item',
+               columnWidth: 360,
+               fitWidth: true
+            });
+         });
+    </script>
 {% endblock %}

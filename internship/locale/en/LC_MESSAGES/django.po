@@ -1,0 +1,151 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-05-03 08:56+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "address"
+msgstr "Address"
+
+msgid	 "city"
+msgstr	 "City"
+
+msgid	 "civility"
+msgstr	 "Civility"
+
+msgid	 "choices_received_by_administration"
+msgstr	 "Choices received by administration"
+
+msgid	 "choose_internships"
+msgstr	 "Choose your non mandatory internship"
+
+msgid "choose_speciality"
+msgstr "Choose a speciality"
+
+msgid "contest"
+msgstr "Contest"
+
+msgid "doctor"
+msgstr "Doctor"
+
+msgid "edit"
+msgstr "Edit"
+
+msgid "edit_information"
+msgstr "Edit information"
+
+msgid "first_choice"
+msgstr "First choice"
+
+msgid "fourth_choice"
+msgstr "Fourth choice"
+
+msgid "generalist"
+msgstr "Generalist"
+
+msgid "GENERALIST"
+msgstr "Generalist"
+
+msgid	 "hospital_list"
+msgstr	 "Hospital list"
+
+msgid	 "hospitals"
+msgstr	 "Hospitals"
+
+msgid "internship"
+msgstr "internship"
+
+msgid "internships"
+msgstr "Internships"
+
+msgid "internship_affectation"
+msgstr "Internship affectation"
+
+msgid "internship_selection_warning_message"
+msgstr "<p>By choosing <strong>'Stage personnel'</strong> you declare that you will be able to find on your own an "
+       "internship. The number of <strong>'Stage personnel'</strong> is <strong>limited to 2</strong> at most.</p>"
+       "<p>Only select <strong>'Stage à l'étranger'</strong> if you have already <strong>been selected</strong> to an "
+       "internship in another country (prior approbation).</p>"
+       "<p>If you intent to pass the <strong>contest of 'Médecine générale'</strong>(general medecine) then <strong> "
+       " you can only choose a speciality between the following ones: <br> "
+       "<strong>chirurgie ou assimilé, dermatologie, gériatrie, gynécologie-obstétrique, médecine interne, médecine "
+       "physique, neurologie, ophtamologie, O.R.L, orthopédie, pédiatrie, psychiatrie, soins palliatifs, urgences, "
+       "urologie.</strong></p>"
+
+msgid	 "masters"
+msgstr	 "Internship's masters"
+
+msgid	 "master_list"
+msgstr	 "Internship's masters list"
+
+msgid	 "mobile_phone"
+msgstr	 "Mobile phone"
+
+msgid	 "number_first_choice"
+msgstr	 "Number of first choice"
+
+msgid	 "organization"
+msgstr	 "Hospital"
+
+msgid "preference"
+msgstr "Preference"
+
+msgid "professor"
+msgstr "Professor"
+
+msgid "reference"
+msgstr "Reference"
+
+msgid "second_choice"
+msgstr "Second choice"
+
+
+msgid "selection"
+msgstr "selection"
+
+msgid "select_contest"
+msgstr "<strong>BEFORE</strong> choosing your internships, follow the link to choose the contest (generalist "
+       "or specialist)that you intend to pass. If this data is incorrect, the system may assign you internships"
+       "which are not compatible."
+
+msgid "selection_is_closed"
+msgstr "The selection is closed."
+
+msgid "speciality"
+msgstr "Speciality"
+
+msgid "SPECIALIST"
+msgstr "Specialist"
+
+msgid "specialist"
+msgstr "Specialist"
+
+msgid "student_information"
+msgstr "Student information"
+
+msgid "student_max"
+msgstr "Maximum number of students"
+
+msgid	 "student_resume"
+msgstr	 "Sump up of your choices and your affectations"
+
+msgid "submit_choices"
+msgstr "Submit choices"
+
+msgid "third_choice"
+msgstr "Third choice"
+
+msgid "website"
+msgstr "Website"

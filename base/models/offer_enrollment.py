@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from base.models.offer_year import OfferYear
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
@@ -49,9 +50,12 @@ def find_by_student(a_student):
     return OfferEnrollment.objects.filter(student=a_student)
 
 
-def find_by_student_ordered(a_student):
-    return find_by_student(a_student).order_by("-offer_year__academic_year__year")
-
-
 def find_by_student_offer(a_student, offer_year):
-    return OfferEnrollment.objects.filter(student=a_student, offer_year=offer_year)
+    try:
+        return OfferEnrollment.objects.get(student=a_student, offer_year=offer_year)
+    except ObjectDoesNotExist:
+        return None
+
+
+def find_by_student_academic_year(a_student, an_academic_year):
+    return OfferEnrollment.objects.filter(student=a_student, offer_year__academic_year=an_academic_year)
