@@ -24,15 +24,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
-from django.core.exceptions import PermissionDenied
+import json
 
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
+from django.utils.translation import ugettext as _
+
 from base.models import student
 from performance import models as mdl_performance
 from base.forms.base_forms import RegistrationIdForm
 from base.views import layout
-import json
 from performance.models.enums import offer_registration_state
 
 
@@ -52,6 +54,15 @@ def view_performance_home(request):
     return layout.render(request, "performance_home.html", data)
 
 
+def __make_not_authorized_message(stud_perf):
+    authorized = stud_perf.authorized if stud_perf else None
+    session_month = stud_perf.session_locked if stud_perf else None
+    if not authorized and session_month:
+        return _('performance_result_note_not_autorized').format(_(session_month))
+    else:
+        return None
+
+
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def display_result_for_specific_student_performance(request, pk):
@@ -66,13 +77,13 @@ def display_result_for_specific_student_performance(request, pk):
     creation_date = stud_perf.creation_date if stud_perf else None
     update_date = stud_perf.update_date if stud_perf else None
     fetch_timed_out = stud_perf.fetch_timed_out if stud_perf else None
-    authorized = stud_perf.authorized if stud_perf else None
+    not_authorized_message = __make_not_authorized_message(stud_perf)
 
     return layout.render(request, "performance_result.html", {"results": document,
                                                               "creation_date": creation_date,
                                                               "update_date": update_date,
                                                               "fetch_timed_out": fetch_timed_out,
-                                                              "authorized": authorized})
+                                                              "not_authorized_message": not_authorized_message})
 
 
 @login_required
@@ -122,13 +133,13 @@ def visualize_student_result(request, pk):
     creation_date = stud_perf.creation_date if stud_perf else None
     update_date = stud_perf.update_date if stud_perf else None
     fetch_timed_out = stud_perf.fetch_timed_out if stud_perf else None
-    authorized = stud_perf.authorized if stud_perf else None
+    not_authorized_message = __make_not_authorized_message(stud_perf)
 
     return layout.render(request, "performance_result.html", {"results": document,
                                                               "creation_date": creation_date,
                                                               "update_date": update_date,
                                                               "fetch_timed_out": fetch_timed_out,
-                                                              "authorized": authorized})
+                                                              "not_authorized_message": not_authorized_message})
 
 
 # *************************** UTILITY FUNCTIONS
