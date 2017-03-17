@@ -46,7 +46,7 @@ def server_error(request):
 
 
 def common_context_processor(request):
-    return {'installed_apps': settings.INSTALLED_APPS, 'debug': settings.DEBUG}
+    return {'installed_apps': settings.INSTALLED_APPS, 'debug': settings.DEBUG, 'logout_button': settings.LOGOUT_BUTTON}
 
 
 def login(request):
