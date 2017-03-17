@@ -67,9 +67,9 @@ def login(request):
 
 
 def log_out(request):
+    logout(request)
     if settings.OVERRIDED_LOGOUT_URL:
         return redirect(settings.OVERRIDED_LOGOUT_URL)
-    logout(request)
     return redirect('logged_out')
 
 
