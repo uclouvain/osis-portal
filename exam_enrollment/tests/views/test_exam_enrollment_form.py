@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from unittest.mock import patch
+from unittest.mock import patch, Mock, MagicMock
 from django.contrib.auth.models import User, Group, Permission
 from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
@@ -35,15 +35,22 @@ import warnings
 
 
 def load_json_file(path):
-    json_data = open(path)
-    data1 = json.load(json_data)  # deserialises it
-    return data1
+    with open(path, 'r') as fp:
+        return json.load(fp)
 
 
 def _create_group(name):
     group = Group(name=name)
     group.save()
     return group
+
+
+def create_offer_enrollment_for_current_academic_yr(student):
+    off_year_current_academic_year = test_offer_year.create_offer_year_with_academic_year(
+        test_academic_year.create_academic_year_current())
+    student_offer_year_enrollment = test_offer_enrollment.create_offer_enrollment(student,
+                                                                                  off_year_current_academic_year)
+    return student_offer_year_enrollment
 
 
 class ExamEnrollmentFormTest(TestCase):
@@ -56,8 +63,7 @@ class ExamEnrollmentFormTest(TestCase):
         self.user_not_student = User.objects.create_user(username='pjashar', email='pjashar@localhost', password='secret')
         self.user.groups.add(group)
         self.person = test_person.create_person_with_user(self.user, first_name="James", last_name="Smith")
-        self.registration_id = "12345678"
-        self.student = test_student.create_student_with_registration_person(self.registration_id, self.person)
+        self.student = test_student.create_student_with_registration_person("12345678", self.person)
         offer_year_id = 1234
         self.off_year = test_offer_year.create_offer_year_from_kwargs(**{'id': offer_year_id,
                                                                          'acronym': 'SINF1BA',
@@ -109,6 +115,88 @@ class ExamEnrollmentFormTest(TestCase):
         response = self.client.get(self.url, follow=True)
         self.assertTemplateUsed(response, 'access_denied.html')
 
+    def test_get_programs_student_is_none(self):
+        self.assertIsNone(main._get_student_programs(None))
+
+    def test_get_one_program(self):
+        self.client.force_login(self.user)
+        student_offer_year_enrollment = create_offer_enrollment_for_current_academic_yr(self.student)
+        self.assertEqual(main._get_student_programs(self.student)[0], student_offer_year_enrollment.offer_year)
+
+    def test_navigation_with_no_offer_in_current_academic_year(self):
+        self.client.force_login(self.user)
+        an_url = reverse('exam_enrollment_form_direct')
+        response = self.client.get(an_url, follow=True)
+        self.assertRedirects(response, reverse('dashboard_home'))
+        self.assertEqual('dashboard.html', response.templates[0].name)
+
+    @patch('base.models.student.find_by_user')
+    def test_choose_offer_no_student_for_current_user(self, mock_find_by_user):
+        mock_find_by_user.return_value = None
+        self.client.force_login(self.user)
+        an_url = reverse('exam_enrollment_offer_choice')
+        response = self.client.get(an_url, follow=True)
+        self.assertRedirects(response, reverse('dashboard_home'))
+
+    @patch('exam_enrollment.views.main._get_student_programs')
+    def test_navigation_student_has_no_programs(self, mock_student_programs):
+        mock_student_programs.return_value = None
+        self.client.force_login(self.user)
+        an_url = reverse('exam_enrollment_offer_choice')
+        response = self.client.get(an_url, follow=True)
+        self.assertRedirects(response, reverse('dashboard_home'))
+        self.assertEqual('dashboard.html', response.templates[0].name)
+
+    @patch('exam_enrollment.views.main._get_student_programs')
+    @patch('exam_enrollment.views.main._fetch_exam_enrollment_form')
+    @patch('base.models.academic_year.current_academic_year')
+    @patch('base.models.offer_year.find_by_id')
+    def test_navigation_student_has_programs_but_returned_form_is_none(self,
+                                                                       mock_find_by_id,
+                                                                       mock_current_academic_year,
+                                                                       mock_fetch_exam_form,
+                                                                       mock_get_student_programs):
+        mock_find_by_id.return_value = Mock()
+        mock_current_academic_year.return_value = None
+        mock_get_student_programs.return_value = [MagicMock(id=1)]
+        mock_fetch_exam_form.return_value = None
+        self.client.force_login(self.user)
+        an_url = reverse('exam_enrollment_form_direct')
+        response = self.client.get(an_url, follow=True)
+        self.assertTrue(mock_current_academic_year.called)
+        self.assertRedirects(response, reverse('dashboard_home'))
+
+    @patch("exam_enrollment.views.main._fetch_exam_enrollment_form")
+    def test_case_exam_enrollment_form_contains_error_message(self, mock_fetch_json):
+        form = self.correct_exam_enrol_form
+        form['error_message'] = "an_error_message_key"
+        mock_fetch_json.return_value = form
+        self.client.force_login(self.user)
+        response = self.client.get(self.url, follow=True)
+        self.assertRedirects(response, reverse('dashboard_home'))
+
+    @patch('exam_enrollment.views.main._get_student_programs')
+    @patch('exam_enrollment.views.main._fetch_exam_enrollment_form')
+    @patch('base.models.academic_year.current_academic_year')
+    @patch('base.models.offer_year.find_by_id')
+    def test_navigation_student_has_programs_with_data(self,
+                                                       mock_find_by_id,
+                                                       mock_current_academic_year,
+                                                       mock_fetch_exam_form,
+                                                       mock_get_student_programs):
+        mock_find_by_id.return_value = Mock()
+        mock_current_academic_year.return_value = None
+        mock_get_student_programs.return_value = [MagicMock(id=1)]
+        mock_fetch_exam_form.return_value = {
+                'exam_enrollments': [],
+                'current_number_session': 0,
+            }
+        self.client.force_login(self.user)
+        an_url = reverse('exam_enrollment_form_direct')
+        response = self.client.get(an_url, follow=True)
+        self.assertTrue(mock_current_academic_year.called)
+        self.assertEqual('exam_enrollment_form.html', response.templates[0].name)
+
     @patch("osis_common.queue.queue_sender.send_message")
     def test_exam_enrollment_form_submission_message(self, send_message):
         warnings.warn(
@@ -128,53 +216,36 @@ class ExamEnrollmentFormTest(TestCase):
             "etat_to_inscr_current_session_LDROI1111": None,
             "current_number_session": 1,
         }
-        # from django.contrib.messages.storage import default_storage
-        # request._messages = default_storage(request)
-        exam_enrollments_expected = [{"acronym": "LPHYS1234",
-                                      "is_enrolled": True,
-                                      "etat_to_inscr": "I"},
-                                     {"acronym": "LBIO4567",
-                                      "is_enrolled": False,
-                                      "etat_to_inscr": None},
-                                     {"acronym": "LDROI1111",
-                                      "is_enrolled": False,
-                                      "etat_to_inscr": None}]
-        expected_result = {
-            "registration_id": self.registration_id,
-            "offer_year_acronym": self.off_year.acronym,
-            "year": self.off_year.academic_year.year,
-            "exam_enrollments": exam_enrollments_expected
-        }
         response = self.client.post(self.url, post_data)
         result = main._exam_enrollment_form_submission_message(self.off_year, response.wsgi_request, self.student)
+        self.assert_correct_data_structure(result)
+        self.assert_none_etat_to_inscr_not_in_submitted_form(result.get('exam_enrollments'))
+
+    def assert_correct_data_structure(self, result):
+        exam_enrollment_expected = {"acronym": "LPHYS1234",
+                                    "is_enrolled": True,
+                                    "etat_to_inscr": "I"}
+        expected_result = {
+            "registration_id": self.student.registration_id,
+            "offer_year_acronym": self.off_year.acronym,
+            "year": self.off_year.academic_year.year,
+            "exam_enrollments": [exam_enrollment_expected]
+        }
         self.assertEqual(len(result), len(expected_result))
         self.assertEqual(expected_result.get('registration_id'), result.get('registration_id'))
         self.assertEqual(expected_result.get('offer_year_acronym'), result.get('offer_year_acronym'))
         self.assertEqual(expected_result.get('year'), result.get('year'))
         exam_enrollments = result.get('exam_enrollments')
-        exam_enrollments_expected = expected_result.get('exam_enrollments')
-        for index in range(0, len(exam_enrollments)):
-            self.assertIn(exam_enrollments[index], exam_enrollments_expected)
+        self.assertEqual(len(exam_enrollments), 1)
+        for exam_enrol in expected_result.get('exam_enrollments'):
+            self.assertIn(exam_enrol, exam_enrollments)
 
-    def create_offer_enrollment_for_current_academic_yr(self):
-        off_year_current_academic_year = test_offer_year.create_offer_year_with_academic_year(
-            test_academic_year.create_academic_year_current())
-        student_offer_year_enrollment = test_offer_enrollment.create_offer_enrollment(self.student,
-                                                                                      off_year_current_academic_year)
-        return student_offer_year_enrollment
-
-    def test_get_programs_student_is_none(self):
-        self.assertIsNone(main._get_student_programs(None))
-
-    def test_get_one_program(self):
-        self.client.force_login(self.user)
-        student_offer_year_enrollment = self.create_offer_enrollment_for_current_academic_yr()
-        self.assertEqual(main._get_student_programs(self.student)[0], student_offer_year_enrollment.offer_year)
-
-    def test_navigation_with_no_offer_in_current_academic_year(self):
-        self.client.force_login(self.user)
-        an_url = reverse('exam_enrollment_form_direct')
-        response = self.client.get(an_url, follow=True)
-        self.assertRedirects(response, reverse('dashboard_home'))
-        self.assertEqual('dashboard.html', response.templates[0].name)
-
+    def assert_none_etat_to_inscr_not_in_submitted_form(self, exam_enrollments):
+        exam_enrollments_unexpected = [{"acronym": "LBIO4567",
+                                        "is_enrolled": False,
+                                        "etat_to_inscr": None},
+                                       {"acronym": "LDROI1111",
+                                        "is_enrolled": False,
+                                        "etat_to_inscr": None}]
+        for index in range(0, len(exam_enrollments_unexpected)):
+            self.assertNotIn(exam_enrollments_unexpected[index], exam_enrollments)

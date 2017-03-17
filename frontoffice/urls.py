@@ -51,8 +51,6 @@ if 'admission' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^admission/', include('admission.urls')), )
 if 'dashboard' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^dashboard/', include('dashboard.urls')), )
-if 'catalog' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^catalog/', include('catalog.urls')), )
 if 'performance' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^performance/', include('performance.urls')), )
 if 'dissertation' in settings.INSTALLED_APPS:

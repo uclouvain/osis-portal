@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,6 +23,21 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
+import factory
+import factory.fuzzy
+from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.offer import OfferFactory
 
-# Create your models here.
+
+def generate_title(offer_year):
+    return '{obj.academic_year} {obj.acronym}'.format(obj=offer_year).lower()
+
+
+class OfferYearFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = "base.OfferYear"
+
+    offer = factory.SubFactory(OfferFactory)
+    academic_year = factory.SubFactory(AcademicYearFactory)
+    acronym = factory.Sequence(lambda n: 'Offer %d' % n)
+    title = factory.LazyAttribute(generate_title)

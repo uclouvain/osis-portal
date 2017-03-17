@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,8 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.apps import AppConfig
+import factory
+import factory.fuzzy
+import string
 
 
-class CatalogConfig(AppConfig):
-    name = 'catalog'
+class OfferFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = "base.Offer"
+
+    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
+    title = factory.Sequence(lambda n: 'Offer %d' % n)

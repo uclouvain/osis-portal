@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,37 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django import template
-from django.contrib import messages
+import factory
 
-register = template.Library()
 
-@register.assignment_tag(takes_context=True)
-def as_messages_info(context):
-    request = context['request']
-    msgs = messages.get_messages(request)
+class UserFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = 'auth.User'
 
-    for m in msgs:
-        if 'info' in m.tags:
-            return True
-    return False
-
-@register.assignment_tag(takes_context=True)
-def as_messages_warning(context):
-    request = context['request']
-    msgs = messages.get_messages(request)
-
-    for m in msgs:
-        if 'warning' in m.tags:
-            return True
-    return False
-
-@register.assignment_tag(takes_context=True)
-def as_messages_error(context):
-    request = context['request']
-    msgs = messages.get_messages(request)
-
-    for m in msgs:
-        if 'error' in m.tags:
-            return True
-    return False
+    username = factory.Faker('user_name')

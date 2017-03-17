@@ -23,5 +23,4 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from exam_enrollment.models import exam_enrollment
 
