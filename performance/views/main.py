@@ -26,7 +26,7 @@
 ############################################################################
 import json
 
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, MultipleObjectsReturned
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.translation import ugettext as _
@@ -36,6 +36,7 @@ from performance import models as mdl_performance
 from base.forms.base_forms import RegistrationIdForm
 from base.views import layout
 from performance.models.enums import offer_registration_state
+from dashboard.views import main as dash_main_view
 
 
 @login_required
@@ -44,7 +45,10 @@ def view_performance_home(request):
     """
     Display the academic programs of the student.
     """
-    stud = student.find_by_user(request.user)
+    try:
+        stud = student.find_by_user(request.user)
+    except MultipleObjectsReturned:
+        return dash_main_view.show_multiple_registration_id_error(request)
     list_student_programs = None
     if stud:
         list_student_programs = get_student_programs_list(stud)
@@ -69,7 +73,10 @@ def display_result_for_specific_student_performance(request, pk):
     """
     Display the student result for a particular year and program.
     """
-    stud = student.find_by_user(request.user)
+    try:
+        stud = student.find_by_user(request.user)
+    except MultipleObjectsReturned:
+        return dash_main_view.show_multiple_registration_id_error(request)
     stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
     if not check_right_access(stud_perf, stud):
         raise PermissionDenied
@@ -142,8 +149,6 @@ def visualize_student_result(request, pk):
                                                               "not_authorized_message": not_authorized_message})
 
 
-# *************************** UTILITY FUNCTIONS
-
 def get_student_programs_list(stud):
     query_result = mdl_performance.student_performance.search(registration_id=stud.registration_id)
     list_student_programs = query_result_to_list(query_result)
@@ -172,5 +177,3 @@ def convert_student_performance_to_dic(student_performance_obj):
 
 def check_right_access(student_performance, student):
     return student_performance.registration_id == student.registration_id
-
-

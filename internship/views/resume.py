@@ -25,6 +25,8 @@
 #
 ############################################################################
 from django.contrib.auth.decorators import login_required, permission_required
+from django.core.exceptions import MultipleObjectsReturned
+
 from base.views import layout
 from internship.models import internship_student_information as mdl_student_information
 from internship.models import internship_student_affectation_stat as mdl_student_affectation
@@ -33,12 +35,16 @@ from internship.models import internship_choice as mdl_internship_choice
 from internship.forms import form_internship_student_information
 from base.models import student as mdl_student
 from base.models import person as mdl_person
+from dashboard.views import main as dash_main_view
 
 
 @login_required
 @permission_required('internship.can_access_internship', raise_exception=True)
 def view_student_resume(request):
-    student = mdl_student.find_by_user(request.user)
+    try:
+        student = mdl_student.find_by_user(request.user)
+    except MultipleObjectsReturned:
+        return dash_main_view.show_multiple_registration_id_error(request)
     student_information = mdl_student_information.find_by_user(request.user)
     student_affectations = mdl_student_affectation.search(student=student)
     student_affectations_with_address = \
