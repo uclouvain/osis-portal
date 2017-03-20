@@ -62,6 +62,7 @@
                 {{ student.registration_id }}
             </div>
         </div>
+
         <br/>
         {% if not available %}
             <div class="alert alert-info" role="alert">{% trans 'no_attestation_available' %}</div>
@@ -88,17 +89,14 @@
                         </td>
                         <td class="text-center">
                         {% if  attestation_statuse.available %}
-                            <a class="btn"
-                               target="_blank"
-                               {% if perms.base.is_faculty_administrator %}
-                               href="{% url 'attestation_admin_download' global_id=student.person.global_id attestation_type=attestation_statuse.attestationType academic_year=academic_year%}">
-                               {% else %}
-                               href="{% url 'download_attestation' attestation_type=attestation_statuse.attestationType academic_year=academic_year%}">
-                               {% endif %}
-                                <i class="fa fa-download" aria-hidden="true"></i></a></td>
+                            <button type="button" class="btn btn-default" id="btn_attestation_download"
+                                    onclick="downloadAttestation({% if perms.base.is_faculty_administrator %} {% url 'attestation_admin_download' global_id=student.person.global_id attestation_type=attestation_statuse.attestationType academic_year=academic_year%} {% else %} {% url 'download_attestation' attestation_type=attestation_statuse.attestationType academic_year=academic_year%} {% endif %})">
+                                <i class="fa fa-download" aria-hidden="true"></i>
+                            </button>
                         {% else %}
                             <i class="fa fa-times" aria-hidden="true"></i>
                         {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -108,4 +106,11 @@
         </div>
     </div>
     {% endif %}
+{% endblock %}
+
+{% block script %}
+    function downloadAttestation(url){
+        window.location = url;
+        window.location.reload();
+    }
 {% endblock %}
