@@ -150,7 +150,7 @@ msgid "performance_result_note_legal_announcement"
 msgstr "Cette feuille de résultats est destinée à la communication entre la faculté et les éudiants. Seule l'annexe au diplôme que l'étudiant reçoit avec celui-ci et qui reprend la liste de tous les cours suivis durant un programme d'étude et des points obtenus peut être considérée comme un transcript officiel."
 
 msgid "performance_result_note_not_autorized"
-msgstr "La diffusion des résultats de la (des) session(s) de janvier n'a pas encore été autorisée par votre faculté."
+msgstr "La diffusion des résultats de la session de {} n'a pas encore été autorisée par votre faculté."
 
 msgid "CESSATION"
 msgstr "Cessation"
@@ -163,6 +163,15 @@ msgstr "Condition"
 
 msgid "INSCRIT"
 msgstr "Inscrit"
+
+msgid "JANUARY"
+msgstr "janvier"
+
+msgid "JUNE"
+msgstr "juin"
+
+msgid "SEPTEMBER"
+msgstr "septembre"
 
 msgid "error_multiple_registration_id"
 msgstr "Un problème à été détecté au niveau de votre inscription : deux NOMAS sont affectés à votre utilisateur. Veuillez prendre contact avec le service des inscriptions (SIC) afin de résoudre le problème. Merci."
