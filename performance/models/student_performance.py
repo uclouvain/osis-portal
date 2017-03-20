@@ -29,7 +29,7 @@ from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from performance.queue.student_performance import fetch_and_save
 from django.utils import timezone
-from performance.models.enums import offer_registration_state
+from performance.models.enums import offer_registration_state, session_month
 
 
 class StudentPerformanceAdmin(admin.ModelAdmin):
@@ -53,6 +53,9 @@ class StudentPerformance(models.Model):
     offer_registration_state = models.CharField(max_length=50,
                                                 choices=offer_registration_state.OFFER_REGISTRAION_STATES,
                                                 null=True)
+    session_locked = models.CharField(max_length=50,
+                                      choices=session_month.SESSION_MONTHS,
+                                      null=True)
 
     fetch_timed_out = False
 

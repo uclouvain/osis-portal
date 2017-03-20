@@ -118,7 +118,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
-                'base.views.common.installed_applications_context_processor',
+                'base.views.common.common_context_processor',
             ],
         },
     },
@@ -271,6 +271,7 @@ QUEUES = {
 LOGIN_URL=reverse_lazy('login')
 OVERRIDED_LOGOUT_URL = ''
 OVERRIDED_LOGIN_URL = ''
+LOGOUT_BUTTON = True
 
 # This has to be replaced by the actual url where you institution logo can be found.
 # Ex : LOGO_INSTITUTION_URL = 'https://www.google.be/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'

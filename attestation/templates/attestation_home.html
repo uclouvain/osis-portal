@@ -34,9 +34,15 @@
     <li class="active">{% trans 'attestation' %}</li>
 {% endblock %}
 
-{% include "template_messages.html" %}
 
 {% block content %}
+    <div class="page-header">
+        <h2>{% trans 'attestation' %}</h2>
+    </div>
+
+    {% include "template_messages.html" %}
+
+    {% if student %}
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
@@ -101,4 +107,5 @@
         {% endif %}
         </div>
     </div>
+    {% endif %}
 {% endblock %}
