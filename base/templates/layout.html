@@ -96,6 +96,10 @@
                                 {{ request.user.first_name }}
                                 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
+                                <li><a href="{% url 'profile_lang' %}" id="lnk_my_osis">
+                                    <span class="glyphicon glyphicon glyphicon-user" aria-hidden="true"></span>
+                                    {% trans 'my_osis' %}</a></li>
+                                <li role="separator" class="divider"></li>
                                 <li><a href="{% url 'logout' %}" id="lnk_logout">
                                     <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                                     Logout</a></li>

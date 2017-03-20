@@ -96,13 +96,13 @@ msgid "no_student_with_this_registration_id"
 msgstr "No student with this registration id"
 
 msgid "performance"
-msgstr "Performance"
+msgstr "Final marks"
 
 msgid "performance_administration"
-msgstr "Performance administration"
+msgstr "Final marks administration"
 
 msgid "performance_results"
-msgstr "Performance results"
+msgstr "Results"
 
 msgid "program"
 msgstr "Program"
@@ -114,7 +114,7 @@ msgid "sept"
 msgstr "Sept."
 
 msgid "student_performance"
-msgstr "Performances of a student"
+msgstr "Final marks of a student"
 
 msgid "text_mean_exprimed_for_20"
 msgstr "Attention : From June 2009, the score is expressed to a maximum of 20."
