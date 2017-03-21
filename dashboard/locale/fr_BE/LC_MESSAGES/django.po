@@ -82,6 +82,9 @@ msgstr "Nom"
 msgid "learning_unit_responsible"
 msgstr "Responsable du cours"
 
+msgid "SCORES_RESPONSIBLE"
+msgstr "Responsable de notes"
+
 msgid "link_to_RGEE"
 msgstr "https://www.uclouvain.be/enseignement-reglements.html"
 
