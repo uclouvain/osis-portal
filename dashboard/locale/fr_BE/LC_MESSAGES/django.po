@@ -135,3 +135,6 @@ msgstr "Attention : décimales non autorisées pour ce cours"
 
 msgid "faculty_administration"
 msgstr "Administration facultaire"
+
+msgid "error_multiple_registration_id"
+msgstr "Un problème a été détecté au niveau de votre inscription : deux NOMAS sont affectés à votre utilisateur. Veuillez prendre contact avec le service des inscriptions (SIC) afin de résoudre le problème. Merci."
