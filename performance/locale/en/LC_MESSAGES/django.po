@@ -172,6 +172,3 @@ msgstr "june"
 
 msgid "SEPTEMBER"
 msgstr "september"
-
-msgid "error_multiple_registration_id"
-msgstr "A problem was detected with your registration : 2 registration id's are linked to your user. Please contact the registration departement (SIC). Thank you."
