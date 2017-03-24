@@ -73,6 +73,9 @@ msgstr "X - Droit et sanction"
 msgid "legend_exam_enrol_y"
 msgstr "Y - Deuxième inscription"
 
+msgid "message_exam_enrolment_state"
+msgstr "Vous pouvez consulter l'ensemble des états d'inscriptions aux examens dans le récapitulatif 'Mes notes'."
+
 msgid "no_offer_enrollment_found"
 msgstr "Vous n'êtes inscrit à aucun programme d'étude pour cette année académique."
 
