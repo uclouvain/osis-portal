@@ -42,6 +42,7 @@
 
 {% include "template_messages.html" %}
 
+{% if student %}
 <div class="alert alert-info" role="alert">
     {% trans 'performance_results_general_legal_announcement' %}
 </div>
@@ -95,4 +96,5 @@
         </table>
     {% endif %}
 </div>
+{% endif %}
 {% endblock %}

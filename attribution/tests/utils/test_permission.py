@@ -63,13 +63,9 @@ class TestPermission(TestCase):
     def test_application_session_period_closed(self):
         test_academic_year.create_academic_year_with_year(CURRENT_YEAR)
         next_academic_year = test_academic_year.create_academic_year_with_year(NEXT_YEAR)
-        two_weeks_ago = datetime.datetime.now() - datetime.timedelta(15)
+        two_weeks_ago = datetime.datetime.today() - datetime.timedelta(15)
         test_academic_calendar.create_academic_calendar(next_academic_year, permission.TEACHING_CHARGE_APPLICATION,
-                                                        datetime.datetime(two_weeks_ago.year,
-                                                                          two_weeks_ago.month,
-                                                                          two_weeks_ago.day),
-                                                        datetime.datetime(two_weeks_ago.year,
-                                                                          two_weeks_ago.month,
-                                                                          two_weeks_ago.day+1))
+                                                        two_weeks_ago,
+                                                        two_weeks_ago + datetime.timedelta(1))
         self.assertEqual(permission.is_online_application_opened(self.a_user), False)
 

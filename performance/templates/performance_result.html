@@ -71,6 +71,12 @@
                         {% trans 'performance_result_fetch_timed_out' %}
                     </div>
                 </div>
+            {% elif not_authorized_message %}
+                <div class="row">
+                    <div class="col-md-12 alert alert-danger">
+                       {{ not_authorized_message }}
+                    </div>
+                </div>
             {% endif %}
             <div class="row container-fluid">
                 <div class="col-md-6 text-left">

@@ -23,7 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
+from django.utils.translation import ugettext_lazy as _
+
 from base.views import layout
 from attribution.utils import permission
 
@@ -39,6 +42,11 @@ def home(request):
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def faculty_administration(request):
     return layout.render(request, "faculty_administrator_dashboard.html")
+
+
+def show_multiple_registration_id_error(request):
+    messages.add_message(request, messages.ERROR, _('error_multiple_registration_id'))
+    return home(request)
 
 
 

@@ -64,7 +64,6 @@ INSTALLED_APPS = (
     'reference',
     'base',
     'admission',
-    'enrollments',
     'dashboard',
     'performance',
     'attribution',
@@ -118,7 +117,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
-                'base.views.common.installed_applications_context_processor',
+                'base.views.common.common_context_processor',
             ],
         },
     },
@@ -271,6 +270,7 @@ QUEUES = {
 LOGIN_URL=reverse_lazy('login')
 OVERRIDED_LOGOUT_URL = ''
 OVERRIDED_LOGIN_URL = ''
+LOGOUT_BUTTON = True
 
 # This has to be replaced by the actual url where you institution logo can be found.
 # Ex : LOGO_INSTITUTION_URL = 'https://www.google.be/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'
@@ -320,11 +320,11 @@ PERFORMANCE_CONFIG = {
 }
 
 ATTESTATION_CONFIG = {
-    'UPDATE_DELTA_HOURS_DEFAULT': 72,
-    'SERVER_TO_FETCH_URL': '',
-    'ATTESTATION_PATH': '',
-    'SERVER_TO_FETCH_USER': '',
-    'SERVER_TO_FETCH_PASSWORD': '',
+    'UPDATE_DELTA_HOURS_DEFAULT': os.environ.get("ATTESTATION_UPDATE_DELTA_HOURS", 72),
+    'SERVER_TO_FETCH_URL': os.environ.get("ATTESTATION_API_URL", ''),
+    'ATTESTATION_PATH': os.environ.get("ATTESTATION_API_PATH", ''),
+    'SERVER_TO_FETCH_USER': os.environ.get("ATTESTATION_API_USER", ''),
+    'SERVER_TO_FETCH_PASSWORD': os.environ.get("ATTESTATION_API_PASSWORD", ''),
 }
 
 try:

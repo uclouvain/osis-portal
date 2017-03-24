@@ -82,6 +82,9 @@ msgstr "Lastname"
 msgid "learning_unit_responsible"
 msgstr "Learning unit's responsible"
 
+msgid "SCORES_RESPONSIBLE"
+msgstr "Scores responsible"
+
 msgid "link_to_RGEE"
 msgstr "https://www.uclouvain.be/enseignement-reglements.html"
 
@@ -132,3 +135,6 @@ msgstr "Unauthorized decimal for this learning unit"
 
 msgid "faculty_administration"
 msgstr "Faculty administration"
+
+msgid "error_multiple_registration_id"
+msgstr "A problem was detected with your registration : 2 registration id's are linked to your user. Please contact the registration departement (SIC). Thank you."
