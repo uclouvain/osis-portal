@@ -45,8 +45,8 @@ def server_error(request):
     return layout.render(request, 'server_error.html', {})
 
 
-def installed_applications_context_processor(request):
-    return {'installed_apps': settings.INSTALLED_APPS}
+def common_context_processor(request):
+    return {'installed_apps': settings.INSTALLED_APPS, 'debug': settings.DEBUG, 'logout_button': settings.LOGOUT_BUTTON}
 
 
 def login(request):
@@ -67,9 +67,9 @@ def login(request):
 
 
 def log_out(request):
+    logout(request)
     if settings.OVERRIDED_LOGOUT_URL:
         return redirect(settings.OVERRIDED_LOGOUT_URL)
-    logout(request)
     return redirect('logged_out')
 
 

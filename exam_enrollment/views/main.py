@@ -24,8 +24,9 @@
 #
 ##############################################################################
 import json
-import warnings
 
+from django.core.exceptions import MultipleObjectsReturned
+import warnings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -35,9 +36,10 @@ from django.conf import settings
 
 from base.views import layout
 from base.models import student, offer_enrollment, academic_year, offer_year
-from exam_enrollment import models as mdl
+from exam_enrollment.models import exam_enrollment_submitted
 from frontoffice.queue import queue_listener
 from osis_common.queue import queue_sender
+from dashboard.views import main as dash_main_view
 
 
 @login_required
@@ -53,7 +55,10 @@ def choose_offer_direct(request):
 
 
 def navigation(request, navigate_direct_to_form):
-    stud = student.find_by_user(request.user)
+    try:
+        stud = student.find_by_user(request.user)
+    except MultipleObjectsReturned:
+        return dash_main_view.show_multiple_registration_id_error(request)
     student_programs = _get_student_programs(stud)
     if student_programs:
         if navigate_direct_to_form and len(student_programs) == 1:
@@ -69,7 +74,10 @@ def navigation(request, navigate_direct_to_form):
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def exam_enrollment_form(request, offer_year_id):
-    stud = student.find_by_user(request.user)
+    try:
+        stud = student.find_by_user(request.user)
+    except MultipleObjectsReturned:
+        return dash_main_view.show_multiple_registration_id_error(request)
     off_year = offer_year.find_by_id(offer_year_id)
     if request.method == 'POST':
         return _process_exam_enrollment_form_submission(off_year, request, stud)
@@ -80,7 +88,10 @@ def exam_enrollment_form(request, offer_year_id):
 def _get_exam_enrollment_form(off_year, offer_year_id, request, stud):
     data = _fetch_exam_enrollment_form(stud, off_year)
     if not data:
-        messages.add_message(request, messages.WARNING, _('outside_exam_enrollment_period').format(off_year.acronym))
+        messages.add_message(request, messages.WARNING, _('exam_enrollment_form_unavalaible_for_the_moment').format(off_year.acronym))
+        return response.HttpResponseRedirect(reverse('dashboard_home'))
+    elif data.get('error_message'):
+        messages.add_message(request, messages.WARNING, _(data.get('error_message')).format(off_year.acronym))
         return response.HttpResponseRedirect(reverse('dashboard_home'))
     return layout.render(request, 'exam_enrollment_form.html', {'exam_enrollments': data.get('exam_enrollments'),
                                                                 'student': stud,
@@ -94,9 +105,8 @@ def _process_exam_enrollment_form_submission(off_year, request, stud):
     json_data = json.dumps(data_to_submit)
     offer_enrol = offer_enrollment.find_by_student_offer(stud, off_year)
     if json_data and offer_enrol:
-        mdl.exam_enrollment_submitted.insert_or_update_document(offer_enrol, json_data)
+        exam_enrollment_submitted.insert_or_update_document(offer_enrol, json_data)
     queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('EXAM_ENROLLMENT_FORM_SUBMISSION'), data_to_submit)
-    mdl.exam_enrollment_form.remove_form(offer_enrol)
     messages.add_message(request, messages.SUCCESS, _('exam_enrollment_form_submitted'))
     return response.HttpResponseRedirect(reverse('dashboard_home'))
 
@@ -123,11 +133,13 @@ def _build_enrollments_by_learning_unit(request):
     is_enrolled_by_acronym = _build_dicts_is_enrolled_by_acronym(current_number_session, request)
     etat_to_inscr_by_acronym = _build_dicts_etat_to_inscr_by_acronym(request)
     for acronym, etat_to_inscr in etat_to_inscr_by_acronym.items():
-        enrollments_by_learn_unit.append({
-            'acronym': acronym,
-            'is_enrolled': is_enrolled_by_acronym.get(acronym, False),
-            'etat_to_inscr': None if not etat_to_inscr or etat_to_inscr == 'None' else etat_to_inscr
-        })
+        etat_to_inscr = None if not etat_to_inscr or etat_to_inscr == 'None' else etat_to_inscr
+        if etat_to_inscr:
+            enrollments_by_learn_unit.append({
+                'acronym': acronym,
+                'is_enrolled': is_enrolled_by_acronym.get(acronym, False),
+                'etat_to_inscr': etat_to_inscr
+            })
     return enrollments_by_learn_unit
 
 
@@ -147,17 +159,10 @@ def _extract_acronym(html_tag_id):
 
 
 def _fetch_exam_enrollment_form(stud, offer_yr):
-    ex_enrollment_form = mdl.exam_enrollment_form.get_form(offer_enrollment.find_by_student_offer(stud, offer_yr))
-    if ex_enrollment_form:
-        json_data = ex_enrollment_form.form
+    json_data = call_exam_enrollment_client(offer_yr, stud)
+    if json_data:
+        json_data = json_data.decode("utf-8")
         return json.loads(json_data)
-    else:
-        json_data = call_exam_enrollment_client(offer_yr, stud)
-        if json_data:
-            json_data = json_data.decode("utf-8")
-            mdl.exam_enrollment_form.insert_or_update_form(offer_enrollment.find_by_student_offer(stud, offer_yr),
-                                                           json_data)
-            return json.loads(json_data)
     return None
 
 

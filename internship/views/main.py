@@ -25,19 +25,25 @@
 #
 ############################################################################
 from django.contrib.auth.decorators import login_required, permission_required
+from django.core.exceptions import MultipleObjectsReturned
 from django.shortcuts import redirect
+from django.forms import formset_factory
+
 from base.views import layout
 import base.models as mdl_base
 import internship.models as mdl_internship
 from internship.forms.form_select_speciality import SpecialityForm
 from internship.forms.form_offer_preference import OfferPreferenceFormSet, OfferPreferenceForm
-from django.forms import formset_factory
+from dashboard.views import main as dash_main_view
 
 
 @login_required
 @permission_required('internship.can_access_internship', raise_exception=True)
 def view_internship_home(request):
-
+    try:
+        mdl_base.student.find_by_user(request.user)
+    except MultipleObjectsReturned:
+        return dash_main_view.show_multiple_registration_id_error(request)
     return layout.render(request, "internship_home.html")
 
 
@@ -45,7 +51,10 @@ def view_internship_home(request):
 @permission_required('internship.can_access_internship', raise_exception=True)
 def view_internship_selection(request, internship_id="1", speciality_id="-1"):
     NUMBER_NON_MANDATORY_INTERNSHIPS = 6
-    student = mdl_base.student.find_by_user(request.user)
+    try:
+        student = mdl_base.student.find_by_user(request.user)
+    except MultipleObjectsReturned:
+        return dash_main_view.show_multiple_registration_id_error(request)
 
     is_open = mdl_internship.internship_offer.get_number_selectable() > 0
     if not is_open:
