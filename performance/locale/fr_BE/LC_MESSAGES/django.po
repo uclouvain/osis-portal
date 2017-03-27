@@ -96,10 +96,10 @@ msgid "no_student_with_this_registration_id"
 msgstr "Aucun étudiant avec ce noma!"
 
 msgid "performance"
-msgstr "Mes notes finales"
+msgstr "Mes notes d'examens"
 
 msgid "performance_administration"
-msgstr "Administration des notes finales"
+msgstr "Administration des notes d'examens"
 
 msgid "performance_results"
 msgstr "Résultats"

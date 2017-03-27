@@ -44,11 +44,11 @@ msgstr ""
   "<a href='https://uclouvain.be/ServiceDesk' target='_blank'>Service Desk</a> et en décrivant l'opération effectuée "
   "de manière plus détaillée."
 
-msgid "my_osis"
-msgstr "Mon OSIS"
-
 msgid "preferences"
 msgstr "Préférences"
 
 msgid "user_interface_language"
 msgstr "Langue de l'interface utilisateur"
+
+msgid "language_choice"
+msgstr "FR - EN"

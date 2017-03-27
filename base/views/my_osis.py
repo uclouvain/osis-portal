@@ -40,13 +40,13 @@ from base.views import layout
 
 @login_required
 def my_osis_index(request):
-    return layout.render(request, "my_osis/profile.html", {})
+    return layout.render(request, "my_osis/language.html", {})
 
 
 @login_required
 def profile(request):
     person = mdl.person.find_by_user(request.user)
-    return layout.render(request, "my_osis/profile.html", {'person':                person,
+    return layout.render(request, "my_osis/language.html", {'person':                person,
                                                            'supported_languages':   settings.LANGUAGES,
                                                            'default_language':      settings.LANGUAGE_CODE})
 

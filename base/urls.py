@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -29,14 +29,5 @@ from base.views import administration, my_osis
 
 urlpatterns = [
     url(r'^'+settings.ADMIN_URL+'data/$', administration.data, name='data'),
-    url(r'^my_osis/$', my_osis.my_osis_index, name="my_osis"),
-#     url(r'^my_osis/management_tasks/messages_templates', my_osis.messages_templates_index, name="messages_templates"),
-#     url(r'^my_osis/my_messages/$', my_osis.my_messages_index, name="my_messages"),
-#     url(r'^my_osis/my_messages/action/$', my_osis.my_messages_action, name="my_messages_action"),
-#     url(r'^my_osis/my_messages/read/([0-9]+)/$', my_osis.read_message, name="read_my_message"),
-#     url(r'^my_osis/my_messages/delete/([0-9]+)/$', my_osis.delete_from_my_messages, name="delete_my_message"),
-#     url(r'^my_osis/my_messages/send_message_again/([0-9]+)/$', my_osis.send_message_again,
-#         name='send_message_again'),
-#     url(r'^my_osis/profile/$', my_osis.profile, name='profile'),
     url(r'^my_osis/profile/lang$', my_osis.profile_lang, name='profile_lang'),
 ]
