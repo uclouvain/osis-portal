@@ -35,7 +35,7 @@ from django.http import response
 from django.conf import settings
 
 from base.views import layout
-from base.models import student, offer_enrollment, academic_year, offer_year
+from base.models import student, offer_enrollment, academic_year, offer_year, learning_unit_enrollment
 from exam_enrollment.models import exam_enrollment_submitted
 from frontoffice.queue import queue_listener
 from osis_common.queue import queue_sender
@@ -62,7 +62,7 @@ def navigation(request, navigate_direct_to_form):
     student_programs = _get_student_programs(stud)
     if student_programs:
         if navigate_direct_to_form and len(student_programs) == 1:
-            return _get_exam_enrollment_form(student_programs[0], student_programs[0].id, request, stud)
+            return _get_exam_enrollment_form(student_programs[0], request, stud)
         else:
             return layout.render(request, 'offer_choice.html', {'programs': student_programs,
                                                                 'student': stud})
@@ -82,10 +82,14 @@ def exam_enrollment_form(request, offer_year_id):
     if request.method == 'POST':
         return _process_exam_enrollment_form_submission(off_year, request, stud)
     else:
-        return _get_exam_enrollment_form(off_year, offer_year_id, request, stud)
+        return _get_exam_enrollment_form(off_year, request, stud)
 
 
-def _get_exam_enrollment_form(off_year, offer_year_id, request, stud):
+def _get_exam_enrollment_form(off_year, request, stud):
+    learn_unit_enrols = learning_unit_enrollment.find_by_student_and_offer_year(stud, off_year)
+    if not learn_unit_enrols:
+        messages.add_message(request, messages.WARNING, _('no_learning_unit_enrollment_found').format(off_year.acronym))
+        return response.HttpResponseRedirect(reverse('dashboard_home'))
     data = _fetch_exam_enrollment_form(stud, off_year)
     if not data:
         messages.add_message(request, messages.WARNING, _('exam_enrollment_form_unavalaible_for_the_moment').format(off_year.acronym))
@@ -97,7 +101,7 @@ def _get_exam_enrollment_form(off_year, offer_year_id, request, stud):
                                                                 'student': stud,
                                                                 'current_number_session': data.get('current_number_session'),
                                                                 'academic_year': academic_year.current_academic_year(),
-                                                                'program': offer_year.find_by_id(offer_year_id)})
+                                                                'program': offer_year.find_by_id(off_year.id)})
 
 
 def _process_exam_enrollment_form_submission(off_year, request, stud):

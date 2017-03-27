@@ -23,13 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from unittest.mock import patch, Mock, MagicMock
+from unittest.mock import patch, Mock
 from django.contrib.auth.models import User, Group, Permission
 from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
 import json
 import random
-from base.tests.models import test_student, test_person, test_academic_year, test_offer_year, test_offer_enrollment
+from base.tests.models import test_student, test_person, test_academic_year, test_offer_year, test_offer_enrollment, test_learning_unit_enrollment, test_learning_unit_year
 from exam_enrollment.views import main
 import warnings
 
@@ -71,6 +71,11 @@ class ExamEnrollmentFormTest(TestCase):
                                                                          'academic_year': self.academic_year})
         self.url = "/exam_enrollment/{}/form/".format(offer_year_id)
         self.correct_exam_enrol_form = load_json_file("exam_enrollment/tests/resources/exam_enrollment_form_example.json")
+        off_enrol = create_offer_enrollment_for_current_academic_yr(self.student)
+        learn_unit_year = test_learning_unit_year.create_learning_unit_year({'acronym': 'LDROI1234',
+                                                                             'title': 'Bachelor in law',
+                                                                             'academic_year': self.academic_year})
+        self.learn_unit_enrol = test_learning_unit_enrollment.create_learning_unit_enrollment(off_enrol, learn_unit_year)
 
     def test_json_form_content(self):
         form = self.correct_exam_enrol_form
@@ -89,8 +94,10 @@ class ExamEnrollmentFormTest(TestCase):
                         or 'session_3' in random_exam_enrol.keys())
         self.assertTrue(random_exam_enrol.get('learning_unit_year'))
 
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
     @patch("exam_enrollment.views.main._fetch_exam_enrollment_form")
-    def test_exam_enrollment_form(self, fetch_json):
+    def test_exam_enrollment_form(self, fetch_json, mock_find_learn_unit_enrols):
+        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
         fetch_json.return_value = self.correct_exam_enrol_form
         self.client.force_login(self.user)
         response = self.client.get(self.url)
@@ -120,8 +127,7 @@ class ExamEnrollmentFormTest(TestCase):
 
     def test_get_one_program(self):
         self.client.force_login(self.user)
-        student_offer_year_enrollment = create_offer_enrollment_for_current_academic_yr(self.student)
-        self.assertEqual(main._get_student_programs(self.student)[0], student_offer_year_enrollment.offer_year)
+        self.assertEqual(main._get_student_programs(self.student)[0], self.learn_unit_enrol.offer_enrollment.offer_year)
 
     def test_navigation_with_no_offer_in_current_academic_year(self):
         self.client.force_login(self.user)
@@ -158,7 +164,7 @@ class ExamEnrollmentFormTest(TestCase):
                                                                        mock_get_student_programs):
         mock_find_by_id.return_value = Mock()
         mock_current_academic_year.return_value = None
-        mock_get_student_programs.return_value = [MagicMock(id=1)]
+        mock_get_student_programs.return_value = [self.off_year]
         mock_fetch_exam_form.return_value = None
         self.client.force_login(self.user)
         an_url = reverse('exam_enrollment_form_direct')
@@ -175,6 +181,7 @@ class ExamEnrollmentFormTest(TestCase):
         response = self.client.get(self.url, follow=True)
         self.assertRedirects(response, reverse('dashboard_home'))
 
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
     @patch('exam_enrollment.views.main._get_student_programs')
     @patch('exam_enrollment.views.main._fetch_exam_enrollment_form')
     @patch('base.models.academic_year.current_academic_year')
@@ -183,14 +190,16 @@ class ExamEnrollmentFormTest(TestCase):
                                                        mock_find_by_id,
                                                        mock_current_academic_year,
                                                        mock_fetch_exam_form,
-                                                       mock_get_student_programs):
+                                                       mock_get_student_programs,
+                                                       mock_find_learn_unit_enrols):
         mock_find_by_id.return_value = Mock()
         mock_current_academic_year.return_value = None
-        mock_get_student_programs.return_value = [MagicMock(id=1)]
+        mock_get_student_programs.return_value = [self.off_year]
         mock_fetch_exam_form.return_value = {
                 'exam_enrollments': [],
                 'current_number_session': 0,
             }
+        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
         self.client.force_login(self.user)
         an_url = reverse('exam_enrollment_form_direct')
         response = self.client.get(an_url, follow=True)
@@ -249,3 +258,11 @@ class ExamEnrollmentFormTest(TestCase):
                                         "etat_to_inscr": None}]
         for index in range(0, len(exam_enrollments_unexpected)):
             self.assertNotIn(exam_enrollments_unexpected[index], exam_enrollments)
+
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
+    def test_case_student_has_no_learning_unit_enrollment(self, mock_find):
+        mock_find.return_value = None
+        off_year_enrol = create_offer_enrollment_for_current_academic_yr(self.student)
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('exam_enrollment_form', args=[off_year_enrol.offer_year.id]), follow=True)
+        self.assertRedirects(response, reverse('dashboard_home'))
