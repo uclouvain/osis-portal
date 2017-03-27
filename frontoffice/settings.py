@@ -71,7 +71,17 @@ INSTALLED_APPS = (
     'internship',
     'exam_enrollment',
     'attestation',
+    'loginas'
 )
+
+# Authentication configuration
+
+LOGINAS_REDIRECT_URL = "/dashboard"
+
+LOGIN_URL=reverse_lazy('login')
+OVERRIDED_LOGIN_URL = ''
+OVERRIDED_LOGOUT_URL = ''
+LOGOUT_BUTTON = True
 
 # check if we are testing right now
 TESTING = 'test' in sys.argv
@@ -266,11 +276,6 @@ QUEUES = {
     }
 }
 
-
-LOGIN_URL=reverse_lazy('login')
-OVERRIDED_LOGOUT_URL = ''
-OVERRIDED_LOGIN_URL = ''
-LOGOUT_BUTTON = True
 
 # This has to be replaced by the actual url where you institution logo can be found.
 # Ex : LOGO_INSTITUTION_URL = 'https://www.google.be/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'
