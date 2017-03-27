@@ -61,25 +61,28 @@
         <div class="row">
             <form action="{% url 'assign_speciality' internship_id=intern_id %}"  method="post">
                 {% csrf_token %}
-                <div class="fieldWrapper col-md-4 form-group">
+                <div class="fieldWrapper col-md-6 form-group">
                     <label for="speciality_selection">{% trans 'choose_speciality' %}:</label>
-                    <select id="speciality_selection"
-                            name="speciality_chosen"
-                            class="form-control">
-                        {% for speciality in all_specialities %}
-                            <option value="{{ speciality.id }}"
-                                    {% if speciality_id == speciality.id %} selected {% endif %}>
-                                {{ speciality.name }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
+                    <div class="row">
+                      <div class="col-md-8">
+                        <select id="speciality_selection"
+                                name="speciality_chosen"
+                                class="form-control">
+                            {% for speciality in all_specialities %}
+                                <option value="{{ speciality.id }}"
+                                        {% if speciality_id == speciality.id %} selected {% endif %}>
+                                    {{ speciality.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                      </div>
 
-                <div class="col-md-2">
-                    <br>
-                    <button type="submit" class="btn btn-primary">
-                        <span class="glyphicon glyphicon-ok"></span>
-                    </button>
+                      <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </button>
+                      </div>
+                    </div>
                 </div>
             </form>
         </div>
