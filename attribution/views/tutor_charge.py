@@ -165,7 +165,7 @@ def list_teaching_charge(a_person, an_academic_year):
 @permission_required('attribution.can_access_attribution', raise_exception=True)
 def by_year(request, year, a_global_id):
     if a_global_id:
-        a_person =mdl_base.person.find_by_global_id(a_global_id)
+        a_person = mdl_base.person.find_by_global_id(a_global_id)
     else:
         a_person = get_person(request.user)
     data = get_teaching_charge_data(a_person,  year)
@@ -219,23 +219,24 @@ def get_url_learning_unit_year(a_learning_unit_year):
     return None
 
 
-def get_students(a_learning_unit_year_id, a_tutor):
-    a_learning_unit_year = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year_id)
+def get_students(a_learning_unit_year, a_tutor):
+
     return get_learning_unit_years_list(a_learning_unit_year, a_tutor)
 
 
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
-def show_students(request, a_learning_unit_year, a_tutor):
+def show_students(request, a_learning_unit_year_id, a_tutor):
     students_list = []
     request_tutor = mdl_base.tutor.find_by_id(a_tutor)
+    a_learning_unit_year = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year_id)
     for learning_unit_enrollment in get_students(a_learning_unit_year, request_tutor):
         students_list.append(set_student_for_display(learning_unit_enrollment))
 
     return render(request, "students_list.html", {
         'global_id': request_tutor.person.global_id,
         'students': students_list,
-        'learning_unit_year': mdl_base.learning_unit_year.find_by_id(a_learning_unit_year), })
+        'learning_unit_year': a_learning_unit_year})
 
 
 def get_sessions_results(a_registration_id, a_learning_unit, offer_acronym):
@@ -293,6 +294,7 @@ def get_session_value(session_results, month_session, variable_to_get):
 
 
 def set_student_for_display(learning_unit_enrollment):
+
     session_results = get_sessions_results(learning_unit_enrollment.offer_enrollment.student.registration_id,
                                            learning_unit_enrollment.learning_unit_year,
                                            learning_unit_enrollment.offer_enrollment.offer_year.acronym)
@@ -343,9 +345,7 @@ def get_learning_unit_years_list(a_learning_unit_year, a_tutor):
     learning_unit_years_allocated = []
     for lu in mdl_base.learning_unit_year.find_by_acronym(a_learning_unit_year.acronym,
                                                           a_learning_unit_year.academic_year):
-        attribution = mdl_attribution.attribution.search(a_tutor, lu)
-        if attribution.exists():
-            learning_unit_years_allocated.append(lu)
+        learning_unit_years_allocated.append(lu)
 
     return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(learning_unit_years_allocated)
 
