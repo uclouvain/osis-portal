@@ -23,37 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.core.urlresolvers import reverse
-
-from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 from django.utils import translation
-from django.utils.translation import ugettext as _
-
 from base import models as mdl
-
-
-from base.views import layout
-
-
-@login_required
-def my_osis_index(request):
-    return layout.render(request, "my_osis/language.html", {})
+from django.shortcuts import redirect
 
 
 @login_required
-def profile(request):
-    person = mdl.person.find_by_user(request.user)
-    return layout.render(request, "my_osis/language.html", {'person':                person,
-                                                           'supported_languages':   settings.LANGUAGES,
-                                                           'default_language':      settings.LANGUAGE_CODE})
-
-@login_required
-def profile_lang(request):
-    ui_language = request.POST.get('ui_language')
+def profile_lang(request, ui_language):
     mdl.person.change_language(request.user, ui_language)
     translation.activate(ui_language)
     request.session[translation.LANGUAGE_SESSION_KEY] = ui_language
-    return profile(request)
+    return redirect(request.META['HTTP_REFERER'])

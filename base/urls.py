@@ -29,5 +29,5 @@ from base.views import administration, my_osis
 
 urlpatterns = [
     url(r'^'+settings.ADMIN_URL+'data/$', administration.data, name='data'),
-    url(r'^my_osis/profile/lang$', my_osis.profile_lang, name='profile_lang'),
+    url(r'^my_osis/profile/lang/([A-Za-z-]+)/$', my_osis.profile_lang, name='profile_lang'),
 ]
