@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -60,5 +60,8 @@ def find_by_learningunit_enrollment(learning_unit_year):
 
 
 def find_by_learning_unit_years(learning_unit_years):
-    return LearningUnitEnrollment.objects.filter(learning_unit_year__in=learning_unit_years) \
+    return LearningUnitEnrollment.objects.select_related("offer_enrollment",
+                                                         "offer_enrollment__student",
+                                                         "offer_enrollment__student__person",
+                                                         "offer_enrollment__offer_year").filter(learning_unit_year__in=learning_unit_years) \
         .order_by('offer_enrollment__student__person__last_name', 'offer_enrollment__student__person__first_name')
