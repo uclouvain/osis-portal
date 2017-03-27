@@ -164,7 +164,7 @@
     "pk": 1,
     "fields": {
       "learning_unit": 1,
-      "name": "State en Pédiatrie",
+      "name": "Stage en Pédiatrie",
       "acronym": "PE",
       "mandatory": true
     }
@@ -174,7 +174,7 @@
     "pk": 2,
     "fields": {
       "learning_unit": 1,
-      "name": "State en en Chirurgie",
+      "name": "Stage en en Chirurgie",
       "acronym": "CH",
       "mandatory": true
     }
@@ -184,7 +184,7 @@
     "pk": 3,
     "fields": {
       "learning_unit": 1,
-      "name": "State en Radiologie",
+      "name": "Stage en Radiologie",
       "acronym": "CH1",
       "mandatory": false
     }
@@ -194,7 +194,7 @@
     "pk": 4,
     "fields": {
       "learning_unit": 1,
-      "name": "State en ??",
+      "name": "Stage en ??",
       "acronym": "CH2",
       "mandatory": false
     }
