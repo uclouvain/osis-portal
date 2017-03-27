@@ -23,17 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from internship.models import internship_choice
-from internship.models import internship_master
-from internship.models import internship_offer
-from internship.models import internship_speciality
-from internship.models import internship_student_affectation_stat
-from internship.models import internship_student_information
-from internship.models import organization
-from internship.models import organization_address
-from internship.models import internship_master
-from internship.models import internship_student_information
-from internship.models import period
-from internship.models import internship_student_affectation_stat
-from internship.models import period_internship_places
-from internship.models import cohort
+from django.db import models
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
+
+
+class CohortAdmin(SerializableModelAdmin):
+    list_display = ('name', 'description', 'free_internships_number', 'publication_start_date', 'subscription_start_date', 'subscription_end_date')
+    fieldsets = ((None, {'fields': ('name', 'description', 'free_internships_number', 'publication_start_date', 'subscription_start_date', 'subscription_end_date')}),)
+
+
+class Cohort(SerializableModel):
+    name = models.CharField(max_length=255, blank=False)
+    description = models.TextField()
+    free_internships_number = models.IntegerField(blank=False)
+    publication_start_date = models.DateField(blank=False)
+    subscription_start_date = models.DateField(blank=False)
+    subscription_end_date = models.DateField(blank=False)
+
+    def __str__(self):
+        return u"%s" % self.name
