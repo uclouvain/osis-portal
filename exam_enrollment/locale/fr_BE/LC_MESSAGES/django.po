@@ -83,7 +83,7 @@ msgid "no_exam_enrollment_found"
 msgstr "Aucune inscription aux examens trouvée."
 
 msgid "no_learning_unit_enrollment_found"
-msgstr "Aucune inscription au cours trouvée dans le cadre de votre programme {}."
+msgstr "Vous n'êtes inscrit à aucun cours dans le cadre du programme {}."
 
 msgid "outside_exam_enrollment_period"
 msgstr "Les inscriptions aux examens pour le programme {} sont actuellement fermées."
