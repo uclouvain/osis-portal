@@ -345,9 +345,6 @@ def get_learning_unit_years_list(a_learning_unit_year, a_tutor):
     learning_unit_years_allocated = []
     for lu in mdl_base.learning_unit_year.find_by_acronym(a_learning_unit_year.acronym,
                                                           a_learning_unit_year.academic_year):
-        # attribution = mdl_attribution.attribution.search(a_tutor, lu)
-        # if attribution.exists():
-        #     learning_unit_years_allocated.append(lu)
         learning_unit_years_allocated.append(lu)
 
     return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(learning_unit_years_allocated)
