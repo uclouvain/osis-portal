@@ -152,6 +152,9 @@ msgstr "This results are intended as communication between faculty and students.
 "which lists all the courses taken during a program of study and points obtained, can be considered as an official "
 "transcript."
 
+msgid "performance_result_note_not_autorized"
+msgstr "The publication of the notes from the {} session was not authorized by our faculty."
+
 msgid "CESSATION"
 msgstr "Interruption"
 
@@ -163,3 +166,12 @@ msgstr "Condition"
 
 msgid "INSCRIT"
 msgstr "Registered"
+
+msgid "JANUARY"
+msgstr "january"
+
+msgid "JUNE"
+msgstr "june"
+
+msgid "SEPTEMBER"
+msgstr "september"

@@ -231,12 +231,14 @@ def save(registration_id, academic_year, acronym, json_data, default_update_date
     else:
         update_date = default_update_date
     authorized = json_data.pop("authorized", False)
+    session_locked = json_data.pop("sessionMonth", None)
     offer_registration_state = json_data.pop("etatInscr", None)
     creation_date = get_creation_date()
     fields = {"data": json_data,
               "update_date": update_date,
               "creation_date": creation_date,
               "authorized": authorized,
+              "session_locked": session_locked,
               "offer_registration_state": offer_registration_state}
     try:
         obj = update_or_create(registration_id, academic_year, acronym, fields)

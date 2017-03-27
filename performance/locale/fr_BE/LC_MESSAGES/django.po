@@ -147,7 +147,10 @@ msgid "performance_results_general_legal_announcement"
 msgstr "Ce composant reflète l'état des informations enregistrées dans les bases de données officielles de l'université au moment de leur affichage et selon des modalités de diffusion décidées par le secrétariat de votre faculté."
 
 msgid "performance_result_note_legal_announcement"
-msgstr "Cette feuille de résultats est destinée à la communication entre la faculté et les éudiants. Seule l'annexe au diplôme que l'étudiant reçoit avec celui-ci et qui reprend la liste de tous les cours suivis durant un programme d'étude et des points obtenus peut être considérée comme un transcript officiel."
+msgstr "Cette feuille de résultats est destinée à la communication entre la faculté et les étudiants. Seule l'annexe au diplôme que l'étudiant reçoit avec celui-ci et qui reprend la liste de tous les cours suivis durant un programme d'étude et des points obtenus peut être considérée comme un transcript officiel."
+
+msgid "performance_result_note_not_autorized"
+msgstr "La diffusion des notes de la session de {} n'a pas encore été autorisée par votre faculté."
 
 msgid "CESSATION"
 msgstr "Cessation"
@@ -161,3 +164,11 @@ msgstr "Condition"
 msgid "INSCRIT"
 msgstr "Inscrit"
 
+msgid "JANUARY"
+msgstr "janvier"
+
+msgid "JUNE"
+msgstr "juin"
+
+msgid "SEPTEMBER"
+msgstr "septembre"

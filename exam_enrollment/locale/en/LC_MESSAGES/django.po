@@ -73,6 +73,9 @@ msgstr "X - Law and administrative penalty"
 msgid "legend_exam_enrol_y"
 msgstr "Y - Second enrollment"
 
+msgid "message_exam_enrolment_state"
+msgstr "You can see the state of all your exam enrollments in your scoresheet."
+
 msgid "no_exam_enrollment_found"
 msgstr "No exam enrollment found."
 
