@@ -114,7 +114,7 @@ msgid "sept"
 msgstr "Sept."
 
 msgid "student_performance"
-msgstr "Final marks of a student"
+msgstr "Exam marks of a student"
 
 msgid "text_mean_exprimed_for_20"
 msgstr "Attention : From June 2009, the score is expressed to a maximum of 20."
