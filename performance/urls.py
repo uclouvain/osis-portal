@@ -28,7 +28,7 @@ from django.conf.urls import url
 from performance.views import main
 
 urlpatterns = [
-    url(r'^exammarks/$', main.view_performance_home, name='performance_home'),
+    url(r'^$', main.view_performance_home, name='performance_home'),
 
     url(r'^administration/select_student/$', main.select_student, name='performance_administration'),
     url(r'^result/(?P<pk>[0-9]+)/$',
