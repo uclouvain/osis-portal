@@ -79,6 +79,9 @@ msgstr "You can see the state of all your exam enrollments in your scoresheet."
 msgid "no_exam_enrollment_found"
 msgstr "No exam enrollment found."
 
+msgid "no_learning_unit_enrollment_found"
+msgstr "You're not enrolled in the learning units of this program : {}."
+
 msgid "no_offer_enrollment_found"
 msgstr "Sorry, you're not enrolled to any program for this academic year."
 
