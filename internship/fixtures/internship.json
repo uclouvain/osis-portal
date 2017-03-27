@@ -1,5 +1,29 @@
 [
   {
+    "model": "internship.cohort",
+    "pk": 1,
+    "fields": {
+      "name": "2016-2017 groupe 1",
+      "description": "Etudiants en 6 ans",
+      "free_internships_number": 3,
+      "publication_start_date": "2017-03-15",
+      "subscription_start_date": "2017-02-01",
+      "subscription_end_date": "2017-03-14"
+    }
+  },
+  {
+    "model": "internship.cohort",
+    "pk": 2,
+    "fields": {
+      "name": "2016-2017 groupe 2",
+      "description": "Etudiants en 7 ans",
+      "free_internships_number": 4,
+      "publication_start_date": "2017-03-15",
+      "subscription_start_date": "2017-02-01",
+      "subscription_end_date": "2017-03-14"
+    }
+  },
+  {
     "model": "internship.organization",
     "pk": 1,
     "fields": {
@@ -206,6 +230,7 @@
     "model": "internship.internshipoffer",
     "pk": 1,
     "fields": {
+      "cohort": 1,
       "organization": 1,
       "speciality": 1,
       "title": "Stage en Pédiatrie",
@@ -217,6 +242,7 @@
     "model": "internship.internshipoffer",
     "pk": 2,
     "fields": {
+      "cohort": 1,
       "organization": 1,
       "speciality": 2,
       "title": "Stage en Chirurgie",
@@ -228,6 +254,7 @@
     "model": "internship.internshipoffer",
     "pk": 3,
     "fields": {
+      "cohort": 1,
       "organization": 2,
       "speciality": 1,
       "title": "Stage en Pédiatrie",
@@ -239,6 +266,7 @@
     "model": "internship.internshipoffer",
     "pk": 4,
     "fields": {
+      "cohort": 1,
       "organization": 3,
       "speciality": 2,
       "title": "Stage en Chirurgie",
