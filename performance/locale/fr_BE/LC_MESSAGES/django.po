@@ -96,10 +96,10 @@ msgid "no_student_with_this_registration_id"
 msgstr "Aucun étudiant avec ce noma!"
 
 msgid "performance"
-msgstr "Mes notes"
+msgstr "Mes notes d'examens"
 
 msgid "performance_administration"
-msgstr "Administration de performance"
+msgstr "Administration des notes d'examens"
 
 msgid "performance_results"
 msgstr "Résultats"
@@ -114,7 +114,7 @@ msgid "sept"
 msgstr "Sept."
 
 msgid "student_performance"
-msgstr "Performances d'un étudiant"
+msgstr "Notes d'examens d'un étudiant"
 
 msgid "text_mean_exprimed_for_20"
 msgstr "Attention : à partir de juin 2009, la moyenne est exprimée sur un maximum de 20."

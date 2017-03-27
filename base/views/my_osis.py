@@ -23,11 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
-from django.conf.urls import url
-from base.views import administration, my_osis
+from django.contrib.auth.decorators import login_required
+from django.utils import translation
+from base import models as mdl
+from django.shortcuts import redirect
 
-urlpatterns = [
-    url(r'^'+settings.ADMIN_URL+'data/$', administration.data, name='data'),
-    url(r'^my_osis/profile/lang/([A-Za-z-]+)/$', my_osis.profile_lang, name='profile_lang'),
-]
+
+@login_required
+def profile_lang(request, ui_language):
+    mdl.person.change_language(request.user, ui_language)
+    translation.activate(ui_language)
+    request.session[translation.LANGUAGE_SESSION_KEY] = ui_language
+    return redirect(request.META['HTTP_REFERER'])
