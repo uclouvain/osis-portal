@@ -127,7 +127,6 @@ class ExamEnrollmentFormTest(TestCase):
 
     def test_get_one_program(self):
         self.client.force_login(self.user)
-        # student_offer_year_enrollment = create_offer_enrollment_for_current_academic_yr(self.student)
         self.assertEqual(main._get_student_programs(self.student)[0], self.learn_unit_enrol.offer_enrollment.offer_year)
 
     def test_navigation_with_no_offer_in_current_academic_year(self):
