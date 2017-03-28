@@ -81,7 +81,7 @@ def view_internship_selection(request, cohort_id, internship_id="1", speciality_
         return dash_main_view.show_multiple_registration_id_error(request)
 
     cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
-    NUMBER_NON_MANDATORY_INTERNSHIPS = int(cohort.free_internships_number)
+    free_internships_number = int(cohort.free_internships_number)
 
     is_open = mdl_internship.internship_offer.get_number_selectable() > 0
     if not is_open:
@@ -104,7 +104,7 @@ def view_internship_selection(request, cohort_id, internship_id="1", speciality_
     number_first_choices_by_organization = get_first_choices_by_organization(speciality)
 
     return layout.render(request, "internship_selection.html",
-                         {"number_non_mandatory_internships": range(1, NUMBER_NON_MANDATORY_INTERNSHIPS + 1),
+                         {"number_non_mandatory_internships": range(1, free_internships_number + 1),
                           "speciality_form": SpecialityForm(),
                           "all_specialities": specialities,
                           "formset": formset,
