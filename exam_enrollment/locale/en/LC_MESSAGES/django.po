@@ -31,6 +31,9 @@ msgstr "Exams enrollment"
 msgid "exam_enrollment_form_submitted"
 msgstr "Exam enrollment form successfully submitted."
 
+msgid "exam_enrollment_form_unavalaible_for_the_moment"
+msgstr "Your exam enrollment form isn't avalaible for the moment. Please retry later."
+
 msgid "exam_enrollment_form_currently_unavalaible"
 msgstr "Your exam enrollment form is currently unavalaible. Please retry later."
 
