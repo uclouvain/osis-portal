@@ -5,6 +5,24 @@ from __future__ import unicode_literals
 from django.db import migrations, models
 import uuid
 
+def createDefaultCohort(apps, schema_editor):
+    Cohort = apps.get_model("internship", "Cohort")
+    db_alias = schema_editor.connection.alias
+    Cohort.objects.using(db_alias).bulk_create([
+        Cohort(
+            name="2016-2017",
+            description="Groupe 1",
+            free_internships_number=8,
+            mandatory_internships_number=0,
+            publication_start_date="2017-03-27",
+            subscription_start_date="2017-03-01",
+            subscription_end_date="2017-03-20")
+    ])
+
+def deleteDefaultCohort(apps, schema_editor):
+    Cohort = apps.get_model("internship", "Cohort")
+    db_alias = schema_editor.connection.alias
+    Cohort.objects.filter(pk=1).delete()
 
 class Migration(migrations.Migration):
 
@@ -21,6 +39,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=255)),
                 ('description', models.TextField()),
                 ('free_internships_number', models.IntegerField()),
+                ('mandatory_internships_number', models.IntegerField()),
                 ('publication_start_date', models.DateField()),
                 ('subscription_start_date', models.DateField()),
                 ('subscription_end_date', models.DateField()),
@@ -29,4 +48,5 @@ class Migration(migrations.Migration):
                 'abstract': False,
             },
         ),
+        migrations.RunPython(createDefaultCohort, deleteDefaultCohort)
     ]

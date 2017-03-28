@@ -6,6 +6,13 @@ from django.db import migrations, models
 import django.db.models.deletion
 from internship.models import cohort
 
+def linkToDefaultCohort(apps, schema_editor):
+    Cohort = apps.get_model("internship", "Cohort")
+    Period = apps.get_model("internship", "Period")
+    db_alias = schema_editor.connection.alias
+    default_cohort = Cohort.objects.first()
+    Period.objects.all().update(cohort=default_cohort)
+
 
 class Migration(migrations.Migration):
 
@@ -17,7 +24,15 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='period',
             name='cohort',
-            field=models.ForeignKey(default=cohort.Cohort.objects.first().pk, on_delete=django.db.models.deletion.CASCADE, to='internship.Cohort'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='internship.Cohort'),
             preserve_default=False,
         ),
+        migrations.RunPython(linkToDefaultCohort),
+        migrations.AlterField(
+            model_name='internshipoffer',
+            name='cohort',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='internship.Cohort'),
+            preserve_default=False
+        )
+
     ]
