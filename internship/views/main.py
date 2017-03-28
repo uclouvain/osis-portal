@@ -38,15 +38,13 @@ from internship.forms.form_select_speciality import SpecialityForm
 from internship.forms.form_offer_preference import OfferPreferenceFormSet, OfferPreferenceForm
 from dashboard.views import main as dash_main_view
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
+from internship.decorators.global_view_decorators import redirect_if_multiple_registrations
 
 @login_required
+@redirect_if_multiple_registrations
 @permission_required('internship.can_access_internship', raise_exception=True)
 def view_cohort_selection(request):
-    try:
-        student = mdl_base.student.find_by_user(request.user)
-    except MultipleObjectsReturned:
-        return dash_main_view.show_multiple_registration_id_error(request)
-
+    student = mdl_base.student.find_by_user(request.user)
     cohort_subscriptions = mdl_internship.cohort_student.find_cohorts_for_student(student)
     if cohort_subscriptions.count() > 1:
         cohort_ids = cohort_subscriptions.values('cohort_id')
@@ -60,26 +58,19 @@ def view_cohort_selection(request):
         return redirect(view_internship_home, cohort_id=cohort_id)
 
 @login_required
+@redirect_if_multiple_registrations
 @redirect_if_not_in_cohort
 @permission_required('internship.can_access_internship', raise_exception=True)
 def view_internship_home(request, cohort_id):
-    try:
-        mdl_base.student.find_by_user(request.user)
-    except MultipleObjectsReturned:
-        return dash_main_view.show_multiple_registration_id_error(request)
-
     cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
     return layout.render(request, "internship_home.html", {'cohort': cohort})
 
 @login_required
+@redirect_if_multiple_registrations
 @redirect_if_not_in_cohort
 @permission_required('internship.can_access_internship', raise_exception=True)
 def view_internship_selection(request, cohort_id, internship_id="1", speciality_id="-1"):
-    try:
-        student = mdl_base.student.find_by_user(request.user)
-    except MultipleObjectsReturned:
-        return dash_main_view.show_multiple_registration_id_error(request)
-
+    student = mdl_base.student.find_by_user(request.user)
     cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
     free_internships_number = int(cohort.free_internships_number)
 
@@ -135,6 +126,7 @@ def zip_offers_formset_and_first_choices(formset, internships_offers, number_cho
 
 
 @login_required
+@redirect_if_multiple_registrations
 @redirect_if_not_in_cohort
 @permission_required('internship.can_access_internship', raise_exception=True)
 def assign_speciality_for_internship(request, cohort_id, internship_id):
