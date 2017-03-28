@@ -35,3 +35,6 @@ class CohortStudentAdmin(SerializableModelAdmin):
 class CohortStudent(SerializableModel):
     cohort = models.ForeignKey('internship.Cohort', null=False)
     student = models.ForeignKey('base.Student', null=False)
+
+def find_cohorts_for_student(student):
+    return CohortStudent.objects.filter(student_id=student.id).all()
