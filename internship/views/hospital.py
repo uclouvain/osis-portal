@@ -32,9 +32,10 @@ from internship import models as mdl_internship
 
 @login_required
 @permission_required('internship.can_access_internship', raise_exception=True)
-def view_hospitals_list(request):
+def view_hospitals_list(request, cohort_id):
     cities = mdl_internship.organization_address.get_all_cities()
     hospitals = []
+    cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
 
     if request.method == 'POST':
         form = SearchHospitalForm(cities, request.POST)
@@ -47,7 +48,8 @@ def view_hospitals_list(request):
         form = SearchHospitalForm(cities)
 
     return layout.render(request, "hospitals.html", {'search_form': form,
-                                                     'hospitals': hospitals})
+                                                     'hospitals': hospitals,
+                                                     'cohort': cohort})
 
 
 def get_hospitals(name="", city=""):

@@ -32,6 +32,7 @@ from internship.models import internship_student_information as mdl_student_info
 from internship.models import internship_student_affectation_stat as mdl_student_affectation
 from internship.models import organization_address as mdl_organization_address
 from internship.models import internship_choice as mdl_internship_choice
+from internship.models import cohort as mdl_internship_cohort
 from internship.forms import form_internship_student_information
 from base.models import student as mdl_student
 from base.models import person as mdl_person
@@ -40,7 +41,7 @@ from dashboard.views import main as dash_main_view
 
 @login_required
 @permission_required('internship.can_access_internship', raise_exception=True)
-def view_student_resume(request):
+def view_student_resume(request, cohort_id):
     try:
         student = mdl_student.find_by_user(request.user)
     except MultipleObjectsReturned:
@@ -51,17 +52,19 @@ def view_student_resume(request):
         [(affectation, mdl_organization_address.get_by_organization(affectation.organization)) for affectation in
          student_affectations]
     student_choices = mdl_internship_choice.search(student=student).order_by('internship_choice', 'choice')
+    cohort = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
     return layout.render(request, "student_resume.html", {"student": student,
                                                           "student_information": student_information,
                                                           "student_affectations_with_address":
                                                               student_affectations_with_address,
                                                           "student_choices": student_choices,
-                                                          "internships": range(1, 7)})
+                                                          "internships": range(1, 7),
+                                                          "cohort": cohort})
 
 
 @login_required
 @permission_required('internship.can_access_internship', raise_exception=True)
-def edit_student_information(request):
+def edit_student_information(request, cohort_id):
     if request.method == "POST":
         form = form_internship_student_information.InternshipStudentInformationForm(request.POST)
         if form.is_valid():
@@ -70,7 +73,8 @@ def edit_student_information(request):
     else:
         student_information = mdl_student_information.find_by_user(request.user)
         form = form_internship_student_information.InternshipStudentInformationForm(instance=student_information)
-    return layout.render(request, "student_edit_information.html", {"form": form})
+    cohort = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
+    return layout.render(request, "student_edit_information.html", {"form": form, "cohort": cohort})
 
 
 def save_from_form(form, person):

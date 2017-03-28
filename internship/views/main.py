@@ -25,9 +25,11 @@
 #
 ############################################################################
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib import messages
 from django.core.exceptions import MultipleObjectsReturned
 from django.shortcuts import redirect
 from django.forms import formset_factory
+from django.utils.translation import ugettext_lazy as _
 
 from base.views import layout
 import base.models as mdl_base
@@ -35,26 +37,51 @@ import internship.models as mdl_internship
 from internship.forms.form_select_speciality import SpecialityForm
 from internship.forms.form_offer_preference import OfferPreferenceFormSet, OfferPreferenceForm
 from dashboard.views import main as dash_main_view
-
-
-@login_required
-@permission_required('internship.can_access_internship', raise_exception=True)
-def view_internship_home(request):
-    try:
-        mdl_base.student.find_by_user(request.user)
-    except MultipleObjectsReturned:
-        return dash_main_view.show_multiple_registration_id_error(request)
-    return layout.render(request, "internship_home.html")
-
+from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
 
 @login_required
 @permission_required('internship.can_access_internship', raise_exception=True)
-def view_internship_selection(request, internship_id="1", speciality_id="-1"):
-    NUMBER_NON_MANDATORY_INTERNSHIPS = 6
+def view_cohort_selection(request):
     try:
         student = mdl_base.student.find_by_user(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
+
+    cohort_subscriptions = mdl_internship.cohort_student.find_cohorts_for_student(student)
+    if cohort_subscriptions.count() > 1:
+        cohort_ids = cohort_subscriptions.values('cohort_id')
+        cohorts = mdl_internship.cohort.Cohort.objects.filter(id__in=cohort_ids)
+        return layout.render(request, "cohort_selection.html", {'cohorts': cohorts})
+    elif cohort_subscriptions.count() == 0:
+        messages.add_message(request, messages.ERROR, _('error_does_not_belong_to_any_cohort'))
+        return redirect(dash_main_view.home)
+    else:
+        cohort_id = cohort_subscriptions.values('cohort_id').first()['cohort_id']
+        return redirect(view_internship_home, cohort_id=cohort_id)
+
+@login_required
+@redirect_if_not_in_cohort
+@permission_required('internship.can_access_internship', raise_exception=True)
+def view_internship_home(request, cohort_id):
+    try:
+        mdl_base.student.find_by_user(request.user)
+    except MultipleObjectsReturned:
+        return dash_main_view.show_multiple_registration_id_error(request)
+
+    cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
+    return layout.render(request, "internship_home.html", {'cohort': cohort})
+
+@login_required
+@redirect_if_not_in_cohort
+@permission_required('internship.can_access_internship', raise_exception=True)
+def view_internship_selection(request, cohort_id, internship_id="1", speciality_id="-1"):
+    try:
+        student = mdl_base.student.find_by_user(request.user)
+    except MultipleObjectsReturned:
+        return dash_main_view.show_multiple_registration_id_error(request)
+
+    cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
+    NUMBER_NON_MANDATORY_INTERNSHIPS = int(cohort.free_internships_number)
 
     is_open = mdl_internship.internship_offer.get_number_selectable() > 0
     if not is_open:
@@ -85,7 +112,8 @@ def view_internship_selection(request, internship_id="1", speciality_id="-1"):
                                                                                number_first_choices_by_organization),
                           "speciality_id": int(speciality_id),
                           "intern_id": int(internship_id),
-                          "can_submit": len(selectable_offers) > 0})
+                          "can_submit": len(selectable_offers) > 0,
+                          "cohort": cohort})
 
 
 def get_first_choices_by_organization(speciality):
@@ -107,13 +135,14 @@ def zip_offers_formset_and_first_choices(formset, internships_offers, number_cho
 
 
 @login_required
+@redirect_if_not_in_cohort
 @permission_required('internship.can_access_internship', raise_exception=True)
-def assign_speciality_for_internship(request, internship_id):
+def assign_speciality_for_internship(request, cohort_id, internship_id):
     speciality_id = None
     if request.method == "POST":
         speciality_id = int(request.POST.get("speciality_chosen", 0))
 
-    return redirect("select_internship_speciality", internship_id=internship_id, speciality_id=speciality_id)
+    return redirect("select_internship_speciality", cohort_id=cohort_id, internship_id=internship_id, speciality_id=speciality_id)
 
 
 def remove_previous_choices(student, internship_id):
@@ -152,3 +181,4 @@ def do_not_exceed_maximum_personnal_internship(speciality, student):
     number_choices_personal_internship = \
         mdl_internship.internship_choice.search(student=student, speciality=speciality).count()
     return number_choices_personal_internship < 2
+
