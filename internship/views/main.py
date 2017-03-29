@@ -93,6 +93,7 @@ def view_internship_selection(request, cohort_id, internship_id="1", speciality_
 
     specialities = mdl_internship.internship_speciality.find_non_mandatory()
     number_first_choices_by_organization = get_first_choices_by_organization(speciality)
+    internship_choices = mdl_internship.internship_choice.InternshipChoice.objects.all()
 
     return layout.render(request, "internship_selection.html",
                          {"number_non_mandatory_internships": range(1, free_internships_number + 1),
@@ -103,6 +104,7 @@ def view_internship_selection(request, cohort_id, internship_id="1", speciality_
                                                                                number_first_choices_by_organization),
                           "speciality_id": int(speciality_id),
                           "intern_id": int(internship_id),
+                          "internship_choices": list(internship_choices),
                           "can_submit": len(selectable_offers) > 0,
                           "cohort": cohort})
 

@@ -6,6 +6,7 @@
       "name": "2016-2017 groupe 1",
       "description": "Etudiants en 6 ans",
       "free_internships_number": 3,
+      "mandatory_internships_number": 2,
       "publication_start_date": "2017-03-15",
       "subscription_start_date": "2017-02-01",
       "subscription_end_date": "2017-03-14"
@@ -18,6 +19,7 @@
       "name": "2016-2017 groupe 2",
       "description": "Etudiants en 7 ans",
       "free_internships_number": 4,
+      "mandatory_internships_number": 4,
       "publication_start_date": "2017-03-15",
       "subscription_start_date": "2017-02-01",
       "subscription_end_date": "2017-03-14"
@@ -270,6 +272,30 @@
       "organization": 3,
       "speciality": 2,
       "title": "Stage en Chirurgie",
+      "maximum_enrollments": 40,
+      "master": "Dr. Marc Hoselaus"
+    }
+  },
+  {
+    "model": "internship.internshipoffer",
+    "pk": 5,
+    "fields": {
+      "cohort": 1,
+      "organization": 3,
+      "speciality": 3,
+      "title": "Stage en Radiologie",
+      "maximum_enrollments": 40,
+      "master": "Dr. Marc Hoselaus"
+    }
+  },
+  {
+    "model": "internship.internshipoffer",
+    "pk": 6,
+    "fields": {
+      "cohort": 1,
+      "organization": 3,
+      "speciality": 4,
+      "title": "Stage en ??",
       "maximum_enrollments": 40,
       "master": "Dr. Marc Hoselaus"
     }
