@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -63,7 +63,6 @@ INSTALLED_APPS = (
     'ckeditor',
     'reference',
     'base',
-    'admission',
     'dashboard',
     'performance',
     'attribution',
@@ -153,7 +152,7 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
-            'level':'DEBUG',
+            'level': 'DEBUG',
         },
     },
     'loggers': {
@@ -279,10 +278,6 @@ LOGO_INSTITUTION_URL = os.path.join(BASE_DIR, "base/static/img/logo_institution.
 LOGO_EMAIL_SIGNATURE_URL = ''
 LOGO_OSIS_URL = ''
 
-LOCALE_PATHS = (
-    "/admission/locale",
-)
-
 EMAIL_PRODUCTION_SENDING = False
 COMMON_EMAIL_RECEIVER = 'osis@localhost.org'
 
@@ -327,14 +322,10 @@ ATTESTATION_CONFIG = {
 }
 
 try:
-    from frontoffice.server_settings import *
+    from frontoffice import server_settings
     try:
-        LOCALE_PATHS = LOCALE_PATHS + SERVER_LOCALE_PATHS
+        LOCALE_PATHS = server_settings.LOCALE_PATHS + server_settings.SERVER_LOCALE_PATHS
     except NameError:
         pass
 except ImportError:
     pass
-
-if 'admission' in INSTALLED_APPS:
-    ADMISSION_LOGIN_URL = reverse_lazy('admission_login')
-    ADMISSION_LOGIN_REDIRECT_URL = reverse_lazy('admission')
