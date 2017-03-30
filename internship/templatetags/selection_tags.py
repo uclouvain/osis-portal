@@ -24,10 +24,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
+from django import template
+from django.template import Template
+from django.core.exceptions import ObjectDoesNotExist
 
-@register.filter
-def choice_for_offer(internship_choices, offer):
+register = template.Library()
+
+@register.assignment_tag
+def choice_for_offer(internship_choices, offer, internship_choice):
     try:
-        return internship_choices.get(internship_choice=offer.id).choice
-    except DoesNotExist:
+        choice = internship_choices.get(speciality_id=offer.speciality_id, internship_choice=internship_choice).choice
+        return str(choice)
+    except ObjectDoesNotExist:
         return None

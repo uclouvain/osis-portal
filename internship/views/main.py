@@ -104,7 +104,7 @@ def view_internship_selection(request, cohort_id, internship_id="1", speciality_
                                                                                number_first_choices_by_organization),
                           "speciality_id": int(speciality_id),
                           "intern_id": int(internship_id),
-                          "internship_choices": list(internship_choices),
+                          "internship_choices": internship_choices,
                           "can_submit": len(selectable_offers) > 0,
                           "cohort": cohort})
 

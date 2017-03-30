@@ -1,5 +1,6 @@
 {% extends "dashboard_layout.html" %}
 {% load staticfiles %}
+{% load template_filters %}
 {% load i18n %}
 
 {% comment "License" %}
@@ -113,10 +114,11 @@
                         <td>
                             <select id="{{ form.preference.id_for_label }}" name="{{ form.preference.html_name }}" class="form-control">
                                 {% for x,y in form.fields.preference.choices %}
-                                <option value="{{ x }}" {% if internship_choices|choice_for_offer(offer) == x %} selected{% endif %}>
-                                        {{ y }}
-                                    </option>
-                                 {% endfor %}
+                                {% choice_for_offer internship_choices offer intern_id as choice %}
+                                <option value="{{ x }}" {% if x == choice %} selected{% endif %}>
+                                    <span>{{ y }}</span>
+                                </option>
+                                {% endfor %}
                             </select>
                         </td>
                    </tr>
