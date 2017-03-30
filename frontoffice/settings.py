@@ -322,9 +322,9 @@ ATTESTATION_CONFIG = {
 }
 
 try:
-    from frontoffice import server_settings
+    from frontoffice.server_settings import *
     try:
-        LOCALE_PATHS = server_settings.SERVER_LOCALE_PATHS
+        LOCALE_PATHS = SERVER_LOCALE_PATHS
     except NameError:
         pass
 except ImportError:
