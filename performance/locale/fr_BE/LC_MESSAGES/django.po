@@ -96,10 +96,10 @@ msgid "no_student_with_this_registration_id"
 msgstr "Aucun étudiant avec ce noma!"
 
 msgid "performance"
-msgstr "Mes notes"
+msgstr "Mes notes d'examens"
 
 msgid "performance_administration"
-msgstr "Administration de performance"
+msgstr "Administration des notes d'examens"
 
 msgid "performance_results"
 msgstr "Résultats"
@@ -114,7 +114,7 @@ msgid "sept"
 msgstr "Sept."
 
 msgid "student_performance"
-msgstr "Performances d'un étudiant"
+msgstr "Notes d'examens d'un étudiant"
 
 msgid "text_mean_exprimed_for_20"
 msgstr "Attention : à partir de juin 2009, la moyenne est exprimée sur un maximum de 20."
@@ -147,10 +147,10 @@ msgid "performance_results_general_legal_announcement"
 msgstr "Ce composant reflète l'état des informations enregistrées dans les bases de données officielles de l'université au moment de leur affichage et selon des modalités de diffusion décidées par le secrétariat de votre faculté."
 
 msgid "performance_result_note_legal_announcement"
-msgstr "Cette feuille de résultats est destinée à la communication entre la faculté et les éudiants. Seule l'annexe au diplôme que l'étudiant reçoit avec celui-ci et qui reprend la liste de tous les cours suivis durant un programme d'étude et des points obtenus peut être considérée comme un transcript officiel."
+msgstr "Cette feuille de résultats est destinée à la communication entre la faculté et les étudiants. Seule l'annexe au diplôme que l'étudiant reçoit avec celui-ci et qui reprend la liste de tous les cours suivis durant un programme d'étude et des points obtenus peut être considérée comme un transcript officiel."
 
 msgid "performance_result_note_not_autorized"
-msgstr "La diffusion des résultats de la (des) session(s) de janvier n'a pas encore été autorisée par votre faculté."
+msgstr "La diffusion des notes de la session de {} n'a pas encore été autorisée par votre faculté."
 
 msgid "CESSATION"
 msgstr "Cessation"
@@ -164,3 +164,11 @@ msgstr "Condition"
 msgid "INSCRIT"
 msgstr "Inscrit"
 
+msgid "JANUARY"
+msgstr "janvier"
+
+msgid "JUNE"
+msgstr "juin"
+
+msgid "SEPTEMBER"
+msgstr "septembre"

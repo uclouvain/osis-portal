@@ -31,10 +31,11 @@ from django.conf import settings
 from django.contrib import admin, messages
 
 
-class ExamEnrollmentAdmin(admin.ModelAdmin):
-    list_display = ('registration_id', 'offer_year_acronym', )
-    fieldsets = ((None, {'fields': ('registration_id', 'offer_year_acronym', 'document')}),)
-    search_fields = ['registration_id']
+class ExamEnrollmentSubmittedAdmin(admin.ModelAdmin):
+    list_display = ('offer_enrollment', )
+    fieldsets = ((None, {'fields': ('offer_enrollment', 'document')}),)
+    search_fields = ['offer_enrollment__student__registration_id', 'offer_enrollment__offer_year__acronym']
+    raw_id_fields = ('offer_enrollment', )
     actions = ['resend_messages_to_queue']
 
     def resend_messages_to_queue(self, request, queryset):
@@ -51,18 +52,17 @@ class ExamEnrollmentAdmin(admin.ModelAdmin):
         self.message_user(request, "{} message(s) sent.".format(counter), level=messages.SUCCESS)
 
 
-class ExamEnrollment(models.Model):
-    registration_id = models.CharField(max_length=10, unique=True)
-    offer_year_acronym = models.CharField(max_length=10, unique=True)
+class ExamEnrollmentSubmitted(models.Model):
+    offer_enrollment = models.ForeignKey('base.OfferEnrollment', on_delete=models.CASCADE)
     document = JSONField()
 
     def __str__(self):
-        return "{}{}".format(self.registration_id, self.offer_year_acronym)
+        return "{}".format(self.offer_enrollment)
 
 
-def insert_or_update_document(registration_id, offer_year_acronym, document):
-    exam_enrollment_object, created = ExamEnrollment.objects.update_or_create(
-        registration_id=registration_id, offer_year_acronym=offer_year_acronym, defaults={"document": document}
+def insert_or_update_document(an_offer_enrollment, document):
+    exam_enrollment_object, created = ExamEnrollmentSubmitted.objects.update_or_create(
+        offer_enrollment=an_offer_enrollment, defaults={"document": document}
     )
     return exam_enrollment_object
 

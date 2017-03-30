@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from base.models.offer_year import OfferYear
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
@@ -32,7 +33,8 @@ class OfferEnrollmentAdmin(SerializableModelAdmin):
     list_display = ('offer_year', 'student', 'date_enrollment')
     fieldsets = ((None, {'fields': ('offer_year', 'student', 'date_enrollment')}),)
     raw_id_fields = ('offer_year', 'student')
-    search_fields = ['offer_year__acronym', 'student__person__first_name', 'student__person__last_name']
+    search_fields = ['offer_year__acronym', 'student__person__first_name', 'student__person__last_name',
+                     'student__registration_id']
 
 
 class OfferEnrollment(SerializableModel):
@@ -50,7 +52,10 @@ def find_by_student(a_student):
 
 
 def find_by_student_offer(a_student, offer_year):
-    return OfferEnrollment.objects.filter(student=a_student, offer_year=offer_year)
+    try:
+        return OfferEnrollment.objects.get(student=a_student, offer_year=offer_year)
+    except ObjectDoesNotExist:
+        return None
 
 
 def find_by_student_academic_year(a_student, an_academic_year):

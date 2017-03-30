@@ -31,6 +31,9 @@ msgstr "Inscription aux examens"
 msgid "exam_enrollment_form_submitted"
 msgstr "Formulaire d'inscription aux examens soumis avec succès."
 
+msgid "exam_enrollment_form_unavalaible_for_the_moment"
+msgstr "Votre formulaire d'inscription aux examens est actuellement indisponible. Veuillez réessayer plus tard."
+
 msgid "info_exam_enrollment_by_default"
 msgstr "<b>Par défaut, vous êtes déjà inscrit à tous les examens cochés ci-dessous. "
        "<br>Si cela vous convient, vous n'avez aucune action à effectuer.</b>"
@@ -70,8 +73,17 @@ msgstr "X - Droit et sanction"
 msgid "legend_exam_enrol_y"
 msgstr "Y - Deuxième inscription"
 
+msgid "message_exam_enrolment_state"
+msgstr "Vous pouvez consulter l'ensemble des états d'inscriptions aux examens dans le récapitulatif 'Mes notes'."
+
 msgid "no_offer_enrollment_found"
 msgstr "Vous n'êtes inscrit à aucun programme d'étude pour cette année académique."
+
+msgid "no_exam_enrollment_found"
+msgstr "Aucune inscription aux examens trouvée."
+
+msgid "no_learning_unit_enrollment_found"
+msgstr "Vous n'êtes inscrit à aucun cours dans le cadre du programme {}."
 
 msgid "outside_exam_enrollment_period"
 msgstr "Les inscriptions aux examens pour le programme {} sont actuellement fermées."
@@ -87,6 +99,10 @@ msgstr "Matricule"
 
 msgid "student"
 msgstr "Étudiant"
+
+msgid "student_can_not_enrol_to_exam"
+msgstr "Vous ne pouvez pas vous inscrire aux examens pour le moment. "
+       "Veuillez contacter votre gestionnaire pour plus d'informations."
 
 msgid "validate_exam_enrol_form_description"
 msgstr "En cliquant ici, vous validez vos modifications par rapport à l'inscription par défaut."

@@ -80,9 +80,9 @@ msgstr "<p>By choosing <strong>'Stage personnel'</strong> you declare that you w
        "internship in another country (prior approbation).</p>"
        "<p>If you intent to pass the <strong>contest of 'Médecine générale'</strong>(general medecine) then <strong> "
        " you can only choose a speciality between the following ones: <br> "
-       "<strong>chirurgie, dermatologie, gieriatrie, gynécologie-obstetrique, médecine interne, médecine physique, "
-       "neurologie adulte, ophtamologie, O.R.L, orthopedie, psychiatrie adulte, soins palliatifs, urgences, urologie."
-       "</strong></p>"
+       "<strong>chirurgie ou assimilé, dermatologie, gériatrie, gynécologie-obstétrique, médecine interne, médecine "
+       "physique, neurologie, ophtamologie, O.R.L, orthopédie, pédiatrie, psychiatrie, soins palliatifs, urgences, "
+       "urologie.</strong></p>"
 
 msgid	 "masters"
 msgstr	 "Internship's masters"
@@ -119,6 +119,9 @@ msgid "select_contest"
 msgstr "<strong>BEFORE</strong> choosing your internships, follow the link to choose the contest (generalist "
        "or specialist)that you intend to pass. If this data is incorrect, the system may assign you internships"
        "which are not compatible."
+
+msgid "selection_is_closed"
+msgstr "The selection is closed."
 
 msgid "speciality"
 msgstr "Speciality"

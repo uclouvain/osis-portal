@@ -48,10 +48,8 @@ urlpatterns = (
 
 if 'dashboard' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^dashboard/', include('dashboard.urls')), )
-if 'catalog' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^catalog/', include('catalog.urls')), )
 if 'performance' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^performance/', include('performance.urls')), )
+    urlpatterns = urlpatterns + (url(r'^exammarks/', include('performance.urls')), )
 if 'dissertation' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^dissertation/', include('dissertation.urls')),)
 if 'attribution' in settings.INSTALLED_APPS:

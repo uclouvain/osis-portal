@@ -1,4 +1,4 @@
-{% extends "catalog_layout.html" %}
+{% extends "dashboard_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -26,6 +26,19 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
+{% block breadcrumb %}
+    <li><a href="{% url 'internship_home' %}">{% trans 'internships' %}</a></li>
+    <li class="active">{% trans 'selection' %}</li>
+{% endblock %}
+
 {% block content %}
-<h1>{% trans 'catalog_title' %}</h1>
+<div class="page-header">
+    <h2>{% trans 'internships' %}</h2>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        {% trans "selection_is_closed" %}
+    </div>
+</div>
 {% endblock %}

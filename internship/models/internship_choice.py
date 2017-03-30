@@ -32,6 +32,7 @@ class InternshipChoiceAdmin(SerializableModelAdmin):
     fieldsets = ((None, {'fields': ('student', 'organization', 'speciality', 'choice', 'internship_choice',
                                     'priority')}),)
     raw_id_fields = ('student', 'organization', 'speciality')
+    search_fields = ['student__person__first_name', 'student__person__last_name']
 
 
 class InternshipChoice(SerializableModel):
@@ -66,3 +67,8 @@ def search(student=None, internship_choice=None, speciality=None):
         return queryset
     else:
         return None
+
+
+def get_number_first_choice_by_organization(speciality):
+    return InternshipChoice.objects.filter(choice=1, speciality=speciality).values("organization")\
+        .annotate(models.Count("organization"))

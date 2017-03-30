@@ -34,9 +34,15 @@
     <li class="active">{% trans 'attestation' %}</li>
 {% endblock %}
 
-{% include "template_messages.html" %}
 
 {% block content %}
+    <div class="page-header">
+        <h2>{% trans 'attestation' %}</h2>
+    </div>
+
+    {% include "template_messages.html" %}
+
+    {% if student %}
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
@@ -47,13 +53,16 @@
         </div>
         <div class="panel-body">
         <div class="row">
-            <div class="col-md-6" id="student_name">
-                <b>{{ student.person.first_name }}, {{ student.person.last_name }}</b>
+            <div class="col-md-6">
+                <label><b>{% trans 'last_name' %}, {% trans 'first_name' %}</b></label><br>
+                {{ student.person.first_name }}, {{ student.person.last_name }}
             </div>
-            <div class="col-md-6" id="academic_year">
-                <b>{% trans 'registration_id' %}: </b>{{ student.registration_id }}
+            <div class="col-md-6">
+                <b>{% trans 'registration_id' %}</b><br>
+                {{ student.registration_id }}
             </div>
         </div>
+
         <br/>
         {% if not available %}
             <div class="alert alert-info" role="alert">{% trans 'no_attestation_available' %}</div>
@@ -73,24 +82,23 @@
                         <td>{% trans attestation_statuse.attestationType %}</td>
                         <td class="text-center">
                             {% if attestation_statuse.printed %}
-                                <i class="fa fa-check" aria-hidden="true"></i>
+                                <i id="attestation_printed_{{ attestation_statuse.attestationType }}" class="fa fa-check" aria-hidden="true"></i>
                             {% else %}
-                                <i class="fa fa-times" aria-hidden="true"></i>
+                                <i id="attestation_printed_{{ attestation_statuse.attestationType }}" class="fa fa-times" aria-hidden="true"></i>
                             {% endif %}
                         </td>
                         <td class="text-center">
                         {% if  attestation_statuse.available %}
-                            <a class="btn"
-                               target="_blank"
-                               {% if perms.base.is_faculty_administrator %}
-                               href="{% url 'attestation_admin_download' global_id=student.person.global_id attestation_type=attestation_statuse.attestationType academic_year=academic_year%}">
-                               {% else %}
-                               href="{% url 'download_attestation' attestation_type=attestation_statuse.attestationType academic_year=academic_year%}">
-                               {% endif %}
-                                <i class="fa fa-download" aria-hidden="true"></i></a></td>
+                            {% if perms.base.is_faculty_administrator %}
+                                {% url 'attestation_admin_download' global_id=student.person.global_id attestation_type=attestation_statuse.attestationType academic_year=academic_year as download_pdf_url %}
+                            {% else %}
+                                {% url 'download_attestation' attestation_type=attestation_statuse.attestationType academic_year=academic_year as download_pdf_url %}
+                            {% endif %}
+                            <a id="btn_attestation_download_{{ attestation_statuse.attestationType }}" href="{{ download_pdf_url }}" target="_self"><i class="fa fa-download" aria-hidden="true"></i></a>
                         {% else %}
                             <i class="fa fa-times" aria-hidden="true"></i>
                         {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -99,5 +107,9 @@
         {% endif %}
         </div>
     </div>
+    {% endif %}
+{% endblock %}
 
+{% block script %}
+    <script src="{% static 'js/attestation.js' %}"></script>
 {% endblock %}

@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,6 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase
+from django.conf import settings
+from django.utils import timezone
 
-# Create your tests here.
+
+def _get_tzinfo():
+    if settings.USE_TZ:
+        return timezone.get_current_timezone()
+    else:
+        return None

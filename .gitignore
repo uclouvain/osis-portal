@@ -10,3 +10,4 @@ base/tests/sent_mails/
 /test.pdf
 /uploads/
 *.iml
+.env

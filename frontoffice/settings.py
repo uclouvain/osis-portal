@@ -63,14 +63,13 @@ INSTALLED_APPS = (
     'ckeditor',
     'reference',
     'base',
-    'enrollments',
     'dashboard',
     'performance',
     'attribution',
     'dissertation',
     'internship',
     'exam_enrollment',
-    'attestation',
+    'attestation'
 )
 
 # check if we are testing right now
@@ -117,7 +116,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
-                'base.views.common.installed_applications_context_processor',
+                'base.views.common.common_context_processor',
             ],
         },
     },
@@ -129,9 +128,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'osis_front_dev',
-        'USER': "postgres" if os.environ.get("ENV") == "test" else 'osis_usr',
-        'PASSWORD': "" if os.environ.get("ENV") == "test" else 'osis',
-        'HOST': '127.0.0.1',
+        'USER': os.environ.get("POSTGRES_USER") or "osis_usr",
+        'PASSWORD': os.environ.get("POSTGRES_PASSWORD") or "osis",
+        'HOST': os.environ.get("POSTGRES_HOST") or "127.0.0.1",
         'PORT': '5432',
     },
 }
@@ -238,9 +237,9 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL
 # Uncomment the configuration if you want to use the queue system
 # The queue system uses RabbitMq queues to communicate with other application (ex : osis)
 QUEUES = {
-    'QUEUE_URL': 'localhost',
-    'QUEUE_USER': 'guest',
-    'QUEUE_PASSWORD': 'guest',
+    'QUEUE_URL': os.environ.get("RABBITMQ_HOST") or 'localhost',
+    'QUEUE_USER': os.environ.get("RABBITMQ_USER") or 'guest',
+    'QUEUE_PASSWORD': os.environ.get("RABBITMQ_PASSWORD") or 'guest',
     'QUEUE_PORT': 5672,
     'QUEUE_CONTEXT_ROOT': '/',
     'QUEUES_NAME': {
@@ -266,10 +265,10 @@ QUEUES = {
     }
 }
 
-
-LOGIN_URL = reverse_lazy('login')
+LOGIN_URL=reverse_lazy('login')
 OVERRIDED_LOGOUT_URL = ''
 OVERRIDED_LOGIN_URL = ''
+LOGOUT_BUTTON = True
 
 # This has to be replaced by the actual url where you institution logo can be found.
 # Ex : LOGO_INSTITUTION_URL = 'https://www.google.be/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'
@@ -315,9 +314,18 @@ PERFORMANCE_CONFIG = {
 }
 
 ATTESTATION_CONFIG = {
-    'UPDATE_DELTA_HOURS_DEFAULT': 72,
-    'SERVER_TO_FETCH_URL': '',
-    'ATTESTATION_PATH': '',
-    'SERVER_TO_FETCH_USER': '',
-    'SERVER_TO_FETCH_PASSWORD': '',
+    'UPDATE_DELTA_HOURS_DEFAULT': os.environ.get("ATTESTATION_UPDATE_DELTA_HOURS", 72),
+    'SERVER_TO_FETCH_URL': os.environ.get("ATTESTATION_API_URL", ''),
+    'ATTESTATION_PATH': os.environ.get("ATTESTATION_API_PATH", ''),
+    'SERVER_TO_FETCH_USER': os.environ.get("ATTESTATION_API_USER", ''),
+    'SERVER_TO_FETCH_PASSWORD': os.environ.get("ATTESTATION_API_PASSWORD", ''),
 }
+
+try:
+    from frontoffice import server_settings
+    try:
+        LOCALE_PATHS = server_settings.LOCALE_PATHS + server_settings.SERVER_LOCALE_PATHS
+    except NameError:
+        pass
+except ImportError:
+    pass

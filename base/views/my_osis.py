@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,13 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import messages
-from django.shortcuts import render
-from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.decorators import login_required
+from django.utils import translation
+from base import models as mdl
+from django.shortcuts import redirect
 
-# Create your views here.
 
-
-def catalog_home(request):
-    messages.add_message(request, messages.ERROR, _('dev_message'))
-    return render(request, "catalog_home.html", {})
+@login_required
+def profile_lang(request, ui_language):
+    mdl.person.change_language(request.user, ui_language)
+    translation.activate(ui_language)
+    request.session[translation.LANGUAGE_SESSION_KEY] = ui_language
+    return redirect(request.META['HTTP_REFERER'])

@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,6 +23,21 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
+import datetime
+import factory
+import factory.fuzzy
+import string
+from base.tests.factories.offer_year import OfferYearFactory
+from base.tests.factories.student import StudentFactory
+from base.tests.factories import helpers
 
-# Register your models here.
+
+class OfferEnrollmentFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = "base.OfferEnrollment"
+
+    date_enrollment = factory.fuzzy.FuzzyDateTime(datetime.datetime(2016, 1, 1, tzinfo=helpers._get_tzinfo()),
+                                                  datetime.datetime(2017, 3, 1, tzinfo=helpers._get_tzinfo()))
+    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
+    offer_year = factory.SubFactory(OfferYearFactory)
+    student = factory.SubFactory(StudentFactory)

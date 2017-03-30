@@ -55,7 +55,7 @@
       ],
       "session_number": 1,
       "decimal_scores": false,
-      "coordinator": {
+      "scores_responsible": {
         "address": {
           "postal_code": "",
           "city": "",

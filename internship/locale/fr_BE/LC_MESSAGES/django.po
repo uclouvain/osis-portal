@@ -80,9 +80,9 @@ msgstr "<p>Si vous séléctionnez <strong>'Stage personnel'</strong> alors vous 
        "</strong> pour un stage à l'étranger et avez confirmé votre départ.</p>"
        "<p>Si vous envisagez de passer le <strong>'concours de Médecine générale'</strong> en première session,<strong> "
        " vous ne pouvez choisir une spécialité que parmis les suivantes: <br> "
-       "<strong>chirurgie ou assimilé, dermatologie, gériatrie, gynécologie-obstétrique, médecine interne, médecine physique, "
-       "neurologie, ophtamologie, O.R.L, orthopédie, psychiatrie, soins palliatifs, urgences, urologie."
-       "</strong></p>"
+       "<strong>chirurgie ou assimilé, dermatologie, gériatrie, gynécologie-obstétrique, médecine interne, médecine "
+       "physique, neurologie, ophtamologie, O.R.L, orthopédie, pédiatrie, psychiatrie, soins palliatifs, urgences, "
+       "urologie.</strong></p>"
 
 msgid	 "masters"
 msgstr	 "Maîtres de stage"
@@ -118,6 +118,9 @@ msgid "select_contest"
 msgstr "<strong>AVANT</strong> de faire vos choix, suivez le lien pour séléctionner la filière (généraliste ou "
        "spécialiste) que vous comptez suivre à ce stade. Si cette donnée n'est pas correcte, le système risque de "
        "vous imposer des choix non compatibles."
+
+msgid "selection_is_closed"
+msgstr "Vous ne pouvez plus soumettre vos choix."
 
 msgid "specialist"
 msgstr "Spécialiste"

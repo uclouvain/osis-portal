@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -72,7 +72,9 @@ def search_order_by_acronym(academic_year_id=None):
 
 
 def find_by_id(learning_unit_year_id):
-    return LearningUnitYear.objects.get(pk=learning_unit_year_id)
+    return LearningUnitYear.objects.select_related("academic_year",
+                                                    "learning_unit")\
+        .get(pk=learning_unit_year_id)
 
 
 def find_first(an_academic_year=None, a_learning_unit=None):
@@ -80,5 +82,6 @@ def find_first(an_academic_year=None, a_learning_unit=None):
 
 
 def find_by_acronym(acronym, academic_year):
-    return LearningUnitYear.objects.filter(acronym__startswith=acronym,
-                                           academic_year=academic_year)
+    return LearningUnitYear.objects.select_related("academic_year",
+                                                   "learning_unit").\
+        filter(acronym__startswith=acronym, academic_year=academic_year)
