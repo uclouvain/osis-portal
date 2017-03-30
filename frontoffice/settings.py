@@ -321,7 +321,7 @@ ATTESTATION_CONFIG = {
     'SERVER_TO_FETCH_PASSWORD': os.environ.get("ATTESTATION_API_PASSWORD", ''),
 }
 
-LOCALE_PATHS = ''
+LOCALE_PATHS = ('',)
 try:
     from frontoffice import server_settings
     try:
