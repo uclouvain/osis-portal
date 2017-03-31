@@ -99,6 +99,7 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
         if formset.is_valid() and do_not_exceed_maximum_personnal_internship(speciality, student):
             remove_previous_choices(student, internship_id)
             save_student_choices(formset, student, int(internship_id), speciality)
+            messages.add_message(request, messages.SUCCESS, _('internship_choice_successfully_saved'))
 
     specialities = mdl_internship.internship_speciality.find_non_mandatory()
     number_first_choices_by_organization = get_first_choices_by_organization(speciality)

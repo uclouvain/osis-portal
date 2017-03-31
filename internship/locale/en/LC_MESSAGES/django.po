@@ -149,3 +149,9 @@ msgstr "Third choice"
 
 msgid "website"
 msgstr "Website"
+
+msgid "internship_choice_successfully_saved"
+msgstr "Your internship choices have been saved!"
+
+msgid "error_does_not_belong_to_any_cohort"
+msgstr "It seems you are not subscribed to internships, you may want to check with your administration."

@@ -148,3 +148,9 @@ msgstr "Troisième choix"
 
 msgid "website"
 msgstr "Site web"
+
+msgid "internship_choice_successfully_saved"
+msgstr "Vos choix ont bien été sauvés !"
+
+msgid "error_does_not_belong_to_any_cohort"
+msgstr "Il semblerait que vous ne soyez pas inscrit aux stages, nous vous recommandons de contacter votre secrétariat."
