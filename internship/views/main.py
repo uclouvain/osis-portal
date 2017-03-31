@@ -69,10 +69,19 @@ def view_internship_home(request, cohort_id):
 @redirect_if_multiple_registrations
 @redirect_if_not_in_cohort
 @permission_required('internship.can_access_internship', raise_exception=True)
-def view_internship_selection(request, cohort_id, internship_id="1", speciality_id="-1"):
+def view_internship_selection(request, cohort_id, internship_id=-1, speciality_id=-1):
+    if int(internship_id) < 1:
+        return redirect(view_internship_selection, cohort_id=cohort_id, internship_id=1)
+
     student = mdl_base.student.find_by_user(request.user)
     cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
     free_internships_number = int(cohort.free_internships_number)
+    internship_choices = mdl_internship.internship_choice.InternshipChoice.objects.all()
+
+    current_choice = internship_choices.filter(internship_choice=internship_id).first()
+
+    if (current_choice != None) and (int(speciality_id) < 0):
+        speciality_id = current_choice.speciality_id
 
     is_open = mdl_internship.internship_offer.get_number_selectable() > 0
     if not is_open:
@@ -93,7 +102,6 @@ def view_internship_selection(request, cohort_id, internship_id="1", speciality_
 
     specialities = mdl_internship.internship_speciality.find_non_mandatory()
     number_first_choices_by_organization = get_first_choices_by_organization(speciality)
-    internship_choices = mdl_internship.internship_choice.InternshipChoice.objects.all()
 
     return layout.render(request, "internship_selection.html",
                          {"number_non_mandatory_internships": range(1, free_internships_number + 1),
@@ -105,6 +113,7 @@ def view_internship_selection(request, cohort_id, internship_id="1", speciality_
                           "speciality_id": int(speciality_id),
                           "intern_id": int(internship_id),
                           "internship_choices": internship_choices,
+                          "current_choice": current_choice,
                           "can_submit": len(selectable_offers) > 0,
                           "cohort": cohort})
 
@@ -134,7 +143,10 @@ def zip_offers_formset_and_first_choices(formset, internships_offers, number_cho
 def assign_speciality_for_internship(request, cohort_id, internship_id):
     speciality_id = None
     if request.method == "POST":
-        speciality_id = int(request.POST.get("speciality_chosen", 0))
+        try:
+            speciality_id = int(request.POST.get("speciality_id", 0))
+        except ValueError:
+            speciality_id = -1
 
     return redirect("select_internship_speciality", cohort_id=cohort_id, internship_id=internship_id, speciality_id=speciality_id)
 
