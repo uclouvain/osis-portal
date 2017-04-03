@@ -47,7 +47,7 @@ class InternshipChoice(SerializableModel):
         return u"%s - %s : %s" % (self.organization.acronym, self.speciality.acronym, self.choice)
 
 
-def search(student=None, internship_choice=None, speciality=None):
+def search(student=None, internship_choice=None, speciality=None, specialities=None):
     has_criteria = False
     queryset = InternshipChoice.objects
 
@@ -61,6 +61,10 @@ def search(student=None, internship_choice=None, speciality=None):
 
     if speciality:
         queryset = queryset.filter(speciality=speciality)
+        has_criteria = True
+
+    if specialities:
+        queryset = queryset.filter(speciality_id__in=specialities)
         has_criteria = True
 
     if has_criteria:

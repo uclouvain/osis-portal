@@ -58,9 +58,9 @@ class InternshipStudentInformation(SerializableModel):
         return u"%s" % self.person
 
 
-def find_by_user(a_user):
+def find_by_user_and_cohort(user, cohort):
     try:
-        return InternshipStudentInformation.objects.get(person__user=a_user)
+        return InternshipStudentInformation.objects.get(person__user=user, cohort=cohort)
     except ObjectDoesNotExist:
         return None
 
