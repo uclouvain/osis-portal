@@ -45,7 +45,7 @@ from internship.decorators.global_view_decorators import redirect_if_multiple_re
 @permission_required('internship.can_access_internship', raise_exception=True)
 def view_cohort_selection(request):
     student = mdl_base.student.find_by_user(request.user)
-    cohort_subscriptions = mdl_internship.cohort_student.find_cohorts_for_student(student)
+    cohort_subscriptions = mdl_internship.internship_student_information.InternshipStudentInformation.objects.filter(person_id=student.person_id)
     if cohort_subscriptions.count() > 1:
         cohort_ids = cohort_subscriptions.values('cohort_id')
         cohorts = mdl_internship.cohort.Cohort.objects.filter(id__in=cohort_ids)
