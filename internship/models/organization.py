@@ -28,13 +28,14 @@ from django.db import models
 
 
 class OrganizationAdmin(SerializableModelAdmin):
-    list_display = ('name', 'acronym', 'reference', 'type')
+    list_display = ('name', 'acronym', 'reference', 'type', 'cohort')
     fieldsets = ((None, {'fields': ('name', 'acronym', 'reference', 'website', 'type')}),)
     search_fields = ['acronym', 'name']
 
 
 class Organization(SerializableModel):
     name = models.CharField(max_length=255)
+    cohort = models.ForeignKey('internship.Cohort', null=False)
     acronym = models.CharField(max_length=15, blank=True)
     website = models.URLField(max_length=255, blank=True, null=True)
     reference = models.CharField(max_length=30, blank=True, null=True)
