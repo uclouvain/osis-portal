@@ -36,6 +36,7 @@ class InternshipSpecialityAdmin(SerializableModelAdmin):
 
 class InternshipSpeciality(SerializableModel):
     learning_unit = models.ForeignKey('base.LearningUnit')
+    cohort = models.ForeignKey('internship.Cohort', null=False)
     name = models.CharField(max_length=125, blank=False, null=False)
     acronym = models.CharField(max_length=125, blank=False, null=False)
     mandatory = models.BooleanField(default=False)
