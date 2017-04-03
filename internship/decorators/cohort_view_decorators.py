@@ -40,7 +40,7 @@ def redirect_if_not_in_cohort(function):
         except MultipleObjectsReturned:
             return dash_main_view.show_multiple_registration_id_error(request)
 
-        if mdl_internship.cohort_student.CohortStudent.objects.filter(cohort_id=cohort_id, student_id=student.pk).count() > 0:
+        if mdl_internship.internship_student_information.InternshipStudentInformation.objects.filter(cohort_id=cohort_id, person_id=student.person_id).count() > 0:
             response = function(request, cohort_id, *args, **kwargs)
             return response
         else:

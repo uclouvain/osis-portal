@@ -34,7 +34,7 @@ class PeriodAdmin(SerializableModelAdmin):
 
 class Period(SerializableModel):
     name = models.CharField(max_length=255)
-    cohort = models.ForeignKey('internship.Cohort', null=False)
+    cohort = models.ForeignKey('internship.Cohort')
     date_start = models.DateField(blank=False)
     date_end = models.DateField(blank=False)
 

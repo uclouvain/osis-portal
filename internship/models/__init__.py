@@ -38,4 +38,3 @@ from internship.models import internship_student_affectation_stat
 from internship.models import period_internship_places
 from internship.models import cohort
 from base.models import student
-from internship.models import cohort_student
