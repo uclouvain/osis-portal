@@ -27,7 +27,7 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'internship_home' %}">{% trans 'internships' %}</a></li>
+    <li><a href="{% url 'internship_home' cohort_id=cohort.id %}">{% trans 'internships' %}</a></li>
     <li class="active">{% trans 'selection' %}</li>
 {% endblock %}
 

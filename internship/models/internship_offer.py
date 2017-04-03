@@ -55,8 +55,8 @@ class InternshipOffer(SerializableModel):
         )
 
 
-def find_selectable_by_speciality(speciality):
-    return InternshipOffer.objects.filter(speciality=speciality, selectable=True)
+def find_selectable_by_speciality_and_cohort(speciality, cohort):
+    return InternshipOffer.objects.filter(speciality=speciality, cohort=cohort, selectable=True)
 
 
 def find_by_speciality(speciality):
@@ -65,13 +65,11 @@ def find_by_speciality(speciality):
 def find_by_cohort(cohort):
     return InternshipOffer.objects.filter(cohort=cohort)
 
-
 def find_by_pk(a_pk):
     try:
         return InternshipOffer.objects.get(pk=a_pk)
     except ObjectDoesNotExist:
         return None
 
-
-def get_number_selectable():
-    return InternshipOffer.objects.filter(selectable=True).count()
+def get_number_selectable(cohort):
+    return InternshipOffer.objects.filter(selectable=True, cohort=cohort).count()

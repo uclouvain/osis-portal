@@ -73,22 +73,22 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
     if int(internship_id) < 1:
         return redirect(view_internship_selection, cohort_id=cohort_id, internship_id=1)
 
-    student = mdl_base.student.find_by_user(request.user)
-    cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
+    student                 = mdl_base.student.find_by_user(request.user)
+    cohort                  = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
     free_internships_number = int(cohort.free_internships_number)
-    internship_choices = mdl_internship.internship_choice.InternshipChoice.objects.all()
-
-    current_choice = internship_choices.filter(internship_choice=internship_id).first()
+    specialities            = mdl_internship.internship_speciality.filter_by_cohort(cohort)
+    internship_choices      = mdl_internship.internship_choice.InternshipChoice.objects.filter(speciality_id__in=specialities)
+    current_choice          = internship_choices.filter(internship_choice=internship_id).first()
 
     if (current_choice != None) and (int(speciality_id) < 0):
         speciality_id = current_choice.speciality_id
 
-    is_open = mdl_internship.internship_offer.get_number_selectable() > 0
+    is_open = mdl_internship.internship_offer.get_number_selectable(cohort) > 0
     if not is_open:
-        return layout.render(request, "internship_selection_closed.html")
+        return layout.render(request, "internship_selection_closed.html", {'cohort': cohort})
 
-    speciality = mdl_internship.internship_speciality.find_by_id(speciality_id)
-    selectable_offers = mdl_internship.internship_offer.find_selectable_by_speciality(speciality=speciality)
+    speciality               = mdl_internship.internship_speciality.find_by_id(speciality_id)
+    selectable_offers        = mdl_internship.internship_offer.find_selectable_by_speciality_and_cohort(speciality=speciality, cohort=cohort)
     offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet,
                                                extra=len(selectable_offers), min_num=len(selectable_offers),
                                                max_num=len(selectable_offers), validate_min=True, validate_max=True)
@@ -97,11 +97,11 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
     if request.method == 'POST':
         formset = offer_preference_formset(request.POST)
         if formset.is_valid() and do_not_exceed_maximum_personnal_internship(speciality, student):
-            remove_previous_choices(student, internship_id)
+            remove_previous_choices(student, internship_id, speciality_id)
             save_student_choices(formset, student, int(internship_id), speciality)
             messages.add_message(request, messages.SUCCESS, _('internship_choice_successfully_saved'))
 
-    specialities = mdl_internship.internship_speciality.find_non_mandatory()
+    specialities                         = mdl_internship.internship_speciality.filter_by_cohort(cohort)
     number_first_choices_by_organization = get_first_choices_by_organization(speciality)
 
     return layout.render(request, "internship_selection.html",
@@ -147,13 +147,13 @@ def assign_speciality_for_internship(request, cohort_id, internship_id):
         try:
             speciality_id = int(request.POST.get("speciality_id", 0))
         except ValueError:
-            speciality_id = -1
+            speciality_id = 0
 
     return redirect("select_internship_speciality", cohort_id=cohort_id, internship_id=internship_id, speciality_id=speciality_id)
 
 
-def remove_previous_choices(student, internship_id):
-    previous_choices = mdl_internship.internship_choice.search(student, internship_id)
+def remove_previous_choices(student, internship_id, speciality_id):
+    previous_choices = mdl_internship.internship_choice.search(student, internship_id, speciality_id)
     if previous_choices:
         previous_choices.delete()
 

@@ -48,6 +48,8 @@ class Organization(SerializableModel):
         self.acronym = self.name[:14]
         super(Organization, self).save(*args, **kwargs)
 
+def filter_by_cohort(cohort):
+    return Organization.objects.filter(cohort_id=cohort.pk)
 
-def search(name):
-    return Organization.objects.filter(name__contains=name)
+def search(name, cohort):
+    return Organization.objects.filter(name__icontains=name, cohort=cohort)

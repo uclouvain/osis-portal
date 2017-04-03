@@ -56,6 +56,8 @@ def find_by_id(a_id):
 def find_all():
     return InternshipSpeciality.objects.all()
 
+def filter_by_cohort(cohort):
+    return InternshipSpeciality.objects.filter(cohort=cohort)
 
 def find_non_mandatory():
     return InternshipSpeciality.objects.filter(mandatory=False).order_by("name")

@@ -33,7 +33,7 @@ register = template.Library()
 @register.assignment_tag
 def choice_for_offer(internship_choices, offer, internship_choice):
     try:
-        choice = internship_choices.get(speciality_id=offer.speciality_id, internship_choice=internship_choice).choice
+        choice = internship_choices.get(speciality_id=offer.speciality_id, organization_id=offer.organization_id, internship_choice=internship_choice).choice
         return str(choice)
     except ObjectDoesNotExist:
         return None
