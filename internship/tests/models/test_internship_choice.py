@@ -28,7 +28,6 @@ from internship.models import internship_choice as mdl_internship_choice
 from internship.tests.models import test_organization, test_internship_speciality
 from base.tests.models import test_student
 
-
 def create_internship_choice(organization, student, speciality, internship_choice=0):
     choice = mdl_internship_choice.InternshipChoice(organization=organization, student=student, speciality=speciality,
                                                     choice=1, internship_choice=internship_choice, priority=False)

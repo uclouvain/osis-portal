@@ -26,12 +26,15 @@
 from internship.models import internship_speciality as mdl_internship_speciality
 from base.tests.models import test_learning_unit
 from django.test import TestCase
+from internship.tests.factories.cohort import CohortFactory
 
+def create_speciality(name="chirurgie", acronym="WSD", cohort=None):
+    if cohort == None:
+        cohort = CohortFactory()
 
-def create_speciality(name="chirurgie", acronym="WSD"):
     learning_unit = test_learning_unit.create_learning_unit({"title": "stage medecine",
                                                              "acronym": "WSD"})
-    speciality = mdl_internship_speciality.InternshipSpeciality(learning_unit=learning_unit, name=name, acronym=acronym)
+    speciality = mdl_internship_speciality.InternshipSpeciality(learning_unit=learning_unit, name=name, acronym=acronym, cohort=cohort)
     speciality.save()
     return speciality
 

@@ -30,7 +30,8 @@ from django.contrib.auth.models import User, Permission
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from internship.models import internship_student_information as mdl_student_information
-
+from internship.tests.models import test_internship_student_information
+from internship.tests.factories.cohort import CohortFactory
 
 class TestResumeUrl(TestCase):
     def setUp(self):
@@ -39,10 +40,12 @@ class TestResumeUrl(TestCase):
         self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
         self.student.person.user = self.user
         self.student.person.save()
+        self.cohort = CohortFactory()
+        self.student_information = test_internship_student_information.create_student_information(self.user, self.cohort, self.student.person)
         add_permission(self.student.person.user, "can_access_internship")
 
     def test_can_access_student_resume(self):
-        url = reverse("student_resume")
+        url = reverse("student_resume", kwargs={'cohort_id': self.cohort.id})
         response = self.c.get(url)
         self.assertEqual(response.status_code, 302)
 
@@ -51,7 +54,7 @@ class TestResumeUrl(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_can_access_student_info_modification(self):
-        url = reverse("internship_student_edit")
+        url = reverse("internship_student_edit", kwargs={'cohort_id': self.cohort.id})
         response = self.c.get(url)
         self.assertEqual(response.status_code, 302)
 
@@ -66,11 +69,13 @@ class TestEditStudentInformation(TestCase):
         self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
         self.student.person.user = self.user
         self.student.person.save()
+        self.cohort = CohortFactory()
+        self.student_information = test_internship_student_information.create_student_information(self.user, self.cohort, self.student.person)
         add_permission(self.student.person.user, "can_access_internship")
         self.c = Client()
         self.c.force_login(self.user)
 
-        self.url = reverse("internship_student_edit")
+        self.url = reverse("internship_student_edit", kwargs={'cohort_id': self.cohort.id})
 
         self.data = {
             "location": "location",
@@ -85,7 +90,7 @@ class TestEditStudentInformation(TestCase):
     def test_information_save(self):
         self.c.post(self.url, data=self.data)
         try:
-            student_information = mdl_student_information.find_by_user(self.user)
+            student_information = mdl_student_information.find_by_user_and_cohort(self.user, cohort=self.cohort)
         except ObjectDoesNotExist:
             self.fail()
 
