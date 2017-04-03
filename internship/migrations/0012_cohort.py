@@ -10,8 +10,8 @@ def createDefaultCohort(apps, schema_editor):
     db_alias = schema_editor.connection.alias
     Cohort.objects.using(db_alias).bulk_create([
         Cohort(
-            name="2016-2017",
-            description="Groupe 1",
+            name="M7-2018",
+            description="M7-2018",
             free_internships_number=8,
             mandatory_internships_number=0,
             publication_start_date="2017-03-27",
