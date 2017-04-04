@@ -18,6 +18,7 @@ def fn_subscription_end_date(cohort):
 class CohortFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = 'internship.Cohort'
+        database = 'default'
 
     name = factory.Sequence(lambda n: 'Cohort %d' % (n,))
     description = factory.fuzzy.FuzzyText()
