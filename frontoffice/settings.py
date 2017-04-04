@@ -127,11 +127,11 @@ WSGI_APPLICATION = 'frontoffice.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'osis_front_dev',
-        'USER': os.environ.get("POSTGRES_USER") or "osis_usr",
-        'PASSWORD': os.environ.get("POSTGRES_PASSWORD") or "osis",
-        'HOST': os.environ.get("POSTGRES_HOST") or "127.0.0.1",
-        'PORT': '5432',
+        'NAME': os.environ.get("DATABASE_NAME", 'osis_front_dev'),
+        'USER': os.environ.get("POSTGRES_USER", 'osis_usr'),
+        'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'osis'),
+        'HOST': os.environ.get("POSTGRES_HOST", '127.0.0.1'),
+        'PORT': os.environ.get("POSTGRES_PORT", '5432'),
     },
 }
 
