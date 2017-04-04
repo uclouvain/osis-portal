@@ -54,6 +54,9 @@ admin.site.register(period.Period,
 admin.site.register(cohort.Cohort,
                     cohort.CohortAdmin)
 
+admin.site.register(internship.Internship,
+                    internship.InternshipAdmin)
+
 admin.site.register(internship_student_affectation_stat.InternshipStudentAffectationStat,
                     internship_student_affectation_stat.InternshipStudentAffectationStatAdmin)
 

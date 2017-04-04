@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-############################################################################
+##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -23,17 +22,29 @@
 #    at the root of the source code of this program.  If not,
 #    see http://www.gnu.org/licenses/.
 #
-############################################################################
-from django import template
-from django.template import Template
-from django.core.exceptions import ObjectDoesNotExist
+##############################################################################
+from django.db import models
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
-register = template.Library()
 
-@register.assignment_tag
-def choice_for_offer(internship_choices, offer, internship):
-    try:
-        choice = internship_choices.get(speciality_id=offer.speciality_id, organization_id=offer.organization_id, internship=internship).choice
-        return str(choice)
-    except ObjectDoesNotExist:
-        return None
+class InternshipAdmin(SerializableModelAdmin):
+    list_display = (
+            'name',
+            'speciality',
+            'cohort',
+            'length_in_periods')
+    fieldsets = ((None, {'fields':
+        (
+            'name',
+            'speciality',
+            'cohort',
+            'length_in_periods'
+        )}),)
+
+
+class Internship(SerializableModel):
+    name = models.CharField(max_length=255, blank=False)
+    speciality = models.ForeignKey('internship.InternshipSpeciality', null=True, blank=True)
+    cohort = models.ForeignKey('internship.Cohort', null=False)
+    length_in_periods = models.IntegerField(null=False, default=1)
+

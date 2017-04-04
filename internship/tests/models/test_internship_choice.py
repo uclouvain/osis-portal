@@ -27,10 +27,11 @@ from django.test import TestCase
 from internship.models import internship_choice as mdl_internship_choice
 from internship.tests.models import test_organization, test_internship_speciality
 from base.tests.models import test_student
+from internship.tests.factories.internship import InternshipFactory
 
-def create_internship_choice(organization, student, speciality, internship_choice=0):
+def create_internship_choice(organization, student, speciality, internship):
     choice = mdl_internship_choice.InternshipChoice(organization=organization, student=student, speciality=speciality,
-                                                    choice=1, internship_choice=internship_choice, priority=False)
+                                                    choice=1, internship=internship, priority=False)
     choice.save()
     return choice
 
@@ -41,10 +42,12 @@ class TestSearch(TestCase):
         self.student = test_student.create_student("64641200")
         self.other_student = test_student.create_student("60601200")
         self.speciality = test_internship_speciality.create_speciality()
+        self.internship = InternshipFactory()
+        self.other_internship = InternshipFactory()
 
-        self.choice_1 = create_internship_choice(self.organization, self.student, self.speciality)
-        self.choice_2 = create_internship_choice(self.organization, self.student, self.speciality, internship_choice=1)
-        self.choice_3 = create_internship_choice(self.organization, self.other_student, self.speciality)
+        self.choice_1 = create_internship_choice(self.organization, self.student, self.speciality, internship=self.other_internship)
+        self.choice_2 = create_internship_choice(self.organization, self.student, self.speciality, internship=self.internship)
+        self.choice_3 = create_internship_choice(self.organization, self.other_student, self.speciality, internship=self.other_internship)
 
     def test_with_only_student(self):
         choices = list(mdl_internship_choice.search(student=self.student))
@@ -53,7 +56,7 @@ class TestSearch(TestCase):
         self.assertIn(self.choice_2, choices)
 
     def test_with_only_internship_choice(self):
-        choices = list(mdl_internship_choice.search(internship_choice=0))
+        choices = list(mdl_internship_choice.search(internship=self.other_internship))
         self.assertEqual(len(choices), 2)
         self.assertIn(self.choice_1, choices)
         self.assertIn(self.choice_3, choices)
@@ -66,7 +69,7 @@ class TestSearch(TestCase):
         self.assertIn(self.choice_3, choices)
 
     def test_with_student_and_internship_choice(self):
-        choices = list(mdl_internship_choice.search(student=self.student, internship_choice=1))
+        choices = list(mdl_internship_choice.search(student=self.student, internship=self.internship))
         self.assertListEqual([self.choice_2], choices)
 
     def test_get_number_first_choice_by_organization(self):
@@ -75,19 +78,10 @@ class TestSearch(TestCase):
         self.assertEqual(expected, number_first_choice)
 
         other_organization = test_organization.create_organization(reference="02")
-        create_internship_choice(other_organization, self.student, self.speciality)
+        create_internship_choice(other_organization, self.student, self.speciality, self.internship)
         number_first_choice = list(mdl_internship_choice.get_number_first_choice_by_organization(self.speciality))
         expected = [{"organization": self.organization.id, "organization__count": 3},
                     {"organization": other_organization.id, "organization__count": 1}]
         self.assertCountEqual(number_first_choice, expected)
         self.assertIn(expected[0], number_first_choice)
         self.assertIn(expected[1], number_first_choice)
-
-
-
-
-
-
-
-
-

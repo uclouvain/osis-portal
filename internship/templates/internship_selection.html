@@ -43,13 +43,13 @@
     <div class="panel-body">
 
         <div class="row">
-
+          <div class="col-lg-12">
             <ul class="nav nav-tabs">
-                {% for non_mandatory_id in number_non_mandatory_internships %}
-                    <li role="presentation" {% if non_mandatory_id == intern_id %} class="active" {% endif %}><a href="{% url 'select_specific_internship' internship_id=non_mandatory_id cohort_id=cohort.id %}">{% trans 'internship'%} {{ non_mandatory_id }}</a></li>
+                {% for internship in internships %}
+                    <li role="presentation" {% if current_internship.id == internship.id %} class="active" {% endif %}><a href="{% url 'select_specific_internship' internship_id=internship.id cohort_id=cohort.id %}">{{ internship.name }}</a></li>
                 {% endfor %}
             </ul>
-
+          </div>
         </div>
 
         <br>
@@ -62,7 +62,7 @@
         </div>
 
         <div class="row">
-            <form action="{% url 'assign_speciality' internship_id=intern_id cohort_id=cohort.id %}"  method="post">
+            <form action="{% url 'assign_speciality' internship_id=current_internship.id cohort_id=cohort.id %}"  method="post">
                 {% csrf_token %}
                 <div class="fieldWrapper col-md-6 form-group">
                     <label for="speciality_selection">{% trans 'choose_speciality' %}:</label>
@@ -89,11 +89,10 @@
                     </div>
                 </div>
             </form>
+          </div>
         </div>
 
-        <br>
-
-       <div class="row">
+         <div class="col-lg-12">
            {% if offers_forms  %}
            <form id="assign_preference" method="post">
                {% csrf_token %}
@@ -117,7 +116,7 @@
                         <td>
                             <select id="{{ form.preference.id_for_label }}" name="{{ form.preference.html_name }}" class="form-control">
                                 {% for x,y in form.fields.preference.choices %}
-                                {% choice_for_offer internship_choices offer intern_id as choice %}
+                                {% choice_for_offer internship_choices offer current_internship as choice %}
                                 <option value="{{ x }}" {% if x == choice %} selected{% endif %}>
                                     <span>{{ y }}</span>
                                 </option>
@@ -138,8 +137,8 @@
                 {% endif %}
            </form>
            {% endif %}
+         </div>
 
-       </div>
 
     </div>
 </div>

@@ -133,11 +133,11 @@
                 <br>
                 <div class="row">
                     {% for internship in internships %}
-                        <strong>{% trans 'internship' %} {{ internship }}</strong>
+                        <strong>{{ internship.name }}</strong>
                         <ul>
                         {% for choice in student_choices %}
-                            {% if choice.internship_choice == internship %}
-                                <li>{{ choice.organization }} | {{ choice.speciality }} |{{ choice.choice }}</li>
+                            {% if choice.internship_id == internship.id %}
+                                <li>{{ choice.organization }} | {{ choice.speciality }} | {{ choice.choice }}</li>
                             {% endif %}
                         {% endfor %}
                         </ul>

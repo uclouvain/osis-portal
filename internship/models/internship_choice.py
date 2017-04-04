@@ -28,8 +28,8 @@ from osis_common.models.serializable_model import SerializableModelAdmin, Serial
 
 
 class InternshipChoiceAdmin(SerializableModelAdmin):
-    list_display = ('student', 'organization', 'speciality', 'choice', 'internship_choice', 'priority')
-    fieldsets = ((None, {'fields': ('student', 'organization', 'speciality', 'choice', 'internship_choice',
+    list_display = ('student', 'organization', 'speciality', 'choice', 'internship', 'priority')
+    fieldsets = ((None, {'fields': ('student', 'organization', 'speciality', 'choice', 'internship',
                                     'priority')}),)
     raw_id_fields = ('student', 'organization', 'speciality')
     search_fields = ['student__person__first_name', 'student__person__last_name']
@@ -40,14 +40,14 @@ class InternshipChoice(SerializableModel):
     organization = models.ForeignKey('internship.Organization')
     speciality = models.ForeignKey('internship.InternshipSpeciality', null=True)
     choice = models.IntegerField()
-    internship_choice = models.IntegerField(default=0)
+    internship = models.ForeignKey('internship.Internship')
     priority = models.BooleanField()
 
     def __str__(self):
         return u"%s - %s : %s" % (self.organization.acronym, self.speciality.acronym, self.choice)
 
 
-def search(student=None, internship_choice=None, speciality=None, specialities=None):
+def search(student=None, speciality=None, specialities=None, internship=None):
     has_criteria = False
     queryset = InternshipChoice.objects
 
@@ -55,12 +55,12 @@ def search(student=None, internship_choice=None, speciality=None, specialities=N
         queryset = queryset.filter(student=student)
         has_criteria = True
 
-    if internship_choice is not None:
-        queryset = queryset.filter(internship_choice=internship_choice)
-        has_criteria = True
-
     if speciality:
         queryset = queryset.filter(speciality=speciality)
+        has_criteria = True
+
+    if internship:
+        queryset = queryset.filter(internship=internship)
         has_criteria = True
 
     if specialities:

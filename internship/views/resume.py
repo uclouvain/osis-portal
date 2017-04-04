@@ -32,6 +32,7 @@ from internship.models import internship_student_information as mdl_student_info
 from internship.models import internship_student_affectation_stat as mdl_student_affectation
 from internship.models import organization_address as mdl_organization_address
 from internship.models import internship_choice as mdl_internship_choice
+from internship.models import internship as mdl_internship
 from internship.models import internship_speciality as mdl_internship_speciality
 from internship.models import cohort as mdl_internship_cohort
 from internship.forms import form_internship_student_information
@@ -47,8 +48,9 @@ from internship.decorators.global_view_decorators import redirect_if_multiple_re
 @redirect_if_not_in_cohort
 @permission_required('internship.can_access_internship', raise_exception=True)
 def view_student_resume(request, cohort_id):
-    cohort = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
-    student = mdl_student.find_by_user(request.user)
+    cohort      = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
+    student     = mdl_student.find_by_user(request.user)
+    internships = mdl_internship.Internship.objects.filter(cohort=cohort)
 
     student_information = mdl_student_information.find_by_user_and_cohort(request.user, cohort=cohort)
     student_affectations = mdl_student_affectation.search(student=student)
@@ -56,14 +58,14 @@ def view_student_resume(request, cohort_id):
         [(affectation, mdl_organization_address.get_by_organization(affectation.organization)) for affectation in
          student_affectations]
     specialities = mdl_internship_speciality.filter_by_cohort(cohort)
-    student_choices = mdl_internship_choice.search(student=student, specialities=specialities).order_by('internship_choice', 'choice')
+    student_choices = mdl_internship_choice.search(student=student, specialities=specialities)
     cohort = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
     return layout.render(request, "student_resume.html", {"student": student,
                                                           "student_information": student_information,
                                                           "student_affectations_with_address":
                                                               student_affectations_with_address,
                                                           "student_choices": student_choices,
-                                                          "internships": range(1, cohort.free_internships_number + 1),
+                                                          "internships": internships,
                                                           "cohort": cohort})
 
 

@@ -29,7 +29,7 @@ msgid	 "choices_received_by_administration"
 msgstr	 "Choix reçus de l'administration"
 
 msgid	 "choose_internships"
-msgstr	 "Choisissez vos stages aux choix"
+msgstr	 "Encodez vos choix de stages"
 
 msgid "choose_speciality"
 msgstr "Choisissez une spécialité"

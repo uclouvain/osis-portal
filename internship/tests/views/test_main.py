@@ -34,6 +34,7 @@ from internship.tests.models import test_internship_offer, test_organization, te
 from internship.models import internship_choice as mdl_internship_choice
 from internship.models import period_internship_places as mdl_period_places
 from internship.tests.factories.cohort import CohortFactory
+from internship.tests.factories.internship import InternshipFactory
 
 class TestMain(TestCase):
     def setUp(self):
@@ -43,6 +44,7 @@ class TestMain(TestCase):
         self.student.person.user = self.user
         self.student.person.save()
         self.cohort = CohortFactory()
+        self.internship = InternshipFactory(cohort=self.cohort)
         self.student_information = test_internship_student_information.create_student_information(self.user, self.cohort, self.student.person)
         add_permission(self.student.person.user, "can_access_internship")
 
@@ -65,7 +67,7 @@ class TestMain(TestCase):
         self.assertEqual(response.status_code, 302) # Now redirected to first internship
 
     def test_can_access_specific_internship_selection(self):
-        selection_url = reverse("select_specific_internship", kwargs={'internship_id': 1, 'cohort_id': self.cohort.id})
+        selection_url = reverse("select_specific_internship", kwargs={'internship_id': self.internship.id, 'cohort_id': self.cohort.id})
         response = self.c.get(selection_url)
         self.assertEqual(response.status_code, 302)
 
@@ -74,8 +76,8 @@ class TestMain(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_can_access_internship_selection_with_speciality(self):
-        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 1,
-                                                                        'speciality_id': 0,
+        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship.id,
+                                                                        'speciality_id': 1,
                                                                         'cohort_id': self.cohort.id})
         response = self.c.get(selection_url)
         self.assertEqual(response.status_code, 302)
@@ -95,6 +97,8 @@ class TestSelectInternship(TestCase):
         self.c = Client()
         self.c.force_login(user)
         self.cohort = CohortFactory()
+        self.internship_1 = InternshipFactory(cohort=self.cohort)
+        self.internship_2 = InternshipFactory(cohort=self.cohort)
         self.student_information = test_internship_student_information.create_student_information(user, self.cohort, self.student.person)
 
         self.speciality_1 = test_internship_speciality.create_speciality(name="urgence", cohort=self.cohort)
@@ -123,13 +127,13 @@ class TestSelectInternship(TestCase):
         mdl_period_places.PeriodInternshipPlaces(period=period_9, internship=self.offer_6, number_places=5).save()
 
     def test_with_zero_choices(self):
-        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 1,
+        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship_1.id,
                                                                         'speciality_id': self.speciality_1.id,
                                                                         'cohort_id': self.cohort.id})
         self.assertRaises(ValidationError, self.c.post, selection_url, {})
 
     def test_with_one_choice(self):
-        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 1,
+        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship_2.id,
                                                                         'speciality_id': self.speciality_2.id,
                                                                         'cohort_id': self.cohort.id})
         response = self.c.post(selection_url, data={'form-TOTAL_FORMS': '2',
@@ -145,11 +149,11 @@ class TestSelectInternship(TestCase):
         self.assertEqual(len(choices), 1)
         self.assertEqual(choices[0].organization, self.organization_1)
         self.assertEqual(choices[0].speciality, self.speciality_2)
-        self.assertEqual(choices[0].internship_choice, 1)
+        self.assertEqual(choices[0].internship_id, self.internship_2.id)
         self.assertEqual(choices[0].choice, 1)
 
     def test_with_multiple_choice(self):
-        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 1,
+        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship_1.id,
                                                                         'speciality_id': self.speciality_1.id,
                                                                         'cohort_id': self.cohort.id})
         self.c.post(selection_url, data={'form-TOTAL_FORMS': '4',
@@ -185,7 +189,7 @@ class TestSelectInternship(TestCase):
         self.assertEqual(len(choices), 2)
 
     def test_with_incorrect_speciality(self):
-        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 1,
+        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship_1.id,
                                                                         'speciality_id': self.speciality_1.id,
                                                                         'cohort_id': self.cohort.id})
         self.c.post(selection_url, data={'form-TOTAL_FORMS': '4',
@@ -206,8 +210,8 @@ class TestSelectInternship(TestCase):
 
     def test_replace_previous_choices(self):
         previous_choice = test_internship_choice.create_internship_choice(test_organization.create_organization(),
-                                                                          self.student, self.speciality_1, 2)
-        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 2,
+                                                                          self.student, self.speciality_1, self.internship_1)
+        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship_2.id,
                                                                         'speciality_id': self.speciality_2.id,
                                                                         'cohort_id': self.cohort.id})
         self.c.post(selection_url, data={'form-TOTAL_FORMS': '2',
@@ -228,10 +232,10 @@ class TestSelectInternship(TestCase):
                                                                   acronym="SP")
         offer = test_internship_offer.create_specific_internship_offer(organization, speciality,
                                                                        title="Stage personnel")
-        choice_1 = test_internship_choice.create_internship_choice(organization, self.student, speciality, 1)
-        choice_2 = test_internship_choice.create_internship_choice(organization, self.student, speciality, 2)
+        choice_1 = test_internship_choice.create_internship_choice(organization, self.student, speciality, self.internship_1)
+        choice_2 = test_internship_choice.create_internship_choice(organization, self.student, speciality, self.internship_2)
 
-        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': 3,
+        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': InternshipFactory(cohort=self.cohort).id,
                                                                         'speciality_id': speciality.id,
                                                                         'cohort_id': self.cohort.id})
         self.c.post(selection_url, data={'form-TOTAL_FORMS': '1',

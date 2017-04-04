@@ -29,7 +29,7 @@ msgid	 "choices_received_by_administration"
 msgstr	 "Choices received by administration"
 
 msgid	 "choose_internships"
-msgstr	 "Choose your non mandatory internship"
+msgstr	 "Submit your internship choices"
 
 msgid "choose_speciality"
 msgstr "Choose a speciality"
