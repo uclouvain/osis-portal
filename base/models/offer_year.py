@@ -28,10 +28,10 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 
 
 class OfferYearAdmin(SerializableModelAdmin):
-    list_display = ('acronym', 'title', 'academic_year', 'grade_type', 'subject_to_quota', 'enrollment_enabled')
-    list_filter = ('grade_type__institutional_grade_type', 'subject_to_quota', 'enrollment_enabled')
+    list_display = ('acronym', 'title', 'academic_year', 'grade_type', 'enrollment_enabled')
+    list_filter = ('grade_type__institutional_grade_type', 'enrollment_enabled')
     fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'title_international', 'grade_type',
-                                    'subject_to_quota', 'offer', 'enrollment_enabled')}),)
+                                    'offer', 'enrollment_enabled')}),)
     search_fields = ['acronym']
     raw_id_fields = ('offer',)
 
@@ -43,7 +43,6 @@ class OfferYear(SerializableModel):
     title = models.CharField(max_length=255)
     title_international = models.CharField(max_length=255, blank=True, null=True)
     grade_type = models.ForeignKey('reference.GradeType', blank=True, null=True, db_index=True)
-    subject_to_quota = models.BooleanField(default=False)
     offer = models.ForeignKey('base.Offer', blank=True, null=True)
     campus = models.ForeignKey('base.Campus', blank=True, null=True)
     enrollment_enabled = models.BooleanField(default=False)
