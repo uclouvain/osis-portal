@@ -61,6 +61,7 @@
               {% trans 'internship_selection_warning_message'|safe %}
         </div>
 
+        {% if current_internship.speciality == None %}
         <div class="row">
             <form action="{% url 'assign_speciality' internship_id=current_internship.id cohort_id=cohort.id %}"  method="post">
                 {% csrf_token %}
@@ -91,6 +92,7 @@
             </form>
           </div>
         </div>
+        {% endif %}
 
          <div class="col-lg-12">
            {% if offers_forms  %}

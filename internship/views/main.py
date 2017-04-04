@@ -88,7 +88,10 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
     if (current_choice != None) and (int(speciality_id) < 0):
         speciality_id = current_choice.speciality_id
 
-    speciality = specialities.filter(pk=speciality_id).first()
+    if current_internship.speciality != None:
+        speciality = current_internship.speciality
+    else:
+        speciality = specialities.filter(pk=speciality_id).first()
     selectable_offers = mdl_internship.internship_offer.find_selectable_by_speciality_and_cohort(speciality=speciality, cohort=cohort)
 
     offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet,
