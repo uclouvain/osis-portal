@@ -156,22 +156,25 @@ def get_student_programs_list(stud):
 
 
 def query_result_to_list(query_result):
-    l = []
+    performance_results_list = []
     for row in query_result:
-        d = convert_student_performance_to_dic(row)
+        performance_dict = convert_student_performance_to_dic(row)
         allowed_registration_states = [value for key, value in offer_registration_state.OFFER_REGISTRAION_STATES]
-        if d.get("offer_registration_state") in allowed_registration_states:
-            l.append(d)
-    return l
+        if performance_dict and performance_dict.get("offer_registration_state") in allowed_registration_states:
+            performance_results_list.append(performance_dict)
+    return performance_results_list
 
 
 def convert_student_performance_to_dic(student_performance_obj):
     d = dict()
-    d["academic_year"] = student_performance_obj.academic_year_template_formated
-    d["acronym"] = student_performance_obj.acronym
-    d["title"] = json.loads(json.dumps(student_performance_obj.data))["monAnnee"]["monOffre"]["offre"]["intituleComplet"]
-    d["pk"] = student_performance_obj.pk
-    d["offer_registration_state"] = student_performance_obj.offer_registration_state
+    try:
+        d["academic_year"] = student_performance_obj.academic_year_template_formated
+        d["acronym"] = student_performance_obj.acronym
+        d["title"] = json.loads(json.dumps(student_performance_obj.data))["monAnnee"]["monOffre"]["offre"]["intituleComplet"]
+        d["pk"] = student_performance_obj.pk
+        d["offer_registration_state"] = student_performance_obj.offer_registration_state
+    except Exception:
+        d = None
     return d
 
 
