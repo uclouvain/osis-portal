@@ -48,3 +48,6 @@ class Internship(SerializableModel):
     cohort = models.ForeignKey('internship.Cohort', null=False)
     length_in_periods = models.IntegerField(null=False, default=1)
 
+    def __str__(self):
+        return u"%s" % self.name
+

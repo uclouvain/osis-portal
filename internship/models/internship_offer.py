@@ -29,8 +29,8 @@ from osis_common.models.serializable_model import SerializableModelAdmin, Serial
 
 
 class InternshipOfferAdmin(SerializableModelAdmin):
-    list_display = ('organization', 'speciality', 'cohort', 'title', 'maximum_enrollments', 'master', 'selectable')
-    fieldsets = ((None, {'fields': ('organization', 'speciality', 'cohort', 'title', 'maximum_enrollments', 'master',
+    list_display = ('organization', 'speciality', 'cohort', 'title', 'maximum_enrollments', 'internship', 'master', 'selectable')
+    fieldsets = ((None, {'fields': ('organization', 'speciality', 'cohort', 'title', 'maximum_enrollments', 'internship', 'master',
                                     'selectable')}),)
     raw_id_fields = ('organization', 'speciality', 'cohort')
     search_fields = ['organization__name', 'speciality__name']
@@ -40,6 +40,7 @@ class InternshipOffer(SerializableModel):
     organization = models.ForeignKey('internship.Organization')
     speciality = models.ForeignKey('internship.InternshipSpeciality', null=True)
     cohort = models.ForeignKey('internship.Cohort', null=False)
+    internship = models.ForeignKey('internship.Internship', null=True, blank=True)
     title = models.CharField(max_length=255)
     maximum_enrollments = models.IntegerField()
     master = models.CharField(max_length=100, blank=True, null=True)
@@ -56,7 +57,7 @@ class InternshipOffer(SerializableModel):
 
 
 def find_selectable_by_speciality_and_cohort(speciality, cohort):
-    return InternshipOffer.objects.filter(speciality=speciality, cohort=cohort, selectable=True)
+    return InternshipOffer.objects.filter(speciality=speciality, cohort=cohort, internship=None, selectable=True)
 
 
 def find_by_speciality(speciality):
