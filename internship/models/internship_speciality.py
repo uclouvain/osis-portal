@@ -29,8 +29,8 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 class InternshipSpecialityAdmin(SerializableModelAdmin):
-    list_display = ('learning_unit', 'name', 'acronym', 'order_postion')
-    fieldsets = ((None, {'fields': ('learning_unit', 'name', 'acronym', 'order_postion')}),)
+    list_display = ('learning_unit', 'name', 'acronym')
+    fieldsets = ((None, {'fields': ('learning_unit', 'name', 'acronym')}),)
     raw_id_fields = ('learning_unit',)
 
 
@@ -39,7 +39,6 @@ class InternshipSpeciality(SerializableModel):
     cohort = models.ForeignKey('internship.Cohort', null=False)
     name = models.CharField(max_length=125, blank=False, null=False)
     acronym = models.CharField(max_length=125, blank=False, null=False)
-    order_postion = models.IntegerField(default=0)
 
     def __str__(self):
         return u"%s" % self.name
