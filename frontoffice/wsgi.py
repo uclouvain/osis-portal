@@ -29,12 +29,17 @@ import sys
 import logging
 from django.core.wsgi import get_wsgi_application
 from pika.exceptions import ConnectionClosed, AMQPConnectionError, ChannelClosed
+import dotenv
 
 # The two following lines are mandatory for working with mod_wsgi on the servers
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..' )
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../frontoffice')
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "frontoffice.settings")
+dotenv.read_dotenv()
+
+SETTINGS_FILE = os.environ.get('DJANGO_SETTINGS_MODULE', 'frontoffice.settings.local')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", SETTINGS_FILE)
+
 application = get_wsgi_application()
 
 from osis_common.queue import queue_listener as common_queue_listener, callbacks as common_callback

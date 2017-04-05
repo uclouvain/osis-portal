@@ -31,7 +31,8 @@ import dotenv
 if __name__ == "__main__":
     dotenv.read_dotenv()
 
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "frontoffice.settings")
+    SETTINGS_FILE = os.environ.get('DJANGO_SETTINGS_MODULE', 'frontoffice.settings.local')
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", SETTINGS_FILE)
 
     from django.core.management import execute_from_command_line
 

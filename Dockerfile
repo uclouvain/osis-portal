@@ -5,5 +5,5 @@ RUN mkdir /code
 ADD requirements.txt /code/
 ADD . /code/
 WORKDIR /code
-RUN cp .env.example .env
+RUN cp .env.docker .env
 RUN pip install -r requirements.txt
