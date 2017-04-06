@@ -9,7 +9,7 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('internship', '0019_internship'),
+        ('internship', '0018_internship'),
     ]
 
     operations = [
