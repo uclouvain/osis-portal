@@ -69,8 +69,7 @@ def view_internship_home(request, cohort_id):
     return layout.render(request, "internship_home.html",
             {
                 'cohort': cohort,
-                'subscription_allowed': subscription_allowed,
-                'publication_allowed': publication_allowed
+                'subscription_allowed': subscription_allowed
             })
 
 @login_required
