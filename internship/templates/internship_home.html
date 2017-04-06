@@ -43,10 +43,17 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="row">
+                  {% if subscription_allowed %}
                     <div class="col-md-2 text-center"><i class="fa fa-archive" style="font-size: 400%; color: #6699FF;"></i></div>
                     <div class="col-md-5">
                         <h4 class="media-heading"><a href="{% url 'select_internship' cohort_id=cohort.id %}">{% trans 'choose_internships' %}</a></h4>
                     </div>
+                  {% else %}
+                    <div class="col-md-2 text-center"><i class="fa fa-archive" style="font-size: 400%; color: #CCC;"></i></div>
+                    <div class="col-md-5">
+                        <h4 class="media-heading" style="color: #CCC;">{% trans 'choose_internships' %}</h4>
+                    </div>
+                  {% endif %}
                 </div>
             </div>
             <div class="col-md-6">

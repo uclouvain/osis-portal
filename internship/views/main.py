@@ -30,6 +30,7 @@ from django.core.exceptions import MultipleObjectsReturned
 from django.shortcuts import redirect
 from django.forms import formset_factory
 from django.utils.translation import ugettext_lazy as _
+import datetime
 
 from base.views import layout
 import base.models as mdl_base
@@ -38,6 +39,7 @@ from internship.forms.form_select_speciality import SpecialityForm
 from internship.forms.form_offer_preference import OfferPreferenceFormSet, OfferPreferenceForm
 from dashboard.views import main as dash_main_view
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
+from internship.decorators.cohort_view_decorators import redirect_if_subscription_not_allowed
 from internship.decorators.global_view_decorators import redirect_if_multiple_registrations
 
 @login_required
@@ -63,11 +65,18 @@ def view_cohort_selection(request):
 @permission_required('internship.can_access_internship', raise_exception=True)
 def view_internship_home(request, cohort_id):
     cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
-    return layout.render(request, "internship_home.html", {'cohort': cohort})
+    subscription_allowed = cohort.subscription_start_date <= datetime.date.today() and datetime.date.today() <= cohort.subscription_end_date
+    return layout.render(request, "internship_home.html",
+            {
+                'cohort': cohort,
+                'subscription_allowed': subscription_allowed,
+                'publication_allowed': publication_allowed
+            })
 
 @login_required
 @redirect_if_multiple_registrations
 @redirect_if_not_in_cohort
+@redirect_if_subscription_not_allowed
 @permission_required('internship.can_access_internship', raise_exception=True)
 def view_internship_selection(request, cohort_id, internship_id=-1, speciality_id=-1):
     if int(internship_id) < 1:

@@ -26,6 +26,7 @@
 ############################################################################
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import MultipleObjectsReturned
+import datetime
 
 from base.views import layout
 from internship.models import internship_student_information as mdl_student_information
@@ -60,12 +61,14 @@ def view_student_resume(request, cohort_id):
     specialities = mdl_internship_speciality.filter_by_cohort(cohort)
     student_choices = mdl_internship_choice.search(student=student, specialities=specialities)
     cohort = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
+    publication_allowed  = cohort.publication_start_date <= datetime.date.today()
     return layout.render(request, "student_resume.html", {"student": student,
                                                           "student_information": student_information,
                                                           "student_affectations_with_address":
                                                               student_affectations_with_address,
                                                           "student_choices": student_choices,
                                                           "internships": internships,
+                                                          "publication_allowed": publication_allowed,
                                                           "cohort": cohort})
 
 

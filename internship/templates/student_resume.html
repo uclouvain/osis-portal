@@ -54,11 +54,13 @@
                         {% trans 'choices_received_by_administration' %}
                     </a>
                 </li>
+                {% if publication_allowed %}
                 <li role="presentation">
                     <a href="#affectation" aria-controls="affectation" role="tab" data-toggle="tab">
                         {% trans 'internship_affectation' %}
                     </a>
                 </li>
+                {% endif %}
             </ul>
         </div>
 
@@ -146,6 +148,7 @@
                 </div>
             </div>
 
+            {% if publication_allowed %}
             <div role="tabpanel" class="tab-pane" id="affectation">
                 {% for affectation, address in student_affectations_with_address %}
                 <div class="row">
@@ -158,6 +161,7 @@
                 </div>
                 {% endfor %}
             </div>
+            {% endif %}
 
         </div>
 
