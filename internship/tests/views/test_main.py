@@ -119,12 +119,12 @@ class TestSelectInternship(TestCase):
         self.offer_6 = test_internship_offer.create_specific_internship_offer(self.organization_5, self.speciality_2, cohort=self.cohort)
 
         period_9 = test_period.create_period("P9", cohort=self.cohort)
-        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship=self.offer_1, number_places=5).save()
-        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship=self.offer_2, number_places=5).save()
-        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship=self.offer_3, number_places=5).save()
-        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship=self.offer_4, number_places=5).save()
-        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship=self.offer_5, number_places=5).save()
-        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship=self.offer_6, number_places=5).save()
+        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship_offer=self.offer_1, number_places=5).save()
+        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship_offer=self.offer_2, number_places=5).save()
+        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship_offer=self.offer_3, number_places=5).save()
+        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship_offer=self.offer_4, number_places=5).save()
+        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship_offer=self.offer_5, number_places=5).save()
+        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship_offer=self.offer_6, number_places=5).save()
 
     def test_with_zero_choices(self):
         selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship_1.id,
