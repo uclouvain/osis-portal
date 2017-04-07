@@ -27,7 +27,8 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-        <li class="active">{% trans 'internships' %}</li>
+    <li><a href="{% url 'internship' %}">{{cohort.name}}</a></li>
+    <li class="active">{% trans 'internships' %}</li>
 {% endblock %}
 
 
@@ -39,25 +40,27 @@
 
 <div class="panel panel-default">
     <div class="panel panel-body">
-        <div class="alert alert-danger">
-            <p>{% trans 'select_contest'|safe %}</p>
-            <p><a href="{% url 'internship_student_edit' %}">{% trans 'link' %}</a> </p>
-
-        </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="row">
-                    <div class="col-md-2"><i class="fa fa-archive" style="font-size: 400%; color: #6699FF;"></i></div>
+                  {% if subscription_allowed %}
+                    <div class="col-md-2 text-center"><i class="fa fa-archive" style="font-size: 400%; color: #6699FF;"></i></div>
                     <div class="col-md-5">
-                        <h4 class="media-heading"><a href="{% url 'select_internship' %}">{% trans 'choose_internships' %}</a></h4>
+                        <h4 class="media-heading"><a href="{% url 'select_internship' cohort_id=cohort.id %}">{% trans 'choose_internships' %}</a></h4>
                     </div>
+                  {% else %}
+                    <div class="col-md-2 text-center"><i class="fa fa-archive" style="font-size: 400%; color: #CCC;"></i></div>
+                    <div class="col-md-5">
+                        <h4 class="media-heading" style="color: #CCC;">{% trans 'choose_internships' %}</h4>
+                    </div>
+                  {% endif %}
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="row">
-                    <div class="col-md-2"><i class="fa fa-hospital-o" style="font-size: 400%; color: #6699FF;"></i></div>
+                    <div class="col-md-2 text-center"><i class="fa fa-hospital-o" style="font-size: 400%; color: #6699FF;"></i></div>
                     <div class="col-md-5">
-                        <h4 class="media-heading"><a href="{% url 'hospitals_list' %}">{% trans 'hospital_list' %}</a></h4>
+                        <h4 class="media-heading"><a href="{% url 'hospitals_list' cohort_id=cohort.id %}">{% trans 'hospital_list' %}</a></h4>
                     </div>
                 </div>
             </div>
@@ -66,9 +69,9 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="row">
-                    <div class="col-md-2"><i class="fa fa-user" style="font-size: 400%; color: #6699FF;"></i></div>
+                    <div class="col-md-2 text-center"><i class="fa fa-user" style="font-size: 400%; color: #6699FF;"></i></div>
                     <div class="col-md-5">
-                        <h4 class="media-heading"><a href="{% url 'student_resume' %}">{% trans 'student_resume' %}</a></h4>
+                        <h4 class="media-heading"><a href="{% url 'student_resume' cohort_id=cohort.id %}">{% trans 'student_resume' %}</a></h4>
                     </div>
                 </div>
             </div>

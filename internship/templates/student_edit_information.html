@@ -27,8 +27,9 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li> <a href="{% url 'internship_home' %}">{% trans 'internship' %}</a> </li>
-    <li> <a href="{% url 'student_resume' %}">{% trans 'student_resume' %}</a> </li>
+    <li><a href="{% url 'internship' %}">{{cohort.name}}</a></li>
+    <li><a href="{% url 'internship_home' cohort_id=cohort.id %}">{% trans 'internships' %}</a> </li>
+    <li><a href="{% url 'student_resume' cohort_id=cohort.id %}">{% trans 'student_resume' %}</a> </li>
     <li class="active">{% trans 'edit_information' %}</li>
 {% endblock %}
 

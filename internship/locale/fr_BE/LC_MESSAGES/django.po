@@ -29,7 +29,7 @@ msgid	 "choices_received_by_administration"
 msgstr	 "Choix reçus de l'administration"
 
 msgid	 "choose_internships"
-msgstr	 "Choisissez vos stages aux choix"
+msgstr	 "Encodez vos choix de stages"
 
 msgid "choose_speciality"
 msgstr "Choisissez une spécialité"
@@ -148,3 +148,9 @@ msgstr "Troisième choix"
 
 msgid "website"
 msgstr "Site web"
+
+msgid "internship_choice_successfully_saved"
+msgstr "Vos choix ont bien été sauvés !"
+
+msgid "error_does_not_belong_to_any_cohort"
+msgstr "Il semblerait que vous ne soyez pas inscrit aux stages, nous vous recommandons de contacter votre secrétariat."

@@ -26,54 +26,70 @@
 ############################################################################
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import MultipleObjectsReturned
+import datetime
 
 from base.views import layout
 from internship.models import internship_student_information as mdl_student_information
 from internship.models import internship_student_affectation_stat as mdl_student_affectation
 from internship.models import organization_address as mdl_organization_address
 from internship.models import internship_choice as mdl_internship_choice
+from internship.models import internship as mdl_internship
+from internship.models import internship_speciality as mdl_internship_speciality
+from internship.models import cohort as mdl_internship_cohort
 from internship.forms import form_internship_student_information
 from base.models import student as mdl_student
 from base.models import person as mdl_person
 from dashboard.views import main as dash_main_view
+from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
+from internship.decorators.global_view_decorators import redirect_if_multiple_registrations
 
 
 @login_required
+@redirect_if_multiple_registrations
+@redirect_if_not_in_cohort
 @permission_required('internship.can_access_internship', raise_exception=True)
-def view_student_resume(request):
-    try:
-        student = mdl_student.find_by_user(request.user)
-    except MultipleObjectsReturned:
-        return dash_main_view.show_multiple_registration_id_error(request)
-    student_information = mdl_student_information.find_by_user(request.user)
+def view_student_resume(request, cohort_id):
+    cohort      = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
+    student     = mdl_student.find_by_user(request.user)
+    internships = mdl_internship.Internship.objects.filter(cohort=cohort)
+
+    student_information = mdl_student_information.find_by_user_and_cohort(request.user, cohort=cohort)
     student_affectations = mdl_student_affectation.search(student=student)
     student_affectations_with_address = \
         [(affectation, mdl_organization_address.get_by_organization(affectation.organization)) for affectation in
          student_affectations]
-    student_choices = mdl_internship_choice.search(student=student).order_by('internship_choice', 'choice')
+    specialities = mdl_internship_speciality.filter_by_cohort(cohort)
+    student_choices = mdl_internship_choice.search(student=student, specialities=specialities)
+    cohort = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
+    publication_allowed  = cohort.publication_start_date <= datetime.date.today()
     return layout.render(request, "student_resume.html", {"student": student,
                                                           "student_information": student_information,
                                                           "student_affectations_with_address":
                                                               student_affectations_with_address,
                                                           "student_choices": student_choices,
-                                                          "internships": range(1, 7)})
+                                                          "internships": internships,
+                                                          "publication_allowed": publication_allowed,
+                                                          "cohort": cohort})
 
 
 @login_required
+@redirect_if_not_in_cohort
 @permission_required('internship.can_access_internship', raise_exception=True)
-def edit_student_information(request):
+def edit_student_information(request, cohort_id):
+    cohort = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
+
     if request.method == "POST":
         form = form_internship_student_information.InternshipStudentInformationForm(request.POST)
         if form.is_valid():
             person = mdl_person.find_by_user(request.user)
-            save_from_form(form, person)
+            save_from_form(form, person, cohort)
     else:
-        student_information = mdl_student_information.find_by_user(request.user)
+        student_information = mdl_student_information.find_by_user_and_cohort(request.user, cohort=cohort)
         form = form_internship_student_information.InternshipStudentInformationForm(instance=student_information)
-    return layout.render(request, "student_edit_information.html", {"form": form})
+    return layout.render(request, "student_edit_information.html", {"form": form, "cohort": cohort})
 
 
-def save_from_form(form, person):
+def save_from_form(form, person, cohort):
     defaults = {
         "location": form.cleaned_data["location"],
         "postal_code": form.cleaned_data["postal_code"],
@@ -84,5 +100,5 @@ def save_from_form(form, person):
         "contest": form.cleaned_data["contest"],
     }
 
-    mdl_student_information.InternshipStudentInformation.objects.update_or_create(person=person,
+    mdl_student_information.InternshipStudentInformation.objects.update_or_create(person=person, cohort=cohort,
                                                                                   defaults=defaults)
