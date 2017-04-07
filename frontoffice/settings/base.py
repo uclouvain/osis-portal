@@ -177,6 +177,7 @@ LOGIN_URL = os.environ.get('LOGIN_URL', reverse_lazy('login'))
 OVERRIDED_LOGOUT_URL = os.environ.get('OVERRIDED_LOGOUT_URL', '')
 OVERRIDED_LOGIN_URL = os.environ.get('OVERRIDED_LOGIN_URL', '')
 LOGOUT_BUTTON = bool(os.environ.get('LOGOUT_BUTTON', True))
+CURRENT_URL = os.environ.get('CURRENT_URL', 'http://localhost:8000')
 
 
 # This has to be set in your .env with the actual url where you institution logo can be found.
