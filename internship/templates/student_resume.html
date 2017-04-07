@@ -27,7 +27,8 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li> <a href="{% url 'internship_home' %}">{% trans 'internship' %}</a> </li>
+    <li><a href="{% url 'internship' %}">{{cohort.name}}</a></li>
+    <li><a href="{% url 'internship_home' cohort_id=cohort.id %}">{% trans 'internships' %}</a> </li>
     <li class="active">{% trans 'student_resume' %}</li>
 {% endblock %}
 
@@ -53,11 +54,13 @@
                         {% trans 'choices_received_by_administration' %}
                     </a>
                 </li>
+                {% if publication_allowed %}
                 <li role="presentation">
                     <a href="#affectation" aria-controls="affectation" role="tab" data-toggle="tab">
                         {% trans 'internship_affectation' %}
                     </a>
                 </li>
+                {% endif %}
             </ul>
         </div>
 
@@ -122,7 +125,7 @@
                     </div>
                 </div>
                 <br>
-                <a role="button" class="btn btn-info" aria-label="Edit" href="{% url 'internship_student_edit' %}">
+                <a role="button" class="btn btn-info" aria-label="Edit" href="{% url 'internship_student_edit' cohort_id=cohort.id %}">
                     <span class="glyphicon glyphicon-edit" aria-hidden="true">
                     </span>
                     {% trans 'edit' %}
@@ -133,11 +136,11 @@
                 <br>
                 <div class="row">
                     {% for internship in internships %}
-                        <strong>{% trans 'internship' %} {{ internship }}</strong>
+                        <strong>{{ internship.name }}</strong>
                         <ul>
                         {% for choice in student_choices %}
-                            {% if choice.internship_choice == internship %}
-                                <li>{{ choice.organization }} | {{ choice.speciality }} |{{ choice.choice }}</li>
+                            {% if choice.internship_id == internship.id %}
+                                <li>{{ choice.organization }} | {{ choice.speciality }} | {{ choice.choice }}</li>
                             {% endif %}
                         {% endfor %}
                         </ul>
@@ -145,6 +148,7 @@
                 </div>
             </div>
 
+            {% if publication_allowed %}
             <div role="tabpanel" class="tab-pane" id="affectation">
                 {% for affectation, address in student_affectations_with_address %}
                 <div class="row">
@@ -157,6 +161,7 @@
                 </div>
                 {% endfor %}
             </div>
+            {% endif %}
 
         </div>
 

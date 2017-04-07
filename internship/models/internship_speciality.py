@@ -29,17 +29,16 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 class InternshipSpecialityAdmin(SerializableModelAdmin):
-    list_display = ('learning_unit', 'name', 'acronym', 'mandatory', 'order_postion')
-    fieldsets = ((None, {'fields': ('learning_unit', 'name', 'acronym', 'mandatory', 'order_postion')}),)
+    list_display = ('learning_unit', 'name', 'acronym')
+    fieldsets = ((None, {'fields': ('learning_unit', 'name', 'acronym')}),)
     raw_id_fields = ('learning_unit',)
 
 
 class InternshipSpeciality(SerializableModel):
     learning_unit = models.ForeignKey('base.LearningUnit')
+    cohort = models.ForeignKey('internship.Cohort', null=False)
     name = models.CharField(max_length=125, blank=False, null=False)
     acronym = models.CharField(max_length=125, blank=False, null=False)
-    mandatory = models.BooleanField(default=False)
-    order_postion = models.IntegerField(default=0)
 
     def __str__(self):
         return u"%s" % self.name
@@ -55,6 +54,5 @@ def find_by_id(a_id):
 def find_all():
     return InternshipSpeciality.objects.all()
 
-
-def find_non_mandatory():
-    return InternshipSpeciality.objects.filter(mandatory=False).order_by("name")
+def filter_by_cohort(cohort):
+    return InternshipSpeciality.objects.filter(cohort=cohort)

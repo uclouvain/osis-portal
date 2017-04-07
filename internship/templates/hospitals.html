@@ -27,7 +27,8 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li> <a href="{% url 'internship_home' %}">{% trans 'internship' %}</a> </li>
+    <li><a href="{% url 'internship' %}">{{cohort.name}}</a></li>
+    <li><a href="{% url 'internship_home' cohort_id=cohort.id %}">{% trans 'internships' %}</a> </li>
     <li class="active">{% trans 'hospitals' %}</li>
 {% endblock %}
 
@@ -49,7 +50,7 @@
                     {{ search_form.name.errors }}
                     <label for="{{ search_form.name.id_for_label }}">{% trans 'organization' %}</label>
                     <input type="text" class="form-control" id="{{ search_form.name.id_for_label }}"
-                           name="{{ search_form.name.html_name }}" placeholder="Organization">
+                      name="{{ search_form.name.html_name }}" placeholder="Organization" value="{{name}}">
                 </div>
                 <div class="fieldWrapper col-md-3 form-group">
                     {{ search_form.city.errors }}
@@ -58,7 +59,7 @@
                             name="{{ search_form.city.html_name }}"
                             class="form-control">
                         {% for x,y in search_form.fields.city.choices %}
-                            <option value="{{ x }}">
+                        <option value="{{ x }}" {% if city == y %} selected{% endif %}>
                                 {{ y }}
                             </option>
                         {% endfor %}

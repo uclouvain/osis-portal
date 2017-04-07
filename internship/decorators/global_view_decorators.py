@@ -1,4 +1,5 @@
-##############################################################################
+# -*- coding: utf-8 -*-
+############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -22,24 +23,20 @@
 #    at the root of the source code of this program.  If not,
 #    see http://www.gnu.org/licenses/.
 #
-##############################################################################
-from django.db import models
-from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
+############################################################################
+import base.models as mdl_base
+from functools import wraps
+from dashboard.views import main as dash_main_view
+from django.core.exceptions import MultipleObjectsReturned
 
+def redirect_if_multiple_registrations(function):
+    @wraps(function)
+    def wrapper(request, *args, **kwargs):
+        try:
+            mdl_base.student.find_by_user(request.user)
+        except MultipleObjectsReturned:
+            return dash_main_view.show_multiple_registration_id_error(request)
+        response = function(request, *args, **kwargs)
+        return response
+    return wrapper
 
-class PeriodAdmin(SerializableModelAdmin):
-    list_display = ('name', 'cohort', 'date_start', 'date_end')
-    fieldsets = ((None, {'fields': ('name', 'cohort', 'date_start', 'date_end')}),)
-
-
-class Period(SerializableModel):
-    name = models.CharField(max_length=255)
-    cohort = models.ForeignKey('internship.Cohort', null=False)
-    date_start = models.DateField(blank=False)
-    date_end = models.DateField(blank=False)
-
-    def find_by_cohort(cohort):
-        return InternshipOffer.objects.filter(cohort=cohort)
-
-    def __str__(self):
-        return u"%s" % self.name

@@ -27,19 +27,27 @@ from django.db import models
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
-class PeriodAdmin(SerializableModelAdmin):
-    list_display = ('name', 'cohort', 'date_start', 'date_end')
-    fieldsets = ((None, {'fields': ('name', 'cohort', 'date_start', 'date_end')}),)
+class InternshipAdmin(SerializableModelAdmin):
+    list_display = (
+            'name',
+            'speciality',
+            'cohort',
+            'length_in_periods')
+    fieldsets = ((None, {'fields':
+        (
+            'name',
+            'speciality',
+            'cohort',
+            'length_in_periods'
+        )}),)
 
 
-class Period(SerializableModel):
-    name = models.CharField(max_length=255)
+class Internship(SerializableModel):
+    name = models.CharField(max_length=255, blank=False)
+    speciality = models.ForeignKey('internship.InternshipSpeciality', null=True, blank=True)
     cohort = models.ForeignKey('internship.Cohort', null=False)
-    date_start = models.DateField(blank=False)
-    date_end = models.DateField(blank=False)
-
-    def find_by_cohort(cohort):
-        return InternshipOffer.objects.filter(cohort=cohort)
+    length_in_periods = models.IntegerField(null=False, default=1)
 
     def __str__(self):
         return u"%s" % self.name
+

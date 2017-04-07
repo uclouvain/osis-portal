@@ -1,4 +1,5 @@
-##############################################################################
+# -*- coding: utf-8 -*-
+############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -22,24 +23,17 @@
 #    at the root of the source code of this program.  If not,
 #    see http://www.gnu.org/licenses/.
 #
-##############################################################################
-from django.db import models
-from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
+############################################################################
+from django import template
+from django.template import Template
+from django.core.exceptions import ObjectDoesNotExist
 
+register = template.Library()
 
-class PeriodAdmin(SerializableModelAdmin):
-    list_display = ('name', 'cohort', 'date_start', 'date_end')
-    fieldsets = ((None, {'fields': ('name', 'cohort', 'date_start', 'date_end')}),)
-
-
-class Period(SerializableModel):
-    name = models.CharField(max_length=255)
-    cohort = models.ForeignKey('internship.Cohort', null=False)
-    date_start = models.DateField(blank=False)
-    date_end = models.DateField(blank=False)
-
-    def find_by_cohort(cohort):
-        return InternshipOffer.objects.filter(cohort=cohort)
-
-    def __str__(self):
-        return u"%s" % self.name
+@register.assignment_tag
+def choice_for_offer(internship_choices, offer, internship):
+    try:
+        choice = internship_choices.get(speciality_id=offer.speciality_id, organization_id=offer.organization_id, internship=internship).choice
+        return str(choice)
+    except ObjectDoesNotExist:
+        return None

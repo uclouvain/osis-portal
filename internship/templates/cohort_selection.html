@@ -27,19 +27,25 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'internship' %}">{{cohort.name}}</a></li>
-    <li><a href="{% url 'internship_home' cohort_id=cohort.id %}">{% trans 'internships' %}</a></li>
-    <li class="active">{% trans 'selection' %}</li>
+    <li class="active">{% trans 'internships' %}</li>
 {% endblock %}
+
 
 {% block content %}
 <div class="page-header">
     <h2>{% trans 'internships' %}</h2>
 </div>
 
+
 <div class="panel panel-default">
-    <div class="panel-body">
-        {% trans "selection_is_closed" %}
+    <div class="panel panel-body">
+        <div class="row">
+          {% for cohort in cohorts %}
+            <p>
+              <a href={% url 'internship_home' cohort_id=cohort.id %}>{{ cohort }}</a>
+            </p>
+          {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock %}
