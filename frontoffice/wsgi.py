@@ -35,7 +35,8 @@ import dotenv
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..' )
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../frontoffice')
 
-dotenv.read_dotenv()
+ENV_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+dotenv.read_dotenv(os.path.join(ENV_DIR, '.env'))
 
 SETTINGS_FILE = os.environ.get('DJANGO_SETTINGS_MODULE', 'frontoffice.settings.local')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", SETTINGS_FILE)

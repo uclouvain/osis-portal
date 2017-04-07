@@ -28,13 +28,13 @@ from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 import sys
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 # SECURITY Settings
 # Those settings are mandatory and have to be defined in your .env file
 SECRET_KEY = os.environ['SECRET_KEY']
-bool(os.environ.get('DEBUG', False))
+DEBUG = bool(os.environ.get('DEBUG', False))
 ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split()
 ADMIN_URL = os.environ['ADMIN_URL']
 ENVIRONMENT = os.environ['ENVIRONMENT']
@@ -157,11 +157,19 @@ QUEUE_EXCEPTION_LOGGER = os.environ.get('QUEUE_EXCEPTION_LOGGER', 'queue_excepti
 
 
 # Email Settings
+# By default Email are saved in the folder defined by EMAIL_FILE_PATH
+# If you want ti use the smtp backend,
+# you have to define EMAIL_BACKEND, EMAIL_HOST and EMAIL_PORT in your .env if the default values doesn't match.
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'osis@localhost.be')
 SERVER_EMAIL = os.environ.get('SERVER_EMAIL', DEFAULT_FROM_EMAIL)
 LOGO_EMAIL_SIGNATURE_URL = os.environ.get('LOGO_EMAIL_SIGNATURE_URL', '')
 EMAIL_PRODUCTION_SENDING = bool(os.environ.get('EMAIL_PRODUCTION_SENDING', False))
 COMMON_EMAIL_RECEIVER = os.environ.get('COMMON_EMAIL_RECEIVER', 'osis@localhost.org')
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.filebased.EmailBackend')
+EMAIL_FILE_PATH = os.environ.get('EMAIL_FILE_PATH', os.path.join(BASE_DIR, "base/tests/sent_mails"))
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
+EMAIL_PORT = os.environ.get('EMAIL_PORT', 25)
+SEND_BROKEN_LINK_EMAILS = bool(os.environ.get('SEND_BROKEN_LINK_EMAILS', True))
 
 
 # Authentication settings
