@@ -96,13 +96,13 @@ msgid "no_student_with_this_registration_id"
 msgstr "No student with this registration id"
 
 msgid "performance"
-msgstr "Performance"
+msgstr "My exam marks"
 
 msgid "performance_administration"
-msgstr "Performance administration"
+msgstr "Exam marks administration"
 
 msgid "performance_results"
-msgstr "Performance results"
+msgstr "Results"
 
 msgid "program"
 msgstr "Program"
@@ -114,7 +114,7 @@ msgid "sept"
 msgstr "Sept."
 
 msgid "student_performance"
-msgstr "Performances of a student"
+msgstr "Exam marks of a student"
 
 msgid "text_mean_exprimed_for_20"
 msgstr "Attention : From June 2009, the score is expressed to a maximum of 20."
@@ -144,16 +144,19 @@ msgid "performance_result_fetch_timed_out"
 msgstr "The server is actually overloaded. Please excuse us and try again later."
 
 msgid "performance_results_general_legal_announcement"
-msgstr "Ce composant reflète l'état des informations enregistrées dans les bases de données officielles de l'université au moment de leur affichage et selon des modalités de diffusion décidées par le secrétariat de votre faculté."
+msgstr "This component reflects the status of the information stored in the official databases of the university at the "
+"time of publication and according to the rules of publication decided by the secretariat of your faculty."
 
 msgid "performance_result_note_legal_announcement"
-msgstr "Cette feuille de résultats est destinée à la communication entre la faculté et les éudiants. Seule l'annexe au diplôme que l'étudiant reçoit avec celui-ci et qui reprend la liste de tous les cours suivis durant un programme d'étude et des points obtenus peut être considérée comme un transcript officiel."
+msgstr "This results are intended as communication between faculty and students. Only the appendix to the diploma, "
+"which lists all the courses taken during a program of study and points obtained, can be considered as an official "
+"transcript."
 
 msgid "performance_result_note_not_autorized"
 msgstr "The publication of the notes from the {} session was not authorized by our faculty."
 
 msgid "CESSATION"
-msgstr "Cessation"
+msgstr "Interruption"
 
 msgid "CYCLE"
 msgstr "Cycle"
@@ -162,7 +165,7 @@ msgid "CONDITION"
 msgstr "Condition"
 
 msgid "INSCRIT"
-msgstr "Inscrit"
+msgstr "Registered"
 
 msgid "JANUARY"
 msgstr "january"
