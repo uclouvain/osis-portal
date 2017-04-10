@@ -163,7 +163,10 @@ def assign_speciality_for_internship(request, cohort_id, internship_id):
     return redirect("select_internship_speciality", cohort_id=cohort_id, internship_id=internship_id, speciality_id=speciality_id)
 
 def remove_previous_choices(student, internship, speciality):
-    previous_choices = mdl_internship.internship_choice.search(student=student, internship=internship, speciality=speciality)
+    if internship.speciality_id != None:
+        previous_choices = mdl_internship.internship_choice.search(student=student, internship=internship, speciality=speciality)
+    else:
+        previous_choices = mdl_internship.internship_choice.search(student=student, internship=internship)
     if previous_choices:
         previous_choices.delete()
 
