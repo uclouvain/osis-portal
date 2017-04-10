@@ -98,6 +98,12 @@ msgstr "Soumettre au professeur"
 msgid "dissertation"
 msgstr "Mémoire"
 
+msgid "dissertation_creation"
+msgstr "Création du mémoire"
+
+msgid "dissertation_edit"
+msgstr "Modification du mémoire"
+
 msgid "dissertations"
 msgstr "Mémoires"
 
