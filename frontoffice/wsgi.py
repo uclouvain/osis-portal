@@ -47,7 +47,7 @@ except KeyError as ke:
     print("Error loading application.")
     print("The following environment var is not defined : {}".format(str(ke)))
     print("Check the following possible causes :")
-    print(" - You don't have a .env file. You can copy .env.example to .env")
+    print(" - You don't have a .env file. You can copy .env.example to .env to use default")
     print(" - Mandatory variables are not defined in your .env file.")
     sys.exit("SettingsKeyError")
 except ImportError as ie:

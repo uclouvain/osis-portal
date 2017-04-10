@@ -35,6 +35,14 @@ INSTALLED_APPS += (
     'attestation',
 )
 
+# Tests settings
+TESTING = 'test' in sys.argv
+if TESTING:
+    # add test packages that have specific models for tests
+    INSTALLED_APPS = INSTALLED_APPS + (
+        'osis_common.tests',
+    )
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
