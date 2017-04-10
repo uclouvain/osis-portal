@@ -210,13 +210,13 @@ def dissertation_new(request):
                 memory = form.save()
                 dissertation_update.add(request, memory, memory.status, justification="student_creation_dissertation")
                 return redirect('dissertation_detail', pk=memory.pk)
-            else:
-                form.fields["offer_year_start"].queryset = offer_year.find_by_student_enrollment(student)
-                form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offers(offers)
         else:
             form = DissertationForm(initial={'active': True, 'author': student})
-            form.fields["offer_year_start"].queryset = offer_year.find_by_student_enrollment(student)
-            form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offers(offers)
+
+        all_offer_propositions_offers = offer_proposition.get_all_offers()
+        form.fields["offer_year_start"].queryset = \
+            offer_year.find_by_student_enrollment_and_offers(student, all_offer_propositions_offers)
+        form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offers(offers)
         return layout.render(request, 'dissertation_form.html',
                              {'form': form,
                               'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
