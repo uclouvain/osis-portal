@@ -78,11 +78,12 @@ def view_internship_home(request, cohort_id):
 @redirect_if_subscription_not_allowed
 @permission_required('internship.can_access_internship', raise_exception=True)
 def view_internship_selection(request, cohort_id, internship_id=-1, speciality_id=-1):
+    cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
     if int(internship_id) < 1:
-        return redirect(view_internship_selection, cohort_id=cohort_id, internship_id=1)
+        current_internship = mdl_internship.internship.Internship.objects.filter(cohort=cohort).first()
+        return redirect(view_internship_selection, cohort_id=cohort_id, internship_id=current_internship.id)
 
     student            = mdl_base.student.find_by_user(request.user)
-    cohort             = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
     internships        = mdl_internship.internship.Internship.objects.filter(cohort=cohort)
     current_internship = internships.get(pk=internship_id)
     specialities       = mdl_internship.internship_speciality.filter_by_cohort(cohort)
@@ -98,7 +99,7 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
 
     if current_internship.speciality != None:
         speciality = current_internship.speciality
-        selectable_offers = mdl_internship.internship_offer.InternshipOffer.objects.filter(internship=current_internship, cohort=cohort)
+        selectable_offers = mdl_internship.internship_offer.InternshipOffer.objects.filter(internship=current_internship, cohort=cohort).order_by("organization__reference")
     else:
         speciality = specialities.filter(pk=speciality_id).first()
         selectable_offers = mdl_internship.internship_offer.find_selectable_by_speciality_and_cohort(speciality=speciality, cohort=cohort)
