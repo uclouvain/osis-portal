@@ -99,10 +99,13 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
 
     if current_internship.speciality != None:
         speciality = current_internship.speciality
-        selectable_offers = mdl_internship.internship_offer.InternshipOffer.objects.filter(internship=current_internship, cohort=cohort).order_by("organization__reference")
+        selectable_offers = mdl_internship.internship_offer.InternshipOffer.objects.filter(internship=current_internship, cohort=cohort, selectable=True, master__isnull=False).order_by("organization__reference")
     else:
         speciality = specialities.filter(pk=speciality_id).first()
+        non_mandatory_offers = mdl_internship.internship_offer.find_selectable_by_cohort(cohort=cohort)
         selectable_offers = mdl_internship.internship_offer.find_selectable_by_speciality_and_cohort(speciality=speciality, cohort=cohort)
+        speciality_ids = non_mandatory_offers.values_list("speciality_id", flat=True)
+        specialities = specialities.filter(id__in=speciality_ids)
 
     offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet,
                                             extra=len(selectable_offers), min_num=len(selectable_offers),
@@ -163,7 +166,10 @@ def assign_speciality_for_internship(request, cohort_id, internship_id):
     return redirect("select_internship_speciality", cohort_id=cohort_id, internship_id=internship_id, speciality_id=speciality_id)
 
 def remove_previous_choices(student, internship, speciality):
-    previous_choices = mdl_internship.internship_choice.search(student=student, internship=internship, speciality=speciality)
+    if internship.speciality_id != None:
+        previous_choices = mdl_internship.internship_choice.search(student=student, internship=internship, speciality=speciality)
+    else:
+        previous_choices = mdl_internship.internship_choice.search(student=student, internship=internship)
     if previous_choices:
         previous_choices.delete()
 
