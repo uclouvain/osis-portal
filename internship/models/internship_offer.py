@@ -57,10 +57,10 @@ class InternshipOffer(SerializableModel):
 
 
 def find_selectable_by_speciality_and_cohort(speciality, cohort):
-    return InternshipOffer.objects.filter(speciality=speciality, cohort=cohort, internship=None, selectable=True, master__isnull=False).order_by("organization__reference")
+    return InternshipOffer.objects.filter(speciality=speciality, cohort=cohort, internship=None, selectable=True).order_by("organization__reference")
 
 def find_selectable_by_cohort(cohort):
-    return InternshipOffer.objects.filter(cohort=cohort, internship=None, selectable=True, master__isnull=False).order_by("organization__reference")
+    return InternshipOffer.objects.filter(cohort=cohort, internship=None, selectable=True).order_by("organization__reference")
 
 def find_by_speciality(speciality):
     return InternshipOffer.objects.filter(speciality=speciality)
