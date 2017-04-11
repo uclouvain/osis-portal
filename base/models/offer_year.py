@@ -63,9 +63,9 @@ def find_by_offer(offers):
     return OfferYear.objects.filter(offer__in=offers)
 
 
-def find_by_student_enrollment(student):
+def find_by_student(student):
     return OfferYear.objects.filter(offerenrollment__student=student).order_by("academic_year__year", "acronym")
 
 
-def find_by_student_enrollment_and_offers(student, offers):
-    return find_by_student_enrollment(student).filter(offer__in=offers)
+def find_by_student_and_offers(student, offers):
+    return find_by_student(student).filter(offer__in=offers)

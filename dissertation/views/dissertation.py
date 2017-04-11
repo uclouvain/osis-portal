@@ -215,7 +215,7 @@ def dissertation_new(request):
 
         all_offer_propositions_offers = offer_proposition.get_all_offers()
         form.fields["offer_year_start"].queryset = \
-            offer_year.find_by_student_enrollment_and_offers(student, all_offer_propositions_offers)
+            offer_year.find_by_student_and_offers(student, all_offer_propositions_offers)
         form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offers(offers)
         return layout.render(request, 'dissertation_form.html',
                              {'form': form,
