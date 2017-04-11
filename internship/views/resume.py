@@ -34,6 +34,7 @@ from internship.models import internship_student_affectation_stat as mdl_student
 from internship.models import organization_address as mdl_organization_address
 from internship.models import internship_choice as mdl_internship_choice
 from internship.models import internship as mdl_internship
+from internship.models import period as mdl_period
 from internship.models import internship_speciality as mdl_internship_speciality
 from internship.models import cohort as mdl_internship_cohort
 from internship.forms import form_internship_student_information
@@ -54,7 +55,9 @@ def view_student_resume(request, cohort_id):
     internships = mdl_internship.Internship.objects.filter(cohort=cohort)
 
     student_information = mdl_student_information.find_by_user_and_cohort(request.user, cohort=cohort)
-    student_affectations = mdl_student_affectation.search(student=student)
+    periods = mdl_period.Period.objects.filter(cohort=cohort)
+    period_ids = periods.values_list("pk", flat=True)
+    student_affectations = mdl_student_affectation.InternshipStudentAffectationStat.objects.filter(student=student, period_id__in=period_ids).order_by("period__name")
     student_affectations_with_address = \
         [(affectation, mdl_organization_address.get_by_organization(affectation.organization)) for affectation in
          student_affectations]
