@@ -34,7 +34,7 @@ def create_internship_offer(cohort=None):
     organization = test_organization.create_organization()
     speciality = test_internship_speciality.create_speciality()
     offer = internship_offer.InternshipOffer(speciality=speciality, organization=organization, title="offer_test", cohort=cohort,
-                                             maximum_enrollments=20)
+                                             maximum_enrollments=20, master="Dr. Test")
     offer.save()
     return offer
 
@@ -43,7 +43,7 @@ def create_specific_internship_offer(organization, speciality, title="offer_test
     if cohort == None:
         cohort = CohortFactory()
     offer = internship_offer.InternshipOffer(speciality=speciality, organization=organization, title=title, cohort=cohort,
-                                             maximum_enrollments=20)
+                                             maximum_enrollments=20, master="Dr. Test")
     offer.save()
     return offer
 
@@ -80,10 +80,10 @@ class TestInternshipOffer(TestCase):
         actual = internship_offer.get_number_selectable(self.offer.cohort)
         self.assertEqual(expected, actual)
 
-    def test_find_selectable_by_speciality(self):
+    def test_find_selectable_by_speciality_and_cohort(self):
         speciality = test_internship_speciality.create_speciality("OTHER", "OTHER", cohort=self.offer.cohort)
         organization = test_organization.create_organization("ORG", "ORG", "02", cohort=self.offer.cohort)
-        other_offer = create_specific_internship_offer(organization, speciality, "other_offer", cohort=self.offer.cohort)
+        other_offer = create_specific_internship_offer(organization, speciality, title="other_offer", cohort=self.offer.cohort)
 
         actual = list(internship_offer.find_selectable_by_speciality_and_cohort(self.offer.speciality, self.offer.cohort))
         self.assertEqual(len(actual), 1)
