@@ -57,13 +57,6 @@
 
 
         {% if current_internship.speciality == None %}
-        <div class="alert alert-warning alert-dismissible" role="alert">
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-              {% trans 'internship_selection_warning_message'|safe %}
-        </div>
-
         <div class="row">
             <form action="{% url 'assign_speciality' internship_id=current_internship.id cohort_id=cohort.id %}"  method="post">
                 {% csrf_token %}
