@@ -87,7 +87,7 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
     internships        = mdl_internship.internship.Internship.objects.filter(cohort=cohort)
     current_internship = internships.get(pk=internship_id)
     specialities       = mdl_internship.internship_speciality.filter_by_cohort(cohort)
-    internship_choices = mdl_internship.internship_choice.InternshipChoice.objects.filter(speciality_id__in=specialities, internship=current_internship)
+    internship_choices = mdl_internship.internship_choice.InternshipChoice.objects.filter(speciality_id__in=specialities, internship=current_internship, student=student)
     current_choice     = internship_choices.filter(internship=current_internship).first()
 
     is_open = mdl_internship.internship_offer.get_number_selectable(cohort) > 0
