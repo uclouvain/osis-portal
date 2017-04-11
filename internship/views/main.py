@@ -99,7 +99,7 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
 
     if current_internship.speciality != None:
         speciality = current_internship.speciality
-        selectable_offers = mdl_internship.internship_offer.InternshipOffer.objects.filter(internship=current_internship, cohort=cohort, selectable=True, master__isnull=False).order_by("organization__reference")
+        selectable_offers = mdl_internship.internship_offer.InternshipOffer.objects.filter(internship=current_internship, cohort=cohort, selectable=True).order_by("organization__reference")
     else:
         speciality = specialities.filter(pk=speciality_id).first()
         non_mandatory_offers = mdl_internship.internship_offer.find_selectable_by_cohort(cohort=cohort)
