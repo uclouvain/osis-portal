@@ -84,7 +84,7 @@ msgid "delete_adviser_role_confirmation_message"
 msgstr "You are ready to delete this jury member.  Are you sure you want to continue ?"
 
 msgid "desc_lnk_dissertations"
-msgstr "List of dissertations which I am linked to"
+msgstr "My dissertations projects"
 
 msgid "desc_lnk_propositions_dissertations"
 msgstr "Dissertation subjects submitted by teachers"
