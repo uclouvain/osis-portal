@@ -56,7 +56,7 @@ class OfferProposition(SerializableModel):
 
 
 def get_all_offers():
-    offer_propositions = list(OfferProposition.objects.all())
+    offer_propositions = list(OfferProposition.objects.all().select_related('offer'))
     return [obj.offer for obj in offer_propositions]
 
 
