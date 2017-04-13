@@ -51,7 +51,7 @@ def home(request):
     else:
         attestation_statuses_json_dict = None
     data = _make_attestation_data(attestation_statuses_json_dict, student)
-    return layout.render(request, "attestation_home.html", data)
+    return layout.render(request, "attestation_home_student.html", data)
 
 
 @login_required
@@ -84,7 +84,7 @@ def visualize_student_attestations(request, registration_id):
     json_message = _make_registration_json_message(student.registration_id)
     attestation_statuses_json_dict = student_attestation_status.fetch_json_attestation_statuses(json_message)
     data = _make_attestation_data(attestation_statuses_json_dict, student)
-    return layout.render(request, "attestation_home.html", data)
+    return layout.render(request, "attestation_home_admin.html", data)
 
 
 @login_required
