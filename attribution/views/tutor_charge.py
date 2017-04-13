@@ -229,9 +229,10 @@ def get_url_learning_unit_year(a_learning_unit_year):
     return None
 
 
-def get_students(a_learning_unit_year, a_tutor):
-
+def get_students(a_learning_unit_year_id, a_tutor):
+    a_learning_unit_year = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year_id)
     return get_learning_unit_years_list(a_learning_unit_year, a_tutor)
+
 
 def load_students(a_learning_unit_year, a_tutor, request):
     students_list = []
@@ -249,7 +250,6 @@ def load_students(a_learning_unit_year, a_tutor, request):
 def show_students_admin(request, a_learning_unit_year, a_tutor):
     return render(request, "students_list_admin.html",
                   load_students(a_learning_unit_year, a_tutor, request))
-
 
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
@@ -313,6 +313,7 @@ def get_session_value(session_results, month_session, variable_to_get):
 
 
 def set_student_for_display(learning_unit_enrollment):
+
     session_results = get_sessions_results(learning_unit_enrollment.offer_enrollment.student.registration_id,
                                            learning_unit_enrollment.learning_unit_year,
                                            learning_unit_enrollment.offer_enrollment.offer_year.acronym)
@@ -363,9 +364,7 @@ def get_learning_unit_years_list(a_learning_unit_year, a_tutor):
     learning_unit_years_allocated = []
     for lu in mdl_base.learning_unit_year.find_by_acronym(a_learning_unit_year.acronym,
                                                           a_learning_unit_year.academic_year):
-        attribution = mdl_attribution.attribution.search(a_tutor, lu)
-        if attribution.exists():
-            learning_unit_years_allocated.append(lu)
+        learning_unit_years_allocated.append(lu)
 
     return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(learning_unit_years_allocated)
 
@@ -394,4 +393,4 @@ def select_tutor_attributions(request):
 def visualize_tutor_attributions(request, global_id):
     tutor = mdl_base.tutor.find_by_person_global_id(global_id)
     data = get_teaching_charge_data(tutor.person,  get_current_academic_year())
-    return render(request, "tutor_charge_admin.html", data)
+    return render(request, "tutor_charge.html", data)
