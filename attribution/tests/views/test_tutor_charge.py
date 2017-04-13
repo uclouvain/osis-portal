@@ -62,11 +62,11 @@ class TutorChargeTest(TestCase):
     def init_data(self):
         self.create_tutor()
         self.data = []
-        self.data.append(self.create_learning_unit_year_annual_data(CURRENT_YEAR))
-        self.data.append(self.create_learning_unit_year_annual_data(NEXT_YEAR))
+        self.data.append(self.create_lu_yr_annual_data(CURRENT_YEAR))
+        self.data.append(self.create_lu_yr_annual_data(NEXT_YEAR))
         Group.objects.get_or_create(name='students')
 
-    def create_learning_unit_year_annual_data(self, a_year):
+    def create_lu_yr_annual_data(self, a_year):
         an_academic_yr = test_academic_year.create_academic_year_with_year(a_year)
         an_academic_yr.year = a_year
         a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({

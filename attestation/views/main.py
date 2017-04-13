@@ -26,6 +26,7 @@
 import json
 
 from django.contrib import messages
+from django.core.exceptions import MultipleObjectsReturned
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.translation import ugettext_lazy as _
@@ -34,14 +35,21 @@ from base.forms.base_forms import RegistrationIdForm
 from base.models import student as student_mdl, person as person_mdl
 from attestation.queues import student_attestation_status, student_attestation
 from base.views import layout
+from dashboard.views import main as dash_main_view
 
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def home(request):
-    student = student_mdl.find_by_user(request.user)
-    json_message = _make_registration_json_message(student.registration_id)
-    attestation_statuses_json_dict = student_attestation_status.fetch_json_attestation_statuses(json_message)
+    try:
+        student = student_mdl.find_by_user(request.user)
+    except MultipleObjectsReturned:
+        return dash_main_view.show_multiple_registration_id_error(request)
+    if student:
+        json_message = _make_registration_json_message(student.registration_id)
+        attestation_statuses_json_dict = student_attestation_status.fetch_json_attestation_statuses(json_message)
+    else:
+        attestation_statuses_json_dict = None
     data = _make_attestation_data(attestation_statuses_json_dict, student)
     return layout.render(request, "attestation_home_student.html", data)
 
@@ -49,7 +57,10 @@ def home(request):
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def download_attestation(request, academic_year, attestation_type):
-    student = student_mdl.find_by_user(request.user)
+    try:
+        student = student_mdl.find_by_user(request.user)
+    except MultipleObjectsReturned:
+        return dash_main_view.show_multiple_registration_id_error(request)
     attestation_pdf = student_attestation.fetch_student_attestation(student.person.global_id,
                                                                     academic_year,
                                                                     attestation_type)

@@ -31,10 +31,10 @@ from django.utils.translation import ugettext_lazy as _
 
 class InternshipStudentInformationAdmin(SerializableModelAdmin):
     list_display = ('person', 'location', 'postal_code', 'city', 'country', 'latitude', 'longitude', 'email',
-                    'phone_mobile', 'contest')
+                    'phone_mobile', 'contest', 'cohort')
     fieldsets = ((None, {'fields': ('person', 'location', 'postal_code', 'city', 'latitude', 'longitude', 'country',
-                                    'email', 'phone_mobile', 'contest')}),)
-    raw_id_fields = ('person',)
+                                    'email', 'phone_mobile', 'contest', 'cohort')}),)
+    raw_id_fields = ('person', 'cohort')
     list_filter = ('contest', 'country')
     search_fields = ['person__user__username', 'person__last_name', 'person__first_name']
 
@@ -43,6 +43,7 @@ class InternshipStudentInformation(SerializableModel):
     TYPE_CHOICE = (('SPECIALIST', _('specialist')),
                    ('GENERALIST', _('generalist')))
     person = models.ForeignKey('base.Person')
+    cohort = models.ForeignKey('internship.Cohort')
     location = models.CharField(max_length=255)
     postal_code = models.CharField(max_length=20)
     city = models.CharField(max_length=255)
@@ -57,9 +58,9 @@ class InternshipStudentInformation(SerializableModel):
         return u"%s" % self.person
 
 
-def find_by_user(a_user):
+def find_by_user_and_cohort(user, cohort):
     try:
-        return InternshipStudentInformation.objects.get(person__user=a_user)
+        return InternshipStudentInformation.objects.get(person__user=user, cohort=cohort)
     except ObjectDoesNotExist:
         return None
 
@@ -69,3 +70,6 @@ def find_by_person(person):
         return InternshipStudentInformation.objects.get(person=person)
     except ObjectDoesNotExist:
         return None
+
+def filter_by_cohort(cohort):
+    return InternshipStudentInformation.objects.filter(cohort=cohort)

@@ -53,7 +53,7 @@ class ExamEnrollmentSubmittedAdmin(admin.ModelAdmin):
 
 
 class ExamEnrollmentSubmitted(models.Model):
-    offer_enrollment = models.ForeignKey('base.OfferEnrollment')
+    offer_enrollment = models.ForeignKey('base.OfferEnrollment', on_delete=models.CASCADE)
     document = JSONField()
 
     def __str__(self):

@@ -29,7 +29,7 @@
 {% block breadcrumb %}
     {% if perms.base.is_faculty_administrator %}
         <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'faculty_administration' %}</a></li>
-        <li><a id="lnk_performance_administration" href="{% url 'performance_administration' %}">{% trans 'peformance_administration' %}</a></li>
+        <li><a id="lnk_performance_administration" href="{% url 'performance_administration' %}">{% trans 'performance_administration' %}</a></li>
     {% endif %}
         <li class="active">{% trans 'performance' %}</li>
 {% endblock %}
@@ -42,6 +42,7 @@
 
 {% include "template_messages.html" %}
 
+{% if student %}
 <div class="alert alert-info" role="alert">
     {% trans 'performance_results_general_legal_announcement' %}
 </div>
@@ -95,4 +96,5 @@
         </table>
     {% endif %}
 </div>
+{% endif %}
 {% endblock %}

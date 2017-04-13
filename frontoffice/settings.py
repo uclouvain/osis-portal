@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -63,15 +63,13 @@ INSTALLED_APPS = (
     'ckeditor',
     'reference',
     'base',
-    'admission',
-    'enrollments',
     'dashboard',
     'performance',
     'attribution',
     'dissertation',
     'internship',
     'exam_enrollment',
-    'attestation',
+    'attestation'
 )
 
 # check if we are testing right now
@@ -118,7 +116,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
-                'base.views.common.installed_applications_context_processor',
+                'base.views.common.common_context_processor',
             ],
         },
     },
@@ -129,11 +127,11 @@ WSGI_APPLICATION = 'frontoffice.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'osis_front_dev',
-        'USER': os.environ.get("POSTGRES_USER") or "osis_usr",
-        'PASSWORD': os.environ.get("POSTGRES_PASSWORD") or "osis",
-        'HOST': os.environ.get("POSTGRES_HOST") or "127.0.0.1",
-        'PORT': '5432',
+        'NAME': os.environ.get("DATABASE_NAME", 'osis_front_dev'),
+        'USER': os.environ.get("POSTGRES_USER", 'osis_usr'),
+        'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'osis'),
+        'HOST': os.environ.get("POSTGRES_HOST", '127.0.0.1'),
+        'PORT': os.environ.get("POSTGRES_PORT", '5432'),
     },
 }
 
@@ -154,7 +152,7 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
-            'level':'DEBUG',
+            'level': 'DEBUG',
         },
     },
     'loggers': {
@@ -267,10 +265,10 @@ QUEUES = {
     }
 }
 
-
 LOGIN_URL=reverse_lazy('login')
 OVERRIDED_LOGOUT_URL = ''
 OVERRIDED_LOGIN_URL = ''
+LOGOUT_BUTTON = True
 
 # This has to be replaced by the actual url where you institution logo can be found.
 # Ex : LOGO_INSTITUTION_URL = 'https://www.google.be/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'
@@ -279,10 +277,6 @@ LOGO_INSTITUTION_URL = os.path.join(BASE_DIR, "base/static/img/logo_institution.
 
 LOGO_EMAIL_SIGNATURE_URL = ''
 LOGO_OSIS_URL = ''
-
-LOCALE_PATHS = (
-    "/admission/locale",
-)
 
 EMAIL_PRODUCTION_SENDING = False
 COMMON_EMAIL_RECEIVER = 'osis@localhost.org'
@@ -320,22 +314,18 @@ PERFORMANCE_CONFIG = {
 }
 
 ATTESTATION_CONFIG = {
-    'UPDATE_DELTA_HOURS_DEFAULT': 72,
-    'SERVER_TO_FETCH_URL': '',
-    'ATTESTATION_PATH': '',
-    'SERVER_TO_FETCH_USER': '',
-    'SERVER_TO_FETCH_PASSWORD': '',
+    'UPDATE_DELTA_HOURS_DEFAULT': os.environ.get("ATTESTATION_UPDATE_DELTA_HOURS", 72),
+    'SERVER_TO_FETCH_URL': os.environ.get("ATTESTATION_API_URL", ''),
+    'ATTESTATION_PATH': os.environ.get("ATTESTATION_API_PATH", ''),
+    'SERVER_TO_FETCH_USER': os.environ.get("ATTESTATION_API_USER", ''),
+    'SERVER_TO_FETCH_PASSWORD': os.environ.get("ATTESTATION_API_PASSWORD", ''),
 }
 
 try:
     from frontoffice.server_settings import *
     try:
-        LOCALE_PATHS = LOCALE_PATHS + SERVER_LOCALE_PATHS
+        LOCALE_PATHS = SERVER_LOCALE_PATHS
     except NameError:
         pass
 except ImportError:
     pass
-
-if 'admission' in INSTALLED_APPS:
-    ADMISSION_LOGIN_URL = reverse_lazy('admission_login')
-    ADMISSION_LOGIN_REDIRECT_URL = reverse_lazy('admission')

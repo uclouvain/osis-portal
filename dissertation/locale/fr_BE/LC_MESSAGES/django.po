@@ -84,7 +84,7 @@ msgid "delete_adviser_role_confirmation_message"
 msgstr "Vous allez définitivement supprimer ce membre du jury. Êtes-vous certain de vouloir continuer ?"
 
 msgid "desc_lnk_dissertations"
-msgstr "Liste des projets de mémoires auxquels je suis relié."
+msgstr "Mes projets de mémoires"
 
 msgid "desc_lnk_propositions_dissertations"
 msgstr "Sujets de mémoire proposés par les enseignants"
@@ -97,6 +97,12 @@ msgstr "Soumettre au professeur"
 
 msgid "dissertation"
 msgstr "Mémoire"
+
+msgid "dissertation_creation"
+msgstr "Création du mémoire"
+
+msgid "dissertation_edit"
+msgstr "Modification du mémoire"
 
 msgid "dissertations"
 msgstr "Mémoires"

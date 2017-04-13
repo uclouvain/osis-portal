@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -229,10 +229,9 @@ def get_url_learning_unit_year(a_learning_unit_year):
     return None
 
 
-def get_students(a_learning_unit_year_id, a_person):
-    a_learning_unit_year = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year_id)
-    return get_learning_unit_years_list(a_learning_unit_year, mdl_base.tutor.find_by_person(a_person))
+def get_students(a_learning_unit_year, a_tutor):
 
+    return get_learning_unit_years_list(a_learning_unit_year, a_tutor)
 
 def load_students(a_learning_unit_year, a_tutor, request):
     students_list = []

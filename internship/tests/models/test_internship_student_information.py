@@ -27,11 +27,15 @@ from django.contrib.auth.models import User
 from internship.models import internship_student_information as mdl_student_information
 from base.tests.models import test_person
 from django.test import TestCase
+from internship.tests.factories.cohort import CohortFactory
 
+def create_student_information(user, cohort=None, person=None):
+    if person == None:
+        person = test_person.create_person_with_user(user)
 
-def create_student_information(user):
-    person = test_person.create_person_with_user(user)
-    student_information = mdl_student_information.InternshipStudentInformation(person=person, location="location",
+    if cohort == None:
+        cohort = CohortFactory()
+    student_information = mdl_student_information.InternshipStudentInformation(person=person, location="location", cohort=cohort,
                                                                                postal_code="00", city="city",
                                                                                country="country")
     student_information.save()
@@ -40,25 +44,25 @@ def create_student_information(user):
 
 class TestFindByUser(TestCase):
     def setUp(self):
+        self.cohort = CohortFactory()
         self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
 
     def test_with_no_data(self):
-        student_information = mdl_student_information.find_by_user(self.user)
+        student_information = mdl_student_information.find_by_user_and_cohort(self.user, self.cohort)
         self.assertFalse(student_information)
 
     def test_with_no_information_for_user(self):
         other_user = User.objects.create_user('other_user', 'other_user@test.com', 'userpass')
-        create_student_information(other_user)
+        create_student_information(other_user, cohort=self.cohort)
 
-        student_information = mdl_student_information.find_by_user(self.user)
+        student_information = mdl_student_information.find_by_user_and_cohort(self.user, self.cohort)
         self.assertFalse(student_information)
 
     def test_with_information_for_user(self):
-        expected = create_student_information(self.user)
-        actual = mdl_student_information.find_by_user(self.user)
+        expected = create_student_information(self.user, cohort=self.cohort)
+        actual = mdl_student_information.find_by_user_and_cohort(self.user, cohort=self.cohort)
 
         self.assertEqual(expected, actual)
-
 
 class TestFindByPerson(TestCase):
     def setUp(self):

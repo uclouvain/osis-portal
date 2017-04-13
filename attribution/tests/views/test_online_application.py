@@ -74,16 +74,16 @@ class OnlineApplicationTest(TestCase):
         self.a_current_academic_yr = test_academic_year.create_academic_year_with_year(CURRENT_YEAR)
         a_next_academic_yr = test_academic_year.create_academic_year_with_year(NEXT_YEAR)
 
-        self.learning_unit_year1_partially_vacant_previous = self.create_learning_unit_year_annual_data(ACRONYM, TITLE, a_previous_academic_yr, self.a_tutor, START, END)
-        self.learning_unit_year1_partially_vacant_current = self.create_learning_unit_year_annual_data(ACRONYM, TITLE, self.a_current_academic_yr, self.a_tutor, START, END)
-        self.learning_unit_year1_partially_vacant_next = self.create_learning_unit_year_annual_data(ACRONYM, TITLE, a_next_academic_yr, self.a_tutor, START, END)
-        self.learning_unit_year2_partially_vacant_previous = self.create_learning_unit_year_annual_data(ACRONYM2, TITLE2, a_previous_academic_yr, self.a_tutor, START, END)
-        self.learning_unit_year2_partially_vacant_current = self.create_learning_unit_year_annual_data(ACRONYM2, TITLE2, self.a_current_academic_yr, self.a_tutor, START, END)
-        self.learning_unit_year2_partially_vacant_next = self.create_learning_unit_year_annual_data(ACRONYM2, TITLE2, a_next_academic_yr, self.a_tutor, START, END)
+        self.learning_unit_year1_partially_vacant_previous = self.create_lu_year_annual_data(ACRONYM, TITLE, a_previous_academic_yr, self.a_tutor, START, END)
+        self.learning_unit_year1_partially_vacant_current = self.create_lu_year_annual_data(ACRONYM, TITLE, self.a_current_academic_yr, self.a_tutor, START, END)
+        self.learning_unit_year1_partially_vacant_next = self.create_lu_year_annual_data(ACRONYM, TITLE, a_next_academic_yr, self.a_tutor, START, END)
+        self.learning_unit_year2_partially_vacant_previous = self.create_lu_year_annual_data(ACRONYM2, TITLE2, a_previous_academic_yr, self.a_tutor, START, END)
+        self.learning_unit_year2_partially_vacant_current = self.create_lu_year_annual_data(ACRONYM2, TITLE2, self.a_current_academic_yr, self.a_tutor, START, END)
+        self.learning_unit_year2_partially_vacant_next = self.create_lu_year_annual_data(ACRONYM2, TITLE2, a_next_academic_yr, self.a_tutor, START, END)
 
-        self.learning_unit_year_totally_vacant_next = self.create_learning_unit_year_annual_data(ACRONYM_VACANT_LEARNING_UNIT, TITLE_VACANT_LEARNING_UNIT, a_next_academic_yr, None, START, END)
+        self.learning_unit_year_totally_vacant_next = self.create_lu_year_annual_data(ACRONYM_VACANT_LEARNING_UNIT, TITLE_VACANT_LEARNING_UNIT, a_next_academic_yr, None, START, END)
 
-    def create_learning_unit_year_annual_data(self, an_acronym, a_title, an_academic_yr, a_tutor, start, end):
+    def create_lu_year_annual_data(self, an_acronym, a_title, an_academic_yr, a_tutor, start, end):
         a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
             'acronym': an_acronym,
             'title': a_title,
@@ -131,9 +131,9 @@ class OnlineApplicationTest(TestCase):
         unused_year = CURRENT_YEAR+10
         an_new_academic_year = test_academic_year.create_academic_year_with_year(unused_year)
         acronym_1 = 'LMECA2125'
-        self.create_learning_unit_year_annual_data(acronym_1, TITLE, an_new_academic_year, self.a_tutor, unused_year, unused_year+1)
+        self.create_lu_year_annual_data(acronym_1, TITLE, an_new_academic_year, self.a_tutor, unused_year, unused_year+1)
         acronym_2 = 'LSTAT8125'
-        self.create_learning_unit_year_annual_data(acronym_2, TITLE, an_new_academic_year, self.a_tutor, unused_year, unused_year+1)
+        self.create_lu_year_annual_data(acronym_2, TITLE, an_new_academic_year, self.a_tutor, unused_year, unused_year+1)
         self.assertEqual(len(online_application.get_attributions_allocated(an_new_academic_year.year, self.a_tutor)), 2)
 
     def test_sum_attribution_allocation_charges(self):
