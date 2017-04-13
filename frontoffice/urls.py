@@ -47,19 +47,19 @@ urlpatterns = (
 )
 
 if 'dashboard' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^dashboard/', include('dashboard.urls')), )
+    urlpatterns += (url(r'^dashboard/', include('dashboard.urls')), )
 if 'performance' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^exammarks/', include('performance.urls')), )
+    urlpatterns += (url(r'^exammarks/', include('performance.urls')), )
 if 'dissertation' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^dissertation/', include('dissertation.urls')),)
+    urlpatterns += (url(r'^dissertation/', include('dissertation.urls')),)
 if 'attribution' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^attribution/', include('attribution.urls')), )
+    urlpatterns += (url(r'^attribution/', include('attribution.urls')), )
 if 'internship' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^internship/', include('internship.urls')), )
+    urlpatterns += (url(r'^internship/', include('internship.urls')), )
 if 'exam_enrollment' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^exam_enrollment/', include('exam_enrollment.urls')), )
+    urlpatterns += (url(r'^exam_enrollment/', include('exam_enrollment.urls')), )
 if 'attestation' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^attestation/', include('attestation.urls')), )
+    urlpatterns += (url(r'^attestation/', include('attestation.urls')), )
 
 handler404 = 'base.views.common.page_not_found'
 handler403 = 'base.views.common.access_denied'

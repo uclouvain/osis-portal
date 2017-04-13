@@ -28,13 +28,13 @@ from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 import sys
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 # SECURITY Settings
 # Those settings are mandatory and have to be defined in your .env file
 SECRET_KEY = os.environ['SECRET_KEY']
-bool(os.environ.get('DEBUG', False))
+DEBUG = bool(os.environ.get('DEBUG', False))
 ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split()
 ADMIN_URL = os.environ['ADMIN_URL']
 ENVIRONMENT = os.environ['ENVIRONMENT']
@@ -65,15 +65,6 @@ INSTALLED_APPS = (
     'reference',
     'base',
 )
-
-# Tests settings
-TESTING = 'test' in sys.argv
-if TESTING:
-    # add test packages that have specific models for tests
-    INSTALLED_APPS = INSTALLED_APPS + (
-        'osis_common.tests',
-    )
-
 
 TEMPLATES = [
     {
@@ -147,7 +138,7 @@ MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, "uploads"))
 MEDIA_URL = os.environ.get('MEDIA_URL',  '/media/')
 CONTENT_TYPES = ['application/csv', 'application/doc', 'application/pdf', 'application/xls', 'application/xml',
                  'application/zip', 'image/jpeg', 'image/gif', 'image/png', 'text/html', 'text/plain']
-MAX_UPLOAD_SIZE = os.environ.get('MAX_UPLOAD_SIZE', 5242880)
+MAX_UPLOAD_SIZE = int(os.environ.get('MAX_UPLOAD_SIZE', 5242880))
 
 
 # Logging settings
@@ -157,17 +148,18 @@ QUEUE_EXCEPTION_LOGGER = os.environ.get('QUEUE_EXCEPTION_LOGGER', 'queue_excepti
 
 
 # Email Settings
+# By default Email are saved in the folder defined by EMAIL_FILE_PATH
+# If you want ti use the smtp backend,
+# you have to define EMAIL_BACKEND, EMAIL_HOST and EMAIL_PORT in your .env if the default values doesn't match.
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'osis@localhost.be')
 SERVER_EMAIL = os.environ.get('SERVER_EMAIL', DEFAULT_FROM_EMAIL)
 LOGO_EMAIL_SIGNATURE_URL = os.environ.get('LOGO_EMAIL_SIGNATURE_URL', '')
 EMAIL_PRODUCTION_SENDING = bool(os.environ.get('EMAIL_PRODUCTION_SENDING', False))
 COMMON_EMAIL_RECEIVER = os.environ.get('COMMON_EMAIL_RECEIVER', 'osis@localhost.org')
 EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.filebased.EmailBackend')
-# File_Path is used if the file mail backend is used
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, "base/tests/sent_mails")
-# Hosts and port are used when smtp backend is used
+EMAIL_FILE_PATH = os.environ.get('EMAIL_FILE_PATH', os.path.join(BASE_DIR, "base/tests/sent_mails"))
 EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
-EMAIL_PORT = os.environ.get('EMAIL_PORT', 25)
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 25))
 SEND_BROKEN_LINK_EMAILS = bool(os.environ.get('SEND_BROKEN_LINK_EMAILS', True))
 
 
@@ -176,7 +168,7 @@ LOGIN_URL = os.environ.get('LOGIN_URL', reverse_lazy('login'))
 OVERRIDED_LOGOUT_URL = os.environ.get('OVERRIDED_LOGOUT_URL', '')
 OVERRIDED_LOGIN_URL = os.environ.get('OVERRIDED_LOGIN_URL', '')
 LOGOUT_BUTTON = bool(os.environ.get('LOGOUT_BUTTON', True))
-CURRENT_URL = os.environ.get('CURRENT_URL', 'localhost')
+CURRENT_URL = os.environ.get('CURRENT_URL', 'http://localhost:8000')
 
 
 # This has to be set in your .env with the actual url where you institution logo can be found.
@@ -193,7 +185,7 @@ QUEUES = {
     'QUEUE_URL': os.environ.get('RABBITMQ_HOST', 'localhost'),
     'QUEUE_USER': os.environ.get('RABBITMQ_USER', 'guest'),
     'QUEUE_PASSWORD': os.environ.get('RABBITMQ_PASSWORD', 'guest'),
-    'QUEUE_PORT': os.environ.get('RABBITMQ_PORT', 5672),
+    'QUEUE_PORT': int(os.environ.get('RABBITMQ_PORT', 5672)),
     'QUEUE_CONTEXT_ROOT': os.environ.get('RABBITMQ_CONTEXT_ROOT', '/'),
     'QUEUES_NAME': {
         'MIGRATIONS_TO_PRODUCE': 'osis',
@@ -210,11 +202,11 @@ QUEUES = {
         'EXAM_ENROLLMENT_FORM_SUBMISSION': 'exam_enrollment_form_submission',
     },
     'RPC_QUEUES_TIMEOUT': {
-        'PAPER_SHEET': os.environ.get('PAPER_SHEET_TIMEOUT', 60),
-        'STUDENT_PERFORMANCE': os.environ.get('STUDENT_PERFORMANCE_TIMEOUT', 15),
-        'ATTESTATION_STATUS': os.environ.get('ATTESTATION_STATUS_TIMEOUT', 10),
-        'ATTESTATION': os.environ.get('ATTESTATION_TIMEOUT', 60),
-        'EXAM_ENROLLMENT_FORM': os.environ.get('EXAM_ENROLLMENT_FORM_TIMEOUT', 15)
+        'PAPER_SHEET': int(os.environ.get('PAPER_SHEET_TIMEOUT', 60)),
+        'STUDENT_PERFORMANCE': int(os.environ.get('STUDENT_PERFORMANCE_TIMEOUT', 15)),
+        'ATTESTATION_STATUS': int(os.environ.get('ATTESTATION_STATUS_TIMEOUT', 10)),
+        'ATTESTATION': int(os.environ.get('ATTESTATION_TIMEOUT', 60)),
+        'EXAM_ENROLLMENT_FORM': int(os.environ.get('EXAM_ENROLLMENT_FORM_TIMEOUT', 15))
     }
 }
 
@@ -257,13 +249,13 @@ ATTRIBUTION_CONFIG = {
 }
 
 PERFORMANCE_CONFIG = {
-    'UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR': os.environ.get('PERFORMANCE_UPDT_DELTA_CURRENT_ACAD_YR', 12),
-    'UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR': os.environ.get('PERFORMANCE_UPDT_DELTA_NON_CURRENT_ACAD_YR', 720),
-    'UPDATE_DELTA_HOURS_AFTER_CONSUMPTION': os.environ.get('PERFORMANCE_UPDT_DELTA_AFTER_CONS', 24),
+    'UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR': int(os.environ.get('PERFORMANCE_UPDT_DELTA_CURRENT_ACAD_YR', 12)),
+    'UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR': int(os.environ.get('PERFORMANCE_UPDT_DELTA_NON_CURRENT_ACAD_YR', 720)),
+    'UPDATE_DELTA_HOURS_AFTER_CONSUMPTION': int(os.environ.get('PERFORMANCE_UPDT_DELTA_AFTER_CONS', 24)),
 }
 
 ATTESTATION_CONFIG = {
-    'UPDATE_DELTA_HOURS_DEFAULT': os.environ.get("ATTESTATION_UPDATE_DELTA_HOURS", 72),
+    'UPDATE_DELTA_HOURS_DEFAULT': int(os.environ.get("ATTESTATION_UPDATE_DELTA_HOURS", 72)),
     'SERVER_TO_FETCH_URL': os.environ.get("ATTESTATION_API_URL", ''),
     'ATTESTATION_PATH': os.environ.get("ATTESTATION_API_PATH", ''),
     'SERVER_TO_FETCH_USER': os.environ.get("ATTESTATION_API_USER", ''),

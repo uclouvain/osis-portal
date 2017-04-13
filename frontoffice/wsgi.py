@@ -24,23 +24,38 @@
 #
 ##############################################################################
 
-import os
 import sys
 import logging
-from django.core.wsgi import get_wsgi_application
-from pika.exceptions import ConnectionClosed, AMQPConnectionError, ChannelClosed
+
+import os
 import dotenv
 
-# The two following lines are mandatory for working with mod_wsgi on the servers
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..' )
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../frontoffice')
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+dotenv.read_dotenv(os.path.join(BASE_DIR, '.env'))
+sys.path.extend(os.environ.get('EXTRA_SYS_PATHS').split()) if os.environ.get('EXTRA_SYS_PATHS') else None
 
-dotenv.read_dotenv()
+from django.core.wsgi import get_wsgi_application
+from pika.exceptions import ConnectionClosed, AMQPConnectionError, ChannelClosed
+
 
 SETTINGS_FILE = os.environ.get('DJANGO_SETTINGS_MODULE', 'frontoffice.settings.local')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", SETTINGS_FILE)
 
-application = get_wsgi_application()
+try:
+    application = get_wsgi_application()
+except KeyError as ke:
+    print("Error loading application.")
+    print("The following environment var is not defined : {}".format(str(ke)))
+    print("Check the following possible causes :")
+    print(" - You don't have a .env file. You can copy .env.example to .env to use default")
+    print(" - Mandatory variables are not defined in your .env file.")
+    sys.exit("SettingsKeyError")
+except ImportError as ie:
+    print("Error loading application : {}".format(str(ie)))
+    print("Check the following possible causes :")
+    print(" - The DJANGO_SETTINGS_MODULE defined in your .env doesn't exist")
+    print(" - No DJANGO_SETTINGS_MODULE is defined and the default 'frontoffice.settings.local' doesn't exist ")
+    sys.exit("DjangoSettingsError")
 
 from osis_common.queue import queue_listener as common_queue_listener, callbacks as common_callback
 from performance.queue.student_performance import callback as perf_callback, update_exp_date_callback

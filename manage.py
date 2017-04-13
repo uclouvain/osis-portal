@@ -36,4 +36,19 @@ if __name__ == "__main__":
 
     from django.core.management import execute_from_command_line
 
-    execute_from_command_line(sys.argv)
+    try:
+        execute_from_command_line(sys.argv)
+    except KeyError as ke:
+        print("Error loading application.")
+        print("The following environment var is not defined : {}".format(str(ke)))
+        print("Check the following possible causes :")
+        print(" - You don't have a .env file. You can copy .env.example to .env to use default")
+        print(" - Mandatory variables are not defined in your .env file.")
+        sys.exit("SettingsKeyError")
+    except ImportError as ie:
+        print("Error loading application : {}".format(str(ie)))
+        print("Check the following possible causes :")
+        print(" - The DJANGO_SETTINGS_MODULE defined in your .env doesn't exist")
+        print(" - No DJANGO_SETTINGS_MODULE is defined and the default 'frontoffice.settings.local' doesn't exist ")
+        sys.exit("DjangoSettingsError")
+
