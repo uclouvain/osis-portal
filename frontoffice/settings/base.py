@@ -162,6 +162,13 @@ SERVER_EMAIL = os.environ.get('SERVER_EMAIL', DEFAULT_FROM_EMAIL)
 LOGO_EMAIL_SIGNATURE_URL = os.environ.get('LOGO_EMAIL_SIGNATURE_URL', '')
 EMAIL_PRODUCTION_SENDING = bool(os.environ.get('EMAIL_PRODUCTION_SENDING', False))
 COMMON_EMAIL_RECEIVER = os.environ.get('COMMON_EMAIL_RECEIVER', 'osis@localhost.org')
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.filebased.EmailBackend')
+# File_Path is used if the file mail backend is used
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "base/tests/sent_mails")
+# Hosts and port are used when smtp backend is used
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
+EMAIL_PORT = os.environ.get('EMAIL_PORT', 25)
+SEND_BROKEN_LINK_EMAILS = bool(os.environ.get('SEND_BROKEN_LINK_EMAILS', True))
 
 
 # Authentication settings
@@ -169,6 +176,7 @@ LOGIN_URL = os.environ.get('LOGIN_URL', reverse_lazy('login'))
 OVERRIDED_LOGOUT_URL = os.environ.get('OVERRIDED_LOGOUT_URL', '')
 OVERRIDED_LOGIN_URL = os.environ.get('OVERRIDED_LOGIN_URL', '')
 LOGOUT_BUTTON = bool(os.environ.get('LOGOUT_BUTTON', True))
+CURRENT_URL = os.environ.get('CURRENT_URL', 'localhost')
 
 
 # This has to be set in your .env with the actual url where you institution logo can be found.
