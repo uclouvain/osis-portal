@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from .base import *
+import sys
 
 INSTALLED_APPS += (
     'dashboard',
