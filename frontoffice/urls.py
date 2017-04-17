@@ -68,3 +68,7 @@ handler500 = 'base.views.common.server_error'
 admin.site.site_header = 'Osis-studies'
 admin.site.site_title = 'Osis-studies'
 admin.site.index_title = 'Louvain'
+
+if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
+    import debug_toolbar
+    urlpatterns += (url(r'^__debug__/', include(debug_toolbar.urls)), )

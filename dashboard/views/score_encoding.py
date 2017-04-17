@@ -137,8 +137,10 @@ def fetch_document(global_id):
 
 
 def fetch_json(global_id):
-    scores_sheets_cli = queue_listener.ScoresSheetClient()
-    json_data = scores_sheets_cli.call(global_id)
+    json_data = None
+    if hasattr(settings, 'QUEUES') and settings.QUEUES:
+        scores_sheets_cli = queue_listener.ScoresSheetClient()
+        json_data = scores_sheets_cli.call(global_id)
     if json_data:
         json_data = json_data.decode("utf-8")
     return json_data

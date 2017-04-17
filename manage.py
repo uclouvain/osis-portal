@@ -29,6 +29,8 @@ import sys
 import dotenv
 
 if __name__ == "__main__":
+    if 'test' in sys.argv:
+        os.environ.setdefault('TESTING', 'True')
     dotenv.read_dotenv()
 
     SETTINGS_FILE = os.environ.get('DJANGO_SETTINGS_MODULE', 'frontoffice.settings.local')

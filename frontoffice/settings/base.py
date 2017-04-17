@@ -42,9 +42,9 @@ CSRF_COOKIE_SECURE = os.environ.get('CSRF_COOKIE_SECURE', 'False').lower() == 't
 
 
 # Base configuration
-ROOT_URLCONF = 'frontoffice.urls'
-WSGI_APPLICATION = 'frontoffice.wsgi.application'
-MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+ROOT_URLCONF = os.environ.get('', 'frontoffice.urls')
+WSGI_APPLICATION = os.environ.get('', 'frontoffice.wsgi.application')
+MESSAGE_STORAGE = os.environ.get('', 'django.contrib.messages.storage.cookie.CookieStorage')
 
 # Application definition
 # Common apps for all environments
@@ -68,12 +68,20 @@ INSTALLED_APPS = (
 )
 
 # Tests settings
-TESTING = 'test' in sys.argv
+TESTING = os.environ.get('TESTING', 'False').lower() == 'true'
 if TESTING:
     # add test packages that have specific models for tests
     INSTALLED_APPS = INSTALLED_APPS + (
         'osis_common.tests',
     )
+APPS_TO_TEST = (
+    'osis_common',
+    'reference',
+    'base',
+)
+TEST_RUNNER = os.environ.get('TEST_RUNNER', 'osis_common.tests.runner.InstalledAppsTestRunner')
+SKIP_QUEUES_TESTS = os.environ.get('SKIP_QUEUES_TESTS', 'False').lower() == 'true'
+QUEUES_TESTING_TIMEOUT = float(os.environ.get('QUEUES_TESTING_TIMEOUT', 0.1))
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -230,6 +238,9 @@ LOGOUT_URL = os.environ.get('LOGOUT_URL', reverse_lazy('logout'))
 OVERRIDED_LOGIN_URL = os.environ.get('OVERRIDED_LOGIN_URL', None)
 OVERRIDED_LOGOUT_URL = os.environ.get('OVERRIDED_LOGOUT_URL', None)
 LOGOUT_BUTTON = os.environ.get('LOGOUT_BUTTON', 'True').lower() == 'true'
+USER_SIGNALS_MANAGER = os.environ.get('USER_SIGNALS_MANAGER', None)
+USER_UPDATED_SIGNAL = os.environ.get('USER_UPDATED_SIGNAL', None)
+USER_CREATED_SIGNAL = os.environ.get('USER_CREATED_SIGNAL', None)
 
 
 # This has to be set in your .env with the actual url where you institution logo can be found.
@@ -242,6 +253,9 @@ LOGO_OSIS_URL = os.environ.get('LOGO_OSIS_URL', '')
 
 # Queues Definition
 # The queue system uses RabbitMq queues to communicate with other application (ex : osis)
+def get_queue_timeout(timeout_name, default_timeout):
+    return float(os.environ.get(timeout_name, QUEUES_TESTING_TIMEOUT if TESTING else default_timeout))
+
 QUEUES = {
     'QUEUE_URL': os.environ.get('RABBITMQ_HOST', 'localhost'),
     'QUEUE_USER': os.environ.get('RABBITMQ_USER', 'guest'),
@@ -263,14 +277,16 @@ QUEUES = {
         'EXAM_ENROLLMENT_FORM_SUBMISSION': 'exam_enrollment_form_submission',
     },
     'RPC_QUEUES_TIMEOUT': {
-        'PAPER_SHEET': int(os.environ.get('PAPER_SHEET_TIMEOUT', 60)),
-        'STUDENT_PERFORMANCE': int(os.environ.get('STUDENT_PERFORMANCE_TIMEOUT', 15)),
-        'ATTESTATION_STATUS': int(os.environ.get('ATTESTATION_STATUS_TIMEOUT', 10)),
-        'ATTESTATION': int(os.environ.get('ATTESTATION_TIMEOUT', 60)),
-        'EXAM_ENROLLMENT_FORM': int(os.environ.get('EXAM_ENROLLMENT_FORM_TIMEOUT', 15))
+        'PAPER_SHEET': get_queue_timeout('PAPER_SHEET_TIMEOUT', 60),
+        'STUDENT_PERFORMANCE': get_queue_timeout('STUDENT_PERFORMANCE', 15),
+        'ATTESTATION_STATUS': get_queue_timeout('ATTESTATION_STATUS', 10),
+        'ATTESTATION': get_queue_timeout('ATTESTATION', 60),
+        'EXAM_ENROLLMENT_FORM': get_queue_timeout('EXAM_ENROLLMENT_FORM', 15)
     }
 }
 
+if TESTING and SKIP_QUEUES_TESTS:
+    QUEUES = {}
 
 # Apps Settings
 

@@ -31,6 +31,8 @@ import os
 import dotenv
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if 'test' in sys.argv:
+    os.environ.setdefault('TESTING', 'True')
 dotenv.read_dotenv(os.path.join(BASE_DIR, '.env'))
 sys.path.extend(os.environ.get('EXTRA_SYS_PATHS').split()) if os.environ.get('EXTRA_SYS_PATHS') else None
 

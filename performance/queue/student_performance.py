@@ -180,9 +180,11 @@ def fetch_and_save(registration_id, academic_year, acronym):
 
 def fetch_json_data(registration_id, academic_year, acronym):
     json_student_perf = None
+    json_data = None
     message = generate_message(registration_id, academic_year, acronym)
-    client = PerformanceClient()
-    json_data = client.call(message)
+    if hasattr(settings, 'QUEUES') and settings.QUEUES:
+        client = PerformanceClient()
+        json_data = client.call(message)
     if json_data:
         json_student_perf = json.loads(json_data.decode("utf-8"))
     return json_student_perf

@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from unittest.mock import patch, Mock
+from django.conf import settings
 from django.contrib.auth.models import User, Group, Permission
 from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
@@ -206,29 +207,30 @@ class ExamEnrollmentFormTest(TestCase):
         self.assertTrue(mock_current_academic_year.called)
         self.assertEqual('exam_enrollment_form.html', response.templates[0].name)
 
-    @patch("osis_common.queue.queue_sender.send_message")
-    def test_exam_enrollment_form_submission_message(self, send_message):
-        warnings.warn(
-            "The field named 'etat_to_inscr' is only used to call EPC services. It should be deleted when the exam "
-            "enrollment business will be implemented in Osis (not in EPC anymore). "
-            "The flag 'is_enrolled' should be sufficient for Osis.",
-            DeprecationWarning
-        )
-        send_message.return_value = None
-        self.client.force_login(self.user)
-        post_data = {
-            "chckbox_exam_enrol_sess1_LPHYS1234": "on",
-            "etat_to_inscr_current_session_LPHYS1234": "I",
-            "chckbox_exam_enrol_sess1_LBIO4567": "",
-            "etat_to_inscr_current_session_LBIO4567": "None",
-            "chckbox_exam_enrol_sess1_LDROI1111": None,
-            "etat_to_inscr_current_session_LDROI1111": None,
-            "current_number_session": 1,
-        }
-        response = self.client.post(self.url, post_data)
-        result = main._exam_enrollment_form_submission_message(self.off_year, response.wsgi_request, self.student)
-        self.assert_correct_data_structure(result)
-        self.assert_none_etat_to_inscr_not_in_submitted_form(result.get('exam_enrollments'))
+    if hasattr(settings, 'QUEUES') and settings.QUEUES:
+        @patch("osis_common.queue.queue_sender.send_message")
+        def test_exam_enrollment_form_submission_message(self, send_message):
+            warnings.warn(
+                "The field named 'etat_to_inscr' is only used to call EPC services. It should be deleted when the exam "
+                "enrollment business will be implemented in Osis (not in EPC anymore). "
+                "The flag 'is_enrolled' should be sufficient for Osis.",
+                DeprecationWarning
+            )
+            send_message.return_value = None
+            self.client.force_login(self.user)
+            post_data = {
+                "chckbox_exam_enrol_sess1_LPHYS1234": "on",
+                "etat_to_inscr_current_session_LPHYS1234": "I",
+                "chckbox_exam_enrol_sess1_LBIO4567": "",
+                "etat_to_inscr_current_session_LBIO4567": "None",
+                "chckbox_exam_enrol_sess1_LDROI1111": None,
+                "etat_to_inscr_current_session_LDROI1111": None,
+                "current_number_session": 1,
+            }
+            response = self.client.post(self.url, post_data)
+            result = main._exam_enrollment_form_submission_message(self.off_year, response.wsgi_request, self.student)
+            self.assert_correct_data_structure(result)
+            self.assert_none_etat_to_inscr_not_in_submitted_form(result.get('exam_enrollments'))
 
     def assert_correct_data_structure(self, result):
         exam_enrollment_expected = {"acronym": "LPHYS1234",

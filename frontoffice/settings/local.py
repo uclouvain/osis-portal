@@ -25,7 +25,7 @@
 ##############################################################################
 from .base import *
 
-INSTALLED_APPS += (
+OPTIONAL_APPS = (
     'dashboard',
     'performance',
     'attribution',
@@ -35,3 +35,5 @@ INSTALLED_APPS += (
     'attestation',
 )
 
+INSTALLED_APPS += OPTIONAL_APPS
+APPS_TO_TEST += OPTIONAL_APPS

@@ -33,7 +33,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 def fetch_json_attestation_statuses(message):
     attestation_statuses = None
-    if message:
+    if hasattr(settings, 'QUEUES') and settings.QUEUES and message:
         try:
             client = AttestationStatusClient()
             json_data = client.call(message)
