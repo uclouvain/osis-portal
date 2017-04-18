@@ -42,14 +42,14 @@ CSRF_COOKIE_SECURE = os.environ.get('CSRF_COOKIE_SECURE', 'False').lower() == 't
 
 
 # Base configuration
-ROOT_URLCONF = os.environ.get('', 'frontoffice.urls')
-WSGI_APPLICATION = os.environ.get('', 'frontoffice.wsgi.application')
-MESSAGE_STORAGE = os.environ.get('', 'django.contrib.messages.storage.cookie.CookieStorage')
+ROOT_URLCONF = os.environ.get('ROOT_URLCONF', 'frontoffice.urls')
+WSGI_APPLICATION = os.environ.get('WSGI_APPLICATION', 'frontoffice.wsgi.application')
+MESSAGE_STORAGE = os.environ.get('MESSAGE_STORAGE', 'django.contrib.messages.storage.cookie.CookieStorage')
 
 # Application definition
 # Common apps for all environments
 # Specific apps (all osis-portal modules except base and reference + env specific apps like sentry)
-# have to be defined in environment settings (ex: local.py)
+# have to be defined in environment settings (ex: dev.py)
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -81,6 +81,8 @@ TEST_RUNNER = os.environ.get('TEST_RUNNER', 'osis_common.tests.runner.InstalledA
 SKIP_QUEUES_TESTS = os.environ.get('SKIP_QUEUES_TESTS', 'False').lower() == 'true'
 QUEUES_TESTING_TIMEOUT = float(os.environ.get('QUEUES_TESTING_TIMEOUT', 0.1))
 
+# Middleware config
+# Override this tuple in yous environment config (ex dev.py) if you want specific midddleware in specific order
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -93,6 +95,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
+# Logging config
+# This is a dev config, all the errors are redirect to console output
+# Override this settings in your environment settings (ex dev.py) if you want to use different loggers
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -184,7 +189,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 # If you want to change the default settings,
-# you have to redefine the LANGUAGE_CODE and LANGUAGES vars in environment settings (ex: local.py)
+# you have to redefine the LANGUAGE_CODE and LANGUAGES vars in environment settings (ex: dev.py)
 LANGUAGE_CODE = 'fr-be'
 LANGUAGES = [
     ('fr-be', _('French')),
@@ -208,7 +213,7 @@ MAX_UPLOAD_SIZE = int(os.environ.get('MAX_UPLOAD_SIZE', 5242880))
 
 
 # Logging settings
-# Logging framework is defined in env settings (ex: local.py)
+# Logging framework is defined in env settings (ex: dev.py)
 DEFAULT_LOGGER = os.environ.get('DEFAULT_LOGGER', 'default')
 QUEUE_EXCEPTION_LOGGER = os.environ.get('QUEUE_EXCEPTION_LOGGER', 'queue_exception')
 
@@ -282,6 +287,11 @@ if not TESTING or not SKIP_QUEUES_TESTS:
             'EXAM_ENROLLMENT_FORM': get_queue_timeout('EXAM_ENROLLMENT_FORM_TIMEOUT', 15)
         }
     }
+
+# Additionnal Locale Path
+# Add local path in your environment settings (ex: dev.py)
+LOCALE_PATHS = ()
+
 
 # Apps Settings
 

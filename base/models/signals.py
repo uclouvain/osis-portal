@@ -50,7 +50,7 @@ if settings.USER_SIGNALS_MANAGER:
             _add_person_to_group(person)
             return person
     if settings.USER_UPDATED_SIGNAL:
-        user_updated_signal = importlib.import_module(settings.USER_UPDATED_SIGNAL_SIGNAL, settings.USER_SIGNALS_MANAGER)
+        user_updated_signal = importlib.import_module(settings.USER_UPDATED_SIGNAL, settings.USER_SIGNALS_MANAGER)
 
         @receiver(user_updated_signal)
         def update_person_after_user_update(sender, **kwargs):
