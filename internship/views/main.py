@@ -84,9 +84,9 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
         return redirect(view_internship_selection, cohort_id=cohort_id, internship_id=current_internship.id)
 
     student            = mdl_base.student.find_by_user(request.user)
-    internships        = mdl_internship.internship.Internship.objects.filter(cohort=cohort)
+    internships        = mdl_internship.internship.Internship.objects.filter(cohort=cohort).order_by("speciality__name", "name")
     current_internship = internships.get(pk=internship_id)
-    specialities       = mdl_internship.internship_speciality.filter_by_cohort(cohort)
+    specialities       = mdl_internship.internship_speciality.filter_by_cohort(cohort).order_by("name")
     internship_choices = mdl_internship.internship_choice.InternshipChoice.objects.filter(speciality_id__in=specialities, internship=current_internship, student=student)
     current_choice     = internship_choices.filter(internship=current_internship).first()
 
@@ -105,7 +105,7 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
         non_mandatory_offers = mdl_internship.internship_offer.find_selectable_by_cohort(cohort=cohort)
         selectable_offers = mdl_internship.internship_offer.find_selectable_by_speciality_and_cohort(speciality=speciality, cohort=cohort)
         speciality_ids = non_mandatory_offers.values_list("speciality_id", flat=True)
-        specialities = specialities.filter(id__in=speciality_ids)
+        specialities = specialities.filter(id__in=speciality_ids).order_by("name")
 
     offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet,
                                             extra=len(selectable_offers), min_num=len(selectable_offers),
