@@ -75,3 +75,15 @@ def log_out(request):
 
 def logged_out(request):
     return layout.render(request, 'logged_out.html', {})
+
+
+def environnement_request_processor(request):
+    if hasattr(settings, 'ENVIRONMENT'):
+        env = settings.ENVIRONMENT
+    else:
+        env = 'DEV'
+    if hasattr(settings, 'SENTRY_PUBLIC_DNS'):
+        sentry_dns = settings.SENTRY_PUBLIC_DNS
+    else:
+        sentry_dns = ''
+    return {'environment': env, 'sentry_dns': sentry_dns}
