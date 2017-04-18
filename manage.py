@@ -53,4 +53,3 @@ if __name__ == "__main__":
         print(" - The DJANGO_SETTINGS_MODULE defined in your .env doesn't exist")
         print(" - No DJANGO_SETTINGS_MODULE is defined and the default 'frontoffice.settings.local' doesn't exist ")
         sys.exit("DjangoSettingsError")
-

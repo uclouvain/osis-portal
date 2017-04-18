@@ -14,6 +14,9 @@ from .local import *
 # In this example Queues are not used
 QUEUES = {}
 
+# Password validation for dev
+AUTH_PASSWORD_VALIDATORS = {}
+
 if DEBUG:
     INSTALLED_APPS = INSTALLED_APPS + (
         'django_extensions',

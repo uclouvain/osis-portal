@@ -71,9 +71,7 @@ INSTALLED_APPS = (
 TESTING = os.environ.get('TESTING', 'False').lower() == 'true'
 if TESTING:
     # add test packages that have specific models for tests
-    INSTALLED_APPS = INSTALLED_APPS + (
-        'osis_common.tests',
-    )
+    INSTALLED_APPS += ('osis_common.tests', )
 APPS_TO_TEST = (
     'osis_common',
     'reference',
@@ -256,37 +254,34 @@ LOGO_OSIS_URL = os.environ.get('LOGO_OSIS_URL', '')
 def get_queue_timeout(timeout_name, default_timeout):
     return float(os.environ.get(timeout_name, QUEUES_TESTING_TIMEOUT if TESTING else default_timeout))
 
-QUEUES = {
-    'QUEUE_URL': os.environ.get('RABBITMQ_HOST', 'localhost'),
-    'QUEUE_USER': os.environ.get('RABBITMQ_USER', 'guest'),
-    'QUEUE_PASSWORD': os.environ.get('RABBITMQ_PASSWORD', 'guest'),
-    'QUEUE_PORT': int(os.environ.get('RABBITMQ_PORT', 5672)),
-    'QUEUE_CONTEXT_ROOT': os.environ.get('RABBITMQ_CONTEXT_ROOT', '/'),
-    'QUEUES_NAME': {
-        'MIGRATIONS_TO_PRODUCE': 'osis',
-        'MIGRATIONS_TO_CONSUME': 'osis_portal',
-        'PAPER_SHEET': 'paper_sheet',
-        'PERFORMANCE': 'performance_to_client',
-        'STUDENT_PERFORMANCE': 'rpc_performance_from_client',
-        'STUDENT_POINTS': 'rpc_performance_to_client',
-        'PERFORMANCE_UPDATE_EXP_DATE': 'performance_exp_date',
-        'ATTRIBUTION': 'attribution',
-        'ATTESTATION': 'rpc_attestation',
-        'ATTESTATION_STATUS': 'rpc_attestation_status',
-        'EXAM_ENROLLMENT_FORM': 'rpc_exam_enrollment_form',
-        'EXAM_ENROLLMENT_FORM_SUBMISSION': 'exam_enrollment_form_submission',
-    },
-    'RPC_QUEUES_TIMEOUT': {
-        'PAPER_SHEET': get_queue_timeout('PAPER_SHEET_TIMEOUT', 60),
-        'STUDENT_PERFORMANCE': get_queue_timeout('STUDENT_PERFORMANCE', 15),
-        'ATTESTATION_STATUS': get_queue_timeout('ATTESTATION_STATUS', 10),
-        'ATTESTATION': get_queue_timeout('ATTESTATION', 60),
-        'EXAM_ENROLLMENT_FORM': get_queue_timeout('EXAM_ENROLLMENT_FORM', 15)
+if not TESTING or not SKIP_QUEUES_TESTS:
+    QUEUES = {
+        'QUEUE_URL': os.environ.get('RABBITMQ_HOST', 'localhost'),
+        'QUEUE_USER': os.environ.get('RABBITMQ_USER', 'guest'),
+        'QUEUE_PASSWORD': os.environ.get('RABBITMQ_PASSWORD', 'guest'),
+        'QUEUE_PORT': int(os.environ.get('RABBITMQ_PORT', 5672)),
+        'QUEUE_CONTEXT_ROOT': os.environ.get('RABBITMQ_CONTEXT_ROOT', '/'),
+        'QUEUES_NAME': {
+            'MIGRATIONS_TO_PRODUCE': 'osis',
+            'MIGRATIONS_TO_CONSUME': 'osis_portal',
+            'PAPER_SHEET': 'paper_sheet',
+            'PERFORMANCE': 'performance_to_client',
+            'STUDENT_PERFORMANCE': 'rpc_performance_from_client',
+            'PERFORMANCE_UPDATE_EXP_DATE': 'performance_exp_date',
+            'ATTRIBUTION': 'attribution',
+            'ATTESTATION': 'rpc_attestation',
+            'ATTESTATION_STATUS': 'rpc_attestation_status',
+            'EXAM_ENROLLMENT_FORM': 'rpc_exam_enrollment_form',
+            'EXAM_ENROLLMENT_FORM_SUBMISSION': 'exam_enrollment_form_submission',
+        },
+        'RPC_QUEUES_TIMEOUT': {
+            'PAPER_SHEET': get_queue_timeout('PAPER_SHEET_TIMEOUT', 60),
+            'STUDENT_PERFORMANCE': get_queue_timeout('STUDENT_PERFORMANCE_TIMEOUT', 15),
+            'ATTESTATION_STATUS': get_queue_timeout('ATTESTATION_STATUS_TIMEOUT', 10),
+            'ATTESTATION': get_queue_timeout('ATTESTATION_TIMEOUT', 60),
+            'EXAM_ENROLLMENT_FORM': get_queue_timeout('EXAM_ENROLLMENT_FORM_TIMEOUT', 15)
+        }
     }
-}
-
-if TESTING and SKIP_QUEUES_TESTS:
-    QUEUES = {}
 
 # Apps Settings
 
