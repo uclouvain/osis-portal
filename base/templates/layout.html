@@ -45,12 +45,14 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'css/osis-portal.css' %}?version={{ js }}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
 
     {% block style %}
     {% endblock %}
     {% analytical_head_bottom %}
 </head>
-<body>
+<body {% if environment == 'DEV' %} class="devmode" {% elif environment == 'LOCAL' %} class="localmode" {% elif environment == 'QA' %} class="qamode" {% endif %}>
     {% analytical_body_top %}
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
@@ -125,6 +127,13 @@
             </div>
         </div>
     </nav>
+    {% if environment == 'DEV' %}
+        <div class="devorange">DEV</div>
+    {% elif environment == 'LOCAL'%}
+        <div class="localred">LOCAL</div>
+    {% elif environment == 'QA'%}
+        <div class="qagreen">QA</div>
+    {% endif %}
     <div class="container">
 
         {% if request.user.is_authenticated %}
