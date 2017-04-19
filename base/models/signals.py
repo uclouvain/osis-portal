@@ -39,7 +39,6 @@ person_created = Signal(providing_args=['person'])
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 if settings.USER_SIGNALS_MANAGER:
-    import importlib
 
     if settings.USER_CREATED_SIGNAL:
         try:
@@ -64,10 +63,6 @@ if settings.USER_SIGNALS_MANAGER:
 
         except Exception as e:
              logger.error(str(e))
-
-
-    if settings.USER_UPDATED_SIGNAL:
-        user_updated_signal = importlib.import_module(settings.USER_UPDATED_SIGNAL, settings.USER_SIGNALS_MANAGER)
 
 
 
