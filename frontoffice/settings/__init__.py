@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,22 +23,3 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import json
-import logging
-from django.conf import settings
-from frontoffice.queue.queue_listener import AttestationStatusClient
-
-logger = logging.getLogger(settings.DEFAULT_LOGGER)
-
-
-def fetch_json_attestation_statuses(message):
-    attestation_statuses = None
-    if hasattr(settings, 'QUEUES') and settings.QUEUES and message:
-        try:
-            client = AttestationStatusClient()
-            json_data = client.call(message)
-            if json_data:
-                attestation_statuses = json.loads(json_data.decode("utf-8"))
-        except Exception as e:
-            logger.error('Error fetching student attestation statuses.\nmessage sent :  {}'.format(str(message)))
-    return attestation_statuses

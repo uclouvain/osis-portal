@@ -26,6 +26,7 @@
 import datetime
 import json
 from unittest.mock import patch
+from django.conf import settings
 
 from django.test import TestCase
 from django.core.exceptions import ObjectDoesNotExist
@@ -97,23 +98,24 @@ class TestQueueStudentPerformance(TestCase):
         except ObjectDoesNotExist:
             self.fail("Object should be created")
 
-    @patch('frontoffice.queue.queue_listener.Client.call')
-    def test_fetch_and_save(self, mock_client_call):
-        mock_client_call.return_value = None
-        obj = queue_stud_perf.fetch_and_save(self.student_performance.registration_id,
-                                             self.student_performance.academic_year,
-                                             self.student_performance.acronym)
-        self.assertIsNone(obj, "Should return None")
+    if hasattr(settings, 'QUEUES') and settings.QUEUES:
+        @patch('frontoffice.queue.queue_listener.Client.call')
+        def test_fetch_and_save(self, mock_client_call):
+            mock_client_call.return_value = None
+            obj = queue_stud_perf.fetch_and_save(self.student_performance.registration_id,
+                                                 self.student_performance.academic_year,
+                                                 self.student_performance.acronym)
+            self.assertIsNone(obj, "Should return None")
 
-        mock_client_call.return_value = self.json_points.encode()
-        obj = queue_stud_perf.fetch_and_save(self.student_performance.registration_id,
-                                             self.student_performance.academic_year,
-                                             self.student_performance.acronym)
-        self.assertIsNotNone(obj, "Should return a valid student performance object")
-        self.assertJSONEqual(json.dumps(obj.data), self.json_points, "Incorrect student points json")
-        self.assertEqual(self.student_performance.registration_id, obj.registration_id, "Incorrect student")
-        self.assertEqual(self.student_performance.academic_year, obj.academic_year, "Incorrect academic_year")
-        self.assertEqual(self.student_performance.acronym, obj.acronym, "Incorrect acronym")
+            mock_client_call.return_value = self.json_points.encode()
+            obj = queue_stud_perf.fetch_and_save(self.student_performance.registration_id,
+                                                 self.student_performance.academic_year,
+                                                 self.student_performance.acronym)
+            self.assertIsNotNone(obj, "Should return a valid student performance object")
+            self.assertJSONEqual(json.dumps(obj.data), self.json_points, "Incorrect student points json")
+            self.assertEqual(self.student_performance.registration_id, obj.registration_id, "Incorrect student")
+            self.assertEqual(self.student_performance.academic_year, obj.academic_year, "Incorrect academic_year")
+            self.assertEqual(self.student_performance.acronym, obj.acronym, "Incorrect acronym")
 
 
 class TestUpdateExpDate(TestCase):

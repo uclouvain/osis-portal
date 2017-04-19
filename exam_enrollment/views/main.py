@@ -186,6 +186,8 @@ def _get_student_programs(stud):
 
 
 def call_exam_enrollment_client(offer_yr, stud):
-    exam_enrol_client = queue_listener.ExamEnrollmentClient()
-    message = _exam_enrollment_form_message(stud.registration_id, offer_yr.acronym, offer_yr.academic_year.year)
-    return exam_enrol_client.call(json.dumps(message))
+    if hasattr(settings, 'QUEUES') and settings.QUEUES:
+        exam_enrol_client = queue_listener.ExamEnrollmentClient()
+        message = _exam_enrollment_form_message(stud.registration_id, offer_yr.acronym, offer_yr.academic_year.year)
+        return exam_enrol_client.call(json.dumps(message))
+    return None

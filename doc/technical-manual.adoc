@@ -217,6 +217,10 @@ of the project:
     $ cd osis
     $ virtualenv --python=python3.4 venv
 
+A local environment file is used to configure django. If you want to change configuration during development, use the `.env` file.
+Create the local environment file:
+    $ cp .env.example .env
+
 [[installing-application]]
 === Installing the Application
 

@@ -176,7 +176,8 @@ class TutorChargeTest(TestCase):
         self.assertIsNone(tutor_charge.get_email_students(None))
 
     def test_get_schedule_url(self):
-        url_expected = settings.TIME_TABLE_URL.format(settings.TIME_TABLE_NUMBER, ACRONYM.lower())
+        url_expected = settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_URL').\
+            format(settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_NUMBER'), ACRONYM.lower())
         self.assertEqual(tutor_charge.get_schedule_url(ACRONYM), url_expected)
 
     def test_get_schedule_url_without_acronym(self):
@@ -193,7 +194,8 @@ class TutorChargeTest(TestCase):
 
     def test_get_url_learning_unit_year(self):
         a_learning_unit_year = self.get_data('learning_unit_year')
-        url_learning_unit = settings.CATALOG_URL.format(a_learning_unit_year.academic_year.year, ACRONYM.lower())
+        url_learning_unit = settings.ATTRIBUTION_CONFIG.get('CATALOG_URL').format(a_learning_unit_year.academic_year.year,
+                                                                                  ACRONYM.lower())
         self.assertEqual(tutor_charge.get_url_learning_unit_year(a_learning_unit_year), url_learning_unit)
 
     def test_find_january_note(self):
