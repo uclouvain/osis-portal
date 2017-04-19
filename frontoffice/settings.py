@@ -117,7 +117,6 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
                 'base.views.common.common_context_processor',
-                'base.views.common.environnement_request_processor',
             ],
         },
     },
