@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import logging
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.db.models.signals import post_save, post_delete
@@ -35,30 +36,35 @@ from osis_common.models.serializable_model import SerializableModel
 
 person_created = Signal(providing_args=['person'])
 
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
+
 if settings.USER_SIGNALS_MANAGER:
-    import importlib
 
     if settings.USER_CREATED_SIGNAL:
-        user_created_signal = importlib.import_module(settings.USER_CREATED_SIGNAL, settings.USER_SIGNALS_MANAGER)
+        try:
+            from osis_louvain_auth.authentication.shibboleth_auth import user_created_signal, user_updated_signal
 
-        @receiver(user_created_signal)
-        def update_person_after_user_creation(sender, **kwargs):
-            user = kwargs.get('user')
-            user_infos = kwargs.get('user_infos')
-            person = find_by_global_id(user_infos.get('USER_FGS'))
-            person = _create_update_person(user, person, user_infos)
-            _add_person_to_group(person)
-            return person
-    if settings.USER_UPDATED_SIGNAL:
-        user_updated_signal = importlib.import_module(settings.USER_UPDATED_SIGNAL, settings.USER_SIGNALS_MANAGER)
+            @receiver(user_created_signal)
+            def update_person_after_user_creation(sender, **kwargs):
+                user = kwargs.get('user')
+                user_infos = kwargs.get('user_infos')
+                person = find_by_global_id(user_infos.get('USER_FGS'))
+                person = _create_update_person(user, person, user_infos)
+                _add_person_to_group(person)
+                return person
 
-        @receiver(user_updated_signal)
-        def update_person_after_user_update(sender, **kwargs):
-            user = kwargs.get('user')
-            user_infos = kwargs.get('user_infos')
-            person = find_by_global_id(user_infos.get('USER_FGS'))
-            person = _create_update_person(user, person, user_infos)
-            return person
+            @receiver(user_updated_signal)
+            def update_person_after_user_update(sender, **kwargs):
+                user = kwargs.get('user')
+                user_infos = kwargs.get('user_infos')
+                person = find_by_global_id(user_infos.get('USER_FGS'))
+                person = _create_update_person(user, person, user_infos)
+                return person
+
+        except Exception as e:
+             logger.error(str(e))
+
+
 
 
 @receiver(post_save, sender=Student)
@@ -102,7 +108,6 @@ if 'internship' in settings.INSTALLED_APPS:
         if instance.person.user:
             internship_students_group = Group.objects.get(name='internship_students')
             instance.person.user.groups.remove(internship_students_group)
-
 
 def _add_person_to_group(person):
     # Check Student
