@@ -27,7 +27,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from base.models.person import Person
 from internship.models.internship_student_information import InternshipStudentInformation
-
+from internship.tests.factories.cohort import CohortFactory
 
 class AddToGroupsSignalsTest(TestCase):
 
@@ -36,7 +36,8 @@ class AddToGroupsSignalsTest(TestCase):
         self.person_foo = Person.objects.create(user=self.user_foo)
 
     def create_internships_student_foo(self):
-        return InternshipStudentInformation.objects.create(person=self.person_foo,
+        cohort = CohortFactory()
+        return InternshipStudentInformation.objects.create(person=self.person_foo, cohort=cohort,
                                                            location='Location',
                                                            postal_code='postal_code',
                                                            city='city',

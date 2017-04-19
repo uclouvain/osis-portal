@@ -36,7 +36,7 @@ msgid "page_not_found"
 msgstr "Page not found"
 
 msgid "server_error"
-msgstr "A server error occured."
+msgstr "A server error occurred."
 
 msgid "server_error_message"
 msgstr ""

@@ -288,6 +288,7 @@ if not TESTING or not SKIP_QUEUES_TESTS:
         }
     }
 
+
 # Additionnal Locale Path
 # Add local path in your environment settings (ex: dev.py)
 LOCALE_PATHS = ()
