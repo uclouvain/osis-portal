@@ -143,6 +143,9 @@ msgstr "Reporté"
 msgid "ended_win"
 msgstr "Réussi"
 
+msgid "file"
+msgstr "Fichier"
+
 msgid "forbidden"
 msgstr "Interdite"
 

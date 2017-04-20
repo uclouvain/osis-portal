@@ -100,8 +100,8 @@ def list_build(request):
 
 
 def fetch_student_exam_enrollment(academic_year, codes):
-    server_top_url = settings.LIST_CONFIG.get('SERVER_TO_FETCH_URL')
-    document_base_path = server_top_url + settings.LIST_CONFIG.get('LIST_PATH')
+    server_top_url = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_URL')
+    document_base_path = server_top_url + settings.ATTRIBUTION_CONFIG.get('ATTRIBUTION_PATH')
     if document_base_path:
         try:
             document_url = document_base_path.format(anac=academic_year,
@@ -114,8 +114,8 @@ def fetch_student_exam_enrollment(academic_year, codes):
 
 def _fetch_with_basic_auth(server_top_url, document_url):
     password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
-    username = settings.LIST_CONFIG.get('SERVER_TO_FETCH_USER')
-    password = settings.LIST_CONFIG.get('SERVER_TO_FETCH_PASSWORD')
+    username = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_USER')
+    password = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_PASSWORD')
     password_mgr.add_password(None, server_top_url, username, password)
     handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
     opener = urllib.request.build_opener(handler)
