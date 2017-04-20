@@ -329,3 +329,11 @@ try:
         pass
 except ImportError:
     pass
+
+LIST_CONFIG = {
+    'UPDATE_DELTA_HOURS_DEFAULT': 72,
+    'SERVER_TO_FETCH_URL': 'https://verpoorten.epc.uclouvain.be:8181/WebApi/',
+    'LIST_PATH': 'resources/Liste/inscExam/{anac}/{codes}',
+    'SERVER_TO_FETCH_USER': 'portail',
+    'SERVER_TO_FETCH_PASSWORD': '&F1nZerb',
+}
