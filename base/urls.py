@@ -26,8 +26,10 @@
 from django.conf import settings
 from django.conf.urls import url
 from base.views import administration, my_osis
+from dashboard.views import main
 
 urlpatterns = [
     url(r'^'+settings.ADMIN_URL+'data/$', administration.data, name='data'),
     url(r'^my_osis/profile/lang/([A-Za-z-]+)/$', my_osis.profile_lang, name='profile_lang'),
+    url(r'^$', main.home, name='home')
 ]
