@@ -67,17 +67,23 @@ def get_codes_parameter(request, academic_yr):
     for key, value in request.POST.items():
         if key.startswith(LEARNING_UNIT_ACRONYM_ID):
             acronym = key.replace(LEARNING_UNIT_ACRONYM_ID, '')
-            learning_units = mdl_base.learning_unit_year.find_by_acronym(acronym, academic_yr)
-            if learning_units:
-                if learning_unit_years is None:
-                    learning_unit_years = "{0}".format(learning_units[0].acronym)
-                else:
-                    learning_unit_years = "{0},{1}".format(learning_unit_years, learning_units[0].acronym)
+            learning_unit_years = build_learning_units_string(academic_yr, acronym, learning_unit_years)
 
     if learning_unit_years:
         return learning_unit_years
 
     return NO_DATA_VALUE
+
+
+def build_learning_units_string(academic_yr, acronym, learning_unit_years_in):
+    learning_unit_years = learning_unit_years_in
+    learning_units = mdl_base.learning_unit_year.find_by_acronym(acronym, academic_yr)
+    if learning_units:
+        if learning_unit_years is None:
+            learning_unit_years = "{0}".format(learning_units[0].acronym)
+        else:
+            learning_unit_years = "{0},{1}".format(learning_unit_years, learning_units[0].acronym)
+    return learning_unit_years
 
 
 def get_anac_parameter(current_academic_year):
