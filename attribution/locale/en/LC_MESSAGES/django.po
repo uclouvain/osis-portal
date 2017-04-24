@@ -304,15 +304,3 @@ msgstr "No tutor with this global id"
 
 msgid "teaching_charge"
 msgstr "Teaching charge"
-
-msgid "exam_student_list"
-msgstr "List of students enrolled to my exams"
-
-msgid "desc_lnk_my_students_list"
-msgstr "Get the list of students enrolled to my exams"
-
-msgid "no_data"
-msgstr "No data found"
-
-msgid "error_fetching_list"
-msgstr "Error fetching list"

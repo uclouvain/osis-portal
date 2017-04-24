@@ -115,6 +115,3 @@ msgstr "Valider mes changements"
 
 msgid "year"
 msgstr "Année"
-
-msgid "offer_choice"
-msgstr "Choix de l'offre"
