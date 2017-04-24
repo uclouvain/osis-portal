@@ -319,3 +319,9 @@ msgstr "Aucune donnée trouvée"
 
 msgid "error_fetching_list"
 msgstr "Erreur durant la construction de la liste"
+
+msgid "hlp_enrollment_exam_list"
+msgstr "Choississez dans vos cours ceux que vous voulez considérer dans la liste produite"
+
+msgid "produce_xls"
+msgstr "Produire xls"

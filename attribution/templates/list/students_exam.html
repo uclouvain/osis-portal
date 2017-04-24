@@ -42,7 +42,7 @@
     {% endif %}
     <div class="panel panel-default">
         <div class="panel-body">
-            <div>Choississez dans vos cours ceux que vous voulez considérer dans la liste produite</div>
+            <div>{% trans 'hlp_enrollment_exam_list' %}</div>
             <br>
             <form action="{% url 'students_list_create' %}" method="post">
             <div class="row">
@@ -66,7 +66,7 @@
             </div>
                 <br>
                 <button class="btn btn-primary pull-right" id="bt_produce_xls" type="submit" title="{% trans 'submit' %}" disabled >
-                    Produire xls</button>
+                    {% trans 'produce_xls' %}</button>
             </form>
         </div>
     </div>
