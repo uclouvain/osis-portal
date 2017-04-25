@@ -26,15 +26,6 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block breadcrumb %}
-    {% if perms.base.is_faculty_administrator %}
-        <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'faculty_administration' %}</a></li>
-        <li><a id="lnk_performance_administration" href="{% url 'performance_administration' %}">{% trans 'performance_administration' %}</a></li>
-    {% endif %}
-        <li class="active">{% trans 'performance' %}</li>
-{% endblock %}
-
-
 {% block content %}
 <div class="page-header">
     <h2>{% trans 'performance' %}</h2>
