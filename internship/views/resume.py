@@ -46,9 +46,9 @@ from internship.decorators.global_view_decorators import redirect_if_multiple_re
 
 
 @login_required
+@permission_required('internship.can_access_internship', raise_exception=True)
 @redirect_if_multiple_registrations
 @redirect_if_not_in_cohort
-@permission_required('internship.can_access_internship', raise_exception=True)
 def view_student_resume(request, cohort_id):
     cohort      = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
     student     = mdl_student.find_by_user(request.user)
@@ -76,8 +76,8 @@ def view_student_resume(request, cohort_id):
 
 
 @login_required
-@redirect_if_not_in_cohort
 @permission_required('internship.can_access_internship', raise_exception=True)
+@redirect_if_not_in_cohort
 def edit_student_information(request, cohort_id):
     cohort = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
 

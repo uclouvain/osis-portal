@@ -32,8 +32,8 @@ from internship.decorators.cohort_view_decorators import redirect_if_not_in_coho
 
 
 @login_required
-@redirect_if_not_in_cohort
 @permission_required('internship.can_access_internship', raise_exception=True)
+@redirect_if_not_in_cohort
 def view_hospitals_list(request, cohort_id):
     cities = mdl_internship.organization_address.get_all_cities()
     name = ""
