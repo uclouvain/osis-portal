@@ -43,8 +43,8 @@ from internship.decorators.cohort_view_decorators import redirect_if_subscriptio
 from internship.decorators.global_view_decorators import redirect_if_multiple_registrations
 
 @login_required
-@redirect_if_multiple_registrations
 @permission_required('internship.can_access_internship', raise_exception=True)
+@redirect_if_multiple_registrations
 def view_cohort_selection(request):
     student = mdl_base.student.find_by_user(request.user)
     cohort_subscriptions = mdl_internship.internship_student_information.InternshipStudentInformation.objects.filter(person_id=student.person_id)
@@ -60,9 +60,9 @@ def view_cohort_selection(request):
         return redirect(view_internship_home, cohort_id=cohort_id)
 
 @login_required
+@permission_required('internship.can_access_internship', raise_exception=True)
 @redirect_if_multiple_registrations
 @redirect_if_not_in_cohort
-@permission_required('internship.can_access_internship', raise_exception=True)
 def view_internship_home(request, cohort_id):
     cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
     subscription_allowed = cohort.subscription_start_date <= datetime.date.today() and datetime.date.today() <= cohort.subscription_end_date
@@ -73,10 +73,10 @@ def view_internship_home(request, cohort_id):
             })
 
 @login_required
+@permission_required('internship.can_access_internship', raise_exception=True)
 @redirect_if_multiple_registrations
 @redirect_if_not_in_cohort
 @redirect_if_subscription_not_allowed
-@permission_required('internship.can_access_internship', raise_exception=True)
 def view_internship_selection(request, cohort_id, internship_id=-1, speciality_id=-1):
     cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
     if int(internship_id) < 1:
@@ -152,9 +152,9 @@ def zip_offers_formset_and_first_choices(formset, internships_offers, number_cho
     return zipped_data
 
 @login_required
+@permission_required('internship.can_access_internship', raise_exception=True)
 @redirect_if_multiple_registrations
 @redirect_if_not_in_cohort
-@permission_required('internship.can_access_internship', raise_exception=True)
 def assign_speciality_for_internship(request, cohort_id, internship_id):
     speciality_id = None
     if request.method == "POST":

@@ -11,3 +11,5 @@ base/tests/sent_mails/
 /uploads/
 *.iml
 .env
+/frontoffice/settings/dev.py
+/dev-requirements.txt

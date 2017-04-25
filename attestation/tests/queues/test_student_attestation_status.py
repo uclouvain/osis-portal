@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from unittest import skip
+from django.conf import settings
 from django.test import TestCase
 from mock import patch
 from attestation.queues import student_attestation_status as std_att_stat
@@ -40,20 +41,19 @@ class TestFetchSutentAttestationStatuses(TestCase):
         attestation_statuses = std_att_stat.fetch_json_attestation_statuses(None)
         self.assertIsNone(attestation_statuses)
 
-    @skip
-    @patch('frontoffice.queue.queue_listener.AttestationStatusClient.call')
-    def test_fetch_without_result(self, mock_client_call):
-        mock_client_call.return_value = None
-        attestation_statuses = std_att_stat.fetch_json_attestation_statuses(self.json_message)
-        self.assertIsNone(attestation_statuses)
+    if hasattr(settings, 'QUEUES') and settings.QUEUES:
+        @patch('frontoffice.queue.queue_listener.AttestationStatusClient.call')
+        def test_fetch_without_result(self, mock_client_call):
+            mock_client_call.return_value = None
+            attestation_statuses = std_att_stat.fetch_json_attestation_statuses(self.json_message)
+            self.assertIsNone(attestation_statuses)
 
-    @skip
-    @patch('frontoffice.queue.queue_listener.Client.call')
-    def test_fetch_with_results(self, mock_client_call):
-        mock_client_call.return_value = self._get_test_attestation_statuses_as_byte()
-        attestation_statuses = std_att_stat.fetch_json_attestation_statuses(self.json_message)
-        attesatation_statuses_expected = self._get_test_attestation_statuses_as_dict()
-        self.assertDictEqual(attesatation_statuses_expected, attestation_statuses)
+        @patch('frontoffice.queue.queue_listener.Client.call')
+        def test_fetch_with_results(self, mock_client_call):
+            mock_client_call.return_value = self._get_test_attestation_statuses_as_byte()
+            attestation_statuses = std_att_stat.fetch_json_attestation_statuses(self.json_message)
+            attesatation_statuses_expected = self._get_test_attestation_statuses_as_dict()
+            self.assertDictEqual(attesatation_statuses_expected, attestation_statuses)
 
     def _get_test_attestation_statuses_as_byte(self):
         return b'{"available": true,"academicYear": 2016,"attestationStatuses": [{"type": "REGISTRATION","printed": true,"available": false},{"type": "STUDENT_CARD","printed": false,"available": false},{"type": "REGULAR_REGISTRATION","printed": true,"available": true}]}'

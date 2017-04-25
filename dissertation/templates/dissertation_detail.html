@@ -294,30 +294,6 @@
 
 {% block script %}
     <script>
-    //***************************
-    //File upload
-    //***************************
-    function update_description(description, elt){
-        $('#hdn_description').val(description);
-        $('#lbl_description_label').text(gettext(description.toLowerCase()));
-        $('#txt_file').val('');
-    }
-
-    $("#txt_file").on("change", function(){
-       var file = this.files[0];
-       fileName = file.name;
-       $("#hdn_filename").val(fileName);
-    });
-
-    $('[id^="bt_load_doc_"]').click(function(event) {
-        var target = $(event.target);
-        var id = target.attr("id");
-        var pos = id.indexOf('bt_load_doc_');
-        var description = id.substring(pos+12);
-        update_description(description, target);
-        display_existing_files(description);
-    });
-
     $("#bt_upload_document").click(function(event) {
         var target = $(event.target);
         var id = target.attr("id");
@@ -398,59 +374,5 @@
 
 
     });
-
-    //***************************
-    //File upload - end
-    //***************************
-    function display_existing_files(description){
-        // To clear the div
-        $("#pnl_existing_files").html('')
-        $("#pnl_existing_files").find("a")
-            .remove()
-            .end()
-        $("#pnl_modal_upload").find("span").remove();
-        $.ajax({
-            url: "/admission/document?description=" + description
-        }).then(function(data) {
-            if(data.length > 0 ){
-                $('#pnl_existing_files').append("<br>");
-                $('#pnl_existing_files').append('<span style="text-decoration:underline;">Existing file :</span>');
-                $.each(data, function(key, value) {
-                    var url = build_url('upload/download/', value.id);
-                    $('#pnl_existing_files').append("<br>");
-                    $('#pnl_existing_files').append($("<a></a>").attr("href", url)
-                                                                .attr("target","_blank")
-                                                                .append(value.file_name));
-                    var bt = jQuery('<input  id="hdn_delete_document_file" type="hidden" value="'+value.id+'">');
-                    $('#pnl_existing_files').append(bt);
-                    $('#pnl_existing_files').append('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
-                    bt = jQuery('<button type="submit" id="bt_delete_document_file" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-trash"></span></button>');
-                    $('#pnl_existing_files').append(bt);
-                });
-            }
-        });
-    }
-
-    function build_url(url_begin, value){
-        /*Todo try to use django url directly in href - Leila*/
-        var loc = location.href;
-        var count = 0;
-        var pos = loc.indexOf('/admission/');
-
-        pos = pos + 12;
-        while ( pos != -1 ) {
-           count++;
-           pos = loc.indexOf( "/",pos + 1 );
-        }
-        count=count-1;
-        var url = url_begin + value;
-        var cpt = 0;
-        while (cpt< count){
-            url = "../" + url
-            cpt=cpt+1;
-
-        }
-        return url;
-    }
     </script>
 {% endblock %}

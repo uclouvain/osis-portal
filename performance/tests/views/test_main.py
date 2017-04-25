@@ -24,8 +24,6 @@
 #
 ##############################################################################
 import json
-import logging
-from django.conf import settings
 from django.test import TestCase
 
 import base.tests.models.test_offer_year

@@ -104,13 +104,6 @@ class AttestationStatusClient(Client):
         super(AttestationStatusClient, self).__init__(queue_name=queue_name, call_timeout=performance_timeout)
 
 
-class AttestationClient(Client):
-    def __init__(self):
-        queue_name = settings.QUEUES.get('QUEUES_NAME').get('ATTESTATION')
-        performance_timeout = settings.QUEUES.get('RPC_QUEUES_TIMEOUT').get('ATTESTATION')
-        super(AttestationClient, self).__init__(queue_name=queue_name, call_timeout=performance_timeout)
-
-
 class SynchronousConsumerThread(threading.Thread):
     def __init__(self, queue_name, callback, *args, **kwargs):
         super(SynchronousConsumerThread, self).__init__(*args, **kwargs)
