@@ -257,3 +257,13 @@ def add_permission(user, codename):
 
 def get_permission(codename):
     return Permission.objects.get(codename=codename)
+
+
+class TestMainAccess(TestCase):
+    def test_assign_speciality_for_internship_get_error(self):
+        url = reverse('assign_speciality', kwargs={
+            'cohort_id': 0,
+            'internship_id': 1,
+        })
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 405)
