@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from django.test import TestCase
+from django.db.utils import IntegrityError
 from internship.models import internship_choice as mdl_internship_choice
 from internship.tests.models import test_organization, test_internship_speciality
 from base.tests.models import test_student
@@ -48,6 +49,10 @@ class TestSearch(TestCase):
         self.choice_1 = create_internship_choice(self.organization, self.student, self.speciality, internship=self.other_internship)
         self.choice_2 = create_internship_choice(self.organization, self.student, self.speciality, internship=self.internship)
         self.choice_3 = create_internship_choice(self.organization, self.other_student, self.speciality, internship=self.other_internship)
+
+    def test_duplicates_are_forbidden(self):
+        with self.assertRaises(IntegrityError):
+            create_internship_choice(self.organization, self.student, self.speciality, internship=self.internship)
 
     def test_with_only_student(self):
         choices = list(mdl_internship_choice.search(student=self.student))
