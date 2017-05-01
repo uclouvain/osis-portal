@@ -59,6 +59,9 @@ class InternshipChoice(SerializableModel):
     def __str__(self):
         return u"%s - %s : %s" % (self.organization.acronym, self.speciality.acronym, self.choice)
 
+    class Meta:
+        unique_together = (("student", "internship", "choice"),)
+
 
 def search(student=None, speciality=None, specialities=None, internship=None):
     has_criteria = False
