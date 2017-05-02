@@ -36,12 +36,6 @@ admin.site.register(decree.Decree,
 admin.site.register(domain.Domain,
                     domain.DomainAdmin)
 
-admin.site.register(education_institution.EducationInstitution,
-                    education_institution.EducationInstitutionAdmin)
-
-admin.site.register(education_type.EducationType,
-                    education_type.EducationTypeAdmin)
-
 admin.site.register(grade_type.GradeType,
                     grade_type.GradeTypeAdmin)
 

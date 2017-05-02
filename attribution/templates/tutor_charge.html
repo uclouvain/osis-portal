@@ -9,7 +9,7 @@
 * The core business involves the administration of students, teachers,
 * courses, programs and so on.
 *
-* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+* Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -29,71 +29,13 @@
     <ol class="breadcrumb">
         <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                           aria-hidden="true"></span></a></li>
-        {% if perms.base.is_faculty_administrator %}
-            <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'faculty_administration' %}</a></li>
-            <li><a href="{% url 'attribution_administration'  %}" id="lnk_attribution_administration">{% trans 'attribution_administration' %}</a></li>
-            <li class="active">{% trans 'teaching_charge' %}</li>
-        {% else %}
-            {% block breadcrumb %}
-                <li>{% trans 'tutor_charge' %}</li>
-            {% endblock %}
-        {% endif %}
+
+        {% block breadcrumb %}
+            <li>{% trans 'tutor_charge' %}</li>
+        {% endblock %}
+
     </ol>
 {% endblock %}
 {% block content %}
-    <h1>{% trans 'tutor_charge' %}</h1>
-    <h2>{{ user.first_name }} {{ user.last_name }}</h2>
-
-    <ul class="nav nav-tabs">
-    {%  for form in formset%}
-        <li {% if year ==  form.year.value%}class="active"{% endif %}><a href="{% url 'attributions_by_year'  form.year.value global_id  %}" >{{ form.year.value }}-{{ form.next_year.value }}</a></li>
-    {% endfor %}
-    </ul>
-    <div class="tab-content">
-        {%  for form in formset%}
-            <div id="tab_profile_{{ forloop.counter }}" class="tab-pane fade">
-            </div>
-        {% endfor %}
-    </div>
-    {% if attributions %}
-        <table class="table table-striped table-hover">
-        <tr>
-            <th>{% trans 'code'%}</th>
-            <th>{% trans 'title'%}</th>
-            <th>{% trans 'lecturing_hours'%}</th>
-            <th>{% trans 'practical_hours'%}</th>
-            <th>%</th>
-            <th>{% trans 'weight' %}</th>
-            <th>{% trans 'students' %}</th>
-            <th>{% trans 'schedule'%}</th>
-            <th>{% trans 'email'%}</th>
-            <th>{% trans 'function'%}</th>
-        </tr>
-        {% for attribution in attributions %}
-            <tr>
-                <td>{% if  attribution.learning_unit_year_url%}<a href="{{ attribution.learning_unit_year_url }}" target="_blank">{{ attribution.acronym }}</a>{% else %}{{ attribution.acronym }}{% endif %}</td>
-                <td>{{ attribution.title }}</td>
-                <td>{{ attribution.lecturing_allocation_charge | default_if_none:''}}</td>
-                <td>{{ attribution.practice_allocation_charge | default_if_none:''}}</td>
-                <td>{{ attribution.percentage_allocation_charge | default_if_none:''}}</td>
-                <td>{{ attribution.weight | default_if_none:''}}</td>
-                <td><a href="{% url 'attribution_students' a_learning_unit_year=attribution.learning_unit_year.id  a_tutor=attribution.tutor_id %}"><span class="fa fa-group" aria-hidden="true"></span></a></td>
-                <td><a target="_blank" href="{{ attribution.url_schedule }}"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span></a></td>
-                <td><a href="{{ attribution.url_students_list_email }}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a></td>
-                <td>{% trans attribution.function %}</td>
-            </tr>
-        {% endfor %}
-            <tr>
-                <td></td>
-                <td ><label>{% trans 'total' %}</label></td>
-                <td>{{ tot_lecturing }}</td>
-                <td>{{ tot_practical }}</td>
-                <td colspan="6"></td>
-            </tr>
-        </table>
-    {% else %}
-        <br>
-        <div class="alert alert-info" role="alert">{% trans 'no_teaching_charge' %} {{ academic_year }}</div>
-    {% endif %}
-
+    {% include 'tutor_charge_content.html' %}
 {% endblock %}

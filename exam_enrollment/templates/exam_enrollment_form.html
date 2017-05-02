@@ -155,12 +155,19 @@
                         {% endfor %}
                     </table>
 
-                    <div class="row">
-                        <div class="text-center">
-                            <button class="btn btn-primary" id="bt_validate_exam_enrol_form" type="submit"
-                                    data-toggle="tooltip" data-placement="bottom" title="{% trans 'validate_exam_enrol_form_description' %}">
-                                <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> {% trans 'validate_changes' %}</button>
-                        </div>
+                    <div class="alert alert-info" style="display:inline-block;">
+                        <table>
+                            <tr>
+                                <td style="padding-right:12px;"><i class="fa fa-info-circle" style="font-size:250%" aria-hidden="true"></i></td>
+                                <td>{% trans 'message_exam_enrolment_state' %}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="text-center">
+                        <button class="btn btn-primary" id="bt_validate_exam_enrol_form" type="submit"
+                                data-toggle="tooltip" data-placement="bottom" title="{% trans 'validate_exam_enrol_form_description' %}">
+                            <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> {% trans 'validate_changes' %}</button>
                     </div>
                 </form>
 

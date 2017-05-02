@@ -28,34 +28,44 @@ from django.contrib.auth.decorators import login_required, permission_required
 from base.views import layout
 from internship.forms.form_search_hospital import SearchHospitalForm
 from internship import models as mdl_internship
+from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
 
 
 @login_required
 @permission_required('internship.can_access_internship', raise_exception=True)
-def view_hospitals_list(request):
+@redirect_if_not_in_cohort
+def view_hospitals_list(request, cohort_id):
     cities = mdl_internship.organization_address.get_all_cities()
+    name = ""
+    city = ""
     hospitals = []
+    cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
 
     if request.method == 'POST':
         form = SearchHospitalForm(cities, request.POST)
         if form.is_valid():
             name = form.cleaned_data['name']
             city = form.cleaned_data['city']
-            hospitals = get_hospitals(name=name, city=city)
 
     else:
         form = SearchHospitalForm(cities)
 
+    hospitals = get_hospitals(name=name, city=city, cohort=cohort)
+
     return layout.render(request, "hospitals.html", {'search_form': form,
-                                                     'hospitals': hospitals})
+                                                     'hospitals': hospitals,
+                                                     'cohort': cohort,
+                                                     'name': name,
+                                                     'city': city})
 
 
-def get_hospitals(name="", city=""):
+def get_hospitals(cohort, name="", city=""):
     if name:
-        organizations = mdl_internship.organization.search(name)
+        organizations = mdl_internship.organization.search(name, cohort)
     else:
-        organizations = mdl_internship.organization.Organization.objects.all()
+        organizations = mdl_internship.organization.filter_by_cohort(cohort)
     hospitals = []
+
     for organization in organizations:
         organization_address = mdl_internship.organization_address.get_by_organization(organization)
         if is_in_city(organization_address, city):

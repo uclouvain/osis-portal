@@ -27,20 +27,6 @@ from base import models as mdl_base
 
 
 def create_learning_unit_year(data):
-    learning_unit_year = mdl_base.learning_unit_year.LearningUnitYear()
-    if 'acronym' in data:
-        learning_unit_year.acronym = data['acronym']
-    if 'title' in data:
-        learning_unit_year.title = data['title']
-    if 'academic_year' in data:
-        learning_unit_year.academic_year = data['academic_year']
-    if 'weight' in data:
-        learning_unit_year.weight = data['weight']
-    if 'learning_unit' in data:
-        learning_unit_year.learning_unit = data['learning_unit']
-    if 'vacant' in data:
-        learning_unit_year.vacant = data['vacant']
-    if 'in_charge' in data:
-        learning_unit_year.in_charge = data['in_charge']
+    learning_unit_year = mdl_base.learning_unit_year.LearningUnitYear(**data)
     learning_unit_year.save()
     return learning_unit_year

@@ -81,6 +81,6 @@ def find_by_person_global_id(global_id):
 
 def find_by_id(tutor_id):
     try:
-        return Tutor.objects.get(pk=tutor_id)
+        return Tutor.objects.select_related("person").get(pk=tutor_id)
     except ObjectDoesNotExist:
         return None
