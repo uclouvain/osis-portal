@@ -204,7 +204,7 @@ def get_teaching_charge_data(a_person, year):
             'year': int(year),
             'tot_lecturing': tot_lecturing,
             'tot_practical': tot_practical,
-            'academic_year': "{0}-{1}".format(str(an_academic_year.year), str(an_academic_year.year + 1)),
+            'academic_year': an_academic_year,
             'global_id': a_person.global_id}
     return data
 
