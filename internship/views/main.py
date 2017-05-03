@@ -24,23 +24,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
-from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib import messages
-from django.core.exceptions import MultipleObjectsReturned
-from django.shortcuts import redirect
-from django.forms import formset_factory
-from django.utils.translation import ugettext_lazy as _
 import datetime
 
-from base.views import layout
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, permission_required
+from django.forms import formset_factory
+from django.shortcuts import redirect
+from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.http import require_POST
+
 import base.models as mdl_base
 import internship.models as mdl_internship
-from internship.forms.form_select_speciality import SpecialityForm
-from internship.forms.form_offer_preference import OfferPreferenceFormSet, OfferPreferenceForm
+from base.views import layout
 from dashboard.views import main as dash_main_view
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
 from internship.decorators.cohort_view_decorators import redirect_if_subscription_not_allowed
 from internship.decorators.global_view_decorators import redirect_if_multiple_registrations
+from internship.forms.form_offer_preference import OfferPreferenceFormSet, OfferPreferenceForm
+from internship.forms.form_select_speciality import SpecialityForm
+
 
 @login_required
 @permission_required('internship.can_access_internship', raise_exception=True)
@@ -151,6 +153,7 @@ def zip_offers_formset_and_first_choices(formset, internships_offers, number_cho
             zipped_data.append((offer, form, number_choices_by_organization.get(offer.organization.id, 0)))
     return zipped_data
 
+@require_POST
 @login_required
 @permission_required('internship.can_access_internship', raise_exception=True)
 @redirect_if_multiple_registrations
