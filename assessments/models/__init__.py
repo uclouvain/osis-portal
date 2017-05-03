@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -23,11 +23,4 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
-
-from dashboard.views import main
-
-urlpatterns = [
-    url(r'^$', main.home, name='dashboard_home'),
-    url('^faculty_administration/$', main.faculty_administration, name='faculty_administration')
-]
+from assessments.models import score_encoding
