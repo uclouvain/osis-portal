@@ -73,11 +73,20 @@ msgstr "X - Droit et sanction"
 msgid "legend_exam_enrol_y"
 msgstr "Y - Deuxième inscription"
 
+msgid "message_exam_enrolment_state"
+msgstr "Vous pouvez consulter l'ensemble des états d'inscriptions aux examens dans le récapitulatif 'Mes notes'."
+
 msgid "no_offer_enrollment_found"
 msgstr "Vous n'êtes inscrit à aucun programme d'étude pour cette année académique."
 
+msgid "no_exam_enrollment_avalaible"
+msgstr "Vous n'êtes inscrit à aucun cours dans le cadre du programme {}."
+
 msgid "no_exam_enrollment_found"
-msgstr "Aucune inscription aux examens trouvée."
+msgstr "Vous n'êtes inscrit à aucun cours dans le cadre du programme {}."
+
+msgid "no_learning_unit_enrollment_found"
+msgstr "Vous n'êtes inscrit à aucun cours dans le cadre du programme {}."
 
 msgid "outside_exam_enrollment_period"
 msgstr "Les inscriptions aux examens pour le programme {} sont actuellement fermées."
@@ -106,3 +115,6 @@ msgstr "Valider mes changements"
 
 msgid "year"
 msgstr "Année"
+
+msgid "offer_choice"
+msgstr "Choix de l'offre"

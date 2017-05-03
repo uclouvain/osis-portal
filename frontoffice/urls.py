@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -46,21 +46,18 @@ urlpatterns = (
     url(r'^jsi18n/$', javascript_catalog, js_info_dict, name='javascript-catalog'),
 )
 
-
-if 'admission' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^admission/', include('admission.urls')), )
 if 'dashboard' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^dashboard/', include('dashboard.urls')), )
+    urlpatterns += (url(r'^dashboard/', include('dashboard.urls')), )
 if 'performance' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^performance/', include('performance.urls')), )
+    urlpatterns += (url(r'^exammarks/', include('performance.urls')), )
 if 'dissertation' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^dissertation/', include('dissertation.urls')),)
+    urlpatterns += (url(r'^dissertation/', include('dissertation.urls')),)
 if 'attribution' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^attribution/', include('attribution.urls')), )
+    urlpatterns += (url(r'^attribution/', include('attribution.urls')), )
 if 'internship' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^internship/', include('internship.urls')), )
+    urlpatterns += (url(r'^internship/', include('internship.urls')), )
 if 'exam_enrollment' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^exam_enrollment/', include('exam_enrollment.urls')), )
+    urlpatterns += (url(r'^exam_enrollment/', include('exam_enrollment.urls')), )
 if 'attestation' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^attestation/', include('attestation.urls')), )
 if 'assessments' in settings.INSTALLED_APPS:
@@ -73,3 +70,7 @@ handler500 = 'base.views.common.server_error'
 admin.site.site_header = 'Osis-studies'
 admin.site.site_title = 'Osis-studies'
 admin.site.index_title = 'Louvain'
+
+if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
+    import debug_toolbar
+    urlpatterns += (url(r'^__debug__/', include(debug_toolbar.urls)), )

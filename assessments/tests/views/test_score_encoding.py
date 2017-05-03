@@ -23,9 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from unittest.mock import patch
-
+from django.conf import settings
 from django.test import TestCase
+from unittest.mock import patch
 
 from assessments.tests.models import test_score_encoding
 from assessments.views import score_encoding
@@ -40,30 +40,31 @@ class ScoreSheetTest(TestCase):
         document = score_encoding.get_score_sheet(self.global_id)
         self.assertJSONEqual(self.score_encoding.document, document, "Should return the document in db")
 
-    @patch('frontoffice.queue.queue_listener.Client.call')
-    def test_get_score_sheet_if_present_in_db_but_outdated(self, mock_client_call):
-        global_id = "12012"
-        new_score_encoding = test_score_encoding.create_score_encoding(global_id=global_id)
-        new_score_encoding.document = test_score_encoding.get_old_sample()
-        new_score_encoding.save()
+    if hasattr(settings, 'QUEUES') and settings.QUEUES:
+        @patch('frontoffice.queue.queue_listener.Client.call')
+        def test_get_score_sheet_if_present_in_db_but_outdated(self, mock_client_call):
+            global_id = "12012"
+            new_score_encoding = test_score_encoding.create_score_encoding(global_id=global_id)
+            new_score_encoding.document = test_score_encoding.get_old_sample()
+            new_score_encoding.save()
 
-        expected = test_score_encoding.get_sample()
-        mock_client_call.return_value = expected.encode("utf-8")
-        document = score_encoding.get_score_sheet(global_id)
-        self.assertJSONEqual(document, expected, "Should fetch document from queue")
+            expected = test_score_encoding.get_sample()
+            mock_client_call.return_value = expected.encode("utf-8")
+            document = score_encoding.get_score_sheet(global_id)
+            self.assertJSONEqual(document, expected, "Should fetch document from queue")
 
-    @patch('frontoffice.queue.queue_listener.Client.call')
-    def test_get_score_sheet_if_not_present_in_db_with_timeout(self, mock_client_call):
-        mock_client_call.return_value = None
-        document = score_encoding.get_score_sheet("12012")
-        self.assertIsNone(document, "Should timeout when waiting for document and return none")
+        @patch('frontoffice.queue.queue_listener.Client.call')
+        def test_get_score_sheet_if_not_present_in_db_with_timeout(self, mock_client_call):
+            mock_client_call.return_value = None
+            document = score_encoding.get_score_sheet("12012")
+            self.assertIsNone(document, "Should timeout when waiting for document and return none")
 
-    @patch('frontoffice.queue.queue_listener.Client.call')
-    def test_get_score_sheet_if_not_present_in_db_and_fetch(self, mock_client_call):
-        expected = test_score_encoding.get_sample()
-        mock_client_call.return_value = expected.encode("utf-8")
-        document = score_encoding.get_score_sheet("12012")
-        self.assertJSONEqual(document, expected, "Should fetch document from queue")
+        @patch('frontoffice.queue.queue_listener.Client.call')
+        def test_get_score_sheet_if_not_present_in_db_and_fetch(self, mock_client_call):
+            expected = test_score_encoding.get_sample()
+            mock_client_call.return_value = expected.encode("utf-8")
+            document = score_encoding.get_score_sheet("12012")
+            self.assertJSONEqual(document, expected, "Should fetch document from queue")
 
 
 class PrintScoreSheetTest(TestCase):

@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -108,7 +108,8 @@ def get_email_students(an_acronym):
 
 def get_schedule_url(an_acronym):
     if is_string_not_null_empty(an_acronym):
-        return settings.TIME_TABLE_URL.format(settings.TIME_TABLE_NUMBER, an_acronym.lower())
+        return settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_URL').\
+            format(settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_NUMBER'), an_acronym.lower())
     return None
 
 
@@ -164,12 +165,22 @@ def list_teaching_charge(a_person, an_academic_year):
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
 def by_year(request, year, a_global_id):
+    return render(request, "tutor_charge.html", load_teaching_charge_data(a_global_id, request, year))
+
+
+@login_required
+@permission_required('base.is_faculty_administrator', raise_exception=True)
+def by_year_admin(request, year, a_global_id):
+    return render(request, "tutor_charge_admin.html", load_teaching_charge_data(a_global_id, request, year))
+
+
+def load_teaching_charge_data(a_global_id, request, year):
     if a_global_id:
-        a_person =mdl_base.person.find_by_global_id(a_global_id)
+        a_person = mdl_base.person.find_by_global_id(a_global_id)
     else:
         a_person = get_person(request.user)
-    data = get_teaching_charge_data(a_person,  year)
-    return render(request, "tutor_charge.html", data)
+    data = get_teaching_charge_data(a_person, year)
+    return data
 
 
 def get_teaching_charge_data(a_person, year):
@@ -214,28 +225,38 @@ def set_formset_years(a_person):
 
 def get_url_learning_unit_year(a_learning_unit_year):
     if a_learning_unit_year and is_string_not_null_empty(a_learning_unit_year.acronym):
-        return settings.CATALOG_URL.format(a_learning_unit_year.academic_year.year,
+        return settings.ATTRIBUTION_CONFIG.get('CATALOG_URL').format(a_learning_unit_year.academic_year.year,
                                            a_learning_unit_year.acronym.lower())
     return None
 
 
-def get_students(a_learning_unit_year_id, a_person):
+def get_students(a_learning_unit_year_id, a_tutor):
     a_learning_unit_year = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year_id)
-    return get_learning_unit_years_list(a_learning_unit_year, mdl_base.tutor.find_by_person(a_person))
+    return get_learning_unit_years_list(a_learning_unit_year, a_tutor)
 
 
-@login_required
-@permission_required('attribution.can_access_attribution', raise_exception=True)
-def show_students(request, a_learning_unit_year, a_tutor):
+def load_students(a_learning_unit_year, a_tutor, request):
     students_list = []
     request_tutor = mdl_base.tutor.find_by_id(a_tutor)
     for learning_unit_enrollment in get_students(a_learning_unit_year, get_person(request_tutor.person.user)):
         students_list.append(set_student_for_display(learning_unit_enrollment))
+    a_person = mdl_base.person.find_by_user(request.user)
+    return {'global_id': request_tutor.person.global_id,
+            'students': students_list,
+            'learning_unit_year': mdl_base.learning_unit_year.find_by_id(a_learning_unit_year), }
 
-    return render(request, "students_list.html", {
-        'global_id': request_tutor.person.global_id,
-        'students': students_list,
-        'learning_unit_year': mdl_base.learning_unit_year.find_by_id(a_learning_unit_year), })
+
+@login_required
+@permission_required('base.is_faculty_administrator', raise_exception=True)
+def show_students_admin(request, a_learning_unit_year, a_tutor):
+    return render(request, "students_list_admin.html",
+                  load_students(a_learning_unit_year, a_tutor, request))
+
+@login_required
+@permission_required('attribution.can_access_attribution', raise_exception=True)
+def show_students(request, a_learning_unit_year, a_tutor):
+    return render(request, "students_list.html",
+                  load_students(a_learning_unit_year, a_tutor, request))
 
 
 def get_sessions_results(a_registration_id, a_learning_unit, offer_acronym):
@@ -293,6 +314,7 @@ def get_session_value(session_results, month_session, variable_to_get):
 
 
 def set_student_for_display(learning_unit_enrollment):
+
     session_results = get_sessions_results(learning_unit_enrollment.offer_enrollment.student.registration_id,
                                            learning_unit_enrollment.learning_unit_year,
                                            learning_unit_enrollment.offer_enrollment.offer_year.acronym)
@@ -343,9 +365,7 @@ def get_learning_unit_years_list(a_learning_unit_year, a_tutor):
     learning_unit_years_allocated = []
     for lu in mdl_base.learning_unit_year.find_by_acronym(a_learning_unit_year.acronym,
                                                           a_learning_unit_year.academic_year):
-        attribution = mdl_attribution.attribution.search(a_tutor, lu)
-        if attribution.exists():
-            learning_unit_years_allocated.append(lu)
+        learning_unit_years_allocated.append(lu)
 
     return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(learning_unit_years_allocated)
 

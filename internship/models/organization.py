@@ -28,13 +28,14 @@ from django.db import models
 
 
 class OrganizationAdmin(SerializableModelAdmin):
-    list_display = ('name', 'acronym', 'reference', 'type')
+    list_display = ('name', 'acronym', 'reference', 'type', 'cohort')
     fieldsets = ((None, {'fields': ('name', 'acronym', 'reference', 'website', 'type')}),)
     search_fields = ['acronym', 'name']
 
 
 class Organization(SerializableModel):
     name = models.CharField(max_length=255)
+    cohort = models.ForeignKey('internship.Cohort', null=False)
     acronym = models.CharField(max_length=15, blank=True)
     website = models.URLField(max_length=255, blank=True, null=True)
     reference = models.CharField(max_length=30, blank=True, null=True)
@@ -47,6 +48,8 @@ class Organization(SerializableModel):
         self.acronym = self.name[:14]
         super(Organization, self).save(*args, **kwargs)
 
+def filter_by_cohort(cohort):
+    return Organization.objects.filter(cohort_id=cohort.pk)
 
-def search(name):
-    return Organization.objects.filter(name__contains=name)
+def search(name, cohort):
+    return Organization.objects.filter(name__icontains=name, cohort=cohort)

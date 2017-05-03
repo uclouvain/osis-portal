@@ -29,15 +29,15 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 
 
 class PeriodInternshipPlacesAdmin(SerializableModelAdmin):
-    list_display = ('period', 'internship', 'number_places')
-    fieldsets = ((None, {'fields': ('period', 'internship', 'number_places')}),)
-    raw_id_fields = ('period', 'internship')
+    list_display = ('period', 'internship_offer', 'number_places')
+    fieldsets = ((None, {'fields': ('period', 'internship_offer', 'number_places')}),)
+    raw_id_fields = ('period', 'internship_offer')
     search_fields = ['internship__organization__name']
 
 
 class PeriodInternshipPlaces(SerializableModel):
     period = models.ForeignKey('internship.Period')
-    internship = models.ForeignKey('internship.InternshipOffer')
+    internship_offer = models.ForeignKey('internship.InternshipOffer')
     number_places = models.IntegerField(blank=None, null=False)
 
     def __str__(self):

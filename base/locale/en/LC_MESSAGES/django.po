@@ -36,10 +36,16 @@ msgid "page_not_found"
 msgstr "Page not found"
 
 msgid "server_error"
-msgstr "A server error occured."
+msgstr "A server error occurred."
 
 msgid "server_error_message"
 msgstr ""
   "We have been automatically informed about this problem. Do not hesitate to help us to solve this problem by "
   "contacting the <a href='https://uclouvain.be/ServiceDesk' target='_blank'>Service Desk</a> to describe what you "
   "intended to do in more details."
+
+msgid "succesfull_logout"
+msgstr "You are succesfully logout."
+
+msgid "redirect_to_login"
+msgstr "Click to reconnect"

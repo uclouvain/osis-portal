@@ -26,29 +26,33 @@
 
 from internship.models import organization as mdl_organization
 from django.test import TestCase
+from internship.tests.factories.cohort import CohortFactory
 
 
-def create_organization(name="OSIS", acronym="OSIS", reference="01"):
-    organization = mdl_organization.Organization(name=name, acronym=acronym, reference=reference)
+def create_organization(name="OSIS", acronym="OSIS", reference="01", cohort=None):
+    if cohort == None:
+        cohort = CohortFactory()
+    organization = mdl_organization.Organization(name=name, acronym=acronym, reference=reference, cohort=cohort)
     organization.save()
     return organization
 
 
 class TestSearch(TestCase):
     def setUp(self):
-        self.organization = create_organization()
-        self.organization2 = create_organization(name="OSAS", reference="02")
+        self.cohort = CohortFactory()
+        self.organization = create_organization(cohort=self.cohort)
+        self.organization2 = create_organization(name="OSAS", reference="02", cohort=self.cohort)
 
     def test_with_specific_name(self):
-        organizations = list(mdl_organization.search("OSIS"))
+        organizations = list(mdl_organization.search("OSIS", self.cohort))
         self.assertListEqual(organizations, [self.organization])
 
     def test_with_no_match(self):
-        organizations = list(mdl_organization.search("NO MATCH"))
+        organizations = list(mdl_organization.search("NO MATCH", self.cohort))
         self.assertFalse(organizations)
 
     def test_with_prefix(self):
-        organizations = list(mdl_organization.search("OS"))
+        organizations = list(mdl_organization.search("OS", self.cohort))
         self.assertEqual(len(organizations), 2)
         self.assertIn(self.organization, organizations)
         self.assertIn(self.organization2, organizations)

@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,29 +23,39 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
+from django.conf.urls import url, include
 from attribution.views import tutor_charge, online_application
 
 urlpatterns = [
 
     url(r'^$', tutor_charge.home, name='attribution_home'),
     url(r'^charge/([0-9]+)/([0-9a-z-]+)/$', tutor_charge.by_year, name='attributions_by_year'),
+    url(r'^search/$', online_application.search, name='vacant_learning_unit_search'),
+
     url(r'^students/(?P<a_learning_unit_year>[0-9]+)/(?P<a_tutor>[0-9]+)/$', tutor_charge.show_students,
         name='attribution_students'),
-    url(r'^applications/$', online_application.home, name='learning_unit_applications'),
-    url(r'^applications/([0-9]+)/delete/$', online_application.delete, name='delete_tutor_application'),
-    url(r'^applications/([0-9]+)/edit/$', online_application.edit, name='edit_tutor_application'),
-    url(r'^applications/([0-9]+)/save/$', online_application.save, name='save_tutor_application'),
-    url(r'^applications/create/$', online_application.save_on_new_learning_unit, name='save_new_tutor_application'),
 
-    url(r'^applications/form/$', online_application.attribution_application_form, name='tutor_application_create'),
-    url(r'^search/$', online_application.search, name='vacant_learning_unit_search'),
-    url(r'^applications/renew/$', online_application.renew, name='renew'),
-    url(r'^applications/new/$', online_application.new, name='new'),
-    url(r'^applications/outside_period/$', online_application.outside_period, name='outside_applications_period'),
-    url(r'^administration/attributions/$', tutor_charge.attribution_administration, name='attribution_administration'),
-    url(r'^administration/select_tutor/$', tutor_charge.select_tutor_attributions,
-        name='attribution_admin_select_tutor'),
-    url(r'^administration/visualize_tutor/([0-9a-z-]+)/$', tutor_charge.visualize_tutor_attributions,
-        name='attribution_admin_visualize_tutor'),
+    url(r'^applications/', include([
+        url(r'^$', online_application.home, name='learning_unit_applications'),
+        url(r'^([0-9]+)/delete/$', online_application.delete, name='delete_tutor_application'),
+        url(r'^([0-9]+)/edit/$', online_application.edit, name='edit_tutor_application'),
+        url(r'^([0-9]+)/save/$', online_application.save, name='save_tutor_application'),
+        url(r'^create/$', online_application.save_on_new_learning_unit, name='save_new_tutor_application'),
+        url(r'^form/$', online_application.attribution_application_form, name='tutor_application_create'),
+        url(r'^renew/$', online_application.renew, name='renew'),
+        url(r'^new/$', online_application.new, name='new'),
+        url(r'^outside_period/$', online_application.outside_period, name='outside_applications_period'),
+    ])),
+
+    url(r'^administration/', include([
+        url(r'^charge/([0-9]+)/([0-9a-z-]+)/$', tutor_charge.by_year_admin, name='attributions_by_year_admin'),
+        url(r'^students/(?P<a_learning_unit_year>[0-9]+)/(?P<a_tutor>[0-9]+)/$', tutor_charge.show_students_admin,
+            name='attribution_students_admin'),
+        url(r'^attributions/$', tutor_charge.attribution_administration, name='attribution_administration'),
+        url(r'^select_tutor/$', tutor_charge.select_tutor_attributions,
+            name='attribution_admin_select_tutor'),
+        url(r'^visualize_tutor/([0-9a-z-]+)/$', tutor_charge.visualize_tutor_attributions,
+            name='attribution_admin_visualize_tutor'),
+    ])),
+
 ]
