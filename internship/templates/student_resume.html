@@ -49,17 +49,17 @@
                         {% trans 'student_information' %}
                     </a>
                 </li>
-                <li role="presentation">
-                    <a href="#choices" aria-controls="choices" role="tab" data-toggle="tab">
-                        {% trans 'choices_received_by_administration' %}
-                    </a>
-                </li>
                 {% if publication_allowed %}
-                <li role="presentation">
-                    <a href="#affectation" aria-controls="affectation" role="tab" data-toggle="tab">
-                        {% trans 'internship_affectation' %}
-                    </a>
-                </li>
+                  <li role="presentation">
+                      <a href="#choices" aria-controls="choices" role="tab" data-toggle="tab">
+                          {% trans 'choices_received_by_administration' %}
+                      </a>
+                  </li>
+                  <li role="presentation">
+                      <a href="#affectation" aria-controls="affectation" role="tab" data-toggle="tab">
+                          {% trans 'internship_affectation' %}
+                      </a>
+                  </li>
                 {% endif %}
             </ul>
         </div>

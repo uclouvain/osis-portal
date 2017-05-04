@@ -26,13 +26,26 @@
 from django.db import models
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
+from internship.admin_actions.actions import export_as_csv_action
 
 class InternshipChoiceAdmin(SerializableModelAdmin):
-    list_display = ('student', 'organization', 'speciality', 'choice', 'internship', 'priority')
-    fieldsets = ((None, {'fields': ('student', 'organization', 'speciality', 'choice', 'internship',
+    list_display = ('id', 'student', 'organization', 'speciality', 'choice', 'internship', 'priority', 'uuid')
+    fieldsets = ((None, {'fields': ('id', 'student', 'organization', 'speciality', 'choice', 'internship',
                                     'priority')}),)
     raw_id_fields = ('student', 'organization', 'speciality')
-    search_fields = ['student__person__first_name', 'student__person__last_name']
+    search_fields = ['id', 'uuid', 'student__person__first_name', 'student__person__last_name']
+
+    actions = [export_as_csv_action("Export to CSV",
+        fields = [
+            'student',
+            'organization',
+            'speciality',
+            'internship',
+            'choice',
+            'priority',
+            'uuid'
+        ]
+    )]
 
 
 class InternshipChoice(SerializableModel):
@@ -45,6 +58,9 @@ class InternshipChoice(SerializableModel):
 
     def __str__(self):
         return u"%s - %s : %s" % (self.organization.acronym, self.speciality.acronym, self.choice)
+
+    class Meta:
+        unique_together = (("student", "internship", "choice"),)
 
 
 def search(student=None, speciality=None, specialities=None, internship=None):
