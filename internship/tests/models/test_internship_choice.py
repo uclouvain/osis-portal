@@ -24,14 +24,15 @@
 #
 ##############################################################################
 from django.test import TestCase
+from django.db.utils import IntegrityError
 from internship.models import internship_choice as mdl_internship_choice
 from internship.tests.models import test_organization, test_internship_speciality
 from base.tests.models import test_student
 from internship.tests.factories.internship import InternshipFactory
 
-def create_internship_choice(organization, student, speciality, internship):
+def create_internship_choice(organization, student, speciality, internship, choice=1):
     choice = mdl_internship_choice.InternshipChoice(organization=organization, student=student, speciality=speciality,
-                                                    choice=1, internship=internship, priority=False)
+                                                    choice=choice, internship=internship, priority=False)
     choice.save()
     return choice
 
@@ -42,12 +43,16 @@ class TestSearch(TestCase):
         self.student = test_student.create_student("64641200")
         self.other_student = test_student.create_student("60601200")
         self.speciality = test_internship_speciality.create_speciality()
-        self.internship = InternshipFactory()
-        self.other_internship = InternshipFactory()
+        self.internship = InternshipFactory(speciality=self.speciality)
+        self.other_internship = InternshipFactory(speciality=self.speciality)
 
         self.choice_1 = create_internship_choice(self.organization, self.student, self.speciality, internship=self.other_internship)
         self.choice_2 = create_internship_choice(self.organization, self.student, self.speciality, internship=self.internship)
         self.choice_3 = create_internship_choice(self.organization, self.other_student, self.speciality, internship=self.other_internship)
+
+    def test_duplicates_are_forbidden(self):
+        with self.assertRaises(IntegrityError):
+            create_internship_choice(self.organization, self.student, self.speciality, internship=self.internship)
 
     def test_with_only_student(self):
         choices = list(mdl_internship_choice.search(student=self.student))
@@ -77,8 +82,9 @@ class TestSearch(TestCase):
         expected = [{"organization": self.organization.id, "organization__count": 3}]
         self.assertEqual(expected, number_first_choice)
 
-        other_organization = test_organization.create_organization(reference="02")
-        create_internship_choice(other_organization, self.student, self.speciality, self.internship)
+        other_organization = test_organization.create_organization(reference="10")
+        yet_another_internship = InternshipFactory(speciality=self.speciality)
+        create_internship_choice(other_organization, self.student, self.speciality, yet_another_internship)
         number_first_choice = list(mdl_internship_choice.get_number_first_choice_by_organization(self.speciality))
         expected = [{"organization": self.organization.id, "organization__count": 3},
                     {"organization": other_organization.id, "organization__count": 1}]
