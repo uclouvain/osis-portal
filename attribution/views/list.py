@@ -42,21 +42,22 @@ LEARNING_UNIT_ACRONYM_ID = "learning_unit_acronym_"
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
 def students_list(request):
-    data = get_learning_units(request)
+    data = get_learning_units(request.user)
     return render(request, "list/students_exam.html", data)
 
 
-def get_learning_units(request):
-    a_person = mdl_base.person.find_by_user(request.user)
+def get_learning_units(a_user):
+    a_person = mdl_base.person.find_by_user(a_user)
     learning_units = []
     if a_person:
         current_academic_year = mdl_base.academic_year.current_academic_year()
         tutor = mdl_base.tutor.find_by_person(a_person)
-        attributions = mdl_attribution.attribution.find_by_tutor_year(tutor, current_academic_year)
-        learning_units = []
-        for a in attributions:
-            if a.learning_unit_year not in learning_units:
-                learning_units.append(a.learning_unit_year)
+        if current_academic_year and tutor:
+            attributions = mdl_attribution.attribution.find_by_tutor_year(tutor, current_academic_year)
+
+            for attribution in attributions:
+                if attribution.learning_unit_year not in learning_units:
+                    learning_units.append(attribution.learning_unit_year)
     data = {'person': a_person,
             'my_learning_units': learning_units}
     return data
