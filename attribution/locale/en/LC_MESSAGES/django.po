@@ -322,3 +322,6 @@ msgstr "Choose the learning units you want to consider in the list"
 
 msgid "produce_xls"
 msgstr "Produce xls"
+
+msgid "desc_lnk_my_students_list_legend"
+msgstr "Legend to help you understanding the xls file"
