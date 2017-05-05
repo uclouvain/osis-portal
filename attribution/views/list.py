@@ -101,7 +101,7 @@ def list_build(request):
     if list_exam_enrollments_xls:
         return _make_xls_list(list_exam_enrollments_xls)
     else:
-        data = get_learning_units(request)
+        data = get_learning_units(request.user)
         data.update({'msg_error': _('no_data')})
         return render(request, "list/students_exam.html", data)
 
