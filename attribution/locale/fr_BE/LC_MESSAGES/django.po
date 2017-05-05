@@ -325,3 +325,6 @@ msgstr "Choississez dans vos cours ceux que vous voulez considérer dans la list
 
 msgid "produce_xls"
 msgstr "Produire xls"
+
+msgid "desc_lnk_my_students_list_legend"
+msgstr "Légende pour mieux comprendre le fichier xls"

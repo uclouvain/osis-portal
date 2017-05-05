@@ -64,9 +64,51 @@
                 </table>
                 </div>
             </div>
+            <br>
+            <button class="btn btn-primary pull-right" id="bt_produce_xls" type="submit" title="{% trans 'submit' %}" disabled >
+                {% trans 'produce_xls' %}</button>
+            <div>
                 <br>
-                <button class="btn btn-primary pull-right" id="bt_produce_xls" type="submit" title="{% trans 'submit' %}" disabled >
-                    {% trans 'produce_xls' %}</button>
+                <br>
+                <br>
+                <label>{% trans 'desc_lnk_my_students_list_legend' %}</label>
+                <table class="table table-bordered">
+                    <tr><td>Fac charge</td><td>Faculté responsable du cahier de charge</td></tr>
+                    <tr><td>Comm charge</td><td>Commission/Ecole responsable du cahier de charge</td></tr>
+                    <tr><td>Fac attrib</td><td>Faculté responsable de l'attribution</td></tr>
+                    <tr><td>Comm attrib</td><td>Commission/Ecole responsable de l'attribution</td></tr>
+                    <tr><td>Sigle cours</td><td>Sigle complet de l'activité</td></tr>
+                    <tr><td>Enseignant</td><td>Liste des enseignants en charge</td></tr>
+                    <tr><td>Intitulé abrégé</td><td>Intitulé abrégé</td></tr>
+                    <tr><td>Quadri</td><td>Quadrimestre d'organisation</td></tr>
+                    <tr><td>Sess derog cours</td><td>Dérogation de la session d'organisation de l'examen, enregistrée sur l’UE</td></tr>
+                    <tr><td>Ecole étudiant</td><td>Commission/Ecole du programme de l'étudiant</td></tr>
+                    <tr><td>AnEt</td><td>Programme de l'étudiant</td></tr>
+                    <tr><td>Section</td><td>Section de l’étudiant</td></tr>
+                    <tr><td>Sess derog AnEt</td><td>Dérogation de la session d'organisation de l'examen enregistrée dans la LCP (càd spécifique au programme)</td></tr>
+                    <tr><td>Num. fac.</td><td>Numéro facultaire</td></tr>
+                    <tr><td>NOMA</td><td>Numéro de matricule</td></tr>
+                    <tr><td>Nom prénom</td><td>Nom, Prénom1</td></tr>
+                    <tr><td>Email</td><td>Email</td></tr>
+                    <tr><td>Cntxt inscr.</td><td>Contexte de l’inscription au cours (mineure, majeure, option, mobilité)</td></tr>
+                    <tr><td>Etat cours</td><td>Type d’inscription au cours. Etat d'inscription à l'examen pour la session de janvier (I, Y= inscrit ; R=report) </td></tr>
+                    <tr><td>Etat exam 1</td><td>Etat d'inscription à l'examen pour la session de janvier (I, Y= inscrit ; R= report)</td></tr>
+                    <tr><td>Etat sess 1</td><td>Etat d'inscription à la session de janvier (EP=épreuve, IS = examens isolés)</td></tr>
+                    <tr><td>Note 1</td><td>Note chiffrée pour la session de janvier</td></tr>
+                    <tr><td>Mention 1</td><td>Information pour la session de janvier (M= absence motivée, S= abs. non motivée, T=tricherie)</td></tr>
+                    <tr><td>Etat exam 2</td><td>Etat d'inscription à l'examen pour la session de juin (I, Y= inscrit ; R= report)</td></tr>
+                    <tr><td>Etat sess 2</td><td> Etat d'inscription à la session de juin (EP=épreuve, IS = examens isolés)</td></tr>
+                    <tr><td>Note 2</td><td>Note chiffrée pour la session de juin</td></tr>
+                    <tr><td>Mention 2</td><td>Information pour la session de juin (M= absence motivée, S= abs. non motivée, T=tricherie)</td></tr>
+                    <tr><td>Etat exam 3</td><td>Etat d'inscription à l'examen pour la session de septembre (I, Y= inscrit ; R= report)</td></tr>
+                    <tr><td>Etat sess 3</td><td>Etat d'inscription à la session de septembre (EP=épreuve, IS = examens isolés)</td></tr>
+                    <tr><td>Note 3</td><td>Note chiffrée pour la session de septembre</td></tr>
+                    <tr><td>Mention 3</td><td>Information pour la session de septembre (M= absence motivée, S= abs. non motivée, T=tricherie)</td></tr>
+                    <tr><td>Dern note</td><td>Dernière note chiffrée</td></tr>
+                    <tr><td>Dern mention</td><td>Dernière information</td></tr>
+                </table>
+            </div>
+
             </form>
         </div>
     </div>
