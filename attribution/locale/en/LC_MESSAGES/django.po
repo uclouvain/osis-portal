@@ -325,3 +325,7 @@ msgstr "Produce xls"
 
 msgid "desc_lnk_my_students_list_legend"
 msgstr "Legend to help you understanding the xls file"
+
+msgid "no_learning_units"
+msgstr "You aren't teaching for any learning unit"
+
