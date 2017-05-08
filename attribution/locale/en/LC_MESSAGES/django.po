@@ -302,7 +302,6 @@ msgstr "Global id"
 msgid "no_tutor_with_this_global_id"
 msgstr "No tutor with this global id"
 
-
 msgid "teaching_charge"
 msgstr "Teaching charge"
 
@@ -317,3 +316,16 @@ msgstr "No data found"
 
 msgid "error_fetching_list"
 msgstr "Error fetching list"
+
+msgid "hlp_enrollment_exam_list"
+msgstr "Choose the learning units you want to consider in the list"
+
+msgid "produce_xls"
+msgstr "Produce xls"
+
+msgid "desc_lnk_my_students_list_legend"
+msgstr "Legend to help you understanding the xls file"
+
+msgid "no_learning_units"
+msgstr "You aren't teaching for any learning unit"
+

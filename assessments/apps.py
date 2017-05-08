@@ -23,11 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
+from django.apps import AppConfig
 
-from dashboard.views import main
 
-urlpatterns = [
-    url(r'^$', main.home, name='dashboard_home'),
-    url('^faculty_administration/$', main.faculty_administration, name='faculty_administration')
-]
+class AssessmentsConfig(AppConfig):
+    name = 'assessments'
