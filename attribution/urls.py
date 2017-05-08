@@ -24,7 +24,7 @@
 #
 ##############################################################################
 from django.conf.urls import url, include
-from attribution.views import tutor_charge, online_application
+from attribution.views import tutor_charge, online_application, list
 
 urlpatterns = [
 
@@ -57,5 +57,7 @@ urlpatterns = [
         url(r'^visualize_tutor/([0-9a-z-]+)/$', tutor_charge.visualize_tutor_attributions,
             name='attribution_admin_visualize_tutor'),
     ])),
+    url(r'^list/students$', list.students_list, name='students_list'),
+    url(r'^list/students/xls', list.list_build, name='students_list_create'),
 
 ]

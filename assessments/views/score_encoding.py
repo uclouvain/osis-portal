@@ -24,25 +24,26 @@
 #
 ##############################################################################
 import datetime
-import logging
 import json
+import logging
 import traceback
+from voluptuous import error as voluptuous_error
 
 from django.conf import settings
-from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
-from django.http import HttpResponse
-from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
-from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
+from django.contrib.auth.decorators import login_required, permission_required
 from django.db import connection
+from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
+from django.http import HttpResponse
+from django.utils.translation import ugettext_lazy as _
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
 
-from osis_common.document import paper_sheet
-from frontoffice.queue import queue_listener
 from base import models as mdl_base
 from base.views import layout
-from dashboard import models as mdl
+from frontoffice.queue import queue_listener
+from osis_common.document import paper_sheet
 from osis_common.models.queue_exception import QueueException
+import assessments.models
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
@@ -78,8 +79,9 @@ def print_scores(global_id):
     if json_document:
         document = json.loads(json_document)
         try:
+            paper_sheet.validate_data_structure(document)
             return paper_sheet.build_pdf(document)
-        except KeyError:
+        except (KeyError, voluptuous_error.Invalid):
             trace = traceback.format_exc()
             logger.error(trace)
             logger.warning("A document could not be produced from the json document of the global id {0}".format(global_id))
@@ -89,7 +91,7 @@ def print_scores(global_id):
 
 
 def get_score_sheet(global_id):
-    scor_encoding = mdl.score_encoding.find_by_global_id(global_id)
+    scor_encoding = assessments.models.score_encoding.find_by_global_id(global_id)
     document = None
     if scor_encoding:
         document = scor_encoding.document
@@ -104,7 +106,7 @@ def fetch_document(global_id):
         json_data = fetch_json(global_id)
         if json_data:
                 try:
-                    document = mdl.score_encoding.insert_or_update_document(global_id, json_data).document
+                    document = assessments.models.score_encoding.insert_or_update_document(global_id, json_data).document
                 except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError) as ep:
                     trace = traceback.format_exc()
                     try:
@@ -119,7 +121,7 @@ def fetch_document(global_id):
                         log_trace = traceback.format_exc()
                         logger.warning('Error during queue logging :\n {}'.format(log_trace))
                     connection.close()
-                    document = mdl.score_encoding.insert_or_update_document(global_id, json_data).document
+                    document = assessments.models.score_encoding.insert_or_update_document(global_id, json_data).document
     except Exception as e:
         trace = traceback.format_exc()
         try:

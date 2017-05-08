@@ -38,7 +38,6 @@ from internship.tests.factories.internship import InternshipFactory
 
 class TestMain(TestCase):
     def setUp(self):
-        self.c = Client()
         self.student = base.tests.models.test_student.create_student("45451298")
         self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
         self.student.person.user = self.user
@@ -50,40 +49,40 @@ class TestMain(TestCase):
 
     def test_can_access_internship_home(self):
         home_url = reverse("internship_home", kwargs={'cohort_id': self.cohort.id})
-        response = self.c.get(home_url)
+        response = self.client.get(home_url)
         self.assertEqual(response.status_code, 302)
 
-        self.c.force_login(self.user)
-        response = self.c.get(home_url)
+        self.client.force_login(self.user)
+        response = self.client.get(home_url)
         self.assertEqual(response.status_code, 200)
 
     def test_can_access_internship_selection(self):
         selection_url = reverse("select_internship", kwargs={'cohort_id': self.cohort.id})
-        response = self.c.get(selection_url)
+        response = self.client.get(selection_url)
         self.assertEqual(response.status_code, 302)
 
-        self.c.force_login(self.user)
-        response = self.c.get(selection_url)
+        self.client.force_login(self.user)
+        response = self.client.get(selection_url)
         self.assertEqual(response.status_code, 302) # Now redirected to first internship
 
     def test_can_access_specific_internship_selection(self):
         selection_url = reverse("select_specific_internship", kwargs={'internship_id': self.internship.id, 'cohort_id': self.cohort.id})
-        response = self.c.get(selection_url)
+        response = self.client.get(selection_url)
         self.assertEqual(response.status_code, 302)
 
-        self.c.force_login(self.user)
-        response = self.c.get(selection_url)
+        self.client.force_login(self.user)
+        response = self.client.get(selection_url)
         self.assertEqual(response.status_code, 200)
 
     def test_can_access_internship_selection_with_speciality(self):
         selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship.id,
                                                                         'speciality_id': 1,
                                                                         'cohort_id': self.cohort.id})
-        response = self.c.get(selection_url)
+        response = self.client.get(selection_url)
         self.assertEqual(response.status_code, 302)
 
-        self.c.force_login(self.user)
-        response = self.c.get(selection_url)
+        self.client.force_login(self.user)
+        response = self.client.get(selection_url)
         self.assertEqual(response.status_code, 200)
 
 
@@ -94,8 +93,9 @@ class TestSelectInternship(TestCase):
         self.student.person.user = user
         self.student.person.save()
         add_permission(self.student.person.user, "can_access_internship")
-        self.c = Client()
-        self.c.force_login(user)
+
+        self.client.force_login(user)
+
         self.cohort = CohortFactory()
         self.internship_1 = InternshipFactory(cohort=self.cohort)
         self.internship_2 = InternshipFactory(cohort=self.cohort)
@@ -130,13 +130,13 @@ class TestSelectInternship(TestCase):
         selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship_1.id,
                                                                         'speciality_id': self.speciality_1.id,
                                                                         'cohort_id': self.cohort.id})
-        self.assertRaises(ValidationError, self.c.post, selection_url, {})
+        self.assertRaises(ValidationError, self.client.post, selection_url, {})
 
     def test_with_one_choice(self):
         selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship_2.id,
                                                                         'speciality_id': self.speciality_2.id,
                                                                         'cohort_id': self.cohort.id})
-        response = self.c.post(selection_url, data={'form-TOTAL_FORMS': '2',
+        response = self.client.post(selection_url, data={'form-TOTAL_FORMS': '2',
                                          'form-INITIAL_FORMS': '0',
                                          'form-MIN_NUM_FORMS': '2',
                                          'form-MAX_NUM_FORMS': '2',
@@ -156,7 +156,7 @@ class TestSelectInternship(TestCase):
         selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship_1.id,
                                                                         'speciality_id': self.speciality_1.id,
                                                                         'cohort_id': self.cohort.id})
-        self.c.post(selection_url, data={'form-TOTAL_FORMS': '4',
+        self.client.post(selection_url, data={'form-TOTAL_FORMS': '4',
                                          'form-INITIAL_FORMS': '0',
                                          'form-MIN_NUM_FORMS': '4',
                                          'form-MAX_NUM_FORMS': '4',
@@ -172,7 +172,7 @@ class TestSelectInternship(TestCase):
         choices = list(mdl_internship_choice.search(student=self.student))
         self.assertEqual(len(choices), 4)
 
-        self.c.post(selection_url, data={'form-TOTAL_FORMS': '4',
+        self.client.post(selection_url, data={'form-TOTAL_FORMS': '4',
                                          'form-INITIAL_FORMS': '0',
                                          'form-MIN_NUM_FORMS': '4',
                                          'form-MAX_NUM_FORMS': '4',
@@ -192,7 +192,7 @@ class TestSelectInternship(TestCase):
         selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship_1.id,
                                                                         'speciality_id': self.speciality_1.id,
                                                                         'cohort_id': self.cohort.id})
-        self.c.post(selection_url, data={'form-TOTAL_FORMS': '4',
+        self.client.post(selection_url, data={'form-TOTAL_FORMS': '4',
                                          'form-INITIAL_FORMS': '0',
                                          'form-MIN_NUM_FORMS': '4',
                                          'form-MAX_NUM_FORMS': '4',
@@ -214,7 +214,7 @@ class TestSelectInternship(TestCase):
         selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship_2.id,
                                                                         'speciality_id': self.speciality_2.id,
                                                                         'cohort_id': self.cohort.id})
-        self.c.post(selection_url, data={'form-TOTAL_FORMS': '2',
+        self.client.post(selection_url, data={'form-TOTAL_FORMS': '2',
                                          'form-INITIAL_FORMS': '0',
                                          'form-MIN_NUM_FORMS': '2',
                                          'form-MAX_NUM_FORMS': '2',
@@ -238,7 +238,7 @@ class TestSelectInternship(TestCase):
         selection_url = reverse("select_internship_speciality", kwargs={'internship_id': InternshipFactory(cohort=self.cohort).id,
                                                                         'speciality_id': speciality.id,
                                                                         'cohort_id': self.cohort.id})
-        self.c.post(selection_url, data={'form-TOTAL_FORMS': '1',
+        self.client.post(selection_url, data={'form-TOTAL_FORMS': '1',
                                          'form-INITIAL_FORMS': '0',
                                          'form-MIN_NUM_FORMS': '1',
                                          'form-MAX_NUM_FORMS': '1',
@@ -257,3 +257,13 @@ def add_permission(user, codename):
 
 def get_permission(codename):
     return Permission.objects.get(codename=codename)
+
+
+class TestMainAccess(TestCase):
+    def test_assign_speciality_for_internship_get_error(self):
+        url = reverse('assign_speciality', kwargs={
+            'cohort_id': 0,
+            'internship_id': 1,
+        })
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 405)

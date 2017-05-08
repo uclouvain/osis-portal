@@ -9,7 +9,6 @@
       "title": "Elektrische actuatoren: gevorderde aspecten en toepassingen m.i.v. transport (Katholieke Universiteit te Leuven)",
       "programs": [
         {
-          "deadline": "",
           "deliberation_date": "Not passed",
           "enrollments": [
             {
@@ -17,7 +16,8 @@
               "first_name": "Martin",
               "last_name": "Student3",
               "score": "16",
-              "justification": ""
+              "justification": "",
+              "deadline": ""
             }
           ],
           "acronym": "DROI1BA",
@@ -31,7 +31,6 @@
           }
         },
         {
-          "deadline": "",
           "deliberation_date": "Not passed",
           "enrollments": [
             {
@@ -39,7 +38,8 @@
               "first_name": "Armand",
               "last_name": "Student5",
               "score": "15",
-              "justification": ""
+              "justification": "",
+              "deadline": ""
             }
           ],
           "acronym": "SINF2MA",
