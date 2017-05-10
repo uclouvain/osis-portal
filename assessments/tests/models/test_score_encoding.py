@@ -23,10 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase
-from dashboard.models import score_encoding as mdl_score_encoding
-import json
 import datetime
+import json
+
+from django.test import TestCase
+
+from assessments.models import score_encoding as mdl_score_encoding
 
 
 class ScoreEncodingTest(TestCase):
@@ -51,7 +53,7 @@ class ScoreEncodingTest(TestCase):
         self.assertJSONEqual(self.score_encoding.document, new_document, "Problem when updating document")
 
 
-sample_1 = "dashboard/tests/ressources/score_encoding_sample.json"
+sample_1 = "assessments/tests/ressources/score_encoding_sample.json"
 
 
 def create_score_encoding(global_id="001254"):

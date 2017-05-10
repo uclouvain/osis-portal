@@ -23,14 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase, Client
-from dashboard.tests.models import test_score_encoding
-from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Permission
+from django.core.urlresolvers import reverse
+from django.test import TestCase, Client
 from django.utils.translation import ugettext_lazy as _
 from django.utils import html
+
+from assessments.tests.models import test_score_encoding
+from assessments.views import score_encoding
 from base.tests.models import test_tutor
-from dashboard.views import score_encoding
 from django.contrib.auth.models import User
 
 

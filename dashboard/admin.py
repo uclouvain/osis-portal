@@ -23,9 +23,4 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from dashboard.models import *
 from django.contrib import admin
-
-
-admin.site.register(score_encoding.ScoreEncoding,
-                    score_encoding.ScoreEncodingAdmin)

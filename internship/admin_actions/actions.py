@@ -23,11 +23,33 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
+import unicodecsv
+import datetime
+from django.http import HttpResponse
 
-from dashboard.views import main
+def export_as_csv_action(description="Export objects as CSV",
+                         fields=None, exclude=None, header=True):
 
-urlpatterns = [
-    url(r'^$', main.home, name='dashboard_home'),
-    url('^faculty_administration/$', main.faculty_administration, name='faculty_administration')
-]
+    def export_as_csv(adminmodel, request, queryset):
+        opts = adminmodel.model._meta
+
+        if fields:
+            field_names = fields
+        else:
+            field_names = [field.name for field in opts.fields]
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=%s-%s.csv' % (str(opts).replace('.', '_'), str(datetime.datetime.now()))
+        writer = unicodecsv.writer(response, encoding='utf-8')
+
+        if header:
+            writer.writerow(field_names)
+        for record in queryset:
+            get_attribute = lambda record, field: getattr(record, field)() if callable(getattr(record, field)) else getattr(record, field)
+            row = [get_attribute(record, field) for field in field_names]
+            writer.writerow(row)
+        return response
+
+    export_as_csv.short_description = description
+
+    return export_as_csv
