@@ -218,7 +218,7 @@ def set_formset_years(a_person):
     initial_data = []
     for yr in get_attribution_years(a_person):
         initial_data.append({'year': yr,
-                             'next_year': yr+1})
+                             'next_year': str(yr+1)[-2:] })
 
     return AttributionFormSet(initial=initial_data)
 
