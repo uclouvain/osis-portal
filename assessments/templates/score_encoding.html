@@ -51,17 +51,19 @@
             </div>
         </div>
 
-        <div class="grid-item">
-            <i class="fa fa-edit"></i>
-            <div class="description">
-                <h4 class="media-heading">
-                    <a href="{% url 'scores_download' %}" id="lnk_scores_download_2">
-                        {% trans 'scores_encoding' %}
-                    </a>
-                </h4>
-                <p>{% trans 'scores_encoding_use_vpn' %}</p>
+        {% if score_encoding_url %}
+            <div class="grid-item">
+                <i class="fa fa-edit"></i>
+                <div class="description">
+                    <h4 class="media-heading">
+                        <a href="{{score_encoding_url}}" id="lnk_scores_download_2">
+                            {% trans 'scores_encoding' %}
+                        </a>
+                    </h4>
+                    <p>{% trans 'scores_encoding_use_vpn' %}</p>
+                </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
