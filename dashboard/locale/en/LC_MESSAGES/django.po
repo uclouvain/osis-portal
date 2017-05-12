@@ -32,7 +32,7 @@ msgid "desc_lnk_performance"
 msgstr "Show the student results."
 
 msgid "desc_lnk_scores_encoding"
-msgstr "Print the papersheet to encode the scores of your students."
+msgstr "Get scores encoding papersheet and encode scores of your students."
 
 msgid "get_my_scores_sheets"
 msgstr "Get my scores' sheets"
@@ -52,9 +52,11 @@ msgstr "Numbered scores"
 msgid "return_doc_to_administrator"
 msgstr "Please return this document to the administrative office before %s."
 
-
 msgid "scores_encoding"
 msgstr "Scores Encoding"
+
+msgid "scores_encoding_use_vpn"
+msgstr "Score encoding require a VPN access outside UCL"
 
 msgid "my_score_sheets"
 msgstr "My Score Sheets"
