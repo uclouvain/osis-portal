@@ -309,10 +309,10 @@ msgid "teaching_charge"
 msgstr "Charge d'enseignement"
 
 msgid "exam_student_list"
-msgstr "Liste des étudiants inscrits à mes examens"
+msgstr "Listes des étudiants inscrits à mes cours et examens"
 
 msgid "desc_lnk_my_students_list"
-msgstr "Obtenir la liste des étudiants inscrits à mes examens"
+msgstr "Obtenir la liste des étudiants inscrits à mes cours et à mes examens"
 
 msgid "no_data"
 msgstr "Aucune donnée trouvée"
