@@ -306,10 +306,10 @@ msgid "teaching_charge"
 msgstr "Teaching charge"
 
 msgid "exam_student_list"
-msgstr "List of students enrolled to my exams"
+msgstr "List of students enrolled to my classes and my exams"
 
 msgid "desc_lnk_my_students_list"
-msgstr "Get the list of students enrolled to my exams"
+msgstr "Get the list of students enrolled to my classes and my exams"
 
 msgid "no_data"
 msgstr "No data found"
