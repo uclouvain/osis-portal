@@ -50,7 +50,7 @@ msgid "desc_lnk_performance"
 msgstr "Show the student results."
 
 msgid "desc_lnk_scores_encoding"
-msgstr "Print the papersheet to encode the scores of your students."
+msgstr "Get scores encoding papersheet and encode scores of your students."
 
 msgid "done_at"
 msgstr "Done at"
@@ -123,6 +123,9 @@ msgstr "My Score Sheets"
 
 msgid "scores_sheet"
 msgstr "Scores Sheet"
+
+msgid "scores_encoding_use_vpn"
+msgstr "Score encoding require a VPN access outside UCL"
 
 msgid "signature"
 msgstr "Signature"
