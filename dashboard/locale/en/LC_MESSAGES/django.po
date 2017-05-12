@@ -16,32 +16,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "ABSENCE_JUSTIFIED"
-msgstr "Justified absence"
-
-msgid "ABSENCE_UNJUSTIFIED"
-msgstr "Unjustified Absence"
-
-msgid "CHEATING"
-msgstr "Cheating"
-
-msgid "SCORE_MISSING"
-msgstr "Score missing"
-
 msgid "absent_pdf_legend"
 msgstr "A=Absent"
-
-msgid "academic_year"
-msgstr "Academic year"
 
 msgid "cheating_pdf_legend"
 msgstr "T=Cheating"
 
 msgid "dashboard"
 msgstr "Dashboard"
-
-msgid "deliberation_date"
-msgstr "Deliberation date"
 
 msgid "desc_lnk_internships"
 msgstr "This process controls students internships."
@@ -52,83 +34,30 @@ msgstr "Show the student results."
 msgid "desc_lnk_scores_encoding"
 msgstr "Print the papersheet to encode the scores of your students."
 
-msgid "done_at"
-msgstr "Done at"
-
-msgid "fax"
-msgstr "Fax"
-
-msgid "firstname"
-msgstr "Firstname"
-
 msgid "get_my_scores_sheets"
 msgstr "Get my scores' sheets"
-
-msgid "in_accordance_to_regulation"
-msgstr "In accordance to regulation's rules 104, 109 and 111, available in the following link"
 
 msgid "institution_denomination"
 msgstr "Université catholique de Louvain"
 
-msgid "justification"
-msgstr "Justification"
-
-msgid "justification_legend"
-msgstr "Justification legend: %s"
-
-msgid "lastname"
-msgstr "Lastname"
-
 msgid "learning_unit_responsible"
 msgstr "Learning unit's responsible"
-
-msgid "SCORES_RESPONSIBLE"
-msgstr "Scores responsible"
-
-msgid "link_to_RGEE"
-msgstr "https://www.uclouvain.be/enseignement-reglements.html"
 
 msgid "no_score_to_encode"
 msgstr "There are no scores to encode. So there's no PDF available."
 
-msgid "none"
-msgstr "None"
-
 msgid "numbered_score"
 msgstr "Numbered scores"
-
-msgid "phone"
-msgstr "Phone"
-
-msgid "program"
-msgstr "Program"
-
-msgid "registration_number"
-msgstr "Registration number"
 
 msgid "return_doc_to_administrator"
 msgstr "Please return this document to the administrative office before %s."
 
-msgid "score_legend"
-msgstr "Score legend: %s (0=Score of presence)"
-
-msgid "score_missing_pdf_legend"
-msgstr "?=Score missing"
 
 msgid "scores_encoding"
 msgstr "Scores Encoding"
 
 msgid "my_score_sheets"
 msgstr "My Score Sheets"
-
-msgid "scores_sheet"
-msgstr "Scores Sheet"
-
-msgid "signature"
-msgstr "Signature"
-
-msgid "the"
-msgstr "the"
 
 msgid "unauthorized_decimal"
 msgstr "Unauthorized decimal for this learning unit"
