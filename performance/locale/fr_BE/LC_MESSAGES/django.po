@@ -96,6 +96,9 @@ msgid "no_student_with_this_registration_id"
 msgstr "Aucun étudiant avec ce noma!"
 
 msgid "performance"
+msgstr "Notes d'examens"
+
+msgid "my_performance"
 msgstr "Mes notes d'examens"
 
 msgid "performance_administration"
