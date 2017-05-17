@@ -39,6 +39,8 @@ from performance.models.enums import offer_registration_state
 from dashboard.views import main as dash_main_view
 
 
+# Students Views
+
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def view_performance_home(request):
@@ -55,7 +57,7 @@ def view_performance_home(request):
     data = {"student": stud,
             "programs": list_student_programs,
             "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE}
-    return layout.render(request, "performance_home.html", data)
+    return layout.render(request, "performance_home_student.html", data)
 
 
 def __make_not_authorized_message(stud_perf):
@@ -86,12 +88,14 @@ def display_result_for_specific_student_performance(request, pk):
     fetch_timed_out = stud_perf.fetch_timed_out if stud_perf else None
     not_authorized_message = __make_not_authorized_message(stud_perf)
 
-    return layout.render(request, "performance_result.html", {"results": document,
-                                                              "creation_date": creation_date,
-                                                              "update_date": update_date,
-                                                              "fetch_timed_out": fetch_timed_out,
-                                                              "not_authorized_message": not_authorized_message})
+    return layout.render(request, "performance_result_student.html", {"results": document,
+                                                                      "creation_date": creation_date,
+                                                                      "update_date": update_date,
+                                                                      "fetch_timed_out": fetch_timed_out,
+                                                                      "not_authorized_message": not_authorized_message})
 
+
+# Admins Views
 
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
@@ -125,7 +129,7 @@ def visualize_student_programs(request, registration_id):
     data = {"student": stud,
             "programs": list_student_programs,
             "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE}
-    return layout.render(request, "performance_home.html", data)
+    return layout.render(request, "admin/performance_home_admin.html", data)
 
 
 @login_required
@@ -142,11 +146,13 @@ def visualize_student_result(request, pk):
     fetch_timed_out = stud_perf.fetch_timed_out if stud_perf else None
     not_authorized_message = __make_not_authorized_message(stud_perf)
 
-    return layout.render(request, "performance_result.html", {"results": document,
-                                                              "creation_date": creation_date,
-                                                              "update_date": update_date,
-                                                              "fetch_timed_out": fetch_timed_out,
-                                                              "not_authorized_message": not_authorized_message})
+    return layout.render(request,
+                         "admin/performance_result_admin.html",
+                         {"results": document,
+                          "creation_date": creation_date,
+                          "update_date": update_date,
+                          "fetch_timed_out": fetch_timed_out,
+                          "not_authorized_message": not_authorized_message})
 
 
 def get_student_programs_list(stud):
