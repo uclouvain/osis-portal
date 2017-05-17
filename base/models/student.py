@@ -34,7 +34,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 class StudentAdmin(SerializableModelAdmin):
-    list_display = ('person', 'registration_id')
+    list_display = ('person', 'registration_id', 'email')
     fieldsets = ((None, {'fields': ('registration_id', 'person')}),)
     raw_id_fields = ('person', )
     search_fields = ['person__first_name', 'person__last_name', 'registration_id']
@@ -43,6 +43,9 @@ class StudentAdmin(SerializableModelAdmin):
 class Student(SerializableModel):
     registration_id = models.CharField(max_length=10, unique=True)
     person = models.ForeignKey('Person')
+
+    def email(self):
+        return self.person.email
 
     def __str__(self):
         return u"%s (%s)" % (self.person, self.registration_id)
