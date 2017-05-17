@@ -96,6 +96,9 @@ msgid "no_student_with_this_registration_id"
 msgstr "No student with this registration id"
 
 msgid "performance"
+msgstr "Exam marks"
+
+msgid "my_performance"
 msgstr "My exam marks"
 
 msgid "performance_administration"
@@ -103,6 +106,8 @@ msgstr "Exam marks administration"
 
 msgid "performance_results"
 msgstr "Results"
+
+
 
 msgid "program"
 msgstr "Program"
