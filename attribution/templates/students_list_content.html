@@ -38,9 +38,9 @@
                 <tr>
                     <th>{% trans 'program'%}</th>
                     <th>{% trans 'activity'%}</th>
+                    <th><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></th>
                     <th>{% trans 'student'%}</th>
                     <th>{% trans 'registration_id'%}</th>
-                    <th>&nbsp;</th>
                     <th>{% trans 'january'%}</th>
                     <th>{% trans 'status' %}</th>
                     <th>{% trans 'june'%}</th>
@@ -54,13 +54,13 @@
                     <tr>
                         <td>{{ student.program }}</td>
                         <td>{{ student.acronym }}</td>
-                        <td>{{ student.name }}</td>
-                        <td>{{ student.registration_id | default_if_none:''}}</td>
                         <td>{% if student.email %}
                                 <a href="mailto:{{ student.email }}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a>
                             {% else %}
                                 <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
                             {% endif %}</td>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.registration_id | default_if_none:''}}</td>
                         <td>{{ student.january_note | default_if_none:''}}</td>
                         <td>{{ student.january_status| default_if_none:''}}</td>
                         <td>{{ student.june_note | default_if_none:''}}</td>
