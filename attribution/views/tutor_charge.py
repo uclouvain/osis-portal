@@ -235,12 +235,12 @@ def get_students(a_learning_unit_year_id, a_tutor):
     return get_learning_unit_years_list(a_learning_unit_year, a_tutor)
 
 
-def load_students(a_learning_unit_year, a_tutor, request):
+def _load_students(a_learning_unit_year, a_tutor, request):
     students_list = []
     request_tutor = mdl_base.tutor.find_by_id(a_tutor)
     for learning_unit_enrollment in get_students(a_learning_unit_year, get_person(request_tutor.person.user)):
         students_list.append(set_student_for_display(learning_unit_enrollment))
-    a_person = mdl_base.person.find_by_user(request.user)
+
     return {'global_id': request_tutor.person.global_id,
             'students': students_list,
             'learning_unit_year': mdl_base.learning_unit_year.find_by_id(a_learning_unit_year), }
@@ -250,13 +250,13 @@ def load_students(a_learning_unit_year, a_tutor, request):
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def show_students_admin(request, a_learning_unit_year, a_tutor):
     return render(request, "students_list_admin.html",
-                  load_students(a_learning_unit_year, a_tutor, request))
+                  _load_students(a_learning_unit_year, a_tutor, request))
 
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
 def show_students(request, a_learning_unit_year, a_tutor):
     return render(request, "students_list.html",
-                  load_students(a_learning_unit_year, a_tutor, request))
+                  _load_students(a_learning_unit_year, a_tutor, request))
 
 
 def get_sessions_results(a_registration_id, a_learning_unit, offer_acronym):
@@ -321,6 +321,7 @@ def set_student_for_display(learning_unit_enrollment):
     return{
         'name': "{0}, {1}".format(learning_unit_enrollment.offer_enrollment.student.person.last_name,
                                   learning_unit_enrollment.offer_enrollment.student.person.first_name),
+        'email': learning_unit_enrollment.offer_enrollment.student.person.email,
         'program': learning_unit_enrollment.offer_enrollment.offer_year.acronym,
         'acronym': learning_unit_enrollment.learning_unit_year.acronym,
         'registration_id': learning_unit_enrollment.offer_enrollment.student.registration_id,
