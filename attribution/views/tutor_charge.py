@@ -59,7 +59,11 @@ SEPTEMBER = "septembre"
 @permission_required('attribution.can_access_attribution', raise_exception=True)
 def home(request):
     a_person = get_person(request.user)
-    return by_year(request, get_current_academic_year(), a_person.global_id)
+    if a_person:
+        global_id = a_person.global_id
+    else:
+        global_id = None
+    return by_year(request, get_current_academic_year(), global_id)
 
 
 def get_current_academic_year():
@@ -179,8 +183,7 @@ def load_teaching_charge_data(a_global_id, request, year):
         a_person = mdl_base.person.find_by_global_id(a_global_id)
     else:
         a_person = get_person(request.user)
-    data = get_teaching_charge_data(a_person, year)
-    return data
+    return get_teaching_charge_data(a_person, year)
 
 
 def get_teaching_charge_data(a_person, year):
