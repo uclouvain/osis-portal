@@ -45,7 +45,10 @@ class Student(SerializableModel):
     person = models.ForeignKey('Person')
 
     def email(self):
-        return self.person.email
+        if self.person.user:
+            return self.person.user.email
+        else:
+            return self.person.email
 
     def __str__(self):
         return u"%s (%s)" % (self.person, self.registration_id)
