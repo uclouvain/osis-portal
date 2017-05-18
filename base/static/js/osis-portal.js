@@ -21,3 +21,7 @@ $.ajaxSetup({
          }
      }
 });
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
