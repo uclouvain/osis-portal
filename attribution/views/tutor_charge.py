@@ -59,7 +59,11 @@ SEPTEMBER = "septembre"
 @permission_required('attribution.can_access_attribution', raise_exception=True)
 def home(request):
     a_person = get_person(request.user)
-    return by_year(request, get_current_academic_year(), a_person.global_id)
+    if a_person:
+        global_id = a_person.global_id
+    else:
+        global_id = None
+    return by_year(request, get_current_academic_year(), global_id)
 
 
 def get_current_academic_year():
@@ -179,8 +183,7 @@ def load_teaching_charge_data(a_global_id, request, year):
         a_person = mdl_base.person.find_by_global_id(a_global_id)
     else:
         a_person = get_person(request.user)
-    data = get_teaching_charge_data(a_person, year)
-    return data
+    return get_teaching_charge_data(a_person, year)
 
 
 def get_teaching_charge_data(a_person, year):
@@ -204,7 +207,7 @@ def get_teaching_charge_data(a_person, year):
             'year': int(year),
             'tot_lecturing': tot_lecturing,
             'tot_practical': tot_practical,
-            'academic_year': "{0}-{1}".format(str(an_academic_year.year), str(an_academic_year.year + 1)),
+            'academic_year': an_academic_year,
             'global_id': a_person.global_id}
     return data
 
@@ -218,7 +221,7 @@ def set_formset_years(a_person):
     initial_data = []
     for yr in get_attribution_years(a_person):
         initial_data.append({'year': yr,
-                             'next_year': yr+1})
+                             'next_year': str(yr+1)[-2:] })
 
     return AttributionFormSet(initial=initial_data)
 
@@ -235,12 +238,12 @@ def get_students(a_learning_unit_year_id, a_tutor):
     return get_learning_unit_years_list(a_learning_unit_year, a_tutor)
 
 
-def load_students(a_learning_unit_year, a_tutor, request):
+def _load_students(a_learning_unit_year, a_tutor, request):
     students_list = []
     request_tutor = mdl_base.tutor.find_by_id(a_tutor)
     for learning_unit_enrollment in get_students(a_learning_unit_year, get_person(request_tutor.person.user)):
         students_list.append(set_student_for_display(learning_unit_enrollment))
-    a_person = mdl_base.person.find_by_user(request.user)
+
     return {'global_id': request_tutor.person.global_id,
             'students': students_list,
             'learning_unit_year': mdl_base.learning_unit_year.find_by_id(a_learning_unit_year), }
@@ -250,13 +253,13 @@ def load_students(a_learning_unit_year, a_tutor, request):
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def show_students_admin(request, a_learning_unit_year, a_tutor):
     return render(request, "students_list_admin.html",
-                  load_students(a_learning_unit_year, a_tutor, request))
+                  _load_students(a_learning_unit_year, a_tutor, request))
 
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
 def show_students(request, a_learning_unit_year, a_tutor):
     return render(request, "students_list.html",
-                  load_students(a_learning_unit_year, a_tutor, request))
+                  _load_students(a_learning_unit_year, a_tutor, request))
 
 
 def get_sessions_results(a_registration_id, a_learning_unit, offer_acronym):
@@ -321,6 +324,7 @@ def set_student_for_display(learning_unit_enrollment):
     return{
         'name': "{0}, {1}".format(learning_unit_enrollment.offer_enrollment.student.person.last_name,
                                   learning_unit_enrollment.offer_enrollment.student.person.first_name),
+        'email': learning_unit_enrollment.offer_enrollment.student.person.email,
         'program': learning_unit_enrollment.offer_enrollment.offer_year.acronym,
         'acronym': learning_unit_enrollment.learning_unit_year.acronym,
         'registration_id': learning_unit_enrollment.offer_enrollment.student.registration_id,

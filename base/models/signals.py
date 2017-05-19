@@ -23,70 +23,57 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import logging
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.db.models.signals import post_save, post_delete
 from django.dispatch.dispatcher import receiver, Signal
-from base.models import student, tutor
-from base.models.person import find_by_global_id, find_by_user, Person
-from base.models.student import Student
-from base.models.tutor import Tutor
+from base import models as mdl
 from osis_common.models.serializable_model import SerializableModel
+from osis_common.models.signals.authentication import user_created_signal, user_updated_signal
 
 person_created = Signal(providing_args=['person'])
 
-logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
-if settings.USER_SIGNALS_MANAGER:
-
-    if settings.USER_CREATED_SIGNAL:
-        try:
-            from osis_louvain_auth.authentication.shibboleth_auth import user_created_signal, user_updated_signal
-
-            @receiver(user_created_signal)
-            def update_person_after_user_creation(sender, **kwargs):
-                user = kwargs.get('user')
-                user_infos = kwargs.get('user_infos')
-                person = find_by_global_id(user_infos.get('USER_FGS'))
-                person = _create_update_person(user, person, user_infos)
-                _add_person_to_group(person)
-                return person
-
-            @receiver(user_updated_signal)
-            def update_person_after_user_update(sender, **kwargs):
-                user = kwargs.get('user')
-                user_infos = kwargs.get('user_infos')
-                person = find_by_global_id(user_infos.get('USER_FGS'))
-                person = _create_update_person(user, person, user_infos)
-                return person
-
-        except Exception as e:
-             logger.error(str(e))
+@receiver(user_created_signal)
+def update_person_after_user_creation(sender, **kwargs):
+    person = _update_person(sender, **kwargs)
+    _add_person_to_group(person)
+    return person
 
 
+@receiver(user_updated_signal)
+def update_person_after_user_update(sender, **kwargs):
+    return _update_person(sender, **kwargs)
 
 
-@receiver(post_save, sender=Student)
+def _update_person(sender, **kwargs):
+    user = kwargs.get('user')
+    user_infos = kwargs.get('user_infos')
+    person = mdl.person.find_by_global_id(user_infos.get('USER_FGS'))
+    person = _create_update_person(user, person, user_infos)
+    return person
+
+
+@receiver(post_save, sender=mdl.student.Student)
 def add_to_students_group(sender, instance, **kwargs):
     if kwargs.get('created', True) and instance.person.user:
         _assign_group(instance.person, "students")
 
 
-@receiver(post_save, sender=Tutor)
+@receiver(post_save, sender=mdl.tutor.Tutor)
 def add_to_tutors_group(sender, instance, **kwargs):
     if kwargs.get('created', True) and instance.person.user:
         _assign_group(instance.person, "tutors")
 
 
-@receiver(post_delete, sender=Tutor)
+@receiver(post_delete, sender=mdl.tutor.Tutor)
 def remove_from_tutor_group(sender, instance, **kwargs):
     if instance.person.user:
         tutors_group = Group.objects.get(name='tutors')
         instance.person.user.groups.remove(tutors_group)
 
 
-@receiver(post_delete, sender=Student)
+@receiver(post_delete, sender=mdl.student.Student)
 def remove_from_student_group(sender, instance, **kwargs):
     if instance.person.user:
         students_group = Group.objects.get(name='students')
@@ -109,12 +96,13 @@ if 'internship' in settings.INSTALLED_APPS:
             internship_students_group = Group.objects.get(name='internship_students')
             instance.person.user.groups.remove(internship_students_group)
 
+
 def _add_person_to_group(person):
     # Check Student
-    if student.find_by_person(person):
+    if mdl.student.find_by_person(person):
         _assign_group(person, "students")
     # Check tutor
-    if tutor.find_by_person(person):
+    if mdl.tutor.find_by_person(person):
         _assign_group(person, "tutors")
     # Check if student is internship student
     # Only if internship app is installed
@@ -137,13 +125,13 @@ def _assign_group(person, group_name):
 
 def _create_update_person(user, person, user_infos):
     if not person:
-        person = find_by_user(user)
+        person = mdl.person.find_by_user(user)
     if not person:
-        person = Person(user=user,
-                        global_id=user_infos.get('USER_FGS'),
-                        first_name=user_infos.get('USER_FIRST_NAME'),
-                        last_name=user_infos.get('USER_LAST_NAME'),
-                        email=user_infos.get('USER_EMAIL'))
+        person = mdl.person.Person(user=user,
+                                   global_id=user_infos.get('USER_FGS'),
+                                   first_name=user_infos.get('USER_FIRST_NAME'),
+                                   last_name=user_infos.get('USER_LAST_NAME'),
+                                   email=user_infos.get('USER_EMAIL'))
         person.save()
         person_created.send(sender=None, person=person)
     else:
@@ -172,4 +160,3 @@ def _update_person_if_necessary(person, user, global_id):
     if updated:
         super(SerializableModel, person).save()
     return updated, person
-
