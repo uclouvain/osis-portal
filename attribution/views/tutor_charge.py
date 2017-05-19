@@ -328,7 +328,7 @@ def set_student_for_display(learning_unit_enrollment):
         'january_status': get_session_value(session_results, JANUARY, JSON_LEARNING_UNIT_STATUS),
         'june_note': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE),
         'june_status': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_STATUS),
-        'september_note': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE),
+        'september_note': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_NOTE),
         'september_status': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS,), }
 
 
