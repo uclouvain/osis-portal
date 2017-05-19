@@ -28,6 +28,9 @@ msgstr "T=Tricherie"
 msgid "dashboard"
 msgstr "Tableau de bord"
 
+msgid "download_my_scores_sheets"
+msgstr "Télécharger mes feuilles de notes en PDF pour l'encodage papier."
+
 msgid "desc_lnk_internships"
 msgstr "Gestion des stages des étudiants."
 
@@ -37,14 +40,14 @@ msgstr "Résultats de l'étudiant."
 msgid "desc_lnk_scores_encoding"
 msgstr "Obtenir mes feuilles de notes et encoder les notes de mes étudiants."
 
-msgid "get_my_scores_sheets"
-msgstr "Obtenir mes feuilles de notes"
-
 msgid "institution_denomination"
 msgstr "Université catholique de Louvain"
 
 msgid "learning_unit_responsible"
 msgstr "Responsable du cours"
+
+msgid "my_scores_sheets"
+msgstr "Mes feuilles de notes"
 
 msgid "no_score_to_encode"
 msgstr "Vous n'avez aucune note à encoder. Vous n'avez donc pas de PDF disponible."
@@ -52,17 +55,17 @@ msgstr "Vous n'avez aucune note à encoder. Vous n'avez donc pas de PDF disponib
 msgid "numbered_score"
 msgstr "Note chiffrée"
 
+msgid "online_scores_encoding"
+msgstr "Encodage de notes en ligne"
+
 msgid "return_doc_to_administrator"
 msgstr "Veuillez envoyer ce formulaire au secrétariat de l'entité gestionnaire avant le %s."
-
-msgid "scores_encode"
-msgstr "Encoder des notes"
 
 msgid "scores_encoding"
 msgstr "Encodage de notes"
 
 msgid "scores_encoding_use_vpn"
-msgstr "L'encodage de notes nécessite un accès VPN en dehors du réseau de l'UCL"
+msgstr "L'encodage de notes en ligne nécessite un accès VPN en dehors du réseau de l'UCL."
 
 msgid "unauthorized_decimal"
 msgstr "Attention : décimales non autorisées pour ce cours"
