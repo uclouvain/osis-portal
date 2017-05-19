@@ -27,12 +27,12 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-        <li class="active">{% trans 'my_score_sheets' %}</li>
+        <li class="active">{% trans 'scores_encoding' %}</li>
 {% endblock %}
 
 {% block content %}
 <div class="page-header">
-    <h2>{% trans 'my_score_sheets' %}</h2>
+    <h2>{% trans 'scores_encoding' %}</h2>
 </div>
 
 {% include "template_messages.html" %}
@@ -57,7 +57,7 @@
                 <div class="description">
                     <h4 class="media-heading">
                         <a href="{{score_encoding_url}}" id="lnk_scores_download_2">
-                            {% trans 'scores_encoding' %}
+                            {% trans 'scores_encode' %}
                         </a>
                     </h4>
                     <p>{% trans 'scores_encoding_use_vpn' %}</p>

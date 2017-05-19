@@ -55,14 +55,14 @@ msgstr "Note chiffrée"
 msgid "return_doc_to_administrator"
 msgstr "Veuillez envoyer ce formulaire au secrétariat de l'entité gestionnaire avant le %s."
 
+msgid "scores_encode"
+msgstr "Encoder des notes"
+
 msgid "scores_encoding"
 msgstr "Encodage de notes"
 
 msgid "scores_encoding_use_vpn"
 msgstr "L'encodage de notes nécessite un accès VPN en dehors du réseau de l'UCL"
-
-msgid "my_score_sheets"
-msgstr "Mes feuilles de notes"
 
 msgid "unauthorized_decimal"
 msgstr "Attention : décimales non autorisées pour ce cours"

@@ -52,14 +52,14 @@ msgstr "Numbered scores"
 msgid "return_doc_to_administrator"
 msgstr "Please return this document to the administrative office before %s."
 
+msgid "scores_encode"
+msgstr "Encode scores"
+
 msgid "scores_encoding"
 msgstr "Scores Encoding"
 
 msgid "scores_encoding_use_vpn"
 msgstr "Score encoding require a VPN access outside UCL"
-
-msgid "my_score_sheets"
-msgstr "My Score Sheets"
 
 msgid "unauthorized_decimal"
 msgstr "Unauthorized decimal for this learning unit"
