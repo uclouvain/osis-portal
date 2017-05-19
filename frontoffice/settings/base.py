@@ -252,7 +252,7 @@ USER_CREATED_SIGNAL = os.environ.get('USER_CREATED_SIGNAL', None)
 LOGO_INSTITUTION_URL = os.environ.get('LOGO_INSTITUTION_URL',
                                       os.path.join(BASE_DIR, "base/static/img/logo_institution.jpg"))
 LOGO_OSIS_URL = os.environ.get('LOGO_OSIS_URL', '')
-
+OSIS_SCORE_ENCODING_URL = os.environ.get('OSIS_SCORE_ENCODING_URL', None)
 
 # Queues Definition
 # The queue system uses RabbitMq queues to communicate with other application (ex : osis)
@@ -287,7 +287,6 @@ if not TESTING or not SKIP_QUEUES_TESTS:
             'EXAM_ENROLLMENT_FORM': get_queue_timeout('EXAM_ENROLLMENT_FORM_TIMEOUT', 15)
         }
     }
-
 
 # Additionnal Locale Path
 # Add local path in your environment settings (ex: dev.py)

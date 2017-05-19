@@ -13,3 +13,14 @@ base/tests/sent_mails/
 .env
 /frontoffice/settings/dev.py
 /dev-requirements.txt
+.coverage
+.env_bak
+.pylintrc
+VENV/
+coverage.xml
+htmlcov/
+osis-portal-dev-pylint.pylintrc
+pylint-report.txt
+pylint.html
+pylint.txt
+

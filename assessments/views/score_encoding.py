@@ -52,7 +52,8 @@ queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
 def score_encoding(request):
-    return layout.render(request, "score_encoding.html", {})
+    score_encoding_url = settings.OSIS_SCORE_ENCODING_URL
+    return layout.render(request, "score_encoding.html", locals())
 
 
 @login_required

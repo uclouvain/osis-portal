@@ -38,8 +38,44 @@
 {% include "template_messages.html" %}
 
 <div class="panel panel-default">
-    <div class="panel-body">
-        <a class="btn btn-primary" href="{% url 'scores_download' %}">{% trans 'get_my_scores_sheets' %}</a>
+    <div class="panel-body dashboard-grid">
+
+        <div class="grid-item">
+            <i class="fa fa-file-o"></i>
+            <div class="description">
+                <h4 class="media-heading">
+                    <a href="{% url 'scores_download' %}" id="lnk_scores_download">
+                        {% trans 'get_my_scores_sheets' %}
+                    </a>
+                </h4>
+            </div>
+        </div>
+
+        {% if score_encoding_url %}
+            <div class="grid-item">
+                <i class="fa fa-edit"></i>
+                <div class="description">
+                    <h4 class="media-heading">
+                        <a href="{{score_encoding_url}}" id="lnk_scores_download_2">
+                            {% trans 'scores_encoding' %}
+                        </a>
+                    </h4>
+                    <p>{% trans 'scores_encoding_use_vpn' %}</p>
+                </div>
+            </div>
+        {% endif %}
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+         $(document).ready(function () {
+            $('.dashboard-grid').masonry({
+               itemSelector : '.grid-item',
+               columnWidth: 360,
+               fitWidth: true
+            });
+         });
+    </script>
 {% endblock %}

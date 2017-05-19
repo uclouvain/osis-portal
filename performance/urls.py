@@ -29,12 +29,12 @@ from performance.views import main
 
 urlpatterns = [
     url(r'^$', main.view_performance_home, name='performance_home'),
-
-    url(r'^administration/select_student/$', main.select_student, name='performance_administration'),
     url(r'^result/(?P<pk>[0-9]+)/$',
-        main.display_result_for_specific_student_performance, name='performance_result'),
-    url(r'^student_programs/(?P<registration_id>[0-9]+)/$', main.visualize_student_programs, name='performance_student_programs'),
-    url(r'^student_result/(?P<pk>[0-9]+)/$',
-        main.visualize_student_result, name='performance_student_result'),
+        main.display_result_for_specific_student_performance, name='performance_student_result'),
+    url(r'^administration/select_student/$', main.select_student, name='performance_administration'),
+    url(r'^administration/student_programs/(?P<registration_id>[0-9]+)/$', main.visualize_student_programs,
+        name='performance_student_programs_admin'),
+    url(r'^administration/student_result/(?P<pk>[0-9]+)/$',
+        main.visualize_student_result, name='performance_student_result_admin'),
 ]
 
