@@ -262,9 +262,9 @@ def show_students(request, a_learning_unit_year, a_tutor):
                   _load_students(a_learning_unit_year, a_tutor, request))
 
 
-def get_sessions_results(a_registration_id, a_learning_unit, offer_acronym):
+def get_sessions_results(a_registration_id, a_learning_unit_year, offer_acronym):
     results = {}
-    academic_year = a_learning_unit.academic_year.year
+    academic_year = a_learning_unit_year.academic_year.year
     a_student_performance = mdl_performance.student_performance \
         .find_by_student_and_offer_year(a_registration_id, academic_year, offer_acronym)
 
