@@ -276,12 +276,13 @@ def get_sessions_results(a_registration_id, a_learning_unit, offer_acronym):
             offre = monOffre['offre']
             if offre['sigleComplet'] == offer_acronym:
                 cours_list = monOffre['cours']
-                nb_cours = 0
-                while nb_cours < len(cours_list):
-                    cours = cours_list[nb_cours]
-                    if cours['sigleComplet'] == a_learning_unit.acronym:
-                        get_student_results(cours, results)
-                    nb_cours = nb_cours + 1
+                if cours_list:
+                    nb_cours = 0
+                    while nb_cours < len(cours_list):
+                        cours = cours_list[nb_cours]
+                        if cours['sigleComplet'] == a_learning_unit_year.acronym:
+                            get_student_results(cours, results)
+                        nb_cours = nb_cours + 1
     return results
 
 
