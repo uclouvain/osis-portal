@@ -40,6 +40,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='organization',
             name='acronym',
-            field=models.CharField(blank=True, max_length=15, null=True),
+            field=models.CharField(blank=True, max_length=20, null=True),
         ),
     ]
