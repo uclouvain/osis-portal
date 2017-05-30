@@ -39,7 +39,7 @@ class Organization(SerializableModel):
     changed = models.DateTimeField(null=True)
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=50, blank=True, null=True)
-    acronym = models.CharField(max_length=15)
+    acronym = models.CharField(max_length=15, blank=True, null=True)
     website = models.URLField(max_length=255, blank=True, null=True)
     acronym_learning_unit = models.CharField(max_length=30, blank=True, null=True)
     type = models.CharField(max_length=30, blank=True, null=True, choices=ORGANIZATION_TYPES, default='UNKNOWN')

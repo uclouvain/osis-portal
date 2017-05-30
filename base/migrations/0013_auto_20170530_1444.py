@@ -37,4 +37,9 @@ class Migration(migrations.Migration):
             name='code',
             field=models.CharField(blank=True, max_length=50, null=True),
         ),
+        migrations.AlterField(
+            model_name='organization',
+            name='acronym',
+            field=models.CharField(blank=True, max_length=15, null=True),
+        ),
     ]
