@@ -262,9 +262,9 @@ def show_students(request, a_learning_unit_year, a_tutor):
                   _load_students(a_learning_unit_year, a_tutor, request))
 
 
-def get_sessions_results(a_registration_id, a_learning_unit, offer_acronym):
+def get_sessions_results(a_registration_id, a_learning_unit_year, offer_acronym):
     results = {}
-    academic_year = a_learning_unit.academic_year.year
+    academic_year = a_learning_unit_year.academic_year.year
     a_student_performance = mdl_performance.student_performance \
         .find_by_student_and_offer_year(a_registration_id, academic_year, offer_acronym)
 
@@ -276,12 +276,13 @@ def get_sessions_results(a_registration_id, a_learning_unit, offer_acronym):
             offre = monOffre['offre']
             if offre['sigleComplet'] == offer_acronym:
                 cours_list = monOffre['cours']
-                nb_cours = 0
-                while nb_cours < len(cours_list):
-                    cours = cours_list[nb_cours]
-                    if cours['sigleComplet'] == a_learning_unit.acronym:
-                        get_student_results(cours, results)
-                    nb_cours = nb_cours + 1
+                if cours_list:
+                    nb_cours = 0
+                    while nb_cours < len(cours_list):
+                        cours = cours_list[nb_cours]
+                        if cours['sigleComplet'] == a_learning_unit_year.acronym:
+                            get_student_results(cours, results)
+                        nb_cours = nb_cours + 1
     return results
 
 
