@@ -129,6 +129,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'send_mail': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'django': {
             'handlers': ['console'],
             'level': 'INFO',
@@ -215,6 +220,7 @@ MAX_UPLOAD_SIZE = int(os.environ.get('MAX_UPLOAD_SIZE', 5242880))
 # Logging settings
 # Logging framework is defined in env settings (ex: dev.py)
 DEFAULT_LOGGER = os.environ.get('DEFAULT_LOGGER', 'default')
+SEND_MAIL_LOGGER = os.environ.get('SEND_MAIL_LOGGER', 'send_mail')
 QUEUE_EXCEPTION_LOGGER = os.environ.get('QUEUE_EXCEPTION_LOGGER', 'queue_exception')
 
 
