@@ -29,8 +29,8 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 
 
 class OrganizationAdmin(SerializableModelAdmin):
-    list_display = ('name', 'acronym', 'website', 'acronym_learning_unit', 'type')
-    fieldsets = ((None, {'fields': ('name', 'acronym', 'acronym_learning_unit', 'website', 'type')}),)
+    list_display = ('name', 'acronym', 'website', 'prefix', 'type')
+    fieldsets = ((None, {'fields': ('name', 'acronym', 'prefix', 'website', 'type')}),)
     search_fields = ['acronym']
 
 
@@ -41,7 +41,7 @@ class Organization(SerializableModel):
     code = models.CharField(max_length=50, blank=True, null=True)
     acronym = models.CharField(max_length=20, blank=True, null=True)
     website = models.URLField(max_length=255, blank=True, null=True)
-    acronym_learning_unit = models.CharField(max_length=30, blank=True, null=True)
+    prefix = models.CharField(max_length=30, blank=True, null=True)
     type = models.CharField(max_length=30, blank=True, null=True, choices=ORGANIZATION_TYPES, default='UNKNOWN')
     start_date = models.DateTimeField(null=True)
     end_date = models.DateTimeField(null=True)
@@ -54,7 +54,7 @@ def find_by_id(organization_id):
     return Organization.objects.get(pk=organization_id)
 
 
-def search(acronym=None, name=None, type=None, acronym_learning_unit=None):
+def search(acronym=None, name=None, type=None, prefix=None):
     out = None
     queryset = Organization.objects
 
@@ -67,10 +67,10 @@ def search(acronym=None, name=None, type=None, acronym_learning_unit=None):
     if type:
         queryset = queryset.filter(type=type)
 
-    if acronym_learning_unit:
-        queryset = queryset.filter(acronym_learning_unit=acronym_learning_unit)
+    if prefix:
+        queryset = queryset.filter(prefix=prefix)
 
-    if acronym or name or type or acronym_learning_unit:
+    if acronym or name or type or prefix:
         out = queryset
 
     return out

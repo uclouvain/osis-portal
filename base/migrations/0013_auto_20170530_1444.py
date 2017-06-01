@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.RenameField(
             model_name='organization',
             old_name='reference',
-            new_name='acronym_learning_unit',
+            new_name='prefix',
         ),
         migrations.AddField(
             model_name='organization',
