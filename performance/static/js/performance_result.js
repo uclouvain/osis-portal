@@ -255,6 +255,8 @@ function creditToString(creditReport) {
       return "EPM";
     case "P":
       return "Postposé";
+    case "r":
+      return "Reussi";
     default:
       return creditReport;
 
