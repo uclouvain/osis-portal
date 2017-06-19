@@ -6,6 +6,7 @@ function fillPage(studentJson) {
   fillCoursesTable(studentJson);
   fillMentionExplanation(studentJson);
   fillLegendExplanation(studentJson);
+  fillCycleAdvancement(studentJson);
 }
 
 /***************************** STUDENT INFORMATION ********************/
@@ -255,6 +256,8 @@ function creditToString(creditReport) {
       return "EPM";
     case "P":
       return "Postposé";
+    case "r":
+      return "Reussi";
     default:
       return creditReport;
 
@@ -287,6 +290,63 @@ function fillLegendExplanation(studentJson) {
 
   });
   $frag.appendTo($("#body_legend_explanation"));
+}
+
+/******************************Cycle Advancement*************************/
+
+function fillCycleAdvancement(studentJson){
+  var cycleAdvancementJson = studentJson.detailsCredits
+  if(cycleAdvancementJson !== null) {
+    showCycleAdvancement()
+    makeCycleAdvancement(cycleAdvancementJson)
+  }
+}
+
+function showCycleAdvancement(){
+  $("#panel_cycle_advancement").show();
+}
+
+function makeCycleAdvancement(cycleAdvancementJson){
+  var arrayTotEcts = cycleAdvancementJson.totEctsAcquis;
+  var ectsAcquisCycleJson = cycleAdvancementJson.ectsAcquisCycle;
+  addCycleAcquiredEcts(ectsAcquisCycleJson);
+  if (arrayTotEcts !== undefined || arrayTotEcts.length > 0) {
+    addAcademicYearAcquiredEcts(arrayTotEcts);
+  }
+}
+
+function addCycleAcquiredEcts(ectsAcquisCycleJson){
+  var cycleAcronym = ectsAcquisCycleJson.sigle;
+  var cycleChargeCredits = ectsAcquisCycleJson.credAcquisCharge;
+  var cycleProgressionCredits = ectsAcquisCycleJson.credAcquisProgression;
+  var $frag = $(document.createDocumentFragment());
+  var $cell = createJQObjectNoText("<td/>", {}, $frag);
+  createJQObject("<strong/>", {}, cycleAcronym, $cell);
+  $cell = createJQObjectNoText("<td/>", {}, $frag);
+  createJQObject("<strong/>", {}, cycleChargeCredits, $cell);
+  $cell = createJQObjectNoText("<td/>", {}, $frag);
+  createJQObject("<strong/>", {}, cycleProgressionCredits, $cell);
+  $frag.appendTo($("#cycle_total_credits_row"));
+}
+
+function addAcademicYearAcquiredEcts(arrayTotEcts){
+  var $frag = $(document.createDocumentFragment());
+  $.each(arrayTotEcts, function(index, totEcts) {
+    var $row = createJQObjectNoText("<tr/>", {}, $frag);
+    addRowTotEcts(totEcts, $row);
+  });
+  $frag.appendTo($("#cycle_advancement"));
+}
+
+function addRowTotEcts(totEcts, $row){
+  var academicYear = totEcts.anac;
+  var acronym = totEcts.sigle;
+  var acquiredChargeCredits = totEcts.credAcquisCharge;
+  var acquiredProgressionCredits = totEcts.credAcquisProgression;
+  createJQObject("<td/>", {}, academicYear, $row);
+  createJQObject("<td/>", {}, acronym, $row);
+  createJQObject("<td/>", {}, acquiredChargeCredits, $row);
+  createJQObject("<td/>", {}, acquiredProgressionCredits, $row);
 }
 
 /***************************** UTILITY FUNCTIONS ***********************/
