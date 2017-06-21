@@ -129,13 +129,14 @@ function fillRowMention(programJson) {
 
 function fillCoursesTable(studentJson) {
   var arrayCourses = studentJson.monAnnee.monOffre.cours;
-
-  var $frag = $(document.createDocumentFragment());
-  $.each(arrayCourses, function(index, course) {
-    var $row = createJQObjectNoText("<tr/>", {}, $frag);
-    addRowCourse(course, $row);
-  });
-  $frag.appendTo($("#table_courses"));
+  if (typeof arrayCourses !== "undefined" && arrayCourses !== null && arrayCourses.length > 0){
+    var $frag = $(document.createDocumentFragment());
+    $.each(arrayCourses, function(index, course) {
+      var $row = createJQObjectNoText("<tr/>", {}, $frag);
+      addRowCourse(course, $row);
+    });
+    $frag.appendTo($("#table_courses"));
+  }
 }
 
 function addRowCourse(courseJson, $row) {
@@ -273,32 +274,34 @@ function fillMentionExplanation(studentJson) {
 
 
 function fillLegendExplanation(studentJson) {
-  var legendExplanation = studentJson.legende.explicationLettresLegende
+  var legendExplanation = studentJson.legende.explicationLettresLegende;
 
-  var $frag = $(document.createDocumentFragment());
-  var $row;
-  $.each(legendExplanation, function(index, letter_explanation) {
-    if(index == 0 || index%2 == 0){
-      $row = createJQObjectNoText("<div/>", {'class':'row'}, $frag);
-      var $col = createJQObjectNoText("<div/>", {'class':'col-md-6'}, $row);
-      createJQObject("<p/>", {}, letter_explanation, $col);
-    }
-    else{
-      var $col = createJQObjectNoText("<div/>", {'class':'col-md-6'}, $row);
-      createJQObject("<p/>", {}, letter_explanation, $col);
-    }
+  if (typeof legendExplanation !== "undefined" && legendExplanation !== null && legendExplanation.length > 0) {
+    var $frag = $(document.createDocumentFragment());
+    var $row;
+    $.each(legendExplanation, function (index, letter_explanation) {
+      if (index == 0 || index % 2 == 0) {
+        $row = createJQObjectNoText("<div/>", {'class': 'row'}, $frag);
+        var $col = createJQObjectNoText("<div/>", {'class': 'col-md-6'}, $row);
+        createJQObject("<p/>", {}, letter_explanation, $col);
+      }
+      else {
+        var $col = createJQObjectNoText("<div/>", {'class': 'col-md-6'}, $row);
+        createJQObject("<p/>", {}, letter_explanation, $col);
+      }
 
-  });
-  $frag.appendTo($("#body_legend_explanation"));
+    });
+    $frag.appendTo($("#body_legend_explanation"));
+  }
 }
 
 /******************************Cycle Advancement*************************/
 
 function fillCycleAdvancement(studentJson){
-  var cycleAdvancementJson = studentJson.detailsCredits
-  if(cycleAdvancementJson !== null) {
-    showCycleAdvancement()
-    makeCycleAdvancement(cycleAdvancementJson)
+  var cycleAdvancementJson = studentJson.detailsCredits;
+  if(typeof cycleAdvancementJson !== "undefined" && cycleAdvancementJson !== null) {
+    showCycleAdvancement();
+    makeCycleAdvancement(cycleAdvancementJson);
   }
 }
 
