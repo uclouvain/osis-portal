@@ -134,6 +134,11 @@
     {% elif environment == 'QA'%}
         <div class="qagreen">QA</div>
     {% endif %}
+    {% if subject %}
+        <div class="container">
+            <div class="alert alert-warning" role="alert"><b>{{ subject }}</b><br>{{ notice }}</div>
+        </div>
+    {% endif %}
     <div class="container">
 
         {% if request.user.is_authenticated %}
