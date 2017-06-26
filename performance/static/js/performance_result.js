@@ -299,7 +299,8 @@ function fillLegendExplanation(studentJson) {
 
 function fillCycleAdvancement(studentJson){
   var cycleAdvancementJson = studentJson.detailsCredits;
-  if(typeof cycleAdvancementJson !== "undefined" && cycleAdvancementJson !== null) {
+  var afficherTableau = cycleAdvancementJson.afficherTabCreditsAcquis;
+  if(typeof cycleAdvancementJson !== "undefined" && cycleAdvancementJson !== null && afficherTableau) {
     showCycleAdvancement();
     makeCycleAdvancement(cycleAdvancementJson);
   }
