@@ -55,3 +55,18 @@ body {
     width: 80%;
     display: inline-block;
 }
+
+span.dashboard-vpn-warning{
+    color: #f0ad4e;
+    font-weight: bold;
+}
+
+span.dashboard-vpn-warning a{
+    color: #f0ad4e;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+span.dashboard-vpn-warning a:hover{
+    text-decoration: none;
+}
