@@ -61,7 +61,18 @@
                             {% trans 'online_scores_encoding' %}
                         </a>
                     </h4>
-                    <p>{% trans 'scores_encoding_use_vpn' %}</p>
+                    <p>
+                        <span class="dashboard-vpn-warning fa fa-exclamation-triangle" aria-hidden="true"></span>
+                        {% if score_encoding_vpn_help_url %}
+                            <span class="dashboard-vpn-warning">
+                                {% trans 'scores_encoding_use_vpn_with_link_start' %}{{score_encoding_vpn_help_url}}{% trans 'scores_encoding_use_vpn_with_link_end' %}
+                            </span>
+                        {% else %}
+                            <span class="dashboard-vpn-warning">
+                                {% trans 'scores_encoding_use_vpn' %}
+                            </span>
+                        {% endif %}
+                    </p>
                 </div>
             </div>
         {% endif %}
