@@ -53,6 +53,7 @@ queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
 @permission_required('base.is_tutor', raise_exception=True)
 def score_encoding(request):
     score_encoding_url = settings.OSIS_SCORE_ENCODING_URL
+    score_encoding_vpn_help_url = settings.OSIS_SCORE_ENCODING_VPN_HELP_URL
     return layout.render(request, "score_encoding.html", locals())
 
 
