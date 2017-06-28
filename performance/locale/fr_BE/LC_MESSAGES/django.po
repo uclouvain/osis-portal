@@ -175,3 +175,18 @@ msgstr "juin"
 
 msgid "SEPTEMBER"
 msgstr "septembre"
+
+msgid "cycle_advancement"
+msgstr "Progression des crédits dans le programme"
+
+msgid "cycle_advancement_explanations"
+msgstr "Les crédits acquis de charge sont tous inclus dans la moyenne de cycle. Seuls les crédits acquis de progression sont pris en compte pour atteindre le nombre de crédits requis."
+
+msgid "acquired_charge_credits"
+msgstr "Crédits acquis de charge"
+
+msgid "acquired_progression_credits"
+msgstr "Crédits acquis de progression"
+
+msgid "cycle_total_credits"
+msgstr "Cycle d'études"
