@@ -62,8 +62,16 @@
                         </a>
                     </h4>
                     <p>
-                        <span style="color: #f0ad4e; font-size: 1.2em;" class="fa fa-exclamation-triangle" aria-hidden="true"></span>
-                        <span style="color: #f0ad4e; font-weight: bold">{% trans 'scores_encoding_use_vpn' %}</span>
+                        <span class="dashboard-vpn-warning fa fa-exclamation-triangle" aria-hidden="true"></span>
+                        {% if score_encoding_vpn_help_url %}
+                            <span class="dashboard-vpn-warning">
+                                {% trans 'scores_encoding_use_vpn_with_link_start' %}{{score_encoding_vpn_help_url}}{% trans 'scores_encoding_use_vpn_with_link_end' %}
+                            </span>
+                        {% else %}
+                            <span class="dashboard-vpn-warning">
+                                {% trans 'scores_encoding_use_vpn' %}
+                            </span>
+                        {% endif %}
                     </p>
                 </div>
             </div>

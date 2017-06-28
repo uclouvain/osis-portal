@@ -67,6 +67,12 @@ msgstr "Encodage de notes"
 msgid "scores_encoding_use_vpn"
 msgstr "Ceci nécessite un accès VPN en dehors du réseau de l'UCL."
 
+msgid "scores_encoding_use_vpn_with_link_start"
+msgstr "Ceci nécessite un <a href=\""
+
+msgid "scores_encoding_use_vpn_with_link_end"
+msgstr "\" target=\"_blank\" >accès VPN</a> en dehors du réseau de l'UCL."
+
 msgid "unauthorized_decimal"
 msgstr "Attention : décimales non autorisées pour ce cours"
 
