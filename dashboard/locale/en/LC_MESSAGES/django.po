@@ -62,7 +62,7 @@ msgid "scores_encoding"
 msgstr "Scores Encoding"
 
 msgid "scores_encoding_use_vpn"
-msgstr "Online scores encoding requires a VPN access outside UCL."
+msgstr "This requires a VPN access outside UCL."
 
 msgid "unauthorized_decimal"
 msgstr "Unauthorized decimal for this learning unit"
