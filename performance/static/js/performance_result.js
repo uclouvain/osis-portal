@@ -6,7 +6,6 @@ function fillPage(studentJson) {
   fillCoursesTable(studentJson);
   fillMentionExplanation(studentJson);
   fillLegendExplanation(studentJson);
-  fillCycleAdvancement(studentJson);
 }
 
 /***************************** STUDENT INFORMATION ********************/
