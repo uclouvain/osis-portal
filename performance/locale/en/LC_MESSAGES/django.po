@@ -180,3 +180,18 @@ msgstr "june"
 
 msgid "SEPTEMBER"
 msgstr "september"
+
+msgid "cycle_advancement"
+msgstr "Cycle credits advancement"
+
+msgid "cycle_advancement_explanations"
+msgstr "Acquired cycle credits are included in the cycle mean. Only acquired progression credits are accounted for requested credits."
+
+msgid "acquired_charge_credits"
+msgstr "Acquired charge credits"
+
+msgid "acquired_progression_credits"
+msgstr "Acquired progression credits"
+
+msgid "cycle_total_credits"
+msgstr "Cycle"

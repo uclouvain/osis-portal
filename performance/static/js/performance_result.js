@@ -6,6 +6,7 @@ function fillPage(studentJson) {
   fillCoursesTable(studentJson);
   fillMentionExplanation(studentJson);
   fillLegendExplanation(studentJson);
+  fillCycleAdvancement(studentJson);
 }
 
 /***************************** STUDENT INFORMATION ********************/
@@ -128,13 +129,14 @@ function fillRowMention(programJson) {
 
 function fillCoursesTable(studentJson) {
   var arrayCourses = studentJson.monAnnee.monOffre.cours;
-
-  var $frag = $(document.createDocumentFragment());
-  $.each(arrayCourses, function(index, course) {
-    var $row = createJQObjectNoText("<tr/>", {}, $frag);
-    addRowCourse(course, $row);
-  });
-  $frag.appendTo($("#table_courses"));
+  if (typeof arrayCourses !== "undefined" && arrayCourses !== null && arrayCourses.length > 0){
+    var $frag = $(document.createDocumentFragment());
+    $.each(arrayCourses, function(index, course) {
+      var $row = createJQObjectNoText("<tr/>", {}, $frag);
+      addRowCourse(course, $row);
+    });
+    $frag.appendTo($("#table_courses"));
+  }
 }
 
 function addRowCourse(courseJson, $row) {
@@ -255,6 +257,8 @@ function creditToString(creditReport) {
       return "EPM";
     case "P":
       return "Postposé";
+    case "r":
+      return "Reussi";
     default:
       return creditReport;
 
@@ -270,23 +274,83 @@ function fillMentionExplanation(studentJson) {
 
 
 function fillLegendExplanation(studentJson) {
-  var legendExplanation = studentJson.legende.explicationLettresLegende
+  var legendExplanation = studentJson.legende.explicationLettresLegende;
 
+  if (typeof legendExplanation !== "undefined" && legendExplanation !== null && legendExplanation.length > 0) {
+    var $frag = $(document.createDocumentFragment());
+    var $row;
+    $.each(legendExplanation, function (index, letter_explanation) {
+      if (index == 0 || index % 2 == 0) {
+        $row = createJQObjectNoText("<div/>", {'class': 'row'}, $frag);
+        var $col = createJQObjectNoText("<div/>", {'class': 'col-md-6'}, $row);
+        createJQObject("<p/>", {}, letter_explanation, $col);
+      }
+      else {
+        var $col = createJQObjectNoText("<div/>", {'class': 'col-md-6'}, $row);
+        createJQObject("<p/>", {}, letter_explanation, $col);
+      }
+
+    });
+    $frag.appendTo($("#body_legend_explanation"));
+  }
+}
+
+/******************************Cycle Advancement*************************/
+
+function fillCycleAdvancement(studentJson){
+  var cycleAdvancementJson = studentJson.detailsCredits;
+  var afficherTableau = cycleAdvancementJson.afficherTabCreditsAcquis;
+  if(typeof cycleAdvancementJson !== "undefined" && cycleAdvancementJson !== null && afficherTableau) {
+    showCycleAdvancement();
+    makeCycleAdvancement(cycleAdvancementJson);
+  }
+}
+
+function showCycleAdvancement(){
+  $("#panel_cycle_advancement").show();
+}
+
+function makeCycleAdvancement(cycleAdvancementJson){
+  var arrayTotEcts = cycleAdvancementJson.totEctsAcquis;
+  var ectsAcquisCycleJson = cycleAdvancementJson.ectsAcquisCycle;
+  addCycleAcquiredEcts(ectsAcquisCycleJson);
+  if (arrayTotEcts !== undefined || arrayTotEcts.length > 0) {
+    addAcademicYearAcquiredEcts(arrayTotEcts);
+  }
+}
+
+function addCycleAcquiredEcts(ectsAcquisCycleJson){
+  var cycleAcronym = ectsAcquisCycleJson.sigle;
+  var cycleChargeCredits = ectsAcquisCycleJson.credAcquisCharge;
+  var cycleProgressionCredits = ectsAcquisCycleJson.credAcquisProgression;
   var $frag = $(document.createDocumentFragment());
-  var $row;
-  $.each(legendExplanation, function(index, letter_explanation) {
-    if(index == 0 || index%2 == 0){
-      $row = createJQObjectNoText("<div/>", {'class':'row'}, $frag);
-      var $col = createJQObjectNoText("<div/>", {'class':'col-md-6'}, $row);
-      createJQObject("<p/>", {}, letter_explanation, $col);
-    }
-    else{
-      var $col = createJQObjectNoText("<div/>", {'class':'col-md-6'}, $row);
-      createJQObject("<p/>", {}, letter_explanation, $col);
-    }
+  var $cell = createJQObjectNoText("<td/>", {}, $frag);
+  createJQObject("<strong/>", {}, cycleAcronym, $cell);
+  $cell = createJQObjectNoText("<td/>", {}, $frag);
+  createJQObject("<strong/>", {}, cycleChargeCredits, $cell);
+  $cell = createJQObjectNoText("<td/>", {}, $frag);
+  createJQObject("<strong/>", {}, cycleProgressionCredits, $cell);
+  $frag.appendTo($("#cycle_total_credits_row"));
+}
 
+function addAcademicYearAcquiredEcts(arrayTotEcts){
+  var $frag = $(document.createDocumentFragment());
+  $.each(arrayTotEcts, function(index, totEcts) {
+    var $row = createJQObjectNoText("<tr/>", {}, $frag);
+    addRowTotEcts(totEcts, $row);
   });
-  $frag.appendTo($("#body_legend_explanation"));
+  $frag.appendTo($("#cycle_advancement"));
+}
+
+function addRowTotEcts(totEcts, $row){
+  var academicYear = totEcts.anac;
+  var acronym = totEcts.sigle;
+  var acquiredChargeCredits = totEcts.credAcquisCharge;
+  var acquiredProgressionCredits = totEcts.credAcquisProgression;
+  createJQObject("<td/>", {}, academicYear, $row);
+  createJQObject("<td/>", {}, acronym, $row);
+  createJQObject("<td/>", {}, acquiredChargeCredits, $row);
+  createJQObject("<td/>", {}, acquiredProgressionCredits, $row);
 }
 
 /***************************** UTILITY FUNCTIONS ***********************/

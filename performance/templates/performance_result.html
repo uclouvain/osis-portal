@@ -56,16 +56,12 @@
             </div>
             <br/>
             {% if fetch_timed_out %}
-                <div class="row">
-                    <div class="col-md-12 alert alert-warning">
-                        {% trans 'performance_result_fetch_timed_out' %}
-                    </div>
+                <div class="col-md-12 alert alert-warning">
+                    {% trans 'performance_result_fetch_timed_out' %}
                 </div>
             {% elif not_authorized_message %}
-                <div class="row">
-                    <div class="col-md-12 alert alert-danger">
-                       {{ not_authorized_message }}
-                    </div>
+                <div class="col-md-12 alert alert-danger">
+                   {{ not_authorized_message }}
                 </div>
             {% endif %}
             <div class="row container-fluid">
@@ -80,7 +76,7 @@
             <div class="row container-fluid">
                 <!-- Student sessions summary-->
                 <div class="pull-right">
-                    <table class="table table-striped">
+                    <table class="table table-striped table-responsive">
                         <tr>
                             <th></th>
                             <th>{% trans 'ects' %}</th>
@@ -107,7 +103,7 @@
                 </div>
             </div>
 
-            <table class="table table-striped table-hover table-bordered" id="table_courses">
+            <table class="table table-striped table-hover table-bordered table-responsive" id="table_courses">
                 <tr>
                     <th>{% trans 'course' %}</th>
                     <th>{% trans 'title' %}</th>
@@ -133,16 +129,35 @@
 
             <div class="panel panel-default" >
                 <div class="panel-body" id="body_legend_explanation">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p><b>{% trans 'legend'%}</b></p>
-                        </div>
+                    <div class="col-md-12">
+                        <p><b>{% trans 'legend'%}</b></p>
                     </div>
                 </div>
             </div>
 
+            <div class="panel panel-default" style="display: none" id="panel_cycle_advancement">
+                <div class="panel-body" id="body_cycle_advancement">
+                    <div class="col-md-12">
+                        <p><b>{% trans 'cycle_advancement'%}</b></p>
+                    </div>
+                    <div class="col-md-12">
+                        <p>{% trans 'cycle_advancement_explanations'%}</p>
+                    </div>
+                    <table class="table table-striped table-hover table-bordered table-responsive" id="cycle_advancement">
+                        <tr id="cycle_advancement_table_header">
+                            <th colspan="2"></th>
+                            <th>{% trans 'acquired_charge_credits' %}</th>
+                            <th>{% trans 'acquired_progression_credits' %}</th>
+                        </tr>
+                        <tr id="cycle_total_credits_row">
+                            <td id="cycle_total_title"><strong>{% trans 'cycle_total_credits' %}</strong></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
             <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
-            <script src="{% static 'js/performance_result.js' %}"></script>
+            <script src="{% static 'js/performance_result.js' %}?version={{ js }}"></script>
             <script type="text/javascript">
               $( document ).ready(function() {
                 var studentJson = {{ results|safe }};
