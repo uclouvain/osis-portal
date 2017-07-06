@@ -134,6 +134,11 @@
     {% elif environment == 'QA'%}
         <div class="qagreen">QA</div>
     {% endif %}
+    {% if subject %}
+        <div class="container">
+            <div class="alert alert-warning" role="alert"><b>{{ subject }}</b><br>{{ notice }}</div>
+        </div>
+    {% endif %}
     <div class="container">
 
         {% if request.user.is_authenticated %}
@@ -150,7 +155,7 @@
 
     <div class="container">
         <p class="navbar-text pull-left"></p>
-        <p class="navbar-text pull-right"><span class="glyphicon glyphicon-copyright-mark"></span> 2016 <a
+        <p class="navbar-text pull-right"><span class="glyphicon glyphicon-copyright-mark"></span> {% now "Y" %} <a
                 href="http://www.uclouvain.be" target="_blank" id="lnk_ucl">Université catholique de Louvain</a></p>
     </div>
 
