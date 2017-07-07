@@ -59,6 +59,25 @@ def score_encoding(request):
 
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
+def my_scores_sheets(request):
+    person = mdl_base.person.find_by_user(request.user)
+    if person:
+        pdf = print_scores(person.global_id)
+    else:
+        logger.warning("A person doesn't exist for the user {0}".format(request.user))
+
+    return layout.render(request, "my_scores_sheets.html", locals())
+
+
+@login_required
+@permission_required('base.is_tutor', raise_exception=True)
+def ask_papersheet(request):
+
+    return layout.render(request, "my_scores_sheets.html", locals())
+
+
+@login_required
+@permission_required('base.is_tutor', raise_exception=True)
 def download_papersheet(request):
     person = mdl_base.person.find_by_user(request.user)
     if person:
@@ -73,7 +92,7 @@ def download_papersheet(request):
         logger.warning("A person doesn't exist for the user {0}".format(request.user))
 
     messages.add_message(request, messages.WARNING, _('no_score_to_encode'))
-    return score_encoding(request)
+    return my_scores_sheets(request)
 
 
 def print_scores(global_id):

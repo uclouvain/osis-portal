@@ -22,6 +22,9 @@ msgstr "A=Absent"
 msgid "academic_year"
 msgstr "Année académique"
 
+msgid "ask_papersheet"
+msgstr "Demander les feuilles de notes"
+
 msgid "cheating_pdf_legend"
 msgstr "T=Tricherie"
 

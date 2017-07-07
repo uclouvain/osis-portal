@@ -19,6 +19,9 @@ msgstr ""
 msgid "absent_pdf_legend"
 msgstr "A=Absent"
 
+msgid "ask_papersheet"
+msgstr "Ask scores sheets"
+
 msgid "cheating_pdf_legend"
 msgstr "T=Cheating"
 
