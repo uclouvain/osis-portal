@@ -40,6 +40,10 @@ class ScoreSheetTest(TestCase):
         document = score_encoding.get_score_sheet(self.global_id)
         self.assertJSONEqual(self.score_encoding.document, document, "Should return the document in db")
 
+    def test_check_db_scores(self):
+        scores_check = score_encoding.check_db_scores(self.global_id)
+        self.assertTrue(scores_check)
+
     if hasattr(settings, 'QUEUES') and settings.QUEUES:
         @patch('frontoffice.queue.queue_listener.Client.call')
         def test_get_score_sheet_if_present_in_db_but_outdated(self, mock_client_call):

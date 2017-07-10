@@ -62,8 +62,9 @@ def score_encoding(request):
 def my_scores_sheets(request):
     person = mdl_base.person.find_by_user(request.user)
     if person:
-        pdf = print_scores(person.global_id)
+        scores_in_db_and_uptodate = check_db_scores(person.global_id)
     else:
+        scores_in_db_and_uptodate = False
         logger.warning("A person doesn't exist for the user {0}".format(request.user))
 
     return layout.render(request, "my_scores_sheets.html", locals())
@@ -119,6 +120,14 @@ def get_score_sheet(global_id):
     if not document or is_outdated(document):
         document = fetch_document(global_id)
     return document
+
+
+def check_db_scores(global_id):
+    scores = assessments.models.score_encoding.find_by_global_id(global_id)
+    if scores and scores.document and not is_outdated(scores.document):
+        return True
+    else:
+        return False
 
 
 def fetch_document(global_id):

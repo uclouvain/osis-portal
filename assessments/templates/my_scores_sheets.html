@@ -41,11 +41,11 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div>
-            <a href="{% url 'scores_download' %}" id="lnk_scores_download" class="btn btn-lg btn-primary" style="display: none;">
-                {% trans 'download' %} <span class="glyphicon glyphicon-download"></span>
-            </a>
             <a href="{% url 'ask_papersheet' %}" id="lnk_ask_papersheet" class="btn btn-lg btn-primary" style="display: none;">
                 {% trans 'ask_papersheet' %} <span class="glyphicon glyphicon-cloud-download"></span>
+            </a>
+            <a href="{% url 'scores_download' %}" id="lnk_scores_download" class="btn btn-lg btn-primary" style="display: none;">
+                {% trans 'download' %} <span class="glyphicon glyphicon-download"></span>
             </a>
         </div>
         <div style="padding-top: 1em;">
@@ -58,10 +58,9 @@
 {% block script %}
     <script type="text/javascript">
         window.onload = function() {
-            var person = "{{person|safe}}"
-            var pdf = "{{pdf|safe}}"
-            if(person == 'None' || pdf == 'None' ){
-                show_ask_button()
+            var scores_in_db_and_uptodate = '{{scores_in_db_and_uptodate|safe}}'
+            if(scores_in_db_and_uptodate == 'False'){
+                show_ask_button();
             }
             else{
                 show_download_button();
