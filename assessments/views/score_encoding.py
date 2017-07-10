@@ -73,7 +73,6 @@ def my_scores_sheets(request):
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
 def ask_papersheet(request):
-
     return layout.render(request, "my_scores_sheets.html", locals())
 
 
@@ -125,7 +124,15 @@ def get_score_sheet(global_id):
 def check_db_scores(global_id):
     scores = assessments.models.score_encoding.find_by_global_id(global_id)
     if scores and scores.document and not is_outdated(scores.document):
-        return True
+        try:
+            paper_sheet.validate_data_structure(json.loads(scores.document))
+            return True
+        except (KeyError, voluptuous_error.Invalid):
+            trace = traceback.format_exc()
+            logger.error(trace)
+            logger.warning(
+                "A document could not be produced from the json document of the global id {0}".format(global_id))
+            return False
     else:
         return False
 

@@ -40,23 +40,28 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
+        <div style="padding-bottom: 1em;">
+            <span id="status_message"></span>
+        </div>
         <div>
-            <a href="{% url 'ask_papersheet' %}" id="lnk_ask_papersheet" class="btn btn-lg btn-primary" style="display: none;">
+            <a href="#" id="lnk_ask_papersheet" class="btn btn-lg btn-primary" style="display: none;">
                 {% trans 'ask_papersheet' %} <span class="glyphicon glyphicon-cloud-download"></span>
             </a>
-            <a href="{% url 'scores_download' %}" id="lnk_scores_download" class="btn btn-lg btn-primary" style="display: none;">
+            <a href="scores_download" id="lnk_scores_download" class="btn btn-lg btn-primary" style="display: none;">
                 {% trans 'download' %} <span class="glyphicon glyphicon-download"></span>
             </a>
         </div>
-        <div style="padding-top: 1em;">
-            <span id="pdf_status_message"></span>
-        </div>
+
     </div>
 </div>
 {% endblock %}
 
 {% block script %}
     <script type="text/javascript">
+        var lnk_ask_papersheet = document.getElementById("lnk_ask_papersheet")
+        var status_message = document.getElementById("status_message")
+        var lnk_scores_download = document.getElementById("lnk_scores_download")
+
         window.onload = function() {
             var scores_in_db_and_uptodate = '{{scores_in_db_and_uptodate|safe}}'
             if(scores_in_db_and_uptodate == 'False'){
@@ -68,11 +73,11 @@
         };
 
         function show_ask_button(){
-            document.getElementById("lnk_ask_papersheet").style.display = 'inline-block';
-            document.getElementById("pdf_status_message").innerHTML = 'Your pdf is not yet ready...';
+            lnk_ask_papersheet.style.display = 'inline-block';
+            status_message.innerHTML = 'Your pdf is not yet ready';
         }
         function show_download_button(){
-            document.getElementById("lnk_scores_download").style.display = 'inline-block';
+            lnk_scores_download.style.display = 'inline-block';
         }
     </script>
 {% endblock %}
