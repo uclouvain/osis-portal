@@ -42,10 +42,10 @@
     <div class="panel-body">
         <div>
             <button id="lnk_ask_papersheet" onclick="ask_papersheet()" class="btn btn-lg btn-primary" style="display: none;">
-                {% trans 'ask_papersheet' %} <span class="glyphicon glyphicon-cloud-download"></span>
+                {% trans 'ask_papersheet' %}
             </button>
-            <a href="scores_download" id="lnk_scores_download" class="btn btn-lg btn-primary" style="display: none;">
-                {% trans 'download' %} <span class="glyphicon glyphicon-download"></span>
+            <a href="{% url 'scores_download' %}" id="lnk_scores_download" class="btn btn-lg btn-primary" style="display: none;">
+                {% trans 'download' %}
             </a>
         </div>
         <div id="message_box" class="alert alert-info" style="margin-top: 1em;">
@@ -62,8 +62,12 @@
         var status_message = document.getElementById("status_message")
         var message_box = document.getElementById("message_box")
 
-        function show(element) {
-            element.style.display = 'inline-block';
+        function sleep(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function show(element, display) {
+            element.style.display = display;
         }
         function disable(element) {
             element.disabled = true;
@@ -82,24 +86,41 @@
             var scores_in_db_and_uptodate = '{{scores_in_db_and_uptodate|safe}}'
             if(scores_in_db_and_uptodate == 'False'){
                 hide(message_box);
-                show(lnk_ask_papersheet);
+                show(lnk_ask_papersheet, 'inline-block');
             }
             else{
+                set_class(message_box, "alert alert-success");
                 show_message_in_container(status_message, "{% trans 'scores_sheet_ready' %}");
-                show(lnk_scores_download);
+                show(lnk_scores_download, 'inline-block');
             }
         };
 
-        function ask_papersheet() {
+        async function ask_papersheet() {
             disable(lnk_ask_papersheet);
-            show(message_box);
+            show(message_box, 'block');
             set_class(message_box, "alert alert-info");
             show_message_in_container(status_message, "{% trans 'scores_sheet_building' %}");
-            // get scores sheets
-            set_class(message_box, "alert alert-success");
-            show_message_in_container(status_message, "{% trans 'scores_sheet_ready' %}");
-            hide(lnk_ask_papersheet);
-            show(lnk_scores_download);
+
+            await sleep(1000);
+
+            $.ajax({
+                method: 'POST',
+                url: "{% url 'ask_papersheet' %}",
+                data: {'fgs': '00123456'},
+                success: function (data) {
+                    set_class(message_box, "alert alert-success");
+                    show_message_in_container(status_message, "{% trans 'scores_sheet_ready' %}");
+                    hide(lnk_ask_papersheet);
+                    show(lnk_scores_download, 'inline-block');
+                },
+                error: function (data) {
+                    set_class(message_box, "alert alert-warning");
+                    show_message_in_container(status_message, "{% trans 'scores_sheet_unavailable' %}");
+                }
+            });
+
+
+
         }
 
 

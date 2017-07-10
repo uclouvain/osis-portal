@@ -26,6 +26,7 @@
 import datetime
 import json
 import logging
+import pika
 import traceback
 from voluptuous import error as voluptuous_error
 
@@ -73,7 +74,12 @@ def my_scores_sheets(request):
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
 def ask_papersheet(request):
-    return layout.render(request, "my_scores_sheets.html", locals())
+    if request.is_ajax():
+        fgs = request.POST.get('fgs')
+        assessments.models.score_encoding.insert_or_update_document(fgs, "{}")
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=405)
 
 
 @login_required

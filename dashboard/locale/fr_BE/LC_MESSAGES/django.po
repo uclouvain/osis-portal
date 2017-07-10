@@ -79,6 +79,9 @@ msgstr "\" target=\"_blank\" >accès VPN</a> en dehors du réseau de l'UCL."
 msgid "scores_sheet_building"
 msgstr "Récupération des feuilles de notes en cours."
 
+msgid "scores_sheet_unavailable"
+msgstr "Les feuilles de notes ne sont pas disponibles pour l'instant."
+
 msgid "scores_sheet_ready"
 msgstr "Les feuilles de notes sont prêtes !"
 

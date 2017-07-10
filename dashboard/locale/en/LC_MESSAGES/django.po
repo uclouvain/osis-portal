@@ -76,6 +76,9 @@ msgstr "\" target=\"_blank\" >VPN access</a> outside UCL."
 msgid "scores_sheet_building"
 msgstr "Scores sheets are building."
 
+msgid "scores_sheet_unavailable"
+msgstr "Scores sheets are not available for now."
+
 msgid "scores_sheet_ready"
 msgstr "Scores sheets are ready !"
 
