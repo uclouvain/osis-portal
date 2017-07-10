@@ -44,9 +44,9 @@
             <span id="status_message"></span>
         </div>
         <div>
-            <a href="#" id="lnk_ask_papersheet" class="btn btn-lg btn-primary" style="display: none;">
+            <button id="lnk_ask_papersheet" onclick="ask_papersheet()" class="btn btn-lg btn-primary" style="display: none;">
                 {% trans 'ask_papersheet' %} <span class="glyphicon glyphicon-cloud-download"></span>
-            </a>
+            </button>
             <a href="scores_download" id="lnk_scores_download" class="btn btn-lg btn-primary" style="display: none;">
                 {% trans 'download' %} <span class="glyphicon glyphicon-download"></span>
             </a>
@@ -62,22 +62,40 @@
         var status_message = document.getElementById("status_message")
         var lnk_scores_download = document.getElementById("lnk_scores_download")
 
+        function show_button(button) {
+            button.style.display = 'inline-block';
+        }
+        function disable_button(button) {
+            button.disabled = true;
+        }
+        function hide_button(button) {
+            button.style.display = 'none';
+        }
+        function show_message_in_container(container, message) {
+            container.innerHTML = message;
+        }
+
         window.onload = function() {
             var scores_in_db_and_uptodate = '{{scores_in_db_and_uptodate|safe}}'
             if(scores_in_db_and_uptodate == 'False'){
-                show_ask_button();
+                show_message_in_container(status_message, "Your PDF is not ready...");
+                show_button(lnk_ask_papersheet);
             }
             else{
-                show_download_button();
+                show_message_in_container(status_message, "Your PDF is ready !");
+                show_button(lnk_scores_download);
             }
         };
 
-        function show_ask_button(){
-            lnk_ask_papersheet.style.display = 'inline-block';
-            status_message.innerHTML = 'Your pdf is not yet ready';
+        function ask_papersheet() {
+            disable_button(lnk_ask_papersheet)
+            show_message_in_container(status_message, "Getting PDF...");
+            // try to get json...
+            show_message_in_container(status_message, "Your PDF is ready !");
+            hide_button(lnk_ask_papersheet);
+            show_button(lnk_scores_download);
         }
-        function show_download_button(){
-            lnk_scores_download.style.display = 'inline-block';
-        }
+
+
     </script>
 {% endblock %}
