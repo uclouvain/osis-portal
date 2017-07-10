@@ -40,9 +40,6 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <div style="padding-bottom: 1em;">
-            <span id="status_message"></span>
-        </div>
         <div>
             <button id="lnk_ask_papersheet" onclick="ask_papersheet()" class="btn btn-lg btn-primary" style="display: none;">
                 {% trans 'ask_papersheet' %} <span class="glyphicon glyphicon-cloud-download"></span>
@@ -51,7 +48,9 @@
                 {% trans 'download' %} <span class="glyphicon glyphicon-download"></span>
             </a>
         </div>
-
+        <div id="message_box" class="alert alert-info" style="margin-top: 1em;">
+            <span id="status_message"></span>
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -59,41 +58,48 @@
 {% block script %}
     <script type="text/javascript">
         var lnk_ask_papersheet = document.getElementById("lnk_ask_papersheet")
-        var status_message = document.getElementById("status_message")
         var lnk_scores_download = document.getElementById("lnk_scores_download")
+        var status_message = document.getElementById("status_message")
+        var message_box = document.getElementById("message_box")
 
-        function show_button(button) {
-            button.style.display = 'inline-block';
+        function show(element) {
+            element.style.display = 'inline-block';
         }
-        function disable_button(button) {
-            button.disabled = true;
+        function disable(element) {
+            element.disabled = true;
         }
-        function hide_button(button) {
-            button.style.display = 'none';
+        function hide(element) {
+            element.style.display = 'none';
         }
         function show_message_in_container(container, message) {
             container.innerHTML = message;
+        }
+        function set_class(element, class_attributes) {
+            element.className = class_attributes;
         }
 
         window.onload = function() {
             var scores_in_db_and_uptodate = '{{scores_in_db_and_uptodate|safe}}'
             if(scores_in_db_and_uptodate == 'False'){
-                show_message_in_container(status_message, "Your PDF is not ready...");
-                show_button(lnk_ask_papersheet);
+                hide(message_box);
+                show(lnk_ask_papersheet);
             }
             else{
-                show_message_in_container(status_message, "Your PDF is ready !");
-                show_button(lnk_scores_download);
+                show_message_in_container(status_message, "{% trans 'scores_sheet_ready' %}");
+                show(lnk_scores_download);
             }
         };
 
         function ask_papersheet() {
-            disable_button(lnk_ask_papersheet)
-            show_message_in_container(status_message, "Getting PDF...");
-            // try to get json...
-            show_message_in_container(status_message, "Your PDF is ready !");
-            hide_button(lnk_ask_papersheet);
-            show_button(lnk_scores_download);
+            disable(lnk_ask_papersheet);
+            show(message_box);
+            set_class(message_box, "alert alert-info");
+            show_message_in_container(status_message, "{% trans 'scores_sheet_building' %}");
+            // get scores sheets
+            set_class(message_box, "alert alert-success");
+            show_message_in_container(status_message, "{% trans 'scores_sheet_ready' %}");
+            hide(lnk_ask_papersheet);
+            show(lnk_scores_download);
         }
 
 
