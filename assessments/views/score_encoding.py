@@ -72,7 +72,7 @@ def ask_papersheet(request):
     if request.is_ajax() and 'assessments' in settings.INSTALLED_APPS:
         person = mdl_base.person.find_by_user(request.user)
         if hasattr(settings, 'QUEUES') and settings.QUEUES:
-            connect = pika.BlockingConnection(get_rabbit_settings())
+            connect = pika.BlockingConnection(_get_rabbit_settings())
             queue_name = settings.QUEUES.get('QUEUES_NAME').get('SCORE_ENDCODING_PDF_REQUEST')
             channel = _create_channel(connect, queue_name)
             channel.basic_publish(exchange='',
@@ -88,16 +88,30 @@ def ask_papersheet(request):
 @permission_required('base.is_tutor', raise_exception=True)
 def wait_papersheet(request):
     if request.is_ajax() and 'assessments' in settings.INSTALLED_APPS:
-        connect = pika.BlockingConnection(get_rabbit_settings())
+        connect = pika.BlockingConnection(_get_rabbit_settings())
         queue_name = settings.QUEUES.get('QUEUES_NAME').get('SCORE_ENDCODING_PDF_RESPONSE')
         channel = _create_channel(connect, queue_name)
-        channel.basic_consume(insert_or_update_document_from_queue,
+        channel.basic_consume(_insert_or_update_document_from_queue,
                               queue=queue_name,
                               no_ack=True)
         channel.start_consuming()
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=405)
+
+
+def _insert_or_update_document_from_queue(ch, method, properties, body):
+    json_data = body.decode("utf-8")
+    data = json.loads(json_data)
+    global_id = data.get('tutor_global_id')
+    if global_id:
+        assessments.models.score_encoding.insert_or_update_document(global_id, json_data)
+        for x in range(10):
+            if not ch.get_waiting_message_count():
+                ch.stop_consuming()
+                break
+            else:
+                time.sleep(1)
 
 
 @login_required
@@ -110,20 +124,6 @@ def check_papersheet(request):
             return HttpResponse(status=404)
     else:
         return HttpResponse(status=405)
-
-
-def insert_or_update_document_from_queue(ch, method, properties, body):
-    json_data = body.decode("utf-8")
-    data = json.loads(json_data)
-    global_id = data.get('tutor_global_id')
-    if global_id:
-        assessments.models.score_encoding.insert_or_update_document(global_id, json_data)
-        for x in range(10):
-            if not ch.get_waiting_message_count():
-                ch.stop_consuming()
-                break
-            else:
-                time.sleep(1)
 
 
 @login_required
@@ -141,8 +141,8 @@ def download_papersheet(request):
     else:
         logger.warning("A person doesn't exist for the user {0}".format(request.user))
 
-    messages.add_message(request, messages.WARNING, _('no_score_to_encode'))
-    return my_scores_sheets(request)
+    scores_sheets_unavailable = True
+    return layout.render(request, "my_scores_sheets.html", locals())
 
 
 def print_scores(global_id):
@@ -167,7 +167,7 @@ def get_score_sheet(global_id):
     if scor_encoding:
         document = scor_encoding.document
     if not document or is_outdated(document):
-        document = fetch_document(global_id)
+        return None
     return document
 
 
@@ -187,54 +187,6 @@ def check_db_scores(global_id):
         return False
 
 
-def fetch_document(global_id):
-    document = None
-    try:
-        json_data = fetch_json(global_id)
-        if json_data:
-                try:
-                    document = assessments.models.score_encoding.insert_or_update_document(global_id, json_data).document
-                except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError) as ep:
-                    trace = traceback.format_exc()
-                    try:
-                        data = json.dumps({'global_id': str(global_id)})
-                        queue_exception = QueueException(queue_name=settings.QUEUES.get('QUEUES_NAME').get('PAPER_SHEET'),
-                                                         message=data,
-                                                         exception_title='[Catched and retried] - {}'.format(type(ep).__name__),
-                                                         exception=trace)
-                        queue_exception_logger.error(queue_exception.to_exception_log())
-                    except Exception:
-                        logger.error(trace)
-                        log_trace = traceback.format_exc()
-                        logger.warning('Error during queue logging :\n {}'.format(log_trace))
-                    connection.close()
-                    document = assessments.models.score_encoding.insert_or_update_document(global_id, json_data).document
-    except Exception as e:
-        trace = traceback.format_exc()
-        try:
-            data = json.dumps({'global_id': str(global_id)})
-            queue_exception = QueueException(queue_name=settings.QUEUES.get('QUEUES_NAME').get('PAPER_SHEET'),
-                                             message=data,
-                                             exception_title=type(e).__name__,
-                                             exception=trace)
-            queue_exception_logger.error(queue_exception.to_exception_log())
-        except Exception:
-            logger.error(trace)
-            log_trace = traceback.format_exc()
-            logger.warning('Error during queue logging :\n {}'.format(log_trace))
-    return document
-
-
-def fetch_json(global_id):
-    json_data = None
-    if hasattr(settings, 'QUEUES') and settings.QUEUES:
-        scores_sheets_cli = queue_listener.ScoresSheetClient()
-        json_data = scores_sheets_cli.call(global_id)
-    if json_data:
-        json_data = json_data.decode("utf-8")
-    return json_data
-
-
 def is_outdated(document):
     json_document = json.loads(document)
     now = datetime.datetime.now()
@@ -244,7 +196,7 @@ def is_outdated(document):
     return False
 
 
-def get_rabbit_settings():
+def _get_rabbit_settings():
     credentials = pika.PlainCredentials(settings.QUEUES.get('QUEUE_USER'),
                                         settings.QUEUES.get('QUEUE_PASSWORD'))
     rabbit_settings = pika.ConnectionParameters(settings.QUEUES.get('QUEUE_URL'),

@@ -36,10 +36,11 @@
     <h2>{% trans 'my_scores_sheets' %}</h2>
 </div>
 
-{% include "template_messages.html" %}
-
 <div class="panel panel-default">
     <div class="panel-body">
+        <div id="message_box" class="alert alert-info" style="margin-top: 1em;">
+            <span id="status_message"></span>
+        </div>
         <div>
             <button id="lnk_ask_papersheet" onclick="ask_papersheet()" class="btn btn-lg btn-primary" style="display: none;">
                 {% trans 'ask_papersheet' %}
@@ -47,9 +48,6 @@
             <a href="{% url 'scores_download' %}" id="lnk_scores_download" class="btn btn-lg btn-primary" style="display: none;">
                 {% trans 'download' %}
             </a>
-        </div>
-        <div id="message_box" class="alert alert-info" style="margin-top: 1em;">
-            <span id="status_message"></span>
         </div>
     </div>
 </div>
@@ -88,8 +86,16 @@
 
         window.onload = function() {
             var scores_in_db_and_uptodate = '{{scores_in_db_and_uptodate|safe}}'
+            var scores_sheets_unavailable = '{{scores_sheets_unavailable|safe}}'
+
             if(scores_in_db_and_uptodate == 'False'){
                 hide(message_box);
+                show(lnk_ask_papersheet, 'inline-block');
+            }
+            else if(scores_sheets_unavailable == 'True') {
+                show(message_box, 'block');
+                set_class(message_box, "alert alert-warning");
+                show_message_in_container(status_message, "{% trans 'scores_sheet_unavailable' %}");
                 show(lnk_ask_papersheet, 'inline-block');
             }
             else{
