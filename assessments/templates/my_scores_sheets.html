@@ -57,10 +57,14 @@
 
 {% block script %}
     <script type="text/javascript">
-        var lnk_ask_papersheet = document.getElementById("lnk_ask_papersheet")
-        var lnk_scores_download = document.getElementById("lnk_scores_download")
-        var status_message = document.getElementById("status_message")
-        var message_box = document.getElementById("message_box")
+        var lnk_ask_papersheet = document.getElementById("lnk_ask_papersheet");
+        var lnk_scores_download = document.getElementById("lnk_scores_download");
+        var status_message = document.getElementById("status_message");
+        var message_box = document.getElementById("message_box");
+
+        var counter = 0;
+        var max_loops = 10;
+        var delay = 1000;
 
         function sleep(ms) {
           return new Promise(resolve => setTimeout(resolve, ms));
@@ -94,25 +98,24 @@
                 show(lnk_scores_download, 'inline-block');
             }
         };
-        var max_loops = 10;
-        var counter = 0;
-        async function ask_papersheet() {
+
+        function ask_papersheet() {
             disable(lnk_ask_papersheet);
             show(message_box, 'block');
             set_class(message_box, "alert alert-info");
             show_message_in_container(status_message, "<i class=\"fa fa-spinner fa-spin fa-fw\"></i> {% trans 'scores_sheet_building' %}");
-            wait_response()
-            send_request()
+
+            send_request();
         }
 
         function send_request(){
             $.ajax({
                 method: 'POST',
                 url: "{% url 'ask_papersheet' %}",
-                success: function (data) {
-
+                success: function () {
+                    wait_response();
                 },
-                error: function (data) {
+                error: function () {
                     set_class(message_box, "alert alert-warning");
                     show_message_in_container(status_message, "{% trans 'scores_sheet_unavailable' %} ");
                 }
@@ -123,16 +126,41 @@
             $.ajax({
                 method: 'POST',
                 url: "{% url 'wait_papersheet' %}",
-                success: function (data) {
-
+                success: function () {
+                    check_result();
                 },
-                error: function (data) {
+                error: function () {
                     set_class(message_box, "alert alert-warning");
                     show_message_in_container(status_message, "{% trans 'scores_sheet_unavailable' %} ");
                 }
             });
         }
 
-
+        function check_result(){
+        set_class(message_box, "alert alert-success");
+                    show_message_in_container(status_message, "{% trans 'scores_sheet_ready' %}");
+                    hide(lnk_ask_papersheet);
+                    show(lnk_scores_download, 'inline-block');
+            $.ajax({
+                method: 'POST',
+                url: "{% url 'check_papersheet' %}",
+                success: function () {
+                    set_class(message_box, "alert alert-success");
+                    show_message_in_container(status_message, "{% trans 'scores_sheet_ready' %}");
+                    hide(lnk_ask_papersheet);
+                    show(lnk_scores_download, 'inline-block');
+                },
+                error: function () {
+                    counter++;
+                    if (counter < max_loops) {
+                        setTimeout(check_result(), delay);
+                    }
+                    else {
+                        set_class(message_box, "alert alert-warning");
+                        show_message_in_container(status_message, "{% trans 'scores_sheet_unavailable' %} ");
+                    }
+                }
+            });
+        }
     </script>
 {% endblock %}

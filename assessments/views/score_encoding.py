@@ -27,6 +27,7 @@ import datetime
 import json
 import logging
 import pika
+import time
 import traceback
 from voluptuous import error as voluptuous_error
 
@@ -61,13 +62,7 @@ def score_encoding(request):
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
 def my_scores_sheets(request):
-    person = mdl_base.person.find_by_user(request.user)
-    if person:
-        scores_in_db_and_uptodate = check_db_scores(person.global_id)
-    else:
-        scores_in_db_and_uptodate = False
-        logger.warning("A person doesn't exist for the user {0}".format(request.user))
-
+    scores_in_db_and_uptodate = _check_person_and_scores_in_db(request)
     return layout.render(request, "my_scores_sheets.html", locals())
 
 
@@ -105,14 +100,30 @@ def wait_papersheet(request):
         return HttpResponse(status=405)
 
 
+@login_required
+@permission_required('base.is_tutor', raise_exception=True)
+def check_papersheet(request):
+    if request.is_ajax() and 'assessments' in settings.INSTALLED_APPS:
+        if _check_person_and_scores_in_db(request):
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse(status=404)
+    else:
+        return HttpResponse(status=405)
+
+
 def insert_or_update_document_from_queue(ch, method, properties, body):
     json_data = body.decode("utf-8")
     data = json.loads(json_data)
     global_id = data.get('tutor_global_id')
     if global_id:
-        doc = assessments.models.score_encoding.insert_or_update_document(global_id, json_data)
-        print(doc)
-        print("done")
+        assessments.models.score_encoding.insert_or_update_document(global_id, json_data)
+        for x in range(10):
+            if not ch.get_waiting_message_count():
+                ch.stop_consuming()
+                break
+            else:
+                time.sleep(1)
 
 
 @login_required
@@ -247,3 +258,13 @@ def _create_channel(connect, queue_name):
     channel = connect.channel()
     channel.queue_declare(queue=queue_name, durable=True)
     return channel
+
+
+def _check_person_and_scores_in_db(request):
+    person = mdl_base.person.find_by_user(request.user)
+    if person:
+        scores_in_db_and_uptodate = check_db_scores(person.global_id)
+    else:
+        scores_in_db_and_uptodate = False
+        logger.warning("A person doesn't exist for the user {0}".format(request.user))
+    return scores_in_db_and_uptodate
