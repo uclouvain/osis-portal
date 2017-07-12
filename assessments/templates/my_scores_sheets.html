@@ -94,33 +94,43 @@
                 show(lnk_scores_download, 'inline-block');
             }
         };
-
+        var max_loops = 10;
+        var counter = 0;
         async function ask_papersheet() {
             disable(lnk_ask_papersheet);
             show(message_box, 'block');
             set_class(message_box, "alert alert-info");
-            show_message_in_container(status_message, "{% trans 'scores_sheet_building' %}");
+            show_message_in_container(status_message, "<i class=\"fa fa-spinner fa-spin fa-fw\"></i> {% trans 'scores_sheet_building' %}");
+            wait_response()
+            send_request()
+        }
 
-            await sleep(1000);
-
+        function send_request(){
             $.ajax({
                 method: 'POST',
                 url: "{% url 'ask_papersheet' %}",
-                data: {'fgs': '00123456'},
                 success: function (data) {
-                    set_class(message_box, "alert alert-success");
-                    show_message_in_container(status_message, "{% trans 'scores_sheet_ready' %}");
-                    hide(lnk_ask_papersheet);
-                    show(lnk_scores_download, 'inline-block');
+
                 },
                 error: function (data) {
                     set_class(message_box, "alert alert-warning");
-                    show_message_in_container(status_message, "{% trans 'scores_sheet_unavailable' %}");
+                    show_message_in_container(status_message, "{% trans 'scores_sheet_unavailable' %} ");
                 }
             });
+        }
 
+        function wait_response(){
+            $.ajax({
+                method: 'POST',
+                url: "{% url 'wait_papersheet' %}",
+                success: function (data) {
 
-
+                },
+                error: function (data) {
+                    set_class(message_box, "alert alert-warning");
+                    show_message_in_container(status_message, "{% trans 'scores_sheet_unavailable' %} ");
+                }
+            });
         }
 
 

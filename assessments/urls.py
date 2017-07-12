@@ -30,5 +30,6 @@ urlpatterns = [
     url(r'^scores_encoding/$', score_encoding.score_encoding, name='scores_encoding'),
     url(r'^scores_encoding/my_scores_sheets/$', score_encoding.my_scores_sheets, name='my_scores_sheets'),
     url(r'^scores_encoding/my_scores_sheets/ask/$', score_encoding.ask_papersheet, name='ask_papersheet'),
+    url(r'^scores_encoding/my_scores_sheets/wait/$', score_encoding.wait_papersheet, name='wait_papersheet'),
     url(r'^scores_encoding/my_scores_sheets/download/$', score_encoding.download_papersheet, name='scores_download')
 ]

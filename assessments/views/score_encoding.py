@@ -74,12 +74,45 @@ def my_scores_sheets(request):
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
 def ask_papersheet(request):
-    if request.is_ajax():
-        fgs = request.POST.get('fgs')
-        assessments.models.score_encoding.insert_or_update_document(fgs, "{}")
+    if request.is_ajax() and 'assessments' in settings.INSTALLED_APPS:
+        person = mdl_base.person.find_by_user(request.user)
+        if hasattr(settings, 'QUEUES') and settings.QUEUES:
+            connect = pika.BlockingConnection(get_rabbit_settings())
+            queue_name = settings.QUEUES.get('QUEUES_NAME').get('SCORE_ENDCODING_PDF_REQUEST')
+            channel = _create_channel(connect, queue_name)
+            channel.basic_publish(exchange='',
+                                  routing_key=queue_name,
+                                  body=person.global_id)
+            connect.close()
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=405)
+
+
+@login_required
+@permission_required('base.is_tutor', raise_exception=True)
+def wait_papersheet(request):
+    if request.is_ajax() and 'assessments' in settings.INSTALLED_APPS:
+        connect = pika.BlockingConnection(get_rabbit_settings())
+        queue_name = settings.QUEUES.get('QUEUES_NAME').get('SCORE_ENDCODING_PDF_RESPONSE')
+        channel = _create_channel(connect, queue_name)
+        channel.basic_consume(insert_or_update_document_from_queue,
+                              queue=queue_name,
+                              no_ack=True)
+        channel.start_consuming()
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=405)
+
+
+def insert_or_update_document_from_queue(ch, method, properties, body):
+    json_data = body.decode("utf-8")
+    data = json.loads(json_data)
+    global_id = data.get('tutor_global_id')
+    if global_id:
+        doc = assessments.models.score_encoding.insert_or_update_document(global_id, json_data)
+        print(doc)
+        print("done")
 
 
 @login_required
@@ -198,3 +231,19 @@ def is_outdated(document):
     if json_document.get('publication_date', None) != now_str:
             return True
     return False
+
+
+def get_rabbit_settings():
+    credentials = pika.PlainCredentials(settings.QUEUES.get('QUEUE_USER'),
+                                        settings.QUEUES.get('QUEUE_PASSWORD'))
+    rabbit_settings = pika.ConnectionParameters(settings.QUEUES.get('QUEUE_URL'),
+                                                settings.QUEUES.get('QUEUE_PORT'),
+                                                settings.QUEUES.get('QUEUE_CONTEXT_ROOT'),
+                                                credentials)
+    return rabbit_settings
+
+
+def _create_channel(connect, queue_name):
+    channel = connect.channel()
+    channel.queue_declare(queue=queue_name, durable=True)
+    return channel
