@@ -32,19 +32,13 @@ import traceback
 from voluptuous import error as voluptuous_error
 
 from django.conf import settings
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
-from django.db import connection
-from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
 from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
-from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
 
 from base import models as mdl_base
 from base.views import layout
-from frontoffice.queue import queue_listener
 from osis_common.document import paper_sheet
-from osis_common.models.queue_exception import QueueException
 import assessments.models
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
