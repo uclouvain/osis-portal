@@ -137,10 +137,10 @@
         }
 
         function check_result(){
-        set_class(message_box, "alert alert-success");
-                    show_message_in_container(status_message, "{% trans 'scores_sheet_ready' %}");
-                    hide(lnk_ask_papersheet);
-                    show(lnk_scores_download, 'inline-block');
+            set_class(message_box, "alert alert-success");
+            show_message_in_container(status_message, "{% trans 'scores_sheet_ready' %}");
+            hide(lnk_ask_papersheet);
+            show(lnk_scores_download, 'inline-block');
             $.ajax({
                 method: 'POST',
                 url: "{% url 'check_papersheet' %}",
