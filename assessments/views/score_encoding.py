@@ -27,7 +27,6 @@ import datetime
 import json
 import logging
 import pika
-import time
 import traceback
 from voluptuous import error as voluptuous_error
 
@@ -35,6 +34,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.http import require_http_methods
 
 from base import models as mdl_base
 from base.views import layout
@@ -62,6 +62,7 @@ def my_scores_sheets(request):
 
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
+@require_http_methods(["POST"])
 def ask_papersheet(request):
     if request.is_ajax() and 'assessments' in settings.INSTALLED_APPS:
         person = mdl_base.person.find_by_user(request.user)
@@ -80,6 +81,7 @@ def ask_papersheet(request):
 
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
+@require_http_methods(["POST"])
 def wait_papersheet(request):
     if request.is_ajax() and 'assessments' in settings.INSTALLED_APPS:
         connect = pika.BlockingConnection(_get_rabbit_settings())
@@ -105,6 +107,7 @@ def _insert_or_update_document_from_queue(ch, method, properties, body):
 
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
+@require_http_methods(["POST"])
 def check_papersheet(request):
     if request.is_ajax() and 'assessments' in settings.INSTALLED_APPS:
         if _check_person_and_scores_in_db(request):

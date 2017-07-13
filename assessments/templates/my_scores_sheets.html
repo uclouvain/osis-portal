@@ -64,15 +64,14 @@
         var max_loops = 10;
         var delay = 1000;
 
-        function sleep(ms) {
-          return new Promise(resolve => setTimeout(resolve, ms));
-        }
-
         function show(element, display) {
             element.style.display = display;
         }
         function disable(element) {
             element.disabled = true;
+        }
+        function enable(element) {
+            element.disabled = false;
         }
         function hide(element) {
             element.style.display = 'none';
@@ -124,6 +123,7 @@
                 error: function () {
                     set_class(message_box, "alert alert-warning");
                     show_message_in_container(status_message, "{% trans 'scores_sheet_unavailable' %} ");
+                    enable(lnk_ask_papersheet);
                 }
             });
         }
@@ -138,15 +138,12 @@
                 error: function () {
                     set_class(message_box, "alert alert-warning");
                     show_message_in_container(status_message, "{% trans 'scores_sheet_unavailable' %} ");
+                    enable(lnk_ask_papersheet);
                 }
             });
         }
 
         function check_result(){
-            set_class(message_box, "alert alert-success");
-            show_message_in_container(status_message, "{% trans 'scores_sheet_ready' %}");
-            hide(lnk_ask_papersheet);
-            show(lnk_scores_download, 'inline-block');
             $.ajax({
                 method: 'POST',
                 url: "{% url 'check_papersheet' %}",
@@ -159,11 +156,14 @@
                 error: function () {
                     counter++;
                     if (counter < max_loops) {
-                        setTimeout(check_result(), delay);
+                        setTimeout(function() {
+                          check_result();
+                        }, delay);
                     }
                     else {
                         set_class(message_box, "alert alert-warning");
                         show_message_in_container(status_message, "{% trans 'scores_sheet_unavailable' %} ");
+                        enable(lnk_ask_papersheet);
                     }
                 }
             });
