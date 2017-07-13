@@ -100,12 +100,7 @@ def _insert_or_update_document_from_queue(ch, method, properties, body):
     global_id = data.get('tutor_global_id')
     if global_id:
         assessments.models.score_encoding.insert_or_update_document(global_id, json_data)
-        for x in range(10):
-            if not ch.get_waiting_message_count():
-                ch.stop_consuming()
-                break
-            else:
-                time.sleep(1)
+        ch.stop_consuming()
 
 
 @login_required
