@@ -61,4 +61,4 @@ class DownloadPaperSheetTest(TestCase):
         c.force_login(self.tutor.person.user)
         url = reverse('scores_download')
         response = c.get(url)
-        self.assertContains(response,  html.escape(_('no_score_to_encode')))
+        self.assertEqual(response.context['scores_sheets_unavailable'], True)
