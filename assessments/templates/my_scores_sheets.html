@@ -61,7 +61,7 @@
         var message_box = document.getElementById("message_box");
 
         var counter = 0;
-        var max_loops = 10;
+        var max_loops = 60;
         var delay = 1000;
 
         function show(element, display) {
@@ -117,21 +117,6 @@
             $.ajax({
                 method: 'POST',
                 url: "{% url 'ask_papersheet' %}",
-                success: function () {
-                    wait_response();
-                },
-                error: function () {
-                    set_class(message_box, "alert alert-warning");
-                    show_message_in_container(status_message, "{% trans 'scores_sheet_unavailable' %} ");
-                    enable(lnk_ask_papersheet);
-                }
-            });
-        }
-
-        function wait_response(){
-            $.ajax({
-                method: 'POST',
-                url: "{% url 'wait_papersheet' %}",
                 success: function () {
                     check_result();
                 },

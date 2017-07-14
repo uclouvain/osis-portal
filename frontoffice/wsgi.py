@@ -89,3 +89,13 @@ if hasattr(settings, 'QUEUES') and settings.QUEUES:
                                                             update_exp_date_callback).start()
         except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
             LOGGER.exception("Couldn't connect to the QueueServer")
+
+        # Thread in wich is running the listening of the queue used to receive the json of scores_sheets from osis
+        if 'assessments' in settings.INSTALLED_APPS:
+            from assessments.views.score_encoding import insert_or_update_document_from_queue
+            try:
+                common_queue_listener.SynchronousConsumerThread(
+                    settings.QUEUES.get('QUEUES_NAME').get('SCORE_ENDCODING_PDF_RESPONSE'),
+                    insert_or_update_document_from_queue).start()
+            except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
+                LOGGER.exception("Couldn't connect to the QueueServer")

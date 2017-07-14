@@ -79,30 +79,12 @@ def ask_papersheet(request):
         return HttpResponse(status=405)
 
 
-@login_required
-@permission_required('base.is_tutor', raise_exception=True)
-@require_http_methods(["POST"])
-def wait_papersheet(request):
-    if request.is_ajax() and 'assessments' in settings.INSTALLED_APPS:
-        connect = pika.BlockingConnection(_get_rabbit_settings())
-        queue_name = settings.QUEUES.get('QUEUES_NAME').get('SCORE_ENDCODING_PDF_RESPONSE')
-        channel = _create_channel(connect, queue_name)
-        channel.basic_consume(_insert_or_update_document_from_queue,
-                              queue=queue_name,
-                              no_ack=True)
-        channel.start_consuming()
-        return HttpResponse(status=200)
-    else:
-        return HttpResponse(status=405)
-
-
-def _insert_or_update_document_from_queue(ch, method, properties, body):
+def insert_or_update_document_from_queue(body):
     json_data = body.decode("utf-8")
     data = json.loads(json_data)
     global_id = data.get('tutor_global_id')
     if global_id:
         assessments.models.score_encoding.insert_or_update_document(global_id, json_data)
-        ch.stop_consuming()
 
 
 @login_required
