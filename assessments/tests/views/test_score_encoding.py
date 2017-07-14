@@ -40,6 +40,10 @@ class ScoreSheetTest(TestCase):
         document = score_encoding.get_score_sheet(self.global_id)
         self.assertJSONEqual(self.score_encoding.document, document, "Should return the document in db")
 
+    def test_check_db_scores(self):
+        scores_check = score_encoding.check_db_scores(self.global_id)
+        self.assertTrue(scores_check)
+
     if hasattr(settings, 'QUEUES') and settings.QUEUES:
         @patch('frontoffice.queue.queue_listener.Client.call')
         def test_get_score_sheet_if_present_in_db_but_outdated(self, mock_client_call):
@@ -51,7 +55,7 @@ class ScoreSheetTest(TestCase):
             expected = test_score_encoding.get_sample()
             mock_client_call.return_value = expected.encode("utf-8")
             document = score_encoding.get_score_sheet(global_id)
-            self.assertJSONEqual(document, expected, "Should fetch document from queue")
+            self.assertIsNone(document)
 
         @patch('frontoffice.queue.queue_listener.Client.call')
         def test_get_score_sheet_if_not_present_in_db_with_timeout(self, mock_client_call):
@@ -64,7 +68,7 @@ class ScoreSheetTest(TestCase):
             expected = test_score_encoding.get_sample()
             mock_client_call.return_value = expected.encode("utf-8")
             document = score_encoding.get_score_sheet("12012")
-            self.assertJSONEqual(document, expected, "Should fetch document from queue")
+            self.assertIsNone(document)
 
 
 class PrintScoreSheetTest(TestCase):

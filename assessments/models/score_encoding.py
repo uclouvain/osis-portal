@@ -55,4 +55,3 @@ def insert_or_update_document(global_id, document):
         global_id=global_id, defaults={"document": document}
     )
     return score_encoding_object
-
