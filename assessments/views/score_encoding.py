@@ -27,6 +27,7 @@ import datetime
 import json
 import logging
 import pika
+import pika.exceptions
 import traceback
 from voluptuous import error as voluptuous_error
 
@@ -67,16 +68,22 @@ def ask_papersheet(request):
     if request.is_ajax() and 'assessments' in settings.INSTALLED_APPS:
         person = mdl_base.person.find_by_user(request.user)
         if hasattr(settings, 'QUEUES') and settings.QUEUES:
-            connect = pika.BlockingConnection(_get_rabbit_settings())
-            queue_name = settings.QUEUES.get('QUEUES_NAME').get('SCORE_ENDCODING_PDF_REQUEST')
-            channel = _create_channel(connect, queue_name)
-            channel.basic_publish(exchange='',
-                                  routing_key=queue_name,
-                                  body=person.global_id)
-            connect.close()
-        return HttpResponse(status=200)
-    else:
-        return HttpResponse(status=405)
+            try:
+                connect = pika.BlockingConnection(_get_rabbit_settings())
+                queue_name = settings.QUEUES.get('QUEUES_NAME').get('SCORE_ENDCODING_PDF_REQUEST')
+                channel = _create_channel(connect, queue_name)
+                message_published = channel.basic_publish(exchange='',
+                                                          routing_key=queue_name,
+                                                          body=person.global_id)
+                connect.close()
+            except (RuntimeError, pika.exceptions.ConnectionClosed, pika.exceptions.ChannelClosed,
+                    pika.exceptions.AMQPError):
+                return HttpResponse(status=400)
+
+            if message_published:
+                return HttpResponse(status=200)
+
+    return HttpResponse(status=405)
 
 
 def insert_or_update_document_from_queue(body):
