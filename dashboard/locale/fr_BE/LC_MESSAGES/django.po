@@ -22,6 +22,9 @@ msgstr "A=Absent"
 msgid "academic_year"
 msgstr "Année académique"
 
+msgid "ask_papersheet"
+msgstr "Demander les feuilles de notes"
+
 msgid "cheating_pdf_legend"
 msgstr "T=Tricherie"
 
@@ -72,6 +75,15 @@ msgstr "Ceci nécessite un <a href=\""
 
 msgid "scores_encoding_use_vpn_with_link_end"
 msgstr "\" target=\"_blank\" >accès VPN</a> en dehors du réseau de l'UCL."
+
+msgid "scores_sheet_building"
+msgstr "Récupération des feuilles de notes en cours."
+
+msgid "scores_sheet_unavailable"
+msgstr "Les feuilles de notes ne sont pas disponibles pour l'instant."
+
+msgid "scores_sheet_ready"
+msgstr "Les feuilles de notes sont prêtes !"
 
 msgid "unauthorized_decimal"
 msgstr "Attention : décimales non autorisées pour ce cours"
