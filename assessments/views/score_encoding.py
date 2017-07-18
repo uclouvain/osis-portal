@@ -70,7 +70,7 @@ def ask_papersheet(request):
         if hasattr(settings, 'QUEUES') and settings.QUEUES:
             try:
                 connect = pika.BlockingConnection(_get_rabbit_settings())
-                queue_name = settings.QUEUES.get('QUEUES_NAME').get('SCORE_ENDCODING_PDF_REQUEST')
+                queue_name = settings.QUEUES.get('QUEUES_NAME').get('SCORE_ENCODING_PDF_REQUEST')
                 channel = _create_channel(connect, queue_name)
                 message_published = channel.basic_publish(exchange='',
                                                           routing_key=queue_name,

@@ -95,7 +95,7 @@ if hasattr(settings, 'QUEUES') and settings.QUEUES:
         from assessments.views.score_encoding import insert_or_update_document_from_queue
         try:
             common_queue_listener.SynchronousConsumerThread(
-                settings.QUEUES.get('QUEUES_NAME').get('SCORE_ENDCODING_PDF_RESPONSE'),
+                settings.QUEUES.get('QUEUES_NAME').get('SCORE_ENCODING_PDF_RESPONSE'),
                 insert_or_update_document_from_queue).start()
         except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
             LOGGER.exception("Couldn't connect to the QueueServer")
