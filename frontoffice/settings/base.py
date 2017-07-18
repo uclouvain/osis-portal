@@ -276,7 +276,6 @@ if not TESTING or not SKIP_QUEUES_TESTS:
         'QUEUES_NAME': {
             'MIGRATIONS_TO_PRODUCE': 'osis',
             'MIGRATIONS_TO_CONSUME': 'osis_portal',
-            'PAPER_SHEET': 'paper_sheet',
             'PERFORMANCE': 'performance_to_client',
             'STUDENT_PERFORMANCE': 'rpc_performance_from_client',
             'PERFORMANCE_UPDATE_EXP_DATE': 'performance_exp_date',
@@ -289,7 +288,6 @@ if not TESTING or not SKIP_QUEUES_TESTS:
             'SCORE_ENDCODING_PDF_RESPONSE': 'score_endcoding_pdf_response',
         },
         'RPC_QUEUES_TIMEOUT': {
-            'PAPER_SHEET': get_queue_timeout('PAPER_SHEET_TIMEOUT', 60),
             'STUDENT_PERFORMANCE': get_queue_timeout('STUDENT_PERFORMANCE_TIMEOUT', 15),
             'ATTESTATION_STATUS': get_queue_timeout('ATTESTATION_STATUS_TIMEOUT', 10),
             'ATTESTATION': get_queue_timeout('ATTESTATION_TIMEOUT', 60),
