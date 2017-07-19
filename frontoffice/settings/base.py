@@ -164,8 +164,8 @@ TEMPLATES = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get("DATABASE_NAME", 'osis_front_dev'),
-        'USER': os.environ.get("POSTGRES_USER", 'osis_usr'),
+        'NAME': os.environ.get("DATABASE_NAME", 'osis_portal_local'),
+        'USER': os.environ.get("POSTGRES_USER", 'osis_portal'),
         'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'osis'),
         'HOST': os.environ.get("POSTGRES_HOST", '127.0.0.1'),
         'PORT': os.environ.get("POSTGRES_PORT", '5432'),
@@ -284,8 +284,8 @@ if not TESTING or not SKIP_QUEUES_TESTS:
             'ATTESTATION_STATUS': 'rpc_attestation_status',
             'EXAM_ENROLLMENT_FORM': 'rpc_exam_enrollment_form',
             'EXAM_ENROLLMENT_FORM_SUBMISSION': 'exam_enrollment_form_submission',
-            'SCORE_ENCODING_PDF_REQUEST': 'score_encoding_pdf_request',
-            'SCORE_ENCODING_PDF_RESPONSE': 'score_encoding_pdf_response',
+            'SCORE_ENDCODING_PDF_REQUEST': 'score_endcoding_pdf_request',
+            'SCORE_ENDCODING_PDF_RESPONSE': 'score_endcoding_pdf_response',
         },
         'RPC_QUEUES_TIMEOUT': {
             'STUDENT_PERFORMANCE': get_queue_timeout('STUDENT_PERFORMANCE_TIMEOUT', 15),
