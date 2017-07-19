@@ -284,8 +284,8 @@ if not TESTING or not SKIP_QUEUES_TESTS:
             'ATTESTATION_STATUS': 'rpc_attestation_status',
             'EXAM_ENROLLMENT_FORM': 'rpc_exam_enrollment_form',
             'EXAM_ENROLLMENT_FORM_SUBMISSION': 'exam_enrollment_form_submission',
-            'SCORE_ENDCODING_PDF_REQUEST': 'score_endcoding_pdf_request',
-            'SCORE_ENDCODING_PDF_RESPONSE': 'score_endcoding_pdf_response',
+            'SCORE_ENCODING_PDF_REQUEST': 'score_encoding_pdf_request',
+            'SCORE_ENCODING_PDF_RESPONSE': 'score_encoding_pdf_response',
         },
         'RPC_QUEUES_TIMEOUT': {
             'STUDENT_PERFORMANCE': get_queue_timeout('STUDENT_PERFORMANCE_TIMEOUT', 15),
