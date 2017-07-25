@@ -35,6 +35,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 class StudentAdmin(SerializableModelAdmin):
+    actions = ['add_to_group']
     list_display = ('person', 'registration_id', 'email')
     fieldsets = ((None, {'fields': ('registration_id', 'person')}),)
     raw_id_fields = ('person', )
