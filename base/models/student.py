@@ -27,6 +27,7 @@ import logging
 from django.conf import settings
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import Group
 from base.models import person as model_person
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
