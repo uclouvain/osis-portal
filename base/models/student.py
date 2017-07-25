@@ -38,6 +38,20 @@ class StudentAdmin(SerializableModelAdmin):
     fieldsets = ((None, {'fields': ('registration_id', 'person')}),)
     raw_id_fields = ('person', )
     search_fields = ['person__first_name', 'person__last_name', 'registration_id']
+    
+    def add_to_group(self, request, queryset):
+        group_name = "students"
+        try:
+            group = Group.objects.get(name=group_name)
+            count = 0
+            for student in queryset:
+                user = student.person.user
+                if user and not user.groups.filter(name=group_name).exists():
+                    user.groups.add(group)
+                    count += 1
+            self.message_user(request, "{} users added to the group '{}'.".format(count, group_name), level=messages.SUCCESS)
+        except Group.DoesNotExist:
+            self.message_user(request, "Group {} doesn't exist.".format(group_name), level=messages.ERROR)
 
 
 class Student(SerializableModel):
