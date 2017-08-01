@@ -24,20 +24,23 @@
 #
 ##############################################################################
 import datetime
+import string
+
 import factory
 import factory.fuzzy
-import string
+
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.student import StudentFactory
-from base.tests.factories import helpers
+from osis_common.utils.datetime import get_tzinfo
+
 
 
 class OfferEnrollmentFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = "base.OfferEnrollment"
 
-    date_enrollment = factory.fuzzy.FuzzyDateTime(datetime.datetime(2016, 1, 1, tzinfo=helpers._get_tzinfo()),
-                                                  datetime.datetime(2017, 3, 1, tzinfo=helpers._get_tzinfo()))
+    date_enrollment = factory.fuzzy.FuzzyDateTime(datetime.datetime(2016, 1, 1, tzinfo=get_tzinfo()),
+                                                  datetime.datetime(2017, 3, 1, tzinfo=get_tzinfo()))
     external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
     offer_year = factory.SubFactory(OfferYearFactory)
     student = factory.SubFactory(StudentFactory)
