@@ -35,22 +35,13 @@ person_created = Signal(providing_args=['person'])
 
 
 @receiver(user_created_signal)
-def update_person_after_user_creation(sender, **kwargs):
-    person = _update_person(sender, **kwargs)
-    _add_person_to_group(person)
-    return person
-
-
 @receiver(user_updated_signal)
-def update_person_after_user_update(sender, **kwargs):
-    return _update_person(sender, **kwargs)
-
-
-def _update_person(sender, **kwargs):
+def update_person(sender, **kwargs):
     user = kwargs.get('user')
     user_infos = kwargs.get('user_infos')
     person = mdl.person.find_by_global_id(user_infos.get('USER_FGS'))
     person = _create_update_person(user, person, user_infos)
+    _add_person_to_group(person)
     return person
 
 
@@ -131,7 +122,9 @@ def _create_update_person(user, person, user_infos):
                                    global_id=user_infos.get('USER_FGS'),
                                    first_name=user_infos.get('USER_FIRST_NAME'),
                                    last_name=user_infos.get('USER_LAST_NAME'),
-                                   email=user_infos.get('USER_EMAIL'))
+                                   email=user_infos.get('USER_EMAIL'),
+                                   external_id=settings.PERSON_EXTERNAL_ID_PATTERN.format(
+                                       global_id=user_infos.get('USER_FGS')))
         person.save()
         person_created.send(sender=None, person=person)
     else:
