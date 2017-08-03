@@ -172,11 +172,11 @@ Before moving forward, make sure you installed PostgreSQL, as explained in the
 section <<installing-postgresql>>. Then, follow the steps below to create the
 backend database:
 
-    $ createdb osis_front_dev
-    $ createuser osis_usr -P    // Inform the password 'osis' when asked for.
-    $ psql -d osis_front_dev
-      =# grant connect on database osis_front_dev to osis_usr;
-      =# revoke connect on database osis_front_dev from public;
+    $ createdb osis_portal_local
+    $ createuser osis_portal -P    // Inform the password 'osis' when asked for.
+    $ psql -d osis_portal_local
+      =# grant connect on database osis_portal_local to osis_portal;
+      =# revoke connect on database osis_portal_local from public;
       =# \q
 
 Now, install the necessary dependencies to allow a Python application to connect
