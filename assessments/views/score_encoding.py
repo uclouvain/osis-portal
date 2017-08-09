@@ -54,7 +54,6 @@ def scores_sheets_admin(request):
         form = GlobalIdForm(request.POST)
         if form.is_valid():
             global_id = form.cleaned_data['global_id']
-            print(global_id)
             return tutor_scores_sheets(request, global_id)
     else:
         form = GlobalIdForm()
