@@ -35,8 +35,8 @@ urlpatterns = [
 
     url(r'^administration/', include([
         url(r'^scores_sheets/$', score_encoding.scores_sheets_admin, name='scores_sheets_admin'),
-        url(r'^scores_encoding/my_scores_sheets/ask/([0-9a-z-]+)/$', score_encoding.ask_papersheet, name='ask_papersheet'),
-        url(r'^scores_encoding/my_scores_sheets/check/([0-9a-z-]+)/$', score_encoding.check_papersheet, name='check_papersheet'),
+        url(r'^scores_sheets/ask/([0-9a-z-]+)/$', score_encoding.ask_papersheet, name='ask_papersheet'),
+        url(r'^scores_sheets/check/([0-9a-z-]+)/$', score_encoding.check_papersheet, name='check_papersheet'),
         url(r'^scores_sheets/download/([0-9a-z-]+)/$', score_encoding.download_papersheet, name='scores_download_admin'),
     ])),
 ]
