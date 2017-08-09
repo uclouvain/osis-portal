@@ -39,7 +39,7 @@
             {% trans 'scores_sheets' %}
         </div>
         <div class="panel-body">
-            <form action="{% url 'scores_sheets_admin' %}" name="scores_sheets_admin" method="post">
+            <form action="{% url 'scores_sheets_admin' %}" name="scores_sheets_admin" method="post" target="_blank">
                 {% csrf_token %}
                 {% if form.errors %}
                     <div class="alert alert-danger" role="alert">

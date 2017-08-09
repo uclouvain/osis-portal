@@ -27,16 +27,16 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'faculty_administration' %}</a></li>
-    <li class="active">{% trans 'scores_sheets_admin' %}</li>
+        <li><a href="{% url 'scores_encoding' %}" id="lnk_score_encoding">{% trans 'scores_encoding' %}</a></li>
+        <li class="active">{% trans 'my_scores_sheets' %}</li>
 {% endblock %}
 
 {% block content %}
+<div class="page-header">
+    <h2>{% trans 'my_scores_sheets' %}</h2>
+</div>
 
 <div class="panel panel-default">
-    <div class="panel-heading">
-        {% trans 'scores_sheets' %} : {{ person }} ({{ person.global_id }})
-    </div>
     <div class="panel-body">
         <div id="message_box" class="alert alert-info" style="margin-top: 1em;">
             <span id="status_message"></span>
@@ -45,7 +45,7 @@
             <button id="lnk_ask_papersheet" onclick="ask_papersheet()" class="btn btn-lg btn-primary" style="display: none;">
                 {% trans 'ask_papersheet' %}
             </button>
-            <a href="{% url 'scores_download_admin' person.global_id %}" id="lnk_scores_download" class="btn btn-lg btn-primary" style="display: none;">
+            <a href="{% url 'scores_download' person.global_id %}" id="lnk_scores_download" class="btn btn-lg btn-primary" style="display: none;">
                 {% trans 'download' %}
             </a>
         </div>

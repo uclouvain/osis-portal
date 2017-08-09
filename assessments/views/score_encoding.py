@@ -57,15 +57,15 @@ def scores_sheets_admin(request):
             return tutor_scores_sheets(request, global_id)
     else:
         form = GlobalIdForm()
-    return layout.render(request, "admin/scores_sheet.html", {"form": form})
+    return layout.render(request, "admin/scores_sheets.html", {"form": form})
 
 
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def tutor_scores_sheets(request, global_id):
     person = mdl_base.person.find_by_global_id(global_id)
-    scores_in_db_and_uptodate = _check_person_and_scores_in_db(request, person)
-    return layout.render(request, "admin/tutor_scores_sheets.html", locals())
+    scores_in_db_and_uptodate = _check_person_and_scores_in_db(person)
+    return layout.render(request, "scores_sheets.html", locals())
 
 
 @login_required
@@ -78,9 +78,10 @@ def score_encoding(request):
 
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
-def my_scores_sheets(request):
-    scores_in_db_and_uptodate = _check_person_and_scores_in_db(request)
-    return layout.render(request, "my_scores_sheets.html", locals())
+def scores_sheets(request):
+    person = mdl_base.person.find_by_user(request.user)
+    scores_in_db_and_uptodate = _check_person_and_scores_in_db(person)
+    return layout.render(request, "scores_sheets.html", locals())
 
 
 @login_required
@@ -126,9 +127,9 @@ def check_papersheet(request, global_id=None):
     if global_id:
         person = mdl_base.person.find_by_global_id(global_id)
     else:
-        person = None
+        person = mdl_base.person.find_by_user(request.user)
     if request.is_ajax() and 'assessments' in settings.INSTALLED_APPS:
-        if _check_person_and_scores_in_db(request, person):
+        if _check_person_and_scores_in_db(person):
             return HttpResponse(status=200)
         else:
             return HttpResponse(status=404)
@@ -139,10 +140,16 @@ def check_papersheet(request, global_id=None):
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
 def download_papersheet(request, global_id=None):
-    if global_id:
-        person = mdl_base.person.find_by_global_id(global_id)
+    logged_person = mdl_base.person.find_by_user(request.user)
+    searched_person = mdl_base.person.find_by_global_id(global_id)
+
+    if logged_person != searched_person and request.user.has_perm('base.is_faculty_administrator'):
+        person = searched_person
+    elif logged_person != searched_person:
+        return layout.render(request, 'access_denied.html', {})
     else:
-        person = mdl_base.person.find_by_user(request.user)
+        person = logged_person
+
     if person:
         pdf = print_scores(person.global_id)
         if pdf:
@@ -152,13 +159,11 @@ def download_papersheet(request, global_id=None):
             response.write(pdf)
             return response
     else:
+        person = mdl_base.person.find_by_user(request.user)
         logger.warning("A person doesn't exist for the user {0}".format(request.user))
 
     scores_sheets_unavailable = True
-    if global_id:
-        return layout.render(request, "admin/scores_sheet.html", locals())
-    else:
-        return layout.render(request, "my_scores_sheets.html", locals())
+    return layout.render(request, "scores_sheets.html", locals())
 
 
 def print_scores(global_id):
@@ -228,12 +233,10 @@ def _create_channel(connect, queue_name):
     return channel
 
 
-def _check_person_and_scores_in_db(request, person=None):
-    if not person:
-        person = mdl_base.person.find_by_user(request.user)
+def _check_person_and_scores_in_db(person):
     if person:
         scores_in_db_and_uptodate = check_db_scores(person.global_id)
     else:
         scores_in_db_and_uptodate = False
-        logger.warning("A person doesn't exist for the user {0}".format(request.user))
+        logger.warning("This person doesn't exist")
     return scores_in_db_and_uptodate
