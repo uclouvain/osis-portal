@@ -1,0 +1,157 @@
+{% extends "dashboard_layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block breadcrumb %}
+    <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'faculty_administration' %}</a></li>
+    <li class="active">{% trans 'scores_sheets_admin' %}</li>
+{% endblock %}
+
+{% block content %}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        {% trans 'scores_sheets' %} : {{ person }} ({{ person.global_id }})
+    </div>
+    <div class="panel-body">
+        <div id="message_box" class="alert alert-info" style="margin-top: 1em;">
+            <span id="status_message"></span>
+        </div>
+        <div>
+            <button id="lnk_ask_papersheet" onclick="ask_papersheet()" class="btn btn-lg btn-primary" style="display: none;">
+                {% trans 'ask_papersheet' %}
+            </button>
+            <a href="{% url 'scores_download_admin' person.global_id %}" id="lnk_scores_download" class="btn btn-lg btn-primary" style="display: none;">
+                {% trans 'download' %}
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+        var lnk_ask_papersheet = document.getElementById("lnk_ask_papersheet");
+        var lnk_scores_download = document.getElementById("lnk_scores_download");
+        var status_message = document.getElementById("status_message");
+        var message_box = document.getElementById("message_box");
+
+        var counter = 0;
+        var max_loops = 60;
+        var delay = 1000;
+
+        function show(element, display) {
+            element.style.display = display;
+        }
+        function disable(element) {
+            element.disabled = true;
+        }
+        function enable(element) {
+            element.disabled = false;
+        }
+        function hide(element) {
+            element.style.display = 'none';
+        }
+        function show_message_in_container(container, message) {
+            container.innerHTML = message;
+        }
+        function set_class(element, class_attributes) {
+            element.className = class_attributes;
+        }
+
+        window.onload = function() {
+            var scores_in_db_and_uptodate = '{{scores_in_db_and_uptodate|safe}}'
+            var scores_sheets_unavailable = '{{scores_sheets_unavailable|safe}}'
+
+            if(scores_in_db_and_uptodate == 'False'){
+                hide(message_box);
+                show(lnk_ask_papersheet, 'inline-block');
+            }
+            else if(scores_sheets_unavailable == 'True') {
+                show(message_box, 'block');
+                set_class(message_box, "alert alert-warning");
+                show_message_in_container(status_message, "{% trans 'scores_sheet_unavailable' %}");
+                show(lnk_ask_papersheet, 'inline-block');
+            }
+            else{
+                set_class(message_box, "alert alert-success");
+                show_message_in_container(status_message, "{% trans 'scores_sheet_ready' %}");
+                show(lnk_scores_download, 'inline-block');
+            }
+        };
+
+        function ask_papersheet() {
+            disable(lnk_ask_papersheet);
+            show(message_box, 'block');
+            set_class(message_box, "alert alert-info");
+            show_message_in_container(status_message, "<i class=\"fa fa-spinner fa-spin fa-fw\"></i> {% trans 'scores_sheet_building' %}");
+
+            send_request();
+        }
+
+        function send_request(){
+            $.ajax({
+                method: 'POST',
+                url: "{% url 'ask_papersheet' person.global_id %}",
+                success: function () {
+                    check_result();
+                },
+                error: function () {
+                    set_class(message_box, "alert alert-warning");
+                    show_message_in_container(status_message, "{% trans 'scores_sheet_unavailable' %} ");
+                    enable(lnk_ask_papersheet);
+                }
+            });
+        }
+
+        function check_result(){
+            $.ajax({
+                method: 'POST',
+                url: "{% url 'check_papersheet' person.global_id %}",
+                success: function () {
+                    set_class(message_box, "alert alert-success");
+                    show_message_in_container(status_message, "{% trans 'scores_sheet_ready' %}");
+                    hide(lnk_ask_papersheet);
+                    show(lnk_scores_download, 'inline-block');
+                },
+                error: function () {
+                    counter++;
+                    if (counter < max_loops) {
+                        setTimeout(function() {
+                          check_result();
+                        }, delay);
+                    }
+                    else {
+                        set_class(message_box, "alert alert-warning");
+                        show_message_in_container(status_message, "{% trans 'scores_sheet_unavailable' %} ");
+                        enable(lnk_ask_papersheet);
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock %}

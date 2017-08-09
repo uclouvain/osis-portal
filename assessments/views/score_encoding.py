@@ -38,12 +38,35 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
 from base import models as mdl_base
+from base.forms.base_forms import GlobalIdForm
 from base.views import layout
 from osis_common.document import paper_sheet
 import assessments.models
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
+
+
+@login_required
+@permission_required('base.is_faculty_administrator', raise_exception=True)
+def scores_sheets_admin(request):
+    if request.method == "POST":
+        form = GlobalIdForm(request.POST)
+        if form.is_valid():
+            global_id = form.cleaned_data['global_id']
+            print(global_id)
+            return tutor_scores_sheets(request, global_id)
+    else:
+        form = GlobalIdForm()
+    return layout.render(request, "admin/scores_sheet.html", {"form": form})
+
+
+@login_required
+@permission_required('base.is_faculty_administrator', raise_exception=True)
+def tutor_scores_sheets(request, global_id):
+    person = mdl_base.person.find_by_global_id(global_id)
+    scores_in_db_and_uptodate = _check_person_and_scores_in_db(request, person)
+    return layout.render(request, "admin/tutor_scores_sheets.html", locals())
 
 
 @login_required
@@ -64,9 +87,12 @@ def my_scores_sheets(request):
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
 @require_http_methods(["POST"])
-def ask_papersheet(request):
+def ask_papersheet(request, global_id=None):
     if request.is_ajax() and 'assessments' in settings.INSTALLED_APPS:
-        person = mdl_base.person.find_by_user(request.user)
+        if global_id:
+            person = mdl_base.person.find_by_global_id(global_id)
+        else:
+            person = mdl_base.person.find_by_user(request.user)
         if hasattr(settings, 'QUEUES') and settings.QUEUES:
             try:
                 connect = pika.BlockingConnection(_get_rabbit_settings())
@@ -97,9 +123,13 @@ def insert_or_update_document_from_queue(body):
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
 @require_http_methods(["POST"])
-def check_papersheet(request):
+def check_papersheet(request, global_id=None):
+    if global_id:
+        person = mdl_base.person.find_by_global_id(global_id)
+    else:
+        person = None
     if request.is_ajax() and 'assessments' in settings.INSTALLED_APPS:
-        if _check_person_and_scores_in_db(request):
+        if _check_person_and_scores_in_db(request, person):
             return HttpResponse(status=200)
         else:
             return HttpResponse(status=404)
@@ -109,8 +139,11 @@ def check_papersheet(request):
 
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
-def download_papersheet(request):
-    person = mdl_base.person.find_by_user(request.user)
+def download_papersheet(request, global_id=None):
+    if global_id:
+        person = mdl_base.person.find_by_global_id(global_id)
+    else:
+        person = mdl_base.person.find_by_user(request.user)
     if person:
         pdf = print_scores(person.global_id)
         if pdf:
@@ -123,7 +156,10 @@ def download_papersheet(request):
         logger.warning("A person doesn't exist for the user {0}".format(request.user))
 
     scores_sheets_unavailable = True
-    return layout.render(request, "my_scores_sheets.html", locals())
+    if global_id:
+        return layout.render(request, "admin/scores_sheet.html", locals())
+    else:
+        return layout.render(request, "my_scores_sheets.html", locals())
 
 
 def print_scores(global_id):
@@ -193,8 +229,9 @@ def _create_channel(connect, queue_name):
     return channel
 
 
-def _check_person_and_scores_in_db(request):
-    person = mdl_base.person.find_by_user(request.user)
+def _check_person_and_scores_in_db(request, person=None):
+    if not person:
+        person = mdl_base.person.find_by_user(request.user)
     if person:
         scores_in_db_and_uptodate = check_db_scores(person.global_id)
     else:
