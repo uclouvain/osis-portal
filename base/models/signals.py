@@ -27,6 +27,8 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.db.models.signals import post_save, post_delete
 from django.dispatch.dispatcher import receiver, Signal
+from psycopg2._psycopg import IntegrityError
+
 from base import models as mdl
 from osis_common.models.serializable_model import SerializableModel
 from osis_common.models.signals.authentication import user_created_signal, user_updated_signal
@@ -108,11 +110,14 @@ def _assign_group(person, group_name):
     :param group_name: a string of a legit group
     :return: nothing
     """
-    group = Group.objects.get(name=group_name)
-    if person.user and \
-            not person.user.groups.filter(name=group_name).exists():
-        person.user.groups.add(group)
-
+    try:
+        group = Group.objects.get(name=group_name)
+        if person.user and not person.user.groups.filter(name=group_name).exists():
+            person.user.groups.add(group)
+    except IntegrityError:
+        # Catch IntegrityError [Duplicate key violation]
+        # Do nothing because already linked
+        pass
 
 def _create_update_person(user, person, user_infos):
     if not person:
