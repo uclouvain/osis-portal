@@ -31,8 +31,6 @@ from base.models.tutor import Tutor
 from base.tests.factories.person import PersonFactory
 
 
-
-
 class TestModelsSignals(TestCase):
     def setUp(self):
         # Create tutors groups
