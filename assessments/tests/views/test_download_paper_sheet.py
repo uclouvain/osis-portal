@@ -50,7 +50,7 @@ class DownloadPaperSheetTest(TestCase):
         self.tutor.person.save()
         c = Client()
         c.force_login(self.tutor.person.user)
-        url = reverse('scores_download')
+        url = reverse('scores_download', args=[self.global_id])
         response = c.get(url)
         self.assertEquals(response.content, score_encoding.print_scores(self.global_id))
 
@@ -59,6 +59,6 @@ class DownloadPaperSheetTest(TestCase):
         self.tutor.person.save()
         c = Client()
         c.force_login(self.tutor.person.user)
-        url = reverse('scores_download')
+        url = reverse('scores_download', args=["0124"])
         response = c.get(url)
         self.assertEqual(response.context['scores_sheets_unavailable'], True)
