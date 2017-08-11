@@ -24,7 +24,9 @@
 #
 ##############################################################################
 from django.contrib.auth.models import User
+from base.tests.factories.user import UserFactory
 from internship.models import internship_student_information as mdl_student_information
+from base.models import person as mdl_person
 from base.tests.models import test_person
 from django.test import TestCase
 from internship.tests.factories.cohort import CohortFactory
@@ -64,9 +66,10 @@ class TestFindByUser(TestCase):
 
         self.assertEqual(expected, actual)
 
+
 class TestFindByPerson(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
+        self.user = UserFactory()
         self.student_information = create_student_information(self.user)
 
     def test_with_no_information_for_user(self):
@@ -77,6 +80,24 @@ class TestFindByPerson(TestCase):
 
     def test_with_information_for_user(self):
         self.assertEqual(mdl_student_information.find_by_person(self.student_information.person),
+                         self.student_information)
+
+
+class TestFindFirstByPerson(TestCase):
+    def setUp(self):
+        self.user = UserFactory()
+        self.student_information = create_student_information(self.user)
+        person = mdl_person.find_by_user(self.user)
+        self.student_information2 = create_student_information(self.user, person=person)
+
+    def test_with_no_information_for_user(self):
+        other_person = test_person.create_person("other", "another")
+
+        student_information = mdl_student_information.find_first_by_person(other_person)
+        self.assertFalse(student_information)
+
+    def test_with_information_for_user(self):
+        self.assertEqual(mdl_student_information.find_first_by_person(self.student_information.person),
                          self.student_information)
 
 
