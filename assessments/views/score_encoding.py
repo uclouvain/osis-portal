@@ -43,6 +43,11 @@ from base.views import layout
 from osis_common.document import paper_sheet
 import assessments.models
 
+from django.db import connection
+from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
+import time
+
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
 
@@ -113,11 +118,23 @@ def ask_papersheet(request, global_id=None):
 
 
 def insert_or_update_document_from_queue(body):
-    json_data = body.decode("utf-8")
-    data = json.loads(json_data)
-    global_id = data.get('tutor_global_id')
-    if global_id:
-        assessments.models.score_encoding.insert_or_update_document(global_id, json_data)
+    try:
+        json_data = body.decode("utf-8")
+        data = json.loads(json_data)
+        global_id = data.get('tutor_global_id')
+        if global_id:
+            assessments.models.score_encoding.insert_or_update_document(global_id, json_data)
+    except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError):
+        queue_exception_logger.error('Postgres Error during insert_or_update_document_from_queue => retried')
+        trace = traceback.format_exc()
+        queue_exception_logger.error(trace)
+        connection.close()
+        time.sleep(1)
+        insert_or_update_document_from_queue(body)
+    except Exception:
+        logger.warning('(Not PostgresError) during insert_or_update_document_from_queue')
+        trace = traceback.format_exc()
+        logger.error(trace)
 
 
 @login_required
