@@ -76,5 +76,6 @@ def filter_by_cohort(cohort):
     return InternshipStudentInformation.objects.filter(cohort=cohort)
 
 
-def find_first_by_person(person):
-    return InternshipStudentInformation.objects.filter(person=person).first()
+def exists_by_person(person):
+    return InternshipStudentInformation.objects.filter(person=person).exists()
+

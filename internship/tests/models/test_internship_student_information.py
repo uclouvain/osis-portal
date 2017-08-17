@@ -31,6 +31,7 @@ from base.tests.models import test_person
 from django.test import TestCase
 from internship.tests.factories.cohort import CohortFactory
 
+
 def create_student_information(user, cohort=None, person=None):
     if person == None:
         person = test_person.create_person_with_user(user)
@@ -83,7 +84,7 @@ class TestFindByPerson(TestCase):
                          self.student_information)
 
 
-class TestFindFirstByPerson(TestCase):
+class TestExistsByPerson(TestCase):
     def setUp(self):
         self.user = UserFactory()
         self.student_information = create_student_information(self.user)
@@ -92,13 +93,12 @@ class TestFindFirstByPerson(TestCase):
 
     def test_with_no_information_for_user(self):
         other_person = test_person.create_person("other", "another")
-
-        student_information = mdl_student_information.find_first_by_person(other_person)
-        self.assertFalse(student_information)
+        student_information_exists = mdl_student_information.exists_by_person(other_person)
+        self.assertFalse(student_information_exists)
 
     def test_with_information_for_user(self):
-        self.assertEqual(mdl_student_information.find_first_by_person(self.student_information.person),
-                         self.student_information)
+        student_information_exists = mdl_student_information.exists_by_person(self.student_information.person)
+        self.assertTrue(student_information_exists)
 
 
 

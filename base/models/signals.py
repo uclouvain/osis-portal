@@ -97,7 +97,7 @@ def _add_person_to_group(person):
         _assign_group(person, "tutors")
     # Check if student is internship student
     # Only if internship app is installed
-    if 'internship' in settings.INSTALLED_APPS and mdl_internship.find_first_by_person(person):
+    if 'internship' in settings.INSTALLED_APPS and mdl_internship.exists_by_person(person):
         _assign_group(person, 'internship_students')
 
 
