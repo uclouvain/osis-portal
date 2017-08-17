@@ -71,5 +71,11 @@ def find_by_person(person):
     except ObjectDoesNotExist:
         return None
 
+
 def filter_by_cohort(cohort):
     return InternshipStudentInformation.objects.filter(cohort=cohort)
+
+
+def exists_by_person(person):
+    return InternshipStudentInformation.objects.filter(person=person).exists()
+
