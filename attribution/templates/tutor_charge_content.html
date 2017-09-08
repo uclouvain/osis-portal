@@ -52,7 +52,6 @@
         <tr>
             <th>{% trans 'code'%}</th>
             <th>{% trans 'title'%}</th>
-            <th>%</th>
             <th>{% trans 'weight' %}</th>
             <th>{% trans 'students' %}</th>
             <th>{% trans 'schedule'%}</th>
@@ -63,7 +62,6 @@
             <tr>
                 <td>{% if  attribution.learning_unit_year_url%}<a href="{{ attribution.learning_unit_year_url }}" target="_blank">{{ attribution.acronym }}</a>{% else %}{{ attribution.acronym }}{% endif %}</td>
                 <td>{{ attribution.title }}</td>
-                <td>{{ attribution.percentage_allocation_charge | default_if_none:''}}</td>
                 <td>{{ attribution.weight | default_if_none:''}}</td>
                 <td>
                     {% if perms.base.is_faculty_administrator %}
