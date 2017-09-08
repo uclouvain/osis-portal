@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "allocation_charge_maintenance"
-msgstr "Allocation charge maintenance."
+msgstr "Allocation charge in maintenance."
 
 msgid "tutor_charge"
 msgstr "Teaching charge"
