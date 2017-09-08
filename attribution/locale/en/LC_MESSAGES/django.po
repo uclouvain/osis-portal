@@ -17,6 +17,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "allocation_charge_maintenance"
+msgstr "Allocation charge maintenance."
+
 msgid "tutor_charge"
 msgstr "Teaching charge"
 

@@ -27,6 +27,11 @@
 <h1>{% trans 'tutor_charge' %}</h1>
 <h2>{{ user.first_name }} {{ user.last_name }}</h2>
 
+<div id="warning_no_address_found" class="alert alert-dismissible alert-warning">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <p><span class="fa fa-info-circle" aria-hidden="true"></span> {% trans 'allocation_charge_maintenance' %}</p>
+</div>
+
 <ul class="nav nav-tabs">
     {%  for form in formset%}
         {% if perms.base.is_faculty_administrator %}
@@ -47,8 +52,6 @@
         <tr>
             <th>{% trans 'code'%}</th>
             <th>{% trans 'title'%}</th>
-            <th>{% trans 'lecturing_hours'%}</th>
-            <th>{% trans 'practical_hours'%}</th>
             <th>%</th>
             <th>{% trans 'weight' %}</th>
             <th>{% trans 'students' %}</th>
@@ -60,8 +63,6 @@
             <tr>
                 <td>{% if  attribution.learning_unit_year_url%}<a href="{{ attribution.learning_unit_year_url }}" target="_blank">{{ attribution.acronym }}</a>{% else %}{{ attribution.acronym }}{% endif %}</td>
                 <td>{{ attribution.title }}</td>
-                <td>{{ attribution.lecturing_allocation_charge | default_if_none:''}}</td>
-                <td>{{ attribution.practice_allocation_charge | default_if_none:''}}</td>
                 <td>{{ attribution.percentage_allocation_charge | default_if_none:''}}</td>
                 <td>{{ attribution.weight | default_if_none:''}}</td>
                 <td>
