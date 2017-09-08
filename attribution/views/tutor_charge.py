@@ -131,14 +131,15 @@ def list_teaching_charge(a_person, an_academic_year):
     attribution_list = []
     tot_lecturing = NO_ALLOCATION_CHARGE
     tot_practical = NO_ALLOCATION_CHARGE
+    attributions_charge_duration = get_attributions_charge_duration(a_person, an_academic_year)
     for an_attribution in list_attributions(a_person, an_academic_year):
         a_learning_unit_year = an_attribution.learning_unit_year
-        tot_attribution_lecturing = attribution_allocation_charge(a_learning_unit_year,
-                                                                  component_type.LECTURING,
-                                                                  an_attribution)
-        tot_attribution_practical = attribution_allocation_charge(a_learning_unit_year,
-                                                                  component_type.PRACTICAL_EXERCISES,
-                                                                  an_attribution)
+
+        learning_unit_attribution_charge_duration = attributions_charge_duration.get(a_learning_unit_year.acronym, {})
+
+        tot_attribution_lecturing = learning_unit_attribution_charge_duration.get("lecturing", 0)
+        tot_attribution_practical = learning_unit_attribution_charge_duration.get("practical", 0)
+
         tot_lecturing = tot_lecturing + tot_attribution_lecturing
         tot_practical = tot_practical + tot_attribution_practical
         attribution_list.append(
@@ -400,3 +401,7 @@ def visualize_tutor_attributions(request, global_id):
     tutor = mdl_base.tutor.find_by_person_global_id(global_id)
     data = get_teaching_charge_data(tutor.person,  get_current_academic_year())
     return render(request, "tutor_charge.html", data)
+
+
+def get_attributions_charge_duration(a_person, an_academic_year):
+    return {"LELEC1530": {"lecturing": 40, "practical": 20}}

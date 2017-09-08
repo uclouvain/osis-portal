@@ -148,8 +148,8 @@ class TutorChargeTest(TestCase):
 
     def test_get_attribution_charge_practice_exercises_duration(self):
         self.assertEqual(tutor_charge.attribution_allocation_charges(self.a_tutor,
-                                                                        self.get_data('learning_unit_year'),
-                                                                        component_type.PRACTICAL_EXERCISES),
+                                                                     self.get_data('learning_unit_year'),
+                                                                     component_type.PRACTICAL_EXERCISES),
                          ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION)
 
     def test_sum_learning_unit_year_duration(self):
@@ -239,3 +239,18 @@ class TutorChargeTest(TestCase):
     def test_string_not_empty(self):
         self.assertTrue(tutor_charge.is_string_not_null_empty("test"))
 
+    def test_get_attributions_charge_duration(self):
+        attributions_charge = tutor_charge.get_attributions_charge_duration(self.a_tutor.person,
+                                                                            self.get_data('academic_year'))
+        self.assertEqual(type(attributions_charge), dict)
+
+    def test_list_teaching_charge(self):
+        teaching_charge = tutor_charge.list_teaching_charge(self.a_tutor.person, self.get_data('academic_year'))
+        attributions = teaching_charge["attributions"]
+        tot_lecturing = teaching_charge["tot_lecturing"]
+        tot_practical = teaching_charge["tot_practical"]
+        self.assertEqual(len(attributions), 1)
+        self.assertEqual(attributions[0]["lecturing_allocation_charge"], '40.0')
+        self.assertEqual(attributions[0]["practice_allocation_charge"], '20.0')
+        self.assertEqual(tot_lecturing, 40)
+        self.assertEqual(tot_practical, 20)
