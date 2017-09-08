@@ -73,6 +73,12 @@ msgstr "This requires a <a href=\""
 msgid "scores_encoding_use_vpn_with_link_end"
 msgstr "\" target=\"_blank\" >VPN access</a> outside UCL."
 
+msgid "scores_sheets"
+msgstr "Scores sheets"
+
+msgid "scores_sheets_admin"
+msgstr "Scores sheets administration"
+
 msgid "scores_sheet_building"
 msgstr "Scores sheets are building."
 
