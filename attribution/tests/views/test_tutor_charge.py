@@ -36,7 +36,7 @@ from base.models.enums import component_type
 from attribution.models.enums import function
 from performance.tests.models import test_student_performance
 from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
-    test_learning_unit_component, test_learning_unit
+    test_learning_unit_component
 from attribution.tests.models import test_attribution_charge, test_attribution
 
 
@@ -51,11 +51,13 @@ ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION = 15.0
 
 ACRONYM = 'LELEC1530'
 TITLE = 'Circ. Electro. Analog. & Digit. Fondam.'
-EXTERNAL_ID = 30880
 WEIGHT = 5
 now = datetime.datetime.now()
 CURRENT_YEAR = now.year
 NEXT_YEAR = now.year + 1
+LEARNING_UNIT_ID = "8080"
+EXTERNAL_ID = "osis.learning_unit_year_{learning_unit_id}_{year}".format(learning_unit_id=LEARNING_UNIT_ID,
+    year=CURRENT_YEAR)
 
 def mock_request_attributions_charge(*args, **kwargs):
     class MockRequest:
@@ -68,8 +70,8 @@ def mock_request_attributions_charge(*args, **kwargs):
                  "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
                  "function":"COORDINATOR",
                  "globalId":"00233751",
-                 "learningUnitId":str(EXTERNAL_ID),
-                 "year":"2017"}
+                 "learningUnitId":str(LEARNING_UNIT_ID),
+                 "year":str(CURRENT_YEAR)}
             ]}
     return MockRequest()
 
@@ -86,18 +88,13 @@ class TutorChargeTest(TestCase):
         Group.objects.get_or_create(name='students')
 
     def create_lu_yr_annual_data(self, a_year):
-        a_learning_unit = test_learning_unit.create_learning_unit({
-            'external_id':EXTERNAL_ID,
-            'acronym': ACRONYM,
-            'title': TITLE,
-        })
         an_academic_yr = test_academic_year.create_academic_year_with_year(a_year)
         an_academic_yr.year = a_year
         a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
+            'external_id': EXTERNAL_ID,
             'acronym': ACRONYM,
             'title': TITLE,
             'academic_year': an_academic_yr,
-            'learning_unit': a_learning_unit,
             'weight': WEIGHT,
             'vacant': True,
             'in_charge': True})

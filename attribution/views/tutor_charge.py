@@ -136,10 +136,8 @@ def list_teaching_charge(a_person, an_academic_year):
     for an_attribution in list_attributions(a_person, an_academic_year):
         a_learning_unit_year = an_attribution.learning_unit_year
 
-        learning_unit_attribution_charge_duration = {}
-        if a_learning_unit_year.learning_unit and a_learning_unit_year.learning_unit.external_id:
-            learning_unit_attribution_charge_duration = \
-                attributions_charge_duration.get(str(a_learning_unit_year.learning_unit.external_id), {})
+        learning_unit_attribution_charge_duration = \
+            attributions_charge_duration.get(str(a_learning_unit_year.external_id), {})
 
         lecturing_charge = float(learning_unit_attribution_charge_duration.get("lecturing_charge", 0))
         practice_charge = float(learning_unit_attribution_charge_duration.get("practice_charge", 0))
@@ -411,8 +409,12 @@ def visualize_tutor_attributions(request, global_id):
 def get_attributions_charge_duration(a_person, an_academic_year):
     attributions_charge_duration = {}
     try:
-        url = "todefine.com"
-        response = requests.get(url)
+        server_top_url =  settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_URL')
+        tutor_allocations_path = server_top_url + settings.ATTRIBUTION_CONFIG.get('ATTRIBUTIONS_TUTOR_ALLOCATION_PATH')
+        url = tutor_allocations_path.format(global_id=a_person.global_id, year=an_academic_year.year)
+        username = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_USER')
+        password = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_PASSWORD')
+        response = requests.get(url, auth=(username , password))
         if response.status_code == 200:
             tutor_allocations_json = response.json()
             attributions_charge_duration =  _tutor_attributions_by_learning_unit(tutor_allocations_json)
@@ -423,10 +425,12 @@ def _tutor_attributions_by_learning_unit(tutor_allocations_json):
     tutor_attributions = {}
     list_attributions = tutor_allocations_json.get("tutorAllocations", [])
     for attribution in list_attributions:
-        learning_unit_external_id = attribution.get("learningUnitId", None)
-        if not learning_unit_external_id:
+        if not attribution.get("learningUnitId") and not attribution.get('year'):
             continue
-        tutor_attributions[learning_unit_external_id] = {
+        learning_unit_year_external_id = "osis.learning_unit_year_{learning_unit_id}_{year}".format(
+            learning_unit_id=attribution.get("learningUnitId", ''),
+            year=attribution.get('year',''))
+        tutor_attributions[learning_unit_year_external_id] = {
             "lecturing_charge":attribution.get("allocationChargeLecturing", 0),
             "practice_charge":attribution.get("allocationChargePractice", 0),
             "learning_unit_charge": attribution.get("learningUnitCharge", 0)
