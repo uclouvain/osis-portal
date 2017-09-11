@@ -25,6 +25,8 @@
 ##############################################################################
 import datetime
 
+from unittest import mock
+
 from django.contrib.auth.models import User, Group
 from django.test import TestCase
 from django.conf import settings
@@ -34,7 +36,7 @@ from base.models.enums import component_type
 from attribution.models.enums import function
 from performance.tests.models import test_student_performance
 from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
-    test_learning_unit_component
+    test_learning_unit_component, test_learning_unit
 from attribution.tests.models import test_attribution_charge, test_attribution
 
 
@@ -42,17 +44,34 @@ REGISTRATION_ID = '64641200'
 
 LEARNING_UNIT_LECTURING_DURATION = 15.0
 LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION = 30.0
+LEARNING_UNIT_CHARGE = 60.0
 
 ATTRIBUTION_CHARGE_LECTURING_DURATION = 15.0
 ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION = 15.0
 
 ACRONYM = 'LELEC1530'
 TITLE = 'Circ. Electro. Analog. & Digit. Fondam.'
+EXTERNAL_ID = 30880
 WEIGHT = 5
 now = datetime.datetime.now()
 CURRENT_YEAR = now.year
 NEXT_YEAR = now.year + 1
 
+def mock_request_attributions_charge(*args, **kwargs):
+    class MockRequest:
+        status_code = 200
+
+        def json(self):
+            return {"tutorAllocations": [
+                {"allocationChargeLecturing":str(LEARNING_UNIT_LECTURING_DURATION),
+                 "allocationChargePractice":str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION),
+                 "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
+                 "function":"COORDINATOR",
+                 "globalId":"00233751",
+                 "learningUnitId":str(EXTERNAL_ID),
+                 "year":"2017"}
+            ]}
+    return MockRequest()
 
 class TutorChargeTest(TestCase):
 
@@ -67,12 +86,18 @@ class TutorChargeTest(TestCase):
         Group.objects.get_or_create(name='students')
 
     def create_lu_yr_annual_data(self, a_year):
+        a_learning_unit = test_learning_unit.create_learning_unit({
+            'external_id':EXTERNAL_ID,
+            'acronym': ACRONYM,
+            'title': TITLE,
+        })
         an_academic_yr = test_academic_year.create_academic_year_with_year(a_year)
         an_academic_yr.year = a_year
         a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
             'acronym': ACRONYM,
             'title': TITLE,
             'academic_year': an_academic_yr,
+            'learning_unit': a_learning_unit,
             'weight': WEIGHT,
             'vacant': True,
             'in_charge': True})
@@ -160,13 +185,12 @@ class TutorChargeTest(TestCase):
         self.assertEqual(tutor_charge.sum_learning_unit_year_duration(self.create_learning_unit_year_without_duration()), 0)
 
     def test_calculate_percentage_allocation_charge(self):
-        self.assertEqual(tutor_charge.calculate_attribution_format_percentage_allocation_charge(self.get_data('learning_unit_year'),
-                                                                                                self.get_data('attribution')), self.calculate_formatted_percentage())
+        self.assertEqual(tutor_charge.calculate_attribution_format_percentage_allocation_charge(
+            LEARNING_UNIT_LECTURING_DURATION, LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION, LEARNING_UNIT_CHARGE), "75.0")
 
     def test_calculate_percentage_allocation_charge_with_no_duration(self):
         self.assertIsNone(tutor_charge.calculate_attribution_format_percentage_allocation_charge(
-            self.create_learning_unit_year_without_duration(),
-            self.get_data('attribution')))
+            LEARNING_UNIT_LECTURING_DURATION, LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION, 0))
 
     def test_format_students_email(self):
         email_expected = "{0}{1}{2}".format(tutor_charge.MAIL_TO, ACRONYM.lower(), tutor_charge.STUDENT_LIST_EMAIL_END)
@@ -239,18 +263,26 @@ class TutorChargeTest(TestCase):
     def test_string_not_empty(self):
         self.assertTrue(tutor_charge.is_string_not_null_empty("test"))
 
-    def test_get_attributions_charge_duration(self):
+    @mock.patch('requests.get', side_effect=Exception)
+    def test_get_attributions_charge_duration(self, mock_requests_get):
         attributions_charge = tutor_charge.get_attributions_charge_duration(self.a_tutor.person,
                                                                             self.get_data('academic_year'))
-        self.assertEqual(type(attributions_charge), dict)
+        self.assertTrue(mock_requests_get.called)
+        self.assertEqual(attributions_charge, {})
 
-    def test_list_teaching_charge(self):
+    @mock.patch('requests.get', side_effect=mock_request_attributions_charge)
+    def test_list_teaching_charge(self, mock_requests_get):
         teaching_charge = tutor_charge.list_teaching_charge(self.a_tutor.person, self.get_data('academic_year'))
+
+        self.assertTrue(mock_requests_get.called)
+
         attributions = teaching_charge["attributions"]
         tot_lecturing = teaching_charge["tot_lecturing"]
         tot_practical = teaching_charge["tot_practical"]
+
         self.assertEqual(len(attributions), 1)
-        self.assertEqual(attributions[0]["lecturing_allocation_charge"], '40.0')
-        self.assertEqual(attributions[0]["practice_allocation_charge"], '20.0')
-        self.assertEqual(tot_lecturing, 40)
-        self.assertEqual(tot_practical, 20)
+        self.assertEqual(attributions[0]["lecturing_allocation_charge"], str(LEARNING_UNIT_LECTURING_DURATION))
+        self.assertEqual(attributions[0]["practice_allocation_charge"], str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION))
+        self.assertEqual(attributions[0]["percentage_allocation_charge"], "75.0")
+        self.assertEqual(tot_lecturing, LEARNING_UNIT_LECTURING_DURATION)
+        self.assertEqual(tot_practical, LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION)
