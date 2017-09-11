@@ -38,6 +38,7 @@ from base.forms.base_forms import GlobalIdForm
 from base.views import layout
 from django.contrib.auth.decorators import login_required, permission_required
 import json
+import requests
 
 
 ONE_DECIMAL_FORMAT = "%0.1f"
@@ -131,26 +132,30 @@ def list_teaching_charge(a_person, an_academic_year):
     attribution_list = []
     tot_lecturing = NO_ALLOCATION_CHARGE
     tot_practical = NO_ALLOCATION_CHARGE
+    attributions_charge_duration = get_attributions_charge_duration(a_person, an_academic_year)
     for an_attribution in list_attributions(a_person, an_academic_year):
         a_learning_unit_year = an_attribution.learning_unit_year
-        tot_attribution_lecturing = attribution_allocation_charge(a_learning_unit_year,
-                                                                  component_type.LECTURING,
-                                                                  an_attribution)
-        tot_attribution_practical = attribution_allocation_charge(a_learning_unit_year,
-                                                                  component_type.PRACTICAL_EXERCISES,
-                                                                  an_attribution)
-        tot_lecturing = tot_lecturing + tot_attribution_lecturing
-        tot_practical = tot_practical + tot_attribution_practical
+
+        learning_unit_attribution_charge_duration = \
+            attributions_charge_duration.get(str(a_learning_unit_year.external_id), {})
+
+        lecturing_charge = float(learning_unit_attribution_charge_duration.get("lecturing_charge", 0))
+        practice_charge = float(learning_unit_attribution_charge_duration.get("practice_charge", 0))
+        learning_unit_charge = float(learning_unit_attribution_charge_duration.get("learning_unit_charge", 0))
+
+
+        tot_lecturing = tot_lecturing + lecturing_charge
+        tot_practical = tot_practical + practice_charge
         attribution_list.append(
             {'acronym': a_learning_unit_year.acronym,
              'title': a_learning_unit_year.title,
              'lecturing_allocation_charge':
-                 ONE_DECIMAL_FORMAT % (tot_attribution_lecturing,),
+                 ONE_DECIMAL_FORMAT % (lecturing_charge,),
              'practice_allocation_charge':
-                 ONE_DECIMAL_FORMAT % (tot_attribution_practical,),
+                 ONE_DECIMAL_FORMAT % (practice_charge,),
              'percentage_allocation_charge':
-                 calculate_attribution_format_percentage_allocation_charge(a_learning_unit_year,
-                                                                           an_attribution),
+                 calculate_attribution_format_percentage_allocation_charge(lecturing_charge, practice_charge,
+                                                                           learning_unit_charge),
              'weight': a_learning_unit_year.credits,
              'url_schedule': get_schedule_url(a_learning_unit_year.acronym),
              'url_students_list_email': get_email_students(a_learning_unit_year.acronym),
@@ -356,10 +361,9 @@ def attribution_allocation_charge(a_learning_unit_year, a_component_type, an_att
     return tot_allocation_charge
 
 
-def calculate_attribution_format_percentage_allocation_charge(a_learning_unit_year, an_attribution):
-    duration = sum_learning_unit_year_duration(a_learning_unit_year)
-    if duration > DURATION_NUL:
-        percentage = attribution_allocation_charge(a_learning_unit_year, None, an_attribution) * 100 / duration
+def calculate_attribution_format_percentage_allocation_charge(lecturing_charge, practice_charge, learning_unit_charge):
+    if learning_unit_charge > DURATION_NUL:
+        percentage = (lecturing_charge + practice_charge) * 100 / learning_unit_charge
         return ONE_DECIMAL_FORMAT % (percentage,)
     return None
 
@@ -400,3 +404,35 @@ def visualize_tutor_attributions(request, global_id):
     tutor = mdl_base.tutor.find_by_person_global_id(global_id)
     data = get_teaching_charge_data(tutor.person,  get_current_academic_year())
     return render(request, "tutor_charge.html", data)
+
+
+def get_attributions_charge_duration(a_person, an_academic_year):
+    attributions_charge_duration = {}
+    try:
+        server_top_url =  settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_URL')
+        tutor_allocations_path = server_top_url + settings.ATTRIBUTION_CONFIG.get('ATTRIBUTIONS_TUTOR_ALLOCATION_PATH')
+        url = tutor_allocations_path.format(global_id=a_person.global_id, year=an_academic_year.year)
+        username = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_USER')
+        password = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_PASSWORD')
+        response = requests.get(url, auth=(username , password))
+        if response.status_code == 200:
+            tutor_allocations_json = response.json()
+            attributions_charge_duration =  _tutor_attributions_by_learning_unit(tutor_allocations_json)
+    finally:
+        return attributions_charge_duration
+
+def _tutor_attributions_by_learning_unit(tutor_allocations_json):
+    tutor_attributions = {}
+    list_attributions = tutor_allocations_json.get("tutorAllocations", [])
+    for attribution in list_attributions:
+        if not attribution.get("learningUnitId") and not attribution.get('year'):
+            continue
+        learning_unit_year_external_id = "osis.learning_unit_year_{learning_unit_id}_{year}".format(
+            learning_unit_id=attribution.get("learningUnitId", ''),
+            year=attribution.get('year',''))
+        tutor_attributions[learning_unit_year_external_id] = {
+            "lecturing_charge":attribution.get("allocationChargeLecturing", 0),
+            "practice_charge":attribution.get("allocationChargePractice", 0),
+            "learning_unit_charge": attribution.get("learningUnitCharge", 0)
+        }
+    return tutor_attributions
