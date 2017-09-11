@@ -45,7 +45,7 @@
             <button id="lnk_ask_papersheet" onclick="ask_papersheet()" class="btn btn-lg btn-primary" style="display: none;">
                 {% trans 'ask_papersheet' %}
             </button>
-            <a href="{% url 'scores_download' %}" id="lnk_scores_download" class="btn btn-lg btn-primary" style="display: none;">
+            <a href="{% url 'scores_download' person.global_id %}" id="lnk_scores_download" class="btn btn-lg btn-primary" style="display: none;">
                 {% trans 'download' %}
             </a>
         </div>
@@ -116,7 +116,7 @@
         function send_request(){
             $.ajax({
                 method: 'POST',
-                url: "{% url 'ask_papersheet' %}",
+                url: "{% url 'ask_papersheet' person.global_id %}",
                 success: function () {
                     check_result();
                 },
@@ -131,7 +131,7 @@
         function check_result(){
             $.ajax({
                 method: 'POST',
-                url: "{% url 'check_papersheet' %}",
+                url: "{% url 'check_papersheet' person.global_id %}",
                 success: function () {
                     set_class(message_box, "alert alert-success");
                     show_message_in_container(status_message, "{% trans 'scores_sheet_ready' %}");
