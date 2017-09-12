@@ -66,7 +66,7 @@ def mock_request_attributions_charge(*args, **kwargs):
         def json(self):
             return {"tutorAllocations": [
                 {"allocationChargeLecturing":str(LEARNING_UNIT_LECTURING_DURATION),
-                 "allocationChargePractice":str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION),
+                 "allocationChargePractical":str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION),
                  "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
                  "function":"COORDINATOR",
                  "globalId":"00233751",
