@@ -142,21 +142,21 @@ def list_teaching_charge(a_person, an_academic_year):
             attributions_charge_duration.get(str(a_learning_unit_year.external_id), {})
 
         lecturing_charge = float(learning_unit_attribution_charge_duration.get("lecturing_charge", 0))
-        practice_charge = float(learning_unit_attribution_charge_duration.get("practice_charge", 0))
+        practical_charge = float(learning_unit_attribution_charge_duration.get("practical_charge", 0))
         learning_unit_charge = float(learning_unit_attribution_charge_duration.get("learning_unit_charge", 0))
 
 
         tot_lecturing = tot_lecturing + lecturing_charge
-        tot_practical = tot_practical + practice_charge
+        tot_practical = tot_practical + practical_charge
         attribution_list.append(
             {'acronym': a_learning_unit_year.acronym,
              'title': a_learning_unit_year.title,
              'lecturing_allocation_charge':
                  ONE_DECIMAL_FORMAT % (lecturing_charge,),
              'practice_allocation_charge':
-                 ONE_DECIMAL_FORMAT % (practice_charge,),
+                 ONE_DECIMAL_FORMAT % (practical_charge,),
              'percentage_allocation_charge':
-                 calculate_attribution_format_percentage_allocation_charge(lecturing_charge, practice_charge,
+                 calculate_attribution_format_percentage_allocation_charge(lecturing_charge, practical_charge,
                                                                            learning_unit_charge),
              'weight': a_learning_unit_year.credits,
              'url_schedule': get_schedule_url(a_learning_unit_year.acronym),
@@ -363,9 +363,9 @@ def attribution_allocation_charge(a_learning_unit_year, a_component_type, an_att
     return tot_allocation_charge
 
 
-def calculate_attribution_format_percentage_allocation_charge(lecturing_charge, practice_charge, learning_unit_charge):
+def calculate_attribution_format_percentage_allocation_charge(lecturing_charge, practical_charge, learning_unit_charge):
     if learning_unit_charge > DURATION_NUL:
-        percentage = (lecturing_charge + practice_charge) * 100 / learning_unit_charge
+        percentage = (lecturing_charge + practical_charge) * 100 / learning_unit_charge
         return ONE_DECIMAL_FORMAT % (percentage,)
     return None
 
@@ -435,7 +435,7 @@ def _tutor_attributions_by_learning_unit(tutor_allocations_json):
             year=attribution.get('year',''))
         tutor_attributions[learning_unit_year_external_id] = {
             "lecturing_charge":attribution.get("allocationChargeLecturing", 0),
-            "practice_charge":attribution.get("allocationChargePractice", 0),
+            "practical_charge":attribution.get("allocationChargePractical", 0),
             "learning_unit_charge": attribution.get("learningUnitCharge", 0)
         }
     return tutor_attributions
