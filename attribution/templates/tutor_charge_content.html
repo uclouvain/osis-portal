@@ -27,10 +27,6 @@
 <h1>{% trans 'tutor_charge' %}</h1>
 <h2>{{ user.first_name }} {{ user.last_name }}</h2>
 
-<div id="warning_no_address_found" class="alert alert-dismissible alert-warning">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <p><span class="fa fa-info-circle" aria-hidden="true"></span> {% trans 'allocation_charge_maintenance' %}</p>
-</div>
 
 <ul class="nav nav-tabs">
     {%  for form in formset%}
