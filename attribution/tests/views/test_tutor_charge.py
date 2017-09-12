@@ -265,7 +265,7 @@ class TutorChargeTest(TestCase):
         attributions_charge = tutor_charge.get_attributions_charge_duration(self.a_tutor.person,
                                                                             self.get_data('academic_year'))
         self.assertTrue(mock_requests_get.called)
-        self.assertEqual(attributions_charge, {})
+        self.assertEqual(attributions_charge, {'error': True})
 
     @mock.patch('requests.get', side_effect=mock_request_attributions_charge)
     def test_list_teaching_charge(self, mock_requests_get):

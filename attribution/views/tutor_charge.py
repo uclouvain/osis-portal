@@ -145,7 +145,6 @@ def list_teaching_charge(a_person, an_academic_year):
         practical_charge = float(learning_unit_attribution_charge_duration.get("practical_charge", 0))
         learning_unit_charge = float(learning_unit_attribution_charge_duration.get("learning_unit_charge", 0))
 
-
         tot_lecturing = tot_lecturing + lecturing_charge
         tot_practical = tot_practical + practical_charge
         attribution_list.append(
@@ -170,7 +169,8 @@ def list_teaching_charge(a_person, an_academic_year):
         attribution_list = None
     return {'attributions': attribution_list,
             'tot_lecturing': tot_lecturing,
-            'tot_practical': tot_practical}
+            'tot_practical': tot_practical,
+            'error': attributions_charge_duration.get('error', False)}
 
 
 @login_required
@@ -200,11 +200,13 @@ def get_teaching_charge_data(a_person, year):
     attributions = None
     tot_lecturing = None
     tot_practical = None
+    error = False
     if is_tutor(a_person):
         attributions_dict = list_teaching_charge(a_person, an_academic_year)
         attributions = attributions_dict['attributions']
         tot_lecturing = attributions_dict['tot_lecturing']
         tot_practical = attributions_dict['tot_practical']
+        error = attributions_dict['error']
     a_user = None
     if a_person:
         a_user = a_person.user
@@ -215,7 +217,8 @@ def get_teaching_charge_data(a_person, year):
             'tot_lecturing': tot_lecturing,
             'tot_practical': tot_practical,
             'academic_year': an_academic_year,
-            'global_id': a_person.global_id}
+            'global_id': a_person.global_id,
+            'error': error}
     return data
 
 
@@ -228,7 +231,7 @@ def set_formset_years(a_person):
     initial_data = []
     for yr in get_attribution_years(a_person):
         initial_data.append({'year': yr,
-                             'next_year': str(yr+1)[-2:] })
+                             'next_year': str(yr+1)[-2:]})
 
     return AttributionFormSet(initial=initial_data)
 
@@ -236,7 +239,7 @@ def set_formset_years(a_person):
 def get_url_learning_unit_year(a_learning_unit_year):
     if a_learning_unit_year and is_string_not_null_empty(a_learning_unit_year.acronym):
         return settings.ATTRIBUTION_CONFIG.get('CATALOG_URL').format(a_learning_unit_year.academic_year.year,
-                                           a_learning_unit_year.acronym.lower())
+                                                                     a_learning_unit_year.acronym.lower())
     return None
 
 
@@ -261,6 +264,7 @@ def _load_students(a_learning_unit_year, a_tutor, request):
 def show_students_admin(request, a_learning_unit_year, a_tutor):
     return render(request, "students_list_admin.html",
                   _load_students(a_learning_unit_year, a_tutor, request))
+
 
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
@@ -420,6 +424,8 @@ def get_attributions_charge_duration(a_person, an_academic_year):
         if response.status_code == 200:
             tutor_allocations_json = response.json()
             attributions_charge_duration = _tutor_attributions_by_learning_unit(tutor_allocations_json)
+    except Exception:
+        attributions_charge_duration['error'] = True
     finally:
         return attributions_charge_duration
 
@@ -432,10 +438,10 @@ def _tutor_attributions_by_learning_unit(tutor_allocations_json):
             continue
         learning_unit_year_external_id = "osis.learning_unit_year_{learning_unit_id}_{year}".format(
             learning_unit_id=attribution.get("learningUnitId", ''),
-            year=attribution.get('year',''))
+            year=attribution.get('year', ''))
         tutor_attributions[learning_unit_year_external_id] = {
-            "lecturing_charge":attribution.get("allocationChargeLecturing", 0),
-            "practical_charge":attribution.get("allocationChargePractical", 0),
+            "lecturing_charge": attribution.get("allocationChargeLecturing", 0),
+            "practical_charge": attribution.get("allocationChargePractical", 0),
             "learning_unit_charge": attribution.get("learningUnitCharge", 0)
         }
     return tutor_attributions
