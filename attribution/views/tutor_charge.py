@@ -55,6 +55,8 @@ JANUARY = "janvier"
 JUNE = "juin"
 SEPTEMBER = "septembre"
 
+ATTRIBUTIONS_TUTOR_ALLOCATION_PATH = 'resources/AllocationCharges/tutors/{global_id}/{year}'
+
 
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
@@ -409,17 +411,18 @@ def visualize_tutor_attributions(request, global_id):
 def get_attributions_charge_duration(a_person, an_academic_year):
     attributions_charge_duration = {}
     try:
-        server_top_url =  settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_URL')
-        tutor_allocations_path = server_top_url + settings.ATTRIBUTION_CONFIG.get('ATTRIBUTIONS_TUTOR_ALLOCATION_PATH')
+        server_top_url = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_URL')
+        tutor_allocations_path = server_top_url + ATTRIBUTIONS_TUTOR_ALLOCATION_PATH
         url = tutor_allocations_path.format(global_id=a_person.global_id, year=an_academic_year.year)
         username = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_USER')
         password = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_PASSWORD')
-        response = requests.get(url, auth=(username , password))
+        response = requests.get(url, auth=(username, password))
         if response.status_code == 200:
             tutor_allocations_json = response.json()
-            attributions_charge_duration =  _tutor_attributions_by_learning_unit(tutor_allocations_json)
+            attributions_charge_duration = _tutor_attributions_by_learning_unit(tutor_allocations_json)
     finally:
         return attributions_charge_duration
+
 
 def _tutor_attributions_by_learning_unit(tutor_allocations_json):
     tutor_attributions = {}
