@@ -56,6 +56,7 @@
         <tr>
             <th>{% trans 'code'%}</th>
             <th>{% trans 'title'%}</th>
+            <th>{% trans 'start_year' %}</th>
             <th>{% trans 'lecturing_hours'%}</th>
             <th>{% trans 'practical_hours'%}</th>
             <th>%</th>
@@ -69,6 +70,7 @@
             <tr>
                 <td>{% if  attribution.learning_unit_year_url%}<a href="{{ attribution.learning_unit_year_url }}" target="_blank">{{ attribution.acronym }}</a>{% else %}{{ attribution.acronym }}{% endif %}</td>
                 <td>{{ attribution.title }}</td>
+                <td>{{ attribution.start_year }}</td>
                 <td>{%if not error%}{{ attribution.lecturing_allocation_charge | default_if_none:''}}{%endif%}</td>
                 <td>{%if not error%}{{ attribution.practice_allocation_charge | default_if_none:''}}{%endif%}</td>
                 <td>{{ attribution.percentage_allocation_charge | default_if_none:''}}</td>
