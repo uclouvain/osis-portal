@@ -150,6 +150,7 @@ def list_teaching_charge(a_person, an_academic_year):
         attribution_list.append(
             {'acronym': a_learning_unit_year.acronym,
              'title': a_learning_unit_year.title,
+             'start_year': an_attribution.start_year,
              'lecturing_allocation_charge':
                  ONE_DECIMAL_FORMAT % (lecturing_charge,),
              'practice_allocation_charge':
