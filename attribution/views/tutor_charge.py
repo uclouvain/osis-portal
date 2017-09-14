@@ -139,7 +139,7 @@ def list_teaching_charge(a_person, an_academic_year):
         a_learning_unit_year = an_attribution.learning_unit_year
 
         learning_unit_attribution_charge_duration = \
-            attributions_charge_duration.get(str(a_learning_unit_year.external_id), {})
+            attributions_charge_duration.get(str(an_attribution.external_id), {})
 
         lecturing_charge = float(learning_unit_attribution_charge_duration.get("lecturing_charge", 0))
         practical_charge = float(learning_unit_attribution_charge_duration.get("practical_charge", 0))
@@ -435,12 +435,11 @@ def _tutor_attributions_by_learning_unit(tutor_allocations_json):
     tutor_attributions = {}
     list_attributions = tutor_allocations_json.get("tutorAllocations", [])
     for attribution in list_attributions:
-        if not attribution.get("learningUnitId") and not attribution.get('year'):
+        if not attribution.get("attributionId") and not attribution.get('year'):
             continue
-        learning_unit_year_external_id = "osis.learning_unit_year_{learning_unit_id}_{year}".format(
-            learning_unit_id=attribution.get("learningUnitId", ''),
-            year=attribution.get('year', ''))
-        tutor_attributions[learning_unit_year_external_id] = {
+        attribution_external_id = \
+            "osis.attribution_{attribution_id}".format(attribution_id=attribution['attributionId'])
+        tutor_attributions[attribution_external_id] = {
             "lecturing_charge": attribution.get("allocationChargeLecturing", 0),
             "practical_charge": attribution.get("allocationChargePractical", 0),
             "learning_unit_charge": attribution.get("learningUnitCharge", 0)
