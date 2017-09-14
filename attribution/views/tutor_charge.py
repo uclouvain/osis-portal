@@ -435,10 +435,10 @@ def _tutor_attributions_by_learning_unit(tutor_allocations_json):
     tutor_attributions = {}
     list_attributions = tutor_allocations_json.get("tutorAllocations", [])
     for attribution in list_attributions:
-        if not attribution.get("attributionId") and not attribution.get('year'):
+        if not attribution.get("allocationId") and not attribution.get('year'):
             continue
         attribution_external_id = \
-            "osis.attribution_{attribution_id}".format(attribution_id=attribution['attributionId'])
+            "osis.attribution_{attribution_id}".format(attribution_id=attribution['allocationId'])
         tutor_attributions[attribution_external_id] = {
             "lecturing_charge": attribution.get("allocationChargeLecturing", 0),
             "practical_charge": attribution.get("allocationChargePractical", 0),

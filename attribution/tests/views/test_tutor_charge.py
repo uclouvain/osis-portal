@@ -70,7 +70,7 @@ def mock_request_attributions_charge(*args, **kwargs):
               "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
               "function": "COORDINATOR",
               "globalId": "00233751",
-              "attributionId": ATTRIBUTION_ID
+              "allocationId": ATTRIBUTION_ID
               }]}
 
     return MockRequest()
