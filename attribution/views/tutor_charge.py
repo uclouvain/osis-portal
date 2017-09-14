@@ -437,6 +437,7 @@ def get_attributions_charge_duration(a_person, an_academic_year):
     except Exception:
         log_trace = traceback.format_exc()
         logger.warning('Error when returning attributions charge duration: \n {}'.format(log_trace))
+        attributions_charge_duration['error'] = True
     finally:
         return attributions_charge_duration
 
