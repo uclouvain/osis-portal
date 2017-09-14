@@ -26,6 +26,7 @@
 import datetime
 
 from unittest import mock
+from requests.exceptions import RequestException
 
 from django.contrib.auth.models import User, Group
 from django.test import TestCase
@@ -261,7 +262,7 @@ class TutorChargeTest(TestCase):
     def test_string_not_empty(self):
         self.assertTrue(tutor_charge.is_string_not_null_empty("test"))
 
-    @mock.patch('requests.get', side_effect=Exception)
+    @mock.patch('requests.get', side_effect=RequestException)
     def test_get_attributions_charge_duration(self, mock_requests_get):
         attributions_charge = tutor_charge.get_attributions_charge_duration(self.a_tutor.person,
                                                                             self.get_data('academic_year'))
