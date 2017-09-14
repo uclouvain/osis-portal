@@ -25,6 +25,11 @@
 ##############################################################################
 import datetime
 
+import json
+import requests
+import logging
+import traceback
+
 from django.conf import settings
 from django.forms import formset_factory
 from django.shortcuts import render
@@ -37,8 +42,6 @@ from attribution.forms.attribution import AttributionForm
 from base.forms.base_forms import GlobalIdForm
 from base.views import layout
 from django.contrib.auth.decorators import login_required, permission_required
-import json
-import requests
 
 
 ONE_DECIMAL_FORMAT = "%0.1f"
@@ -56,6 +59,8 @@ JUNE = "juin"
 SEPTEMBER = "septembre"
 
 ATTRIBUTIONS_TUTOR_ALLOCATION_PATH = 'resources/AllocationCharges/tutors/{global_id}/{year}'
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 @login_required
@@ -415,19 +420,25 @@ def visualize_tutor_attributions(request, global_id):
 
 def get_attributions_charge_duration(a_person, an_academic_year):
     attributions_charge_duration = {}
-    server_top_url = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_URL')
-    tutor_allocations_path = server_top_url + ATTRIBUTIONS_TUTOR_ALLOCATION_PATH
-    url = tutor_allocations_path.format(global_id=a_person.global_id, year=an_academic_year.year)
-    username = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_USER')
-    password = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_PASSWORD')
     try:
+        server_top_url = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_URL')
+        tutor_allocations_path = server_top_url + ATTRIBUTIONS_TUTOR_ALLOCATION_PATH
+        url = tutor_allocations_path.format(global_id=a_person.global_id, year=an_academic_year.year)
+        username = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_USER')
+        password = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_PASSWORD')
         response = requests.get(url, auth=(username, password))
         if response.status_code == 200:
             tutor_allocations_json = response.json()
             attributions_charge_duration = _tutor_attributions_by_learning_unit(tutor_allocations_json)
-    except requests.exceptions.RequestException:
+    except requests.exceptions.RequestException as req_exception:
+        log_trace = traceback.format_exc()
+        logger.warning('Error when querying WebService: \n {}'.format(log_trace))
         attributions_charge_duration['error'] = True
-    return attributions_charge_duration
+    except Exception:
+        log_trace = traceback.format_exc()
+        logger.warning('Error when returning attributions charge duration: \n {}'.format(log_trace))
+    finally:
+        return attributions_charge_duration
 
 
 def _tutor_attributions_by_learning_unit(tutor_allocations_json):
