@@ -430,7 +430,7 @@ def get_attributions_charge_duration(a_person, an_academic_year):
         if response.status_code == 200:
             tutor_allocations_json = response.json()
             attributions_charge_duration = _tutor_attributions_by_learning_unit(tutor_allocations_json)
-    except requests.exceptions.RequestException as req_exception:
+    except requests.exceptions.RequestException:
         log_trace = traceback.format_exc()
         logger.warning('Error when querying WebService: \n {}'.format(log_trace))
         attributions_charge_duration['error'] = True
