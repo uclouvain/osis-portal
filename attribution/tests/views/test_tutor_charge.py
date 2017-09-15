@@ -65,14 +65,14 @@ def mock_request_attributions_charge(*args, **kwargs):
         status_code = 200
 
         def json(self):
-            return {"tutorAllocations": [
-             {"allocationChargeLecturing": str(LEARNING_UNIT_LECTURING_DURATION),
-              "allocationChargePractical": str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION),
-              "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
-              "function": "COORDINATOR",
-              "globalId": "00233751",
-              "allocationId": ATTRIBUTION_ID
-              }]}
+            return {"tutorAllocations": {
+                        "allocationChargeLecturing": str(LEARNING_UNIT_LECTURING_DURATION),
+                        "allocationChargePractical": str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION),
+                        "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
+                        "function": "COORDINATOR",
+                        "globalId": "00233751",
+                        "allocationId": ATTRIBUTION_ID
+                    }}
 
     return MockRequest()
 
