@@ -445,6 +445,10 @@ def get_attributions_charge_duration(a_person, an_academic_year):
 def _tutor_attributions_by_learning_unit(tutor_allocations_json):
     tutor_attributions = {}
     list_attributions = tutor_allocations_json.get("tutorAllocations", [])
+    # Fix when the webservice return a dictionnary in place of a list. Occure when
+    # the tutor has a single attribution.
+    if type(list_attributions) is dict:
+        list_attributions = [list_attributions]
     for attribution in list_attributions:
         if not attribution.get("allocationId") and not attribution.get('year'):
             continue
