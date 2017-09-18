@@ -67,7 +67,8 @@ def navigation(request, navigate_direct_to_form):
             return layout.render(request, 'offer_choice.html', {'programs': student_programs,
                                                                 'student': stud})
     else:
-        messages.add_message(request, messages.WARNING, _('no_offer_enrollment_found'))
+        current_academic_year = academic_year.current_academic_year()
+        messages.add_message(request, messages.WARNING, _('no_offer_enrollment_found').format(current_academic_year))
         return response.HttpResponseRedirect(reverse('dashboard_home'))
 
 
