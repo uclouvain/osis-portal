@@ -124,7 +124,7 @@ class ExamEnrollmentFormTest(TestCase):
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_get_programs_student_is_none(self):
-        self.assertIsNone(main._get_student_programs(None, self.academic_year))
+        self.assertIsNone(main._get_student_programs(None, self.current_academic_year))
 
     def test_get_one_program(self):
         self.client.force_login(self.user)
