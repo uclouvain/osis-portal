@@ -76,7 +76,7 @@ def home(request):
 
 def get_current_academic_year():
     a_year = datetime.datetime.now().year
-    current_academic_year = mdl_base.academic_year.current_academic_year()
+    current_academic_year = mdl_base.academic_year.starting_academic_year()
     if current_academic_year:
         a_year = current_academic_year.year
     return a_year
