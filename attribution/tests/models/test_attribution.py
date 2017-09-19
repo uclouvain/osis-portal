@@ -50,6 +50,7 @@ def create_attribution(data):
         attribution.end_year = end
     if 'tutor' in data:
         attribution.tutor = data['tutor']
+    if 'external_id' in data:
+        attribution.external_id = data['external_id']
     attribution.save()
     return attribution
-
