@@ -46,9 +46,8 @@ def _create_group(name):
     return group
 
 
-def create_offer_enrollment_for_current_academic_yr(student):
-    off_year_current_academic_year = test_offer_year.create_offer_year_with_academic_year(
-        test_academic_year.create_academic_year_current())
+def create_offer_enrollment(student, academic_year):
+    off_year_current_academic_year = test_offer_year.create_offer_year_with_academic_year(academic_year)
     student_offer_year_enrollment = test_offer_enrollment.create_offer_enrollment(student,
                                                                                   off_year_current_academic_year)
     return student_offer_year_enrollment
@@ -72,7 +71,8 @@ class ExamEnrollmentFormTest(TestCase):
                                                                          'academic_year': self.academic_year})
         self.url = "/exam_enrollment/{}/form/".format(offer_year_id)
         self.correct_exam_enrol_form = load_json_file("exam_enrollment/tests/resources/exam_enrollment_form_example.json")
-        off_enrol = create_offer_enrollment_for_current_academic_yr(self.student)
+        self.current_academic_year = test_academic_year.create_academic_year_current()
+        off_enrol = create_offer_enrollment(self.student, self.current_academic_year)
         learn_unit_year = test_learning_unit_year.create_learning_unit_year({'acronym': 'LDROI1234',
                                                                              'title': 'Bachelor in law',
                                                                              'academic_year': self.academic_year})
@@ -124,11 +124,12 @@ class ExamEnrollmentFormTest(TestCase):
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_get_programs_student_is_none(self):
-        self.assertIsNone(main._get_student_programs(None))
+        self.assertIsNone(main._get_student_programs(None, self.academic_year))
 
     def test_get_one_program(self):
         self.client.force_login(self.user)
-        self.assertEqual(main._get_student_programs(self.student)[0], self.learn_unit_enrol.offer_enrollment.offer_year)
+        self.assertEqual(main._get_student_programs(self.student, self.current_academic_year)[0],
+                         self.learn_unit_enrol.offer_enrollment.offer_year)
 
     def test_navigation_with_no_offer_in_current_academic_year(self):
         self.client.force_login(self.user)
@@ -264,7 +265,7 @@ class ExamEnrollmentFormTest(TestCase):
     @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
     def test_case_student_has_no_learning_unit_enrollment(self, mock_find):
         mock_find.return_value = None
-        off_year_enrol = create_offer_enrollment_for_current_academic_yr(self.student)
+        off_year_enrol = create_offer_enrollment(self.student, self.current_academic_year)
         self.client.force_login(self.user)
         response = self.client.get(reverse('exam_enrollment_form', args=[off_year_enrol.offer_year.id]), follow=True)
         self.assertRedirects(response, reverse('dashboard_home'))

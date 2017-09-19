@@ -59,7 +59,8 @@ def navigation(request, navigate_direct_to_form):
         stud = student.find_by_user(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
-    student_programs = _get_student_programs(stud)
+    current_academic_year = academic_year.current_academic_year()
+    student_programs = _get_student_programs(stud, current_academic_year)
     if student_programs:
         if navigate_direct_to_form and len(student_programs) == 1:
             return _get_exam_enrollment_form(student_programs[0], request, stud)
@@ -67,7 +68,6 @@ def navigation(request, navigate_direct_to_form):
             return layout.render(request, 'offer_choice.html', {'programs': student_programs,
                                                                 'student': stud})
     else:
-        current_academic_year = academic_year.current_academic_year()
         messages.add_message(request, messages.WARNING, _('no_offer_enrollment_found').format(current_academic_year))
         return response.HttpResponseRedirect(reverse('dashboard_home'))
 
@@ -179,10 +179,10 @@ def _exam_enrollment_form_message(registration_id, offer_year_acronym, year):
     }
 
 
-def _get_student_programs(stud):
+def _get_student_programs(stud, acad_year):
     if stud:
         return [enrol.offer_year for enrol in list(
-            offer_enrollment.find_by_student_academic_year(stud, academic_year.current_academic_year()))]
+            offer_enrollment.find_by_student_academic_year(stud, acad_year))]
     return None
 
 
