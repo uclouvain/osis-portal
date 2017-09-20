@@ -268,3 +268,13 @@ class ExamEnrollmentFormTest(TestCase):
         self.client.force_login(self.user)
         response = self.client.get(reverse('exam_enrollment_form', args=[off_year_enrol.offer_year.id]), follow=True)
         self.assertRedirects(response, reverse('dashboard_home'))
+
+    @patch('exam_enrollment.views.main.call_exam_enrollment_client')
+    def test_fetch_exam_enrollment_form(self, mock_call_exam_enrollment_client):
+        mock_call_exam_enrollment_client.return_value = "this is not a valid json".encode()
+        self.assertIsNone(main._fetch_exam_enrollment_form(None, None))
+
+        json_str = json.dumps(['foo', {'bar': ('baz', None, 1.0, 2)}]).encode()
+        mock_call_exam_enrollment_client.return_value = json_str
+        self.assertEqual(json.loads(json_str.decode("utf-8")),
+                         main._fetch_exam_enrollment_form(None, None))
