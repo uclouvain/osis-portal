@@ -78,6 +78,8 @@ class ScoreSheetTest(TestCase):
             invalid_document = test_score_encoding.get_invalid_sample()
             with(self.assertRaises(ValueError)):
                 score_encoding.is_outdated(invalid_document)
+            undated_document = test_score_encoding.get_undated_sample()
+            self.assertTrue(score_encoding.is_outdated(undated_document))
 
 
 class PrintScoreSheetTest(TestCase):
