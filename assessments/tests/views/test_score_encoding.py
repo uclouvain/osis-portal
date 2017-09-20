@@ -40,9 +40,31 @@ class ScoreSheetTest(TestCase):
         document = score_encoding.get_score_sheet(self.global_id)
         self.assertJSONEqual(self.score_encoding.document, document, "Should return the document in db")
 
+    def test_get_score_sheet_invalid_json(self):
+        global_id = "007896"
+        test_score_encoding.create_invalid_score_encoding(global_id=global_id)
+        document = score_encoding.get_score_sheet(global_id)
+        self.assertIsNone(document)
+
     def test_check_db_scores(self):
         scores_check = score_encoding.check_db_scores(self.global_id)
         self.assertTrue(scores_check)
+
+    def test_check_db_scores_invalid_json(self):
+        global_id = "007896"
+        test_score_encoding.create_invalid_score_encoding(global_id=global_id)
+        self.assertFalse(score_encoding.check_db_scores(global_id))
+
+    def test_is_outdated(self):
+        outdated_document = test_score_encoding.get_old_sample()
+        self.assertTrue(score_encoding.is_outdated(outdated_document))
+        today_document = test_score_encoding.get_sample()
+        self.assertFalse(score_encoding.is_outdated(today_document))
+        invalid_document = test_score_encoding.get_invalid_sample()
+        with(self.assertRaises(ValueError)):
+            score_encoding.is_outdated(invalid_document)
+        undated_document = test_score_encoding.get_undated_sample()
+        self.assertTrue(score_encoding.is_outdated(undated_document))
 
     if hasattr(settings, 'QUEUES') and settings.QUEUES:
         @patch('frontoffice.queue.queue_listener.Client.call')
@@ -69,17 +91,6 @@ class ScoreSheetTest(TestCase):
             mock_client_call.return_value = expected.encode("utf-8")
             document = score_encoding.get_score_sheet("12012")
             self.assertIsNone(document)
-
-        def test_is_outdated(self):
-            outdated_document = test_score_encoding.get_old_sample()
-            self.assertTrue(score_encoding.is_outdated(outdated_document))
-            today_document = test_score_encoding.get_sample()
-            self.assertFalse(score_encoding.is_outdated(today_document))
-            invalid_document = test_score_encoding.get_invalid_sample()
-            with(self.assertRaises(ValueError)):
-                score_encoding.is_outdated(invalid_document)
-            undated_document = test_score_encoding.get_undated_sample()
-            self.assertTrue(score_encoding.is_outdated(undated_document))
 
 
 class PrintScoreSheetTest(TestCase):

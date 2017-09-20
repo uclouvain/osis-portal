@@ -204,14 +204,23 @@ def get_score_sheet(global_id):
     document = None
     if scor_encoding:
         document = scor_encoding.document
-    if not document or is_outdated(document):
+    try:
+        if not document or is_outdated(document):
+            return None
+    except ValueError:
         return None
+
     return document
 
 
 def check_db_scores(global_id):
     scores = assessments.models.score_encoding.find_by_global_id(global_id)
-    if scores and scores.document and not is_outdated(scores.document):
+    try:
+        outdated_document = is_outdated(scores.document)
+    except ValueError:
+        return False
+
+    if scores and scores.document and not outdated_document:
         try:
             paper_sheet.validate_data_structure(json.loads(scores.document))
             return True

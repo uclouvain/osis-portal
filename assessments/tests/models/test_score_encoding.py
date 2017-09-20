@@ -65,6 +65,13 @@ def create_score_encoding(global_id="001254"):
     return score_encoding
 
 
+def create_invalid_score_encoding(global_id):
+    invalid_document = get_invalid_sample()
+    score_encoding = mdl_score_encoding.ScoreEncoding(global_id=global_id, document=invalid_document)
+    score_encoding.save()
+    return score_encoding
+
+
 def load_sample(sample_path):
     with open(sample_path) as file_sample:
         return file_sample.read()
