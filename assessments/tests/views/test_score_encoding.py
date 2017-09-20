@@ -106,5 +106,8 @@ class PrintScoreSheetTest(TestCase):
         pdf = score_encoding.print_scores(self.global_id)
         self.assertTrue(pdf, "Should generate a pdf")
 
-
-
+    def test_when_invalid_json(self):
+        global_id = "007896"
+        test_score_encoding.create_invalid_score_encoding(global_id=global_id)
+        pdf = score_encoding.print_scores(global_id)
+        self.assertIsNone(pdf, "Should not create any pdf")
