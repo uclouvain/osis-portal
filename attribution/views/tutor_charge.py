@@ -426,7 +426,7 @@ def get_attributions_charge_duration(a_person, an_academic_year):
         url = tutor_allocations_path.format(global_id=a_person.global_id, year=an_academic_year.year)
         username = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_USER')
         password = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_PASSWORD')
-        response = requests.get(url, auth=(username, password))
+        response = requests.get(url, auth=(username, password), timeout=100)
         if response.status_code == 200:
             tutor_allocations_json = response.json()
             attributions_charge_duration = _tutor_attributions_by_learning_unit(tutor_allocations_json)
