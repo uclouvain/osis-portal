@@ -70,6 +70,12 @@ class ScoreSheetTest(TestCase):
             document = score_encoding.get_score_sheet("12012")
             self.assertIsNone(document)
 
+        def test_is_outdated(self):
+            outdated_document = test_score_encoding.get_old_sample()
+            self.assertTrue(score_encoding.is_outdated(outdated_document))
+            today_document = test_score_encoding.get_sample()
+            self.assertFalse(score_encoding.is_outdated(today_document))
+
 
 class PrintScoreSheetTest(TestCase):
     def setUp(self):

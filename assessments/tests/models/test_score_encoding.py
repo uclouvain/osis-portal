@@ -54,6 +54,7 @@ class ScoreEncodingTest(TestCase):
 
 
 sample_1 = "assessments/tests/ressources/score_encoding_sample.json"
+invalid_sample = "assessments/tests/ressources/invalid_sample.json"
 
 
 def create_score_encoding(global_id="001254"):
@@ -75,6 +76,10 @@ def get_sample():
 
 def get_old_sample():
     return load_sample(sample_1)
+
+
+def get_invalid_sample():
+    return load_sample(invalid_sample)
 
 
 def update_publication_date(sample):
