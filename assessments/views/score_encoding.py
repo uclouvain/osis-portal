@@ -226,7 +226,14 @@ def check_db_scores(global_id):
 
 
 def is_outdated(document):
-    json_document = json.loads(document)
+    try:
+        json_document = json.loads(document)
+    except ValueError:
+        trace = traceback.format_exc()
+        logger.error(trace)
+        logger.warning("The JSON document is invalid and cannot be loaded")
+        raise
+
     now = datetime.datetime.now()
     now_str = '%s/%s/%s' % (now.day, now.month, now.year)
     if json_document.get('publication_date', None) != now_str:

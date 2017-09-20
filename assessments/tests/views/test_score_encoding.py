@@ -75,6 +75,9 @@ class ScoreSheetTest(TestCase):
             self.assertTrue(score_encoding.is_outdated(outdated_document))
             today_document = test_score_encoding.get_sample()
             self.assertFalse(score_encoding.is_outdated(today_document))
+            invalid_document = test_score_encoding.get_invalid_sample()
+            with(self.assertRaises(ValueError)):
+                score_encoding.is_outdated(invalid_document)
 
 
 class PrintScoreSheetTest(TestCase):
