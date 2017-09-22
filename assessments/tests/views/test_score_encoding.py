@@ -205,9 +205,7 @@ class DownloadPaperSheetTest(TestCase):
                          'attachment; filename="%s"' % ("%s.pdf" % _('scores_sheet')))
 
     def test_when_person_not_exist_as_faculty_administrator(self):
-        faculty_admin_permission = Permission.objects.get(codename="is_faculty_administrator")
-        self.tutor.person.user.user_permissions.add(faculty_admin_permission)
-        self.url = reverse('scores_download', args=[OTHER_GLOBAL_ID])
+        self.__set_user_as_faculty_administrator()
 
         response = self.client.get(self.url, follow=True)
 
@@ -216,9 +214,7 @@ class DownloadPaperSheetTest(TestCase):
     def test_when_person_exists_but_no_papersheet_as_faculty_adminstrator(self):
         PersonFactory(global_id=OTHER_GLOBAL_ID)
 
-        faculty_admin_permission = Permission.objects.get(codename="is_faculty_administrator")
-        self.tutor.person.user.user_permissions.add(faculty_admin_permission)
-        self.url = reverse('scores_download', args=[OTHER_GLOBAL_ID])
+        self.__set_user_as_faculty_administrator()
 
         response = self.client.get(self.url, follow=True)
 
@@ -229,9 +225,7 @@ class DownloadPaperSheetTest(TestCase):
         PersonFactory(global_id=OTHER_GLOBAL_ID)
         ScoreEncodingFactory(global_id=OTHER_GLOBAL_ID)
 
-        faculty_admin_permission = Permission.objects.get(codename="is_faculty_administrator")
-        self.tutor.person.user.user_permissions.add(faculty_admin_permission)
-        self.url = reverse('scores_download', args=[OTHER_GLOBAL_ID])
+        self.__set_user_as_faculty_administrator()
 
         response = self.client.get(self.url, follow=True)
 
@@ -241,7 +235,10 @@ class DownloadPaperSheetTest(TestCase):
         self.assertEqual(response.get('Content-Disposition'),
                          'attachment; filename="%s"' % ("%s.pdf" % _('scores_sheet')))
 
-
+    def __set_user_as_faculty_administrator(self):
+        faculty_admin_permission = Permission.objects.get(codename="is_faculty_administrator")
+        self.tutor.person.user.user_permissions.add(faculty_admin_permission)
+        self.url = reverse('scores_download', args=[OTHER_GLOBAL_ID])
 
 
 class ScoreSheetTest(TestCase):
