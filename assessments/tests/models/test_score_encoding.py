@@ -23,17 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
-import json
 
 from django.test import TestCase
 
 from assessments.models import score_encoding as mdl_score_encoding
+from assessments.tests.factories.score_encoding import ScoreEncodingFactory, load_score_encoding_sample
 
 
 class ScoreEncodingTest(TestCase):
     def setUp(self):
-        self.score_encoding = create_score_encoding()
+        self.score_encoding = ScoreEncodingFactory()
         self.global_id = self.score_encoding.global_id
 
     def test_find_by_global_id(self):
@@ -44,7 +43,7 @@ class ScoreEncodingTest(TestCase):
         self.assertIsNone(score_encoding, "Should return no score encoding")
 
     def test_insert_or_update_document(self):
-        new_document = get_sample()
+        new_document = load_score_encoding_sample()
         score_encoding = mdl_score_encoding.insert_or_update_document("1202151", new_document)
         self.assertJSONEqual(score_encoding.document, new_document, "Problem when inserting new document")
 
@@ -52,40 +51,6 @@ class ScoreEncodingTest(TestCase):
         self.score_encoding.refresh_from_db()
         self.assertJSONEqual(self.score_encoding.document, new_document, "Problem when updating document")
 
-
-sample_1 = "assessments/tests/ressources/score_encoding_sample.json"
-
-
-def create_score_encoding(global_id="001254"):
-    document = get_sample()
-    score_encoding = mdl_score_encoding.ScoreEncoding(global_id=global_id, document=document)
-    score_encoding.save()
-    return score_encoding
-
-
-def load_sample(sample_path):
-    with open(sample_path) as file_sample:
-        return file_sample.read()
-
-
-def get_sample():
-    sample = get_old_sample()
-    return update_publication_date(sample)
-
-
-def get_old_sample():
-    return load_sample(sample_1)
-
-
-def update_publication_date(sample):
-    json_sample = json.loads(sample)
-    json_sample['publication_date'] = get_today_date()
-    return json.dumps(json_sample)
-
-
-def get_today_date():
-    now = datetime.datetime.now()
-    return '%s/%s/%s' % (now.day, now.month, now.year)
 
 
 

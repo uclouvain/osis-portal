@@ -23,16 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import json
+
 from django.conf import settings
 from django.contrib.auth.models import Group, Permission
 from django.core.urlresolvers import reverse
-from django.test import TestCase, Client
-from unittest.mock import patch
+from django.test import TestCase, Client, modify_settings, override_settings
 
-from assessments.tests.models import test_score_encoding
 from assessments.tests.factories.score_encoding import ScoreEncodingFactory
 from assessments.views import score_encoding
-from base.models.tutor import Tutor
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 
@@ -73,10 +72,10 @@ class CheckPaperSheetTest(TestCase):
         response = self.client.post(self.url, data={}, follow=True)
         self.assertEqual(response.status_code, ACCESS_DENIED)
 
+    @modify_settings(INSTALLED_APPS={'remove': 'assessments'})
     def test_when_app_not_installed(self):
-        with self.modify_settings(INSTALLED_APPS={'remove': 'assessments'}):
-            response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-            self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
+        response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
 
     def test_when_no_corresponding_papersheet(self):
         response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
@@ -89,57 +88,85 @@ class CheckPaperSheetTest(TestCase):
         self.assertEqual(response.status_code, OK)
 
 
+class AskPaperSheetTest(TestCase):
+    def setUp(self):
+        a_person = PersonFactory(global_id=GLOBAL_ID)
+
+        tutors_group = Group.objects.create(name='tutors')
+        permission = Permission.objects.get(codename="is_tutor")
+        tutors_group.permissions.add(permission)
+        a_person.user.groups.add(tutors_group)
+
+        self.tutor = TutorFactory(person=a_person)
+
+        self.client = Client()
+        self.url = reverse('ask_papersheet', args=[GLOBAL_ID])
+        self.client.force_login(a_person.user)
+
+    def test_when_no_tutor(self):
+        self.tutor.delete()
+
+        response = self.client.get(self.url, follow=True)
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+
+    def test_when_request_is_get(self):
+        response = self.client.get(self.url, follow=True)
+        self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
+
+    def test_when_request_is_not_ajax(self):
+        response = self.client.post(self.url, data={}, follow=True)
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+
+    @modify_settings(INSTALLED_APPS={'remove': 'assessments'})
+    def test_when_app_not_installed(self):
+        response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
+
+    @override_settings(QUEUES="")
+    def test_when_no_queues(self):
+        response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
+
+
 class ScoreSheetTest(TestCase):
     def setUp(self):
-        self.score_encoding = test_score_encoding.create_score_encoding()
-        self.global_id = self.score_encoding.global_id
-
-    def test_get_score_sheet_if_present_in_db(self):
-        document = score_encoding.get_score_sheet(self.global_id)
-        self.assertJSONEqual(self.score_encoding.document, document, "Should return the document in db")
+        self.score_encoding = ScoreEncodingFactory(global_id=GLOBAL_ID)
 
     def test_check_db_scores(self):
-        scores_check = score_encoding.check_db_scores(self.global_id)
+        scores_check = score_encoding.check_db_scores(GLOBAL_ID)
         self.assertTrue(scores_check)
 
-    if hasattr(settings, 'QUEUES') and settings.QUEUES:
-        @patch('frontoffice.queue.queue_listener.Client.call')
-        def test_get_score_sheet_if_present_in_db_but_outdated(self, mock_client_call):
-            global_id = "12012"
-            new_score_encoding = test_score_encoding.create_score_encoding(global_id=global_id)
-            new_score_encoding.document = test_score_encoding.get_old_sample()
-            new_score_encoding.save()
+    def test_get_score_sheet_if_not_present_in_db(self):
+        self.score_encoding.delete()
 
-            expected = test_score_encoding.get_sample()
-            mock_client_call.return_value = expected.encode("utf-8")
-            document = score_encoding.get_score_sheet(global_id)
-            self.assertIsNone(document)
+        document = score_encoding.get_score_sheet(GLOBAL_ID)
+        self.assertIsNone(document)
 
-        @patch('frontoffice.queue.queue_listener.Client.call')
-        def test_get_score_sheet_if_not_present_in_db_with_timeout(self, mock_client_call):
-            mock_client_call.return_value = None
-            document = score_encoding.get_score_sheet("12012")
-            self.assertIsNone(document, "Should timeout when waiting for document and return none")
+    def test_get_score_sheet_if_present_in_db_but_outdated(self):
+        old_date = "15/11/2016"
+        json_obj = json.loads(self.score_encoding.document)
+        json_obj['publication_date'] = old_date
+        self.score_encoding.document = json.dumps(json_obj)
+        self.score_encoding.save()
 
-        @patch('frontoffice.queue.queue_listener.Client.call')
-        def test_get_score_sheet_if_not_present_in_db_and_fetch(self, mock_client_call):
-            expected = test_score_encoding.get_sample()
-            mock_client_call.return_value = expected.encode("utf-8")
-            document = score_encoding.get_score_sheet("12012")
-            self.assertIsNone(document)
+        document = score_encoding.get_score_sheet(GLOBAL_ID)
+        self.assertIsNone(document)
+
+    def test_get_score_sheet_if_present_in_db(self):
+        document = score_encoding.get_score_sheet(GLOBAL_ID)
+        self.assertJSONEqual(self.score_encoding.document, document)
 
 
 class PrintScoreSheetTest(TestCase):
     def setUp(self):
-        self.score_encoding = test_score_encoding.create_score_encoding()
-        self.global_id = self.score_encoding.global_id
+        self.score_encoding = ScoreEncodingFactory(global_id=GLOBAL_ID)
 
     def test_when_no_scores_sheet(self):
         pdf = score_encoding.print_scores("014")
         self.assertIsNone(pdf, "Should not create any pdf")
 
     def test_when_scores_sheet(self):
-        pdf = score_encoding.print_scores(self.global_id)
+        pdf = score_encoding.print_scores(GLOBAL_ID)
         self.assertTrue(pdf, "Should generate a pdf")
 
 

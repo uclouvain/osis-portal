@@ -30,14 +30,18 @@ import json
 import datetime
 
 
-def _load_score_encoding_sample():
+def load_score_encoding_sample():
     sample = "assessments/tests/ressources/score_encoding_sample.json"
     with open(sample) as file_sample:
         # Reassign publication date as today to pass method assessments.views.score_encoding.is_outdated
         json_obj = json.load(file_sample)
-        now = datetime.datetime.now()
-        json_obj['publication_date'] = '%s/%s/%s' % (now.day, now.month, now.year)
+        json_obj['publication_date'] = _get_today_date()
         return json.dumps(json_obj)
+
+
+def _get_today_date():
+    now = datetime.datetime.now()
+    return '%s/%s/%s' % (now.day, now.month, now.year)
 
 
 class ScoreEncodingFactory(factory.DjangoModelFactory):
@@ -45,4 +49,4 @@ class ScoreEncodingFactory(factory.DjangoModelFactory):
         model = 'assessments.ScoreEncoding'
 
     global_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    document = _load_score_encoding_sample()
+    document = load_score_encoding_sample()
