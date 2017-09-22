@@ -53,9 +53,9 @@ class ScoreEncodingTest(TestCase):
         self.assertJSONEqual(self.score_encoding.document, new_document, "Problem when updating document")
 
 
-sample_1 = "assessments/tests/ressources/score_encoding_sample.json"
-invalid_sample = "assessments/tests/ressources/invalid_sample.json"
-undated_sample = "assessments/tests/ressources/undated_sample.json"
+sample_1 = "assessments/tests/resources/score_encoding_sample.json"
+invalid_sample = "assessments/tests/resources/invalid_sample.json"
+undated_sample = "assessments/tests/resources/undated_sample.json"
 
 
 def create_score_encoding(global_id="001254"):
