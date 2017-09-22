@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import json
+from unittest.mock import patch
 
 from django.conf import settings
 from django.contrib.auth.models import Group, Permission
@@ -37,10 +38,11 @@ from base.tests.factories.tutor import TutorFactory
 
 
 GLOBAL_ID = "45451200"
-ACCESS_DENIED = 401
-METHOD_NOT_ALLOWED = 405
-FILE_NOT_FOUND = 404
 OK = 200
+BAD_REQUEST = 400
+ACCESS_DENIED = 401
+FILE_NOT_FOUND = 404
+METHOD_NOT_ALLOWED = 405
 
 
 class CheckPaperSheetTest(TestCase):
@@ -126,6 +128,34 @@ class AskPaperSheetTest(TestCase):
     def test_when_no_queues(self):
         response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
+
+    if hasattr(settings, 'QUEUES') and settings.QUEUES:
+        @patch('assessments.views.score_encoding.ask_queue_for_papersheet')
+        def test_when_exception_occured_when_publishing_to_queue(self, mock_ask_queue_for_papersheet):
+            from pika.exceptions import ConnectionClosed, ChannelClosed, AMQPError
+            side_effects = [RuntimeError, ConnectionClosed, ChannelClosed, AMQPError]
+
+            for side_effect in side_effects:
+                mock_ask_queue_for_papersheet.side_effect = side_effect
+
+                response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+                self.assertTrue(mock_ask_queue_for_papersheet.called)
+                self.assertEqual(response.status_code, BAD_REQUEST)
+
+        @patch('assessments.views.score_encoding.ask_queue_for_papersheet', side_effect=lambda x: False)
+        def test_when_message_not_publish_to_queue(self, mock_ask_queue_for_papersheet):
+            response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+            self.assertTrue(mock_ask_queue_for_papersheet.called)
+            self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
+
+        @patch('assessments.views.score_encoding.ask_queue_for_papersheet', side_effect=lambda x: True)
+        def test_when_message_publish_to_queue(self, mock_ask_queue_for_papersheet):
+            response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+            self.assertTrue(mock_ask_queue_for_papersheet.called)
+            self.assertEqual(response.status_code, OK)
 
 
 class ScoreSheetTest(TestCase):

@@ -102,13 +102,7 @@ def ask_papersheet(request, global_id=None):
             person = mdl_base.person.find_by_user(request.user)
         if hasattr(settings, 'QUEUES') and settings.QUEUES:
             try:
-                connect = pika.BlockingConnection(_get_rabbit_settings())
-                queue_name = settings.QUEUES.get('QUEUES_NAME').get('SCORE_ENCODING_PDF_REQUEST')
-                channel = _create_channel(connect, queue_name)
-                message_published = channel.basic_publish(exchange='',
-                                                          routing_key=queue_name,
-                                                          body=person.global_id)
-                connect.close()
+                message_published = ask_queue_for_papersheet(person)
             except (RuntimeError, pika.exceptions.ConnectionClosed, pika.exceptions.ChannelClosed,
                     pika.exceptions.AMQPError):
                 return HttpResponse(status=400)
@@ -117,6 +111,17 @@ def ask_papersheet(request, global_id=None):
                 return HttpResponse(status=200)
 
     return HttpResponse(status=405)
+
+
+def ask_queue_for_papersheet(person):
+    connect = pika.BlockingConnection(_get_rabbit_settings())
+    queue_name = settings.QUEUES.get('QUEUES_NAME').get('SCORE_ENCODING_PDF_REQUEST')
+    channel = _create_channel(connect, queue_name)
+    message_published = channel.basic_publish(exchange='',
+                                              routing_key=queue_name,
+                                              body=person.global_id)
+    connect.close()
+    return message_published
 
 
 def insert_or_update_document_from_queue(body):
