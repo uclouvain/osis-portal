@@ -30,6 +30,7 @@ from django.conf import settings
 from django.contrib.auth.models import Group, Permission
 from django.core.urlresolvers import reverse
 from django.test import TestCase, Client, modify_settings, override_settings
+from django.utils.translation import ugettext_lazy as _
 
 from assessments.tests.factories.score_encoding import ScoreEncodingFactory
 from assessments.views import score_encoding
@@ -38,6 +39,7 @@ from base.tests.factories.tutor import TutorFactory
 
 
 GLOBAL_ID = "45451200"
+OTHER_GLOBAL_ID = "92921100"
 OK = 200
 BAD_REQUEST = 400
 ACCESS_DENIED = 401
@@ -66,27 +68,27 @@ class CheckPaperSheetTest(TestCase):
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, ACCESS_DENIED)
 
-    def test_when_request_is_get(self):
-        response = self.client.get(self.url, follow=True)
+    def test_when_request_is_post(self):
+        response = self.client.post(self.url, data={}, follow=True)
         self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
 
     def test_when_request_is_not_ajax(self):
-        response = self.client.post(self.url, data={}, follow=True)
+        response = self.client.get(self.url, data={}, follow=True)
         self.assertEqual(response.status_code, ACCESS_DENIED)
 
     @modify_settings(INSTALLED_APPS={'remove': 'assessments'})
     def test_when_app_not_installed(self):
-        response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.get(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
 
     def test_when_no_corresponding_papersheet(self):
-        response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.get(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, FILE_NOT_FOUND)
 
     def test_when_papersheet_is_present(self):
         ScoreEncodingFactory(global_id=GLOBAL_ID)
 
-        response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.get(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, OK)
 
 
@@ -111,22 +113,22 @@ class AskPaperSheetTest(TestCase):
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, ACCESS_DENIED)
 
-    def test_when_request_is_get(self):
-        response = self.client.get(self.url, follow=True)
+    def test_when_request_is_post(self):
+        response = self.client.post(self.url, data={}, follow=True)
         self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
 
     def test_when_request_is_not_ajax(self):
-        response = self.client.post(self.url, data={}, follow=True)
+        response = self.client.get(self.url, data={}, follow=True)
         self.assertEqual(response.status_code, ACCESS_DENIED)
 
     @modify_settings(INSTALLED_APPS={'remove': 'assessments'})
     def test_when_app_not_installed(self):
-        response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.get(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
 
     @override_settings(QUEUES="")
     def test_when_no_queues(self):
-        response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.get(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
 
     if hasattr(settings, 'QUEUES') and settings.QUEUES:
@@ -138,24 +140,108 @@ class AskPaperSheetTest(TestCase):
             for side_effect in side_effects:
                 mock_ask_queue_for_papersheet.side_effect = side_effect
 
-                response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+                response = self.client.get(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
                 self.assertTrue(mock_ask_queue_for_papersheet.called)
                 self.assertEqual(response.status_code, BAD_REQUEST)
 
         @patch('assessments.views.score_encoding.ask_queue_for_papersheet', side_effect=lambda x: False)
         def test_when_message_not_publish_to_queue(self, mock_ask_queue_for_papersheet):
-            response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+            response = self.client.get(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
             self.assertTrue(mock_ask_queue_for_papersheet.called)
             self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
 
         @patch('assessments.views.score_encoding.ask_queue_for_papersheet', side_effect=lambda x: True)
         def test_when_message_publish_to_queue(self, mock_ask_queue_for_papersheet):
-            response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+            response = self.client.get(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
             self.assertTrue(mock_ask_queue_for_papersheet.called)
             self.assertEqual(response.status_code, OK)
+
+
+class DownloadPaperSheetTest(TestCase):
+    def setUp(self):
+        a_person = PersonFactory(global_id=GLOBAL_ID)
+
+        tutors_group = Group.objects.create(name='tutors')
+        permission = Permission.objects.get(codename="is_tutor")
+        tutors_group.permissions.add(permission)
+        a_person.user.groups.add(tutors_group)
+
+        self.tutor = TutorFactory(person=a_person)
+
+        self.client = Client()
+        self.url = reverse('scores_download', args=[GLOBAL_ID])
+        self.client.force_login(a_person.user)
+
+    def test_when_user_not_tutor(self):
+        self.tutor.delete()
+
+        response = self.client.get(self.url, follow=True)
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+
+    def test_when_trying_to_access_other_tutor_papersheet(self):
+        self.url = reverse('scores_download', args=[OTHER_GLOBAL_ID])
+        response = self.client.get(self.url, follow=True)
+
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+
+    def test_when_papersheet_is_not_present(self):
+        response = self.client.get(self.url, follow=True)
+
+        self.assertEqual(response.context['scores_sheets_unavailable'], True)
+        self.assertTemplateUsed(response, 'scores_sheets.html')
+
+    def test_when_papersheet_is_present(self):
+        ScoreEncodingFactory(global_id=GLOBAL_ID)
+
+        response = self.client.get(self.url, follow=True)
+
+        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.get('Content-Type'),
+                         'application/pdf')
+        self.assertEqual(response.get('Content-Disposition'),
+                         'attachment; filename="%s"' % ("%s.pdf" % _('scores_sheet')))
+
+    def test_when_person_not_exist_as_faculty_administrator(self):
+        faculty_admin_permission = Permission.objects.get(codename="is_faculty_administrator")
+        self.tutor.person.user.user_permissions.add(faculty_admin_permission)
+        self.url = reverse('scores_download', args=[OTHER_GLOBAL_ID])
+
+        response = self.client.get(self.url, follow=True)
+
+        self.assertEqual(response.status_code, FILE_NOT_FOUND)
+
+    def test_when_person_exists_but_no_papersheet_as_faculty_adminstrator(self):
+        PersonFactory(global_id=OTHER_GLOBAL_ID)
+
+        faculty_admin_permission = Permission.objects.get(codename="is_faculty_administrator")
+        self.tutor.person.user.user_permissions.add(faculty_admin_permission)
+        self.url = reverse('scores_download', args=[OTHER_GLOBAL_ID])
+
+        response = self.client.get(self.url, follow=True)
+
+        self.assertEqual(response.context['scores_sheets_unavailable'], True)
+        self.assertTemplateUsed(response, 'scores_sheets.html')
+
+    def test_when_faculty_administator(self):
+        PersonFactory(global_id=OTHER_GLOBAL_ID)
+        ScoreEncodingFactory(global_id=OTHER_GLOBAL_ID)
+
+        faculty_admin_permission = Permission.objects.get(codename="is_faculty_administrator")
+        self.tutor.person.user.user_permissions.add(faculty_admin_permission)
+        self.url = reverse('scores_download', args=[OTHER_GLOBAL_ID])
+
+        response = self.client.get(self.url, follow=True)
+
+        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.get('Content-Type'),
+                         'application/pdf')
+        self.assertEqual(response.get('Content-Disposition'),
+                         'attachment; filename="%s"' % ("%s.pdf" % _('scores_sheet')))
+
+
 
 
 class ScoreSheetTest(TestCase):

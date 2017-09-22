@@ -33,9 +33,10 @@ from voluptuous import error as voluptuous_error
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.utils.translation import ugettext_lazy as _
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_GET
+from django.core.exceptions import PermissionDenied
 
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
@@ -92,12 +93,12 @@ def scores_sheets(request):
 
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
-@require_http_methods(["POST"])
+@require_GET
 @ajax_required
 def ask_papersheet(request, global_id=None):
     if 'assessments' in settings.INSTALLED_APPS:
         if global_id:
-            person = mdl_base.person.find_by_global_id(global_id)
+            person = mdl_base.person.find_by_global_id(global_id) if global_id else mdl_base.person.find_by_user(request.user)
         else:
             person = mdl_base.person.find_by_user(request.user)
         if hasattr(settings, 'QUEUES') and settings.QUEUES:
@@ -146,7 +147,7 @@ def insert_or_update_document_from_queue(body):
 
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
-@require_http_methods(["POST"])
+@require_GET
 @ajax_required
 def check_papersheet(request, global_id=None):
     if global_id:
@@ -158,8 +159,7 @@ def check_papersheet(request, global_id=None):
             return HttpResponse(status=200)
         else:
             return HttpResponse(status=404)
-    else:
-        return HttpResponse(status=405)
+    return HttpResponse(status=405)
 
 
 @login_required
@@ -168,24 +168,21 @@ def download_papersheet(request, global_id=None):
     logged_person = mdl_base.person.find_by_user(request.user)
     searched_person = mdl_base.person.find_by_global_id(global_id)
 
-    if logged_person != searched_person and request.user.has_perm('base.is_faculty_administrator'):
+    if logged_person == searched_person or request.user.has_perm('base.is_faculty_administrator'):
         person = searched_person
-    elif logged_person != searched_person:
-        return layout.render(request, 'access_denied.html', {})
     else:
-        person = logged_person
+        raise PermissionDenied()
 
-    if person:
-        pdf = print_scores(person.global_id)
-        if pdf:
-            filename = "%s.pdf" % _('scores_sheet')
-            response = HttpResponse(content_type='application/pdf')
-            response['Content-Disposition'] = 'attachment; filename="%s"' % filename
-            response.write(pdf)
-            return response
-    else:
-        person = mdl_base.person.find_by_user(request.user)
-        logger.warning("A person doesn't exist for the user {0}".format(request.user))
+    if not person:
+        raise Http404()
+
+    pdf = print_scores(person.global_id)
+    if pdf:
+        filename = "%s.pdf" % _('scores_sheet')
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        response.write(pdf)
+        return response
 
     scores_sheets_unavailable = True
     return layout.render(request, "scores_sheets.html", locals())

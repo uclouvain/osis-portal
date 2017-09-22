@@ -115,7 +115,7 @@
 
         function send_request(){
             $.ajax({
-                method: 'POST',
+                method: 'GET',
                 url: "{% url 'ask_papersheet' person.global_id %}",
                 success: function () {
                     check_result();
@@ -130,7 +130,7 @@
 
         function check_result(){
             $.ajax({
-                method: 'POST',
+                method: 'GET',
                 url: "{% url 'check_papersheet' person.global_id %}",
                 success: function () {
                     set_class(message_box, "alert alert-success");
