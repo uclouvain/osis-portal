@@ -41,6 +41,7 @@ from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
 from base.views import layout
 from osis_common.document import paper_sheet
+from osis_common.decorators.ajax import ajax_required
 import assessments.models
 
 from django.db import connection
@@ -92,8 +93,9 @@ def scores_sheets(request):
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
 @require_http_methods(["POST"])
+@ajax_required
 def ask_papersheet(request, global_id=None):
-    if request.is_ajax() and 'assessments' in settings.INSTALLED_APPS:
+    if 'assessments' in settings.INSTALLED_APPS:
         if global_id:
             person = mdl_base.person.find_by_global_id(global_id)
         else:
@@ -140,12 +142,13 @@ def insert_or_update_document_from_queue(body):
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
 @require_http_methods(["POST"])
+@ajax_required
 def check_papersheet(request, global_id=None):
     if global_id:
         person = mdl_base.person.find_by_global_id(global_id)
     else:
         person = mdl_base.person.find_by_user(request.user)
-    if request.is_ajax() and 'assessments' in settings.INSTALLED_APPS:
+    if 'assessments' in settings.INSTALLED_APPS:
         if _check_person_and_scores_in_db(person):
             return HttpResponse(status=200)
         else:

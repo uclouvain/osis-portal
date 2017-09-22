@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,29 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import operator
 import factory
 import factory.fuzzy
-from django.conf import settings
-from base import models as mdl
-from base.tests.factories.user import UserFactory
+import string
+import json
+import datetime
 
 
-def generate_person_email(person, domain=None):
-    if domain is None:
-        domain = factory.Faker('domain_name').generate({})
-    return '{0.first_name}.{0.last_name}@{1}'.format(person, domain).lower()
+def _load_score_encoding_sample():
+    sample = "assessments/tests/ressources/score_encoding_sample.json"
+    with open(sample) as file_sample:
+        # Reassign publication date as today to pass method assessments.views.score_encoding.is_outdated
+        json_obj = json.load(file_sample)
+        now = datetime.datetime.now()
+        json_obj['publication_date'] = '%s/%s/%s' % (now.day, now.month, now.year)
+        return json.dumps(json_obj)
 
 
-class PersonFactory(factory.DjangoModelFactory):
+class ScoreEncodingFactory(factory.DjangoModelFactory):
     class Meta:
-        model = 'base.Person'
+        model = 'assessments.ScoreEncoding'
 
-    first_name = factory.Faker('first_name')
-    last_name = factory.Faker('last_name')
-    email = factory.LazyAttribute(generate_person_email)
-    phone = factory.Faker('phone_number')
-    language = factory.Iterator(settings.LANGUAGES, getter=operator.itemgetter(0))
-    gender = factory.Iterator(mdl.person.Person.GENDER_CHOICES, getter=operator.itemgetter(0))
-    user = factory.SubFactory(UserFactory)
-    global_id = None
+    global_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
+    document = _load_score_encoding_sample()

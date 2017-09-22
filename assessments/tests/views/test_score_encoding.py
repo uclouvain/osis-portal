@@ -24,11 +24,83 @@
 #
 ##############################################################################
 from django.conf import settings
-from django.test import TestCase
+from django.contrib.auth.models import Group, Permission
+from django.core.urlresolvers import reverse
+from django.test import TestCase, Client
 from unittest.mock import patch
 
 from assessments.tests.models import test_score_encoding
+from assessments.tests.factories.score_encoding import ScoreEncodingFactory
 from assessments.views import score_encoding
+from base.tests.factories.person import PersonFactory
+from base.tests.factories.tutor import TutorFactory
+
+
+GLOBAL_ID = "45451200"
+ACCESS_DENIED = 401
+METHOD_NOT_ALLOWED = 405
+FILE_NOT_FOUND = 404
+OK = 200
+
+
+class CheckPaperSheetTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.a_person = PersonFactory(global_id=GLOBAL_ID)
+        self.url = reverse('check_papersheet', args=[GLOBAL_ID])
+
+        self.tutors_group = Group.objects.create(name='tutors')
+        permission = Permission.objects.get(codename="is_tutor")
+        self.tutors_group.permissions.add(permission)
+
+    def test_when_no_tutor(self):
+        self.client.force_login(self.a_person.user)
+
+        response = self.client.get(self.url, follow=True)
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+
+    def test_when_request_is_get(self):
+        TutorFactory(person=self.a_person)
+        self.a_person.user.groups.add(self.tutors_group)
+        self.client.force_login(self.a_person.user)
+
+        response = self.client.get(self.url, follow=True)
+        self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
+
+    def test_when_request_is_not_ajax(self):
+        TutorFactory(person=self.a_person)
+        self.a_person.user.groups.add(self.tutors_group)
+        self.client.force_login(self.a_person.user)
+
+        response = self.client.post(self.url, data={}, follow=True)
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+
+    def test_when_app_not_installed(self):
+        TutorFactory(person=self.a_person)
+        self.a_person.user.groups.add(self.tutors_group)
+        self.client.force_login(self.a_person.user)
+
+        with self.modify_settings(INSTALLED_APPS={'remove': 'assessments'}):
+            response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+            self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
+
+    def test_when_no_corresponding_papersheet(self):
+        TutorFactory(person=self.a_person)
+        self.a_person.user.groups.add(self.tutors_group)
+        self.client.force_login(self.a_person.user)
+
+        response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, FILE_NOT_FOUND)
+
+    def test_when_papersheet_is_present(self):
+        TutorFactory(person=self.a_person)
+        self.a_person.user.groups.add(self.tutors_group)
+        self.client.force_login(self.a_person.user)
+
+        ScoreEncodingFactory(global_id=self.a_person.global_id)
+
+        response = self.client.post(self.url, data={}, follow=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, OK)
 
 
 class ScoreSheetTest(TestCase):
