@@ -37,5 +37,5 @@ class AcademicYearFactory(factory.django.DjangoModelFactory):
 
     external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
     year = factory.fuzzy.FuzzyInteger(2000, timezone.now().year)
-    start_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year, 1, 1))
-    end_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year+1, 12, 30))
+    start_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year, 9, 15))
+    end_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year+1, 9, 30))

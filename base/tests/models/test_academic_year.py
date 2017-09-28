@@ -25,6 +25,8 @@
 ##############################################################################
 import datetime
 from base import models as mdl_base
+from base.tests.factories.academic_year import AcademicYearFactory
+from django.test import TestCase
 
 
 now = datetime.datetime.now()
@@ -52,3 +54,24 @@ def create_academic_year_current():
     an_academic_year.end_date = now
     an_academic_year.save()
     return an_academic_year
+
+
+class AcademicYearTest(TestCase):
+    def setUp(self):
+        # Create a list with 4 unordered academic_years : Y+1, Y-1, Y, Y+2 (Y = current year)
+        self.academic_years = [AcademicYearFactory(year=now.year+x) for x in [1, -1, 0, 2]]
+        self.sorted_academic_years = sorted(self.academic_years, key=lambda ay: ay.year)
+        self.current_academic_years = [ay for ay in self.sorted_academic_years
+                                       if ay.start_date <= now.date() < ay.end_date]
+
+    def test_find_academic_years(self):
+        self.assertListEqual(list(mdl_base.academic_year.find_academic_years()), self.sorted_academic_years)
+
+    def test_current_academic_years(self):
+        self.assertListEqual(list(mdl_base.academic_year.current_academic_years()), self.current_academic_years)
+
+    def test_current_academic_year(self):
+        self.assertEqual(mdl_base.academic_year.current_academic_year(), self.current_academic_years[0])
+
+    def test_starting_academic_year(self):
+        self.assertEqual(mdl_base.academic_year.starting_academic_year(), self.current_academic_years[-1])
