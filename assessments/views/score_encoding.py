@@ -204,14 +204,23 @@ def get_score_sheet(global_id):
     document = None
     if scor_encoding:
         document = scor_encoding.document
-    if not document or is_outdated(document):
+    try:
+        if not document or is_outdated(document):
+            return None
+    except ValueError:
         return None
+
     return document
 
 
 def check_db_scores(global_id):
     scores = assessments.models.score_encoding.find_by_global_id(global_id)
-    if scores and scores.document and not is_outdated(scores.document):
+    try:
+        outdated_document = is_outdated(scores.document)
+    except ValueError:
+        return False
+
+    if scores and scores.document and not outdated_document:
         try:
             paper_sheet.validate_data_structure(json.loads(scores.document))
             return True
@@ -226,7 +235,14 @@ def check_db_scores(global_id):
 
 
 def is_outdated(document):
-    json_document = json.loads(document)
+    try:
+        json_document = json.loads(document)
+    except ValueError:
+        trace = traceback.format_exc()
+        logger.error(trace)
+        logger.warning("The JSON document is invalid and cannot be loaded")
+        raise
+
     now = datetime.datetime.now()
     now_str = '%s/%s/%s' % (now.day, now.month, now.year)
     if json_document.get('publication_date', None) != now_str:

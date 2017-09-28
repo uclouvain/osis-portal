@@ -167,7 +167,10 @@ def _fetch_exam_enrollment_form(stud, offer_yr):
     json_data = call_exam_enrollment_client(offer_yr, stud)
     if json_data:
         json_data = json_data.decode("utf-8")
-        return json.loads(json_data)
+        try:
+            return json.loads(json_data)
+        except ValueError:
+            return None
     return None
 
 
