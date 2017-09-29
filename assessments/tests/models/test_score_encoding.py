@@ -29,11 +29,12 @@ import json
 from django.test import TestCase
 
 from assessments.models import score_encoding as mdl_score_encoding
+from assessments.tests.factories.score_encoding import ScoreEncodingFactory, load_score_encoding_sample
 
 
 class ScoreEncodingTest(TestCase):
     def setUp(self):
-        self.score_encoding = create_score_encoding()
+        self.score_encoding = ScoreEncodingFactory()
         self.global_id = self.score_encoding.global_id
 
     def test_find_by_global_id(self):
@@ -44,7 +45,7 @@ class ScoreEncodingTest(TestCase):
         self.assertIsNone(score_encoding, "Should return no score encoding")
 
     def test_insert_or_update_document(self):
-        new_document = get_sample()
+        new_document = load_score_encoding_sample()
         score_encoding = mdl_score_encoding.insert_or_update_document("1202151", new_document)
         self.assertJSONEqual(score_encoding.document, new_document, "Problem when inserting new document")
 
