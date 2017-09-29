@@ -31,7 +31,7 @@ import datetime
 
 
 def load_score_encoding_sample():
-    sample = "assessments/tests/ressources/score_encoding_sample.json"
+    sample = "assessments/tests/resources/score_encoding_sample.json"
     with open(sample) as file_sample:
         # Reassign publication date as today to pass method assessments.views.score_encoding.is_outdated
         json_obj = json.load(file_sample)

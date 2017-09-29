@@ -59,7 +59,7 @@ def navigation(request, navigate_direct_to_form):
         stud = student.find_by_user(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
-    current_academic_year = academic_year.current_academic_year()
+    current_academic_year = academic_year.starting_academic_year()
     student_programs = _get_student_programs(stud, current_academic_year)
     if student_programs:
         if navigate_direct_to_form and len(student_programs) == 1:
@@ -167,7 +167,10 @@ def _fetch_exam_enrollment_form(stud, offer_yr):
     json_data = call_exam_enrollment_client(offer_yr, stud)
     if json_data:
         json_data = json_data.decode("utf-8")
-        return json.loads(json_data)
+        try:
+            return json.loads(json_data)
+        except ValueError:
+            return None
     return None
 
 

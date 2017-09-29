@@ -48,21 +48,29 @@ class AcademicYear(SerializableModel):
         return u"%s-%s" % (self.year, str(self.year + 1)[-2:])
 
 
-def find_academic_years():
-    return AcademicYear.objects.all().order_by('year')
+def find_academic_years(start_date=None, end_date=None):
+    queryset = AcademicYear.objects.all()
+    if start_date is not None:
+        queryset = queryset.filter(start_date__lte=start_date)
+    if end_date is not None:
+        queryset = queryset.filter(end_date__gte=end_date)
+
+    return queryset.order_by('year')
 
 
-def find_last_academic_years():
-    return AcademicYear.objects.all().order_by('-year')[:2]
+def current_academic_years():
+    now = timezone.now()
+    return find_academic_years(start_date=now, end_date=now)
 
 
 def current_academic_year():
-    academic_yr = AcademicYear.objects.filter(start_date__lte=timezone.now()) \
-                                      .filter(end_date__gte=timezone.now()).first()
-    if academic_yr:
-        return academic_yr
-    else:
-        return None
+    """ If we have two academic year [2015-2016] [2016-2017]. It will return [2015-2016] """
+    return current_academic_years().first()
+
+
+def starting_academic_year():
+    """ If we have two academic year [2015-2016] [2016-2017]. It will return [2016-2017] """
+    return current_academic_years().last()
 
 
 def find_by_year(a_year):

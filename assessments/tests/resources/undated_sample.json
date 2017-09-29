@@ -1,0 +1,70 @@
+{
+  "link_to_regulation": "https://www.uclouvain.be/enseignement-reglements.html",
+  "tutor_global_id": "",
+  "institution": "Universit\u00e9 catholique de Louvain",
+  "justification_legend": "Légende pour le champ 'Justification': A=Absent, T=Tricherie, ?=Note manquante. Légende pour le champ 'Note chiffrée': 0 - 20 (0=Cote de présence)",
+  "learning_unit_years": [
+    {
+      "title": "Elektrische actuatoren: gevorderde aspecten en toepassingen m.i.v. transport (Katholieke Universiteit te Leuven)",
+      "programs": [
+        {
+          "deliberation_date": "Not passed",
+          "enrollments": [
+            {
+              "registration_id": "3",
+              "first_name": "Martin",
+              "last_name": "Student3",
+              "score": "16",
+              "justification": "",
+              "deadline": ""
+            }
+          ],
+          "acronym": "DROI1BA",
+          "address": {
+            "fax": null,
+            "recipient": null,
+            "city": null,
+            "postal_code": null,
+            "phone": null,
+            "location": null
+          }
+        },
+        {
+          "deliberation_date": "Not passed",
+          "enrollments": [
+            {
+              "registration_id": "5",
+              "first_name": "Armand",
+              "last_name": "Student5",
+              "score": "15",
+              "justification": "",
+              "deadline": ""
+            }
+          ],
+          "acronym": "SINF2MA",
+          "address": {
+            "fax": null,
+            "recipient": null,
+            "city": null,
+            "postal_code": null,
+            "phone": null,
+            "location": null
+          }
+        }
+      ],
+      "session_number": 1,
+      "decimal_scores": false,
+      "scores_responsible": {
+        "address": {
+          "postal_code": "",
+          "city": "",
+          "location": ""
+        },
+        "first_name": "",
+        "last_name": ""
+      },
+      "acronym": "LDUAL4355",
+      "academic_year": "2016-2017"
+    }
+  ]
+}

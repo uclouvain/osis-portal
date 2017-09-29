@@ -33,6 +33,7 @@ from django.test import TestCase, Client, modify_settings, override_settings
 from django.utils.translation import ugettext_lazy as _
 
 from assessments.tests.factories.score_encoding import ScoreEncodingFactory
+from assessments.tests.models import test_score_encoding
 from assessments.views import score_encoding
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
@@ -245,6 +246,12 @@ class ScoreSheetTest(TestCase):
     def setUp(self):
         self.score_encoding = ScoreEncodingFactory(global_id=GLOBAL_ID)
 
+    def test_get_score_sheet_invalid_json(self):
+        global_id = "007896"
+        test_score_encoding.create_invalid_score_encoding(global_id=global_id)
+        document = score_encoding.get_score_sheet(global_id)
+        self.assertIsNone(document)
+
     def test_check_db_scores(self):
         scores_check = score_encoding.check_db_scores(GLOBAL_ID)
         self.assertTrue(scores_check)
@@ -282,5 +289,8 @@ class PrintScoreSheetTest(TestCase):
         pdf = score_encoding.print_scores(GLOBAL_ID)
         self.assertTrue(pdf, "Should generate a pdf")
 
-
-
+    def test_when_invalid_json(self):
+        global_id = "007896"
+        test_score_encoding.create_invalid_score_encoding(global_id=global_id)
+        pdf = score_encoding.print_scores(global_id)
+        self.assertIsNone(pdf, "Should not create any pdf")

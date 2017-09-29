@@ -186,7 +186,10 @@ def fetch_json_data(registration_id, academic_year, acronym):
         client = PerformanceClient()
         json_data = client.call(message)
     if json_data:
-        json_student_perf = json.loads(json_data.decode("utf-8"))
+        try:
+            json_student_perf = json.loads(json_data.decode("utf-8"))
+        except ValueError:
+            return None
     return json_student_perf
 
 
