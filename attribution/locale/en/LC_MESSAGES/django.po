@@ -17,6 +17,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "allocation_charge_maintenance"
+msgstr "Allocation charge in maintenance."
+
 msgid "tutor_charge"
 msgstr "Teaching charge"
 
@@ -329,3 +332,5 @@ msgstr "Legend to help you understanding the xls file"
 msgid "no_learning_units"
 msgstr "You aren't teaching for any learning unit"
 
+msgid "error_retrieving_attributions_charge"
+msgstr "The volume of charge is not available at the moment. Please try again later."

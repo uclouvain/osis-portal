@@ -27,6 +27,15 @@
 <h1>{% trans 'tutor_charge' %}</h1>
 <h2>{{ user.first_name }} {{ user.last_name }}</h2>
 
+
+{% if error %}
+<div id="warning_no_address_found" class="alert alert-dismissible alert-warning">
+     <button type="button" class="close" data-dismiss="alert">&times;</button>
+     <p><span class="fa fa-info-circle" aria-hidden="true"></span> {% trans 'error_retrieving_attributions_charge' %}</p>
+ </div>
+ {% endif %}
+
+
 <ul class="nav nav-tabs">
     {%  for form in formset%}
         {% if perms.base.is_faculty_administrator %}
@@ -47,6 +56,7 @@
         <tr>
             <th>{% trans 'code'%}</th>
             <th>{% trans 'title'%}</th>
+            <th>{% trans 'start' %}</th>
             <th>{% trans 'lecturing_hours'%}</th>
             <th>{% trans 'practical_hours'%}</th>
             <th>%</th>
@@ -60,8 +70,9 @@
             <tr>
                 <td>{% if  attribution.learning_unit_year_url%}<a href="{{ attribution.learning_unit_year_url }}" target="_blank">{{ attribution.acronym }}</a>{% else %}{{ attribution.acronym }}{% endif %}</td>
                 <td>{{ attribution.title }}</td>
-                <td>{{ attribution.lecturing_allocation_charge | default_if_none:''}}</td>
-                <td>{{ attribution.practice_allocation_charge | default_if_none:''}}</td>
+                <td>{{ attribution.start_year | default_if_none:'' }}</td>
+                <td>{%if not error%}{{ attribution.lecturing_allocation_charge | default_if_none:''}}{%endif%}</td>
+                <td>{%if not error%}{{ attribution.practice_allocation_charge | default_if_none:''}}{%endif%}</td>
                 <td>{{ attribution.percentage_allocation_charge | default_if_none:''}}</td>
                 <td>{{ attribution.weight | default_if_none:''}}</td>
                 <td>
@@ -79,10 +90,11 @@
         <tr>
             <td></td>
             <td ><label>{% trans 'total' %}</label></td>
-            <td>{{ tot_lecturing }}</td>
-            <td>{{ tot_practical }}</td>
+            <td></td>
+            <td>{%if not error%}{{ tot_lecturing }}{%endif%}</td>
+            <td>{%if not error%}{{ tot_practical }}{%endif%}</td>
             <td colspan="6"></td>
-        </tr>
+         </tr>
     </table>
 {% else %}
     <br>
