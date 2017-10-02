@@ -247,9 +247,7 @@ LOGOUT_URL = os.environ.get('LOGOUT_URL', reverse_lazy('logout'))
 OVERRIDED_LOGIN_URL = os.environ.get('OVERRIDED_LOGIN_URL', None)
 OVERRIDED_LOGOUT_URL = os.environ.get('OVERRIDED_LOGOUT_URL', None)
 LOGOUT_BUTTON = os.environ.get('LOGOUT_BUTTON', 'True').lower() == 'true'
-USER_SIGNALS_MANAGER = os.environ.get('USER_SIGNALS_MANAGER', None)
-USER_UPDATED_SIGNAL = os.environ.get('USER_UPDATED_SIGNAL', None)
-USER_CREATED_SIGNAL = os.environ.get('USER_CREATED_SIGNAL', None)
+PERSON_EXTERNAL_ID_PATTERN = os.environ.get('PERSON_EXTERNAL_ID_PATTERN', 'osis.person_{global_id}')
 
 
 # This has to be set in your .env with the actual url where you institution logo can be found.
