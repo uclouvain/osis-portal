@@ -122,7 +122,9 @@ def _create_update_person(user, person, user_infos):
                                    global_id=user_infos.get('USER_FGS'),
                                    first_name=user_infos.get('USER_FIRST_NAME'),
                                    last_name=user_infos.get('USER_LAST_NAME'),
-                                   email=user_infos.get('USER_EMAIL'))
+                                   email=user_infos.get('USER_EMAIL'),
+                                   external_id=settings.PERSON_EXTERNAL_ID_PATTERN.format(
+                                       global_id=user_infos.get('USER_FGS')))
         person.save()
         person_created.send(sender=None, person=person)
     else:

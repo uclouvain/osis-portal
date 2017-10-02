@@ -43,6 +43,7 @@ from base.forms.base_forms import GlobalIdForm
 from base.views import layout
 from django.contrib.auth.decorators import login_required, permission_required
 
+YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST = 2017
 
 ONE_DECIMAL_FORMAT = "%0.1f"
 
@@ -112,9 +113,12 @@ def is_string_not_null_empty(string):
     return False
 
 
-def get_email_students(an_acronym):
+def get_email_students(an_acronym, year):
     if is_string_not_null_empty(an_acronym):
-        return "{0}{1}{2}".format(MAIL_TO, an_acronym.lower(), STUDENT_LIST_EMAIL_END)
+        if year >= YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST:
+            return "{0}{1}-{2}{3}".format(MAIL_TO, an_acronym.lower(), year, STUDENT_LIST_EMAIL_END)
+        else:
+            return "{0}{1}{2}".format(MAIL_TO, an_acronym.lower(), STUDENT_LIST_EMAIL_END)
     return None
 
 
@@ -165,7 +169,7 @@ def list_teaching_charge(a_person, an_academic_year):
                                                                            learning_unit_charge),
              'weight': a_learning_unit_year.credits,
              'url_schedule': get_schedule_url(a_learning_unit_year.acronym),
-             'url_students_list_email': get_email_students(a_learning_unit_year.acronym),
+             'url_students_list_email': get_email_students(a_learning_unit_year.acronym, a_learning_unit_year.academic_year.year),
              'function': an_attribution.function,
              'year': a_learning_unit_year.academic_year.year,
              'learning_unit_year_url': get_url_learning_unit_year(a_learning_unit_year),
