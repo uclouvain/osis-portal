@@ -28,11 +28,15 @@ from unittest.mock import patch
 
 from django.conf import settings
 from django.contrib.auth.models import Group, Permission
+from django.db.utils import OperationalError
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.test import TestCase, Client, modify_settings, override_settings
 from django.utils.translation import ugettext_lazy as _
 
-from assessments.tests.factories.score_encoding import ScoreEncodingFactory
+from assessments.models.score_encoding import ScoreEncoding
+
+from assessments.tests.factories.score_encoding import ScoreEncodingFactory, load_score_encoding_sample
 from assessments.tests.models import test_score_encoding
 from assessments.views import score_encoding
 from base.tests.factories.person import PersonFactory
@@ -75,6 +79,12 @@ class CheckPaperSheetTest(TestCase):
 
     def test_when_request_is_not_ajax(self):
         response = self.client.get(self.url, data={}, follow=True)
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+
+    def test_when_no_corresponding_person(self):
+        self.url = reverse('check_papersheet', args=["01010101"])
+
+        response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, ACCESS_DENIED)
 
     @modify_settings(INSTALLED_APPS={'remove': 'assessments'})
@@ -120,6 +130,12 @@ class AskPaperSheetTest(TestCase):
 
     def test_when_request_is_not_ajax(self):
         response = self.client.get(self.url, data={}, follow=True)
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+
+    def test_when_no_corresponding_person(self):
+        self.url = reverse('ask_papersheet', args=["01010101"])
+
+        response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, ACCESS_DENIED)
 
     @modify_settings(INSTALLED_APPS={'remove': 'assessments'})
@@ -289,8 +305,99 @@ class PrintScoreSheetTest(TestCase):
         pdf = score_encoding.print_scores(GLOBAL_ID)
         self.assertTrue(pdf, "Should generate a pdf")
 
-    def test_when_invalid_json(self):
-        global_id = "007896"
-        test_score_encoding.create_invalid_score_encoding(global_id=global_id)
+    def test_when_invalid_structure_json(self):
+        global_id = "045123"
+        incorrect_format_json = load_score_encoding_sample("assessments/tests/resources/incorrect_format_sample.json")
+        ScoreEncodingFactory(global_id=global_id, document=incorrect_format_json)
         pdf = score_encoding.print_scores(global_id)
         self.assertIsNone(pdf, "Should not create any pdf")
+
+
+class InsertOrUpdateDocumentFromQueueTest(TestCase):
+    def setUp(self):
+        json_sample = load_score_encoding_sample(global_id=GLOBAL_ID)
+        self.message_body = bytes(json_sample, 'utf-8')
+
+    @patch("assessments.models.score_encoding.insert_or_update_document", side_effect=Exception)
+    def test_when_Exception(self, mock_insert_or_update_document):
+        score_encoding.insert_or_update_document_from_queue(self.message_body)
+        self.assertTrue(mock_insert_or_update_document.called)
+        self.assertRaises(ObjectDoesNotExist, ScoreEncoding.objects.get, global_id=GLOBAL_ID)
+
+    @patch("assessments.models.score_encoding.insert_or_update_document", side_effect=[OperationalError, True])
+    def test_when_error_occured_with_db(self, mock_insert_or_update_document):
+        score_encoding.insert_or_update_document_from_queue(self.message_body)
+        self.assertEqual(mock_insert_or_update_document.call_count, 2)
+
+    def test_insert(self):
+        score_encoding.insert_or_update_document_from_queue(self.message_body)
+        self.assertTrue(ScoreEncoding.objects.get(global_id=GLOBAL_ID))
+
+
+class ScoresSheetAdminTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.url = reverse('scores_sheets_admin')
+        self.a_person = PersonFactory(global_id=GLOBAL_ID)
+        self.client.force_login(self.a_person.user)
+
+    def test_when_not_logged(self):
+        client = Client()
+        response = client.get(self.url)
+        self.assertRedirects(response, '/login/?next=/assessments/administration/scores_sheets/')
+
+    def test_when_not_faculty_administrator(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+
+    def test_when_get_request(self):
+        self.__add_faculty_administrator_permission()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, "admin/scores_sheets.html")
+
+    def test_when_invalid_global_id(self):
+        self.__add_faculty_administrator_permission()
+        response = self.client.post(self.url, {'global_id': GLOBAL_ID}, follow=True)
+        self.assertEqual(response.status_code, OK)
+
+    def test_when_valid_post_request(self):
+        self.__add_faculty_administrator_permission()
+        Group.objects.create(name='tutors')
+        TutorFactory(person=self.a_person)
+        response = self.client.post(self.url, {'global_id': GLOBAL_ID})
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, 'scores_sheets.html')
+
+    def __add_faculty_administrator_permission(self):
+        permission = Permission.objects.get(codename="is_faculty_administrator")
+        self.a_person.user.user_permissions.add(permission)
+
+
+class ScoresSheetTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.url = reverse('my_scores_sheets')
+        self.a_person = PersonFactory(global_id=GLOBAL_ID)
+
+        self.client.force_login(self.a_person.user)
+
+    def test_when_not_logged(self):
+        client = Client()
+        response = client.get(self.url)
+        self.assertRedirects(response, '/login/?next=/assessments/scores_encoding/my_scores_sheets/')
+
+    def test_when_not_a_tutor(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+
+    def test_when_tutor(self):
+        tutors_group = Group.objects.create(name='tutors')
+        permission = Permission.objects.get(codename="is_tutor")
+        tutors_group.permissions.add(permission)
+        self.a_person.user.groups.add(tutors_group)
+        TutorFactory(person=self.a_person)
+
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, 'scores_sheets.html')
