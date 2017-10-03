@@ -39,7 +39,7 @@
     <div class="panel panel-default">
         <div class="panel-body">
             {% if not exam_enrollments %}
-                <p>{% trans 'no_results' %}</p>
+                <p>{% trans 'building' %}</p>
             {% else %}
                 <!-- Student information's-->
                 <div class="row">
@@ -211,4 +211,39 @@
         </div>
     </div>
 
+{% endblock %}
+{% block script %}
+    <script type="text/javascript">
+        var counter = 0;
+        var max_loops = 60;
+        var delay = 1000;
+
+        window.onload = function() {
+            check_result();
+        };
+
+        function check_result(){
+            $.ajax({
+                method: 'GET',
+                url: "{% url 'check_exam_enrollment_form' %}",
+                success: function () {
+                    var check_data = '{{exam_enrollments}}'
+                    if(!check_data){
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    counter++;
+                    if (counter < max_loops) {
+                        setTimeout(function() {
+                          check_result();
+                        }, delay);
+                    }
+                    else {
+                        set_class(message_box, "alert alert-warning");
+                    }
+                }
+            });
+        }
+    </script>
 {% endblock %}

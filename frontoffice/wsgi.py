@@ -99,3 +99,12 @@ if hasattr(settings, 'QUEUES') and settings.QUEUES:
                 insert_or_update_document_from_queue).start()
         except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
             LOGGER.exception("Couldn't connect to the QueueServer")
+
+    if 'exam_enrollment' in settings.INSTALLED_APPS:
+        from assessments.views.score_encoding import insert_or_update_document_from_queue
+        try:
+            common_queue_listener.SynchronousConsumerThread(
+                settings.QUEUES.get('QUEUES_NAME').get('EXAM_ENROLLMENT_FORM_RESPONSE'),
+                insert_or_update_document_from_queue).start()
+        except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
+            LOGGER.exception("Couldn't connect to the QueueServer")
