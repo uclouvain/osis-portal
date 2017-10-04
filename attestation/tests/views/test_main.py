@@ -34,6 +34,7 @@ from django.test import TestCase, Client
 
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
+from base.forms.base_forms import RegistrationIdForm
 from attestation.views import main as v_main
 
 
@@ -42,6 +43,9 @@ BAD_REQUEST = 400
 ACCESS_DENIED = 401
 FILE_NOT_FOUND = 404
 METHOD_NOT_ALLOWED = 405
+
+STUDENT_REGISTRATION_ID = "45451000"
+STUDENT_GLOBAL_ID = "78961314"
 
 
 def open_sample_pdf():
@@ -199,6 +203,172 @@ class DownloadAttestationTest(TestCase):
     def test_when_attestation_pdf_fetched(self, mock_fetch_student_attestation):
         StudentFactory(person=self.person)
 
+        self.client.force_login(self.person.user)
+        response = self.client.get(self.url, follow=True)
+
+        self.assertTrue(mock_fetch_student_attestation.called)
+        self.assertEqual(response['Content-Type'], 'application/pdf')
+        self.assertEqual(response['Content-Disposition'], 'attachment; filename="{}.pdf"'.format(self.attestation_type))
+        self.assertEqual(response.content.decode(), str(open_sample_pdf()))
+
+
+class AttestationAdministrationTest(TestCase):
+    def setUp(self):
+        self.url = reverse('attestation_administration')
+        self.client = Client()
+        self.person = PersonFactory()
+
+        self.permission = Permission.objects.get(codename="is_faculty_administrator")
+        self.person.user.user_permissions.add(self.permission)
+
+    def test_without_being_logged(self):
+        response = self.client.get(self.url)
+        self.assertRedirects(response, '/login/?next={}'.format(self.url))
+
+    def test_when_user_is_not_a_faculty_administrator(self):
+        a_person = PersonFactory()
+        self.client.force_login(a_person.user)
+        response = self.client.get(self.url, follow=True)
+
+        self.assertTemplateUsed(response, "access_denied.html")
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+
+    def test_when_faculty_administrator(self):
+        self.client.force_login(self.person.user)
+
+        response = self.client.get(self.url, follow=True)
+
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, "admin/attestation_administration.html")
+
+
+class SelectStudentAttestationTest(TestCase):
+    def setUp(self):
+        self.url = reverse('attestation_admin_select_student')
+        self.client = Client()
+        self.person = PersonFactory()
+
+        self.permission = Permission.objects.get(codename="is_faculty_administrator")
+        self.person.user.user_permissions.add(self.permission)
+
+        Group.objects.create(name='students')
+
+    def test_without_being_logged(self):
+        response = self.client.get(self.url)
+        self.assertRedirects(response, '/login/?next={}'.format(self.url))
+
+    def test_when_user_is_not_a_faculty_administrator(self):
+        a_person = PersonFactory()
+        self.client.force_login(a_person.user)
+        response = self.client.get(self.url, follow=True)
+
+        self.assertTemplateUsed(response, "access_denied.html")
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+
+    def test_get_request(self):
+        self.client.force_login(self.person.user)
+
+        response = self.client.get(self.url, follow=True)
+
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, "admin/attestation_administration.html")
+
+        self.assertIsInstance(response.context['form'], RegistrationIdForm)
+
+    def test_invalid_post_request(self):
+        self.client.force_login(self.person.user)
+
+        response = self.client.post(self.url, data={'registration_id': STUDENT_REGISTRATION_ID}, follow=True)
+
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, "admin/attestation_administration.html")
+
+        self.assertFormError(response, 'form', 'registration_id', _('no_student_with_this_registration_id'))
+
+    @patch('attestation.queues.student_attestation_status.fetch_json_attestation_statuses', side_effect=lambda x: None)
+    def test_valid_post_request_but_no_attestation(self, mock_fetch_json_attestation_statuses):
+        a_student = StudentFactory(registration_id=STUDENT_REGISTRATION_ID)
+        self.client.force_login(self.person.user)
+
+        response = self.client.post(self.url, data={'registration_id': STUDENT_REGISTRATION_ID}, follow=True)
+
+        self.assertTrue(mock_fetch_json_attestation_statuses.called)
+
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, "attestation_home_admin.html")
+
+        self.assertEqual(response.context['student'], a_student)
+
+        self.assertFalse(response.context['attestation_statuses'])
+        self.assertFalse(response.context['academic_year'])
+        self.assertFalse(response.context['formated_academic_year'])
+        self.assertFalse(response.context['available'])
+
+    @patch('attestation.queues.student_attestation_status.fetch_json_attestation_statuses',
+           side_effect=lambda x: {'academicYear': 2015, 'available': False, 'attestationStatuses': []})
+    def test_valid_post_request(self, mock_fetch_json_attestation_statuses):
+        a_student = StudentFactory(registration_id=STUDENT_REGISTRATION_ID)
+        self.client.force_login(self.person.user)
+
+        response = self.client.post(self.url, data={'registration_id': STUDENT_REGISTRATION_ID}, follow=True)
+
+        self.assertTrue(mock_fetch_json_attestation_statuses.called)
+
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, "attestation_home_admin.html")
+
+        self.assertEqual(response.context['student'], a_student)
+        self.assertEqual(response.context['academic_year'], 2015)
+        self.assertEqual(response.context['formated_academic_year'], "2015 - 2016")
+
+        self.assertFalse(response.context['attestation_statuses'])
+        self.assertFalse(response.context['available'])
+
+
+class DownloadStudentAttestation(TestCase):
+    def setUp(self):
+        year = datetime.date.today().year
+        self.attestation_type = "test"
+        self.url = reverse('attestation_admin_download', args=[STUDENT_GLOBAL_ID, year, self.attestation_type])
+        self.client = Client()
+        self.person = PersonFactory()
+
+        self.permission = Permission.objects.get(codename="is_faculty_administrator")
+        self.person.user.user_permissions.add(self.permission)
+
+        Group.objects.create(name='students')
+
+    def test_without_being_logged(self):
+        response = self.client.get(self.url)
+        self.assertRedirects(response, '/login/?next={}'.format(self.url))
+
+    def test_when_user_is_not_a_faculty_administrator(self):
+        a_person = PersonFactory()
+        self.client.force_login(a_person.user)
+        response = self.client.get(self.url, follow=True)
+
+        self.assertTemplateUsed(response, "access_denied.html")
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+
+    @patch('attestation.queues.student_attestation.fetch_student_attestation',
+           side_effect=lambda global_id, year, attestation_type: None)
+    def test_when_no_attestation_pdf(self, mock_fetch_student_attestation):
+        StudentFactory(person=PersonFactory(global_id=STUDENT_GLOBAL_ID))
+        self.client.force_login(self.person.user)
+        response = self.client.get(self.url, follow=True)
+
+        self.assertTrue(mock_fetch_student_attestation.called)
+        self.assertTemplateUsed(response, "attestation_home_admin.html")
+
+        messages = list(response.context['messages'])
+
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(messages[0].tags, 'error')
+        self.assertEqual(messages[0].message, _('error_fetching_attestation'))
+
+    @patch('attestation.queues.student_attestation.fetch_student_attestation',
+           side_effect=lambda global_id, year, attestation_type: open_sample_pdf())
+    def test_when_attestation_pdf_fetched(self, mock_fetch_student_attestation):
         self.client.force_login(self.person.user)
         response = self.client.get(self.url, follow=True)
 
