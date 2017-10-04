@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import json
+import datetime
 from mock import patch
 
 from django.utils.translation import ugettext_lazy as _
@@ -41,6 +42,12 @@ BAD_REQUEST = 400
 ACCESS_DENIED = 401
 FILE_NOT_FOUND = 404
 METHOD_NOT_ALLOWED = 405
+
+
+def open_sample_pdf():
+    pdf_path = 'attestation/tests/resources/sample.pdf'
+    with open(pdf_path) as pdf_file:
+        return pdf_file
 
 
 class HomeTest(TestCase):
@@ -130,6 +137,75 @@ class HomeTest(TestCase):
         self.assertFalse(response.context['academic_year'])
         self.assertFalse(response.context['formated_academic_year'])
         self.assertFalse(response.context['available'])
+
+
+class DownloadAttestationTest(TestCase):
+    def setUp(self):
+        year = datetime.date.today().year
+        self.attestation_type = "test"
+        self.url = reverse('download_attestation', args=[str(year), self.attestation_type])
+        self.client = Client()
+        self.person = PersonFactory()
+
+        students_group = Group.objects.create(name='students')
+        self.permission = Permission.objects.get(codename="is_student")
+        students_group.permissions.add(self.permission)
+
+    def test_without_being_logged(self):
+        response = self.client.get(self.url)
+        self.assertRedirects(response, '/login/?next={}'.format(self.url))
+
+    def test_with_user_not_a_student(self):
+        self.client.force_login(self.person.user)
+        response = self.client.get(self.url, follow=True)
+
+        self.assertTemplateUsed(response, "access_denied.html")
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+
+    def test_with_multiple_students_assigned_same_person(self):
+        StudentFactory(person=self.person)
+        StudentFactory(person=self.person)
+
+        self.client.force_login(self.person.user)
+        response = self.client.get(self.url, follow=True)
+
+        self.assertTemplateUsed(response, "dashboard.html")
+
+        messages = list(response.context['messages'])
+
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(messages[0].tags, 'error')
+        self.assertEqual(messages[0].message, _('error_multiple_registration_id'))
+
+    @patch('attestation.queues.student_attestation.fetch_student_attestation',
+           side_effect=lambda global_id, year, attestation_type: None)
+    def test_when_no_attestation_pdf(self, mock_fetch_student_attestation):
+        StudentFactory(person=self.person)
+
+        self.client.force_login(self.person.user)
+        response = self.client.get(self.url, follow=True)
+
+        self.assertTrue(mock_fetch_student_attestation.called)
+        self.assertTemplateUsed(response, "attestation_home_student.html")
+
+        messages = list(response.context['messages'])
+
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(messages[0].tags, 'error')
+        self.assertEqual(messages[0].message, _('error_fetching_attestation'))
+
+    @patch('attestation.queues.student_attestation.fetch_student_attestation',
+           side_effect=lambda global_id, year, attestation_type: open_sample_pdf())
+    def test_when_attestation_pdf_fetched(self, mock_fetch_student_attestation):
+        StudentFactory(person=self.person)
+
+        self.client.force_login(self.person.user)
+        response = self.client.get(self.url, follow=True)
+
+        self.assertTrue(mock_fetch_student_attestation.called)
+        self.assertEqual(response['Content-Type'], 'application/pdf')
+        self.assertEqual(response['Content-Disposition'], 'attachment; filename="{}.pdf"'.format(self.attestation_type))
+        self.assertEqual(response.content.decode(), str(open_sample_pdf()))
 
 
 class TestRegistrationIdMessage(TestCase):
