@@ -23,38 +23,30 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
-import json
 import json
 import logging
-import pika
-import pika.exceptions
 import time
 import traceback
 import warnings
-from base.views import layout
+
+import pika
+import pika.exceptions
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
-from django.core.exceptions import PermissionDenied, MultipleObjectsReturned
+from django.core.exceptions import MultipleObjectsReturned
 from django.core.urlresolvers import reverse
 from django.db import connection
 from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
-from django.http import HttpResponse, Http404, response
+from django.http import HttpResponse, response
 from django.utils.translation import ugettext_lazy as _
-from django.views.decorators.http import require_GET
 from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
-from voluptuous import error as voluptuous_error
 
-import assessments.models
 from base import models as mdl_base
-from base.forms.base_forms import GlobalIdForm
-from base.models import student, offer_enrollment, academic_year, offer_year, learning_unit_enrollment
+from base.models import student, offer_enrollment, offer_year
+from base.views import layout
 from dashboard.views import main as dash_main_view
 from exam_enrollment.models import exam_enrollment_request, exam_enrollment_submitted
-from frontoffice.queue import queue_listener
-from osis_common.decorators.ajax import ajax_required
-from osis_common.document import paper_sheet
 from osis_common.queue import queue_sender
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
@@ -193,53 +185,31 @@ def _exam_enrollment_form_message(registration_id, offer_year_acronym, year):
 
 
 def check_exam_enrollment_form(request):
-    student = mdl_base.student.find_by_user(request.user)
+    a_student = mdl_base.student.find_by_user(request.user)
     if 'exam_enrollment' in settings.INSTALLED_APPS:
-        if _check_offer_enrollments_in_db(student):
+        if _check_offer_enrollments_in_db(a_student):
             return HttpResponse(status=200)
         else:
             return HttpResponse(status=404)
     return HttpResponse(status=405)
 
 
-def _check_offer_enrollments_in_db(student):
-    offer_enrollment = mdl_base.offer_enrollment.find_by_student(student)
-    if offer_enrollment:
-        offer_enrollment_in_db_and_uptodate = check_db_offer_enrollments(student)
+def _check_offer_enrollments_in_db(a_student):
+    an_offer_enrollment = mdl_base.offer_enrollment.find_by_student(a_student)
+    if an_offer_enrollment:
+        offer_enrollment_in_db_and_uptodate = check_db_offer_enrollments(a_student)
     else:
         offer_enrollment_in_db_and_uptodate = False
         logger.warning("This person doesn't exist")
     return offer_enrollment_in_db_and_uptodate
 
 
-def check_db_offer_enrollments(student):
-    exam_enrollment = exam_enrollment_request.find_by_student(student)
+def check_db_offer_enrollments(a_student):
+    exam_enrollment = exam_enrollment_request.find_by_student(a_student)
     if not exam_enrollment or not exam_enrollment.document:
         return False
     else:
         return True
-
-
-def get_data_schema():
-    return Schema({
-        Required("exam_enrollments"): str,
-    }, extra=True)
-
-
-def validate_data_structure(data):
-    s = get_data_schema()
-    return s(data)
-
-
-def _fetch_exam_enrollment_form(stud, offer_yr):
-    json_data = call_exam_enrollment_client(offer_yr, stud)
-    if json_data:
-        json_data = json_data.decode("utf-8")
-        try:
-            return json.loads(json_data)
-        except ValueError:
-            return None
-    return None
 
 
 def _process_exam_enrollment_form_submission(off_year, request, stud):

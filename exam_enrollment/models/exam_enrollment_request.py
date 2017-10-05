@@ -23,14 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
-from django.contrib import admin, messages
+from django.contrib import admin
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from pika.exceptions import ChannelClosed, ConnectionClosed
-
-from osis_common.queue import queue_sender
 
 
 class ExamEnrollmentRequestdAdmin(admin.ModelAdmin):
