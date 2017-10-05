@@ -25,46 +25,37 @@
 ##############################################################################
 import datetime
 import json
+import json
 import logging
 import pika
 import pika.exceptions
+import time
 import traceback
-from voluptuous import error as voluptuous_error
-from django.conf import settings
-from django.contrib.auth.decorators import login_required, permission_required
-from django.http import HttpResponse, Http404
-from django.utils.translation import ugettext_lazy as _
-from django.views.decorators.http import require_GET
-from django.core.exceptions import PermissionDenied, MultipleObjectsReturned
-from base import models as mdl_base
-from base.forms.base_forms import GlobalIdForm
+import warnings
 from base.views import layout
-from osis_common.document import paper_sheet
-from osis_common.decorators.ajax import ajax_required
-import assessments.models
-from exam_enrollment.models import exam_enrollment_request
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, permission_required
+from django.core.exceptions import PermissionDenied, MultipleObjectsReturned
+from django.core.urlresolvers import reverse
 from django.db import connection
 from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
-from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
-import time
-from django.contrib import messages
-from django.http import response
-import json
-from django.core.exceptions import MultipleObjectsReturned
-import warnings
-from django.contrib.auth.decorators import login_required, permission_required
-from django.core.urlresolvers import reverse
-from django.contrib import messages
+from django.http import HttpResponse, Http404, response
 from django.utils.translation import ugettext_lazy as _
-from django.http import response
-from django.conf import settings
-from base.views import layout
-from base.models import student, offer_enrollment, academic_year, offer_year, learning_unit_enrollment
-from exam_enrollment.models import exam_enrollment_submitted
-from frontoffice.queue import queue_listener
-from osis_common.queue import queue_sender
-from dashboard.views import main as dash_main_view
+from django.views.decorators.http import require_GET
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
+from voluptuous import error as voluptuous_error
 
+import assessments.models
+from base import models as mdl_base
+from base.forms.base_forms import GlobalIdForm
+from base.models import student, offer_enrollment, academic_year, offer_year, learning_unit_enrollment
+from dashboard.views import main as dash_main_view
+from exam_enrollment.models import exam_enrollment_request, exam_enrollment_submitted
+from frontoffice.queue import queue_listener
+from osis_common.decorators.ajax import ajax_required
+from osis_common.document import paper_sheet
+from osis_common.queue import queue_sender
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
@@ -134,7 +125,8 @@ def _get_exam_enrollment_form(off_year, request, stud):
                                                                     'current_number_session': data.get(
                                                                         'current_number_session'),
                                                                     'academic_year': mdl_base.academic_year.current_academic_year(),
-                                                                    'program': mdl_base.offer_year.find_by_id(off_year.id),
+                                                                    'program': mdl_base.offer_year.find_by_id(
+                                                                        off_year.id),
                                                                     'request_timeout': settings.QUEUES.get(
                                                                         "QUEUES_TIMEOUT").get(
                                                                         "EXAM_ENROLLMENT_FORM_RESPONSE")})
@@ -144,7 +136,8 @@ def _get_exam_enrollment_form(off_year, request, stud):
                                                                     'student': stud,
                                                                     'current_number_session': "",
                                                                     'academic_year': mdl_base.academic_year.current_academic_year(),
-                                                                    'program': mdl_base.offer_year.find_by_id(off_year.id),
+                                                                    'program': mdl_base.offer_year.find_by_id(
+                                                                        off_year.id),
                                                                     'request_timeout': settings.QUEUES.get(
                                                                         "QUEUES_TIMEOUT").get(
                                                                         "EXAM_ENROLLMENT_FORM_RESPONSE")})

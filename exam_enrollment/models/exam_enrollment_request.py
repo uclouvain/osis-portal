@@ -23,20 +23,21 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
-from django.contrib.postgres.fields import JSONField
-from pika.exceptions import ChannelClosed, ConnectionClosed
-from osis_common.queue import queue_sender
 from django.conf import settings
 from django.contrib import admin, messages
+from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
+from pika.exceptions import ChannelClosed, ConnectionClosed
+
+from osis_common.queue import queue_sender
 
 
 class ExamEnrollmentRequestdAdmin(admin.ModelAdmin):
-    list_display = ('student', )
+    list_display = ('student',)
     fieldsets = ((None, {'fields': ('student', 'document')}),)
     search_fields = ['student__registration_id']
-    raw_id_fields = ('student', )
+    raw_id_fields = ('student',)
 
 
 class ExamEnrollmentRequest(models.Model):
@@ -59,4 +60,3 @@ def find_by_student(student):
         return exam_enrollments_request
     except ObjectDoesNotExist:
         return None
-
