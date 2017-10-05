@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -72,6 +72,12 @@ queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
+def choose_offer(request):
+    return navigation(request, False)
+
+
+@login_required
+@permission_required('base.is_student', raise_exception=True)
 def choose_offer_direct(request):
     return navigation(request, True)
 
@@ -120,22 +126,28 @@ def _get_exam_enrollment_form(off_year, request, stud):
     if not learn_unit_enrols:
         messages.add_message(request, messages.WARNING, _('no_learning_unit_enrollment_found').format(off_year.acronym))
         return response.HttpResponseRedirect(reverse('dashboard_home'))
-    offer_enrollments = mdl_base.offer_enrollment.find_by_student(stud)
-    data = exam_enrollment_request.find_by_offer_enrollment(offer_enrollments)
+    data = exam_enrollment_request.find_by_student(stud)
     if data:
         data = json.loads(data.document)
         return layout.render(request, 'exam_enrollment_form.html', {'exam_enrollments': data.get('exam_enrollments'),
                                                                     'student': stud,
-                                                                    'current_number_session': "",
+                                                                    'current_number_session': data.get(
+                                                                        'current_number_session'),
                                                                     'academic_year': mdl_base.academic_year.current_academic_year(),
-                                                                    'program': mdl_base.offer_year.find_by_id(off_year.id)})
+                                                                    'program': mdl_base.offer_year.find_by_id(off_year.id),
+                                                                    'request_timeout': settings.QUEUES.get(
+                                                                        "QUEUES_TIMEOUT").get(
+                                                                        "EXAM_ENROLLMENT_FORM_RESPONSE")})
     else:
         ask_exam_enrollment_form(stud, off_year)
         return layout.render(request, 'exam_enrollment_form.html', {'exam_enrollments': "",
                                                                     'student': stud,
                                                                     'current_number_session': "",
                                                                     'academic_year': mdl_base.academic_year.current_academic_year(),
-                                                                    'program': mdl_base.offer_year.find_by_id(off_year.id)})
+                                                                    'program': mdl_base.offer_year.find_by_id(off_year.id),
+                                                                    'request_timeout': settings.QUEUES.get(
+                                                                        "QUEUES_TIMEOUT").get(
+                                                                        "EXAM_ENROLLMENT_FORM_RESPONSE")})
 
 
 def ask_exam_enrollment_form(stud, off_year):
@@ -200,15 +212,15 @@ def check_exam_enrollment_form(request):
 def _check_offer_enrollments_in_db(student):
     offer_enrollment = mdl_base.offer_enrollment.find_by_student(student)
     if offer_enrollment:
-        offer_enrollment_in_db_and_uptodate = check_db_offer_enrollments(offer_enrollment)
+        offer_enrollment_in_db_and_uptodate = check_db_offer_enrollments(student)
     else:
         offer_enrollment_in_db_and_uptodate = False
         logger.warning("This person doesn't exist")
     return offer_enrollment_in_db_and_uptodate
 
 
-def check_db_offer_enrollments(offer_enrollment):
-    exam_enrollment = exam_enrollment_request.find_by_offer_enrollment(offer_enrollment)
+def check_db_offer_enrollments(student):
+    exam_enrollment = exam_enrollment_request.find_by_student(student)
     if not exam_enrollment or not exam_enrollment.document:
         return False
     else:
@@ -246,3 +258,71 @@ def _process_exam_enrollment_form_submission(off_year, request, stud):
     queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('EXAM_ENROLLMENT_FORM_SUBMISSION'), data_to_submit)
     messages.add_message(request, messages.SUCCESS, _('exam_enrollment_form_submitted'))
     return response.HttpResponseRedirect(reverse('dashboard_home'))
+
+
+def _exam_enrollment_form_submission_message(off_year, request, stud):
+    return {
+        'registration_id': stud.registration_id,
+        'offer_year_acronym': off_year.acronym,
+        'year': off_year.academic_year.year,
+        'exam_enrollments': _build_enrollments_by_learning_unit(request)
+    }
+
+
+def _build_enrollments_by_learning_unit(request):
+    warnings.warn(
+        "The field named 'etat_to_inscr' is only used to call EPC services. It should be deleted when the exam "
+        "enrollment business will be implemented in Osis (not in EPC anymore). "
+        "The flag 'is_enrolled' should be sufficient for Osis."
+        "Do not forget to delete the hidden input field in the html template.",
+        DeprecationWarning
+    )
+    current_number_session = request.POST['current_number_session']
+    enrollments_by_learn_unit = []
+    is_enrolled_by_acronym = _build_dicts_is_enrolled_by_acronym(current_number_session, request)
+    etat_to_inscr_by_acronym = _build_dicts_etat_to_inscr_by_acronym(request)
+    for acronym, etat_to_inscr in etat_to_inscr_by_acronym.items():
+        etat_to_inscr = None if not etat_to_inscr or etat_to_inscr == 'None' else etat_to_inscr
+        if etat_to_inscr:
+            enrollments_by_learn_unit.append({
+                'acronym': acronym,
+                'is_enrolled': is_enrolled_by_acronym.get(acronym, False),
+                'etat_to_inscr': etat_to_inscr
+            })
+    return enrollments_by_learn_unit
+
+
+def _build_dicts_etat_to_inscr_by_acronym(request):
+    return {_extract_acronym(html_tag_id): etat_to_inscr for html_tag_id, etat_to_inscr in request.POST.items()
+            if "etat_to_inscr_current_session_" in html_tag_id}
+
+
+def _build_dicts_is_enrolled_by_acronym(current_number_session, request):
+    return {_extract_acronym(html_tag_id): True if value == "on" else False
+            for html_tag_id, value in request.POST.items()
+            if "chckbox_exam_enrol_sess{}_".format(current_number_session) in html_tag_id}
+
+
+def _extract_acronym(html_tag_id):
+    return html_tag_id.split("_")[-1]
+
+
+def insert_or_update_document_from_queue(body):
+    try:
+        json_data = body.decode("utf-8")
+        data = json.loads(json_data)
+        registration_id = data.get('registration_id')
+        if registration_id:
+            a_student = mdl_base.student.find_by_registration_id(registration_id)
+            exam_enrollment_request.insert_or_update_document(a_student, json_data)
+    except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError):
+        queue_exception_logger.error('Postgres Error during insert_or_update_document_from_queue => retried')
+        trace = traceback.format_exc()
+        queue_exception_logger.error(trace)
+        connection.close()
+        time.sleep(1)
+        insert_or_update_document_from_queue(body)
+    except Exception:
+        logger.warning('(Not PostgresError) during insert_or_update_document_from_queue')
+        trace = traceback.format_exc()
+        logger.error(trace)

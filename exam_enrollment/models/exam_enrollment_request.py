@@ -33,29 +33,29 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 class ExamEnrollmentRequestdAdmin(admin.ModelAdmin):
-    list_display = ('offer_enrollment', )
-    fieldsets = ((None, {'fields': ('offer_enrollment', 'document')}),)
-    search_fields = ['offer_enrollment__student__registration_id', 'offer_enrollment__offer_year__acronym']
-    raw_id_fields = ('offer_enrollment', )
+    list_display = ('student', )
+    fieldsets = ((None, {'fields': ('student', 'document')}),)
+    search_fields = ['student__registration_id']
+    raw_id_fields = ('student', )
 
 
 class ExamEnrollmentRequest(models.Model):
-    offer_enrollment = models.ForeignKey('base.OfferEnrollment', on_delete=models.CASCADE)
+    student = models.ForeignKey('base.Student')
     document = JSONField()
 
     def __str__(self):
-        return "{}".format(self.offer_enrollment)
+        return "{}".format(self.student)
 
 
-def insert_or_update_document(an_offer_enrollment, document):
-    exam_enrollment_object, created = ExamEnrollmentSubmitted.objects.update_or_create(
-        offer_enrollment=an_offer_enrollment, defaults={"document": document})
-    return exam_enrollment_object
+def insert_or_update_document(student, document):
+    exam_enrollment_request_object, created = ExamEnrollmentRequest.objects.update_or_create(
+        student=student, defaults={"document": document})
+    return exam_enrollment_request_object
 
 
-def find_by_offer_enrollment(offer_enrollment):
+def find_by_student(student):
     try:
-        exam_enrollments_request = ExamEnrollmentRequest.objects.get(offer_enrollment=offer_enrollment)
+        exam_enrollments_request = ExamEnrollmentRequest.objects.get(student=student)
         return exam_enrollments_request
     except ObjectDoesNotExist:
         return None

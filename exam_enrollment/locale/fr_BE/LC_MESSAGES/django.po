@@ -118,3 +118,6 @@ msgstr "Année"
 
 msgid "offer_choice"
 msgstr "Choix de l'offre"
+
+msgid "form_unavailable"
+msgstr "Le formulaire d'inscription n'est pas disponible pour l'instant"

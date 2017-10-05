@@ -39,7 +39,9 @@
     <div class="panel panel-default">
         <div class="panel-body">
             {% if not exam_enrollments %}
-                <p>{% trans 'building' %}</p>
+                <div id="message_box" class="alert alert-info" style="margin-top: 1em;display: block;">
+                <span id="status_message"><i class="fa fa-spinner fa-spin fa-fw"></i></span>
+            </div>
             {% else %}
                 <!-- Student information's-->
                 <div class="row">
@@ -215,8 +217,24 @@
 {% block script %}
     <script type="text/javascript">
         var counter = 0;
-        var max_loops = 60;
+        var max_loops = '{{request_timeout|safe}}';
         var delay = 1000;
+        var message_box = document.getElementById("message_box");
+
+        function show(element, display) {
+            element.style.display = display;
+        }
+
+        function hide(element) {
+            element.style.display = 'none';
+        }
+
+        function set_class(element, class_attributes) {
+            element.className = class_attributes;
+        }
+        function show_message_in_container(container, message) {
+            container.innerHTML = message;
+        }
 
         window.onload = function() {
             check_result();
@@ -236,11 +254,15 @@
                     counter++;
                     if (counter < max_loops) {
                         setTimeout(function() {
-                          check_result();
+                            set_class(message_box, "alert alert-info");
+                            show(message_box, 'block');
+                            check_result();
                         }, delay);
                     }
                     else {
+                        show_message_in_container(status_message, "{% trans 'form_unavailable' %}");
                         set_class(message_box, "alert alert-warning");
+                        show(message_box, 'block');
                     }
                 }
             });

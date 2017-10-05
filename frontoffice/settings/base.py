@@ -287,6 +287,9 @@ if not TESTING or not SKIP_QUEUES_TESTS:
             'SCORE_ENCODING_PDF_REQUEST': 'score_encoding_pdf_request',
             'SCORE_ENCODING_PDF_RESPONSE': 'score_encoding_pdf_response',
         },
+        'QUEUES_TIMEOUT': {
+            'EXAM_ENROLLMENT_FORM_RESPONSE': get_queue_timeout('EXAM_ENROLLMENT_FORM_RESPONSE_TIMEOUT', 15)
+        },
         'RPC_QUEUES_TIMEOUT': {
             'STUDENT_PERFORMANCE': get_queue_timeout('STUDENT_PERFORMANCE_TIMEOUT', 15),
             'ATTESTATION_STATUS': get_queue_timeout('ATTESTATION_STATUS_TIMEOUT', 10),
