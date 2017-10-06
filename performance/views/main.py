@@ -185,4 +185,4 @@ def convert_student_performance_to_dic(student_performance_obj):
 
 
 def check_right_access(student_performance, student):
-    return student_performance.registration_id == student.registration_id
+    return student_performance and student and student_performance.registration_id == student.registration_id

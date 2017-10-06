@@ -24,13 +24,25 @@
 #
 ##############################################################################
 import json
-from django.test import TestCase
+import pytz
+
+from django.contrib.auth.models import Group, Permission
+from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
+from django.test import TestCase, Client
 
 import base.tests.models.test_offer_year
 import base.tests.models.test_student
+from base.tests.factories.student import StudentFactory
+from base.tests.factories.person import PersonFactory
 from performance.models.enums import offer_registration_state
+from performance.tests.factories.student_performance import StudentPerformanceFactory
 import performance.tests.models.test_student_performance
 from performance.views import main
+
+
+OK = 200
+ACCESS_DENIED = 401
 
 
 class TestMain(TestCase):
@@ -63,5 +75,168 @@ class TestMain(TestCase):
         student = base.tests.models.test_student.create_student(registration_id="879466")
         has_access = main.check_right_access(self.student_performance, student)
         self.assertFalse(has_access)
+
+
+class ViewPerformanceHomeTest(TestCase):
+    def setUp(self):
+        students_group = Group.objects.create(name="students")
+        permission = Permission.objects.get(codename="is_student")
+        students_group.permissions.add(permission)
+
+        self.student = StudentFactory()
+
+        self.url = reverse('performance_home')
+        self.client = Client()
+        self.client.force_login(self.student.person.user)
+
+    def test_user_not_logged(self):
+        self.client.logout()
+        response = self.client.get(self.url, follow=True)
+        self.assertRedirects(response, "/login/?next={}".format(self.url))
+
+    def test_user_not_a_student(self):
+        a_person = PersonFactory()
+        self.client.logout()
+        self.client.force_login(a_person.user)
+
+        response = self.client.get(self.url, follow=True)
+
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertTemplateUsed(response, 'access_denied.html')
+
+    def test_multiple_students_objects_for_one_user(self):
+        StudentFactory(person=self.student.person)
+
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, 'dashboard.html')
+
+        messages = list(response.context['messages'])
+
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(messages[0].tags, 'error')
+        self.assertEqual(messages[0].message, _('error_multiple_registration_id'))
+
+    def test_with_empty_programs_list(self):
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, 'performance_home_student.html')
+        self.assertEqual(response.status_code, OK)
+
+        self.assertEqual(response.context['student'], self.student)
+        self.assertEqual(response.context['programs'], [])
+        self.assertEqual(response.context['registration_states_to_show'],
+                         offer_registration_state.STATES_TO_SHOW_ON_PAGE)
+
+    def test_with_program_list(self):
+        a_student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id)
+
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, 'performance_home_student.html')
+        self.assertEqual(response.status_code, OK)
+
+        self.assertEqual(response.context['student'], self.student)
+        self.assertEqual(response.context['programs'],
+                         [{'academic_year': '2017 - 2018',
+                           'acronym': a_student_performance.acronym,
+                           'offer_registration_state': 'CESSATION',
+                           'pk': a_student_performance.pk,
+                           'title': ' Master [120] en sciences informatiques, à finalité spécialisée '}]
+                         )
+        self.assertEqual(response.context['registration_states_to_show'],
+                         offer_registration_state.STATES_TO_SHOW_ON_PAGE)
+
+
+class DisplayResultForSpecificStudentPerformanceTest(TestCase):
+    def setUp(self):
+        students_group = Group.objects.create(name="students")
+        permission = Permission.objects.get(codename="is_student")
+        students_group.permissions.add(permission)
+
+        self.student = StudentFactory()
+        self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id)
+
+        self.url = reverse('performance_student_result', args=[self.student_performance.pk])
+        self.client = Client()
+        self.client.force_login(self.student.person.user)
+
+    def test_user_not_logged(self):
+        self.client.logout()
+        response = self.client.get(self.url, follow=True)
+        self.assertRedirects(response, "/login/?next={}".format(self.url))
+
+    def test_user_not_a_student(self):
+        a_person = PersonFactory()
+        self.client.logout()
+        self.client.force_login(a_person.user)
+
+        response = self.client.get(self.url, follow=True)
+
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertTemplateUsed(response, 'access_denied.html')
+
+    def test_multiple_students_objects_for_one_user(self):
+        StudentFactory(person=self.student.person)
+
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, 'dashboard.html')
+
+        messages = list(response.context['messages'])
+
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(messages[0].tags, 'error')
+        self.assertEqual(messages[0].message, _('error_multiple_registration_id'))
+
+    def test_when_none_student_performance(self):
+        self.student_performance.delete()
+
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, 'access_denied.html')
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+
+    def test_when_trying_to_access_other_student_performance(self):
+        an_other_student = StudentFactory()
+        self.client.force_login(an_other_student.person.user)
+
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, 'access_denied.html')
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+
+    def test_with_performance_present(self):
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, 'performance_result_student.html')
+        self.assertEqual(response.status_code, OK)
+
+        self.assertJSONEqual(response.context['results'], json.dumps(self.student_performance.data))
+        self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
+        self.assertEqual(response.context['update_date'], self.student_performance.update_date)
+        self.assertEqual(response.context['fetch_timed_out'], False)
+        self.assertEqual(response.context['not_authorized_message'], None)
+
+    def test_with_not_authorized_message(self):
+        self.student_performance.authorized = False
+        self.student_performance.save()
+
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, 'performance_result_student.html')
+        self.assertEqual(response.status_code, OK)
+
+        self.assertJSONEqual(response.context['results'], json.dumps(self.student_performance.data))
+        self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
+        self.assertEqual(response.context['update_date'], self.student_performance.update_date)
+        self.assertEqual(response.context['fetch_timed_out'], False)
+        self.assertEqual(response.context['not_authorized_message'],
+                         _('performance_result_note_not_autorized').format(_(self.student_performance.session_locked)))
+
+
+
+
+
 
 
