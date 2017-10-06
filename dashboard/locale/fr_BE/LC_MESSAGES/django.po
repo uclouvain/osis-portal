@@ -82,7 +82,7 @@ msgstr "Feuilles de notes"
 msgid "scores_sheets_admin"
 msgstr "Administration des feuilles de notes"
 
-msgid "scores_sheet_building"
+msgid "scores_sheet_loading"
 msgstr "Récupération des feuilles de notes en cours."
 
 msgid "scores_sheet_unavailable"
