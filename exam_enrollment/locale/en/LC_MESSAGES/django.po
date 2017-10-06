@@ -120,3 +120,6 @@ msgstr "Offer choice"
 
 msgid "form_unavailable"
 msgstr "Form unavailable"
+
+msgid "exam_enrollment_form_building"
+msgstr "Exam enrollment form is building."

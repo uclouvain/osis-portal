@@ -121,3 +121,6 @@ msgstr "Choix de l'offre"
 
 msgid "form_unavailable"
 msgstr "Le formulaire d'inscription n'est pas disponible pour l'instant"
+
+msgid "exam_enrollment_form_building"
+msgstr "Récupération du formulaire d'inscription aux examens."
