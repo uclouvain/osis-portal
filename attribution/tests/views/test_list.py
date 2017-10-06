@@ -29,7 +29,7 @@ import mock
 from django.contrib.auth.models import Group, Permission
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.test import TestCase, Client
+from django.test import TestCase, Client, override_settings
 
 from attribution.views.list import LEARNING_UNIT_ACRONYM_ID
 from base.tests.factories.tutor import TutorFactory
@@ -138,6 +138,8 @@ class ListBuildTest(TestCase):
         self.assertEqual(response.context['my_learning_units'], [])
         self.assertEqual(response.context['msg_error'], _('no_data'))
 
+    @override_settings(ATTRIBUTION_CONFIG={'SERVER_TO_FETCH_URL': '/server',
+                                           'ATTRIBUTION_PATH': '/path'})
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=Exception)
     def test_with_post_but_webservice_unavailable(self, mock_fetch):
         today = datetime.datetime.today()
@@ -178,6 +180,8 @@ class ListBuildTest(TestCase):
         self.assertEqual(response.context['my_learning_units'], [])
         self.assertEqual(response.context['msg_error'], _('no_data'))
 
+    @override_settings(ATTRIBUTION_CONFIG={'SERVER_TO_FETCH_URL': '/server',
+                                           'ATTRIBUTION_PATH': '/path'})
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=return_sample_xls)
     def test_with_post_and_webservice_is_available(self, mock_fetch):
         today = datetime.datetime.today()
