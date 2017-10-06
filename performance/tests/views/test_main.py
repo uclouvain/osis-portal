@@ -24,13 +24,13 @@
 #
 ##############################################################################
 import json
-import pytz
 
 from django.contrib.auth.models import Group, Permission
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.test import TestCase, Client
 
+from base.forms.base_forms import RegistrationIdForm
 import base.tests.models.test_offer_year
 import base.tests.models.test_student
 from base.tests.factories.student import StudentFactory
@@ -233,6 +233,198 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         self.assertEqual(response.context['fetch_timed_out'], False)
         self.assertEqual(response.context['not_authorized_message'],
                          _('performance_result_note_not_autorized').format(_(self.student_performance.session_locked)))
+
+
+class SelectStudentTest(TestCase):
+    def setUp(self):
+        self.person = PersonFactory()
+        self.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
+        Group.objects.create(name="students")
+        self.student = StudentFactory()
+        self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id)
+
+        self.url = reverse('performance_administration')
+        self.client = Client()
+
+        self.client.force_login(self.person.user)
+
+    def test_user_not_logged(self):
+        self.client.logout()
+        response = self.client.get(self.url, follow=True)
+        self.assertRedirects(response, "/login/?next={}".format(self.url))
+
+    def test_user_has_not_permission(self):
+        a_person = PersonFactory()
+        self.client.force_login(a_person.user)
+
+        response = self.client.get(self.url, follow=True)
+
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertTemplateUsed(response, 'access_denied.html')
+
+    def test_get_request(self):
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, 'admin/performance_administration.html')
+
+        self.assertIsInstance(response.context['form'], RegistrationIdForm)
+
+    def test_invalid_registration_id_post_request(self):
+        response = self.client.post(self.url, data={'registration_id': str(int(self.student.registration_id) - 1)})
+
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, 'admin/performance_administration.html')
+
+        self.assertIsInstance(response.context['form'], RegistrationIdForm)
+
+        self.assertFormError(response, 'form', 'registration_id', _('no_student_with_this_registration_id'))
+
+    def test_valid_post_request(self):
+        response = self.client.post(self.url, data={'registration_id': self.student.registration_id})
+
+        expected_url = reverse('performance_student_programs_admin', args=[self.student.registration_id])
+        self.assertRedirects(response, expected_url)
+
+
+class VisualizeStudentPrograms(TestCase):
+    def setUp(self):
+        self.person = PersonFactory()
+        self.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
+        Group.objects.create(name="students")
+        self.student = StudentFactory()
+        self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id)
+
+        self.url = reverse('performance_student_programs_admin', args=[self.student.registration_id])
+        self.client = Client()
+
+        self.client.force_login(self.person.user)
+
+    def test_user_not_logged(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(response, "/login/?next={}".format(self.url))
+
+    def test_user_has_not_permission(self):
+        a_person = PersonFactory()
+        self.client.force_login(a_person.user)
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertTemplateUsed(response, 'access_denied.html')
+
+    def test_with_no_corresponding_student(self):
+        self.student.delete()
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, 'admin/performance_home_admin.html')
+
+        self.assertEqual(response.context['student'], None)
+        self.assertEqual(response.context['programs'], None)
+        self.assertEqual(response.context['registration_states_to_show'],
+                         offer_registration_state.STATES_TO_SHOW_ON_PAGE)
+
+    def test_when_empty_programs_list(self):
+        self.student_performance.delete()
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, 'admin/performance_home_admin.html')
+
+        self.assertEqual(response.context['student'], self.student)
+        self.assertEqual(response.context['programs'], [])
+        self.assertEqual(response.context['registration_states_to_show'],
+                         offer_registration_state.STATES_TO_SHOW_ON_PAGE)
+
+    def test_when_program(self):
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, 'admin/performance_home_admin.html')
+
+        self.assertEqual(response.context['student'], self.student)
+        self.assertEqual(response.context['programs'],
+                         [{'academic_year': '2017 - 2018',
+                           'acronym': self.student_performance.acronym,
+                           'offer_registration_state': 'CESSATION',
+                           'pk': self.student_performance.pk,
+                           'title': ' Master [120] en sciences informatiques, à finalité spécialisée '}]
+                         )
+        self.assertEqual(response.context['registration_states_to_show'],
+                         offer_registration_state.STATES_TO_SHOW_ON_PAGE)
+
+
+class VisualizeStudentResult(TestCase):
+    def setUp(self):
+        self.person = PersonFactory()
+        self.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
+        self.student_performance = StudentPerformanceFactory()
+
+        self.url = reverse('performance_student_result_admin', args=[self.student_performance.pk])
+        self.client = Client()
+
+        self.client.force_login(self.person.user)
+
+    def test_user_not_logged(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(response, "/login/?next={}".format(self.url))
+
+    def test_user_has_not_permission(self):
+        a_person = PersonFactory()
+        self.client.force_login(a_person.user)
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertTemplateUsed(response, 'access_denied.html')
+
+    def test_no_corresponding_student_performance(self):
+        self.student_performance.delete()
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, 'admin/performance_result_admin.html')
+
+        self.assertEqual(response.context['results'], None)
+        self.assertEqual(response.context['creation_date'], None)
+        self.assertEqual(response.context['update_date'], None)
+        self.assertEqual(response.context['fetch_timed_out'], None)
+        self.assertEqual(response.context['not_authorized_message'], None)
+
+    def test_when_found_student_performance(self):
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, 'admin/performance_result_admin.html')
+
+        self.assertJSONEqual(response.context['results'], json.dumps(self.student_performance.data))
+        self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
+        self.assertEqual(response.context['update_date'], self.student_performance.update_date)
+        self.assertEqual(response.context['fetch_timed_out'], False)
+        self.assertEqual(response.context['not_authorized_message'], None)
+
+    def test_with_not_authorized_message(self):
+        self.student_performance.authorized = False
+        self.student_performance.save()
+
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, 'admin/performance_result_admin.html')
+        self.assertEqual(response.status_code, OK)
+
+        self.assertJSONEqual(response.context['results'], json.dumps(self.student_performance.data))
+        self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
+        self.assertEqual(response.context['update_date'], self.student_performance.update_date)
+        self.assertEqual(response.context['fetch_timed_out'], False)
+        self.assertEqual(response.context['not_authorized_message'],
+                         _('performance_result_note_not_autorized').format(_(self.student_performance.session_locked)))
+
 
 
 
