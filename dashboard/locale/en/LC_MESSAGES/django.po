@@ -79,8 +79,8 @@ msgstr "Scores sheets"
 msgid "scores_sheets_admin"
 msgstr "Scores sheets administration"
 
-msgid "scores_sheet_building"
-msgstr "Scores sheets are building."
+msgid "scores_sheet_loading"
+msgstr "Scores sheets are loading."
 
 msgid "scores_sheet_unavailable"
 msgstr "Scores sheets are not available for now."
