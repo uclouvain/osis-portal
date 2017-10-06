@@ -158,8 +158,7 @@ class ListBuildTest(TestCase):
         self.assertEqual(response.context['my_learning_units'], [a_learning_unit_year])
         self.assertEqual(response.context['msg_error'], _('no_data'))
 
-    @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=return_sample_xls)
-    def test_when_trying_to_access_other_tutor_students_list(self, mock_fetch):
+    def test_when_trying_to_access_other_tutor_students_list(self):
         an_other_tutor = TutorFactory()
         an_other_tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
         self.client.force_login(an_other_tutor.person.user)
