@@ -86,7 +86,6 @@ class ViewPerformanceHomeTest(TestCase):
         self.student = StudentFactory()
 
         self.url = reverse('performance_home')
-        self.client = Client()
         self.client.force_login(self.student.person.user)
 
     def test_user_not_logged(self):
@@ -158,7 +157,6 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id)
 
         self.url = reverse('performance_student_result', args=[self.student_performance.pk])
-        self.client = Client()
         self.client.force_login(self.student.person.user)
 
     def test_user_not_logged(self):
@@ -244,7 +242,6 @@ class SelectStudentTest(TestCase):
         self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id)
 
         self.url = reverse('performance_administration')
-        self.client = Client()
 
         self.client.force_login(self.person.user)
 
@@ -296,7 +293,6 @@ class VisualizeStudentPrograms(TestCase):
         self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id)
 
         self.url = reverse('performance_student_programs_admin', args=[self.student.registration_id])
-        self.client = Client()
 
         self.client.force_login(self.person.user)
 
@@ -365,7 +361,6 @@ class VisualizeStudentResult(TestCase):
         self.student_performance = StudentPerformanceFactory()
 
         self.url = reverse('performance_student_result_admin', args=[self.student_performance.pk])
-        self.client = Client()
 
         self.client.force_login(self.person.user)
 

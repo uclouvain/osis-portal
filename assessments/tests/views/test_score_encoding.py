@@ -63,7 +63,6 @@ class CheckPaperSheetTest(TestCase):
 
         self.tutor = TutorFactory(person=a_person)
 
-        self.client = Client()
         self.url = reverse('check_papersheet', args=[GLOBAL_ID])
         self.client.force_login(a_person.user)
 
@@ -114,7 +113,6 @@ class AskPaperSheetTest(TestCase):
 
         self.tutor = TutorFactory(person=a_person)
 
-        self.client = Client()
         self.url = reverse('ask_papersheet', args=[GLOBAL_ID])
         self.client.force_login(a_person.user)
 
@@ -188,7 +186,6 @@ class DownloadPaperSheetTest(TestCase):
 
         self.tutor = TutorFactory(person=a_person)
 
-        self.client = Client()
         self.url = reverse('scores_download', args=[GLOBAL_ID])
         self.client.force_login(a_person.user)
 
@@ -336,7 +333,6 @@ class InsertOrUpdateDocumentFromQueueTest(TestCase):
 
 class ScoresSheetAdminTest(TestCase):
     def setUp(self):
-        self.client = Client()
         self.url = reverse('scores_sheets_admin')
         self.a_person = PersonFactory(global_id=GLOBAL_ID)
         self.client.force_login(self.a_person.user)
@@ -376,7 +372,6 @@ class ScoresSheetAdminTest(TestCase):
 
 class ScoresSheetTest(TestCase):
     def setUp(self):
-        self.client = Client()
         self.url = reverse('my_scores_sheets')
         self.a_person = PersonFactory(global_id=GLOBAL_ID)
 

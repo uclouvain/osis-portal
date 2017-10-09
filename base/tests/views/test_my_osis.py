@@ -41,7 +41,6 @@ class ProfileLangTest(TestCase):
         self.person.save()
 
         self.url = reverse('profile_lang', args=[ENGLISH_LANGUAGE])
-        self.client = Client()
         self.client.force_login(self.person.user)
 
     def test_user_not_logged(self):

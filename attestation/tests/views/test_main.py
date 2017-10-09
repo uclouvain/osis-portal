@@ -57,7 +57,6 @@ def open_sample_pdf():
 class HomeTest(TestCase):
     def setUp(self):
         self.url = reverse('attestation_home')
-        self.client = Client()
         self.person = PersonFactory()
 
         students_group = Group.objects.create(name='students')
@@ -148,7 +147,6 @@ class DownloadAttestationTest(TestCase):
         year = datetime.date.today().year
         self.attestation_type = "test"
         self.url = reverse('download_attestation', args=[str(year), self.attestation_type])
-        self.client = Client()
         self.person = PersonFactory()
 
         students_group = Group.objects.create(name='students')
@@ -215,7 +213,6 @@ class DownloadAttestationTest(TestCase):
 class AttestationAdministrationTest(TestCase):
     def setUp(self):
         self.url = reverse('attestation_administration')
-        self.client = Client()
         self.person = PersonFactory()
 
         self.permission = Permission.objects.get(codename="is_faculty_administrator")
@@ -245,7 +242,6 @@ class AttestationAdministrationTest(TestCase):
 class SelectStudentAttestationTest(TestCase):
     def setUp(self):
         self.url = reverse('attestation_admin_select_student')
-        self.client = Client()
         self.person = PersonFactory()
 
         self.permission = Permission.objects.get(codename="is_faculty_administrator")
@@ -330,7 +326,6 @@ class DownloadStudentAttestation(TestCase):
         year = datetime.date.today().year
         self.attestation_type = "test"
         self.url = reverse('attestation_admin_download', args=[STUDENT_GLOBAL_ID, year, self.attestation_type])
-        self.client = Client()
         self.person = PersonFactory()
 
         self.permission = Permission.objects.get(codename="is_faculty_administrator")
