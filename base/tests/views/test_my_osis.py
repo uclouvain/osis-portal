@@ -30,15 +30,40 @@ from django.conf import settings
 from base.tests.factories.person import PersonFactory
 
 
+FRENCH_LANGUAGE = settings.LANGUAGE_CODE
+ENGLISH_LANGUAGE = 'en'
+
+
 class ProfileLangTest(TestCase):
     def setUp(self):
-        self.url = reverse('profile_lang', args=[settings.LANGUAGE_CODE])
+        self.person = PersonFactory()
+        self.person.language = FRENCH_LANGUAGE
+        self.person.save()
+
+        self.url = reverse('profile_lang', args=[ENGLISH_LANGUAGE])
         self.client = Client()
+        self.client.force_login(self.person.user)
 
     def test_user_not_logged(self):
+        self.client.logout()
         response = self.client.get(self.url)
 
         self.assertRedirects(response, '/login/?next={}'.format(self.url))
 
     def test_language_not_known(self):
-        self.fail()
+        url = reverse('profile_lang', args=["unk"])
+        response = self.client.get(url, HTTP_REFERER='/')
+        self.person.refresh_from_db()
+
+        self.assertRedirects(response, '/')
+        self.assertEqual(self.person.language, FRENCH_LANGUAGE)
+
+    def test_change_language(self):
+        response = self.client.get(self.url, HTTP_REFERER='/')
+        self.person.refresh_from_db()
+
+        self.assertRedirects(response, '/')
+        self.assertEqual(self.person.language, ENGLISH_LANGUAGE)
+
+
+
