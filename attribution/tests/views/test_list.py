@@ -24,13 +24,6 @@
 #
 ##############################################################################
 import datetime
-<<<<<<< HEAD
-
-from django.contrib.auth.models import Group, Permission
-from django.core.urlresolvers import reverse
-from django.test import TestCase, Client
-
-=======
 import mock
 
 from django.contrib.auth.models import Group, Permission
@@ -39,7 +32,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.test import TestCase, Client, override_settings
 
 from attribution.views.list import LEARNING_UNIT_ACRONYM_ID
->>>>>>> 0877abe1956ded75f75efcd4c467e66e6e781e68
 from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.academic_year import AcademicYearFactory
