@@ -220,10 +220,15 @@ class TutorChargeTest(TestCase):
 
     def test_format_students_email(self):
         email_expected = "{0}{1}{2}".format(tutor_charge.MAIL_TO, ACRONYM.lower(), tutor_charge.STUDENT_LIST_EMAIL_END)
-        self.assertEqual(tutor_charge.get_email_students(ACRONYM), email_expected)
+        self.assertEqual(tutor_charge.get_email_students(ACRONYM, tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST -1 ), email_expected)
+
+    def test_format_students_email_new_management(self):
+        email_expected = "{0}{1}-{2}{3}".format(tutor_charge.MAIL_TO, ACRONYM.lower(), tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST, tutor_charge.STUDENT_LIST_EMAIL_END)
+        self.assertEqual(tutor_charge.get_email_students(ACRONYM, tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST), email_expected)
+
 
     def test_format_students_email_without_acronym(self):
-        self.assertIsNone(tutor_charge.get_email_students(None))
+        self.assertIsNone(tutor_charge.get_email_students(None, 2017))
 
     def test_get_schedule_url(self):
         url_expected = settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_URL').\

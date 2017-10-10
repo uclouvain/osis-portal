@@ -27,6 +27,7 @@
 import urllib
 
 from django.contrib.auth.decorators import login_required, permission_required
+from django.views.decorators.http import require_POST
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
@@ -65,10 +66,12 @@ def get_learning_units(a_user):
 
 def get_codes_parameter(request, academic_yr):
     learning_unit_years = None
+    user_learning_units_assigned = get_learning_units(request.user).get('my_learning_units', [])
     for key, value in request.POST.items():
         if key.startswith(LEARNING_UNIT_ACRONYM_ID):
             acronym = key.replace(LEARNING_UNIT_ACRONYM_ID, '')
-            learning_unit_years = build_learning_units_string(academic_yr, acronym, learning_unit_years)
+            learning_unit_years = build_learning_units_string(academic_yr, acronym, learning_unit_years,
+                                                              user_learning_units_assigned)
 
     if learning_unit_years:
         return learning_unit_years
@@ -76,10 +79,10 @@ def get_codes_parameter(request, academic_yr):
     return NO_DATA_VALUE
 
 
-def build_learning_units_string(academic_yr, acronym, learning_unit_years_in):
+def build_learning_units_string(academic_yr, acronym, learning_unit_years_in, user_learning_units_assigned):
     learning_unit_years = learning_unit_years_in
     learning_units = mdl_base.learning_unit_year.find_by_acronym(acronym, academic_yr)
-    if learning_units:
+    if learning_units and learning_units[0] in user_learning_units_assigned:
         if learning_unit_years is None:
             learning_unit_years = "{0}".format(learning_units[0].acronym)
         else:
@@ -93,6 +96,9 @@ def get_anac_parameter(current_academic_year):
     return NO_DATA_VALUE
 
 
+@login_required
+@permission_required('attribution.can_access_attribution', raise_exception=True)
+@require_POST
 def list_build(request):
     current_academic_year = mdl_base.academic_year.current_academic_year()
     anac = get_anac_parameter(current_academic_year)
@@ -107,6 +113,8 @@ def list_build(request):
 
 
 def fetch_student_exam_enrollment(academic_year, codes):
+    if codes == NO_DATA_VALUE or academic_year == NO_DATA_VALUE:
+        return None
     server_top_url = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_URL')
     document_base_path = server_top_url + settings.ATTRIBUTION_CONFIG.get('ATTRIBUTION_PATH')
     if document_base_path:

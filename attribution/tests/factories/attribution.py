@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,10 +23,21 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
-from exam_enrollment.models import exam_enrollment_submitted, exam_enrollment_request
+import factory
+import factory.fuzzy
+import operator
+from attribution.models.enums import function
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
+from base.tests.factories.tutor import TutorFactory
 
-admin.site.register(exam_enrollment_submitted.ExamEnrollmentSubmitted,
-                    exam_enrollment_submitted.ExamEnrollmentSubmittedAdmin)
-admin.site.register(exam_enrollment_request.ExamEnrollmentRequest,
-                    exam_enrollment_request.ExamEnrollmentRequestdAdmin)
+
+class AttributionFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = 'attribution.Attribution'
+
+    external_id = None
+    function = factory.Iterator(function.FUNCTIONS, getter=operator.itemgetter(0))
+    learning_unit_year = factory.SubFactory(LearningUnitYearFactory)
+    tutor = factory.SubFactory(TutorFactory)
+    start_year = None
+    end_year = None
