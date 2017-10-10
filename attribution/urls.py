@@ -51,6 +51,8 @@ urlpatterns = [
         url(r'^renew/$', online_application.renew, name='renew'),
         url(r'^new/$', online_application.new, name='new'),
         url(r'^outside_period/$', online_application.outside_period, name='outside_applications_period'),
+        url(r'^confirm/$', online_application.applications_confirmation, name='email_tutor_application_confirmation'),
+
     ])),
 
     url(r'^administration/', include([

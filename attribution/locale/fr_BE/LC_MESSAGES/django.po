@@ -337,3 +337,6 @@ msgstr "Vous n'êtes assigné à aucune unité d'enseignement"
 
 msgid "error_retrieving_attributions_charge"
 msgstr "Les volumes horaires ne sont pas disponibles pour le moment. Veuillez réessayer plus tard."
+
+msgid "confirm_applications_by_mail"
+msgstr "Pour recevoir un email de confirmation avec toutes les candidatures en ligne"

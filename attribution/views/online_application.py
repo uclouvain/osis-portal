@@ -39,6 +39,8 @@ from attribution.models.enums import function
 from attribution.forms.application import ApplicationForm
 from osis_common.queue import queue_sender
 from attribution.utils import message_generation, permission
+from osis_common.messaging import message_config, send_message as message_service
+from django.shortcuts import redirect
 
 
 ATTRIBUTION_ID_NAME = 'attribution_id_'
@@ -765,3 +767,53 @@ def is_deputy_function(a_function):
          a_function == function.DEPUTY_TEMPORARY):
         return True
     return False
+
+@login_required
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
+def applications_confirmation(request):
+    a_tutor = mdl_base.tutor.find_by_user(request.user)
+    application_year = mdl_base.academic_year.find_next_academic_year()
+    send_mail_with_applications(application_year, a_tutor)
+    return redirect('learning_unit_applications')
+
+
+def send_mail_with_applications(application_year, a_tutor):
+    applications = get_tutor_applications(application_year, a_tutor)
+
+    html_template_ref = 'applications_confirmation_html'
+    txt_template_ref = 'applications_confirmation_txt'
+
+    tutor_person = a_tutor.person
+    receivers = [message_config.create_receiver(tutor_person.id, tutor_person.email, tutor_person.language)]
+    suject_data = None
+
+    template_base_data = {'first_name': tutor_person.first_name,
+                          'last_name': tutor_person.last_name,
+                          'applications': get_applications_txt(applications)
+                          }
+    tables = None
+    message_content = message_config.create_message_content(html_template_ref, txt_template_ref,
+                                                            tables, receivers, template_base_data, suject_data)
+    return message_service.send_messages(message_content)
+
+
+def get_applications_txt(applications):
+    txt = "\n"
+    for application in applications:
+        txt += get_application_learning_unit_line(application)
+
+    return txt
+
+
+def get_application_learning_unit_line(application):
+    acronym = None
+    vol_lecturing = 0
+    vol_practical = 0
+
+    if application[APPLICATION_CHARGE_LECTURING]:
+        acronym = application[APPLICATION_CHARGE_LECTURING].learning_unit_component.learning_unit_year.acronym
+        vol_lecturing = application[APPLICATION_CHARGE_LECTURING].allocation_charge
+    if application[APPLICATION_CHARGE_PRACTICAL]:
+        acronym = application[APPLICATION_CHARGE_PRACTICAL].learning_unit_component.learning_unit_year.acronym
+        vol_practical = application[APPLICATION_CHARGE_PRACTICAL].allocation_charge
+    return "*\t{}\t{}\t{}\n".format(acronym, vol_lecturing, vol_practical)
