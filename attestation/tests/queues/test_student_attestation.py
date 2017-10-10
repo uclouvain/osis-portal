@@ -23,35 +23,33 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import urllib
+from mock import patch
 
 from django.conf import settings
+from django.test import SimpleTestCase, override_settings
+
+from attestation.queues.student_attestation import fetch_student_attestation
+from attestation.models.enums.attestation_type import REGULAR_REGISTRATION
+
+GLOBAL_ID = "45451200"
+ACADEMIC_YEAR = 2016
+ATTESTATION_TYPE = REGULAR_REGISTRATION
 
 
-def fetch_student_attestation(global_id, academic_year, attestation_type):
-    if not hasattr(settings, 'ATTESTATION_CONFIG'):
-        return None
-    server_top_url = settings.ATTESTATION_CONFIG.get('SERVER_TO_FETCH_URL')
-    document_base_path = server_top_url + settings.ATTESTATION_CONFIG.get('ATTESTATION_PATH')
-    if document_base_path:
-        try:
-            document_url = document_base_path.format(global_id=global_id,
-                                                     academic_year=academic_year,
-                                                     attestation_type=attestation_type)
-            return _fetch_with_basic_auth(server_top_url, document_url)
-        except Exception as e:
-            pass
-    return None
+class FetchStudentAttestationTest(SimpleTestCase):
+    @override_settings()
+    def test_when_attestation_config_not_present(self):
+        del settings.ATTESTATION_CONFIG
+        response = fetch_student_attestation(GLOBAL_ID, ACADEMIC_YEAR, ATTESTATION_TYPE)
+
+        self.assertEqual(response, None)
+
+    @override_settings(ATTESTATION_CONFIG={'SERVER_TO_FETCH_URL': '', 'ATTESTATION_PATH': ''})
+    def test_when_attestation_config_items_are_none(self):
+        response = fetch_student_attestation(GLOBAL_ID, ACADEMIC_YEAR, ATTESTATION_TYPE)
+
+        self.assertEqual(response, None)
 
 
-def _fetch_with_basic_auth(server_top_url, document_url):
-    password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
-    username = settings.ATTESTATION_CONFIG.get('SERVER_TO_FETCH_USER')
-    password = settings.ATTESTATION_CONFIG.get('SERVER_TO_FETCH_PASSWORD')
-    password_mgr.add_password(None, server_top_url, username, password)
-    handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
-    opener = urllib.request.build_opener(handler)
 
-    with opener.open(document_url) as response:
-        return response.read()
 
