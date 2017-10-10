@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,19 +23,36 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
-import factory.fuzzy
-import string
-import datetime
-from django.conf import settings
-from django.utils import timezone
+from django.contrib import admin
+from django.contrib.postgres.fields import JSONField
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 
 
-class AcademicYearFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = "base.AcademicYear"
+class ExamEnrollmentRequestdAdmin(admin.ModelAdmin):
+    list_display = ('student',)
+    fieldsets = ((None, {'fields': ('student', 'document')}),)
+    search_fields = ['student__registration_id']
+    raw_id_fields = ('student',)
 
-    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    year = factory.fuzzy.FuzzyInteger(2000, timezone.now().year)
-    start_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year, 9, 15))
-    end_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year+1, 9, 30))
+
+class ExamEnrollmentRequest(models.Model):
+    student = models.ForeignKey('base.Student')
+    document = JSONField()
+
+    def __str__(self):
+        return "{}".format(self.student)
+
+
+def insert_or_update_document(student, document):
+    exam_enrollment_request_object, created = ExamEnrollmentRequest.objects.update_or_create(
+        student=student, defaults={"document": document})
+    return exam_enrollment_request_object
+
+
+def find_by_student(student):
+    try:
+        exam_enrollments_request = ExamEnrollmentRequest.objects.get(student=student)
+        return exam_enrollments_request
+    except ObjectDoesNotExist:
+        return None

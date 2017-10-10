@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -26,16 +26,13 @@
 import factory
 import factory.fuzzy
 import string
-import datetime
-from django.conf import settings
-from django.utils import timezone
 
 
-class AcademicYearFactory(factory.django.DjangoModelFactory):
+class LearningUnitFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = "base.AcademicYear"
+        model = "base.LearningUnit"
 
     external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    year = factory.fuzzy.FuzzyInteger(2000, timezone.now().year)
-    start_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year, 9, 15))
-    end_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year+1, 9, 30))
+    acronym = factory.fuzzy.FuzzyText(length=10, chars=string.ascii_letters)
+    title = factory.Sequence(lambda n: 'Learning Unit %d' % n)
+    description = None

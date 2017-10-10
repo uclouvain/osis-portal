@@ -70,6 +70,18 @@
                     </div>
                 </div>
             {% endif %}
+            {% if 'assessments'  in installed_apps %}
+                <div class="grid-item">
+                    <i class="fa fa-file-pdf-o"></i>
+                    <div class="description">
+                        <h4 class="media-heading">
+                            <a href="{% url 'scores_sheets_admin' %}" id="lnk_scores_sheets_admin">
+                                {% trans 'scores_sheets_admin' %}
+                            </a>
+                        </h4>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 

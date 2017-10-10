@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -26,16 +26,27 @@
 import factory
 import factory.fuzzy
 import string
+import json
 import datetime
-from django.conf import settings
-from django.utils import timezone
 
 
-class AcademicYearFactory(factory.django.DjangoModelFactory):
+def load_score_encoding_sample():
+    sample = "assessments/tests/resources/score_encoding_sample.json"
+    with open(sample) as file_sample:
+        # Reassign publication date as today to pass method assessments.views.score_encoding.is_outdated
+        json_obj = json.load(file_sample)
+        json_obj['publication_date'] = _get_today_date()
+        return json.dumps(json_obj)
+
+
+def _get_today_date():
+    now = datetime.datetime.now()
+    return '%s/%s/%s' % (now.day, now.month, now.year)
+
+
+class ScoreEncodingFactory(factory.DjangoModelFactory):
     class Meta:
-        model = "base.AcademicYear"
+        model = 'assessments.ScoreEncoding'
 
-    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    year = factory.fuzzy.FuzzyInteger(2000, timezone.now().year)
-    start_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year, 9, 15))
-    end_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year+1, 9, 30))
+    global_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
+    document = load_score_encoding_sample()

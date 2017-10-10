@@ -77,7 +77,7 @@ msgid "message_exam_enrolment_state"
 msgstr "Vous pouvez consulter l'ensemble des états d'inscriptions aux examens dans le récapitulatif 'Mes notes'."
 
 msgid "no_offer_enrollment_found"
-msgstr "Vous n'êtes inscrit à aucun programme d'étude pour cette année académique."
+msgstr "Vous n'êtes inscrit à aucun programme d'étude pour l'année académique en cours ({})."
 
 msgid "no_exam_enrollment_avalaible"
 msgstr "Vous n'êtes inscrit à aucun cours dans le cadre du programme {}."
@@ -118,3 +118,9 @@ msgstr "Année"
 
 msgid "offer_choice"
 msgstr "Choix de l'offre"
+
+msgid "form_unavailable"
+msgstr "Le formulaire d'inscription n'est pas disponible pour l'instant"
+
+msgid "exam_enrollment_form_loading"
+msgstr "Récupération du formulaire d'inscription aux examens."

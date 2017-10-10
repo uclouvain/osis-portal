@@ -76,7 +76,13 @@ msgstr "Ceci nécessite un <a href=\""
 msgid "scores_encoding_use_vpn_with_link_end"
 msgstr "\" target=\"_blank\" >accès VPN</a> en dehors du réseau de l'UCL."
 
-msgid "scores_sheet_building"
+msgid "scores_sheets"
+msgstr "Feuilles de notes"
+
+msgid "scores_sheets_admin"
+msgstr "Administration des feuilles de notes"
+
+msgid "scores_sheet_loading"
 msgstr "Récupération des feuilles de notes en cours."
 
 msgid "scores_sheet_unavailable"

@@ -26,10 +26,8 @@
 from django.contrib.auth.models import Permission
 from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
-from django.utils.translation import ugettext_lazy as _
-from django.utils import html
 
-from assessments.tests.models import test_score_encoding
+from assessments.tests.factories.score_encoding import ScoreEncodingFactory
 from assessments.views import score_encoding
 from base.tests.models import test_tutor
 from django.contrib.auth.models import User
@@ -37,7 +35,7 @@ from django.contrib.auth.models import User
 
 class DownloadPaperSheetTest(TestCase):
     def setUp(self):
-        self.score_encoding = test_score_encoding.create_score_encoding()
+        self.score_encoding = ScoreEncodingFactory()
         self.global_id = self.score_encoding.global_id
         self.tutor = test_tutor.create_tutor()
         self.tutor.person.user = User.objects.create_user('testo', password='testopw')
@@ -50,7 +48,7 @@ class DownloadPaperSheetTest(TestCase):
         self.tutor.person.save()
         c = Client()
         c.force_login(self.tutor.person.user)
-        url = reverse('scores_download')
+        url = reverse('scores_download', args=[self.global_id])
         response = c.get(url)
         self.assertEquals(response.content, score_encoding.print_scores(self.global_id))
 
@@ -59,6 +57,6 @@ class DownloadPaperSheetTest(TestCase):
         self.tutor.person.save()
         c = Client()
         c.force_login(self.tutor.person.user)
-        url = reverse('scores_download')
+        url = reverse('scores_download', args=["0124"])
         response = c.get(url)
         self.assertEqual(response.context['scores_sheets_unavailable'], True)

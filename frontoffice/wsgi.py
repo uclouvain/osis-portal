@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -96,6 +96,15 @@ if hasattr(settings, 'QUEUES') and settings.QUEUES:
         try:
             common_queue_listener.SynchronousConsumerThread(
                 settings.QUEUES.get('QUEUES_NAME').get('SCORE_ENCODING_PDF_RESPONSE'),
+                insert_or_update_document_from_queue).start()
+        except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
+            LOGGER.exception("Couldn't connect to the QueueServer")
+
+    if 'exam_enrollment' in settings.INSTALLED_APPS:
+        from exam_enrollment.views.exam_enrollment import insert_or_update_document_from_queue
+        try:
+            common_queue_listener.SynchronousConsumerThread(
+                settings.QUEUES.get('QUEUES_NAME').get('EXAM_ENROLLMENT_FORM_RESPONSE'),
                 insert_or_update_document_from_queue).start()
         except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
             LOGGER.exception("Couldn't connect to the QueueServer")

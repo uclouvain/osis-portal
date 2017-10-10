@@ -61,9 +61,11 @@ def download_attestation(request, academic_year, attestation_type):
         student = student_mdl.find_by_user(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
+
     attestation_pdf = student_attestation.fetch_student_attestation(student.person.global_id,
                                                                     academic_year,
                                                                     attestation_type)
+
     if attestation_pdf:
         return _make_pdf_attestation(attestation_pdf, attestation_type)
     else:

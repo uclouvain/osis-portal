@@ -25,17 +25,10 @@
 ##############################################################################
 import factory
 import factory.fuzzy
-import string
-import datetime
-from django.conf import settings
-from django.utils import timezone
+from base.tests.factories.person import PersonFactory
 
 
-class AcademicYearFactory(factory.django.DjangoModelFactory):
+class TutorFactory(factory.DjangoModelFactory):
     class Meta:
-        model = "base.AcademicYear"
-
-    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    year = factory.fuzzy.FuzzyInteger(2000, timezone.now().year)
-    start_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year, 9, 15))
-    end_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year+1, 9, 30))
+        model = 'base.Tutor'
+    person = factory.SubFactory(PersonFactory)
