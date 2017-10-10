@@ -32,7 +32,7 @@ from base.views import common
 
 js_info_dict = {
     'domain': 'djangojs',
-    'packages': ('admission',),
+    'packages': ('attribution'),
 }
 
 
