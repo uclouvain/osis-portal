@@ -26,15 +26,17 @@
 
 import urllib
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
-from django.views.decorators.http import require_POST
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
-from django.conf import settings
+from django.views.decorators.http import require_POST
 
-from base import models as mdl_base
 from attribution import models as mdl_attribution
+from base import models as mdl_base
+from base.forms.base_forms import GlobalIdForm
+from base.views import layout
 
 NO_DATA_VALUE = "-"
 LEARNING_UNIT_ACRONYM_ID = "learning_unit_acronym_"
@@ -145,3 +147,63 @@ def _make_xls_list(attestation_pdf):
     response['Content-Disposition'] = 'attachment; filename="%s"' % filename
     response.write(attestation_pdf)
     return response
+
+
+@login_required
+@permission_required('attribution.can_access_attribution', raise_exception=True)
+def students_list_admin(request):
+    if request.method == "POST":
+        form = GlobalIdForm(request.POST)
+        if form.is_valid():
+            global_id = form.cleaned_data['global_id']
+            return get_learning_units_by_person(request, global_id)
+    else:
+        form = GlobalIdForm()
+    return layout.render(request, "admin/students_list.html", {"form": form})
+
+
+def get_learning_units_by_person(request, global_id):
+    a_person = mdl_base.person.find_by_global_id(global_id)
+    learning_units = []
+    if a_person:
+        current_academic_year = mdl_base.academic_year.current_academic_year()
+        tutor = mdl_base.tutor.find_by_person(a_person)
+        if current_academic_year and tutor:
+            attributions = mdl_attribution.attribution.find_by_tutor_year(tutor, current_academic_year)
+            for attribution in attributions:
+                if attribution.learning_unit_year not in learning_units:
+                    learning_units.append(attribution.learning_unit_year)
+    data = {'person': a_person, 'learning_units': learning_units}
+    return render(request, "admin/students_exam_list.html", data)
+
+
+@login_required
+@permission_required('attribution.can_access_attribution', raise_exception=True)
+@require_POST
+def list_build_by_person(request, global_id):
+    current_academic_year = mdl_base.academic_year.current_academic_year()
+    anac = get_anac_parameter(current_academic_year)
+    person = mdl_base.person.find_by_global_id(global_id)
+    learning_units = get_learning_units_by_person(request, person.global_id)
+    codes = get_codes_parameter_list(request, current_academic_year, learning_units)
+    list_exam_enrollments_xls = fetch_student_exam_enrollment(str(anac), codes)
+    if list_exam_enrollments_xls:
+        return _make_xls_list(list_exam_enrollments_xls)
+    else:
+        data = {'person': person,
+                'learning_units': learning_units}
+        data.update({'msg_error': _('no_data')})
+        return render(request, "admin/students_exam_list.html", data)
+
+
+def get_codes_parameter_list(request, academic_yr, learning_units):
+    learning_unit_years = None
+    user_learning_units_assigned = learning_units.get('learning_units', [])
+    for key, value in request.POST.items():
+        if key.startswith(LEARNING_UNIT_ACRONYM_ID):
+            acronym = key.replace(LEARNING_UNIT_ACRONYM_ID, '')
+            learning_unit_years = build_learning_units_string(academic_yr, acronym, learning_unit_years,
+                                                              user_learning_units_assigned)
+    if learning_unit_years:
+        return learning_unit_years
+    return NO_DATA_VALUE
