@@ -76,12 +76,6 @@ UPDATE_OPERATION = "update"
 DELETE_OPERATION = "delete"
 
 
-def get_year(a_year):
-    if a_year:
-        return a_year.year
-    return None
-
-
 def get_attributions_allocated(a_year, a_tutor):
     an_academic_year = mdl_base.academic_year.find_by_year(a_year)
     if a_tutor and an_academic_year:
@@ -290,9 +284,9 @@ def get_terminating_charges(a_year, a_tutor):
             a_function = duplicated_function(attribution, attributions)
             if next_learning_unit_year and not existing_tutor_application_for_next_year(a_tutor,
                                                                                         attribution.learning_unit_year,
-                                                                                        a_function):
-                if next_learning_unit_year.in_charge and not is_deputy_function(attribution.function):
-                    attributions_vacant.append(attribution)
+                                                                                        a_function) \
+                and next_learning_unit_year.in_charge and not is_deputy_function(attribution.function):
+                attributions_vacant.append(attribution)
         return get_attribution_data(attributions_vacant)
     return []
 
@@ -800,12 +794,12 @@ def send_mail_with_applications(application_year, a_tutor):
 def get_applications_txt(applications):
     txt = "\n"
     for application in applications:
-        txt += get_application_learning_unit_line(application)
+        txt += get_application_detail_line(application)
 
     return txt
 
 
-def get_application_learning_unit_line(application):
+def get_application_detail_line(application):
     acronym = None
     vol_lecturing = 0
     vol_practical = 0
