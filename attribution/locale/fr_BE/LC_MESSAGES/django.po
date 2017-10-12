@@ -337,3 +337,9 @@ msgstr "Vous n'êtes assigné à aucune unité d'enseignement"
 
 msgid "error_retrieving_attributions_charge"
 msgstr "Les volumes horaires ne sont pas disponibles pour le moment. Veuillez réessayer plus tard."
+
+msgid "exam_and_student_list"
+msgstr "Listes des étudiants inscrits aux cours et examens de "
+
+msgid "students_list_admin"
+msgstr "Administration des listes des étudiants"

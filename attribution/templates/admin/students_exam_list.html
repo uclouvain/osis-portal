@@ -29,11 +29,11 @@
     <ol class="breadcrumb">
         <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'faculty_administration' %}</a></li>
         <li><a id="lnk_students_list_admin" href="{% url 'students_list_admin' %}">{% trans 'students_list_admin' %}</a></li>
-        <li class="active">{% trans 'exam_and_student_list' %}</li>
+        <li class="active">{% trans 'exam_and_student_list' %} {{ person.first_name }} {{ person.last_name }}</li>
     </ol>
 {% endblock %}
 {% block content %}
-    <h1>{% trans 'exam_and_student_list' %} {{ person.first_name }} {{ person.last_name }}</h1>
+    <h2>{% trans 'exam_and_student_list' %} {{ person.first_name }} {{ person.last_name }}</h2>
     {% if msg_error %}
         <br>
         <div class="alert alert-info">{{ msg_error }}</div>

@@ -204,7 +204,8 @@ class ListBuildTest(TestCase):
 class AdminStudentsListTest(TestCase):
     def setUp(self):
         Group.objects.create(name="tutors")
-        self.tutor = TutorFactory()
+        self.person = PersonFactory(global_id="76543210")
+        self.tutor = TutorFactory(person=self.person)
         self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
 
         self.url = reverse('students_list_admin')
@@ -229,10 +230,7 @@ class AdminStudentsListTest(TestCase):
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, OK)
-        self.assertTemplateUsed(response, 'admin/students_exam_list.html')
-
-        self.assertEqual(response.context['person'], self.tutor.person)
-        self.assertEqual(response.context['my_learning_units'], [])
+        self.assertTemplateUsed(response, 'admin/students_list.html')
 
     def test_with_attributions(self):
         today = datetime.datetime.today()
@@ -244,19 +242,17 @@ class AdminStudentsListTest(TestCase):
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, OK)
-        self.assertTemplateUsed(response, 'admin/students_exam_list.html')
-
-        self.assertEqual(response.context['person'], self.tutor.person)
-        self.assertListEqual(response.context['my_learning_units'], [a_learning_unit_year])
+        self.assertTemplateUsed(response, 'admin/students_list.html')
 
 
 class AdminListBuildTest(TestCase):
     def setUp(self):
         Group.objects.create(name="tutors")
-        self.tutor = TutorFactory()
+        self.person = PersonFactory(global_id="01234567")
+        self.tutor = TutorFactory(person=self.person)
         self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
 
-        self.url = reverse('students_list_admin_create')
+        self.url = reverse('students_list_admin_create', args=['01234567'])
         self.client = Client()
         self.client.force_login(self.tutor.person.user)
 
@@ -286,7 +282,7 @@ class AdminListBuildTest(TestCase):
         self.assertTemplateUsed(response, 'admin/students_exam_list.html')
 
         self.assertEqual(response.context['person'], self.tutor.person)
-        self.assertEqual(response.context['my_learning_units'], [])
+        self.assertEqual(response.context['learning_units'], [])
         self.assertEqual(response.context['msg_error'], _('no_data'))
 
     @override_settings(ATTRIBUTION_CONFIG={'SERVER_TO_FETCH_URL': '/server',
@@ -308,7 +304,7 @@ class AdminListBuildTest(TestCase):
         self.assertTemplateUsed(response, 'admin/students_exam_list.html')
 
         self.assertEqual(response.context['person'], self.tutor.person)
-        self.assertEqual(response.context['my_learning_units'], [a_learning_unit_year])
+        self.assertEqual(response.context['learning_units'], [a_learning_unit_year])
         self.assertEqual(response.context['msg_error'], _('no_data'))
 
     @override_settings(ATTRIBUTION_CONFIG={'SERVER_TO_FETCH_URL': '/server',

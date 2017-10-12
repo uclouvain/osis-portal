@@ -156,13 +156,14 @@ def students_list_admin(request):
         form = GlobalIdForm(request.POST)
         if form.is_valid():
             global_id = form.cleaned_data['global_id']
-            return get_learning_units_by_person(request, global_id)
+            data = get_learning_units_by_person(global_id)
+            return render(request, "admin/students_exam_list.html", data)
     else:
         form = GlobalIdForm()
     return layout.render(request, "admin/students_list.html", {"form": form})
 
 
-def get_learning_units_by_person(request, global_id):
+def get_learning_units_by_person(global_id):
     a_person = mdl_base.person.find_by_global_id(global_id)
     learning_units = []
     if a_person:
@@ -174,7 +175,7 @@ def get_learning_units_by_person(request, global_id):
                 if attribution.learning_unit_year not in learning_units:
                     learning_units.append(attribution.learning_unit_year)
     data = {'person': a_person, 'learning_units': learning_units}
-    return render(request, "admin/students_exam_list.html", data)
+    return data
 
 
 @login_required
@@ -184,21 +185,19 @@ def list_build_by_person(request, global_id):
     current_academic_year = mdl_base.academic_year.current_academic_year()
     anac = get_anac_parameter(current_academic_year)
     person = mdl_base.person.find_by_global_id(global_id)
-    learning_units = get_learning_units_by_person(request, person.global_id)
-    codes = get_codes_parameter_list(request, current_academic_year, learning_units)
+    data = get_learning_units_by_person(person.global_id)
+    codes = get_codes_parameter_list(request, current_academic_year, data)
     list_exam_enrollments_xls = fetch_student_exam_enrollment(str(anac), codes)
     if list_exam_enrollments_xls:
         return _make_xls_list(list_exam_enrollments_xls)
     else:
-        data = {'person': person,
-                'learning_units': learning_units}
         data.update({'msg_error': _('no_data')})
         return render(request, "admin/students_exam_list.html", data)
 
 
-def get_codes_parameter_list(request, academic_yr, learning_units):
+def get_codes_parameter_list(request, academic_yr, data):
     learning_unit_years = None
-    user_learning_units_assigned = learning_units.get('learning_units', [])
+    user_learning_units_assigned = data.get('learning_units', [])
     for key, value in request.POST.items():
         if key.startswith(LEARNING_UNIT_ACRONYM_ID):
             acronym = key.replace(LEARNING_UNIT_ACRONYM_ID, '')

@@ -334,3 +334,9 @@ msgstr "You aren't teaching for any learning unit"
 
 msgid "error_retrieving_attributions_charge"
 msgstr "The volume of charge is not available at the moment. Please try again later."
+
+msgid "exam_and_student_list"
+msgstr "List of students enrolled to classes and exams of "
+
+msgid "students_list_admin"
+msgstr "Students list administration"
