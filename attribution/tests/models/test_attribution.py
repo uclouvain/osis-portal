@@ -24,7 +24,18 @@
 #
 ##############################################################################
 import datetime
+
+from django.test import TestCase
+
 from attribution import models as mdl_attribution
+from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
+from base.tests.factories.tutor import TutorFactory
+from attribution.tests.factories.attribution import AttributionFactory
+from base.tests.models import test_person
+from base.tests.factories.user import UserFactory
+from django.contrib.auth.models import Group
+from attribution.models.enums import function
 
 
 def create_attribution(data):
@@ -54,3 +65,29 @@ def create_attribution(data):
         attribution.external_id = data['external_id']
     attribution.save()
     return attribution
+
+
+class AttributionTest(TestCase):
+    def setUp(self):
+        Group.objects.get_or_create(name='tutors')
+        today = datetime.datetime.today()
+        self.an_academic_year = AcademicYearFactory(year=today.year)
+        self.user = UserFactory()
+        self.user.save()
+        self.person = test_person.create_person_with_user(self.user)
+        self.tutor = TutorFactory(person=self.person)
+
+    def test_find_by_tutor_year_order_by_acronym_function_check_alphabetical_order(self):
+        a_learning_unit_year = LearningUnitYearFactory(academic_year=self.an_academic_year, acronym='LAUT')
+        b_learning_unit_year = LearningUnitYearFactory(academic_year=self.an_academic_year, acronym='LBUT')
+        a_attribution = self.attribution = AttributionFactory(tutor=self.tutor,
+                                                              function=function.HOLDER,
+                                                              learning_unit_year=a_learning_unit_year)
+        b_attribution = self.attribution = AttributionFactory(tutor=self.tutor,
+                                                              function=function.HOLDER,
+                                                              learning_unit_year=b_learning_unit_year)
+        c_attribution = self.attribution = AttributionFactory(tutor=self.tutor,
+                                                              function=function.CO_HOLDER,
+                                                              learning_unit_year=b_learning_unit_year)
+        self.assertCountEqual(mdl_attribution.attribution.find_by_tutor_year_order_by_acronym_function(self.tutor, self.an_academic_year), [a_attribution, c_attribution, b_attribution])
+
