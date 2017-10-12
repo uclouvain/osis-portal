@@ -25,6 +25,12 @@
 ##############################################################################
 from django.conf.urls import url, include
 from attribution.views import tutor_charge, online_application, list
+from django.views.i18n import javascript_catalog
+
+
+js_info_dict = {
+    'packages': ('attribution', )
+}
 
 urlpatterns = [
 
@@ -60,4 +66,5 @@ urlpatterns = [
     url(r'^list/students$', list.students_list, name='students_list'),
     url(r'^list/students/xls', list.list_build, name='students_list_create'),
 
+    url(r'^jsi18n/', javascript_catalog, js_info_dict),
 ]
