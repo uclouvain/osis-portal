@@ -448,8 +448,11 @@ def edit(request, tutor_application_id):
     form = ApplicationForm()
     application = get_application_informations(mdl_attribution.tutor_application.find_by_id(tutor_application_id))
     if application:
-        data = {'charge_lecturing': application[APPLICATION_CHARGE_LECTURING].allocation_charge,
-                'charge_practical': application[APPLICATION_CHARGE_PRACTICAL].allocation_charge,
+        charge_lecturing=application[APPLICATION_CHARGE_LECTURING].allocation_charge if application[APPLICATION_CHARGE_LECTURING] else NO_CHARGE
+        charge_practical=application[APPLICATION_CHARGE_PRACTICAL].allocation_charge if application[APPLICATION_CHARGE_PRACTICAL] else NO_CHARGE
+
+        data = {'charge_lecturing': charge_lecturing,
+                'charge_practical': charge_practical,
                 'remark': application[TUTOR_APPLICATION].remark,
                 'course_summary': application[TUTOR_APPLICATION].course_summary,
                 'max_charge_lecturing': application[VACANT_ATTRIBUTION_CHARGE_LECTURING],
@@ -811,3 +814,4 @@ def get_application_detail_line(application):
         acronym = application[APPLICATION_CHARGE_PRACTICAL].learning_unit_component.learning_unit_year.acronym
         vol_practical = application[APPLICATION_CHARGE_PRACTICAL].allocation_charge
     return "*\t{}\t{}\t{}\n".format(acronym, vol_lecturing, vol_practical)
+
