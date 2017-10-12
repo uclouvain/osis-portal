@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+from dissertation.models.offer_proposition_group import OfferPropositionGroup
 from django.db import models
 from django.utils import timezone
 from base.models import offer
@@ -50,6 +51,7 @@ class OfferProposition(SerializableModel):
     end_jury_visibility = models.DateField(default=timezone.now)
     start_edit_title = models.DateField(default=timezone.now)
     end_edit_title = models.DateField(default=timezone.now)
+    offer_proposition_group = models.ForeignKey(OfferPropositionGroup, null=True, blank=True)
 
     def __str__(self):
         return self.acronym

@@ -24,8 +24,10 @@
 #
 ##############################################################################
 import json
+import logging
 
 from django.contrib import messages
+from django.conf import settings
 from django.core.exceptions import MultipleObjectsReturned
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required, permission_required
@@ -38,12 +40,16 @@ from base.views import layout
 from dashboard.views import main as dash_main_view
 
 
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
+
+
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def home(request):
     try:
         student = student_mdl.find_by_user(request.user)
     except MultipleObjectsReturned:
+        logger.exception('User {} returned multiple students.'.format(request.user.username))
         return dash_main_view.show_multiple_registration_id_error(request)
     if student:
         json_message = _make_registration_json_message(student.registration_id)
@@ -60,6 +66,7 @@ def download_attestation(request, academic_year, attestation_type):
     try:
         student = student_mdl.find_by_user(request.user)
     except MultipleObjectsReturned:
+        logger.exception('User {} returned multiple students.'.format(request.user.username))
         return dash_main_view.show_multiple_registration_id_error(request)
 
     attestation_pdf = student_attestation.fetch_student_attestation(student.person.global_id,
