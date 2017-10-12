@@ -426,7 +426,6 @@ def visualize_tutor_attributions(request, global_id):
 
 
 def get_attributions_charge_duration(a_person, an_academic_year):
-    print('get_attributions_charge_duration')
     attributions_charge_duration = {}
     try:
         server_top_url = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_URL')
@@ -451,6 +450,7 @@ def get_attributions_charge_duration(a_person, an_academic_year):
 
 
 def _tutor_attributions_by_learning_unit(tutor_allocations_json):
+    print('_tutor_attributions_by_learning_unit')
     tutor_attributions = {}
     list_attributions = tutor_allocations_json.get("tutorAllocations", [])
     # Fix when the webservice return a dictionnary in place of a list. Occure when
