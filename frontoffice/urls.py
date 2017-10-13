@@ -32,7 +32,7 @@ from base.views import common
 
 js_info_dict = {
     'domain': 'djangojs',
-    'packages': ('admission',),
+    'packages': ('attribution'),
 }
 
 
@@ -62,7 +62,7 @@ if 'exam_enrollment' in settings.INSTALLED_APPS:
 if 'attestation' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^attestation/', include('attestation.urls')), )
 if 'assessments' in settings.INSTALLED_APPS:
-        urlpatterns = urlpatterns + (url(r'^assessments/', include('assessments.urls')),)
+    urlpatterns = urlpatterns + (url(r'^assessments/', include('assessments.urls')),)
 
 handler404 = 'base.views.common.page_not_found'
 handler403 = 'base.views.common.access_denied'

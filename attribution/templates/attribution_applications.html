@@ -47,6 +47,7 @@
         <div class="panel-heading">{% trans 'my_applications'%}</div>
         <div class="panel-body">
             <a href="{% url 'tutor_application_create' %}"
+               style="visibility:hidden;display:none;"
                id="lnk_tutor_application_create"
                class="btn btn-primary pull-right"
                role="button" title="{% trans 'create_an_tutor_application'%}">
@@ -112,7 +113,8 @@
                                       id="form_delete_{{ application.tutor_application.id }}">
                                     <button class="btn btn-warning"
                                             id="lnk_application_delete_{{ application.tutor_application.id }}"
-                                            type="submit" title="{%trans 'remove'%}">
+                                            type="submit" title="{%trans 'remove'%}"
+                                            >
                                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
                                 </form>
                             </td>

@@ -61,7 +61,7 @@
         var message_box = document.getElementById("message_box");
 
         var counter = 0;
-        var max_loops = 60;
+        var max_loops = '{{request_timeout|safe}}';
         var delay = 1000;
 
         function show(element, display) {

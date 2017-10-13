@@ -24,8 +24,13 @@
 #
 ##############################################################################
 import urllib
+from urllib.error import URLError
+import logging
 
 from django.conf import settings
+
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 def fetch_student_attestation(global_id, academic_year, attestation_type):
@@ -39,8 +44,14 @@ def fetch_student_attestation(global_id, academic_year, attestation_type):
                                                      academic_year=academic_year,
                                                      attestation_type=attestation_type)
             return _fetch_with_basic_auth(server_top_url, document_url)
-        except Exception as e:
-            pass
+        except URLError:
+            logger.exception('Error when interacting with the attestation web services.\n'
+                             'Global id = {}, academic year = {}, attestation_type = {}.'
+                             .format(global_id, academic_year, attestation_type))
+        except Exception:
+            logger.exception('Exception arose when fetching student attestation.'
+                             'Global id = {}, academic year = {}, attestation_type = {}.'
+                             .format(global_id, academic_year, attestation_type))
     return None
 
 
@@ -54,4 +65,3 @@ def _fetch_with_basic_auth(server_top_url, document_url):
 
     with opener.open(document_url) as response:
         return response.read()
-

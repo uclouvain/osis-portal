@@ -40,8 +40,12 @@
         <div class="panel-body">
             {% if not exam_enrollments %}
                 <div id="message_box" class="alert alert-info" style="margin-top: 1em;display: block;">
-                <span id="status_message"><i class="fa fa-spinner fa-spin fa-fw"></i>{% trans 'exam_enrollment_form_loading' %}</span>
-            </div>
+                    {% if error_message %}
+                        <span id="status_message">{% trans error_message %}</span>
+                    {% else %}
+                        <span id="status_message"><i class="fa fa-spinner fa-spin fa-fw"></i>{% trans 'exam_enrollment_form_loading' %}</span>
+                    {% endif %}
+                </div>
             {% else %}
                 <!-- Student information's-->
                 <div class="row">
