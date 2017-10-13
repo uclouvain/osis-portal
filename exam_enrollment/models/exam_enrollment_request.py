@@ -57,5 +57,5 @@ def pop_document(student):
         document = json.loads(exam_enrollments_request.document)
         exam_enrollments_request.delete()
         return document
-    except ObjectDoesNotExist:
+    except (ObjectDoesNotExist, ValueError):
         return None
