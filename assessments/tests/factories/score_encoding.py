@@ -30,12 +30,12 @@ import json
 import datetime
 
 
-def load_score_encoding_sample():
-    sample = "assessments/tests/resources/score_encoding_sample.json"
-    with open(sample) as file_sample:
+def load_score_encoding_sample(sample_path="assessments/tests/resources/score_encoding_sample.json", global_id=""):
+    with open(sample_path) as file_sample:
         # Reassign publication date as today to pass method assessments.views.score_encoding.is_outdated
         json_obj = json.load(file_sample)
         json_obj['publication_date'] = _get_today_date()
+        json_obj['tutor_global_id'] = global_id
         return json.dumps(json_obj)
 
 

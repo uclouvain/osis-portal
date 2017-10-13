@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,25 +23,33 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
-import factory.fuzzy
-import string
+from mock import patch
 
-from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_unit import LearningUnitFactory
+from django.conf import settings
+from django.test import SimpleTestCase, override_settings
+
+from attestation.queues.student_attestation import fetch_student_attestation
+from attestation.models.enums.attestation_type import REGULAR_REGISTRATION
+
+GLOBAL_ID = "45451200"
+ACADEMIC_YEAR = 2016
+ATTESTATION_TYPE = REGULAR_REGISTRATION
 
 
-class LearningUnitYearFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = "base.LearningUnitYear"
+class FetchStudentAttestationTest(SimpleTestCase):
+    @override_settings()
+    def test_when_attestation_config_not_present(self):
+        del settings.ATTESTATION_CONFIG
+        response = fetch_student_attestation(GLOBAL_ID, ACADEMIC_YEAR, ATTESTATION_TYPE)
 
-    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    acronym = factory.LazyAttribute(lambda obj: obj.learning_unit.acronym)
-    title = factory.LazyAttribute(lambda obj: obj.learning_unit.title)
-    credits = 5
-    weight = 5
-    academic_year = factory.SubFactory(AcademicYearFactory)
-    learning_unit = factory.SubFactory(LearningUnitFactory)
-    team = False
-    vacant = False
-    in_charge = False
+        self.assertEqual(response, None)
+
+    @override_settings(ATTESTATION_CONFIG={'SERVER_TO_FETCH_URL': '', 'ATTESTATION_PATH': ''})
+    def test_when_attestation_config_items_are_none(self):
+        response = fetch_student_attestation(GLOBAL_ID, ACADEMIC_YEAR, ATTESTATION_TYPE)
+
+        self.assertEqual(response, None)
+
+
+
+

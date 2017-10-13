@@ -57,7 +57,6 @@ class StudentsListTest(TestCase):
         self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
 
         self.url = reverse('students_list')
-        self.client = Client()
         self.client.force_login(self.tutor.person.user)
 
     def test_without_being_logged(self):
@@ -106,7 +105,6 @@ class ListBuildTest(TestCase):
         self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
 
         self.url = reverse('students_list_create')
-        self.client = Client()
         self.client.force_login(self.tutor.person.user)
 
     def test_without_being_logged(self):
@@ -199,8 +197,6 @@ class ListBuildTest(TestCase):
         self.assertEqual(response['Content-Type'], 'application/vnd.ms-excel')
         self.assertEqual(response['Content-Disposition'], 'attachment; filename="{}"'.format(filename))
         self.assertEqual(response.content.decode(), str(return_sample_xls()))
-
-
 
 
 
