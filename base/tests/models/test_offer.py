@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -23,25 +23,35 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
-import factory.fuzzy
-import string
+from django.test import TestCase
+from django.contrib.auth.models import Group
 
-from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_unit import LearningUnitFactory
+from base.models import offer as mdl_offer
+from base.tests.factories.offer import OfferFactory
+from base.tests.factories.student import StudentFactory
+from base.tests.factories.offer_year import OfferYearFactory
+from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 
 
-class LearningUnitYearFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = "base.LearningUnitYear"
+class TestOffer(TestCase):
+    def setUp(self):
+        self.offer = OfferFactory()
+        self.title = self.offer.title
 
-    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    acronym = factory.LazyAttribute(lambda obj: obj.learning_unit.acronym)
-    title = factory.LazyAttribute(lambda obj: obj.learning_unit.title)
-    credits = 5
-    weight = 5
-    academic_year = factory.SubFactory(AcademicYearFactory)
-    learning_unit = factory.SubFactory(LearningUnitFactory)
-    team = False
-    vacant = False
-    in_charge = False
+    def test_str(self):
+        self.assertEqual(str(self.offer), "{}".format(self.title))
+
+    def test_find_by_id(self):
+        self.assertEqual(mdl_offer.find_by_id(self.offer.id),
+                         self.offer)
+
+    def test_find_by_student(self):
+        Group.objects.create(name='students')
+        a_student = StudentFactory()
+        an_offer_year = OfferYearFactory(offer=self.offer)
+        OfferEnrollmentFactory(offer_year=an_offer_year, student=a_student)
+
+        self.assertListEqual(list(mdl_offer.find_by_student(a_student)),
+                             [self.offer])
+
+

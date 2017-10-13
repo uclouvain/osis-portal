@@ -23,19 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.contrib.auth.models import Group
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import connection
+from django.test import TestCase
 import datetime
 
 from django.test import TestCase
 
 from attribution import models as mdl_attribution
-from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_unit_year import LearningUnitYearFactory
-from base.tests.factories.tutor import TutorFactory
-from attribution.tests.factories.attribution import AttributionFactory
-from base.tests.models import test_person
-from base.tests.factories.user import UserFactory
-from django.contrib.auth.models import Group
-from attribution.models.enums import function
 
 
 def create_attribution(data):
@@ -69,12 +65,30 @@ def create_attribution(data):
 
 class AttributionTest(TestCase):
     def setUp(self):
-        Group.objects.get_or_create(name='tutors')
+        group = Group(name="tutors")
+        group.save()
+        self.attribution = AttributionFactory()
         today = datetime.datetime.today()
         self.an_academic_year = AcademicYearFactory(year=today.year)
         self.user = UserFactory()
         self.person = test_person.create_person_with_user(self.user)
         self.tutor = TutorFactory(person=self.person)
+
+    def test_attribution_deleted_field(self):
+        attribution_id = self.attribution.id
+        self.attribution.deleted = True
+        self.attribution.save()
+
+        with self.assertRaises(ObjectDoesNotExist):
+            mdl_attribution.attribution.Attribution.objects.get(id=attribution_id)
+
+        with connection.cursor() as cursor:
+            cursor.execute("select id, deleted from attribution_attribution where id=%s", [attribution_id])
+            row = cursor.fetchone()
+            db_attribution_id = row[0]
+            db_attribution_deleted = row[1]
+        self.assertEqual(db_attribution_id, attribution_id)
+        self.assertTrue(db_attribution_deleted)
 
     def test_find_by_tutor_year_order_by_acronym_function_check_alphabetical_order(self):
         a_learning_unit_year = LearningUnitYearFactory(academic_year=self.an_academic_year, acronym='LAUT')

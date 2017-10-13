@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -26,22 +26,30 @@
 import factory
 import factory.fuzzy
 import string
+import operator
+import json
+import datetime
+import pytz
 
-from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_unit import LearningUnitFactory
+from performance.models.enums import offer_registration_state as registration_state, session_month
 
 
-class LearningUnitYearFactory(factory.django.DjangoModelFactory):
+def load_sample_student_performance():
+    sample_path = "performance/tests/ressources/points.json"
+    with open(sample_path) as file_sample:
+        return json.load(file_sample)
+
+
+class StudentPerformanceFactory(factory.DjangoModelFactory):
     class Meta:
-        model = "base.LearningUnitYear"
+        model = 'performance.StudentPerformance'
 
-    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    acronym = factory.LazyAttribute(lambda obj: obj.learning_unit.acronym)
-    title = factory.LazyAttribute(lambda obj: obj.learning_unit.title)
-    credits = 5
-    weight = 5
-    academic_year = factory.SubFactory(AcademicYearFactory)
-    learning_unit = factory.SubFactory(LearningUnitFactory)
-    team = False
-    vacant = False
-    in_charge = False
+    registration_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
+    academic_year = datetime.datetime.today().year
+    acronym = factory.fuzzy.FuzzyText(length=15, chars=string.ascii_letters)
+    data = load_sample_student_performance()
+    update_date = datetime.datetime.now(tz=pytz.utc) + datetime.timedelta(days=1)
+    creation_date = datetime.datetime.now(tz=pytz.utc)
+    authorized = True
+    offer_registration_state = registration_state.CESSATION
+    session_locked = factory.Iterator(session_month.SESSION_MONTHS, getter=operator.itemgetter(0))
