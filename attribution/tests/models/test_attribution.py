@@ -23,15 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+
 import datetime
 
-from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection
 from django.test import TestCase
+from django.contrib.auth.models import Group
 
 from attribution import models as mdl_attribution
+from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
+from base.tests.factories.tutor import TutorFactory
 from attribution.tests.factories.attribution import AttributionFactory
+from base.tests.models import test_person
+from base.tests.factories.user import UserFactory
+from attribution.models.enums import function
 
 
 def create_attribution(data):
