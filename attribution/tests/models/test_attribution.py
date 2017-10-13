@@ -23,8 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
+from django.contrib.auth.models import Group
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import connection
+from django.test import TestCase
 from attribution import models as mdl_attribution
+from attribution.tests.factories.attribution import AttributionFactory
 
 
 def create_attribution(data):
@@ -54,3 +58,26 @@ def create_attribution(data):
         attribution.external_id = data['external_id']
     attribution.save()
     return attribution
+
+
+class AttributionTest(TestCase):
+    def setUp(self):
+        group = Group(name="tutors")
+        group.save()
+        self.attribution = AttributionFactory()
+
+    def test_attribution_deleted_field(self):
+        attribution_id = self.attribution.id
+        self.attribution.deleted = True
+        self.attribution.save()
+
+        with self.assertRaises(ObjectDoesNotExist):
+            mdl_attribution.attribution.Attribution.objects.get(id=attribution_id)
+
+        with connection.cursor() as cursor:
+            cursor.execute("select id, deleted from attribution_attribution where id=%s", [attribution_id])
+            row = cursor.fetchone()
+            db_attribution_id = row[0]
+            db_attribution_deleted = row[1]
+        self.assertEqual(db_attribution_id, attribution_id)
+        self.assertTrue(db_attribution_deleted)
