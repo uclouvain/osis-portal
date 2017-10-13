@@ -782,15 +782,13 @@ def send_mail_with_applications(application_year, a_tutor):
 
     tutor_person = a_tutor.person
     receivers = [message_config.create_receiver(tutor_person.id, tutor_person.email, tutor_person.language)]
-    suject_data = None
-
     template_base_data = {'first_name': tutor_person.first_name,
                           'last_name': tutor_person.last_name,
                           'applications': get_applications_txt(applications)
                           }
     tables = None
     message_content = message_config.create_message_content(html_template_ref, txt_template_ref,
-                                                            tables, receivers, template_base_data, suject_data)
+                                                            tables, receivers, template_base_data, None)
     return message_service.send_messages(message_content)
 
 

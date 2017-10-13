@@ -73,7 +73,6 @@ class AttributionTest(TestCase):
         today = datetime.datetime.today()
         self.an_academic_year = AcademicYearFactory(year=today.year)
         self.user = UserFactory()
-        self.user.save()
         self.person = test_person.create_person_with_user(self.user)
         self.tutor = TutorFactory(person=self.person)
 
@@ -89,5 +88,5 @@ class AttributionTest(TestCase):
         c_attribution = self.attribution = AttributionFactory(tutor=self.tutor,
                                                               function=function.CO_HOLDER,
                                                               learning_unit_year=b_learning_unit_year)
-        self.assertCountEqual(mdl_attribution.attribution.find_by_tutor_year_order_by_acronym_function(self.tutor, self.an_academic_year), [a_attribution, c_attribution, b_attribution])
+        self.assertListEqual(list(mdl_attribution.attribution.find_by_tutor_year_order_by_acronym_function(self.tutor, self.an_academic_year)), [a_attribution, c_attribution, b_attribution])
 
