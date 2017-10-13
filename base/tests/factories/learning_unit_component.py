@@ -23,23 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
 import string
+import operator
 
 import factory
 import factory.fuzzy
 
-from base.tests.factories.offer_year import OfferYearFactory
-from base.tests.factories.student import StudentFactory
-from osis_common.utils.datetime import get_tzinfo
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
+from base.models.enums import component_type
 
 
-class OfferEnrollmentFactory(factory.django.DjangoModelFactory):
+class LearningUnitComponentFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = "base.OfferEnrollment"
+        model = "base.LearningUnitComponent"
 
-    date_enrollment = factory.fuzzy.FuzzyDateTime(datetime.datetime(2016, 1, 1, tzinfo=get_tzinfo()),
-                                                  datetime.datetime(2017, 3, 1, tzinfo=get_tzinfo()))
     external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    offer_year = factory.SubFactory(OfferYearFactory)
-    student = factory.SubFactory(StudentFactory)
+
+    learning_unit_year = factory.SubFactory(LearningUnitYearFactory)
+    type = factory.Iterator(component_type.COMPONENT_TYPES, getter=operator.itemgetter(0))
+    duration = factory.fuzzy.FuzzyDecimal(9)

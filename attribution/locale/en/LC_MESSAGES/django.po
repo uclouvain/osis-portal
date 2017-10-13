@@ -340,3 +340,6 @@ msgstr "List of students enrolled to classes and exams of "
 
 msgid "students_list_admin"
 msgstr "Students list administration"
+
+msgid "confirm_applications_by_mail"
+msgstr "To receive a confirmation email with the applications"

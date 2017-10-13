@@ -75,3 +75,10 @@ class AcademicYearTest(TestCase):
 
     def test_starting_academic_year(self):
         self.assertEqual(mdl_base.academic_year.starting_academic_year(), self.current_academic_years[-1])
+
+    def test_find_by_year(self):
+        searched_academic_year = self.academic_years[0]
+        self.assertEqual(mdl_base.academic_year.find_by_year(searched_academic_year.year), searched_academic_year)
+
+    def test_find_by_inexisting_year(self):
+        self.assertIsNone(mdl_base.academic_year.find_by_year(10))

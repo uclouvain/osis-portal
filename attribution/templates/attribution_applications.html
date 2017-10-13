@@ -53,6 +53,15 @@
                role="button" title="{% trans 'create_an_tutor_application'%}">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> {% trans 'create_an_tutor_application' %}
             </a>
+            <span class="pull-right" style="margin-left:10px;margin-right:10px;">
+                <form action="{% url 'email_tutor_application_confirmation' %}"
+                      id="form_email_tutor_application_confirmation">
+                    <button class="btn btn-default"
+                            id="lnk_applications_email_confirmtion"
+                            type="submit" title="{%trans 'confirm_applications_by_mail'%}">
+                        <span class="glyphicon glyphicon-envelope" ></span></button>
+                </form>
+            </span>
             <br>
             <br>
         </div>

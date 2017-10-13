@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import json
 from django.contrib import admin
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ObjectDoesNotExist
@@ -50,9 +51,11 @@ def insert_or_update_document(student, document):
     return exam_enrollment_request_object
 
 
-def find_by_student(student):
+def pop_document(student):
     try:
         exam_enrollments_request = ExamEnrollmentRequest.objects.get(student=student)
-        return exam_enrollments_request
-    except ObjectDoesNotExist:
+        document = json.loads(exam_enrollments_request.document)
+        exam_enrollments_request.delete()
+        return document
+    except (ObjectDoesNotExist, ValueError):
         return None
