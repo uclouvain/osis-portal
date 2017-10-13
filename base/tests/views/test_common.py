@@ -49,13 +49,6 @@ class LoginTest(TestCase):
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'registration/login.html')
 
-    @override_settings(OVERRIDED_LOGIN_URL=None)
-    def test_get_request(self):
-        response = self.client.get(self.url)
-
-        self.assertEqual(response.status_code, OK)
-        self.assertTemplateUsed(response, 'registration/login.html')
-
     @override_settings(OVERRIDED_LOGIN_URL=reverse('logged_out'))
     def test_with_overrided_login_url(self):
         response = self.client.get(self.url)
@@ -108,7 +101,7 @@ class LoggedOutTest(TestCase):
 
 class CommonContextProcessorTest(TestCase):
     @override_settings(ENVIRONMENT='env')
-    def test_with_no_defined_environment(self):
+    def test_with_defined_environment(self):
         return_value = common_context_processor(None)
         expected = {
             'environment': 'env',
