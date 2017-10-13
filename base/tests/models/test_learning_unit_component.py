@@ -23,7 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
+
+from django.test import TestCase
+
 from base import models as mdl_base
+from base.models.enums import component_type
+
+from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
+from base.tests.factories.learning_unit_component import LearningUnitComponentFactory
 
 
 def create_learning_unit_component(data):
@@ -36,3 +45,29 @@ def create_learning_unit_component(data):
         learning_unit_component.duration = data['duration']
     learning_unit_component.save()
     return learning_unit_component
+
+
+class LearningUnitComponentTest(TestCase):
+    def setUp(self):
+        today = datetime.datetime.today()
+        self.an_academic_year = AcademicYearFactory(year=today.year)
+
+    def test_search_by_type(self):
+        a_learning_unit_year = LearningUnitYearFactory(academic_year=self.an_academic_year)
+        lecturing_learning_unit_component = LearningUnitComponentFactory(learning_unit_year=a_learning_unit_year,
+                                                                         type=component_type.LECTURING)
+        practical_learning_unit_component = LearningUnitComponentFactory(learning_unit_year=a_learning_unit_year,
+                                                                         type=component_type.PRACTICAL_EXERCISES)
+
+        self.assertCountEqual(mdl_base.learning_unit_component.search(a_learning_unit_year, component_type.LECTURING),
+                         [lecturing_learning_unit_component])
+
+    def test_search(self):
+        a_learning_unit_year = LearningUnitYearFactory(academic_year=self.an_academic_year)
+        lecturing_learning_unit_component = LearningUnitComponentFactory(learning_unit_year=a_learning_unit_year,
+                                                                         type=component_type.LECTURING)
+        practical_learning_unit_component = LearningUnitComponentFactory(learning_unit_year=a_learning_unit_year,
+                                                                         type=component_type.PRACTICAL_EXERCISES)
+
+        self.assertCountEqual(mdl_base.learning_unit_component.search(a_learning_unit_year, None),
+                              [lecturing_learning_unit_component, practical_learning_unit_component])

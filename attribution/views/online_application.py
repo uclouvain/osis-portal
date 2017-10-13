@@ -39,6 +39,8 @@ from attribution.models.enums import function
 from attribution.forms.application import ApplicationForm
 from osis_common.queue import queue_sender
 from attribution.utils import message_generation, permission
+from osis_common.messaging import message_config, send_message as message_service
+from django.shortcuts import redirect
 
 
 ATTRIBUTION_ID_NAME = 'attribution_id_'
@@ -72,12 +74,6 @@ NO_CHARGE = 0
 
 UPDATE_OPERATION = "update"
 DELETE_OPERATION = "delete"
-
-
-def get_year(a_year):
-    if a_year:
-        return a_year.year
-    return None
 
 
 def get_attributions_allocated(a_year, a_tutor):
@@ -288,9 +284,9 @@ def get_terminating_charges(a_year, a_tutor):
             a_function = duplicated_function(attribution, attributions)
             if next_learning_unit_year and not existing_tutor_application_for_next_year(a_tutor,
                                                                                         attribution.learning_unit_year,
-                                                                                        a_function):
-                if next_learning_unit_year.in_charge and not is_deputy_function(attribution.function):
-                    attributions_vacant.append(attribution)
+                                                                                        a_function) \
+                and next_learning_unit_year.in_charge and not is_deputy_function(attribution.function):
+                attributions_vacant.append(attribution)
         return get_attribution_data(attributions_vacant)
     return []
 
@@ -452,8 +448,11 @@ def edit(request, tutor_application_id):
     form = ApplicationForm()
     application = get_application_informations(mdl_attribution.tutor_application.find_by_id(tutor_application_id))
     if application:
-        data = {'charge_lecturing': application[APPLICATION_CHARGE_LECTURING].allocation_charge,
-                'charge_practical': application[APPLICATION_CHARGE_PRACTICAL].allocation_charge,
+        charge_lecturing=application[APPLICATION_CHARGE_LECTURING].allocation_charge if application[APPLICATION_CHARGE_LECTURING] else NO_CHARGE
+        charge_practical=application[APPLICATION_CHARGE_PRACTICAL].allocation_charge if application[APPLICATION_CHARGE_PRACTICAL] else NO_CHARGE
+
+        data = {'charge_lecturing': charge_lecturing,
+                'charge_practical': charge_practical,
                 'remark': application[TUTOR_APPLICATION].remark,
                 'course_summary': application[TUTOR_APPLICATION].course_summary,
                 'max_charge_lecturing': application[VACANT_ATTRIBUTION_CHARGE_LECTURING],
@@ -765,3 +764,52 @@ def is_deputy_function(a_function):
          a_function == function.DEPUTY_TEMPORARY):
         return True
     return False
+
+@login_required
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
+def applications_confirmation(request):
+    a_tutor = mdl_base.tutor.find_by_user(request.user)
+    application_year = mdl_base.academic_year.find_next_academic_year()
+    send_mail_with_applications(application_year, a_tutor)
+    return redirect('learning_unit_applications')
+
+
+def send_mail_with_applications(application_year, a_tutor):
+    applications = get_tutor_applications(application_year, a_tutor)
+
+    html_template_ref = 'applications_confirmation_html'
+    txt_template_ref = 'applications_confirmation_txt'
+
+    tutor_person = a_tutor.person
+    receivers = [message_config.create_receiver(tutor_person.id, tutor_person.email, tutor_person.language)]
+    template_base_data = {'first_name': tutor_person.first_name,
+                          'last_name': tutor_person.last_name,
+                          'applications': get_applications_txt(applications)
+                          }
+    tables = None
+    message_content = message_config.create_message_content(html_template_ref, txt_template_ref,
+                                                            tables, receivers, template_base_data, None)
+    return message_service.send_messages(message_content)
+
+
+def get_applications_txt(applications):
+    txt = "\n"
+    for application in applications:
+        txt += get_application_detail_line(application)
+
+    return txt
+
+
+def get_application_detail_line(application):
+    acronym = None
+    vol_lecturing = 0
+    vol_practical = 0
+
+    if application[APPLICATION_CHARGE_LECTURING]:
+        acronym = application[APPLICATION_CHARGE_LECTURING].learning_unit_component.learning_unit_year.acronym
+        vol_lecturing = application[APPLICATION_CHARGE_LECTURING].allocation_charge
+    if application[APPLICATION_CHARGE_PRACTICAL]:
+        acronym = application[APPLICATION_CHARGE_PRACTICAL].learning_unit_component.learning_unit_year.acronym
+        vol_practical = application[APPLICATION_CHARGE_PRACTICAL].allocation_charge
+    return "*\t{}\t{}\t{}\n".format(acronym, vol_lecturing, vol_practical)
+

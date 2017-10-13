@@ -334,3 +334,7 @@ msgstr "You aren't teaching for any learning unit"
 
 msgid "error_retrieving_attributions_charge"
 msgstr "The volume of charge is not available at the moment. Please try again later."
+
+msgid "confirm_applications_by_mail"
+msgstr "To receive a confirmation email with the applications"
+
