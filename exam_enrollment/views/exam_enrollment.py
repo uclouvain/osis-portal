@@ -112,7 +112,8 @@ def _get_exam_enrollment_form(off_year, request, stud):
     data = exam_enrollment_request.find_by_student(stud)
     if data:
         data = json.loads(data.document)
-        return layout.render(request, 'exam_enrollment_form.html', {'exam_enrollments': data.get('exam_enrollments'),
+        return layout.render(request, 'exam_enrollment_form.html', {'error_message': _(data.get('error_message')).format(off_year.acronym),
+                                                                    'exam_enrollments': data.get('exam_enrollments'),
                                                                     'student': stud,
                                                                     'current_number_session': data.get(
                                                                         'current_number_session'),
