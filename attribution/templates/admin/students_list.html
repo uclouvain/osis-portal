@@ -1,0 +1,67 @@
+{% extends "dashboard_layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block breadcrumb %}
+    <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'faculty_administration' %}</a></li>
+    <li class="active">{% trans 'students_list_admin' %}</li>
+{% endblock %}
+
+
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% trans 'students_list_admin' %}
+        </div>
+        <div class="panel-body">
+            <form action="{% url 'students_list_admin' %}" name="students_list_admin" method="post" target="_blank">
+                {% csrf_token %}
+                {% if form.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        <ul style="list-style-type: none">
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ error | escape }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                <div class="row text-center">
+                    <div class="form-group col-md-3 col-md-offset-4">
+                        <input id="global_id" name="global_id" class="form-control" type="text"
+                               placeholder="{% trans 'global_id' %}">
+                    </div>
+                    <div class="col-md-1">
+                        <button type="submit" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
