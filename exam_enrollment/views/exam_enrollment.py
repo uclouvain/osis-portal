@@ -204,7 +204,6 @@ def _check_offer_enrollments_in_db(a_student):
     an_offer_enrollment = mdl_base.offer_enrollment.find_by_student(a_student)
     if an_offer_enrollment:
         offer_enrollment_in_db_and_uptodate = check_db_offer_enrollments(a_student)
-
     else:
         offer_enrollment_in_db_and_uptodate = False
         logger.warning("This person doesn't exist")
