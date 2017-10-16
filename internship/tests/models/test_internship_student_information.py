@@ -99,7 +99,3 @@ class TestExistsByPerson(TestCase):
     def test_with_information_for_user(self):
         student_information_exists = mdl_student_information.exists_by_person(self.student_information.person)
         self.assertTrue(student_information_exists)
-
-
-
-

@@ -33,13 +33,16 @@ from voluptuous import error as voluptuous_error
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.utils.translation import ugettext_lazy as _
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_GET
+from django.core.exceptions import PermissionDenied
 
 from base import models as mdl_base
+from base.forms.base_forms import GlobalIdForm
 from base.views import layout
 from osis_common.document import paper_sheet
+from osis_common.decorators.ajax import ajax_required
 import assessments.models
 
 from django.db import connection
@@ -52,6 +55,27 @@ queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
 
 
 @login_required
+@permission_required('base.is_faculty_administrator', raise_exception=True)
+def scores_sheets_admin(request):
+    if request.method == "POST":
+        form = GlobalIdForm(request.POST)
+        if form.is_valid():
+            global_id = form.cleaned_data['global_id']
+            return tutor_scores_sheets(request, global_id)
+    else:
+        form = GlobalIdForm()
+    return layout.render(request, "admin/scores_sheets.html", {"form": form})
+
+
+@login_required
+@permission_required('base.is_faculty_administrator', raise_exception=True)
+def tutor_scores_sheets(request, global_id):
+    person = mdl_base.person.find_by_global_id(global_id)
+    scores_in_db_and_uptodate = _check_person_and_scores_in_db(person)
+    return layout.render(request, "scores_sheets.html", locals())
+
+
+@login_required
 @permission_required('base.is_tutor', raise_exception=True)
 def score_encoding(request):
     score_encoding_url = settings.OSIS_SCORE_ENCODING_URL
@@ -61,26 +85,25 @@ def score_encoding(request):
 
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
-def my_scores_sheets(request):
-    scores_in_db_and_uptodate = _check_person_and_scores_in_db(request)
-    return layout.render(request, "my_scores_sheets.html", locals())
+def scores_sheets(request):
+    person = mdl_base.person.find_by_user(request.user)
+    scores_in_db_and_uptodate = _check_person_and_scores_in_db(person)
+    return layout.render(request, "scores_sheets.html", locals())
 
 
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
-@require_http_methods(["POST"])
-def ask_papersheet(request):
-    if request.is_ajax() and 'assessments' in settings.INSTALLED_APPS:
-        person = mdl_base.person.find_by_user(request.user)
+@require_GET
+@ajax_required
+def ask_papersheet(request, global_id=None):
+    if 'assessments' in settings.INSTALLED_APPS:
+        if global_id:
+            person = mdl_base.person.find_by_global_id(global_id) if global_id else mdl_base.person.find_by_user(request.user)
+        else:
+            person = mdl_base.person.find_by_user(request.user)
         if hasattr(settings, 'QUEUES') and settings.QUEUES:
             try:
-                connect = pika.BlockingConnection(_get_rabbit_settings())
-                queue_name = settings.QUEUES.get('QUEUES_NAME').get('SCORE_ENCODING_PDF_REQUEST')
-                channel = _create_channel(connect, queue_name)
-                message_published = channel.basic_publish(exchange='',
-                                                          routing_key=queue_name,
-                                                          body=person.global_id)
-                connect.close()
+                message_published = ask_queue_for_papersheet(person)
             except (RuntimeError, pika.exceptions.ConnectionClosed, pika.exceptions.ChannelClosed,
                     pika.exceptions.AMQPError):
                 return HttpResponse(status=400)
@@ -89,6 +112,17 @@ def ask_papersheet(request):
                 return HttpResponse(status=200)
 
     return HttpResponse(status=405)
+
+
+def ask_queue_for_papersheet(person):
+    connect = pika.BlockingConnection(_get_rabbit_settings())
+    queue_name = settings.QUEUES.get('QUEUES_NAME').get('SCORE_ENCODING_PDF_REQUEST')
+    channel = _create_channel(connect, queue_name)
+    message_published = channel.basic_publish(exchange='',
+                                              routing_key=queue_name,
+                                              body=person.global_id)
+    connect.close()
+    return message_published
 
 
 def insert_or_update_document_from_queue(body):
@@ -113,34 +147,45 @@ def insert_or_update_document_from_queue(body):
 
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
-@require_http_methods(["POST"])
-def check_papersheet(request):
-    if request.is_ajax() and 'assessments' in settings.INSTALLED_APPS:
-        if _check_person_and_scores_in_db(request):
+@require_GET
+@ajax_required
+def check_papersheet(request, global_id=None):
+    if global_id:
+        person = mdl_base.person.find_by_global_id(global_id)
+    else:
+        person = mdl_base.person.find_by_user(request.user)
+    if 'assessments' in settings.INSTALLED_APPS:
+        if _check_person_and_scores_in_db(person):
             return HttpResponse(status=200)
         else:
             return HttpResponse(status=404)
-    else:
-        return HttpResponse(status=405)
+    return HttpResponse(status=405)
 
 
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
-def download_papersheet(request):
-    person = mdl_base.person.find_by_user(request.user)
-    if person:
-        pdf = print_scores(person.global_id)
-        if pdf:
-            filename = "%s.pdf" % _('scores_sheet')
-            response = HttpResponse(content_type='application/pdf')
-            response['Content-Disposition'] = 'attachment; filename="%s"' % filename
-            response.write(pdf)
-            return response
+def download_papersheet(request, global_id=None):
+    logged_person = mdl_base.person.find_by_user(request.user)
+    searched_person = mdl_base.person.find_by_global_id(global_id)
+
+    if logged_person == searched_person or request.user.has_perm('base.is_faculty_administrator'):
+        person = searched_person
     else:
-        logger.warning("A person doesn't exist for the user {0}".format(request.user))
+        raise PermissionDenied()
+
+    if not person:
+        raise Http404()
+
+    pdf = print_scores(person.global_id)
+    if pdf:
+        filename = "%s.pdf" % _('scores_sheet')
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        response.write(pdf)
+        return response
 
     scores_sheets_unavailable = True
-    return layout.render(request, "my_scores_sheets.html", locals())
+    return layout.render(request, "scores_sheets.html", locals())
 
 
 def print_scores(global_id):
@@ -164,29 +209,48 @@ def get_score_sheet(global_id):
     document = None
     if scor_encoding:
         document = scor_encoding.document
-    if not document or is_outdated(document):
+    try:
+        if not document or is_outdated(document):
+            return None
+    except ValueError:
         return None
+
     return document
 
 
 def check_db_scores(global_id):
     scores = assessments.models.score_encoding.find_by_global_id(global_id)
-    if scores and scores.document and not is_outdated(scores.document):
-        try:
-            paper_sheet.validate_data_structure(json.loads(scores.document))
-            return True
-        except (KeyError, voluptuous_error.Invalid):
-            trace = traceback.format_exc()
-            logger.error(trace)
-            logger.warning(
-                "A document could not be produced from the json document of the global id {0}".format(global_id))
-            return False
-    else:
+    if not scores or not scores.document:
+        return False
+
+    try:
+        outdated_document = is_outdated(scores.document)
+    except ValueError:
+        return False
+
+    if outdated_document:
+        return False
+
+    try:
+        paper_sheet.validate_data_structure(json.loads(scores.document))
+        return True
+    except (KeyError, voluptuous_error.Invalid):
+        trace = traceback.format_exc()
+        logger.error(trace)
+        logger.warning(
+            "A document could not be produced from the json document of the global id {0}".format(global_id))
         return False
 
 
 def is_outdated(document):
-    json_document = json.loads(document)
+    try:
+        json_document = json.loads(document)
+    except ValueError:
+        trace = traceback.format_exc()
+        logger.error(trace)
+        logger.warning("The JSON document is invalid and cannot be loaded")
+        raise
+
     now = datetime.datetime.now()
     now_str = '%s/%s/%s' % (now.day, now.month, now.year)
     if json_document.get('publication_date', None) != now_str:
@@ -210,11 +274,10 @@ def _create_channel(connect, queue_name):
     return channel
 
 
-def _check_person_and_scores_in_db(request):
-    person = mdl_base.person.find_by_user(request.user)
+def _check_person_and_scores_in_db(person):
     if person:
         scores_in_db_and_uptodate = check_db_scores(person.global_id)
     else:
         scores_in_db_and_uptodate = False
-        logger.warning("A person doesn't exist for the user {0}".format(request.user))
+        logger.warning("This person doesn't exist")
     return scores_in_db_and_uptodate

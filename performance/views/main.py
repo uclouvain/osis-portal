@@ -87,12 +87,18 @@ def display_result_for_specific_student_performance(request, pk):
     update_date = stud_perf.update_date if stud_perf else None
     fetch_timed_out = stud_perf.fetch_timed_out if stud_perf else None
     not_authorized_message = __make_not_authorized_message(stud_perf)
+    courses_registration_validated = stud_perf.courses_registration_validated if stud_perf else None
 
-    return layout.render(request, "performance_result_student.html", {"results": document,
-                                                                      "creation_date": creation_date,
-                                                                      "update_date": update_date,
-                                                                      "fetch_timed_out": fetch_timed_out,
-                                                                      "not_authorized_message": not_authorized_message})
+    return layout.render(request,
+                         "performance_result_student.html",
+                         {
+                             "results": document,
+                             "creation_date": creation_date,
+                             "update_date": update_date,
+                             "fetch_timed_out": fetch_timed_out,
+                             "not_authorized_message": not_authorized_message,
+                             "courses_registration_validated": courses_registration_validated
+                         })
 
 
 # Admins Views
@@ -145,14 +151,18 @@ def visualize_student_result(request, pk):
     update_date = stud_perf.update_date if stud_perf else None
     fetch_timed_out = stud_perf.fetch_timed_out if stud_perf else None
     not_authorized_message = __make_not_authorized_message(stud_perf)
+    courses_registration_validated = stud_perf.courses_registration_validated if stud_perf else None
 
     return layout.render(request,
                          "admin/performance_result_admin.html",
-                         {"results": document,
-                          "creation_date": creation_date,
-                          "update_date": update_date,
-                          "fetch_timed_out": fetch_timed_out,
-                          "not_authorized_message": not_authorized_message})
+                         {
+                             "results": document,
+                             "creation_date": creation_date,
+                             "update_date": update_date,
+                             "fetch_timed_out": fetch_timed_out,
+                             "not_authorized_message": not_authorized_message,
+                             "courses_registration_validated": courses_registration_validated
+                         })
 
 
 def get_student_programs_list(stud):

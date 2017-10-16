@@ -78,3 +78,4 @@ def filter_by_cohort(cohort):
 
 def exists_by_person(person):
     return InternshipStudentInformation.objects.filter(person=person).exists()
+

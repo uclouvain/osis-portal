@@ -89,7 +89,7 @@ msgid "no_learning_unit_enrollment_found"
 msgstr "You're not enrolled in the learning units of this program : {}."
 
 msgid "no_offer_enrollment_found"
-msgstr "Sorry, you're not enrolled to any program for this academic year."
+msgstr "You're not enrolled to any program for the current academic year ({})."
 
 msgid "outside_exam_enrollment_period"
 msgstr "Exam enrollments for the program {} the  are currently closed."
@@ -117,3 +117,9 @@ msgstr "Year"
 
 msgid "offer_choice"
 msgstr "Offer choice"
+
+msgid "form_unavailable"
+msgstr "Form unavailable"
+
+msgid "exam_enrollment_form_loading"
+msgstr "Exam enrollment form is loading."

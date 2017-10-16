@@ -48,3 +48,4 @@ class PersonFactory(factory.DjangoModelFactory):
     language = factory.Iterator(settings.LANGUAGES, getter=operator.itemgetter(0))
     gender = factory.Iterator(mdl.person.Person.GENDER_CHOICES, getter=operator.itemgetter(0))
     user = factory.SubFactory(UserFactory)
+    global_id = None

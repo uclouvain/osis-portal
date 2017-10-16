@@ -186,7 +186,10 @@ def fetch_json_data(registration_id, academic_year, acronym):
         client = PerformanceClient()
         json_data = client.call(message)
     if json_data:
-        json_student_perf = json.loads(json_data.decode("utf-8"))
+        try:
+            json_student_perf = json.loads(json_data.decode("utf-8"))
+        except ValueError:
+            return None
     return json_student_perf
 
 
@@ -236,17 +239,28 @@ def save(registration_id, academic_year, acronym, json_data, default_update_date
     session_locked = json_data.pop("sessionMonth", None)
     offer_registration_state = json_data.pop("etatInscr", None)
     creation_date = get_creation_date()
+    courses_registration_validated = get_course_registration_validation_status(json_data.pop("validationInscrCours", None))
     fields = {"data": json_data,
               "update_date": update_date,
               "creation_date": creation_date,
               "authorized": authorized,
               "session_locked": session_locked,
-              "offer_registration_state": offer_registration_state}
+              "offer_registration_state": offer_registration_state,
+              "courses_registration_validated": courses_registration_validated}
     try:
         obj = update_or_create(registration_id, academic_year, acronym, fields)
     except Exception:
         obj = None
     return obj
+
+
+def get_course_registration_validation_status(json_status):
+    if json_status and json_status == "OUI":
+            return True
+    elif json_status and json_status == "NON":
+            return False
+    else:
+        return None
 
 
 def get_performances_by_registration_id_and_offer(registration_id, academic_year, acronym):

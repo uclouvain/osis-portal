@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2017-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,19 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
-import factory.fuzzy
-import string
-import datetime
-from django.conf import settings
-from django.utils import timezone
+from django.db import models
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
+class OfferPropositionGroupAdmin(SerializableModelAdmin):
+    list_display = ('name_short', 'name_long')
+    search_fields=('name_short', 'name_long')
 
-class AcademicYearFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = "base.AcademicYear"
+class OfferPropositionGroup(SerializableModel):
+    name_short = models.CharField(max_length=10)
+    name_long = models.CharField(max_length=256)
 
-    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    year = factory.fuzzy.FuzzyInteger(2000, timezone.now().year)
-    start_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year, 9, 15))
-    end_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year+1, 9, 30))
+    def __str__(self):
+        return self.name_short

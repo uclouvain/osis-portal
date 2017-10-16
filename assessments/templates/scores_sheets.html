@@ -45,7 +45,7 @@
             <button id="lnk_ask_papersheet" onclick="ask_papersheet()" class="btn btn-lg btn-primary" style="display: none;">
                 {% trans 'ask_papersheet' %}
             </button>
-            <a href="{% url 'scores_download' %}" id="lnk_scores_download" class="btn btn-lg btn-primary" style="display: none;">
+            <a href="{% url 'scores_download' person.global_id %}" id="lnk_scores_download" class="btn btn-lg btn-primary" style="display: none;">
                 {% trans 'download' %}
             </a>
         </div>
@@ -108,15 +108,15 @@
             disable(lnk_ask_papersheet);
             show(message_box, 'block');
             set_class(message_box, "alert alert-info");
-            show_message_in_container(status_message, "<i class=\"fa fa-spinner fa-spin fa-fw\"></i> {% trans 'scores_sheet_building' %}");
+            show_message_in_container(status_message, "<i class=\"fa fa-spinner fa-spin fa-fw\"></i> {% trans 'scores_sheet_loading' %}");
 
             send_request();
         }
 
         function send_request(){
             $.ajax({
-                method: 'POST',
-                url: "{% url 'ask_papersheet' %}",
+                method: 'GET',
+                url: "{% url 'ask_papersheet' person.global_id %}",
                 success: function () {
                     check_result();
                 },
@@ -130,8 +130,8 @@
 
         function check_result(){
             $.ajax({
-                method: 'POST',
-                url: "{% url 'check_papersheet' %}",
+                method: 'GET',
+                url: "{% url 'check_papersheet' person.global_id %}",
                 success: function () {
                     set_class(message_box, "alert alert-success");
                     show_message_in_container(status_message, "{% trans 'scores_sheet_ready' %}");

@@ -29,11 +29,12 @@ import json
 from django.test import TestCase
 
 from assessments.models import score_encoding as mdl_score_encoding
+from assessments.tests.factories.score_encoding import ScoreEncodingFactory, load_score_encoding_sample
 
 
 class ScoreEncodingTest(TestCase):
     def setUp(self):
-        self.score_encoding = create_score_encoding()
+        self.score_encoding = ScoreEncodingFactory()
         self.global_id = self.score_encoding.global_id
 
     def test_find_by_global_id(self):
@@ -44,7 +45,7 @@ class ScoreEncodingTest(TestCase):
         self.assertIsNone(score_encoding, "Should return no score encoding")
 
     def test_insert_or_update_document(self):
-        new_document = get_sample()
+        new_document = load_score_encoding_sample()
         score_encoding = mdl_score_encoding.insert_or_update_document("1202151", new_document)
         self.assertJSONEqual(score_encoding.document, new_document, "Problem when inserting new document")
 
@@ -53,12 +54,21 @@ class ScoreEncodingTest(TestCase):
         self.assertJSONEqual(self.score_encoding.document, new_document, "Problem when updating document")
 
 
-sample_1 = "assessments/tests/ressources/score_encoding_sample.json"
+sample_1 = "assessments/tests/resources/score_encoding_sample.json"
+invalid_sample = "assessments/tests/resources/invalid_sample.json"
+undated_sample = "assessments/tests/resources/undated_sample.json"
 
 
 def create_score_encoding(global_id="001254"):
     document = get_sample()
     score_encoding = mdl_score_encoding.ScoreEncoding(global_id=global_id, document=document)
+    score_encoding.save()
+    return score_encoding
+
+
+def create_invalid_score_encoding(global_id):
+    invalid_document = get_invalid_sample()
+    score_encoding = mdl_score_encoding.ScoreEncoding(global_id=global_id, document=invalid_document)
     score_encoding.save()
     return score_encoding
 
@@ -75,6 +85,14 @@ def get_sample():
 
 def get_old_sample():
     return load_sample(sample_1)
+
+
+def get_invalid_sample():
+    return load_sample(invalid_sample)
+
+
+def get_undated_sample():
+    return load_sample(undated_sample)
 
 
 def update_publication_date(sample):

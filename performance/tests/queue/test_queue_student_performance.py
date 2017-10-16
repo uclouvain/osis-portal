@@ -117,9 +117,18 @@ class TestQueueStudentPerformance(TestCase):
             self.assertEqual(self.student_performance.academic_year, obj.academic_year, "Incorrect academic_year")
             self.assertEqual(self.student_performance.acronym, obj.acronym, "Incorrect acronym")
 
+        @patch('frontoffice.queue.queue_listener.Client.call')
+        def test_fetch_json_data(self, mock_client_call):
+            mock_client_call.return_value = "this is not a valid json".encode()
+            self.assertIsNone(queue_stud_perf.fetch_json_data(None, None, None))
+
+            json_str = json.dumps(['foo', {'bar': ('baz', None, 1.0, 2)}]).encode()
+            mock_client_call.return_value = json_str
+            self.assertEqual(json.loads(json_str.decode("utf-8")),
+                             queue_stud_perf.fetch_json_data(None, None, None))
+
 
 class TestUpdateExpDate(TestCase):
-
     def get_update_exp_date_json_with_reg_id_as_byte(self):
         return b'{"registrationId": "1111111","academicYear": 2016,"acronym": \
         "DROI1BA","expirationDate": 1485267376419,"forceUpdate": false}'

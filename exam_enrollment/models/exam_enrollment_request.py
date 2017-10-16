@@ -23,10 +23,41 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import json
 from django.contrib import admin
-from exam_enrollment.models import exam_enrollment_submitted, exam_enrollment_request
+from django.contrib.postgres.fields import JSONField
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 
-admin.site.register(exam_enrollment_submitted.ExamEnrollmentSubmitted,
-                    exam_enrollment_submitted.ExamEnrollmentSubmittedAdmin)
-admin.site.register(exam_enrollment_request.ExamEnrollmentRequest,
-                    exam_enrollment_request.ExamEnrollmentRequestdAdmin)
+
+class ExamEnrollmentRequestdAdmin(admin.ModelAdmin):
+    list_display = ('student',)
+    fieldsets = ((None, {'fields': ('student', 'document')}),)
+    search_fields = ['student__registration_id']
+    raw_id_fields = ('student',)
+
+
+class ExamEnrollmentRequest(models.Model):
+    student = models.ForeignKey('base.Student')
+    document = JSONField()
+
+    def __str__(self):
+        return "{}".format(self.student)
+
+
+def insert_or_update_document(student, document):
+    exam_enrollment_request_object, created = ExamEnrollmentRequest.objects.update_or_create(
+        student=student, defaults={"document": document})
+    return exam_enrollment_request_object
+
+
+def find_by_student(student):
+    try:
+        exam_enrollments_request = ExamEnrollmentRequest.objects.get(student=student)
+        return exam_enrollments_request
+    except ObjectDoesNotExist:
+        return None
+
+
+def pop_document(student):
+    ExamEnrollmentRequest.objects.get(student=student).delete()

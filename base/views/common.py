@@ -33,16 +33,22 @@ from base.views import layout
 from base.models import person as person_mdl
 
 
+def return_error_response(request, template, status_code):
+    response = layout.render(request, template, {})
+    response.status_code = status_code
+    return response
+
+
 def page_not_found(request):
-    return layout.render(request, 'page_not_found.html', {})
+    return return_error_response(request, 'page_not_found.html', 404)
 
 
 def access_denied(request):
-    return layout.render(request, 'access_denied.html', {})
+    return return_error_response(request, 'access_denied.html', 401)
 
 
 def server_error(request):
-    return layout.render(request, 'server_error.html', {})
+    return return_error_response(request, 'server_error.html', 500)
 
 
 def common_context_processor(request):

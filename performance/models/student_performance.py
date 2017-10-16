@@ -34,11 +34,12 @@ from performance.models.enums import offer_registration_state, session_month
 
 class StudentPerformanceAdmin(admin.ModelAdmin):
     list_display = ('registration_id', 'academic_year',
-                    'acronym', 'update_date', 'creation_date', 'authorized', 'offer_registration_state')
+                    'acronym', 'update_date', 'creation_date', 'authorized', 'offer_registration_state',
+                    'courses_registration_validated')
     list_filter = ('academic_year',)
     fieldsets = ((None, {'fields': ('registration_id', 'academic_year', 'acronym', 'update_date',
-                                    'creation_date', 'data')}),)
-    readonly_fields = ('creation_date',)
+                                    'creation_date', 'data', 'courses_registration_validated')}),)
+    readonly_fields = ('creation_date', 'courses_registration_validated')
     search_fields = ['registration_id', 'academic_year', 'acronym']
 
 
@@ -56,7 +57,7 @@ class StudentPerformance(models.Model):
     session_locked = models.CharField(max_length=50,
                                       choices=session_month.SESSION_MONTHS,
                                       null=True)
-
+    courses_registration_validated = models.NullBooleanField(null=True)
     fetch_timed_out = False
 
     def _get_academic_year_template_formated(self):

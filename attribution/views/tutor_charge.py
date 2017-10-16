@@ -318,10 +318,11 @@ def get_student_results(cours, results):
 
 
 def get_student_data_dict(a_student_performance):
-    if a_student_performance:
+    try:
         data_input = json.dumps(a_student_performance.data)
         return json.loads(data_input)
-    return None
+    except (AttributeError, ValueError):
+        return None
 
 
 def get_value(session, variable_name):

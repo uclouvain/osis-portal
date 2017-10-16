@@ -42,3 +42,5 @@ admin.site.register(proposition_document_file.PropositionDocumentFile,
                     proposition_document_file.PropositionDocumentFileAdmin)
 admin.site.register(proposition_offer.PropositionOffer, proposition_offer.PropositionOfferAdmin)
 admin.site.register(proposition_role.PropositionRole, proposition_role.PropositionRoleAdmin)
+admin.site.register(offer_proposition_group.OfferPropositionGroup,
+                    offer_proposition_group.OfferPropositionGroupAdmin)
