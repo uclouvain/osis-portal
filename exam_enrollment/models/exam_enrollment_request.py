@@ -51,11 +51,13 @@ def insert_or_update_document(student, document):
     return exam_enrollment_request_object
 
 
-def pop_document(student):
+def find_by_student(student):
     try:
         exam_enrollments_request = ExamEnrollmentRequest.objects.get(student=student)
-        document = json.loads(exam_enrollments_request.document)
-        exam_enrollments_request.delete()
-        return document
-    except (ObjectDoesNotExist, ValueError):
+        return exam_enrollments_request
+    except ObjectDoesNotExist:
         return None
+
+
+def pop_document(student):
+    ExamEnrollmentRequest.objects.get(student=student).delete()
