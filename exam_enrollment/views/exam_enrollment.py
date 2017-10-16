@@ -109,12 +109,14 @@ def _get_exam_enrollment_form(off_year, request, stud):
     if not learn_unit_enrols:
         messages.add_message(request, messages.WARNING, _('no_learning_unit_enrollment_found').format(off_year.acronym))
         return response.HttpResponseRedirect(reverse('dashboard_home'))
-    data = exam_enrollment_request.pop_document(stud)
+    data = exam_enrollment_request.find_by_student(stud)
     if data:
+        data = json.loads(data.document)
         if data.get('error_message'):
             error_message = _(data.get('error_message')).format(off_year.acronym)
         else:
             error_message = data.get('error_message')
+        exam_enrollment_request.pop_document(stud)
         return layout.render(request, 'exam_enrollment_form.html', {'error_message': error_message,
                                                                     'exam_enrollments': data.get('exam_enrollments'),
                                                                     'student': stud,
@@ -209,8 +211,8 @@ def _check_offer_enrollments_in_db(a_student):
 
 
 def check_db_offer_enrollments(a_student):
-    document = exam_enrollment_request.pop_document(a_student)
-    if not document:
+    exam_enrollment = exam_enrollment_request.find_by_student(a_student)
+    if not exam_enrollment or not exam_enrollment.document:
         return False
     else:
         return True
