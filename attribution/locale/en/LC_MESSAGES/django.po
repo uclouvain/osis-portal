@@ -343,3 +343,9 @@ msgstr "Students list administration"
 
 msgid "confirm_applications_by_mail"
 msgstr "To receive a confirmation email with the applications"
+
+msgid "applications_administration"
+msgstr "Applications administration"
+
+msgid "applications_mail_sent"
+msgstr "An email with your applications have been sent"
