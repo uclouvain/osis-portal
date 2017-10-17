@@ -346,3 +346,9 @@ msgstr "Administration des listes des étudiants"
 
 msgid "confirm_applications_by_mail"
 msgstr "Pour recevoir un email de confirmation avec toutes les candidatures en ligne"
+
+msgid "applications_administration"
+msgstr "Administration des candidatures"
+
+msgid "applications_mail_sent"
+msgstr "Un email contenant vos candidatures vous a été envoyé"

@@ -36,7 +36,7 @@ urlpatterns = [
 
     url(r'^$', tutor_charge.home, name='attribution_home'),
     url(r'^charge/([0-9]+)/([0-9a-z-]+)/$', tutor_charge.by_year, name='attributions_by_year'),
-    url(r'^search/$', online_application.search, name='vacant_learning_unit_search'),
+    url(r'^search/([0-9a-z-]+)/$', online_application.search, name='vacant_learning_unit_search'),
 
     url(r'^students/(?P<a_learning_unit_year>[0-9]+)/(?P<a_tutor>[0-9]+)/$', tutor_charge.show_students,
         name='attribution_students'),
@@ -46,12 +46,12 @@ urlpatterns = [
         url(r'^([0-9]+)/delete/$', online_application.delete, name='delete_tutor_application'),
         url(r'^([0-9]+)/edit/$', online_application.edit, name='edit_tutor_application'),
         url(r'^([0-9]+)/save/$', online_application.save, name='save_tutor_application'),
-        url(r'^create/$', online_application.save_on_new_learning_unit, name='save_new_tutor_application'),
-        url(r'^form/$', online_application.attribution_application_form, name='tutor_application_create'),
+        url(r'^create/([0-9a-z-]+)/$', online_application.save_on_new_learning_unit, name='save_new_tutor_application'),
+        url(r'^form/([0-9a-z-]+)/$', online_application.attribution_application_form, name='tutor_application_create'),
         url(r'^renew/$', online_application.renew, name='renew'),
-        url(r'^new/$', online_application.new, name='new'),
+        url(r'^new/([0-9a-z-]+)/$', online_application.new, name='new'),
         url(r'^outside_period/$', online_application.outside_period, name='outside_applications_period'),
-        url(r'^confirm/$', online_application.applications_confirmation, name='email_tutor_application_confirmation'),
+        url(r'^confirm/(?P<global_id>[0-9a-z-]+)/$', online_application.applications_confirmation, name='email_tutor_application_confirmation'),
 
     ])),
 
@@ -65,7 +65,11 @@ urlpatterns = [
         url(r'^visualize_tutor/([0-9a-z-]+)/$', tutor_charge.visualize_tutor_attributions,
             name='attribution_admin_visualize_tutor'),
         url(r'^students_list/$', list.students_list_admin, name='students_list_admin'),
-        url(r'^students_list/([0-9a-z-]+)/xls', list.list_build_by_person, name='students_list_admin_create')
+        url(r'^students_list/([0-9a-z-]+)/xls', list.list_build_by_person, name='students_list_admin_create'),
+        url(r'^applications/$', online_application.applications_administration, name='attribution_applications'),
+        url(r'^applications/select_tutor/$', online_application.select_tutor_applications,
+            name='applications_admin_select_tutor'),
+        url(r'^visualize_tutor_applications/(?P<global_id>[0-9a-z-]+)/$', online_application.visualize_tutor_applications, name="visualize_tutor_applications")
     ])),
     url(r'^list/students$', list.students_list, name='students_list'),
     url(r'^list/students/xls', list.list_build, name='students_list_create'),
