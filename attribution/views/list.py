@@ -24,7 +24,6 @@
 #
 ##############################################################################
 import logging
-import traceback
 import urllib
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
