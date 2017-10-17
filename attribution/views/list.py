@@ -126,9 +126,7 @@ def fetch_student_exam_enrollment(academic_year, codes):
                                                      codes=codes)
             return _fetch_with_basic_auth(server_top_url, document_url)
         except Exception:
-            logger.warning("Error when fetching document (anac:{}, codes{}, url{})".format(academic_year, codes, document_url))
-            trace = traceback.format_exc()
-            logger.error(trace)
+            logger.exception("Error when fetching document (anac:{}, codes{}, url{})".format(academic_year, codes, document_url))
     return None
 
 
