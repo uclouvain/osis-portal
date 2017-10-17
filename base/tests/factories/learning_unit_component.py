@@ -23,25 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import string
+import operator
+
 import factory
 import factory.fuzzy
-import string
 
-from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_unit import LearningUnitFactory
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
+from base.models.enums import component_type
 
 
-class LearningUnitYearFactory(factory.django.DjangoModelFactory):
+class LearningUnitComponentFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = "base.LearningUnitYear"
+        model = "base.LearningUnitComponent"
 
     external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    acronym = factory.LazyAttribute(lambda obj: obj.learning_unit.acronym)
-    title = factory.LazyAttribute(lambda obj: obj.learning_unit.title)
-    credits = 5
-    weight = 5
-    academic_year = factory.SubFactory(AcademicYearFactory)
-    learning_unit = factory.SubFactory(LearningUnitFactory)
-    team = False
-    vacant = False
-    in_charge = False
+
+    learning_unit_year = factory.SubFactory(LearningUnitYearFactory)
+    type = factory.Iterator(component_type.COMPONENT_TYPES, getter=operator.itemgetter(0))
+    duration = factory.fuzzy.FuzzyDecimal(9)

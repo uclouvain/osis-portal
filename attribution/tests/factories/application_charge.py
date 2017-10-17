@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -25,23 +25,12 @@
 ##############################################################################
 import factory
 import factory.fuzzy
-import string
 
-from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_unit import LearningUnitFactory
+from base.tests.factories.learning_unit_year import LearningUnitComponentFactory
+from attribution.tests.factories.tutor_application import TutorApplicationFactory
 
 
-class LearningUnitYearFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = "base.LearningUnitYear"
-
-    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    acronym = factory.LazyAttribute(lambda obj: obj.learning_unit.acronym)
-    title = factory.LazyAttribute(lambda obj: obj.learning_unit.title)
-    credits = 5
-    weight = 5
-    academic_year = factory.SubFactory(AcademicYearFactory)
-    learning_unit = factory.SubFactory(LearningUnitFactory)
-    team = False
-    vacant = False
-    in_charge = False
+class ApplicationChargeFactory(factory.DjangoModelFactory):
+    tutor_application = factory.SubFactory(TutorApplicationFactory)
+    learning_unit_component = factory.SubFactory(LearningUnitComponentFactory)
+    allocation_charge = factory.fuzzy.FuzzyDecimal(9)
