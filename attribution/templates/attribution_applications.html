@@ -9,7 +9,7 @@
 * The core business involves the administration of students, teachers,
 * courses, programs and so on.
 *
-* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+* Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -40,24 +40,30 @@
 </ol>
 {% endblock %}
 {% block content %}
+    {% if mail_confirmation %}
+        <div id="pnl_msg_info" class="alert alert-info">
+            {{ mail_confirmation }}
+        </div>
+    {% endif %}
     <h1>{% trans 'my_applications' %} {{ academic_year }}</h1>
-    <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+    <h2>{{ a_tutor.person.first_name }} {{ a_tutor.person.last_name }} - {{ a_tutor.person.global_id }}</h2>
     <div class="panel panel-default"
          id="pnl_applications">
         <div class="panel-heading">{% trans 'my_applications'%}</div>
         <div class="panel-body">
-            <a href="{% url 'tutor_application_create' %}"
-               style="visibility:hidden;display:none;"
+            <a href="{% url 'tutor_application_create' a_tutor.person.global_id %}"
+               style="visibility:hidden;display: none;"
                id="lnk_tutor_application_create"
                class="btn btn-primary pull-right"
                role="button" title="{% trans 'create_an_tutor_application'%}">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> {% trans 'create_an_tutor_application' %}
             </a>
             <span class="pull-right" style="margin-left:10px;margin-right:10px;">
-                <form action="{% url 'email_tutor_application_confirmation' %}"
+                <form action="{% url 'email_tutor_application_confirmation' a_tutor.person.global_id %}"
                       id="form_email_tutor_application_confirmation">
+                    {% csrf_token %}
                     <button class="btn btn-default"
-                            id="lnk_applications_email_confirmtion"
+                            id="btn_applications_email_confirmtion"
                             type="submit" title="{%trans 'confirm_applications_by_mail'%}">
                         <span class="glyphicon glyphicon-envelope" ></span></button>
                 </form>
