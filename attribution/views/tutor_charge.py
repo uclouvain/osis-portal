@@ -468,8 +468,3 @@ def _tutor_attributions_by_learning_unit(tutor_allocations_json):
         }
     return tutor_attributions
 
-
-def attribution_deleted_in_external_data(external_data, osis_id):
-    if external_data.get(osis_id):
-        return False
-    return True
