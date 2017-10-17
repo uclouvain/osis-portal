@@ -31,9 +31,6 @@ from base import models as mdl_base
 def user_is_tutor_or_super_user(function):
 
     def wrap(request, *args, **kwargs):
-        print('user_is_tutor_or_super_user')
-        print(kwargs)
-        print(kwargs)
         if 'global_id' in kwargs:
             global_id = kwargs['global_id']
         else:
@@ -47,6 +44,4 @@ def user_is_tutor_or_super_user(function):
 
         return function(request, *args, **kwargs)
 
-    # wrap.__doc__ = function.__doc__
-    # wrap.__name__ = function.__name__
     return wrap
