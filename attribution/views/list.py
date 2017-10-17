@@ -23,9 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+import logging
 import urllib
-
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
@@ -40,6 +39,7 @@ from base.views import layout
 
 NO_DATA_VALUE = "-"
 LEARNING_UNIT_ACRONYM_ID = "learning_unit_acronym_"
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 @login_required
@@ -124,8 +124,8 @@ def fetch_student_exam_enrollment(academic_year, codes):
             document_url = document_base_path.format(anac=academic_year,
                                                      codes=codes)
             return _fetch_with_basic_auth(server_top_url, document_url)
-        except Exception as e:
-            pass
+        except Exception:
+            logger.exception("Error when fetching document (anac:{}, codes{}, url{})".format(academic_year, codes, document_url))
     return None
 
 
