@@ -1,12 +1,12 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -24,10 +24,9 @@
 #
 ##############################################################################
 import datetime
-
 from unittest import mock
-from requests.exceptions import RequestException
 
+from requests.exceptions import RequestException
 from django.contrib.auth.models import User, Group
 from django.test import TestCase
 from django.conf import settings
@@ -38,7 +37,8 @@ from attribution.models.enums import function
 from performance.tests.models import test_student_performance
 from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
     test_learning_unit_component
-from attribution.tests.models import test_attribution_charge, test_attribution
+from attribution.tests.models import test_attribution_charge
+from attribution.tests.factories.attribution import AttributionFactory
 
 
 REGISTRATION_ID = '64641200'
@@ -53,7 +53,6 @@ ATTRIBUTION_ID = "8080"
 ATTRIBUTION_EXTERNAL_ID = "osis.attribution_{attribution_id}".format(attribution_id=ATTRIBUTION_ID)
 OTHER_ATTRIBUTION_ID = "8081"
 OTHER_ATTRIBUTION_EXTERNAL_ID = "osis.attribution_{attribution_id}".format(attribution_id=OTHER_ATTRIBUTION_ID)
-OSIS_ONLY_ATTRIBUTION_EXTERNAL_ID = "osis.attribution_8082"
 
 ACRONYM = 'LELEC1530'
 TITLE = 'Circ. Electro. Analog. & Digit. Fondam.'
@@ -134,10 +133,10 @@ class TutorChargeTest(TestCase):
             self.create_learning_unit_component(component_type.PRACTICAL_EXERCISES,
                                                 LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION,
                                                 a_learning_unit_year)
-        an_attribution = test_attribution.create_attribution({'function': function.CO_HOLDER,
-                                                              'learning_unit_year': a_learning_unit_year,
-                                                              'tutor': self.a_tutor,
-                                                              'external_id': ATTRIBUTION_EXTERNAL_ID})
+        an_attribution = AttributionFactory(function=function.CO_HOLDER,
+                                            learning_unit_year=a_learning_unit_year,
+                                            tutor=self.a_tutor,
+                                            external_id=ATTRIBUTION_EXTERNAL_ID)
         test_attribution_charge.create_attribution_charge(
             {'attribution': an_attribution,
              'learning_unit_component': a_learning_unit_component_lecture,
@@ -226,7 +225,6 @@ class TutorChargeTest(TestCase):
     def test_format_students_email_new_management(self):
         email_expected = "{0}{1}-{2}{3}".format(tutor_charge.MAIL_TO, ACRONYM.lower(), tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST, tutor_charge.STUDENT_LIST_EMAIL_END)
         self.assertEqual(tutor_charge.get_email_students(ACRONYM, tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST), email_expected)
-
 
     def test_format_students_email_without_acronym(self):
         self.assertIsNone(tutor_charge.get_email_students(None, 2017))
@@ -321,13 +319,11 @@ class TutorChargeTest(TestCase):
 
     @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge)
     def test_list_teaching_charge_for_multiple_attributions(self, mock_requests_get):
-        an_other_attribution = test_attribution.create_attribution(
-                {'function': function.CO_HOLDER,
-                 'learning_unit_year': self.get_data('learning_unit_year'),
-                 'tutor': self.a_tutor,
-                 'external_id': OTHER_ATTRIBUTION_EXTERNAL_ID}
-            )
 
+        an_other_attribution = AttributionFactory(function=function.CO_HOLDER,
+                                                  learning_unit_year=self.get_data('learning_unit_year'),
+                                                  tutor=self.a_tutor,
+                                                  external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
         teaching_charge = tutor_charge.list_teaching_charge(self.a_tutor.person, self.get_data('academic_year'))
 
         self.assertTrue(mock_requests_get.called)
@@ -342,18 +338,16 @@ class TutorChargeTest(TestCase):
 
     @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge)
     def test_list_teaching_charge_for_multiple_attributions_less_in_json(self, mock_requests_get):
-        an_other_attribution = test_attribution.create_attribution(
-            {'function': function.CO_HOLDER,
-             'learning_unit_year': self.get_data('learning_unit_year'),
-             'tutor': self.a_tutor,
-             'external_id': OTHER_ATTRIBUTION_EXTERNAL_ID}
-        )
-        attribution_not_in_json = test_attribution.create_attribution(
-            {'function': function.CO_HOLDER,
-             'learning_unit_year': self.get_data('learning_unit_year'),
-             'tutor': self.a_tutor,
-             'external_id': OSIS_ONLY_ATTRIBUTION_EXTERNAL_ID}
-        )
+
+        an_other_attribution = AttributionFactory(learning_unit_year=self.get_data('learning_unit_year'),
+                                                  tutor=self.a_tutor,
+                                                  external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
+        inexisting_external_id = "osis.attribution_8082"
+
+        attribution_not_in_json = AttributionFactory(learning_unit_year=self.get_data('learning_unit_year'),
+                                                     tutor=self.a_tutor,
+                                                     external_id=inexisting_external_id)
+
         teaching_charge = tutor_charge.list_teaching_charge(self.a_tutor.person, self.get_data('academic_year'))
 
         self.assertTrue(mock_requests_get.called)

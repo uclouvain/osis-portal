@@ -145,7 +145,7 @@ def list_teaching_charge(a_person, an_academic_year):
     tot_practical = NO_ALLOCATION_CHARGE
     attributions_charge_duration = get_attributions_charge_duration(a_person, an_academic_year)
     for an_attribution in list_attributions(a_person, an_academic_year):
-        if attribution_deleted_in_external_data(attributions_charge_duration, an_attribution.external_id):
+        if not an_attribution.external_id in attributions_charge_duration:
             continue
         a_learning_unit_year = an_attribution.learning_unit_year
 
