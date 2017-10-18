@@ -1,12 +1,12 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -24,10 +24,9 @@
 #
 ##############################################################################
 import datetime
-
 from unittest import mock
-from requests.exceptions import RequestException
 
+from requests.exceptions import RequestException
 from django.contrib.auth.models import User, Group
 from django.test import TestCase
 from django.conf import settings
@@ -38,7 +37,8 @@ from attribution.models.enums import function
 from performance.tests.models import test_student_performance
 from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
     test_learning_unit_component
-from attribution.tests.models import test_attribution_charge, test_attribution
+from attribution.tests.models import test_attribution_charge
+from attribution.tests.factories.attribution import AttributionFactory
 
 
 REGISTRATION_ID = '64641200'
@@ -73,34 +73,34 @@ class MockRequest:
 
 def mock_request_single_attribution_charge(*args, **kwargs):
     json_response = {"tutorAllocations": {
-                        "allocationChargeLecturing": str(LEARNING_UNIT_LECTURING_DURATION),
-                        "allocationChargePractical": str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION),
-                        "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
-                        "function": "COORDINATOR",
-                        "globalId": "00233751",
-                        "allocationId": ATTRIBUTION_ID
-                    }}
+        "allocationChargeLecturing": str(LEARNING_UNIT_LECTURING_DURATION),
+        "allocationChargePractical": str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION),
+        "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
+        "function": "COORDINATOR",
+        "globalId": "00233751",
+        "allocationId": ATTRIBUTION_ID
+    }}
     return MockRequest(json_response)
 
 
 def mock_request_multiple_attributions_charge(*args, **kwargs):
     json_response = {"tutorAllocations": [{
-                        "allocationChargeLecturing": str(LEARNING_UNIT_LECTURING_DURATION),
-                        "allocationChargePractical": str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION),
-                        "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
-                        "function": "COORDINATOR",
-                        "globalId": "00233751",
-                        "allocationId": ATTRIBUTION_ID
-                    },
-                    {
-                        "allocationChargeLecturing": str(0),
-                        "allocationChargePractical": str(0),
-                        "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
-                        "function": "CO_HOLDER",
-                        "globalId": "00233751",
-                        "allocationId": OTHER_ATTRIBUTION_ID
-                    },
-                    ]}
+        "allocationChargeLecturing": str(LEARNING_UNIT_LECTURING_DURATION),
+        "allocationChargePractical": str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION),
+        "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
+        "function": "COORDINATOR",
+        "globalId": "00233751",
+        "allocationId": ATTRIBUTION_ID
+    },
+        {
+            "allocationChargeLecturing": str(0),
+            "allocationChargePractical": str(0),
+            "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
+            "function": "CO_HOLDER",
+            "globalId": "00233751",
+            "allocationId": OTHER_ATTRIBUTION_ID
+        },
+    ]}
     return MockRequest(json_response)
 
 
@@ -133,10 +133,10 @@ class TutorChargeTest(TestCase):
             self.create_learning_unit_component(component_type.PRACTICAL_EXERCISES,
                                                 LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION,
                                                 a_learning_unit_year)
-        an_attribution = test_attribution.create_attribution({'function': function.CO_HOLDER,
-                                                              'learning_unit_year': a_learning_unit_year,
-                                                              'tutor': self.a_tutor,
-                                                              'external_id': ATTRIBUTION_EXTERNAL_ID})
+        an_attribution = AttributionFactory(function=function.CO_HOLDER,
+                                            learning_unit_year=a_learning_unit_year,
+                                            tutor=self.a_tutor,
+                                            external_id=ATTRIBUTION_EXTERNAL_ID)
         test_attribution_charge.create_attribution_charge(
             {'attribution': an_attribution,
              'learning_unit_component': a_learning_unit_component_lecture,
@@ -226,12 +226,11 @@ class TutorChargeTest(TestCase):
         email_expected = "{0}{1}-{2}{3}".format(tutor_charge.MAIL_TO, ACRONYM.lower(), tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST, tutor_charge.STUDENT_LIST_EMAIL_END)
         self.assertEqual(tutor_charge.get_email_students(ACRONYM, tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST), email_expected)
 
-
     def test_format_students_email_without_acronym(self):
         self.assertIsNone(tutor_charge.get_email_students(None, 2017))
 
     def test_get_schedule_url(self):
-        url_expected = settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_URL').\
+        url_expected = settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_URL'). \
             format(settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_NUMBER'), ACRONYM.lower())
         self.assertEqual(tutor_charge.get_schedule_url(ACRONYM), url_expected)
 
@@ -320,12 +319,34 @@ class TutorChargeTest(TestCase):
 
     @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge)
     def test_list_teaching_charge_for_multiple_attributions(self, mock_requests_get):
-        an_other_attribution = test_attribution.create_attribution(
-                {'function': function.CO_HOLDER,
-                 'learning_unit_year': self.get_data('learning_unit_year'),
-                 'tutor': self.a_tutor,
-                 'external_id': OTHER_ATTRIBUTION_ID}
-            )
+
+        an_other_attribution = AttributionFactory(function=function.CO_HOLDER,
+                                                  learning_unit_year=self.get_data('learning_unit_year'),
+                                                  tutor=self.a_tutor,
+                                                  external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
+        teaching_charge = tutor_charge.list_teaching_charge(self.a_tutor.person, self.get_data('academic_year'))
+
+        self.assertTrue(mock_requests_get.called)
+
+        attributions = teaching_charge["attributions"]
+        tot_lecturing = teaching_charge["tot_lecturing"]
+        tot_practical = teaching_charge["tot_practical"]
+
+        self.assertEqual(len(attributions), 2)
+        self.assertEqual(tot_lecturing, LEARNING_UNIT_LECTURING_DURATION)
+        self.assertEqual(tot_practical, LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION)
+
+    @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge)
+    def test_list_teaching_charge_for_multiple_attributions_less_in_json(self, mock_requests_get):
+
+        an_other_attribution = AttributionFactory(learning_unit_year=self.get_data('learning_unit_year'),
+                                                  tutor=self.a_tutor,
+                                                  external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
+        inexisting_external_id = "osis.attribution_8082"
+
+        attribution_not_in_json = AttributionFactory(learning_unit_year=self.get_data('learning_unit_year'),
+                                                     tutor=self.a_tutor,
+                                                     external_id=inexisting_external_id)
 
         teaching_charge = tutor_charge.list_teaching_charge(self.a_tutor.person, self.get_data('academic_year'))
 

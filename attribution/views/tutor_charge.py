@@ -145,6 +145,8 @@ def list_teaching_charge(a_person, an_academic_year):
     tot_practical = NO_ALLOCATION_CHARGE
     attributions_charge_duration = get_attributions_charge_duration(a_person, an_academic_year)
     for an_attribution in list_attributions(a_person, an_academic_year):
+        if not an_attribution.external_id in attributions_charge_duration:
+            continue
         a_learning_unit_year = an_attribution.learning_unit_year
 
         learning_unit_attribution_charge_duration = \
@@ -465,3 +467,4 @@ def _tutor_attributions_by_learning_unit(tutor_allocations_json):
             "learning_unit_charge": attribution.get("learningUnitCharge", 0)
         }
     return tutor_attributions
+
