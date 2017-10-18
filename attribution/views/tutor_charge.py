@@ -34,6 +34,7 @@ from django.conf import settings
 from django.forms import formset_factory
 from django.shortcuts import render
 
+from attribution.models.enums import offer_enrollment_state
 from performance import models as mdl_performance
 from base import models as mdl_base
 from attribution import models as mdl_attribution
@@ -388,12 +389,14 @@ def calculate_attribution_format_percentage_allocation_charge(lecturing_charge, 
 def get_learning_unit_years_list(a_learning_unit_year, a_tutor):
     # Pour trouver les inscriptions aux partims/classe identifiables dans learning_unit_year par leurs
     # Par exemple l'acronym du partim pour lu LCOPS1124 c'est LCOPS1124L
+    enrollment_states = [offer_enrollment_state.PROVISORY, offer_enrollment_state.SUBSCRIBED]
     learning_unit_years_allocated = []
     for lu in mdl_base.learning_unit_year.find_by_acronym(a_learning_unit_year.acronym,
                                                           a_learning_unit_year.academic_year):
         learning_unit_years_allocated.append(lu)
 
-    return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(learning_unit_years_allocated)
+    return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(learning_unit_years_allocated,
+                                                                         offer_enrollment_states=enrollment_states)
 
 
 @login_required
