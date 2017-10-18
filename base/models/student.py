@@ -98,7 +98,7 @@ def search(registration_id=None, person_name=None, person_username=None, person_
         has_criteria = True
 
     if person_username:
-        queryset = queryset.filter(person__user=person_username)
+        queryset = queryset.filter(person__user__username=person_username)
         has_criteria = True
 
     if person_first_name:

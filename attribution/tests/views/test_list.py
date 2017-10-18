@@ -57,7 +57,6 @@ class StudentsListTest(TestCase):
         self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
 
         self.url = reverse('students_list')
-        self.client = Client()
         self.client.force_login(self.tutor.person.user)
 
     def test_without_being_logged(self):
@@ -106,7 +105,6 @@ class ListBuildTest(TestCase):
         self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
 
         self.url = reverse('students_list_create')
-        self.client = Client()
         self.client.force_login(self.tutor.person.user)
 
     def test_without_being_logged(self):
@@ -201,9 +199,126 @@ class ListBuildTest(TestCase):
         self.assertEqual(response.content.decode(), str(return_sample_xls()))
 
 
+class AdminStudentsListTest(TestCase):
+    def setUp(self):
+        Group.objects.create(name="tutors")
+        self.person = PersonFactory(global_id="76543210")
+        self.tutor = TutorFactory(person=self.person)
+        self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
+
+        self.url = reverse('students_list_admin')
+        self.client.force_login(self.tutor.person.user)
+
+    def test_without_being_logged(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+
+        self.assertRedirects(response, '/login/?next={}'.format(self.url))
+
+    def test_without_permission(self):
+        a_person = PersonFactory()
+        self.client.force_login(a_person.user)
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertTemplateUsed(response, 'access_denied.html')
+
+    def test_with_no_attributions(self):
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, 'admin/students_list.html')
+
+    def test_with_attributions(self):
+        today = datetime.datetime.today()
+        an_academic_year = AcademicYearFactory(year=today.year, start_date=today-datetime.timedelta(days=5),
+                                               end_date=today+datetime.timedelta(days=5))
+        a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
+        AttributionFactory(learning_unit_year=a_learning_unit_year, tutor=self.tutor)
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, 'admin/students_list.html')
 
 
+class AdminListBuildTest(TestCase):
+    def setUp(self):
+        Group.objects.create(name="tutors")
+        self.person = PersonFactory(global_id="01234567")
+        self.tutor = TutorFactory(person=self.person)
+        self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
 
+        self.url = reverse('students_list_admin_create', args=['01234567'])
+        self.client.force_login(self.tutor.person.user)
 
+    def test_without_being_logged(self):
+        self.client.logout()
+        response = self.client.post(self.url)
 
+        self.assertRedirects(response, '/login/?next={}'.format(self.url))
 
+    def test_without_permission(self):
+        a_person = PersonFactory()
+        self.client.force_login(a_person.user)
+        response = self.client.post(self.url)
+
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertTemplateUsed(response, 'access_denied.html')
+
+    def test_with_get(self):
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
+
+    def test_with_empty_post(self):
+        response = self.client.post(self.url,)
+
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, 'admin/students_exam_list.html')
+
+        self.assertEqual(response.context['person'], self.tutor.person)
+        self.assertEqual(response.context['learning_units'], [])
+        self.assertEqual(response.context['msg_error'], _('no_data'))
+
+    @override_settings(ATTRIBUTION_CONFIG={'SERVER_TO_FETCH_URL': '/server',
+                                           'ATTRIBUTION_PATH': '/path'})
+    @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=Exception)
+    def test_with_post_but_webservice_unavailable(self, mock_fetch):
+        today = datetime.datetime.today()
+        an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
+                                               end_date=today + datetime.timedelta(days=5))
+        a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
+        AttributionFactory(learning_unit_year=a_learning_unit_year, tutor=self.tutor)
+
+        key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
+        response = self.client.post(self.url, data={key: ""})
+
+        self.assertTrue(mock_fetch.called)
+
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, 'admin/students_exam_list.html')
+
+        self.assertEqual(response.context['person'], self.tutor.person)
+        self.assertEqual(response.context['learning_units'], [a_learning_unit_year])
+        self.assertEqual(response.context['msg_error'], _('no_data'))
+
+    @override_settings(ATTRIBUTION_CONFIG={'SERVER_TO_FETCH_URL': '/server',
+                                           'ATTRIBUTION_PATH': '/path'})
+    @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=return_sample_xls)
+    def test_with_post_and_webservice_is_available(self, mock_fetch):
+        today = datetime.datetime.today()
+        an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
+                                               end_date=today + datetime.timedelta(days=5))
+        a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
+        AttributionFactory(learning_unit_year=a_learning_unit_year, tutor=self.tutor)
+
+        key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
+        response = self.client.post(self.url, data={key: ""})
+
+        filename = "Liste_Insc_Exam.xls"
+        self.assertEqual(response.status_code, OK)
+        self.assertTrue(mock_fetch.called)
+        self.assertEqual(response['Content-Type'], 'application/vnd.ms-excel')
+        self.assertEqual(response['Content-Disposition'], 'attachment; filename="{}"'.format(filename))
+        self.assertEqual(response.content.decode(), str(return_sample_xls()))

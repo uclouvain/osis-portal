@@ -100,7 +100,8 @@ def find_by_user(user):
 
 
 def change_language(user, new_language):
-    if new_language:
+    languages_supported = [x[0] for x in settings.LANGUAGES]
+    if new_language and new_language in languages_supported:
         person = Person.objects.get(user=user)
         person.language = new_language
         person.save()
