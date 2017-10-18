@@ -38,6 +38,8 @@ class Campus(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True)
     organization = models.ForeignKey('Organization')
+    code = models.CharField(max_length=1, blank=True, null=True)
+    is_administration = models.BooleanField(default=False)
 
     def __str__(self):
         return u"%s" % self.name
