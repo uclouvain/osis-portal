@@ -83,8 +83,9 @@ class AttributionTest(TestCase):
 
     def test_attribution_deleted_field(self):
         attribution_id = self.attribution.id
-        self.attribution.deleted = True
-        self.attribution.save()
+
+        with connection.cursor() as cursor:
+            cursor.execute("update attribution_attribution set deleted=True where id=%s", [attribution_id])
 
         with self.assertRaises(ObjectDoesNotExist):
             mdl_attribution.attribution.Attribution.objects.get(id=attribution_id)
