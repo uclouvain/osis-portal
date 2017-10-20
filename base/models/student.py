@@ -30,7 +30,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.contrib.auth.models import Group
 from base.models import person as model_person
-from base.models.enums import student_academic_enrollment_state
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
@@ -38,10 +37,10 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 class StudentAdmin(SerializableModelAdmin):
     actions = ['add_to_group']
-    list_display = ('person', 'registration_id', 'academic_enrollment_state', 'email')
+    list_display = ('person', 'registration_id', 'email')
     fieldsets = ((None, {'fields': ('registration_id', 'person')}),)
     raw_id_fields = ('person', )
-    search_fields = ['person__first_name', 'person__last_name', 'academic_enrollment_state', 'registration_id']
+    search_fields = ['person__first_name', 'person__last_name', 'registration_id']
     
     def add_to_group(self, request, queryset):
         group_name = "students"
@@ -61,9 +60,7 @@ class StudentAdmin(SerializableModelAdmin):
 class Student(SerializableModel):
     registration_id = models.CharField(max_length=10, unique=True)
     person = models.ForeignKey('Person')
-    academic_enrollment_state = models.CharField(max_length=15, choices=student_academic_enrollment_state.STATES,
-                                                 blank=True,
-                                                 null=True)
+
 
     def email(self):
         if self.person.user:
