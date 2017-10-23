@@ -27,16 +27,24 @@ import datetime
 from unittest import mock
 
 from requests.exceptions import RequestException
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User, Group, Permission
 from django.test import TestCase
 from django.conf import settings
+from django.core.urlresolvers import reverse
+from django.forms.formsets import BaseFormSet
 
 from attribution.views import tutor_charge
+from attribution.forms.attribution import AttributionForm
 from base.models.enums import component_type
 from attribution.models.enums import function
 from performance.tests.models import test_student_performance
 from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
     test_learning_unit_component
+from base.tests.factories.person import PersonFactory
+from base.tests.factories.tutor import TutorFactory
+from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
+from base.tests.factories.learning_unit_component import LearningUnitComponentFactory
 from attribution.tests.models import test_attribution_charge
 from attribution.tests.factories.attribution import AttributionFactory
 
@@ -71,6 +79,10 @@ class MockRequest:
         return self.json_response
 
 
+def mock_request_none_attribution_charge(*args, **kwargs):
+    return MockRequest({})
+
+
 def mock_request_single_attribution_charge(*args, **kwargs):
     json_response = {"tutorAllocations": {
         "allocationChargeLecturing": str(LEARNING_UNIT_LECTURING_DURATION),
@@ -78,7 +90,8 @@ def mock_request_single_attribution_charge(*args, **kwargs):
         "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
         "function": "COORDINATOR",
         "globalId": "00233751",
-        "allocationId": ATTRIBUTION_ID
+        "allocationId": ATTRIBUTION_ID,
+        "year": "2017"
     }}
     return MockRequest(json_response)
 
@@ -90,7 +103,8 @@ def mock_request_multiple_attributions_charge(*args, **kwargs):
         "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
         "function": "COORDINATOR",
         "globalId": "00233751",
-        "allocationId": ATTRIBUTION_ID
+        "allocationId": ATTRIBUTION_ID,
+        "year": "2017"
     },
         {
             "allocationChargeLecturing": str(0),
@@ -98,7 +112,28 @@ def mock_request_multiple_attributions_charge(*args, **kwargs):
             "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
             "function": "CO_HOLDER",
             "globalId": "00233751",
-            "allocationId": OTHER_ATTRIBUTION_ID
+            "allocationId": OTHER_ATTRIBUTION_ID,
+            "year": "2017"
+        },
+    ]}
+    return MockRequest(json_response)
+
+
+def mock_request_multiple_attributions_charge_with_missing_values(*args, **kwargs):
+    json_response = {"tutorAllocations": [{
+        "allocationChargeLecturing": str(LEARNING_UNIT_LECTURING_DURATION),
+        "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
+        "function": "COORDINATOR",
+        "globalId": "00233751",
+        "allocationId": ATTRIBUTION_ID,
+        "year": "2017"
+    },
+        {
+            "allocationChargePractical": str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION),
+            "function": "CO_HOLDER",
+            "globalId": "00233751",
+            "allocationId": OTHER_ATTRIBUTION_ID,
+            "year": "2017"
         },
     ]}
     return MockRequest(json_response)
@@ -293,49 +328,6 @@ class TutorChargeTest(TestCase):
     def test_string_not_empty(self):
         self.assertTrue(tutor_charge.is_string_not_null_empty("test"))
 
-    @mock.patch('requests.get', side_effect=RequestException)
-    def test_get_attributions_charge_duration(self, mock_requests_get):
-        attributions_charge = tutor_charge.get_attributions_charge_duration(self.a_tutor.person,
-                                                                            self.get_data('academic_year'))
-        self.assertTrue(mock_requests_get.called)
-        self.assertEqual(attributions_charge, {'error': True})
-
-    @mock.patch('requests.get', side_effect=mock_request_single_attribution_charge)
-    def test_list_teaching_charge_for_one_attribution(self, mock_requests_get):
-        teaching_charge = tutor_charge.list_teaching_charge(self.a_tutor.person, self.get_data('academic_year'))
-
-        self.assertTrue(mock_requests_get.called)
-
-        attributions = teaching_charge["attributions"]
-        tot_lecturing = teaching_charge["tot_lecturing"]
-        tot_practical = teaching_charge["tot_practical"]
-
-        self.assertEqual(len(attributions), 1)
-        self.assertEqual(attributions[0]["lecturing_allocation_charge"], str(LEARNING_UNIT_LECTURING_DURATION))
-        self.assertEqual(attributions[0]["practice_allocation_charge"], str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION))
-        self.assertEqual(attributions[0]["percentage_allocation_charge"], "75.0")
-        self.assertEqual(tot_lecturing, LEARNING_UNIT_LECTURING_DURATION)
-        self.assertEqual(tot_practical, LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION)
-
-    @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge)
-    def test_list_teaching_charge_for_multiple_attributions(self, mock_requests_get):
-
-        an_other_attribution = AttributionFactory(function=function.CO_HOLDER,
-                                                  learning_unit_year=self.get_data('learning_unit_year'),
-                                                  tutor=self.a_tutor,
-                                                  external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
-        teaching_charge = tutor_charge.list_teaching_charge(self.a_tutor.person, self.get_data('academic_year'))
-
-        self.assertTrue(mock_requests_get.called)
-
-        attributions = teaching_charge["attributions"]
-        tot_lecturing = teaching_charge["tot_lecturing"]
-        tot_practical = teaching_charge["tot_practical"]
-
-        self.assertEqual(len(attributions), 2)
-        self.assertEqual(tot_lecturing, LEARNING_UNIT_LECTURING_DURATION)
-        self.assertEqual(tot_practical, LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION)
-
     @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge)
     def test_list_teaching_charge_for_multiple_attributions_less_in_json(self, mock_requests_get):
 
@@ -359,3 +351,279 @@ class TutorChargeTest(TestCase):
         self.assertEqual(len(attributions), 2)
         self.assertEqual(tot_lecturing, LEARNING_UNIT_LECTURING_DURATION)
         self.assertEqual(tot_practical, LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION)
+
+
+ACCESS_DENIED = 401
+
+
+class HomeTest(TestCase):
+    def setUp(self):
+        Group.objects.get_or_create(name='tutors')
+        self.person = PersonFactory()
+        self.tutor = TutorFactory(person=self.person)
+
+        attribution_permission = Permission.objects.get(codename='can_access_attribution')
+        self.person.user.user_permissions.add(attribution_permission)
+
+        today = datetime.datetime.today()
+        self.academic_year = AcademicYearFactory(year=today.year, start_date=today-datetime.timedelta(days=5),
+                                                 end_date=today+datetime.timedelta(days=5))
+        self.learning_unit_year = LearningUnitYearFactory(academic_year=self.academic_year, in_charge=True)
+        self.attribution = AttributionFactory(function=function.CO_HOLDER,
+                                              learning_unit_year=self.learning_unit_year,
+                                              tutor=self.tutor,
+                                              external_id=ATTRIBUTION_EXTERNAL_ID)
+
+        self.url = reverse('attribution_home')
+        self.client.force_login(self.person.user)
+
+    def test_user_not_logged(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+
+        self.assertRedirects(response, "/login/?next={}".format(self.url))
+
+    def test_user_without_permission(self):
+        a_person = PersonFactory()
+        self.client.force_login(a_person.user)
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertTemplateUsed(response, "access_denied.html")
+
+    def test_person_without_global_id(self):
+        self.person.global_id = None
+        self.person.save()
+
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, 'tutor_charge.html')
+
+        self.assertEqual(response.context['user'], self.person.user)
+        self.assertEqual(response.context['attributions'], None)
+        self.assertEqual(response.context['year'], int(self.academic_year.year))
+        self.assertEqual(response.context['tot_lecturing'], 0)
+        self.assertEqual(response.context['tot_practical'], 0)
+        self.assertEqual(response.context['academic_year'], self.academic_year)
+        self.assertEqual(response.context['global_id'], None)
+        self.assertEqual(response.context['error'], True)
+
+        self.assertIsInstance(response.context['formset'], BaseFormSet)
+
+    def test_user_without_person(self):
+        self.person.delete()
+
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, 'tutor_charge.html')
+
+        self.assertEqual(response.context['user'], None)
+        self.assertEqual(response.context['attributions'], None)
+        self.assertEqual(response.context['year'], int(self.academic_year.year))
+        self.assertEqual(response.context['tot_lecturing'], None)
+        self.assertEqual(response.context['tot_practical'], None)
+        self.assertEqual(response.context['academic_year'], self.academic_year)
+        self.assertEqual(response.context['global_id'], None)
+        self.assertEqual(response.context['error'], False)
+
+        self.assertIsInstance(response.context['formset'], BaseFormSet)
+
+    def test_user_without_tutor(self):
+        self.tutor.delete()
+
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, 'tutor_charge.html')
+
+        self.assertEqual(response.context['user'], self.person.user)
+        self.assertEqual(response.context['attributions'], None)
+        self.assertEqual(response.context['year'], int(self.academic_year.year))
+        self.assertEqual(response.context['tot_lecturing'], None)
+        self.assertEqual(response.context['tot_practical'], None)
+        self.assertEqual(response.context['academic_year'], self.academic_year)
+        self.assertEqual(response.context['global_id'], None)
+        self.assertEqual(response.context['error'], False)
+
+        self.assertIsInstance(response.context['formset'], BaseFormSet)
+
+    def test_without_current_academic_year(self):
+        self.academic_year.year -= 1
+        self.academic_year.end_date = datetime.datetime.today() - datetime.timedelta(days=3)
+        self.academic_year.save()
+
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, 'tutor_charge.html')
+
+        self.assertEqual(response.context['user'], self.person.user)
+        self.assertEqual(response.context['attributions'], None)
+        self.assertEqual(response.context['year'], int(datetime.datetime.now().year))
+        self.assertEqual(response.context['tot_lecturing'], 0)
+        self.assertEqual(response.context['tot_practical'], 0)
+        self.assertEqual(response.context['academic_year'], None)
+        self.assertEqual(response.context['global_id'], None)
+        self.assertEqual(response.context['error'], True)
+
+        self.assertIsInstance(response.context['formset'], BaseFormSet)
+
+    @mock.patch('requests.get', side_effect=mock_request_none_attribution_charge)
+    def test_without_attributions(self, mock_requests_get):
+        response = self.client.get(self.url, mock_requests_get)
+
+        self.assertTrue(mock_requests_get.called)
+
+        self.assertTemplateUsed(response, 'tutor_charge.html')
+
+        self.assertEqual(response.context['user'], self.person.user)
+        self.assertEqual(response.context['attributions'], None)
+        self.assertEqual(response.context['year'], int(self.academic_year.year))
+        self.assertEqual(response.context['tot_lecturing'], 0)
+        self.assertEqual(response.context['tot_practical'], 0)
+        self.assertEqual(response.context['academic_year'], self.academic_year)
+        self.assertEqual(response.context['global_id'], self.person.global_id)
+        self.assertEqual(response.context['error'], False)
+
+        self.assertIsInstance(response.context['formset'], BaseFormSet)
+
+    @mock.patch('requests.get', side_effect=RequestException)
+    def test_when_exception_occured_during_request_of_webservice(self, mock_requests_get):
+        response = self.client.get(self.url)
+
+        self.assertTrue(mock_requests_get.called)
+
+        self.assertTemplateUsed(response, 'tutor_charge.html')
+
+        self.assertEqual(response.context['user'], self.person.user)
+        self.assertEqual(response.context['attributions'], None)
+        self.assertEqual(response.context['year'], int(self.academic_year.year))
+        self.assertEqual(response.context['tot_lecturing'], 0)
+        self.assertEqual(response.context['tot_practical'], 0)
+        self.assertEqual(response.context['academic_year'], self.academic_year)
+        self.assertEqual(response.context['global_id'], self.person.global_id)
+        self.assertEqual(response.context['error'], True)
+
+        self.assertIsInstance(response.context['formset'], BaseFormSet)
+
+    @mock.patch('requests.get', side_effect=mock_request_single_attribution_charge)
+    def test_for_one_attribution(self, mock_requests_get):
+        response = self.client.get(self.url)
+
+        self.assertTrue(mock_requests_get.called)
+
+        self.assertTemplateUsed(response, 'tutor_charge.html')
+
+        self.assertEqual(response.context['user'], self.person.user)
+        self.assertEqual(response.context['year'], int(self.academic_year.year))
+        self.assertEqual(response.context['tot_lecturing'], LEARNING_UNIT_LECTURING_DURATION)
+        self.assertEqual(response.context['tot_practical'], LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION)
+        self.assertEqual(response.context['academic_year'], self.academic_year)
+        self.assertEqual(response.context['global_id'], self.person.global_id)
+        self.assertEqual(response.context['error'], False)
+
+        self.assertIsInstance(response.context['formset'], BaseFormSet)
+
+        self.assertEqual(len(response.context['attributions']), 1)
+        attribution = response.context['attributions'][0]
+        self.assertEqual(attribution['acronym'], self.learning_unit_year.acronym)
+        self.assertEqual(attribution['title'], self.learning_unit_year.title)
+        self.assertEqual(attribution['start_year'], self.attribution.start_year)
+        self.assertEqual(attribution['lecturing_allocation_charge'], str(LEARNING_UNIT_LECTURING_DURATION))
+        self.assertEqual(attribution['practice_allocation_charge'], str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION))
+        self.assertEqual(attribution['percentage_allocation_charge'], '75.0')
+        self.assertEqual(attribution['weight'], self.learning_unit_year.credits)
+        self.assertEqual(attribution['url_schedule'], "")
+        self.assertEqual(attribution['url_students_list_email'], 'mailto:{}-{}@listes-student.uclouvain.be'.format(
+            self.learning_unit_year.acronym.lower(),
+            self.academic_year.year))
+        self.assertEqual(attribution['function'], self.attribution.function)
+        self.assertEqual(attribution['year'], self.academic_year.year)
+        self.assertEqual(attribution['learning_unit_year_url'], "")
+        self.assertEqual(attribution['learning_unit_year'], self.learning_unit_year)
+        self.assertEqual(attribution['tutor_id'], self.tutor.id)
+
+    @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge)
+    def test_for_multiple_attributions(self, mock_requests_get):
+        an_other_attribution = AttributionFactory(function=function.CO_HOLDER,
+                                                  learning_unit_year=self.learning_unit_year,
+                                                  tutor=self.tutor,
+                                                  external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
+
+        response = self.client.get(self.url)
+
+        self.assertTrue(mock_requests_get.called)
+
+        self.assertTemplateUsed(response, 'tutor_charge.html')
+
+        self.assertEqual(response.context['user'], self.person.user)
+        self.assertEqual(response.context['year'], int(self.academic_year.year))
+        self.assertEqual(response.context['tot_lecturing'], LEARNING_UNIT_LECTURING_DURATION)
+        self.assertEqual(response.context['tot_practical'], LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION)
+        self.assertEqual(response.context['academic_year'], self.academic_year)
+        self.assertEqual(response.context['global_id'], self.person.global_id)
+        self.assertEqual(response.context['error'], False)
+
+        self.assertIsInstance(response.context['formset'], BaseFormSet)
+
+        self.assertEqual(len(response.context['attributions']), 2)
+
+    @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge)
+    def test_with_attribution_not_recognized(self, mock_requests_get):
+        an_other_attribution = AttributionFactory(learning_unit_year=self.learning_unit_year,
+                                                  tutor=self.tutor,
+                                                  external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
+
+        inexisting_external_id = "osis.attribution_8082"
+        attribution_not_in_json = AttributionFactory(learning_unit_year=self.learning_unit_year,
+                                                     tutor=self.tutor,
+                                                     external_id=inexisting_external_id)
+
+        response = self.client.get(self.url)
+
+        self.assertTrue(mock_requests_get.called)
+
+        self.assertTemplateUsed(response, 'tutor_charge.html')
+
+        self.assertEqual(response.context['user'], self.person.user)
+        self.assertEqual(response.context['year'], int(self.academic_year.year))
+        self.assertEqual(response.context['tot_lecturing'], LEARNING_UNIT_LECTURING_DURATION)
+        self.assertEqual(response.context['tot_practical'], LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION)
+        self.assertEqual(response.context['academic_year'], self.academic_year)
+        self.assertEqual(response.context['global_id'], self.person.global_id)
+        self.assertEqual(response.context['error'], False)
+
+        self.assertIsInstance(response.context['formset'], BaseFormSet)
+
+        self.assertEqual(len(response.context['attributions']), 2)
+
+    @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge_with_missing_values)
+    def test_with_missing_values(self, mock_requests_get):
+        an_other_attribution = AttributionFactory(learning_unit_year=self.learning_unit_year,
+                                                  tutor=self.tutor,
+                                                  external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
+
+        response = self.client.get(self.url)
+
+        self.assertTrue(mock_requests_get.called)
+
+        self.assertTemplateUsed(response, 'tutor_charge.html')
+
+        self.assertEqual(response.context['user'], self.person.user)
+        self.assertEqual(response.context['year'], int(self.academic_year.year))
+        self.assertEqual(response.context['tot_lecturing'], LEARNING_UNIT_LECTURING_DURATION)
+        self.assertEqual(response.context['tot_practical'], LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION)
+        self.assertEqual(response.context['academic_year'], self.academic_year)
+        self.assertEqual(response.context['global_id'], self.person.global_id)
+        self.assertEqual(response.context['error'], False)
+
+        self.assertIsInstance(response.context['formset'], BaseFormSet)
+
+        attributions = response.context['attributions']
+        self.assertEqual(len(attributions), 2)
+        self.assertEqual(attributions[1]["lecturing_allocation_charge"], str(LEARNING_UNIT_LECTURING_DURATION))
+        self.assertEqual(attributions[1]["practice_allocation_charge"], None)
+        self.assertEqual(attributions[1]["percentage_allocation_charge"], "25.0")
+
+        self.assertEqual(attributions[0]["lecturing_allocation_charge"], None)
+        self.assertEqual(attributions[0]["practice_allocation_charge"], str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION))
+        self.assertEqual(attributions[0]["percentage_allocation_charge"], None)
