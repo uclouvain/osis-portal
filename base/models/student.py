@@ -61,6 +61,7 @@ class Student(SerializableModel):
     registration_id = models.CharField(max_length=10, unique=True)
     person = models.ForeignKey('Person')
 
+
     def email(self):
         if self.person.user:
             return self.person.user.email
@@ -98,7 +99,7 @@ def search(registration_id=None, person_name=None, person_username=None, person_
         has_criteria = True
 
     if person_username:
-        queryset = queryset.filter(person__user=person_username)
+        queryset = queryset.filter(person__user__username=person_username)
         has_criteria = True
 
     if person_first_name:

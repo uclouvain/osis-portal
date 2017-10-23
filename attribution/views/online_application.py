@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -39,6 +39,12 @@ from attribution.models.enums import function
 from attribution.forms.application import ApplicationForm
 from osis_common.queue import queue_sender
 from attribution.utils import message_generation, permission
+from osis_common.messaging import message_config, send_message as message_service
+from django.shortcuts import redirect
+from base.views import layout
+from base.forms.base_forms import GlobalIdForm
+from attribution.views.decorators.authorization import user_is_tutor_or_super_user
+from django.utils.translation import ugettext_lazy as _
 
 
 ATTRIBUTION_ID_NAME = 'attribution_id_'
@@ -72,12 +78,6 @@ NO_CHARGE = 0
 
 UPDATE_OPERATION = "update"
 DELETE_OPERATION = "delete"
-
-
-def get_year(a_year):
-    if a_year:
-        return a_year.year
-    return None
 
 
 def get_attributions_allocated(a_year, a_tutor):
@@ -210,11 +210,11 @@ def get_vacant_learning_units(a_year):
 
 def sum_attribution_allocation_charges(a_learning_unit_year):
     return tutor_charge.attribution_allocation_charges(None,
-                                                          a_learning_unit_year,
-                                                          component_type.LECTURING) \
+                                                       a_learning_unit_year,
+                                                       component_type.LECTURING) \
            + tutor_charge.attribution_allocation_charges(None,
-                                                            a_learning_unit_year,
-                                                            component_type.PRACTICAL_EXERCISES)
+                                                         a_learning_unit_year,
+                                                         component_type.PRACTICAL_EXERCISES)
 
 
 def sum_tutor_application_allocated_charges(a_tutor_application):
@@ -288,19 +288,22 @@ def get_terminating_charges(a_year, a_tutor):
             a_function = duplicated_function(attribution, attributions)
             if next_learning_unit_year and not existing_tutor_application_for_next_year(a_tutor,
                                                                                         attribution.learning_unit_year,
-                                                                                        a_function):
-                if next_learning_unit_year.in_charge and not is_deputy_function(attribution.function):
-                    attributions_vacant.append(attribution)
+                                                                                        a_function) \
+                and next_learning_unit_year.in_charge and not is_deputy_function(attribution.function):
+                attributions_vacant.append(attribution)
         return get_attribution_data(attributions_vacant)
     return []
 
 
 @login_required
-@user_passes_test(permission.is_online_application_opened, login_url=reverse_lazy('outside_applications_period'))
 @permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def home(request):
-    application_year = mdl_base.academic_year.find_next_academic_year()
     a_tutor = mdl_base.tutor.find_by_user(request.user)
+    return applications_form(a_tutor, request)
+
+
+def applications_form(a_tutor, request, mail_confirmation=None):
+    application_year = mdl_base.academic_year.find_next_academic_year()
     attributions = get_attributions_allocated(application_year, a_tutor)
     tot_lecturing = 0
     tot_practical = 0
@@ -309,7 +312,8 @@ def home(request):
             tot_lecturing = tot_lecturing + attribution_informations[ATTRIBUTION_CHARGE_LECTURING]
             tot_practical = tot_practical + attribution_informations[ATTRIBUTION_CHARGE_PRACTICAL]
     return render(request, "attribution_applications.html", {
-        'user': request.user,
+        'mail_confirmation': mail_confirmation,
+        'a_tutor': a_tutor,
         'applications': get_tutor_applications(application_year, a_tutor),
         'attributions': attributions,
         'academic_year': "{0}-{1}".format(application_year, application_year + 1),
@@ -327,7 +331,8 @@ def get_tutor_application_charge(a_component_type, a_tutor_application):
 
 def get_application_charge(a_tutor, a_learning_unit_year, a_component_type):
     for an_tutor_application in mdl_attribution.tutor_application.search(a_tutor, a_learning_unit_year, None):
-        for a_learning_unit_component in mdl_base.learning_unit_component.search(a_learning_unit_year, a_component_type):
+        for a_learning_unit_component in mdl_base.learning_unit_component.search(a_learning_unit_year,
+                                                                                 a_component_type):
             application_charges = mdl_attribution.application_charge.search(an_tutor_application,
                                                                             a_learning_unit_component)
             for application_charge in application_charges:
@@ -340,6 +345,7 @@ def get_application_charge(a_tutor, a_learning_unit_year, a_component_type):
 @permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def delete(request, tutor_application_id):
     tutor_application_to_delete = mdl_attribution.tutor_application.find_by_id(tutor_application_id)
+    a_tutor = tutor_application_to_delete.tutor
     if tutor_application_to_delete:
         queue_sender\
             .send_message(settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION'),
@@ -350,19 +356,21 @@ def delete(request, tutor_application_id):
 
         tutor_application_to_delete.delete()
 
-    return HttpResponseRedirect(reverse('learning_unit_applications'))
+    return HttpResponseRedirect(reverse('visualize_tutor_applications',
+                                        kwargs={'global_id': a_tutor.person.global_id}))
 
 
 @login_required
 @user_passes_test(permission.is_online_application_opened, login_url=reverse_lazy('outside_applications_period'))
 @permission_required('attribution.can_access_attribution_application', raise_exception=True)
-def attribution_application_form(request):
-    a_tutor = mdl_base.tutor.find_by_user(request.user)
+def attribution_application_form(request, global_id):
+    a_tutor = mdl_base.tutor.find_by_person_global_id(global_id)
     last_year = get_last_year()
 
     attributions = get_terminating_charges(last_year, a_tutor)
     application_year = mdl_base.academic_year.find_next_academic_year()
     return render(request, "attribution_application_form.html", {
+        'a_tutor': a_tutor,
         'application': None,
         'attributions': attributions,
         'application_academic_year': "{0}-{1}".format(application_year, application_year + 1),
@@ -370,16 +378,18 @@ def attribution_application_form(request):
 
 
 @login_required
-def search(request):
+def search(request, global_id):
     learning_unit_acronym = request.GET['learning_unit_acronym']
-    a_tutor = mdl_base.tutor.find_by_user(request.user)
+    a_tutor = mdl_base.tutor.find_by_person_global_id(global_id)
     application_year = mdl_base.academic_year.find_next_academic_year()
     if learning_unit_acronym and len(learning_unit_acronym.strip()) > 0:
         return render(request, "attribution_vacant.html", {
+            'a_tutor': a_tutor,
             'attribution': get_learning_unit_year_vacant(application_year, learning_unit_acronym, a_tutor)})
     else:
         attributions = get_terminating_charges(application_year, a_tutor)
         return render(request, "attribution_application_form.html", {
+            'a_tutor': a_tutor,
             'application': None,
             'attributions': attributions})
 
@@ -395,7 +405,7 @@ def renew(request):
             if an_attribution_to_renew:
                 create_tutor_application_from_attribution(an_attribution_to_renew)
 
-    return HttpResponseRedirect(reverse('learning_unit_applications'))
+    return HttpResponseRedirect(reverse('visualize_tutor_applications', kwargs={'global_id': a_tutor.person.global_id}))
 
 
 def create_tutor_application_from_attribution(an_attribution):
@@ -452,8 +462,11 @@ def edit(request, tutor_application_id):
     form = ApplicationForm()
     application = get_application_informations(mdl_attribution.tutor_application.find_by_id(tutor_application_id))
     if application:
-        data = {'charge_lecturing': application[APPLICATION_CHARGE_LECTURING].allocation_charge,
-                'charge_practical': application[APPLICATION_CHARGE_PRACTICAL].allocation_charge,
+        charge_lecturing = application[APPLICATION_CHARGE_LECTURING].allocation_charge if application[APPLICATION_CHARGE_LECTURING] else NO_CHARGE
+        charge_practical = application[APPLICATION_CHARGE_PRACTICAL].allocation_charge if application[APPLICATION_CHARGE_PRACTICAL] else NO_CHARGE
+
+        data = {'charge_lecturing': charge_lecturing,
+                'charge_practical': charge_practical,
                 'remark': application[TUTOR_APPLICATION].remark,
                 'course_summary': application[TUTOR_APPLICATION].course_summary,
                 'max_charge_lecturing': application[VACANT_ATTRIBUTION_CHARGE_LECTURING],
@@ -461,6 +474,7 @@ def edit(request, tutor_application_id):
         form = ApplicationForm(initial=data)
 
     return render(request, "application_form.html", {
+        'a_tutor': application[TUTOR_APPLICATION].tutor,
         'application': application,
         'form': form})
 
@@ -474,9 +488,9 @@ def format_charge(value):
 @login_required
 @user_passes_test(permission.is_online_application_opened, login_url=reverse_lazy('outside_applications_period'))
 @permission_required('attribution.can_access_attribution_application', raise_exception=True)
-def save_on_new_learning_unit(request):
+def save_on_new_learning_unit(request, tutor_global_id):
     new_tutor_application = create_tutor_application_from_user_learning_unit_year(
-        request.user, request.POST.get('learning_unit_year_id'))
+        tutor_global_id, request.POST.get('learning_unit_year_id'))
     form = ApplicationForm(data=request.POST)
 
     if form.is_valid():
@@ -508,17 +522,19 @@ def save_on_new_learning_unit(request):
                                       UPDATE_OPERATION,
                                       define_tutor_application_function(new_tutor_application)))
 
-        return HttpResponseRedirect(reverse('learning_unit_applications'))
+        return HttpResponseRedirect(reverse('visualize_tutor_applications',
+                                            kwargs={'global_id': tutor_global_id}))
     else:
         return render(request, "application_form.html", {
+            'a_tutor': application[TUTOR_APPLICATION].tutor,
             'application': get_application_informations(new_tutor_application),
             'attributions': get_terminating_charges(get_last_year(), new_tutor_application.tutor),
             'form': form})
 
 
-def create_tutor_application_from_user_learning_unit_year(a_user, a_learning_unit_year_id):
+def create_tutor_application_from_user_learning_unit_year(tutor_global_id, a_learning_unit_year_id):
     new_tutor_application = mdl_attribution.tutor_application.TutorApplication()
-    new_tutor_application.tutor = mdl_base.tutor.find_by_user(a_user)
+    new_tutor_application.tutor = mdl_base.tutor.find_by_person_global_id(tutor_global_id)
     new_tutor_application.learning_unit_year = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year_id)
     new_tutor_application.start_year = new_tutor_application.learning_unit_year.academic_year.year
     new_tutor_application.end_year = new_tutor_application.learning_unit_year.academic_year.year
@@ -530,6 +546,7 @@ def create_tutor_application_from_user_learning_unit_year(a_user, a_learning_uni
 @permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def save(request, tutor_application_id):
     tutor_application_to_save = mdl_attribution.tutor_application.find_by_id(tutor_application_id)
+    a_tutor = tutor_application_to_save.tutor
     form = ApplicationForm(data=request.POST)
 
     if form.is_valid():
@@ -554,10 +571,11 @@ def save(request, tutor_application_id):
                                                                                               UPDATE_OPERATION,
                                                                                               tutor_application_to_save.function))
 
-        return HttpResponseRedirect(reverse('learning_unit_applications'))
+        return HttpResponseRedirect(reverse('visualize_tutor_applications', kwargs={'global_id': a_tutor.person.global_id}))
 
     else:
         return render(request, "application_form.html", {
+            'a_tutor': application[TUTOR_APPLICATION].tutor,
             'application': get_application_informations(tutor_application_to_save),
             'attributions': get_terminating_charges(get_last_year(), tutor_application_to_save.tutor),
             'form': form})
@@ -646,13 +664,14 @@ def define_renew_possible(a_tutor, a_learning_unit_year, a_function):
 
 
 @login_required
-def new(request):
+def new(request, global_id):
+    a_tutor = mdl_base.tutor.find_by_person_global_id(global_id)
     a_learning_unit_year_id = request.POST.get('learning_unit_year_id')
     tutor_application_to_save = None
     learning_unit_year = None
     if a_learning_unit_year_id:
         learning_unit_year = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year_id)
-        tutor_application_to_save = create_tutor_application_from_learning_unit_year(learning_unit_year, request.user)
+        tutor_application_to_save = create_tutor_application_from_learning_unit_year(learning_unit_year, a_tutor)
     form = ApplicationForm()
     if tutor_application_to_save:
         data = {'charge_lecturing': get_vacant_attribution_allocation_charge(learning_unit_year,
@@ -667,14 +686,15 @@ def new(request):
                                                                              component_type.PRACTICAL_EXERCISES)}
         form = ApplicationForm(initial=data)
     return render(request, "application_form.html", {
+        'a_tutor': a_tutor,
         'application': get_application_informations(tutor_application_to_save),
         'form': form})
 
 
-def create_tutor_application_from_learning_unit_year(a_learning_unit_year=None, a_user=None):
+def create_tutor_application_from_learning_unit_year(a_learning_unit_year=None, a_tutor=None):
     if a_learning_unit_year:
         a_new_tutor_application = mdl_attribution.tutor_application.TutorApplication()
-        a_new_tutor_application.tutor = mdl_base.tutor.find_by_user(a_user)
+        a_new_tutor_application.tutor = a_tutor
 
         a_new_tutor_application.learning_unit_year = a_learning_unit_year
         a_new_tutor_application.remark = None
@@ -765,3 +785,89 @@ def is_deputy_function(a_function):
          a_function == function.DEPUTY_TEMPORARY):
         return True
     return False
+
+
+@login_required
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
+@user_is_tutor_or_super_user
+def applications_confirmation(request, global_id):
+    a_tutor = mdl_base.tutor.find_by_person_global_id(global_id)
+    application_year = mdl_base.academic_year.find_next_academic_year()
+    send_mail_with_applications(application_year, a_tutor)
+    return mail_applications_sent(request, global_id)
+
+
+def send_mail_with_applications(application_year, a_tutor):
+    applications = get_tutor_applications(application_year, a_tutor)
+
+    html_template_ref = 'applications_confirmation_html'
+    txt_template_ref = 'applications_confirmation_txt'
+
+    tutor_person = a_tutor.person
+    receivers = [message_config.create_receiver(tutor_person.id, tutor_person.email, tutor_person.language)]
+    template_base_data = {'first_name': tutor_person.first_name,
+                          'last_name': tutor_person.last_name,
+                          'applications': get_applications_txt(applications)
+                          }
+    tables = None
+    message_content = message_config.create_message_content(html_template_ref, txt_template_ref,
+                                                            tables, receivers, template_base_data, None)
+    return message_service.send_messages(message_content)
+
+
+def get_applications_txt(applications):
+    txt = "\n"
+    for application in applications:
+        txt += get_application_detail_line(application)
+
+    return txt
+
+
+def get_application_detail_line(application):
+    acronym = None
+    vol_lecturing = 0
+    vol_practical = 0
+
+    if application[APPLICATION_CHARGE_LECTURING]:
+        acronym = application[APPLICATION_CHARGE_LECTURING].learning_unit_component.learning_unit_year.acronym
+        vol_lecturing = application[APPLICATION_CHARGE_LECTURING].allocation_charge
+    if application[APPLICATION_CHARGE_PRACTICAL]:
+        acronym = application[APPLICATION_CHARGE_PRACTICAL].learning_unit_component.learning_unit_year.acronym
+        vol_practical = application[APPLICATION_CHARGE_PRACTICAL].allocation_charge
+    return "*\t{}\t{}\t{}\n".format(acronym, vol_lecturing, vol_practical)
+
+
+@login_required
+@permission_required('base.is_faculty_administrator', raise_exception=True)
+def applications_administration(request):
+    return layout.render(request, 'admin/applications_administration.html')
+
+
+@login_required
+@permission_required('base.is_faculty_administrator', raise_exception=True)
+def select_tutor_applications(request):
+    if request.method == "POST":
+        form = GlobalIdForm(request.POST)
+        if form.is_valid():
+            global_id = form.cleaned_data['global_id']
+            return visualize_tutor_applications(request, global_id)
+    else:
+        form = GlobalIdForm()
+    return layout.render(request, "admin/applications_administration.html", {"form": form})
+
+
+@login_required
+@permission_required('base.is_faculty_administrator', raise_exception=True)
+@user_is_tutor_or_super_user
+def visualize_tutor_applications(request, global_id):
+    a_tutor = mdl_base.tutor.find_by_person_global_id(global_id)
+    return applications_form(a_tutor, request)
+
+
+@login_required
+@permission_required('base.is_faculty_administrator', raise_exception=True)
+@user_is_tutor_or_super_user
+def mail_applications_sent(request, global_id):
+    mail_confirmation = _('applications_mail_sent')
+    a_tutor = mdl_base.tutor.find_by_person_global_id(global_id)
+    return applications_form(a_tutor, request, mail_confirmation)

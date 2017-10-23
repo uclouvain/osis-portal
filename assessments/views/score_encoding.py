@@ -72,6 +72,7 @@ def scores_sheets_admin(request):
 def tutor_scores_sheets(request, global_id):
     person = mdl_base.person.find_by_global_id(global_id)
     scores_in_db_and_uptodate = _check_person_and_scores_in_db(person)
+    request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("PAPER_SHEET_TIMEOUT")
     return layout.render(request, "scores_sheets.html", locals())
 
 
@@ -88,6 +89,7 @@ def score_encoding(request):
 def scores_sheets(request):
     person = mdl_base.person.find_by_user(request.user)
     scores_in_db_and_uptodate = _check_person_and_scores_in_db(person)
+    request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("PAPER_SHEET_TIMEOUT")
     return layout.render(request, "scores_sheets.html", locals())
 
 
@@ -95,13 +97,10 @@ def scores_sheets(request):
 @permission_required('base.is_tutor', raise_exception=True)
 @require_GET
 @ajax_required
-def ask_papersheet(request, global_id=None):
+def ask_papersheet(request, global_id):
     if 'assessments' in settings.INSTALLED_APPS:
-        if global_id:
-            person = mdl_base.person.find_by_global_id(global_id) if global_id else mdl_base.person.find_by_user(request.user)
-        else:
-            person = mdl_base.person.find_by_user(request.user)
-        if hasattr(settings, 'QUEUES') and settings.QUEUES:
+        person = mdl_base.person.find_by_global_id(global_id)
+        if hasattr(settings, 'QUEUES') and settings.QUEUES and person:
             try:
                 message_published = ask_queue_for_papersheet(person)
             except (RuntimeError, pika.exceptions.ConnectionClosed, pika.exceptions.ChannelClosed,
@@ -132,6 +131,7 @@ def insert_or_update_document_from_queue(body):
         global_id = data.get('tutor_global_id')
         if global_id:
             assessments.models.score_encoding.insert_or_update_document(global_id, json_data)
+
     except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError):
         queue_exception_logger.error('Postgres Error during insert_or_update_document_from_queue => retried')
         trace = traceback.format_exc()
@@ -149,11 +149,8 @@ def insert_or_update_document_from_queue(body):
 @permission_required('base.is_tutor', raise_exception=True)
 @require_GET
 @ajax_required
-def check_papersheet(request, global_id=None):
-    if global_id:
-        person = mdl_base.person.find_by_global_id(global_id)
-    else:
-        person = mdl_base.person.find_by_user(request.user)
+def check_papersheet(request, global_id):
+    person = mdl_base.person.find_by_global_id(global_id)
     if 'assessments' in settings.INSTALLED_APPS:
         if _check_person_and_scores_in_db(person):
             return HttpResponse(status=200)
@@ -237,8 +234,7 @@ def check_db_scores(global_id):
     except (KeyError, voluptuous_error.Invalid):
         trace = traceback.format_exc()
         logger.error(trace)
-        logger.warning(
-            "A document could not be produced from the json document of the global id {0}".format(global_id))
+        logger.warning("A document could not be produced from the json document of the global id {0}".format(global_id))
         return False
 
 

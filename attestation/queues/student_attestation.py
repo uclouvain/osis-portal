@@ -34,6 +34,8 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 def fetch_student_attestation(global_id, academic_year, attestation_type):
+    if not hasattr(settings, 'ATTESTATION_CONFIG'):
+        return None
     server_top_url = settings.ATTESTATION_CONFIG.get('SERVER_TO_FETCH_URL')
     document_base_path = server_top_url + settings.ATTESTATION_CONFIG.get('ATTESTATION_PATH')
     if document_base_path:

@@ -41,7 +41,7 @@ def home(request):
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def faculty_administration(request):
-    return layout.render(request, "faculty_administrator_dashboard.html")
+    return layout.render(request, "faculty_administrator_dashboard.html", {'online_application_opened': permission.is_online_application_opened(request.user)})
 
 
 def show_multiple_registration_id_error(request):

@@ -195,3 +195,9 @@ msgstr "Acquired progression credits"
 
 msgid "cycle_total_credits"
 msgstr "Cycle"
+
+msgid "courses_registration_validated"
+msgstr "Your courses registration has been validated by the jury."
+
+msgid "courses_registration_not_validated"
+msgstr "Your courses registration has not been validated yet."

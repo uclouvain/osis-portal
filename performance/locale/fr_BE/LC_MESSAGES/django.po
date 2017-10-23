@@ -190,3 +190,9 @@ msgstr "Crédits acquis de progression"
 
 msgid "cycle_total_credits"
 msgstr "Cycle d'études"
+
+msgid "courses_registration_validated"
+msgstr "Votre inscription aux cours a été validée par le jury."
+
+msgid "courses_registration_not_validated"
+msgstr "Votre inscription aux cours n'a pas encore été validée."
