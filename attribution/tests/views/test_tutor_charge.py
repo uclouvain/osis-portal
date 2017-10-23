@@ -638,11 +638,7 @@ class HomeTest(TestCase):
         self.assertIsInstance(response.context['formset'], BaseFormSet)
 
         attributions = response.context['attributions']
-        self.assertEqual(len(attributions), 2)
-        self.assertEqual(attributions[1]["lecturing_allocation_charge"], str(LEARNING_UNIT_LECTURING_DURATION))
-        self.assertEqual(attributions[1]["practice_allocation_charge"], None)
-        self.assertEqual(attributions[1]["percentage_allocation_charge"], "25.0")
-
-        self.assertEqual(attributions[0]["lecturing_allocation_charge"], None)
-        self.assertEqual(attributions[0]["practice_allocation_charge"], str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION))
-        self.assertEqual(attributions[0]["percentage_allocation_charge"], None)
+        reduced_list_attributions = map(lambda attribution: [attribution["lecturing_allocation_charge"],
+                                        attribution['practice_allocation_charge'],
+                                        attribution['percentage_allocation_charge']], attributions)
+        self.assertIn([str(LEARNING_UNIT_LECTURING_DURATION), None, "25.0"], reduced_list_attributions)
