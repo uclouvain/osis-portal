@@ -28,7 +28,7 @@ from unittest import mock
 
 from requests.exceptions import RequestException
 from django.contrib.auth.models import User, Group, Permission
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.forms.formsets import BaseFormSet
@@ -483,6 +483,25 @@ class HomeTest(TestCase):
         self.assertEqual(response.context['academic_year'], self.academic_year)
         self.assertEqual(response.context['global_id'], self.person.global_id)
         self.assertEqual(response.context['error'], False)
+
+        self.assertIsInstance(response.context['formset'], BaseFormSet)
+
+    @override_settings()
+    def test_when_not_configuration_for_attribution(self):
+        del settings.ATTRIBUTION_CONFIG
+
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, 'tutor_charge.html')
+
+        self.assertEqual(response.context['user'], self.person.user)
+        self.assertEqual(response.context['attributions'], None)
+        self.assertEqual(response.context['year'], int(self.academic_year.year))
+        self.assertEqual(response.context['tot_lecturing'], 0)
+        self.assertEqual(response.context['tot_practical'], 0)
+        self.assertEqual(response.context['academic_year'], self.academic_year)
+        self.assertEqual(response.context['global_id'], self.person.global_id)
+        self.assertEqual(response.context['error'], True)
 
         self.assertIsInstance(response.context['formset'], BaseFormSet)
 

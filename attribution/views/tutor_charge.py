@@ -433,6 +433,9 @@ def visualize_tutor_attributions(request, global_id):
 
 def get_attributions_charge_duration(a_person, an_academic_year):
     attributions_charge_duration = {}
+    if not hasattr(settings, 'ATTRIBUTION_CONFIG') or not settings.ATTRIBUTION_CONFIG:
+        attributions_charge_duration['error'] = True
+        return attributions_charge_duration
     try:
         server_top_url = settings.ATTRIBUTION_CONFIG.get('SERVER_TO_FETCH_URL')
         tutor_allocations_path = server_top_url + ATTRIBUTIONS_TUTOR_ALLOCATION_PATH
