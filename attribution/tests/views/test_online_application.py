@@ -24,16 +24,18 @@
 #
 ##############################################################################
 import datetime
+
 from django.contrib.auth.models import User, Group
 from django.test import TestCase
+
 from attribution.views import online_application
 from base.models.enums import component_type
 from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
     test_learning_unit_component, test_learning_unit
-from attribution.tests.models import test_attribution_charge, test_attribution, test_application_charge, test_tutor_application
+from attribution.tests.models import test_attribution_charge, test_application_charge, test_tutor_application
 from attribution.models.enums import function
 from base import models as mdl_base
-
+from attribution.tests.factories.attribution import AttributionFactory
 
 now = datetime.datetime.now()
 
@@ -99,11 +101,12 @@ class OnlineApplicationTest(TestCase):
                 'type': component_type.PRACTICAL_EXERCISES,
                 'duration': LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION})
         if a_tutor:
-            an_attribution = test_attribution.create_attribution({'function': function.CO_HOLDER,
-                                                                  'learning_unit_year': a_learning_unit_year,
-                                                                  'tutor': a_tutor,
-                                                                  'start_year': start,
-                                                                  'end_year': end})
+            an_attribution = AttributionFactory(function=function.CO_HOLDER,
+                                                learning_unit_year=a_learning_unit_year,
+                                                tutor=a_tutor,
+                                                start_year=start,
+                                                end_year=end)
+
             test_attribution_charge.create_attribution_charge(
                 {'attribution': an_attribution,
                  'learning_unit_component': a_learning_unit_component_lecture,
