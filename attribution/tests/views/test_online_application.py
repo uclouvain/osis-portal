@@ -249,7 +249,3 @@ class OnlineApplicationTest(TestCase):
     def test_is_not_deputy_function(self):
         self.assertEquals(online_application.is_deputy_function(function.COORDINATOR), False)
 
-
-
-
-

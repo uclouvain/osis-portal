@@ -53,6 +53,10 @@ class ScoreEncodingTest(TestCase):
         self.score_encoding.refresh_from_db()
         self.assertJSONEqual(self.score_encoding.document, new_document, "Problem when updating document")
 
+    def test_str(self):
+        a_score_encoding = ScoreEncodingFactory(global_id="123654")
+        self.assertEqual(str(a_score_encoding), "123654")
+
 
 sample_1 = "assessments/tests/resources/score_encoding_sample.json"
 invalid_sample = "assessments/tests/resources/invalid_sample.json"

@@ -24,6 +24,8 @@
 #
 ##############################################################################
 from django.db import models
+
+from attribution.models.enums import offer_enrollment_state
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
@@ -58,18 +60,19 @@ class LearningUnitEnrollment(SerializableModel):
         return u"%s - %s" % (self.learning_unit_year, self.offer_enrollment.student)
 
 
-def find_by_learningunit_enrollment(learning_unit_year):
-    return LearningUnitEnrollment.objects.filter(learning_unit_year=learning_unit_year)\
-        .order_by('offer_enrollment__student__person__last_name', 'offer_enrollment__student__person__first_name')
-
-
-def find_by_learning_unit_years(learning_unit_years):
-    return LearningUnitEnrollment.objects.select_related("learning_unit_year__academic_year",
+def find_by_learning_unit_years(learning_unit_years, offer_enrollment_states=None):
+    qs = LearningUnitEnrollment.objects.select_related("learning_unit_year__academic_year",
                                                          "learning_unit_year__learning_unit",
                                                          "offer_enrollment__student__person",
                                                          "offer_enrollment__offer_year",)\
-        .filter(learning_unit_year__in=learning_unit_years) \
+        .filter(learning_unit_year__in=learning_unit_years)\
         .order_by('offer_enrollment__student__person__last_name', 'offer_enrollment__student__person__first_name')
+
+    if offer_enrollment_states and isinstance(offer_enrollment_states, list):
+        qs = qs.filter(offer_enrollment__enrollment_state__in=offer_enrollment_states)
+
+    return qs
+
 
 
 def find_by_student_and_offer_year(student, off_year):
