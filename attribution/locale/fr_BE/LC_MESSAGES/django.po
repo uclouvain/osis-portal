@@ -312,10 +312,10 @@ msgid "teaching_charge"
 msgstr "Charge d'enseignement"
 
 msgid "exam_student_list"
-msgstr "Listes des étudiants inscrits à mes cours et examens"
+msgstr "Listes des étudiants inscrits à mes examens"
 
 msgid "desc_lnk_my_students_list"
-msgstr "Obtenir la liste des étudiants inscrits à mes cours et à mes examens"
+msgstr "Obtenir la liste des étudiants inscrits à mes examens"
 
 msgid "no_data"
 msgstr "Aucune donnée trouvée"
@@ -339,7 +339,7 @@ msgid "error_retrieving_attributions_charge"
 msgstr "Les volumes horaires ne sont pas disponibles pour le moment. Veuillez réessayer plus tard."
 
 msgid "exam_and_student_list"
-msgstr "Listes des étudiants inscrits aux cours et examens de "
+msgstr "Listes des étudiants inscrits aux examens de "
 
 msgid "students_list_admin"
 msgstr "Administration des listes des étudiants"
