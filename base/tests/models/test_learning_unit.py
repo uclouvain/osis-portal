@@ -23,7 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.test import TestCase
+
 from base import models as mdl_base
+from base.tests.factories.learning_unit import LearningUnitFactory
 
 
 def create_learning_unit(data):
@@ -37,4 +40,23 @@ def create_learning_unit(data):
     learning_unit.save()
     return learning_unit
 
+
+class LearningUnitTest(TestCase):
+    def setUp(self):
+        self.title = "Title"
+        self.acronym = "Acronym"
+        self.learning_unit = LearningUnitFactory(title=self.title, acronym=self.acronym)
+
+    def test_str(self):
+        self.assertEqual(str(self.learning_unit), "{} - {}".format(self.acronym, self.title))
+
+    def test_find_by_id(self):
+        a_learning_unit = mdl_base.learning_unit.find_by_id(self.learning_unit.id)
+
+        self.assertEqual(a_learning_unit, self.learning_unit)
+
+    def test_search(self):
+        self.assertListEqual(list(mdl_base.learning_unit.search(self.acronym)), [self.learning_unit])
+
+        self.assertFalse(mdl_base.learning_unit.search("Other Acronym"))
 

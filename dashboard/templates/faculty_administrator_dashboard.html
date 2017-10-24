@@ -9,7 +9,7 @@
 * The core business involves the administration of students, teachers,
 * courses, programs and so on.
 *
-* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+* Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -59,8 +59,16 @@
                 </div>
             {% endif %}
             {% if 'attribution'  in installed_apps %}
+                {% if online_application_opened %}
+                    <div class="grid-item">
+                        <i class="fa fa-id-card-o"></i>
+                        <div class="description">
+                            <h4 class="media-heading"><a href="{% url 'attribution_applications' %}" id="lnk_my_applications">{% trans 'applications_administration' %}</a></h4>
+                        </div>
+                    </div>
+                {% endif %}
                 <div class="grid-item">
-                    <i class="fa fa-address-card-o"></i>
+                    <i class="fa fa-list-alt"></i>
                     <div class="description">
                         <h4 class="media-heading">
                             <a href="{% url 'attribution_administration' %}" id="lnk_attribution_administration">
@@ -77,6 +85,18 @@
                         <h4 class="media-heading">
                             <a href="{% url 'scores_sheets_admin' %}" id="lnk_scores_sheets_admin">
                                 {% trans 'scores_sheets_admin' %}
+                            </a>
+                        </h4>
+                    </div>
+                </div>
+            {% endif %}
+            {% if 'attribution'  in installed_apps %}
+                <div class="grid-item">
+                    <i class="fa fa-file-pdf-o"></i>
+                    <div class="description">
+                        <h4 class="media-heading">
+                            <a href="{% url 'students_list_admin' %}" id="students_list_admin">
+                                {% trans 'students_list_admin' %}
                             </a>
                         </h4>
                     </div>

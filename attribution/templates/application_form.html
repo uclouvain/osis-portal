@@ -31,7 +31,7 @@
         <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                           aria-hidden="true"></span></a></li>
     {% block breadcrumb %}
-        <li><a href="{% url 'learning_unit_applications' %}" id="lnk_applications">{% trans 'my_applications' %}</a></li>
+        <li><a href="{% url 'visualize_tutor_applications' global_id=a_tutor.person.global_id %}" id="lnk_applications">{% trans 'my_applications' %}</a></li>
         <li>{% trans 'my_application' %}</li>
     {% endblock %}
     <a href="http://uclouvain.github.io/osis/assets/user_manual_portal_fr.pdf"
@@ -46,7 +46,7 @@
          id="pnl_application_form">
         <div class="panel-heading">{% trans 'application'%}</div>
         <div class="panel-body">
-            <form action="{% if application.tutor_application.id %}{% url 'save_tutor_application' application.tutor_application.id %}{% else %}{% url 'save_new_tutor_application' %}{% endif%}"
+            <form action="{% if application.tutor_application.id %}{% url 'save_tutor_application' application.tutor_application.id %}{% else %}{% url 'save_new_tutor_application' application.tutor_application.tutor.person.global_id %}{% endif%}"
                   method="post"
                   class="form" role="form">
                 <input type="hidden"
@@ -151,7 +151,7 @@
                     <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
                     {% trans 'submit' %}</button>
                 <a class="btn btn-default"
-                   href="{% url 'learning_unit_applications' %}"
+                   href="{% url 'visualize_tutor_applications' global_id=a_tutor.person.global_id %}"
                    title="{% trans 'cancel' %}">{% trans 'cancel' %}</a>
 
             </form>
