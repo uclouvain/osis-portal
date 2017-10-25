@@ -61,6 +61,7 @@ class Student(SerializableModel):
     registration_id = models.CharField(max_length=10, unique=True)
     person = models.ForeignKey('Person')
 
+
     def email(self):
         if self.person.user:
             return self.person.user.email
