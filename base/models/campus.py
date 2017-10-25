@@ -30,7 +30,7 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 class CampusAdmin(SerializableModelAdmin):
     list_display = ('name', 'organization')
     list_filter = ('organization',)
-    fieldsets = ((None, {'fields': ('name', 'organization')}),)
+    fieldsets = ((None, {'fields': ('name', 'organization', 'code', 'is_administration')}),)
     search_fields = ['name', 'organization__name']
 
 
