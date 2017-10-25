@@ -123,7 +123,7 @@ def count_by_proposition(subject):
 
 def count_submit_by_user(user, offer):
     return Dissertation.objects.filter(author=user).filter(offer_year_start__offer=offer)\
-        .exclude(status='DRAFT').exclude(status='DIR_KO').count()
+        .exclude(status='DRAFT').exclude(status='DIR_KO').filter(active=True).count()
 
 
 def get_next_status(memory, operation):
