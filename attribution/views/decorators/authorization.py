@@ -24,17 +24,16 @@
 #
 ##############################################################################
 from django.core.exceptions import PermissionDenied
-from django.contrib.auth.models import User
 from base import models as mdl_base
 
 
 def user_is_tutor_or_super_user(function):
 
     def wrap(request, *args, **kwargs):
+        global_id = None
         if 'global_id' in kwargs:
             global_id = kwargs['global_id']
-        else:
-            global_id = args[0]
+
         a_user = request.user
 
         if not a_user.is_staff and not a_user.has_perm('base.is_administrator'):
