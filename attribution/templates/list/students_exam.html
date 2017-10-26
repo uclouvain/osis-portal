@@ -34,7 +34,6 @@
 {% endblock %}
 {% block content %}
     <h1>{% trans 'exam_student_list' %}</h1>
-    <h2>{{ person.user.first_name }} {{ person.user.last_name }}</h2>
     {% if msg_error %}
         <br>
         <div class="alert alert-info">{{ msg_error }}</div>
