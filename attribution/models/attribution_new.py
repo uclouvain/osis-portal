@@ -36,8 +36,14 @@ class AttributionNewAdmin(admin.ModelAdmin):
 
 class AttributionNew(models.Model):
     global_id = models.CharField(max_length=10, unique=True)
-    attributions = JSONField()
-    applications = JSONField()
+    attributions = JSONField(default={})
+    applications = JSONField(default={})
 
     def __str__(self):
         return u"%s" % self.global_id
+
+
+def insert_or_update_attributions(global_id, attributions_data):
+    AttributionNew.objects.update_or_create(
+        global_id=global_id, defaults={"attributions": attributions_data}
+    )

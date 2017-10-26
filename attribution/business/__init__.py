@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,21 +23,3 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
-
-from attribution.models import attribution, attribution_charge, application_charge, tutor_application, attribution_new
-
-admin.site.register(application_charge.ApplicationCharge,
-                    application_charge.ApplicationChargeAdmin)
-
-admin.site.register(attribution.Attribution,
-                    attribution.AttributionAdmin)
-
-admin.site.register(attribution_charge.AttributionCharge,
-                    attribution_charge.AttributionChargeAdmin)
-
-admin.site.register(attribution_new.AttributionNew,
-                    attribution_new.AttributionNewAdmin)
-
-admin.site.register(tutor_application.TutorApplication,
-                    tutor_application.TutorApplicationAdmin)
