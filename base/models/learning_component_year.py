@@ -44,3 +44,6 @@ class LearningComponentYear(SerializableModel):
     type = models.CharField(max_length=30, choices=learning_component_year_type.LEARNING_COMPONENT_YEAR_TYPES,
                             blank=True, null=True, db_index=True)
     volume_declared_vacant = models.DecimalField(max_digits=6, decimal_places=1, blank=True, null=True)
+
+    def __str__(self):
+        return u"%s - %s" % (self.acronym, self.learning_container_year.acronym)
