@@ -47,3 +47,15 @@ class LearningComponentYear(SerializableModel):
 
     def __str__(self):
         return u"%s - %s" % (self.acronym, self.learning_container_year.acronym)
+
+
+def search(*args, **kwargs):
+    qs = LearningComponentYear.objects.all()
+
+    if "learning_container_year" in kwargs:
+        if isinstance(kwargs['learning_container_year'], list):
+            qs = qs.filter(learning_container_year__in=kwargs['learning_container_year'])
+        else:
+            qs = qs.filter(learning_container_year=kwargs['learning_container_year'])
+
+    return qs.select_related('learning_container_year')

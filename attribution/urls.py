@@ -24,6 +24,8 @@
 #
 ##############################################################################
 from django.conf.urls import url, include
+
+from attribution.views import online_application_new
 from attribution.views import tutor_charge, online_application, list
 from django.views.i18n import javascript_catalog
 
@@ -42,7 +44,7 @@ urlpatterns = [
         name='attribution_students'),
 
     url(r'^applications/', include([
-        url(r'^$', online_application.home, name='learning_unit_applications'),
+        url(r'^$', online_application_new.home, name='learning_unit_applications'),
         url(r'^([0-9]+)/delete/$', online_application.delete, name='delete_tutor_application'),
         url(r'^([0-9]+)/edit/$', online_application.edit, name='edit_tutor_application'),
         url(r'^([0-9]+)/save/$', online_application.save, name='save_tutor_application'),
@@ -66,10 +68,13 @@ urlpatterns = [
             name='attribution_admin_visualize_tutor'),
         url(r'^students_list/$', list.students_list_admin, name='students_list_admin'),
         url(r'^students_list/([0-9a-z-]+)/xls', list.list_build_by_person, name='students_list_admin_create'),
-        url(r'^applications/$', online_application.applications_administration, name='attribution_applications'),
-        url(r'^applications/select_tutor/$', online_application.select_tutor_applications,
-            name='applications_admin_select_tutor'),
-        url(r'^visualize_tutor_applications/(?P<global_id>[0-9a-z-]+)/$', online_application.visualize_tutor_applications, name="visualize_tutor_applications")
+
+        url(r'^applications/', include([
+            url(r'^$', online_application_new.administration_applications,
+                name='attribution_applications'),
+            url(r'^(?P<global_id>[0-9a-z-]+)/$', online_application_new.visualize_tutor_applications,
+                name="visualize_tutor_applications")
+        ])),
     ])),
     url(r'^list/students$', list.students_list, name='students_list'),
     url(r'^list/students/xls', list.list_build, name='students_list_create'),

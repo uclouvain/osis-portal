@@ -47,3 +47,10 @@ def insert_or_update_attributions(global_id, attributions_data):
     AttributionNew.objects.update_or_create(
         global_id=global_id, defaults={"attributions": attributions_data}
     )
+
+
+def find_by_global_id(global_id):
+    try:
+        return AttributionNew.objects.get(global_id=global_id)
+    except:
+        return None

@@ -303,7 +303,7 @@ def home(request):
 
 
 def applications_form(a_tutor, request, mail_confirmation=None):
-    application_year = mdl_base.academic_year.find_next_academic_year()
+    application_year = mdl_base.academic_year.find_next_year()
     attributions = get_attributions_allocated(application_year, a_tutor)
     tot_lecturing = 0
     tot_practical = 0
@@ -368,7 +368,7 @@ def attribution_application_form(request, global_id):
     last_year = get_last_year()
 
     attributions = get_terminating_charges(last_year, a_tutor)
-    application_year = mdl_base.academic_year.find_next_academic_year()
+    application_year = mdl_base.academic_year.find_next_year()
     return render(request, "attribution_application_form.html", {
         'a_tutor': a_tutor,
         'application': None,
@@ -381,7 +381,7 @@ def attribution_application_form(request, global_id):
 def search(request, global_id):
     learning_unit_acronym = request.GET['learning_unit_acronym']
     a_tutor = mdl_base.tutor.find_by_person_global_id(global_id)
-    application_year = mdl_base.academic_year.find_next_academic_year()
+    application_year = mdl_base.academic_year.find_next_year()
     if learning_unit_acronym and len(learning_unit_acronym.strip()) > 0:
         return render(request, "attribution_vacant.html", {
             'a_tutor': a_tutor,
@@ -727,13 +727,13 @@ def existing_tutor_application_for_next_year(a_tutor, a_learning_unit_year, a_fu
 
 
 def get_last_year():
-    application_year = mdl_base.academic_year.find_next_academic_year()
+    application_year = mdl_base.academic_year.find_next_year()
     if application_year:
         return application_year - 1
 
 
 def get_next_year():
-    application_year = mdl_base.academic_year.find_next_academic_year()
+    application_year = mdl_base.academic_year.find_next_year()
     if application_year:
         return application_year + 1
 
@@ -792,7 +792,7 @@ def is_deputy_function(a_function):
 @user_is_tutor_or_super_user
 def applications_confirmation(request, global_id):
     a_tutor = mdl_base.tutor.find_by_person_global_id(global_id)
-    application_year = mdl_base.academic_year.find_next_academic_year()
+    application_year = mdl_base.academic_year.find_next_year()
     send_mail_with_applications(application_year, a_tutor)
     return mail_applications_sent(request, global_id)
 
