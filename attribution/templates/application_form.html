@@ -46,7 +46,11 @@
          id="pnl_application_form">
         <div class="panel-heading">{% trans 'application'%}</div>
         <div class="panel-body">
-            <form action="{% if application.tutor_application.id %}{% url 'save_tutor_application' application.tutor_application.id %}{% else %}{% url 'save_new_tutor_application' application.tutor_application.tutor.person.global_id %}{% endif%}"
+            <form action="{% if application.tutor_application.id %}
+                            {% url 'save_tutor_application' application.tutor_application.id %}
+                          {% else %}
+                            {% url 'create_tutor_application' learning_container_year_id=learning_container_year.id %}
+                          {% endif %}"
                   method="post"
                   class="form" role="form">
                 <input type="hidden"
@@ -67,12 +71,12 @@
                     <div class="col-md-2">
                         <label>{% trans 'code' %}</label>
                         <br>
-                        {{ application.tutor_application.learning_unit_year.acronym }}
+                        {{ learning_container_year.acronym }}
                     </div>
                     <div class="col-md-10">
                         <label>{% trans 'title' %}</label>
                         <br>
-                        {{ application.tutor_application.learning_unit_year.title }}
+                        {{ learning_container_year.title }}
                     </div>
                 </div>
                 <br>
@@ -90,14 +94,16 @@
                     <div class="col-md-2">
                         <label>{% trans 'lecturing_hours_vacant' %}</label>
                         <br>
-                        <span name="max_charge_lecturing" style="visibility:hidden;display:none;">{{ form.max_charge_lecturing }}</span>
-                        {{ application.vacant_attribution_charge_lecturing | default_if_none:''}}
+                        <span name="max_charge_lecturing">
+                            {{ attribution_vacant.LECTURING| default_if_none:'' }}
+                        </span>
                     </div>
                     <div class="col-md-6">
                         <label>{% trans 'practical_hours_vacant' %}</label>
                         <br>
-                        <span name="max_charge_practical" style="visibility:hidden;display:none;">{{ form.max_charge_practical}}</span>
-                        {{ application.vacant_attribution_charge_practical | default_if_none:'' }}
+                        <span name="max_charge_practical">
+                            {{ attribution_vacant.PRACTICAL_EXERCICES| default_if_none:'' }}
+                        </span>
                     </div>
                 </div>
                 <br>

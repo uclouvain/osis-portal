@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,24 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
-from attribution import models as mdl_attribution
+import datetime
+import factory
+import factory.fuzzy
+
+from base.tests.factories.academic_year import AcademicYearFactory
+from osis_common.utils.datetime import get_tzinfo
 
 
-def get_application_list(global_id, academic_year=None):
-    if not academic_year:
-        academic_year = get_application_year()
+class LearningContainerYearFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = "base.LearningContainerYear"
 
-    attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
-    if attrib:
-        return _filter_by_years(attrib.applications, academic_year.year)
-    return None
-
-
-def get_application_year():
-    # Application year is always for next year
-    return mdl_base.academic_year.find_next_academic_year()
-
-
-def _filter_by_years(attribution_list, year):
-    return [attribution for attribution in attribution_list if attribution.get('year') == year]
+    external_id = factory.Sequence(lambda n: '10000000%02d' % n)
+    changed = factory.fuzzy.FuzzyDateTime(datetime.datetime(2016, 1, 1, tzinfo=get_tzinfo()),
+                                          datetime.datetime(2017, 3, 1, tzinfo=get_tzinfo()))
+    acronym = factory.Sequence(lambda n: 'LCY-%d' % n)
+    academic_year = factory.SubFactory(AcademicYearFactory)
+    title = factory.Sequence(lambda n: 'Learning container year - %d' % n)
+    title_english = factory.Sequence(lambda n: 'Learning container year - %d' % n)

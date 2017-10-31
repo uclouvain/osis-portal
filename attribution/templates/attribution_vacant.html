@@ -27,6 +27,7 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 {% block breadcrumb_area %}
+
 <ol class="breadcrumb">
     <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                       aria-hidden="true"></span></a></li>
@@ -41,13 +42,80 @@
             aria-hidden="true"></span></a>
 </ol>
 {% endblock %}
+
 {% block content %}
-    <div class="panel panel-default"
-         id="pnl_charges">
+    <div class="panel panel-default" id="pnl_charges">
         <div class="panel-heading">{% trans 'learning_unit_vacant'%}</div>
+
         <div class="panel-body">
-    {% include "learning_unit_year_search.html" %}
-<br>
+            {% include "learning_unit_year_search.html" %}
+            <br>
+            {% if attributions_vacant %}
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th colspan="3"></th>
+                            <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'total' %}</th>
+
+                            <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'vacant' %}</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th>{% trans 'code'%}</th>
+                            <th>{% trans 'title'%}</th>
+                            <th>{% trans 'team'%}</th>
+                            <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours'%}</th>
+                            <th>{% trans 'practical_hours'%}</th>
+                            <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours'%}</th>
+                            <th>{% trans 'practical_hours'%}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for attribution in attributions_vacant %}
+                        <tr>
+                            <td>{{ attribution.acronym }}</td>
+                            <td>{{ attribution.title }}</td>
+                            <td>{% if attribution.team %}<input type='checkbox' checked readonly>{% endif %}</td>
+                            <td style="border-left-style: solid;border-left-width:1px;">{% if attribution.lecturing_duration > 0 %}{{ attribution.lecturing_duration }}{% endif %}</td>
+                            <td>{% if attribution.practice_duration > 0 %}{{ attribution.practice_duration }}{% endif %}</td>
+                            <td style="border-left-style: solid;border-left-width:1px;">{% if attribution.vacant_attribution_charge_lecturing > 0 %}{{ attribution.vacant_attribution_charge_lecturing }}{% endif %}</td>
+                            <td>{% if attribution.vacant_attribution_charge_practical > 0 %}{{ attribution.vacant_attribution_charge_practical }}{% endif %}</td>
+                            <td>
+                                <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
+                                     title="{% if attribution.already_applied %}
+                                                {% trans 'no_application_possible' %}
+                                            {% elif attribution.team %}
+                                                {% trans 'team_mngt_no_application_possible' %}
+                                            {% endif %}">
+                                    <a id="lnk_submit_attribution_new" class="btn btn-primary pull-right"
+                                       href="{% url 'create_tutor_application' learning_container_year_id=attribution.learning_container_year_id %}"
+                                       {% if attribution.already_applied or attribution.team %} disabled {% endif %}>
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                        {% trans 'create_an_tutor_application' %}
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="alert alert-info" role="alert">{% trans 'no_activity' %}</div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block script %}
+    <script>
+        $('[data-toggle="tooltip"]').tooltip()
+    </script>
+{% endblock %}
+
+
+<!--
 {% if attribution %}
     <form action="{% url 'new' a_tutor.person.global_id %}"
           method="post">
@@ -104,11 +172,10 @@
             {% if not attribution.application_possible %}
                 <div class="alert alert-info pull-right" role="alert">{% trans 'no_application_possible' %}</div>
             {% endif %}
-        {% else %}
+            {% else %}
             <div class="alert alert-info" role="alert">{% trans 'no_activity' %}</div>
 
     </form>
 {% endif %}
             </div>
-    </div>
-{% endblock %}
+    </div>-->

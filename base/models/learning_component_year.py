@@ -58,4 +58,5 @@ def search(*args, **kwargs):
         else:
             qs = qs.filter(learning_container_year=kwargs['learning_container_year'])
 
-    return qs.select_related('learning_container_year')
+    return qs.select_related('learning_container_year')\
+             .order_by('learning_container_year__acronym')

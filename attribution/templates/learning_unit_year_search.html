@@ -25,15 +25,17 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 <div class="row pull-right">
-    <form method="get" action="{% url 'vacant_learning_unit_search' a_tutor.person.global_id %}">
+    <form method="get" action="{% url 'vacant_learning_unit_search' %}">
         <div class="col-md-9">
             <p class="text-muted">{% trans 'lu_search_explanation' %}</p>
         </div>
         <div class="col-md-2">
             <label for="txt_acronym">{% trans 'code' %}</label>
-            <input class="form-control" id="txt_acronym" placeholder="{% trans 'acronym' %}"
-                   name="learning_unit_acronym"
-                   value="{{ acronym | default_if_none:'' }}" style="text-transform:uppercase" maxlength="15">
+            {{ search_form.learning_container_acronym}}
+
+            <!--<input class="form-control" id="txt_acronym" placeholder="{% trans 'acronym' %}"
+                   name="learning_container_acronym"
+                   value="{{ acronym | default_if_none:'' }}" maxlength="15">-->
         </div>
         <div class="col-md-1">
             <br>

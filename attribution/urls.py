@@ -38,23 +38,25 @@ urlpatterns = [
 
     url(r'^$', tutor_charge.home, name='attribution_home'),
     url(r'^charge/([0-9]+)/([0-9a-z-]+)/$', tutor_charge.by_year, name='attributions_by_year'),
-    url(r'^search/([0-9a-z-]+)/$', online_application.search, name='vacant_learning_unit_search'),
 
     url(r'^students/(?P<a_learning_unit_year>[0-9]+)/(?P<a_tutor>[0-9]+)/$', tutor_charge.show_students,
         name='attribution_students'),
 
     url(r'^applications/', include([
-        url(r'^$', online_application_new.home, name='learning_unit_applications'),
+        url(r'^$', online_application_new.overview, name='learning_unit_applications'),
+        url(r'^outside_period/$', online_application.outside_period, name='outside_applications_period'),
+        url(r'^expired_overview/$', online_application_new.attribution_expired_overview, name='tutor_application_create'),
+        url(r'^search_vacant$', online_application_new.search_vacant_attribution, name='vacant_learning_unit_search'),
+
+        url(r'^create/(?P<learning_container_year_id>[0-9a-z-]+)/$', online_application_new.create_application,
+            name='create_tutor_application'),
+
         url(r'^([0-9]+)/delete/$', online_application.delete, name='delete_tutor_application'),
         url(r'^([0-9]+)/edit/$', online_application.edit, name='edit_tutor_application'),
         url(r'^([0-9]+)/save/$', online_application.save, name='save_tutor_application'),
-        url(r'^create/([0-9a-z-]+)/$', online_application.save_on_new_learning_unit, name='save_new_tutor_application'),
-        url(r'^form/([0-9a-z-]+)/$', online_application.attribution_application_form, name='tutor_application_create'),
         url(r'^renew/$', online_application.renew, name='renew'),
         url(r'^new/([0-9a-z-]+)/$', online_application.new, name='new'),
-        url(r'^outside_period/$', online_application.outside_period, name='outside_applications_period'),
         url(r'^confirm/(?P<global_id>[0-9a-z-]+)/$', online_application.applications_confirmation, name='email_tutor_application_confirmation'),
-
     ])),
 
     url(r'^administration/', include([
