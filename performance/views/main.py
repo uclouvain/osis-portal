@@ -117,7 +117,7 @@ def display_results_by_acronym_and_year(request, acronym, academic_year):
         return dash_main_view.show_multiple_registration_id_error(request)
     stud_perf = mdl_performance.student_performance.find_by_student_and_offer_year(stud.registration_id,
                                                                                    academic_year,
-                                                                                   acronym)
+                                                                                   acronym.upper())
     if not check_right_access(stud_perf, stud):
         raise PermissionDenied
     perf_data = __get_performance_data(stud_perf)
