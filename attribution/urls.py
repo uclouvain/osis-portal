@@ -60,7 +60,7 @@ urlpatterns = [
         # url(r'^([0-9]+)/delete/$', online_application.delete, name='delete_tutor_application'),
         # url(r'^([0-9]+)/edit/$', online_application.edit, name='edit_tutor_application'),
         # url(r'^([0-9]+)/save/$', online_application.save, name='save_tutor_application'),
-        # url(r'^renew/$', online_application.renew, name='renew'),
+         url(r'^renew/$', online_application.renew, name='renew'),
         # url(r'^new/([0-9a-z-]+)/$', online_application.new, name='new'),
         # url(r'^confirm/(?P<global_id>[0-9a-z-]+)/$', online_application.applications_confirmation, name='email_tutor_application_confirmation'),
     ])),

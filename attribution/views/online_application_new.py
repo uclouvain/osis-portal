@@ -92,11 +92,15 @@ def attribution_expired_overview(request):
     global_id = tutor.person.global_id
     attributions_expired = attribution.get_attribution_list(global_id=global_id)
     search_form = VacantAttributionFilterForm()
+    application_year = tutor_application.get_application_year()
+    current_academic_year = mdl_base.academic_year.current_academic_year()
 
     return layout.render(request, "attribution_application_form.html", {
         'a_tutor': tutor,
         'attributions': attributions_expired,
-        'search_form': search_form
+        'search_form': search_form,
+        'application_year': application_year,
+        'current_academic_year': current_academic_year
     })
 
 

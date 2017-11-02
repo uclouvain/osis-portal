@@ -47,11 +47,17 @@
 
     {% include "template_messages.html" %}
 
-    <div class="panel panel-default"
-         id="pnl_applications">
+    <div class="panel panel-default" id="pnl_applications">
         <div class="panel-heading">{% trans 'my_applications'%}</div>
+        <div class="panel-body">
+            <div class="clearfix">
+                <a id="lnk_submit_attribution_new" class="btn btn-primary pull-right"
+                   href="{% url 'vacant_learning_unit_search'%}">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    {% trans 'create_an_tutor_application' %}
+                </a>
+            </div>
         {% if applications %}
-            <div class="panel-body">
             <a href="{% url 'tutor_application_create' %}"
                style="visibility:hidden;display: none;"
                id="lnk_tutor_application_create"
@@ -69,10 +75,6 @@
                         <span class="glyphicon glyphicon-envelope" ></span></button>
                 </form>
             </span>
-            <br>
-            <br>
-        </div>
-            <!--It's normal that the table is outside of the body.  It's for a better display -->
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -125,19 +127,19 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <br>
         {% else %}
             <div class="alert alert-info" style="margin-top:10px;">{%  trans 'no_tutor_application' %}</div>
         {% endif %}
+        </div>
     </div>
-    <div class="panel panel-default"
-         id="pnl_charges">
+
+    <div class="panel panel-default" id="pnl_charges">
         <div class="panel-heading">{% trans 'my_charges'%} {{ academic_year }}</div>
-        <div class="panel-body"></div>
-        {% if attributions %}
-            <!--It's normal that the table is outside of the body.  It's for a better display -->
-            {% include "attributions.html" %}
-            <br>
-        {% endif %}
+        <div class="panel-body">
+            {% if attributions %}
+                {% include "attributions.html" %}
+                <br>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}

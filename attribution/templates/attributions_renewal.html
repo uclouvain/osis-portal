@@ -31,14 +31,13 @@
         <thead>
             <tr>
                 <th colspan="4"></th>
-                <th colspan="4" style="border-left-style: solid;border-left-width:1px;">{{ application_academic_year }}</th>
-                <th colspan="5" style="border-left-style: solid;border-left-width:1px;">{{ over_academic_year }}</th>
+                <th class="text-center" colspan="2" style="border-left-style: solid;border-left-width:1px;">{{ application_year }}</th>
+                <th class="text-center" colspan="5" style="border-left-style: solid;border-left-width:1px;">{{ current_academic_year }}</th>
             </tr>
             <tr >
                 <th colspan="4"></th>
-                <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'total' %}</th>
-                <th colspan="2" style="border-left-style: solid;border-left-width:1px;" >{% trans 'vacant' %}</th>
-                <th colspan="3" style="border-left-style: solid;border-left-width:1px;"></th>
+                <th colspan="2" class="text-center"  style="border-left-style: solid;border-left-width:1px;" >{% trans 'vacant' %}</th>
+                <th colspan="4" style="border-left-style: solid;border-left-width:1px;"></th>
             </tr>
             <tr >
                 <th><span id="spn_renew_title">
@@ -52,8 +51,6 @@
                 <th style="vertical-align: top">{% trans 'code'%}</th>
                 <th style="vertical-align: top" >{% trans 'title'%}</th>
                 <th style="vertical-align: top" >{% trans 'team'%}</th>
-                <th style="border-left-style: solid;border-left-width:1px;vertical-align: top;">{% trans 'lecturing_hours'%}</th>
-                <th style="vertical-align: top">{% trans 'practical_hours'%}</th>
                 <th style="border-left-style: solid;border-left-width:1px;vertical-align: top;">{% trans 'lecturing_hours'%}</th>
                 <th style="vertical-align: top">{% trans 'practical_hours'%}</th>
                 <th style="border-left-style: solid;border-left-width:1px;vertical-align: top;">{% trans 'start' %}</th>
@@ -75,9 +72,13 @@
                     </td>
                     <td>{{ attribution.acronym }}</td>
                     <td>{{ attribution.title }}</td>
-                    <td>{% if attribution.team %}<input type='checkbox' checked readonly>{% else %}{% endif %}</td>
-                    <td style="border-left-style: solid;border-left-width:1px;">{% if attribution.lecturing_duration > 0 %}{{ attribution.lecturing_duration | default_if_none:''}}{% endif %}</td>
-                    <td>{% if attribution.practice_duration > 0%}{{ attribution.practice_duration | default_if_none:''}}{% endif %}</td>
+                    <td class="text-center">
+                        {% if attribution.team %}
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        {% else %}
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        {% endif %}
+                    </td>
                     <td style="border-left-style: solid;border-left-width:1px;">{% if attribution.vacant_attribution_charge_lecturing > 0 %}{{ attribution.vacant_attribution_charge_lecturing }}{% endif %}</td>
                     <td>{% if attribution.vacant_attribution_charge_practical > 0 %}{{ attribution.vacant_attribution_charge_practical }}{% endif %}</td>
                     <td style="border-left-style: solid;border-left-width:1px;">{{ attribution.start_academic_year}}</td>
