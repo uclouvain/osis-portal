@@ -34,7 +34,6 @@ from django.core.urlresolvers import reverse
 from django.forms.formsets import BaseFormSet
 
 from attribution.views import tutor_charge
-from attribution.forms.attribution import AttributionForm
 from base.models.enums import component_type
 from attribution.models.enums import function
 from performance.tests.models import test_student_performance
@@ -44,10 +43,10 @@ from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
-from base.tests.factories.learning_unit_component import LearningUnitComponentFactory
 from attribution.tests.models import test_attribution_charge
 from attribution.tests.factories.attribution import AttributionFactory
 
+URL_ADE = "url_ade"
 
 REGISTRATION_ID = '64641200'
 
@@ -68,6 +67,16 @@ WEIGHT = 5
 now = datetime.datetime.now()
 CURRENT_YEAR = now.year
 NEXT_YEAR = now.year + 1
+
+
+def get_attribution_config_settings():
+    return {'TIME_TABLE_URL': '',
+            'TIME_TABLE_NUMBER': '',
+            'CATALOG_URL': '',
+            'SERVER_TO_FETCH_URL': 'test',
+            'ATTRIBUTION_PATH': 'test',
+            'SERVER_TO_FETCH_USER': 'test',
+            'SERVER_TO_FETCH_PASSWORD': 'test'}
 
 
 class MockRequest:
@@ -524,8 +533,10 @@ class HomeTest(TestCase):
 
         self.assertIsInstance(response.context['formset'], BaseFormSet)
 
+    @override_settings(ATTRIBUTION_CONFIG=get_attribution_config_settings())
     @mock.patch('requests.get', side_effect=mock_request_single_attribution_charge)
     def test_for_one_attribution(self, mock_requests_get):
+
         response = self.client.get(self.url)
 
         self.assertTrue(mock_requests_get.called)
