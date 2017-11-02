@@ -30,15 +30,10 @@ from base import models as mdl_base
 def user_is_tutor_or_super_user(function):
 
     def wrap(request, *args, **kwargs):
-        global_id = None
-        if 'global_id' in kwargs:
-            global_id = kwargs['global_id']
-
         a_user = request.user
 
         if not a_user.is_staff and not a_user.has_perm('base.is_administrator'):
-            tutor = mdl_base.tutor.find_by_person_global_id(global_id)
-            if tutor.person != mdl_base.person.find_by_user(request.user):
+            if kwargs.get('global_id') != mdl_base.person.find_by_user(a_user).global_id:
                 raise PermissionDenied
 
         return function(request, *args, **kwargs)
