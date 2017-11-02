@@ -463,8 +463,8 @@ class ViewPerformanceByAcronymAndYear(TestCase):
         self.assertEqual(self.complex_acronym, main._clean_acronym("droi2ms_g"))
 
     def test_anonymous(self):
-        url = reverse('performance_student_by_acronym_and_year', args=[self.simple_acronym_input, self.valid_year])
         self.client.logout()
+        url = reverse('performance_student_by_acronym_and_year', args=[self.simple_acronym_input, self.valid_year])
         response = self.client.get(url)
         self.assertRedirects(response, "/login/?next={}".format(url))
 
@@ -478,7 +478,6 @@ class ViewPerformanceByAcronymAndYear(TestCase):
         url = reverse('performance_student_by_acronym_and_year', args=[self.simple_acronym_input, self.valid_year])
         self.__test_access_ok(url)
         url = reverse('performance_student_by_acronym_and_year', args=[self.complex_acronym_input, self.valid_year])
-        self.client.force_login(self.student.person.user)
         self.__test_access_ok(url)
 
     def test_invalid_student(self):
