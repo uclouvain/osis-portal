@@ -226,11 +226,10 @@ class OnlineApplicationTest(TestCase):
             'acronym': a_learning_unit.acronym,
             'academic_year': test_academic_year.create_academic_year_with_year(NEXT_YEAR + 5),
             'learning_unit': a_learning_unit})
-        test_learning_unit_year.learning_container_year = LearningContainerYearFactory(
+        a_learning_unit_year.learning_container_year = LearningContainerYearFactory(
             academic_year=a_learning_unit_year.academic_year,
-            is_vacant=True,
-            team=True)
-        test_learning_unit_year.save()
+            is_vacant=True)
+        a_learning_unit_year.save()
         self.assertEquals(online_application.define_renew_possible(self.a_tutor, a_learning_unit_year_plus_4, None), True)
 
     def test_define_renew_existing_academic_year_False_already_exists(self):
