@@ -28,10 +28,9 @@ import json
 from django.contrib.auth.models import Group, Permission
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.test import TestCase, Client
+from django.test import TestCase
 
 from base.forms.base_forms import RegistrationIdForm
-from base.models import academic_year
 import base.tests.models.test_offer_year
 import base.tests.models.test_student
 from base.tests.factories.student import StudentFactory
@@ -40,7 +39,6 @@ from performance.models.enums import offer_registration_state
 from performance.tests.factories.student_performance import StudentPerformanceFactory
 import performance.tests.models.test_student_performance
 from performance.views import main
-from performance.views.main import _clean_acronym
 
 OK = 200
 ACCESS_DENIED = 401
@@ -424,12 +422,24 @@ class VisualizeStudentResult(TestCase):
 
 class ViewPerformanceByAcronymAndYear(TestCase):
 
+    def __test_access_denied(self, url):
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertTemplateUsed(response, 'access_denied.html')
+
+    def __test_access_ok(self, url):
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, 'performance_result_student.html')
+
     def setUp(self):
         self.simple_acronym_input = 'DROI1BA'
         self.simple_acronym = "DROI1BA"
         self.complex_acronym_input = 'DROI2MS_G'
         self.complex_acronym = "DROI2MS/G"
         self.invalid_acronym_input = "BIR1BA"
+        self.acronym_with_space_input = "IAG IS"
+        self.acronym_with_space = "IAG IS"
         self.valid_year = 2017
         self.invalid_year = 2020
         self.person = PersonFactory()
@@ -443,6 +453,9 @@ class ViewPerformanceByAcronymAndYear(TestCase):
         self.student_performance_complex = StudentPerformanceFactory(registration_id=self.student.registration_id,
                                                                      academic_year=self.valid_year,
                                                                      acronym=self.complex_acronym)
+        self.student_performance_with_space = StudentPerformanceFactory(registration_id=self.student.registration_id,
+                                                                        academic_year=self.valid_year,
+                                                                        acronym=self.acronym_with_space)
 
     def test_clean_acronym(self):
         self.assertEqual(self.simple_acronym, main._clean_acronym(self.simple_acronym_input))
@@ -456,31 +469,26 @@ class ViewPerformanceByAcronymAndYear(TestCase):
         self.assertRedirects(response, "/login/?next={}".format(url))
 
     def test_non_student(self):
-        url = reverse('performance_student_by_acronym_and_year', args=[self.simple_acronym_input, self.valid_year])
         self.client.force_login(self.person.user)
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, ACCESS_DENIED)
-        self.assertTemplateUsed(response, 'access_denied.html')
+        url = reverse('performance_student_by_acronym_and_year', args=[self.simple_acronym_input, self.valid_year])
+        self.__test_access_denied(url)
 
     def test_valid_student(self):
-        url = reverse('performance_student_by_acronym_and_year', args=[self.simple_acronym_input, self.valid_year])
         self.client.force_login(self.student.person.user)
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, OK)
-        self.assertTemplateUsed(response, 'performance_result_student.html')
+        url = reverse('performance_student_by_acronym_and_year', args=[self.simple_acronym_input, self.valid_year])
+        self.__test_access_ok(url)
         url = reverse('performance_student_by_acronym_and_year', args=[self.complex_acronym_input, self.valid_year])
         self.client.force_login(self.student.person.user)
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, OK)
-        self.assertTemplateUsed(response, 'performance_result_student.html')
+        self.__test_access_ok(url)
 
     def test_invalid_student(self):
-        url = reverse('performance_student_by_acronym_and_year', args=[self.simple_acronym_input, self.invalid_year])
         self.client.force_login(self.student.person.user)
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, ACCESS_DENIED)
-        self.assertTemplateUsed(response, 'access_denied.html')
+        url = reverse('performance_student_by_acronym_and_year', args=[self.simple_acronym_input, self.invalid_year])
+        self.__test_access_denied(url)
         url = reverse('performance_student_by_acronym_and_year', args=[self.invalid_acronym_input, self.valid_year])
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, ACCESS_DENIED)
-        self.assertTemplateUsed(response, 'access_denied.html')
+        self.__test_access_denied(url)
+
+    def test_acronym_with_space(self):
+        self.client.force_login(self.student.person.user)
+        url = reverse('performance_student_by_acronym_and_year', args=[self.acronym_with_space_input, self.valid_year])
+        self.__test_access_ok(url)
