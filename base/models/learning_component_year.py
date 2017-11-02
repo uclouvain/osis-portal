@@ -23,27 +23,27 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib.postgres.fields import JSONField
+from base.models.enums import learning_component_year_type
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.db import models
-from django.contrib import admin
 
 
-class AttributionNewAdmin(admin.ModelAdmin):
-    list_display = ('global_id', 'attributions', 'applications')
-    fieldsets = ((None, {'fields': ('global_id', 'attributions', 'applications', )}),)
-    search_fields = ['global_id']
+class LearningComponentYearAdmin(SerializableModelAdmin):
+    list_display = ('learning_container_year', 'acronym', 'type', 'volume_declared_vacant',)
+    fieldsets = ((None, {'fields': ('learning_container_year', 'acronym', 'type', 'volume_declared_vacant',)}),)
+    search_fields = ['acronym', 'learning_container_year__acronym']
+    raw_id_fields = ('learning_container_year',)
+    list_filter = ('learning_container_year__academic_year',)
 
 
-class AttributionNew(models.Model):
-    global_id = models.CharField(max_length=10, unique=True)
-    attributions = JSONField(default={})
-    applications = JSONField(default={})
+class LearningComponentYear(SerializableModel):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
+    changed = models.DateTimeField(null=True, auto_now=True)
+    learning_container_year = models.ForeignKey('LearningContainerYear')
+    acronym = models.CharField(max_length=4, blank=True, null=True)
+    type = models.CharField(max_length=30, choices=learning_component_year_type.LEARNING_COMPONENT_YEAR_TYPES,
+                            blank=True, null=True, db_index=True)
+    volume_declared_vacant = models.DecimalField(max_digits=6, decimal_places=1, blank=True, null=True)
 
     def __str__(self):
-        return u"%s" % self.global_id
-
-
-def insert_or_update_attributions(global_id, attributions_data):
-    AttributionNew.objects.update_or_create(
-        global_id=global_id, defaults={"attributions": attributions_data}
-    )
+        return u"%s - %s" % (self.acronym, self.learning_container_year.acronym)
