@@ -23,30 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
-from base.models.enums import vacant_declaration_type
-from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
+RESEVED_FOR_INTERNS = "RESEVED_FOR_INTERNS"
+OPEN_FOR_EXTERNS = "OPEN_FOR_EXTERNS"
+EXCEPTIONAL_PROCEDURE = "EXCEPTIONAL_PROCEDURE"
+VACANT_NOT_PUBLISH = "VACANT_NOT_PUBLISH"
+DO_NOT_ASSIGN = "DO_NOT_ASSIGN"
 
-class LearningContainerYearAdmin(SerializableModelAdmin):
-    list_display = ('academic_year', 'acronym', 'title')
-    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title',)}),)
-    search_fields = ['acronym']
-    list_filter = ('academic_year',)
-
-
-class LearningContainerYear(SerializableModel):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    changed = models.DateTimeField(null=True, auto_now=True)
-    acronym = models.CharField(max_length=10)
-    academic_year = models.ForeignKey('AcademicYear')
-    title = models.CharField(max_length=255)
-    title_english = models.CharField(max_length=250, blank=True, null=True)
-    team = models.BooleanField(default=False)
-    is_vacant = models.BooleanField(default=False)
-    type_declaration_vacant = models.CharField(max_length=100, blank=True, null=True,
-                                               choices=vacant_declaration_type.DECLARATION_TYPE)
-    in_charge = models.BooleanField(default=False)
-
-    def __str__(self):
-        return u"%s - %s" % (self.acronym, self.title)
+DECLARATION_TYPE = (
+    (RESEVED_FOR_INTERNS, _(RESEVED_FOR_INTERNS)),
+    (OPEN_FOR_EXTERNS, _(OPEN_FOR_EXTERNS)),
+    (EXCEPTIONAL_PROCEDURE, _(EXCEPTIONAL_PROCEDURE)),
+    (VACANT_NOT_PUBLISH, _(VACANT_NOT_PUBLISH)),
+    (DO_NOT_ASSIGN, _(DO_NOT_ASSIGN))
+)
