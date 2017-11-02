@@ -239,7 +239,7 @@ def save(registration_id, academic_year, acronym, json_data, default_update_date
     session_locked = json_data.pop("sessionMonth", None)
     offer_registration_state = json_data.pop("etatInscr", None)
     creation_date = get_creation_date()
-    courses_registration_validated = get_course_registration_validation_status(json_data.pop("validationInscrCours", None))
+    courses_registration_validated = get_course_registration_validation_status(academic_year, json_data.pop("validationInscrCours", None))
     fields = {"data": json_data,
               "update_date": update_date,
               "creation_date": creation_date,
@@ -254,13 +254,15 @@ def save(registration_id, academic_year, acronym, json_data, default_update_date
     return obj
 
 
-def get_course_registration_validation_status(json_status):
-    if json_status and json_status == "OUI":
-            return True
-    elif json_status and json_status == "NON":
-            return False
-    else:
-        return None
+def get_course_registration_validation_status(academic_year, json_status):
+    current_academic_year = mdl_academic_year.current_academic_year()
+    current_year = current_academic_year.year if current_academic_year else None
+    if academic_year == current_year:
+        if json_status and json_status == "OUI":
+                return True
+        elif json_status and json_status == "NON":
+                return False
+    return None
 
 
 def get_performances_by_registration_id_and_offer(registration_id, academic_year, acronym):
