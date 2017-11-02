@@ -25,6 +25,7 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
+
 {% block breadcrumb_area %}
 <ol class="breadcrumb">
     <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
@@ -39,19 +40,19 @@
             aria-hidden="true"></span></a>
 </ol>
 {% endblock %}
+
 {% block content %}
-    {% if mail_confirmation %}
-        <div id="pnl_msg_info" class="alert alert-info">
-            {{ mail_confirmation }}
-        </div>
-    {% endif %}
     <h1>{% trans 'my_applications' %} {{ academic_year }}</h1>
     <h2>{{ a_tutor.person.first_name }} {{ a_tutor.person.last_name }} - {{ a_tutor.person.global_id }}</h2>
+
+    {% include "template_messages.html" %}
+
     <div class="panel panel-default"
          id="pnl_applications">
         <div class="panel-heading">{% trans 'my_applications'%}</div>
-        <div class="panel-body">
-            <a href="{% url 'tutor_application_create' a_tutor.person.global_id %}"
+        {% if applications %}
+            <div class="panel-body">
+            <a href="{% url 'tutor_application_create' %}"
                style="visibility:hidden;display: none;"
                id="lnk_tutor_application_create"
                class="btn btn-primary pull-right"
@@ -59,7 +60,7 @@
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> {% trans 'create_an_tutor_application' %}
             </a>
             <span class="pull-right" style="margin-left:10px;margin-right:10px;">
-                <form action="{% url 'email_tutor_application_confirmation' a_tutor.person.global_id %}"
+                <form action="{% url 'email_tutor_application_confirmation' %}"
                       id="form_email_tutor_application_confirmation">
                     {% csrf_token %}
                     <button class="btn btn-default"
@@ -71,13 +72,11 @@
             <br>
             <br>
         </div>
-        {% if applications %}
             <!--It's normal that the table is outside of the body.  It's for a better display -->
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th colspan="2"></th>
-                        <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'total' %}</th>
                         <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'vacant' %}</th>
                         <th colspan="4" style="border-left-style: solid;border-left-width:1px;">{% trans 'charge' %}</th>
                     </tr>
@@ -86,11 +85,8 @@
                         <th>{% trans 'title'%}</th>
                         <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours'%}</th>
                         <th>{% trans 'practical_hours'%}</th>
-                        <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours'%}</th>
-                        <th>{% trans 'practical_hours'%}</th>
                         <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours_asked'%}</th>
                         <th>{% trans 'practical_hours_asked'%}</th>
-                        <th>{% trans 'function'%}</th>
                         <th></th>
                     </tr>
                 <thead>
@@ -99,35 +95,27 @@
                         <tr>
                             <td>{{ application.id }}
                                 <a title="{%trans 'edit'%}"
-                                   href="{% url 'edit_tutor_application' application.tutor_application.id %}"
+                                   href="{% url 'create_or_update_tutor_application' application.learning_container_year_id  %}"
                                    id="lnk_application_edit">
-                                    {{ application.tutor_application.learning_unit_year.acronym }}
+                                    {{ application.acronym }}
                                 </a>
                             </td>
                             <td>
                                 <a title="{%trans 'edit'%}"
-                                   href="{% url 'edit_tutor_application' application.tutor_application.id %}"
+                                   href="{% url 'create_or_update_tutor_application' application.learning_container_year_id %}"
                                   id="lnk_application_edit">
-                                {{ application.tutor_application.learning_unit_year.title }}
+                                {{ application.title }}
                                 </a>
                             </td>
-                            <td style="border-left-style: solid;border-left-width:1px;">
-                                {{ application.lecturing_duration | default_if_none:''}}
-                            </td>
+                            <td style="border-left-style: solid;border-left-width:1px;">{{ application.LECTURING | default_if_none:''}}</td>
+                            <td>{{ application.PRACTICAL_EXERCISES | default_if_none:''}}</td>
+                            <td style="border-left-style: solid;border-left-width:1px;">{{ application.charge_lecturing_asked | default_if_none:''}}</td>
+                            <td>{{ application.charge_practical_asked | default_if_none:''}}</td>
                             <td>
-                                {{ application.practice_duration | default_if_none:''}}
-
-                            </td>
-                            <td style="border-left-style: solid;border-left-width:1px;">{{ application.vacant_attribution_charge_lecturing | default_if_none:''}}</td>
-                            <td>{{ application.vacant_attribution_charge_practical | default_if_none:''}}</td>
-                            <td style="border-left-style: solid;border-left-width:1px;">{{ application.application_charge_lecturing.allocation_charge | default_if_none:''}}</td>
-                            <td>{{ application.application_charge_practical.allocation_charge | default_if_none:''}}</td>
-                            <td>{% if application.tutor_application.function  %}{% trans application.tutor_application.function %}{% endif %}</td>
-                            <td>
-                                <form action="{% url 'delete_tutor_application' application.tutor_application.id %}"
-                                      id="form_delete_{{ application.tutor_application.id }}">
+                                <form action="{% url 'delete_tutor_application' application.learning_container_year_id %}"
+                                      id="form_delete_{{ application.learning_container_year_id }}">
                                     <button class="btn btn-warning"
-                                            id="lnk_application_delete_{{ application.tutor_application.id }}"
+                                            id="lnk_application_delete_{{ application.learning_container_year_id }}"
                                             type="submit" title="{%trans 'remove'%}"
                                             >
                                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
@@ -139,7 +127,7 @@
             </table>
             <br>
         {% else %}
-            <div class="alert alert-info">{%  trans 'no_tutor_application' %}</div>
+            <div class="alert alert-info" style="margin-top:10px;">{%  trans 'no_tutor_application' %}</div>
         {% endif %}
     </div>
     <div class="panel panel-default"

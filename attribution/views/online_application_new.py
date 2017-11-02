@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.utils.translation import ugettext_lazy as _
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect
@@ -87,7 +89,8 @@ def overview(request, global_id=None):
 @permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def attribution_expired_overview(request):
     tutor = mdl_base.tutor.find_by_user(request.user)
-    attributions_expired = attribution.get_attribution_list(global_id=tutor.person.global_id)
+    global_id = tutor.person.global_id
+    attributions_expired = attribution.get_attribution_list(global_id=global_id)
     search_form = VacantAttributionFilterForm()
 
     return layout.render(request, "attribution_application_form.html", {
@@ -103,7 +106,7 @@ def search_vacant_attribution(request):
     form = VacantAttributionFilterForm(data=request.GET)
     if form.is_valid():
         tutor = mdl_base.tutor.find_by_user(request.user)
-        application_academic_year = mdl_base.academic_year.current_academic_year() #tutor_application.get_application_year()
+        application_academic_year = tutor_application.get_application_year()
         attributions_vacant = tutor_application.get_attributions_vacant_for_application(
             global_id=tutor.person.global_id,
             acronym_filter=form.cleaned_data['learning_container_acronym'],
@@ -121,7 +124,7 @@ def search_vacant_attribution(request):
 @login_required
 #@user_passes_test(permission.is_online_application_opened, login_url=reverse_lazy('outside_applications_period'))
 @permission_required('attribution.can_access_attribution_application', raise_exception=True)
-def create_application(request, learning_container_year_id):
+def create_or_update_application(request, learning_container_year_id):
     tutor = mdl_base.tutor.find_by_user(request.user)
     global_id = tutor.person.global_id
     learning_container_year = mdl_base.learning_container_year.find_by_id(learning_container_year_id)
@@ -131,12 +134,16 @@ def create_application(request, learning_container_year_id):
                                global_id=global_id,
                                data=request.POST)
         if form.is_valid():
-            application_to_add = form.cleaned_data
-            tutor_application.create_application(global_id, application_to_add)
+            application = form.cleaned_data
+            tutor_application.create_or_update_application(global_id, application)
             return redirect('learning_unit_applications')
     else:
-        form = ApplicationForm(learning_container_year=learning_container_year,
-                               global_id=tutor.person.global_id)
+        inital_data = tutor_application.find_application(global_id, learning_container_year)
+        form = ApplicationForm(
+            initial=inital_data,
+            learning_container_year=learning_container_year,
+            global_id=tutor.person.global_id
+        )
 
     return layout.render(request, "application_form.html", {
         'a_tutor': tutor,
@@ -147,10 +154,23 @@ def create_application(request, learning_container_year_id):
 
 @login_required
 @permission_required('attribution.can_access_attribution_application', raise_exception=True)
-def delete_application(request, application_id):
+def delete_application(request, learning_container_year_id):
     tutor = mdl_base.tutor.find_by_user(request.user)
-    tutor_application.delete(global_id=tutor.person.global_id, application_id=application_id)
+    global_id = tutor.person.global_id
+    learning_container_year = mdl_base.learning_container_year.find_by_id(learning_container_year_id)
+    tutor_application.delete_application(global_id, learning_container_year)
     return redirect('learning_unit_applications')
 
 
+@login_required
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
+def send_mail_applications_summary(request):
+    tutor = mdl_base.tutor.find_by_user(request.user)
+    global_id = tutor.person.global_id
+    error_msg = tutor_application.send_mail_applications_summary(global_id)
 
+    if error_msg:
+        messages.add_message(request, messages.ERROR, _(error_msg))
+    else:
+        messages.add_message(request, messages.INFO, _('applications_mail_sent'))
+    return redirect('learning_unit_applications')

@@ -55,8 +55,6 @@
                     <thead>
                         <tr>
                             <th colspan="3"></th>
-                            <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'total' %}</th>
-
                             <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'vacant' %}</th>
                             <th></th>
                         </tr>
@@ -64,8 +62,6 @@
                             <th>{% trans 'code'%}</th>
                             <th>{% trans 'title'%}</th>
                             <th>{% trans 'team'%}</th>
-                            <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours'%}</th>
-                            <th>{% trans 'practical_hours'%}</th>
                             <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours'%}</th>
                             <th>{% trans 'practical_hours'%}</th>
                             <th></th>
@@ -76,11 +72,23 @@
                         <tr>
                             <td>{{ attribution.acronym }}</td>
                             <td>{{ attribution.title }}</td>
-                            <td>{% if attribution.team %}<input type='checkbox' checked readonly>{% endif %}</td>
-                            <td style="border-left-style: solid;border-left-width:1px;">{% if attribution.lecturing_duration > 0 %}{{ attribution.lecturing_duration }}{% endif %}</td>
-                            <td>{% if attribution.practice_duration > 0 %}{{ attribution.practice_duration }}{% endif %}</td>
-                            <td style="border-left-style: solid;border-left-width:1px;">{% if attribution.vacant_attribution_charge_lecturing > 0 %}{{ attribution.vacant_attribution_charge_lecturing }}{% endif %}</td>
-                            <td>{% if attribution.vacant_attribution_charge_practical > 0 %}{{ attribution.vacant_attribution_charge_practical }}{% endif %}</td>
+                            <td class="text-center">
+                                {% if attribution.team %}
+                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                {% else %}
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                {% endif %}
+                            </td>
+                            <td style="border-left-style: solid;border-left-width:1px;">
+                                {% if attribution.LECTURING %}
+                                    {{ attribution.LECTURING }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if attribution.PRACTICAL_EXERCISES %}
+                                    {{ attribution.PRACTICAL_EXERCISES }}
+                                {% endif %}
+                            </td>
                             <td>
                                 <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
                                      title="{% if attribution.already_applied %}
@@ -89,7 +97,7 @@
                                                 {% trans 'team_mngt_no_application_possible' %}
                                             {% endif %}">
                                     <a id="lnk_submit_attribution_new" class="btn btn-primary pull-right"
-                                       href="{% url 'create_tutor_application' learning_container_year_id=attribution.learning_container_year_id %}"
+                                       href="{% url 'create_or_update_tutor_application' learning_container_year_id=attribution.learning_container_year_id %}"
                                        {% if attribution.already_applied or attribution.team %} disabled {% endif %}>
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                         {% trans 'create_an_tutor_application' %}
