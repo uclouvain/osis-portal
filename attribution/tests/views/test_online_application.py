@@ -32,6 +32,7 @@ from attribution.views import online_application
 from base.models.enums import component_type
 from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
     test_learning_unit_component, test_learning_unit
+from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from attribution.tests.models import test_attribution_charge, test_application_charge, test_tutor_application
 from attribution.models.enums import function
 from base import models as mdl_base
@@ -86,11 +87,14 @@ class OnlineApplicationTest(TestCase):
         self.learning_unit_year_totally_vacant_next = self.create_lu_year_annual_data(ACRONYM_VACANT_LEARNING_UNIT, TITLE_VACANT_LEARNING_UNIT, a_next_academic_yr, None, START, END)
 
     def create_lu_year_annual_data(self, an_acronym, a_title, an_academic_yr, a_tutor, start, end):
+        a_learning_container_year = LearningContainerYearFactory(academic_year=an_academic_yr)
         a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
             'acronym': an_acronym,
             'title': a_title,
             'academic_year': an_academic_yr,
             'weight': WEIGHT})
+        a_learning_unit_year.learning_container_year = a_learning_container_year
+        a_learning_unit_year.save()
         a_learning_unit_component_lecture = test_learning_unit_component.create_learning_unit_component({
             'learning_unit_year': a_learning_unit_year,
             'type': component_type.LECTURING,
@@ -218,11 +222,15 @@ class OnlineApplicationTest(TestCase):
             'acronym': a_learning_unit.acronym,
             'academic_year': a_next_academic_yr_plus_4,
             'learning_unit': a_learning_unit})
-        test_learning_unit_year.create_learning_unit_year({
+        a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
             'acronym': a_learning_unit.acronym,
             'academic_year': test_academic_year.create_academic_year_with_year(NEXT_YEAR + 5),
-            'learning_unit': a_learning_unit,
-            'vacant': True})
+            'learning_unit': a_learning_unit})
+        test_learning_unit_year.learning_container_year = LearningContainerYearFactory(
+            academic_year=a_learning_unit_year.academic_year,
+            is_vacant=True,
+            team=True)
+        test_learning_unit_year.save()
         self.assertEquals(online_application.define_renew_possible(self.a_tutor, a_learning_unit_year_plus_4, None), True)
 
     def test_define_renew_existing_academic_year_False_already_exists(self):
@@ -248,4 +256,3 @@ class OnlineApplicationTest(TestCase):
 
     def test_is_not_deputy_function(self):
         self.assertEquals(online_application.is_deputy_function(function.COORDINATOR), False)
-

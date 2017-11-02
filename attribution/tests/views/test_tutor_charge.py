@@ -43,6 +43,7 @@ from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
+from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from attribution.tests.models import test_attribution_charge
 from attribution.tests.factories.attribution import AttributionFactory
 
@@ -163,11 +164,14 @@ class TutorChargeTest(TestCase):
     def create_lu_yr_annual_data(self, a_year):
         an_academic_yr = test_academic_year.create_academic_year_with_year(a_year)
         an_academic_yr.year = a_year
+        a_container_year = LearningContainerYearFactory(in_charge=True)
         a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
             'acronym': ACRONYM,
             'title': TITLE,
             'academic_year': an_academic_yr,
             'weight': WEIGHT})
+        a_learning_unit_year.learning_container_year = a_container_year
+        a_learning_unit_year.save()
         a_learning_unit_component_lecture = self.create_learning_unit_component(component_type.LECTURING,
                                                                                 LEARNING_UNIT_LECTURING_DURATION,
                                                                                 a_learning_unit_year)
@@ -376,6 +380,10 @@ class HomeTest(TestCase):
         self.academic_year = AcademicYearFactory(year=today.year, start_date=today-datetime.timedelta(days=5),
                                                  end_date=today+datetime.timedelta(days=5))
         self.learning_unit_year = LearningUnitYearFactory(academic_year=self.academic_year)
+        self.learning_unit_year.learning_container_year = LearningContainerYearFactory(
+            academic_year=self.learning_unit_year.academic_year,
+            in_charge=True)
+        self.learning_unit_year.save()
         self.attribution = AttributionFactory(function=function.CO_HOLDER,
                                               learning_unit_year=self.learning_unit_year,
                                               tutor=self.tutor,
