@@ -55,7 +55,7 @@ class LearningUnitYear(SerializableModel):
 
     @property
     def vacant(self):
-        return self.learning_container_year and self.learning_container_year.vacant
+        return self.learning_container_year and self.learning_container_year.is_vacant
 
     @property
     def team(self):
