@@ -27,7 +27,7 @@ from django import forms
 from django.core.validators import MinValueValidator
 from django.utils.translation import ugettext_lazy as _
 
-from attribution.business import tutor_application
+from attribution.business import attribution
 from base.forms.base_forms import BootstrapForm
 from base.models.enums import learning_component_year_type
 
@@ -47,13 +47,11 @@ class ApplicationForm(BootstrapForm):
 
     def __init__(self, *args, **kwargs):
         self.learning_container_year = kwargs.pop('learning_container_year')
-        self.global_id = kwargs.pop('global_id')
         self._load_vacant_attribution()
         super(ApplicationForm, self).__init__(*args, **kwargs)
 
     def _load_vacant_attribution(self):
-        self.attribution_vacant = tutor_application.get_attribution_vacant(
-            global_id=self.global_id,
+        self.attribution_vacant = attribution.get_attribution_vacant(
             learning_container_year=self.learning_container_year
         )
 

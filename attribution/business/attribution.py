@@ -26,6 +26,7 @@
 from decimal import Decimal
 from itertools import chain
 
+from attribution.models.enums import function
 from base import models as mdl_base
 from attribution import models as mdl_attribution
 from base.models.enums import learning_component_year_type
@@ -37,7 +38,9 @@ def get_attribution_list(global_id, academic_year=None):
 
     attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
     if attrib:
-        attributions = _filter_by_years(attrib.attributions, academic_year.year)
+        attributions = _filter_by_years(attrib.attributions, academic_year)
+        attributions = _append_team_and_volume_declared_vacant(attributions)
+        attributions = _append_start_and_end_academic_year(attributions)
         return _order_by_acronym_and_function(attributions)
     return None
 
@@ -56,7 +59,36 @@ def get_volumes_total(attribution_list):
     return volumes_total
 
 
-def append_team_and_volume_declared_vacant(attribution_list):
+def get_attribution_vacant_list(acronym_filter, academic_year):
+    attribution_vacant = {}
+    learning_containers_year_ids = list(mdl_base.learning_container_year.search(acronym=acronym_filter,
+                                                                           academic_year=academic_year) \
+                                                                        .values_list('id', flat=True))
+    l_component_years = mdl_base.learning_component_year.search(learning_container_year=learning_containers_year_ids) \
+                                                        .exclude(volume_declared_vacant__isnull=True)
+    for l_component_year in l_component_years:
+        key = l_component_year.learning_container_year.id
+        attribution_vacant.setdefault(key, {
+            'title': l_component_year.learning_container_year.title,
+            'acronym': l_component_year.learning_container_year.acronym,
+            'learning_container_year_id': l_component_year.learning_container_year.id,
+            'team': False
+        }).update({
+            l_component_year.type: l_component_year.volume_declared_vacant
+        })
+    return list(attribution_vacant.values())
+
+
+def get_attribution_vacant(learning_container_year):
+    acronym = learning_container_year.acronym
+    academic_year = learning_container_year.academic_year
+    attribution_vacant = get_attribution_vacant_list(acronym, academic_year)
+    if attribution_vacant:
+        return attribution_vacant[0]
+    return None
+
+
+def _append_team_and_volume_declared_vacant(attribution_list):
     acronym_list = [attribution.get('acronym') for attribution in attribution_list]
     l_container_ids = list(mdl_base.learning_container_year.search(acronym=acronym_list).values_list('id', flat=True))
     l_components = mdl_base.learning_component_year.search(learning_container_year=l_container_ids)
@@ -83,7 +115,7 @@ def _get_volume_declared_vacant(attribution, l_component_year_list):
     return volumes_declared_vacant
 
 
-def append_start_and_end_academic_year(attribution_list):
+def _append_start_and_end_academic_year(attribution_list):
     years = list(chain.from_iterable((attribution.get('start_year'), attribution.get('end_year'))
                                      for attribution in attribution_list))
     ac_years = mdl_base.academic_year.search(year=years)
@@ -102,8 +134,8 @@ def _get_academic_year_related(year, academic_years):
     return next((academic_year for academic_year in academic_years if academic_year.year == year ), None)
 
 
-def _filter_by_years(attribution_list, year):
-    return [attribution for attribution in attribution_list if attribution.get('year') == year]
+def _filter_by_years(attribution_list, academic_year):
+    return [attribution for attribution in attribution_list if attribution.get('year') == academic_year.year]
 
 
 def _order_by_acronym_and_function(attribution_list):
@@ -120,3 +152,61 @@ def _order_by_acronym_and_function(attribution_list):
         return "%s %s" % (acronym, function)
     return sorted(attribution_list, key=lambda k: _sort(k))
 
+
+def get_attribution_list_about_to_expire(global_id, academic_year=None):
+    if not academic_year:
+        academic_year = mdl_base.academic_year.current_academic_year()
+
+    attribution_list = get_attribution_list(global_id, academic_year)
+    if attribution_list:
+        # Remove application which are not about to expire
+        attribution_list = _filter_attribution_about_to_expire(attribution_list, academic_year)
+        # Append attribution vacant for next academic year
+        attribution_list = _resolve_attribution_vacant_next_year(attribution_list, academic_year)
+        # Mark if the attribution can be renewable
+        attribution_list = _append_is_renewable(attribution_list)
+        return attribution_list
+    return None
+
+
+def _filter_attribution_about_to_expire(attribution_list, academic_year):
+    return [attribution for attribution in attribution_list if
+            attribution.get('end_year') == academic_year.year and
+            attribution.get('function') in (function.CO_HOLDER, function.HOLDER)]
+
+
+def _resolve_attribution_vacant_next_year(attribution_list, academic_year):
+    acronyms = [attribution.get('acronym') for attribution in attribution_list]
+    next_year_academic_calendar = mdl_base.academic_year.find_by_year(academic_year.year + 1)
+
+    if acronyms and next_year_academic_calendar:
+        attrib_vacant_list = get_attribution_vacant_list(acronyms, next_year_academic_calendar)
+        for attribution in attribution_list:
+            attribution['attribution_vacant'] = next(
+                (attrib_vacant for attrib_vacant in attrib_vacant_list
+                 if attrib_vacant.get('acronym') == attribution.get('acronym')), None
+            )
+
+    return [attrib for attrib in attribution_list if attrib.get('attribution_vacant')]
+
+
+def _append_is_renewable(attribution_with_vacant_list):
+    for attribution in attribution_with_vacant_list:
+        attribution['is_renewable'] = _is_renewable(attribution)
+        attribution['not_renewable_reason'] = 'volume_next_year_lower' if attribution['is_renewable'] else None
+    return attribution_with_vacant_list
+
+
+def _is_renewable(attribution_with_vacant_next_year):
+    next_year_attribution_vacant = attribution_with_vacant_next_year['attribution_vacant']
+
+    current_volume_lecturing = attribution_with_vacant_next_year.get(learning_component_year_type.LECTURING, 0)
+    next_volume_lecturing = next_year_attribution_vacant.get(learning_component_year_type.LECTURING, 0)
+    if current_volume_lecturing > next_volume_lecturing:
+        return False
+
+    current_volume_practical_exercices = attribution_with_vacant_next_year.get(learning_component_year_type.PRACTICAL_EXERCISES, 0)
+    next_volume_practical_exercices = next_year_attribution_vacant.get(learning_component_year_type.PRACTICAL_EXERCISES, 0)
+    if current_volume_practical_exercices > next_volume_practical_exercices:
+        return False
+    return True

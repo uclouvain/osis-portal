@@ -94,7 +94,6 @@ class ApplicationTest(TestCase):
                                                    volume_practical_exercices=Decimal(75))
         attribution_list = attribution.get_attribution_list(self.person.global_id,
                                                             self.academic_year)
-        attribution_list = attribution.append_team_and_volume_declared_vacant(attribution_list)
         self.assertEqual(attribution_list[0]['acronym'], "LBIR1200")
         self.assertEqual(attribution_list[0]['volume_lecturing_vacant'], Decimal(30))
         self.assertEqual(attribution_list[0]['volume_practical_exercices_vacant'], Decimal(75))
@@ -107,7 +106,6 @@ class ApplicationTest(TestCase):
     def test_append_start_end_academic_year(self):
         attribution_list = attribution.get_attribution_list(self.person.global_id,
                                                             self.academic_year)
-        attribution_list = attribution.append_start_and_end_academic_year(attribution_list)
         self.assertEqual(attribution_list[0]['acronym'], "LBIR1200")
         self.assertTrue(attribution_list[0]['start_academic_year'])
         self.assertEqual(attribution_list[0]['start_academic_year'].year, 2013)

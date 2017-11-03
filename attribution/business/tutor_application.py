@@ -26,8 +26,8 @@
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-from base import models as mdl_base
 from attribution import models as mdl_attribution
+from base import models as mdl_base
 from base.models.enums import learning_component_year_type
 from osis_common.messaging import message_config, send_message as message_service
 from osis_common.queue import queue_sender
@@ -63,53 +63,14 @@ def _resolve_learning_container_year_info(application_list, academic_year):
         application['learning_container_year_id'] = l_container_year.id
         application['title'] = l_container_year.title
         for l_component_year in l_container_year.learningcomponentyear_set.all():
-            application[l_component_year.type] = 40#l_component_year.volume_declared_vacant
+            application[l_component_year.type] = l_component_year.volume_declared_vacant
     return application_list
 
 
-def get_attribution_vacant(global_id, learning_container_year):
-    acronym = learning_container_year.acronym
-    academic_year = learning_container_year.academic_year
-    attribution_vacant = get_attributions_vacant_for_application(global_id, acronym, academic_year)
-    if attribution_vacant:
-        return attribution_vacant[0]
-    return None
+def mark_attribution_already_applied(attributions_vacant, global_id, academic_year, applications=None):
+    if not applications:
+        applications = get_application_list(global_id, academic_year)
 
-
-def get_attributions_vacant_for_application(global_id, acronym_filter, academic_year=None):
-    """
-        Return the list of attribution which can be applied by a tutor
-    """
-    if not academic_year:
-        academic_year = get_application_year()
-
-    attributions_vacant = _get_attributions_vacant_for_application(acronym_filter, academic_year)
-    attributions_vacant = _mark_attribution_already_applied(attributions_vacant, global_id, academic_year)
-    return attributions_vacant
-
-
-def _get_attributions_vacant_for_application(acronym_filter, academic_year):
-    attribution_vacant = {}
-    learning_containers_year_ids = list(mdl_base.learning_container_year.search(acronym=acronym_filter,
-                                                                           academic_year=academic_year) \
-                                                                        .values_list('id', flat=True))
-    l_component_years = mdl_base.learning_component_year.search(learning_container_year=learning_containers_year_ids) \
-                                                       # .exclude(volume_declared_vacant__isnull=True)
-    for l_component_year in l_component_years:
-        key = l_component_year.learning_container_year.id
-        attribution_vacant.setdefault(key, {
-            'title': l_component_year.learning_container_year.title,
-            'acronym': l_component_year.learning_container_year.acronym,
-            'learning_container_year_id': l_component_year.learning_container_year.id,
-            'team': False
-        }).update({
-            l_component_year.type: 30, #l_component_year.volume_declared_vacant
-        })
-    return list(attribution_vacant.values())
-
-
-def _mark_attribution_already_applied(attributions_vacant, global_id, academic_year):
-    applications = get_application_list(global_id, academic_year)
     for attribution in attributions_vacant:
         attribution['already_applied'] = next((True for application in applications if
                                                application.get('acronym') == attribution.get('acronym')), False) \
@@ -119,7 +80,7 @@ def _mark_attribution_already_applied(attributions_vacant, global_id, academic_y
 
 def get_application_year():
     # Application year is always for next year
-    return mdl_base.academic_year.current_academic_year()   # mdl_base.academic_year.find_next_academic_year()
+    return mdl_base.academic_year.find_next_academic_year()
 
 
 def _filter_by_years(attribution_list, year):

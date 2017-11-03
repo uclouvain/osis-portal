@@ -56,6 +56,12 @@ def find_by_id(id):
 def search(*args, **kwargs):
     qs = LearningContainerYear.objects.all()
 
+    if "id" in kwargs:
+        if isinstance(kwargs['id'], list):
+            qs = qs.filter(id__in=kwargs['id'])
+        else:
+            qs = qs.filter(acronym__icontains=kwargs['id'])
+
     if "acronym" in kwargs:
         if isinstance(kwargs['acronym'], list):
             qs = qs.filter(acronym__in=kwargs['acronym'])

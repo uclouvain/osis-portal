@@ -45,24 +45,16 @@ urlpatterns = [
     url(r'^applications/', include([
         url(r'^$', online_application_new.overview, name='learning_unit_applications'),
         url(r'^outside_period/$', online_application.outside_period, name='outside_applications_period'),
-        url(r'^expired_overview/$', online_application_new.attribution_expired_overview,
-            name='tutor_application_create'),
         url(r'^search_vacant$', online_application_new.search_vacant_attribution, name='vacant_learning_unit_search'),
         url(r'^send_summary$', online_application_new.send_mail_applications_summary,
             name='email_tutor_application_confirmation'),
-
+        url(r'^renew/$', online_application_new.renew_applications, name='renew_applications'),
         url(r'^(?P<learning_container_year_id>[0-9a-z-]+)/', include([
             url(r'^edit/$', online_application_new.create_or_update_application,
                 name='create_or_update_tutor_application'),
             url(r'^delete/$', online_application_new.delete_application,
                 name='delete_tutor_application'),
-        ])),
-        # url(r'^([0-9]+)/delete/$', online_application.delete, name='delete_tutor_application'),
-        # url(r'^([0-9]+)/edit/$', online_application.edit, name='edit_tutor_application'),
-        # url(r'^([0-9]+)/save/$', online_application.save, name='save_tutor_application'),
-         url(r'^renew/$', online_application.renew, name='renew'),
-        # url(r'^new/([0-9a-z-]+)/$', online_application.new, name='new'),
-        # url(r'^confirm/(?P<global_id>[0-9a-z-]+)/$', online_application.applications_confirmation, name='email_tutor_application_confirmation'),
+        ]))
     ])),
 
     url(r'^administration/', include([
