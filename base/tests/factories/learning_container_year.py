@@ -23,22 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
-import factory.fuzzy
 import string
 
+import factory
+import factory.fuzzy
+
 from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_unit import LearningUnitFactory
 
 
-class LearningUnitYearFactory(factory.django.DjangoModelFactory):
+class LearningContainerYearFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = "base.LearningUnitYear"
+        model = "base.LearningContainerYear"
 
-    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    acronym = factory.LazyAttribute(lambda obj: obj.learning_unit.acronym)
-    title = factory.LazyAttribute(lambda obj: obj.learning_unit.title)
-    credits = 5
-    weight = 5
+    acronym = factory.fuzzy.FuzzyText(length=10, chars=string.ascii_letters)
     academic_year = factory.SubFactory(AcademicYearFactory)
-    learning_unit = factory.SubFactory(LearningUnitFactory)
+    title = factory.Sequence(lambda n: 'Learning Unit %d' % n)
+    team = False
+    is_vacant = False
+    type_declaration_vacant = None
+    in_charge = False
