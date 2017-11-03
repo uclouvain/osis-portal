@@ -29,10 +29,10 @@ from django.db import models
 
 
 class LearningContainerYearAdmin(SerializableModelAdmin):
-    list_display = ('academic_year', 'acronym', 'title')
-    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title',)}),)
+    list_display = ('learning_container', 'academic_year', 'acronym', 'title')
+    fieldsets = ((None, {'fields': ('learning_container', 'academic_year', 'acronym', 'title',)}),)
     search_fields = ['acronym']
-    list_filter = ('academic_year',)
+    list_filter = ('academic_year', 'in_charge', 'is_vacant',)
 
 
 class LearningContainerYear(SerializableModel):
@@ -40,6 +40,7 @@ class LearningContainerYear(SerializableModel):
     changed = models.DateTimeField(null=True, auto_now=True)
     acronym = models.CharField(max_length=10)
     academic_year = models.ForeignKey('AcademicYear')
+    learning_container = models.ForeignKey('LearningContainer', null=True)
     title = models.CharField(max_length=255)
     title_english = models.CharField(max_length=250, blank=True, null=True)
     team = models.BooleanField(default=False)
