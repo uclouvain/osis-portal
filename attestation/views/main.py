@@ -71,7 +71,8 @@ def download_attestation(request, academic_year, attestation_type):
 
     attestation_pdf = student_attestation.fetch_student_attestation(student.person.global_id,
                                                                     academic_year,
-                                                                    attestation_type)
+                                                                    attestation_type,
+                                                                    request.user)
 
     if attestation_pdf:
         return _make_pdf_attestation(attestation_pdf, attestation_type)
@@ -101,7 +102,8 @@ def visualize_student_attestations(request, registration_id):
 def download_student_attestation(request, global_id, academic_year, attestation_type):
     attestation_pdf = student_attestation.fetch_student_attestation(global_id,
                                                                     academic_year,
-                                                                    attestation_type)
+                                                                    attestation_type,
+                                                                    request.user)
     if attestation_pdf:
         return _make_pdf_attestation(attestation_pdf, attestation_type)
     else:
