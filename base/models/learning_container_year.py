@@ -30,8 +30,10 @@ from django.db import models
 
 class LearningContainerYearAdmin(SerializableModelAdmin):
     list_display = ('learning_container', 'academic_year', 'acronym', 'title')
-    fieldsets = ((None, {'fields': ('learning_container', 'academic_year', 'acronym', 'title',)}),)
+    fieldsets = ((None, {'fields': ('learning_container', 'academic_year', 'acronym', 'title',
+                                    'team', 'is_vacant', 'type_declaration_vacant', 'in_charge')}),)
     search_fields = ['acronym']
+    raw_id_fields = ('learning_container', )
     list_filter = ('academic_year', 'in_charge', 'is_vacant',)
 
 
