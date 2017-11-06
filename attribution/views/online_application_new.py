@@ -162,6 +162,8 @@ def renew_applications(request):
                                data=application_data)
         if form.is_valid():
             application = form.cleaned_data
+            tutor_application.create_or_update_application(global_id, application)
+            tutor_application.set_pending_flag(global_id, application, tutor_application_message_epc.UPDATE_OPERATION)
             # Send signal to EPC
             tutor_application_message_epc.send_message(tutor_application_message_epc.UPDATE_OPERATION,
                                                        global_id,

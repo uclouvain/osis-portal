@@ -64,29 +64,25 @@ def send_message(operation, global_id, application):
 
 
 def _convert_to_epc_application(global_id, application):
-    application_converted = {
+    acronym = application.get('acronym')
+    year = application.get('year')
+
+    return {
         'remark': application.get('remark'),
         'course_summary': application.get('course_summary'),
         'lecturing_allocation': application.get('charge_lecturing_asked'),
         'practical_allocation': application.get('charge_practical_asked'),
-        'tutor': _extract_tutor_epc_info(global_id)
+        'tutor': _extract_tutor_epc_info(global_id),
+        'learning_unit_year': _extract_learning_container_year_epc_info(acronym, year)
     }
-
-    acronym = application.get('acronym')
-    year = application.get('year')
-    if acronym and year:
-        learning_container_year_epc_info = _extract_learning_container_year_epc_info(acronym, year)
-        application_converted['learning_unit_year'] = learning_container_year_epc_info
-
-    return application_converted
 
 
 def _extract_learning_container_year_epc_info(acronym, year):
     # Example of external_id osis.learning_container_year_428750_2017
     learning_container_year_info = {}
     academic_year = mdl_base.academic_year.find_by_year(year)
-    l_container_year = mdl_base.learning_container_year.search(acronym=acronym,academic_year=academic_year)\
-                                                       .first()
+    l_container_year = mdl_base.learning_container_year.find_by_acronym(acronym=acronym,
+                                                                        academic_year=academic_year).first()
     if academic_year and l_container_year and l_container_year.external_id:
         external_id = l_container_year.external_id.replace(LEARNING_CONTAINER_YEAR_PREFIX_EXTERNAL_ID, '')
         external_id_array = external_id.split('_')

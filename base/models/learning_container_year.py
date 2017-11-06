@@ -53,6 +53,13 @@ def find_by_id(id):
         return None
 
 
+def find_by_acronym(acronym, academic_year=None):
+    qs = LearningContainerYear.objects.filter(acronym=acronym)
+    if academic_year:
+        qs = qs.filter(academic_year=academic_year)
+    return qs.select_related('academic_year')
+
+
 def search(*args, **kwargs):
     qs = LearningContainerYear.objects.all()
 
@@ -71,4 +78,4 @@ def search(*args, **kwargs):
     if "academic_year" in kwargs:
         qs = qs.filter(academic_year=kwargs['academic_year'])
 
-    return qs
+    return qs.select_related('academic_year')
