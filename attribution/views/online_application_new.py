@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
@@ -34,6 +35,7 @@ from attribution.business import attribution
 from attribution.business import tutor_application
 from attribution.forms.application import ApplicationForm, VacantAttributionFilterForm
 from attribution.utils import permission
+from attribution.utils import tutor_application_message_epc
 from attribution.views.decorators.authorization import user_is_tutor_or_super_user
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
@@ -147,6 +149,7 @@ def renew_applications(request):
         attrib.get('attribution_vacant', {}).get('learning_container_year_id')
         for attrib in attribution_to_renew_list
         ])
+
     for attri_to_renew in attribution_to_renew_list:
         learning_container_year = next((l_containers_year for l_containers_year in l_containers_years if
                                         l_containers_year.acronym == attri_to_renew.get('acronym')), None)
@@ -159,7 +162,10 @@ def renew_applications(request):
                                data=application_data)
         if form.is_valid():
             application = form.cleaned_data
-            tutor_application.create_or_update_application(global_id, application)
+            # Send signal to EPC
+            tutor_application_message_epc.send_message(tutor_application_message_epc.UPDATE_OPERATION,
+                                                       global_id,
+                                                       application)
     return redirect('learning_unit_applications')
 
 @login_required
@@ -177,9 +183,14 @@ def create_or_update_application(request, learning_container_year_id):
         if form.is_valid():
             application = form.cleaned_data
             tutor_application.create_or_update_application(global_id, application)
+            tutor_application.set_pending_flag(global_id, application, tutor_application_message_epc.UPDATE_OPERATION)
+            # Send message to EPC
+            tutor_application_message_epc.send_message(tutor_application_message_epc.UPDATE_OPERATION,
+                                                       global_id,
+                                                       application)
             return redirect('learning_unit_applications')
     else:
-        inital_data = tutor_application.find_application(global_id, learning_container_year)
+        inital_data = tutor_application.get_application(global_id, learning_container_year)
         form = ApplicationForm(
             initial=inital_data,
             learning_container_year=learning_container_year,
@@ -200,8 +211,18 @@ def delete_application(request, learning_container_year_id):
     tutor = mdl_base.tutor.find_by_user(request.user)
     global_id = tutor.person.global_id
     learning_container_year = mdl_base.learning_container_year.find_by_id(learning_container_year_id)
-    tutor_application.delete_application(global_id, learning_container_year)
-    return redirect('learning_unit_applications')
+
+    application_to_delete = tutor_application.get_application(global_id, learning_container_year)
+    if application_to_delete:
+        # Delete with FLAG Pending
+        tutor_application.set_pending_flag(global_id, application_to_delete,
+                                           tutor_application_message_epc.DELETE_OPERATION)
+        # Send signal to EPC
+        tutor_application_message_epc.send_message(tutor_application_message_epc.DELETE_OPERATION,
+                                                   global_id,
+                                                   application_to_delete)
+        return redirect('learning_unit_applications')
+    raise Http404
 
 
 @login_required
@@ -217,3 +238,10 @@ def send_mail_applications_summary(request):
     else:
         messages.add_message(request, messages.INFO, _('applications_mail_sent'))
     return redirect('learning_unit_applications')
+
+
+@login_required
+@permission_required('attribution.can_access_attribution_application', raise_exception=True)
+@require_http_methods(["GET"])
+def check_status(request, learning_container_year_id):
+    pass

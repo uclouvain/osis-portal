@@ -23,14 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from attribution import models as mdl_attribution
 from base import models as mdl_base
 from base.models.enums import learning_component_year_type
 from osis_common.messaging import message_config, send_message as message_service
-from osis_common.queue import queue_sender
 
 
 def get_application_list(global_id, academic_year=None):
@@ -47,24 +45,10 @@ def get_application_list(global_id, academic_year=None):
     return None
 
 
-def find_application(global_id, learning_container_year):
-    application_list = get_application_list(global_id, learning_container_year.academic_year)
-    return _find_application(learning_container_year.acronym, learning_container_year.academic_year.year ,
-                             application_list)
-
-
-def _resolve_learning_container_year_info(application_list, academic_year):
-    acronym_list = [application.get('acronym') for application in application_list]
-    l_container_years = mdl_base.learning_container_year.search(acronym=acronym_list, academic_year=academic_year)\
-                                                        .prefetch_related('learningcomponentyear_set')
-    for application in application_list:
-        l_container_year = next((l_container_year for l_container_year in l_container_years if
-                                 l_container_year.acronym == application.get('acronym')),None)
-        application['learning_container_year_id'] = l_container_year.id
-        application['title'] = l_container_year.title
-        for l_component_year in l_container_year.learningcomponentyear_set.all():
-            application[l_component_year.type] = l_component_year.volume_declared_vacant
-    return application_list
+def get_application(global_id, learning_container_year):
+    academic_year = learning_container_year.academic_year
+    application_list = get_application_list(global_id, academic_year)
+    return _find_application(learning_container_year.acronym, academic_year.year, application_list)
 
 
 def mark_attribution_already_applied(attributions_vacant, global_id, academic_year, applications=None):
@@ -80,11 +64,7 @@ def mark_attribution_already_applied(attributions_vacant, global_id, academic_ye
 
 def get_application_year():
     # Application year is always for next year
-    return mdl_base.academic_year.find_next_academic_year()
-
-
-def _filter_by_years(attribution_list, year):
-    return [attribution for attribution in attribution_list if attribution.get('year') == year]
+    return mdl_base.academic_year.current_academic_year() #mdl_base.academic_year.find_next_academic_year()
 
 
 def create_or_update_application(global_id, application):
@@ -97,76 +77,28 @@ def create_or_update_application(global_id, application):
     return _create_application(global_id, application)
 
 
-def _create_application(global_id, application_to_create):
-    attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
-    if not attrib:
-        attrib = mdl_attribution.attribution_new.AttributionNew()
-    if not attrib.applications:
-        attrib.applications = []
-    attrib.applications.append(application_to_create)
-    attrib.save()
-    # Send signal to EPC
-    _send_create_application_to_queue(application_to_create)
+def set_pending_flag(global_id, application, flag=None):
+    application['pending'] = flag
+    return _update_application(global_id, application)
 
 
-def _update_application(global_id, application_to_update):
-    attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
-    if attrib and attrib.applications:
-        acronym = application_to_update.get('acronym')
-        year = application_to_update.get('year')
-        # Send signal to EPC
-        _send_update_application_to_queue(application_to_update)
-        # Remove and append new records to json array
-        attrib.applications = _delete_application_in_list(acronym, year, attrib.applications)
-        attrib.applications.append(application_to_update)
-        attrib.save()
+def validate_application(global_id, acronym, year):
+    academic_year = mdl_base.academic_year.find_by_year(year)
+    application_list = get_application_list(global_id, academic_year)
+
+    application = _find_application(acronym, year, application_list)
+    if application:
+        application.pop('pending', None)
+        _update_application(global_id, application)
 
 
-def delete_application(global_id, learning_container_year):
+def delete_application(global_id, acronym, year):
     attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
     if attrib and attrib.applications:
-        year = learning_container_year.academic_year.year
-        acronym = learning_container_year.acronym
-        application_to_delete = _find_application(acronym, year, attrib.applications)
-        # Send signal to EPC
-        _send_deletion_application_to_queue(application_to_delete)
-        # Remove from json array
         attrib.applications = _delete_application_in_list(acronym, year, attrib.applications)
         attrib.save()
         return True
     return False
-
-
-def _delete_application_in_list(acronym, year, application_list):
-    return [application for application in application_list if not (acronym == application.get('acronym') and
-                                                                    year == application.get('year'))]
-
-
-def _find_application(acronym, year, applications_list):
-    if applications_list:
-        return next((application for application in applications_list
-                      if application.get('year') == year and application.get('acronym') == acronym),
-                     None)
-    return None
-
-
-def _send_create_application_to_queue(application):
-    pass
-
-
-def _send_deletion_application_to_queue(application):
-    DELETE_OPERATION = "delete"
-    queue_name = settings.QUEUES.get('QUEUES_NAME', {}).get('ATTRIBUTION')
-
-    if queue_name:
-        queue_sender.send_message(queue_name, {
-          'operation': DELETE_OPERATION,
-          **application
-        })
-
-
-def _send_update_application_to_queue(application):
-    pass
 
 
 def send_mail_applications_summary(global_id):
@@ -188,9 +120,62 @@ def send_mail_applications_summary(global_id):
     return message_service.send_messages(message_content)
 
 
+def _resolve_learning_container_year_info(application_list, academic_year):
+    acronym_list = [application.get('acronym') for application in application_list]
+    l_container_years = mdl_base.learning_container_year.search(acronym=acronym_list, academic_year=academic_year)\
+                                                        .prefetch_related('learningcomponentyear_set')
+    for application in application_list:
+        l_container_year = next((l_container_year for l_container_year in l_container_years if
+                                 l_container_year.acronym == application.get('acronym')),None)
+        application['learning_container_year_id'] = l_container_year.id
+        application['title'] = l_container_year.title
+        for l_component_year in l_container_year.learningcomponentyear_set.all():
+            application[l_component_year.type] = l_component_year.volume_declared_vacant
+    return application_list
+
+
+def _create_application(global_id, application_to_create):
+    attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
+    if not attrib:
+        attrib = mdl_attribution.attribution_new.AttributionNew()
+    if not attrib.applications:
+        attrib.applications = []
+    attrib.applications.append(application_to_create)
+    return attrib.save()
+
+
+def _update_application(global_id, application_to_update):
+    attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
+    if attrib and attrib.applications:
+        acronym = application_to_update.get('acronym')
+        year = application_to_update.get('year')
+        # Remove and append new records to json array
+        attrib.applications = _delete_application_in_list(acronym, year, attrib.applications)
+        attrib.applications.append(application_to_update)
+        return attrib.save()
+    return None
+
+
+def _delete_application_in_list(acronym, year, application_list):
+    return [application for application in application_list if not (acronym == application.get('acronym') and
+                                                                    year == application.get('year'))]
+
+
+def _find_application(acronym, year, applications_list):
+    if applications_list:
+        return next((application for application in applications_list
+                      if application.get('year') == year and application.get('acronym') == acronym),
+                     None)
+    return None
+
+
 def _get_application_list_str(application_list):
     applications_str = ["*\t{}\t{}\t{}".format(application.get('acronym', ''),
                                                application.get(learning_component_year_type.LECTURING, ''),
                                                application.get(learning_component_year_type.PRACTICAL_EXERCISES, ''))
                         for application in application_list ]
     return "\n".join(applications_str)
+
+
+def _filter_by_years(attribution_list, year):
+    return [attribution for attribution in attribution_list if attribution.get('year') == year]
