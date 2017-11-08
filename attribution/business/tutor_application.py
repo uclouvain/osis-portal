@@ -23,9 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import time
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
 
 from attribution import models as mdl_attribution
+from attribution.utils import tutor_application_epc
 from base import models as mdl_base
 from base.models.enums import learning_component_year_type
 from osis_common.messaging import message_config, send_message as message_service
@@ -41,6 +44,7 @@ def get_application_list(global_id, academic_year=None):
     attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
     if attrib and attrib.applications:
         attrib.applications = _filter_by_years(attrib.applications, academic_year.year)
+        attrib.applications = _filter_pending_delete(attrib.applications)
         return _resolve_learning_container_year_info(attrib.applications, academic_year)
     return None
 
@@ -64,7 +68,7 @@ def mark_attribution_already_applied(attributions_vacant, global_id, academic_ye
 
 def get_application_year():
     # Application year is always for next year
-    return mdl_base.academic_year.current_academic_year() #mdl_base.academic_year.find_next_academic_year()
+    return mdl_base.academic_year.find_next_academic_year()
 
 
 def create_or_update_application(global_id, application):
@@ -137,9 +141,10 @@ def _resolve_learning_container_year_info(application_list, academic_year):
 def _create_application(global_id, application_to_create):
     attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
     if not attrib:
-        attrib = mdl_attribution.attribution_new.AttributionNew()
+        attrib = mdl_attribution.attribution_new.AttributionNew(global_id=global_id)
     if not attrib.applications:
         attrib.applications = []
+    application_to_create['updated_at'] = _get_unix_time()
     attrib.applications.append(application_to_create)
     return attrib.save()
 
@@ -151,6 +156,7 @@ def _update_application(global_id, application_to_update):
         year = application_to_update.get('year')
         # Remove and append new records to json array
         attrib.applications = _delete_application_in_list(acronym, year, attrib.applications)
+        application_to_update['updated_at'] = _get_unix_time()
         attrib.applications.append(application_to_update)
         return attrib.save()
     return None
@@ -178,4 +184,15 @@ def _get_application_list_str(application_list):
 
 
 def _filter_by_years(attribution_list, year):
-    return [attribution for attribution in attribution_list if attribution.get('year') == year]
+    return [attribution for attribution in attribution_list if
+            attribution.get('year') == year]
+
+
+def _filter_pending_delete(attribution_list):
+    return [attribution for attribution in attribution_list if
+            attribution.get('pending') != tutor_application_epc.DELETE_OPERATION]
+
+
+def _get_unix_time():
+    now = timezone.now()
+    return time.mktime(now.timetuple())

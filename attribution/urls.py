@@ -25,8 +25,8 @@
 ##############################################################################
 from django.conf.urls import url, include
 
-from attribution.views import online_application_new
-from attribution.views import tutor_charge, online_application, list
+from attribution.views import online_application
+from attribution.views import tutor_charge, list
 from django.views.i18n import javascript_catalog
 
 
@@ -43,16 +43,16 @@ urlpatterns = [
         name='attribution_students'),
 
     url(r'^applications/', include([
-        url(r'^$', online_application_new.overview, name='learning_unit_applications'),
+        url(r'^$', online_application.overview, name='applications_overview'),
         url(r'^outside_period/$', online_application.outside_period, name='outside_applications_period'),
-        url(r'^search_vacant$', online_application_new.search_vacant_attribution, name='vacant_learning_unit_search'),
-        url(r'^send_summary$', online_application_new.send_mail_applications_summary,
+        url(r'^search_vacant$', online_application.search_vacant_attribution, name='vacant_attributions_search'),
+        url(r'^send_summary$', online_application.send_mail_applications_summary,
             name='email_tutor_application_confirmation'),
-        url(r'^renew/$', online_application_new.renew_applications, name='renew_applications'),
+        url(r'^renew/$', online_application.renew_applications, name='renew_applications'),
         url(r'^(?P<learning_container_year_id>[0-9a-z-]+)/', include([
-            url(r'^edit/$', online_application_new.create_or_update_application,
+            url(r'^edit/$', online_application.create_or_update_application,
                 name='create_or_update_tutor_application'),
-            url(r'^delete/$', online_application_new.delete_application,
+            url(r'^delete/$', online_application.delete_application,
                 name='delete_tutor_application'),
         ]))
     ])),
@@ -70,9 +70,9 @@ urlpatterns = [
         url(r'^students_list/([0-9a-z-]+)/xls', list.list_build_by_person, name='students_list_admin_create'),
 
         url(r'^applications/', include([
-            url(r'^$', online_application_new.administration_applications,
+            url(r'^$', online_application.administration_applications,
                 name='attribution_applications'),
-            url(r'^(?P<global_id>[0-9a-z-]+)/$', online_application_new.visualize_tutor_applications,
+            url(r'^(?P<global_id>[0-9a-z-]+)/$', online_application.visualize_tutor_applications,
                 name="visualize_tutor_applications")
         ])),
     ])),

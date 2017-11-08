@@ -23,9 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from decimal import Decimal
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.contrib import admin
+
+from base.models.enums import learning_component_year_type
 
 
 class AttributionNewAdmin(admin.ModelAdmin):
@@ -42,6 +45,20 @@ class AttributionNew(models.Model):
     def __str__(self):
         return u"%s" % self.global_id
 
+    def save(self, *args, **kwargs):
+        if self.attributions and isinstance(self.attributions, list):
+            self.attributions = _convert_decimal_to_str(self.attributions)
+        if self.applications and isinstance(self.applications, list):
+            self.applications = _convert_decimal_to_str(self.applications)
+        super(AttributionNew, self).save(*args, **kwargs)
+
+
+def _convert_decimal_to_str(list):
+    for item in list:
+        for key in item.keys():
+            if isinstance(item[key], Decimal):
+                item[key] = str(item[key])
+    return list
 
 def insert_or_update_attributions(global_id, attributions_data):
     AttributionNew.objects.update_or_create(

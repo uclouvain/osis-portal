@@ -39,7 +39,7 @@ from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 
 
-class ApplicationTest(TestCase):
+class AttributionTest(TestCase):
     def setUp(self):
         # Creation Person/Tutor
         Group.objects.create(name="tutors")

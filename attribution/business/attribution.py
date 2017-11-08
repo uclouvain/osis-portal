@@ -39,6 +39,7 @@ def get_attribution_list(global_id, academic_year=None):
     attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
     if attrib:
         attributions = _filter_by_years(attrib.attributions, academic_year)
+        attributions = _format_str_volume_to_decimal(attributions)
         attributions = _append_team_and_volume_declared_vacant(attributions)
         attributions = _append_start_and_end_academic_year(attributions)
         return _order_by_acronym_and_function(attributions)
@@ -173,6 +174,15 @@ def _filter_attribution_about_to_expire(attribution_list, academic_year):
     return [attribution for attribution in attribution_list if
             attribution.get('end_year') == academic_year.year and
             attribution.get('function') in (function.CO_HOLDER, function.HOLDER)]
+
+
+def _format_str_volume_to_decimal(attribution_list):
+    for attribution in attribution_list:
+        if learning_component_year_type.LECTURING in attribution:
+            attribution[learning_component_year_type.LECTURING] = Decimal(attribution[learning_component_year_type.LECTURING])
+        if learning_component_year_type.PRACTICAL_EXERCISES in attribution:
+            attribution[learning_component_year_type.PRACTICAL_EXERCISES] = Decimal(attribution[learning_component_year_type.PRACTICAL_EXERCISES])
+    return attribution_list
 
 
 def _resolve_attribution_vacant_next_year(attribution_list, academic_year):

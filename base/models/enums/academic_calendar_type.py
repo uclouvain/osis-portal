@@ -1,12 +1,12 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,21 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
-from attribution import models as mdl_attribution
+DELIBERATION = "DELIBERATION"
+DISSERTATION_SUBMISSION = "DISSERTATION_SUBMISSION"
+EXAM_ENROLLMENTS = "EXAM_ENROLLMENTS"
+SCORES_EXAM_DIFFUSION = "SCORES_EXAM_DIFFUSION"
+SCORES_EXAM_SUBMISSION = "SCORES_EXAM_SUBMISSION"
+TEACHING_CHARGE_APPLICATION = "TEACHING_CHARGE_APPLICATION"
 
-
-def create_tutor_application(data):
-    tutor_application = mdl_attribution.tutor_application.TutorApplication()
-    end = None
-    if 'end' in data:
-        end = data['end']
-    if 'function' in data:
-        tutor_application.function = data['function']
-    if 'learning_unit_year' in data:
-        tutor_application.learning_unit_year = data['learning_unit_year']
-        year_yr = tutor_application.learning_unit_year.academic_year.year
-    if 'tutor' in data:
-        tutor_application.tutor = data['tutor']
-    tutor_application.save()
-    return tutor_application
+ACADEMIC_CALENDAR_TYPES = (
+    (DELIBERATION, DELIBERATION),
+    (DISSERTATION_SUBMISSION, DISSERTATION_SUBMISSION),
+    (EXAM_ENROLLMENTS, EXAM_ENROLLMENTS),
+    (SCORES_EXAM_DIFFUSION, SCORES_EXAM_DIFFUSION),
+    (SCORES_EXAM_SUBMISSION, SCORES_EXAM_SUBMISSION),
+    (TEACHING_CHARGE_APPLICATION, TEACHING_CHARGE_APPLICATION))

@@ -50,7 +50,7 @@
         <div class="panel-body">
             <div class="row">
                 <!-- Search vacant -->
-                <form method="get" action="{% url 'vacant_learning_unit_search' %}">
+                <form method="get" action="{% url 'vacant_attributions_search' %}">
                     <div class="col-md-10">
                         <p class="text-muted">{% trans 'lu_search_explanation' %}</p>
                     </div>
@@ -59,7 +59,7 @@
                         <div class="input-group">
                             {{ search_form.learning_container_acronym}}
                              <div class="input-group-btn">
-                                  <button type="submit" id="bt_submit_vacant_learning_unit_search" class="btn btn-primary" role="button"
+                                  <button type="submit" id="bt_submit_vacant_attributions_search" class="btn btn-primary" role="button"
                                     title="{% trans 'vacant_learning_unit_year_search' %}">
                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                                 </button>

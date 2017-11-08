@@ -70,8 +70,8 @@ def _convert_to_epc_application(global_id, application):
     return {
         'remark': application.get('remark'),
         'course_summary': application.get('course_summary'),
-        'lecturing_allocation': application.get('charge_lecturing_asked'),
-        'practical_allocation': application.get('charge_practical_asked'),
+        'lecturing_allocation': str(application.get('charge_lecturing_asked', 0)),
+        'practical_allocation': str(application.get('charge_practical_asked', 0)),
         'tutor': _extract_tutor_epc_info(global_id),
         'learning_unit_year': _extract_learning_container_year_epc_info(acronym, year)
     }
@@ -86,8 +86,9 @@ def _extract_learning_container_year_epc_info(acronym, year):
     if academic_year and l_container_year and l_container_year.external_id:
         external_id = l_container_year.external_id.replace(LEARNING_CONTAINER_YEAR_PREFIX_EXTERNAL_ID, '')
         external_id_array = external_id.split('_')
-        learning_container_year_info['reference'] = external_id_array[0]
-        learning_container_year_info['year'] = external_id_array[1]
+        if len(external_id_array) >= 2:
+            learning_container_year_info['reference'] = external_id_array[0]
+            learning_container_year_info['year'] = external_id_array[1]
     return learning_container_year_info
 
 
