@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,23 +23,27 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
+from base.models.enums import learning_component_year_type
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+from django.db import models
 
 
-class CampusAdmin(SerializableModelAdmin):
-    list_display = ('name', 'organization')
-    list_filter = ('organization',)
-    fieldsets = ((None, {'fields': ('name', 'organization', 'code', 'is_administration')}),)
-    search_fields = ['name', 'organization__name']
+class LearningComponentYearAdmin(SerializableModelAdmin):
+    list_display = ('learning_container_year', 'acronym', 'type', 'volume_declared_vacant',)
+    fieldsets = ((None, {'fields': ('learning_container_year', 'acronym', 'type', 'volume_declared_vacant',)}),)
+    search_fields = ['acronym', 'learning_container_year__acronym']
+    raw_id_fields = ('learning_container_year',)
+    list_filter = ('learning_container_year__academic_year',)
 
 
-class Campus(SerializableModel):
+class LearningComponentYear(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    name = models.CharField(max_length=100, blank=True, null=True)
-    organization = models.ForeignKey('Organization')
-    code = models.CharField(max_length=1, blank=True, null=True)
-    is_administration = models.BooleanField(default=False)
+    changed = models.DateTimeField(null=True, auto_now=True)
+    learning_container_year = models.ForeignKey('LearningContainerYear')
+    acronym = models.CharField(max_length=4, blank=True, null=True)
+    type = models.CharField(max_length=30, choices=learning_component_year_type.LEARNING_COMPONENT_YEAR_TYPES,
+                            blank=True, null=True, db_index=True)
+    volume_declared_vacant = models.DecimalField(max_digits=6, decimal_places=1, blank=True, null=True)
 
     def __str__(self):
-        return u"%s" % self.name
+        return u"%s - %s" % (self.acronym, self.learning_container_year.acronym)

@@ -299,7 +299,10 @@ def get_terminating_charges(a_year, a_tutor):
 @permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def home(request):
     a_tutor = mdl_base.tutor.find_by_user(request.user)
-    return applications_form(a_tutor, request)
+    if a_tutor:
+        return applications_form(a_tutor, request)
+    else:
+        return HttpResponseRedirect(reverse('error_403'))
 
 
 def applications_form(a_tutor, request, mail_confirmation=None):

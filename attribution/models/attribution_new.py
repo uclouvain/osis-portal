@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,20 +23,27 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
-from django.conf.urls import url
-from performance.views import main
+from django.contrib.postgres.fields import JSONField
+from django.db import models
+from django.contrib import admin
 
-urlpatterns = [
-    url(r'^$', main.view_performance_home, name='performance_home'),
-    url(r'^result/(?P<pk>[0-9]+)/$',
-        main.display_result_for_specific_student_performance, name='performance_student_result'),
-    url(r'^result/(?P<acronym>[0-9A-Za-z_ ]+)/(?P<academic_year>[0-9]{4})/$',
-        main.display_results_by_acronym_and_year, name='performance_student_by_acronym_and_year'),
-    url(r'^administration/select_student/$', main.select_student, name='performance_administration'),
-    url(r'^administration/student_programs/(?P<registration_id>[0-9]+)/$', main.visualize_student_programs,
-        name='performance_student_programs_admin'),
-    url(r'^administration/student_result/(?P<pk>[0-9]+)/$',
-        main.visualize_student_result, name='performance_student_result_admin'),
-]
 
+class AttributionNewAdmin(admin.ModelAdmin):
+    list_display = ('global_id', 'attributions', 'applications')
+    fieldsets = ((None, {'fields': ('global_id', 'attributions', 'applications', )}),)
+    search_fields = ['global_id']
+
+
+class AttributionNew(models.Model):
+    global_id = models.CharField(max_length=10, unique=True)
+    attributions = JSONField(default={})
+    applications = JSONField(default={})
+
+    def __str__(self):
+        return u"%s" % self.global_id
+
+
+def insert_or_update_attributions(global_id, attributions_data):
+    AttributionNew.objects.update_or_create(
+        global_id=global_id, defaults={"attributions": attributions_data}
+    )

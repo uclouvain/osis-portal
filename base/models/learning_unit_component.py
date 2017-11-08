@@ -39,10 +39,10 @@ class LearningUnitComponentAdmin(SerializableModelAdmin):
 class LearningUnitComponent(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     learning_unit_year = models.ForeignKey('LearningUnitYear')
+    learning_component_year = models.ForeignKey('LearningComponentYear', blank=True, null=True)
     type = models.CharField(max_length=25, blank=True, null=True, choices=component_type.COMPONENT_TYPES, db_index=True)
     duration = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     coefficient_repetition = models.IntegerField(blank=True, null=True)
-
 
     def __str__(self):
         return u"%s - %s" % (self.type, self.learning_unit_year)
@@ -72,6 +72,3 @@ def find_by_learning_year_type(a_learning_unit_year=None, a_type=None):
         except ObjectDoesNotExist:
             return None
     return None
-
-
-

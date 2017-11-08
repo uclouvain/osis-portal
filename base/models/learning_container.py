@@ -1,4 +1,5 @@
-##############################################################################
+
+#############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -6,7 +7,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,20 +24,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
-from django.conf.urls import url
-from performance.views import main
+from django.db import models
 
-urlpatterns = [
-    url(r'^$', main.view_performance_home, name='performance_home'),
-    url(r'^result/(?P<pk>[0-9]+)/$',
-        main.display_result_for_specific_student_performance, name='performance_student_result'),
-    url(r'^result/(?P<acronym>[0-9A-Za-z_ ]+)/(?P<academic_year>[0-9]{4})/$',
-        main.display_results_by_acronym_and_year, name='performance_student_by_acronym_and_year'),
-    url(r'^administration/select_student/$', main.select_student, name='performance_administration'),
-    url(r'^administration/student_programs/(?P<registration_id>[0-9]+)/$', main.visualize_student_programs,
-        name='performance_student_programs_admin'),
-    url(r'^administration/student_result/(?P<pk>[0-9]+)/$',
-        main.visualize_student_result, name='performance_student_result_admin'),
-]
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
+
+class LearningContainerAdmin(SerializableModelAdmin):
+    list_display = ('external_id',)
+    fieldsets = ((None, {'fields': ('external_id',)}),)
+    search_fields = ['external_id']
+
+
+class LearningContainer(SerializableModel):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
+    changed = models.DateTimeField(null=True, auto_now=True)
+    auto_renewal_until = models.IntegerField(null=True)
+    start_year = models.IntegerField(null=True)
+
+    def __str__(self):
+        return u"%s" % (self.external_id)

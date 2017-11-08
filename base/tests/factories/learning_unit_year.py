@@ -42,6 +42,3 @@ class LearningUnitYearFactory(factory.django.DjangoModelFactory):
     weight = 5
     academic_year = factory.SubFactory(AcademicYearFactory)
     learning_unit = factory.SubFactory(LearningUnitFactory)
-    team = False
-    vacant = False
-    in_charge = False

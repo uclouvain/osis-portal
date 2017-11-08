@@ -69,6 +69,22 @@ def __make_not_authorized_message(stud_perf):
         return None
 
 
+def __get_performance_data(stud_perf):
+    document = json.dumps(stud_perf.data) if stud_perf else None
+    creation_date = stud_perf.creation_date if stud_perf else None
+    update_date = stud_perf.update_date if stud_perf else None
+    fetch_timed_out = stud_perf.fetch_timed_out if stud_perf else None
+    not_authorized_message = __make_not_authorized_message(stud_perf)
+    courses_registration_validated = stud_perf.courses_registration_validated if stud_perf else None
+    return {
+        "results": document,
+        "creation_date": creation_date,
+        "update_date": update_date,
+        "fetch_timed_out": fetch_timed_out,
+        "not_authorized_message": not_authorized_message,
+        "courses_registration_validated": courses_registration_validated
+    }
+
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def display_result_for_specific_student_performance(request, pk):
@@ -82,23 +98,41 @@ def display_result_for_specific_student_performance(request, pk):
     stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
     if not check_right_access(stud_perf, stud):
         raise PermissionDenied
-    document = json.dumps(stud_perf.data) if stud_perf else None
-    creation_date = stud_perf.creation_date if stud_perf else None
-    update_date = stud_perf.update_date if stud_perf else None
-    fetch_timed_out = stud_perf.fetch_timed_out if stud_perf else None
-    not_authorized_message = __make_not_authorized_message(stud_perf)
-    courses_registration_validated = stud_perf.courses_registration_validated if stud_perf else None
+
+    perf_data = __get_performance_data(stud_perf)
+    return layout.render(request,
+                         "performance_result_student.html",
+                         perf_data)
+
+
+def _clean_acronym(acronym):
+    if acronym:
+        cleaned_acronym = str(acronym).replace("_", "/").upper()
+        return cleaned_acronym
+    return None
+
+
+@login_required
+@permission_required('base.is_student', raise_exception=True)
+def display_results_by_acronym_and_year(request, acronym, academic_year):
+    """
+    Display the reslt for a students , filter by acronym
+    """
+    try:
+        stud = student.find_by_user(request.user)
+    except MultipleObjectsReturned:
+        return dash_main_view.show_multiple_registration_id_error(request)
+    cleaned_acronym = _clean_acronym(acronym)
+    stud_perf = mdl_performance.student_performance.find_actual_by_student_and_offer_year(stud.registration_id,
+                                                                                          academic_year,
+                                                                                          cleaned_acronym)
+    if not check_right_access(stud_perf, stud):
+        raise PermissionDenied
+    perf_data = __get_performance_data(stud_perf)
 
     return layout.render(request,
                          "performance_result_student.html",
-                         {
-                             "results": document,
-                             "creation_date": creation_date,
-                             "update_date": update_date,
-                             "fetch_timed_out": fetch_timed_out,
-                             "not_authorized_message": not_authorized_message,
-                             "courses_registration_validated": courses_registration_validated
-                         })
+                         perf_data)
 
 
 # Admins Views
