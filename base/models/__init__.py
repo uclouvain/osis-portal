@@ -30,7 +30,10 @@ from base.models import external_offer
 from base.models import learning_unit
 from base.models import learning_unit_component
 from base.models import learning_unit_enrollment
+from base.models import learning_container
+from base.models import learning_container_year
 from base.models import learning_unit_year
+from base.models import learning_component_year
 from base.models import offer
 from base.models import offer_enrollment
 from base.models import offer_year

@@ -113,6 +113,22 @@ def find_by_student_and_offer_year(registration_id, academic_year, acronym):
     return result
 
 
+def find_actual_by_student_and_offer_year(registration_id, academic_year, acronym):
+    try:
+        result = StudentPerformance.objects.get(registration_id=registration_id,
+                                                academic_year=academic_year,
+                                                acronym=acronym)
+    except ObjectDoesNotExist:
+        result = None
+    if result and has_expired(result):
+        new_result = fetch_and_save(result.registration_id, result.academic_year, result.acronym)
+        if new_result:
+            result = new_result
+        else:
+            result.fetch_timed_out = True
+    return result
+
+
 def has_expired(student_performance):
     now = timezone.now()
     expiration_date = student_performance.update_date
