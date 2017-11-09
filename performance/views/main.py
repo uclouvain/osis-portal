@@ -105,6 +105,13 @@ def display_result_for_specific_student_performance(request, pk):
                          perf_data)
 
 
+def _clean_acronym(acronym):
+    if acronym:
+        cleaned_acronym = str(acronym).replace("_", "/").upper()
+        return cleaned_acronym
+    return None
+
+
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def display_results_by_acronym_and_year(request, acronym, academic_year):
@@ -115,9 +122,10 @@ def display_results_by_acronym_and_year(request, acronym, academic_year):
         stud = student.find_by_user(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
-    stud_perf = mdl_performance.student_performance.find_by_student_and_offer_year(stud.registration_id,
-                                                                                   academic_year,
-                                                                                   acronym.upper())
+    cleaned_acronym = _clean_acronym(acronym)
+    stud_perf = mdl_performance.student_performance.find_actual_by_student_and_offer_year(stud.registration_id,
+                                                                                          academic_year,
+                                                                                          cleaned_acronym)
     if not check_right_access(stud_perf, stud):
         raise PermissionDenied
     perf_data = __get_performance_data(stud_perf)

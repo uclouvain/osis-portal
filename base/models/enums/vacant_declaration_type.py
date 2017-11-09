@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,20 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
-from django.conf.urls import url
-from performance.views import main
+from django.utils.translation import ugettext_lazy as _
 
-urlpatterns = [
-    url(r'^$', main.view_performance_home, name='performance_home'),
-    url(r'^result/(?P<pk>[0-9]+)/$',
-        main.display_result_for_specific_student_performance, name='performance_student_result'),
-    url(r'^result/(?P<acronym>[0-9A-Za-z_ ]+)/(?P<academic_year>[0-9]{4})/$',
-        main.display_results_by_acronym_and_year, name='performance_student_by_acronym_and_year'),
-    url(r'^administration/select_student/$', main.select_student, name='performance_administration'),
-    url(r'^administration/student_programs/(?P<registration_id>[0-9]+)/$', main.visualize_student_programs,
-        name='performance_student_programs_admin'),
-    url(r'^administration/student_result/(?P<pk>[0-9]+)/$',
-        main.visualize_student_result, name='performance_student_result_admin'),
-]
+RESEVED_FOR_INTERNS = "RESEVED_FOR_INTERNS"
+OPEN_FOR_EXTERNS = "OPEN_FOR_EXTERNS"
+EXCEPTIONAL_PROCEDURE = "EXCEPTIONAL_PROCEDURE"
+VACANT_NOT_PUBLISH = "VACANT_NOT_PUBLISH"
+DO_NOT_ASSIGN = "DO_NOT_ASSIGN"
 
+DECLARATION_TYPE = (
+    (RESEVED_FOR_INTERNS, _(RESEVED_FOR_INTERNS)),
+    (OPEN_FOR_EXTERNS, _(OPEN_FOR_EXTERNS)),
+    (EXCEPTIONAL_PROCEDURE, _(EXCEPTIONAL_PROCEDURE)),
+    (VACANT_NOT_PUBLISH, _(VACANT_NOT_PUBLISH)),
+    (DO_NOT_ASSIGN, _(DO_NOT_ASSIGN))
+)

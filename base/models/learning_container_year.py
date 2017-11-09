@@ -24,14 +24,17 @@
 #
 ##############################################################################
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+from base.models.enums import vacant_declaration_type
 from django.db import models
 
 
 class LearningContainerYearAdmin(SerializableModelAdmin):
-    list_display = ('academic_year', 'acronym', 'title')
-    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title',)}),)
+    list_display = ('learning_container', 'academic_year', 'acronym', 'title')
+    fieldsets = ((None, {'fields': ('learning_container', 'academic_year', 'acronym', 'title',
+                                    'team', 'is_vacant', 'type_declaration_vacant', 'in_charge')}),)
     search_fields = ['acronym']
-    list_filter = ('academic_year',)
+    raw_id_fields = ('learning_container', )
+    list_filter = ('academic_year', 'in_charge', 'is_vacant',)
 
 
 class LearningContainerYear(SerializableModel):
@@ -39,8 +42,14 @@ class LearningContainerYear(SerializableModel):
     changed = models.DateTimeField(null=True, auto_now=True)
     acronym = models.CharField(max_length=10)
     academic_year = models.ForeignKey('AcademicYear')
+    learning_container = models.ForeignKey('LearningContainer', null=True)
     title = models.CharField(max_length=255)
     title_english = models.CharField(max_length=250, blank=True, null=True)
+    team = models.BooleanField(default=False)
+    is_vacant = models.BooleanField(default=False)
+    type_declaration_vacant = models.CharField(max_length=100, blank=True, null=True,
+                                               choices=vacant_declaration_type.DECLARATION_TYPE)
+    in_charge = models.BooleanField(default=False)
 
     def __str__(self):
         return u"%s - %s" % (self.acronym, self.title)

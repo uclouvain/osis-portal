@@ -28,12 +28,12 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 
 
 class LearningUnitYearAdmin(SerializableModelAdmin):
-    list_display = ('acronym', 'title', 'academic_year', 'weight', 'learning_unit', 'vacant')
-    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'weight', 'learning_unit', 'team', 'vacant',
-                                    'in_charge')}),)
-    list_filter = ('academic_year__year', 'vacant')
+    list_display = ('acronym', 'title', 'academic_year', 'weight', 'learning_unit',)
+    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'weight', 'learning_unit',
+                 'learning_container_year')}),)
+    list_filter = ('academic_year__year',)
     search_fields = ['acronym']
-    raw_id_fields = ('learning_unit',)
+    raw_id_fields = ('learning_unit', 'learning_container_year')
 
 
 class LearningUnitYear(SerializableModel):
@@ -43,13 +43,23 @@ class LearningUnitYear(SerializableModel):
     credits = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     weight = models.IntegerField(blank=True, null=True)
     academic_year = models.ForeignKey('AcademicYear')
+    learning_container_year = models.ForeignKey('LearningContainerYear', blank=True, null=True)
     learning_unit = models.ForeignKey('LearningUnit', blank=True, null=True)
-    team = models.BooleanField(default=False)
-    vacant = models.BooleanField(default=False)
-    in_charge = models.BooleanField(default=False)
 
     def __str__(self):
         return u"%s - %s" % (self.academic_year, self.acronym)
+
+    @property
+    def in_charge(self):
+        return self.learning_container_year and self.learning_container_year.in_charge
+
+    @property
+    def vacant(self):
+        return self.learning_container_year and self.learning_container_year.is_vacant
+
+    @property
+    def team(self):
+        return self.learning_container_year and self.learning_container_year.team
 
 
 def search(academic_year_id=None, acronym=None, a_learning_unit=None):
