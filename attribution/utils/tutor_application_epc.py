@@ -51,7 +51,7 @@ def send_message(operation, global_id, application):
     if operation not in (DELETE_OPERATION, UPDATE_OPERATION):
         raise ValueError('operation_not_supported')
 
-    queue_name = settings.QUEUES.get('QUEUES_NAME', {}).get('ATTRIBUTION')
+    queue_name = settings.QUEUES.get('QUEUES_NAME', {}).get('APPLICATION_REQUEST')
     if queue_name:
         message_to_send = _convert_to_epc_application(global_id, application)
         queue_sender.send_message(queue_name, {
@@ -104,7 +104,7 @@ def _extract_tutor_epc_info(global_id):
 
 def process_message(json_data):
     """
-        Callback of ATTRIBUTION_RESPONSE
+        Callback of APPLICATION_RESPONSE queue
     :param json_data:
     :return:
     """

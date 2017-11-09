@@ -28,8 +28,6 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.contrib import admin
 
-from base.models.enums import learning_component_year_type
-
 
 class AttributionNewAdmin(admin.ModelAdmin):
     list_display = ('global_id', 'attributions', 'applications')
@@ -41,6 +39,11 @@ class AttributionNew(models.Model):
     global_id = models.CharField(max_length=10, unique=True)
     attributions = JSONField(default={})
     applications = JSONField(default={})
+
+    class Meta:
+        permissions = (
+            ("can_access_attribution_application", "Can access attribution application"),
+        )
 
     def __str__(self):
         return u"%s" % self.global_id
@@ -59,6 +62,7 @@ def _convert_decimal_to_str(list):
             if isinstance(item[key], Decimal):
                 item[key] = str(item[key])
     return list
+
 
 def insert_or_update_attributions(global_id, attributions_data):
     AttributionNew.objects.update_or_create(
