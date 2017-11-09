@@ -54,11 +54,11 @@ def send_message(operation, global_id, application):
     queue_name = settings.QUEUES.get('QUEUES_NAME', {}).get('APPLICATION_REQUEST')
     if queue_name:
         message_to_send = _convert_to_epc_application(global_id, application)
-        queue_sender.send_message(queue_name, {
+        message_to_send.update({
             'operation': operation,
-            'global_id': global_id,
-            **message_to_send
+            'global_id': global_id
         })
+        queue_sender.send_message(queue_name, message_to_send)
         return True
     return False
 
