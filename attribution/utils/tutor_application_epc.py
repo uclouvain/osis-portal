@@ -33,7 +33,7 @@ from django.db import connection
 from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
 from django.conf import settings
 
-from attribution.business import tutor_application
+
 from osis_common.queue import queue_sender
 from base import models as mdl_base
 
@@ -108,6 +108,8 @@ def process_message(json_data):
     :param json_data:
     :return:
     """
+    from attribution.business import tutor_application
+
     try:
         application = json.loads(json_data)
 
