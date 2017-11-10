@@ -76,14 +76,17 @@ def __get_performance_data(stud_perf):
     fetch_timed_out = stud_perf.fetch_timed_out if stud_perf else None
     not_authorized_message = __make_not_authorized_message(stud_perf)
     courses_registration_validated = stud_perf.courses_registration_validated if stud_perf else None
+    learning_units_outside_catalog = stud_perf.learning_units_outside_catalog if stud_perf else None
     return {
         "results": document,
         "creation_date": creation_date,
         "update_date": update_date,
         "fetch_timed_out": fetch_timed_out,
         "not_authorized_message": not_authorized_message,
-        "courses_registration_validated": courses_registration_validated
+        "courses_registration_validated": courses_registration_validated,
+        "learning_units_outside_catalog": learning_units_outside_catalog
     }
+
 
 @login_required
 @permission_required('base.is_student', raise_exception=True)
@@ -136,7 +139,6 @@ def display_results_by_acronym_and_year(request, acronym, academic_year):
 
 
 # Admins Views
-
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def select_student(request):
@@ -180,23 +182,11 @@ def visualize_student_result(request, pk):
     !!! Should only be accessible for staff having the rights.
     """
     stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
-    document = json.dumps(stud_perf.data) if stud_perf else None
-    creation_date = stud_perf.creation_date if stud_perf else None
-    update_date = stud_perf.update_date if stud_perf else None
-    fetch_timed_out = stud_perf.fetch_timed_out if stud_perf else None
-    not_authorized_message = __make_not_authorized_message(stud_perf)
-    courses_registration_validated = stud_perf.courses_registration_validated if stud_perf else None
+    perf_data = __get_performance_data(stud_perf)
 
     return layout.render(request,
                          "admin/performance_result_admin.html",
-                         {
-                             "results": document,
-                             "creation_date": creation_date,
-                             "update_date": update_date,
-                             "fetch_timed_out": fetch_timed_out,
-                             "not_authorized_message": not_authorized_message,
-                             "courses_registration_validated": courses_registration_validated
-                         })
+                         perf_data)
 
 
 def get_student_programs_list(stud):
