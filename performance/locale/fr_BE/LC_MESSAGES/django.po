@@ -196,3 +196,6 @@ msgstr "Votre inscription aux cours a été validée par le jury."
 
 msgid "courses_registration_not_validated"
 msgstr "Votre inscription aux cours n'a pas encore été validée."
+
+msgid "learning_unitys_outside_catalog"
+msgstr "Cette inscription est \"hors programme\" ou \"préalable\" et les crédits associés ne sont pas pris en compte pour atteindre le nombre de crédits requis."

@@ -180,7 +180,7 @@ class DownloadAttestationTest(TestCase):
         self.assertEqual(messages[0].message, _('error_multiple_registration_id'))
 
     @patch('attestation.queues.student_attestation.fetch_student_attestation',
-           side_effect=lambda global_id, year, attestation_type: None)
+           side_effect=lambda global_id, year, attestation_type, username: None)
     def test_when_no_attestation_pdf(self, mock_fetch_student_attestation):
         StudentFactory(person=self.person)
 
@@ -197,7 +197,7 @@ class DownloadAttestationTest(TestCase):
         self.assertEqual(messages[0].message, _('error_fetching_attestation'))
 
     @patch('attestation.queues.student_attestation.fetch_student_attestation',
-           side_effect=lambda global_id, year, attestation_type: open_sample_pdf())
+           side_effect=lambda global_id, year, attestation_type, username: open_sample_pdf())
     def test_when_attestation_pdf_fetched(self, mock_fetch_student_attestation):
         StudentFactory(person=self.person)
 
@@ -346,7 +346,7 @@ class DownloadStudentAttestation(TestCase):
         self.assertEqual(response.status_code, ACCESS_DENIED)
 
     @patch('attestation.queues.student_attestation.fetch_student_attestation',
-           side_effect=lambda global_id, year, attestation_type: None)
+           side_effect=lambda global_id, year, attestation_type, username: None)
     def test_when_no_attestation_pdf(self, mock_fetch_student_attestation):
         StudentFactory(person=PersonFactory(global_id=STUDENT_GLOBAL_ID))
         self.client.force_login(self.person.user)
@@ -362,7 +362,7 @@ class DownloadStudentAttestation(TestCase):
         self.assertEqual(messages[0].message, _('error_fetching_attestation'))
 
     @patch('attestation.queues.student_attestation.fetch_student_attestation',
-           side_effect=lambda global_id, year, attestation_type: open_sample_pdf())
+           side_effect=lambda global_id, year, attestation_type, username: open_sample_pdf())
     def test_when_attestation_pdf_fetched(self, mock_fetch_student_attestation):
         self.client.force_login(self.person.user)
         response = self.client.get(self.url, follow=True)

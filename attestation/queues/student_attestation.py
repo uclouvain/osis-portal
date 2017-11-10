@@ -33,7 +33,7 @@ from django.conf import settings
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-def fetch_student_attestation(global_id, academic_year, attestation_type):
+def fetch_student_attestation(global_id, academic_year, attestation_type, username):
     if not hasattr(settings, 'ATTESTATION_CONFIG'):
         return None
     server_top_url = settings.ATTESTATION_CONFIG.get('SERVER_TO_FETCH_URL')
@@ -42,7 +42,8 @@ def fetch_student_attestation(global_id, academic_year, attestation_type):
         try:
             document_url = document_base_path.format(global_id=global_id,
                                                      academic_year=academic_year,
-                                                     attestation_type=attestation_type)
+                                                     attestation_type=attestation_type,
+                                                     username=username)
             return _fetch_with_basic_auth(server_top_url, document_url)
         except URLError:
             logger.exception('Error when interacting with the attestation web services.\n'
