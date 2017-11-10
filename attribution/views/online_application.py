@@ -170,12 +170,16 @@ def renew_applications(request):
                                data=application_data)
         if form.is_valid():
             application = form.cleaned_data
-            tutor_application.create_or_update_application(global_id, application)
-            tutor_application.set_pending_flag(global_id, application, tutor_application_epc.UPDATE_OPERATION)
-            # Send signal to EPC
-            tutor_application_epc.send_message(tutor_application_epc.UPDATE_OPERATION,
-                                               global_id,
-                                               application)
+            try:
+                tutor_application.create_or_update_application(global_id, application)
+                tutor_application.set_pending_flag(global_id, application, tutor_application_epc.UPDATE_OPERATION)
+                # Send signal to EPC
+                tutor_application_epc.send_message(tutor_application_epc.UPDATE_OPERATION,
+                                                   global_id,
+                                                   application)
+            except Exception as e:
+                error_msg = "{}: {}".format(learning_container_year.acronym, e.args[0])
+                messages.add_message(request, messages.ERROR, error_msg)
     return redirect('applications_overview')
 
 @login_required
@@ -186,21 +190,27 @@ def create_or_update_application(request, learning_container_year_id):
     tutor = mdl_base.tutor.find_by_user(request.user)
     global_id = tutor.person.global_id
     learning_container_year = mdl_base.learning_container_year.find_by_id(learning_container_year_id)
+    can_be_saved = True
 
     if request.method == 'POST':
         form = ApplicationForm(learning_container_year=learning_container_year,
                                data=request.POST)
         if form.is_valid():
             application = form.cleaned_data
-            tutor_application.create_or_update_application(global_id, application)
-            tutor_application.set_pending_flag(global_id, application, tutor_application_epc.UPDATE_OPERATION)
-            # Send message to EPC
-            tutor_application_epc.send_message(tutor_application_epc.UPDATE_OPERATION,
-                                               global_id,
-                                               application)
+            try:
+                tutor_application.create_or_update_application(global_id, application)
+                tutor_application.set_pending_flag(global_id, application, tutor_application_epc.UPDATE_OPERATION)
+                # Send message to EPC
+                tutor_application_epc.send_message(tutor_application_epc.UPDATE_OPERATION,
+                                                   global_id,
+                                                   application)
+            except Exception as e:
+                error_msg = e.args[0]
+                messages.add_message(request, messages.ERROR, error_msg)
             return redirect('applications_overview')
     else:
         inital_data = tutor_application.get_application(global_id, learning_container_year)
+        can_be_saved = tutor_application.can_be_updated(inital_data)
         form = ApplicationForm(
             initial=inital_data,
             learning_container_year=learning_container_year,
@@ -209,7 +219,8 @@ def create_or_update_application(request, learning_container_year_id):
     return layout.render(request, "application_form.html", {
         'a_tutor': tutor,
         'form': form,
-        'learning_container_year': learning_container_year
+        'learning_container_year': learning_container_year,
+        'can_be_saved': can_be_saved
     })
 
 
@@ -224,14 +235,18 @@ def delete_application(request, learning_container_year_id):
 
     application_to_delete = tutor_application.get_application(global_id, learning_container_year)
     if application_to_delete:
-        # Delete with FLAG Pending
-        tutor_application.set_pending_flag(global_id, application_to_delete,
-                                           tutor_application_epc.DELETE_OPERATION)
-        # Send signal to EPC
-        tutor_application_epc.send_message(tutor_application_epc.DELETE_OPERATION,
-                                           global_id,
-                                           application_to_delete)
-        return redirect('applications_overview')
+         try:
+            # Delete with FLAG Pending
+            tutor_application.set_pending_flag(global_id, application_to_delete,
+                                               tutor_application_epc.DELETE_OPERATION)
+            # Send signal to EPC
+            tutor_application_epc.send_message(tutor_application_epc.DELETE_OPERATION,
+                                               global_id,
+                                               application_to_delete)
+         except Exception as e:
+            error_msg = e.args[0]
+            messages.add_message(request, messages.ERROR, error_msg)
+         return redirect('applications_overview')
     raise Http404
 
 

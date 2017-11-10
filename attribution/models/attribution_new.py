@@ -56,12 +56,12 @@ class AttributionNew(models.Model):
         super(AttributionNew, self).save(*args, **kwargs)
 
 
-def _convert_decimal_to_str(list):
-    for item in list:
+def _convert_decimal_to_str(item_list):
+    for item in item_list:
         for key in item.keys():
             if isinstance(item[key], Decimal):
                 item[key] = str(item[key])
-    return list
+    return item_list
 
 
 def insert_or_update_attributions(global_id, attributions_data):
@@ -73,5 +73,5 @@ def insert_or_update_attributions(global_id, attributions_data):
 def find_by_global_id(global_id):
     try:
         return AttributionNew.objects.get(global_id=global_id)
-    except:
+    except AttributionNew.DoesNotExist:
         return None

@@ -25,14 +25,12 @@
 ##############################################################################
 import json
 import logging
-
 import time
-from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
 
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as PsycopInterfaceError
 from django.db import connection
 from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
 from django.conf import settings
-
 
 from osis_common.queue import queue_sender
 from base import models as mdl_base
@@ -85,10 +83,10 @@ def _extract_learning_container_year_epc_info(acronym, year):
                                                                         academic_year=academic_year).first()
     if academic_year and l_container_year and l_container_year.external_id:
         external_id = l_container_year.external_id.replace(LEARNING_CONTAINER_YEAR_PREFIX_EXTERNAL_ID, '')
-        external_id_array = external_id.split('_')
-        if len(external_id_array) >= 2:
-            learning_container_year_info['reference'] = external_id_array[0]
-            learning_container_year_info['year'] = external_id_array[1]
+        external_ids = external_id.split('_')
+        if len(external_ids) >= 2:
+            learning_container_year_info['reference'] = external_ids[0]
+            learning_container_year_info['year'] = external_ids[1]
     return learning_container_year_info
 
 
@@ -97,8 +95,8 @@ def _extract_tutor_epc_info(global_id):
     tutor = mdl_base.tutor.find_by_person_global_id(global_id)
     if tutor and tutor.external_id:
         external_id = tutor.external_id.replace(TUTOR_PREFIX_EXTERNAL_ID, '')
-        external_id_array = external_id.split('_')
-        return external_id_array[0]
+        external_ids = external_id.split('_')
+        return external_ids[0]
     return None
 
 

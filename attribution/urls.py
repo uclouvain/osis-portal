@@ -49,7 +49,7 @@ urlpatterns = [
         url(r'^send_summary$', online_application.send_mail_applications_summary,
             name='email_tutor_application_confirmation'),
         url(r'^renew/$', online_application.renew_applications, name='renew_applications'),
-        url(r'^(?P<learning_container_year_id>[0-9a-z-]+)/', include([
+        url(r'^(?P<learning_container_year_id>[0-9]+)/', include([
             url(r'^edit/$', online_application.create_or_update_application,
                 name='create_or_update_tutor_application'),
             url(r'^delete/$', online_application.delete_application,
@@ -72,7 +72,7 @@ urlpatterns = [
         url(r'^applications/', include([
             url(r'^$', online_application.administration_applications,
                 name='attribution_applications'),
-            url(r'^(?P<global_id>[0-9a-z-]+)/$', online_application.visualize_tutor_applications,
+            url(r'^(?P<global_id>[0-9]+)/$', online_application.visualize_tutor_applications,
                 name="visualize_tutor_applications")
         ])),
     ])),

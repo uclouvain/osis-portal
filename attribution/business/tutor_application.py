@@ -43,9 +43,9 @@ def get_application_list(global_id, academic_year=None):
 
     attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
     if attrib and attrib.applications:
-        attrib.applications = _filter_by_years(attrib.applications, academic_year.year)
-        attrib.applications = _filter_pending_delete(attrib.applications)
-        return _resolve_learning_container_year_info(attrib.applications, academic_year)
+        application_list = list(_filter_by_years(attrib.applications, academic_year.year))
+        application_list = _resolve_learning_container_year_info(application_list, academic_year)
+        return _order_by_pending_and_acronym(application_list)
     return None
 
 
@@ -76,14 +76,21 @@ def create_or_update_application(global_id, application):
     if attrib:
         acronym = application.get('acronym')
         year = application.get('year')
-        if _find_application(acronym, year, attrib.applications):
-            return _update_application(global_id, application)
+        application_found = _find_application(acronym, year, attrib.applications)
+        if application_found:
+            if can_be_updated(application_found):
+                return _update_application(global_id, application)
+            else:
+                raise ValueError("applications_in_pending_state")
     return _create_application(global_id, application)
 
 
 def set_pending_flag(global_id, application, flag=None):
-    application['pending'] = flag
-    return _update_application(global_id, application)
+    if can_be_updated(application):
+        application['pending'] = flag
+        return _update_application(global_id, application)
+    else:
+        raise ValueError("applications_in_pending_state")
 
 
 def validate_application(global_id, acronym, year):
@@ -149,6 +156,11 @@ def _create_application(global_id, application_to_create):
     return attrib.save()
 
 
+def can_be_updated(application):
+    return application.get('pending') not in [tutor_application_epc.DELETE_OPERATION,
+                                              tutor_application_epc.UPDATE_OPERATION]
+
+
 def _update_application(global_id, application_to_update):
     attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
     if attrib and attrib.applications:
@@ -163,8 +175,8 @@ def _update_application(global_id, application_to_update):
 
 
 def _delete_application_in_list(acronym, year, application_list):
-    return [application for application in application_list if not (acronym == application.get('acronym') and
-                                                                    year == application.get('year'))]
+    return [application for application in application_list if
+            not (acronym == application.get('acronym') and year == application.get('year'))]
 
 
 def _find_application(acronym, year, applications_list):
@@ -184,15 +196,32 @@ def _get_application_list_str(application_list):
 
 
 def _filter_by_years(attribution_list, year):
-    return [attribution for attribution in attribution_list if
-            attribution.get('year') == year]
+    for attribution in attribution_list:
+        if attribution.get('year') == year:
+            yield attribution
 
 
 def _filter_pending_delete(attribution_list):
-    return [attribution for attribution in attribution_list if
-            attribution.get('pending') != tutor_application_epc.DELETE_OPERATION]
+    for attribution in attribution_list:
+        if attribution.get('pending') != tutor_application_epc.DELETE_OPERATION:
+            yield attribution
 
 
 def _get_unix_time():
     now = timezone.now()
     return time.mktime(now.timetuple())
+
+
+def _order_by_pending_and_acronym(application_list):
+    """
+        Sort the list by
+         0. Pending
+         1. Acronym
+        :param application_list: List of application to sort
+        :return:
+    """
+    def _sort(key):
+        pending = key.get('pending', '')
+        acronym = key.get('acronym', '')
+        return "%s %s" % (pending, acronym)
+    return sorted(application_list, key=lambda k: _sort(k))

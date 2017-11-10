@@ -45,18 +45,26 @@
         {% for application in applications %}
             <tr>
                 <td>{{ application.id }}
-                    <a title="{%trans 'edit'%}"
-                       href="{% url 'create_or_update_tutor_application' application.learning_container_year_id  %}"
-                       id="lnk_application_edit">
-                        {{ application.acronym }}
-                    </a>
+                    {% if application.pending %}
+                        <a title="{%trans 'edit'%}"
+                           href="{% url 'create_or_update_tutor_application' application.learning_container_year_id  %}"
+                           id="lnk_application_edit">
+                            {{ application.acronym }}
+                        </a>
+                    {% else %}
+                         {{ application.acronym }}
+                    {% endif %}
                 </td>
                 <td>
-                    <a title="{%trans 'edit'%}"
-                       href="{% url 'create_or_update_tutor_application' application.learning_container_year_id %}"
-                      id="lnk_application_edit">
-                    {{ application.title }}
-                    </a>
+                    {% if application.pending %}
+                        <a title="{%trans 'edit'%}"
+                           href="{% url 'create_or_update_tutor_application' application.learning_container_year_id %}"
+                          id="lnk_application_edit">
+                        {{ application.title }}
+                        </a>
+                    {% else %}
+                        {{ application.title }}
+                    {% endif %}
                 </td>
                 <td style="border-left-style: solid;border-left-width:1px;">{{ application.LECTURING | default_if_none:''}}</td>
                 <td>{{ application.PRACTICAL_EXERCISES | default_if_none:''}}</td>
@@ -70,7 +78,7 @@
                         <button class="btn btn-warning"
                                 id="lnk_application_delete_{{ application.learning_container_year_id }}"
                                 type="submit" title="{%trans 'remove'%}"
-                                >
+                                {%if application.pending %} disabled {% endif %}>
                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
                     </form>
                 </td>

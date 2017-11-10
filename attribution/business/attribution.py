@@ -26,6 +26,8 @@
 from decimal import Decimal
 from itertools import chain
 
+import collections
+
 from attribution.models.enums import function
 from base import models as mdl_base
 from attribution import models as mdl_attribution
@@ -47,17 +49,15 @@ def get_attribution_list(global_id, academic_year=None):
 
 
 def get_volumes_total(attribution_list):
-    volumes_total = {}
+    volumes_total = collections.defaultdict(lambda: Decimal(0))
     for attribution in attribution_list:
         lecturing_volume = attribution.get(learning_component_year_type.LECTURING)
         if lecturing_volume:
-            volumes_total.setdefault(learning_component_year_type.LECTURING, Decimal(0))
             volumes_total[learning_component_year_type.LECTURING] += Decimal(lecturing_volume)
         practical_exercices_volume = attribution.get(learning_component_year_type.PRACTICAL_EXERCISES)
         if practical_exercices_volume:
-            volumes_total.setdefault(learning_component_year_type.PRACTICAL_EXERCISES, Decimal(0))
             volumes_total[learning_component_year_type.PRACTICAL_EXERCISES] += Decimal(practical_exercices_volume)
-    return volumes_total
+    return dict(volumes_total)
 
 
 def get_attribution_vacant_list(acronym_filter, academic_year):

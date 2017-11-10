@@ -62,9 +62,9 @@ class TutorApplicationTest(TestCase):
             _get_application_example(self.lbir1300_2017, '7.5', '25'),   # Application 2017
             _get_application_example(self.lbir1200_2016, '2', '30'),  # Application 2016
         ]
-        AttributionNewFactory(global_id=person.global_id,
-                              attributions=_get_attributions_default(),
-                              applications=applications)
+        self.attribution = AttributionNewFactory(global_id=person.global_id,
+                                                 attributions=_get_attributions_default(),
+                                                 applications=applications)
 
     def test_get_application_list(self):
         global_id = self.tutor.person.global_id
@@ -75,6 +75,22 @@ class TutorApplicationTest(TestCase):
         application_list_in_2016 = tutor_application.get_application_list(global_id, self.academic_year_2016)
         self.assertIsInstance(application_list_in_2016, list)
         self.assertEqual(len(application_list_in_2016), 1)
+
+    def test_get_application_list_order_by(self):
+        self.attribution.applications = [
+            _get_application_example(self.lbir1200_2017, '3.5', '35.6'),  # Application 2017
+            _get_application_example(self.lbir1250_2017, '5', '7', tutor_application_epc.UPDATE_OPERATION),
+            _get_application_example(self.lbir1300_2017, '7.5', '25')  # Application 2017
+        ]
+        self.attribution.save()
+        global_id = self.tutor.person.global_id
+        application_list = tutor_application.get_application_list(global_id, self.academic_year)
+        self.assertIsInstance(application_list, list)
+        self.assertEqual(len(application_list), 3)
+        # Check order
+        self.assertEqual(application_list[0]['acronym'], self.lbir1200_2017.acronym)
+        self.assertEqual(application_list[1]['acronym'], self.lbir1300_2017.acronym)
+        self.assertEqual(application_list[2]['acronym'], self.lbir1250_2017.acronym)
 
     def test_get_application(self):
         global_id = self.tutor.person.global_id
@@ -117,9 +133,9 @@ class TutorApplicationTest(TestCase):
         application_updated = next(app for app in application_list if
                              app.get('acronym') == self.lbir1200_2017.acronym)
         self.assertTrue(application_updated)
-        self.assertTrue(application_updated.get('acronym'), self.lbir1200_2017.acronym)
-        self.assertTrue(application_updated.get('charge_lecturing_asked'), '0')
-        self.assertTrue(application_updated.get('charge_practical_asked'), '10')
+        self.assertEqual(application_updated.get('acronym'), self.lbir1200_2017.acronym)
+        self.assertEqual(application_updated.get('charge_lecturing_asked'), '0')
+        self.assertEqual(application_updated.get('charge_practical_asked'), '10')
 
     def test_pending_flag(self):
         global_id = self.tutor.person.global_id

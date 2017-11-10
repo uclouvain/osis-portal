@@ -119,13 +119,14 @@
                 <br>
                 <div class="row pull-right">
                     <div class="col-md-12">
-                        <button class="btn btn-primary" id="bt_submit" type="submit" title="{% trans 'submit' %}">
+                        <button class="btn btn-primary" id="bt_submit" type="submit" title="{% trans 'submit' %}"
+                            {% if not can_be_saved %} disabled {% endif %}>
                             <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
                             {% trans 'submit' %}
                         </button>
 
                         <a class="btn btn-default"
-                           href="{% url 'visualize_tutor_applications' global_id=a_tutor.person.global_id %}"
+                           href="{% url 'applications_overview' %}"
                            title="{% trans 'cancel' %}">
                             {% trans 'cancel' %}
                         </a>

@@ -76,7 +76,7 @@ def search(*args, **kwargs):
         if isinstance(kwargs['id'], list):
             qs = qs.filter(id__in=kwargs['id'])
         else:
-            qs = qs.filter(acronym__icontains=kwargs['id'])
+            qs = qs.filter(id=kwargs['id'])
 
     if "acronym" in kwargs:
         if isinstance(kwargs['acronym'], list):
