@@ -54,6 +54,7 @@
                 {% if applications %}
                 <span class="pull-right" style="margin-left:10px;margin-right:10px;">
                     <form action="{% url 'email_tutor_application_confirmation' %}"
+                          method="POST"
                           id="form_email_tutor_application_confirmation">
                         {% csrf_token %}
                         <button class="btn btn-default"

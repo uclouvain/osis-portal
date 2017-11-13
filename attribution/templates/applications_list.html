@@ -45,18 +45,19 @@
         {% for application in applications %}
             <tr>
                 <td>{{ application.id }}
-                    {% if application.pending %}
+                    {% if not application.pending %}
                         <a title="{%trans 'edit'%}"
                            href="{% url 'create_or_update_tutor_application' application.learning_container_year_id  %}"
                            id="lnk_application_edit">
                             {{ application.acronym }}
                         </a>
                     {% else %}
-                         {{ application.acronym }}
+                         {{ application.acronym }} <br>
+                         <small><em>({% trans 'wait_validation_epc' %})</em></small>
                     {% endif %}
                 </td>
                 <td>
-                    {% if application.pending %}
+                    {% if not application.pending %}
                         <a title="{%trans 'edit'%}"
                            href="{% url 'create_or_update_tutor_application' application.learning_container_year_id %}"
                           id="lnk_application_edit">
@@ -71,16 +72,21 @@
                 <td style="border-left-style: solid;border-left-width:1px;">{{ application.charge_lecturing_asked | default_if_none:''}}</td>
                 <td>{{ application.charge_practical_asked | default_if_none:''}}</td>
                 <td>
-                    <form action="{% url 'delete_tutor_application' application.learning_container_year_id %}"
-                          id="form_delete_{{ application.learning_container_year_id }}"
-                          method="POST">
-                        {% csrf_token %}
-                        <button class="btn btn-warning"
-                                id="lnk_application_delete_{{ application.learning_container_year_id }}"
-                                type="submit" title="{%trans 'remove'%}"
-                                {%if application.pending %} disabled {% endif %}>
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                    </form>
+                    <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
+                                     title="{% if application.pending %}
+                                                {% trans 'wait_validation_epc' %}
+                                            {% endif %}">
+                        <form action="{% url 'delete_tutor_application' application.learning_container_year_id %}"
+                              id="form_delete_{{ application.learning_container_year_id }}"
+                              method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-warning"
+                                    id="lnk_application_delete_{{ application.learning_container_year_id }}"
+                                    type="submit" title="{%trans 'remove'%}"
+                                    {%if application.pending %} disabled {% endif %}>
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                        </form>
+                    </div>
                 </td>
             </tr>
         {% endfor %}

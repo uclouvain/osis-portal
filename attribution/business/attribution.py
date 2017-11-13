@@ -45,7 +45,7 @@ def get_attribution_list(global_id, academic_year=None):
         attributions = _append_team_and_volume_declared_vacant(attributions)
         attributions = _append_start_and_end_academic_year(attributions)
         return _order_by_acronym_and_function(attributions)
-    return None
+    return []
 
 
 def get_volumes_total(attribution_list):
@@ -63,7 +63,8 @@ def get_volumes_total(attribution_list):
 def get_attribution_vacant_list(acronym_filter, academic_year):
     attribution_vacant = {}
     learning_containers_year_ids = list(mdl_base.learning_container_year.search(acronym=acronym_filter,
-                                                                           academic_year=academic_year) \
+                                                                                academic_year=academic_year)\
+                                                                        .filter(team=False)\
                                                                         .values_list('id', flat=True))
     l_component_years = mdl_base.learning_component_year.search(learning_container_year=learning_containers_year_ids) \
                                                         .exclude(volume_declared_vacant__isnull=True)

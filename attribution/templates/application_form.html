@@ -119,11 +119,16 @@
                 <br>
                 <div class="row pull-right">
                     <div class="col-md-12">
-                        <button class="btn btn-primary" id="bt_submit" type="submit" title="{% trans 'submit' %}"
-                            {% if not can_be_saved %} disabled {% endif %}>
-                            <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
-                            {% trans 'submit' %}
-                        </button>
+                         <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
+                                     title="{% if not can_be_saved %}
+                                                {% trans 'wait_validation_epc' %}
+                                            {% endif %}">
+                            <button class="btn btn-primary" id="bt_submit" type="submit" title="{% trans 'submit' %}"
+                                {% if not can_be_saved %} disabled {% endif %}>
+                                <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
+                                {% trans 'submit' %}
+                            </button>
+                         </div>
 
                         <a class="btn btn-default"
                            href="{% url 'applications_overview' %}"

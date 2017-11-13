@@ -358,3 +358,6 @@ msgstr "Pas de candidature trouvée"
 
 msgid "no_attribution_renewed"
 msgstr "Pas d'attribution renouvelée"
+
+msgid "wait_validation_epc"
+msgstr "En attente de validation"
