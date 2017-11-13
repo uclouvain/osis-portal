@@ -25,6 +25,7 @@
 ##############################################################################
 from time import sleep
 
+from decimal import Decimal
 from django.contrib.auth.models import Group
 from django.test import TestCase
 
@@ -134,8 +135,8 @@ class TutorApplicationTest(TestCase):
                              app.get('acronym') == self.lbir1200_2017.acronym)
         self.assertTrue(application_updated)
         self.assertEqual(application_updated.get('acronym'), self.lbir1200_2017.acronym)
-        self.assertEqual(application_updated.get('charge_lecturing_asked'), '0')
-        self.assertEqual(application_updated.get('charge_practical_asked'), '10')
+        self.assertEqual(application_updated.get('charge_lecturing_asked'), Decimal(0))
+        self.assertEqual(application_updated.get('charge_practical_asked'), Decimal(10))
 
     def test_pending_flag(self):
         global_id = self.tutor.person.global_id

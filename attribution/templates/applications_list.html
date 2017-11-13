@@ -29,15 +29,15 @@
         <tr>
             <th colspan="2"></th>
             <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'vacant' %}</th>
-            <th colspan="4" style="border-left-style: solid;border-left-width:1px;">{% trans 'charge' %}</th>
+            <th colspan="4" style="border-left-style: solid;border-left-width:1px;">{% trans 'application' %}</th>
         </tr>
         <tr>
             <th>{% trans 'code'%}</th>
             <th>{% trans 'title'%}</th>
             <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours'%}</th>
             <th>{% trans 'practical_hours'%}</th>
-            <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours_asked'%}</th>
-            <th>{% trans 'practical_hours_asked'%}</th>
+            <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours'%}</th>
+            <th>{% trans 'practical_hours'%}</th>
             <th></th>
         </tr>
     <thead>
@@ -52,7 +52,10 @@
                             {{ application.acronym }}
                         </a>
                     {% else %}
-                         {{ application.acronym }} <br>
+                         <span {% if application.pending = 'delete' %} class="line-through" {% endif %}>
+                             {{ application.acronym }}
+                         </span>
+                         <br>
                          <span class="small font-italic">({% trans 'wait_validation_epc' %})</span>
                     {% endif %}
                 </td>
@@ -64,7 +67,9 @@
                         {{ application.title }}
                         </a>
                     {% else %}
-                        {{ application.title }}
+                        <span {% if application.pending = 'delete' %} class="line-through" {% endif %}>
+                             {{ application.title }}
+                        </span>
                     {% endif %}
                 </td>
                 <td style="border-left-style: solid;border-left-width:1px;">{{ application.LECTURING | default_if_none:''}}</td>

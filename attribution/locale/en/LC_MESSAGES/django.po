@@ -176,11 +176,11 @@ msgstr "Start"
 msgid "end"
 msgstr "End"
 
-msgid "lecturing_hours_asked"
-msgstr "Vol.1 asked"
+msgid "lecturing_hours_applied"
+msgstr "Vol.1 applied"
 
-msgid "practical_hours_asked"
-msgstr "Vol.2 asked"
+msgid "practical_hours_applied"
+msgstr "Vol.2 applied"
 
 msgid "lecturing_hours_vacant"
 msgstr "Vol.1 vacant "
@@ -194,8 +194,8 @@ msgstr "Application"
 msgid "remark"
 msgstr "Remark"
 
-msgid "course_summary"
-msgstr "Course summary"
+msgid "pedagogy_proposal"
+msgstr "Pedagogy proposal"
 
 msgid "submit"
 msgstr "Submit"
