@@ -356,3 +356,5 @@ msgstr "No application found"
 msgid "no_attribution_renewed"
 msgstr "No attribution renewed"
 
+msgid "wait_validation_epc"
+msgstr "Wait validation"

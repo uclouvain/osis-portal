@@ -210,7 +210,7 @@ def create_or_update_application(request, learning_container_year_id):
             return redirect('applications_overview')
     else:
         inital_data = tutor_application.get_application(global_id, learning_container_year)
-        can_be_saved = tutor_application.can_be_updated(inital_data)
+        can_be_saved = tutor_application.can_be_updated(inital_data) if inital_data else True
         form = ApplicationForm(
             initial=inital_data,
             learning_container_year=learning_container_year,

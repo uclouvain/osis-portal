@@ -46,7 +46,7 @@ def get_application_list(global_id, academic_year=None):
         application_list = list(_filter_by_years(attrib.applications, academic_year.year))
         application_list = _resolve_learning_container_year_info(application_list, academic_year)
         return _order_by_pending_and_acronym(application_list)
-    return None
+    return []
 
 
 def get_application(global_id, learning_container_year):
