@@ -24,10 +24,13 @@
 #
 ##############################################################################
 import time
+
+from decimal import Decimal
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
 from attribution import models as mdl_attribution
+from attribution.business.attribution import get_attribution_list
 from attribution.utils import tutor_application_epc
 from base import models as mdl_base
 from base.models.enums import learning_component_year_type
@@ -44,6 +47,7 @@ def get_application_list(global_id, academic_year=None):
     attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
     if attrib and attrib.applications:
         application_list = list(_filter_by_years(attrib.applications, academic_year.year))
+        application_list = _format_str_volume_to_decimal(application_list)
         application_list = _resolve_learning_container_year_info(application_list, academic_year)
         return _order_by_pending_and_acronym(application_list)
     return []
@@ -55,14 +59,19 @@ def get_application(global_id, learning_container_year):
     return _find_application(learning_container_year.acronym, academic_year.year, application_list)
 
 
-def mark_attribution_already_applied(attributions_vacant, global_id, academic_year, applications=None):
-    if not applications:
-        applications = get_application_list(global_id, academic_year)
+def mark_attribution_already_applied(attributions_vacant, global_id, application_academic_year):
+    applications = get_application_list(global_id, application_academic_year)
+    attributions = get_attribution_list(global_id, application_academic_year)
 
     for attribution in attributions_vacant:
-        attribution['already_applied'] = next((True for application in applications if
+        already_applied = next((True for application in applications if
                                                application.get('acronym') == attribution.get('acronym')), False) \
                                           if applications else False
+        already_attributed = next((True for attrib in attributions if
+                                   attrib.get('acronym') == attribution.get('acronym')), False) \
+                                          if attributions else False
+
+        attribution['already_applied'] = (already_applied or already_attributed)
     return attributions_vacant
 
 
@@ -188,9 +197,11 @@ def _find_application(acronym, year, applications_list):
 
 
 def _get_application_list_str(application_list):
-    applications_str = ["*\t{}\t{}\t{}".format(application.get('acronym', ''),
-                                               application.get(learning_component_year_type.LECTURING, ''),
-                                               application.get(learning_component_year_type.PRACTICAL_EXERCISES, ''))
+    validation_str = "\t({})".format(_('wait_validation_epc'))
+    applications_str = ["*{}\t{}\t{}\t{}".format(validation_str if application.get('pending') else '',
+                                                   application.get('acronym', ''),
+                                                   application.get('charge_lecturing_asked', ''),
+                                                   application.get('charge_practical_asked', ''))
                         for application in application_list ]
     return "\n".join(applications_str)
 
@@ -225,3 +236,12 @@ def _order_by_pending_and_acronym(application_list):
         acronym = key.get('acronym', '')
         return "%s %s" % (pending, acronym)
     return sorted(application_list, key=lambda k: _sort(k))
+
+
+def _format_str_volume_to_decimal(application_list):
+    for application in application_list:
+        if 'charge_lecturing_asked' in application:
+            application['charge_lecturing_asked'] = Decimal(application['charge_lecturing_asked'])
+        if 'charge_practical_asked' in application:
+            application['charge_practical_asked'] = Decimal(application['charge_practical_asked'])
+    return application_list

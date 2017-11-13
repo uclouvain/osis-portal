@@ -39,7 +39,7 @@ def get_attribution_list(global_id, academic_year=None):
         academic_year = mdl_base.academic_year.current_academic_year()
 
     attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
-    if attrib:
+    if attrib and attrib.attributions:
         attributions = _filter_by_years(attrib.attributions, academic_year)
         attributions = _format_str_volume_to_decimal(attributions)
         attributions = _append_team_and_volume_declared_vacant(attributions)
@@ -74,7 +74,7 @@ def get_attribution_vacant_list(acronym_filter, academic_year):
             'title': l_component_year.learning_container_year.title,
             'acronym': l_component_year.learning_container_year.acronym,
             'learning_container_year_id': l_component_year.learning_container_year.id,
-            'team': False
+            'team': l_component_year.learning_container_year.team
         }).update({
             l_component_year.type: l_component_year.volume_declared_vacant
         })
@@ -97,10 +97,11 @@ def _append_team_and_volume_declared_vacant(attribution_list):
 
     for attribution in attribution_list:
         volumes_declared_vacant = _get_volume_declared_vacant(attribution, l_components)
+        is_team = _get_is_team(attribution, l_components)
         attribution.update({
           'volume_lecturing_vacant': volumes_declared_vacant[learning_component_year_type.LECTURING],
           'volume_practical_exercices_vacant': volumes_declared_vacant[learning_component_year_type.PRACTICAL_EXERCISES],
-          'team': True
+          'team': is_team
         })
     return attribution_list
 
@@ -115,6 +116,11 @@ def _get_volume_declared_vacant(attribution, l_component_year_list):
            l_component_year.volume_declared_vacant is not None:
             volumes_declared_vacant[l_component_year.type] += l_component_year.volume_declared_vacant
     return volumes_declared_vacant
+
+
+def _get_is_team(attribution, l_component_year_list):
+    return next((l_component_year.learning_container_year.team for l_component_year in l_component_year_list if
+                 l_component_year.learning_container_year.acronym == attribution.get('acronym')), False)
 
 
 def _append_start_and_end_academic_year(attribution_list):

@@ -97,11 +97,11 @@ class AttributionTest(TestCase):
         self.assertEqual(attribution_list[0]['acronym'], "LBIR1200")
         self.assertEqual(attribution_list[0]['volume_lecturing_vacant'], Decimal(30))
         self.assertEqual(attribution_list[0]['volume_practical_exercices_vacant'], Decimal(75))
-        self.assertEqual(attribution_list[0]['team'], True)
+        self.assertEqual(attribution_list[0]['team'], False)
         self.assertEqual(attribution_list[1]['acronym'], "LBIR1300")
         self.assertEqual(attribution_list[1]['volume_lecturing_vacant'], Decimal(15.5))
         self.assertEqual(attribution_list[1]['volume_practical_exercices_vacant'], Decimal(5))
-        self.assertEqual(attribution_list[1]['team'], True)
+        self.assertEqual(attribution_list[1]['team'], False)
 
     def test_append_start_end_academic_year(self):
         attribution_list = attribution.get_attribution_list(self.person.global_id,
