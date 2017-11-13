@@ -39,7 +39,7 @@
             {% trans 'applications' %}
         </div>
         <div class="panel-body">
-            <form action="{% url 'applications_admin_select_tutor' %}"
+            <form action="{% url 'attribution_applications' %}"
                   name="applications_administration" method="post">
                 {% csrf_token %}
                 {% if form.errors %}

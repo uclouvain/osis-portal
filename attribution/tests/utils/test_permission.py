@@ -26,6 +26,7 @@
 import datetime
 from django.test import TestCase
 from attribution.utils import permission
+from base.models.enums import academic_calendar_type
 from base.tests.models import test_academic_year, test_academic_calendar
 from django.contrib.auth.models import User
 
@@ -50,21 +51,22 @@ class TestPermission(TestCase):
         self.assertEqual(permission.is_online_application_opened(self.a_user), False)
 
     def test_application_session_period_opened(self):
-        test_academic_year.create_academic_year_with_year(CURRENT_YEAR)
-        next_academic_year = test_academic_year.create_academic_year_with_year(NEXT_YEAR)
+        current_academic_year = test_academic_year.create_academic_year_with_year(CURRENT_YEAR)
+        test_academic_year.create_academic_year_with_year(NEXT_YEAR)
 
-        test_academic_calendar.create_academic_calendar(next_academic_year,
-                                                        permission.TEACHING_CHARGE_APPLICATION,
+        test_academic_calendar.create_academic_calendar(current_academic_year,
+                                                        academic_calendar_type.TEACHING_CHARGE_APPLICATION,
                                                         now,
                                                         now)
 
         self.assertEqual(permission.is_online_application_opened(self.a_user), True)
 
     def test_application_session_period_closed(self):
-        test_academic_year.create_academic_year_with_year(CURRENT_YEAR)
-        next_academic_year = test_academic_year.create_academic_year_with_year(NEXT_YEAR)
+        current_academic_year = test_academic_year.create_academic_year_with_year(CURRENT_YEAR)
+        test_academic_year.create_academic_year_with_year(NEXT_YEAR)
         two_weeks_ago = datetime.datetime.today() - datetime.timedelta(15)
-        test_academic_calendar.create_academic_calendar(next_academic_year, permission.TEACHING_CHARGE_APPLICATION,
+        test_academic_calendar.create_academic_calendar(current_academic_year,
+                                                        academic_calendar_type.TEACHING_CHARGE_APPLICATION,
                                                         two_weeks_ago,
                                                         two_weeks_ago + datetime.timedelta(1))
         self.assertEqual(permission.is_online_application_opened(self.a_user), False)

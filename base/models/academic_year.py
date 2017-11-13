@@ -80,9 +80,26 @@ def find_by_year(a_year):
         return None
 
 
-def find_next_academic_year():
+def find_next_year():
     academic_yr = current_academic_year()
     if academic_yr:
         return academic_yr.year + 1
     else:
         return None
+
+
+def find_next_academic_year():
+    next_year = find_next_year()
+    if next_year:
+        return find_by_year(next_year)
+    return None
+
+
+def search(*args, **kwargs):
+    qs = AcademicYear.objects.all()
+    if "year" in kwargs:
+        if isinstance(kwargs['year'], list):
+            qs = qs.filter(year__in=kwargs['year'])
+        else:
+            qs = qs.filter(year=kwargs['year'])
+    return qs

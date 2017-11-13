@@ -286,7 +286,9 @@ if not TESTING or not SKIP_QUEUES_TESTS:
             'EXAM_ENROLLMENT_FORM_SUBMISSION': 'exam_enrollment_form_submission',
             'SCORE_ENCODING_PDF_REQUEST': 'score_encoding_pdf_request',
             'SCORE_ENCODING_PDF_RESPONSE': 'score_encoding_pdf_response',
-            'ATTRIBUTION_RESPONSE': 'attribution_response'
+            'ATTRIBUTION_RESPONSE': 'attribution_response',
+            'APPLICATION_REQUEST': 'application_request',
+            'APPLICATION_RESPONSE': 'application_response'
         },
         'QUEUES_TIMEOUT': {
             'EXAM_ENROLLMENT_FORM_RESPONSE': get_queue_timeout('EXAM_ENROLLMENT_FORM_RESPONSE_TIMEOUT', 15),

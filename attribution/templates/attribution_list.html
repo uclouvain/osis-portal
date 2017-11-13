@@ -47,13 +47,19 @@
         <tr>
             <td>{{ attribution.acronym }}</td>
             <td>{{ attribution.title }}</td>
-            <td>{% if attribution.team %}<input type='checkbox' checked readonly>{% else %}{% endif %}</td>
-            <td>{{ attribution.lecturing_duration | default_if_none:''}}</td>
-            <td>{{ attribution.practice_duration | default_if_none:''}}</td>
+            <td class="text-center">
+                {% if attribution.team %}
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                {% else %}
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                {% endif %}
+            </td>
+            <td>{{ attribution.volume_lecturing_vacant | default_if_none:''}}</td>
+            <td>{{ attribution.volume_practical_exercices_vacant | default_if_none:''}}</td>
             <td>{{ attribution.start_academic_year | default_if_none:''}}</td>
             <td>{{ attribution.end_academic_year | default_if_none:''}}</td>
-            <td style="border-left-style: solid;border-left-width:1px;">{{ attribution.attribution_charge_lecturing| default_if_none:'' }}</td>
-            <td>{{ attribution.attribution_charge_practical| default_if_none:'' }}</td>
+            <td style="border-left-style: solid;border-left-width:1px;">{{ attribution.LECTURING| default_if_none:'' }}</td>
+            <td>{{ attribution.PRACTICAL_EXERCISES| default_if_none:'' }}</td>
             <td>{% trans attribution.function %}</td>
         </tr>
 

@@ -1,0 +1,137 @@
+{% extends "layout.html" %}
+
+{% load staticfiles %}
+{% load i18n %}
+{% load l10n %}
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+{% block breadcrumb_area %}
+
+<ol class="breadcrumb">
+    <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
+                                                                      aria-hidden="true"></span></a></li>
+    {% block breadcrumb %}
+        <li><a href="{% url 'visualize_tutor_applications' global_id=a_tutor.person.global_id %}" id="lnk_applications">{% trans 'my_applications' %}</a></li>
+        <li>{% trans 'course_search' %}</li>
+    {% endblock %}
+    <a href="http://uclouvain.github.io/osis/assets/user_manual_portal_fr.pdf"
+       target="help" id="lnk_user_manual_section"><span
+            class="glyphicon glyphicon-question-sign pull-right"
+            style="font-size: 14pt; color: green"
+            aria-hidden="true"></span></a>
+</ol>
+{% endblock %}
+
+{% block content %}
+    <div class="panel panel-default" id="pnl_charges">
+        <div class="panel-heading">{% trans 'learning_unit_vacant'%}</div>
+
+        <div class="panel-body">
+            <div class="row">
+                <!-- Search vacant -->
+                <form method="get" action="{% url 'vacant_attributions_search' %}">
+                    <div class="col-md-10">
+                        <p class="text-muted">{% trans 'lu_search_explanation' %}</p>
+                    </div>
+                    <div class="col-md-2 ">
+                        <label for="learning_container_acronym_id">{% trans 'code' %}</label>
+                        <div class="input-group">
+                            {{ search_form.learning_container_acronym}}
+                             <div class="input-group-btn">
+                                  <button type="submit" id="bt_submit_vacant_attributions_search" class="btn btn-primary" role="button"
+                                    title="{% trans 'vacant_learning_unit_year_search' %}">
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                </button>
+                             </div>
+                         </div>
+                    </div>
+                </form>
+            </div>
+            <br>
+            {% if attributions_vacant %}
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th colspan="3"></th>
+                            <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'vacant' %}</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th>{% trans 'code'%}</th>
+                            <th>{% trans 'title'%}</th>
+                            <th>{% trans 'team'%}</th>
+                            <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours'%}</th>
+                            <th>{% trans 'practical_hours'%}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for attribution in attributions_vacant %}
+                        <tr>
+                            <td>{{ attribution.acronym }}</td>
+                            <td>{{ attribution.title }}</td>
+                            <td class="text-center">
+                                {% if attribution.team %}
+                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                {% else %}
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                {% endif %}
+                            </td>
+                            <td style="border-left-style: solid;border-left-width:1px;">
+                                {{ attribution.LECTURING }}
+                            </td>
+                            <td>
+                                {{ attribution.PRACTICAL_EXERCISES }}
+                            </td>
+                            <td>
+                                <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
+                                     title="{% if attribution.already_applied %}
+                                                {% trans 'no_application_possible' %}
+                                            {% elif attribution.team %}
+                                                {% trans 'team_mngt_no_application_possible' %}
+                                            {% endif %}">
+                                    <a id="lnk_submit_attribution_new" class="btn btn-primary pull-right"
+                                       href="{% url 'create_or_update_tutor_application' learning_container_year_id=attribution.learning_container_year_id %}"
+                                       {% if attribution.already_applied or attribution.team %} disabled {% endif %}>
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                        {% trans 'create_an_tutor_application' %}
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% elif request.GET.learning_container_acronym and not attributions_vacant %}
+                <div class="alert alert-info" role="alert">{% trans 'no_activity' %}</div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        $('[data-toggle="tooltip"]').tooltip()
+    </script>
+{% endblock %}

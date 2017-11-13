@@ -41,3 +41,12 @@ class AttributionFactory(factory.DjangoModelFactory):
     tutor = factory.SubFactory(TutorFactory)
     start_year = None
     end_year = None
+
+
+class AttributionNewFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = 'attribution.AttributionNew'
+
+    global_id = factory.fuzzy.FuzzyText(length=10)
+    attributions = {}
+    applications = {}

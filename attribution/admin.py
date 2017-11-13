@@ -25,10 +25,8 @@
 ##############################################################################
 from django.contrib import admin
 
-from attribution.models import attribution, attribution_charge, application_charge, tutor_application, attribution_new
+from attribution.models import attribution, attribution_charge, attribution_new
 
-admin.site.register(application_charge.ApplicationCharge,
-                    application_charge.ApplicationChargeAdmin)
 
 admin.site.register(attribution.Attribution,
                     attribution.AttributionAdmin)
@@ -38,6 +36,3 @@ admin.site.register(attribution_charge.AttributionCharge,
 
 admin.site.register(attribution_new.AttributionNew,
                     attribution_new.AttributionNewAdmin)
-
-admin.site.register(tutor_application.TutorApplication,
-                    tutor_application.TutorApplicationAdmin)
