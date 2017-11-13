@@ -361,3 +361,15 @@ msgstr "Pas d'attribution renouvelée"
 
 msgid "wait_validation_epc"
 msgstr "En attente de validation"
+
+msgid "charge_lecturing_asked_or_charge_practical_asked_must_be_filled"
+msgstr "Le vol.1 postulé ou le vol.2 postulé doit être rempli"
+
+msgid "cancel"
+msgstr "annuler"
+
+msgid "volume_next_year_lower_than_current"
+msgstr "Le volume vacant de l'année suivante est inférieur à celui actuellement affecté"
+
+msgid "cannot_renew_zero_volume"
+msgstr "Impossible de renouveler un volume nul"

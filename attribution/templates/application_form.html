@@ -49,6 +49,19 @@
                   action="{% url 'create_or_update_tutor_application' learning_container_year_id=learning_container_year.id %}"
                   method="post">
                 {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-danger"  role="alert">
+                            {% for error in form.non_field_errors %}
+                                 {{error}}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
                 <div class="row">
                     <div class="col-md-2">
                         <label>{% trans 'code' %}</label>
@@ -133,7 +146,7 @@
                         <a class="btn btn-default"
                            href="{% url 'applications_overview' %}"
                            title="{% trans 'cancel' %}">
-                            {% trans 'cancel' %}
+                            {% trans 'cancel'|title %}
                         </a>
                     </div>
                 </div>
