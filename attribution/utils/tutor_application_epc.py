@@ -116,7 +116,7 @@ def process_message(json_data):
         acronym = application.get('acronym')
         year = application.get('year')
         if not (global_id and acronym and year and operation):
-            logger.exception('Error during process tutor application message. Missing mandatory data')
+            logger.error('Error during process tutor application message. Missing mandatory data')
             return False
 
         if operation == UPDATE_OPERATION:
@@ -125,7 +125,7 @@ def process_message(json_data):
             tutor_application.delete_application(global_id, acronym, year)
         else:
             error_msg = 'Error during process tutor application message. Invalid operation {}'.format(str(operation))
-            logger.exception(error_msg)
+            logger.error(error_msg)
     except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError):
         queue_exception_logger.exception('Postgres Error during process tutor application message => retried')
         connection.close()
