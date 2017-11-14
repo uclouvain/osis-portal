@@ -106,9 +106,9 @@ class TestTutorApplicationEpc(TestCase):
         self.assertEqual(epc_message['lecturing_allocation'], application['charge_lecturing_asked'])
         self.assertEqual(epc_message['practical_allocation'], application['charge_practical_asked'])
         self.assertEqual(epc_message['tutor'], '2089590559')
-        self.assertIsInstance(epc_message['learning_unit_year'], dict)
-        self.assertEqual(epc_message['learning_unit_year']['reference'], '35654987')
-        self.assertEqual(epc_message['learning_unit_year']['year'], 2017)
+        self.assertIsInstance(epc_message['learning_container_year'], dict)
+        self.assertEqual(epc_message['learning_container_year']['reference'], '35654987')
+        self.assertEqual(epc_message['learning_container_year']['year'], 2017)
 
     def test_process_message_delete_operation(self):
         person = self.tutor.person

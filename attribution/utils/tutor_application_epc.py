@@ -72,7 +72,7 @@ def _convert_to_epc_application(global_id, application):
         'lecturing_allocation': str(application.get('charge_lecturing_asked', 0)),
         'practical_allocation': str(application.get('charge_practical_asked', 0)),
         'tutor': _extract_tutor_epc_info(global_id),
-        'learning_unit_year': _extract_learning_container_year_epc_info(acronym, year)
+        'learning_container_year': _extract_learning_container_year_epc_info(acronym, year)
     }
 
 
