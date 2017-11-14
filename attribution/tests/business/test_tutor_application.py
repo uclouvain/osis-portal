@@ -138,6 +138,32 @@ class TutorApplicationTest(TestCase):
         self.assertEqual(application_updated.get('charge_lecturing_asked'), Decimal(0))
         self.assertEqual(application_updated.get('charge_practical_asked'), Decimal(10))
 
+    def test_get_application_list_with_none_lecturing_charge(self):
+        new_tutor = TutorFactory(person=PersonFactory(global_id="59898988"))
+        application_to_create = _get_application_example(self.lbir1200_2017, None, "15")
+        global_id = new_tutor.person.global_id
+        tutor_application.create_or_update_application(global_id, application_to_create)
+        application_list = tutor_application.get_application_list(global_id, self.academic_year)
+
+        application_created = application_list[0]
+        self.assertTrue(application_created)
+        self.assertEqual(application_created.get('acronym'), self.lbir1200_2017.acronym)
+        self.assertEqual(application_created.get('charge_lecturing_asked'), Decimal(0))
+        self.assertEqual(application_created.get('charge_practical_asked'), Decimal(15))
+
+    def test_get_application_list_with_none_practical_charge(self):
+        new_tutor = TutorFactory(person=PersonFactory(global_id="59898988"))
+        application_to_create = _get_application_example(self.lbir1200_2017, "15", None)
+        global_id = new_tutor.person.global_id
+        tutor_application.create_or_update_application(global_id, application_to_create)
+        application_list = tutor_application.get_application_list(global_id, self.academic_year)
+
+        application_created = application_list[0]
+        self.assertTrue(application_created)
+        self.assertEqual(application_created.get('acronym'), self.lbir1200_2017.acronym)
+        self.assertEqual(application_created.get('charge_lecturing_asked'), Decimal(15))
+        self.assertEqual(application_created.get('charge_practical_asked'), Decimal(0))
+
     def test_pending_flag(self):
         global_id = self.tutor.person.global_id
         application_searched = tutor_application.get_application(global_id, self.lbir1200_2017)
