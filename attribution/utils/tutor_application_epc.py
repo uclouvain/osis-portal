@@ -87,6 +87,7 @@ def _extract_learning_container_year_epc_info(acronym, year):
         if len(external_ids) >= 2:
             learning_container_year_info['reference'] = external_ids[0]
             learning_container_year_info['year'] = year
+            learning_container_year_info['acronym'] = acronym
     return learning_container_year_info
 
 
@@ -110,8 +111,8 @@ def process_message(body):
 
         operation = application.get('operation')
         global_id = application.get('global_id')
-        acronym = application.get('acronym')
-        year = application.get('year')
+        acronym = application.get('learning_container_year', {}).get('acronym')
+        year = application.get('learning_container_year', {}).get('year')
         if not (global_id and acronym and year and operation):
             logger.error('Error during process tutor application message. Missing mandatory data')
             return False
@@ -127,6 +128,6 @@ def process_message(body):
         queue_exception_logger.exception('Postgres Error during process tutor application message => retried')
         connection.close()
         time.sleep(1)
-        process_message(json_data)
+        process_message(body)
     except Exception:
         logger.exception('(Not PostgresError) during process tutor application message. Cannot update ')
