@@ -358,3 +358,16 @@ msgstr "No attribution renewed"
 
 msgid "wait_validation_epc"
 msgstr "Wait validation"
+
+msgid "charge_lecturing_asked_or_charge_practical_asked_must_be_filled"
+msgstr "Lecturing charge or practical charge must be filled"
+
+msgid "cancel"
+msgstr "cancel"
+
+msgid "volume_next_year_lower_than_current"
+msgstr "Volume vacant of next year is lower than currently affected"
+
+msgid "cannot_renew_zero_volume"
+msgstr "Cannot renew zero volume"
+

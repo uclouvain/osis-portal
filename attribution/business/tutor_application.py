@@ -240,8 +240,8 @@ def _order_by_pending_and_acronym(application_list):
 
 def _format_str_volume_to_decimal(application_list):
     for application in application_list:
-        if 'charge_lecturing_asked' in application:
+        if 'charge_lecturing_asked' in application and application['charge_lecturing_asked']:
             application['charge_lecturing_asked'] = Decimal(application['charge_lecturing_asked'])
-        if 'charge_practical_asked' in application:
+        if 'charge_practical_asked' in application and application['charge_practical_asked']:
             application['charge_practical_asked'] = Decimal(application['charge_practical_asked'])
     return application_list
