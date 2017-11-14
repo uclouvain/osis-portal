@@ -38,6 +38,7 @@ from base import models as mdl_base
 
 DELETE_OPERATION = "delete"
 UPDATE_OPERATION = "update"
+ERROR_EPC_FIELD = ""
 LEARNING_CONTAINER_YEAR_PREFIX_EXTERNAL_ID = "osis.learning_container_year_"
 TUTOR_PREFIX_EXTERNAL_ID = "osis.tutor_"
 
@@ -71,7 +72,7 @@ def _convert_to_epc_application(global_id, application):
         'lecturing_allocation': str(application.get('charge_lecturing_asked', 0)),
         'practical_allocation': str(application.get('charge_practical_asked', 0)),
         'tutor': _extract_tutor_epc_info(global_id),
-        'learning_unit_year': _extract_learning_container_year_epc_info(acronym, year)
+        'learning_container_year': _extract_learning_container_year_epc_info(acronym, year)
     }
 
 
@@ -86,7 +87,7 @@ def _extract_learning_container_year_epc_info(acronym, year):
         external_ids = external_id.split('_')
         if len(external_ids) >= 2:
             learning_container_year_info['reference'] = external_ids[0]
-            learning_container_year_info['year'] = external_ids[1]
+            learning_container_year_info['year'] = year
     return learning_container_year_info
 
 
@@ -110,6 +111,12 @@ def process_message(json_data):
 
     try:
         application = json.loads(json_data)
+
+        # Check error in response from epc
+        error_epc = application.get(ERROR_EPC_FIELD)
+        if error_epc:
+            logger.error('Error during processing tutor application in EPC: {} \n JSON: {}'.format(error_epc, str(json_data)))
+            return False
 
         operation = application.get('operation')
         global_id = application.get('global_id')

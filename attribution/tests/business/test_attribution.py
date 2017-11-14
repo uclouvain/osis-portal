@@ -51,13 +51,13 @@ class AttributionTest(TestCase):
 
         # Creation Json which will be store on attribution
         attributions = _get_attributions_dict()
-        AttributionNewFactory(global_id=self.person.global_id,
-                              attributions=attributions)
+        self.attrib = AttributionNewFactory(global_id=self.person.global_id,
+                                            attributions=attributions)
 
     def test_get_attribution_list(self):
         attribution_list = attribution.get_attribution_list(self.person.global_id,
                                                             self.academic_year)
-        self.assertEqual(len(attribution_list), 2)
+        self.assertEqual(len(attribution_list), 3)
 
         academic_year_2016 = AcademicYear.objects.get(year=2016)
         attribution_list = attribution.get_attribution_list(self.person.global_id,
@@ -72,17 +72,18 @@ class AttributionTest(TestCase):
     def test_get_attribution_order(self):
         attribution_list = attribution.get_attribution_list(self.person.global_id,
                                                             self.academic_year)
-        self.assertEqual(len(attribution_list), 2)
-        self.assertEqual(attribution_list[0]['acronym'], "LBIR1200")
-        self.assertEqual(attribution_list[1]['acronym'], "LBIR1300")
+        self.assertEqual(len(attribution_list), 3)
+        self.assertEqual(attribution_list[0]['acronym'], "LAGRO1530")
+        self.assertEqual(attribution_list[1]['acronym'], "LBIR1200")
+        self.assertEqual(attribution_list[2]['acronym'], "LBIR1300")
 
     def test_computes_volumes_total(self):
         attribution_list = attribution.get_attribution_list(self.person.global_id,
                                                             self.academic_year)
         volumes_total = attribution.get_volumes_total(attribution_list)
         self.assertTrue(volumes_total)
-        self.assertEqual(volumes_total.get(learning_component_year_type.LECTURING), Decimal(33))
-        self.assertEqual(volumes_total.get(learning_component_year_type.PRACTICAL_EXERCISES), Decimal(16.5))
+        self.assertEqual(volumes_total.get(learning_component_year_type.LECTURING), Decimal(53.5))
+        self.assertEqual(volumes_total.get(learning_component_year_type.PRACTICAL_EXERCISES), Decimal(21.5))
 
     def test_append_team_and_volume_delcared_vacant(self):
         #Create Container Year and component
@@ -92,29 +93,76 @@ class AttributionTest(TestCase):
         _create_learning_container_with_components(acronym="LBIR1200", academic_year=self.academic_year,
                                                    volume_lecturing=Decimal(30),
                                                    volume_practical_exercices=Decimal(75))
+        _create_learning_container_with_components("LAGRO1530", self.academic_year, Decimal(30), Decimal(30))
+
         attribution_list = attribution.get_attribution_list(self.person.global_id,
                                                             self.academic_year)
-        self.assertEqual(attribution_list[0]['acronym'], "LBIR1200")
+        self.assertEqual(attribution_list[0]['acronym'], "LAGRO1530")
         self.assertEqual(attribution_list[0]['volume_lecturing_vacant'], Decimal(30))
-        self.assertEqual(attribution_list[0]['volume_practical_exercices_vacant'], Decimal(75))
+        self.assertEqual(attribution_list[0]['volume_practical_exercices_vacant'], Decimal(30))
         self.assertEqual(attribution_list[0]['team'], False)
-        self.assertEqual(attribution_list[1]['acronym'], "LBIR1300")
-        self.assertEqual(attribution_list[1]['volume_lecturing_vacant'], Decimal(15.5))
-        self.assertEqual(attribution_list[1]['volume_practical_exercices_vacant'], Decimal(5))
+        self.assertEqual(attribution_list[1]['acronym'], "LBIR1200")
+        self.assertEqual(attribution_list[1]['volume_lecturing_vacant'], Decimal(30))
+        self.assertEqual(attribution_list[1]['volume_practical_exercices_vacant'], Decimal(75))
         self.assertEqual(attribution_list[1]['team'], False)
+        self.assertEqual(attribution_list[2]['acronym'], "LBIR1300")
+        self.assertEqual(attribution_list[2]['volume_lecturing_vacant'], Decimal(15.5))
+        self.assertEqual(attribution_list[2]['volume_practical_exercices_vacant'], Decimal(5))
+        self.assertEqual(attribution_list[2]['team'], False)
 
     def test_append_start_end_academic_year(self):
         attribution_list = attribution.get_attribution_list(self.person.global_id,
                                                             self.academic_year)
-        self.assertEqual(attribution_list[0]['acronym'], "LBIR1200")
+        self.assertEqual(attribution_list[0]['acronym'], "LAGRO1530")
         self.assertTrue(attribution_list[0]['start_academic_year'])
-        self.assertEqual(attribution_list[0]['start_academic_year'].year, 2013)
-        self.assertRaises(KeyError, lambda: attribution_list[0]['end_academic_year']) # No end year
+        self.assertEqual(attribution_list[0]['start_academic_year'].year, 2015)
+        self.assertEqual(attribution_list[0]['end_academic_year'].year, 2017)
 
-        self.assertEqual(attribution_list[1]['acronym'], "LBIR1300")
+        self.assertEqual(attribution_list[1]['acronym'], "LBIR1200")
         self.assertTrue(attribution_list[1]['start_academic_year'])
-        self.assertEqual(attribution_list[1]['start_academic_year'].year, 2015)
-        self.assertEqual(attribution_list[1]['end_academic_year'].year,2020)
+        self.assertEqual(attribution_list[1]['start_academic_year'].year, 2013)
+        self.assertRaises(KeyError, lambda: attribution_list[1]['end_academic_year']) # No end year
+
+        self.assertEqual(attribution_list[2]['acronym'], "LBIR1300")
+        self.assertTrue(attribution_list[2]['start_academic_year'])
+        self.assertEqual(attribution_list[2]['start_academic_year'].year, 2015)
+        self.assertEqual(attribution_list[2]['end_academic_year'].year, 2020)
+
+    def test_get_attribution_list_about_to_expire(self):
+        _create_learning_container_with_components("LAGRO1530", self.academic_year, Decimal(30), Decimal(30))
+        next_academic_year = AcademicYear.objects.get(year=self.academic_year.year + 1)
+        _create_learning_container_with_components("LAGRO1530", next_academic_year, Decimal(30), Decimal(30))
+        attribution_list_about_to_expired = attribution.get_attribution_list_about_to_expire(self.person.global_id,
+                                                                                             self.academic_year)
+        self.assertEqual(len(attribution_list_about_to_expired), 1)
+        self.assertTrue(attribution_list_about_to_expired[0]['is_renewable'])
+        self.assertIsNone(attribution_list_about_to_expired[0]['not_renewable_reason'])
+
+    def test_get_attribution_list_about_to_expire_volume_lower(self):
+        _create_learning_container_with_components("LAGRO1530", self.academic_year, Decimal(30), Decimal(30))
+        next_academic_year = AcademicYear.objects.get(year=self.academic_year.year + 1)
+        _create_learning_container_with_components("LAGRO1530", next_academic_year, Decimal(1), Decimal(30))
+        attribution_list_about_to_expired = attribution.get_attribution_list_about_to_expire(self.person.global_id,
+                                                                                             self.academic_year)
+        self.assertEqual(len(attribution_list_about_to_expired), 1)
+        self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
+        self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'], 'volume_next_year_lower_than_current')
+
+    def test_get_attribution_list_about_to_expire_volume_zero_error(self):
+        self.attrib.attributions = [
+            {'year': 2017, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00',
+             'LECTURING': '0', 'PRACTICAL_EXERCISES': '0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': 2017}
+        ]
+        self.attrib.save()
+        _create_learning_container_with_components("LAGRO1530", self.academic_year, Decimal(30), Decimal(30))
+        next_academic_year = AcademicYear.objects.get(year=self.academic_year.year + 1)
+        _create_learning_container_with_components("LAGRO1530", next_academic_year, Decimal(30), Decimal(30))
+        attribution_list_about_to_expired = attribution.get_attribution_list_about_to_expire(self.person.global_id,
+                                                                                             self.academic_year)
+        self.assertEqual(len(attribution_list_about_to_expired), 1)
+        self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
+        self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'], 'cannot_renew_zero_volume')
+
 
 
 def _create_multiple_academic_year():
@@ -145,5 +193,7 @@ def _get_attributions_dict():
         {'year': 2017, 'acronym': 'LBIR1300', 'title': 'Chimie complexe volume 2', 'weight': '7.50',
          'LECTURING': '12.5', 'PRACTICAL_EXERCISES': '9.5', 'function': 'HOLDER', 'start_year': 2015, 'end_year': 2020},
         {'year': 2017, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00', 'LECTURING': '20.5',
-         'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER','start_year': 2013}
+         'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER','start_year': 2013},
+        {'year': 2017, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00', 'LECTURING': '20.5',
+         'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': 2017}
     ]

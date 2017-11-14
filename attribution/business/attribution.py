@@ -42,7 +42,7 @@ def get_attribution_list(global_id, academic_year=None):
     if attrib and attrib.attributions:
         attributions = _filter_by_years(attrib.attributions, academic_year)
         attributions = _format_str_volume_to_decimal(attributions)
-        attributions = _append_team_and_volume_declared_vacant(attributions)
+        attributions = _append_team_and_volume_declared_vacant(attributions, academic_year)
         attributions = _append_start_and_end_academic_year(attributions)
         return _order_by_acronym_and_function(attributions)
     return []
@@ -90,9 +90,10 @@ def get_attribution_vacant(learning_container_year):
     return None
 
 
-def _append_team_and_volume_declared_vacant(attribution_list):
+def _append_team_and_volume_declared_vacant(attribution_list, academic_year):
     acronym_list = [attribution.get('acronym') for attribution in attribution_list]
-    l_container_ids = list(mdl_base.learning_container_year.search(acronym=acronym_list).values_list('id', flat=True))
+    l_container_ids = list(mdl_base.learning_container_year.search(acronym=acronym_list, academic_year=academic_year)
+                                                           .values_list('id', flat=True))
     l_components = mdl_base.learning_component_year.search(learning_container_year=l_container_ids)
 
     for attribution in attribution_list:
@@ -209,21 +210,31 @@ def _resolve_attribution_vacant_next_year(attribution_list, academic_year):
 
 def _append_is_renewable(attribution_with_vacant_list):
     for attribution in attribution_with_vacant_list:
-        attribution['is_renewable'] = _is_renewable(attribution)
-        attribution['not_renewable_reason'] = 'volume_next_year_lower' if attribution['is_renewable'] else None
+        attribution['not_renewable_reason'] = _check_is_renewable(attribution)
+        attribution['is_renewable'] = (attribution['not_renewable_reason'] is None)
     return attribution_with_vacant_list
 
 
-def _is_renewable(attribution_with_vacant_next_year):
+def _check_is_renewable(attribution_with_vacant_next_year):
+    """
+    This function check if the volume of attribution [current year] is lower or equals to attribution vacant next year
+    :param attribution_with_vacant_next_year:
+    :return: error code if not valid, None if no error
+    """
     next_year_attribution_vacant = attribution_with_vacant_next_year['attribution_vacant']
 
     current_volume_lecturing = attribution_with_vacant_next_year.get(learning_component_year_type.LECTURING, 0)
+    current_volume_practical_exercices = attribution_with_vacant_next_year.get(learning_component_year_type.PRACTICAL_EXERCISES, 0)
+
+    if current_volume_lecturing == current_volume_practical_exercices == 0:
+        return 'cannot_renew_zero_volume'
+
     next_volume_lecturing = next_year_attribution_vacant.get(learning_component_year_type.LECTURING, 0)
     if current_volume_lecturing > next_volume_lecturing:
-        return False
+        return 'volume_next_year_lower_than_current'
 
-    current_volume_practical_exercices = attribution_with_vacant_next_year.get(learning_component_year_type.PRACTICAL_EXERCISES, 0)
     next_volume_practical_exercices = next_year_attribution_vacant.get(learning_component_year_type.PRACTICAL_EXERCISES, 0)
     if current_volume_practical_exercices > next_volume_practical_exercices:
-        return False
-    return True
+        return 'volume_next_year_lower_than_current'
+
+    return None
