@@ -97,8 +97,10 @@ class TestTutorApplicationEpc(TestCase):
         body = {
             'operation': tutor_application_epc.DELETE_OPERATION,
             'global_id': person.global_id,
-            'acronym': 'LBIR1200',
-            'year': 2017
+            'learning_container_year': {
+                'acronym': 'LBIR1200',
+                'year': 2017
+            }
         }
         body_encoded = bytearray(json.dumps(body), "utf-8")
         tutor_application_epc.process_message(body_encoded)
@@ -120,8 +122,10 @@ class TestTutorApplicationEpc(TestCase):
         body = {
             'operation': tutor_application_epc.UPDATE_OPERATION,
             'global_id': person.global_id,
-            'acronym': 'LBIR1200',
-            'year': 2017
+            'learning_container_year': {
+                'acronym': 'LBIR1200',
+                'year': 2017
+            }
         }
         body_encoded = bytearray(json.dumps(body), "utf-8")
         tutor_application_epc.process_message(body_encoded)
@@ -144,8 +148,10 @@ class TestTutorApplicationEpc(TestCase):
         body = {
             'operation': tutor_application_epc.UPDATE_OPERATION,
             'global_id': person.global_id,
-            'acronym': 'LBIR1200',
-            'year': 2017,
+            'learning_container_year': {
+                'acronym': 'LBIR1200',
+                'year': 2017
+            },
             tutor_application_epc.ERROR_EPC_FIELD: 'An error occured in EPC'
         }
         body_encoded = bytearray(json.dumps(body), "utf-8")
