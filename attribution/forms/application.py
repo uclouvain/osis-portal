@@ -35,9 +35,9 @@ MAXIMUM_REMARK_LENGTH = 250
 
 
 class ApplicationForm(BootstrapForm):
-    charge_lecturing_asked = forms.DecimalField(max_digits=5, decimal_places=1, initial=0, localize=True,
+    charge_lecturing_asked = forms.DecimalField(max_digits=5, decimal_places=1, initial=0, required=False, localize=True,
                                                 validators=[MinValueValidator(0)])
-    charge_practical_asked = forms.DecimalField(max_digits=5, decimal_places=1, initial=0, localize=True,
+    charge_practical_asked = forms.DecimalField(max_digits=5, decimal_places=1, initial=0, required=False, localize=True,
                                                 validators=[MinValueValidator(0)])
     course_summary = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False)
     remark = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False, max_length=MAXIMUM_REMARK_LENGTH)
