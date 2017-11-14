@@ -76,36 +76,17 @@ class TestTutorApplicationEpc(TestCase):
         self.assertIsInstance(learning_container_info, dict)
         self.assertFalse(learning_container_info)
 
-    def test_extract_tutor_epc_info(self):
-        person = self.tutor.person
-        tutor_info = tutor_application_epc._extract_tutor_epc_info(person.global_id)
-        self.assertEqual(tutor_info, '2089590559')
-
-    def test_extract_tutor_epc_info_with_external_id_empty(self):
-        person = self.tutor.person
-        self.tutor.external_id = None
-        self.tutor.save()
-        tutor_info = tutor_application_epc._extract_tutor_epc_info(person.global_id)
-        self.assertFalse(tutor_info)
-
-    def test_extract_tutor_epc_info_with_wrong_global_id(self):
-        tutor_info = tutor_application_epc._extract_tutor_epc_info('000000088')
-        self.assertFalse(tutor_info)
-
     def test_convert_to_epc_application(self):
         person = self.tutor.person
         application = _get_application_example(self.lbir1200, '30.5', '40.5')
 
-        epc_message = tutor_application_epc._convert_to_epc_application(
-            global_id=person.global_id,
-            application=application)
+        epc_message = tutor_application_epc._convert_to_epc_application(application=application)
 
         self.assertTrue(epc_message)
         self.assertEqual(epc_message['remark'], application['remark'])
         self.assertEqual(epc_message['course_summary'], application['course_summary'])
         self.assertEqual(epc_message['lecturing_allocation'], application['charge_lecturing_asked'])
         self.assertEqual(epc_message['practical_allocation'], application['charge_practical_asked'])
-        self.assertEqual(epc_message['tutor'], '2089590559')
         self.assertIsInstance(epc_message['learning_container_year'], dict)
         self.assertEqual(epc_message['learning_container_year']['reference'], '35654987')
         self.assertEqual(epc_message['learning_container_year']['year'], 2017)
@@ -119,7 +100,8 @@ class TestTutorApplicationEpc(TestCase):
             'acronym': 'LBIR1200',
             'year': 2017
         }
-        tutor_application_epc.process_message(json.dumps(body))
+        body_encoded = bytearray(json.dumps(body), "utf-8")
+        tutor_application_epc.process_message(body_encoded)
         # Check if the application is removed
         self.attribution.refresh_from_db()
         self.assertEqual(len(self.attribution.applications), 1)
@@ -141,12 +123,38 @@ class TestTutorApplicationEpc(TestCase):
             'acronym': 'LBIR1200',
             'year': 2017
         }
-        tutor_application_epc.process_message(json.dumps(body))
+        body_encoded = bytearray(json.dumps(body), "utf-8")
+        tutor_application_epc.process_message(body_encoded)
         # Check if the application is removed
         self.attribution.refresh_from_db()
         applications_not_pending = [application for application in self.attribution.applications if
                                     not "pending" in application]
         self.assertEqual(len(applications_not_pending), 1)
+
+
+    def test_process_message_with_error_operation(self):
+        person = self.tutor.person
+        _set_all_application_in_pending_state(self.attribution.applications)
+        self.attribution.save()
+        ## Check if all are in pending
+        self.assertEqual(len(self.attribution.applications), 2)
+        self.assertEqual(self.attribution.applications[0]['pending'], tutor_application_epc.UPDATE_OPERATION)
+        self.assertEqual(self.attribution.applications[1]['pending'], tutor_application_epc.UPDATE_OPERATION)
+
+        body = {
+            'operation': tutor_application_epc.UPDATE_OPERATION,
+            'global_id': person.global_id,
+            'acronym': 'LBIR1200',
+            'year': 2017,
+            tutor_application_epc.ERROR_EPC_FIELD: 'An error occured in EPC'
+        }
+        body_encoded = bytearray(json.dumps(body), "utf-8")
+        tutor_application_epc.process_message(body_encoded)
+        # Check if the application is removed
+        self.attribution.refresh_from_db()
+        applications_not_pending = [application for application in self.attribution.applications if
+                                    not "pending" in application]
+        self.assertEqual(len(applications_not_pending), 0) # No changed
 
 
 def _get_application_example(learning_container_year, volume_lecturing, volume_practical_exercice, flag=None):

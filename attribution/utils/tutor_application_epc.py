@@ -38,7 +38,7 @@ from base import models as mdl_base
 
 DELETE_OPERATION = "delete"
 UPDATE_OPERATION = "update"
-ERROR_EPC_FIELD = ""
+ERROR_EPC_FIELD = "error"
 LEARNING_CONTAINER_YEAR_PREFIX_EXTERNAL_ID = "osis.learning_container_year_"
 TUTOR_PREFIX_EXTERNAL_ID = "osis.tutor_"
 
@@ -52,7 +52,7 @@ def send_message(operation, global_id, application):
 
     queue_name = settings.QUEUES.get('QUEUES_NAME', {}).get('APPLICATION_REQUEST')
     if queue_name:
-        message_to_send = _convert_to_epc_application(global_id, application)
+        message_to_send = _convert_to_epc_application(application)
         message_to_send.update({
             'operation': operation,
             'global_id': global_id
@@ -62,7 +62,7 @@ def send_message(operation, global_id, application):
     return False
 
 
-def _convert_to_epc_application(global_id, application):
+def _convert_to_epc_application(application):
     acronym = application.get('acronym')
     year = application.get('year')
 
@@ -71,7 +71,6 @@ def _convert_to_epc_application(global_id, application):
         'course_summary': application.get('course_summary'),
         'lecturing_allocation': str(application.get('charge_lecturing_asked', 0)),
         'practical_allocation': str(application.get('charge_practical_asked', 0)),
-        'tutor': _extract_tutor_epc_info(global_id),
         'learning_container_year': _extract_learning_container_year_epc_info(acronym, year)
     }
 
@@ -91,17 +90,7 @@ def _extract_learning_container_year_epc_info(acronym, year):
     return learning_container_year_info
 
 
-def _extract_tutor_epc_info(global_id):
-    # Example of external_id osis.osis.tutor_00025561
-    tutor = mdl_base.tutor.find_by_person_global_id(global_id)
-    if tutor and tutor.external_id:
-        external_id = tutor.external_id.replace(TUTOR_PREFIX_EXTERNAL_ID, '')
-        external_ids = external_id.split('_')
-        return external_ids[0]
-    return None
-
-
-def process_message(json_data):
+def process_message(body):
     """
         Callback of APPLICATION_RESPONSE queue
     :param json_data:
@@ -110,6 +99,7 @@ def process_message(json_data):
     from attribution.business import tutor_application
 
     try:
+        json_data = body.decode("utf-8")
         application = json.loads(json_data)
 
         # Check error in response from epc
