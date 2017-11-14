@@ -34,8 +34,8 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 class TutorAdmin(SerializableModelAdmin):
-    list_display = ('person', 'changed')
-    fieldsets = ((None, {'fields': ('person',)}),)
+    list_display = ('external_id', 'person', 'changed')
+    fieldsets = ((None, {'fields': ('external_id','person',)}),)
     raw_id_fields = ('person', )
     search_fields = ['person__first_name', 'person__last_name']
 
