@@ -62,7 +62,7 @@ class TestTutorApplicationEpc(TestCase):
         learning_container_info = tutor_application_epc._extract_learning_container_year_epc_info('LBIR1200', 2017)
         self.assertIsInstance(learning_container_info, dict)
         self.assertEqual(learning_container_info['reference'], '35654987')
-        self.assertEqual(learning_container_info['year'], '2017')
+        self.assertEqual(learning_container_info['year'], 2017)
 
     def test_extract_learning_container_year_epc_info_empty(self):
         learning_container_info = tutor_application_epc._extract_learning_container_year_epc_info('LBIR1250', 2017)
@@ -108,7 +108,7 @@ class TestTutorApplicationEpc(TestCase):
         self.assertEqual(epc_message['tutor'], '2089590559')
         self.assertIsInstance(epc_message['learning_unit_year'], dict)
         self.assertEqual(epc_message['learning_unit_year']['reference'], '35654987')
-        self.assertEqual(epc_message['learning_unit_year']['year'], '2017')
+        self.assertEqual(epc_message['learning_unit_year']['year'], 2017)
 
     def test_process_message_delete_operation(self):
         person = self.tutor.person

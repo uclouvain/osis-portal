@@ -51,14 +51,12 @@
                 {% csrf_token %}
 
                 {% if form.non_field_errors %}
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="alert alert-danger"  role="alert">
-                            {% for error in form.non_field_errors %}
-                                 {{error}}
-                            {% endfor %}
-                        </div>
-                    </div>
+                <div class="alert alert-danger"  role="alert">
+                    <ul>
+                    {% for error in form.non_field_errors %}
+                         <li> {{error}} </li>
+                    {% endfor %}
+                     </ul>
                 </div>
                 {% endif %}
 
