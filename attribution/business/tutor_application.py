@@ -33,7 +33,6 @@ from attribution import models as mdl_attribution
 from attribution.business.attribution import get_attribution_list
 from attribution.utils import tutor_application_epc
 from base import models as mdl_base
-from base.models.enums import learning_component_year_type
 from osis_common.messaging import message_config, send_message as message_service
 
 
@@ -90,7 +89,7 @@ def create_or_update_application(global_id, application):
             if can_be_updated(application_found):
                 return _update_application(global_id, application)
             else:
-                raise ValueError("applications_in_pending_state")
+                raise ValueError(_("applications_in_pending_state"))
     return _create_application(global_id, application)
 
 
@@ -99,7 +98,7 @@ def set_pending_flag(global_id, application, flag=None):
         application['pending'] = flag
         return _update_application(global_id, application)
     else:
-        raise ValueError("applications_in_pending_state")
+        raise ValueError(_("applications_in_pending_state"))
 
 
 def validate_application(global_id, acronym, year):

@@ -373,3 +373,6 @@ msgstr "Le volume vacant de l'année suivante est inférieur à celui actuelleme
 
 msgid "cannot_renew_zero_volume"
 msgstr "Impossible de renouveler un volume nul"
+
+msgid "applications_in_pending_state"
+msgstr "La candidature est en attente de validation."

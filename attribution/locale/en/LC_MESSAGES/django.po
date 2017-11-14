@@ -371,3 +371,5 @@ msgstr "Volume vacant of next year is lower than currently affected"
 msgid "cannot_renew_zero_volume"
 msgstr "Cannot renew zero volume"
 
+msgid "applications_in_pending_state"
+msgstr "Applications in pending state"
