@@ -163,6 +163,27 @@ class AttributionTest(TestCase):
         self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
         self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'], 'cannot_renew_zero_volume')
 
+    def test_get_attribution_list_about_to_expire_already_applied(self):
+        _create_learning_container_with_components("LAGRO1530", self.academic_year, Decimal(30), Decimal(30))
+        next_academic_year = AcademicYear.objects.get(year=self.academic_year.year + 1)
+        _create_learning_container_with_components("LAGRO1530", next_academic_year, Decimal(30), Decimal(30))
+        application = [{
+            'remark': 'This is the remarks',
+            'course_summary': 'This is the course summary',
+            'charge_lecturing_asked': 30,
+            'charge_practical_asked': 30,
+            'acronym': "LAGRO1530",
+            'year': next_academic_year.year
+        }]
+        self.attrib.applications = application
+        self.attrib.save()
+
+        attribution_list_about_to_expired = attribution.get_attribution_list_about_to_expire(self.person.global_id,
+                                                                                             self.academic_year)
+
+        self.assertEqual(len(attribution_list_about_to_expired), 1)
+        self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
+        self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'], 'already_applied')
 
 
 def _create_multiple_academic_year():

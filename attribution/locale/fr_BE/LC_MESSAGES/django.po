@@ -376,3 +376,6 @@ msgstr "Impossible de renouveler un volume nul"
 
 msgid "applications_in_pending_state"
 msgstr "La candidature est en attente de validation."
+
+msgid "already_applied"
+msgstr "Une candidature a déjà été soumise"

@@ -30,7 +30,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
 from attribution import models as mdl_attribution
-from attribution.business.attribution import get_attribution_list
 from attribution.utils import tutor_application_epc
 from base import models as mdl_base
 from osis_common.messaging import message_config, send_message as message_service
@@ -59,8 +58,9 @@ def get_application(global_id, learning_container_year):
 
 
 def mark_attribution_already_applied(attributions_vacant, global_id, application_academic_year):
+    import attribution.business.attribution
     applications = get_application_list(global_id, application_academic_year)
-    attributions = get_attribution_list(global_id, application_academic_year)
+    attributions = attribution.business.attribution.get_attribution_list(global_id, application_academic_year)
 
     for attribution in attributions_vacant:
         already_applied = next((True for application in applications if
