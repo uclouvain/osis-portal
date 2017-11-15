@@ -373,3 +373,6 @@ msgstr "Cannot renew zero volume"
 
 msgid "applications_in_pending_state"
 msgstr "Applications in pending state"
+
+msgid "already_applied"
+msgstr "Already applied"

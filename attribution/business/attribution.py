@@ -28,6 +28,7 @@ from itertools import chain
 
 import collections
 
+import attribution.business.tutor_application
 from attribution.models.enums import function
 from base import models as mdl_base
 from attribution import models as mdl_attribution
@@ -167,13 +168,14 @@ def get_attribution_list_about_to_expire(global_id, academic_year=None):
         academic_year = mdl_base.academic_year.current_academic_year()
 
     attribution_list = get_attribution_list(global_id, academic_year)
+    application_list = attribution.business.tutor_application.get_application_list(global_id)
     if attribution_list:
         # Remove application which are not about to expire
         attribution_list = _filter_attribution_about_to_expire(attribution_list, academic_year)
         # Append attribution vacant for next academic year
         attribution_list = _resolve_attribution_vacant_next_year(attribution_list, academic_year)
         # Mark if the attribution can be renewable
-        attribution_list = _append_is_renewable(attribution_list)
+        attribution_list = _append_is_renewable(attribution_list, application_list)
         return attribution_list
     return None
 
@@ -208,17 +210,18 @@ def _resolve_attribution_vacant_next_year(attribution_list, academic_year):
     return [attrib for attrib in attribution_list if attrib.get('attribution_vacant')]
 
 
-def _append_is_renewable(attribution_with_vacant_list):
+def _append_is_renewable(attribution_with_vacant_list, application_list):
     for attribution in attribution_with_vacant_list:
-        attribution['not_renewable_reason'] = _check_is_renewable(attribution)
+        attribution['not_renewable_reason'] = _check_is_renewable(attribution, application_list)
         attribution['is_renewable'] = (attribution['not_renewable_reason'] is None)
     return attribution_with_vacant_list
 
 
-def _check_is_renewable(attribution_with_vacant_next_year):
+def _check_is_renewable(attribution_with_vacant_next_year, application_list):
     """
     This function check if the volume of attribution [current year] is lower or equals to attribution vacant next year
     :param attribution_with_vacant_next_year:
+    :param application_list:
     :return: error code if not valid, None if no error
     """
     next_year_attribution_vacant = attribution_with_vacant_next_year['attribution_vacant']
@@ -237,4 +240,12 @@ def _check_is_renewable(attribution_with_vacant_next_year):
     if current_volume_practical_exercices > next_volume_practical_exercices:
         return 'volume_next_year_lower_than_current'
 
+    if _has_already_applied(attribution_with_vacant_next_year, application_list):
+        return 'already_applied'
+
     return None
+
+
+def _has_already_applied(attribution_with_vacant_next_year, application_list):
+    return any(True if application['acronym'] == attribution_with_vacant_next_year.get('acronym') else False
+               for application in application_list)
