@@ -66,16 +66,11 @@ def _convert_to_epc_application(application):
     acronym = application.get('acronym')
     year = application.get('year')
 
-    normalized_charge_lecturing_asked = \
-        application.get('charge_lecturing_asked') if application.get('charge_lecturing_asked') else 0
-    normalized_charge_practical_asked = \
-        application.get('charge_practical_asked') if application.get('charge_practical_asked') else 0
-
     return {
         'remark': application.get('remark'),
         'course_summary': application.get('course_summary'),
-        'lecturing_allocation': str(normalized_charge_lecturing_asked),
-        'practical_allocation': str(normalized_charge_practical_asked),
+        'lecturing_allocation': str(application.get('charge_lecturing_asked', 0)),
+        'practical_allocation': str(application.get('charge_practical_asked')),
         'learning_container_year': _extract_learning_container_year_epc_info(acronym, year)
     }
 
