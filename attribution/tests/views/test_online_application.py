@@ -54,7 +54,6 @@ class TestOnlineApplication(TestCase):
         person = PersonFactory(global_id="578945612", user=user)
         self.tutor = TutorFactory(person=person)
 
-
         # Add permission and log into app
         add_permission(user, "can_access_attribution_application")
         self.client.force_login(user)
@@ -118,7 +117,7 @@ class TestOnlineApplication(TestCase):
         self.assertEqual(len(context['attributions_about_to_expire']), 1)
         self.assertEqual(context['attributions_about_to_expire'][0]['acronym'], self.lbir1300_current.acronym)
 
-    def test_applictions_overview_post_method_not_allowed(self):
+    def test_applications_overview_post_method_not_allowed(self):
         url = reverse('applications_overview')
         response = self.client.post(url)
         self.assertEqual(response.status_code, 405)
@@ -148,7 +147,7 @@ class TestOnlineApplication(TestCase):
         # Check if LAGRO1600 have the boolean already applied
         self.assertTrue((next(attrib for attrib in context['attributions_vacant']
                               if attrib.get('acronym') == self.lagro1600_next.acronym and
-                                  attrib.get('already_applied')), False))
+                              attrib.get('already_applied')), False))
 
     def test_renew_applications(self):
         url = reverse('renew_applications')
@@ -224,6 +223,18 @@ class TestOnlineApplication(TestCase):
         self.assertTrue(context.get('form'))
         form = context['form']
         self.assertTrue(form.errors)  # Not valid because not number entered
+
+    def test_post_edit_application_form_with_empty_lecturing_value(self):
+        url = reverse('create_or_update_tutor_application',
+                      kwargs={'learning_container_year_id': self.lagro1600_next.id})
+        post_data = _get_application_example(self.lagro1600_next, "15", "")
+        response = self.client.post(url, data=post_data)
+        self.assertEqual(response.status_code, 302)
+        self.attribution.refresh_from_db()
+        self.assertEqual(len(self.attribution.applications), 1)
+        self.assertEqual(self.attribution.applications[0]['charge_lecturing_asked'], '15')
+        self.assertEqual(self.attribution.applications[0]['charge_practical_asked'], '0')
+        self.assertEqual(self.attribution.applications[0]['pending'], tutor_application_epc.UPDATE_OPERATION)
 
     def test_post_edit_application_form_with_value_under_zero(self):
         url = reverse('create_or_update_tutor_application',

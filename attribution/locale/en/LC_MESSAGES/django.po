@@ -236,7 +236,7 @@ msgstr "Vacant"
 msgid "charge"
 msgstr "Charge"
 
-msgid "no_vacant_activity"
+msgid "no_activity"
 msgstr "No vacant corresponding course"
 
 msgid "team_mngt_no_application_possible"
