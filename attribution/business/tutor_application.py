@@ -29,7 +29,6 @@ from decimal import Decimal
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
-import attribution.business.attribution
 from attribution import models as mdl_attribution
 from attribution.utils import tutor_application_epc
 from base import models as mdl_base
@@ -59,7 +58,7 @@ def get_application(global_id, learning_container_year):
 
 
 def mark_attribution_already_applied(attributions_vacant, global_id, application_academic_year):
-
+    import attribution.business.attribution
     applications = get_application_list(global_id, application_academic_year)
     attributions = attribution.business.attribution.get_attribution_list(global_id, application_academic_year)
 

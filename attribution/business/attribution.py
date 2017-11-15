@@ -28,7 +28,6 @@ from itertools import chain
 
 import collections
 
-import attribution.business.tutor_application
 from attribution.models.enums import function
 from base import models as mdl_base
 from attribution import models as mdl_attribution
@@ -164,6 +163,7 @@ def _order_by_acronym_and_function(attribution_list):
 
 
 def get_attribution_list_about_to_expire(global_id, academic_year=None):
+    import attribution.business.tutor_application
     if not academic_year:
         academic_year = mdl_base.academic_year.current_academic_year()
 
