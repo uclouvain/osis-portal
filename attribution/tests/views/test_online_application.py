@@ -66,7 +66,7 @@ class TestOnlineApplication(TestCase):
         self.current_academic_year = AcademicYearFactory(year=current_year)
 
         # Create application year
-        application_year = current_year + 1 # Application is always next year
+        application_year = current_year + 1  # Application is always next year
         self.application_academic_year = AcademicYearFactory(year=application_year)
 
         # Create Event to allow teacher to register
@@ -212,8 +212,8 @@ class TestOnlineApplication(TestCase):
         self.assertEqual(response.status_code, 200)
         self.attribution.refresh_from_db()
         self.assertEqual(len(self.attribution.applications), 1)
-        self.assertEqual(self.attribution.applications[0]['charge_lecturing_asked'], '54')
-        self.assertEqual(self.attribution.applications[0]['charge_practical_asked'], '7')
+        self.assertEqual(self.attribution.applications[0]['charge_lecturing_asked'], '54.0')
+        self.assertEqual(self.attribution.applications[0]['charge_practical_asked'], '7.0')
         self.assertEqual(self.attribution.applications[0]['pending'], tutor_application_epc.UPDATE_OPERATION)
 
     def test_post_edit_application_form_with_empty_value(self):
@@ -235,8 +235,8 @@ class TestOnlineApplication(TestCase):
         self.assertEqual(response.status_code, 302)
         self.attribution.refresh_from_db()
         self.assertEqual(len(self.attribution.applications), 1)
-        self.assertEqual(self.attribution.applications[0]['charge_lecturing_asked'], '15')
-        self.assertEqual(self.attribution.applications[0]['charge_practical_asked'], '0')
+        self.assertEqual(self.attribution.applications[0]['charge_lecturing_asked'], '15.0')
+        self.assertEqual(self.attribution.applications[0]['charge_practical_asked'], '0.0')
         self.assertEqual(self.attribution.applications[0]['pending'], tutor_application_epc.UPDATE_OPERATION)
 
     def test_post_edit_application_form_with_value_under_zero(self):
