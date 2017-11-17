@@ -197,8 +197,8 @@ def _delete_application_in_list(acronym, year, application_list):
 def _find_application(acronym, year, applications_list):
     if applications_list:
         return next((application for application in applications_list
-                      if application.get('year') == year and application.get('acronym') == acronym),
-                     None)
+                     if application.get('year') == year and application.get('acronym') == acronym),
+                    None)
     return None
 
 

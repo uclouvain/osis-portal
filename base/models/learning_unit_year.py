@@ -30,10 +30,10 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 
 
 class LearningUnitYearAdmin(SerializableModelAdmin):
-    list_display = ('acronym', 'title', 'academic_year', 'weight', 'learning_unit',)
+    list_display = ('acronym', 'title', 'academic_year', 'weight', 'learning_unit', )
     fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'weight', 'learning_unit',
-                 'learning_container_year')}),)
-    list_filter = ('academic_year__year',)
+                 'learning_container_year', 'subtype')}),)
+    list_filter = ('academic_year__year', 'subtype',)
     search_fields = ['acronym']
     raw_id_fields = ('learning_unit', 'learning_container_year')
 
