@@ -204,7 +204,7 @@ def _find_application(acronym, year, applications_list):
 
 def _get_application_list_str(application_list):
     validation_str = "\t({})".format(_('wait_validation_epc'))
-    applications_str = ["*{}\t{}\t{}\t{}".format(validation_str if application.get('pending') else '',
+    applications_str = ["*{}\t{}\t{}\t{}\n".format(validation_str if application.get('pending') else '',
                                                    application.get('acronym', ''),
                                                    application.get('charge_lecturing_asked', ''),
                                                    application.get('charge_practical_asked', ''))

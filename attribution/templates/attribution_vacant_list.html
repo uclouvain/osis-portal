@@ -99,10 +99,10 @@
                                 {% endif %}
                             </td>
                             <td style="border-left-style: solid;border-left-width:1px;">
-                                {{ attribution.LECTURING }}
+                                {{ attribution.LECTURING|default_if_none:'0,0' }}
                             </td>
                             <td>
-                                {{ attribution.PRACTICAL_EXERCISES }}
+                                {{ attribution.PRACTICAL_EXERCISES|default_if_none:'0,0' }}
                             </td>
                             <td>
                                 <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
