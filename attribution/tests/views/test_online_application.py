@@ -39,9 +39,12 @@ from base.tests.factories.academic_calendar import AcademicCalendarFactory
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.learning_component_year import LearningComponentYearFactory
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
+from base.tests.factories.learning_unit_component import LearningUnitComponentFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.user import UserFactory
+from base.models.enums import component_type, learning_unit_year_subtypes
 
 
 class TestOnlineApplication(TestCase):
@@ -247,11 +250,30 @@ class TestOnlineApplication(TestCase):
         form = context['form']
         self.assertTrue(form.errors)  # Not valid because -1 entered
 
+    def test_post_overview_with_lecturing_and_practical_component_partim(self):
+        self.attribution.delete()
+        self.attribution = AttributionNewFactory(
+            global_id=self.tutor.person.global_id,
+            applications=[_get_application_example(self.lbira2101_next, "10", "10")]
+        )
+
+        url = reverse('applications_overview')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        context = response.context[-1]
+        self.assertEqual(len(context['applications']), 1)
+        self.assertEqual(context['applications'][0]['acronym'], self.lbira2101_next.acronym)
+        with self.assertRaises(KeyError):
+            context['applications'][0]['PRACTICAL_EXERCISES']
+        with self.assertRaises(KeyError):
+            context['applications'][0]['LECTURING']
+
     def _create_multiple_learning_container_year(self):
         # Creation learning container for current academic year
         self.lbir1200_current = _create_learning_container_with_components("LBIR1200", self.current_academic_year)
         self.lbir1300_current = _create_learning_container_with_components("LBIR1300", self.current_academic_year)
         self.ldroi1500_current = _create_learning_container_with_components("LDROI1500", self.current_academic_year)
+        self.lbira2101_current = _create_learning_container_with_components("LBIRA2101", self.current_academic_year, subtype=learning_unit_year_subtypes.PARTIM)
 
         # Creation learning container for next academic year [==> application academic year]
         self.lbir1200_next = _create_learning_container_with_components("LBIR1200", self.application_academic_year,
@@ -262,6 +284,8 @@ class TestOnlineApplication(TestCase):
                                                                          54, 7)
         self.lagro2500_next = _create_learning_container_with_components("LAGRO2500", self.application_academic_year,
                                                                          0, 70)
+        self.lbira2101_next = _create_learning_container_with_components("LBIRA2101", self.application_academic_year,
+                                                                         20, 20, subtype=learning_unit_year_subtypes.PARTIM)
 
     def _get_default_application_list(self):
         return [
@@ -278,20 +302,30 @@ class TestOnlineApplication(TestCase):
         ]
 
 
-def _create_learning_container_with_components(acronym, academic_year, volume_lecturing=None, volume_practical_exercices=None):
+def _create_learning_container_with_components(acronym, academic_year, volume_lecturing=None, volume_practical_exercices=None, subtype=learning_unit_year_subtypes.FULL):
     l_container = LearningContainerYearFactory(acronym=acronym, academic_year=academic_year)
+    return _link_components_and_learning_unit_year_to_container(l_container, l_container.acronym, volume_lecturing, volume_practical_exercices, subtype)
+
+
+def _link_components_and_learning_unit_year_to_container(l_container, acronym, volume_lecturing=None, volume_practical_exercices=None, subtype=learning_unit_year_subtypes.FULL):
+    a_learning_unit_year = LearningUnitYearFactory(acronym=acronym, academic_year=l_container.academic_year,
+                                                   title=l_container.title, subtype=subtype)
     if volume_lecturing:
-        LearningComponentYearFactory(
+        a_component = LearningComponentYearFactory(
             learning_container_year=l_container,
             type=learning_component_year_type.LECTURING,
             volume_declared_vacant=volume_lecturing
         )
+        LearningUnitComponentFactory(learning_unit_year=a_learning_unit_year, learning_component_year=a_component,
+                                     type=component_type.LECTURING)
     if volume_practical_exercices:
-        LearningComponentYearFactory(
+        a_component = LearningComponentYearFactory(
             learning_container_year=l_container,
             type=learning_component_year_type.PRACTICAL_EXERCISES,
             volume_declared_vacant=volume_practical_exercices
         )
+        LearningUnitComponentFactory(learning_unit_year=a_learning_unit_year, learning_component_year=a_component,
+                                     type=component_type.PRACTICAL_EXERCISES)
     return l_container
 
 
