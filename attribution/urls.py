@@ -66,8 +66,8 @@ urlpatterns = [
             name='attribution_admin_select_tutor'),
         url(r'^visualize_tutor/([0-9a-z-]+)/$', tutor_charge.visualize_tutor_attributions,
             name='attribution_admin_visualize_tutor'),
-        url(r'^students_list/$', list.students_list_admin, name='students_list_admin'),
-        url(r'^students_list/([0-9a-z-]+)/xls', list.list_build_by_person, name='students_list_admin_create'),
+        url(r'^students_list/$', list.lists_of_students_exams_enrollments, name='lists_of_students_exams_enrollments'),
+        url(r'^students_list/([0-9a-z-]+)/xls', list.list_build_by_person, name='lists_of_students_exams_enrollments_create'),
 
         url(r'^applications/', include([
             url(r'^$', online_application.administration_applications,

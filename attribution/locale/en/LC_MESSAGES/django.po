@@ -338,8 +338,8 @@ msgstr "The volume of charge is not available at the moment. Please try again la
 msgid "exam_and_student_list"
 msgstr "List of students enrolled to exams of "
 
-msgid "students_list_admin"
-msgstr "Students list administration"
+msgid "lists_of_students_exams_enrollments"
+msgstr "Lists of students enrollments to exams."
 
 msgid "confirm_applications_by_mail"
 msgstr "To receive a confirmation email with the applications"
