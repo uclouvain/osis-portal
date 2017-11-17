@@ -278,7 +278,7 @@ def _load_students(a_learning_unit_year, a_tutor, request):
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def show_students_admin(request, a_learning_unit_year, a_tutor):
-    return render(request, "students_list_admin.html",
+    return render(request, "lists_of_students_exams_enrollments.html",
                   _load_students(a_learning_unit_year, a_tutor, request))
 
 

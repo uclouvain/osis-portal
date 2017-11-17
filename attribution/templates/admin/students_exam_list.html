@@ -27,9 +27,19 @@
 {% endcomment %}
 {% block breadcrumb_area %}
     <ol class="breadcrumb">
-        <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'faculty_administration' %}</a></li>
-        <li><a id="lnk_students_list_admin" href="{% url 'students_list_admin' %}">{% trans 'students_list_admin' %}</a></li>
-        <li class="active">{% trans 'exam_and_student_list' %} {{ person.first_name }} {{ person.last_name }}</li>
+        <li>
+            <a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">
+                {% trans 'faculty_administration' %}
+            </a>
+        </li>
+        <li>
+            <a id="lnk_lists_of_students_exams_enrollments" href="{% url 'lists_of_students_exams_enrollments' %}">
+                {% trans 'lists_of_students_exams_enrollments' %}
+            </a>
+        </li>
+        <li class="active">
+            {% trans 'exam_and_student_list' %} {{ person.first_name }} {{ person.last_name }}
+        </li>
     </ol>
 {% endblock %}
 {% block content %}
@@ -43,7 +53,7 @@
         <div class="panel-body">
             <div>{% trans 'hlp_enrollment_exam_list' %}</div>
             <br>
-            <form action="{% url 'students_list_admin_create' person.global_id %}" method="post">
+            <form action="{% url 'lists_of_students_exams_enrollments_create' person.global_id %}" method="post">
             <div class="row">
                 {% csrf_token %}
                 <div class="col-md-6">

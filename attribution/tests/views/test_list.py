@@ -206,7 +206,7 @@ class AdminStudentsListTest(TestCase):
         self.tutor = TutorFactory(person=self.person)
         self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
 
-        self.url = reverse('students_list_admin')
+        self.url = reverse('lists_of_students_exams_enrollments')
         self.client.force_login(self.tutor.person.user)
 
     def test_without_being_logged(self):
@@ -249,7 +249,7 @@ class AdminListBuildTest(TestCase):
         self.tutor = TutorFactory(person=self.person)
         self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
 
-        self.url = reverse('students_list_admin_create', args=['01234567'])
+        self.url = reverse('lists_of_students_exams_enrollments_create', args=['01234567'])
         self.client.force_login(self.tutor.person.user)
 
     def test_without_being_logged(self):

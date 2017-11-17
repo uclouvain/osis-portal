@@ -341,8 +341,8 @@ msgstr "Les volumes horaires ne sont pas disponibles pour le moment. Veuillez r�
 msgid "exam_and_student_list"
 msgstr "Listes des étudiants inscrits aux examens de "
 
-msgid "students_list_admin"
-msgstr "Administration des listes des étudiants"
+msgid "lists_of_students_exams_enrollments"
+msgstr "Administration des listes des inscriptions des étudiants aux examens"
 
 msgid "confirm_applications_by_mail"
 msgstr "Pour recevoir un email de confirmation avec toutes les candidatures en ligne"

@@ -28,17 +28,17 @@
 
 {% block breadcrumb %}
     <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'faculty_administration' %}</a></li>
-    <li class="active">{% trans 'students_list_admin' %}</li>
+    <li class="active">{% trans 'lists_of_students_exams_enrollments' %}</li>
 {% endblock %}
 
 
 {% block content %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans 'students_list_admin' %}
+            {% trans 'lists_of_students_exams_enrollments' %}
         </div>
         <div class="panel-body">
-            <form action="{% url 'students_list_admin' %}" name="students_list_admin" method="post" target="_blank">
+            <form action="{% url 'lists_of_students_exams_enrollments' %}" name="lists_of_students_exams_enrollments" method="post" target="_blank">
                 {% csrf_token %}
                 {% if form.errors %}
                     <div class="alert alert-danger" role="alert">
