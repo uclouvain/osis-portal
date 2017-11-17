@@ -72,10 +72,10 @@
                         </span>
                     {% endif %}
                 </td>
-                <td style="border-left-style: solid;border-left-width:1px;">{{ application.LECTURING | default_if_none:''}}</td>
-                <td>{{ application.PRACTICAL_EXERCISES | default_if_none:''}}</td>
-                <td style="border-left-style: solid;border-left-width:1px;">{{ application.charge_lecturing_asked | default_if_none:''}}</td>
-                <td>{{ application.charge_practical_asked | default_if_none:''}}</td>
+                <td style="border-left-style: solid;border-left-width:1px;">{{ application.LECTURING | default_if_none:'0,0'}}</td>
+                <td>{{ application.PRACTICAL_EXERCISES | default_if_none:'0,0'}}</td>
+                <td style="border-left-style: solid;border-left-width:1px;">{{ application.charge_lecturing_asked | default_if_none:'0,0'}}</td>
+                <td>{{ application.charge_practical_asked | default_if_none:'0,0'}}</td>
                 <td>
                     <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
                                      title="{% if application.pending %}

@@ -87,19 +87,19 @@
                         {% endif %}
                     </td>
                     <td style="border-left-style: solid;border-left-width:1px;">
-                        {{ attribution.attribution_vacant.LECTURING|default_if_none:'' }}
+                        {{ attribution.attribution_vacant.LECTURING|default_if_none:'0,0' }}
                     </td>
                     <td>
-                        {{ attribution.attribution_vacant.PRACTICAL_EXERCISES|default_if_none:'' }}
+                        {{ attribution.attribution_vacant.PRACTICAL_EXERCISES|default_if_none:'0,0' }}
 
                     </td>
-                    <td style="border-left-style: solid;border-left-width:1px;">{{ attribution.start_academic_year}}</td>
-                    <td>{{ attribution.end_academic_year}}</td>
+                    <td style="border-left-style: solid;border-left-width:1px;">{{ attribution.start_academic_year|default_if_none:''}}</td>
+                    <td>{{ attribution.end_academic_year|default_if_none:''}}</td>
                     <td>
-                        {{ attribution.LECTURING|default_if_none:'' }}
+                        {{ attribution.LECTURING|default_if_none:'0,0' }}
                     </td>
                     <td>
-                        {{ attribution.PRACTICAL_EXERCISES|default_if_none:'' }}
+                        {{ attribution.PRACTICAL_EXERCISES|default_if_none:'0,0' }}
                     </td>
                     <td>{% trans attribution.function %}</td>
                 </tr>
