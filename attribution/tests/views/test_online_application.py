@@ -158,7 +158,7 @@ class TestOnlineApplication(TestCase):
         response = self.client.post(url, data=post_data)
         self.assertEqual(response.status_code, 302) # redirection
         self.attribution.refresh_from_db()
-        self.assertEqual(len(self.attribution.applications), 2) # Now we have two applications
+        self.assertEqual(len(self.attribution.applications), 2)  # Now we have two applications
 
     def test_renew_applications_with_bad_learning_container(self):
         url = reverse('renew_applications')
