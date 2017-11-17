@@ -26,13 +26,17 @@
 import time
 
 from decimal import Decimal
+
+from django.db.models import Prefetch
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
 from attribution import models as mdl_attribution
 from attribution.utils import tutor_application_epc
 from base import models as mdl_base
+from base.models.learning_component_year import LearningComponentYear
 from osis_common.messaging import message_config, send_message as message_service
+from base.models.enums import learning_unit_year_subtypes
 
 
 def get_application_list(global_id, academic_year=None):
@@ -141,11 +145,14 @@ def send_mail_applications_summary(global_id):
 
 def _resolve_learning_container_year_info(application_list, academic_year):
     acronym_list = [application.get('acronym') for application in application_list]
-    l_container_years = mdl_base.learning_container_year.search(acronym=acronym_list, academic_year=academic_year)\
-                                                        .prefetch_related('learningcomponentyear_set')
+    full_learning_component_year = LearningComponentYear.objects\
+        .filter(learningunitcomponent__learning_unit_year__subtype=learning_unit_year_subtypes.FULL)
+    prefetch_learning_component_year = Prefetch('learningcomponentyear_set', full_learning_component_year)
+    l_container_years = mdl_base.learning_container_year.search(acronym=acronym_list, academic_year=academic_year) \
+                                                        .prefetch_related(prefetch_learning_component_year)
     for application in application_list:
         l_container_year = next((l_container_year for l_container_year in l_container_years if
-                                 l_container_year.acronym == application.get('acronym')),None)
+                                 l_container_year.acronym == application.get('acronym')), None)
         application['learning_container_year_id'] = l_container_year.id
         application['title'] = l_container_year.title
         for l_component_year in l_container_year.learningcomponentyear_set.all():

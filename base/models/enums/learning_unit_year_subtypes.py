@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,24 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import string
-import operator
+FULL = "FULL"
+PARTIM = "PARTIM"
 
-import factory
-import factory.fuzzy
-
-from base.tests.factories.learning_unit_year import LearningUnitYearFactory
-from base.tests.factories.learning_component_year import LearningComponentYearFactory
-from base.models.enums import component_type
-
-
-class LearningUnitComponentFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = "base.LearningUnitComponent"
-
-    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-
-    learning_unit_year = factory.SubFactory(LearningUnitYearFactory)
-    learning_component_year = factory.SubFactory(LearningComponentYearFactory)
-    type = factory.Iterator(component_type.COMPONENT_TYPES, getter=operator.itemgetter(0))
-    duration = factory.fuzzy.FuzzyDecimal(9)
+LEARNING_UNIT_YEAR_SUBTYPES = (
+    (FULL, FULL),
+    (PARTIM, PARTIM)
+)
