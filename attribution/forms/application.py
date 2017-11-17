@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from decimal import Decimal
+
 from django import forms
 from django.core.validators import MinValueValidator
 from django.utils.translation import ugettext_lazy as _
@@ -73,8 +75,8 @@ class ApplicationForm(BootstrapForm):
             max_value = self.attribution_vacant.get(learning_component_year_type.LECTURING, 0)
             if data_cleaned > max_value:
                 self.add_error('charge_lecturing_asked', "{0} (max: {1})".format(_('too_much'), max_value))
-            return data_cleaned
-        return '0'
+            return Decimal('{:.1f}'.format(data_cleaned))
+        return Decimal('0.0')
 
     def clean_charge_practical_asked(self):
         data_cleaned = self.cleaned_data['charge_practical_asked']
@@ -82,8 +84,8 @@ class ApplicationForm(BootstrapForm):
             max_value = self.attribution_vacant.get(learning_component_year_type.PRACTICAL_EXERCISES, 0)
             if data_cleaned > max_value:
                 self.add_error('charge_practical_asked', "{0} (max: {1})".format(_('too_much'), max_value))
-            return data_cleaned
-        return '0'
+            return Decimal('{:.1f}'.format(data_cleaned))
+        return Decimal('0.0')
 
 
 class VacantAttributionFilterForm(BootstrapForm):
