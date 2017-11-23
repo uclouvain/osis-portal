@@ -201,3 +201,6 @@ msgstr "Your courses registration has been validated by the jury."
 
 msgid "courses_registration_not_validated"
 msgstr "Your courses registration has not been validated yet."
+
+msgid "learning_unitys_outside_catalog"
+msgstr "This registration is \"out of catalog\" or \"preemptive\" and the associated credits are not accounted in the requested credits."

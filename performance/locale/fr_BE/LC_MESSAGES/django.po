@@ -99,10 +99,10 @@ msgid "performance"
 msgstr "Notes d'examens"
 
 msgid "my_performance"
-msgstr "Mes notes d'examens"
+msgstr "Mon état d'inscription aux cours et mes notes d'examen"
 
 msgid "performance_administration"
-msgstr "Administration des notes d'examens"
+msgstr "Administration de l'état d'inscription aux cours et des notes d'examen"
 
 msgid "performance_results"
 msgstr "Résultats"
@@ -196,3 +196,6 @@ msgstr "Votre inscription aux cours a été validée par le jury."
 
 msgid "courses_registration_not_validated"
 msgstr "Votre inscription aux cours n'a pas encore été validée."
+
+msgid "learning_unitys_outside_catalog"
+msgstr "Cette inscription est \"hors programme\" ou \"supplémentaire\" et les crédits associés ne sont pas pris en compte pour atteindre le nombre de crédits requis."

@@ -128,10 +128,14 @@
                 </tr>
             </table>
 
-            <div class="row container-fluid text-right">
+            <div class="row container-fluid text-left">
                 <small class="text-warning">* {% trans 'text_mean_exprimed_for_20' %}</small>
             </div>
-
+            {% if learning_units_outside_catalog %}
+                <div class="row container-fluid text-left">
+                    <small class="text-warning">(+) {% trans 'learning_unitys_outside_catalog' %}</small>
+                </div>
+            {% endif %}
             <!-- Text explaining the mention attributed for the session. -->
             <div class="row center-block">
               <p class="bg-info" id="paragraph_mention_explanation"></p>
