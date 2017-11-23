@@ -111,12 +111,17 @@ def _get_exam_enrollment_form(off_year, request, stud):
         return response.HttpResponseRedirect(reverse('dashboard_home'))
     data = exam_enrollment_request.find_by_student(stud)
     if data:
-        data = json.loads(data.document)
+        try:
+            data = json.loads(data.document)
+        except Exception:
+            trace = traceback.format_exc()
+            logger.error(trace)
+        finally:
+            exam_enrollment_request.pop_document(data.get('acronym'), stud)
         if data.get('error_message'):
             error_message = _(data.get('error_message')).format(off_year.acronym)
         else:
             error_message = data.get('error_message')
-        exam_enrollment_request.pop_document(stud)
         return layout.render(request, 'exam_enrollment_form.html', {'error_message': error_message,
                                                                     'exam_enrollments': data.get('exam_enrollments'),
                                                                     'student': stud,
@@ -281,9 +286,10 @@ def insert_or_update_document_from_queue(body):
         json_data = body.decode("utf-8")
         data = json.loads(json_data)
         registration_id = data.get('registration_id')
+        acronym = data.get('acronym')
         if registration_id:
             a_student = mdl_base.student.find_by_registration_id(registration_id)
-            exam_enrollment_request.insert_or_update_document(a_student, json_data)
+            exam_enrollment_request.insert_or_update_document(acronym, a_student, json_data)
     except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError):
         queue_exception_logger.error('Postgres Error during insert_or_update_document_from_queue => retried')
         trace = traceback.format_exc()
