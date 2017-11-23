@@ -77,7 +77,10 @@ msgid "legend_exam_enrol_y"
 msgstr "Y - Second enrollment"
 
 msgid "message_exam_enrolment_state"
-msgstr "You can see the state of all your exam enrollments in your scoresheet."
+msgstr "You can see the state of all your exam enrollments in your "
+
+msgid "message_exam_enrolment_state_link"
+msgstr "scoresheet"
 
 msgid "no_exam_enrollment_avalaible"
 msgstr "You're not enrolled in the learning units of this program : {}."
