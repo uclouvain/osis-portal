@@ -76,7 +76,7 @@ msgstr "Y - Deuxième inscription"
 msgid "message_exam_enrolment_state"
 msgstr "Vous pouvez consulter l'ensemble des états d'inscriptions aux examens dans le récapitulatif "
 
-msgid "message_exam_enrolment_state_link"
+msgid "message_exam_enrolment_state_link_label"
 msgstr "'Mon état d'inscription aux cours et mes notes d'examen'"
 
 msgid "no_offer_enrollment_found"

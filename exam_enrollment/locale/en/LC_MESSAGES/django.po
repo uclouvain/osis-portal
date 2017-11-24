@@ -79,7 +79,7 @@ msgstr "Y - Second enrollment"
 msgid "message_exam_enrolment_state"
 msgstr "You can see the state of all your exam enrollments in your "
 
-msgid "message_exam_enrolment_state_link"
+msgid "message_exam_enrolment_state_link_label"
 msgstr "scoresheet"
 
 msgid "no_exam_enrollment_avalaible"
