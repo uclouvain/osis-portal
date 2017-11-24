@@ -183,7 +183,6 @@ def visualize_student_result(request, pk):
     """
     stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
     perf_data = __get_performance_data(stud_perf)
-
     return layout.render(request,
                          "admin/performance_result_admin.html",
                          perf_data)

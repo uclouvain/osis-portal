@@ -35,7 +35,7 @@ msgid "desc_lnk_internships"
 msgstr "This process controls students internships."
 
 msgid "desc_lnk_performance"
-msgstr "Show the student results."
+msgstr "Show the student results and registration state."
 
 msgid "desc_lnk_scores_encoding"
 msgstr "Get scores encoding papersheet and encode scores of your students."
