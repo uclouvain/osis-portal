@@ -43,6 +43,7 @@ from attribution.forms.attribution import AttributionForm
 from base.forms.base_forms import GlobalIdForm
 from base.views import layout
 from django.contrib.auth.decorators import login_required, permission_required
+from attribution.views import utils
 
 YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST = 2017
 
@@ -108,14 +109,8 @@ def sum_learning_unit_year_duration(a_learning_unit_year):
     return tot_duration
 
 
-def is_string_not_null_empty(string):
-    if string and len(string.strip()) > 0:
-        return True
-    return False
-
-
 def get_email_students(an_acronym, year):
-    if is_string_not_null_empty(an_acronym):
+    if utils.is_string_not_null_empty(an_acronym):
         if year >= YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST:
             return "{0}{1}-{2}{3}".format(MAIL_TO, an_acronym.lower(), year, STUDENT_LIST_EMAIL_END)
         else:
@@ -124,7 +119,7 @@ def get_email_students(an_acronym, year):
 
 
 def get_schedule_url(an_acronym):
-    if is_string_not_null_empty(an_acronym):
+    if utils.is_string_not_null_empty(an_acronym):
         return settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_URL').\
             format(settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_NUMBER'), an_acronym.lower())
     return None
@@ -253,7 +248,7 @@ def set_formset_years(a_person):
 
 
 def get_url_learning_unit_year(a_learning_unit_year):
-    if a_learning_unit_year and is_string_not_null_empty(a_learning_unit_year.acronym):
+    if a_learning_unit_year and utils.is_string_not_null_empty(a_learning_unit_year.acronym):
         return settings.ATTRIBUTION_CONFIG.get('CATALOG_URL').format(a_learning_unit_year.academic_year.year,
                                                                      a_learning_unit_year.acronym.lower())
     return None
