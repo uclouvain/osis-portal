@@ -26,6 +26,7 @@
 from django.db import models
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
+
 class EntityComponentYearAdmin(SerializableModelAdmin):
     list_display = ('entity_container_year', 'learning_component_year', 'hourly_volume_total',
                     'hourly_volume_partial')
@@ -49,6 +50,6 @@ class EntityComponentYear(SerializableModel):
         unique_together = ('entity_container_year', 'learning_component_year',)
 
 
-
-def find_by_learning_component_year( a_learning_component_year):
+def find_by_learning_component_year(a_learning_component_year):
     return EntityComponentYear.objects.filter(learning_component_year=a_learning_component_year)
+

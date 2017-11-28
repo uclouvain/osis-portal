@@ -23,9 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
 
-from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q
@@ -33,8 +31,6 @@ from django.utils import timezone
 
 from base.models.academic_year import AcademicYear
 from base.models.enums import entity_type
-from base.models.enums.organization_type import MAIN
-from osis_common.utils.datetime import get_tzinfo
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
@@ -88,10 +84,6 @@ class EntityVersion(SerializableModel):
             super(EntityVersion, self).save()
         else:
             raise AttributeError('EntityVersion invalid parameters')
-
-    def exists_now(self):
-        now = datetime.datetime.now().date()
-        return (not self.end_date) or (self.end_date and self.start_date < now < self.end_date)
 
     def can_save_entity_version(self):
         return self.count_entity_versions_same_entity_overlapping_dates() == 0 and \
@@ -194,21 +186,6 @@ class EntityVersion(SerializableModel):
         else:
             return False
 
-    def get_organogram_data(self, level):
-        level += 1
-        if level < 3:
-            return {
-                'id': self.id,
-                'acronym': self.acronym,
-                'children': [child.get_organogram_data(level) for child in self.children]
-            }
-        else:
-            return {
-                'id': self.id,
-                'acronym': self.acronym,
-                'children': []
-            }
-
 
 def find(acronym, date=None):
     if date is None:
@@ -232,17 +209,6 @@ def get_last_version(entity, date=None):
     qs = EntityVersion.objects.current(date).entity(entity)
 
     return qs.latest('start_date')
-    # find_latest_version(academic_year.current_academic_year().start_date).get(entity=entity)
-
-
-def get_by_entity_and_date(entity, date):
-    if date is None:
-        date = timezone.now()
-    try:
-        entity_version = EntityVersion.objects.current(date).entity(entity)
-    except ObjectDoesNotExist:
-        return None
-    return entity_version
 
 
 def search(**kwargs):
@@ -271,78 +237,6 @@ def search(**kwargs):
 
 def count(**kwargs):
     return search(**kwargs).count()
-
-
-def search_entities(acronym=None, title=None, type=None, with_entity=None):
-    if not acronym and not title and not type:
-        return
-    queryset = EntityVersion.objects
-    if with_entity:
-        queryset = queryset.select_related('entity__organization')
-
-    if acronym:
-        queryset = queryset.filter(acronym__icontains=acronym)
-    if title:
-        queryset = queryset.filter(title__icontains=title)
-    if type:
-        queryset = queryset.filter(entity_type=type)
-
-    return queryset
-
-
-def find_by_id(entity_version_id):
-    if entity_version_id is None:
-        return
-    return EntityVersion.objects.get(pk=entity_version_id)
-
-
-def count_identical_versions(same_entity, version):
-    return count(entity=same_entity,
-                 title=version.get('title'),
-                 acronym=version.get('acronym'),
-                 entity_type=version.get('entity_type'),
-                 parent=version.get('parent'),
-                 start_date=version.get('start_date'),
-                 end_date=version.get('end_date')
-                 )
-
-
-def find_update_candidates_versions(entity, version):
-    to_update_versions = search(entity=entity,
-                                title=version.get('title'),
-                                acronym=version.get('acronym'),
-                                entity_type=version.get('entity_type'),
-                                parent=version.get('parent'),
-                                start_date=version.get('start_date')
-                                )
-    return [v for v in to_update_versions if not _match_dates(v.end_date, version.get('end_date'))]
-
-
-def _match_dates(osis_date, esb_date):
-    if osis_date is None:
-        return esb_date is None
-    else:
-        return osis_date.strftime('%Y-%m-%d') == esb_date
-
-
-def find_main_entities_version():
-    entities_version = find_latest_version(date=datetime.datetime.now(get_tzinfo())) \
-        .filter(entity_type__in=[entity_type.SECTOR, entity_type.FACULTY, entity_type.SCHOOL,
-                                 entity_type.INSTITUTE, entity_type.DOCTORAL_COMMISSION],
-                entity__organization__type=MAIN).order_by('acronym')
-    return entities_version
-
-
-def find_last_faculty_entities_version():
-    return EntityVersion.objects.filter(entity_type=entity_type.FACULTY,
-                                        entity__organization__type=MAIN).order_by('entity', '-start_date')\
-        .distinct('entity')
-
-
-def find_first_latest_version_by_period(ent, start_date, end_date):
-    return EntityVersion.objects.entity(ent).filter(Q(end_date__lte=end_date) | Q(end_date__isnull=True),
-                                                    start_date__gte=start_date) \
-        .order_by('-start_date').first()
 
 
 def find_latest_version_by_entity(entity, date):

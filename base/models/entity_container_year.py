@@ -24,11 +24,9 @@
 #
 ##############################################################################
 from django.db import models
-from django.db.models import Prefetch
 
 from base.models.enums import entity_container_year_link_type
 from osis_common.models.auditable_serializable_model import AuditableSerializableModel, AuditableSerializableModelAdmin
-from base.models import entity_version
 
 
 class EntityContainerYearAdmin(AuditableSerializableModelAdmin):
