@@ -77,4 +77,33 @@ class Migration(migrations.Migration):
             name='entitycomponentyear',
             unique_together=set([('entity_container_year', 'learning_component_year')]),
         ),
+        migrations.CreateModel(
+            name='EntityVersion',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('uuid', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True)),
+                ('external_id', models.CharField(blank=True, max_length=100, null=True)),
+                ('changed', models.DateTimeField(auto_now=True, null=True)),
+                ('title', models.CharField(db_index=True, max_length=255)),
+                ('acronym', models.CharField(db_index=True, max_length=20)),
+                ('entity_type', models.CharField(blank=True, choices=[('SECTOR', 'SECTOR'), ('FACULTY', 'FACULTY'), ('SCHOOL', 'SCHOOL'), ('INSTITUTE', 'INSTITUTE'), ('POLE', 'POLE'), ('DOCTORAL_COMMISSION', 'DOCTORAL_COMMISSION'), ('PLATFORM', 'PLATFORM'), ('LOGISTICS_ENTITY', 'LOGISTICS_ENTITY')], db_index=True, max_length=50, null=True)),
+                ('start_date', models.DateField(db_index=True)),
+                ('end_date', models.DateField(blank=True, db_index=True, null=True)),
+                ('entity', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='base.Entity')),
+                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='parent_of', to='base.Entity')),
+            ],
+            options={
+                'abstract': False,
+            },
+        ),
+        migrations.AddField(
+            model_name='learningcomponentyear',
+            name='hourly_volume_partial',
+            field=models.DecimalField(blank=True, decimal_places=2, max_digits=6, null=True),
+        ),
+        migrations.AddField(
+            model_name='learningcomponentyear',
+            name='planned_classes',
+            field=models.IntegerField(blank=True, null=True),
+        ),
     ]

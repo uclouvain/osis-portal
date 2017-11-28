@@ -27,14 +27,15 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th colspan="3"></th>
+            <th colspan="4"></th>
             <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'vacant' %} </th>
             <th colspan="5" style="border-left-style: solid;border-left-width:1px;">{% trans 'charge' %} </th>
         </tr>
         <tr>
             <th>{% trans 'code'%}</th>
             <th>{% trans 'title'%}</th>
-            <th>{% trans 'team'%}</th>
+            <th>{% trans 'lecturing_hours'%}</th>
+            <th>{% trans 'practical_hours'%}</th>
             <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours'%}</th>
             <th>{% trans 'practical_hours'%}</th>
             <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours_allocated'%}</th>
@@ -49,10 +50,17 @@
             <td>{{ attribution.acronym }}</td>
             <td>{{ attribution.title }}</td>
             <td class="text-center">
-                {% if attribution.team %}
-                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                {% if attribution.lecturing_vol = 0 %}
+                    {{ attribution.lecturing_vol | floatformat:1 }}
                 {% else %}
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    {{ attribution.lecturing_vol |default_if_none:'0,0'}}
+                {% endif %}
+            </td>
+            <td>
+                {% if attribution.practical_exercises_vol = 0 %}
+                    {{ attribution.practical_exercises_vol | floatformat:1 }}
+                {% else %}
+                    {{ attribution.practical_exercises_vol |default_if_none:'0,0'}}
                 {% endif %}
             </td>
             <td style="border-left-style: solid;border-left-width:1px;">{{ attribution.volume_lecturing_vacant | default_if_none:'0,0'}}</td>
@@ -66,10 +74,10 @@
     {% endfor %}
     <tfoot>
         <tr>
-            <td colspan="5" ><label class="pull-right">{% trans 'total' %}</label></td>
+            <td colspan="6" ><label class="pull-right">{% trans 'total' %}</label></td>
             <td>{{ tot_lecturing|default_if_none:'0,0' }}</td>
             <td>{{ tot_practical|default_if_none:'0,0' }}</td>
-            <td></td>
+            <td colspan="3"></td>
         </tr>
     </tfoot>
 </table>

@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,26 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models import academic_calendar
-from base.models import academic_year
-from base.models import campus
-from base.models import entity
-from base.models import entity_container_year
-from base.models import entity_component_year
-from base.models import entity_version
-from base.models import external_offer
-from base.models import learning_unit
-from base.models import learning_unit_component
-from base.models import learning_unit_enrollment
-from base.models import learning_container
-from base.models import learning_container_year
-from base.models import learning_unit_year
-from base.models import learning_component_year
-from base.models import offer
-from base.models import offer_enrollment
-from base.models import offer_year
-from base.models import offer_year_domain
-from base.models import organization
-from base.models import person
-from base.models import student
-from base.models import tutor
+from django.utils.translation import ugettext_lazy as _
+
+MAIN = "MAIN"
+ACADEMIC_PARTNER = "ACADEMIC_PARTNER"
+INDUSTRIAL_PARTNER = "INDUSTRIAL_PARTNER"
+SERVICE_PARTNER = "SERVICE_PARTNER"
+COMMERCE_PARTNER = "COMMERCE_PARTNER"
+PUBLIC_PARTNER = "PUBLIC_PARTNER"
+
+ORGANIZATION_TYPE = (
+    (MAIN, _(MAIN)),
+    (ACADEMIC_PARTNER, _(ACADEMIC_PARTNER)),
+    (INDUSTRIAL_PARTNER, _(INDUSTRIAL_PARTNER)),
+    (SERVICE_PARTNER, _(SERVICE_PARTNER)),
+    (COMMERCE_PARTNER, _(COMMERCE_PARTNER)),
+    (PUBLIC_PARTNER, _(PUBLIC_PARTNER)),
+)

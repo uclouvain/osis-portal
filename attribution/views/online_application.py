@@ -41,6 +41,9 @@ from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
 from base.models.enums import learning_component_year_type
 from base.views import layout
+from base.business import learning_unit_year_with_context
+from base.models.enums import learning_component_year_type
+from decimal import Decimal
 
 
 @login_required
@@ -91,10 +94,26 @@ def overview(request, global_id=None):
 
     # Attribution which will be expire this academic year
     current_academic_year = mdl_base.academic_year.current_academic_year()
+
     attributions_about_to_expired = attribution.get_attribution_list_about_to_expire(
         global_id=tutor.person.global_id,
         academic_year=current_academic_year
     )
+
+    for a in attributions:
+        learning_unit_years  = mdl_base.learning_unit_year.find_by_acronym(a['acronym'], application_year)
+        a['lecturing_vol'] = Decimal(0)
+        a['practical_exercises_vol'] = Decimal(0)
+        for l in learning_unit_years:
+            learning_units = learning_unit_year_with_context.get_with_context(learning_container_year_id=l.learning_container_year)
+            for l in learning_units:
+                for learning_component_yr in l.components:
+                    if learning_component_yr.type == learning_component_year_type.LECTURING:
+                        a['lecturing_vol'] = l.components[learning_component_yr]['VOLUME_TOTAL'] * l.components[learning_component_yr]['PLANNED_CLASSES']
+                    if learning_component_yr.type == learning_component_year_type.PRACTICAL_EXERCISES:
+                        a['practical_exercises_vol'] = l.components[learning_component_yr]['VOLUME_TOTAL'] * l.components[learning_component_yr]['PLANNED_CLASSES']
+                break
+            break
 
     return layout.render(request, "attribution_overview.html", {
         'a_tutor': tutor,

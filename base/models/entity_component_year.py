@@ -48,3 +48,7 @@ class EntityComponentYear(SerializableModel):
     class Meta:
         unique_together = ('entity_container_year', 'learning_component_year',)
 
+
+
+def find_by_learning_component_year( a_learning_component_year):
+    return EntityComponentYear.objects.filter(learning_component_year=a_learning_component_year)
