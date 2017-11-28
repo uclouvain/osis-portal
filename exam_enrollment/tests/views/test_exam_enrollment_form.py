@@ -33,6 +33,8 @@ from django.contrib.auth.models import User, Group, Permission
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.test import TestCase, Client
+from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
+from base.tests.factories.offer_year import OfferYearFactory
 
 from base.tests.models import test_student, test_person, test_academic_year, test_offer_year, test_offer_enrollment, \
     test_learning_unit_enrollment, test_learning_unit_year
@@ -48,13 +50,6 @@ def _create_group(name):
     group = Group(name=name)
     group.save()
     return group
-
-
-def create_offer_enrollment(student, academic_year):
-    off_year_current_academic_year = test_offer_year.create_offer_year_with_academic_year(academic_year)
-    student_offer_year_enrollment = test_offer_enrollment.create_offer_enrollment(student,
-                                                                                  off_year_current_academic_year)
-    return student_offer_year_enrollment
 
 
 class ExamEnrollmentFormTest(TestCase):
@@ -80,7 +75,7 @@ class ExamEnrollmentFormTest(TestCase):
         self.url = "/exam_enrollment/{}/form/".format(offer_year_id)
         self.correct_exam_enrol_form = load_json_file("exam_enrollment/tests/resources/exam_enrollment_form_example.json")
         self.current_academic_year = test_academic_year.create_academic_year_current()
-        off_enrol = create_offer_enrollment(self.student, self.current_academic_year)
+        off_enrol = OfferEnrollmentFactory(student=self.student, offer_year=OfferYearFactory(academic_year=self.current_academic_year))
         learn_unit_year = test_learning_unit_year.create_learning_unit_year({'acronym': 'LDROI1234',
                                                                              'title': 'Bachelor in law',
                                                                              'academic_year': self.academic_year})
@@ -273,7 +268,7 @@ class ExamEnrollmentFormTest(TestCase):
     @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
     def test_case_student_has_no_learning_unit_enrollment(self, mock_find):
         mock_find.return_value = None
-        off_year_enrol = create_offer_enrollment(self.student, self.current_academic_year)
+        off_year_enrol = OfferEnrollmentFactory(student=self.student, offer_year=OfferYearFactory(academic_year=self.current_academic_year))
         self.client.force_login(self.user)
         response = self.client.get(reverse('exam_enrollment_form', args=[off_year_enrol.offer_year.id]), follow=True)
         self.assertRedirects(response, reverse('dashboard_home'))
