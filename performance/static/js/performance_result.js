@@ -148,11 +148,17 @@ function addRowCourse(courseJson, $row) {
   var juin = courseJson.session[1];
   var sept = courseJson.session[2];
   var credit = creditToString(courseJson.creditReport);
+  var prerequisHP = courseJson.prerequisHgm;
 
   createJQObject("<td/>", {}, acronym, $row);
   createJQObject("<td/>", {}, title, $row);
   createJQObject("<td/>", {}, ects, $row);
-  createJQObject("<td/>", {}, inscr, $row);
+  if (prerequisHP){
+      var inscr_prea = "(+)"+inscr;
+      createJQObject("<td/>", {}, inscr_prea, $row)
+  } else {
+      createJQObject("<td/>", {}, inscr, $row);
+  }
   makeScoreCell(janv, $row);
   makeScoreCell(juin, $row);
   makeScoreCell(sept, $row);
