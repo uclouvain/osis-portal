@@ -70,7 +70,7 @@ class LearningUnitYearTest(TestCase):
                                                                learning_unit=a_learning_unit,
                                                                acronym=LDROI1000)
         LearningUnitYearFactory(academic_year=self.an_academic_year, learning_unit=a_learning_unit, acronym=LAUT5263)
-        self.assertEqual(list(mdl_base.learning_unit_year.search(self.an_academic_year, LDROI1000, a_learning_unit)),
+        self.assertEqual(list(mdl_base.learning_unit_year.search(self.an_academic_year, LDROI1000, None, a_learning_unit)),
                          [ldroi1000_learning_unit_year])
 
     def test_find_by_acronym(self):
