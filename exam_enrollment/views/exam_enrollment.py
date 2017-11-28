@@ -116,7 +116,7 @@ def _get_exam_enrollment_form(off_year, request, stud):
         except json.JSONDecodeError:
             logger.exception("Json data is not valid")
         finally:
-            exam_enrollment_request.pop_document(data.get('acronym'), stud)
+            exam_enrollment_request.pop_document(data.get('offer_year_acronym'), stud)
         if data.get('error_message'):
             error_message = _(data.get('error_message')).format(off_year.acronym)
         else:
