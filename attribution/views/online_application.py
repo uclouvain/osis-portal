@@ -197,15 +197,12 @@ def renew_applications(request):
 @permission_required('attribution.can_access_attribution_application', raise_exception=True)
 @user_passes_test(permission.is_online_application_opened, login_url=reverse_lazy('outside_applications_period'))
 def create_or_update_application(request, learning_container_year_id):
-    print('create_or_update_application bbbb')
-    print(learning_container_year_id)
     tutor = mdl_base.tutor.find_by_user(request.user)
     global_id = tutor.person.global_id
     learning_container_year = mdl_base.learning_container_year.find_by_id(learning_container_year_id)
     can_be_saved = True
 
     if request.method == 'POST':
-        print('post')
         form = ApplicationForm(learning_container_year=learning_container_year,
                                data=request.POST)
         if form.is_valid():
@@ -222,10 +219,7 @@ def create_or_update_application(request, learning_container_year_id):
                 messages.add_message(request, messages.ERROR, error_msg)
             return redirect('applications_overview')
     else:
-        print('get')
-        print(learning_container_year)
         inital_data = tutor_application.get_application(global_id, learning_container_year)
-        print(inital_data)
         can_be_saved = tutor_application.can_be_updated(inital_data) if inital_data else True
         form = ApplicationForm(
             initial=inital_data,
