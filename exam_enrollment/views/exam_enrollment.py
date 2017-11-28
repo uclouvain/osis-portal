@@ -285,7 +285,7 @@ def insert_or_update_document_from_queue(body):
         json_data = body.decode("utf-8")
         data = json.loads(json_data)
         registration_id = data.get('registration_id')
-        acronym = data.get('acronym')
+        acronym = data.get('offer_year_acronym')
         if registration_id:
             a_student = mdl_base.student.find_by_registration_id(registration_id)
             exam_enrollment_request.insert_or_update_document(acronym, a_student, json_data)
