@@ -26,6 +26,7 @@
 from django.db import models
 
 from attribution.models.enums import offer_enrollment_state
+from base.models.enums import learning_unit_enrollment_state
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
@@ -47,6 +48,7 @@ class LearningUnitEnrollment(SerializableModel):
     date_enrollment = models.DateField()
     learning_unit_year = models.ForeignKey('LearningUnitYear')
     offer_enrollment = models.ForeignKey('OfferEnrollment')
+    enrollment_state = models.CharField(max_length=20, choices=learning_unit_enrollment_state.STATES, blank=True, null=True)
 
     @property
     def student(self):
