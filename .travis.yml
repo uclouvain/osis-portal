@@ -12,7 +12,7 @@ before_script:
   - ./cc-test-reporter before-build
 script:
   - python3 manage.py compilemessages
-  - python3 manage.py test
+  - coverage run python3 manage.py test
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 notifications:
