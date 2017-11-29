@@ -7,12 +7,10 @@ python:
 install:
   - pip install -r requirements.txt
 before_script:
-  - rvm install 2.2.0
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 script:
-  - bundle exec rspec
   - python3 manage.py compilemessages
   - python3 manage.py test
 after_script:
