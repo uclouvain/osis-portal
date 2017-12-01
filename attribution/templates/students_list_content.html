@@ -33,6 +33,11 @@
         <h4>{{ students|length }}{% trans 'students_learning_unit' %}</h4>
     {% endif %}
     {% if students %}
+        <form method="get" action="{% url 'produce_xls_students' learning_unit_year.id tutor_id %}">
+            <button class="btn btn-primary pull-left" id="bt_produce_xls" type="submit"
+                    title="{% trans 'produce_xls' %}" >
+                {% trans 'produce_xls' %}</button>
+        </form>
         <table class="table table-striped table-hover" id="students_table">
             <thead>
                 <tr>
