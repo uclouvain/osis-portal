@@ -38,7 +38,7 @@ msgid "desc_lnk_internships"
 msgstr "Gestion des stages des étudiants."
 
 msgid "desc_lnk_performance"
-msgstr "Résultats de l'étudiant."
+msgstr "Etat d'inscription aux cours et résultats de l'étudiant."
 
 msgid "desc_lnk_scores_encoding"
 msgstr "Obtenir mes feuilles de notes et encoder les notes de mes étudiants."

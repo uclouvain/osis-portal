@@ -154,8 +154,8 @@ function addRowCourse(courseJson, $row) {
   createJQObject("<td/>", {}, title, $row);
   createJQObject("<td/>", {}, ects, $row);
   if (prerequisHP){
-    var $inscr = "(+)"+inscr;
-    var $td = createJQObject("<td/>", {},$inscr, $row)
+    var inscr_prea = "(+)"+inscr;
+    createJQObject("<td/>", {}, inscr_prea, $row)
   } else {
     createJQObject("<td/>", {}, inscr, $row);
   }

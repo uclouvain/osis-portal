@@ -96,13 +96,13 @@ msgid "no_student_with_this_registration_id"
 msgstr "Aucun étudiant avec ce noma!"
 
 msgid "performance"
-msgstr "Notes d'examens"
+msgstr "Etat d'inscription aux cours et notes d'examens"
 
 msgid "my_performance"
-msgstr "Mes notes d'examens"
+msgstr "Mon état d'inscription aux cours et mes notes d'examen"
 
 msgid "performance_administration"
-msgstr "Administration des notes d'examens"
+msgstr "Administration de l'état d'inscription aux cours et des notes d'examen"
 
 msgid "performance_results"
 msgstr "Résultats"
@@ -117,7 +117,7 @@ msgid "sept"
 msgstr "Sept."
 
 msgid "student_performance"
-msgstr "Notes d'examens d'un étudiant"
+msgstr "Etat d'inscription aux cours et notes d'examens d'un étudiant"
 
 msgid "text_mean_exprimed_for_20"
 msgstr "Attention : à partir de juin 2009, la moyenne est exprimée sur un maximum de 20."
@@ -198,4 +198,4 @@ msgid "courses_registration_not_validated"
 msgstr "Votre inscription aux cours n'a pas encore été validée."
 
 msgid "learning_unitys_outside_catalog"
-msgstr "Cette inscription est \"hors programme\" ou \"préalable\" et les crédits associés ne sont pas pris en compte pour atteindre le nombre de crédits requis."
+msgstr "Cette inscription est \"hors programme\" ou \"supplémentaire\" et les crédits associés ne sont pas pris en compte pour atteindre le nombre de crédits requis."
