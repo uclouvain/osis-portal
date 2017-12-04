@@ -23,26 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
-import mock
 
 from django.contrib.auth.models import Group, Permission
 from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext_lazy as _
-from django.test import TestCase, Client, override_settings
+from django.test import TestCase
 
-from attribution.views.list import LEARNING_UNIT_ACRONYM_ID
 from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.person import PersonFactory
-from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_unit_year import LearningUnitYearFactory
-from attribution.tests.factories.attribution import AttributionFactory
-
 
 ACCESS_DENIED = 401
-METHOD_NOT_ALLOWED = 405
-OK = 200
-
 
 class ListStudentsLuyTest(TestCase):
     def setUp(self):
@@ -50,7 +39,7 @@ class ListStudentsLuyTest(TestCase):
         self.tutor = TutorFactory()
         self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
 
-        self.url = reverse('produce_xls_students', args=['01234567','1'])
+        self.url = reverse('produce_xls_students', args=['01234567', '1'])
         self.client.force_login(self.tutor.person.user)
 
     def test_without_being_logged(self):
