@@ -379,3 +379,9 @@ msgstr "La candidature est en attente de validation."
 
 msgid "already_applied"
 msgstr "Une candidature a déjà été soumise"
+
+msgid "export_xls_list"
+msgstr "Exporter liste (Excel)"
+
+msgid "desc_export_xls_list"
+msgstr "Exporter la liste des étudiants au format Excel"
