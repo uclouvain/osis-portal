@@ -388,3 +388,6 @@ msgstr "Application period from "
 
 msgid "to"
 msgstr "to"
+
+msgid "learning_unit_specifications"
+msgstr "Specifications"

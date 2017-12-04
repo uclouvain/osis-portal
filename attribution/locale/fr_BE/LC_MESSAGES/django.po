@@ -391,3 +391,6 @@ msgstr "Période de candidature en ligne du "
 
 msgid "to"
 msgstr "au"
+
+msgid "learning_unit_specifications"
+msgstr "Cahier de charges"
