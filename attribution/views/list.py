@@ -151,7 +151,7 @@ def _make_xls_list(attestation_pdf):
 
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
-def students_list_admin(request):
+def lists_of_students_exams_enrollments(request):
     if request.method == "POST":
         form = GlobalIdForm(request.POST)
         if form.is_valid():

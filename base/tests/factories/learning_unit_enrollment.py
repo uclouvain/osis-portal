@@ -25,11 +25,23 @@
 ##############################################################################
 import factory
 import factory.fuzzy
-from base.tests.factories.person import PersonFactory
+import string
+import datetime
+
+from base.models.enums import learning_unit_enrollment_state
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
+from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
+from osis_common.utils.datetime import get_tzinfo
 
 
-class TutorFactory(factory.DjangoModelFactory):
+class LearningUnitEnrollmentFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = 'base.Tutor'
-    external_id = factory.Sequence(lambda n: '10000000%02d' % n)
-    person = factory.SubFactory(PersonFactory)
+        model = "base.LearningUnitEnrollment"
+
+    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
+    changed = factory.fuzzy.FuzzyDateTime(datetime.datetime(2016, 1, 1, tzinfo=get_tzinfo()),
+                                          datetime.datetime(2017, 3, 1, tzinfo=get_tzinfo()))
+    date_enrollment = datetime.datetime.now(tz=get_tzinfo())
+    learning_unit_year = factory.SubFactory(LearningUnitYearFactory)
+    offer_enrollment = factory.SubFactory(OfferEnrollmentFactory)
+    enrollment_state = learning_unit_enrollment_state.ENROLLED

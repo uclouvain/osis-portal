@@ -53,3 +53,38 @@ class LearningContainerYear(SerializableModel):
 
     def __str__(self):
         return u"%s - %s" % (self.acronym, self.title)
+
+
+def find_by_id(id):
+    try:
+        return LearningContainerYear.objects.get(id=id)
+    except LearningContainerYear.DoesNotExist:
+        return None
+
+
+def find_by_acronym(acronym, academic_year=None):
+    qs = LearningContainerYear.objects.filter(acronym=acronym)
+    if academic_year:
+        qs = qs.filter(academic_year=academic_year)
+    return qs.select_related('academic_year')
+
+
+def search(*args, **kwargs):
+    qs = LearningContainerYear.objects.all()
+
+    if "id" in kwargs:
+        if isinstance(kwargs['id'], list):
+            qs = qs.filter(id__in=kwargs['id'])
+        else:
+            qs = qs.filter(id=kwargs['id'])
+
+    if "acronym" in kwargs:
+        if isinstance(kwargs['acronym'], list):
+            qs = qs.filter(acronym__in=kwargs['acronym'])
+        else:
+            qs = qs.filter(acronym__icontains=kwargs['acronym'])
+
+    if "academic_year" in kwargs:
+        qs = qs.filter(academic_year=kwargs['academic_year'])
+
+    return qs.select_related('academic_year')

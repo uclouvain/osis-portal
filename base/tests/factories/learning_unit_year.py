@@ -29,6 +29,7 @@ import string
 
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.learning_unit import LearningUnitFactory
+from base.models.enums import learning_unit_year_subtypes
 
 
 class LearningUnitYearFactory(factory.django.DjangoModelFactory):
@@ -42,3 +43,4 @@ class LearningUnitYearFactory(factory.django.DjangoModelFactory):
     weight = 5
     academic_year = factory.SubFactory(AcademicYearFactory)
     learning_unit = factory.SubFactory(LearningUnitFactory)
+    subtype = learning_unit_year_subtypes.FULL

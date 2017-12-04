@@ -24,14 +24,16 @@
 #
 ##############################################################################
 from django.db import models
+
+from base.models.enums import learning_unit_year_subtypes
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
 class LearningUnitYearAdmin(SerializableModelAdmin):
-    list_display = ('acronym', 'title', 'academic_year', 'weight', 'learning_unit',)
+    list_display = ('acronym', 'title', 'academic_year', 'weight', 'learning_unit', )
     fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'weight', 'learning_unit',
-                 'learning_container_year')}),)
-    list_filter = ('academic_year__year',)
+                 'learning_container_year', 'subtype')}),)
+    list_filter = ('academic_year__year', 'subtype',)
     search_fields = ['acronym']
     raw_id_fields = ('learning_unit', 'learning_container_year')
 
@@ -45,6 +47,8 @@ class LearningUnitYear(SerializableModel):
     academic_year = models.ForeignKey('AcademicYear')
     learning_container_year = models.ForeignKey('LearningContainerYear', blank=True, null=True)
     learning_unit = models.ForeignKey('LearningUnit', blank=True, null=True)
+    subtype = models.CharField(max_length=50, blank=True, null=True,
+                               choices=learning_unit_year_subtypes.LEARNING_UNIT_YEAR_SUBTYPES)
 
     def __str__(self):
         return u"%s - %s" % (self.academic_year, self.acronym)

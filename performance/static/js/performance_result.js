@@ -154,10 +154,10 @@ function addRowCourse(courseJson, $row) {
   createJQObject("<td/>", {}, title, $row);
   createJQObject("<td/>", {}, ects, $row);
   if (prerequisHP){
-      var inscr_prea = "(+)"+inscr;
-      createJQObject("<td/>", {}, inscr_prea, $row)
+    var inscr_prea = "(+)"+inscr;
+    createJQObject("<td/>", {}, inscr_prea, $row)
   } else {
-      createJQObject("<td/>", {}, inscr, $row);
+    createJQObject("<td/>", {}, inscr, $row);
   }
   makeScoreCell(janv, $row);
   makeScoreCell(juin, $row);

@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -25,233 +25,340 @@
 ##############################################################################
 import datetime
 
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group, Permission
+from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.utils.translation import ugettext_lazy as _
 
-from attribution.views import online_application
-from base.models.enums import component_type
-from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
-    test_learning_unit_component, test_learning_unit
-from base.tests.factories.learning_container_year import LearningContainerYearFactory
-from attribution.tests.models import test_attribution_charge, test_application_charge, test_tutor_application
 from attribution.models.enums import function
-from base import models as mdl_base
-from attribution.tests.factories.attribution import AttributionFactory
-
-now = datetime.datetime.now()
-
-PREVIOUS_YEAR = now.year - 1
-CURRENT_YEAR = now.year
-NEXT_YEAR = now.year + 1
-
-
-LEARNING_UNIT_LECTURING_DURATION = 15.00
-LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION = 30.00
-
-ATTRIBUTION_CHARGE_LECTURING_DURATION = 15.00
-ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION = 15.00
-
-ACRONYM = 'LFSAB1003'
-TITLE = 'METHODES NUMERIQUES'
-
-ACRONYM2 = 'LFSAB1104'
-TITLE2 = 'Coordination du quadrimestre 3'
-
-ACRONYM_VACANT_LEARNING_UNIT = 'LFSAB1105'
-TITLE_VACANT_LEARNING_UNIT = 'Coordination et mathématiques'
-
-WEIGHT = 5
-
-START = PREVIOUS_YEAR
-END = NEXT_YEAR
+from attribution.tests.factories.attribution import AttributionNewFactory
+from attribution.utils import tutor_application_epc
+from base.models.enums import academic_calendar_type
+from base.models.enums import learning_component_year_type
+from base.tests.factories.academic_calendar import AcademicCalendarFactory
+from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.learning_component_year import LearningComponentYearFactory
+from base.tests.factories.learning_container_year import LearningContainerYearFactory
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
+from base.tests.factories.learning_unit_component import LearningUnitComponentFactory
+from base.tests.factories.person import PersonFactory
+from base.tests.factories.tutor import TutorFactory
+from base.tests.factories.user import UserFactory
+from base.models.enums import component_type, learning_unit_year_subtypes
 
 
-class OnlineApplicationTest(TestCase):
-
+class TestOnlineApplication(TestCase):
     def setUp(self):
-        self.a_user = User.objects.create_user(username='legat', email='legat@localhost', password='top_secret')
-        self.a_person = test_person.create_person_with_user(self.a_user)
-        Group.objects.get_or_create(name='tutors')
-        self.a_tutor = test_tutor.create_tutor_with_person(self.a_person)
-        a_previous_academic_yr = test_academic_year.create_academic_year_with_year(PREVIOUS_YEAR)
-        self.a_current_academic_yr = test_academic_year.create_academic_year_with_year(CURRENT_YEAR)
-        a_next_academic_yr = test_academic_year.create_academic_year_with_year(NEXT_YEAR)
+        # Create Group tutor
+        Group.objects.create(name="tutors")
 
-        self.learning_unit_year1_partially_vacant_previous = self.create_lu_year_annual_data(ACRONYM, TITLE, a_previous_academic_yr, self.a_tutor, START, END)
-        self.learning_unit_year1_partially_vacant_current = self.create_lu_year_annual_data(ACRONYM, TITLE, self.a_current_academic_yr, self.a_tutor, START, END)
-        self.learning_unit_year1_partially_vacant_next = self.create_lu_year_annual_data(ACRONYM, TITLE, a_next_academic_yr, self.a_tutor, START, END)
-        self.learning_unit_year2_partially_vacant_previous = self.create_lu_year_annual_data(ACRONYM2, TITLE2, a_previous_academic_yr, self.a_tutor, START, END)
-        self.learning_unit_year2_partially_vacant_current = self.create_lu_year_annual_data(ACRONYM2, TITLE2, self.a_current_academic_yr, self.a_tutor, START, END)
-        self.learning_unit_year2_partially_vacant_next = self.create_lu_year_annual_data(ACRONYM2, TITLE2, a_next_academic_yr, self.a_tutor, START, END)
+        # Create user
+        user = UserFactory(username="tutor_application")
+        person = PersonFactory(global_id="578945612", user=user)
+        self.tutor = TutorFactory(person=person)
 
-        self.learning_unit_year_totally_vacant_next = self.create_lu_year_annual_data(ACRONYM_VACANT_LEARNING_UNIT, TITLE_VACANT_LEARNING_UNIT, a_next_academic_yr, None, START, END)
+        # Add permission and log into app
+        add_permission(user, "can_access_attribution_application")
+        self.client.force_login(user)
 
-    def create_lu_year_annual_data(self, an_acronym, a_title, an_academic_yr, a_tutor, start, end):
-        a_learning_container_year = LearningContainerYearFactory(academic_year=an_academic_yr)
-        a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
-            'acronym': an_acronym,
-            'title': a_title,
-            'academic_year': an_academic_yr,
-            'weight': WEIGHT})
-        a_learning_unit_year.learning_container_year = a_learning_container_year
-        a_learning_unit_year.save()
-        a_learning_unit_component_lecture = test_learning_unit_component.create_learning_unit_component({
-            'learning_unit_year': a_learning_unit_year,
-            'type': component_type.LECTURING,
-            'duration': LEARNING_UNIT_LECTURING_DURATION})
-        a_learning_unit_component_practice = \
-            test_learning_unit_component.create_learning_unit_component({
-                'learning_unit_year': a_learning_unit_year,
-                'type': component_type.PRACTICAL_EXERCISES,
-                'duration': LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION})
-        if a_tutor:
-            an_attribution = AttributionFactory(function=function.CO_HOLDER,
-                                                learning_unit_year=a_learning_unit_year,
-                                                tutor=a_tutor,
-                                                start_year=start,
-                                                end_year=end)
+        # Create current academic year
+        current_year = datetime.datetime.today().year
+        self.current_academic_year = AcademicYearFactory(year=current_year)
 
-            test_attribution_charge.create_attribution_charge(
-                {'attribution': an_attribution,
-                 'learning_unit_component': a_learning_unit_component_lecture,
-                 'allocation_charge': ATTRIBUTION_CHARGE_LECTURING_DURATION})
-            test_attribution_charge.create_attribution_charge(
-                {'attribution': an_attribution,
-                 'learning_unit_component': a_learning_unit_component_practice,
-                 'allocation_charge': ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION})
+        # Create application year
+        application_year = current_year + 1  # Application is always next year
+        self.application_academic_year = AcademicYearFactory(year=application_year)
 
-        return a_learning_unit_year
+        # Create Event to allow teacher to register
+        start_date = datetime.datetime.today() - datetime.timedelta(days=10)
+        end_date = datetime.datetime.today() + datetime.timedelta(days=15)
+        self.academic_calendar = AcademicCalendarFactory(
+            academic_year=self.current_academic_year,
+            reference=academic_calendar_type.TEACHING_CHARGE_APPLICATION,
+            start_date=start_date,
+            end_date=end_date
+        )
 
-    def get_learning_unit_component(self):
-        a_learning_unit_component_practices = mdl_base.learning_unit_component.search(
-            self.learning_unit_year1_partially_vacant_next,
-            component_type.PRACTICAL_EXERCISES)
+        # Creation context with multiple learning container year
+        self._create_multiple_learning_container_year()
+        self.attribution = AttributionNewFactory(
+            global_id=person.global_id,
+            applications=self._get_default_application_list(),
+            attributions=self._get_default_attribution_list()
+        )
 
-        if a_learning_unit_component_practices.exists():
-            return a_learning_unit_component_practices[0]
-        return None
+    def test_redirection_to_outside_encoding_period(self):
+        # Remove teaching charge application event
+        self.academic_calendar.delete()
+        url = reverse('applications_overview')
+        url_outside = reverse('outside_applications_period')
+        response = self.client.get(url)
+        self.assertRedirects(response, "%s?next=%s" % (url_outside, url))  # Redirection
 
-    def test_get_learning_unit_component_duration(self):
-        self.assertEqual(online_application.get_learning_unit_component_duration(self.learning_unit_year1_partially_vacant_current, component_type.LECTURING), LEARNING_UNIT_LECTURING_DURATION)
+    def test_message_outside_encoding_period(self):
+        # Remove teaching charge application event
+        self.academic_calendar.delete()
+        url = reverse('outside_applications_period')
+        response = self.client.get(url)
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(messages[0].tags, 'warning')
+        self.assertEqual(messages[0].message, _('application_denied'))
 
-    def test_get_current_attributions(self):
-        unused_year = CURRENT_YEAR+10
-        an_new_academic_year = test_academic_year.create_academic_year_with_year(unused_year)
-        acronym_1 = 'LMECA2125'
-        self.create_lu_year_annual_data(acronym_1, TITLE, an_new_academic_year, self.a_tutor, unused_year, unused_year+1)
-        acronym_2 = 'LSTAT8125'
-        self.create_lu_year_annual_data(acronym_2, TITLE, an_new_academic_year, self.a_tutor, unused_year, unused_year+1)
-        self.assertEqual(len(online_application.get_attributions_allocated(an_new_academic_year.year, self.a_tutor)), 2)
+    def test_applictions_overview(self):
+        url = reverse('applications_overview')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        context = response.context[-1]
+        self.assertEqual(context['a_tutor'], self.tutor)
+        self.assertEqual(context['current_academic_year'], self.current_academic_year)
+        self.assertEqual(context['application_year'], self.application_academic_year)
+        self.assertEqual(len(context['attributions']), 1)
+        self.assertEqual(context['attributions'][0]['acronym'], self.lagro2500_next.acronym)
+        self.assertEqual(len(context['applications']), 1)
+        self.assertEqual(context['applications'][0]['acronym'], self.lagro1600_next.acronym)
+        self.assertEqual(len(context['attributions_about_to_expire']), 1)
+        self.assertEqual(context['attributions_about_to_expire'][0]['acronym'], self.lbir1300_current.acronym)
 
-    def test_sum_attribution_allocation_charges(self):
-        self.assertEqual(online_application.sum_attribution_allocation_charges(self.learning_unit_year1_partially_vacant_current), ATTRIBUTION_CHARGE_LECTURING_DURATION + ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION)
+    def test_applications_overview_post_method_not_allowed(self):
+        url = reverse('applications_overview')
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 405)
 
-    def test_no_attribution_allocation_charge(self):
-        self.assertEqual(online_application.sum_attribution_allocation_charges(self.learning_unit_year_totally_vacant_next), 0)
+    def test_search_vacant_attribution_initial(self):
+        url = reverse('vacant_attributions_search')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        context = response.context[-1]
+        self.assertEqual(context['a_tutor'], self.tutor)
+        self.assertTrue(context['search_form'])
+        self.assertFalse(context['attributions_vacant'])
 
-    def test_get_vacant_attribution_allocation_charge_lecturing(self):
-        self.assertEqual(online_application.get_vacant_attribution_allocation_charge(self.learning_unit_year1_partially_vacant_current, component_type.LECTURING), 0)
+    def test_search_vacant_attribution_post_not_allowed(self):
+        url = reverse('vacant_attributions_search')
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 405)
 
-    def test_get_vacant_attribution_allocation_charge_practical(self):
-        self.assertEqual(online_application.get_vacant_attribution_allocation_charge(self.learning_unit_year1_partially_vacant_current, component_type.PRACTICAL_EXERCISES), 15.00)
+    def test_search_vacant_attribution_search_list(self):
+        url = reverse('vacant_attributions_search')
+        response = self.client.get(url, data={'learning_container_acronym': 'LAGRO'})
+        self.assertEqual(response.status_code, 200)
+        context = response.context[-1]
+        self.assertEqual(context['a_tutor'], self.tutor)
+        self.assertTrue(context['search_form'])
+        self.assertEqual(len(context['attributions_vacant']), 2)
+        # Check if LAGRO1600 have the boolean already applied
+        self.assertTrue((next(attrib for attrib in context['attributions_vacant']
+                              if attrib.get('acronym') == self.lagro1600_next.acronym and
+                              attrib.get('already_applied')), False))
 
-    def test_get_vacant_learning_units(self):
-        data1 = {online_application.ACRONYM:                      ACRONYM,
-                 online_application.TITLE:                        TITLE,
-                 online_application.LECTURING_DURATION:           LEARNING_UNIT_LECTURING_DURATION,
-                 online_application.PRACTICAL_DURATION:           LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION,
+    def test_renew_applications(self):
+        url = reverse('renew_applications')
+        post_data = {'learning_container_year_' + self.lbir1300_next.acronym: 'on'}
+        response = self.client.post(url, data=post_data)
+        self.assertEqual(response.status_code, 302) # redirection
+        self.attribution.refresh_from_db()
+        self.assertEqual(len(self.attribution.applications), 2)  # Now we have two applications
 
-                 online_application.VACANT_ATTRIBUTION_CHARGE_LECTURING: LEARNING_UNIT_LECTURING_DURATION-ATTRIBUTION_CHARGE_LECTURING_DURATION,
-                 online_application.VACANT_ATTRIBUTION_CHARGE_PRACTICAL: LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION-ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION,
-                 }
+    def test_renew_applications_with_bad_learning_container(self):
+        url = reverse('renew_applications')
+        post_data = {'learning_container_year_' + self.lagro2500_next.acronym: 'on'}
+        response = self.client.post(url, data=post_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(messages[0].tags, 'error')
+        self.assertEqual(messages[0].message, _('no_attribution_renewed'))
 
-        data2 = {online_application.ACRONYM:                      ACRONYM2,
-                 online_application.TITLE:                        TITLE2,
-                 online_application.LECTURING_DURATION:           LEARNING_UNIT_LECTURING_DURATION,
-                 online_application.PRACTICAL_DURATION:           LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION,
+    def test_renew_applications_method_not_allowed(self):
+        url = reverse('renew_applications')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 405)
 
-                 online_application.VACANT_ATTRIBUTION_CHARGE_LECTURING: LEARNING_UNIT_LECTURING_DURATION-ATTRIBUTION_CHARGE_LECTURING_DURATION,
-                 online_application.VACANT_ATTRIBUTION_CHARGE_PRACTICAL: LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION-ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION,
+    def test_delete_application(self):
+        url = reverse('delete_tutor_application', kwargs={'learning_container_year_id': self.lagro1600_next.id})
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)  # redirection
+        self.attribution.refresh_from_db()
+        # pending flag must be set to 'deleted'
+        self.assertTrue((next(attrib for attrib in self.attribution.applications
+                              if attrib.get('acronym') == self.lagro1600_next.acronym and
+                              attrib.get('pending') == tutor_application_epc.DELETE_OPERATION), False))
 
-                 }
+    def test_delete_application_with_wrong_container(self):
+        url = reverse('delete_tutor_application', kwargs={'learning_container_year_id': self.lbir1300_next.id})
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 404)  # Not found
 
-        data3 = {online_application.ACRONYM:                      ACRONYM_VACANT_LEARNING_UNIT,
-                 online_application.TITLE:                        TITLE_VACANT_LEARNING_UNIT,
-                 online_application.LECTURING_DURATION:           LEARNING_UNIT_LECTURING_DURATION,
-                 online_application.PRACTICAL_DURATION:           LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION,
+    def test_delete_application_method_not_allowed(self):
+        url = reverse('delete_tutor_application', kwargs={'learning_container_year_id': self.lagro1600_next.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 405)
 
-                 online_application.VACANT_ATTRIBUTION_CHARGE_LECTURING: LEARNING_UNIT_LECTURING_DURATION,
-                 online_application.VACANT_ATTRIBUTION_CHARGE_PRACTICAL: LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION,
-                 }
+    def test_get_edit_application_form(self):
+        url = reverse('create_or_update_tutor_application', kwargs={'learning_container_year_id': self.lagro1600_next.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        context = response.context[-1]
+        self.assertEqual(context['a_tutor'], self.tutor)
+        self.assertEqual(context['learning_container_year'], self.lagro1600_next)
+        self.assertTrue(context['form'])
 
-        data = [data1, data2, data3]
+    def test_post_edit_application_form(self):
+        url = reverse('create_or_update_tutor_application',
+                      kwargs={'learning_container_year_id': self.lagro1600_next.id})
+        post_data = _get_application_example(self.lagro1600_next, '54', '7')
+        response = self.client.post(url, data=post_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.attribution.refresh_from_db()
+        self.assertEqual(len(self.attribution.applications), 1)
+        self.assertEqual(self.attribution.applications[0]['charge_lecturing_asked'], '54.0')
+        self.assertEqual(self.attribution.applications[0]['charge_practical_asked'], '7.0')
+        self.assertEqual(self.attribution.applications[0]['pending'], tutor_application_epc.UPDATE_OPERATION)
 
-        self.assertEqual(online_application.get_vacant_learning_units(NEXT_YEAR), data)
+    def test_post_edit_application_form_with_empty_value(self):
+        url = reverse('create_or_update_tutor_application',
+                      kwargs={'learning_container_year_id': self.lagro1600_next.id})
+        post_data = _get_application_example(self.lagro1600_next, None, None)
+        response = self.client.post(url, data=post_data)
+        self.assertEqual(response.status_code, 200)
+        context = response.context[-1]
+        self.assertTrue(context.get('form'))
+        form = context['form']
+        self.assertTrue(form.errors)  # Not valid because not number entered
 
-    def test_find_no_application(self):
-        unexisting_year_date = NEXT_YEAR+100
-        self.assertEqual(len(online_application.get_tutor_applications(unexisting_year_date, self.a_tutor)), 0)
+    def test_post_edit_application_form_with_empty_lecturing_value(self):
+        url = reverse('create_or_update_tutor_application',
+                      kwargs={'learning_container_year_id': self.lagro1600_next.id})
+        post_data = _get_application_example(self.lagro1600_next, "15", "")
+        response = self.client.post(url, data=post_data)
+        self.assertEqual(response.status_code, 302)
+        self.attribution.refresh_from_db()
+        self.assertEqual(len(self.attribution.applications), 1)
+        self.assertEqual(self.attribution.applications[0]['charge_lecturing_asked'], '15.0')
+        self.assertEqual(self.attribution.applications[0]['charge_practical_asked'], '0.0')
+        self.assertEqual(self.attribution.applications[0]['pending'], tutor_application_epc.UPDATE_OPERATION)
 
-    def test_find_applications(self):
-        tutor_application_learning_unit_1 = test_tutor_application.create_tutor_application(
-            {'function': function.CO_HOLDER,
-             'learning_unit_year': self.learning_unit_year1_partially_vacant_next,
-             'tutor': self.a_tutor})
-        application_charge_duration = LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION - ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION
-        a_learning_unit_component_practice = self.get_learning_unit_component()
-        test_application_charge.create_application_charge(
-            {'tutor_application': tutor_application_learning_unit_1,
-             'learning_unit_component': a_learning_unit_component_practice,
-             'allocation_charge': application_charge_duration})
-        self.assertEquals(len(online_application.get_tutor_applications(NEXT_YEAR, self.a_tutor)), 1)
+    def test_post_edit_application_form_with_value_under_zero(self):
+        url = reverse('create_or_update_tutor_application',
+                      kwargs={'learning_container_year_id': self.lagro1600_next.id})
+        post_data = _get_application_example(self.lagro1600_next, '-1', '5')
+        response = self.client.post(url, data=post_data)
+        self.assertEqual(response.status_code, 200)
+        context = response.context[-1]
+        self.assertTrue(context.get('form'))
+        form = context['form']
+        self.assertTrue(form.errors)  # Not valid because -1 entered
 
-    def test_define_renew_unexisting_academic_year(self):
-        a_learning_unit = test_learning_unit.create_learning_unit({'acronym': 'LSTAT2121', 'title': 'Statistiques'})
-        a_next_academic_yr = test_academic_year.create_academic_year_with_year(NEXT_YEAR + 10)
-        a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
-            'acronym': a_learning_unit.acronym,
-            'academic_year': a_next_academic_yr,
-            'learning_unit': a_learning_unit})
-        self.assertEquals(online_application.define_renew_possible(self.a_tutor, a_learning_unit_year, None), False)
+    def test_post_overview_with_lecturing_and_practical_component_partim(self):
+        self.attribution.delete()
+        self.attribution = AttributionNewFactory(
+            global_id=self.tutor.person.global_id,
+            applications=[_get_application_example(self.lbira2101_next, "10", "10")]
+        )
 
-    def test_define_renew_existing_academic_year_true(self):
-        a_learning_unit = test_learning_unit.create_learning_unit({'acronym': 'LSTAT2121',
-                                                                   'title': 'Statistiques'})
-        a_next_academic_yr_plus_4 = test_academic_year.create_academic_year_with_year(NEXT_YEAR + 4)
-        a_learning_unit_year_plus_4 = test_learning_unit_year.create_learning_unit_year({
-            'acronym': a_learning_unit.acronym,
-            'academic_year': a_next_academic_yr_plus_4,
-            'learning_unit': a_learning_unit})
-        a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
-            'acronym': a_learning_unit.acronym,
-            'academic_year': test_academic_year.create_academic_year_with_year(NEXT_YEAR + 5),
-            'learning_unit': a_learning_unit})
-        a_learning_unit_year.learning_container_year = LearningContainerYearFactory(
-            academic_year=a_learning_unit_year.academic_year,
-            is_vacant=True)
-        a_learning_unit_year.save()
-        self.assertEquals(online_application.define_renew_possible(self.a_tutor, a_learning_unit_year_plus_4, None), True)
+        url = reverse('applications_overview')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        context = response.context[-1]
+        self.assertEqual(len(context['applications']), 1)
+        self.assertEqual(context['applications'][0]['acronym'], self.lbira2101_next.acronym)
+        with self.assertRaises(KeyError):
+            context['applications'][0]['PRACTICAL_EXERCISES']
+        with self.assertRaises(KeyError):
+            context['applications'][0]['LECTURING']
 
-    def test_define_renew_existing_academic_year_False_already_exists(self):
-        a_learning_unit = test_learning_unit.create_learning_unit({'acronym': 'LSTAT2121',
-                                                                   'title': 'Statistiques'})
-        a_next_academic_yr_plus_4 = test_academic_year.create_academic_year_with_year(NEXT_YEAR + 4)
-        a_learning_unit_year_plus_4 = test_learning_unit_year.create_learning_unit_year({
-            'acronym': a_learning_unit.acronym,
-            'academic_year': a_next_academic_yr_plus_4,
-            'learning_unit': a_learning_unit})
-        a_next_academic_yr_plus_5 = test_academic_year.create_academic_year_with_year(NEXT_YEAR + 5)
-        a_learning_unit_year_plus_5 = test_learning_unit_year.create_learning_unit_year({
-            'acronym': a_learning_unit.acronym,
-            'academic_year': a_next_academic_yr_plus_5,
-            'learning_unit': a_learning_unit})
-        test_tutor_application.create_tutor_application({'learning_unit_year': a_learning_unit_year_plus_5,
-                                                         'tutor': self.a_tutor,
-                                                         'function': function.CO_HOLDER})
-        self.assertEquals(online_application.define_renew_possible(self.a_tutor, a_learning_unit_year_plus_4, None), False)
+    def _create_multiple_learning_container_year(self):
+        # Creation learning container for current academic year
+        self.lbir1200_current = _create_learning_container_with_components("LBIR1200", self.current_academic_year)
+        self.lbir1300_current = _create_learning_container_with_components("LBIR1300", self.current_academic_year)
+        self.ldroi1500_current = _create_learning_container_with_components("LDROI1500", self.current_academic_year)
+        self.lbira2101_current = _create_learning_container_with_components("LBIRA2101", self.current_academic_year, subtype=learning_unit_year_subtypes.PARTIM)
 
-    def test_is_deputy_function(self):
-        self.assertEquals(online_application.is_deputy_function(function.DEPUTY_TEMPORARY), True)
+        # Creation learning container for next academic year [==> application academic year]
+        self.lbir1200_next = _create_learning_container_with_components("LBIR1200", self.application_academic_year,
+                                                                        70,70)
+        self.lbir1300_next = _create_learning_container_with_components("LBIR1300", self.application_academic_year,
+                                                                        60,60)
+        self.lagro1600_next = _create_learning_container_with_components("LAGRO1600", self.application_academic_year,
+                                                                         54, 7)
+        self.lagro2500_next = _create_learning_container_with_components("LAGRO2500", self.application_academic_year,
+                                                                         0, 70)
+        self.lbira2101_next = _create_learning_container_with_components("LBIRA2101", self.application_academic_year,
+                                                                         20, 20, subtype=learning_unit_year_subtypes.PARTIM)
 
-    def test_is_not_deputy_function(self):
-        self.assertEquals(online_application.is_deputy_function(function.COORDINATOR), False)
+    def _get_default_application_list(self):
+        return [
+            _get_application_example(self.lagro1600_next, '15', '0')
+        ]
+
+    def _get_default_attribution_list(self):
+        return [
+            # Attribution in current year
+            _get_attribution_example(self.lbir1200_current, '20.0', '31.5', 2015, 2019),
+            _get_attribution_example(self.lbir1300_current, '21.5', '40', 2015, self.current_academic_year.year),
+            # Attribution in next year
+            _get_attribution_example(self.lagro2500_next, '29', '10', 2015, 2020)
+        ]
+
+
+def _create_learning_container_with_components(acronym, academic_year, volume_lecturing=None, volume_practical_exercices=None, subtype=learning_unit_year_subtypes.FULL):
+    l_container = LearningContainerYearFactory(acronym=acronym, academic_year=academic_year)
+    return _link_components_and_learning_unit_year_to_container(l_container, l_container.acronym, volume_lecturing, volume_practical_exercices, subtype)
+
+
+def _link_components_and_learning_unit_year_to_container(l_container, acronym, volume_lecturing=None, volume_practical_exercices=None, subtype=learning_unit_year_subtypes.FULL):
+    a_learning_unit_year = LearningUnitYearFactory(acronym=acronym, academic_year=l_container.academic_year,
+                                                   title=l_container.title, subtype=subtype)
+    if volume_lecturing:
+        a_component = LearningComponentYearFactory(
+            learning_container_year=l_container,
+            type=learning_component_year_type.LECTURING,
+            volume_declared_vacant=volume_lecturing
+        )
+        LearningUnitComponentFactory(learning_unit_year=a_learning_unit_year, learning_component_year=a_component,
+                                     type=component_type.LECTURING)
+    if volume_practical_exercices:
+        a_component = LearningComponentYearFactory(
+            learning_container_year=l_container,
+            type=learning_component_year_type.PRACTICAL_EXERCISES,
+            volume_declared_vacant=volume_practical_exercices
+        )
+        LearningUnitComponentFactory(learning_unit_year=a_learning_unit_year, learning_component_year=a_component,
+                                     type=component_type.PRACTICAL_EXERCISES)
+    return l_container
+
+
+def _get_application_example(learning_container_year, volume_lecturing, volume_practical_exercice, flag=None):
+    return {
+        'remark': 'This is the remarks',
+        'course_summary': 'This is the course summary',
+        'charge_lecturing_asked': volume_lecturing,
+        'charge_practical_asked': volume_practical_exercice,
+        'acronym': learning_container_year.acronym,
+        'year': learning_container_year.academic_year.year,
+        'pending': flag
+    }
+
+
+def _get_attribution_example(learning_container_year, volume_lecturing, volume_practical_exercice,
+                             start_year, end_year):
+    return {
+        'acronym': learning_container_year.acronym,
+        'title': learning_container_year.title,
+        'year': learning_container_year.academic_year.year,
+        learning_component_year_type.LECTURING: volume_lecturing,
+        learning_component_year_type.PRACTICAL_EXERCISES: volume_practical_exercice,
+        'start_year': start_year,
+        'end_year': end_year,
+        'function': function.HOLDER
+    }
+
+
+def get_permission(codename):
+    return Permission.objects.filter(codename=codename).first()
+
+
+def add_permission(user, codename):
+    perm = get_permission(codename)
+    user.user_permissions.add(perm)

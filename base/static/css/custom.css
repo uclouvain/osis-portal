@@ -70,3 +70,10 @@ span.dashboard-vpn-warning a{
 span.dashboard-vpn-warning a:hover{
     text-decoration: none;
 }
+
+.tooltip-wrapper {
+  display: inline-block;
+}
+.tooltip-wrapper [disabled] {
+  pointer-events: none;
+}

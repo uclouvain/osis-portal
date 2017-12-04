@@ -29,9 +29,12 @@ import mock
 from django.contrib.auth.models import Group, Permission
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.test import TestCase, Client, override_settings
+from django.test import TestCase, override_settings
 
 from attribution.views.list import LEARNING_UNIT_ACRONYM_ID
+from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
+from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
+from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.academic_year import AcademicYearFactory
@@ -53,8 +56,12 @@ def return_sample_xls(*args):
 class StudentsListTest(TestCase):
     def setUp(self):
         Group.objects.create(name="tutors")
+        Group.objects.get_or_create(name='students')
         self.tutor = TutorFactory()
-        self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
+        person = self.tutor.person
+        person.global_id = "001923265"
+        person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
+        person.save()
 
         self.url = reverse('students_list')
         self.client.force_login(self.tutor.person.user)
@@ -88,7 +95,6 @@ class StudentsListTest(TestCase):
                                                end_date=today+datetime.timedelta(days=5))
         a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
         AttributionFactory(learning_unit_year=a_learning_unit_year, tutor=self.tutor)
-
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, OK)
@@ -96,6 +102,37 @@ class StudentsListTest(TestCase):
 
         self.assertEqual(response.context['person'], self.tutor.person)
         self.assertListEqual(response.context['my_learning_units'], [a_learning_unit_year])
+
+    def test_with_attribution_students(self):
+        today = datetime.datetime.today()
+        an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
+                                               end_date=today + datetime.timedelta(days=5))
+        a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
+        AttributionFactory(learning_unit_year=a_learning_unit_year, tutor=self.tutor)
+        offer_year = OfferYearFactory(academic_year=an_academic_year)
+
+        # Create two enrollment to exam [Enrolled]
+        off_enrollment = OfferEnrollmentFactory(offer_year=offer_year)
+        LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_year, offer_enrollment=off_enrollment)
+        off_enrollment = OfferEnrollmentFactory(offer_year=offer_year)
+        LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_year, offer_enrollment=off_enrollment)
+        # Create an enrollment to exam [NOT enrolled]
+        off_enrollment = OfferEnrollmentFactory(offer_year=offer_year)
+        LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_year, offer_enrollment=off_enrollment,
+                                      enrollment_state=None)
+
+        url = reverse('attribution_students', kwargs={
+            'a_learning_unit_year': a_learning_unit_year.id,
+            'a_tutor': self.tutor.id
+        })
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, 'students_list.html')
+
+        self.assertEqual(response.context['global_id'], self.tutor.person.global_id)
+        self.assertEqual(response.context['learning_unit_year'], a_learning_unit_year)
+        self.assertTrue(response.context['students'])
+        self.assertEqual(len(response.context['students']), 2)
 
 
 class ListBuildTest(TestCase):
@@ -206,7 +243,7 @@ class AdminStudentsListTest(TestCase):
         self.tutor = TutorFactory(person=self.person)
         self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
 
-        self.url = reverse('students_list_admin')
+        self.url = reverse('lists_of_students_exams_enrollments')
         self.client.force_login(self.tutor.person.user)
 
     def test_without_being_logged(self):
@@ -249,7 +286,7 @@ class AdminListBuildTest(TestCase):
         self.tutor = TutorFactory(person=self.person)
         self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
 
-        self.url = reverse('students_list_admin_create', args=['01234567'])
+        self.url = reverse('lists_of_students_exams_enrollments_create', args=['01234567'])
         self.client.force_login(self.tutor.person.user)
 
     def test_without_being_logged(self):

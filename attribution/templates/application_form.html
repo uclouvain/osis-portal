@@ -42,118 +42,112 @@
     </ol>
 {% endblock %}
 {% block content %}
-    <div class="panel panel-default"
-         id="pnl_application_form">
-        <div class="panel-heading">{% trans 'application'%}</div>
+    <div class="panel panel-default" id="pnl_application_form">
+        <div class="panel-heading">{% trans 'application' %}</div>
         <div class="panel-body">
-            <form action="{% if application.tutor_application.id %}{% url 'save_tutor_application' application.tutor_application.id %}{% else %}{% url 'save_new_tutor_application' application.tutor_application.tutor.person.global_id %}{% endif%}"
-                  method="post"
-                  class="form" role="form">
-                <input type="hidden"
-                       id="hdn_learning_unit_year_id"
-                       name="learning_unit_year_id"
-                       value="{{application.tutor_application.learning_unit_year.id }}">
+            <form class="form" role="form"
+                  action="{% url 'create_or_update_tutor_application' learning_container_year_id=learning_container_year.id %}"
+                  method="post">
                 {% csrf_token %}
-                <input type="hidden"
-                       id="hdn_application_charge_lecturing_id"
-                       name="application_charge_lecturing_id"
-                       value="{{ application.application_charge_lecturing.id }}">
-                <input type="hidden"
-                       id="hdn_application_charge_practical_id"
-                       name="application_charge_practical_id"
-                       value="{{ application.application_charge_practical.id }}">
+
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger"  role="alert">
+                    <ul>
+                    {% for error in form.non_field_errors %}
+                         <li> {{error}} </li>
+                    {% endfor %}
+                     </ul>
+                </div>
+                {% endif %}
 
                 <div class="row">
                     <div class="col-md-2">
                         <label>{% trans 'code' %}</label>
                         <br>
-                        {{ application.tutor_application.learning_unit_year.acronym }}
+                        {{ form.learning_container_year.acronym }}
                     </div>
-                    <div class="col-md-10">
+                    <div class="col-md-6">
                         <label>{% trans 'title' %}</label>
                         <br>
-                        {{ application.tutor_application.learning_unit_year.title }}
+                        {{ form.learning_container_year.title }}
                     </div>
                 </div>
                 <br>
                 <div class="row">
-                    <div class="col-md-2">
-                        <label>{% trans 'lecturing_hours' %}</label>
-                        <br>
-                        {{ application.lecturing_duration | default_if_none:''}}
-                    </div>
-                    <div class="col-md-2">
-                        <label>{% trans 'practical_hours' %}</label>
-                        <br>
-                        {{ application.practice_duration | default_if_none:'' }}
-                    </div>
                     <div class="col-md-2">
                         <label>{% trans 'lecturing_hours_vacant' %}</label>
                         <br>
-                        <span name="max_charge_lecturing" style="visibility:hidden;display:none;">{{ form.max_charge_lecturing }}</span>
-                        {{ application.vacant_attribution_charge_lecturing | default_if_none:''}}
+                        <span name="max_charge_lecturing">
+                            {{ form.attribution_vacant.LECTURING| default_if_none:'' }}
+                        </span>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-2">
                         <label>{% trans 'practical_hours_vacant' %}</label>
                         <br>
-                        <span name="max_charge_practical" style="visibility:hidden;display:none;">{{ form.max_charge_practical}}</span>
-                        {{ application.vacant_attribution_charge_practical | default_if_none:'' }}
+                        <span name="max_charge_practical">
+                            {{ form.attribution_vacant.PRACTICAL_EXERCISES| default_if_none:'' }}
+                        </span>
                     </div>
                 </div>
                 <br>
-
                 <div class="row">
                     <div class="col-md-2">
-                        <label>{% trans 'lecturing_hours_asked' %}</label>
+                        <label>{% trans 'lecturing_hours_applied' %}</label>
                         <br>
-                        <input class="form-control"
-                               id="txt_charge_lecturing"
-                               name="charge_lecturing"
-                               value="{{ form.charge_lecturing.value | default_if_none:'' }}">
-                        {% if  form.charge_lecturing.errors %}<span class="error">{{ form.charge_lecturing.errors|striptags }}</span>{% endif %}
-                    </div>
-                    <div class="col-md-2">
-                        <label>{% trans 'practical_hours_asked' %}</label>
-                        <br>
-                        <input class="form-control"
-                               id="txt_charge_practical"
-                               name="charge_practical"
-                               value="{{ form.charge_practical.value | default_if_none:'' }}">
-                        {% if form.charge_practical.errors %}<span class="error">{{ form.charge_practical.errors|striptags }}</span>{% endif %}
-                    </div>
-                    <div class="col-md-8">
-                        <label>{% trans 'function' %}</label>
-                        <br>
-                        {% if application.tutor_application.function  %}
-                            {% trans application.tutor_application.function %}
-                        {% else %}
-                            -
+                        {{ form.charge_lecturing_asked }}
+                        {% if form.charge_lecturing_asked.errors %}
+                            <span class="error">{{ form.charge_lecturing_asked.errors|striptags }}</span>
                         {% endif %}
                     </div>
+                    <div class="col-md-2">
+                        <label>{% trans 'practical_hours_applied' %}</label>
+                        <br>
+                         {{ form.charge_practical_asked }}
+                         {% if form.charge_practical_asked.errors %}
+                             <span class="error">{{ form.charge_practical_asked.errors|striptags }}</span>
+                         {% endif %}
+                    </div>
                 </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                         <label>{% trans 'pedagogy_proposal' %}</label>
+                         <br>
+                         {{ form.course_summary }}
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                         <label>{% trans 'remark' %}</label>
+                         <br>
+                         {{ form.remark }}
+                         {% if form.remark.errors %}
+                             <span class="error">{{ form.remark.errors|striptags }}</span>
+                         {% endif %}
+                    </div>
+                </div>
+                <br>
+                <div class="row pull-right">
+                    <div class="col-md-12">
+                         <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
+                                     title="{% if not can_be_saved %}
+                                                {% trans 'wait_validation_epc' %}
+                                            {% endif %}">
+                            <button class="btn btn-primary" id="bt_submit" type="submit" title="{% trans 'submit' %}"
+                                {% if not can_be_saved %} disabled {% endif %}>
+                                <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
+                                {% trans 'submit' %}
+                            </button>
+                         </div>
 
-                <br>
-                <label>{% trans 'course_summary' %}</label>
-                <br>
-                <textarea id="txt_course_summary"
-                          name="course_summary"
-                          class="form-control"
-                        >{{form.course_summary.value | default_if_none:''}}</textarea>
-                <br>
-                <label>{% trans 'remark' %}</label>
-                <br>
-                <textarea id="txt_remark"
-                          name="remark"
-                          class="form-control">{{form.remark.value | default_if_none:''}}</textarea>
-                {% if form.remark.errors %}<span class="error">{{ form.remark.errors|striptags }}</span>{% endif %}
-                <br>
-                <button class="btn btn-primary" id="bt_submit" type="submit" title="{% trans 'submit' %}">
-                    <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
-                    {% trans 'submit' %}</button>
-                <a class="btn btn-default"
-                   href="{% url 'visualize_tutor_applications' global_id=a_tutor.person.global_id %}"
-                   title="{% trans 'cancel' %}">{% trans 'cancel' %}</a>
-
+                        <a class="btn btn-default"
+                           href="{% url 'applications_overview' %}"
+                           title="{% trans 'cancel' %}">
+                            {% trans 'cancel'|title %}
+                        </a>
+                    </div>
+                </div>
             </form>
         </div>
     </div>

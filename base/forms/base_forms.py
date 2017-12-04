@@ -51,3 +51,23 @@ class GlobalIdForm(forms.Form):
             tutor = tutor_model.find_by_person_global_id(global_id)
             if tutor is None:
                 self.add_error('global_id', _('no_tutor_with_this_global_id'))
+
+
+class BootstrapModelForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(BootstrapModelForm, self).__init__(*args, **kwargs)
+        set_form_control(self)
+
+
+class BootstrapForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        super(BootstrapForm, self).__init__(*args, **kwargs)
+        set_form_control(self)
+
+
+def set_form_control(self):
+    for field in self.fields:
+        attr_class = self.fields[field].widget.attrs.get('class') or ''
+        self.fields[field].widget.attrs['class'] = attr_class + ' form-control'

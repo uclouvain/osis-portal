@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,13 +23,35 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
 import factory
 import factory.fuzzy
-from base.tests.factories.person import PersonFactory
+import string
+from django.utils import timezone
+from base.tests.factories.academic_year import AcademicYearFactory
+from osis_common.utils.datetime import get_tzinfo
 
 
-class TutorFactory(factory.DjangoModelFactory):
+def generate_start_date(academic_calendar):
+    if academic_calendar.academic_year:
+        return academic_calendar.academic_year.start_date
+    else:
+        return datetime.date(timezone.now().year, 9, 30)
+
+
+def generate_end_date(academic_calendar):
+    if academic_calendar.academic_year:
+        return academic_calendar.academic_year.end_date
+    else:
+        return datetime.date(timezone.now().year+1, 9, 30)
+
+
+class AcademicCalendarFactory(factory.DjangoModelFactory):
     class Meta:
-        model = 'base.Tutor'
-    external_id = factory.Sequence(lambda n: '10000000%02d' % n)
-    person = factory.SubFactory(PersonFactory)
+        model = 'base.AcademicCalendar'
+
+    academic_year = factory.SubFactory(AcademicYearFactory)
+    title = factory.Sequence(lambda n: 'Academic Calendar - %d' % n)
+    start_date = factory.LazyAttribute(generate_start_date)
+    end_date = factory.LazyAttribute(generate_end_date)
+    reference = None

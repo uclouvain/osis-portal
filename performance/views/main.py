@@ -87,6 +87,7 @@ def __get_performance_data(stud_perf):
         "learning_units_outside_catalog": learning_units_outside_catalog
     }
 
+
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def display_result_for_specific_student_performance(request, pk):
@@ -138,7 +139,6 @@ def display_results_by_acronym_and_year(request, acronym, academic_year):
 
 
 # Admins Views
-
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def select_student(request):

@@ -117,3 +117,11 @@ if hasattr(settings, 'QUEUES') and settings.QUEUES:
                 insert_or_update_document_from_queue).start()
         except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
             LOGGER.exception("Couldn't connect to the QueueServer")
+
+        from attribution.utils.tutor_application_epc import process_message
+        try:
+            common_queue_listener.SynchronousConsumerThread(
+                settings.QUEUES.get('QUEUES_NAME').get('APPLICATION_RESPONSE'),
+                process_message).start()
+        except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
+            LOGGER.exception("Couldn't connect to the QueueServer")
