@@ -31,11 +31,13 @@ from openpyxl import Workbook
 
 
 FIRST_DATA_LINE = 2
+COLUMN_REGISTRATION_ID_NO = 5
 STATUS_COL_WIDTH = 10
 NOTE_COL_WIDTH = 10
+OPENPYXL_STRING_FORMAT = '@'
 
 
-def students_list_build_by_learning_unit(student_list, a_learning_unit_year):
+def get_xls(student_list, a_learning_unit_year):
     xls = _make_xls_list(student_list)
     filename = 'student_list_{}_{}.xlsx'.format(a_learning_unit_year.acronym, a_learning_unit_year.academic_year.year)
     response = HttpResponse(xls, content_type='application/vnd.ms-excel')
@@ -47,19 +49,18 @@ def _make_xls_list(student_list):
     workbook = Workbook()
     worksheet1 = workbook.active
     worksheet1.title = "Students"
-    worksheet1.append([str(_('program')),
-                       str(_('activity')),
-                       str(_('email')),
-                       str(_('student')),
-                       str(_('registration_id')),
-                       str(_('status')),
-                       str(_('january')),
-                       str(_('status')),
-                       str(_('june')),
-                       str(_('status')),
-                       str(_('september'))
-                       ])
-
+    COLUMNS = ['program',
+               'activity',
+               'email',
+               'student',
+               'registration_id',
+               'status',
+               'january',
+               'status',
+               'june',
+               'status',
+               'september']
+    worksheet1.append(_(col) for col in COLUMNS)
     for student in student_list:
         worksheet1.append([student.get('program'),
                            student.get('acronym'),
@@ -115,7 +116,8 @@ def _columns_registration_id_to_text(ws, number_of_rows):
     :param number_of_rows:
     :return:
     """
+
     data_row_counter = FIRST_DATA_LINE
     while data_row_counter <= number_of_rows:
-        ws.cell(row=data_row_counter, column=5).number_format = '@'
+        ws.cell(row=data_row_counter, column=COLUMN_REGISTRATION_ID_NO).number_format = OPENPYXL_STRING_FORMAT
         data_row_counter = data_row_counter + 1

@@ -24,15 +24,15 @@
 #
 ##############################################################################
 import datetime
-
 import json
-import requests
 import logging
 import traceback
 
+import requests
 from django.conf import settings
 from django.forms import formset_factory
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required, permission_required
 
 from attribution.models.enums import offer_enrollment_state
 from performance import models as mdl_performance
@@ -41,12 +41,7 @@ from attribution import models as mdl_attribution
 from attribution.forms.attribution import AttributionForm
 from base.forms.base_forms import GlobalIdForm
 from base.views import layout
-from django.contrib.auth.decorators import login_required, permission_required
-from openpyxl.writer.excel import save_virtual_workbook
-from openpyxl import Workbook
-from django.utils.translation import ugettext_lazy as _
-from django.http import HttpResponse
-from attribution.views import list_students_luy
+from attribution.business import xls_students_by_learning_unit
 
 YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST = 2017
 
@@ -482,10 +477,7 @@ def _tutor_attributions_by_learning_unit(tutor_allocations_json):
 
 
 def _get_learning_unit_yr_student_list(a_learning_unit_year, request_tutor):
-    students_list = []
-    for learning_unit_enrollment in get_students(a_learning_unit_year, get_person(request_tutor.person.user)):
-        students_list.append(set_student_for_display(learning_unit_enrollment))
-    return students_list
+    return [ set_student_for_display(lue) for lue in get_students(a_learning_unit_year, get_person(request_tutor.person.user)) ]
 
 
 @login_required
@@ -494,4 +486,4 @@ def students_list_build_by_learning_unit(request, a_learning_unit_year, a_tutor)
     request_tutor = mdl_base.tutor.find_by_id(a_tutor)
     student_list = _get_learning_unit_yr_student_list(a_learning_unit_year, request_tutor)
     a_learning_unit_yr = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year)
-    return list_students_luy.students_list_build_by_learning_unit(student_list, a_learning_unit_yr)
+    return xls_students_by_learning_unit.get_xls(student_list, a_learning_unit_yr)

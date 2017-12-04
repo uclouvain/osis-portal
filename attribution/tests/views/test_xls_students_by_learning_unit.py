@@ -30,10 +30,11 @@ from django.test import TestCase
 
 from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.person import PersonFactory
+from attribution.business import xls_students_by_learning_unit
 
 ACCESS_DENIED = 401
 
-class ListStudentsLuyTest(TestCase):
+class XlsStudentsByLearningUnitTest(TestCase):
     def setUp(self):
         Group.objects.create(name="tutors")
         self.tutor = TutorFactory()
