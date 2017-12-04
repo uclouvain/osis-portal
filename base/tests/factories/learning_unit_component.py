@@ -30,6 +30,7 @@ import factory
 import factory.fuzzy
 
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
+from base.tests.factories.learning_component_year import LearningComponentYearFactory
 from base.models.enums import component_type
 
 
@@ -40,5 +41,6 @@ class LearningUnitComponentFactory(factory.django.DjangoModelFactory):
     external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
 
     learning_unit_year = factory.SubFactory(LearningUnitYearFactory)
+    learning_component_year = factory.SubFactory(LearningComponentYearFactory)
     type = factory.Iterator(component_type.COMPONENT_TYPES, getter=operator.itemgetter(0))
     duration = factory.fuzzy.FuzzyDecimal(9)

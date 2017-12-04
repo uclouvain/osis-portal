@@ -176,11 +176,11 @@ msgstr "Start"
 msgid "end"
 msgstr "End"
 
-msgid "lecturing_hours_asked"
-msgstr "Vol.1"
+msgid "lecturing_hours_applied"
+msgstr "Vol.1 applied"
 
-msgid "practical_hours_asked"
-msgstr "Vol.2"
+msgid "practical_hours_applied"
+msgstr "Vol.2 applied"
 
 msgid "lecturing_hours_vacant"
 msgstr "Vol.1 vacant "
@@ -194,8 +194,8 @@ msgstr "Application"
 msgid "remark"
 msgstr "Remark"
 
-msgid "course_summary"
-msgstr "Course summary"
+msgid "pedagogy_proposal"
+msgstr "Pedagogy proposal"
 
 msgid "submit"
 msgstr "Submit"
@@ -236,7 +236,7 @@ msgstr "Vacant"
 msgid "charge"
 msgstr "Charge"
 
-msgid "no_vacant_activity"
+msgid "no_activity"
 msgstr "No vacant corresponding course"
 
 msgid "team_mngt_no_application_possible"
@@ -338,8 +338,8 @@ msgstr "The volume of charge is not available at the moment. Please try again la
 msgid "exam_and_student_list"
 msgstr "List of students enrolled to exams of "
 
-msgid "students_list_admin"
-msgstr "Students list administration"
+msgid "lists_of_students_exams_enrollments"
+msgstr "Lists of students enrollments to exams."
 
 msgid "confirm_applications_by_mail"
 msgstr "To receive a confirmation email with the applications"
@@ -349,3 +349,30 @@ msgstr "Applications administration"
 
 msgid "applications_mail_sent"
 msgstr "An email with your applications have been sent"
+
+msgid "no_application_found"
+msgstr "No application found"
+
+msgid "no_attribution_renewed"
+msgstr "No attribution renewed"
+
+msgid "wait_validation_epc"
+msgstr "Wait validation"
+
+msgid "charge_lecturing_asked_or_charge_practical_asked_must_be_filled"
+msgstr "Lecturing charge or practical charge must be filled"
+
+msgid "cancel"
+msgstr "cancel"
+
+msgid "volume_next_year_lower_than_current"
+msgstr "Volume vacant of next year is lower than currently affected"
+
+msgid "cannot_renew_zero_volume"
+msgstr "Cannot renew zero volume"
+
+msgid "applications_in_pending_state"
+msgstr "Applications in pending state"
+
+msgid "already_applied"
+msgstr "Already applied"

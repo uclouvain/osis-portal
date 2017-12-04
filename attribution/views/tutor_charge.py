@@ -401,7 +401,8 @@ def get_learning_unit_years_list(a_learning_unit_year, a_tutor):
         learning_unit_years_allocated.append(lu)
 
     return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(learning_unit_years_allocated,
-                                                                         offer_enrollment_states=enrollment_states)
+                                                                         offer_enrollment_states=enrollment_states,
+                                                                         only_enrolled=True)
 
 
 @login_required

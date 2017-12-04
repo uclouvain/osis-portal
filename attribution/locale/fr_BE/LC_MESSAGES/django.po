@@ -176,11 +176,11 @@ msgstr "Début"
 msgid "end"
 msgstr "Fin"
 
-msgid "lecturing_hours_asked"
-msgstr "Vol.1"
+msgid "lecturing_hours_applied"
+msgstr "Vol.1 postulé"
 
-msgid "practical_hours_asked"
-msgstr "Vol.2"
+msgid "practical_hours_applied"
+msgstr "Vol.2 postulé"
 
 msgid "lecturing_hours_vacant"
 msgstr "Vol.1 vacant"
@@ -194,8 +194,8 @@ msgstr "Candidature"
 msgid "remark"
 msgstr "Remarque"
 
-msgid "course_summary"
-msgstr "Résumé de cours"
+msgid "pedagogy_proposal"
+msgstr "Votre proposition d'organisation pédagogique"
 
 msgid "submit"
 msgstr "Soumettre"
@@ -341,8 +341,8 @@ msgstr "Les volumes horaires ne sont pas disponibles pour le moment. Veuillez r�
 msgid "exam_and_student_list"
 msgstr "Listes des étudiants inscrits aux examens de "
 
-msgid "students_list_admin"
-msgstr "Administration des listes des étudiants"
+msgid "lists_of_students_exams_enrollments"
+msgstr "Administration des listes des inscriptions des étudiants aux examens"
 
 msgid "confirm_applications_by_mail"
 msgstr "Pour recevoir un email de confirmation avec toutes les candidatures en ligne"
@@ -352,3 +352,30 @@ msgstr "Administration des candidatures"
 
 msgid "applications_mail_sent"
 msgstr "Un email contenant vos candidatures vous a été envoyé"
+
+msgid "no_application_found"
+msgstr "Pas de candidature trouvée"
+
+msgid "no_attribution_renewed"
+msgstr "Pas d'attribution renouvelée"
+
+msgid "wait_validation_epc"
+msgstr "En attente de validation"
+
+msgid "charge_lecturing_asked_or_charge_practical_asked_must_be_filled"
+msgstr "Le vol.1 postulé ou le vol.2 postulé doit être rempli"
+
+msgid "cancel"
+msgstr "annuler"
+
+msgid "volume_next_year_lower_than_current"
+msgstr "Le volume vacant de l'année suivante est inférieur à celui actuellement affecté"
+
+msgid "cannot_renew_zero_volume"
+msgstr "Impossible de renouveler un volume nul"
+
+msgid "applications_in_pending_state"
+msgstr "La candidature est en attente de validation."
+
+msgid "already_applied"
+msgstr "Une candidature a déjà été soumise"

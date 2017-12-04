@@ -23,8 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from attribution.models import application_charge
 from attribution.models import attribution
 from attribution.models import attribution_charge
-from attribution.models import tutor_application
 from attribution.models import attribution_new
