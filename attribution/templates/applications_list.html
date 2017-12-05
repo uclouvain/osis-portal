@@ -29,8 +29,8 @@
     <thead>
         <tr>
             <th colspan="2"></th>
-            <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'vacant' %}</th>
-            <th colspan="4" style="border-left-style: solid;border-left-width:1px;">{% trans 'application' %}</th>
+            <th colspan="2" style="border-left: 1px solid;">{% trans 'vacant' %}</th>
+            <th colspan="4" style="border-left: 1px solid;">{% trans 'application' %}</th>
         </tr>
         <tr>
             <th>{% trans 'code'%}</th>
@@ -76,13 +76,13 @@
                         </span>
                     {% endif %}
                 </td>
-                <td style="border-left-style: solid;border-left-width:1px;">{{ application.LECTURING | default_if_none:'0,0'}}</td>
+                <td style="border-left-style: 1px solid;">{{ application.LECTURING | default_if_none:'0,0'}}</td>
                 <td>{{ application.PRACTICAL_EXERCISES | default_if_none:'0,0'}}</td>
-                <td style="border-left-style: solid;border-left-width:1px;">{{ application.charge_lecturing_asked | default_if_none:'0,0'}}</td>
+                <td style="border-left-style: 1px solid;">{{ application.charge_lecturing_asked | default_if_none:'0,0'}}</td>
                 <td>{{ application.charge_practical_asked | default_if_none:'0,0'}}</td>
                 <td colspan="2">
                     <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
-                         title="{% if application.pending %}
+                         title="{% if not application.pending %}
                                     {% trans 'wait_validation_epc' %}
                                 {% endif %}">
                         <form action="{% url 'create_or_update_tutor_application' application.learning_container_year_id %}"

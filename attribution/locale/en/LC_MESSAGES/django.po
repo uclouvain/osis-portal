@@ -391,3 +391,6 @@ msgstr "to"
 
 msgid "learning_unit_specifications"
 msgstr "Specifications"
+
+msgid "applications_of"
+msgstr "Applications  "

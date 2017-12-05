@@ -32,7 +32,10 @@
                                                                           aria-hidden="true"></span></a></li>
     {% block breadcrumb %}
         {% if perms.base.is_faculty_administrator %}
-            <li><a href="{% url 'visualize_tutor_applications' global_id=a_tutor.person.global_id %}" id="lnk_applications">{% trans 'my_applications' %}</a></li>
+            <li><a href="{% url 'visualize_tutor_applications' global_id=a_tutor.person.global_id %}" id="lnk_applications">
+                {% trans 'applications_of' %} {{ a_tutor.person.first_name }} {{ a_tutor.person.last_name }}
+                </a>
+            </li>
         {% else %}
             <li><a href="{% url 'applications_overview' %}" id="lnk_applications">{% trans 'my_applications' %}</a></li>
         {% endif %}

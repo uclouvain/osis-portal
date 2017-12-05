@@ -394,3 +394,6 @@ msgstr "au"
 
 msgid "learning_unit_specifications"
 msgstr "Cahier de charges"
+
+msgid "applications_of"
+msgstr "Applications de "
