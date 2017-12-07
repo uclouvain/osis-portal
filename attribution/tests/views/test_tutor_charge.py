@@ -266,7 +266,7 @@ class TutorChargeTest(TestCase):
 
     def test_format_students_email(self):
         email_expected = "{0}{1}{2}".format(tutor_charge.MAIL_TO, ACRONYM.lower(), tutor_charge.STUDENT_LIST_EMAIL_END)
-        self.assertEqual(tutor_charge.get_email_students(ACRONYM, tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST -1 ), email_expected)
+        self.assertEqual(tutor_charge.get_email_students(ACRONYM, tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST - 1), email_expected)
 
     def test_format_students_email_new_management(self):
         email_expected = "{0}{1}-{2}{3}".format(tutor_charge.MAIL_TO, ACRONYM.lower(), tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST, tutor_charge.STUDENT_LIST_EMAIL_END)
@@ -659,3 +659,13 @@ class HomeTest(TestCase):
                                         attribution['practice_allocation_charge'],
                                         attribution['percentage_allocation_charge']], attributions)
         self.assertIn([str(LEARNING_UNIT_LECTURING_DURATION), None, "25.0"], reduced_list_attributions)
+
+    def test_valid_students_data_for_xls(self):
+        min_student_data_for_this_test = [{'registration_id': '61761600'}, {'registration_id': '71761601'}]
+        self.assertTrue(tutor_charge._valid_students_data_for_xls(min_student_data_for_this_test))
+
+    def test_not_valid_students_data_for_xls(self):
+        min_student_data_for_this_test = [{'registration_id': '61'}]
+        self.assertFalse(tutor_charge._valid_students_data_for_xls(min_student_data_for_this_test))
+        min_student_data_for_this_test = [{'registration_id': 'AB123456'}]
+        self.assertFalse(tutor_charge._valid_students_data_for_xls(min_student_data_for_this_test))

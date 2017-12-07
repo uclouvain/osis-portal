@@ -30,7 +30,6 @@ from openpyxl.writer.excel import save_virtual_workbook
 from openpyxl import Workbook
 
 
-FIRST_DATA_LINE = 2
 COLUMN_REGISTRATION_ID_NO = 5
 STATUS_COL_WIDTH = 10
 NOTE_COL_WIDTH = 10
@@ -76,7 +75,7 @@ def _make_xls_list(student_list):
                            ])
 
     _columns_resizing(worksheet1)
-    _columns_registration_id_to_text(worksheet1, len(student_list) + 1)
+    _columns_registration_id_to_text(worksheet1)
     return save_virtual_workbook(workbook)
 
 
@@ -108,16 +107,12 @@ def _columns_resizing(ws):
     col_september_note.width = NOTE_COL_WIDTH
 
 
-def _columns_registration_id_to_text(ws, number_of_rows):
+def _columns_registration_id_to_text(ws):
     """
     Necesseray, otherwise the registration_id is considered as a number and set with a quote while looking at the
     input line
-    :param ws:
-    :param number_of_rows:
-    :return:
     """
-
-    data_row_counter = FIRST_DATA_LINE
-    while data_row_counter <= number_of_rows:
-        ws.cell(row=data_row_counter, column=COLUMN_REGISTRATION_ID_NO).number_format = OPENPYXL_STRING_FORMAT
-        data_row_counter = data_row_counter + 1
+    for row in ws.iter_rows():
+        for cell in row:
+            if cell.col_idx == COLUMN_REGISTRATION_ID_NO:
+                cell.number_format = OPENPYXL_STRING_FORMAT

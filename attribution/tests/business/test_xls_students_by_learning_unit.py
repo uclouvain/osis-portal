@@ -30,8 +30,6 @@ from django.test import TestCase
 
 from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.person import PersonFactory
-from attribution.business import xls_students_by_learning_unit
-import openpyxl
 
 
 ACCESS_DENIED = 401
@@ -60,17 +58,3 @@ class XlsStudentsByLearningUnitTest(TestCase):
         self.assertEqual(response.status_code, ACCESS_DENIED)
         self.assertTemplateUsed(response, 'access_denied.html')
 
-    def test_columns_registration_id_to_text(self):
-        workbook = openpyxl.Workbook()
-        worksheet = workbook.active
-
-        nb_row = xls_students_by_learning_unit.FIRST_DATA_LINE
-        worksheet.cell(row=nb_row, column=xls_students_by_learning_unit.COLUMN_REGISTRATION_ID_NO).value = '12345678'
-        worksheet.cell(row=nb_row+1, column=xls_students_by_learning_unit.COLUMN_REGISTRATION_ID_NO).value = 12345678
-        worksheet.cell(row=nb_row+2, column=xls_students_by_learning_unit.COLUMN_REGISTRATION_ID_NO).value = "zzzzz"
-        worksheet.cell(row=nb_row+3, column=xls_students_by_learning_unit.COLUMN_REGISTRATION_ID_NO).value = "10%"
-        worksheet.cell(row=nb_row+4, column=xls_students_by_learning_unit.COLUMN_REGISTRATION_ID_NO).value = "10-02-2015"
-        try:
-            xls_students_by_learning_unit._columns_registration_id_to_text(worksheet, nb_row+4)
-        except Exception:
-            self.fail("_columns_registration_id_to_text raises exception")

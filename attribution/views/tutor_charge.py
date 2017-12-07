@@ -27,6 +27,7 @@ import datetime
 import json
 import logging
 import traceback
+import re
 
 import requests
 from django.conf import settings
@@ -42,6 +43,8 @@ from attribution.forms.attribution import AttributionForm
 from base.forms.base_forms import GlobalIdForm
 from base.views import layout
 from attribution.business import xls_students_by_learning_unit
+from django.utils.translation import ugettext_lazy as _
+
 
 YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST = 2017
 
@@ -60,6 +63,11 @@ JUNE = "juin"
 SEPTEMBER = "septembre"
 
 ATTRIBUTIONS_TUTOR_ALLOCATION_PATH = 'resources/AllocationCharges/tutors/{global_id}/{year}'
+
+REGISTRATION_ID_KEY = 'registration_id'
+REGISTRATION_ID_LENGTH = 8
+STUDENTS_LIST_PAGE_FOR_ADMIN = "students_list_admin.html",
+STUDENTS_LIST_PAGE_FOR_TUTOR = "students_list.html",
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -258,7 +266,7 @@ def get_url_learning_unit_year(a_learning_unit_year):
     return None
 
 
-def get_students(a_learning_unit_year_id, a_tutor):
+def get_students(a_learning_unit_year_id):
     a_learning_unit_year = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year_id)
     return get_learning_unit_years_list(a_learning_unit_year)
 
@@ -268,7 +276,7 @@ def _load_students(a_learning_unit_year, a_tutor):
     request_tutor = mdl_base.tutor.find_by_id(a_tutor)
 
     return {'global_id': request_tutor.person.global_id,
-            'students': _get_learning_unit_yr_student_list(a_learning_unit_year, request_tutor),
+            'students': _get_learning_unit_yr_student_list(a_learning_unit_year),
             'learning_unit_year': mdl_base.learning_unit_year.find_by_id(a_learning_unit_year),
             'tutor_id': request_tutor.id}
 
@@ -276,14 +284,14 @@ def _load_students(a_learning_unit_year, a_tutor):
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def show_students_admin(request, a_learning_unit_year, a_tutor):
-    return render(request, "students_list_admin.html",
+    return render(request, STUDENTS_LIST_PAGE_FOR_ADMIN,
                   _load_students(a_learning_unit_year, a_tutor))
 
 
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
 def show_students(request, a_learning_unit_year, a_tutor):
-    return render(request, "students_list.html",
+    return render(request, STUDENTS_LIST_PAGE_FOR_TUTOR,
                   _load_students(a_learning_unit_year, a_tutor))
 
 
@@ -476,14 +484,34 @@ def _tutor_attributions_by_learning_unit(tutor_allocations_json):
     return tutor_attributions
 
 
-def _get_learning_unit_yr_student_list(a_learning_unit_year, request_tutor):
-    return [ set_student_for_display(lue) for lue in get_students(a_learning_unit_year, get_person(request_tutor.person.user)) ]
+def _get_learning_unit_yr_student_list(a_learning_unit_year):
+    return [set_student_for_display(lue) for lue in get_students(a_learning_unit_year)]
 
 
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
 def students_list_build_by_learning_unit(request, a_learning_unit_year, a_tutor):
-    request_tutor = mdl_base.tutor.find_by_id(a_tutor)
-    student_list = _get_learning_unit_yr_student_list(a_learning_unit_year, request_tutor)
+    student_list = _get_learning_unit_yr_student_list(a_learning_unit_year)
     a_learning_unit_yr = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year)
-    return xls_students_by_learning_unit.get_xls(student_list, a_learning_unit_yr)
+
+    if _valid_students_data_for_xls(student_list):
+        return xls_students_by_learning_unit.get_xls(student_list, a_learning_unit_yr)
+    else:
+        return _redirection_xls_invalid_data(a_learning_unit_year, a_tutor, request)
+
+
+def _valid_students_data_for_xls(student_list):
+    for student in student_list:
+        if not(re.match("^[0-9]+$", student.get(REGISTRATION_ID_KEY))
+               and len(student.get(REGISTRATION_ID_KEY)) == REGISTRATION_ID_LENGTH):
+            return False
+    return True
+
+
+def _redirection_xls_invalid_data(a_learning_unit_year, a_tutor, request):
+    data = _load_students(a_learning_unit_year, a_tutor)
+    data.update({'msg_data': _('error_export_xls_list')})
+    if request.user.has_perm('base.is_faculty_administrator'):
+        return render(request, STUDENTS_LIST_PAGE_FOR_ADMIN, data)
+    else:
+        return render(request, STUDENTS_LIST_PAGE_FOR_TUTOR, data)
