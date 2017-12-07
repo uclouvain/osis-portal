@@ -25,9 +25,10 @@
 ##############################################################################
 
 from django.conf import settings
-from base import models as mdl_base
-from attribution.views import utils
 from django import template
+
+from base import models as mdl_base
+from base.utils import string_utils
 
 register = template.Library()
 
@@ -35,7 +36,7 @@ register = template.Library()
 @register.filter
 def get_previous_url_learning_unit_year(learning_container_year_id):
     a_learning_unit_year = mdl_base.learning_unit_year.find_first_by_learning_container_year(learning_container_year_id)
-    if a_learning_unit_year and utils.is_string_not_null_empty(a_learning_unit_year.acronym):
+    if a_learning_unit_year and string_utils.is_string_not_null_empty(a_learning_unit_year.acronym):
         previous_year = a_learning_unit_year.academic_year.year-1
         return settings.ATTRIBUTION_CONFIG.get('CATALOG_URL').format(previous_year,
                                                                      a_learning_unit_year.acronym.lower())

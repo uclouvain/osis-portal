@@ -26,6 +26,4 @@
 
 
 def is_string_not_null_empty(string):
-    if string and len(string.strip()) > 0:
-        return True
-    return False
+    return string and string.strip()

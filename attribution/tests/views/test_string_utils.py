@@ -26,20 +26,20 @@
 
 from django.test import TestCase
 
-from attribution.views import utils
+from base.utils import string_utils
 
 
-class TutorChargeTest(TestCase):
+class StringUtilsTest(TestCase):
 
     def test_string_none(self):
-        self.assertFalse(utils.is_string_not_null_empty(None))
+        self.assertFalse(string_utils.is_string_not_null_empty(None))
 
     def test_string_empty(self):
-        self.assertFalse(utils.is_string_not_null_empty(""))
+        self.assertFalse(string_utils.is_string_not_null_empty(""))
 
     def test_string_not_empty(self):
-        self.assertTrue(utils.is_string_not_null_empty("test"))
+        self.assertTrue(string_utils.is_string_not_null_empty("test"))
 
     def test_string_spaces(self):
-        self.assertFalse(utils.is_string_not_null_empty(" "))
+        self.assertFalse(string_utils.is_string_not_null_empty(" "))
 
