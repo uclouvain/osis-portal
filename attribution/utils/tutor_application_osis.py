@@ -26,6 +26,9 @@
 import json
 import logging
 import time
+import datetime
+
+from dateutil import parser
 from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as PsycopInterfaceError
 from django.db import connection
 from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
@@ -52,23 +55,36 @@ def process_message(body):
     try:
         json_data = body.decode("utf-8")
         new_applications = json.loads(json_data)
-        for application in new_applications:
-            global_id = application.get('global_id')
-            operation = application.get('operation')
+        for new_application in new_applications:
+            global_id = new_application.get('global_id')
             attribution_new = mdl_attribution_new.find_by_global_id(global_id)
+            applications_list = []
             if attribution_new:
-                tutor_applications = attribution_new.applications[0]['tutor_applications']
                 if attribution_new.applications == "{}":
-                    attribution_new.applications = new_applications
+                    attribution_new.applications = new_application.get('tutor_applications')
                     attribution_new.save()
-                    test = "Insert"
                 else:
-
-                    elif tutor_applications == application.get('tutor_applications') and operation == "update":
-
-                else:
-                    test = "No"
-                print(test)
+                    for application in new_application['tutor_applications']:
+                        is_updated = False
+                        is_in_list = False
+                        for data in attribution_new.applications:
+                            if data["year"] == application["year"] and data["acronym"] == application["acronym"]:
+                                is_in_list = True
+                                if "pending" not in data or (data["pending"] == "update" and parser.parse(data["last_changed"]) < parser.parse(application["last_changed"])):
+                                    is_updated = True
+                                    attribution_new.applications.remove(data)
+                                else:
+                                    is_updated = False
+                                    applications_list.append(data)
+                                    attribution_new.applications.remove(data)
+                            else:
+                                is_in_list = False
+                        if is_in_list and is_updated:
+                            applications_list.append(application)
+                        elif not is_in_list:
+                            applications_list.append(application)
+                    attribution_new.applications = applications_list
+                    attribution_new.save()
     except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError):
         queue_exception_logger.exception('Postgres Error during process tutor application message => retried')
         connection.close()
