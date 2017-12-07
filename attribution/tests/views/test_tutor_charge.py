@@ -660,12 +660,3 @@ class HomeTest(TestCase):
                                         attribution['percentage_allocation_charge']], attributions)
         self.assertIn([str(LEARNING_UNIT_LECTURING_DURATION), None, "25.0"], reduced_list_attributions)
 
-    def test_valid_students_data_for_xls(self):
-        min_student_data_for_this_test = [{'registration_id': '61761600'}, {'registration_id': '71761601'}]
-        self.assertTrue(tutor_charge._valid_students_data_for_xls(min_student_data_for_this_test))
-
-    def test_not_valid_students_data_for_xls(self):
-        min_student_data_for_this_test = [{'registration_id': '61'}]
-        self.assertFalse(tutor_charge._valid_students_data_for_xls(min_student_data_for_this_test))
-        min_student_data_for_this_test = [{'registration_id': 'AB123456'}]
-        self.assertFalse(tutor_charge._valid_students_data_for_xls(min_student_data_for_this_test))

@@ -382,6 +382,3 @@ msgstr "Export list (Excel)"
 
 msgid "desc_export_xls_list"
 msgstr "Export the students list in Excel format"
-
-msgid "error_export_xls_list"
-msgstr "Impossible to export the students list in Excel format, data format is invalid"
