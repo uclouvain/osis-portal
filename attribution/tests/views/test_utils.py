@@ -40,3 +40,6 @@ class TutorChargeTest(TestCase):
     def test_string_not_empty(self):
         self.assertTrue(utils.is_string_not_null_empty("test"))
 
+    def test_string_spaces(self):
+        self.assertFalse(utils.is_string_not_null_empty(" "))
+
