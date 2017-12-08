@@ -29,7 +29,7 @@ import string
 import factory
 import factory.fuzzy
 
-from attribution.models.enums import offer_enrollment_state
+from base.models.enums import offer_enrollment_state
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.student import StudentFactory
 from osis_common.utils.datetime import get_tzinfo

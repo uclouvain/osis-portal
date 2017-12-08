@@ -24,23 +24,24 @@
 #
 ##############################################################################
 import datetime
+
 import json
+import requests
 import logging
 import traceback
 
-import requests
 from django.conf import settings
 from django.forms import formset_factory
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required, permission_required
 
-from attribution.models.enums import offer_enrollment_state
 from performance import models as mdl_performance
 from base import models as mdl_base
 from attribution import models as mdl_attribution
+from base.models.enums import offer_enrollment_state
 from attribution.forms.attribution import AttributionForm
 from base.forms.base_forms import GlobalIdForm
 from base.views import layout
+from django.contrib.auth.decorators import login_required, permission_required
 from base.utils import string_utils
 
 YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST = 2017

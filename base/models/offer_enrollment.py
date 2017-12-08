@@ -26,7 +26,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
-from attribution.models.enums import offer_enrollment_state
+from base.models.enums import offer_enrollment_state
 from base.models.offer_year import OfferYear
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
