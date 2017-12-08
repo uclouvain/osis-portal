@@ -61,30 +61,23 @@ def process_message(body):
             applications_list = []
             if attribution_new:
                 if attribution_new.applications == "{}":
-                    attribution_new.applications = new_application.get('tutor_applications')
-                    attribution_new.save()
+                    _merge_applications_list(new_application.get('tutor_applications'), attribution_new)
                 else:
                     for application in new_application['tutor_applications']:
-                        is_updated = False
                         is_in_list = False
                         for data in attribution_new.applications:
                             if data["year"] == application["year"] and data["acronym"] == application["acronym"]:
                                 is_in_list = True
                                 if "pending" not in data or (data["pending"] == "update" and parser.parse(data["last_changed"]) < parser.parse(application["last_changed"])):
-                                    is_updated = True
-                                    attribution_new.applications.remove(data)
+                                    _add_application_in_list(application, applications_list, attribution_new, data)
                                 else:
-                                    is_updated = False
-                                    applications_list.append(data)
-                                    attribution_new.applications.remove(data)
+                                    _add_application_in_list(data, applications_list, attribution_new, data)
+                                break
                             else:
                                 is_in_list = False
-                        if is_in_list and is_updated:
+                        if not is_in_list:
                             applications_list.append(application)
-                        elif not is_in_list:
-                            applications_list.append(application)
-                    attribution_new.applications = applications_list
-                    attribution_new.save()
+                    _merge_applications_list(applications_list, attribution_new)
     except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError):
         queue_exception_logger.exception('Postgres Error during process tutor application message => retried')
         connection.close()
@@ -92,3 +85,13 @@ def process_message(body):
         process_message(body)
     except Exception:
         logger.exception('(Not PostgresError) during process tutor application message. Cannot update ')
+
+
+def _add_application_in_list(application, applications_list, attribution_new, data):
+    applications_list.append(application)
+    attribution_new.applications.remove(data)
+
+
+def _merge_applications_list(applications_list, attribution_new):
+    attribution_new.applications = applications_list
+    attribution_new.save()
