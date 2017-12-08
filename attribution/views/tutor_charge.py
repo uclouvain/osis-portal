@@ -34,11 +34,10 @@ from django.conf import settings
 from django.forms import formset_factory
 from django.shortcuts import render
 
-from attribution.models.enums import offer_enrollment_state
 from performance import models as mdl_performance
 from base import models as mdl_base
 from attribution import models as mdl_attribution
-from base.models.enums import component_type
+from base.models.enums import offer_enrollment_state
 from attribution.forms.attribution import AttributionForm
 from base.forms.base_forms import GlobalIdForm
 from base.views import layout
@@ -278,7 +277,7 @@ def _load_students(a_learning_unit_year, a_tutor, request):
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def show_students_admin(request, a_learning_unit_year, a_tutor):
-    return render(request, "lists_of_students_exams_enrollments.html",
+    return render(request, "students_list_admin.html",
                   _load_students(a_learning_unit_year, a_tutor, request))
 
 
@@ -401,7 +400,8 @@ def get_learning_unit_years_list(a_learning_unit_year, a_tutor):
         learning_unit_years_allocated.append(lu)
 
     return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(learning_unit_years_allocated,
-                                                                         offer_enrollment_states=enrollment_states)
+                                                                         offer_enrollment_states=enrollment_states,
+                                                                         only_enrolled=True)
 
 
 @login_required

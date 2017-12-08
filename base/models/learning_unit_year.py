@@ -26,10 +26,10 @@
 from django.db import models
 
 from base.models.enums import learning_unit_year_subtypes
-from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+from osis_common.models.auditable_serializable_model import AuditableSerializableModel, AuditableSerializableModelAdmin
 
 
-class LearningUnitYearAdmin(SerializableModelAdmin):
+class LearningUnitYearAdmin(AuditableSerializableModelAdmin):
     list_display = ('acronym', 'title', 'academic_year', 'weight', 'learning_unit', )
     fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'weight', 'learning_unit',
                  'learning_container_year', 'subtype')}),)
@@ -38,7 +38,7 @@ class LearningUnitYearAdmin(SerializableModelAdmin):
     raw_id_fields = ('learning_unit', 'learning_container_year')
 
 
-class LearningUnitYear(SerializableModel):
+class LearningUnitYear(AuditableSerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     acronym = models.CharField(max_length=15, db_index=True)
     title = models.CharField(max_length=255)

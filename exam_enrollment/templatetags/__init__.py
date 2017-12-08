@@ -23,9 +23,3 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-SUBSCRIBED = 'SUBSCRIBED'
-PROVISORY = 'PROVISORY'
-
-STATES = (
-    (SUBSCRIBED, SUBSCRIBED),
-    (PROVISORY, PROVISORY))

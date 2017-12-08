@@ -26,7 +26,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
-from attribution.models.enums import offer_enrollment_state
+from base.models.enums import offer_enrollment_state
 from base.models.offer_year import OfferYear
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
@@ -62,4 +62,6 @@ def find_by_student_offer(a_student, offer_year):
 
 
 def find_by_student_academic_year(a_student, an_academic_year):
-    return OfferEnrollment.objects.filter(student=a_student, offer_year__academic_year=an_academic_year)
+    return OfferEnrollment.objects.filter(student=a_student,
+                                          offer_year__academic_year=an_academic_year,
+                                          enrollment_state__in=[offer_enrollment_state.SUBSCRIBED, offer_enrollment_state.PROVISORY])
