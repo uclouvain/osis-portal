@@ -69,8 +69,20 @@
                     {{ attribution.volume_practical_exercices_vacant | default_if_none:'0,0'}}
                 {% endif %}
             </td>
-            <td style="border-left: 1px solid;">{{ attribution.LECTURING| default_if_none:'0,0' }}</td>
-            <td>{{ attribution.PRACTICAL_EXERCISES| default_if_none:'0,0' }}</td>
+            <td style="border-left: 1px solid;">
+                {% if attribution.LECTURING = 0 %}
+                    {{ attribution.LECTURING|floatformat:1 }}
+                {% else %}
+                    {{ attribution.LECTURING | default_if_none:'0,0'}}
+                {% endif %}
+            </td>
+            <td>
+                {% if attribution.PRACTICAL_EXERCISES = 0 %}
+                    {{ attribution.PRACTICAL_EXERCISES|floatformat:1 }}
+                {% else %}
+                    {{ attribution.PRACTICAL_EXERCISES | default_if_none:'0,0'}}
+                {% endif %}
+            </td>
             <td>{% trans attribution.function %}</td>
             <td>{{ attribution.start_academic_year | default_if_none:''}}</td>
             <td>{{ attribution.end_academic_year | default_if_none:''}}</td>
