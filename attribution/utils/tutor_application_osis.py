@@ -64,17 +64,7 @@ def process_message(body):
                     _merge_applications_list(new_application.get('tutor_applications'), attribution_new)
                 else:
                     for application in new_application['tutor_applications']:
-                        is_in_list = False
-                        for data in attribution_new.applications:
-                            if data["year"] == application["year"] and data["acronym"] == application["acronym"]:
-                                is_in_list = True
-                                if "pending" not in data or (data["pending"] == "update" and parser.parse(data["last_changed"]) < parser.parse(application["last_changed"])):
-                                    _add_application_in_list(application, applications_list, attribution_new, data)
-                                else:
-                                    _add_application_in_list(data, applications_list, attribution_new, data)
-                                break
-                            else:
-                                is_in_list = False
+                        is_in_list = _is_in_list(application, applications_list, attribution_new)
                         if not is_in_list:
                             applications_list.append(application)
                     _merge_applications_list(applications_list, attribution_new)
@@ -85,6 +75,23 @@ def process_message(body):
         process_message(body)
     except Exception:
         logger.exception('(Not PostgresError) during process tutor application message. Cannot update ')
+
+
+def _is_in_list(application, applications_list, attribution_new):
+    is_in_list = False
+    for data in attribution_new.applications:
+        if data["year"] == application["year"] and data["acronym"] == application["acronym"]:
+            is_in_list = True
+            if "pending" not in data or (
+                    data["pending"] == "update" and parser.parse(data["last_changed"]) < parser.parse(
+                    application["last_changed"])):
+                _add_application_in_list(application, applications_list, attribution_new, data)
+            else:
+                _add_application_in_list(data, applications_list, attribution_new, data)
+            break
+        else:
+            is_in_list = False
+    return is_in_list
 
 
 def _add_application_in_list(application, applications_list, attribution_new, data):
