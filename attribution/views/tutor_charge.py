@@ -24,21 +24,22 @@
 #
 ##############################################################################
 import datetime
+
 import json
+import requests
 import logging
 import traceback
 import re
 
-import requests
 from django.conf import settings
 from django.forms import formset_factory
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, permission_required
 
-from attribution.models.enums import offer_enrollment_state
 from performance import models as mdl_performance
 from base import models as mdl_base
 from attribution import models as mdl_attribution
+from base.models.enums import offer_enrollment_state
 from attribution.forms.attribution import AttributionForm
 from base.forms.base_forms import GlobalIdForm
 from base.views import layout
@@ -63,6 +64,7 @@ JUNE = "juin"
 SEPTEMBER = "septembre"
 
 ATTRIBUTIONS_TUTOR_ALLOCATION_PATH = 'resources/AllocationCharges/tutors/{global_id}/{year}'
+
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
@@ -401,7 +403,8 @@ def get_learning_unit_years_list(a_learning_unit_year):
         learning_unit_years_allocated.append(lu)
 
     return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(learning_unit_years_allocated,
-                                                                         offer_enrollment_states=enrollment_states)
+                                                                         offer_enrollment_states=enrollment_states,
+                                                                         only_enrolled=True)
 
 
 @login_required

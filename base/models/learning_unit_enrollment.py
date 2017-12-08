@@ -25,14 +25,14 @@
 ##############################################################################
 from django.db import models
 
-from attribution.models.enums import offer_enrollment_state
-from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+from base.models.enums import learning_unit_enrollment_state
+from osis_common.models.auditable_serializable_model import AuditableSerializableModel, AuditableSerializableModelAdmin
 
 
-class LearningUnitEnrollmentAdmin(SerializableModelAdmin):
-    list_display = ('student', 'learning_unit_year', 'date_enrollment', 'changed')
-    fieldsets = ((None, {'fields': ('offer_enrollment', 'learning_unit_year', 'date_enrollment')}),)
-    list_filter = ('learning_unit_year__academic_year__year',)
+class LearningUnitEnrollmentAdmin(AuditableSerializableModelAdmin):
+    list_display = ('student', 'learning_unit_year', 'date_enrollment', 'enrollment_state', 'changed')
+    fieldsets = ((None, {'fields': ('offer_enrollment', 'learning_unit_year', 'date_enrollment', 'enrollment_state',)}),)
+    list_filter = ('learning_unit_year__academic_year', 'enrollment_state',)
     raw_id_fields = ('offer_enrollment', 'learning_unit_year')
     search_fields = ['learning_unit_year__acronym',
                      'offer_enrollment__offer_year__acronym',
@@ -41,12 +41,13 @@ class LearningUnitEnrollmentAdmin(SerializableModelAdmin):
                      'offer_enrollment__student__person__last_name']
 
 
-class LearningUnitEnrollment(SerializableModel):
+class LearningUnitEnrollment(AuditableSerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     changed = models.DateTimeField(null=True)
     date_enrollment = models.DateField()
     learning_unit_year = models.ForeignKey('LearningUnitYear')
     offer_enrollment = models.ForeignKey('OfferEnrollment')
+    enrollment_state = models.CharField(max_length=20, choices=learning_unit_enrollment_state.STATES, blank=True, null=True)
 
     @property
     def student(self):
@@ -60,7 +61,7 @@ class LearningUnitEnrollment(SerializableModel):
         return u"%s - %s" % (self.learning_unit_year, self.offer_enrollment.student)
 
 
-def find_by_learning_unit_years(learning_unit_years, offer_enrollment_states=None):
+def find_by_learning_unit_years(learning_unit_years, offer_enrollment_states=None, only_enrolled=False):
     qs = LearningUnitEnrollment.objects.select_related("learning_unit_year__academic_year",
                                                          "learning_unit_year__learning_unit",
                                                          "offer_enrollment__student__person",
@@ -70,6 +71,8 @@ def find_by_learning_unit_years(learning_unit_years, offer_enrollment_states=Non
 
     if offer_enrollment_states and isinstance(offer_enrollment_states, list):
         qs = qs.filter(offer_enrollment__enrollment_state__in=offer_enrollment_states)
+    if only_enrolled:
+        qs = qs.filter(enrollment_state=learning_unit_enrollment_state.ENROLLED)
 
     return qs
 
