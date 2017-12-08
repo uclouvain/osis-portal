@@ -26,16 +26,16 @@
 ##############################################################################
 from django.db import models
 
-from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+from osis_common.models.auditable_serializable_model import AuditableSerializableModel, AuditableSerializableModelAdmin
 
 
-class LearningContainerAdmin(SerializableModelAdmin):
+class LearningContainerAdmin(AuditableSerializableModelAdmin):
     list_display = ('external_id',)
     fieldsets = ((None, {'fields': ('external_id',)}),)
     search_fields = ['external_id']
 
 
-class LearningContainer(SerializableModel):
+class LearningContainer(AuditableSerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     changed = models.DateTimeField(null=True, auto_now=True)
     auto_renewal_until = models.IntegerField(null=True)
