@@ -29,7 +29,7 @@ from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.student import StudentFactory
-from attribution.models.enums import offer_enrollment_state
+from base.models.enums import offer_enrollment_state
 from django.contrib.auth.models import Group
 from exam_enrollment.views import exam_enrollment
 
