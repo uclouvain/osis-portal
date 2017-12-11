@@ -67,3 +67,10 @@ def is_academic_calendar_opened(an_academic_year_id, a_reference):
     if an_academic_calendar:
         return True
     return False
+
+
+def get_by_reference_and_academic_year(a_reference, an_academic_year):
+    try:
+        return AcademicCalendar.objects.get(reference=a_reference, academic_year=an_academic_year)
+    except AcademicCalendar.DoesNotExist:
+        return None

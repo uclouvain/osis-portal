@@ -330,15 +330,6 @@ class TutorChargeTest(TestCase):
         a_year = datetime.datetime.now().year
         self.assertEqual(tutor_charge.get_current_academic_year(), a_year)
 
-    def test_string_none(self):
-        self.assertFalse(tutor_charge.is_string_not_null_empty(None))
-
-    def test_string_empty(self):
-        self.assertFalse(tutor_charge.is_string_not_null_empty(""))
-
-    def test_string_not_empty(self):
-        self.assertTrue(tutor_charge.is_string_not_null_empty("test"))
-
     @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge)
     def test_list_teaching_charge_for_multiple_attributions_less_in_json(self, mock_requests_get):
 

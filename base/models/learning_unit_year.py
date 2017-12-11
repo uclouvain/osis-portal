@@ -99,3 +99,11 @@ def find_by_acronym(acronym, academic_year):
     return LearningUnitYear.objects.select_related("academic_year",
                                                    "learning_unit").\
         filter(acronym__startswith=acronym, academic_year=academic_year)
+
+
+def find_by_learning_container_year(learning_container_yr_id):
+    return LearningUnitYear.objects.filter(learning_container_year=learning_container_yr_id)
+
+
+def find_first_by_learning_container_year(learning_container_yr_id):
+    return find_by_learning_container_year(learning_container_yr_id).first()
