@@ -34,7 +34,7 @@ from django.db import connection
 from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
 from django.conf import settings
 from attribution.models import attribution_new as mdl_attribution_new
-
+from attribution.models.attribution_new import AttributionNew
 
 DELETE_OPERATION = "delete"
 UPDATE_OPERATION = "update"
@@ -71,12 +71,13 @@ def _update_applications_list(new_applications):
         attribution_new = mdl_attribution_new.find_by_global_id(global_id)
         if attribution_new:
             applications_list = []
-            if attribution_new.applications == "{}":
+            if not attribution_new.applications:
                 _merge_applications_list(new_application.get('tutor_applications'), attribution_new)
             else:
                 for application in new_application['tutor_applications']:
                     object_in_list = next((data for data in attribution_new.applications
-                                           if data["year"] == application["year"] and data["acronym"] == application["acronym"]))
+                                           if data.get("year") == application.get("year")
+                                           and data.get("acronym") == application.get("acronym")), None)
                     if object_in_list:
                         if _check_if_update(application, object_in_list):
                             applications_list.append(application)
@@ -85,13 +86,14 @@ def _update_applications_list(new_applications):
                     else:
                         applications_list.append(application)
                 _merge_applications_list(applications_list, attribution_new)
+        else:
+            attribution_new = AttributionNew(global_id=global_id, applications=new_application.get('tutor_applications'))
+            attribution_new.save()
 
 
 def _check_if_update(application, object_in_list):
-    if object_in_list.get("pending") == UPDATE_OPERATION and parser.parse(
-            object_in_list.get("last_changed", 0)) < parser.parse(application.get("last_changed", 0)):
-        return True
-    return False
+    return object_in_list.get("pending") == UPDATE_OPERATION and parser.parse(
+            object_in_list.get("last_changed", 0)) < parser.parse(application.get("last_changed", 0))
 
 
 def _add_application_in_list(application, applications_list, attribution_new, data):
