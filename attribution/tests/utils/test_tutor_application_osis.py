@@ -123,6 +123,7 @@ class TestTutorApplicationEpc(TestCase):
         body_encoded = bytearray(json.dumps(body), "utf-8")
         tutor_application_osis.process_message(body_encoded)
         self.attribution_new.refresh_from_db()
+        self.assertEqual(len(self.attribution_new.applications), 1)
         self.assertEqual(self.attribution_new.applications[0]['charge_lecturing_asked'], '12.5')
 
 

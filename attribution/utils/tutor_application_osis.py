@@ -55,19 +55,7 @@ def process_message(body):
     try:
         json_data = body.decode("utf-8")
         new_applications = json.loads(json_data)
-        for new_application in new_applications:
-            global_id = new_application.get('global_id')
-            attribution_new = mdl_attribution_new.find_by_global_id(global_id)
-            applications_list = []
-            if attribution_new:
-                if attribution_new.applications == "{}":
-                    _merge_applications_list(new_application.get('tutor_applications'), attribution_new)
-                else:
-                    for application in new_application['tutor_applications']:
-                        is_in_list = _is_in_list(application, applications_list, attribution_new)
-                        if not is_in_list:
-                            applications_list.append(application)
-                    _merge_applications_list(applications_list, attribution_new)
+        _update_applications_list(new_applications)
     except (PsycopOperationalError, PsycopInterfaceError, DjangoOperationalError, DjangoInterfaceError):
         queue_exception_logger.exception('Postgres Error during process tutor application message => retried')
         connection.close()
@@ -77,21 +65,33 @@ def process_message(body):
         logger.exception('(Not PostgresError) during process tutor application message. Cannot update ')
 
 
-def _is_in_list(application, applications_list, attribution_new):
-    is_in_list = False
-    for data in attribution_new.applications:
-        if data["year"] == application["year"] and data["acronym"] == application["acronym"]:
-            is_in_list = True
-            if "pending" not in data or (
-                    data["pending"] == "update" and parser.parse(data["last_changed"]) < parser.parse(
-                    application["last_changed"])):
-                _add_application_in_list(application, applications_list, attribution_new, data)
+def _update_applications_list(new_applications):
+    for new_application in new_applications:
+        global_id = new_application.get('global_id')
+        attribution_new = mdl_attribution_new.find_by_global_id(global_id)
+        if attribution_new:
+            applications_list = []
+            if attribution_new.applications == "{}":
+                _merge_applications_list(new_application.get('tutor_applications'), attribution_new)
             else:
-                _add_application_in_list(data, applications_list, attribution_new, data)
-            break
-        else:
-            is_in_list = False
-    return is_in_list
+                for application in new_application['tutor_applications']:
+                    object_in_list = next((data for data in attribution_new.applications
+                                           if data["year"] == application["year"] and data["acronym"] == application["acronym"]))
+                    if object_in_list:
+                        if _check_if_update(application, object_in_list):
+                            applications_list.append(application)
+                        else:
+                            applications_list.append(object_in_list)
+                    else:
+                        applications_list.append(application)
+                _merge_applications_list(applications_list, attribution_new)
+
+
+def _check_if_update(application, object_in_list):
+    if object_in_list.get("pending") == UPDATE_OPERATION and parser.parse(
+            object_in_list.get("last_changed", 0)) < parser.parse(application.get("last_changed", 0)):
+        return True
+    return False
 
 
 def _add_application_in_list(application, applications_list, attribution_new, data):
