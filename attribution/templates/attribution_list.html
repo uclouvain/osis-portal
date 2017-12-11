@@ -28,8 +28,8 @@
     <thead>
         <tr>
             <th colspan="4"></th>
-            <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'vacant' %} </th>
-            <th colspan="5" style="border-left-style: solid;border-left-width:1px;">{% trans 'charge' %} </th>
+            <th colspan="2" style="border-left: 1px solid;">{% trans 'vacant' %} </th>
+            <th colspan="5" style="border-left: 1px solid;">{% trans 'charge' %} </th>
         </tr>
         <tr>
             <th>{% trans 'code'%}</th>
@@ -63,7 +63,7 @@
                     {{ attribution.practical_exercises_vol |default_if_none:'0,0'}}
                 {% endif %}
             </td>
-            <td style="border-left-style: solid;border-left-width:1px;">
+            <td style="border-left: 1px solid;">
                 {% if attribution.volume_lecturing_vacant = 0 %}
                     {{ attribution.volume_lecturing_vacant|floatformat:1 }}
                 {% else %}
@@ -77,7 +77,7 @@
                     {{ attribution.volume_practical_exercices_vacant | default_if_none:'0,0'}}
                 {% endif %}
             </td>
-            <td style="border-left-style: solid;border-left-width:1px;">
+            <td style="border-left: 1px solid;">
                 {% if attribution.LECTURING = 0 %}
                     {{ attribution.LECTURING|floatformat:1 }}
                 {% else %}
