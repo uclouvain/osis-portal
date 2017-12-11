@@ -376,3 +376,9 @@ msgstr "Applications in pending state"
 
 msgid "already_applied"
 msgstr "Already applied"
+
+msgid "export_xls_list"
+msgstr "Export list (Excel)"
+
+msgid "desc_export_xls_list"
+msgstr "Export the students list in Excel format"
