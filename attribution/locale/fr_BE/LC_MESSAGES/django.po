@@ -397,3 +397,9 @@ msgstr "Cahier de charges"
 
 msgid "applications_of"
 msgstr "Applications de "
+
+msgid "export_xls_list"
+msgstr "Exporter liste (Excel)"
+
+msgid "desc_export_xls_list"
+msgstr "Exporter la liste des étudiants au format Excel"

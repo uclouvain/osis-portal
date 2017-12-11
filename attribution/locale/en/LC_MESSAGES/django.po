@@ -394,3 +394,9 @@ msgstr "Specifications"
 
 msgid "applications_of"
 msgstr "Applications  "
+
+msgid "export_xls_list"
+msgstr "Export list (Excel)"
+
+msgid "desc_export_xls_list"
+msgstr "Export the students list in Excel format"
