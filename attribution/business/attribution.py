@@ -194,8 +194,12 @@ def _format_str_volume_to_decimal(attribution_list):
     for attribution in attribution_list:
         if learning_component_year_type.LECTURING in attribution:
             attribution[learning_component_year_type.LECTURING] = Decimal(attribution[learning_component_year_type.LECTURING])
+        else:
+            attribution[learning_component_year_type.LECTURING] = Decimal(0)
         if learning_component_year_type.PRACTICAL_EXERCISES in attribution:
             attribution[learning_component_year_type.PRACTICAL_EXERCISES] = Decimal(attribution[learning_component_year_type.PRACTICAL_EXERCISES])
+        else:
+            attribution[learning_component_year_type.PRACTICAL_EXERCISES] = Decimal(0)
     return attribution_list
 
 

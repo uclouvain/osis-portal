@@ -70,11 +70,8 @@ def mark_attribution_already_applied(attributions_vacant, global_id, application
         already_applied = next((True for application in applications if
                                                application.get('acronym') == attribution.get('acronym')), False) \
                                           if applications else False
-        already_attributed = next((True for attrib in attributions if
-                                   attrib.get('acronym') == attribution.get('acronym')), False) \
-                                          if attributions else False
 
-        attribution['already_applied'] = (already_applied or already_attributed)
+        attribution['already_applied'] = already_applied
     return attributions_vacant
 
 

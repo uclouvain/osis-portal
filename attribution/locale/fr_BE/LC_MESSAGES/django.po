@@ -379,3 +379,27 @@ msgstr "La candidature est en attente de validation."
 
 msgid "already_applied"
 msgstr "Une candidature a déjà été soumise"
+
+msgid "non_renewable"
+msgstr "Non-reconductible"
+
+msgid "desc_renewable"
+msgstr "Reproduire à l'identique l'année suivante"
+
+msgid "application_period"
+msgstr "Période de candidature en ligne du "
+
+msgid "to"
+msgstr "au"
+
+msgid "learning_unit_specifications"
+msgstr "Cahier de charges"
+
+msgid "applications_of"
+msgstr "Applications de "
+
+msgid "export_xls_list"
+msgstr "Exporter liste (Excel)"
+
+msgid "desc_export_xls_list"
+msgstr "Exporter la liste des étudiants au format Excel"

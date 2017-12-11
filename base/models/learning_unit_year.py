@@ -112,10 +112,7 @@ def find_by_learning_container_year(learning_container_yr_id):
 
 
 def find_first_by_learning_container_year(learning_container_yr_id):
-    learning_unit_years = find_by_learning_container_year(learning_container_yr_id)
-    if learning_unit_years:
-        return learning_unit_years.first()
-    return None
+    return find_by_learning_container_year(learning_container_yr_id).first()
 
 
 def find_first_by_exact_acronym(academic_year_id, acronym):

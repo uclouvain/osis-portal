@@ -41,6 +41,10 @@ from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
 from base.models.enums import learning_component_year_type
 from base.views import layout
+from base.models.enums import academic_calendar_type
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.conf import settings
 from base.business import learning_unit_year_with_context
 from base.models.enums import learning_component_year_type
 from decimal import Decimal
@@ -111,9 +115,12 @@ def overview(request, global_id=None):
         'application_year': application_year,
         'applications': applications,
         'tot_lecturing': volume_total_attributions.get(learning_component_year_type.LECTURING),
-        'tot_practical': volume_total_attributions.get(learning_component_year_type.PRACTICAL_EXERCISES)
+        'tot_practical': volume_total_attributions.get(learning_component_year_type.PRACTICAL_EXERCISES),
+        'application_academic_calendar': mdl_base.academic_calendar.get_by_reference_and_academic_year(
+            academic_calendar_type.TEACHING_CHARGE_APPLICATION,
+            current_academic_year),
+        'catalog_url': settings.ATTRIBUTION_CONFIG.get('CATALOG_URL')
     })
-
 
 
 @login_required
