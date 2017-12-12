@@ -91,9 +91,9 @@ def _update_applications_list(new_applications):
             attribution_new.save()
 
 
-def _check_if_update(application, object_in_list):
-    if "pending" not in object_in_list or (object_in_list["pending"] == UPDATE_OPERATION and parser.parse(
-            object_in_list.get("last_changed")) < parser.parse(application.get("last_changed"))):
+def _check_if_update(application, existing_application):
+    if "pending" not in existing_application or (existing_application["pending"] == UPDATE_OPERATION and parser.parse(
+            existing_application.get("last_changed")) < parser.parse(application.get("last_changed"))):
         return True
 
 
