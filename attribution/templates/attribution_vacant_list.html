@@ -73,14 +73,16 @@
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th colspan="3"></th>
+                            <th colspan="2"></th>
+                            <th colspan="2">{% trans 'learning_unit_volumes' %}</th>
                             <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'vacant' %}</th>
                             <th></th>
                         </tr>
                         <tr>
                             <th>{% trans 'code'%}</th>
                             <th>{% trans 'title'%}</th>
-                            <th>{% trans 'team'%}</th>
+                            <th>{% trans 'lecturing_hours'%}</th>
+                            <th>{% trans 'practical_hours'%}</th>
                             <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours'%}</th>
                             <th>{% trans 'practical_hours'%}</th>
                             <th></th>
@@ -91,11 +93,19 @@
                         <tr>
                             <td>{{ attribution.acronym }}</td>
                             <td>{{ attribution.title }}</td>
-                            <td class="text-center">
-                                {% if attribution.team %}
-                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                            <td >
+                                {% if attribution.lecturing_vol = 0 %}
+                                    {{ attribution.lecturing_vol | floatformat:1 }}
                                 {% else %}
-                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                    {{ attribution.lecturing_vol |default_if_none:'0,0'}}
+                                {% endif %}
+                            </td>
+
+                            <td >
+                                {% if attribution.practical_exercises_vol = 0 %}
+                                    {{ attribution.practical_exercises_vol | floatformat:1 }}
+                                {% else %}
+                                    {{ attribution.practical_exercises_vol |default_if_none:'0,0'}}
                                 {% endif %}
                             </td>
                             <td style="border-left-style: solid;border-left-width:1px;">

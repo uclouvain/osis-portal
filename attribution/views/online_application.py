@@ -144,6 +144,9 @@ def search_vacant_attribution(request):
             tutor.person.global_id,
             application_academic_year
         )
+        if attributions_vacant:
+            for a in attributions_vacant:
+                attribution.get_learning_unit_volume(a, application_academic_year)
 
     return layout.render(request, "attribution_vacant_list.html", {
         'a_tutor': tutor,
