@@ -25,14 +25,12 @@
 ##############################################################################
 from decimal import Decimal
 from itertools import chain
-
 import collections
 
 from attribution.models.enums import function
 from base import models as mdl_base
 from attribution import models as mdl_attribution
 from base.models.enums import learning_component_year_type
-from collections import OrderedDict
 
 
 def get_attribution_list(global_id, academic_year=None):
