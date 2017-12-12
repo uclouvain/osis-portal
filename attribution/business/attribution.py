@@ -260,20 +260,19 @@ def get_teachers(a, academic_yr, global_id):
     learning_unit_acronym = a['acronym']
     application_yr = academic_yr.year
 
-    teachers= mdl_attribution.attribution_new.find_teachers(learning_unit_acronym, application_yr)
-    teachers_data = populate_teachers(application_yr, learning_unit_acronym, teachers)
+    teachers = mdl_attribution.attribution_new.find_teachers(learning_unit_acronym, application_yr)
+    teachers_data = _populate_teachers(application_yr, learning_unit_acronym, teachers)
 
     return list(sorted(teachers_data, key=lambda teacher: "{},{}".format(teacher["person"].last_name,
                                                                          teacher["person"].first_name)))
 
 
-def populate_teachers(application_yr, learning_unit_acronym, teachers):
+def _populate_teachers(application_yr, learning_unit_acronym, teachers):
     teachers_data=[]
 
     for teacher in teachers:
         for a in teacher.attributions:
             if a['acronym'] == learning_unit_acronym and a['year'] == application_yr:
                 a['person'] = mdl_base.person.find_by_global_id(teacher.global_id)
-                print(a)
                 teachers_data.append(a)
     return teachers_data
