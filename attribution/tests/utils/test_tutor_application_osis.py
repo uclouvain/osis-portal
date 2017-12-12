@@ -24,10 +24,9 @@
 #
 ##############################################################################
 import json
-
 from django.contrib.auth.models import Group
 from django.test import TestCase
-
+from attribution.models.attribution_new import find_by_global_id
 from attribution.tests.factories.attribution import AttributionNewFactory
 from attribution.utils import tutor_application_osis
 from base.tests.factories.academic_year import AcademicYearFactory
@@ -43,6 +42,7 @@ class TestTutorApplicationEpc(TestCase):
         self.lbir1200 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LBIR1200",
                                                      external_id=external_id)
         self.lagro2630 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LAGRO2630")
+        self.bio = LearningContainerYearFactory(academic_year=self.academic_year, acronym="BIO5213")
 
         # Creation Person/Tutor
         Group.objects.create(name="tutors")
@@ -52,7 +52,8 @@ class TestTutorApplicationEpc(TestCase):
 
         # Create two tutor applications
         applications = [_get_application_example(self.lbir1200, '30.5', '40.5'),
-                        _get_application_example(self.lagro2630, '12.5', '10.5')]
+                        _get_application_example(self.lagro2630, '12.5', '10.5'),
+                        _get_application_example(self.bio, '10.5', '9.5')]
         self.attribution_new = AttributionNewFactory(
             global_id=person.global_id,
             applications=applications
@@ -62,7 +63,7 @@ class TestTutorApplicationEpc(TestCase):
         person = self.tutor.person
         _set_all_application_in_pending_state(self.attribution_new.applications)
         self.attribution_new.save()
-        self.assertEqual(len(self.attribution_new.applications), 2)
+        self.assertEqual(len(self.attribution_new.applications), 3)
         self.assertEqual(self.attribution_new.applications[0]['pending'], tutor_application_osis.UPDATE_OPERATION)
         self.assertEqual(self.attribution_new.applications[1]['pending'], tutor_application_osis.UPDATE_OPERATION)
 
@@ -85,7 +86,7 @@ class TestTutorApplicationEpc(TestCase):
         person = self.tutor.person
         _set_all_application_in_pending_state(self.attribution_new.applications)
         self.attribution_new.save()
-        self.assertEqual(len(self.attribution_new.applications), 2)
+        self.assertEqual(len(self.attribution_new.applications), 3)
         self.assertEqual(self.attribution_new.applications[0]['pending'], tutor_application_osis.UPDATE_OPERATION)
         self.assertEqual(self.attribution_new.applications[1]['pending'], tutor_application_osis.UPDATE_OPERATION)
 
@@ -96,7 +97,7 @@ class TestTutorApplicationEpc(TestCase):
                 'year': self.academic_year.year,
                 'charge_lecturing_asked': '0',
                 'charge_practical_asked': '0',
-                'last_changed': "2016-12-08 09:58:57+00:00"
+                'last_changed': "2013-12-08 09:58:57+00:00"
             }]
         }]
         body_encoded = bytearray(json.dumps(body), "utf-8")
@@ -108,7 +109,7 @@ class TestTutorApplicationEpc(TestCase):
         person = self.tutor.person
         _set_all_application_in_pending_delete(self.attribution_new.applications)
         self.attribution_new.save()
-        self.assertEqual(len(self.attribution_new.applications), 2)
+        self.assertEqual(len(self.attribution_new.applications), 3)
 
         body = [{
             'global_id': person.global_id,
@@ -126,6 +127,59 @@ class TestTutorApplicationEpc(TestCase):
         self.assertEqual(len(self.attribution_new.applications), 1)
         self.assertEqual(self.attribution_new.applications[0]['charge_lecturing_asked'], '12.5')
 
+    def test_process_when_attribution_new_not_exist(self):
+        body = [{
+            'global_id': "321654",
+            'tutor_applications': [{
+                'acronym': 'LAGRO2630',
+                'year': self.academic_year.year,
+                'charge_lecturing_asked': '0',
+                'charge_practical_asked': '0',
+                'last_changed': "2016-12-08 09:58:57+00:00"
+            }]
+        }]
+        self.assertEqual(find_by_global_id("321654"), None)
+        body_encoded = bytearray(json.dumps(body), "utf-8")
+        tutor_application_osis.process_message(body_encoded)
+        self.assertEqual(find_by_global_id("321654").global_id, "321654")
+
+    def test_process_with_many_change(self):
+        person = self.tutor.person
+        self.assertEqual(len(self.attribution_new.applications), 3)
+        self.attribution_new.applications[0]['pending'] = tutor_application_osis.UPDATE_OPERATION
+        self.attribution_new.applications[1]['pending'] = tutor_application_osis.DELETE_OPERATION
+        self.attribution_new.save()
+        self.attribution_new.refresh_from_db()
+        body = [{
+            'global_id': person.global_id,
+            'tutor_applications': [
+                {'acronym': 'LAGRO2630',
+                 'year': self.academic_year.year,
+                 'charge_lecturing_asked': '0',
+                 'charge_practical_asked': '0',
+                 'last_changed': "2021-12-08 09:58:57+00:00"
+                 },
+                {'acronym': 'LBIR1200',
+                 'year': self.academic_year.year,
+                 'charge_lecturing_asked': '0',
+                 'charge_practical_asked': '0',
+                 'last_changed': "2013-12-08 09:58:57+00:00"
+                 },
+                {'acronym': 'BIO5213',
+                 'year': self.academic_year.year,
+                 'charge_lecturing_asked': '0',
+                 'charge_practical_asked': '0',
+                 'last_changed': "2013-12-08 09:58:57+00:00"}
+            ]
+        }]
+        body_encoded = bytearray(json.dumps(body), "utf-8")
+        tutor_application_osis.process_message(body_encoded)
+        self.attribution_new.refresh_from_db()
+        self.assertEqual(len(self.attribution_new.applications), 3)
+        self.assertEqual(self.attribution_new.applications[0]['charge_lecturing_asked'], '12.5')
+        self.assertEqual(self.attribution_new.applications[1]['charge_lecturing_asked'], '30.5')
+        self.assertEqual(self.attribution_new.applications[2]['charge_lecturing_asked'], '0')
+
 
 def _get_application_example(learning_container_year, volume_lecturing, volume_practical_exercice):
     return {
@@ -135,7 +189,7 @@ def _get_application_example(learning_container_year, volume_lecturing, volume_p
         'charge_practical_asked': volume_practical_exercice,
         'acronym': learning_container_year.acronym,
         'year': learning_container_year.academic_year.year,
-        'last_changed': "2017-12-08 09:58:57+00:00"
+        'last_changed': "2018-12-08 09:58:57+00:00"
     }
 
 

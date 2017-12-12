@@ -75,14 +75,14 @@ def _update_applications_list(new_applications):
                 _merge_applications_list(new_application.get('tutor_applications'), attribution_new)
             else:
                 for application in new_application['tutor_applications']:
-                    object_in_list = next((data for data in attribution_new.applications
-                                           if data.get("year") == application.get("year")
-                                           and data.get("acronym") == application.get("acronym")), None)
+                    object_in_list = next((data for data in attribution_new.applications if data.get("year") == application.get("year") and data.get("acronym") == application.get("acronym")), None)
                     if object_in_list:
                         if _check_if_update(application, object_in_list):
                             applications_list.append(application)
+                            attribution_new.applications.remove(object_in_list)
                         else:
                             applications_list.append(object_in_list)
+                            attribution_new.applications.remove(object_in_list)
                     else:
                         applications_list.append(application)
                 _merge_applications_list(applications_list, attribution_new)
@@ -92,13 +92,9 @@ def _update_applications_list(new_applications):
 
 
 def _check_if_update(application, object_in_list):
-    return object_in_list.get("pending") == UPDATE_OPERATION and parser.parse(
-            object_in_list.get("last_changed", 0)) < parser.parse(application.get("last_changed", 0))
-
-
-def _add_application_in_list(application, applications_list, attribution_new, data):
-    applications_list.append(application)
-    attribution_new.applications.remove(data)
+    if "pending" not in object_in_list or (object_in_list["pending"] == UPDATE_OPERATION and parser.parse(
+            object_in_list["last_changed"]) < parser.parse(application["last_changed"])):
+        return True
 
 
 def _merge_applications_list(applications_list, attribution_new):
