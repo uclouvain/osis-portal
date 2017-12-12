@@ -41,6 +41,10 @@ from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
 from base.models.enums import learning_component_year_type
 from base.views import layout
+from base.models.enums import academic_calendar_type
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.conf import settings
 
 
 @login_required
@@ -77,6 +81,7 @@ def visualize_tutor_applications(request, global_id):
 @permission_required('attribution.can_access_attribution_application', raise_exception=True)
 @user_passes_test(permission.is_online_application_opened, login_url=reverse_lazy('outside_applications_period'))
 def overview(request, global_id=None):
+
     tutor = mdl_base.tutor.find_by_user(request.user) if not global_id else \
                  mdl_base.tutor.find_by_person_global_id(global_id)
 
@@ -91,6 +96,7 @@ def overview(request, global_id=None):
 
     # Attribution which will be expire this academic year
     current_academic_year = mdl_base.academic_year.current_academic_year()
+
     attributions_about_to_expired = attribution.get_attribution_list_about_to_expire(
         global_id=tutor.person.global_id,
         academic_year=current_academic_year
@@ -104,7 +110,11 @@ def overview(request, global_id=None):
         'application_year': application_year,
         'applications': applications,
         'tot_lecturing': volume_total_attributions.get(learning_component_year_type.LECTURING),
-        'tot_practical': volume_total_attributions.get(learning_component_year_type.PRACTICAL_EXERCISES)
+        'tot_practical': volume_total_attributions.get(learning_component_year_type.PRACTICAL_EXERCISES),
+        'application_academic_calendar': mdl_base.academic_calendar.get_by_reference_and_academic_year(
+            academic_calendar_type.TEACHING_CHARGE_APPLICATION,
+            current_academic_year),
+        'catalog_url': settings.ATTRIBUTION_CONFIG.get('CATALOG_URL')
     })
 
 
@@ -215,6 +225,8 @@ def create_or_update_application(request, learning_container_year_id):
             initial=inital_data,
             learning_container_year=learning_container_year,
         )
+
+
 
     return layout.render(request, "application_form.html", {
         'a_tutor': tutor,

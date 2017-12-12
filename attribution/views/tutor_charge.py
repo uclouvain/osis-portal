@@ -29,6 +29,7 @@ import json
 import requests
 import logging
 import traceback
+import re
 
 from django.conf import settings
 from django.forms import formset_factory
@@ -42,6 +43,10 @@ from attribution.forms.attribution import AttributionForm
 from base.forms.base_forms import GlobalIdForm
 from base.views import layout
 from django.contrib.auth.decorators import login_required, permission_required
+from base.utils import string_utils
+from attribution.business import xls_students_by_learning_unit
+from django.utils.translation import ugettext_lazy as _
+
 
 YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST = 2017
 
@@ -107,14 +112,8 @@ def sum_learning_unit_year_duration(a_learning_unit_year):
     return tot_duration
 
 
-def is_string_not_null_empty(string):
-    if string and len(string.strip()) > 0:
-        return True
-    return False
-
-
 def get_email_students(an_acronym, year):
-    if is_string_not_null_empty(an_acronym):
+    if string_utils.is_string_not_null_empty(an_acronym):
         if year >= YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST:
             return "{0}{1}-{2}{3}".format(MAIL_TO, an_acronym.lower(), year, STUDENT_LIST_EMAIL_END)
         else:
@@ -123,7 +122,7 @@ def get_email_students(an_acronym, year):
 
 
 def get_schedule_url(an_acronym):
-    if is_string_not_null_empty(an_acronym):
+    if string_utils.is_string_not_null_empty(an_acronym):
         return settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_URL').\
             format(settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_NUMBER'), an_acronym.lower())
     return None
@@ -252,40 +251,39 @@ def set_formset_years(a_person):
 
 
 def get_url_learning_unit_year(a_learning_unit_year):
-    if a_learning_unit_year and is_string_not_null_empty(a_learning_unit_year.acronym):
+    if a_learning_unit_year and string_utils.is_string_not_null_empty(a_learning_unit_year.acronym):
         return settings.ATTRIBUTION_CONFIG.get('CATALOG_URL').format(a_learning_unit_year.academic_year.year,
                                                                      a_learning_unit_year.acronym.lower())
     return None
 
 
-def get_students(a_learning_unit_year_id, a_tutor):
+def get_students(a_learning_unit_year_id):
     a_learning_unit_year = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year_id)
-    return get_learning_unit_years_list(a_learning_unit_year, a_tutor)
+    return get_learning_unit_years_list(a_learning_unit_year)
 
 
-def _load_students(a_learning_unit_year, a_tutor, request):
-    students_list = []
+def _load_students(a_learning_unit_year, a_tutor):
+
     request_tutor = mdl_base.tutor.find_by_id(a_tutor)
-    for learning_unit_enrollment in get_students(a_learning_unit_year, get_person(request_tutor.person.user)):
-        students_list.append(set_student_for_display(learning_unit_enrollment))
 
     return {'global_id': request_tutor.person.global_id,
-            'students': students_list,
-            'learning_unit_year': mdl_base.learning_unit_year.find_by_id(a_learning_unit_year), }
+            'students': _get_learning_unit_yr_student_list(a_learning_unit_year),
+            'learning_unit_year': mdl_base.learning_unit_year.find_by_id(a_learning_unit_year),
+            'tutor_id': request_tutor.id}
 
 
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def show_students_admin(request, a_learning_unit_year, a_tutor):
     return render(request, "students_list_admin.html",
-                  _load_students(a_learning_unit_year, a_tutor, request))
+                  _load_students(a_learning_unit_year, a_tutor))
 
 
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
 def show_students(request, a_learning_unit_year, a_tutor):
     return render(request, "students_list.html",
-                  _load_students(a_learning_unit_year, a_tutor, request))
+                  _load_students(a_learning_unit_year, a_tutor))
 
 
 def get_sessions_results(a_registration_id, a_learning_unit_year, offer_acronym):
@@ -390,7 +388,7 @@ def calculate_attribution_format_percentage_allocation_charge(lecturing_charge, 
     return None
 
 
-def get_learning_unit_years_list(a_learning_unit_year, a_tutor):
+def get_learning_unit_years_list(a_learning_unit_year):
     # Pour trouver les inscriptions aux partims/classe identifiables dans learning_unit_year par leurs
     # Par exemple l'acronym du partim pour lu LCOPS1124 c'est LCOPS1124L
     enrollment_states = [offer_enrollment_state.PROVISORY, offer_enrollment_state.SUBSCRIBED]
@@ -476,3 +474,15 @@ def _tutor_attributions_by_learning_unit(tutor_allocations_json):
             "learning_unit_charge": attribution.get("learningUnitCharge")
         }
     return tutor_attributions
+
+
+def _get_learning_unit_yr_student_list(a_learning_unit_year):
+    return [set_student_for_display(lue) for lue in get_students(a_learning_unit_year)]
+
+
+@login_required
+@permission_required('attribution.can_access_attribution', raise_exception=True)
+def students_list_build_by_learning_unit(request, a_learning_unit_year, a_tutor):
+    student_list = _get_learning_unit_yr_student_list(a_learning_unit_year)
+    a_learning_unit_yr = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year)
+    return xls_students_by_learning_unit.get_xls(student_list, a_learning_unit_yr)
