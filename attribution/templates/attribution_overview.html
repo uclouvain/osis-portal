@@ -140,5 +140,15 @@
                 return confirm(gettext('confirm_application_delete'));
             });
         });
+
+        function changeOrientation(button) {
+            if (button.className == "glyphicon glyphicon-collapse-down"){
+                button.className = "glyphicon glyphicon-expand"
+            }
+            else if (button.className == "glyphicon glyphicon-expand"){
+                button.className = "glyphicon glyphicon-collapse-down"
+            }
+        }
+
     </script>
 {% endblock %}

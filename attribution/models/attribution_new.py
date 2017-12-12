@@ -75,3 +75,9 @@ def find_by_global_id(global_id):
         return AttributionNew.objects.get(global_id=global_id)
     except AttributionNew.DoesNotExist:
         return None
+
+
+def find_teachers(an_acronym, yr):
+    return AttributionNew.objects.filter(attributions__contains=[{'acronym': an_acronym,
+                                                                  'year': yr}])
+

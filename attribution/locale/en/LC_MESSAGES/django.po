@@ -400,3 +400,9 @@ msgstr "Export list (Excel)"
 
 msgid "desc_export_xls_list"
 msgstr "Export the students list in Excel format"
+
+msgid "teachers"
+msgstr "Teachers"
+
+msgid "display_teachers"
+msgstr "Display teachers"

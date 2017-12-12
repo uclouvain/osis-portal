@@ -32,6 +32,7 @@ from attribution.models.enums import function
 from base import models as mdl_base
 from attribution import models as mdl_attribution
 from base.models.enums import learning_component_year_type
+from collections import OrderedDict
 
 
 def get_attribution_list(global_id, academic_year=None):
@@ -253,3 +254,26 @@ def _check_is_renewable(attribution_with_vacant_next_year, application_list):
 def _has_already_applied(attribution_with_vacant_next_year, application_list):
     return any(application['acronym'] == attribution_with_vacant_next_year.get('acronym')
                for application in application_list)
+
+
+def get_teachers(a, academic_yr, global_id):
+    learning_unit_acronym = a['acronym']
+    application_yr = academic_yr.year
+
+    teachers= mdl_attribution.attribution_new.find_teachers(learning_unit_acronym, application_yr)
+    teachers_data = populate_teachers(application_yr, learning_unit_acronym, teachers)
+
+    return list(sorted(teachers_data, key=lambda teacher: "{},{}".format(teacher["person"].last_name,
+                                                                         teacher["person"].first_name)))
+
+
+def populate_teachers(application_yr, learning_unit_acronym, teachers):
+    teachers_data=[]
+
+    for teacher in teachers:
+        for a in teacher.attributions:
+            if a['acronym'] == learning_unit_acronym and a['year'] == application_yr:
+                a['person'] = mdl_base.person.find_by_global_id(teacher.global_id)
+                print(a)
+                teachers_data.append(a)
+    return teachers_data
