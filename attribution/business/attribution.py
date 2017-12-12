@@ -268,7 +268,6 @@ def get_learning_unit_volume(an_attribution, application_year):
     learning_units = learning_unit_year_with_context.get_with_context(learning_container_year_id=learning_unit_year.learning_container_year)
     for l in learning_units:
         for learning_component_yr in l.components:
-            print(learning_component_yr)
             if learning_component_yr.type == learning_component_year_type.LECTURING:
                 an_attribution['lecturing_vol'] = _get_effective_volume(l.components[learning_component_yr])
             if learning_component_yr.type == learning_component_year_type.PRACTICAL_EXERCISES:
