@@ -106,8 +106,9 @@ def overview(request, global_id=None):
 
     for a in attributions:
         attribution.get_learning_unit_volume(a, application_year)
-    for a in attributions_about_to_expired:
-        attribution.get_learning_unit_volume(a, application_year)
+    if attributions_about_to_expired:
+        for a in attributions_about_to_expired:
+            attribution.get_learning_unit_volume(a, application_year)
     return layout.render(request, "attribution_overview.html", {
         'a_tutor': tutor,
         'attributions': attributions,
