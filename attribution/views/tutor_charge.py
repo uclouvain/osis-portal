@@ -338,7 +338,7 @@ def get_session_value(session_results, month_session, variable_to_get):
         return None
 
 
-def get_enrollment_dict_for_display(learning_unit_enrollment):
+def get_enrollments_dict_for_display(learning_unit_enrollment):
 
     session_results = get_sessions_results(learning_unit_enrollment.offer_enrollment.student.registration_id,
                                            learning_unit_enrollment.learning_unit_year,
