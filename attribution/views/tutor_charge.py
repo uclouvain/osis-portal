@@ -258,28 +258,28 @@ def get_url_learning_unit_year(a_learning_unit_year):
     return None
 
 
-def _load_students(a_learning_unit_year, a_tutor):
+def _load_students(learning_unit_year_id, a_tutor):
 
     request_tutor = mdl_base.tutor.find_by_id(a_tutor)
-
+    a_learning_unit_year = mdl_base.learning_unit_year.find_by_id(learning_unit_year_id)
     return {'global_id': request_tutor.person.global_id,
             'students': _get_learning_unit_yr_enrollments_list(a_learning_unit_year),
-            'learning_unit_year': mdl_base.learning_unit_year.find_by_id(a_learning_unit_year),
+            'learning_unit_year': a_learning_unit_year,
             'tutor_id': request_tutor.id}
 
 
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
-def show_students_admin(request, a_learning_unit_year, a_tutor):
+def show_students_admin(request, learning_unit_year_id, a_tutor):
     return render(request, "students_list_admin.html",
-                  _load_students(a_learning_unit_year, a_tutor))
+                  _load_students(learning_unit_year_id, a_tutor))
 
 
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
-def show_students(request, a_learning_unit_year, a_tutor):
+def show_students(request, learning_unit_year_id, a_tutor):
     return render(request, "students_list.html",
-                  _load_students(a_learning_unit_year, a_tutor))
+                  _load_students(learning_unit_year_id, a_tutor))
 
 
 def get_sessions_results(a_registration_id, a_learning_unit_year, offer_acronym):
@@ -386,7 +386,6 @@ def calculate_attribution_format_percentage_allocation_charge(lecturing_charge, 
 
 def get_learning_unit_enrollments_list(a_learning_unit_year):
     enrollment_states = [offer_enrollment_state.PROVISORY, offer_enrollment_state.SUBSCRIBED]
-
     return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(
         list(mdl_base.learning_unit_year.find_by_learning_container_year(a_learning_unit_year.learning_container_year)),
         offer_enrollment_states=enrollment_states,
@@ -470,7 +469,7 @@ def _tutor_attributions_by_learning_unit(tutor_allocations_json):
 
 def _get_learning_unit_yr_enrollments_list(a_learning_unit_year):
     enrollments = [
-        get_enrollment_dict_for_display(lue)
+        get_enrollments_dict_for_display(lue)
         for lue in get_learning_unit_enrollments_list(a_learning_unit_year)
     ]
     return sorted(enrollments, key=itemgetter('program'))

@@ -39,9 +39,9 @@ urlpatterns = [
     url(r'^$', tutor_charge.home, name='attribution_home'),
     url(r'^charge/([0-9]+)/([0-9a-z-]+)/$', tutor_charge.by_year, name='attributions_by_year'),
 
-    url(r'^students/(?P<a_learning_unit_year>[0-9]+)/(?P<a_tutor>[0-9]+)/$', tutor_charge.show_students,
+    url(r'^students/(?P<learning_unit_year_id>[0-9]+)/(?P<a_tutor>[0-9]+)/$', tutor_charge.show_students,
         name='attribution_students'),
-    url(r'^students/list/xls/(?P<a_learning_unit_year>[0-9]+)', tutor_charge.students_list_build_by_learning_unit, name='produce_xls_students'),
+    url(r'^students/list/xls/(?P<learning_unit_year_id>[0-9]+)', tutor_charge.students_list_build_by_learning_unit, name='produce_xls_students'),
 
     url(r'^applications/', include([
         url(r'^$', online_application.overview, name='applications_overview'),
@@ -60,7 +60,7 @@ urlpatterns = [
 
     url(r'^administration/', include([
         url(r'^charge/([0-9]+)/([0-9a-z-]+)/$', tutor_charge.by_year_admin, name='attributions_by_year_admin'),
-        url(r'^students/(?P<a_learning_unit_year>[0-9]+)/(?P<a_tutor>[0-9]+)/$', tutor_charge.show_students_admin,
+        url(r'^students/(?P<learning_unit_year_id>[0-9]+)/(?P<a_tutor>[0-9]+)/$', tutor_charge.show_students_admin,
             name='attribution_students_admin'),
         url(r'^attributions/$', tutor_charge.attribution_administration, name='attribution_administration'),
         url(r'^select_tutor/$', tutor_charge.select_tutor_attributions,
