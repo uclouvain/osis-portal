@@ -203,6 +203,12 @@ class AttributionTest(TestCase):
         self.assertEqual(attribution._calculate_effective_volume({'PLANNED_CLASSES': 1}), attribution.NO_CHARGE)
 
 
+    def test_get_effective_volume_case_negative_volume(self):
+        vol_tot = -10.0
+        planned_classes = 1
+        data = {'PLANNED_CLASSES': planned_classes, 'VOLUME_TOTAL': vol_tot}
+        self.assertEqual(attribution._calculate_effective_volume(data), attribution.NO_CHARGE)
+
 def _create_multiple_academic_year():
     for year in range(2000, 2025):
         AcademicYearFactory(year=year)
