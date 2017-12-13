@@ -113,8 +113,8 @@ def _append_team_and_volume_declared_vacant(attribution_list, academic_year):
 
 def _get_volume_declared_vacant(attribution, l_component_year_list):
     volumes_declared_vacant = {
-        learning_component_year_type.LECTURING: Decimal(0),
-        learning_component_year_type.PRACTICAL_EXERCISES: Decimal(0)
+        learning_component_year_type.LECTURING: NO_CHARGE,
+        learning_component_year_type.PRACTICAL_EXERCISES: NO_CHARGE
     }
     for l_component_year in l_component_year_list:
         if l_component_year.learning_container_year.acronym == attribution.get('acronym') and \
@@ -195,11 +195,11 @@ def _format_str_volume_to_decimal(attribution_list):
         if learning_component_year_type.LECTURING in attribution:
             attribution[learning_component_year_type.LECTURING] = Decimal(attribution[learning_component_year_type.LECTURING])
         else:
-            attribution[learning_component_year_type.LECTURING] = Decimal(0)
+            attribution[learning_component_year_type.LECTURING] = NO_CHARGE
         if learning_component_year_type.PRACTICAL_EXERCISES in attribution:
             attribution[learning_component_year_type.PRACTICAL_EXERCISES] = Decimal(attribution[learning_component_year_type.PRACTICAL_EXERCISES])
         else:
-            attribution[learning_component_year_type.PRACTICAL_EXERCISES] = Decimal(0)
+            attribution[learning_component_year_type.PRACTICAL_EXERCISES] = NO_CHARGE
     return attribution_list
 
 
