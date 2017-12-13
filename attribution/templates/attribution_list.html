@@ -50,12 +50,12 @@
         <tr>
             <td>{{ attribution.acronym }}</td>
             <td>{{ attribution.title }}</td>
-            <td>{{ attribution.lecturing_vol | floatformat:1 }}</td>
-            <td>{{ attribution.practical_exercises_vol | floatformat:1 }}</td>
-            <td style="border-left: 1px solid;">{{ attribution.volume_lecturing_vacant|floatformat:1 }}</td>
-            <td>{{ attribution.volume_practical_exercices_vacant|floatformat:1 }}</td>
-            <td style="border-left: 1px solid;">{{ attribution.LECTURING|floatformat:1 }}</td>
-            <td>{{ attribution.PRACTICAL_EXERCISES|floatformat:1 }}</td>
+            <td>{{ attribution.lecturing_vol }}</td>
+            <td>{{ attribution.practical_exercises_vol }}</td>
+            <td style="border-left: 1px solid;">{{ attribution.volume_lecturing_vacant }}</td>
+            <td>{{ attribution.volume_practical_exercices_vacant }}</td>
+            <td style="border-left: 1px solid;">{{ attribution.LECTURING|default_if_none:'0,0' }}</td>
+            <td>{{ attribution.PRACTICAL_EXERCISES|default_if_none:'0,0' }}</td>
             <td>{% trans attribution.function %}</td>
             <td>{{ attribution.start_academic_year | default_if_none:''}}</td>
             <td>{{ attribution.end_academic_year | default_if_none:''}}</td>

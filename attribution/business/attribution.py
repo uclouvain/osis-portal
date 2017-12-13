@@ -35,7 +35,7 @@ from base.models.enums import learning_component_year_type
 from base.business import learning_unit_year_with_context
 
 
-NO_CHARGE = Decimal(0)
+NO_CHARGE = 0.0
 
 
 def get_attribution_list(global_id, academic_year=None):

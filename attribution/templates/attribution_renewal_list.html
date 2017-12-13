@@ -84,8 +84,8 @@
                     </td>
                     <td>{{ attribution.acronym }}</td>
                     <td>{{ attribution.title }}</td>
-                    <td style="border-left: 1px solid;">{{ attribution.lecturing_vol | floatformat:1 }}</td>
-                    <td>{{ attribution.practical_exercises_vol | floatformat:1 }}</td>
+                    <td style="border-left: 1px solid;">{{ attribution.lecturing_vol }}</td>
+                    <td>{{ attribution.practical_exercises_vol }}</td>
                     <td >{{ attribution.attribution_vacant.LECTURING|default_if_none:'0,0' }}</td>
                     <td>{{ attribution.attribution_vacant.PRACTICAL_EXERCISES|default_if_none:'0,0' }}</td>
                     <td style="border-left: 1px solid;">{{ attribution.start_academic_year|default_if_none:''}}</td>
