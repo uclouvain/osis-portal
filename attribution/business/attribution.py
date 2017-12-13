@@ -269,13 +269,13 @@ def get_learning_unit_volume(an_attribution, application_year):
     for l in learning_units:
         for learning_component_yr in l.components:
             if learning_component_yr.type == learning_component_year_type.LECTURING:
-                an_attribution['lecturing_vol'] = _get_effective_volume(l.components[learning_component_yr])
+                an_attribution['lecturing_vol'] = _calculate_effective_volume(l.components[learning_component_yr])
             if learning_component_yr.type == learning_component_year_type.PRACTICAL_EXERCISES:
-                an_attribution['practical_exercises_vol'] = _get_effective_volume(l.components[learning_component_yr])
+                an_attribution['practical_exercises_vol'] = _calculate_effective_volume(l.components[learning_component_yr])
         break
 
 
-def _get_effective_volume(data):
+def _calculate_effective_volume(data):
     if 'VOLUME_TOTAL' in data and 'PLANNED_CLASSES' in data \
             and _is_positive(data['VOLUME_TOTAL']) and _is_positive(data['PLANNED_CLASSES']):
         return data['VOLUME_TOTAL'] * data['PLANNED_CLASSES']
@@ -285,5 +285,4 @@ def _get_effective_volume(data):
 def _is_positive(value):
     if value > 0:
         return True
-    else:
-        return False
+    return False

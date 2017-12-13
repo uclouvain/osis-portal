@@ -187,20 +187,20 @@ class AttributionTest(TestCase):
         self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
         self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'], 'already_applied')
 
-    def test_get_effective_volume(self):
+    def test_calculate_effective_volume(self):
         vol_tot = 10.0
         planned_classes = 2
         data = {'PLANNED_CLASSES': planned_classes, 'VOLUME_TOTAL': vol_tot}
-        self.assertEqual(attribution._get_effective_volume(data), vol_tot * planned_classes)
+        self.assertEqual(attribution._calculate_effective_volume(data), vol_tot * planned_classes)
 
-    def test_get_effective_volume_incorrect(self):
+    def test_calculate_effective_volume_incorrect(self):
         vol_tot = 10.0
         planned_classes = -1
         data = {'PLANNED_CLASSES': planned_classes, 'VOLUME_TOTAL': vol_tot}
-        self.assertEqual(attribution._get_effective_volume(data), attribution.NO_CHARGE)
+        self.assertEqual(attribution._calculate_effective_volume(data), attribution.NO_CHARGE)
 
-    def test_get_effective_volume_inexisting(self):
-        self.assertEqual(attribution._get_effective_volume({'PLANNED_CLASSES': 1}), attribution.NO_CHARGE)
+    def test_calculate_effective_volume_inexisting(self):
+        self.assertEqual(attribution._calculate_effective_volume({'PLANNED_CLASSES': 1}), attribution.NO_CHARGE)
 
 
 def _create_multiple_academic_year():
