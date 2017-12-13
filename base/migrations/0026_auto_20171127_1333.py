@@ -39,6 +39,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('uuid', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True)),
+                ('deleted', models.BooleanField(default=False)),
                 ('changed', models.DateTimeField(auto_now=True, null=True)),
                 ('hourly_volume_total', models.DecimalField(blank=True, decimal_places=2, max_digits=6, null=True)),
                 ('hourly_volume_partial', models.DecimalField(blank=True, decimal_places=2, max_digits=6, null=True)),
