@@ -34,9 +34,9 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 
 
 class EntityAdmin(SerializableModelAdmin):
-    list_display = ('id', 'external_id', 'organization')
-    search_fields = ['external_id', 'entityversion__acronym', 'organization__acronym', 'organization__name']
-    readonly_fields = ('organization', 'external_id')
+    list_display = ('id', 'organization')
+    search_fields = ['organization__acronym', 'organization__name']
+    readonly_fields = ('organization',)
 
 
 class Entity(SerializableModel):
