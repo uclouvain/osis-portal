@@ -36,7 +36,7 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 
 class EntityVersionAdmin(SerializableModelAdmin):
     list_display = ('id', 'entity', )
-    search_fields = ['entity__id', 'entity__external_id']
+    search_fields = ['entity__id']
     raw_id_fields = ('entity', )
 
 
@@ -52,6 +52,5 @@ class EntityVersionQuerySet(models.QuerySet):
 
 
 class EntityVersion(SerializableModel):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
     changed = models.DateTimeField(null=True, auto_now=True)
     entity = models.ForeignKey('Entity')

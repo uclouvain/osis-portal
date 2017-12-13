@@ -20,7 +20,6 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('uuid', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True)),
-                ('external_id', models.CharField(max_length=255, unique=True)),
                 ('changed', models.DateTimeField(auto_now=True, null=True)),
                 ('location', models.CharField(blank=True, max_length=255, null=True)),
                 ('postal_code', models.CharField(blank=True, max_length=20, null=True)),
@@ -40,7 +39,6 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('uuid', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True)),
-                ('external_id', models.CharField(blank=True, max_length=255, null=True)),
                 ('changed', models.DateTimeField(auto_now=True, null=True)),
                 ('hourly_volume_total', models.DecimalField(blank=True, decimal_places=2, max_digits=6, null=True)),
                 ('hourly_volume_partial', models.DecimalField(blank=True, decimal_places=2, max_digits=6, null=True)),
@@ -52,7 +50,6 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('uuid', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True)),
                 ('deleted', models.BooleanField(default=False)),
-                ('external_id', models.CharField(blank=True, max_length=255, null=True)),
                 ('changed', models.DateTimeField(auto_now=True, null=True)),
                 ('type', models.CharField(choices=[('REQUIREMENT_ENTITY', 'REQUIREMENT_ENTITY'), ('ALLOCATION_ENTITY', 'ALLOCATION_ENTITY'), ('ADDITIONAL_REQUIREMENT_ENTITY_1', 'ADDITIONAL_REQUIREMENT_ENTITY_1'), ('ADDITIONAL_REQUIREMENT_ENTITY_2', 'ADDITIONAL_REQUIREMENT_ENTITY_2')], max_length=35)),
                 ('entity', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='base.Entity')),
@@ -82,7 +79,6 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('uuid', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True)),
-                ('external_id', models.CharField(blank=True, max_length=100, null=True)),
                 ('changed', models.DateTimeField(auto_now=True, null=True)),
                 ('title', models.CharField(db_index=True, max_length=255)),
                 ('acronym', models.CharField(db_index=True, max_length=20)),

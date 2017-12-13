@@ -202,7 +202,6 @@ class AttributionTest(TestCase):
     def test_calculate_effective_volume_no_volume_provided(self):
         self.assertEqual(attribution._calculate_effective_volume({'PLANNED_CLASSES': 1}), attribution.NO_CHARGE)
 
-
     def test_calculate_effective_volume_case_negative_volume(self):
         vol_tot = -10.0
         planned_classes = 1

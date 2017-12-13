@@ -39,7 +39,6 @@ class EntityContainerYearFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = "base.EntityContainerYear"
 
-    external_id = factory.Sequence(lambda n: '10000000%02d' % n)
     changed = factory.fuzzy.FuzzyDateTime(datetime.datetime(2016, 1, 1, tzinfo=get_tzinfo()),
                                           datetime.datetime(2017, 3, 1, tzinfo=get_tzinfo()))
     entity = factory.SubFactory(EntityFactory)
