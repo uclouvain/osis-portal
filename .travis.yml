@@ -11,4 +11,4 @@ services:
   - postgresql
   - rabbitmq
 addons:
-    postgresql: "9.6.4"
+    postgresql: "9.4"
