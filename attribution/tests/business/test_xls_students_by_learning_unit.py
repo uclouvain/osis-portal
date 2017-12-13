@@ -42,7 +42,7 @@ class XlsStudentsByLearningUnitTest(TestCase):
         self.tutor = TutorFactory()
         self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
 
-        self.url = reverse('produce_xls_students', args=['01234567', '1'])
+        self.url = reverse('produce_xls_students', args=['01234567'])
         self.client.force_login(self.tutor.person.user)
 
     def create_worksheet(self):
