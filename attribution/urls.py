@@ -41,7 +41,7 @@ urlpatterns = [
 
     url(r'^students/(?P<a_learning_unit_year>[0-9]+)/(?P<a_tutor>[0-9]+)/$', tutor_charge.show_students,
         name='attribution_students'),
-    url(r'^students/list/xls/(?P<a_learning_unit_year>[0-9]+)/(?P<a_tutor>[0-9]+)', tutor_charge.students_list_build_by_learning_unit, name='produce_xls_students'),
+    url(r'^students/list/xls/(?P<a_learning_unit_year>[0-9]+)', tutor_charge.students_list_build_by_learning_unit, name='produce_xls_students'),
 
     url(r'^applications/', include([
         url(r'^$', online_application.overview, name='applications_overview'),
