@@ -1,7 +1,9 @@
 language: python
 python:
   "3.4.5"
+ 
 install: "pip install -r requirements.txt"
+
 script: "python3 manage.py compilemessages && python3 manage.py test"
 notifications:
   slack: osisteam:2M3DtIOGE4clU1DF8r6k8NQD

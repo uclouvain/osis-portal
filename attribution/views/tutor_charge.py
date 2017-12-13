@@ -34,11 +34,10 @@ from django.conf import settings
 from django.forms import formset_factory
 from django.shortcuts import render
 
-from attribution.models.enums import offer_enrollment_state
 from performance import models as mdl_performance
 from base import models as mdl_base
 from attribution import models as mdl_attribution
-from base.models.enums import component_type
+from base.models.enums import offer_enrollment_state
 from attribution.forms.attribution import AttributionForm
 from base.forms.base_forms import GlobalIdForm
 from base.views import layout
