@@ -7,7 +7,7 @@ jdcal==1.2
 mock==2.0.0
 pika==0.10.0
 Pillow==3.3.0
-psycopg2==2.7.1
+psycopg2==2.7.3.2
 PyPDF2==1.26.0
 reportlab==3.2.0
 selenium==2.48.0
