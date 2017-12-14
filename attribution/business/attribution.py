@@ -32,6 +32,10 @@ from attribution.models.enums import function
 from base import models as mdl_base
 from attribution import models as mdl_attribution
 from base.models.enums import learning_component_year_type
+from base.business import learning_unit_year_with_context
+
+
+NO_CHARGE = 0.0
 
 
 def get_attribution_list(global_id, academic_year=None):
@@ -109,8 +113,8 @@ def _append_team_and_volume_declared_vacant(attribution_list, academic_year):
 
 def _get_volume_declared_vacant(attribution, l_component_year_list):
     volumes_declared_vacant = {
-        learning_component_year_type.LECTURING: Decimal(0),
-        learning_component_year_type.PRACTICAL_EXERCISES: Decimal(0)
+        learning_component_year_type.LECTURING: NO_CHARGE,
+        learning_component_year_type.PRACTICAL_EXERCISES: NO_CHARGE
     }
     for l_component_year in l_component_year_list:
         if l_component_year.learning_container_year.acronym == attribution.get('acronym') and \
@@ -191,11 +195,11 @@ def _format_str_volume_to_decimal(attribution_list):
         if learning_component_year_type.LECTURING in attribution:
             attribution[learning_component_year_type.LECTURING] = Decimal(attribution[learning_component_year_type.LECTURING])
         else:
-            attribution[learning_component_year_type.LECTURING] = Decimal(0)
+            attribution[learning_component_year_type.LECTURING] = NO_CHARGE
         if learning_component_year_type.PRACTICAL_EXERCISES in attribution:
             attribution[learning_component_year_type.PRACTICAL_EXERCISES] = Decimal(attribution[learning_component_year_type.PRACTICAL_EXERCISES])
         else:
-            attribution[learning_component_year_type.PRACTICAL_EXERCISES] = Decimal(0)
+            attribution[learning_component_year_type.PRACTICAL_EXERCISES] = NO_CHARGE
     return attribution_list
 
 
@@ -253,3 +257,32 @@ def _check_is_renewable(attribution_with_vacant_next_year, application_list):
 def _has_already_applied(attribution_with_vacant_next_year, application_list):
     return any(application['acronym'] == attribution_with_vacant_next_year.get('acronym')
                for application in application_list)
+
+
+def get_learning_unit_volume(an_attribution, application_year):
+    learning_unit_year = mdl_base.learning_unit_year.find_first_by_exact_acronym(application_year,
+                                                                                  an_attribution['acronym'])
+    an_attribution['lecturing_vol'] = NO_CHARGE
+    an_attribution['practical_exercises_vol'] = NO_CHARGE
+
+    learning_units = learning_unit_year_with_context.get_with_context(learning_container_year_id=learning_unit_year.learning_container_year)
+    for l in learning_units:
+        for learning_component_yr in l.components:
+            if learning_component_yr.type == learning_component_year_type.LECTURING:
+                an_attribution['lecturing_vol'] = _calculate_effective_volume(l.components[learning_component_yr])
+            if learning_component_yr.type == learning_component_year_type.PRACTICAL_EXERCISES:
+                an_attribution['practical_exercises_vol'] = _calculate_effective_volume(l.components[learning_component_yr])
+        break
+
+
+def _calculate_effective_volume(data):
+    if 'VOLUME_TOTAL' in data and 'PLANNED_CLASSES' in data \
+            and _is_positive(data['VOLUME_TOTAL']) and _is_positive(data['PLANNED_CLASSES']):
+        return data['VOLUME_TOTAL'] * data['PLANNED_CLASSES']
+    return NO_CHARGE
+
+
+def _is_positive(value):
+    if value > 0:
+        return True
+    return False

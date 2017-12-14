@@ -45,6 +45,9 @@ from base.models.enums import academic_calendar_type
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.conf import settings
+from base.business import learning_unit_year_with_context
+from base.models.enums import learning_component_year_type
+from decimal import Decimal
 
 
 @login_required
@@ -81,7 +84,6 @@ def visualize_tutor_applications(request, global_id):
 @permission_required('attribution.can_access_attribution_application', raise_exception=True)
 @user_passes_test(permission.is_online_application_opened, login_url=reverse_lazy('outside_applications_period'))
 def overview(request, global_id=None):
-
     tutor = mdl_base.tutor.find_by_user(request.user) if not global_id else \
                  mdl_base.tutor.find_by_person_global_id(global_id)
 
@@ -102,6 +104,11 @@ def overview(request, global_id=None):
         academic_year=current_academic_year
     )
 
+    for a in attributions:
+        attribution.get_learning_unit_volume(a, application_year)
+    if attributions_about_to_expired:
+        for a in attributions_about_to_expired:
+            attribution.get_learning_unit_volume(a, application_year)
     return layout.render(request, "attribution_overview.html", {
         'a_tutor': tutor,
         'attributions': attributions,
@@ -137,6 +144,9 @@ def search_vacant_attribution(request):
             tutor.person.global_id,
             application_academic_year
         )
+        if attributions_vacant:
+            for a in attributions_vacant:
+                attribution.get_learning_unit_volume(a, application_academic_year)
 
     return layout.render(request, "attribution_vacant_list.html", {
         'a_tutor': tutor,
@@ -225,8 +235,6 @@ def create_or_update_application(request, learning_container_year_id):
             initial=inital_data,
             learning_container_year=learning_container_year,
         )
-
-
 
     return layout.render(request, "application_form.html", {
         'a_tutor': tutor,

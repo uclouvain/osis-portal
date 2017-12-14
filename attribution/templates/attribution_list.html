@@ -27,14 +27,16 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th colspan="3"></th>
+            <th colspan="2"></th>
+            <th colspan="2">{% trans 'learning_unit_volumes' %}</th>
             <th colspan="2" style="border-left: 1px solid;">{% trans 'vacant' %} </th>
             <th colspan="5" style="border-left: 1px solid;">{% trans 'charge' %} </th>
         </tr>
         <tr>
             <th>{% trans 'code'%}</th>
             <th>{% trans 'title'%}</th>
-            <th>{% trans 'team'%}</th>
+            <th>{% trans 'lecturing_hours'%}</th>
+            <th>{% trans 'practical_hours'%}</th>
             <th style="border-left: 1px solid;">{% trans 'lecturing_hours'%}</th>
             <th>{% trans 'practical_hours'%}</th>
             <th style="border-left: 1px solid;">{% trans 'lecturing_hours_allocated'%}</th>
@@ -48,41 +50,12 @@
         <tr>
             <td>{{ attribution.acronym }}</td>
             <td>{{ attribution.title }}</td>
-            <td class="text-center">
-                {% if attribution.team %}
-                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                {% else %}
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                {% endif %}
-            </td>
-            <td style="border-left: 1px solid;">
-                {% if attribution.volume_lecturing_vacant = 0 %}
-                    {{ attribution.volume_lecturing_vacant|floatformat:1 }}
-                {% else %}
-                    {{ attribution.volume_lecturing_vacant | default_if_none:'0,0' }}
-                {% endif%}
-            </td>
-
-            <td>{% if attribution.volume_practical_exercices_vacant = 0 %}
-                    {{ attribution.volume_practical_exercices_vacant|floatformat:1 }}
-                {% else %}
-                    {{ attribution.volume_practical_exercices_vacant | default_if_none:'0,0'}}
-                {% endif %}
-            </td>
-            <td style="border-left: 1px solid;">
-                {% if attribution.LECTURING = 0 %}
-                    {{ attribution.LECTURING|floatformat:1 }}
-                {% else %}
-                    {{ attribution.LECTURING | default_if_none:'0,0'}}
-                {% endif %}
-            </td>
-            <td>
-                {% if attribution.PRACTICAL_EXERCISES = 0 %}
-                    {{ attribution.PRACTICAL_EXERCISES|floatformat:1 }}
-                {% else %}
-                    {{ attribution.PRACTICAL_EXERCISES | default_if_none:'0,0'}}
-                {% endif %}
-            </td>
+            <td>{{ attribution.lecturing_vol }}</td>
+            <td>{{ attribution.practical_exercises_vol }}</td>
+            <td style="border-left: 1px solid;">{{ attribution.volume_lecturing_vacant }}</td>
+            <td>{{ attribution.volume_practical_exercices_vacant }}</td>
+            <td style="border-left: 1px solid;">{{ attribution.LECTURING|default_if_none:'0,0' }}</td>
+            <td>{{ attribution.PRACTICAL_EXERCISES|default_if_none:'0,0' }}</td>
             <td>{% trans attribution.function %}</td>
             <td>{{ attribution.start_academic_year | default_if_none:''}}</td>
             <td>{{ attribution.end_academic_year | default_if_none:''}}</td>
@@ -90,7 +63,7 @@
     {% endfor %}
     <tfoot>
         <tr>
-            <td colspan="5" ><label class="pull-right">{% trans 'total' %}</label></td>
+            <td colspan="6" ><label class="pull-right">{% trans 'total' %}</label></td>
             <td>{{ tot_lecturing|default_if_none:'0,0' }}</td>
             <td>{{ tot_practical|default_if_none:'0,0' }}</td>
             <td colspan="3"></td>

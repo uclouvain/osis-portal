@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,26 +23,29 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models import academic_calendar
-from base.models import academic_year
-from base.models import campus
-from base.models import entity
-from base.models import entity_container_year
-from base.models import entity_component_year
-from base.models import entity_version
-from base.models import external_offer
-from base.models import learning_unit
-from base.models import learning_unit_component
-from base.models import learning_unit_enrollment
-from base.models import learning_container
-from base.models import learning_container_year
-from base.models import learning_unit_year
-from base.models import learning_component_year
-from base.models import offer
-from base.models import offer_enrollment
-from base.models import offer_year
-from base.models import offer_year_domain
-from base.models import organization
-from base.models import person
-from base.models import student
-from base.models import tutor
+from django.contrib import admin
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
+from django.db.models import Case, When, Q, F
+from django.utils import timezone
+
+from base.models.enums import entity_type
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+
+
+class EntityAdmin(SerializableModelAdmin):
+    list_display = ('id', 'organization')
+    search_fields = ['organization__acronym', 'organization__name']
+    readonly_fields = ('organization',)
+
+
+class Entity(SerializableModel):
+    organization = models.ForeignKey('Organization', blank=True, null=True)
+    changed = models.DateTimeField(null=True, auto_now=True)
+
+
+    class Meta:
+        verbose_name_plural = "entities"
+
+    def __str__(self):
+        return "{0} - {1}".format(self.id, self.external_id)
