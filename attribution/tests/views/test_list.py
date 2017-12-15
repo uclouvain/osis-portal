@@ -122,7 +122,7 @@ class StudentsListTest(TestCase):
                                       enrollment_state=None)
 
         url = reverse('attribution_students', kwargs={
-            'a_learning_unit_year': a_learning_unit_year.id,
+            'learning_unit_year_id': a_learning_unit_year.id,
             'a_tutor': self.tutor.id
         })
         response = self.client.get(url)
