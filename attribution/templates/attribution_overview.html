@@ -142,11 +142,11 @@
         });
 
         function changeOrientation(button) {
-            if (button.className == "glyphicon glyphicon-collapse-down"){
-                button.className = "glyphicon glyphicon-expand"
+            if (button.className.includes("glyphicon-collapse-down") {
+                button.className = button.className.replace("glyphicon-collapse-down", "glyphicon-expand");
             }
-            else if (button.className == "glyphicon glyphicon-expand"){
-                button.className = "glyphicon glyphicon-collapse-down"
+            else if (button.className.includes("glyphicon-expand") {
+                button.className = button.className.replace("glyphicon-expand", "glyphicon-collapse-down");
             }
         }
 
