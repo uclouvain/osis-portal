@@ -75,8 +75,8 @@
                         <tr>
                             <th colspan="3"></th>
                             <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'vacant' %}</th>
-                            <th></th>
-                            <th></th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
                         </tr>
                         <tr>
                             <th>{% trans 'code'%}</th>
@@ -108,11 +108,13 @@
                             </td>
                             <td>
                             {% if attribution.teachers %}
-                                <a role="button" data-toggle="collapse" href=".collapse_teachers{{ forloop.counter0 }}"
-                                   aria-expanded="false" aria-controls="collapse_teachers{{ forloop.counter0 }}" style="border:0;padding:0;"
-                                   onclick="changeOrientation(expandButton{{ forloop.counter0 }})" title="{% trans 'display_teachers' %}">
-                                    <span id="expandButton{{ forloop.counter0 }}" class="glyphicon glyphicon-expand" aria-hidden="true"></span>
-                                </a>
+                                {% with teacher_number=forloop.counter0 %}
+                                    <a role="button" data-toggle="collapse" href=".collapse_teachers{{ teacher_number }}"
+                                       aria-expanded="false" aria-controls="collapse_teachers{{ teacher_number }}" style="border:0;padding:0;"
+                                       onclick="changeOrientation(expandButton{{ teacher_number }})" title="{% trans 'display_teachers' %}">
+                                        <span id="expandButton{{ teacher_number }}" class="glyphicon glyphicon-expand" aria-hidden="true"></span>
+                                    </a>
+                                {% endwith %}
                             {% endif %}
                             </td>
                             <td>
