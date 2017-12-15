@@ -32,6 +32,7 @@ from base import models as mdl_base
 from attribution import models as mdl_attribution
 from base.models.enums import learning_component_year_type
 
+PERSON_KEY= 'person'
 
 def get_attribution_list(global_id, academic_year=None):
     if not academic_year:
@@ -254,23 +255,23 @@ def _has_already_applied(attribution_with_vacant_next_year, application_list):
                for application in application_list)
 
 
-def get_teachers(a, academic_yr, global_id):
-    learning_unit_acronym = a['acronym']
-    application_yr = academic_yr.year
-
-    teachers = mdl_attribution.attribution_new.find_teachers(learning_unit_acronym, application_yr)
-    teachers_data = _populate_teachers(application_yr, learning_unit_acronym, teachers)
-
-    return list(sorted(teachers_data, key=lambda teacher: "{},{}".format(teacher["person"].last_name,
-                                                                         teacher["person"].first_name)))
+def get_teachers(learning_unit_acronym, application_yr):
+    if learning_unit_acronym and application_yr:
+        teachers = mdl_attribution.attribution_new.find_teachers(learning_unit_acronym, application_yr)
+        if teachers:
+            teachers_data = _populate_teachers(application_yr, learning_unit_acronym, teachers)
+            return list(sorted(teachers_data, key=lambda teacher: "{},{}".format(teacher[PERSON_KEY].last_name,
+                                                                                 teacher[PERSON_KEY].first_name)))
+    return None
 
 
 def _populate_teachers(application_yr, learning_unit_acronym, teachers):
     teachers_data=[]
-
     for teacher in teachers:
         for a in teacher.attributions:
             if a['acronym'] == learning_unit_acronym and a['year'] == application_yr:
-                a['person'] = mdl_base.person.find_by_global_id(teacher.global_id)
+                a[PERSON_KEY] = mdl_base.person.find_by_global_id(teacher.global_id)
                 teachers_data.append(a)
-    return teachers_data
+
+    return teachers_data if  len(teachers_data) > 0 else None
+
