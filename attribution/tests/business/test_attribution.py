@@ -88,7 +88,7 @@ class AttributionTest(TestCase):
         self.assertEqual(volumes_total.get(learning_component_year_type.PRACTICAL_EXERCISES), Decimal(21.5))
 
     def test_append_team_and_volume_delcared_vacant(self):
-        #Create Container Year and component
+        #  Create Container Year and component
         _create_learning_container_with_components(acronym="LBIR1300", academic_year=self.academic_year,
                                                    volume_lecturing=Decimal(15.5),
                                                    volume_practical_exercices=Decimal(5))
@@ -186,6 +186,44 @@ class AttributionTest(TestCase):
         self.assertEqual(len(attribution_list_about_to_expired), 1)
         self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
         self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'], 'already_applied')
+
+    def test_get_teachers_parameter_none(self):
+        self.assertIsNone(attribution.get_teachers(None, None))
+        self.assertIsNone(attribution.get_teachers('LCHM1111', None))
+        academic_year = AcademicYearFactory()
+        self.assertIsNone(attribution.get_teachers(None, academic_year))
+
+    def test_get_teachers_no_teacher_found(self):
+        self.assertIsNone(attribution.get_teachers('LCHM1111', 2017))
+
+    def test_get_2_teachers_in_order(self):
+        acronym_LCHM1111 = 'LCHM1111'
+        acronym_LDVLP2627 = 'LDVLP2627'
+        acronym_LDROI1110 = 'LDROI1110'
+
+        # Create first teacher with one attribution on LCHM1111 and others
+        person_first_alphabetical_order = PersonFactory(global_id='12345678', last_name='Antonelli')
+        attribution_teacher_1_LCHM1111 = {'year': 2017, 'acronym': acronym_LCHM1111}
+        attributions_teacher1 = [
+            attribution_teacher_1_LCHM1111,
+            {'year': 2016, 'acronym': acronym_LDVLP2627},
+            {'year': 2017, 'acronym': acronym_LDVLP2627},
+            {'year': 2017, 'acronym': acronym_LDROI1110}
+        ]
+
+        AttributionNewFactory(global_id=person_first_alphabetical_order.global_id,
+                              attributions=attributions_teacher1)
+        # Create second teacher with one attribution on LCHM1111
+        person_second_alphabetical_order = PersonFactory(global_id='987654321', last_name='Barnet')
+        attribution_teacher_2_LCHM1111 = {'year': 2017, 'acronym': acronym_LCHM1111}
+        attributions_teacher2 = [attribution_teacher_2_LCHM1111]
+        AttributionNewFactory(global_id=person_second_alphabetical_order.global_id,
+                              attributions=attributions_teacher2)
+        #
+        attributions_result = attribution.get_teachers(acronym_LCHM1111, 2017)
+        self.assertEquals(len(attributions_result), 2)
+        self.assertEquals(attributions_result[0][attribution.PERSON_KEY],
+                          person_first_alphabetical_order)
 
 
 def _create_multiple_academic_year():
