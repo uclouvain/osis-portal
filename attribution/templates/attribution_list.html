@@ -87,17 +87,15 @@
             <td>{% trans attribution.function %}</td>
             <td>{{ attribution.start_academic_year | default_if_none:''}}</td>
             <td>{{ attribution.end_academic_year | default_if_none:''}}</td>
+            <td>
             {% if attribution.teachers %}
-                <td>
-                    <a role="button" data-toggle="collapse" href=".collapse_teachers{{ forloop.counter0 }}"
-                       aria-expanded="false" aria-controls="collapse_teachers{{ forloop.counter0 }}" style="border:0;padding:0;"
-                       onclick="changeOrientation(expandButton{{ forloop.counter0 }})" title="{% trans 'display_teachers' %}">
-                        <span id="expandButton{{ forloop.counter0 }}" class="glyphicon glyphicon-expand" aria-hidden="true"></span>
-                    </a>
-                </td>
-            {% else %}
-                <td></td>
+                <a role="button" data-toggle="collapse" href=".collapse_teachers{{ forloop.counter0 }}"
+                   aria-expanded="false" aria-controls="collapse_teachers{{ forloop.counter0 }}" style="border:0;padding:0;"
+                   onclick="changeOrientation(expandButton{{ forloop.counter0 }})" title="{% trans 'display_teachers' %}">
+                    <span id="expandButton{{ forloop.counter0 }}" class="glyphicon glyphicon-expand" aria-hidden="true"></span>
+                </a>
             {% endif %}
+            </td>
         </tr>
         {% with teacher_number=forloop.counter0 %}
             {% if attribution.teachers  %}

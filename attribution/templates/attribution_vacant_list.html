@@ -106,18 +106,15 @@
                             <td>
                                 {{ attribution.PRACTICAL_EXERCISES|default_if_none:'0,0' }}
                             </td>
-
+                            <td>
                             {% if attribution.teachers %}
-                                <td>
-                                    <a role="button" data-toggle="collapse" href=".collapse_teachers{{ forloop.counter0 }}"
-                                       aria-expanded="false" aria-controls="collapse_teachers{{ forloop.counter0 }}" style="border:0;padding:0;"
-                                       onclick="changeOrientation(expandButton{{ forloop.counter0 }})" title="{% trans 'display_teachers' %}">
-                                        <span id="expandButton{{ forloop.counter0 }}" class="glyphicon glyphicon-expand" aria-hidden="true"></span>
-                                    </a>
-                                </td>
-                            {% else %}
-                                <td></td>
+                                <a role="button" data-toggle="collapse" href=".collapse_teachers{{ forloop.counter0 }}"
+                                   aria-expanded="false" aria-controls="collapse_teachers{{ forloop.counter0 }}" style="border:0;padding:0;"
+                                   onclick="changeOrientation(expandButton{{ forloop.counter0 }})" title="{% trans 'display_teachers' %}">
+                                    <span id="expandButton{{ forloop.counter0 }}" class="glyphicon glyphicon-expand" aria-hidden="true"></span>
+                                </a>
                             {% endif %}
+                            </td>
                             <td>
                                 <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
                                      title="{% if attribution.already_applied %}
