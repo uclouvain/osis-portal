@@ -259,19 +259,19 @@ def get_teachers(learning_unit_acronym, application_yr):
     if learning_unit_acronym and application_yr:
         teachers = mdl_attribution.attribution_new.find_teachers(learning_unit_acronym, application_yr)
         if teachers:
-            teachers_data = _populate_teachers(application_yr, learning_unit_acronym, teachers)
-            return list(sorted(teachers_data, key=lambda teacher: "{},{}".format(teacher[PERSON_KEY].last_name,
-                                                                                 teacher[PERSON_KEY].first_name)))
+            teachers_data = _find_teachers_with_person(application_yr, learning_unit_acronym, teachers)
+            return sorted(teachers_data, key=lambda teacher: str(teacher[PERSON_KEY]))
     return None
 
 
-def _populate_teachers(application_yr, learning_unit_acronym, teachers):
+def _find_teachers_with_person(application_yr, learning_unit_acronym, teachers):
+    teachers_to_process = teachers
     teachers_data=[]
-    for teacher in teachers:
-        for a in teacher.attributions:
-            if a['acronym'] == learning_unit_acronym and a['year'] == application_yr:
-                a[PERSON_KEY] = mdl_base.person.find_by_global_id(teacher.global_id)
-                teachers_data.append(a)
+    for teacher in teachers_to_process:
+        for an_attribution in teacher.attributions:
+            if an_attribution['acronym'] == learning_unit_acronym and an_attribution['year'] == application_yr:
+                an_attribution[PERSON_KEY] = mdl_base.person.find_by_global_id(teacher.global_id)
+                teachers_data.append(an_attribution)
 
-    return teachers_data if  len(teachers_data) > 0 else None
+    return teachers_data if len(teachers_data) > 0 else None
 
