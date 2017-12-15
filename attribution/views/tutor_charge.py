@@ -30,6 +30,7 @@ import requests
 import logging
 import traceback
 import re
+from operator import itemgetter
 
 from django.conf import settings
 from django.forms import formset_factory
@@ -257,33 +258,28 @@ def get_url_learning_unit_year(a_learning_unit_year):
     return None
 
 
-def get_students(a_learning_unit_year_id):
-    a_learning_unit_year = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year_id)
-    return get_learning_unit_years_list(a_learning_unit_year)
-
-
-def _load_students(a_learning_unit_year, a_tutor):
+def _load_students(learning_unit_year_id, a_tutor):
 
     request_tutor = mdl_base.tutor.find_by_id(a_tutor)
-
+    a_learning_unit_year = mdl_base.learning_unit_year.find_by_id(learning_unit_year_id)
     return {'global_id': request_tutor.person.global_id,
-            'students': _get_learning_unit_yr_student_list(a_learning_unit_year),
-            'learning_unit_year': mdl_base.learning_unit_year.find_by_id(a_learning_unit_year),
+            'students': _get_learning_unit_yr_enrollments_list(a_learning_unit_year),
+            'learning_unit_year': a_learning_unit_year,
             'tutor_id': request_tutor.id}
 
 
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
-def show_students_admin(request, a_learning_unit_year, a_tutor):
+def show_students_admin(request, learning_unit_year_id, a_tutor):
     return render(request, "students_list_admin.html",
-                  _load_students(a_learning_unit_year, a_tutor))
+                  _load_students(learning_unit_year_id, a_tutor))
 
 
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
-def show_students(request, a_learning_unit_year, a_tutor):
+def show_students(request, learning_unit_year_id, a_tutor):
     return render(request, "students_list.html",
-                  _load_students(a_learning_unit_year, a_tutor))
+                  _load_students(learning_unit_year_id, a_tutor))
 
 
 def get_sessions_results(a_registration_id, a_learning_unit_year, offer_acronym):
@@ -342,12 +338,12 @@ def get_session_value(session_results, month_session, variable_to_get):
         return None
 
 
-def set_student_for_display(learning_unit_enrollment):
+def get_enrollments_dict_for_display(learning_unit_enrollment):
 
     session_results = get_sessions_results(learning_unit_enrollment.offer_enrollment.student.registration_id,
                                            learning_unit_enrollment.learning_unit_year,
                                            learning_unit_enrollment.offer_enrollment.offer_year.acronym)
-    return{
+    return {
         'name': "{0}, {1}".format(learning_unit_enrollment.offer_enrollment.student.person.last_name,
                                   learning_unit_enrollment.offer_enrollment.student.person.first_name),
         'email': learning_unit_enrollment.offer_enrollment.student.person.email,
@@ -388,18 +384,13 @@ def calculate_attribution_format_percentage_allocation_charge(lecturing_charge, 
     return None
 
 
-def get_learning_unit_years_list(a_learning_unit_year):
-    # Pour trouver les inscriptions aux partims/classe identifiables dans learning_unit_year par leurs
-    # Par exemple l'acronym du partim pour lu LCOPS1124 c'est LCOPS1124L
+def get_learning_unit_enrollments_list(a_learning_unit_year):
     enrollment_states = [offer_enrollment_state.PROVISORY, offer_enrollment_state.SUBSCRIBED]
-    learning_unit_years_allocated = []
-    for lu in mdl_base.learning_unit_year.find_by_acronym(a_learning_unit_year.acronym,
-                                                          a_learning_unit_year.academic_year):
-        learning_unit_years_allocated.append(lu)
-
-    return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(learning_unit_years_allocated,
-                                                                         offer_enrollment_states=enrollment_states,
-                                                                         only_enrolled=True)
+    return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(
+        list(mdl_base.learning_unit_year.find_by_learning_container_year(a_learning_unit_year.learning_container_year)),
+        offer_enrollment_states=enrollment_states,
+        only_enrolled=True
+    )
 
 
 @login_required
@@ -476,13 +467,17 @@ def _tutor_attributions_by_learning_unit(tutor_allocations_json):
     return tutor_attributions
 
 
-def _get_learning_unit_yr_student_list(a_learning_unit_year):
-    return [set_student_for_display(lue) for lue in get_students(a_learning_unit_year)]
+def _get_learning_unit_yr_enrollments_list(a_learning_unit_year):
+    enrollments = [
+        get_enrollments_dict_for_display(lue)
+        for lue in get_learning_unit_enrollments_list(a_learning_unit_year)
+    ]
+    return sorted(enrollments, key=itemgetter('program'))
 
 
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
-def students_list_build_by_learning_unit(request, a_learning_unit_year, a_tutor):
-    student_list = _get_learning_unit_yr_student_list(a_learning_unit_year)
-    a_learning_unit_yr = mdl_base.learning_unit_year.find_by_id(a_learning_unit_year)
+def students_list_build_by_learning_unit(request, learning_unit_year_id):
+    a_learning_unit_yr = mdl_base.learning_unit_year.find_by_id(learning_unit_year_id)
+    student_list = _get_learning_unit_yr_enrollments_list(a_learning_unit_yr)
     return xls_students_by_learning_unit.get_xls(student_list, a_learning_unit_yr)

@@ -77,9 +77,9 @@
                 <td>{{ attribution.weight | default_if_none:''}}</td>
                 <td>
                     {% if perms.base.is_faculty_administrator %}
-                        <a href="{% url 'attribution_students_admin' a_learning_unit_year=attribution.learning_unit_year.id  a_tutor=attribution.tutor_id %}"><span class="fa fa-group" aria-hidden="true"></span></a>
+                        <a href="{% url 'attribution_students_admin' learning_unit_year_id=attribution.learning_unit_year.id  a_tutor=attribution.tutor_id %}"><span class="fa fa-group" aria-hidden="true"></span></a>
                     {% else %}
-                        <a href="{% url 'attribution_students' a_learning_unit_year=attribution.learning_unit_year.id  a_tutor=attribution.tutor_id %}"><span class="fa fa-group" aria-hidden="true"></span></a>
+                        <a href="{% url 'attribution_students' learning_unit_year_id=attribution.learning_unit_year.id  a_tutor=attribution.tutor_id %}"><span class="fa fa-group" aria-hidden="true"></span></a>
                     {% endif %}
                 </td>
                 <td><a target="_blank" href="{{ attribution.url_schedule }}"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span></a></td>

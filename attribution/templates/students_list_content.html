@@ -33,7 +33,7 @@
         <h4>{{ students|length }}{% trans 'students_learning_unit' %}</h4>
     {% endif %}
     {% if students %}
-        <form method="get" action="{% url 'produce_xls_students' learning_unit_year.id tutor_id %}">
+        <form method="get" action="{% url 'produce_xls_students' learning_unit_year.id %}">
             <button class="btn btn-success pull-left" id="bt_produce_xls" type="submit"
                     title="{% trans 'desc_export_xls_list' %}">
                 {% trans 'export_xls_list' %}
