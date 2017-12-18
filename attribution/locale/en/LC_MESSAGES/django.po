@@ -376,3 +376,33 @@ msgstr "Applications in pending state"
 
 msgid "already_applied"
 msgstr "Already applied"
+
+msgid "non_renewable"
+msgstr "Non-renewable"
+
+msgid "desc_renewable"
+msgstr "Reproduce identically in the following year"
+
+msgid "application_period"
+msgstr "Application period from "
+
+msgid "to"
+msgstr "to"
+
+msgid "learning_unit_specifications"
+msgstr "Specifications"
+
+msgid "applications_of"
+msgstr "Applications  "
+
+msgid "export_xls_list"
+msgstr "Export list (Excel)"
+
+msgid "desc_export_xls_list"
+msgstr "Export the students list in Excel format"
+
+msgid "teachers"
+msgstr "Teachers"
+
+msgid "display_teachers"
+msgstr "Display teachers"

@@ -25,7 +25,6 @@
 ##############################################################################
 from decimal import Decimal
 from itertools import chain
-
 import collections
 
 from attribution.models.enums import function
@@ -33,6 +32,7 @@ from base import models as mdl_base
 from attribution import models as mdl_attribution
 from base.models.enums import learning_component_year_type
 
+PERSON_KEY= 'person'
 
 def get_attribution_list(global_id, academic_year=None):
     if not academic_year:
@@ -190,8 +190,12 @@ def _format_str_volume_to_decimal(attribution_list):
     for attribution in attribution_list:
         if learning_component_year_type.LECTURING in attribution:
             attribution[learning_component_year_type.LECTURING] = Decimal(attribution[learning_component_year_type.LECTURING])
+        else:
+            attribution[learning_component_year_type.LECTURING] = Decimal(0)
         if learning_component_year_type.PRACTICAL_EXERCISES in attribution:
             attribution[learning_component_year_type.PRACTICAL_EXERCISES] = Decimal(attribution[learning_component_year_type.PRACTICAL_EXERCISES])
+        else:
+            attribution[learning_component_year_type.PRACTICAL_EXERCISES] = Decimal(0)
     return attribution_list
 
 
@@ -249,3 +253,25 @@ def _check_is_renewable(attribution_with_vacant_next_year, application_list):
 def _has_already_applied(attribution_with_vacant_next_year, application_list):
     return any(application['acronym'] == attribution_with_vacant_next_year.get('acronym')
                for application in application_list)
+
+
+def get_teachers(learning_unit_acronym, application_yr):
+    if learning_unit_acronym and application_yr:
+        teachers = mdl_attribution.attribution_new.find_teachers(learning_unit_acronym, application_yr)
+        if teachers:
+            teachers_data = _find_teachers_with_person(application_yr, learning_unit_acronym, teachers)
+            return sorted(teachers_data, key=lambda teacher: str(teacher[PERSON_KEY]))
+    return None
+
+
+def _find_teachers_with_person(application_yr, learning_unit_acronym, teachers):
+    teachers_to_process = teachers
+    teachers_data=[]
+    for teacher in teachers_to_process:
+        for an_attribution in teacher.attributions:
+            if an_attribution['acronym'] == learning_unit_acronym and an_attribution['year'] == application_yr:
+                an_attribution[PERSON_KEY] = mdl_base.person.find_by_global_id(teacher.global_id)
+                teachers_data.append(an_attribution)
+
+    return teachers_data if len(teachers_data) > 0 else None
+

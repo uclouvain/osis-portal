@@ -75,7 +75,8 @@
                         <tr>
                             <th colspan="3"></th>
                             <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'vacant' %}</th>
-                            <th></th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
                         </tr>
                         <tr>
                             <th>{% trans 'code'%}</th>
@@ -83,6 +84,7 @@
                             <th>{% trans 'team'%}</th>
                             <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours'%}</th>
                             <th>{% trans 'practical_hours'%}</th>
+                            <th>{% trans 'teachers'%}</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -105,6 +107,17 @@
                                 {{ attribution.PRACTICAL_EXERCISES|default_if_none:'0,0' }}
                             </td>
                             <td>
+                            {% if attribution.teachers %}
+                                {% with teacher_number=forloop.counter0 %}
+                                    <a role="button" data-toggle="collapse" href=".collapse_teachers{{ teacher_number }}"
+                                       aria-expanded="false" aria-controls="collapse_teachers{{ teacher_number }}" style="border:0;padding:0;"
+                                       onclick="changeOrientation(expandButton{{ teacher_number }})" title="{% trans 'display_teachers' %}">
+                                        <span id="expandButton{{ teacher_number }}" class="glyphicon glyphicon-expand" aria-hidden="true"></span>
+                                    </a>
+                                {% endwith %}
+                            {% endif %}
+                            </td>
+                            <td>
                                 <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
                                      title="{% if attribution.already_applied %}
                                                 {% trans 'no_application_possible' %}
@@ -120,6 +133,16 @@
                                 </div>
                             </td>
                         </tr>
+
+                        {% with teacher_number=forloop.counter0 %}
+                            {% if attribution.teachers  %}
+                                <tr class="collapse collapse_teachers{{ teacher_number }}" style="background-color: white;">
+                                    <td colspan="11" >
+                                        {% include "teachers.html" %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endwith %}
                         {% endfor %}
                     </tbody>
                 </table>

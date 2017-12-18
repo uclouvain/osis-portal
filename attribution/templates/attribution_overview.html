@@ -42,7 +42,8 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{% trans 'my_applications' %} </h1>
+    <small style="color:black;font-family:Verdana;" class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% trans 'application_period'%}{{ application_academic_calendar.start_date | default_if_none:''|date:"d/m/Y"}} {% trans 'to' %} {{ application_academic_calendar.end_date | default_if_none:''|date:"d/m/Y" }}</small>
+    <h1>{% trans 'my_applications' %}</h1>
     <h2>{{ a_tutor.person.first_name }} {{ a_tutor.person.last_name }} - {{ a_tutor.person.global_id }}</h2>
 
     {% include "template_messages.html" %}
@@ -98,6 +99,7 @@
             {% endif %}
         </div>
     </div>
+
 {% endblock %}
 
 {% block script %}
@@ -138,5 +140,15 @@
                 return confirm(gettext('confirm_application_delete'));
             });
         });
+
+        function changeOrientation(button) {
+            if (button.className.includes("glyphicon-collapse-down") {
+                button.className = button.className.replace("glyphicon-collapse-down", "glyphicon-expand");
+            }
+            else if (button.className.includes("glyphicon-expand") {
+                button.className = button.className.replace("glyphicon-expand", "glyphicon-collapse-down");
+            }
+        }
+
     </script>
 {% endblock %}
