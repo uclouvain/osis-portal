@@ -58,7 +58,7 @@ def get_volumes_total(attribution_list):
     for attribution in attribution_list:
         lecturing_volume = attribution.get(learning_component_year_type.LECTURING)
         if lecturing_volume:
-            volumes_total[learning_component_year_type.LECTURING] = lecturing_volume
+            volumes_total[learning_component_year_type.LECTURING] += Decimal(lecturing_volume)
         practical_exercices_volume = attribution.get(learning_component_year_type.PRACTICAL_EXERCISES)
         if practical_exercices_volume:
             volumes_total[learning_component_year_type.PRACTICAL_EXERCISES] += Decimal(practical_exercices_volume)
