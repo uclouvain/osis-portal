@@ -84,44 +84,14 @@
                     </td>
                     <td>{{ attribution.acronym }}</td>
                     <td>{{ attribution.title }}</td>
-                    <td style="border-left: 1px solid;">
-                        {% if attribution.lecturing_vol = 0 %}
-                            {{ attribution.lecturing_vol | floatformat:1 }}
-                        {% else %}
-                            {{ attribution.lecturing_vol |default_if_none:'0,0'}}
-                        {% endif %}
-                    </td>
-                    <td>
-
-                        {% if attribution.practical_exercises_vol = 0 %}
-                            {{ attribution.practical_exercises_vol | floatformat:1 }}
-                        {% else %}
-                            {{ attribution.practical_exercises_vol |default_if_none:'0,0'}}
-                        {% endif %}
-                    </td>
-                    <td >
-                        {{ attribution.attribution_vacant.LECTURING|default_if_none:'0,0' }}
-                    </td>
-                    <td>
-                        {{ attribution.attribution_vacant.PRACTICAL_EXERCISES|default_if_none:'0,0' }}
-
-                    </td>
+                    <td style="border-left: 1px solid;">{{ attribution.lecturing_vol }}</td>
+                    <td>{{ attribution.practical_exercises_vol }}</td>
+                    <td >{{ attribution.attribution_vacant.LECTURING }}</td>
+                    <td>{{ attribution.attribution_vacant.PRACTICAL_EXERCISES }}</td>
                     <td style="border-left: 1px solid;">{{ attribution.start_academic_year|default_if_none:''}}</td>
                     <td>{{ attribution.end_academic_year|default_if_none:''}}</td>
-                    <td>
-                        {% if attribution.LECTURING %}
-                            {{ attribution.LECTURING|default_if_none:'0,0' }}
-                        {% else %}
-                            0,0
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if attribution.PRACTICAL_EXERCISES %}
-                            {{ attribution.PRACTICAL_EXERCISES|default_if_none:'0,0' }}
-                        {% else %}
-                            0,0
-                        {% endif %}
-                    </td>
+                    <td>{{ attribution.LECTURING }}</td>
+                    <td>{{ attribution.PRACTICAL_EXERCISES }}</td>
                     <td>{% trans attribution.function %}</td>
                 </tr>
             {% endfor %}

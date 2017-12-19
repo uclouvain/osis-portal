@@ -95,27 +95,10 @@
                         <tr>
                             <td>{{ attribution.acronym }}</td>
                             <td>{{ attribution.title }}</td>
-                            <td >
-                                {% if attribution.lecturing_vol = 0 %}
-                                    {{ attribution.lecturing_vol | floatformat:1 }}
-                                {% else %}
-                                    {{ attribution.lecturing_vol |default_if_none:'0,0'}}
-                                {% endif %}
-                            </td>
-
-                            <td >
-                                {% if attribution.practical_exercises_vol = 0 %}
-                                    {{ attribution.practical_exercises_vol | floatformat:1 }}
-                                {% else %}
-                                    {{ attribution.practical_exercises_vol |default_if_none:'0,0'}}
-                                {% endif %}
-                            </td>
-                            <td style="border-left-style: solid;border-left-width:1px;">
-                                {{ attribution.LECTURING|default_if_none:'0,0' }}
-                            </td>
-                            <td>
-                                {{ attribution.PRACTICAL_EXERCISES|default_if_none:'0,0' }}
-                            </td>
+                            <td >{{ attribution.lecturing_vol }}</td>
+                            <td >{{ attribution.practical_exercises_vol }}</td>
+                            <td style="border-left-style: solid;border-left-width:1px;">{{ attribution.LECTURING }}</td>
+                            <td>{{ attribution.PRACTICAL_EXERCISES }}</td>
                             <td>
                             {% if attribution.teachers %}
                                 {% with teacher_number=forloop.counter0 %}

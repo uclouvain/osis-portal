@@ -51,48 +51,12 @@
         <tr>
             <td>{{ attribution.acronym }}</td>
             <td>{{ attribution.title }}</td>
-            <td>
-                {% if attribution.lecturing_vol = 0 %}
-                    {{ attribution.lecturing_vol | floatformat:1 }}
-                {% else %}
-                    {{ attribution.lecturing_vol |default_if_none:'0,0'}}
-                {% endif %}
-            </td>
-            <td>
-                {% if attribution.practical_exercises_vol = 0 %}
-                    {{ attribution.practical_exercises_vol | floatformat:1 }}
-                {% else %}
-                    {{ attribution.practical_exercises_vol |default_if_none:'0,0'}}
-                {% endif %}
-            </td>
-            <td style="border-left: 1px solid;">
-                {% if attribution.volume_lecturing_vacant = 0 %}
-                    {{ attribution.volume_lecturing_vacant|floatformat:1 }}
-                {% else %}
-                    {{ attribution.volume_lecturing_vacant | default_if_none:'0,0' }}
-                {% endif%}
-            </td>
-            <td>
-                {% if attribution.volume_practical_exercices_vacant = 0 %}
-                    {{ attribution.volume_practical_exercices_vacant|floatformat:1 }}
-                {% else %}
-                    {{ attribution.volume_practical_exercices_vacant | default_if_none:'0,0'}}
-                {% endif %}
-            </td>
-            <td style="border-left: 1px solid;">
-                {% if attribution.LECTURING = 0 %}
-                    {{ attribution.LECTURING|floatformat:1 }}
-                {% else %}
-                    {{ attribution.LECTURING | default_if_none:'0,0'}}
-                {% endif %}
-            </td>
-            <td>
-                {% if attribution.PRACTICAL_EXERCISES = 0 %}
-                    {{ attribution.PRACTICAL_EXERCISES|floatformat:1 }}
-                {% else %}
-                    {{ attribution.PRACTICAL_EXERCISES | default_if_none:'0,0'}}
-                {% endif %}
-            </td>
+            <td>{{ attribution.lecturing_vol }}</td>
+            <td>{{ attribution.practical_exercises_vol }}</td>
+            <td style="border-left: 1px solid;">{{ attribution.volume_lecturing_vacant| floatformat:1 }}</td>
+            <td>{{ attribution.volume_practical_exercices_vacant| floatformat:1 }}</td>
+            <td style="border-left: 1px solid;">{{ attribution.LECTURING }}</td>
+            <td>{{ attribution.PRACTICAL_EXERCISES }}</td>
             <td>{% trans attribution.function %}</td>
             <td>{{ attribution.start_academic_year | default_if_none:''}}</td>
             <td>{{ attribution.end_academic_year | default_if_none:''}}</td>

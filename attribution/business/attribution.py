@@ -34,9 +34,10 @@ from base.models.enums import learning_component_year_type
 from base.business import learning_unit_year_with_context
 
 
-NO_CHARGE = Decimal(0)
+NO_CHARGE = 0.0
 
-PERSON_KEY= 'person'
+PERSON_KEY = 'person'
+
 
 def get_attribution_list(global_id, academic_year=None):
     if not academic_year:
@@ -57,7 +58,7 @@ def get_volumes_total(attribution_list):
     for attribution in attribution_list:
         lecturing_volume = attribution.get(learning_component_year_type.LECTURING)
         if lecturing_volume:
-            volumes_total[learning_component_year_type.LECTURING] += Decimal(lecturing_volume)
+            volumes_total[learning_component_year_type.LECTURING] = lecturing_volume
         practical_exercices_volume = attribution.get(learning_component_year_type.PRACTICAL_EXERCISES)
         if practical_exercices_volume:
             volumes_total[learning_component_year_type.PRACTICAL_EXERCISES] += Decimal(practical_exercices_volume)
@@ -195,11 +196,11 @@ def _format_str_volume_to_decimal(attribution_list):
         if learning_component_year_type.LECTURING in attribution:
             attribution[learning_component_year_type.LECTURING] = Decimal(attribution[learning_component_year_type.LECTURING])
         else:
-            attribution[learning_component_year_type.LECTURING] = Decimal(0)
+            attribution[learning_component_year_type.LECTURING] = NO_CHARGE
         if learning_component_year_type.PRACTICAL_EXERCISES in attribution:
             attribution[learning_component_year_type.PRACTICAL_EXERCISES] = Decimal(attribution[learning_component_year_type.PRACTICAL_EXERCISES])
         else:
-            attribution[learning_component_year_type.PRACTICAL_EXERCISES] = Decimal(0)
+            attribution[learning_component_year_type.PRACTICAL_EXERCISES] = NO_CHARGE
     return attribution_list
 
 
@@ -234,17 +235,17 @@ def _check_is_renewable(attribution_with_vacant_next_year, application_list):
     """
     next_year_attribution_vacant = attribution_with_vacant_next_year['attribution_vacant']
 
-    current_volume_lecturing = attribution_with_vacant_next_year.get(learning_component_year_type.LECTURING, 0)
-    current_volume_practical_exercices = attribution_with_vacant_next_year.get(learning_component_year_type.PRACTICAL_EXERCISES, 0)
+    current_volume_lecturing = attribution_with_vacant_next_year.get(learning_component_year_type.LECTURING, NO_CHARGE)
+    current_volume_practical_exercices = attribution_with_vacant_next_year.get(learning_component_year_type.PRACTICAL_EXERCISES, NO_CHARGE)
 
     if current_volume_lecturing == current_volume_practical_exercices == 0:
         return 'cannot_renew_zero_volume'
 
-    next_volume_lecturing = next_year_attribution_vacant.get(learning_component_year_type.LECTURING, 0)
+    next_volume_lecturing = next_year_attribution_vacant.get(learning_component_year_type.LECTURING, NO_CHARGE)
     if current_volume_lecturing > next_volume_lecturing:
         return 'volume_next_year_lower_than_current'
 
-    next_volume_practical_exercices = next_year_attribution_vacant.get(learning_component_year_type.PRACTICAL_EXERCISES, 0)
+    next_volume_practical_exercices = next_year_attribution_vacant.get(learning_component_year_type.PRACTICAL_EXERCISES, NO_CHARGE)
     if current_volume_practical_exercices > next_volume_practical_exercices:
         return 'volume_next_year_lower_than_current'
 
@@ -286,6 +287,7 @@ def _is_positive(value):
     if value > 0:
         return True
     return False
+
 
 def get_teachers(learning_unit_acronym, application_yr):
     if learning_unit_acronym and application_yr:
