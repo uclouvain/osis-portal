@@ -30,7 +30,7 @@
             <th colspan="2"></th>
             <th colspan="2">{% trans 'learning_unit_volumes' %}</th>
             <th colspan="2" style="border-left: 1px solid;">{% trans 'vacant' %} </th>
-            <th colspan="5" style="border-left: 1px solid;">{% trans 'charge' %} </th>
+            <th colspan="6" style="border-left: 1px solid;">{% trans 'charge' %} </th>
         </tr>
         <tr>
             <th>{% trans 'code'%}</th>
@@ -44,6 +44,7 @@
             <th>{% trans 'function'%}</th>
             <th>{% trans 'start' %}</th>
             <th>{% trans 'end' %}</th>
+            <th>{% trans 'teachers' %}</th>
         </tr>
     </thead>
     {% for attribution in attributions %}
@@ -95,14 +96,35 @@
             <td>{% trans attribution.function %}</td>
             <td>{{ attribution.start_academic_year | default_if_none:''}}</td>
             <td>{{ attribution.end_academic_year | default_if_none:''}}</td>
+            <td>
+
+            {% if attribution.teachers %}
+                {% with teacher_number=forloop.counter0 %}
+                    <a role="button" data-toggle="collapse" href=".collapse_teachers{{ teacher_number }}"
+                       aria-expanded="false" aria-controls="collapse_teachers{{ teacher_number }}" style="border:0;padding:0;"
+                       onclick="changeOrientation(expandButton{{ teacher_number }})" title="{% trans 'display_teachers' %}">
+                        <span id="expandButton{{ teacher_number }}" class="glyphicon glyphicon-expand" aria-hidden="true"></span>
+                    </a>
+                {% endwith %}
+            {% endif %}
+            </td>
         </tr>
+        {% if attribution.teachers  %}
+            {% with teacher_number=forloop.counter0 %}
+                <tr class="collapse collapse_teachers{{ teacher_number }}">
+                    <td colspan="11">
+                        {% include "teachers.html" %}
+                    </td>
+                </tr>
+            {% endwith %}
+        {% endif %}
     {% endfor %}
     <tfoot>
         <tr>
             <td colspan="6" ><label class="pull-right">{% trans 'total' %}</label></td>
             <td>{{ tot_lecturing|default_if_none:'0,0' }}</td>
             <td>{{ tot_practical|default_if_none:'0,0' }}</td>
-            <td colspan="3"></td>
+            <td colspan="4"></td>
         </tr>
     </tfoot>
 </table>

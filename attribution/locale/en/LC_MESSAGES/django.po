@@ -403,3 +403,10 @@ msgstr "Export the students list in Excel format"
 
 msgid "learning_unit_volumes"
 msgstr "Learning unit volumes"
+
+msgid "teachers"
+msgstr "Teachers"
+
+msgid "display_teachers"
+msgstr "Display teachers"
+

@@ -103,6 +103,9 @@ def overview(request, global_id=None):
         global_id=tutor.person.global_id,
         academic_year=current_academic_year
     )
+    for attrib in attributions:
+        attrib['teachers'] = attribution.get_teachers(attrib['acronym'],
+                                                      application_year.year)
 
     for a in attributions:
         attribution.get_learning_unit_volume(a, application_year)
@@ -147,6 +150,10 @@ def search_vacant_attribution(request):
         if attributions_vacant:
             for a in attributions_vacant:
                 attribution.get_learning_unit_volume(a, application_academic_year)
+
+        for attrib in attributions_vacant:
+            attrib['teachers'] = attribution.get_teachers(attrib['acronym'],
+                                                          application_academic_year.year)
 
     return layout.render(request, "attribution_vacant_list.html", {
         'a_tutor': tutor,

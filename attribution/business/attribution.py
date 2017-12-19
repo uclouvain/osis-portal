@@ -25,7 +25,6 @@
 ##############################################################################
 from decimal import Decimal
 from itertools import chain
-
 import collections
 
 from attribution.models.enums import function
@@ -37,6 +36,7 @@ from base.business import learning_unit_year_with_context
 
 NO_CHARGE = Decimal(0)
 
+PERSON_KEY= 'person'
 
 def get_attribution_list(global_id, academic_year=None):
     if not academic_year:
@@ -286,3 +286,23 @@ def _is_positive(value):
     if value > 0:
         return True
     return False
+
+def get_teachers(learning_unit_acronym, application_yr):
+    if learning_unit_acronym and application_yr:
+        teachers = mdl_attribution.attribution_new.find_teachers(learning_unit_acronym, application_yr)
+        if teachers:
+            teachers_data = _find_teachers_with_person(application_yr, learning_unit_acronym, teachers)
+            return sorted(teachers_data, key=lambda teacher: str(teacher[PERSON_KEY]))
+    return None
+
+
+def _find_teachers_with_person(application_yr, learning_unit_acronym, teachers):
+    teachers_to_process = teachers
+    teachers_data=[]
+    for teacher in teachers_to_process:
+        for an_attribution in teacher.attributions:
+            if an_attribution['acronym'] == learning_unit_acronym and an_attribution['year'] == application_yr:
+                an_attribution[PERSON_KEY] = mdl_base.person.find_by_global_id(teacher.global_id)
+                teachers_data.append(an_attribution)
+
+    return teachers_data if len(teachers_data) > 0 else None

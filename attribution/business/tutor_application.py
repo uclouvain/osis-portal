@@ -131,7 +131,9 @@ def send_mail_applications_summary(global_id):
     txt_template_ref = 'applications_confirmation_txt'
     receivers = [message_config.create_receiver(person.id, person.email, person.language)]
     applications = _get_applications_table(application_list)
-    table_applications = message_config.create_table('applications', [], applications)
+    table_applications = message_config.create_table('applications',
+                                                     [_('acronym'),'Vol. 1','Vol. 2'],
+                                                     applications)
     template_base_data = {
         'first_name': person.first_name,
         'last_name': person.last_name,
@@ -205,8 +207,8 @@ def _get_applications_table(application_list):
     applications = []
     validation_str = "({})".format(_('wait_validation_epc'))
     for application in application_list:
-        applications.append((validation_str if application.get('pending') else '',
-                             application.get('acronym', ''),
+        applications.append(("{} {}".format(validation_str if application.get('pending') else '',
+                                            application.get('acronym', '')),
                              application.get('charge_lecturing_asked', ''),
                              application.get('charge_practical_asked', '')))
     return applications
