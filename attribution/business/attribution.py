@@ -260,7 +260,7 @@ def _has_already_applied(attribution_with_vacant_next_year, application_list):
                for application in application_list)
 
 
-def get_learning_unit_volume(an_attribution, application_year):
+def update_learning_unit_volume(an_attribution, application_year):
     learning_unit_year = mdl_base.learning_unit_year.find_first_by_exact_acronym(application_year,
                                                                                  an_attribution['acronym'])
     an_attribution['lecturing_vol'] = NO_CHARGE

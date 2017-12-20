@@ -109,10 +109,10 @@ def overview(request, global_id=None):
         attrib['teachers'] = attribution.get_teachers(attrib['acronym'], application_year.year)
 
     for an_attribution in attributions:
-        attribution.get_learning_unit_volume(an_attribution, application_year)
+        attribution.update_learning_unit_volume(an_attribution, application_year)
     if attributions_about_to_expired:
-        for a in attributions_about_to_expired:
-            attribution.get_learning_unit_volume(a, application_year)
+        for an_attribution in attributions_about_to_expired:
+            attribution.update_learning_unit_volume(an_attribution, application_year)
     return layout.render(request, "attribution_overview.html", {
         'a_tutor': tutor,
         'attributions': attributions,
@@ -149,8 +149,8 @@ def search_vacant_attribution(request):
             application_academic_year
         )
         if attributions_vacant:
-            for a in attributions_vacant:
-                attribution.get_learning_unit_volume(a, application_academic_year)
+            for an_attribution in attributions_vacant:
+                attribution.update_learning_unit_volume(an_attribution, application_academic_year)
 
         for attrib in attributions_vacant:
             attrib['teachers'] = attribution.get_teachers(attrib['acronym'],
