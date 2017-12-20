@@ -110,3 +110,6 @@ def change_language(user, new_language):
 def find_by_global_id(global_id):
     return Person.objects.filter(global_id=global_id).first() if global_id else None
 
+
+def find_by_global_ids(global_ids):
+    return Person.objects.filter(global_id__in=global_ids) if global_ids else None

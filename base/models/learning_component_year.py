@@ -29,8 +29,8 @@ from osis_common.models.auditable_serializable_model import AuditableSerializabl
 
 
 class LearningComponentYearAdmin(AuditableSerializableModelAdmin):
-    list_display = ('learning_container_year', 'acronym', 'type', 'volume_declared_vacant',)
-    fieldsets = ((None, {'fields': ('learning_container_year', 'acronym', 'type', 'volume_declared_vacant',)}),)
+    list_display = ('learning_container_year', 'acronym', 'type', 'volume_declared_vacant', 'planned_classes')
+    fieldsets = ((None, {'fields': ('learning_container_year', 'acronym', 'type', 'volume_declared_vacant', 'planned_classes')}),)
     search_fields = ['acronym', 'learning_container_year__acronym']
     raw_id_fields = ('learning_container_year',)
     list_filter = ('learning_container_year__academic_year',)
@@ -43,6 +43,8 @@ class LearningComponentYear(AuditableSerializableModel):
     acronym = models.CharField(max_length=4, blank=True, null=True)
     type = models.CharField(max_length=30, choices=learning_component_year_type.LEARNING_COMPONENT_YEAR_TYPES,
                             blank=True, null=True, db_index=True)
+    planned_classes = models.IntegerField(blank=True, null=True)
+    hourly_volume_partial = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     volume_declared_vacant = models.DecimalField(max_digits=6, decimal_places=1, blank=True, null=True)
 
     def __str__(self):

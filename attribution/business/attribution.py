@@ -31,16 +31,21 @@ from attribution.models.enums import function
 from base import models as mdl_base
 from attribution import models as mdl_attribution
 from base.models.enums import learning_component_year_type
+from base.business import learning_unit_year_with_context
 
-PERSON_KEY= 'person'
+
+NO_CHARGE = 0.0
+
+PERSON_KEY = 'person'
+
 
 def get_attribution_list(global_id, academic_year=None):
     if not academic_year:
         academic_year = mdl_base.academic_year.current_academic_year()
 
-    attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
-    if attrib and attrib.attributions:
-        attributions = _filter_by_years(attrib.attributions, academic_year)
+    attribution_new = mdl_attribution.attribution_new.find_by_global_id(global_id)
+    if attribution_new and attribution_new.attributions:
+        attributions = _filter_by_years(attribution_new.attributions, academic_year)
         attributions = _format_str_volume_to_decimal(attributions)
         attributions = _append_team_and_volume_declared_vacant(attributions, academic_year)
         attributions = _append_start_and_end_academic_year(attributions)
@@ -191,11 +196,11 @@ def _format_str_volume_to_decimal(attribution_list):
         if learning_component_year_type.LECTURING in attribution:
             attribution[learning_component_year_type.LECTURING] = Decimal(attribution[learning_component_year_type.LECTURING])
         else:
-            attribution[learning_component_year_type.LECTURING] = Decimal(0)
+            attribution[learning_component_year_type.LECTURING] = NO_CHARGE
         if learning_component_year_type.PRACTICAL_EXERCISES in attribution:
             attribution[learning_component_year_type.PRACTICAL_EXERCISES] = Decimal(attribution[learning_component_year_type.PRACTICAL_EXERCISES])
         else:
-            attribution[learning_component_year_type.PRACTICAL_EXERCISES] = Decimal(0)
+            attribution[learning_component_year_type.PRACTICAL_EXERCISES] = NO_CHARGE
     return attribution_list
 
 
@@ -230,17 +235,17 @@ def _check_is_renewable(attribution_with_vacant_next_year, application_list):
     """
     next_year_attribution_vacant = attribution_with_vacant_next_year['attribution_vacant']
 
-    current_volume_lecturing = attribution_with_vacant_next_year.get(learning_component_year_type.LECTURING, 0)
-    current_volume_practical_exercices = attribution_with_vacant_next_year.get(learning_component_year_type.PRACTICAL_EXERCISES, 0)
+    current_volume_lecturing = attribution_with_vacant_next_year.get(learning_component_year_type.LECTURING, NO_CHARGE)
+    current_volume_practical_exercices = attribution_with_vacant_next_year.get(learning_component_year_type.PRACTICAL_EXERCISES, NO_CHARGE)
 
     if current_volume_lecturing == current_volume_practical_exercices == 0:
         return 'cannot_renew_zero_volume'
 
-    next_volume_lecturing = next_year_attribution_vacant.get(learning_component_year_type.LECTURING, 0)
+    next_volume_lecturing = next_year_attribution_vacant.get(learning_component_year_type.LECTURING, NO_CHARGE)
     if current_volume_lecturing > next_volume_lecturing:
         return 'volume_next_year_lower_than_current'
 
-    next_volume_practical_exercices = next_year_attribution_vacant.get(learning_component_year_type.PRACTICAL_EXERCISES, 0)
+    next_volume_practical_exercices = next_year_attribution_vacant.get(learning_component_year_type.PRACTICAL_EXERCISES, NO_CHARGE)
     if current_volume_practical_exercices > next_volume_practical_exercices:
         return 'volume_next_year_lower_than_current'
 
@@ -255,6 +260,27 @@ def _has_already_applied(attribution_with_vacant_next_year, application_list):
                for application in application_list)
 
 
+def update_learning_unit_volume(an_attribution, application_year):
+    learning_unit_year = mdl_base.learning_unit_year.find_first_by_exact_acronym(application_year,
+                                                                                 an_attribution['acronym'])
+    an_attribution['lecturing_vol'] = NO_CHARGE
+    an_attribution['practical_exercises_vol'] = NO_CHARGE
+
+    learning_units = learning_unit_year_with_context.get_with_context(learning_container_year_id=learning_unit_year.learning_container_year)
+    for learning_component_yr in learning_units[0].components:
+        if learning_component_yr.type == learning_component_year_type.LECTURING:
+            an_attribution['lecturing_vol'] = _calculate_effective_volume(learning_units[0].components[learning_component_yr])
+        if learning_component_yr.type == learning_component_year_type.PRACTICAL_EXERCISES:
+            an_attribution['practical_exercises_vol'] = _calculate_effective_volume(learning_units[0].components[learning_component_yr])
+
+
+def _calculate_effective_volume(data):
+    if 'VOLUME_TOTAL' in data and 'PLANNED_CLASSES' in data \
+            and data['VOLUME_TOTAL'] > 0 and data['PLANNED_CLASSES'] > 0:
+        return data['VOLUME_TOTAL'] * data['PLANNED_CLASSES']
+    return NO_CHARGE
+
+
 def get_teachers(learning_unit_acronym, application_yr):
     if learning_unit_acronym and application_yr:
         teachers = mdl_attribution.attribution_new.find_teachers(learning_unit_acronym, application_yr)
@@ -265,13 +291,13 @@ def get_teachers(learning_unit_acronym, application_yr):
 
 
 def _find_teachers_with_person(application_yr, learning_unit_acronym, teachers):
-    teachers_to_process = teachers
-    teachers_data=[]
-    for teacher in teachers_to_process:
+    teachers_data = []
+    global_ids = [teacher.global_id for teacher in teachers]
+    person_list = mdl_base.person.find_by_global_ids(global_ids)
+    for teacher in teachers:
         for an_attribution in teacher.attributions:
             if an_attribution['acronym'] == learning_unit_acronym and an_attribution['year'] == application_yr:
-                an_attribution[PERSON_KEY] = mdl_base.person.find_by_global_id(teacher.global_id)
+                an_attribution[PERSON_KEY] = next((person for person in person_list if person.global_id==teacher.global_id))
                 teachers_data.append(an_attribution)
 
     return teachers_data if len(teachers_data) > 0 else None
-

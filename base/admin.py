@@ -36,6 +36,18 @@ admin.site.register(academic_year.AcademicYear,
 admin.site.register(campus.Campus,
                     campus.CampusAdmin)
 
+admin.site.register(entity.Entity,
+                    entity.EntityAdmin)
+
+admin.site.register(entity_version.EntityVersion,
+                    entity_version.EntityVersionAdmin)
+
+admin.site.register(entity_component_year.EntityComponentYear,
+                    entity_component_year.EntityComponentYearAdmin)
+
+admin.site.register(entity_container_year.EntityContainerYear,
+                    entity_container_year.EntityContainerYearAdmin)
+
 admin.site.register(learning_unit.LearningUnit,
                     learning_unit.LearningUnitAdmin)
 
