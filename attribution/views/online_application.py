@@ -42,6 +42,7 @@ from base.forms.base_forms import GlobalIdForm
 from base.models.enums import learning_component_year_type
 from base.views import layout
 from base.models.enums import academic_calendar_type
+from attribution.models import attribution as mdl_attribution, attribution_new
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.conf import settings
@@ -103,9 +104,9 @@ def overview(request, global_id=None):
         global_id=tutor.person.global_id,
         academic_year=current_academic_year
     )
+
     for attrib in attributions:
-        attrib['teachers'] = attribution.get_teachers(attrib['acronym'],
-                                                      application_year.year)
+        attrib['teachers'] = attribution.get_teachers(attrib['acronym'], application_year.year)
 
     for a in attributions:
         attribution.get_learning_unit_volume(a, application_year)

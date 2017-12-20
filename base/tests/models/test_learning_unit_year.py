@@ -82,3 +82,11 @@ class LearningUnitYearTest(TestCase):
 
         self.assertCountEqual(mdl_base.learning_unit_year.find_by_acronym('LDR', self.an_academic_year),
                               [ldroi1000_learning_unit_year, ldroi2000_learning_unit_year])
+
+    def test_find_first_by_exact_acronym(self):
+        a_learning_unit = LearningUnitFactory()
+        ldroi1000_learning_unit_year = LearningUnitYearFactory(academic_year=self.an_academic_year, learning_unit=a_learning_unit, acronym='LDROI1000')
+        ldroi1000_learning_unit_year.save()
+        ldroi1000_learning_unit_year_bis = LearningUnitYearFactory(academic_year=self.an_academic_year, learning_unit=a_learning_unit, acronym='LDROI1000')
+        ldroi1000_learning_unit_year_bis.save()
+        self.assertEqual(mdl_base.learning_unit_year.find_first_by_exact_acronym(self.an_academic_year, 'LDROI1000'), ldroi1000_learning_unit_year)

@@ -43,9 +43,9 @@ def get_attribution_list(global_id, academic_year=None):
     if not academic_year:
         academic_year = mdl_base.academic_year.current_academic_year()
 
-    attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
-    if attrib and attrib.attributions:
-        attributions = _filter_by_years(attrib.attributions, academic_year)
+    attribution_new = mdl_attribution.attribution_new.find_by_global_id(global_id)
+    if attribution_new and attribution_new.attributions:
+        attributions = _filter_by_years(attribution_new.attributions, academic_year)
         attributions = _format_str_volume_to_decimal(attributions)
         attributions = _append_team_and_volume_declared_vacant(attributions, academic_year)
         attributions = _append_start_and_end_academic_year(attributions)
@@ -262,7 +262,7 @@ def _has_already_applied(attribution_with_vacant_next_year, application_list):
 
 def get_learning_unit_volume(an_attribution, application_year):
     learning_unit_year = mdl_base.learning_unit_year.find_first_by_exact_acronym(application_year,
-                                                                                  an_attribution['acronym'])
+                                                                                 an_attribution['acronym'])
     an_attribution['lecturing_vol'] = NO_CHARGE
     an_attribution['practical_exercises_vol'] = NO_CHARGE
 
@@ -299,12 +299,13 @@ def get_teachers(learning_unit_acronym, application_yr):
 
 
 def _find_teachers_with_person(application_yr, learning_unit_acronym, teachers):
-    teachers_to_process = teachers
-    teachers_data=[]
-    for teacher in teachers_to_process:
+    teachers_data = []
+    global_ids = [teacher.global_id for teacher in teachers]
+    person_list = mdl_base.person.find_by_global_ids(global_ids)
+    for teacher in teachers:
         for an_attribution in teacher.attributions:
             if an_attribution['acronym'] == learning_unit_acronym and an_attribution['year'] == application_yr:
-                an_attribution[PERSON_KEY] = mdl_base.person.find_by_global_id(teacher.global_id)
+                an_attribution[PERSON_KEY] = next((person for person in person_list if person.global_id==teacher.global_id))
                 teachers_data.append(an_attribution)
 
     return teachers_data if len(teachers_data) > 0 else None
