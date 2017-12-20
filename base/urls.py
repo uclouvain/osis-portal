@@ -30,6 +30,7 @@ from dashboard.views import main
 
 urlpatterns = [
     url(r'^'+settings.ADMIN_URL+'data/$', administration.data, name='data'),
+    url(r'^'+settings.ADMIN_URL+'data/maintenance$', administration.data_maintenance, name='data_maintenance'),
     url(r'^my_osis/profile/lang/([A-Za-z-]+)/$', my_osis.profile_lang, name='profile_lang'),
     url(r'^$', main.home, name='home')
 ]
