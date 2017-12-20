@@ -278,15 +278,9 @@ def get_learning_unit_volume(an_attribution, application_year):
 
 def _calculate_effective_volume(data):
     if 'VOLUME_TOTAL' in data and 'PLANNED_CLASSES' in data \
-            and _is_positive(data['VOLUME_TOTAL']) and _is_positive(data['PLANNED_CLASSES']):
+            and data['VOLUME_TOTAL'] > 0 and data['PLANNED_CLASSES']> 0:
         return data['VOLUME_TOTAL'] * data['PLANNED_CLASSES']
     return NO_CHARGE
-
-
-def _is_positive(value):
-    if value > 0:
-        return True
-    return False
 
 
 def get_teachers(learning_unit_acronym, application_yr):
