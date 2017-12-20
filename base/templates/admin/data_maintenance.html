@@ -41,6 +41,7 @@
             <div class="form-group">
                 <label for="txa_sql_command">{% trans 'sql_command' %}</label>
                 <textarea id="txa_sql_command" name="sql_command" class="form-control" rows="10">{{ sql_command | default_if_none:'' }}</textarea>
+                <br><label>{% trans 'sql_readonly' %} :</label> {{ sql_readonly|yesno:"Yes,No" }}
                 <br><label>{% trans 'forbidden_sql_keywords' %} :</label>
                 {% for word in forbidden_sql_keywords %}
                     {{ word }}{% if not forloop.last %} - {% endif %}

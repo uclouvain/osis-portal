@@ -47,9 +47,11 @@ def data_maintenance(request):
     sql_command = request.POST.get('sql_command')
     results = native.execute(sql_command)
     forbidden_sql_keywords = native.get_forbidden_sql_keywords()
+    sql_readonly = native.get_sql_data_management_readonly()
     return layout.render(request, "admin/data_maintenance.html", {'section': 'data_maintenance',
                                                                   'sql_command': sql_command,
                                                                   'results': results,
+                                                                  'sql_readonly': sql_readonly,
                                                                   'forbidden_sql_keywords': forbidden_sql_keywords
                                                                   }
                          )

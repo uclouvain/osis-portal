@@ -67,3 +67,6 @@ msgstr "Result"
 
 msgid "are_you_sure"
 msgstr "Are you sure ?"
+
+msgid "sql_readonly"
+msgstr "SQL readonly"
