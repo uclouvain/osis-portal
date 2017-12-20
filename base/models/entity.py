@@ -43,9 +43,8 @@ class Entity(SerializableModel):
     organization = models.ForeignKey('Organization', blank=True, null=True)
     changed = models.DateTimeField(null=True, auto_now=True)
 
-
     class Meta:
         verbose_name_plural = "entities"
 
     def __str__(self):
-        return "{0} - {1}".format(self.id, self.external_id)
+        return "{0}".format(self.id)
