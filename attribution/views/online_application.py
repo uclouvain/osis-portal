@@ -108,8 +108,8 @@ def overview(request, global_id=None):
     for attrib in attributions:
         attrib['teachers'] = attribution.get_teachers(attrib['acronym'], application_year.year)
 
-    for a in attributions:
-        attribution.get_learning_unit_volume(a, application_year)
+    for an_attribution in attributions:
+        attribution.get_learning_unit_volume(an_attribution, application_year)
     if attributions_about_to_expired:
         for a in attributions_about_to_expired:
             attribution.get_learning_unit_volume(a, application_year)

@@ -29,6 +29,7 @@ from django.db import models
 
 from base import models as mdl
 from base.models.enums import entity_container_year_link_type as entity_types
+from base.models.enums.learning_unit_year_subtypes import FULL
 
 
 class LearningUnitYearWithContext:
@@ -69,7 +70,7 @@ def get_with_context(**learning_unit_year_data):
         to_attr='learning_unit_components'
     )
 
-    learning_units = mdl.learning_unit_year.search(**learning_unit_year_data) \
+    learning_units = mdl.learning_unit_year.LearningUnitYear.objects.filter(subtype=FULL, **learning_unit_year_data) \
         .select_related('academic_year', 'learning_container_year') \
         .prefetch_related(entity_container_prefetch) \
         .prefetch_related(learning_component_prefetch) \
@@ -88,9 +89,6 @@ def append_latest_entities(learning_unit):
     for entity_container_yr in getattr(learning_container_year, "entity_containers_year", []):
         link_type = entity_container_yr.type
         learning_unit.entities[link_type] = entity_container_yr.get_latest_entity_version()
-
-    requirement_entity_version = learning_unit.entities.get(entity_types.REQUIREMENT_ENTITY)
-    learning_unit_alloc_entity = learning_unit.entities.get(entity_types.ALLOCATION_ENTITY)
 
     return learning_unit
 

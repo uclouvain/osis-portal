@@ -266,19 +266,17 @@ def get_learning_unit_volume(an_attribution, application_year):
     an_attribution['lecturing_vol'] = NO_CHARGE
     an_attribution['practical_exercises_vol'] = NO_CHARGE
 
-    learning_units = learning_unit_year_with_context.get_with_context(learning_container_year_id=learning_unit_year.learning_container_year)
-    for l in learning_units:
-        for learning_component_yr in l.components:
-            if learning_component_yr.type == learning_component_year_type.LECTURING:
-                an_attribution['lecturing_vol'] = _calculate_effective_volume(l.components[learning_component_yr])
-            if learning_component_yr.type == learning_component_year_type.PRACTICAL_EXERCISES:
-                an_attribution['practical_exercises_vol'] = _calculate_effective_volume(l.components[learning_component_yr])
-        break
+    learning_unit = learning_unit_year_with_context.get_with_context(learning_container_year_id=learning_unit_year.learning_container_year)
+    for learning_component_yr in learning_unit[0].components:
+        if learning_component_yr.type == learning_component_year_type.LECTURING:
+            an_attribution['lecturing_vol'] = _calculate_effective_volume(learning_unit[0].components[learning_component_yr])
+        if learning_component_yr.type == learning_component_year_type.PRACTICAL_EXERCISES:
+            an_attribution['practical_exercises_vol'] = _calculate_effective_volume(learning_unit[0].components[learning_component_yr])
 
 
 def _calculate_effective_volume(data):
     if 'VOLUME_TOTAL' in data and 'PLANNED_CLASSES' in data \
-            and data['VOLUME_TOTAL'] > 0 and data['PLANNED_CLASSES']> 0:
+            and data['VOLUME_TOTAL'] > 0 and data['PLANNED_CLASSES'] > 0:
         return data['VOLUME_TOTAL'] * data['PLANNED_CLASSES']
     return NO_CHARGE
 
