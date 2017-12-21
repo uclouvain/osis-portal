@@ -187,6 +187,27 @@ class AttributionTest(TestCase):
         self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
         self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'], 'already_applied')
 
+    def test_calculate_effective_volume(self):
+        vol_tot = 10.0
+        planned_classes = 2
+        data = {'PLANNED_CLASSES': planned_classes, 'VOLUME_TOTAL': vol_tot}
+        self.assertEqual(attribution._calculate_effective_volume(data), vol_tot * planned_classes)
+
+    def test_calculate_effective_volume_incorrect(self):
+        vol_tot = 10.0
+        planned_classes = -1
+        data = {'PLANNED_CLASSES': planned_classes, 'VOLUME_TOTAL': vol_tot}
+        self.assertEqual(attribution._calculate_effective_volume(data), attribution.NO_CHARGE)
+
+    def test_calculate_effective_volume_no_volume_provided(self):
+        self.assertEqual(attribution._calculate_effective_volume({'PLANNED_CLASSES': 1}), attribution.NO_CHARGE)
+
+    def test_calculate_effective_volume_case_negative_volume(self):
+        vol_tot = -10.0
+        planned_classes = 1
+        data = {'PLANNED_CLASSES': planned_classes, 'VOLUME_TOTAL': vol_tot}
+        self.assertEqual(attribution._calculate_effective_volume(data), attribution.NO_CHARGE)
+
     def test_get_teachers_parameter_none(self):
         self.assertIsNone(attribution.get_teachers(None, None))
         self.assertIsNone(attribution.get_teachers('LCHM1111', None))
@@ -260,7 +281,7 @@ def _get_attributions_dict():
         {'year': 2017, 'acronym': 'LBIR1300', 'title': 'Chimie complexe volume 2', 'weight': '7.50',
          'LECTURING': '12.5', 'PRACTICAL_EXERCISES': '9.5', 'function': 'HOLDER', 'start_year': 2015, 'end_year': 2020},
         {'year': 2017, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00', 'LECTURING': '20.5',
-         'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER','start_year': 2013},
+         'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER', 'start_year': 2013},
         {'year': 2017, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00', 'LECTURING': '20.5',
          'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': 2017}
     ]

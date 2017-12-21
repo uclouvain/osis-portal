@@ -57,7 +57,7 @@ def find_by_id(an_id):
     return Attribution.objects.get(pk=an_id)
 
 
-def search(tutor=None, learning_unit_year=None):
+def search(tutor=None, learning_unit_year=None, academic_year=None, acronym=None):
     queryset = Attribution.objects
 
     if tutor:
@@ -65,6 +65,12 @@ def search(tutor=None, learning_unit_year=None):
 
     if learning_unit_year:
         queryset = queryset.filter(learning_unit_year=learning_unit_year)
+
+    if academic_year:
+        queryset = queryset.filter(learning_unit_year__academic_year=academic_year)
+
+    if acronym:
+        queryset = queryset.filter(learning_unit_year__acronym=acronym)
 
     return queryset.select_related('tutor', 'learning_unit_year')
 

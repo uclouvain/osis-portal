@@ -30,14 +30,16 @@
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th colspan="4"></th>
-                <th class="text-center" colspan="2" style="border-left-style: solid;border-left-width:1px;">{{ application_year }}</th>
-                <th class="text-center" colspan="5" style="border-left-style: solid;border-left-width:1px;">{{ current_academic_year }}</th>
+                <th colspan="3"></th>
+                <th colspan="2" style="border-left: 1px solid;"></th>
+                <th class="text-center" colspan="2" >{{ application_year }}</th>
+                <th class="text-center" colspan="5" style="border-left: 1px solid;">{{ current_academic_year }}</th>
             </tr>
             <tr >
-                <th colspan="4"></th>
-                <th colspan="2" class="text-center"  style="border-left-style: solid;border-left-width:1px;" >{% trans 'vacant' %}</th>
-                <th colspan="4" style="border-left-style: solid;border-left-width:1px;"></th>
+                <th colspan="3"></th>
+                <th colspan="2" style="border-left: 1px solid;">{% trans 'learning_unit_volumes' %}</th>
+                <th colspan="2" class="text-center">{% trans 'vacant' %}</th>
+                <th colspan="4" style="border-left: 1px solid;"></th>
             </tr>
             <tr >
                 <th class="text-center">
@@ -51,8 +53,9 @@
                 </th>
                 <th style="vertical-align: top">{% trans 'code'%}</th>
                 <th style="vertical-align: top" >{% trans 'title'%}</th>
-                <th style="vertical-align: top" >{% trans 'team'%}</th>
-                <th style="border-left-style: solid;border-left-width:1px;vertical-align: top;">{% trans 'lecturing_hours'%}</th>
+                <th style="border-left-style: solid;border-left-width:1px;vertical-align: top;" >{% trans 'lecturing_hours'%}</th>
+                <th style="vertical-align: top" >{% trans 'practical_hours'%}</th>
+                <th style="vertical-align: top;">{% trans 'lecturing_hours'%}</th>
                 <th style="vertical-align: top">{% trans 'practical_hours'%}</th>
                 <th style="border-left-style: solid;border-left-width:1px;vertical-align: top;">{% trans 'start' %}</th>
                 <th style="vertical-align: top">{% trans 'end' %}</th>
@@ -81,36 +84,14 @@
                     </td>
                     <td>{{ attribution.acronym }}</td>
                     <td>{{ attribution.title }}</td>
-                    <td class="text-center">
-                        {% if attribution.team %}
-                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                        {% else %}
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                        {% endif %}
-                    </td>
-                    <td style="border-left-style: solid;border-left-width:1px;">
-                        {{ attribution.attribution_vacant.LECTURING|default_if_none:'0,0' }}
-                    </td>
-                    <td>
-                        {{ attribution.attribution_vacant.PRACTICAL_EXERCISES|default_if_none:'0,0' }}
-
-                    </td>
-                    <td style="border-left-style: solid;border-left-width:1px;">{{ attribution.start_academic_year|default_if_none:''}}</td>
+                    <td style="border-left: 1px solid;">{{ attribution.lecturing_vol }}</td>
+                    <td>{{ attribution.practical_exercises_vol }}</td>
+                    <td >{{ attribution.attribution_vacant.LECTURING }}</td>
+                    <td>{{ attribution.attribution_vacant.PRACTICAL_EXERCISES }}</td>
+                    <td style="border-left: 1px solid;">{{ attribution.start_academic_year|default_if_none:''}}</td>
                     <td>{{ attribution.end_academic_year|default_if_none:''}}</td>
-                    <td>
-                        {% if attribution.LECTURING %}
-                            {{ attribution.LECTURING|default_if_none:'0,0' }}
-                        {% else %}
-                            0,0
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if attribution.PRACTICAL_EXERCISES %}
-                            {{ attribution.PRACTICAL_EXERCISES|default_if_none:'0,0' }}
-                        {% else %}
-                            0,0
-                        {% endif %}
-                    </td>
+                    <td>{{ attribution.LECTURING }}</td>
+                    <td>{{ attribution.PRACTICAL_EXERCISES }}</td>
                     <td>{% trans attribution.function %}</td>
                 </tr>
             {% endfor %}

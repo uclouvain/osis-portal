@@ -66,7 +66,7 @@ class LearningUnitYear(AuditableSerializableModel):
         return self.learning_container_year and self.learning_container_year.team
 
 
-def search(academic_year_id=None, acronym=None, a_learning_unit=None):
+def search(academic_year_id=None, acronym=None, learning_container_year_id=None, a_learning_unit=None):
     queryset = LearningUnitYear.objects
 
     if academic_year_id:
@@ -74,6 +74,12 @@ def search(academic_year_id=None, acronym=None, a_learning_unit=None):
 
     if acronym:
         queryset = queryset.filter(acronym__iexact=acronym)
+
+    if learning_container_year_id is not None:
+        if isinstance(learning_container_year_id, list):
+            queryset = queryset.filter(learning_container_year__in=learning_container_year_id)
+        elif learning_container_year_id:
+            queryset = queryset.filter(learning_container_year=learning_container_year_id)
 
     if a_learning_unit:
         queryset = queryset.filter(learning_unit=a_learning_unit)
@@ -107,3 +113,7 @@ def find_by_learning_container_year(learning_container_yr_id):
 
 def find_first_by_learning_container_year(learning_container_yr_id):
     return find_by_learning_container_year(learning_container_yr_id).first()
+
+
+def find_first_by_exact_acronym(academic_year_id, acronym):
+    return search(academic_year_id, acronym, None, None).first()
