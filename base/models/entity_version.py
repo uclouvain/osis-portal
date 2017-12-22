@@ -54,3 +54,4 @@ class EntityVersionQuerySet(models.QuerySet):
 class EntityVersion(SerializableModel):
     changed = models.DateTimeField(null=True, auto_now=True)
     entity = models.ForeignKey('Entity')
+    acronym = models.CharField(db_index=True, max_length=20, null=True, blank=True)
