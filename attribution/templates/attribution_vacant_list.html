@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
-
 {% load staticfiles %}
 {% load i18n %}
 {% load l10n %}
+{% load urls_catalog %}
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
 * designed to manage the core business of higher education institutions,
@@ -93,8 +93,20 @@
                     <tbody>
                         {% for attribution in attributions_vacant %}
                         <tr>
-                            <td>{{ attribution.acronym }}</td>
-                            <td>{{ attribution.title }}</td>
+                            <td>
+                                 <a title="{% trans 'learning_unit_specifications' %}"
+                                    href="{{attribution.learning_container_year_id | get_previous_url_learning_unit_year }}"
+                                    target="_blank">
+                                        {{ attribution.acronym }}
+                                 </a>
+                            </td>
+                            <td>
+                                <a title="{% trans 'learning_unit_specifications' %}"
+                                    href="{{attribution.learning_container_year_id | get_previous_url_learning_unit_year }}"
+                                    target="_blank">
+                                    {{ attribution.title }}
+                                </a>
+                            </td>
                             <td >{{ attribution.lecturing_vol }}</td>
                             <td >{{ attribution.practical_exercises_vol }}</td>
                             <td style="border-left: 1px solid;">{{ attribution.LECTURING }}</td>
