@@ -62,12 +62,12 @@ class TestOnlineApplication(TestCase):
         self.client.force_login(user)
 
         # Create current academic year
-        current_year = datetime.datetime.today().year
-        self.current_academic_year = AcademicYearFactory(year=current_year)
+        today = datetime.datetime.today()
+        self.current_academic_year = AcademicYearFactory(year=today.year, start_date=today)
 
         # Create application year
-        application_year = current_year + 1  # Application is always next year
-        self.application_academic_year = AcademicYearFactory(year=application_year)
+        # Application is always next year
+        self.application_academic_year = AcademicYearFactory(year=today.year + 1)
 
         # Create Event to allow teacher to register
         start_date = datetime.datetime.today() - datetime.timedelta(days=10)
