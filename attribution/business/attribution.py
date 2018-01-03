@@ -267,11 +267,12 @@ def update_learning_unit_volume(an_attribution, application_year):
     an_attribution['practical_exercises_vol'] = NO_CHARGE
 
     learning_units = learning_unit_year_with_context.get_with_context(learning_container_year_id=learning_unit_year.learning_container_year)
-    for learning_component_yr in learning_units[0].components:
-        if learning_component_yr.type == learning_component_year_type.LECTURING:
-            an_attribution['lecturing_vol'] = _calculate_effective_volume(learning_units[0].components[learning_component_yr])
-        if learning_component_yr.type == learning_component_year_type.PRACTICAL_EXERCISES:
-            an_attribution['practical_exercises_vol'] = _calculate_effective_volume(learning_units[0].components[learning_component_yr])
+    if learning_units:
+        for learning_component_yr in learning_units[0].components:
+            if learning_component_yr.type == learning_component_year_type.LECTURING:
+                an_attribution['lecturing_vol'] = _calculate_effective_volume(learning_units[0].components[learning_component_yr])
+            if learning_component_yr.type == learning_component_year_type.PRACTICAL_EXERCISES:
+                an_attribution['practical_exercises_vol'] = _calculate_effective_volume(learning_units[0].components[learning_component_yr])
 
 
 def _calculate_effective_volume(data):
