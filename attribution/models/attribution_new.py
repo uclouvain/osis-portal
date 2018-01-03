@@ -37,8 +37,8 @@ class AttributionNewAdmin(admin.ModelAdmin):
 
 class AttributionNew(models.Model):
     global_id = models.CharField(max_length=10, unique=True)
-    attributions = JSONField(default={})
-    applications = JSONField(default={})
+    attributions = JSONField(default=list, blank=True)
+    applications = JSONField(default=list, blank=True)
 
     class Meta:
         permissions = (
