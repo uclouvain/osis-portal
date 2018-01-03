@@ -246,6 +246,37 @@ class AttributionTest(TestCase):
         self.assertEquals(attributions_result[0][attribution.PERSON_KEY],
                           person_first_alphabetical_order)
 
+    def test_update_learning_unit_volume_no_components(self):
+        """When no components found on database, the key 'lecturing_vol' / 'practical_exercises_vol' is set to 0.0"""
+        l_container = LearningContainerYearFactory(acronym='LAGRO1530', academic_year=self.academic_year)
+        LearningUnitYearFactory(acronym='LAGRO1530', academic_year=self.academic_year, learning_container_year=l_container)
+        an_attribution = {'year': 2017, 'acronym': 'LAGRO1530', 'title': 'Chimie complexe', 'weight': '5.00',
+                          'LECTURING': '22.5', 'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': 2020}
+
+        attribution.update_learning_unit_volume(an_attribution, self.academic_year)
+        self.assertEqual(an_attribution['lecturing_vol'], Decimal(0.0))
+        self.assertEqual(an_attribution['practical_exercises_vol'], Decimal(0.0))
+
+    def test_calculate_component_volume(self):
+        an_attribution = {'year': 2017, 'acronym': 'LAGRO1530', 'title': 'Chimie complexe', 'weight': '5.00',
+                          'LECTURING': '22.5', 'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015,
+                          'end_year': 2020}
+        l_component_lecturing = LearningComponentYearFactory(type=learning_component_year_type.LECTURING)
+        l_component_other = LearningComponentYearFactory(type=None)
+        components_computed = {
+            l_component_lecturing: {
+                'VOLUME_TOTAL': Decimal(15),
+                'PLANNED_CLASSES': 5
+            },
+            l_component_other: {
+                'VOLUME_TOTAL': Decimal(1),
+                'PLANNED_CLASSES': 1
+            }
+        }
+        attribution._calculate_component_volume(an_attribution, components_computed)
+        self.assertEqual(an_attribution['lecturing_vol'], Decimal(75)) # VOLUME_TOTAL * PLANNED_CLASSES
+        self.assertRaises(KeyError, lambda: an_attribution['practical_exercises_vol'])
+
 
 def _create_multiple_academic_year():
     for year in range(2000, 2025):
@@ -255,7 +286,7 @@ def _create_multiple_academic_year():
 def _create_learning_container_with_components(acronym, academic_year, volume_lecturing=None, volume_practical_exercices=None):
     l_container = LearningContainerYearFactory(acronym=acronym, academic_year=academic_year)
     a_learning_unit_year = LearningUnitYearFactory(acronym=acronym, academic_year=academic_year,
-                                                   title=l_container.title)
+                                                   title=l_container.title, learning_container_year=l_container)
     if volume_lecturing:
         a_component = LearningComponentYearFactory(
             learning_container_year=l_container,

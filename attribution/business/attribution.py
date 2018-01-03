@@ -261,17 +261,23 @@ def _has_already_applied(attribution_with_vacant_next_year, application_list):
 
 
 def update_learning_unit_volume(an_attribution, application_year):
-    learning_unit_year = mdl_base.learning_unit_year.find_first_by_exact_acronym(application_year,
-                                                                                 an_attribution['acronym'])
     an_attribution['lecturing_vol'] = NO_CHARGE
     an_attribution['practical_exercises_vol'] = NO_CHARGE
 
-    learning_units = learning_unit_year_with_context.get_with_context(learning_container_year_id=learning_unit_year.learning_container_year)
-    for learning_component_yr in learning_units[0].components:
+    learning_unit_year = mdl_base.learning_unit_year.find_first_by_exact_acronym(application_year,
+                                                                                 an_attribution['acronym'])
+    l_container_year = learning_unit_year.learning_container_year
+    learning_units = learning_unit_year_with_context.get_with_context(learning_container_year_id=l_container_year)
+    if learning_units:
+        _calculate_component_volume(an_attribution, learning_units[0].components)
+
+
+def _calculate_component_volume(an_attribution, components):
+    for learning_component_yr, volume_data in components.items():
         if learning_component_yr.type == learning_component_year_type.LECTURING:
-            an_attribution['lecturing_vol'] = _calculate_effective_volume(learning_units[0].components[learning_component_yr])
+            an_attribution['lecturing_vol'] = _calculate_effective_volume(volume_data)
         if learning_component_yr.type == learning_component_year_type.PRACTICAL_EXERCISES:
-            an_attribution['practical_exercises_vol'] = _calculate_effective_volume(learning_units[0].components[learning_component_yr])
+            an_attribution['practical_exercises_vol'] = _calculate_effective_volume(volume_data)
 
 
 def _calculate_effective_volume(data):
