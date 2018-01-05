@@ -31,14 +31,16 @@ from django.contrib import admin
 
 class AttributionNewAdmin(admin.ModelAdmin):
     list_display = ('global_id', 'attributions', 'applications')
-    fieldsets = ((None, {'fields': ('global_id', 'attributions', 'applications', )}),)
+    fieldsets = ((None, {'fields': ('global_id', 'attributions', 'applications', 'summary_responsible' )}),)
     search_fields = ['global_id']
+    list_filter = ('summary_responsible', )
 
 
 class AttributionNew(models.Model):
     global_id = models.CharField(max_length=10, unique=True)
     attributions = JSONField(default=list, blank=True)
     applications = JSONField(default=list, blank=True)
+    summary_responsible = models.BooleanField(default=False)
 
     class Meta:
         permissions = (
