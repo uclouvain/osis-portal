@@ -143,7 +143,7 @@ def _fetch_with_basic_auth(server_top_url, document_url):
 
 def _make_xls_list(attestation_pdf):
     filename = "Liste_Insc_Exam.xls"
-    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=binary')
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename="%s"' % filename
     response.write(attestation_pdf)
     return response

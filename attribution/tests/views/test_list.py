@@ -232,7 +232,7 @@ class ListBuildTest(TestCase):
         self.assertEqual(response.status_code, OK)
         self.assertTrue(mock_fetch.called)
         self.assertEqual(response['Content-Type'],
-                         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=binary')
+                         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         self.assertEqual(response['Content-Disposition'], 'attachment; filename="{}"'.format(filename))
         self.assertEqual(response.content.decode(), str(return_sample_xls()))
 
@@ -358,6 +358,6 @@ class AdminListBuildTest(TestCase):
         self.assertEqual(response.status_code, OK)
         self.assertTrue(mock_fetch.called)
         self.assertEqual(response['Content-Type'],
-                         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=binary')
+                         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         self.assertEqual(response['Content-Disposition'], 'attachment; filename="{}"'.format(filename))
         self.assertEqual(response.content.decode(), str(return_sample_xls()))
