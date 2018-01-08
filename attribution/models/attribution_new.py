@@ -31,7 +31,7 @@ from django.contrib import admin
 
 class AttributionNewAdmin(admin.ModelAdmin):
     list_display = ('global_id', 'attributions', 'applications')
-    fieldsets = ((None, {'fields': ('global_id', 'attributions', 'applications', 'summary_responsible' )}),)
+    fieldsets = ((None, {'fields': ('global_id', 'attributions', 'applications', 'summary_responsible')}),)
     search_fields = ['global_id']
     list_filter = ('summary_responsible', )
 
