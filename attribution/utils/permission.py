@@ -25,6 +25,7 @@
 ##############################################################################
 from base import models as mdl_base
 from base.models.enums import academic_calendar_type
+from attribution import models as mdl_attribution
 
 
 def is_online_application_opened(user):
@@ -34,4 +35,15 @@ def is_online_application_opened(user):
             current_academic_year,
             academic_calendar_type.TEACHING_CHARGE_APPLICATION
         )
+    return False
+
+
+def is_summary_responsible(a_user):
+    a_person = mdl_base.person.find_by_user(a_user)
+    if a_person:
+        attributions = mdl_attribution.attribution.find_by_id(a_person.global_id)
+        if attributions:
+            for attribution in attributions:
+                if attribution.summary_responsible:
+                    return True
     return False

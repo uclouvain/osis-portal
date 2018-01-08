@@ -34,4 +34,30 @@
             <p>{% trans 'desc_lnk_my_students_list' %}</p>
         </div>
     </div>
+    {% if is_summary_responsible %}
+        <div class="grid-item">
+            <i class="fa fa-file-text-o"></i>
+            <div class="description">
+                <h4 class="media-heading">
+                    <a href="{{score_encoding_url}}" id="lnk_manage_courses">
+                        {% trans 'manage_courses' %}
+                    </a>
+                </h4>
+                <p>
+                    <span class="dashboard-vpn-warning fa fa-exclamation-triangle" aria-hidden="true"></span>
+                    {% if score_encoding_vpn_help_url %}
+                        <span class="dashboard-vpn-warning">
+                        {% trans 'scores_encoding_use_vpn_with_link_start' %}{{score_encoding_vpn_help_url}}{% trans 'scores_encoding_use_vpn_with_link_end' %}
+                   </span>
+                    {% else %}
+                        <span class="dashboard-vpn-warning">
+                        {% trans 'scores_encoding_use_vpn' %}
+                    </span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    {% endif %}
 {% endif %}
+
+
