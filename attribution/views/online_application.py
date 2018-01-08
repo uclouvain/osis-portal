@@ -41,6 +41,14 @@ from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
 from base.models.enums import learning_component_year_type
 from base.views import layout
+from base.models.enums import academic_calendar_type
+from attribution.models import attribution as mdl_attribution, attribution_new
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.conf import settings
+from base.business import learning_unit_year_with_context
+from base.models.enums import learning_component_year_type
+from decimal import Decimal
 
 
 @login_required
@@ -91,11 +99,20 @@ def overview(request, global_id=None):
 
     # Attribution which will be expire this academic year
     current_academic_year = mdl_base.academic_year.current_academic_year()
+
     attributions_about_to_expired = attribution.get_attribution_list_about_to_expire(
         global_id=tutor.person.global_id,
         academic_year=current_academic_year
     )
 
+    for attrib in attributions:
+        attrib['teachers'] = attribution.get_teachers(attrib['acronym'], application_year.year)
+
+    for an_attribution in attributions:
+        attribution.update_learning_unit_volume(an_attribution, application_year)
+    if attributions_about_to_expired:
+        for an_attribution in attributions_about_to_expired:
+            attribution.update_learning_unit_volume(an_attribution, application_year)
     return layout.render(request, "attribution_overview.html", {
         'a_tutor': tutor,
         'attributions': attributions,
@@ -104,7 +121,11 @@ def overview(request, global_id=None):
         'application_year': application_year,
         'applications': applications,
         'tot_lecturing': volume_total_attributions.get(learning_component_year_type.LECTURING),
-        'tot_practical': volume_total_attributions.get(learning_component_year_type.PRACTICAL_EXERCISES)
+        'tot_practical': volume_total_attributions.get(learning_component_year_type.PRACTICAL_EXERCISES),
+        'application_academic_calendar': mdl_base.academic_calendar.get_by_reference_and_academic_year(
+            academic_calendar_type.TEACHING_CHARGE_APPLICATION,
+            current_academic_year),
+        'catalog_url': settings.ATTRIBUTION_CONFIG.get('CATALOG_URL')
     })
 
 
@@ -127,6 +148,13 @@ def search_vacant_attribution(request):
             tutor.person.global_id,
             application_academic_year
         )
+        if attributions_vacant:
+            for an_attribution in attributions_vacant:
+                attribution.update_learning_unit_volume(an_attribution, application_academic_year)
+
+        for attrib in attributions_vacant:
+            attrib['teachers'] = attribution.get_teachers(attrib['acronym'],
+                                                          application_academic_year.year)
 
     return layout.render(request, "attribution_vacant_list.html", {
         'a_tutor': tutor,

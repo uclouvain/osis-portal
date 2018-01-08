@@ -37,8 +37,8 @@ class AttributionNewAdmin(admin.ModelAdmin):
 
 class AttributionNew(models.Model):
     global_id = models.CharField(max_length=10, unique=True)
-    attributions = JSONField(default={})
-    applications = JSONField(default={})
+    attributions = JSONField(default=list, blank=True)
+    applications = JSONField(default=list, blank=True)
 
     class Meta:
         permissions = (
@@ -75,3 +75,8 @@ def find_by_global_id(global_id):
         return AttributionNew.objects.get(global_id=global_id)
     except AttributionNew.DoesNotExist:
         return None
+
+
+def find_teachers(an_acronym, yr):
+    return AttributionNew.objects.filter(attributions__contains=[{'acronym': an_acronym,
+                                                                  'year': yr}])

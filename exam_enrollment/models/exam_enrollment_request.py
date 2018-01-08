@@ -39,15 +39,16 @@ class ExamEnrollmentRequestdAdmin(admin.ModelAdmin):
 
 class ExamEnrollmentRequest(models.Model):
     student = models.ForeignKey('base.Student')
+    offer_year_acronym = models.CharField(max_length=15, null=True)
     document = JSONField()
 
     def __str__(self):
         return "{}".format(self.student)
 
 
-def insert_or_update_document(student, document):
+def insert_or_update_document(acronym, student, document):
     exam_enrollment_request_object, created = ExamEnrollmentRequest.objects.update_or_create(
-        student=student, defaults={"document": document})
+        offer_year_acronym=acronym, student=student, defaults={"document": document})
     return exam_enrollment_request_object
 
 
@@ -59,5 +60,5 @@ def find_by_student(student):
         return None
 
 
-def pop_document(student):
-    ExamEnrollmentRequest.objects.get(student=student).delete()
+def pop_document(offer_year_acronym, student):
+    ExamEnrollmentRequest.objects.get(offer_year_acronym=offer_year_acronym, student=student).delete()

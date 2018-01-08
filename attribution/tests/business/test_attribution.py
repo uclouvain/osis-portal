@@ -88,7 +88,7 @@ class AttributionTest(TestCase):
         self.assertEqual(volumes_total.get(learning_component_year_type.PRACTICAL_EXERCISES), Decimal(21.5))
 
     def test_append_team_and_volume_delcared_vacant(self):
-        #Create Container Year and component
+        #  Create Container Year and component
         _create_learning_container_with_components(acronym="LBIR1300", academic_year=self.academic_year,
                                                    volume_lecturing=Decimal(15.5),
                                                    volume_practical_exercices=Decimal(5))
@@ -187,6 +187,96 @@ class AttributionTest(TestCase):
         self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
         self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'], 'already_applied')
 
+    def test_calculate_effective_volume(self):
+        vol_tot = 10.0
+        planned_classes = 2
+        data = {'PLANNED_CLASSES': planned_classes, 'VOLUME_TOTAL': vol_tot}
+        self.assertEqual(attribution._calculate_effective_volume(data), vol_tot * planned_classes)
+
+    def test_calculate_effective_volume_incorrect(self):
+        vol_tot = 10.0
+        planned_classes = -1
+        data = {'PLANNED_CLASSES': planned_classes, 'VOLUME_TOTAL': vol_tot}
+        self.assertEqual(attribution._calculate_effective_volume(data), attribution.NO_CHARGE)
+
+    def test_calculate_effective_volume_no_volume_provided(self):
+        self.assertEqual(attribution._calculate_effective_volume({'PLANNED_CLASSES': 1}), attribution.NO_CHARGE)
+
+    def test_calculate_effective_volume_case_negative_volume(self):
+        vol_tot = -10.0
+        planned_classes = 1
+        data = {'PLANNED_CLASSES': planned_classes, 'VOLUME_TOTAL': vol_tot}
+        self.assertEqual(attribution._calculate_effective_volume(data), attribution.NO_CHARGE)
+
+    def test_get_teachers_parameter_none(self):
+        self.assertIsNone(attribution.get_teachers(None, None))
+        self.assertIsNone(attribution.get_teachers('LCHM1111', None))
+        academic_year = AcademicYearFactory()
+        self.assertIsNone(attribution.get_teachers(None, academic_year))
+
+    def test_get_teachers_no_teacher_found(self):
+        self.assertIsNone(attribution.get_teachers('LCHM1111', 2017))
+
+    def test_get_2_teachers_in_order(self):
+        acronym_LCHM1111 = 'LCHM1111'
+        acronym_LDVLP2627 = 'LDVLP2627'
+        acronym_LDROI1110 = 'LDROI1110'
+
+        # Create first teacher with one attribution on LCHM1111 and others
+        person_first_alphabetical_order = PersonFactory(global_id='12345678', last_name='Antonelli')
+        attribution_teacher_1_LCHM1111 = {'year': 2017, 'acronym': acronym_LCHM1111}
+        attributions_teacher1 = [
+            attribution_teacher_1_LCHM1111,
+            {'year': 2016, 'acronym': acronym_LDVLP2627},
+            {'year': 2017, 'acronym': acronym_LDVLP2627},
+            {'year': 2017, 'acronym': acronym_LDROI1110}
+        ]
+
+        AttributionNewFactory(global_id=person_first_alphabetical_order.global_id,
+                              attributions=attributions_teacher1)
+        # Create second teacher with one attribution on LCHM1111
+        person_second_alphabetical_order = PersonFactory(global_id='987654321', last_name='Barnet')
+        attribution_teacher_2_LCHM1111 = {'year': 2017, 'acronym': acronym_LCHM1111}
+        attributions_teacher2 = [attribution_teacher_2_LCHM1111]
+        AttributionNewFactory(global_id=person_second_alphabetical_order.global_id,
+                              attributions=attributions_teacher2)
+        #
+        attributions_result = attribution.get_teachers(acronym_LCHM1111, 2017)
+        self.assertEquals(len(attributions_result), 2)
+        self.assertEquals(attributions_result[0][attribution.PERSON_KEY],
+                          person_first_alphabetical_order)
+
+    def test_update_learning_unit_volume_no_components(self):
+        """When no components found on database, the key 'lecturing_vol' / 'practical_exercises_vol' is set to 0.0"""
+        l_container = LearningContainerYearFactory(acronym='LAGRO1530', academic_year=self.academic_year)
+        LearningUnitYearFactory(acronym='LAGRO1530', academic_year=self.academic_year, learning_container_year=l_container)
+        an_attribution = {'year': 2017, 'acronym': 'LAGRO1530', 'title': 'Chimie complexe', 'weight': '5.00',
+                          'LECTURING': '22.5', 'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': 2020}
+
+        attribution.update_learning_unit_volume(an_attribution, self.academic_year)
+        self.assertEqual(an_attribution['lecturing_vol'], Decimal(0.0))
+        self.assertEqual(an_attribution['practical_exercises_vol'], Decimal(0.0))
+
+    def test_calculate_component_volume(self):
+        an_attribution = {'year': 2017, 'acronym': 'LAGRO1530', 'title': 'Chimie complexe', 'weight': '5.00',
+                          'LECTURING': '22.5', 'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015,
+                          'end_year': 2020}
+        l_component_lecturing = LearningComponentYearFactory(type=learning_component_year_type.LECTURING)
+        l_component_other = LearningComponentYearFactory(type=None)
+        components_computed = {
+            l_component_lecturing: {
+                'VOLUME_TOTAL': Decimal(15),
+                'PLANNED_CLASSES': 5
+            },
+            l_component_other: {
+                'VOLUME_TOTAL': Decimal(1),
+                'PLANNED_CLASSES': 1
+            }
+        }
+        attribution._calculate_component_volume(an_attribution, components_computed)
+        self.assertEqual(an_attribution['lecturing_vol'], Decimal(75)) # VOLUME_TOTAL * PLANNED_CLASSES
+        self.assertRaises(KeyError, lambda: an_attribution['practical_exercises_vol'])
+
 
 def _create_multiple_academic_year():
     for year in range(2000, 2025):
@@ -196,7 +286,7 @@ def _create_multiple_academic_year():
 def _create_learning_container_with_components(acronym, academic_year, volume_lecturing=None, volume_practical_exercices=None):
     l_container = LearningContainerYearFactory(acronym=acronym, academic_year=academic_year)
     a_learning_unit_year = LearningUnitYearFactory(acronym=acronym, academic_year=academic_year,
-                                                   title=l_container.title)
+                                                   title=l_container.title, learning_container_year=l_container)
     if volume_lecturing:
         a_component = LearningComponentYearFactory(
             learning_container_year=l_container,
@@ -222,7 +312,7 @@ def _get_attributions_dict():
         {'year': 2017, 'acronym': 'LBIR1300', 'title': 'Chimie complexe volume 2', 'weight': '7.50',
          'LECTURING': '12.5', 'PRACTICAL_EXERCISES': '9.5', 'function': 'HOLDER', 'start_year': 2015, 'end_year': 2020},
         {'year': 2017, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00', 'LECTURING': '20.5',
-         'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER','start_year': 2013},
+         'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER', 'start_year': 2013},
         {'year': 2017, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00', 'LECTURING': '20.5',
          'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': 2017}
     ]

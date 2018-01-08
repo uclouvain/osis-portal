@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
-
 {% load staticfiles %}
 {% load i18n %}
 {% load l10n %}
+{% load urls_catalog %}
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
 * designed to manage the core business of higher education institutions,
@@ -73,36 +73,54 @@
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th colspan="3"></th>
-                            <th colspan="2" style="border-left-style: solid;border-left-width:1px;">{% trans 'vacant' %}</th>
-                            <th></th>
+                            <th colspan="2"></th>
+                            <th colspan="2">{% trans 'learning_unit_volumes' %}</th>
+                            <th colspan="2" style="border-left: 1px solid;">{% trans 'vacant' %}</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
                         </tr>
                         <tr>
                             <th>{% trans 'code'%}</th>
                             <th>{% trans 'title'%}</th>
-                            <th>{% trans 'team'%}</th>
-                            <th style="border-left-style: solid;border-left-width:1px;">{% trans 'lecturing_hours'%}</th>
+                            <th>{% trans 'lecturing_hours'%}</th>
                             <th>{% trans 'practical_hours'%}</th>
+                            <th style="border-left: 1px solid;">{% trans 'lecturing_hours'%}</th>
+                            <th>{% trans 'practical_hours'%}</th>
+                            <th>{% trans 'teachers'%}</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for attribution in attributions_vacant %}
                         <tr>
-                            <td>{{ attribution.acronym }}</td>
-                            <td>{{ attribution.title }}</td>
-                            <td class="text-center">
-                                {% if attribution.team %}
-                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                                {% else %}
-                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                {% endif %}
-                            </td>
-                            <td style="border-left-style: solid;border-left-width:1px;">
-                                {{ attribution.LECTURING|default_if_none:'0,0' }}
+                            <td>
+                                 <a title="{% trans 'learning_unit_specifications' %}"
+                                    href="{{attribution.learning_container_year_id | get_previous_url_learning_unit_year }}"
+                                    target="_blank">
+                                        {{ attribution.acronym }}
+                                 </a>
                             </td>
                             <td>
-                                {{ attribution.PRACTICAL_EXERCISES|default_if_none:'0,0' }}
+                                <a title="{% trans 'learning_unit_specifications' %}"
+                                    href="{{attribution.learning_container_year_id | get_previous_url_learning_unit_year }}"
+                                    target="_blank">
+                                    {{ attribution.title }}
+                                </a>
+                            </td>
+                            <td >{{ attribution.lecturing_vol }}</td>
+                            <td >{{ attribution.practical_exercises_vol }}</td>
+                            <td style="border-left: 1px solid;">{{ attribution.LECTURING }}</td>
+                            <td>{{ attribution.PRACTICAL_EXERCISES }}</td>
+                            <td>
+                            {% if attribution.teachers %}
+                                {% with teacher_number=forloop.counter0 %}
+                                    <a role="button" data-toggle="collapse" href=".collapse_teachers{{ teacher_number }}"
+                                       aria-expanded="false" aria-controls="collapse_teachers{{ teacher_number }}" style="border:0;padding:0;"
+                                       onclick="changeOrientation(expandButton{{ teacher_number }})" title="{% trans 'display_teachers' %}">
+                                        <span id="expandButton{{ teacher_number }}" class="glyphicon glyphicon-expand" aria-hidden="true"></span>
+                                    </a>
+                                {% endwith %}
+                            {% endif %}
                             </td>
                             <td>
                                 <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
@@ -120,6 +138,16 @@
                                 </div>
                             </td>
                         </tr>
+
+                        {% with teacher_number=forloop.counter0 %}
+                            {% if attribution.teachers  %}
+                                <tr class="collapse collapse_teachers{{ teacher_number }}" style="background-color: white;">
+                                    <td colspan="11" >
+                                        {% include "teachers.html" %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endwith %}
                         {% endfor %}
                     </tbody>
                 </table>

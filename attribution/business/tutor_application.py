@@ -70,11 +70,8 @@ def mark_attribution_already_applied(attributions_vacant, global_id, application
         already_applied = next((True for application in applications if
                                                application.get('acronym') == attribution.get('acronym')), False) \
                                           if applications else False
-        already_attributed = next((True for attrib in attributions if
-                                   attrib.get('acronym') == attribution.get('acronym')), False) \
-                                          if attributions else False
 
-        attribution['already_applied'] = (already_applied or already_attributed)
+        attribution['already_applied'] = already_applied
     return attributions_vacant
 
 
@@ -133,13 +130,17 @@ def send_mail_applications_summary(global_id):
     html_template_ref = 'applications_confirmation_html'
     txt_template_ref = 'applications_confirmation_txt'
     receivers = [message_config.create_receiver(person.id, person.email, person.language)]
+    applications = _get_applications_table(application_list)
+    table_applications = message_config.create_table('applications',
+                                                     [_('acronym'),'Vol. 1','Vol. 2'],
+                                                     applications)
     template_base_data = {
         'first_name': person.first_name,
         'last_name': person.last_name,
-        'applications': _get_application_list_str(application_list)
+
     }
     message_content = message_config.create_message_content(html_template_ref, txt_template_ref,
-                                                            None, receivers, template_base_data, None)
+                                                            [table_applications], receivers, template_base_data, None)
     return message_service.send_messages(message_content)
 
 
@@ -202,14 +203,15 @@ def _find_application(acronym, year, applications_list):
     return None
 
 
-def _get_application_list_str(application_list):
-    validation_str = "\t({})".format(_('wait_validation_epc'))
-    applications_str = ["*{}\t{}\t{}\t{}\n".format(validation_str if application.get('pending') else '',
-                                                   application.get('acronym', ''),
-                                                   application.get('charge_lecturing_asked', ''),
-                                                   application.get('charge_practical_asked', ''))
-                        for application in application_list ]
-    return "\n".join(applications_str)
+def _get_applications_table(application_list):
+    applications = []
+    validation_str = "({})".format(_('wait_validation_epc'))
+    for application in application_list:
+        applications.append(("{} {}".format(validation_str if application.get('pending') else '',
+                                            application.get('acronym', '')),
+                             application.get('charge_lecturing_asked', ''),
+                             application.get('charge_practical_asked', '')))
+    return applications
 
 
 def _filter_by_years(attribution_list, year):
