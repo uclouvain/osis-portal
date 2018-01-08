@@ -40,8 +40,9 @@ def is_online_application_opened(user):
 
 def is_summary_responsible(a_user):
     a_person = mdl_base.person.find_by_user(a_user)
-    if a_person:
-        attributions = mdl_attribution.attribution.find_by_id(a_person.global_id)
+    a_tutor = mdl_base.tutor.find_by_user(a_user)
+    if a_tutor:
+        attributions = mdl_attribution.attribution.search(a_tutor, None, None, None)
         if attributions:
             for attribution in attributions:
                 if attribution.summary_responsible:

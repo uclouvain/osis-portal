@@ -258,7 +258,8 @@ LOGO_INSTITUTION_URL = os.environ.get('LOGO_INSTITUTION_URL',
                                       os.path.join(BASE_DIR, "base/static/img/logo_institution.jpg"))
 LOGO_OSIS_URL = os.environ.get('LOGO_OSIS_URL', '')
 OSIS_SCORE_ENCODING_URL = os.environ.get('OSIS_SCORE_ENCODING_URL', None)
-OSIS_SCORE_ENCODING_VPN_HELP_URL = os.environ.get('OSIS_SCORE_ENCODING_VPN_HELP_URL', None)
+OSIS_VPN_HELP_URL = os.environ.get('OSIS_VPN_HELP_URL', None)
+OSIS_MANAGE_COURSES_URL = os.environ.get('OSIS_MANAGE_COURSES_URL', None)
 
 # Queues Definition
 # The queue system uses RabbitMq queues to communicate with other application (ex : osis)
