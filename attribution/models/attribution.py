@@ -98,3 +98,7 @@ def find_distinct_years(a_tutor):
     return Attribution.objects.filter(tutor=a_tutor, learning_unit_year__learning_container_year__in_charge=True)\
         .order_by('-learning_unit_year__academic_year__year')\
         .values_list('learning_unit_year__academic_year__year', flat=True).distinct()
+
+
+def find_by_tutor_summary_responsible(a_tutor):
+    return Attribution.objects.filter(tutor=a_tutor, summary_responsible=True)
