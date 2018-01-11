@@ -174,6 +174,13 @@ DATABASES = {
 }
 
 
+# SQL Data Management Settings
+# Enable or disable the admin screen to directly query the database
+ENABLE_SQL_DATA_MANAGEMENT = os.environ.get('ENABLE_SQL_DATA_MANAGEMENT', 'False').lower() == 'true'
+SQL_DATA_MANAGEMENT_READONLY = os.environ.get('SQL_DATA_MANAGEMENT_READONLY', 'False').lower() == 'true'
+FORBIDDEN_SQL_KEYWORDS = os.environ.get('SQL_DATA_MANAGEMENT_READONLY', '').split()
+
+
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
