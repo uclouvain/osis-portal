@@ -39,7 +39,7 @@ def home(request):
                          {'online_application_opened': permission.is_online_application_opened(request.user),
                           'is_summary_responsible': permission.is_summary_responsible(request.user),
                           'manage_courses_url': settings.OSIS_MANAGE_COURSES_URL,
-                          'osis_vpn_help_url': settings.OSIS_VPN_HELP_URL })
+                          'osis_vpn_help_url': settings.OSIS_VPN_HELP_URL})
 
 
 @login_required
