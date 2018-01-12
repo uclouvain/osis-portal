@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -80,7 +80,7 @@ def tutor_scores_sheets(request, global_id):
 @permission_required('base.is_tutor', raise_exception=True)
 def score_encoding(request):
     score_encoding_url = settings.OSIS_SCORE_ENCODING_URL
-    score_encoding_vpn_help_url = settings.OSIS_SCORE_ENCODING_VPN_HELP_URL
+    score_encoding_vpn_help_url = settings.OSIS_VPN_HELP_URL
     return layout.render(request, "score_encoding.html", locals())
 
 
