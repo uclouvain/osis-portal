@@ -101,6 +101,6 @@ def find_distinct_years(a_tutor):
 
 
 def is_summary_responsible(a_tutor):
-    if Attribution.objects.filter(tutor=a_tutor, summary_responsible=True):
+    if Attribution.objects.filter(tutor=a_tutor, summary_responsible=True).count() > 0:
         return True
     return False
