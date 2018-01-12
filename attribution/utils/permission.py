@@ -41,6 +41,5 @@ def is_online_application_opened(user):
 def is_summary_responsible(a_user):
     a_tutor = mdl_base.tutor.find_by_user(a_user)
     if a_tutor:
-        if mdl_attribution.attribution.find_by_tutor_summary_responsible(a_tutor):
-            return True
+        return mdl_attribution.attribution.is_summary_responsible(a_tutor)
     return False

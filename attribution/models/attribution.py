@@ -100,5 +100,7 @@ def find_distinct_years(a_tutor):
         .values_list('learning_unit_year__academic_year__year', flat=True).distinct()
 
 
-def find_by_tutor_summary_responsible(a_tutor):
-    return Attribution.objects.filter(tutor=a_tutor, summary_responsible=True)
+def is_summary_responsible(a_tutor):
+    if Attribution.objects.filter(tutor=a_tutor, summary_responsible=True):
+        return True
+    return False

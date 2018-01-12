@@ -111,3 +111,15 @@ class AttributionTest(TestCase):
                                                               function=function.CO_HOLDER,
                                                               learning_unit_year=b_learning_unit_year)
         self.assertListEqual(list(mdl_attribution.attribution.find_by_tutor_year_order_by_acronym_function(self.tutor, self.an_academic_year)), [a_attribution, c_attribution, b_attribution])
+
+
+    def test_is_summary_responsible_tutor(self):
+        a_attribution = self.attribution = AttributionFactory(tutor=self.tutor,
+                                                              summary_responsible=True)
+        return self.assertTrue(mdl_attribution.attribution.is_summary_responsible(self.tutor))
+
+
+    def test_is_not_summary_responsible_tutor(self):
+        a_attribution = self.attribution = AttributionFactory(tutor=self.tutor,
+                                                              summary_responsible=False)
+        return self.assertFalse(mdl_attribution.attribution.is_summary_responsible(self.tutor))
