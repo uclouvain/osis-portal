@@ -28,6 +28,7 @@ from django.test import TestCase
 from reference.models import domain
 from reference.tests.factories.domain import DomainFactory
 
+
 class TestFindSubdomains(TestCase):
     def setUp(self):
         self.parent_domain = DomainFactory()
