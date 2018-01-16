@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,13 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import factory
 
-FRENCH = "FRENCH"
-GERMAN = "GERMAN"
-DUTCH = "DUTCH"
 
-NATIONAL_COMMUNITY_TYPES = (
-    (FRENCH, FRENCH),
-    (GERMAN, GERMAN),
-    (DUTCH, DUTCH),
-)
+class DomainFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = 'reference.Domain'
+
+    external_id = factory.Faker('text', max_nb_chars=100)
+    name = factory.Sequence(lambda n: 'Domain - %d' % n)
+    parent = None
+
