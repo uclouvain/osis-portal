@@ -26,6 +26,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import *
 from dissertation import models as mdl
+from dissertation.views.common import download_file
 from osis_common import models as mdl_osis_common
 from osis_common.models.enum import storage_duration
 from django.shortcuts import get_object_or_404, redirect
@@ -36,11 +37,7 @@ def download(request, pk):
     memory = get_object_or_404(mdl.dissertation.Dissertation, pk=pk)
     if memory.author_is_logged_student(request):
         dissertation_document = mdl.dissertation_document_file.find_by_id(pk)
-        document = mdl_osis_common.document_file.find_by_id(dissertation_document.document_file.id)
-        filename = document.file_name
-        response = HttpResponse(document.file, content_type=document.content_type)
-        response['Content-Disposition'] = 'attachment; filename=%s' % filename
-        return response
+        return download_file(dissertation_document)
     else:
         return redirect('dissertations')
 
@@ -62,14 +59,9 @@ def save_uploaded_file(request):
             document.delete()
             old_document = mdl_osis_common.document_file.find_by_id(document.document_file.id)
             old_document.delete()
-        new_document = mdl_osis_common.document_file.DocumentFile(file_name=file_name,
-                                                                  file=file,
-                                                                  description=description,
-                                                                  storage_duration=storage_duration.FIVE_YEARS,
-                                                                  application_name='dissertation',
-                                                                  content_type=content_type,
-                                                                  size=size,
-                                                                  update_by=request.user.username)
+        new_document = mdl_osis_common.document_file.DocumentFile(
+            file_name=file_name,file=file,description=description,storage_duration=storage_duration.FIVE_YEARS,
+            application_name='dissertation', content_type=content_type,size=size, update_by=request.user.username)
         new_document.save()
         dissertation_file = mdl.dissertation_document_file.DissertationDocumentFile()
         dissertation_file.dissertation = dissertation
