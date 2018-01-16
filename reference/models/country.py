@@ -46,19 +46,3 @@ class Country(SerializableModel):
 
     def __str__(self):
         return self.name
-
-
-def find_all():
-    return Country.objects.order_by('name')
-
-
-def find_by_id(country_id):
-    return Country.objects.get(pk=country_id)
-
-
-def find_excluding(an_iso_code):
-    return Country.objects.exclude(iso_code=an_iso_code).order_by('name')
-
-
-def find_by_iso_code(an_iso_code):
-    return Country.objects.filter(iso_code=an_iso_code).first()
