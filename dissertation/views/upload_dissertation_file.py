@@ -60,8 +60,8 @@ def save_uploaded_file(request):
             old_document = mdl_osis_common.document_file.find_by_id(document.document_file.id)
             old_document.delete()
         new_document = mdl_osis_common.document_file.DocumentFile(
-            file_name=file_name,file=file,description=description,storage_duration=storage_duration.FIVE_YEARS,
-            application_name='dissertation', content_type=content_type,size=size, update_by=request.user.username)
+            file_name=file_name, file=file, description=description, storage_duration=storage_duration.FIVE_YEARS,
+            application_name='dissertation', content_type=content_type, size=size, update_by=request.user.username)
         new_document.save()
         dissertation_file = mdl.dissertation_document_file.DissertationDocumentFile()
         dissertation_file.dissertation = dissertation
