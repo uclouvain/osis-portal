@@ -29,7 +29,8 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 
 class CountryAdmin(SerializableModelAdmin):
     list_display = ('external_id', 'name', 'iso_code', 'nationality', 'european_union', 'dialing_code', 'cref_code')
-    fieldsets = ((None, {'fields': ('iso_code', 'name', 'nationality', 'european_union', 'dialing_code', 'cref_code')}),)
+    fieldsets = ((None, {'fields': ('iso_code', 'name', 'nationality', 'european_union', 'dialing_code',
+                                    'cref_code')}),)
     ordering = ('name',)
     search_fields = ['name']
 
