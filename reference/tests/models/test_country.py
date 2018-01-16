@@ -23,11 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from reference import models as mdl_reference
+from django.test import TestCase
 
+from reference.models import country
+from reference.tests.factories import country as country_factory
 
-def create_country():
-    a_country = mdl_reference.country.Country(iso_code="BE",
-                                              name="Belgium")
-    a_country.save()
-    return a_country
+class TestFindAll(TestCase):
+    def test_with_no_country(self):
+        countries = list(country.find_all())
+        self.assertFalse(countries)
+
+    def test_with_countries(self):
+        country_belgique = country_factory.CountryFactory(name="Belgique")
+        country_france = country_factory.CountryFactory(name="France")
+
+        countries = list(country.find_all())
+        self.assertEqual(countries, [country_belgique, country_france])
