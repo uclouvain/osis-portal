@@ -44,7 +44,6 @@ from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
-from attribution.tests.models import test_attribution_charge
 from attribution.tests.factories.attribution import AttributionFactory
 
 URL_ADE = "url_ade"
@@ -183,14 +182,6 @@ class TutorChargeTest(TestCase):
                                             learning_unit_year=a_learning_unit_year,
                                             tutor=self.a_tutor,
                                             external_id=ATTRIBUTION_EXTERNAL_ID)
-        test_attribution_charge.create_attribution_charge(
-            {'attribution': an_attribution,
-             'learning_unit_component': a_learning_unit_component_lecture,
-             'allocation_charge': ATTRIBUTION_CHARGE_LECTURING_DURATION})
-        test_attribution_charge.create_attribution_charge(
-            {'attribution': an_attribution,
-             'learning_unit_component': a_learning_unit_component_practice,
-             'allocation_charge': ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION})
 
         return {'academic_year':                   an_academic_yr,
                 'learning_unit_year':               a_learning_unit_year,
@@ -236,18 +227,6 @@ class TutorChargeTest(TestCase):
     def get_data(self, key):
         data_year = self.data[0]
         return data_year.get(key, None)
-
-    def test_get_attribution_charge_lecturing_duration(self):
-        self.assertEqual(tutor_charge.attribution_allocation_charges(self.a_tutor,
-                                                                     self.get_data('learning_unit_year'),
-                                                                     component_type.LECTURING),
-                         ATTRIBUTION_CHARGE_LECTURING_DURATION)
-
-    def test_get_attribution_charge_practice_exercises_duration(self):
-        self.assertEqual(tutor_charge.attribution_allocation_charges(self.a_tutor,
-                                                                     self.get_data('learning_unit_year'),
-                                                                     component_type.PRACTICAL_EXERCISES),
-                         ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION)
 
     def test_sum_learning_unit_year_duration(self):
         self.assertEqual(tutor_charge.sum_learning_unit_year_duration(self.get_data('learning_unit_year')),
