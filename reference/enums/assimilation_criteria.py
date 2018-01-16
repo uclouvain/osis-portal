@@ -43,10 +43,3 @@ ASSIMILATION_CRITERIA_CHOICES = (
     (CRITERIA_6, _(CRITERIA_6)),
     (CRITERIA_7, _(CRITERIA_7)),
 )
-
-
-def find(criteria):
-    for elt in ASSIMILATION_CRITERIA_CHOICES:
-        if elt[0] == criteria:
-            return elt
-    return None
