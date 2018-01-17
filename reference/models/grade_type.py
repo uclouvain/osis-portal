@@ -49,15 +49,3 @@ class GradeType(SerializableModel):
 
     def __str__(self):
         return self.name
-
-
-def find_all():
-    return GradeType.objects.all().order_by("name")
-
-
-def find_by_grade(name):
-    return GradeType.objects.filter(name=name).order_by("name")
-
-
-def find_by_id(an_id):
-    return GradeType.objects.get(pk=an_id)

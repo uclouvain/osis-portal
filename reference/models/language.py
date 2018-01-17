@@ -42,23 +42,3 @@ class Language(SerializableModel):
 
     def __str__(self):
         return self.name
-
-
-def find_by_id(a_language_id):
-    return Language.objects.get(pk=a_language_id)
-
-
-def find_languages():
-    return Language.objects.all().order_by('name')
-
-
-def find_recognized_languages():
-    return Language.objects.filter(recognized=True).order_by('name')
-
-
-def find_unrecognized_languages():
-    return Language.objects.filter(recognized=False).order_by('name')
-
-
-def find_by_code(a_code):
-    return Language.objects.get(code=a_code)

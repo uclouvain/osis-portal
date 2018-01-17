@@ -178,7 +178,7 @@ DATABASES = {
 # Enable or disable the admin screen to directly query the database
 ENABLE_SQL_DATA_MANAGEMENT = os.environ.get('ENABLE_SQL_DATA_MANAGEMENT', 'False').lower() == 'true'
 SQL_DATA_MANAGEMENT_READONLY = os.environ.get('SQL_DATA_MANAGEMENT_READONLY', 'False').lower() == 'true'
-FORBIDDEN_SQL_KEYWORDS = os.environ.get('SQL_DATA_MANAGEMENT_READONLY', '').split()
+FORBIDDEN_SQL_KEYWORDS = os.environ.get('FORBIDDEN_SQL_KEYWORDS', '').split()
 
 
 # Password validation

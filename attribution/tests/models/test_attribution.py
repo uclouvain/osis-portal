@@ -85,7 +85,7 @@ class AttributionTest(TestCase):
         attribution_id = self.attribution.id
 
         with connection.cursor() as cursor:
-            cursor.execute("update attribution_attribution set deleted=True where id=%s", [attribution_id])
+            cursor.execute("update attribution_attribution set deleted='2004-10-19 10:23:54' where id=%s", [attribution_id])
 
         with self.assertRaises(ObjectDoesNotExist):
             mdl_attribution.attribution.Attribution.objects.get(id=attribution_id)
