@@ -24,9 +24,19 @@
 #
 ##############################################################################
 from django.contrib.auth.decorators import login_required
+from django.http.response import HttpResponse
 from django.shortcuts import render
+from osis_common import models as mdl_osis_common
 
 
 @login_required
 def home(request):
     return render(request, 'dissertation.html')
+
+
+def download_file(document_to_download):
+    document = mdl_osis_common.document_file.find_by_id(document_to_download.document_file.id)
+    filename = document.file_name
+    response = HttpResponse(document.file, content_type=document.content_type)
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    return response
