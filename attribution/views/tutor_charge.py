@@ -93,18 +93,6 @@ def get_person(a_user):
     return mdl_base.person.find_by_user(a_user)
 
 
-def attribution_allocation_charges(a_tutor, a_learning_unit_year, a_component_type):
-    attribution_list = mdl_attribution.attribution.search(a_tutor, a_learning_unit_year)
-    tot_allocation_charge = NO_ALLOCATION_CHARGE
-    for an_attribution in attribution_list:
-        a_learning_unit_components = mdl_base.learning_unit_component.search(a_learning_unit_year, a_component_type)
-        for a_learning_unit_component in a_learning_unit_components:
-            attribution_charges = mdl_attribution.attribution_charge.search(an_attribution, a_learning_unit_component)
-            for attribution_charge in attribution_charges:
-                tot_allocation_charge += attribution_charge.allocation_charge
-    return tot_allocation_charge
-
-
 def sum_learning_unit_year_duration(a_learning_unit_year):
     tot_duration = DURATION_NUL
     for learning_unit_component in mdl_base.learning_unit_component.search(a_learning_unit_year, None):
@@ -362,19 +350,6 @@ def is_tutor(a_person):
     if mdl_base.tutor.find_by_person(a_person):
         return True
     return False
-
-
-def attribution_allocation_charge(a_learning_unit_year, a_component_type, an_attribution):
-
-    tot_allocation_charge = NO_ALLOCATION_CHARGE
-
-    a_learning_unit_components = mdl_base.learning_unit_component.search(a_learning_unit_year, a_component_type)
-    for a_learning_unit_component in a_learning_unit_components:
-        attribution_charges = mdl_attribution.attribution_charge.search(an_attribution, a_learning_unit_component)
-        for attribution_charge in attribution_charges:
-            tot_allocation_charge += attribution_charge.allocation_charge
-
-    return tot_allocation_charge
 
 
 def calculate_attribution_format_percentage_allocation_charge(lecturing_charge, practical_charge, learning_unit_charge):
