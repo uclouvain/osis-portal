@@ -266,7 +266,7 @@ class TutorChargeTest(TestCase):
 
     def test_format_students_email(self):
         email_expected = "{0}{1}{2}".format(tutor_charge.MAIL_TO, ACRONYM.lower(), tutor_charge.STUDENT_LIST_EMAIL_END)
-        self.assertEqual(tutor_charge.get_email_students(ACRONYM, tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST -1 ), email_expected)
+        self.assertEqual(tutor_charge.get_email_students(ACRONYM, tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST - 1), email_expected)
 
     def test_format_students_email_new_management(self):
         email_expected = "{0}{1}-{2}{3}".format(tutor_charge.MAIL_TO, ACRONYM.lower(), tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST, tutor_charge.STUDENT_LIST_EMAIL_END)
@@ -329,15 +329,6 @@ class TutorChargeTest(TestCase):
     def test_no_current_academic_year(self):
         a_year = datetime.datetime.now().year
         self.assertEqual(tutor_charge.get_current_academic_year(), a_year)
-
-    def test_string_none(self):
-        self.assertFalse(tutor_charge.is_string_not_null_empty(None))
-
-    def test_string_empty(self):
-        self.assertFalse(tutor_charge.is_string_not_null_empty(""))
-
-    def test_string_not_empty(self):
-        self.assertTrue(tutor_charge.is_string_not_null_empty("test"))
 
     @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge)
     def test_list_teaching_charge_for_multiple_attributions_less_in_json(self, mock_requests_get):
@@ -659,3 +650,4 @@ class HomeTest(TestCase):
                                         attribution['practice_allocation_charge'],
                                         attribution['percentage_allocation_charge']], attributions)
         self.assertIn([str(LEARNING_UNIT_LECTURING_DURATION), None, "25.0"], reduced_list_attributions)
+

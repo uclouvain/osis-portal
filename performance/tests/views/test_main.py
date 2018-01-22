@@ -127,7 +127,8 @@ class ViewPerformanceHomeTest(TestCase):
                          offer_registration_state.STATES_TO_SHOW_ON_PAGE)
 
     def test_with_program_list(self):
-        a_student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id)
+        a_student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id,
+                                                          academic_year=2017)
 
         response = self.client.get(self.url)
 
@@ -289,7 +290,8 @@ class VisualizeStudentPrograms(TestCase):
         self.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
         Group.objects.create(name="students")
         self.student = StudentFactory()
-        self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id)
+        self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id,
+                                                             academic_year=2017)
 
         self.url = reverse('performance_student_programs_admin', args=[self.student.registration_id])
 

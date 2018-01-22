@@ -2,3 +2,6 @@
 	path = osis_common
 	url = https://github.com/uclouvain/osis-common.git
         branch = master
+[submodule "internship"]
+	path = internship
+	url = https://github.com/uclouvain/osis-portal-internship.git

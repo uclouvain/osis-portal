@@ -43,4 +43,5 @@ class LearningUnitYearFactory(factory.django.DjangoModelFactory):
     weight = 5
     academic_year = factory.SubFactory(AcademicYearFactory)
     learning_unit = factory.SubFactory(LearningUnitFactory)
+    learning_container_year = None
     subtype = learning_unit_year_subtypes.FULL

@@ -125,3 +125,11 @@ if hasattr(settings, 'QUEUES') and settings.QUEUES:
                 process_message).start()
         except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
             LOGGER.exception("Couldn't connect to the QueueServer")
+
+        from attribution.utils.tutor_application_osis import process_message
+        try:
+            common_queue_listener.SynchronousConsumerThread(
+                settings.QUEUES.get('QUEUES_NAME').get('APPLICATION_OSIS_PORTAL'),
+                process_message).start()
+        except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
+            LOGGER.exception("Couldn't connect to the QueueServer")
