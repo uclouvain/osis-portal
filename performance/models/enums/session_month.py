@@ -1,7 +1,0 @@
-JANUARY = 'JANUARY'
-JUNE = 'JUNE'
-SEPTEMBER = 'SEPTEMBER'
-
-SESSION_MONTHS = ((JANUARY, JANUARY),
-                  (JUNE, JUNE),
-                  (SEPTEMBER, SEPTEMBER))
