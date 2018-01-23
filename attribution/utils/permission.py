@@ -38,6 +38,16 @@ def is_online_application_opened(user):
     return False
 
 
+def is_summary_course_submission_opened(user):
+    current_academic_year = mdl_base.academic_year.current_academic_year()
+    if current_academic_year:
+        return mdl_base.academic_calendar.is_academic_calendar_opened(
+            current_academic_year,
+            academic_calendar_type.SUMMARY_COURSE_SUBMISSION
+        )
+    return False
+
+
 def is_summary_responsible(a_user):
     a_tutor = mdl_base.tutor.find_by_user(a_user)
     if a_tutor:
