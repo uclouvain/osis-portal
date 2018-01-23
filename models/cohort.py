@@ -28,22 +28,10 @@ from osis_common.models.serializable_model import SerializableModelAdmin, Serial
 
 
 class CohortAdmin(SerializableModelAdmin):
-    list_display = (
-            'name',
-            'description',
-            'free_internships_number',
-            'publication_start_date',
-            'subscription_start_date',
-            'subscription_end_date')
-    fieldsets = ((None, {'fields':
-        (
-            'name',
-            'description',
-            'free_internships_number',
-            'publication_start_date',
-            'subscription_start_date',
-            'subscription_end_date'
-        )}),)
+    list_display = ('name', 'description', 'free_internships_number', 'publication_start_date',
+                    'subscription_start_date', 'subscription_end_date')
+    fieldsets = ((None, {'fields': ('name', 'description', 'free_internships_number', 'publication_start_date',
+                                    'subscription_start_date', 'subscription_end_date')}),)
 
 
 class Cohort(SerializableModel):

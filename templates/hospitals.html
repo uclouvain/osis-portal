@@ -77,27 +77,31 @@
         <div class="row">
             <table class="table table-striped table-hover">
                 <thead>
-                    <th>{% trans 'reference' %}</th>
-                    <th>{% trans 'name' %}</th>
-                    <th>{% trans 'address' %}</th>
-                    <th>{% trans 'postal_code' %}</th>
-                    <th>{% trans 'city' %}</th>
-                    <th>{% trans 'country' %}</th>
-                    <th>{% trans 'website' %}</th>
+                    <tr>
+                        <th>{% trans 'reference' %}</th>
+                        <th>{% trans 'name' %}</th>
+                        <th>{% trans 'address' %}</th>
+                        <th>{% trans 'postal_code' %}</th>
+                        <th>{% trans 'city' %}</th>
+                        <th>{% trans 'country' %}</th>
+                        <th>{% trans 'website' %}</th>
+                    </tr>
                 </thead>
-                {% for organization, address in hospitals %}
-                <tr>
-                    <td>{{ organization.reference }}</td>
-                    <td>{{ organization.name }}</td>
-                    <td>{{ address.location }}</td>
-                    <td>{{ address.postal_code }}</td>
-                    <td>{{ address.city }}</td>
-                    <td>{{ address.country }}</td>
-                    <td>{% if organization.website %}
-                        <a href="{{ organization.website }}">{{ organization.website }}</a>
-                        {% endif %}
-                    </td>
-                </tr>
+                {% for hospital in hospitals %}
+                    <tbody>
+                        <tr>
+                            <td>{{ hospital.reference }}</td>
+                            <td>{{ hospital.name }}</td>
+                            <td>{{ hospital.location | default_if_none:'' }}</td>
+                            <td>{{ hospital.postal_code | default_if_none:'' }}</td>
+                            <td>{{ hospital.city | default_if_none:'' }}</td>
+                            <td>{{ hospital.country | default_if_none:'' }}</td>
+                            <td>{% if hospital.website %}
+                                <a href="{{ hospital.website }}">{{ hospital.website }}</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
                 {% endfor %}
             </table>
         </div>

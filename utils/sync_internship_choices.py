@@ -24,10 +24,8 @@
 #
 ##############################################################################
 import csv
-import sys
-import operator
-import uuid
 from django.db import connection
+
 
 class InternshipChoiceSynchronizer:
     def __init__(self, choices_file=None):

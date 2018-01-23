@@ -30,10 +30,9 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class InternshipStudentInformationAdmin(SerializableModelAdmin):
-    list_display = ('person', 'location', 'postal_code', 'city', 'country', 'latitude', 'longitude', 'email',
-                    'phone_mobile', 'contest', 'cohort')
-    fieldsets = ((None, {'fields': ('person', 'location', 'postal_code', 'city', 'latitude', 'longitude', 'country',
-                                    'email', 'phone_mobile', 'contest', 'cohort')}),)
+    list_display = ('person', 'location', 'postal_code', 'city', 'country', 'email', 'phone_mobile', 'contest', 'cohort')
+    fieldsets = ((None, {'fields': ('person', 'location', 'postal_code', 'city', 'country', 'email', 'phone_mobile',
+                                    'contest', 'cohort')}),)
     raw_id_fields = ('person', 'cohort')
     list_filter = ('contest', 'country')
     search_fields = ['person__user__username', 'person__last_name', 'person__first_name']
@@ -43,16 +42,14 @@ class InternshipStudentInformation(SerializableModel):
     TYPE_CHOICE = (('SPECIALIST', _('specialist')),
                    ('GENERALIST', _('generalist')))
     person = models.ForeignKey('base.Person')
-    cohort = models.ForeignKey('internship.Cohort')
     location = models.CharField(max_length=255)
     postal_code = models.CharField(max_length=20)
     city = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
-    latitude = models.FloatField(blank=True, null=True)
-    longitude = models.FloatField(blank=True, null=True)
     email = models.EmailField(max_length=255, blank=True, null=True)
     phone_mobile = models.CharField(max_length=100, blank=True, null=True)
     contest = models.CharField(max_length=124, choices=TYPE_CHOICE, default="GENERALIST")
+    cohort = models.ForeignKey('internship.Cohort')
 
     def __str__(self):
         return u"%s" % self.person
@@ -66,16 +63,8 @@ def find_by_user_and_cohort(user, cohort):
 
 
 def find_by_person(person):
-    try:
-        return InternshipStudentInformation.objects.get(person=person)
-    except ObjectDoesNotExist:
-        return None
-
-
-def filter_by_cohort(cohort):
-    return InternshipStudentInformation.objects.filter(cohort=cohort)
+    return InternshipStudentInformation.objects.filter(person=person)
 
 
 def exists_by_person(person):
     return InternshipStudentInformation.objects.filter(person=person).exists()
-

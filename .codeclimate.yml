@@ -1,14 +1,11 @@
-version: "2"
-
-checks:
-  file-lines:
-    enabled: false
-
-plugins:
+engines:
   pep8:
     enabled: true
+    checks:
+      E501:
+        enabled: false
 
-exclude_patterns:
-- "**/tests/"
-- "**/migrations/"
-- "**/fixtures/"
+exclude_paths:
+- "migrations"
+- "tests"
+- "fixtures"

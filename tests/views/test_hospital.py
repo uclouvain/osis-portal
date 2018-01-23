@@ -27,9 +27,9 @@ from django.test import TestCase, Client
 import base.tests.models.test_student
 from django.contrib.auth.models import User, Permission
 from django.core.urlresolvers import reverse
-from internship.tests.models import test_organization_address, test_organization, test_internship_student_information
-from internship.views import hospital
+from internship.tests.models import test_internship_student_information
 from internship.tests.factories.cohort import CohortFactory
+
 
 class TestHospitalUrl(TestCase):
     def setUp(self):
@@ -50,52 +50,6 @@ class TestHospitalUrl(TestCase):
         self.c.force_login(self.user)
         response = self.c.get(home_url)
         self.assertEqual(response.status_code, 200)
-
-class TestGetHospitals(TestCase):
-    def setUp(self):
-        self.cohort = CohortFactory()
-        self.organization_1 = test_organization.create_organization(cohort=self.cohort)
-        self.organization_address_1 = \
-            test_organization_address.create_organization_address(self.organization_1, city="city1")
-        self.organization_2 = test_organization.create_organization(reference='02', cohort=self.cohort)
-        self.organization_address_2 = \
-            test_organization_address.create_organization_address(self.organization_2, city="city2")
-        self.organization_3 = test_organization.create_organization(name="OSAS", reference='03', cohort=self.cohort)
-        self.organization_address_3 = \
-            test_organization_address.create_organization_address(self.organization_3, city="city1")
-
-    def test_with_no_criteria(self):
-        hospitals = hospital.get_hospitals(cohort=self.cohort)
-        self.assertEqual(len(hospitals), 3)
-        self.assertIn((self.organization_1, self.organization_address_1), hospitals)
-        self.assertIn((self.organization_2, self.organization_address_2), hospitals)
-        self.assertIn((self.organization_3, self.organization_address_3), hospitals)
-
-    def test_with_name(self):
-        hospitals = hospital.get_hospitals(name="OSIS", cohort=self.cohort)
-        self.assertEqual(len(hospitals), 2)
-        self.assertIn((self.organization_1, self.organization_address_1), hospitals)
-        self.assertIn((self.organization_2, self.organization_address_2), hospitals)
-
-    def test_with_city(self):
-        hospitals = hospital.get_hospitals(city="city1", cohort=self.cohort)
-        self.assertEqual(len(hospitals), 2)
-        self.assertIn((self.organization_1, self.organization_address_1), hospitals)
-        self.assertIn((self.organization_3, self.organization_address_3), hospitals)
-
-    def test_with_name_and_city(self):
-        hospitals = hospital.get_hospitals(name="OSIS", city="city2", cohort=self.cohort)
-        self.assertEqual(len(hospitals), 1)
-        self.assertIn((self.organization_2, self.organization_address_2), hospitals)
-
-    def test_with_organization_without_address(self):
-        organization = test_organization.create_organization(name="NO_ADDRESS", cohort=self.cohort)
-        hospitals = hospital.get_hospitals(name="NO_ADDRESS", cohort=self.cohort)
-        self.assertEqual(len(hospitals), 1)
-        self.assertIn((organization, None), hospitals)
-
-        hospitals = hospital.get_hospitals(name="NO_ADDRESS", city="city", cohort=self.cohort)
-        self.assertEqual(len(hospitals), 0)
 
 
 def add_permission(user, codename):

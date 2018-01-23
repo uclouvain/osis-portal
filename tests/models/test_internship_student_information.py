@@ -80,7 +80,7 @@ class TestFindByPerson(TestCase):
         self.assertFalse(student_information)
 
     def test_with_information_for_user(self):
-        self.assertEqual(mdl_student_information.find_by_person(self.student_information.person),
+        self.assertEqual(mdl_student_information.find_by_person(self.student_information.person).first(),
                          self.student_information)
 
 

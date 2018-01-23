@@ -25,10 +25,10 @@
 #
 ############################################################################
 from django import template
-from django.template import Template
 from django.core.exceptions import ObjectDoesNotExist
 
 register = template.Library()
+
 
 @register.assignment_tag
 def choice_for_offer(internship_choices, offer, internship):

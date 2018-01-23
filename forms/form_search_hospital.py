@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
 from django import forms
 
 
@@ -36,4 +35,3 @@ class SearchHospitalForm(forms.Form):
 
     name = forms.CharField(max_length=255, required=False)
     city = forms.ChoiceField(required=False)
-

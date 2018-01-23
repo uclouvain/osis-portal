@@ -30,11 +30,11 @@ from django.contrib.auth.models import User, Permission
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from internship.tests.models import test_internship_offer, test_organization, test_internship_speciality, \
-    test_internship_choice, test_period, test_internship_student_information
+    test_internship_choice, test_internship_student_information
 from internship.models import internship_choice as mdl_internship_choice
-from internship.models import period_internship_places as mdl_period_places
 from internship.tests.factories.cohort import CohortFactory
 from internship.tests.factories.internship import InternshipFactory
+
 
 class TestMain(TestCase):
     def setUp(self):
@@ -117,14 +117,6 @@ class TestSelectInternship(TestCase):
 
         self.offer_5 = test_internship_offer.create_specific_internship_offer(self.organization_1, self.speciality_2, cohort=self.cohort)
         self.offer_6 = test_internship_offer.create_specific_internship_offer(self.organization_5, self.speciality_2, cohort=self.cohort)
-
-        period_9 = test_period.create_period("P9", cohort=self.cohort)
-        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship_offer=self.offer_1, number_places=5).save()
-        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship_offer=self.offer_2, number_places=5).save()
-        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship_offer=self.offer_3, number_places=5).save()
-        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship_offer=self.offer_4, number_places=5).save()
-        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship_offer=self.offer_5, number_places=5).save()
-        mdl_period_places.PeriodInternshipPlaces(period=period_9, internship_offer=self.offer_6, number_places=5).save()
 
     def test_with_zero_choices(self):
         selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship_1.id,

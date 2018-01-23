@@ -28,18 +28,22 @@ from django.db import models
 
 
 class OrganizationAdmin(SerializableModelAdmin):
-    list_display = ('name', 'acronym', 'reference', 'type', 'cohort')
-    fieldsets = ((None, {'fields': ('name', 'acronym', 'reference', 'website', 'type')}),)
+    list_display = ('name', 'acronym', 'reference', 'cohort', 'website')
+    fieldsets = ((None, {'fields': ('name', 'acronym', 'reference', 'website', 'cohort')}),)
     search_fields = ['acronym', 'name']
+    list_filter = ['cohort']
 
 
 class Organization(SerializableModel):
     name = models.CharField(max_length=255)
-    cohort = models.ForeignKey('internship.Cohort', null=False)
     acronym = models.CharField(max_length=15, blank=True)
     website = models.URLField(max_length=255, blank=True, null=True)
     reference = models.CharField(max_length=30, blank=True, null=True)
-    type = models.CharField(max_length=30, blank=True, null=True, default="service partner")
+    location = models.CharField(max_length=255, blank=True, null=True)
+    postal_code = models.CharField(max_length=20, blank=True, null=True)
+    city = models.CharField(max_length=255, blank=True, null=True)
+    country = models.ForeignKey('reference.Country', blank=True, null=True)
+    cohort = models.ForeignKey('internship.Cohort', null=False)
 
     def __str__(self):
         return u"%s" % self.name
@@ -48,8 +52,22 @@ class Organization(SerializableModel):
         self.acronym = self.name[:14]
         super(Organization, self).save(*args, **kwargs)
 
-def filter_by_cohort(cohort):
+
+def find_by_cohort(cohort):
     return Organization.objects.filter(cohort_id=cohort.pk)
 
-def search(name, cohort):
-    return Organization.objects.filter(name__icontains=name, cohort=cohort)
+
+def search(cohort, name="", city=""):
+    organizations = Organization.objects.filter(cohort=cohort)
+
+    if name:
+        organizations = organizations.filter(name__icontains=name)
+
+    if city:
+        organizations = organizations.filter(city__icontains=city)
+
+    return organizations
+
+
+def get_all_cities():
+    return list(Organization.objects.values_list('city', flat=True).distinct('city').order_by('city'))

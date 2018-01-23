@@ -39,12 +39,6 @@ admin.site.register(organization.Organization,
 admin.site.register(internship_choice.InternshipChoice,
                     internship_choice.InternshipChoiceAdmin)
 
-admin.site.register(organization_address.OrganizationAddress,
-                    organization_address.OrganizationAddressAdmin)
-
-admin.site.register(internship_master.InternshipMaster,
-                    internship_master.InternshipMasterAdmin)
-
 admin.site.register(internship_student_information.InternshipStudentInformation,
                     internship_student_information.InternshipStudentInformationAdmin)
 
@@ -59,7 +53,3 @@ admin.site.register(internship.Internship,
 
 admin.site.register(internship_student_affectation_stat.InternshipStudentAffectationStat,
                     internship_student_affectation_stat.InternshipStudentAffectationStatAdmin)
-
-admin.site.register(period_internship_places.PeriodInternshipPlaces,
-                    period_internship_places.PeriodInternshipPlacesAdmin)
-

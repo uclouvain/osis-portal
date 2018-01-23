@@ -150,22 +150,19 @@
 
             {% if publication_allowed %}
             <div role="tabpanel" class="tab-pane" id="affectation">
-                {% for affectation, address in student_affectations_with_address %}
+                {% for affectation in student_affectations %}
                 <div class="row">
                 <br>
                     <strong>{{ affectation.period.name }}</strong> ({{ affectation.period.date_start }} - {{ affectation.period.date_end }})
                     <br>
                     {{ affectation.speciality.name }} | {{ affectation.organization }}
                     <br>
-                    Address: {{ address.location }}
+                    Address: {{ affectation.organization.location }}
                 </div>
                 {% endfor %}
             </div>
             {% endif %}
-
         </div>
-
-
     </div>
 </div>
 {% endblock %}

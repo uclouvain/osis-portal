@@ -24,7 +24,7 @@
 #
 ##############################################################################
 from django.conf.urls import url
-from internship.views import main, hospital, master, resume
+from internship.views import main, hospital, resume
 
 urlpatterns = [
     url(r'^$', main.view_cohort_selection, name="internship"),
@@ -41,5 +41,4 @@ urlpatterns = [
 
     url(r'^cohort/(?P<cohort_id>[0-9]+)/resume/$', resume.view_student_resume, name='student_resume'),
     url(r'^cohort/(?P<cohort_id>[0-9]+)/edit_info/$', resume.edit_student_information, name='internship_student_edit'),
-
 ]

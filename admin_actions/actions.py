@@ -27,8 +27,8 @@ import unicodecsv
 import datetime
 from django.http import HttpResponse
 
-def export_as_csv_action(description="Export objects as CSV",
-                         fields=None, exclude=None, header=True):
+
+def export_as_csv_action(description="Export objects as CSV", fields=None, exclude=None, header=True):
 
     def export_as_csv(adminmodel, request, queryset):
         opts = adminmodel.model._meta

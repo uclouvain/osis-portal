@@ -24,14 +24,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
-from django.contrib.auth.decorators import login_required, permission_required
-from django.core.exceptions import MultipleObjectsReturned
 import datetime
+from django.contrib.auth.decorators import login_required, permission_required
 
 from base.views import layout
 from internship.models import internship_student_information as mdl_student_information
 from internship.models import internship_student_affectation_stat as mdl_student_affectation
-from internship.models import organization_address as mdl_organization_address
 from internship.models import internship_choice as mdl_internship_choice
 from internship.models import internship as mdl_internship
 from internship.models import period as mdl_period
@@ -40,7 +38,6 @@ from internship.models import cohort as mdl_internship_cohort
 from internship.forms import form_internship_student_information
 from base.models import student as mdl_student
 from base.models import person as mdl_person
-from dashboard.views import main as dash_main_view
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
 from internship.decorators.global_view_decorators import redirect_if_multiple_registrations
 
@@ -50,25 +47,21 @@ from internship.decorators.global_view_decorators import redirect_if_multiple_re
 @redirect_if_multiple_registrations
 @redirect_if_not_in_cohort
 def view_student_resume(request, cohort_id):
-    cohort      = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
-    student     = mdl_student.find_by_user(request.user)
+    cohort = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
+    student = mdl_student.find_by_user(request.user)
     internships = mdl_internship.Internship.objects.filter(cohort=cohort)
 
     student_information = mdl_student_information.find_by_user_and_cohort(request.user, cohort=cohort)
     periods = mdl_period.Period.objects.filter(cohort=cohort)
     period_ids = periods.values_list("pk", flat=True)
     student_affectations = mdl_student_affectation.InternshipStudentAffectationStat.objects.filter(student=student, period_id__in=period_ids).order_by("period__name")
-    student_affectations_with_address = \
-        [(affectation, mdl_organization_address.get_by_organization(affectation.organization)) for affectation in
-         student_affectations]
     specialities = mdl_internship_speciality.filter_by_cohort(cohort)
     student_choices = mdl_internship_choice.search(student=student, specialities=specialities)
     cohort = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
     publication_allowed  = cohort.publication_start_date <= datetime.date.today()
     return layout.render(request, "student_resume.html", {"student": student,
                                                           "student_information": student_information,
-                                                          "student_affectations_with_address":
-                                                              student_affectations_with_address,
+                                                          "student_affectations": student_affectations,
                                                           "student_choices": student_choices,
                                                           "internships": internships,
                                                           "publication_allowed": publication_allowed,

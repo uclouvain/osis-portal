@@ -35,10 +35,9 @@ from internship.decorators.cohort_view_decorators import redirect_if_not_in_coho
 @permission_required('internship.can_access_internship', raise_exception=True)
 @redirect_if_not_in_cohort
 def view_hospitals_list(request, cohort_id):
-    cities = mdl_internship.organization_address.get_all_cities()
+    cities = mdl_internship.organization.get_all_cities()
     name = ""
     city = ""
-    hospitals = []
     cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
 
     if request.method == 'POST':
@@ -46,35 +45,13 @@ def view_hospitals_list(request, cohort_id):
         if form.is_valid():
             name = form.cleaned_data['name']
             city = form.cleaned_data['city']
-
     else:
         form = SearchHospitalForm(cities)
 
-    hospitals = get_hospitals(name=name, city=city, cohort=cohort)
+    hospitals = mdl_internship.organization.search(cohort, name, city)
 
     return layout.render(request, "hospitals.html", {'search_form': form,
                                                      'hospitals': hospitals,
                                                      'cohort': cohort,
                                                      'name': name,
                                                      'city': city})
-
-
-def get_hospitals(cohort, name="", city=""):
-    if name:
-        organizations = mdl_internship.organization.search(name, cohort)
-    else:
-        organizations = mdl_internship.organization.filter_by_cohort(cohort)
-    hospitals = []
-
-    for organization in organizations:
-        organization_address = mdl_internship.organization_address.get_by_organization(organization)
-        if is_in_city(organization_address, city):
-            hospitals.append((organization, organization_address))
-    return hospitals
-
-
-def is_in_city(organization_address, city):
-    if not city:
-        return True
-    return False if not organization_address else organization_address.city == city
-

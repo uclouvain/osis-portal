@@ -34,6 +34,7 @@ from django.shortcuts import redirect
 from django.core.exceptions import MultipleObjectsReturned
 from internship.models.cohort import Cohort
 
+
 def redirect_if_not_in_cohort(function):
     @wraps(function)
     def wrapper(request, cohort_id, *args, **kwargs):
@@ -49,6 +50,7 @@ def redirect_if_not_in_cohort(function):
             return redirect(reverse("internship"))
 
     return wrapper
+
 
 def redirect_if_subscription_not_allowed(function):
     @wraps(function)

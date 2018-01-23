@@ -28,6 +28,7 @@ from internship.models import internship_offer
 from internship.tests.models import test_organization, test_internship_speciality
 from internship.tests.factories.cohort import CohortFactory
 
+
 def create_internship_offer(cohort=None):
     if cohort == None:
         cohort = CohortFactory()

@@ -29,6 +29,7 @@ from functools import wraps
 from dashboard.views import main as dash_main_view
 from django.core.exceptions import MultipleObjectsReturned
 
+
 def redirect_if_multiple_registrations(function):
     @wraps(function)
     def wrapper(request, *args, **kwargs):
@@ -39,4 +40,3 @@ def redirect_if_multiple_registrations(function):
         response = function(request, *args, **kwargs)
         return response
     return wrapper
-

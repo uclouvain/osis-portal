@@ -34,12 +34,9 @@ class PeriodAdmin(SerializableModelAdmin):
 
 class Period(SerializableModel):
     name = models.CharField(max_length=255)
-    cohort = models.ForeignKey('internship.Cohort', null=False)
     date_start = models.DateField(blank=False)
     date_end = models.DateField(blank=False)
-
-    def find_by_cohort(cohort):
-        return InternshipOffer.objects.filter(cohort=cohort)
+    cohort = models.ForeignKey('internship.Cohort', null=False)
 
     def __str__(self):
         return u"%s" % self.name
