@@ -40,7 +40,7 @@ def _is_academic_calendar_event_opened(calendar_type):
     current_academic_year = mdl_base.academic_year.current_academic_year()
     if not current_academic_year:
         return False
-    return mdl_base.academic_calendar.is_academic_calendar_opened( current_academic_year, calendar_type)
+    return mdl_base.academic_calendar.is_academic_calendar_opened(current_academic_year, calendar_type)
 
 
 def is_summary_responsible(a_user):
