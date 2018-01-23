@@ -30,6 +30,5 @@ from attribution.models import attribution_new, attribution
 
 admin.site.register(attribution_new.AttributionNew,
                     attribution_new.AttributionNewAdmin)
-
 admin.site.register(attribution.Attribution,
                     attribution.AttributionAdmin)
