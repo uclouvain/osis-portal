@@ -23,22 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
+from django.conf.urls import url, include
 from internship.views import main, hospital, resume
 
 urlpatterns = [
     url(r'^$', main.view_cohort_selection, name="internship"),
-    url(r'^cohort/(?P<cohort_id>[0-9]+)$', main.view_internship_home, name='internship_home'),
-    url(r'^cohort/(?P<cohort_id>[0-9]+)/speciality_assignment/(?P<internship_id>[0-9]+)/$', main.assign_speciality_for_internship,
-        name='assign_speciality'),
 
-    url(r'^cohort/(?P<cohort_id>[0-9]+)/selection/$', main.view_internship_selection, name='select_internship'),
-    url(r'^cohort/(?P<cohort_id>[0-9]+)/selection/(?P<internship_id>[0-9]+)/$', main.view_internship_selection, name='select_specific_internship'),
-    url(r'^cohort/(?P<cohort_id>[0-9]+)/selection/(?P<internship_id>[0-9]+)/(?P<speciality_id>[0-9]+)/$', main.view_internship_selection,
-        name='select_internship_speciality'),
+    url(r'^cohort/(?P<cohort_id>[0-9]+)/', include([
+        url(r'^$', main.view_internship_home, name='internship_home'),
+        url(r'^selection/$', main.view_internship_selection, name='select_internship'),
+        url(r'^hospitals/$', hospital.view_hospitals_list, name='hospitals_list'),
+        url(r'^resume/$', resume.view_student_resume, name='student_resume'),
+        url(r'^edit_info/$', resume.edit_student_information, name='internship_student_edit'),
 
-    url(r'^cohort/(?P<cohort_id>[0-9]+)/hospitals/$', hospital.view_hospitals_list, name='hospitals_list'),
-
-    url(r'^cohort/(?P<cohort_id>[0-9]+)/resume/$', resume.view_student_resume, name='student_resume'),
-    url(r'^cohort/(?P<cohort_id>[0-9]+)/edit_info/$', resume.edit_student_information, name='internship_student_edit'),
+        url(r'^(?P<internship_id>[0-9]+)/', include([
+            url(r'^speciality_assignment/$', main.assign_speciality_for_internship, name='assign_speciality'),
+            url(r'^selection/$', main.view_internship_selection, name='select_specific_internship'),
+            url(r'^selection/(?P<speciality_id>[0-9]+)/$', main.view_internship_selection,
+                name='select_internship_speciality'),
+        ]))
+    ]))
 ]

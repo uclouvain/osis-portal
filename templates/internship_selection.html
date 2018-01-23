@@ -40,103 +40,92 @@
 
 {% include "template_messages.html" %}
 
-<div class="panel panel-default">
-    <div class="panel-body">
+<ul class="nav nav-tabs">
+    {% for internship in internships %}
+        <li role="presentation" {% if current_internship.id == internship.id %} class="active" {% endif %}><a href="{% url 'select_specific_internship' internship_id=internship.id cohort_id=cohort.id %}">{{ internship.name }}</a></li>
+    {% endfor %}
+</ul>
+<br>
 
-        <div class="row">
-          <div class="col-lg-12">
-            <ul class="nav nav-tabs">
-                {% for internship in internships %}
-                    <li role="presentation" {% if current_internship.id == internship.id %} class="active" {% endif %}><a href="{% url 'select_specific_internship' internship_id=internship.id cohort_id=cohort.id %}">{{ internship.name }}</a></li>
-                {% endfor %}
-            </ul>
-          </div>
-        </div>
-
-        <br>
-
-
-        {% if current_internship.speciality == None %}
-        <div class="row">
+{% if current_internship.speciality == None %}
+    <div class="panel panel-default">
+        <div class="panel-body">
             <form action="{% url 'assign_speciality' internship_id=current_internship.id cohort_id=cohort.id %}"  method="post">
                 {% csrf_token %}
                 <div class="fieldWrapper col-md-6 form-group">
                     <label for="speciality_selection">{% trans 'choose_speciality' %}:</label>
                     <div class="row">
-                      <div class="col-md-8">
-                        <select id="speciality_selection"
-                                name="speciality_id"
-                                class="form-control">
-                            <option value="">-----</option>
-                            {% for speciality in all_specialities %}
-                                <option value="{{ speciality.id }}"
-                                    {% if speciality_id == speciality.id %} selected {% endif %}>
-                                    {{ speciality.name }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                      </div>
-
-                      <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary">
-                            <span class="glyphicon glyphicon-ok"></span>
-                        </button>
-                      </div>
+                        <div class="col-md-8">
+                            <select id="speciality_selection"
+                                    name="speciality_id"
+                                    class="form-control">
+                                <option value="">-----</option>
+                                {% for speciality in all_specialities %}
+                                    <option value="{{ speciality.id }}"
+                                        {% if speciality_id == speciality.id %} selected {% endif %}>
+                                        {{ speciality.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary">
+                                <span class="glyphicon glyphicon-ok"></span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>
-          </div>
         </div>
-        {% endif %}
-
-         <div class="col-lg-12">
-           {% if offers_forms  %}
-           <form id="assign_preference" method="post">
-               {% csrf_token %}
-                {{ formset.management_form }}
-               <table class="table table-striped">
-                   <thead>
-                       <th>{% trans 'organization' %}</th>
-                       <th>{% trans 'student_max' %}</th>
-                       <th>{% trans 'number_first_choice' %}</th>
-                       <th>{% trans 'preference' %}</th>
-                   </thead>
-
-                    {% for offer, form, number_first_choices in  offers_forms %}
-                   <tr>
-                        <td>{{ offer.organization }}</td>
-                        <td>{{ offer.maximum_enrollments }}</td>
-                        <td> {{ number_first_choices }} </td>
-                        <td hidden>
-                            <input type="number" id="{{ form.offer.id_for_label }}" name="{{ form.offer.html_name }}" class="form-control" value="{{ offer.pk }}">
-                        </td>
-                        <td>
-                            <select id="{{ form.preference.id_for_label }}" name="{{ form.preference.html_name }}" class="form-control">
-                                {% for x,y in form.fields.preference.choices %}
-                                {% choice_for_offer internship_choices offer current_internship as choice %}
-                                <option value="{{ x }}" {% if x == choice %} selected{% endif %}>
-                                    <span>{{ y }}</span>
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                   </tr>
-                    {% endfor %}
-               </table>
-
-                <br>
-
-                {% if can_submit%}
-                <button type="submit" class="btn btn-primary">
-                    <span class="glyphicon glyphicon-ok"></span>
-                    {% trans 'submit_choices' %}
-                </button>
-                {% endif %}
-           </form>
-           {% endif %}
-         </div>
-
-
     </div>
-</div>
+{% endif %}
+
+<form id="assign_preference" method="post">
+    <div class="panel panel-default">
+        {% if offers_forms  %}
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>{% trans 'organization' %}</th>
+                        <th>{% trans 'student_max' %}</th>
+                        <th>{% trans 'number_first_choice' %}</th>
+                        <th>{% trans 'preference' %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for offer, form, number_first_choices in offers_forms %}
+                        <tr>
+                            <td>{{ offer.organization }}</td>
+                            <td>{{ offer.maximum_enrollments }}</td>
+                            <td> {{ number_first_choices }} </td>
+                            <td hidden>
+                                <input type="number" id="{{ form.offer.id_for_label }}" name="{{ form.offer.html_name }}" class="form-control" value="{{ offer.pk }}">
+                            </td>
+                            <td>
+                                <select id="{{ form.preference.id_for_label }}" name="{{ form.preference.html_name }}" class="form-control">
+                                    {% for x,y in form.fields.preference.choices %}
+                                    {% choice_for_offer internship_choices offer current_internship as choice %}
+                                    <option value="{{ x }}" {% if x == choice %} selected{% endif %}>
+                                        <span>{{ y }}</span>
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="panel-footer">
+                {% if can_submit%}
+                    <button type="submit" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-ok"></span> {% trans 'submit_choices' %}
+                    </button>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</form>
 {% endblock %}

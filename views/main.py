@@ -69,8 +69,8 @@ def view_cohort_selection(request):
 @redirect_if_not_in_cohort
 def view_internship_home(request, cohort_id):
     cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
-    subscription_allowed = cohort.subscription_start_date <= datetime.date.today() and \
-                           datetime.date.today() <= cohort.subscription_end_date
+    today = datetime.date.today()
+    subscription_allowed = cohort.subscription_start_date <= today <= cohort.subscription_end_date
     return layout.render(request, "internship_home.html", locals())
 
 
@@ -98,10 +98,10 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
     if not is_open:
         return layout.render(request, "internship_selection_closed.html", {'cohort': cohort})
 
-    if (current_choice != None) and (int(speciality_id) < 0):
+    if current_choice is not None and int(speciality_id) < 0:
         speciality_id = current_choice.speciality_id
 
-    if current_internship.speciality != None:
+    if current_internship.speciality is not None:
         speciality = current_internship.speciality
         selectable_offers = mdl_internship.internship_offer.InternshipOffer.objects.filter(cohort=cohort, selectable=True).order_by("organization__reference")
     else:
@@ -112,8 +112,8 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
         specialities = specialities.filter(id__in=speciality_ids).order_by("name")
 
     offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet,
-                                            extra=len(selectable_offers), min_num=len(selectable_offers),
-                                            max_num=len(selectable_offers), validate_min=True, validate_max=True)
+                                               extra=len(selectable_offers), min_num=len(selectable_offers),
+                                               max_num=len(selectable_offers), validate_min=True, validate_max=True)
     formset = offer_preference_formset()
 
     if request.method == 'POST':
@@ -176,7 +176,7 @@ def assign_speciality_for_internship(request, cohort_id, internship_id):
 
 
 def remove_previous_choices(student, internship, speciality):
-    if internship.speciality_id != None:
+    if internship.speciality_id is not None:
         previous_choices = mdl_internship.internship_choice.search(student=student, internship=internship,
                                                                    speciality=speciality)
     else:
