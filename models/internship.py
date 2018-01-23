@@ -28,18 +28,9 @@ from osis_common.models.serializable_model import SerializableModelAdmin, Serial
 
 
 class InternshipAdmin(SerializableModelAdmin):
-    list_display = (
-            'name',
-            'speciality',
-            'cohort',
-            'length_in_periods')
-    fieldsets = ((None, {'fields':
-        (
-            'name',
-            'speciality',
-            'cohort',
-            'length_in_periods'
-        )}),)
+    list_display = ('name', 'speciality', 'cohort', 'length_in_periods')
+    fieldsets = ((None, {'fields': ('name', 'speciality', 'cohort', 'length_in_periods')}),)
+    list_filter = ['cohort']
 
 
 class Internship(SerializableModel):
@@ -50,4 +41,3 @@ class Internship(SerializableModel):
 
     def __str__(self):
         return u"%s" % self.name
-

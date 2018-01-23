@@ -34,7 +34,7 @@ class InternshipStudentInformationAdmin(SerializableModelAdmin):
     fieldsets = ((None, {'fields': ('person', 'location', 'postal_code', 'city', 'country', 'email', 'phone_mobile',
                                     'contest', 'cohort')}),)
     raw_id_fields = ('person', 'cohort')
-    list_filter = ('contest', 'country')
+    list_filter = ('cohort')
     search_fields = ['person__user__username', 'person__last_name', 'person__first_name']
 
 

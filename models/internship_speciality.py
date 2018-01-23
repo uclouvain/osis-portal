@@ -31,6 +31,7 @@ from django.core.exceptions import ObjectDoesNotExist
 class InternshipSpecialityAdmin(SerializableModelAdmin):
     list_display = ('name', 'acronym', 'cohort')
     fieldsets = ((None, {'fields': ('name', 'acronym', 'cohort')}),)
+    list_filter = ['cohort']
 
 
 class InternshipSpeciality(SerializableModel):
