@@ -34,7 +34,6 @@ from attribution.utils import permission
 
 @login_required
 def home(request):
-    # Adapt layout depending on the type of user (student, professor)
     return layout.render(request, "dashboard.html",
                          {'online_application_opened': permission.is_online_application_opened(request.user),
                           'is_summary_responsible': permission.is_summary_responsible(request.user),
