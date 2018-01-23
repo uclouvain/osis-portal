@@ -29,23 +29,18 @@ from attribution import models as mdl_attribution
 
 
 def is_online_application_opened(user):
-    current_academic_year = mdl_base.academic_year.current_academic_year()
-    if current_academic_year:
-        return mdl_base.academic_calendar.is_academic_calendar_opened(
-            current_academic_year,
-            academic_calendar_type.TEACHING_CHARGE_APPLICATION
-        )
-    return False
+    return _is_academic_calendar_event_opened(academic_calendar_type.TEACHING_CHARGE_APPLICATION)
 
 
 def is_summary_course_submission_opened(user):
+    return _is_academic_calendar_event_opened(academic_calendar_type.SUMMARY_COURSE_SUBMISSION)
+
+
+def _is_academic_calendar_event_opened(calendar_type):
     current_academic_year = mdl_base.academic_year.current_academic_year()
-    if current_academic_year:
-        return mdl_base.academic_calendar.is_academic_calendar_opened(
-            current_academic_year,
-            academic_calendar_type.SUMMARY_COURSE_SUBMISSION
-        )
-    return False
+    if not current_academic_year:
+        return False
+    return mdl_base.academic_calendar.is_academic_calendar_opened( current_academic_year, calendar_type)
 
 
 def is_summary_responsible(a_user):
