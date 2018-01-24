@@ -34,12 +34,13 @@ from attribution.utils import permission
 
 @login_required
 def home(request):
-    # Adapt layout depending on the type of user (student, professor)
-    return layout.render(request, "dashboard.html",
-                         {'online_application_opened': permission.is_online_application_opened(request.user),
-                          'is_summary_responsible': permission.is_summary_responsible(request.user),
-                          'manage_courses_url': settings.OSIS_MANAGE_COURSES_URL,
-                          'osis_vpn_help_url': settings.OSIS_VPN_HELP_URL})
+    return layout.render(request, "dashboard.html", {
+        'online_application_opened': permission.is_online_application_opened(request.user),
+        'summary_course_submission_opened': permission.is_summary_course_submission_opened(request.user),
+        'is_summary_responsible': permission.is_summary_responsible(request.user),
+        'manage_courses_url': settings.OSIS_MANAGE_COURSES_URL,
+        'osis_vpn_help_url': settings.OSIS_VPN_HELP_URL
+    })
 
 
 @login_required

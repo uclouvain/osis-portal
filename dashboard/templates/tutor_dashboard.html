@@ -34,7 +34,7 @@
             <p>{% trans 'desc_lnk_my_students_list' %}</p>
         </div>
     </div>
-    {% if is_summary_responsible %}
+    {% if is_summary_responsible and summary_course_submission_opened %}
         <div class="grid-item">
             <i class="fa fa-file-text-o"></i>
             <div class="description">
