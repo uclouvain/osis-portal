@@ -30,6 +30,7 @@ from osis_common.models.serializable_model import SerializableModelAdmin, Serial
 class PeriodAdmin(SerializableModelAdmin):
     list_display = ('name', 'cohort', 'date_start', 'date_end')
     fieldsets = ((None, {'fields': ('name', 'cohort', 'date_start', 'date_end')}),)
+    list_filter = ['cohort']
 
 
 class Period(SerializableModel):

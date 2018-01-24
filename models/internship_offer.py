@@ -34,6 +34,7 @@ class InternshipOfferAdmin(SerializableModelAdmin):
                                     'selectable')}),)
     raw_id_fields = ('organization', 'speciality', 'cohort')
     search_fields = ['organization__name', 'speciality__name']
+    list_filter = ['cohort', 'selectable']
 
 
 class InternshipOffer(SerializableModel):
