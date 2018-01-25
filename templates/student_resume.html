@@ -117,13 +117,15 @@
                     </div>
                 </div>
                 <br>
-                <div class="row">
-                    <div class="col-md-4">
-                        <strong>{% trans 'contest' %}</strong>
-                        <br>
-                        {% trans student_information.contest %}
+                {% if student_information.contest %}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>{% trans 'contest' %}</strong>
+                            <br>
+                            {% trans student_information.contest %}
+                        </div>
                     </div>
-                </div>
+                {% endif %}
                 <br>
                 <a role="button" class="btn btn-info" aria-label="Edit" href="{% url 'internship_student_edit' cohort_id=cohort.id %}">
                     <span class="glyphicon glyphicon-edit" aria-hidden="true">

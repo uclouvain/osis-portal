@@ -34,7 +34,6 @@ urlpatterns = [
         url(r'^selection/$', main.view_internship_selection, name='select_internship'),
         url(r'^hospitals/$', hospital.view_hospitals_list, name='hospitals_list'),
         url(r'^resume/$', resume.view_student_resume, name='student_resume'),
-        url(r'^edit_info/$', resume.edit_student_information, name='internship_student_edit'),
 
         url(r'^(?P<internship_id>[0-9]+)/', include([
             url(r'^speciality_assignment/$', main.assign_speciality_for_internship, name='assign_speciality'),

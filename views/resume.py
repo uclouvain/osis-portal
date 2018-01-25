@@ -68,23 +68,6 @@ def view_student_resume(request, cohort_id):
                                                           "cohort": cohort})
 
 
-@login_required
-@permission_required('internship.can_access_internship', raise_exception=True)
-@redirect_if_not_in_cohort
-def edit_student_information(request, cohort_id):
-    cohort = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
-
-    if request.method == "POST":
-        form = form_internship_student_information.InternshipStudentInformationForm(request.POST)
-        if form.is_valid():
-            person = mdl_person.find_by_user(request.user)
-            save_from_form(form, person, cohort)
-    else:
-        student_information = mdl_student_information.find_by_user_and_cohort(request.user, cohort=cohort)
-        form = form_internship_student_information.InternshipStudentInformationForm(instance=student_information)
-    return layout.render(request, "student_edit_information.html", {"form": form, "cohort": cohort})
-
-
 def save_from_form(form, person, cohort):
     defaults = {
         "location": form.cleaned_data["location"],
