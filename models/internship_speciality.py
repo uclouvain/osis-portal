@@ -29,15 +29,16 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 class InternshipSpecialityAdmin(SerializableModelAdmin):
-    list_display = ('name', 'acronym', 'cohort')
-    fieldsets = ((None, {'fields': ('name', 'acronym', 'cohort')}),)
-    list_filter = ['cohort']
+    list_display = ('name', 'acronym', 'cohort', 'selectable')
+    fieldsets = ((None, {'fields': ('name', 'acronym', 'cohort', 'selectable')}),)
+    list_filter = ['cohort', 'selectable']
 
 
 class InternshipSpeciality(SerializableModel):
     name = models.CharField(max_length=125, blank=False, null=False)
     acronym = models.CharField(max_length=125, blank=False, null=False)
     cohort = models.ForeignKey('internship.Cohort', null=False)
+    selectable = models.BooleanField(default=True)
 
     def __str__(self):
         return u"%s" % self.name
