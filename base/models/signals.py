@@ -27,12 +27,16 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.db.models.signals import post_save, post_delete
 from django.dispatch.dispatcher import receiver, Signal
+from django.core.exceptions import ObjectDoesNotExist
 from base import models as mdl
 from osis_common.models.serializable_model import SerializableModel
 from osis_common.models.signals.authentication import user_created_signal, user_updated_signal
 
 person_created = Signal(providing_args=['person'])
 
+GROUP_STUDENTS = "students"
+GROUP_STUDENTS_INTERNSHIP = "internship_students"
+GROUP_TUTORS = "tutors"
 
 @receiver(user_created_signal)
 @receiver(user_updated_signal)
@@ -48,26 +52,26 @@ def update_person(sender, **kwargs):
 @receiver(post_save, sender=mdl.student.Student)
 def add_to_students_group(sender, instance, **kwargs):
     if kwargs.get('created', True) and instance.person.user:
-        _assign_group(instance.person, "students")
+        _assign_group(instance.person, GROUP_STUDENTS)
 
 
 @receiver(post_save, sender=mdl.tutor.Tutor)
 def add_to_tutors_group(sender, instance, **kwargs):
     if kwargs.get('created', True) and instance.person.user:
-        _assign_group(instance.person, "tutors")
+        _assign_group(instance.person, GROUP_TUTORS)
 
 
 @receiver(post_delete, sender=mdl.tutor.Tutor)
 def remove_from_tutor_group(sender, instance, **kwargs):
     if instance.person.user:
-        tutors_group = Group.objects.get(name='tutors')
+        tutors_group = Group.objects.get(name=GROUP_TUTORS)
         instance.person.user.groups.remove(tutors_group)
 
 
 @receiver(post_delete, sender=mdl.student.Student)
 def remove_from_student_group(sender, instance, **kwargs):
     if instance.person.user:
-        students_group = Group.objects.get(name='students')
+        students_group = Group.objects.get(name=GROUP_STUDENTS)
         instance.person.user.groups.remove(students_group)
 
 
@@ -78,27 +82,27 @@ if 'internship' in settings.INSTALLED_APPS:
     @receiver(post_save, sender=mdl_internship.InternshipStudentInformation)
     def add_to_internship_students_group(sender, instance, **kwargs):
         if kwargs.get('created', True) and instance.person.user:
-            _assign_group(instance.person, 'internship_students')
+            _assign_group(instance.person, GROUP_STUDENTS_INTERNSHIP)
 
 
     @receiver(post_delete, sender=mdl_internship.InternshipStudentInformation)
     def remove_internship_students_group(sender, instance, **kwargs):
         if instance.person.user:
-            internship_students_group = Group.objects.get(name='internship_students')
+            internship_students_group = Group.objects.get(name=GROUP_STUDENTS_INTERNSHIP)
             instance.person.user.groups.remove(internship_students_group)
 
 
 def _add_person_to_group(person):
     # Check Student
     if mdl.student.find_by_person(person):
-        _assign_group(person, "students")
+        _assign_group(person, GROUP_STUDENTS)
     # Check tutor
     if mdl.tutor.find_by_person(person):
-        _assign_group(person, "tutors")
+        _assign_group(person, GROUP_TUTORS)
     # Check if student is internship student
     # Only if internship app is installed
     if 'internship' in settings.INSTALLED_APPS and mdl_internship.exists_by_person(person):
-        _assign_group(person, 'internship_students')
+        _assign_group(person, GROUP_STUDENTS_INTERNSHIP)
 
 
 def _assign_group(person, group_name):
@@ -108,10 +112,12 @@ def _assign_group(person, group_name):
     :param group_name: a string of a legit group
     :return: nothing
     """
-    group = Group.objects.get(name=group_name)
-    if person.user and \
-            not person.user.groups.filter(name=group_name).exists():
-        person.user.groups.add(group)
+    try:
+        group = Group.objects.get(name=group_name)
+        if person.user and not person.user.groups.filter(name=group_name).exists():
+            person.user.groups.add(group)
+    except ObjectDoesNotExist:
+        return
 
 
 def _create_update_person(user, person, user_infos):
