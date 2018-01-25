@@ -49,7 +49,7 @@
                     {% if not application.pending %}
                         <a title="{%trans 'learning_unit_specifications'%}"
                            id="lnk_application_edit_acronym_{{ application.learning_container_year_id }}"
-                           href="{{application.learning_container_year_id | get_previous_url_learning_unit_year }}"
+                           href="{{application.learning_container_year_id | get_url_learning_unit_year }}"
                            target="_blank">
                             {{ application.acronym }}
                         </a>
@@ -65,7 +65,7 @@
                     {% if not application.pending %}
                         <a title="{%trans 'learning_unit_specifications'%}"
                            id="lnk_application_edit_title_{{ application.learning_container_year_id}}"
-                           href="{{application.learning_container_year_id | get_previous_url_learning_unit_year }}"
+                           href="{{application.learning_container_year_id | get_url_learning_unit_year }}"
                            target="_blank">
                         {{ application.title }}
                         </a>
