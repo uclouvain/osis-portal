@@ -106,10 +106,10 @@
                             <td>
                                 <select id="{{ form.preference.id_for_label }}" name="{{ form.preference.html_name }}" class="form-control">
                                     {% for x,y in form.fields.preference.choices %}
-                                    {% choice_for_offer internship_choices offer current_internship as choice %}
-                                    <option value="{{ x }}" {% if x == choice %} selected{% endif %}>
-                                        <span>{{ y }}</span>
-                                    </option>
+                                        {% choice_for_offer internship_choices offer current_internship as choice %}
+                                        <option value="{{ x }}" {% if x == choice %} selected{% endif %}>
+                                            <span>{{ y }}</span>
+                                        </option>
                                     {% endfor %}
                                 </select>
                             </td>

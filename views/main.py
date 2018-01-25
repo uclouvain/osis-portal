@@ -88,7 +88,7 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
     student = mdl_base.student.find_by_user(request.user)
     internships = mdl_internship.internship.Internship.objects.filter(cohort=cohort).order_by("speciality__name", "name")
     current_internship = internships.get(pk=internship_id)
-    specialities = mdl_internship.internship_speciality.filter_by_cohort(cohort).order_by("name")
+    specialities = mdl_internship.internship_speciality.find_by_cohort(cohort).filter(selectable=True).order_by("name")
     internship_choices = mdl_internship.internship_choice.InternshipChoice.objects.filter(speciality_id__in=specialities,
                                                                                           internship=current_internship,
                                                                                           student=student)
