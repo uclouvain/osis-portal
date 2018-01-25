@@ -30,7 +30,7 @@ from internship.admin_actions.actions import export_as_csv_action
 
 
 class InternshipChoiceAdmin(SerializableModelAdmin):
-    list_display = ('id', 'student', 'organization', 'speciality', 'choice', 'internship', 'priority', 'uuid')
+    list_display = ('id', 'student', 'organization', 'speciality', 'choice', 'internship', 'uuid', 'registered')
     fieldsets = ((None, {'fields': ('id', 'student', 'organization', 'speciality', 'choice', 'internship',
                                     'priority')}),)
     raw_id_fields = ('student', 'organization', 'speciality')
@@ -47,6 +47,7 @@ class InternshipChoice(SerializableModel):
     choice = models.IntegerField()
     internship = models.ForeignKey('internship.Internship')
     priority = models.BooleanField()
+    registered = models.DateTimeField(null=True, auto_now=True)
 
     def __str__(self):
         return u"%s - %s : %s" % (self.organization.acronym, self.speciality.acronym, self.choice)
