@@ -53,55 +53,6 @@ class TestResumeUrl(TestCase):
         response = self.c.get(url)
         self.assertEqual(response.status_code, 200)
 
-    def test_can_access_student_info_modification(self):
-        url = reverse("internship_student_edit", kwargs={'cohort_id': self.cohort.id})
-        response = self.c.get(url)
-        self.assertEqual(response.status_code, 302)
-
-        self.c.force_login(self.user)
-        response = self.c.get(url)
-        self.assertEqual(response.status_code, 200)
-
-
-class TestEditStudentInformation(TestCase):
-    def setUp(self):
-        self.student = base.tests.models.test_student.create_student("45451298")
-        self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
-        self.student.person.user = self.user
-        self.student.person.save()
-        self.cohort = CohortFactory()
-        self.student_information = test_internship_student_information.create_student_information(self.user, self.cohort, self.student.person)
-        add_permission(self.student.person.user, "can_access_internship")
-        self.c = Client()
-        self.c.force_login(self.user)
-
-        self.url = reverse("internship_student_edit", kwargs={'cohort_id': self.cohort.id})
-
-        self.data = {
-            "location": "location",
-            "postal_code": "postal",
-            "city": "city",
-            "country": "country",
-            "email": "test@test.com",
-            "phone_mobile": "0236478987",
-            "contest": "GENERALIST",
-        }
-
-    def test_information_save(self):
-        self.c.post(self.url, data=self.data)
-        try:
-            student_information = mdl_student_information.find_by_user_and_cohort(self.user, cohort=self.cohort)
-        except ObjectDoesNotExist:
-            self.fail()
-
-        self.assertEqual(student_information.location, self.data["location"])
-        self.assertEqual(student_information.postal_code, self.data["postal_code"])
-        self.assertEqual(student_information.city, self.data["city"])
-        self.assertEqual(student_information.country, self.data["country"])
-        self.assertEqual(student_information.email, self.data["email"])
-        self.assertEqual(student_information.phone_mobile, self.data["phone_mobile"])
-        self.assertEqual(student_information.contest, self.data["contest"])
-
 
 def add_permission(user, codename):
     perm = get_permission(codename)
