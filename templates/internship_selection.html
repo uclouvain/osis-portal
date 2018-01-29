@@ -28,7 +28,7 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'internship' %}">{{cohort.name}}</a></li>
+    <li><a href="{% url 'internship' %}">{{ cohort.name }}</a></li>
     <li><a href="{% url 'internship_home' cohort_id=cohort.id %}">{% trans 'internships' %}</a></li>
     <li class="active">{% trans 'selection' %}</li>
 {% endblock %}
@@ -99,17 +99,15 @@
                         <tr>
                             <td>{{ offer.organization }}</td>
                             <td>{{ offer.maximum_enrollments }}</td>
-                            <td> {{ number_first_choices }} </td>
+                            <td>{{ number_first_choices }}</td>
                             <td hidden>
                                 <input type="number" id="{{ form.offer.id_for_label }}" name="{{ form.offer.html_name }}" class="form-control" value="{{ offer.pk }}">
                             </td>
                             <td>
                                 <select id="{{ form.preference.id_for_label }}" name="{{ form.preference.html_name }}" class="form-control">
-                                    {% for x,y in form.fields.preference.choices %}
+                                    {% for key, val in form.fields.preference.choices %}
                                         {% choice_for_offer internship_choices offer current_internship as choice %}
-                                        <option value="{{ x }}" {% if x == choice %} selected{% endif %}>
-                                            <span>{{ y }}</span>
-                                        </option>
+                                        <option value="{{ key }}" {% if key == choice %} selected {% endif %}>{{ val }}</option>
                                     {% endfor %}
                                 </select>
                             </td>
@@ -119,7 +117,7 @@
             </table>
 
             <div class="panel-footer">
-                {% if can_submit%}
+                {% if can_submit %}
                     <button type="submit" class="btn btn-primary">
                         <span class="glyphicon glyphicon-ok"></span> {% trans 'submit_choices' %}
                     </button>

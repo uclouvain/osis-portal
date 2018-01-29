@@ -45,3 +45,7 @@ class InternshipSpeciality(SerializableModel):
 
 def find_by_cohort(cohort):
     return InternshipSpeciality.objects.filter(cohort=cohort)
+
+
+def find_selectables(cohort):
+    return find_by_cohort(cohort).filter(selectable=True)

@@ -30,8 +30,8 @@ from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_POST
 
-import base.models as mdl_base
-import internship.models as mdl_internship
+import base.models as mdl
+import internship.models as mdl_int
 from base.views import layout
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
 from internship.decorators.cohort_view_decorators import redirect_if_subscription_not_allowed
@@ -46,41 +46,40 @@ from internship.forms.form_select_speciality import SpecialityForm
 @redirect_if_not_in_cohort
 @redirect_if_subscription_not_allowed
 def view_internship_selection(request, cohort_id, internship_id=-1, speciality_id=-1):
-    cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
+    cohort = mdl_int.cohort.Cohort.objects.get(pk=cohort_id)
+
+    if not mdl_int.internship_offer.cohort_open_for_selection(cohort):
+        return layout.render(request, "internship_selection_closed.html", {'cohort': cohort})
+
     if int(internship_id) < 1:
-        current_internship = mdl_internship.internship.Internship.objects.filter(cohort=cohort).first()
+        current_internship = mdl_int.internship.find_by_cohort(cohort).first()
         return redirect(view_internship_selection, cohort_id=cohort_id, internship_id=current_internship.id)
 
-    student = mdl_base.student.find_by_user(request.user)
-    internships = mdl_internship.internship.Internship.objects.filter(cohort=cohort).order_by("speciality__name", "name")
-    current_internship = internships.get(pk=internship_id)
-    specialities = mdl_internship.internship_speciality.find_by_cohort(cohort).filter(selectable=True).order_by("name")
-    internship_choices = mdl_internship.internship_choice.InternshipChoice.objects.filter(speciality_id__in=specialities,
-                                                                                          internship=current_internship,
-                                                                                          student=student)
-    current_choice = internship_choices.filter(internship=current_internship).first()
+    internships = mdl_int.internship.find_by_cohort(cohort).order_by("speciality__name", "name")
 
-    is_open = mdl_internship.internship_offer.get_number_selectable(cohort) > 0
-    if not is_open:
-        return layout.render(request, "internship_selection_closed.html", {'cohort': cohort})
+    specialities = mdl_int.internship_speciality.find_selectables(cohort).order_by("name")
+    current_internship = internships.get(pk=internship_id)
+    student = mdl.student.find_by_user(request.user)
+    internship_choices = mdl_int.internship_choice.InternshipChoice.objects.filter(speciality_id__in=specialities,
+                                                                                   internship=current_internship,
+                                                                                   student=student)
+    current_choice = internship_choices.filter(internship=current_internship).first()
 
     if current_choice is not None and int(speciality_id) < 0:
         speciality_id = current_choice.speciality_id
 
     if current_internship.speciality is not None:
         speciality = current_internship.speciality
-        selectable_offers = mdl_internship.internship_offer.InternshipOffer.objects.filter(speciality=speciality, cohort=cohort, selectable=True).order_by("organization__reference")
     else:
         speciality = specialities.filter(pk=speciality_id).first()
-        non_mandatory_offers = mdl_internship.internship_offer.find_selectable_by_cohort(cohort=cohort)
-        selectable_offers = mdl_internship.internship_offer.find_selectable_by_speciality_and_cohort(speciality=speciality, cohort=cohort)
+        non_mandatory_offers = mdl_int.internship_offer.find_selectable_by_cohort(cohort=cohort)
         speciality_ids = non_mandatory_offers.values_list("speciality_id", flat=True)
         specialities = specialities.filter(id__in=speciality_ids).order_by("name")
 
+    selectable_offers = mdl_int.internship_offer.find_selectable_by_speciality_and_cohort(speciality, cohort)
     offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet,
                                                extra=len(selectable_offers), min_num=len(selectable_offers),
                                                max_num=len(selectable_offers), validate_min=True, validate_max=True)
-    formset = offer_preference_formset()
 
     if request.method == 'POST':
         formset = offer_preference_formset(request.POST)
@@ -88,8 +87,11 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
             remove_previous_choices(student, current_internship, speciality)
             save_student_choices(formset, student, current_internship, speciality)
             messages.add_message(request, messages.SUCCESS, _('internship_choice_successfully_saved'))
+    else:
+        formset = offer_preference_formset()
 
-    number_first_choices_by_organization = get_first_choices_by_organization(speciality)
+    first_choices_by_organization = get_first_choices_by_organization(speciality)
+    offers_forms = zip_offers_formset_and_first_choices(formset, selectable_offers, first_choices_by_organization)
 
     return layout.render(request, "internship_selection.html",
                          {"internships": internships,
@@ -97,8 +99,7 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
                           "speciality_form": SpecialityForm(),
                           "all_specialities": specialities,
                           "formset": formset,
-                          "offers_forms": zip_offers_formset_and_first_choices(formset, selectable_offers,
-                                                                               number_first_choices_by_organization),
+                          "offers_forms": offers_forms,
                           "speciality_id": int(speciality_id),
                           "internship_choices": internship_choices,
                           "current_choice": current_choice,
@@ -124,7 +125,7 @@ def assign_speciality_for_internship(request, cohort_id, internship_id):
 
 
 def get_first_choices_by_organization(speciality):
-    list_number_choices = mdl_internship.internship_choice.get_number_first_choice_by_organization(speciality)
+    list_number_choices = mdl_int.internship_choice.get_number_first_choice_by_organization(speciality)
     dict_number_choices_by_organization = dict()
     for number_first_choices in list_number_choices:
         dict_number_choices_by_organization[number_first_choices["organization"]] = \
@@ -143,10 +144,10 @@ def zip_offers_formset_and_first_choices(formset, internships_offers, number_cho
 
 def remove_previous_choices(student, internship, speciality):
     if internship.speciality_id is not None:
-        previous_choices = mdl_internship.internship_choice.search(student=student, internship=internship,
-                                                                   speciality=speciality)
+        previous_choices = mdl_int.internship_choice.search(student=student, internship=internship,
+                                                            speciality=speciality)
     else:
-        previous_choices = mdl_internship.internship_choice.search(student=student, internship=internship)
+        previous_choices = mdl_int.internship_choice.search(student=student, internship=internship)
     if previous_choices:
         previous_choices.delete()
 
@@ -156,14 +157,14 @@ def save_student_choices(formset, student, internship, speciality):
         if form.cleaned_data:
             offer_pk = form.cleaned_data["offer"]
             preference_value = int(form.cleaned_data["preference"])
-            offer = mdl_internship.internship_offer.find_by_pk(offer_pk)
+            offer = mdl_int.internship_offer.find_by_pk(offer_pk)
             if has_been_selected(preference_value) and is_correct_speciality(offer, speciality):
-                internship_choice = mdl_internship.internship_choice.InternshipChoice(student=student,
-                                                                                      organization=offer.organization,
-                                                                                      speciality=speciality,
-                                                                                      choice=preference_value,
-                                                                                      internship=internship,
-                                                                                      priority=False)
+                internship_choice = mdl_int.internship_choice.InternshipChoice(student=student,
+                                                                               organization=offer.organization,
+                                                                               speciality=speciality,
+                                                                               choice=preference_value,
+                                                                               internship=internship,
+                                                                               priority=False)
                 internship_choice.save()
 
 
@@ -179,5 +180,5 @@ def do_not_exceed_maximum_personnal_internship(speciality, student):
     if speciality.acronym != "SP":
         return True
     number_choices_personal_internship = \
-        mdl_internship.internship_choice.search(student=student, speciality=speciality).count()
+        mdl_int.internship_choice.search(student=student, speciality=speciality).count()
     return number_choices_personal_internship < 2
