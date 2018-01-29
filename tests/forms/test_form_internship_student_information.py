@@ -59,11 +59,6 @@ class TestSearchHospitalForm(TestCase):
         form = form_internship_student_information.InternshipStudentInformationForm(data=self.data)
         self.assertFalse(form.is_valid())
 
-    def test_null_contest(self):
-        self.data["contest"] = ""
-        form = form_internship_student_information.InternshipStudentInformationForm(data=self.data)
-        self.assertFalse(form.is_valid())
-
     def test_correct_form(self):
         form = form_internship_student_information.InternshipStudentInformationForm(data=self.data)
         self.assertTrue(form.is_valid())

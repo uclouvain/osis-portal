@@ -28,10 +28,9 @@ from django.test import TestCase, Client
 import base.tests.models.test_student
 from django.contrib.auth.models import User, Permission
 from django.core.urlresolvers import reverse
-from django.core.exceptions import ObjectDoesNotExist
-from internship.models import internship_student_information as mdl_student_information
 from internship.tests.models import test_internship_student_information
 from internship.tests.factories.cohort import CohortFactory
+
 
 class TestResumeUrl(TestCase):
     def setUp(self):
@@ -41,7 +40,9 @@ class TestResumeUrl(TestCase):
         self.student.person.user = self.user
         self.student.person.save()
         self.cohort = CohortFactory()
-        self.student_information = test_internship_student_information.create_student_information(self.user, self.cohort, self.student.person)
+        self.student_information = test_internship_student_information.create_student_information(self.user,
+                                                                                                  self.cohort,
+                                                                                                  self.student.person)
         add_permission(self.student.person.user, "can_access_internship")
 
     def test_can_access_student_resume(self):

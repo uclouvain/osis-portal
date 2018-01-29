@@ -35,7 +35,7 @@ class InternshipChoiceAdmin(SerializableModelAdmin):
                                     'priority')}),)
     raw_id_fields = ('student', 'organization', 'speciality')
     search_fields = ['id', 'uuid', 'student__person__first_name', 'student__person__last_name']
-
+    list_filter = ['internship__cohort', 'internship']
     actions = [export_as_csv_action("Export to CSV", fields=['student', 'organization', 'speciality', 'internship',
                                                              'choice', 'priority', 'uuid'])]
 
