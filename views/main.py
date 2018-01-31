@@ -191,7 +191,7 @@ def save_student_choices(formset, student, internship, speciality):
             offer_pk = form.cleaned_data["offer"]
             preference_value = int(form.cleaned_data["preference"])
             offer = mdl_internship.internship_offer.find_by_pk(offer_pk)
-            if has_been_selected(preference_value) and is_correct_speciality(offer, speciality):
+            if has_been_selected(preference_value) and _is_correct_speciality(offer, speciality):
                 internship_choice = mdl_internship.internship_choice.InternshipChoice(student=student,
                                                                                       organization=offer.organization,
                                                                                       speciality=speciality,
@@ -205,7 +205,7 @@ def has_been_selected(preference_value):
     return bool(preference_value)
 
 
-def is_correct_speciality(offer, speciality):
+def _is_correct_speciality(offer, speciality):
     return offer.speciality == speciality
 
 

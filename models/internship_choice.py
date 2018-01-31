@@ -26,8 +26,6 @@
 from django.db import models
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
-from internship.admin_actions.actions import export_as_csv_action
-
 
 class InternshipChoiceAdmin(SerializableModelAdmin):
     list_display = ('id', 'student', 'organization', 'speciality', 'choice', 'internship', 'uuid', 'registered')
@@ -35,9 +33,6 @@ class InternshipChoiceAdmin(SerializableModelAdmin):
                                     'priority')}),)
     raw_id_fields = ('student', 'organization', 'speciality')
     search_fields = ['id', 'uuid', 'student__person__first_name', 'student__person__last_name']
-
-    actions = [export_as_csv_action("Export to CSV", fields=['student', 'organization', 'speciality', 'internship',
-                                                             'choice', 'priority', 'uuid'])]
 
 
 class InternshipChoice(SerializableModel):
