@@ -35,6 +35,7 @@ from attribution.tests.factories.attribution import AttributionNewFactory
 from attribution.utils import tutor_application_epc
 from base.models.enums import academic_calendar_type
 from base.models.enums import learning_component_year_type
+from base.models.enums import vacant_declaration_type
 from base.tests.factories.academic_calendar import AcademicCalendarFactory
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.learning_component_year import LearningComponentYearFactory
@@ -151,6 +152,21 @@ class TestOnlineApplication(TestCase):
         self.assertTrue((next(attrib for attrib in context['attributions_vacant']
                               if attrib.get('acronym') == self.lagro1600_next.acronym and
                               attrib.get('already_applied')), False))
+
+    def test_search_vacant_attribution_with_delcaration_vac_not_allowed(self):
+        # Create container with type_declaration_vacant not in [RESEVED_FOR_INTERNS, OPEN_FOR_EXTERNS]
+        self.lagro1234_current = _create_learning_container_with_components("LAGRO1234", self.current_academic_year)
+        # Creation learning container for next academic year [==> application academic year]
+        self.lagro1234_next = _create_learning_container_with_components("LAGRO1234", self.application_academic_year,
+                                                                         70, 70,
+                                                                         type_declaration_vacant=vacant_declaration_type.DO_NOT_ASSIGN)
+        url = reverse('vacant_attributions_search')
+        response = self.client.get(url, data={'learning_container_acronym': 'LAGRO1234'})
+        self.assertEqual(response.status_code, 200)
+        context = response.context[-1]
+        self.assertEqual(context['a_tutor'], self.tutor)
+        self.assertTrue(context['search_form'])
+        self.assertFalse(context['attributions_vacant'])
 
     def test_renew_applications(self):
         url = reverse('renew_applications')
@@ -302,8 +318,10 @@ class TestOnlineApplication(TestCase):
         ]
 
 
-def _create_learning_container_with_components(acronym, academic_year, volume_lecturing=None, volume_practical_exercices=None, subtype=learning_unit_year_subtypes.FULL):
-    l_container = LearningContainerYearFactory(acronym=acronym, academic_year=academic_year)
+def _create_learning_container_with_components(acronym, academic_year, volume_lecturing=None, volume_practical_exercices=None,
+                                               subtype=learning_unit_year_subtypes.FULL, type_declaration_vacant=vacant_declaration_type.RESEVED_FOR_INTERNS):
+    l_container = LearningContainerYearFactory(acronym=acronym, academic_year=academic_year,
+                                               type_declaration_vacant=type_declaration_vacant)
     return _link_components_and_learning_unit_year_to_container(l_container, l_container.acronym, volume_lecturing, volume_practical_exercices, subtype)
 
 
