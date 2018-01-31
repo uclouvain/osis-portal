@@ -71,15 +71,13 @@ class TestInternshipOffer(TestCase):
         self.assertFalse(internship_offer.find_by_pk(pk))
 
     def test_get_number_selectable(self):
-        expected = 1
-        actual = internship_offer.get_number_selectable(self.offer.cohort)
-        self.assertEqual(expected, actual)
+        actual = internship_offer.cohort_open_for_selection(self.offer.cohort)
+        self.assertTrue(actual)
 
         self.offer.selectable = False
         self.offer.save()
-        expected = 0
-        actual = internship_offer.get_number_selectable(self.offer.cohort)
-        self.assertEqual(expected, actual)
+        actual = internship_offer.cohort_open_for_selection(self.offer.cohort)
+        self.assertFalse(actual)
 
     def test_find_selectable_by_speciality_and_cohort(self):
         speciality = test_internship_speciality.create_speciality("OTHER", "OTHER", cohort=self.offer.cohort)

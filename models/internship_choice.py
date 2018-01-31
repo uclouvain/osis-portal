@@ -29,10 +29,10 @@ from osis_common.models.serializable_model import SerializableModelAdmin, Serial
 
 class InternshipChoiceAdmin(SerializableModelAdmin):
     list_display = ('id', 'student', 'organization', 'speciality', 'choice', 'internship', 'uuid', 'registered')
-    fieldsets = ((None, {'fields': ('id', 'student', 'organization', 'speciality', 'choice', 'internship',
-                                    'priority')}),)
+    fieldsets = ((None, {'fields': ('student', 'organization', 'speciality', 'choice', 'internship', 'priority')}),)
     raw_id_fields = ('student', 'organization', 'speciality')
-    search_fields = ['id', 'uuid', 'student__person__first_name', 'student__person__last_name']
+    search_fields = ['uuid', 'student__person__first_name', 'student__person__last_name']
+    list_filter = ['internship__cohort', 'internship']
 
 
 class InternshipChoice(SerializableModel):

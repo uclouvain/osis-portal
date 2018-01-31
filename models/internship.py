@@ -31,6 +31,7 @@ class InternshipAdmin(SerializableModelAdmin):
     list_display = ('name', 'speciality', 'cohort', 'length_in_periods')
     fieldsets = ((None, {'fields': ('name', 'speciality', 'cohort', 'length_in_periods')}),)
     list_filter = ['cohort']
+    raw_id_fields = ('speciality',)
 
 
 class Internship(SerializableModel):
@@ -41,3 +42,7 @@ class Internship(SerializableModel):
 
     def __str__(self):
         return u"%s" % self.name
+
+
+def find_by_cohort(cohort):
+    return Internship.objects.filter(cohort=cohort)

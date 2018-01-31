@@ -48,7 +48,7 @@ class InternshipStudentInformation(SerializableModel):
     country = models.CharField(max_length=255)
     email = models.EmailField(max_length=255, blank=True, null=True)
     phone_mobile = models.CharField(max_length=100, blank=True, null=True)
-    contest = models.CharField(max_length=124, choices=TYPE_CHOICE, null=True)
+    contest = models.CharField(max_length=124, choices=TYPE_CHOICE, null=True, blank=True)
     cohort = models.ForeignKey('internship.Cohort')
 
     def __str__(self):
