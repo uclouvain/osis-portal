@@ -56,13 +56,13 @@ def redirect_if_subscription_not_allowed(function):
     @wraps(function)
     def wrapper(request, cohort_id, *args, **kwargs):
         try:
-            student = mdl_base.student.find_by_user(request.user)
+            mdl_base.student.find_by_user(request.user)
         except MultipleObjectsReturned:
             return dash_main_view.show_multiple_registration_id_error(request)
 
         cohort = Cohort.objects.get(pk=cohort_id)
 
-        if cohort.subscription_start_date <= datetime.date.today() and datetime.date.today() <= cohort.subscription_end_date:
+        if cohort.subscription_start_date <= datetime.date.today() <= cohort.subscription_end_date:
             response = function(request, cohort_id, *args, **kwargs)
             return response
         else:
