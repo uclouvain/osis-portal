@@ -1,12 +1,12 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -70,7 +70,10 @@ class LearningUnitYearTest(TestCase):
                                                                learning_unit=a_learning_unit,
                                                                acronym=LDROI1000)
         LearningUnitYearFactory(academic_year=self.an_academic_year, learning_unit=a_learning_unit, acronym=LAUT5263)
-        self.assertEqual(list(mdl_base.learning_unit_year.search(self.an_academic_year, LDROI1000, None, a_learning_unit)),
+        self.assertEqual(list(mdl_base.learning_unit_year.search(self.an_academic_year,
+                                                                 LDROI1000,
+                                                                 None,
+                                                                 a_learning_unit)),
                          [ldroi1000_learning_unit_year])
 
     def test_find_by_acronym(self):
@@ -85,8 +88,11 @@ class LearningUnitYearTest(TestCase):
 
     def test_find_first_by_exact_acronym(self):
         a_learning_unit = LearningUnitFactory()
-        ldroi1000_learning_unit_year = LearningUnitYearFactory(academic_year=self.an_academic_year, learning_unit=a_learning_unit, acronym='LDROI1000')
+        ldroi1000_learning_unit_year = LearningUnitYearFactory(academic_year=self.an_academic_year,
+                                                               learning_unit=a_learning_unit, acronym='LDROI1000')
         ldroi1000_learning_unit_year.save()
-        ldroi1000_learning_unit_year_bis = LearningUnitYearFactory(academic_year=self.an_academic_year, learning_unit=a_learning_unit, acronym='LDROI1000')
+        ldroi1000_learning_unit_year_bis = LearningUnitYearFactory(academic_year=self.an_academic_year,
+                                                                   learning_unit=a_learning_unit, acronym='LDROI1000')
         ldroi1000_learning_unit_year_bis.save()
-        self.assertEqual(mdl_base.learning_unit_year.find_first_by_exact_acronym(self.an_academic_year, 'LDROI1000'), ldroi1000_learning_unit_year)
+        self.assertEqual(mdl_base.learning_unit_year.find_first_by_exact_acronym(self.an_academic_year, 'LDROI1000'),
+                         ldroi1000_learning_unit_year)

@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -151,7 +151,7 @@ def list_teaching_charge(a_person, an_academic_year):
         tot_practical = tot_practical + numeric_practical_charge
         attribution_list.append(
             {'acronym': a_learning_unit_year.acronym,
-             'title': a_learning_unit_year.title,
+             'title': a_learning_unit_year.specific_title,
              'start_year': an_attribution.start_year,
              'lecturing_allocation_charge': lecturing_charge,
              'practice_allocation_charge': practical_charge,
