@@ -51,7 +51,7 @@ class InternshipChoice(SerializableModel):
         unique_together = (("student", "internship", "choice"),)
 
 
-def search(student=None, speciality=None, specialities=None, internship=None):
+def search(student=None, speciality=None, internship=None, specialities=None):
     has_criteria = False
     queryset = InternshipChoice.objects
 
@@ -71,10 +71,7 @@ def search(student=None, speciality=None, specialities=None, internship=None):
         queryset = queryset.filter(speciality_id__in=specialities)
         has_criteria = True
 
-    if has_criteria:
-        return queryset
-    else:
-        return None
+    return queryset if has_criteria else None
 
 
 def get_number_first_choice_by_organization(speciality):

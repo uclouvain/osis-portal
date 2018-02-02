@@ -48,9 +48,6 @@ from internship.forms.form_select_speciality import SpecialityForm
 def view_internship_selection(request, cohort_id, internship_id=-1, speciality_id=-1):
     cohort = mdl_int.cohort.Cohort.objects.get(pk=cohort_id)
 
-    if not mdl_int.internship_offer.cohort_open_for_selection(cohort):
-        return layout.render(request, "internship_selection_closed.html", {'cohort': cohort})
-
     if int(internship_id) < 1:
         current_internship = mdl_int.internship.find_by_cohort(cohort).first()
         return redirect(view_internship_selection, cohort_id=cohort_id, internship_id=current_internship.id)
@@ -64,6 +61,9 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
                                                                                    internship=current_internship,
                                                                                    student=student)
     current_choice = internship_choices.filter(internship=current_internship).first()
+
+    if not mdl_int.internship_offer.cohort_open_for_selection(cohort):
+        return layout.render(request, "internship_selection_closed.html", {'cohort': cohort})
 
     if current_choice is not None and int(speciality_id) < 0:
         speciality_id = current_choice.speciality_id

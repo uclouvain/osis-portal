@@ -57,8 +57,7 @@ def view_cohort_selection(request):
     if student:
         cohort_subscriptions = mdl_internship.internship_student_information.find_by_person(student.person)
         if cohort_subscriptions:
-            cohort_ids = cohort_subscriptions.values('cohort_id')
-            cohorts = mdl_internship.cohort.Cohort.objects.filter(id__in=cohort_ids)
+            cohorts = [subscription.cohort for subscription in cohort_subscriptions]
             return layout.render(request, "cohort_selection.html", {'cohorts': cohorts})
         else:
             messages.add_message(request, messages.ERROR, _('error_does_not_belong_to_any_cohort'))

@@ -33,19 +33,20 @@
 
 {% block content %}
 <div class="page-header">
-    <h2>{% trans 'internships' %}</h2>
+    <h2>{% trans 'select_cohort' %}</h2>
 </div>
 
-
-<div class="panel panel-default">
-    <div class="panel panel-body">
-        <div class="row">
-          {% for cohort in cohorts %}
-            <p>
-              <a href={% url 'internship_home' cohort_id=cohort.id %}>{{ cohort }}</a>
-            </p>
-          {% endfor %}
-        </div>
-    </div>
+<div class="list-group">
+    {% for cohort in cohorts|dictsortreversed:"subscription_start_date" %}
+        <a href="{% url 'internship_home' cohort_id=cohort.id %}" class="list-group-item">
+            <h4 class="list-group-item-heading">{{ cohort }}</h4>
+            {% if cohort.enrollment_active %}
+                <p class="list-group-item-text">{% trans 'enrollments_from' %} {{ cohort.subscription_start_date }} {% trans 'to' %} {{ cohort.subscription_end_date }}.</p>
+            {% endif %}
+            {% if cohort.publication_active %}
+                <p class="list-group-item-text">{% trans 'affectation_available_since' %} {{ cohort.publication_start_date }}</p>
+            {% endif %}
+        </a>
+    {% endfor %}
 </div>
 {% endblock %}

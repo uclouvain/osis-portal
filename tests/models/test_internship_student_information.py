@@ -33,10 +33,10 @@ from internship.tests.factories.cohort import CohortFactory
 
 
 def create_student_information(user, cohort=None, person=None):
-    if person == None:
+    if person is None:
         person = test_person.create_person_with_user(user)
 
-    if cohort == None:
+    if cohort is None:
         cohort = CohortFactory()
     student_information = mdl_student_information.InternshipStudentInformation(person=person, location="location", cohort=cohort,
                                                                                postal_code="00", city="city",

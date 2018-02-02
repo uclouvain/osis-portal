@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from datetime import date
 from django.db import models
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
@@ -41,6 +42,12 @@ class Cohort(SerializableModel):
     publication_start_date = models.DateField(blank=False)
     subscription_start_date = models.DateField(blank=False)
     subscription_end_date = models.DateField(blank=False)
+
+    def enrollment_active(self, today=date.today()):
+        return True if self.subscription_start_date <= today <= self.subscription_end_date else False
+
+    def publication_active(self, today=date.today()):
+        return True if self.publication_start_date <= today else False
 
     def __str__(self):
         return u"%s" % self.name
