@@ -48,9 +48,6 @@ from internship.forms.form_select_speciality import SpecialityForm
 def view_internship_selection(request, cohort_id, internship_id=-1, speciality_id=-1):
     cohort = mdl_int.cohort.Cohort.objects.get(pk=cohort_id)
 
-    if not mdl_int.internship_offer.cohort_open_for_selection(cohort):
-        return layout.render(request, "internship_selection_closed.html", {'cohort': cohort})
-
     if int(internship_id) < 1:
         current_internship = mdl_int.internship.find_by_cohort(cohort).first()
         return redirect(view_internship_selection, cohort_id=cohort_id, internship_id=current_internship.id)
@@ -65,6 +62,9 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
                                                                                    student=student)
     current_choice = internship_choices.filter(internship=current_internship).first()
 
+    if not mdl_int.internship_offer.cohort_open_for_selection(cohort):
+        return layout.render(request, "internship_selection_closed.html", {'cohort': cohort})
+
     if current_choice is not None and int(speciality_id) < 0:
         speciality_id = current_choice.speciality_id
 
@@ -77,18 +77,8 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
         specialities = specialities.filter(id__in=speciality_ids).order_by("name")
 
     selectable_offers = mdl_int.internship_offer.find_selectable_by_speciality_and_cohort(speciality, cohort)
-    offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet,
-                                               extra=len(selectable_offers), min_num=len(selectable_offers),
-                                               max_num=len(selectable_offers), validate_min=True, validate_max=True)
 
-    if request.method == 'POST':
-        formset = offer_preference_formset(request.POST)
-        if formset.is_valid() and do_not_exceed_maximum_personnal_internship(speciality, student):
-            remove_previous_choices(student, current_internship, speciality)
-            save_student_choices(formset, student, current_internship, speciality)
-            messages.add_message(request, messages.SUCCESS, _('internship_choice_successfully_saved'))
-    else:
-        formset = offer_preference_formset()
+    formset = _handle_formset_to_save(request, selectable_offers, student, current_internship, speciality)
 
     first_choices_by_organization = get_first_choices_by_organization(speciality)
     offers_forms = zip_offers_formset_and_first_choices(formset, selectable_offers, first_choices_by_organization)
@@ -142,7 +132,24 @@ def zip_offers_formset_and_first_choices(formset, internships_offers, number_cho
     return zipped_data
 
 
-def remove_previous_choices(student, internship, speciality):
+def _handle_formset_to_save(request, selectable_offers, student, current_internship, speciality):
+    offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet,
+                                               extra=len(selectable_offers), min_num=len(selectable_offers),
+                                               max_num=len(selectable_offers), validate_min=True, validate_max=True)
+
+    if request.method == 'POST':
+        formset = offer_preference_formset(request.POST)
+        if formset.is_valid() and do_not_exceed_maximum_personnal_internship(speciality, student):
+            _remove_previous_choices(student, current_internship, speciality)
+            save_student_choices(formset, student, current_internship, speciality)
+            messages.add_message(request, messages.SUCCESS, _('internship_choice_successfully_saved'))
+    else:
+        formset = offer_preference_formset()
+
+    return formset
+
+
+def _remove_previous_choices(student, internship, speciality):
     if internship.speciality_id is not None:
         previous_choices = mdl_int.internship_choice.search(student=student, internship=internship,
                                                             speciality=speciality)

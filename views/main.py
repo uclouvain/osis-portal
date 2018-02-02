@@ -57,8 +57,7 @@ def view_cohort_selection(request):
     if student:
         cohort_subscriptions = mdl_internship.internship_student_information.find_by_person(student.person)
         if cohort_subscriptions:
-            cohort_ids = cohort_subscriptions.values('cohort_id')
-            cohorts = mdl_internship.cohort.Cohort.objects.filter(id__in=cohort_ids)
+            cohorts = [subscription.cohort for subscription in cohort_subscriptions]
             return layout.render(request, "cohort_selection.html", {'cohorts': cohorts})
         else:
             messages.add_message(request, messages.ERROR, _('error_does_not_belong_to_any_cohort'))
@@ -66,3 +65,14 @@ def view_cohort_selection(request):
     else:
         messages.add_message(request, messages.ERROR, _('error_does_not_belong_to_any_cohort'))
         return redirect(dash_main_view.home)
+
+
+@login_required
+@permission_required('internship.can_access_internship', raise_exception=True)
+@redirect_if_multiple_registrations
+@redirect_if_not_in_cohort
+def view_internship_home(request, cohort_id):
+    cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
+    today = datetime.date.today()
+    subscription_allowed = cohort.subscription_start_date <= today <= cohort.subscription_end_date
+    return layout.render(request, "internship_home.html", locals())

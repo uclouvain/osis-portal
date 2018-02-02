@@ -1,4 +1,4 @@
-import factory
+
 import factory.fuzzy
 import pendulum
 
@@ -22,7 +22,6 @@ class CohortFactory(factory.django.DjangoModelFactory):
     name = factory.Sequence(lambda n: 'Cohort %d' % (n,))
     description = factory.fuzzy.FuzzyText()
 
-    free_internships_number = 8
     publication_start_date = factory.LazyAttribute(fn_publication_start_date)
     subscription_start_date = factory.LazyAttribute(fn_subscription_start_date)
     subscription_end_date = factory.LazyAttribute(fn_subscription_end_date)
