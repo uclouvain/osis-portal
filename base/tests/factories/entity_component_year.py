@@ -42,4 +42,4 @@ class EntityComponentYearFactory(factory.django.DjangoModelFactory):
 
     entity_container_year = factory.SubFactory(EntityContainerYearFactory)
     learning_component_year = factory.SubFactory(LearningComponentYearFactory)
-    hourly_volume_total = factory.fuzzy.FuzzyDecimal(9)
+    repartition_volume = factory.fuzzy.FuzzyDecimal(9)
