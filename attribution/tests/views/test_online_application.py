@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -157,9 +157,9 @@ class TestOnlineApplication(TestCase):
         # Create container with type_declaration_vacant not in [RESEVED_FOR_INTERNS, OPEN_FOR_EXTERNS]
         self.lagro1234_current = _create_learning_container_with_components("LAGRO1234", self.current_academic_year)
         # Creation learning container for next academic year [==> application academic year]
-        self.lagro1234_next = _create_learning_container_with_components("LAGRO1234", self.application_academic_year,
-                                                                         70, 70,
-                                                                         type_declaration_vacant=vacant_declaration_type.DO_NOT_ASSIGN)
+        self.lagro1234_next = _create_learning_container_with_components\
+            ("LAGRO1234", self.application_academic_year, 70, 70,
+             type_declaration_vacant=vacant_declaration_type.DO_NOT_ASSIGN)
         url = reverse('vacant_attributions_search')
         response = self.client.get(url, data={'learning_container_acronym': 'LAGRO1234'})
         self.assertEqual(response.status_code, 200)
@@ -172,7 +172,7 @@ class TestOnlineApplication(TestCase):
         url = reverse('renew_applications')
         post_data = {'learning_container_year_' + self.lbir1300_next.acronym: 'on'}
         response = self.client.post(url, data=post_data)
-        self.assertEqual(response.status_code, 302) # redirection
+        self.assertEqual(response.status_code, 302)  # redirection
         self.attribution.refresh_from_db()
         self.assertEqual(len(self.attribution.applications), 2)  # Now we have two applications
 
@@ -212,7 +212,8 @@ class TestOnlineApplication(TestCase):
         self.assertEqual(response.status_code, 405)
 
     def test_get_edit_application_form(self):
-        url = reverse('create_or_update_tutor_application', kwargs={'learning_container_year_id': self.lagro1600_next.id})
+        url = reverse('create_or_update_tutor_application',
+                      kwargs={'learning_container_year_id': self.lagro1600_next.id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         context = response.context[-1]
@@ -289,19 +290,21 @@ class TestOnlineApplication(TestCase):
         self.lbir1200_current = _create_learning_container_with_components("LBIR1200", self.current_academic_year)
         self.lbir1300_current = _create_learning_container_with_components("LBIR1300", self.current_academic_year)
         self.ldroi1500_current = _create_learning_container_with_components("LDROI1500", self.current_academic_year)
-        self.lbira2101_current = _create_learning_container_with_components("LBIRA2101", self.current_academic_year, subtype=learning_unit_year_subtypes.PARTIM)
+        self.lbira2101_current = _create_learning_container_with_components("LBIRA2101", self.current_academic_year,
+                                                                            subtype=learning_unit_year_subtypes.PARTIM)
 
         # Creation learning container for next academic year [==> application academic year]
         self.lbir1200_next = _create_learning_container_with_components("LBIR1200", self.application_academic_year,
-                                                                        70,70)
+                                                                        70, 70)
         self.lbir1300_next = _create_learning_container_with_components("LBIR1300", self.application_academic_year,
-                                                                        60,60)
+                                                                        60, 60)
         self.lagro1600_next = _create_learning_container_with_components("LAGRO1600", self.application_academic_year,
                                                                          54, 7)
         self.lagro2500_next = _create_learning_container_with_components("LAGRO2500", self.application_academic_year,
                                                                          0, 70)
         self.lbira2101_next = _create_learning_container_with_components("LBIRA2101", self.application_academic_year,
-                                                                         20, 20, subtype=learning_unit_year_subtypes.PARTIM)
+                                                                         20, 20,
+                                                                         subtype=learning_unit_year_subtypes.PARTIM)
 
     def _get_default_application_list(self):
         return [
@@ -318,16 +321,22 @@ class TestOnlineApplication(TestCase):
         ]
 
 
-def _create_learning_container_with_components(acronym, academic_year, volume_lecturing=None, volume_practical_exercices=None,
-                                               subtype=learning_unit_year_subtypes.FULL, type_declaration_vacant=vacant_declaration_type.RESEVED_FOR_INTERNS):
+def _create_learning_container_with_components(acronym, academic_year, volume_lecturing=None,
+                                               volume_practical_exercices=None,
+                                               subtype=learning_unit_year_subtypes.FULL,
+                                               type_declaration_vacant=vacant_declaration_type.RESEVED_FOR_INTERNS):
     l_container = LearningContainerYearFactory(acronym=acronym, academic_year=academic_year,
                                                type_declaration_vacant=type_declaration_vacant)
-    return _link_components_and_learning_unit_year_to_container(l_container, l_container.acronym, volume_lecturing, volume_practical_exercices, subtype)
+    return _link_components_and_learning_unit_year_to_container(l_container, l_container.acronym,
+                                                                volume_lecturing, volume_practical_exercices, subtype)
 
 
-def _link_components_and_learning_unit_year_to_container(l_container, acronym, volume_lecturing=None, volume_practical_exercices=None, subtype=learning_unit_year_subtypes.FULL):
+def _link_components_and_learning_unit_year_to_container(l_container, acronym,
+                                                         volume_lecturing=None,
+                                                         volume_practical_exercices=None,
+                                                         subtype=learning_unit_year_subtypes.FULL):
     a_learning_unit_year = LearningUnitYearFactory(acronym=acronym, academic_year=l_container.academic_year,
-                                                   title=l_container.title, subtype=subtype)
+                                                   specific_title=l_container.common_title, subtype=subtype)
     if volume_lecturing:
         a_component = LearningComponentYearFactory(
             learning_container_year=l_container,
@@ -363,7 +372,7 @@ def _get_attribution_example(learning_container_year, volume_lecturing, volume_p
                              start_year, end_year):
     return {
         'acronym': learning_container_year.acronym,
-        'title': learning_container_year.title,
+        'title': learning_container_year.common_title,
         'year': learning_container_year.academic_year.year,
         learning_component_year_type.LECTURING: volume_lecturing,
         learning_component_year_type.PRACTICAL_EXERCISES: volume_practical_exercice,

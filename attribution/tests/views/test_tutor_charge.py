@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -166,7 +166,7 @@ class TutorChargeTest(TestCase):
         a_container_year = LearningContainerYearFactory(in_charge=True)
         a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
             'acronym': ACRONYM,
-            'title': TITLE,
+            'specific_title': TITLE,
             'academic_year': an_academic_yr,
             'weight': WEIGHT})
         a_learning_unit_year.learning_container_year = a_container_year
@@ -213,7 +213,7 @@ class TutorChargeTest(TestCase):
     def create_learning_unit_year_without_duration(self):
         a_learning_unit_year_without_duration = test_learning_unit_year.create_learning_unit_year({
             'acronym': ACRONYM,
-            'title': TITLE,
+            'specific_title': TITLE,
             'academic_year': test_academic_year.create_academic_year_with_year(2016)})
         return a_learning_unit_year_without_duration
 
@@ -233,7 +233,8 @@ class TutorChargeTest(TestCase):
                          LEARNING_UNIT_LECTURING_DURATION + LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION)
 
     def test_sum_learning_unit_year_with_no_duration(self):
-        self.assertEqual(tutor_charge.sum_learning_unit_year_duration(self.create_learning_unit_year_without_duration()), 0)
+        self.assertEqual(tutor_charge.sum_learning_unit_year_duration(self.create_learning_unit_year_without_duration())
+                         , 0)
 
     def test_calculate_percentage_allocation_charge(self):
         self.assertEqual(tutor_charge.calculate_attribution_format_percentage_allocation_charge(
@@ -245,11 +246,15 @@ class TutorChargeTest(TestCase):
 
     def test_format_students_email(self):
         email_expected = "{0}{1}{2}".format(tutor_charge.MAIL_TO, ACRONYM.lower(), tutor_charge.STUDENT_LIST_EMAIL_END)
-        self.assertEqual(tutor_charge.get_email_students(ACRONYM, tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST - 1), email_expected)
+        self.assertEqual(tutor_charge.get_email_students(ACRONYM, tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST - 1),
+                         email_expected)
 
     def test_format_students_email_new_management(self):
-        email_expected = "{0}{1}-{2}{3}".format(tutor_charge.MAIL_TO, ACRONYM.lower(), tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST, tutor_charge.STUDENT_LIST_EMAIL_END)
-        self.assertEqual(tutor_charge.get_email_students(ACRONYM, tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST), email_expected)
+        email_expected = "{0}{1}-{2}{3}".format(tutor_charge.MAIL_TO, ACRONYM.lower(),
+                                                tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST,
+                                                tutor_charge.STUDENT_LIST_EMAIL_END)
+        self.assertEqual(tutor_charge.get_email_students(ACRONYM, tutor_charge.YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST),
+                         email_expected)
 
     def test_format_students_email_without_acronym(self):
         self.assertIsNone(tutor_charge.get_email_students(None, 2017))
@@ -272,17 +277,17 @@ class TutorChargeTest(TestCase):
         self.assertEqual(tutor_charge.get_attribution_years(self.a_person), list_years)
 
     def test_get_url_learning_unit_year(self):
-        a_learning_unit_year = self.get_data('learning_unit_year')
-        url_learning_unit = settings.ATTRIBUTION_CONFIG.get('CATALOG_URL').format(a_learning_unit_year.academic_year.year,
+        a_learning_unit_yr = self.get_data('learning_unit_year')
+        url_learning_unit = settings.ATTRIBUTION_CONFIG.get('CATALOG_URL').format(a_learning_unit_yr.academic_year.year,
                                                                                   ACRONYM.lower())
-        self.assertEqual(tutor_charge.get_url_learning_unit_year(a_learning_unit_year), url_learning_unit)
+        self.assertEqual(tutor_charge.get_url_learning_unit_year(a_learning_unit_yr), url_learning_unit)
 
     def test_find_january_note(self):
         student_performance = test_student_performance.create_student_performance()
         an_academic_yr = test_academic_year.create_academic_year_with_year(student_performance.academic_year)
         a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
             'acronym': 'LINGI2145',
-            'title': TITLE,
+            'specific_title': TITLE,
             'academic_year': an_academic_yr,
             'weight': WEIGHT})
         self.assertEqual(tutor_charge.get_sessions_results(student_performance.registration_id,
@@ -532,7 +537,7 @@ class HomeTest(TestCase):
         self.assertEqual(len(response.context['attributions']), 1)
         attribution = response.context['attributions'][0]
         self.assertEqual(attribution['acronym'], self.learning_unit_year.acronym)
-        self.assertEqual(attribution['title'], self.learning_unit_year.title)
+        self.assertEqual(attribution['title'], self.learning_unit_year.specific_title)
         self.assertEqual(attribution['start_year'], self.attribution.start_year)
         self.assertEqual(attribution['lecturing_allocation_charge'], str(LEARNING_UNIT_LECTURING_DURATION))
         self.assertEqual(attribution['practice_allocation_charge'], str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION))
