@@ -26,7 +26,7 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-    <h1>{{ learning_unit_year.academic_year }} - {{ learning_unit_year.acronym }} - {{ learning_unit_year.title }}</h1>
+    <h1>{{ learning_unit_year.academic_year }} - {{ learning_unit_year.acronym }} - {{ learning_unit_year.specific_title }}</h1>
     {% if students|length = 0 %}
         <h4>{% trans 'no_student_learning_unit' %}</h4>
     {% else %}

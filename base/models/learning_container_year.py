@@ -30,9 +30,10 @@ from django.db import models
 
 
 class LearningContainerYearAdmin(AuditableSerializableModelAdmin):
-    list_display = ('learning_container', 'academic_year', 'acronym', 'title')
-    fieldsets = ((None, {'fields': ('learning_container', 'academic_year', 'acronym', 'title',
-                                    'team', 'is_vacant', 'type_declaration_vacant', 'in_charge')}),)
+    list_display = ('learning_container', 'academic_year', 'acronym', 'common_title')
+    fieldsets = ((None, {'fields': ('learning_container', 'academic_year', 'acronym', 'common_title',
+                                    'team', 'is_vacant', 'type_declaration_vacant', 'in_charge',
+                                    'common_title_english')}),)
     search_fields = ['acronym']
     raw_id_fields = ('learning_container', )
     list_filter = ('academic_year', 'in_charge', 'is_vacant',)
@@ -44,8 +45,8 @@ class LearningContainerYear(AuditableSerializableModel):
     acronym = models.CharField(max_length=10)
     academic_year = models.ForeignKey('AcademicYear')
     learning_container = models.ForeignKey('LearningContainer', null=True)
-    title = models.CharField(max_length=255)
-    title_english = models.CharField(max_length=250, blank=True, null=True)
+    common_title = models.CharField(max_length=255)
+    common_title_english = models.CharField(max_length=250, blank=True, null=True)
     team = models.BooleanField(default=False)
     is_vacant = models.BooleanField(default=False)
     type_declaration_vacant = models.CharField(max_length=100, blank=True, null=True,
@@ -53,7 +54,7 @@ class LearningContainerYear(AuditableSerializableModel):
     in_charge = models.BooleanField(default=False)
 
     def __str__(self):
-        return u"%s - %s" % (self.acronym, self.title)
+        return u"%s - %s" % (self.acronym, self.common_title)
 
 
 def find_by_id(id):

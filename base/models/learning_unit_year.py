@@ -30,8 +30,8 @@ from osis_common.models.auditable_serializable_model import AuditableSerializabl
 
 
 class LearningUnitYearAdmin(AuditableSerializableModelAdmin):
-    list_display = ('acronym', 'title', 'academic_year', 'weight', 'learning_unit', )
-    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'weight', 'learning_unit',
+    list_display = ('acronym', 'specific_title', 'academic_year', 'weight', 'learning_unit', )
+    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'specific_title', 'weight', 'learning_unit',
                  'learning_container_year', 'subtype')}),)
     list_filter = ('academic_year__year', 'subtype',)
     search_fields = ['acronym']
@@ -41,7 +41,7 @@ class LearningUnitYearAdmin(AuditableSerializableModelAdmin):
 class LearningUnitYear(AuditableSerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     acronym = models.CharField(max_length=15, db_index=True)
-    title = models.CharField(max_length=255)
+    specific_title = models.CharField(max_length=255, blank=True, null=True)
     credits = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     weight = models.IntegerField(blank=True, null=True)
     academic_year = models.ForeignKey('AcademicYear')
@@ -93,7 +93,7 @@ def search_order_by_acronym(academic_year_id=None):
 
 def find_by_id(learning_unit_year_id):
     return LearningUnitYear.objects.select_related("academic_year",
-                                                    "learning_unit")\
+                                                   "learning_unit")\
         .get(pk=learning_unit_year_id)
 
 

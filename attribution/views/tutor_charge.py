@@ -151,7 +151,7 @@ def list_teaching_charge(a_person, an_academic_year):
         tot_practical = tot_practical + numeric_practical_charge
         attribution_list.append(
             {'acronym': a_learning_unit_year.acronym,
-             'title': a_learning_unit_year.title,
+             'title': a_learning_unit_year.specific_title,
              'start_year': an_attribution.start_year,
              'lecturing_allocation_charge': lecturing_charge,
              'practice_allocation_charge': practical_charge,

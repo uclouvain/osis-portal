@@ -32,7 +32,7 @@ from base import models as mdl_base
 from attribution import models as mdl_attribution
 from base.models.enums import learning_component_year_type
 from base.business import learning_unit_year_with_context
-
+from base.models.enums import vacant_declaration_type
 
 NO_CHARGE = 0.0
 
@@ -66,17 +66,21 @@ def get_volumes_total(attribution_list):
 
 
 def get_attribution_vacant_list(acronym_filter, academic_year):
+    type_delcaration_vacant_allowed = [vacant_declaration_type.RESEVED_FOR_INTERNS,
+                                       vacant_declaration_type.OPEN_FOR_EXTERNS]
     attribution_vacant = {}
     learning_containers_year_ids = list(mdl_base.learning_container_year.search(acronym=acronym_filter,
                                                                                 academic_year=academic_year)\
-                                                                        .filter(team=False)\
+                                                                        .filter(team=False,
+                                                                                type_declaration_vacant__in=
+                                                                                type_delcaration_vacant_allowed)\
                                                                         .values_list('id', flat=True))
     l_component_years = mdl_base.learning_component_year.search(learning_container_year=learning_containers_year_ids) \
                                                         .exclude(volume_declared_vacant__isnull=True)
     for l_component_year in l_component_years:
         key = l_component_year.learning_container_year.id
         attribution_vacant.setdefault(key, {
-            'title': l_component_year.learning_container_year.title,
+            'title': l_component_year.learning_container_year.common_title,
             'acronym': l_component_year.learning_container_year.acronym,
             'learning_container_year_id': l_component_year.learning_container_year.id,
             'team': l_component_year.learning_container_year.team

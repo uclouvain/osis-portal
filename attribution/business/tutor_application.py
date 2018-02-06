@@ -155,7 +155,7 @@ def _resolve_learning_container_year_info(application_list, academic_year):
         l_container_year = next((l_container_year for l_container_year in l_container_years if
                                  l_container_year.acronym == application.get('acronym')), None)
         application['learning_container_year_id'] = l_container_year.id
-        application['title'] = l_container_year.title
+        application['title'] = l_container_year.common_title
         for l_component_year in l_container_year.learningcomponentyear_set.all():
             application[l_component_year.type] = l_component_year.volume_declared_vacant
     return application_list
