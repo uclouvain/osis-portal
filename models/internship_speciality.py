@@ -23,8 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 from django.db import models
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
 class InternshipSpecialityAdmin(SerializableModelAdmin):

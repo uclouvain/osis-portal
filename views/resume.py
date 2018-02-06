@@ -35,9 +35,7 @@ from internship.models import internship as mdl_internship
 from internship.models import period as mdl_period
 from internship.models import internship_speciality as mdl_internship_speciality
 from internship.models import cohort as mdl_internship_cohort
-from internship.forms import form_internship_student_information
 from base.models import student as mdl_student
-from base.models import person as mdl_person
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
 from internship.decorators.global_view_decorators import redirect_if_multiple_registrations
 
@@ -58,7 +56,7 @@ def view_student_resume(request, cohort_id):
     specialities = mdl_internship_speciality.find_by_cohort(cohort)
     student_choices = mdl_internship_choice.search(student=student, specialities=specialities)
     cohort = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
-    publication_allowed  = cohort.publication_start_date <= datetime.date.today()
+    publication_allowed = cohort.publication_start_date <= datetime.date.today()
     return layout.render(request, "student_resume.html", {"student": student,
                                                           "student_information": student_information,
                                                           "student_affectations": student_affectations,
