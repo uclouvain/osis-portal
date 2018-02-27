@@ -122,8 +122,7 @@ def list_attributions(a_person, an_academic_year):
     results = mdl_attribution.attribution \
         .find_by_tutor_year_order_by_acronym_function(mdl_base.tutor.find_by_person(a_person), an_academic_year)
     for attribution in results:
-        if attribution.learning_unit_year.in_charge:
-            results_in_charge.append(attribution)
+        results_in_charge.append(attribution)
     return results_in_charge
 
 
@@ -247,7 +246,6 @@ def get_url_learning_unit_year(a_learning_unit_year):
 
 
 def _load_students(learning_unit_year_id, a_tutor):
-
     request_tutor = mdl_base.tutor.find_by_id(a_tutor)
     a_learning_unit_year = mdl_base.learning_unit_year.find_by_id(learning_unit_year_id)
     return {'global_id': request_tutor.person.global_id,
