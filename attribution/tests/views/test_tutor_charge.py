@@ -26,27 +26,27 @@
 import datetime
 from unittest import mock
 
-from requests.exceptions import RequestException
-from django.contrib.auth.models import User, Group, Permission
-from django.test import TestCase, override_settings
 from django.conf import settings
+from django.contrib.auth.models import User, Group, Permission
 from django.core.urlresolvers import reverse
 from django.forms.formsets import BaseFormSet
+from django.test import TestCase, override_settings
+from requests.exceptions import RequestException
 
+from attribution.models.enums import function
+from attribution.tests.factories.attribution import AttributionFactory
 from attribution.views import tutor_charge
 from attribution.views.tutor_charge import get_learning_unit_enrollments_list
 from base.models.enums import component_type
-from attribution.models.enums import function
+from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
-from performance.tests.models import test_student_performance
-from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
-    test_learning_unit_component
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
-from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_unit_year import LearningUnitYearFactory
-from base.tests.factories.learning_container_year import LearningContainerYearFactory
-from attribution.tests.factories.attribution import AttributionFactory
+from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
+    test_learning_unit_component
+from performance.tests.models import test_student_performance
 
 URL_ADE = "url_ade"
 
