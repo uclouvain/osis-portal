@@ -65,7 +65,8 @@ JANUARY = "janvier"
 JUNE = "juin"
 SEPTEMBER = "septembre"
 
-ENROLLMENT_STATES_TO_SHOW_IN_ATTRIBUTIONS_LIST = [offer_enrollment_state.PROVISORY, offer_enrollment_state.SUBSCRIBED]
+OFFER_ENROLLMENT_STATES_TO_SHOW_IN_ATTRIBUTIONS_LIST = \
+    [offer_enrollment_state.PROVISORY, offer_enrollment_state.SUBSCRIBED]
 
 ATTRIBUTIONS_TUTOR_ALLOCATION_PATH = 'resources/AllocationCharges/tutors/{global_id}/{year}'
 
@@ -359,7 +360,7 @@ def calculate_attribution_format_percentage_allocation_charge(lecturing_charge, 
 def get_learning_unit_enrollments_list(a_learning_unit_year):
     return mdl_base.learning_unit_enrollment.find_by_learning_unit_year(
         a_learning_unit_year,
-        offer_enrollment_states=ENROLLMENT_STATES_TO_SHOW_IN_ATTRIBUTIONS_LIST,
+        offer_enrollment_states=OFFER_ENROLLMENT_STATES_TO_SHOW_IN_ATTRIBUTIONS_LIST,
         only_enrolled=True
     )
 
