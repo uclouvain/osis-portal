@@ -34,8 +34,10 @@ from django.core.urlresolvers import reverse
 from django.forms.formsets import BaseFormSet
 
 from attribution.views import tutor_charge
+from attribution.views.tutor_charge import get_learning_unit_enrollments_list
 from base.models.enums import component_type
 from attribution.models.enums import function
+from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
 from performance.tests.models import test_student_performance
 from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
     test_learning_unit_component
@@ -62,6 +64,7 @@ OTHER_ATTRIBUTION_ID = "8081"
 OTHER_ATTRIBUTION_EXTERNAL_ID = "osis.attribution_{attribution_id}".format(attribution_id=OTHER_ATTRIBUTION_ID)
 
 ACRONYM = 'LELEC1530'
+PARTIM = 'LELEC1530A'
 TITLE = 'Circ. Electro. Analog. & Digit. Fondam.'
 WEIGHT = 5
 now = datetime.datetime.now()
@@ -313,6 +316,23 @@ class TutorChargeTest(TestCase):
     def test_no_current_academic_year(self):
         a_year = datetime.datetime.now().year
         self.assertEqual(tutor_charge.get_current_academic_year(), a_year)
+
+    def test_get_learning_unit_enrollments_list(self):
+        a_learning_unit_yr = self.get_data('learning_unit_year')
+
+        a_learning_unit_year_partim = test_learning_unit_year.create_learning_unit_year({
+            'acronym': PARTIM,
+            'specific_title': TITLE,
+            'academic_year': self.get_data('academic_year'),
+            'weight': WEIGHT})
+        a_learning_unit_year_partim.learning_container_year = self.get_data('learning_container_year')
+        a_learning_unit_year_partim.save()
+
+        enrollment_learning_unit = LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_yr)
+        LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_year_partim)
+
+        self.assertCountEqual(get_learning_unit_enrollments_list(a_learning_unit_yr), [enrollment_learning_unit])
+
 
     @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge)
     def test_list_teaching_charge_for_multiple_attributions_less_in_json(self, mock_requests_get):
