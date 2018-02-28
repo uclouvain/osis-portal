@@ -337,11 +337,11 @@ class TutorChargeTest(TestCase):
             enrollment_learning_unit.offer_enrollment.save()
             self.assertCountEqual(get_learning_unit_enrollments_list(a_learning_unit_yr), [enrollment_learning_unit])
 
-        all_enrollment_states = [state[0] for state in offer_enrollment_state.STATES]
-        enrollment_states_not_to_show_in_attributions_list = [
-            state for state in all_enrollment_states
+        all_offer_enrollment_states = [state[0] for state in offer_enrollment_state.STATES]
+        offer_enrollment_states_not_to_show_in_attributions_list = [
+            state for state in all_offer_enrollment_states
             if state not in tutor_charge.OFFER_ENROLLMENT_STATES_TO_SHOW_IN_ATTRIBUTIONS_LIST]
-        for state in enrollment_states_not_to_show_in_attributions_list:
+        for state in offer_enrollment_states_not_to_show_in_attributions_list:
             enrollment_learning_unit.offer_enrollment.enrollment_state = state
             enrollment_learning_unit.offer_enrollment.save()
             self.assertCountEqual(get_learning_unit_enrollments_list(a_learning_unit_yr), [])
