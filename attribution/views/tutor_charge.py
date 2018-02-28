@@ -65,9 +65,6 @@ JANUARY = "janvier"
 JUNE = "juin"
 SEPTEMBER = "septembre"
 
-OFFER_ENROLLMENT_STATES_TO_SHOW_IN_ATTRIBUTIONS_LIST = \
-    [offer_enrollment_state.PROVISORY, offer_enrollment_state.SUBSCRIBED]
-
 ATTRIBUTIONS_TUTOR_ALLOCATION_PATH = 'resources/AllocationCharges/tutors/{global_id}/{year}'
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
@@ -121,9 +118,13 @@ def get_schedule_url(an_acronym):
 
 
 def list_attributions(a_person, an_academic_year):
-    return list(mdl_attribution.attribution.find_by_tutor_year_order_by_acronym_function(
-        mdl_base.tutor.find_by_person(a_person),
-        an_academic_year))
+    results_in_charge = []
+    results = mdl_attribution.attribution \
+        .find_by_tutor_year_order_by_acronym_function(mdl_base.tutor.find_by_person(a_person), an_academic_year)
+    for attribution in results:
+        if attribution.learning_unit_year.in_charge:
+            results_in_charge.append(attribution)
+    return results_in_charge
 
 
 def list_teaching_charge(a_person, an_academic_year):
@@ -246,6 +247,7 @@ def get_url_learning_unit_year(a_learning_unit_year):
 
 
 def _load_students(learning_unit_year_id, a_tutor):
+
     request_tutor = mdl_base.tutor.find_by_id(a_tutor)
     a_learning_unit_year = mdl_base.learning_unit_year.find_by_id(learning_unit_year_id)
     return {'global_id': request_tutor.person.global_id,
@@ -358,9 +360,10 @@ def calculate_attribution_format_percentage_allocation_charge(lecturing_charge, 
 
 
 def get_learning_unit_enrollments_list(a_learning_unit_year):
-    return mdl_base.learning_unit_enrollment.find_by_learning_unit_year(
-        a_learning_unit_year,
-        offer_enrollment_states=OFFER_ENROLLMENT_STATES_TO_SHOW_IN_ATTRIBUTIONS_LIST,
+    enrollment_states = [offer_enrollment_state.PROVISORY, offer_enrollment_state.SUBSCRIBED]
+    return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(
+        list(mdl_base.learning_unit_year.find_by_learning_container_year(a_learning_unit_year.learning_container_year)),
+        offer_enrollment_states=enrollment_states,
         only_enrolled=True
     )
 
