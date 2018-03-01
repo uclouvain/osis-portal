@@ -61,12 +61,12 @@ class LearningUnitEnrollment(AuditableSerializableModel):
         return u"%s - %s" % (self.learning_unit_year, self.offer_enrollment.student)
 
 
-def find_by_learning_unit_year(learning_unit_year, offer_enrollment_states=None, only_enrolled=False):
+def find_by_learning_unit_years(learning_unit_years, offer_enrollment_states=None, only_enrolled=False):
     qs = LearningUnitEnrollment.objects.select_related("learning_unit_year__academic_year",
                                                          "learning_unit_year__learning_unit",
                                                          "offer_enrollment__student__person",
                                                          "offer_enrollment__offer_year",)\
-        .filter(learning_unit_year=learning_unit_year)\
+        .filter(learning_unit_year__in=learning_unit_years)\
         .order_by('offer_enrollment__student__person__last_name', 'offer_enrollment__student__person__first_name')
 
     if offer_enrollment_states and isinstance(offer_enrollment_states, list):

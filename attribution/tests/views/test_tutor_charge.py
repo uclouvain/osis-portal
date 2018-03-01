@@ -26,28 +26,25 @@
 import datetime
 from unittest import mock
 
-from django.conf import settings
+from requests.exceptions import RequestException
 from django.contrib.auth.models import User, Group, Permission
+from django.test import TestCase, override_settings
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.forms.formsets import BaseFormSet
-from django.test import TestCase, override_settings
-from requests.exceptions import RequestException
 
-from attribution.models.enums import function
-from attribution.tests.factories.attribution import AttributionFactory
 from attribution.views import tutor_charge
-from attribution.views.tutor_charge import get_learning_unit_enrollments_list
 from base.models.enums import component_type
-from base.models.enums import offer_enrollment_state
-from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_container_year import LearningContainerYearFactory
-from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
-from base.tests.factories.learning_unit_year import LearningUnitYearFactory
-from base.tests.factories.person import PersonFactory
-from base.tests.factories.tutor import TutorFactory
+from attribution.models.enums import function
+from performance.tests.models import test_student_performance
 from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
     test_learning_unit_component
-from performance.tests.models import test_student_performance
+from base.tests.factories.person import PersonFactory
+from base.tests.factories.tutor import TutorFactory
+from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
+from base.tests.factories.learning_container_year import LearningContainerYearFactory
+from attribution.tests.factories.attribution import AttributionFactory
 
 URL_ADE = "url_ade"
 
@@ -65,7 +62,6 @@ OTHER_ATTRIBUTION_ID = "8081"
 OTHER_ATTRIBUTION_EXTERNAL_ID = "osis.attribution_{attribution_id}".format(attribution_id=OTHER_ATTRIBUTION_ID)
 
 ACRONYM = 'LELEC1530'
-PARTIM = 'LELEC1530A'
 TITLE = 'Circ. Electro. Analog. & Digit. Fondam.'
 WEIGHT = 5
 now = datetime.datetime.now()
@@ -317,34 +313,6 @@ class TutorChargeTest(TestCase):
     def test_no_current_academic_year(self):
         a_year = datetime.datetime.now().year
         self.assertEqual(tutor_charge.get_current_academic_year(), a_year)
-
-    def test_get_learning_unit_enrollments_list(self):
-        a_learning_unit_yr = self.get_data('learning_unit_year')
-
-        a_learning_unit_year_partim = test_learning_unit_year.create_learning_unit_year({
-            'acronym': PARTIM,
-            'specific_title': TITLE,
-            'academic_year': self.get_data('academic_year'),
-            'weight': WEIGHT})
-        a_learning_unit_year_partim.learning_container_year = self.get_data('learning_container_year')
-        a_learning_unit_year_partim.save()
-
-        enrollment_learning_unit = LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_yr)
-        LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_year_partim)
-
-        for state in tutor_charge.OFFER_ENROLLMENT_STATES_TO_SHOW_IN_ATTRIBUTIONS_LIST:
-            enrollment_learning_unit.offer_enrollment.enrollment_state = state
-            enrollment_learning_unit.offer_enrollment.save()
-            self.assertCountEqual(get_learning_unit_enrollments_list(a_learning_unit_yr), [enrollment_learning_unit])
-
-        all_offer_enrollment_states = [state[0] for state in offer_enrollment_state.STATES]
-        offer_enrollment_states_not_to_show_in_attributions_list = [
-            state for state in all_offer_enrollment_states
-            if state not in tutor_charge.OFFER_ENROLLMENT_STATES_TO_SHOW_IN_ATTRIBUTIONS_LIST]
-        for state in offer_enrollment_states_not_to_show_in_attributions_list:
-            enrollment_learning_unit.offer_enrollment.enrollment_state = state
-            enrollment_learning_unit.offer_enrollment.save()
-            self.assertCountEqual(get_learning_unit_enrollments_list(a_learning_unit_yr), [])
 
     @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge)
     def test_list_teaching_charge_for_multiple_attributions_less_in_json(self, mock_requests_get):
