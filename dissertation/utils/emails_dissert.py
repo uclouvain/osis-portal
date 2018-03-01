@@ -25,17 +25,49 @@
 ##############################################################################
 
 from osis_common.messaging import message_config, send_message as message_service
+from dissertation.models import dissertation_role
 
 
-def send_mail_to_teacher_new_dissert(adviser):
-    """
-    Notify (for the teacher) of a new dissertation project
-    """
-    html_template_ref = 'dissertation_adviser_new_project_dissertation_html'
-    txt_template_ref = 'dissertation_adviser_new_project_dissertation_txt'
-    receivers = [message_config.create_receiver(adviser.person.id, adviser.person.email, adviser.person.language)]
+def get_base_template(dissert):
+    template_base_data = {'author': dissert.author,
+                          'title': dissert.title,
+                          'promoteur': create_string_list_promoteurs(dissert),
+                          'description': dissert.description,
+                          'dissertation_proposition_titre': dissert.proposition_dissertation.title}
+    return template_base_data
+
+
+def create_string_list_promoteurs(dissert):
+    liste_promoteurs_string = ''
+    promoteurs = dissertation_role.find_all_promoteur_by_dissertation(dissert)
+    if promoteurs:
+        liste_promoteurs_string = ','.join(['{} {}'.format(dissrole.adviser.person.first_name,
+                                            dissrole.adviser.person.last_name)
+                                            for dissrole in promoteurs])
+    return liste_promoteurs_string
+
+
+def send_email_to_all_promoteurs(dissert, template):
+    receivers = [diss_role.adviser for diss_role in dissertation_role.find_all_promoteur_by_dissertation(dissert)]
+    send_email(dissert, template, receivers)
+
+
+def send_email(dissert, template_ref, receivers):
+    receivers = generate_receivers(receivers)
+    html_template_ref = template_ref + '_html'
+    txt_template_ref = template_ref + '_txt'
     suject_data = None
-    template_base_data = {'adviser': adviser, }
+    template_base_data = get_base_template(dissert)
     tables = None
-    message_content = message_config.create_message_content(html_template_ref, txt_template_ref, tables, receivers, template_base_data, suject_data)
+    message_content = message_config.create_message_content(html_template_ref, txt_template_ref, tables, receivers,
+                                                            template_base_data, suject_data)
     return message_service.send_messages(message_content)
+
+
+def generate_receivers(receivers):
+    receivers_tab = []
+    for receiver in receivers:
+        receivers_tab.append(message_config.create_receiver(receiver.person.id,
+                                                            receiver.person.email,
+                                                            receiver.person.language))
+    return receivers_tab
