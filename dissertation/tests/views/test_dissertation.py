@@ -37,15 +37,9 @@ from dissertation.tests.factories.proposition_dissertation import PropositionDis
 from osis_common.models import message_history
 from osis_common.models import message_template
 
-ERROR_405_BAD_REQUEST = 405
-ERROR_404_PAGE_NO_FOUND = 404
-HTTP_OK = 200
-ERROR_403_NOT_AUTORIZED = 403
-MAXIMUM_IN_REQUEST = 50
-
 
 class DissertationViewTestCase(TestCase):
-    fixtures = ['dissertation/fixtures/message_template.json', ]
+    fixtures = ['dissertation/fixtures/message_templates_dissertation.json', ]
 
     def setUp(self):
         self.maxDiff = None
@@ -54,28 +48,19 @@ class DissertationViewTestCase(TestCase):
                                                 last_name='Dupont',
                                                 email='laurent.dermine@uclouvain.be')
         self.teacher = AdviserTeacherFactory(person=a_person_teacher)
-        a_person_teacher2 = PersonFactory.create(first_name='Marco',
-                                                 last_name='Millet',
-                                                 email='laurent.dermine@uclouvain.be')
-        self.teacher2 = AdviserTeacherFactory(person=a_person_teacher2)
         a_person_student = PersonFactory.create(last_name="Durant",
                                                 user=None,
                                                 email='laurent.dermine@uclouvain.be')
         self.student = StudentFactory.create(person=a_person_student)
         self.offer1 = OfferFactory(title="test_offer1")
-        self.offer2 = OfferFactory(title="test_offer2")
         self.academic_year1 = AcademicYearFactory()
-        self.academic_year2 = AcademicYearFactory(year=self.academic_year1.year - 1)
         self.offer_year_start1 = OfferYearFactory(acronym="test_offer1", offer=self.offer1,
                                                   academic_year=self.academic_year1)
-        self.offer_proposition1 = OfferPropositionFactory(offer=self.offer1, global_email_to_commission=True)
-        self.offer_proposition2 = OfferPropositionFactory(offer=self.offer2, global_email_to_commission=False)
+        self.offer_proposition1 = OfferPropositionFactory(offer=self.offer1)
         self.proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
                                                                        creator=a_person_teacher,
                                                                        title='Proposition 1212121'
                                                                        )
-
-
 
     def test_email_new_dissert(self):
         self.dissertation_test_email = DissertationFactory(author=self.student,
@@ -99,5 +84,3 @@ class DissertationViewTestCase(TestCase):
             message_template.find_by_reference('dissertation_adviser_new_project_dissertation_html'),
             None)
         assert 'Vous avez reçu une demande d\'encadrement de mémoire' in message_history_result.last().subject
-
-

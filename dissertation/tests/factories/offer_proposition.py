@@ -47,3 +47,4 @@ class OfferPropositionFactory(factory.DjangoModelFactory):
     end_jury_visibility = factory.Faker('date_time_this_year', before_now=False, after_now=True, tzinfo=None)
     start_edit_title = factory.Faker('date_time_this_year', before_now=True, after_now=False, tzinfo=None)
     end_edit_title = factory.Faker('date_time_this_year', before_now=False, after_now=True, tzinfo=None)
+    global_email_to_commission = True

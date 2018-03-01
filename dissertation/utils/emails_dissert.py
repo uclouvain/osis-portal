@@ -48,6 +48,7 @@ def create_string_list_promoteurs(dissert):
 
 
 def send_email_to_all_promoteurs(dissert, template):
+    print('___'+ str(dissertation_role.find_all_promoteur_by_dissertation(dissert)))
     receivers = [diss_role.adviser for diss_role in dissertation_role.find_all_promoteur_by_dissertation(dissert)]
     send_email(dissert, template, receivers)
 

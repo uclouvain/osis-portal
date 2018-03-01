@@ -24,13 +24,11 @@
 #
 ##############################################################################
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
-from django.contrib import admin
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from base.models import student, offer_year
 from . import dissertation_location, proposition_dissertation
-from dissertation.models.dissertation_role import get_promoteur_by_dissertation
 from dissertation.utils import emails_dissert
 from base import models as mdl
 
