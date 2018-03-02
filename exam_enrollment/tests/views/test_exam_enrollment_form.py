@@ -1,12 +1,12 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -31,12 +31,11 @@ from unittest.mock import patch, Mock
 from django.conf import settings
 from django.contrib.auth.models import User, Group, Permission
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
 from django.test import TestCase, Client
+
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.offer_year import OfferYearFactory
-
-from base.tests.models import test_student, test_person, test_academic_year, test_offer_year, test_offer_enrollment, \
+from base.tests.models import test_student, test_person, test_academic_year, test_offer_year, \
     test_learning_unit_enrollment, test_learning_unit_year
 from exam_enrollment.views import exam_enrollment
 
@@ -60,7 +59,9 @@ class ExamEnrollmentFormTest(TestCase):
         group.permissions.add(Permission.objects.get(codename='is_student'))
         self.user = User.objects.create_user(username='jsmith', email='jsmith@localhost', password='secret')
         self.user2 = User.objects.create_user(username='jsmath', email='jsmath@localhost', password='secret')
-        self.user_not_student = User.objects.create_user(username='pjashar', email='pjashar@localhost', password='secret')
+        self.user_not_student = User.objects.create_user(username='pjashar',
+                                                         email='pjashar@localhost',
+                                                         password='secret')
         self.user.groups.add(group)
         self.user2.groups.add(group)
         self.person = test_person.create_person_with_user(self.user, first_name="James", last_name="Smith")
@@ -77,9 +78,10 @@ class ExamEnrollmentFormTest(TestCase):
         self.current_academic_year = test_academic_year.create_academic_year_current()
         off_enrol = OfferEnrollmentFactory(student=self.student, offer_year=OfferYearFactory(academic_year=self.current_academic_year))
         learn_unit_year = test_learning_unit_year.create_learning_unit_year({'acronym': 'LDROI1234',
-                                                                             'title': 'Bachelor in law',
+                                                                             'specific_title': 'Bachelor in law',
                                                                              'academic_year': self.academic_year})
-        self.learn_unit_enrol = test_learning_unit_enrollment.create_learning_unit_enrollment(off_enrol, learn_unit_year)
+        self.learn_unit_enrol = test_learning_unit_enrollment.create_learning_unit_enrollment(off_enrol,
+                                                                                              learn_unit_year)
 
     def test_json_form_content(self):
         form = self.correct_exam_enrol_form
@@ -201,9 +203,9 @@ class ExamEnrollmentFormTest(TestCase):
         mock_current_academic_year.return_value = None
         mock_get_student_programs.return_value = [self.off_year]
         mock_fetch_exam_form.return_value = {
-                'exam_enrollments': [],
-                'current_number_session': 0,
-            }
+            'exam_enrollments': [],
+            'current_number_session': 0,
+        }
         mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
         self.client.force_login(self.user)
         an_url = reverse('exam_enrollment_form_direct')
@@ -232,7 +234,9 @@ class ExamEnrollmentFormTest(TestCase):
                 "current_number_session": 1,
             }
             response = self.client.post(self.url, post_data)
-            result = exam_enrollment._exam_enrollment_form_submission_message(self.off_year, response.wsgi_request, self.student)
+            result = exam_enrollment._exam_enrollment_form_submission_message(self.off_year,
+                                                                              response.wsgi_request,
+                                                                              self.student)
             self.assert_correct_data_structure(result)
             self.assert_none_etat_to_inscr_not_in_submitted_form(result.get('exam_enrollments'))
 
@@ -268,7 +272,8 @@ class ExamEnrollmentFormTest(TestCase):
     @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
     def test_case_student_has_no_learning_unit_enrollment(self, mock_find):
         mock_find.return_value = None
-        off_year_enrol = OfferEnrollmentFactory(student=self.student, offer_year=OfferYearFactory(academic_year=self.current_academic_year))
+        off_year_enrol = OfferEnrollmentFactory(student=self.student,
+                                                offer_year=OfferYearFactory(academic_year=self.current_academic_year))
         self.client.force_login(self.user)
         response = self.client.get(reverse('exam_enrollment_form', args=[off_year_enrol.offer_year.id]), follow=True)
         self.assertRedirects(response, reverse('dashboard_home'))

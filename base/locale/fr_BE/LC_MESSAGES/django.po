@@ -49,3 +49,24 @@ msgstr "Vous êtes à présent déconnecté."
 
 msgid "redirect_to_login"
 msgstr "Cliquez pour vous reconnectez"
+
+msgid "sql_command"
+msgstr "Commande SQL"
+
+msgid "data_maintenance"
+msgstr "Maintenance des données"
+
+msgid "desc_lnk_data_maintenance"
+msgstr "Maintenance des données via SQL"
+
+msgid "forbidden_sql_keywords"
+msgstr "Mots-clés SQL interdits"
+
+msgid "result"
+msgstr "Résultat"
+
+msgid "are_you_sure"
+msgstr "Êtes-vous certain ?"
+
+msgid "sql_readonly"
+msgstr "SQL readonly"

@@ -30,8 +30,9 @@ from attribution.models.enums import function
 
 class AttributionAdmin(AuditableSerializableModelAdmin):
     list_display = ('tutor', 'function', 'learning_unit_year')
-    list_filter = ('function',)
-    fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function', 'start_year', 'end_year')}),)
+    list_filter = ('function', 'summary_responsible',)
+    fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function', 'start_year', 'end_year',
+                                    'summary_responsible')}),)
     raw_id_fields = ('learning_unit_year', 'tutor')
     search_fields = ['tutor__person__first_name', 'tutor__person__last_name', 'learning_unit_year__acronym']
 
@@ -43,6 +44,7 @@ class Attribution(AuditableSerializableModel):
     tutor = models.ForeignKey('base.Tutor')
     start_year = models.IntegerField(blank=True, null=True)
     end_year = models.IntegerField(blank=True, null=True)
+    summary_responsible = models.BooleanField(default=False)
 
     class Meta:
         permissions = (
@@ -96,3 +98,9 @@ def find_distinct_years(a_tutor):
     return Attribution.objects.filter(tutor=a_tutor, learning_unit_year__learning_container_year__in_charge=True)\
         .order_by('-learning_unit_year__academic_year__year')\
         .values_list('learning_unit_year__academic_year__year', flat=True).distinct()
+
+
+def is_summary_responsible(a_tutor):
+    if Attribution.objects.filter(tutor=a_tutor, summary_responsible=True).count() > 0:
+        return True
+    return False

@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -80,7 +80,7 @@ def get_attribution_vacant_list(acronym_filter, academic_year):
     for l_component_year in l_component_years:
         key = l_component_year.learning_container_year.id
         attribution_vacant.setdefault(key, {
-            'title': l_component_year.learning_container_year.title,
+            'title': l_component_year.learning_container_year.common_title,
             'acronym': l_component_year.learning_container_year.acronym,
             'learning_container_year_id': l_component_year.learning_container_year.id,
             'team': l_component_year.learning_container_year.team

@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -31,14 +31,16 @@ from django.contrib import admin
 
 class AttributionNewAdmin(admin.ModelAdmin):
     list_display = ('global_id', 'attributions', 'applications')
-    fieldsets = ((None, {'fields': ('global_id', 'attributions', 'applications', )}),)
+    fieldsets = ((None, {'fields': ('global_id', 'attributions', 'applications', 'summary_responsible')}),)
     search_fields = ['global_id']
+    list_filter = ('summary_responsible', )
 
 
 class AttributionNew(models.Model):
     global_id = models.CharField(max_length=10, unique=True)
     attributions = JSONField(default=list, blank=True)
     applications = JSONField(default=list, blank=True)
+    summary_responsible = models.BooleanField(default=False)
 
     class Meta:
         permissions = (

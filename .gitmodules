@@ -5,3 +5,6 @@
 [submodule "internship"]
 	path = internship
 	url = https://github.com/uclouvain/osis-portal-internship.git
+[submodule "mobility"]
+	path = mobility
+	url = https://github.com/uclouvain/osis-portal-mobility.git

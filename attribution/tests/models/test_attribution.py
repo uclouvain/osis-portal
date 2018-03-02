@@ -85,7 +85,7 @@ class AttributionTest(TestCase):
         attribution_id = self.attribution.id
 
         with connection.cursor() as cursor:
-            cursor.execute("update attribution_attribution set deleted=True where id=%s", [attribution_id])
+            cursor.execute("update attribution_attribution set deleted='2004-10-19 10:23:54' where id=%s", [attribution_id])
 
         with self.assertRaises(ObjectDoesNotExist):
             mdl_attribution.attribution.Attribution.objects.get(id=attribution_id)
@@ -111,3 +111,15 @@ class AttributionTest(TestCase):
                                                               function=function.CO_HOLDER,
                                                               learning_unit_year=b_learning_unit_year)
         self.assertListEqual(list(mdl_attribution.attribution.find_by_tutor_year_order_by_acronym_function(self.tutor, self.an_academic_year)), [a_attribution, c_attribution, b_attribution])
+
+
+    def test_is_summary_responsible_tutor(self):
+        a_attribution = self.attribution = AttributionFactory(tutor=self.tutor,
+                                                              summary_responsible=True)
+        return self.assertTrue(mdl_attribution.attribution.is_summary_responsible(self.tutor))
+
+
+    def test_is_not_summary_responsible_tutor(self):
+        a_attribution = self.attribution = AttributionFactory(tutor=self.tutor,
+                                                              summary_responsible=False)
+        return self.assertFalse(mdl_attribution.attribution.is_summary_responsible(self.tutor))

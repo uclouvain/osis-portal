@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -28,8 +28,7 @@ from osis_common.models.auditable_serializable_model import AuditableSerializabl
 
 
 class EntityComponentYearAdmin(AuditableSerializableModelAdmin):
-    list_display = ('entity_container_year', 'learning_component_year', 'hourly_volume_total',
-                    'hourly_volume_partial')
+    list_display = ('entity_container_year', 'learning_component_year', 'repartition_volume',)
     search_fields = ['entity_container_year__learning_container_year__acronym']
     raw_id_fields = ('entity_container_year', 'learning_component_year')
     list_filter = ('entity_container_year__learning_container_year__academic_year',)
@@ -39,8 +38,7 @@ class EntityComponentYear(AuditableSerializableModel):
     changed = models.DateTimeField(null=True, auto_now=True)
     entity_container_year = models.ForeignKey('EntityContainerYear')
     learning_component_year = models.ForeignKey('LearningComponentYear')
-    hourly_volume_total = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
-    hourly_volume_partial = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    repartition_volume = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
         return u"%s - %s" % (self.entity_container_year, self.learning_component_year)

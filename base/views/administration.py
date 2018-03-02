@@ -23,11 +23,41 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.exceptions import PermissionDenied
+
 from base.views import layout
+from osis_common.utils import native
 
 
 @login_required
 @user_passes_test(lambda u: u.is_staff and u.has_perm('base.is_administrator'), login_url='/403/', redirect_field_name=None)
 def data(request):
-    return layout.render(request, 'admin/data.html')
+    sql_data_management_enabled = _is_sql_data_management_enabled()
+    return layout.render(request, 'admin/data.html', locals())
+
+
+@login_required
+@user_passes_test(lambda u: u.is_staff and u.has_perm('base.is_administrator'), login_url='/403/', redirect_field_name=None)
+def data_maintenance(request):
+    if not _is_sql_data_management_enabled():
+        raise PermissionDenied("SQL data management is not enabled in this environment")
+
+    sql_command = request.POST.get('sql_command')
+    results = native.execute(sql_command)
+    forbidden_sql_keywords = native.get_forbidden_sql_keywords()
+    sql_readonly = native.get_sql_data_management_readonly()
+    return layout.render(request, "admin/data_maintenance.html", {'section': 'data_maintenance',
+                                                                  'sql_command': sql_command,
+                                                                  'results': results,
+                                                                  'sql_readonly': sql_readonly,
+                                                                  'forbidden_sql_keywords': forbidden_sql_keywords
+                                                                  }
+                         )
+
+
+def _is_sql_data_management_enabled():
+    if hasattr(settings, 'ENABLE_SQL_DATA_MANAGEMENT'):
+        return settings.ENABLE_SQL_DATA_MANAGEMENT
+    return False
