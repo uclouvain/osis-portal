@@ -268,10 +268,21 @@ class TestOnlineApplication(TestCase):
         self.assertTrue(form.errors)  # Not valid because -1 entered
 
     def test_post_overview_with_lecturing_and_practical_component_partim(self):
+        lbira2101a_next = _create_learning_container_with_components("LBIRA2101A", self.application_academic_year,
+                                                                     volume_lecturing=20, volume_practical_exercices=20,
+                                                                         subtype=learning_unit_year_subtypes.PARTIM)
+        lbira2101a_current = _create_learning_container_with_components(
+            "LBIRA2101A", self.current_academic_year,
+            volume_lecturing=20, volume_practical_exercices=20,
+            subtype=learning_unit_year_subtypes.PARTIM)
+        _link_components_and_learning_unit_year_to_container(lbira2101a_current, "LBIRA2101",
+                                                             subtype=learning_unit_year_subtypes.FULL)
+        _link_components_and_learning_unit_year_to_container(lbira2101a_next, "LBIRA2101",
+                                                             subtype=learning_unit_year_subtypes.FULL)
         self.attribution.delete()
         self.attribution = AttributionNewFactory(
             global_id=self.tutor.person.global_id,
-            applications=[_get_application_example(self.lbira2101_next, "10", "10")]
+            applications=[_get_application_example(lbira2101a_next, "10", "10")]
         )
 
         url = reverse('applications_overview')
@@ -279,7 +290,7 @@ class TestOnlineApplication(TestCase):
         self.assertEqual(response.status_code, 200)
         context = response.context[-1]
         self.assertEqual(len(context['applications']), 1)
-        self.assertEqual(context['applications'][0]['acronym'], self.lbira2101_next.acronym)
+        self.assertEqual(context['applications'][0]['acronym'], lbira2101a_next.acronym)
         with self.assertRaises(KeyError):
             context['applications'][0]['PRACTICAL_EXERCISES']
         with self.assertRaises(KeyError):
@@ -290,8 +301,8 @@ class TestOnlineApplication(TestCase):
         self.lbir1200_current = _create_learning_container_with_components("LBIR1200", self.current_academic_year)
         self.lbir1300_current = _create_learning_container_with_components("LBIR1300", self.current_academic_year)
         self.ldroi1500_current = _create_learning_container_with_components("LDROI1500", self.current_academic_year)
-        self.lbira2101_current = _create_learning_container_with_components("LBIRA2101", self.current_academic_year,
-                                                                            subtype=learning_unit_year_subtypes.PARTIM)
+        # self.lbira2101_current = _create_learning_container_with_components("LBIRA2101", self.current_academic_year,
+        #                                                                     subtype=learning_unit_year_subtypes.PARTIM)
 
         # Creation learning container for next academic year [==> application academic year]
         self.lbir1200_next = _create_learning_container_with_components("LBIR1200", self.application_academic_year,
@@ -302,9 +313,9 @@ class TestOnlineApplication(TestCase):
                                                                          54, 7)
         self.lagro2500_next = _create_learning_container_with_components("LAGRO2500", self.application_academic_year,
                                                                          0, 70)
-        self.lbira2101_next = _create_learning_container_with_components("LBIRA2101", self.application_academic_year,
-                                                                         20, 20,
-                                                                         subtype=learning_unit_year_subtypes.PARTIM)
+        # self.lbira2101_next = _create_learning_container_with_components("LBIRA2101", self.application_academic_year,
+        #                                                                  20, 20,
+        #                                                                  subtype=learning_unit_year_subtypes.PARTIM)
 
     def _get_default_application_list(self):
         return [
@@ -336,7 +347,8 @@ def _link_components_and_learning_unit_year_to_container(l_container, acronym,
                                                          volume_practical_exercices=None,
                                                          subtype=learning_unit_year_subtypes.FULL):
     a_learning_unit_year = LearningUnitYearFactory(acronym=acronym, academic_year=l_container.academic_year,
-                                                   specific_title=l_container.common_title, subtype=subtype)
+                                                   specific_title=l_container.common_title, subtype=subtype,
+                                                   learning_container_year=l_container)
     if volume_lecturing:
         a_component = LearningComponentYearFactory(
             learning_container_year=l_container,

@@ -65,6 +65,10 @@ class LearningUnitYear(AuditableSerializableModel):
     def team(self):
         return self.learning_container_year and self.learning_container_year.team
 
+    @property
+    def complete_title(self):
+        return ' '.join(filter(None, [self.learning_container_year.common_title, self.specific_title]))
+
 
 def search(academic_year_id=None, acronym=None, learning_container_year_id=None, a_learning_unit=None):
     queryset = LearningUnitYear.objects

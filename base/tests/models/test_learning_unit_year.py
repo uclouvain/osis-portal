@@ -28,6 +28,9 @@ import datetime
 from django.test import TestCase
 
 from base import models as mdl_base
+from base.models.enums import learning_unit_year_subtypes
+from base.models.learning_container_year import LearningContainerYear
+from base.models.learning_unit_year import LearningUnitYear
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.learning_unit import LearningUnitFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
@@ -96,3 +99,30 @@ class LearningUnitYearTest(TestCase):
         ldroi1000_learning_unit_year_bis.save()
         self.assertEqual(mdl_base.learning_unit_year.find_first_by_exact_acronym(self.an_academic_year, 'LDROI1000'),
                          ldroi1000_learning_unit_year)
+
+    def _create_learning_unit_year_partim(self, common_title, speicific_title):
+        return LearningUnitYear(
+            subtype=learning_unit_year_subtypes.PARTIM,
+            specific_title=speicific_title,
+            learning_container_year=LearningContainerYear(common_title=common_title)
+        )
+
+    def test_complete_title_property_case_common_title_is_none(self):
+        specific_title = 'part 1: Vertebrate'
+        learn_unit_year = self._create_learning_unit_year_partim(None, specific_title)
+        self.assertEqual(learn_unit_year.complete_title, specific_title)
+        learn_unit_year = self._create_learning_unit_year_partim('', specific_title)
+        self.assertEqual(learn_unit_year.complete_title, specific_title)
+
+    def test_complete_title_property_case_specific_title_is_none(self):
+        common_title = 'Zoology'
+        learn_unit_year = self._create_learning_unit_year_partim(common_title, None)
+        self.assertEqual(learn_unit_year.complete_title, common_title)
+        learn_unit_year = self._create_learning_unit_year_partim(common_title, '')
+        self.assertEqual(learn_unit_year.complete_title, common_title)
+
+    def test_complete_title_property_case_common_and_specific_title_are_set(self):
+        specific_title = 'part 1: Vertebrate'
+        common_title = 'Zoology'
+        learn_unit_year = self._create_learning_unit_year_partim(common_title, specific_title)
+        self.assertEqual(learn_unit_year.complete_title, '{} {}'.format(common_title, specific_title))
