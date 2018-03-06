@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -143,7 +143,7 @@ def _fetch_with_basic_auth(server_top_url, document_url):
 
 def _make_xls_list(attestation_pdf):
     filename = "Liste_Insc_Exam.xls"
-    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename="%s"' % filename
     response.write(attestation_pdf)
     return response

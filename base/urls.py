@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ from dashboard.views import main
 
 urlpatterns = [
     url(r'^'+settings.ADMIN_URL+'data/$', administration.data, name='data'),
+    url(r'^'+settings.ADMIN_URL+'data/maintenance$', administration.data_maintenance, name='data_maintenance'),
     url(r'^my_osis/profile/lang/([A-Za-z-]+)/$', my_osis.profile_lang, name='profile_lang'),
     url(r'^$', main.home, name='home')
 ]

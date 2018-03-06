@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -128,7 +128,7 @@ def _get_requirement_entities_volumes(entity_components_year):
         entity_types.ADDITIONAL_REQUIREMENT_ENTITY_2
     ]
     return {
-        entity_type: _get_floated_only_element_of_list([ecy.hourly_volume_total for ecy in entity_components_year
+        entity_type: _get_floated_only_element_of_list([ecy.repartition_volume for ecy in entity_components_year
                                                         if ecy.entity_container_year.type == entity_type], default=0)
         for entity_type in needed_entity_types
         }

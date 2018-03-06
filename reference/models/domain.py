@@ -55,21 +55,5 @@ class Domain(SerializableModel):
         return Domain.objects.filter(parent=self)
 
 
-def find_by_id(an_id):
-    return Domain.objects.get(pk=an_id)
-
-
-def find_current_domains():
-    current_decree = decree.find_current_decree()
-    return Domain.objects.filter(decree=current_decree)\
-                         .filter(type=domain_type.UNIVERSITY)\
-                         .filter(parent__isnull=True)\
-                         .order_by("name")
-
-
-def find_parent_domains():
-    return Domain.objects.exclude(parent=None)
-
-
 def find_subdomains(domain):
     return Domain.objects.filter(parent=domain)

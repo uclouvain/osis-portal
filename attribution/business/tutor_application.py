@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -155,7 +155,7 @@ def _resolve_learning_container_year_info(application_list, academic_year):
         l_container_year = next((l_container_year for l_container_year in l_container_years if
                                  l_container_year.acronym == application.get('acronym')), None)
         application['learning_container_year_id'] = l_container_year.id
-        application['title'] = l_container_year.title
+        application['title'] = l_container_year.common_title
         for l_component_year in l_container_year.learningcomponentyear_set.all():
             application[l_component_year.type] = l_component_year.volume_declared_vacant
     return application_list

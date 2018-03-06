@@ -1,12 +1,12 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,16 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from attribution import models as mdl_attribution
+import factory
 
 
-def create_attribution_charge(data):
-    attribution_charge = mdl_attribution.attribution_charge.AttributionCharge()
-    if 'attribution' in data:
-        attribution_charge.attribution = data['attribution']
-    if 'learning_unit_component' in data:
-        attribution_charge.learning_unit_component = data['learning_unit_component']
-    if 'allocation_charge' in data:
-        attribution_charge.allocation_charge = data['allocation_charge']
-    attribution_charge.save()
-    return attribution_charge
+class DomainFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = 'reference.Domain'
+
+    external_id = factory.Faker('text', max_nb_chars=100)
+    name = factory.Sequence(lambda n: 'Domain - %d' % n)
+    parent = None
+

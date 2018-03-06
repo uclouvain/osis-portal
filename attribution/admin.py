@@ -25,14 +25,10 @@
 ##############################################################################
 from django.contrib import admin
 
-from attribution.models import attribution, attribution_charge, attribution_new
+from attribution.models import attribution_new, attribution
 
-
-admin.site.register(attribution.Attribution,
-                    attribution.AttributionAdmin)
-
-admin.site.register(attribution_charge.AttributionCharge,
-                    attribution_charge.AttributionChargeAdmin)
 
 admin.site.register(attribution_new.AttributionNew,
                     attribution_new.AttributionNewAdmin)
+admin.site.register(attribution.Attribution,
+                    attribution.AttributionAdmin)
