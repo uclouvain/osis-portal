@@ -537,7 +537,7 @@ class HomeTest(TestCase):
         self.assertEqual(len(response.context['attributions']), 1)
         attribution = response.context['attributions'][0]
         self.assertEqual(attribution['acronym'], self.learning_unit_year.acronym)
-        self.assertEqual(attribution['title'], self.learning_unit_year.specific_title)
+        self.assertEqual(attribution['title'], self.learning_unit_year.complete_title)
         self.assertEqual(attribution['start_year'], self.attribution.start_year)
         self.assertEqual(attribution['lecturing_allocation_charge'], str(LEARNING_UNIT_LECTURING_DURATION))
         self.assertEqual(attribution['practice_allocation_charge'], str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION))
