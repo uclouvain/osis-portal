@@ -217,7 +217,8 @@ def renew_applications(request):
 def create_or_update_application(request, learning_container_year_id):
     tutor = mdl_base.tutor.find_by_user(request.user)
     global_id = tutor.person.global_id
-    learning_container_year = mdl_base.learning_container_year.find_by_id(learning_container_year_id)
+    learning_unit_year = mdl_base.learning_unit_year.get_full_by_learning_container_year_id(learning_container_year_id)
+    learning_container_year = learning_unit_year.learning_container_year
     can_be_saved = True
 
     if request.method == 'POST':
@@ -248,6 +249,7 @@ def create_or_update_application(request, learning_container_year_id):
         'a_tutor': tutor,
         'form': form,
         'learning_container_year': learning_container_year,
+        'learning_unit_year': learning_unit_year,
         'can_be_saved': can_be_saved
     })
 
