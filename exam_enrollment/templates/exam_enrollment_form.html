@@ -103,7 +103,7 @@
                                            value="{{ exam_enrol.etat_to_inscr_current_session }}"/>
                                     {{ exam_enrol.learning_unit_year.acronym }}
                                 </td>
-                                <td>{{ exam_enrol.learning_unit_year.common_title | default_if_none:"" }}</td>
+                                <td>{{ exam_enrol.learning_unit_year.title | default_if_none:"" }}</td>
                                 <td class="text-center">{{ exam_enrol.credits | default_if_none:"-" }}</td>
                                 <td class="text-center">{{ exam_enrol.learning_unit_year.enrollment_state | default_if_none:"-" }}</td>
                                 {% if current_number_session == 1 %}
