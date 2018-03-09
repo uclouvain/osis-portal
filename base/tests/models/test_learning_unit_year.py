@@ -25,6 +25,7 @@
 ##############################################################################
 import datetime
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 
 from base import models as mdl_base
@@ -32,6 +33,7 @@ from base.models.enums import learning_unit_year_subtypes
 from base.models.learning_container_year import LearningContainerYear
 from base.models.learning_unit_year import LearningUnitYear
 from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from base.tests.factories.learning_unit import LearningUnitFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 
@@ -126,3 +128,23 @@ class LearningUnitYearTest(TestCase):
         common_title = 'Zoology'
         learn_unit_year = self._create_learning_unit_year_partim(common_title, specific_title)
         self.assertEqual(learn_unit_year.complete_title, '{} {}'.format(common_title, specific_title))
+
+
+class TestGetFullByLearningContainerYearId(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.full_learning_unit_year = LearningUnitYearFactory(subtype=learning_unit_year_subtypes.FULL)
+        cls.partim_learning_unit_year = LearningUnitYearFactory(
+            subtype=learning_unit_year_subtypes.PARTIM,
+            learning_container_year=cls.full_learning_unit_year.learning_container_year)
+
+        cls.learning_container_year = LearningContainerYearFactory()
+
+    def test_when_no_full_course_attached(self):
+        with self.assertRaises(ObjectDoesNotExist):
+            mdl_base.learning_unit_year.get_full_by_learning_container_year_id(self.learning_container_year.id)
+
+    def test_when_full_course_attached(self):
+        self.assertEqual(self.full_learning_unit_year,
+                         mdl_base.learning_unit_year.get_full_by_learning_container_year_id(
+                             self.partim_learning_unit_year.learning_container_year.id))
