@@ -167,28 +167,6 @@ def _resolve_learning_container_year_info(application_list, academic_year):
     return application_list
 
 
-# def _resolve_learning_container_year_info(application_list, academic_year):
-#     acronym_list = [application.get('acronym') for application in application_list]
-#     full_learning_component_year = LearningComponentYear.objects \
-#         .filter(learningunitcomponent__learning_unit_year__subtype=learning_unit_year_subtypes.FULL)
-#     prefetch_learning_component_year = Prefetch('learningunitcomponent_set__learning_component_year', full_learning_component_year, to_attr='learningcomponentyear_set')
-#     learn_unit_years = mdl_base.learning_unit_year.LearningUnitYear.objects \
-#         .filter(learning_container_year__acronym__in=acronym_list, learning_container_year__academic_year=academic_year)\
-#         .exclude(learning_container_year__isnull=True) \
-#         .prefetch_related(prefetch_learning_component_year) \
-#         .select_related('learning_container_year')
-#     for application in application_list:
-#         learn_unit_year = next((luy for luy in learn_unit_years
-#                                 if luy.learning_container_year.acronym == application.get('acronym')), None)
-#         l_container_year = learn_unit_year.learning_container_year
-#         application['learning_container_year_id'] = l_container_year.id
-#         application['title'] = learn_unit_year.complete_title
-#         for l_component_year in learn_unit_year.learningcomponentyear_set.all():
-#             application[l_component_year.type] = l_component_year.volume_declared_vacant
-#     return application_list
-
-
-
 def _create_application(global_id, application_to_create):
     attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
     if not attrib:

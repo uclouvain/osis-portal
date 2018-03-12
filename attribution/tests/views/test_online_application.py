@@ -301,8 +301,6 @@ class TestOnlineApplication(TestCase):
         self.lbir1200_current = _create_learning_container_with_components("LBIR1200", self.current_academic_year)
         self.lbir1300_current = _create_learning_container_with_components("LBIR1300", self.current_academic_year)
         self.ldroi1500_current = _create_learning_container_with_components("LDROI1500", self.current_academic_year)
-        # self.lbira2101_current = _create_learning_container_with_components("LBIRA2101", self.current_academic_year,
-        #                                                                     subtype=learning_unit_year_subtypes.PARTIM)
 
         # Creation learning container for next academic year [==> application academic year]
         self.lbir1200_next = _create_learning_container_with_components("LBIR1200", self.application_academic_year,
@@ -313,9 +311,6 @@ class TestOnlineApplication(TestCase):
                                                                          54, 7)
         self.lagro2500_next = _create_learning_container_with_components("LAGRO2500", self.application_academic_year,
                                                                          0, 70)
-        # self.lbira2101_next = _create_learning_container_with_components("LBIRA2101", self.application_academic_year,
-        #                                                                  20, 20,
-        #                                                                  subtype=learning_unit_year_subtypes.PARTIM)
 
     def _get_default_application_list(self):
         return [
