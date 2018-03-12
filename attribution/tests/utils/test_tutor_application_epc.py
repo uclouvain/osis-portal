@@ -32,6 +32,7 @@ from attribution.tests.factories.attribution import AttributionNewFactory
 from attribution.utils import tutor_application_epc
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 
@@ -40,9 +41,14 @@ class TestTutorApplicationEpc(TestCase):
     def setUp(self):
         self.academic_year = AcademicYearFactory(year=2017)
         external_id = tutor_application_epc.LEARNING_CONTAINER_YEAR_PREFIX_EXTERNAL_ID + '35654987_2017'
-        self.lbir1200 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LBIR1200",
-                                                     external_id=external_id)
-        self.lagro2630 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LAGRO2630")
+        self.lbir1200 = LearningUnitYearFactory(academic_year=self.academic_year, acronym="LBIR1200",
+                                                learning_container_year__academic_year=self.academic_year,
+                                                learning_container_year__acronym="LBIR1200",
+                                                learning_container_year__external_id=external_id)
+        self.lagro2630 = LearningUnitYearFactory(academic_year=self.academic_year, acronym="LAGRO2630",
+                                                 learning_container_year__academic_year=self.academic_year,
+                                                 learning_container_year__acronym="LAGRO2630",
+                                                 )
 
         # Creation Person/Tutor
         Group.objects.create(name="tutors")
@@ -70,8 +76,8 @@ class TestTutorApplicationEpc(TestCase):
         self.assertFalse(learning_container_info)
 
     def test_extract_learning_container_year_epc_info_with_external_id_empty(self):
-        self.lbir1200.external_id = None
-        self.lbir1200.save()
+        self.lbir1200.learning_container_year.external_id = None
+        self.lbir1200.learning_container_year.save()
         learning_container_info = tutor_application_epc._extract_learning_container_year_epc_info('LBIR1200', 2017)
         self.assertIsInstance(learning_container_info, dict)
         self.assertFalse(learning_container_info)
@@ -163,14 +169,15 @@ class TestTutorApplicationEpc(TestCase):
         self.assertEqual(len(applications_not_pending), 0) # No changed
 
 
-def _get_application_example(learning_container_year, volume_lecturing, volume_practical_exercice, flag=None):
+def _get_application_example(learning_unit_year, volume_lecturing, volume_practical_exercice, flag=None):
     return {
         'remark': 'This is the remarks',
         'course_summary': 'This is the course summary',
         'charge_lecturing_asked': volume_lecturing,
         'charge_practical_asked': volume_practical_exercice,
-        'acronym': learning_container_year.acronym,
-        'year': learning_container_year.academic_year.year,
+        'acronym': learning_unit_year.acronym,
+        'year': learning_unit_year.academic_year.year,
+        'title': learning_unit_year.complete_title,
         'pending': flag
     }
 
