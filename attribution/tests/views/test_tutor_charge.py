@@ -354,11 +354,9 @@ class HomeTest(TestCase):
         today = datetime.datetime.today()
         self.academic_year = AcademicYearFactory(year=today.year, start_date=today-datetime.timedelta(days=5),
                                                  end_date=today+datetime.timedelta(days=5))
-        self.learning_unit_year = LearningUnitYearFactory(academic_year=self.academic_year)
-        self.learning_unit_year.learning_container_year = LearningContainerYearFactory(
-            academic_year=self.learning_unit_year.academic_year,
-            in_charge=True)
-        self.learning_unit_year.save()
+        self.learning_unit_year = LearningUnitYearFactory(academic_year=self.academic_year,
+                                                          learning_container_year__academic_year=self.academic_year,
+                                                          learning_container_year__in_charge=True)
         self.attribution = AttributionFactory(function=function.CO_HOLDER,
                                               learning_unit_year=self.learning_unit_year,
                                               tutor=self.tutor,
