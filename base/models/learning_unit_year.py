@@ -41,7 +41,7 @@ class LearningUnitYearAdmin(AuditableSerializableModelAdmin):
 class LearningUnitYear(AuditableSerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     acronym = models.CharField(max_length=15, db_index=True)
-    specific_title = models.CharField(max_length=255)
+    specific_title = models.CharField(max_length=255, blank=True, null=True)
     credits = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     weight = models.IntegerField(blank=True, null=True)
     academic_year = models.ForeignKey('AcademicYear')

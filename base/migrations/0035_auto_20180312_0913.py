@@ -17,9 +17,4 @@ class Migration(migrations.Migration):
             name='common_title',
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
-        migrations.AlterField(
-            model_name='learningunityear',
-            name='specific_title',
-            field=models.CharField(default='', max_length=255),
-        ),
     ]
