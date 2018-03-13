@@ -160,11 +160,11 @@ def _resolve_learning_container_year_info(application_list, academic_year):
         l_container_year = next((l_container_year for l_container_year in l_container_years if
                                  l_container_year.acronym == application.get('acronym')), None)
         if l_container_year:
-            _update_application(application, l_container_year, learn_unit_year_by_container_id)
+            _modify_application(application, l_container_year, learn_unit_year_by_container_id)
     return application_list
 
 
-def _update_application(application, l_container_year, learn_unit_year_by_container_id):
+def _modify_application(application, l_container_year, learn_unit_year_by_container_id):
     application['learning_container_year_id'] = l_container_year.id
     application['title'] = learn_unit_year_by_container_id[l_container_year.id].complete_title
     for l_component_year in l_container_year.learningcomponentyear_set.all():
