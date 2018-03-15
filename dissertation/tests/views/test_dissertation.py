@@ -77,10 +77,10 @@ class DissertationViewTestCase(TestCase):
         self.dissertation_test_email.go_forward()
         message_history_result = message_history.find_my_messages(self.teacher.person.id)
         self.assertEqual(count_messages_before_status_change + 1, len(message_history_result))
-        self.assertNotEqual(
-            message_template.find_by_reference('dissertation_adviser_new_project_dissertation_txt'),
-            None)
+        self.assertNotEqual(message_template.find_by_reference('dissertation_adviser_new_project_dissertation_txt'),
+                            None)
         self.assertNotEqual(
             message_template.find_by_reference('dissertation_adviser_new_project_dissertation_html'),
             None)
-        assert 'Vous avez reçu une demande d\'encadrement de mémoire' in message_history_result.last().subject
+        self.assertIn('Vous avez reçu une demande d\'encadrement de mémoire',
+                           message_history_result.last().subject)

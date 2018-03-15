@@ -81,9 +81,5 @@ def search_by_dissertation_and_role(dissertation, role):
     return search_by_dissertation(dissertation).filter(status=role)
 
 
-def find_all_promoteur_by_dissertation(dissert):
-    promoteurs = search_by_dissertation_and_role(dissert, 'PROMOTEUR')
-    returned = None
-    if promoteurs:
-        returned = promoteurs
-    return returned
+def find_all_promotor_by_dissertation(dissert):
+    return search_by_dissertation_and_role(dissert, 'PROMOTEUR')

@@ -31,25 +31,20 @@ from dissertation.models import dissertation_role
 def get_base_template(dissert):
     template_base_data = {'author': dissert.author,
                           'title': dissert.title,
-                          'promoteur': create_string_list_promoteurs(dissert),
+                          'promoteur': create_string_list_promotors(dissert),
                           'description': dissert.description,
                           'dissertation_proposition_titre': dissert.proposition_dissertation.title}
     return template_base_data
 
 
-def create_string_list_promoteurs(dissert):
-    liste_promoteurs_string = ''
-    promoteurs = dissertation_role.find_all_promoteur_by_dissertation(dissert)
-    if promoteurs:
-        liste_promoteurs_string = ','.join(['{} {}'.format(dissrole.adviser.person.first_name,
-                                            dissrole.adviser.person.last_name)
-                                            for dissrole in promoteurs])
-    return liste_promoteurs_string
+def create_string_list_promotors(dissert):
+    promotors = dissertation_role.find_all_promotor_by_dissertation(dissert)
+    return ','.join(['{adv.first_name} {adv.last_name}'.format(adv=dissrole.adviser.person)
+                     for dissrole in promotors])
 
 
-def send_email_to_all_promoteurs(dissert, template):
-    print('___'+ str(dissertation_role.find_all_promoteur_by_dissertation(dissert)))
-    receivers = [diss_role.adviser for diss_role in dissertation_role.find_all_promoteur_by_dissertation(dissert)]
+def send_email_to_all_promotors(dissert, template):
+    receivers = [diss_role.adviser for diss_role in dissertation_role.find_all_promotor_by_dissertation(dissert)]
     send_email(dissert, template, receivers)
 
 
@@ -66,9 +61,7 @@ def send_email(dissert, template_ref, receivers):
 
 
 def generate_receivers(receivers):
-    receivers_tab = []
-    for receiver in receivers:
-        receivers_tab.append(message_config.create_receiver(receiver.person.id,
-                                                            receiver.person.email,
-                                                            receiver.person.language))
-    return receivers_tab
+    return [message_config.create_receiver(receiver.person.id,
+                                           receiver.person.email,
+                                           receiver.person.language)
+            for receiver in receivers]

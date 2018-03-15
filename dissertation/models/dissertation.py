@@ -95,7 +95,7 @@ class Dissertation(SerializableModel):
     def go_forward(self):
         next_status = get_next_status(self, "go_forward")
         if self.status == 'DRAFT' and next_status == 'DIR_SUBMIT':
-            emails_dissert.send_email_to_all_promoteurs(self, 'dissertation_adviser_new_project_dissertation')
+            emails_dissert.send_email_to_all_promotors(self, 'dissertation_adviser_new_project_dissertation')
         self.set_status(next_status)
 
     def accept(self):
