@@ -75,12 +75,14 @@ def get_attribution_vacant_list(acronym_filter, academic_year):
                                                                                 type_declaration_vacant__in=
                                                                                 type_delcaration_vacant_allowed)\
                                                                         .values_list('id', flat=True))
-    l_component_years = mdl_base.learning_component_year.search(learning_container_year=learning_containers_year_ids) \
-                                                        .exclude(volume_declared_vacant__isnull=True)
-    for l_component_year in l_component_years:
+    learning_unit_components = mdl_base.learning_unit_component.LearningUnitComponent.objects\
+        .filter(learning_unit_year__learning_container_year_id__in=learning_containers_year_ids) \
+        .exclude(learning_component_year__volume_declared_vacant__isnull=True)
+    for learn_unit_comp in learning_unit_components:
+        l_component_year = learn_unit_comp.learning_component_year
         key = l_component_year.learning_container_year.id
         attribution_vacant.setdefault(key, {
-            'title': l_component_year.learning_container_year.common_title,
+            'title': learn_unit_comp.learning_unit_year.complete_title,
             'acronym': l_component_year.learning_container_year.acronym,
             'learning_container_year_id': l_component_year.learning_container_year.id,
             'team': l_component_year.learning_container_year.team
