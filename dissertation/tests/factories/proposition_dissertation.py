@@ -25,24 +25,25 @@
 ##############################################################################
 import factory
 import factory.fuzzy
-import string
-
-from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_container_year import LearningContainerYearFactory
-from base.tests.factories.learning_unit import LearningUnitFactory
-from base.models.enums import learning_unit_year_subtypes
+from django.utils import timezone
+from base.tests.factories.person import PersonFactory
+from dissertation.tests.factories.adviser import AdviserTeacherFactory
+from dissertation.models.proposition_dissertation import PropositionDissertation
 
 
-class LearningUnitYearFactory(factory.django.DjangoModelFactory):
+class PropositionDissertationFactory(factory.DjangoModelFactory):
     class Meta:
-        model = "base.LearningUnitYear"
+        model = 'dissertation.PropositionDissertation'
 
-    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    acronym = factory.LazyAttribute(lambda obj: obj.learning_unit.acronym)
-    specific_title = factory.LazyAttribute(lambda obj: obj.learning_unit.title)
-    credits = 5
-    weight = 5
-    academic_year = factory.SubFactory(AcademicYearFactory)
-    learning_unit = factory.SubFactory(LearningUnitFactory)
-    learning_container_year = factory.SubFactory(LearningContainerYearFactory)
-    subtype = learning_unit_year_subtypes.FULL
+    author = factory.SubFactory(AdviserTeacherFactory)
+    creator = factory.SubFactory(PersonFactory)
+    collaboration = factory.Iterator(PropositionDissertation.COLLABORATION_CHOICES, getter=lambda c: c[0])
+    description = factory.Faker('text', max_nb_chars=500)
+    level = factory.Iterator(PropositionDissertation.LEVELS_CHOICES, getter=lambda c: c[0])
+    max_number_student = factory.fuzzy.FuzzyInteger(1, 50)
+    title = factory.Faker('text', max_nb_chars=150)
+    type = factory.Iterator(PropositionDissertation.TYPES_CHOICES, getter=lambda c: c[0])
+    visibility = True
+    active = True
+    created_date = factory.Faker('date_time_this_year', before_now=True, after_now=False,
+                                 tzinfo=timezone.get_current_timezone())

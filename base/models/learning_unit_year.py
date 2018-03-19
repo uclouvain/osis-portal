@@ -65,6 +65,10 @@ class LearningUnitYear(AuditableSerializableModel):
     def team(self):
         return self.learning_container_year and self.learning_container_year.team
 
+    @property
+    def complete_title(self):
+        return ' '.join(filter(None, [self.learning_container_year.common_title, self.specific_title]))
+
 
 def search(academic_year_id=None, acronym=None, learning_container_year_id=None, a_learning_unit=None):
     queryset = LearningUnitYear.objects
@@ -117,3 +121,8 @@ def find_first_by_learning_container_year(learning_container_yr_id):
 
 def find_first_by_exact_acronym(academic_year_id, acronym):
     return search(academic_year_id, acronym, None, None).first()
+
+
+def get_full_by_learning_container_year_id(learning_container_year_id):
+    return LearningUnitYear.objects.get(learning_container_year__id=learning_container_year_id,
+                                        subtype=learning_unit_year_subtypes.FULL)

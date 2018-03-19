@@ -24,25 +24,13 @@
 #
 ##############################################################################
 import factory
-import factory.fuzzy
-import string
-
-from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_container_year import LearningContainerYearFactory
-from base.tests.factories.learning_unit import LearningUnitFactory
-from base.models.enums import learning_unit_year_subtypes
+from base.tests.factories.offer import OfferFactory
+from dissertation.tests.factories.adviser import AdviserManagerFactory
 
 
-class LearningUnitYearFactory(factory.django.DjangoModelFactory):
+class FacultyAdviserFactory(factory.DjangoModelFactory):
     class Meta:
-        model = "base.LearningUnitYear"
+        model = 'dissertation.FacultyAdviser'
 
-    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    acronym = factory.LazyAttribute(lambda obj: obj.learning_unit.acronym)
-    specific_title = factory.LazyAttribute(lambda obj: obj.learning_unit.title)
-    credits = 5
-    weight = 5
-    academic_year = factory.SubFactory(AcademicYearFactory)
-    learning_unit = factory.SubFactory(LearningUnitFactory)
-    learning_container_year = factory.SubFactory(LearningContainerYearFactory)
-    subtype = learning_unit_year_subtypes.FULL
+    adviser = factory.SubFactory(AdviserManagerFactory)
+    offer = factory.SubFactory(OfferFactory)

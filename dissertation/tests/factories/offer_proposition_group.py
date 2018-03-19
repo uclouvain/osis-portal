@@ -24,25 +24,10 @@
 #
 ##############################################################################
 import factory
-import factory.fuzzy
-import string
-
-from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_container_year import LearningContainerYearFactory
-from base.tests.factories.learning_unit import LearningUnitFactory
-from base.models.enums import learning_unit_year_subtypes
 
 
-class LearningUnitYearFactory(factory.django.DjangoModelFactory):
+class OfferPropositionGroupFactory(factory.DjangoModelFactory):
     class Meta:
-        model = "base.LearningUnitYear"
-
-    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    acronym = factory.LazyAttribute(lambda obj: obj.learning_unit.acronym)
-    specific_title = factory.LazyAttribute(lambda obj: obj.learning_unit.title)
-    credits = 5
-    weight = 5
-    academic_year = factory.SubFactory(AcademicYearFactory)
-    learning_unit = factory.SubFactory(LearningUnitFactory)
-    learning_container_year = factory.SubFactory(LearningContainerYearFactory)
-    subtype = learning_unit_year_subtypes.FULL
+        model = 'dissertation.OfferPropositionGroup'
+    name_short = factory.Faker('text', max_nb_chars=10)
+    name_long = factory.Faker('text', max_nb_chars=256)
