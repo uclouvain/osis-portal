@@ -83,4 +83,4 @@ class DissertationViewTestCase(TestCase):
             message_template.find_by_reference('dissertation_adviser_new_project_dissertation_html'),
             None)
         self.assertIn('Vous avez reçu une demande d\'encadrement de mémoire',
-                           message_history_result.last().subject)
+                      message_history_result.last().subject)
