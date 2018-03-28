@@ -23,13 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.auditable_serializable_model import AuditableSerializableModel, AuditableSerializableModelAdmin
-
 from base.models.enums import vacant_declaration_type
 from django.db import models
 
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
-class LearningContainerYearAdmin(AuditableSerializableModelAdmin):
+
+class LearningContainerYearAdmin(SerializableModelAdmin):
     list_display = ('learning_container', 'academic_year', 'acronym', 'common_title')
     fieldsets = ((None, {'fields': ('learning_container', 'academic_year', 'acronym', 'common_title',
                                     'team', 'is_vacant', 'type_declaration_vacant', 'in_charge',
@@ -39,7 +39,7 @@ class LearningContainerYearAdmin(AuditableSerializableModelAdmin):
     list_filter = ('academic_year', 'in_charge', 'is_vacant',)
 
 
-class LearningContainerYear(AuditableSerializableModel):
+class LearningContainerYear(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     changed = models.DateTimeField(null=True, auto_now=True)
     acronym = models.CharField(max_length=10)

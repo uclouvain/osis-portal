@@ -24,17 +24,17 @@
 #
 ##############################################################################
 from django.db import models
-from osis_common.models.auditable_serializable_model import AuditableSerializableModel, AuditableSerializableModelAdmin
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
-class EntityComponentYearAdmin(AuditableSerializableModelAdmin):
+class EntityComponentYearAdmin(SerializableModelAdmin):
     list_display = ('entity_container_year', 'learning_component_year', 'repartition_volume',)
     search_fields = ['entity_container_year__learning_container_year__acronym']
     raw_id_fields = ('entity_container_year', 'learning_component_year')
     list_filter = ('entity_container_year__learning_container_year__academic_year',)
 
 
-class EntityComponentYear(AuditableSerializableModel):
+class EntityComponentYear(SerializableModel):
     changed = models.DateTimeField(null=True, auto_now=True)
     entity_container_year = models.ForeignKey('EntityContainerYear')
     learning_component_year = models.ForeignKey('LearningComponentYear')
