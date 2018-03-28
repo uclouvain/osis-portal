@@ -26,10 +26,10 @@
 from django.db import models
 
 from base.models.enums import entity_container_year_link_type
-from osis_common.models.auditable_serializable_model import AuditableSerializableModel, AuditableSerializableModelAdmin
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
-class EntityContainerYearAdmin(AuditableSerializableModelAdmin):
+class EntityContainerYearAdmin(SerializableModelAdmin):
     list_display = ('learning_container_year', 'entity', 'type')
     fieldsets = ((None, {'fields': ('entity', 'learning_container_year', 'type')}),)
     search_fields = ['learning_container_year__acronym', 'type']
@@ -37,7 +37,7 @@ class EntityContainerYearAdmin(AuditableSerializableModelAdmin):
     raw_id_fields = ('entity', 'learning_container_year')
 
 
-class EntityContainerYear(AuditableSerializableModel):
+class EntityContainerYear(SerializableModel):
     changed = models.DateTimeField(null=True, auto_now=True)
     entity = models.ForeignKey('Entity')
     learning_container_year = models.ForeignKey('LearningContainerYear')
@@ -80,4 +80,3 @@ def search(*args, **kwargs):
             queryset = queryset.filter(entity=entity_id)
 
     return queryset.select_related('learning_container_year__academic_year', 'entity')
-
