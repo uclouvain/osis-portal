@@ -13,56 +13,12 @@ class Migration(migrations.Migration):
 
     operations = [
         # Remove all deleted records physically
-        migrations.RunSQL("DELETE FROM base_learningunitcomponent WHERE deleted is not null"),
-        migrations.RunSQL("""DELETE FROM base_learningunitcomponent
-                            WHERE id in (
-                                SELECT base_learningunitcomponent.id
-                                FROM base_learningunitcomponent
-                                JOIN base_learningunityear on (base_learningunityear.id = base_learningunitcomponent.learning_unit_year_id)
-                                WHERE base_learningunitcomponent.deleted is null and base_learningunityear.deleted is not null
-                            )"""),
-        migrations.RunSQL("""DELETE FROM base_learningunitcomponent
-                               WHERE id in (
-                                    SELECT base_learningunitcomponent.id
-                                    FROM base_learningunitcomponent
-                                    JOIN base_learningcomponentyear on (base_learningcomponentyear.id = base_learningunitcomponent.learning_component_year_id)
-                                    JOIN base_learningcontaineryear on (base_learningcontaineryear.id = base_learningcomponentyear.learning_container_year_id)
-                                    WHERE base_learningunitcomponent.deleted is null and (base_learningcomponentyear.deleted is not null or base_learningcontaineryear.deleted is not null)
-                            )"""),
-        migrations.RunSQL("DELETE FROM base_entitycomponentyear WHERE deleted is not null"),
-        migrations.RunSQL("""DELETE FROM base_entitycomponentyear
-                                WHERE id in (
-                                    SELECT base_entitycomponentyear.id
-                                    FROM base_entitycomponentyear
-                                    JOIN base_learningcomponentyear on (base_learningcomponentyear.id = base_entitycomponentyear.learning_component_year_id)
-                                    JOIN base_learningcontaineryear on (base_learningcontaineryear.id = base_learningcomponentyear.learning_container_year_id)
-                                    WHERE base_entitycomponentyear.deleted is null and (base_learningcomponentyear.deleted is not null or base_learningcontaineryear.deleted is not null)
-                                )"""),
-        migrations.RunSQL("DELETE FROM base_entitycontaineryear WHERE deleted is not null"),
-        migrations.RunSQL("""DELETE FROM base_entitycontaineryear
-                               WHERE id in (
-                                   SELECT base_entitycontaineryear.id
-                                   FROM base_entitycontaineryear
-                                   JOIN base_learningcontaineryear on (base_learningcontaineryear.id = base_entitycontaineryear.learning_container_year_id)
-                                   WHERE base_entitycontaineryear.deleted is null and base_learningcontaineryear.deleted is not null
-                           )"""),
-        migrations.RunSQL("DELETE FROM base_learningcomponentyear WHERE deleted is not null"),
-        migrations.RunSQL("""DELETE FROM base_learningcomponentyear
-                              WHERE id in (
-                                  SELECT base_learningcomponentyear.id
-                                  FROM base_learningcomponentyear
-                                  JOIN base_learningcontaineryear on (base_learningcontaineryear.id = base_learningcomponentyear.learning_container_year_id)
-                                  WHERE base_learningcomponentyear.deleted is null and base_learningcontaineryear.deleted is not null
-                          )"""),
-        migrations.RunSQL("DELETE FROM base_learningunityear WHERE deleted is not null"),
-        migrations.RunSQL("""DELETE FROM base_learningunityear
-                                WHERE id in (
-                                    SELECT base_learningunityear.id
-                                    FROM base_learningunityear
-                                    JOIN base_learningcontaineryear on (base_learningcontaineryear.id = base_learningunityear.learning_container_year_id)
-                                    WHERE base_learningunityear.deleted is null and base_learningcontaineryear.deleted is not null
-                            )"""),
-        migrations.RunSQL("DELETE FROM base_learningunit WHERE deleted is not null"),
-        migrations.RunSQL("DELETE FROM base_learningcontaineryear WHERE deleted is not null"),
-        migrations.RunSQL("DELETE FROM base_learningcontainer WHERE deleted is not null"),
+        migrations.RunSQL("DELETE FROM base_learningunitcomponent CASCADE WHERE deleted is not null"),
+        migrations.RunSQL("DELETE FROM base_entitycomponentyear CASCADE WHERE deleted is not null"),
+        migrations.RunSQL("DELETE FROM base_entitycontaineryear CASCADE WHERE deleted is not null"),
+        migrations.RunSQL("DELETE FROM base_learningcomponentyear CASCADE WHERE deleted is not null"),
+        migrations.RunSQL("DELETE FROM base_learningunityear CASCADE WHERE deleted is not null"),
+        migrations.RunSQL("DELETE FROM base_learningunit CASCADE WHERE deleted is not null"),
+        migrations.RunSQL("DELETE FROM base_learningcontaineryear CASCADE WHERE deleted is not null"),
+        migrations.RunSQL("DELETE FROM base_learningcontainer CASCADE WHERE deleted is not null"),
     ]
