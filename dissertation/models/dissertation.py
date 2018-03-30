@@ -27,7 +27,7 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
-from base.models import student, offer_year
+from base.models import student, offer_year, academic_year
 from . import dissertation_location, proposition_dissertation
 from dissertation.utils import emails_dissert
 from base import models as mdl
@@ -113,8 +113,10 @@ class Dissertation(SerializableModel):
 
 
 def count_by_proposition(subject):
+    current_academic_year = academic_year.starting_academic_year()
     return Dissertation.objects.filter(active=True)\
-                               .filter(proposition_dissertation=subject)\
+                               .filter(proposition_dissertation=subject) \
+                               .filter(offer_year_start__academic_year=current_academic_year) \
                                .exclude(status='DRAFT')\
                                .count()
 
