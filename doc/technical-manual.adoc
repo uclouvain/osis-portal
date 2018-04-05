@@ -95,7 +95,7 @@ To make sure everything is working, lets test the connection:
 
 This configuration works only when we use a ssh connection to GitHub. To verify that, go to one of your local GitHub projects and check the url pointing to the server:
 
-    $ cd ~/python/projects/osis/osis
+    $ cd ~/python/projects/osis/osis-portal
     $ git remote -v
 
 If the url starts with `https://` then you are using `https` instead of `ssh`. In this case, you should change the url to the ssh one:
@@ -161,7 +161,7 @@ Install the Python virtual environment and other system dependencies:
 In the new repository, create a virtual environment to isolate all dependencies of the project:
 
     $ cd osis
-    $ virtualenv --python=python3.4 venv
+    $ python3 -m venv venv
 
 A local environment file is used to configure django. If you want to change configuration during development, use the `.env` file. Create the local environment file:
 
@@ -169,6 +169,9 @@ A local environment file is used to configure django. If you want to change conf
 
 [[installing-application]]
 === Installing the Application
+
+    $ git submodule init
+    $ git submodule update
 
 Start the virtual environment and install the dependencies:
 
@@ -179,15 +182,6 @@ Create the data structure in the database:
 
     (venv)$ python manage.py migrate
 
-Create the groups used to allow/deny access to pages and functions:
-
-    (venv)$ python manage.py loaddata groups
-
-At this point we have two options:
-
-1. we create a super user and go on with an empty database or
-2. we load the demonstration data that already contains a superuser
-
 To create the super user and continue with an empty database:
 
     (venv)$ python manage.py createsuperuser
@@ -197,18 +191,7 @@ To create the super user and continue with an empty database:
        Password (again):
        Superuser created successfully.
 
-You will need this user to login on OSIS for the first time and be able to create other users.
-
-To load the demonstration data that already contains a superuser:
-
-    (venv)$ python manage.py loaddata demo_data.json
-
-The demonstration data create a super user with the following credentials:
-
-    Username: osis
-    Password: osisosis
-
-The demonstration data also create several other users. The password for each user is the username typed twice (e.g. user: `antonin`  password: `antoninantonin`).
+You will need this user to login on OSIS-Portal for the first time and be able to create other users.
 
 Now, we can run the application:
 
