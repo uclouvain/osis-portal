@@ -177,6 +177,7 @@ backend database:
     $ psql -d osis_portal_local
       =# grant connect on database osis_portal_local to osis_portal;
       =# revoke connect on database osis_portal_local from public;
+      =# alter user osis createdb;
       =# \q
 
 Now, install the necessary dependencies to allow a Python application to connect
