@@ -129,6 +129,7 @@ Before moving forward, make sure you installed PostgreSQL, as explained in the s
     $ psql -d osis_portal_local
       =# grant connect on database osis_portal_local to osis_portal;
       =# revoke connect on database osis_portal_local from public;
+      =# alter user osis_portal createdb;
       =# \q
 
 Now, install the necessary dependencies to allow a Python application to connect to PostgreSQL:

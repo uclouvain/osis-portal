@@ -24,16 +24,16 @@
 #
 ##############################################################################
 from django.db import models
-from osis_common.models.auditable_serializable_model import AuditableSerializableModel, AuditableSerializableModelAdmin
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
-class LearningUnitAdmin(AuditableSerializableModelAdmin):
+class LearningUnitAdmin(SerializableModelAdmin):
     list_display = ('acronym', 'title')
     fieldsets = ((None, {'fields': ('acronym', 'title', 'description')}),)
     search_fields = ['acronym']
 
 
-class LearningUnit(AuditableSerializableModel):
+class LearningUnit(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     acronym = models.CharField(max_length=15)
     title = models.CharField(max_length=255)
