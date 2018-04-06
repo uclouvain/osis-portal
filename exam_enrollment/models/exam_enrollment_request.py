@@ -39,7 +39,7 @@ class ExamEnrollmentRequestdAdmin(admin.ModelAdmin):
 
 class ExamEnrollmentRequest(models.Model):
     student = models.ForeignKey('base.Student')
-    offer_year_acronym = models.CharField(max_length=15, null=True)
+    offer_year_acronym = models.CharField(max_length=15)
     document = JSONField()
 
     def __str__(self):

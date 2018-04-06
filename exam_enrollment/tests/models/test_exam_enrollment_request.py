@@ -39,3 +39,7 @@ class TestExamEnrollmentRequest(TestCase):
         ExamEnrollmentRequestFactory(student=the_student, offer_year_acronym=acronym)
         with self.assertRaises(IntegrityError):
             ExamEnrollmentRequestFactory(student=the_student, offer_year_acronym=acronym)
+
+    def test_offer_year_acronym_mandatory(self):
+        with self.assertRaises(IntegrityError):
+            ExamEnrollmentRequestFactory(offer_year_acronym=None)
