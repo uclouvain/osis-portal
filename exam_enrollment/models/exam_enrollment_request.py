@@ -41,6 +41,7 @@ class ExamEnrollmentRequest(models.Model):
     student = models.ForeignKey('base.Student')
     offer_year_acronym = models.CharField(max_length=15)
     document = JSONField()
+    fetch_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return "{}".format(self.student)
