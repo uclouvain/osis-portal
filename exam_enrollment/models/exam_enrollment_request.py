@@ -31,8 +31,8 @@ from django.db import models
 
 
 class ExamEnrollmentRequestdAdmin(admin.ModelAdmin):
-    list_display = ('student',)
-    fieldsets = ((None, {'fields': ('student', 'document')}),)
+    list_display = ('student', 'offer_year_acronym')
+    fieldsets = ((None, {'fields': ('student', 'document', 'offer_year_acronym')}),)
     search_fields = ['student__registration_id']
     raw_id_fields = ('student',)
 
