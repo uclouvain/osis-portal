@@ -45,6 +45,9 @@ class ExamEnrollmentRequest(models.Model):
     def __str__(self):
         return "{}".format(self.student)
 
+    class Meta:
+        unique_together = ('student', 'offer_year_acronym',)
+
 
 def insert_or_update_document(acronym, student, document):
     exam_enrollment_request_object, created = ExamEnrollmentRequest.objects.update_or_create(
