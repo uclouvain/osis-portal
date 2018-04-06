@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='examenrollmentrequest',
             name='fetch_date',
-            field=models.DateTimeField(null=True),
+            field=models.DateTimeField(auto_now=True),
         ),
     ]
