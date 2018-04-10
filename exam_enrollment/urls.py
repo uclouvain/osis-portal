@@ -30,5 +30,5 @@ urlpatterns = [
     url(r'^$', exam_enrollment.choose_offer, name='exam_enrollment_offer_choice'),
     url(r'^direct/$', exam_enrollment.choose_offer_direct, name='exam_enrollment_form_direct'),
     url(r'^([0-9]+)/form/$', exam_enrollment.exam_enrollment_form, name='exam_enrollment_form'),
-    url(r'^check/$', exam_enrollment.check_exam_enrollment_form, name='check_exam_enrollment_form'),
+    url(r'^([0-9]+)/check/$', exam_enrollment.check_exam_enrollment_form, name='check_exam_enrollment_form'),
 ]
