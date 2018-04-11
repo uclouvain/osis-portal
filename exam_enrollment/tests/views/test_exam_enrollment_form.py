@@ -54,6 +54,10 @@ def _create_group(name):
     return group
 
 
+HTTP_RESPONSE_OK = 200
+HTTP_RESPONSE_NOTFOUND = 404
+
+
 class ExamEnrollmentFormTest(TestCase):
     def setUp(self):
         self.client = Client()
@@ -283,27 +287,40 @@ class ExamEnrollmentFormTest(TestCase):
         self.assertEqual(exam_enrollment.ask_exam_enrollment_form(self.student, self.off_year).status_code, 200)
 
 
-    def test_exam_enrollment_up_to_date_in_db_with_document(self):
+    def test_check_exam_enrollment_form_up_to_date_in_db_with_document(self):
         off_year = self.off_enrol.offer_year
         ExamEnrollmentRequestFactory(student=self.student,
                                      offer_year_acronym=off_year.acronym,
                                      document={"id": 1})
-        self.assertTrue(exam_enrollment._exam_enrollment_up_to_date_in_db_with_document(self.student, off_year))
 
-    def test_exam_enrollment_not_in_db(self):
+        request_url = reverse(exam_enrollment.check_exam_enrollment_form, args=[off_year.id])
+        self.client.force_login(self.user)
+        response = self.client.get(request_url)
+        self.assertEqual(response.status_code, HTTP_RESPONSE_OK)
+
+
+    def test_check_exam_enrollment_form_not_in_db(self):
         off_year = self.off_enrol.offer_year
-        self.assertFalse(exam_enrollment._exam_enrollment_up_to_date_in_db_with_document(self.student, off_year))
+
+        request_url = reverse(exam_enrollment.check_exam_enrollment_form, args=[off_year.id])
+        self.client.force_login(self.user)
+        response = self.client.get(request_url)
+        self.assertEqual(response.status_code, HTTP_RESPONSE_NOTFOUND)
 
 
-    def test_exam_enrollment_up_to_date_in_db_with_empty_document(self):
+    def test_check_exam_enrollment_form_up_to_date_in_db_with_empty_document(self):
         off_year = self.off_enrol.offer_year
         ExamEnrollmentRequestFactory(student=self.student,
                                      offer_year_acronym=off_year.acronym,
                                      document={})
-        self.assertFalse(exam_enrollment._exam_enrollment_up_to_date_in_db_with_document(self.student, off_year))
+
+        request_url = reverse(exam_enrollment.check_exam_enrollment_form, args=[off_year.id])
+        self.client.force_login(self.user)
+        response = self.client.get(request_url)
+        self.assertEqual(response.status_code, HTTP_RESPONSE_NOTFOUND)
 
 
-    def test_exam_enrollment_outdated_in_db_with_document(self):
+    def test_check_exam_enrollment_form_up_to_date_in_db_with_outdated_document(self):
         queues_timeout_settings = settings.QUEUES.get("QUEUES_TIMEOUT")
         queues_timeout_settings['EXAM_ENROLLMENT_FORM_RESPONSE'] = 15
         with override_settings(QUEUES_TIMEOUT=queues_timeout_settings):
@@ -318,10 +335,16 @@ class ExamEnrollmentFormTest(TestCase):
                                                                           offer_year_acronym=off_year.acronym)
             exam_enroll_request_qs.update(fetch_date=outdated_time)
 
-            self.assertFalse(exam_enrollment._exam_enrollment_up_to_date_in_db_with_document(self.student, off_year))
+            request_url = reverse(exam_enrollment.check_exam_enrollment_form, args=[off_year.id])
+            self.client.force_login(self.user)
+            response = self.client.get(request_url)
+            self.assertEqual(response.status_code, HTTP_RESPONSE_NOTFOUND)
 
 
-    def test_exam_enrollment_up_to_date_in_db_with_document_with_no_offer_enrollment(self):
+    def test_check_exam_enrollment_form_not_in_db_without_offer_enrollment(self):
         off_year = self.off_enrol.offer_year
         self.off_enrol.delete()
-        self.assertFalse(exam_enrollment._exam_enrollment_up_to_date_in_db_with_document(self.student, off_year))
+        request_url = reverse(exam_enrollment.check_exam_enrollment_form, args=[off_year.id])
+        self.client.force_login(self.user)
+        response = self.client.get(request_url)
+        self.assertEqual(response.status_code, HTTP_RESPONSE_NOTFOUND)
