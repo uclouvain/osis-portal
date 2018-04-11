@@ -319,3 +319,9 @@ class ExamEnrollmentFormTest(TestCase):
             exam_enroll_request_qs.update(fetch_date=outdated_time)
 
             self.assertFalse(exam_enrollment._exam_enrollment_up_to_date_in_db_with_document(self.student, off_year))
+
+
+    def test_exam_enrollment_up_to_date_in_db_with_document_with_no_offer_enrollment(self):
+        off_year = self.off_enrol.offer_year
+        self.off_enrol.delete()
+        self.assertFalse(exam_enrollment._exam_enrollment_up_to_date_in_db_with_document(self.student, off_year))
