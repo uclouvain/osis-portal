@@ -39,6 +39,7 @@ from django.core.urlresolvers import reverse
 from django.db import connection
 from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
 from django.http import HttpResponse, response
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
 
@@ -198,21 +199,26 @@ def check_exam_enrollment_form(request, offer_year_id):
     a_student = mdl_base.student.find_by_user(request.user)
     off_year = offer_year.find_by_id(offer_year_id)
     if 'exam_enrollment' in settings.INSTALLED_APPS:
-        if _exam_enrollment_in_db_with_document(a_student, off_year):
+        if _exam_enrollment_up_to_date_in_db_with_document(a_student, off_year):
             return HttpResponse(status=200)
         else:
             return HttpResponse(status=404)
     return HttpResponse(status=405)
 
 
-def _exam_enrollment_in_db_with_document(a_student, off_year):
+def _exam_enrollment_up_to_date_in_db_with_document(a_student, off_year):
     an_offer_enrollment = mdl_base.offer_enrollment.get_by_student_offer(a_student, off_year)
     if an_offer_enrollment:
         exam_enrollment = exam_enrollment_request.get_by_student_and_offer_year_acronym(a_student, off_year.acronym)
-        return exam_enrollment and exam_enrollment.document
+        return exam_enrollment and exam_enrollment.document and _is_up_to_date(exam_enrollment)
     else:
-        logger.warning("This person doesn't exist")
+        logger.warning("This student is not enrolled in this offer_year")
         return False
+
+
+def _is_up_to_date(exam_enrollment):
+    request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
+    return exam_enrollment.fetch_date >= timezone.now() - timezone.timedelta(seconds=request_timeout)
 
 
 def _process_exam_enrollment_form_submission(off_year, request, stud):

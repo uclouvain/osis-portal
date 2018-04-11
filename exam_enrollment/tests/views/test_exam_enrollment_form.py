@@ -31,12 +31,15 @@ from unittest.mock import patch, Mock
 from django.conf import settings
 from django.contrib.auth.models import User, Group, Permission
 from django.core.urlresolvers import reverse
-from django.test import TestCase, Client
+from django.test import TestCase, Client, override_settings
+from django.utils import timezone
 
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.models import test_student, test_person, test_academic_year, test_offer_year, \
     test_learning_unit_enrollment, test_learning_unit_year
+from exam_enrollment.models.exam_enrollment_request import ExamEnrollmentRequest
+from exam_enrollment.tests.factories.exam_enrollment_request import ExamEnrollmentRequestFactory
 from exam_enrollment.views import exam_enrollment
 
 
@@ -76,11 +79,12 @@ class ExamEnrollmentFormTest(TestCase):
         self.url = "/exam_enrollment/{}/form/".format(offer_year_id)
         self.correct_exam_enrol_form = load_json_file("exam_enrollment/tests/resources/exam_enrollment_form_example.json")
         self.current_academic_year = test_academic_year.create_academic_year_current()
-        off_enrol = OfferEnrollmentFactory(student=self.student, offer_year=OfferYearFactory(academic_year=self.current_academic_year))
+        self.off_enrol = OfferEnrollmentFactory(student=self.student,
+                                                offer_year=OfferYearFactory(academic_year=self.current_academic_year))
         learn_unit_year = test_learning_unit_year.create_learning_unit_year({'acronym': 'LDROI1234',
                                                                              'specific_title': 'Bachelor in law',
                                                                              'academic_year': self.academic_year})
-        self.learn_unit_enrol = test_learning_unit_enrollment.create_learning_unit_enrollment(off_enrol,
+        self.learn_unit_enrol = test_learning_unit_enrollment.create_learning_unit_enrollment(self.off_enrol,
                                                                                               learn_unit_year)
 
     def test_json_form_content(self):
@@ -280,3 +284,41 @@ class ExamEnrollmentFormTest(TestCase):
 
     def test_get_exam_enrollment_form(self):
         self.assertEqual(exam_enrollment.ask_exam_enrollment_form(self.student, self.off_year).status_code, 200)
+
+
+    def test_exam_enrollment_up_to_date_in_db_with_document(self):
+        off_year = self.off_enrol.offer_year
+        ExamEnrollmentRequestFactory(student=self.student,
+                                     offer_year_acronym=off_year.acronym,
+                                     document={"id": 1})
+        self.assertTrue(exam_enrollment._exam_enrollment_up_to_date_in_db_with_document(self.student, off_year))
+
+    def test_exam_enrollment_not_in_db(self):
+        off_year = self.off_enrol.offer_year
+        self.assertFalse(exam_enrollment._exam_enrollment_up_to_date_in_db_with_document(self.student, off_year))
+
+
+    def test_exam_enrollment_up_to_date_in_db_with_empty_document(self):
+        off_year = self.off_enrol.offer_year
+        ExamEnrollmentRequestFactory(student=self.student,
+                                     offer_year_acronym=off_year.acronym,
+                                     document={})
+        self.assertFalse(exam_enrollment._exam_enrollment_up_to_date_in_db_with_document(self.student, off_year))
+
+
+    def test_exam_enrollment_outdated_in_db_with_document(self):
+        queues_timeout_settings = settings.QUEUES.get("QUEUES_TIMEOUT")
+        queues_timeout_settings['EXAM_ENROLLMENT_FORM_RESPONSE'] = 15
+        with override_settings(QUEUES_TIMEOUT=queues_timeout_settings):
+            request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
+            outdated_time = timezone.now() - timezone.timedelta(seconds=request_timeout + 1)
+            off_year = self.off_enrol.offer_year
+            ExamEnrollmentRequestFactory(student=self.student,
+                                         offer_year_acronym=off_year.acronym,
+                                         document={"id": 1})
+            # We must update fetch_date without passing trough save() to bypass auto_now :
+            exam_enroll_request_qs = ExamEnrollmentRequest.objects.filter(student=self.student,
+                                                                          offer_year_acronym=off_year.acronym)
+            exam_enroll_request_qs.update(fetch_date=outdated_time)
+
+            self.assertFalse(exam_enrollment._exam_enrollment_up_to_date_in_db_with_document(self.student, off_year))
