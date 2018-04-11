@@ -54,7 +54,7 @@ def find_by_student(a_student):
     return OfferEnrollment.objects.filter(student=a_student)
 
 
-def find_by_student_offer(a_student, offer_year):
+def get_by_student_offer(a_student, offer_year):
     try:
         return OfferEnrollment.objects.get(student=a_student, offer_year=offer_year)
     except ObjectDoesNotExist:
