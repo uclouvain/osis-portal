@@ -62,6 +62,3 @@ def get_by_student_and_offer_year_acronym(student, offer_year_acronym):
     except ObjectDoesNotExist:
         return None
 
-
-def pop_document(offer_year_acronym, student):
-    ExamEnrollmentRequest.objects.get(offer_year_acronym=offer_year_acronym, student=student).delete()
