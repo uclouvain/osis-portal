@@ -112,8 +112,10 @@ def _get_exam_enrollment_form(off_year, request, stud):
         return response.HttpResponseRedirect(reverse('dashboard_home'))
 
     request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
-    exam_enroll_request = exam_enrollment_request.get_by_student_and_offer_year_acronym(stud, off_year.acronym)
-    if exam_enroll_request and _is_up_to_date(exam_enroll_request):
+    fetch_date_limit = timezone.now() - timezone.timedelta(seconds=request_timeout)
+    exam_enroll_request = exam_enrollment_request.\
+        get_by_student_and_offer_year_acronym_and_fetch_date(stud, off_year.acronym, fetch_date_limit)
+    if exam_enroll_request:
         try:
             data = json.loads(exam_enroll_request.document)
         except json.JSONDecodeError:
@@ -207,16 +209,14 @@ def check_exam_enrollment_form(request, offer_year_id):
 def _exam_enrollment_up_to_date_in_db_with_document(a_student, off_year):
     an_offer_enrollment = mdl_base.offer_enrollment.get_by_student_offer(a_student, off_year)
     if an_offer_enrollment:
-        exam_enroll_request = exam_enrollment_request.get_by_student_and_offer_year_acronym(a_student, off_year.acronym)
-        return exam_enroll_request and exam_enroll_request.document and _is_up_to_date(exam_enroll_request)
+        request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
+        fetch_date_limit = timezone.now() - timezone.timedelta(seconds=request_timeout)
+        exam_enroll_request = exam_enrollment_request.\
+            get_by_student_and_offer_year_acronym_and_fetch_date(a_student, off_year.acronym, fetch_date_limit)
+        return exam_enroll_request and exam_enroll_request.document
     else:
         logger.warning("This student is not enrolled in this offer_year")
         return False
-
-
-def _is_up_to_date(exam_enroll_request):
-    request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
-    return exam_enroll_request.fetch_date >= timezone.now() - timezone.timedelta(seconds=request_timeout)
 
 
 def _process_exam_enrollment_form_submission(off_year, request, stud):

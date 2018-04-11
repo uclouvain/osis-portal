@@ -56,9 +56,10 @@ def insert_or_update_document(acronym, student, document):
     return exam_enrollment_request_object
 
 
-def get_by_student_and_offer_year_acronym(student, offer_year_acronym):
+def get_by_student_and_offer_year_acronym_and_fetch_date(student, offer_year_acronym, fetch_date_limit):
     try:
-        return ExamEnrollmentRequest.objects.get(student=student, offer_year_acronym=offer_year_acronym)
+        return ExamEnrollmentRequest.objects.get(student=student,
+                                                 offer_year_acronym=offer_year_acronym,
+                                                 fetch_date__gte=fetch_date_limit)
     except ObjectDoesNotExist:
         return None
-
