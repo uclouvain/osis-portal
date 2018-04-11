@@ -320,7 +320,7 @@ class ExamEnrollmentFormTest(TestCase):
         self.assertEqual(response.status_code, HTTP_RESPONSE_NOTFOUND)
 
 
-    def test_check_exam_enrollment_form_up_to_date_in_db_with_outdated_document(self):
+    def test_check_exam_enrollment_form_outdated_in_db(self):
         queues_timeout_settings = settings.QUEUES.get("QUEUES_TIMEOUT")
         queues_timeout_settings['EXAM_ENROLLMENT_FORM_RESPONSE'] = 15
         with override_settings(QUEUES_TIMEOUT=queues_timeout_settings):
