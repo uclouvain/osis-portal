@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,12 +23,23 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
-from exam_enrollment.views import exam_enrollment
+from django.test import TestCase
+from django.db import IntegrityError
 
-urlpatterns = [
-    url(r'^$', exam_enrollment.choose_offer, name='exam_enrollment_offer_choice'),
-    url(r'^direct/$', exam_enrollment.choose_offer_direct, name='exam_enrollment_form_direct'),
-    url(r'^([0-9]+)/form/$', exam_enrollment.exam_enrollment_form, name='exam_enrollment_form'),
-    url(r'^([0-9]+)/check/$', exam_enrollment.check_exam_enrollment_form, name='check_exam_enrollment_form'),
-]
+from base.tests.factories.student import StudentFactory
+from exam_enrollment.tests.factories.exam_enrollment_request import ExamEnrollmentRequestFactory
+
+
+class TestExamEnrollmentRequest(TestCase):
+
+    def test_must_be_unique(self):
+        the_student = StudentFactory()
+        acronym = 'ACRO0001'
+
+        ExamEnrollmentRequestFactory(student=the_student, offer_year_acronym=acronym)
+        with self.assertRaises(IntegrityError):
+            ExamEnrollmentRequestFactory(student=the_student, offer_year_acronym=acronym)
+
+    def test_offer_year_acronym_mandatory(self):
+        with self.assertRaises(IntegrityError):
+            ExamEnrollmentRequestFactory(offer_year_acronym=None)

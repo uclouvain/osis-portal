@@ -248,9 +248,9 @@
         function check_result(){
             $.ajax({
                 method: 'GET',
-                url: "{% url 'check_exam_enrollment_form' %}",
+                url: "{% url 'check_exam_enrollment_form' program.id %}",
                 success: function () {
-                    var check_data = '{{exam_enrollments}}'
+                    var check_data = '{{exam_enrollments}}';
                     if(!check_data){
                         location.reload();
                     }

@@ -13,5 +13,5 @@ class Migration(migrations.Migration):
 
     operations = [
         # Remove all deleted records physically
-        migrations.RunSQL("DELETE FROM attribution_attribution CASCADE WHERE deleted is not null")
+        migrations.RunSQL("DELETE FROM attribution_attribution WHERE deleted is not null")
     ]

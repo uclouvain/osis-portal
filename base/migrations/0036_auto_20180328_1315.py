@@ -13,12 +13,84 @@ class Migration(migrations.Migration):
 
     operations = [
         # Remove all deleted records physically
-        migrations.RunSQL("DELETE FROM base_learningunitcomponent CASCADE WHERE deleted is not null"),
-        migrations.RunSQL("DELETE FROM base_entitycomponentyear CASCADE WHERE deleted is not null"),
-        migrations.RunSQL("DELETE FROM base_entitycontaineryear CASCADE WHERE deleted is not null"),
-        migrations.RunSQL("DELETE FROM base_learningcomponentyear CASCADE WHERE deleted is not null"),
-        migrations.RunSQL("DELETE FROM base_learningunityear CASCADE WHERE deleted is not null"),
-        migrations.RunSQL("DELETE FROM base_learningunit CASCADE WHERE deleted is not null"),
-        migrations.RunSQL("DELETE FROM base_learningcontaineryear CASCADE WHERE deleted is not null"),
-        migrations.RunSQL("DELETE FROM base_learningcontainer CASCADE WHERE deleted is not null"),
+        migrations.RunSQL("""
+            DELETE FROM base_learningunitcomponent
+            WHERE deleted is not null OR
+                id in (
+                    SELECT base_learningunitcomponent.id
+                    FROM base_learningunitcomponent
+                    JOIN base_learningcomponentyear on (base_learningcomponentyear.id = base_learningunitcomponent.learning_component_year_id)
+                    JOIN base_learningcontaineryear on (base_learningcontaineryear.id = base_learningcomponentyear.learning_container_year_id)
+                    JOIN base_learningcontainer on (base_learningcontainer.id = base_learningcontaineryear.learning_container_id)
+                    WHERE base_learningunitcomponent.deleted is null AND
+                        ( base_learningcomponentyear is not null OR base_learningcontaineryear.deleted is not null OR base_learningcontainer.deleted is not null )
+                ) OR
+                id in (
+                    SELECT base_learningunitcomponent.id
+                    FROM base_learningunitcomponent
+                    JOIN base_learningunityear on (base_learningunityear.id = base_learningunitcomponent.learning_unit_year_id)
+                    JOIN base_learningunit on (base_learningunit.id = base_learningunityear.learning_unit_id)
+                     WHERE base_learningunitcomponent.deleted is null AND
+                        ( base_learningunityear is not null OR base_learningunit.deleted is not null)
+                )
+        """),
+        migrations.RunSQL("""
+            DELETE FROM base_entitycomponentyear
+            WHERE deleted is not null OR
+                  id in (
+                    SELECT base_entitycomponentyear.id
+                    FROM base_entitycomponentyear
+                    JOIN base_entitycontaineryear on (base_entitycontaineryear.id = base_entitycomponentyear.entity_container_year_id)
+                    JOIN base_learningcontaineryear on (base_learningcontaineryear.id = base_entitycontaineryear.learning_container_year_id)
+                    JOIN base_learningcontainer on (base_learningcontainer.id = base_learningcontaineryear.learning_container_id)
+                    WHERE base_entitycomponentyear.deleted is null AND
+                    ( base_entitycontaineryear.deleted is not null OR base_learningcontaineryear.deleted is not null OR base_learningcontainer.deleted is not null )
+                  )
+        """),
+        migrations.RunSQL("""
+            DELETE FROM base_entitycontaineryear
+            WHERE deleted is not null OR
+                  id in (
+                    SELECT base_entitycontaineryear.id
+                    FROM base_entitycontaineryear
+                    JOIN base_learningcontaineryear on (base_learningcontaineryear.id = base_entitycontaineryear.learning_container_year_id)
+                    JOIN base_learningcontainer on (base_learningcontainer.id = base_learningcontaineryear.learning_container_id)
+                    WHERE base_entitycontaineryear.deleted is null AND
+                    ( base_learningcontaineryear.deleted is not null OR base_learningcontainer.deleted is not null )
+                  )
+        """),
+        migrations.RunSQL("""
+            DELETE FROM base_learningcomponentyear
+            WHERE deleted is not null OR
+                  id in (
+                     SELECT base_learningcomponentyear.id
+                     FROM base_learningcomponentyear
+                     JOIN base_learningcontaineryear on (base_learningcontaineryear.id = base_learningcomponentyear.learning_container_year_id)
+                     JOIN base_learningcontainer on (base_learningcontainer.id = base_learningcontaineryear.learning_container_id)
+                     WHERE base_learningcomponentyear.deleted is null AND
+                      ( base_learningcontaineryear.deleted is not null OR base_learningcontainer.deleted is not null )
+                  )
+        """),
+        migrations.RunSQL("""
+            DELETE FROM base_learningunityear
+            WHERE deleted is not null OR
+                  id in (
+                    SELECT base_learningunityear.id
+                    FROM base_learningunityear
+                    JOIN base_learningunit on (base_learningunit.id = base_learningunityear.learning_unit_id)
+                     WHERE base_learningunityear.deleted is null AND base_learningunit.deleted is not null
+                  )
+        """),
+        migrations.RunSQL("DELETE FROM base_learningunit WHERE deleted is not null"),
+        migrations.RunSQL("""
+            DELETE FROM base_learningcontaineryear
+            WHERE deleted is not null OR
+                  id in (
+                    SELECT base_learningcontaineryear.id
+                    FROM base_learningcontaineryear
+                    JOIN base_learningcontainer on (base_learningcontainer.id = base_learningcontaineryear.learning_container_id)
+                    WHERE base_learningcontaineryear.deleted is null AND base_learningcontainer.deleted is not null
+                  )
+        """),
+        migrations.RunSQL("DELETE FROM base_learningcontainer WHERE deleted is not null"),
     ]
