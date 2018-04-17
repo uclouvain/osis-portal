@@ -33,6 +33,3 @@ class LearningUnitFactory(factory.django.DjangoModelFactory):
         model = "base.LearningUnit"
 
     external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    acronym = factory.fuzzy.FuzzyText(length=10, chars=string.ascii_letters)
-    title = factory.Sequence(lambda n: 'Learning Unit %d' % n)
-    description = None
