@@ -1,188 +1,47 @@
 = OSIS Portal Technical Manual
 Hildeberto Mendonça, PhD
-v0.1, 2016-03-24
+v0.1, 2016-04-16
 :toc: right
 
-This documentation explains how to contribute as a committer to OSIS-Portal project. A committer is an individual who is disciplined enough to gain the confidence of the project manager to commit directly to the repository without further bureaucracy. In fact, be accepted as a committer is a great recognition of the quality of your work as a programmer.
+The installation of OSIS-Portal is very similar to https://github.com/uclouvain/osis/blob/dev/doc/technical-manual.adoc[OSIS]. This document focus on the differences to minimize repetition.
 
 == Installing OSIS-Portal
 
-The first thing to do to start contributing to the project is to prepare the development environment. During this section, we explain in details how to do that in a Debian-based distribution (Debian Linux, Ubuntu, Mint, etc.). This is the recommended operating system for development and deployment.
-
-If your operating system is not based on Debian Linux then you can rely on a virtual machine as a development environment. For the virtual machine, we suggest  https://www.virtualbox.org[VirtualBox] as virtual runtime and https://ubuntu-mate.org[Ubuntu Mate] as operating system. Follow the installation instructions on their respective websites according to your own platform. When the Ubuntu virtual machine is created and running, execute the following command to make the operating system aware of the virtual runtime:
-
-    $ sudo apt-get install virtualbox-guest-dkms virtualbox-guest-x11
-
-Now that you have a Debian-based Linux system available, you can start preparing the development environment in it. Follow the steps below:
-
-- <<installing-git>>
-- <<installing-postgresql>>
-- <<installing-django>>
-- <<installing-application>>
-
-[[installing-git]]
-=== Installing and Configuring Git
-
-Git is a distributed version control system used to manage the source code of OSIS. The source code is necessary to develop and deploy OSIS and we start the instructions by explaining how to install and configure it. We can use `apt-get` to install Git:
-
-    $ sudo apt-get update
-    $ sudo apt-get install git
-
-The `update` command downloads package lists from remote repositories to get information about the newest versions of packages and their dependencies. This way, we make sure we are getting the last version of Git and all other dependencies. Then `install git` performs the installation. We can test it by cloning the repository:
-
-    $ mkdir -p ~/python/projects/osis
-    $ cd ~/python/projects/osis
-    $ git clone git@github.com:uclouvain/osis-portal.git
-
-Next, we add some personal information in the local Git installation to make sure you are well identified in all commits:
-
-    $ git config --global user.name "[Firstname] [Lastname]"
-    $ git config --global user.email "[firstname.lastname]@domain.com"
-
-Since version 2.0, Git has adopted a new behavior to pull and push commits while in a branch. When you execute `git push` or `git pull` Git will consider pushing or pulling just for the current branch. Before, these commands would push and pull all branches. But the change to this new behavior is voluntary, not automatically imposed. So, we have to explicitly say we have to move from the old behavior to the new one. To do that, execute the following command:
-
-    $ git config --global push.default simple
-
-=== Configuring Git to Simplify GitHub Authentication
-
-For the moment, every time we push code to GitHub the prompt asks for a username and password. We can bypass this step by registering a SSH key. To do that, we first check whether there is already an existing SSH key we can reuse:
-
-    $ ls -al ~/.ssh
-
-If files with the extension `.pub` are listed then one of them can be reused to authenticate to GitHub. If not, then we can create one:
-
-    $ ssh-keygen -t rsa -b 4096 -C "[firstname.lastname]@domain.com"
-      Enter file in which to save the key (/Users/[user]/.ssh/id_rsa): [Press enter]
-      Enter passphrase (empty for no passphrase): [Type a passphrase]
-      Enter same passphrase again: [Type passphrase again]
-
-The next step is to add the new key - or an existing one - to the `ssh-agent`. This program runs the duration of a local login session, stores unencrypted keys in memory, and communicates with SSH clients using a Unix domain socket. Everyone who is able to connect to this socket also has access to the ssh-agent. First, we have to enable the ssh-agent:
-
-    $ eval "$(ssh-agent -s)"
-
-And add key to it:
-
-    $ ssh-add ~/.ssh/id_rsa
-
-The next step is to make GitHub aware of the key. For that, we have to copy the exact content of the file `id_rsa.pub` and paste into GitHub. To make no mistake about the copy, install a program called `xclip`:
-
-    $ sudo apt-get install xclip
-
-And then copy the content of the file `id_rsa.pub` in the clipboard:
-
-    $ xclip -sel clip < ~/.ssh/id_rsa.pub
-
-The command above is the equivalent of opening the file `~/.ssh/id_rsa.pub`, selecting the whole content and pressing `Ctrl+C`. This way, you can paste the content on GitHub when required in the next steps. On the GitHub side:
-
- . Login at https://github.com
- . In the top right corner of the page, click on the profile photo and select
-   **Settings**
- . In the user settings sidebar, click **SSH keys**
- . Then click **Add SSH key**
- . In the form, define a friendly title for the new key and paste the key in the
-   **Key** field
- . Click **Add Key** to finish with GitHub
-
-To make sure everything is working, lets test the connection:
-
-    $ ssh -T git@github.com
-      The authenticity of host 'github.com (207.97.227.239)' can't be established.
-      RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.
-      Are you sure you want to continue connecting (yes/no)? yes
-      _
-      Hi [username]! You've successfully authenticated, but GitHub does not
-      provide shell access.
-
-This configuration works only when we use a ssh connection to GitHub. To verify that, go to one of your local GitHub projects and check the url pointing to the server:
-
-    $ cd ~/python/projects/osis/osis-portal
-    $ git remote -v
-
-If the url starts with `https://` then you are using `https` instead of `ssh`. In this case, you should change the url to the ssh one:
-
-    $ git remote set-url origin git@github.com:uclouvain/osis-portal.git
-
-The automatic authentication should work after that.
-
-[[installing-postgresql]]
-=== Installing and Configuring PostgreSQL
-
-PostgreSQL is the only database supported by OSIS. In theory, the Django ORM would make the application database-independent, but we do not test OSIS with  other databases, thus we cannot guarantee that it works on other databases such as MySQL or Oracle. Fortunately, PostgreSQL has a very good reputation, a large community and a generous documentation.
-
-TIP: If you really need a database different from PostgreSQL then you could
-contribute to the project by testing OSIS on your favorite database.
-
-Execute the following commands to install PostgreSQL:
-
-    $ sudo apt-get install postgresql
-    $ sudo su - postgres -c "createuser -s $USER"
-    $ sudo apt-get install libpq-dev
-
-The first command installs PostgreSQL and creates a user named after the current logged OS user. The library libpq-dev is also installed for development purposes.
-
 === Creating the Database
 
-Before moving forward, make sure you installed PostgreSQL, as explained in the section <<installing-postgresql>>. Then, follow the steps below to create the backend database:
+Follow the steps below to create the frontend database:
 
     $ createdb osis_portal_local
-    $ createuser osis_portal -P    // Inform the password 'osis' when asked for.
+    $ createuser osis_portal -P   // Inform the password 'osis' when asked for.
     $ psql -d osis_portal_local
       =# grant connect on database osis_portal_local to osis_portal;
       =# revoke connect on database osis_portal_local from public;
       =# alter user osis_portal createdb;
       =# \q
 
-Now, install the necessary dependencies to allow a Python application to connect to PostgreSQL:
+=== Installing and Configuring the Application
 
-    $ sudo apt-get install python3-dev libpq-dev
-
-
-[[installing-django]]
-=== Installing and Configuring Django
-
-Django is a modern and lightweight web framework to support our back office and front office applications. The choice for Django was made thanks to the following advantages:
-
-- Very well documented.
-- The most popular web framework on the Python ecosystem. Largely supported by the majority of platforms, IDEs and web servers in general.
-- It supports several databases: Oracle, PortgreSQL, MySQL, etc.
-- Most of the time, modifications in the code can be immediately seen on the browser, without the need for redeployments or restarts.
-- Easily testable with Selenium.
-- In general, more productive than most of the alternatives.
-
-The repository `osis` is a Django application. We already cloned that when installing git. At that point we executed the following commands:
+The repository `osis-portal` is a Django application. To clone the repository, execute the following commands:
 
     $ cd ~/python/projects/osis
-    $ git clone git@github.com:uclouvain/osis-portal.git
+    $ git clone https://github.com/uclouvain/osis-portal.git
 
-Install the Python virtual environment and other system dependencies:
+The dependencies of OSIS-Portal are different from OSIS. That's why it deserves its own virtual environment:
 
-    $ sudo apt-get install build-essential, python-virtualenv libjpeg-dev libpng-dev
-
-In the new repository, create a virtual environment to isolate all dependencies of the project:
-
-    $ cd osis
+    $ cd osis-portal
     $ python3 -m venv venv
-
-A local environment file is used to configure django. If you want to change configuration during development, use the `.env` file. Create the local environment file:
-
-    $ cp .env.example .env
-
-[[installing-application]]
-=== Installing the Application
-
-    $ git submodule init
-    $ git submodule update
-
-Start the virtual environment and install the dependencies:
-
     $ source venv/bin/activate
     (venv)$ pip install -r requirements.txt
+
+Create a `.env` file based on `.env.example`:
+
+    (venv)$ cp .env.example .env
 
 Create the data structure in the database:
 
     (venv)$ python manage.py migrate
 
-To create the super user and continue with an empty database:
+To create the super user:
 
     (venv)$ python manage.py createsuperuser
        Username (leave blank to use '[linux-user]'):
@@ -197,67 +56,61 @@ Now, we can run the application:
 
     (venv)$ python manage.py runserver
 
-You can leave the server running while you are developing. It will take into account all changes in your code, except the changes in the model. In this case, we have to stop the server to execute the commands `makemigrations` and `migrate` as shown above. When we have finished your daily work, we can deactivate the virtual environment:
+You can leave the server running while you are developing. It will take into account all changes in your code, except the changes in the model. When we have finished your daily work, we can deactivate the virtual environment:
 
     (venv)$ deactivate
 
-== Adding the license to the source code
+== Integrating OSIS and OSIS-Portal
 
-OSIS is an open source project licensed under GPL v3. As such, it must respect certain rules of the license. The most important one is the addition of a license header in each one of the source files.
+OSIS and OSIS-Portal are two Django projects highly decoupled from each other, to the point where one is fully functional without the other. This is possible because both are integrated in a pure data level exchange using RabbitMQ, a message broker for asynchronous messaging.
 
-For Python files, the following text should appear on the top of the file, before any Python code:
+=== Installing RabbitMQ
 
-    # -*- coding: utf-8 -*-
-    ############################################################################
-    #
-    #    OSIS stands for Open Student Information System. It's an application
-    #    designed to manage the core business of higher education institutions,
-    #    such as universities, faculties, institutes and professional schools.
-    #    The core business involves the administration of students, teachers,
-    #    courses, programs and so on.
-    #
-    #    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
-    #
-    #    This program is free software: you can redistribute it and/or modify
-    #    it under the terms of the GNU General Public License as published by
-    #    the Free Software Foundation, either version 3 of the License, or
-    #    (at your option) any later version.
-    #
-    #    This program is distributed in the hope that it will be useful,
-    #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    #    GNU General Public License for more details.
-    #
-    #    A copy of this license - GNU General Public License - is available
-    #    at the root of the source code of this program.  If not,
-    #    see http://www.gnu.org/licenses/.
-    #
-    ############################################################################
+The installation of RabbitMQ is pretty straightforward. Just run the following command:
 
-For HTML/Template files, we change just the comment syntax:
+    $ sudo apt-get install rabbitmq-server
 
-    {% comment "License" %}
-     * OSIS stands for Open Student Information System. It's an application
-     * designed to manage the core business of higher education institutions,
-     * such as universities, faculties, institutes and professional schools.
-     * The core business involves the administration of students, teachers,
-     * courses, programs and so on.
-     *
-     * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
-     *
-     * This program is free software: you can redistribute it and/or modify
-     * it under the terms of the GNU General Public License as published by
-     * the Free Software Foundation, either version 3 of the License, or
-     * (at your option) any later version.
-     *
-     * This program is distributed in the hope that it will be useful,
-     * but WITHOUT ANY WARRANTY; without even the implied warranty of
-     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-     * GNU General Public License for more details.
-     *
-     * A copy of this license - GNU General Public License - is available
-     * at the root of the source code of this program.  If not,
-     * see http://www.gnu.org/licenses/.
-    {% endcomment %}
+After the installation, RabbitMQ is immediately up and running. To check its status, run:
 
-=== Making changes in the model
+    $ sudo rabbitmqctl status
+
+In case you need to stop the service for any reason, run:
+
+    $ sudo rabbitmqctl stop
+
+To start the service is a bit different:
+
+    $ sudo invoke-rc.d rabbitmq-server start
+
+At this point, RabbitMQ is ready for exchanging messages between OSIS and OSIS-Portal for development purposes, but it is difficult to visualize what is going on when you are debugging the application, since RabbitMQ is just a service running in the background. To address this issue, we can install the management console plugin:
+
+    $ sudo rabbitmq-plugins enable rabbitmq_management
+
+To access the management console, visit http://localhost:15672/ and inform `guest` as username and password.
+
+=== Configuring OSIS for Message Exchanging
+
+To enforce the principle of decoupling, OSIS and OSIS-Portal are configured to ignore the broker by default. When necessary, the access to the broker can be activated by changing the configuration of the projects. On the OSIS side, go to backoffice/queue and create the file `dev.py` based on `dev.example`:
+
+    $ cd ~/python/projects/osis/osis/backoffice/settings
+    $ cp dev.example dev.py
+
+In the file `dev.py`, uncomment the constant `QUEUES` and its value. Then, open the `.env` file, uncomment the constant `DJANGO_SETTINGS_MODULE` and change its value to `backoffice.settings.dev`.
+
+Finally, install the development dependencies:
+
+    $ pip install -r dev-requirements.txt
+
+=== Running OSIS and OSIS-Portal at the Same Time
+
+After activating the use of the queue, it is important to keep OSIS and OSIS-Portal running at the same time, otherwise lots of messages will be accumulated in the broker because one of the apps is pushing messages while the other one is not consuming them. But to run both on the same machine (common in developer's machine), it is necessary to have different TCP/IP ports. This is configurable when launching the application. First, let's launch OSIS:
+
+    $ cd ~/python/projects/osis/osis
+    $ source venv/bin/activate
+    (venv)$ python manage.py runserver
+
+OSIS is now running in the default port 8000. Let's launch OSIS-Portal in another port to avoid conflict. Open another console window and execute:
+
+    $ cd ~/python/projects/osis/osis-portal
+    $ source venv/bin/activate
+    (venv)$ python manage.py runserver 8001
