@@ -19,17 +19,20 @@ msgstr ""
 msgid "address"
 msgstr "Address"
 
-msgid	 "city"
-msgstr	 "City"
+msgid "affectation_available_since"
+msgstr "Affectations are available since"
 
-msgid	 "civility"
-msgstr	 "Civility"
+msgid "city"
+msgstr "City"
 
-msgid	 "choices_received_by_administration"
-msgstr	 "Choices received by administration"
+msgid "civility"
+msgstr "Civility"
 
-msgid	 "choose_internships"
-msgstr	 "Submit your internship choices"
+msgid "choices_received_by_administration"
+msgstr "Choices received by administration"
+
+msgid "choose_internships"
+msgstr "Submit your internship choices"
 
 msgid "choose_speciality"
 msgstr "Choose a speciality"
@@ -46,6 +49,9 @@ msgstr "Edit"
 msgid "edit_information"
 msgstr "Edit information"
 
+msgid "enrollments_from"
+msgstr "Enrollments from"
+
 msgid "first_choice"
 msgstr "First choice"
 
@@ -58,11 +64,11 @@ msgstr "Generalist"
 msgid "GENERALIST"
 msgstr "Generalist"
 
-msgid	 "hospital_list"
-msgstr	 "Hospital list"
+msgid "hospital_list"
+msgstr "Hospital list"
 
-msgid	 "hospitals"
-msgstr	 "Hospitals"
+msgid "hospitals"
+msgstr "Hospitals"
 
 msgid "internship"
 msgstr "internship"
@@ -84,20 +90,20 @@ msgstr "<p>By choosing <strong>'Stage personnel'</strong> you declare that you w
        "physique, neurologie, ophtamologie, O.R.L, orthopédie, pédiatrie, psychiatrie, soins palliatifs, urgences, "
        "urologie.</strong></p>"
 
-msgid	 "masters"
-msgstr	 "Internship's masters"
+msgid "masters"
+msgstr "Internship's masters"
 
-msgid	 "master_list"
-msgstr	 "Internship's masters list"
+msgid "master_list"
+msgstr "Internship's masters list"
 
-msgid	 "mobile_phone"
-msgstr	 "Mobile phone"
+msgid "mobile_phone"
+msgstr "Mobile phone"
 
-msgid	 "number_first_choice"
-msgstr	 "Number of first choice"
+msgid "number_first_choice"
+msgstr "Number of first choice"
 
-msgid	 "organization"
-msgstr	 "Hospital"
+msgid "organization"
+msgstr "Hospital"
 
 msgid "preference"
 msgstr "Preference"
@@ -111,9 +117,11 @@ msgstr "Reference"
 msgid "second_choice"
 msgstr "Second choice"
 
-
 msgid "selection"
 msgstr "selection"
+
+msgid "select_cohort"
+msgstr "Select a Cohort"
 
 msgid "select_contest"
 msgstr "<strong>BEFORE</strong> choosing your internships, follow the link to choose the contest (generalist "
@@ -138,14 +146,17 @@ msgstr "Student information"
 msgid "student_max"
 msgstr "Maximum number of students"
 
-msgid	 "student_resume"
-msgstr	 "Sump up of your choices and your affectations"
+msgid "student_resume"
+msgstr "Sump up of your choices and your affectations"
 
 msgid "submit_choices"
 msgstr "Submit choices"
 
 msgid "third_choice"
 msgstr "Third choice"
+
+msgid "to"
+msgstr "to"
 
 msgid "website"
 msgstr "Website"

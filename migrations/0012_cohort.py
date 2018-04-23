@@ -3,27 +3,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-from osis_common.models.serializable_model import SerializableModel
-from internship.models.cohort import Cohort
 import uuid
-
-def createDefaultCohort(apps, schema_editor):
-    db_alias = schema_editor.connection.alias
-
-    cohort = Cohort(
-            name="M7-2018",
-            uuid="1091eebf-e3ed-4cfd-b13e-6b9e947f14bb",
-            description="M7-2018",
-            free_internships_number=8,
-            publication_start_date="2017-03-27",
-            subscription_start_date="2017-03-01",
-            subscription_end_date="2017-03-20")
-    super(SerializableModel, cohort).save()
-
-def deleteDefaultCohort(apps, schema_editor):
-    Cohort = apps.get_model("internship", "Cohort")
-    db_alias = schema_editor.connection.alias
-    Cohort.objects.filter(pk=1).delete()
 
 class Migration(migrations.Migration):
 
@@ -48,5 +28,4 @@ class Migration(migrations.Migration):
                 'abstract': False,
             },
         ),
-        migrations.RunPython(createDefaultCohort, deleteDefaultCohort)
     ]

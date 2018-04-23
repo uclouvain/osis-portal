@@ -19,17 +19,20 @@ msgstr ""
 msgid "address"
 msgstr "Adresse"
 
-msgid	 "city"
-msgstr	 "Ville"
+msgid "affectation_available_since"
+msgstr "Les affections sont disponibles depuis"
 
-msgid	 "civility"
-msgstr	 "Civilité"
+msgid "city"
+msgstr "Ville"
 
-msgid	 "choices_received_by_administration"
-msgstr	 "Choix reçus de l'administration"
+msgid "civility"
+msgstr "Civilité"
 
-msgid	 "choose_internships"
-msgstr	 "Encodez vos choix de stages"
+msgid "choices_received_by_administration"
+msgstr "Choix reçus de l'administration"
+
+msgid "choose_internships"
+msgstr "Encodez vos choix de stages"
 
 msgid "choose_speciality"
 msgstr "Choisissez une spécialité"
@@ -46,6 +49,9 @@ msgstr "Modifier"
 msgid "edit_information"
 msgstr "Modifier information"
 
+msgid "enrollments_from"
+msgstr "Inscriptions du"
+
 msgid "first_choice"
 msgstr "Premier choix"
 
@@ -58,11 +64,11 @@ msgstr "Généraliste"
 msgid "GENERALIST"
 msgstr "Généraliste"
 
-msgid	 "hospital_list"
-msgstr	 "Liste des hôpitaux"
+msgid "hospital_list"
+msgstr "Liste des hôpitaux"
 
-msgid	 "hospitals"
-msgstr	 "Hôpitaux"
+msgid "hospitals"
+msgstr "Hôpitaux"
 
 msgid "internship"
 msgstr "stage"
@@ -84,20 +90,20 @@ msgstr "<p>Si vous séléctionnez <strong>'Stage personnel'</strong> alors vous 
        "physique, neurologie, ophtamologie, O.R.L, orthopédie, pédiatrie, psychiatrie, soins palliatifs, urgences, "
        "urologie.</strong></p>"
 
-msgid	 "masters"
-msgstr	 "Maîtres de stage"
+msgid "masters"
+msgstr "Maîtres de stage"
 
-msgid	 "master_list"
-msgstr	 "Liste des maîtres de stage"
+msgid "master_list"
+msgstr "Liste des maîtres de stage"
 
-msgid	 "mobile_phone"
-msgstr	 "Numéro de téléphone"
+msgid "mobile_phone"
+msgstr "Numéro de téléphone"
 
-msgid	 "number_first_choice"
-msgstr	 "Nombre de 1er choix"
+msgid "number_first_choice"
+msgstr "Nombre de 1er choix"
 
-msgid	 "organization"
-msgstr	 "Hôpital"
+msgid "organization"
+msgstr "Hôpital"
 
 msgid "preference"
 msgstr "Préférence"
@@ -113,6 +119,9 @@ msgstr "Second choix"
 
 msgid "selection"
 msgstr "sélection"
+
+msgid "select_cohort"
+msgstr "Sélectionnez une cohorte"
 
 msgid "select_contest"
 msgstr "<strong>AVANT</strong> de faire vos choix, suivez le lien pour séléctionner la filière (généraliste ou "
@@ -137,14 +146,17 @@ msgstr "Information de l'étudiant"
 msgid "student_max"
 msgstr "Nombre maximum d'étudiants"
 
-msgid	 "student_resume"
-msgstr	 "Résumé de vos choix et affectations"
+msgid "student_resume"
+msgstr "Résumé de vos choix et affectations"
 
 msgid "submit_choices"
 msgstr "Soumettre vos choix"
 
 msgid "third_choice"
 msgstr "Troisième choix"
+
+msgid "to"
+msgstr "au"
 
 msgid "website"
 msgstr "Site web"

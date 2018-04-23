@@ -26,18 +26,13 @@
 from django.db import models
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
-from internship.admin_actions.actions import export_as_csv_action
-
 
 class InternshipChoiceAdmin(SerializableModelAdmin):
     list_display = ('id', 'student', 'organization', 'speciality', 'choice', 'internship', 'uuid', 'registered')
-    fieldsets = ((None, {'fields': ('id', 'student', 'organization', 'speciality', 'choice', 'internship',
-                                    'priority')}),)
+    fieldsets = ((None, {'fields': ('student', 'organization', 'speciality', 'choice', 'internship', 'priority')}),)
     raw_id_fields = ('student', 'organization', 'speciality')
-    search_fields = ['id', 'uuid', 'student__person__first_name', 'student__person__last_name']
-
-    actions = [export_as_csv_action("Export to CSV", fields=['student', 'organization', 'speciality', 'internship',
-                                                             'choice', 'priority', 'uuid'])]
+    search_fields = ['uuid', 'student__person__first_name', 'student__person__last_name']
+    list_filter = ['internship__cohort', 'internship']
 
 
 class InternshipChoice(SerializableModel):
@@ -56,7 +51,7 @@ class InternshipChoice(SerializableModel):
         unique_together = (("student", "internship", "choice"),)
 
 
-def search(student=None, speciality=None, specialities=None, internship=None):
+def search(student=None, speciality=None, internship=None, specialities=None):
     has_criteria = False
     queryset = InternshipChoice.objects
 
@@ -76,12 +71,10 @@ def search(student=None, speciality=None, specialities=None, internship=None):
         queryset = queryset.filter(speciality_id__in=specialities)
         has_criteria = True
 
-    if has_criteria:
-        return queryset
-    else:
-        return None
+    return queryset if has_criteria else None
 
 
 def get_number_first_choice_by_organization(speciality):
     return InternshipChoice.objects.filter(choice=1, speciality=speciality).values("organization")\
         .annotate(models.Count("organization"))
+

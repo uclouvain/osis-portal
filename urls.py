@@ -24,21 +24,21 @@
 #
 ##############################################################################
 from django.conf.urls import url, include
-from internship.views import main, hospital, resume
+from internship.views import main, hospital, resume, selection
 
 urlpatterns = [
     url(r'^$', main.view_cohort_selection, name="internship"),
 
     url(r'^cohort/(?P<cohort_id>[0-9]+)/', include([
         url(r'^$', main.view_internship_home, name='internship_home'),
-        url(r'^selection/$', main.view_internship_selection, name='select_internship'),
+        url(r'^selection/$', selection.view_internship_selection, name='select_internship'),
         url(r'^hospitals/$', hospital.view_hospitals_list, name='hospitals_list'),
         url(r'^resume/$', resume.view_student_resume, name='student_resume'),
 
-        url(r'^(?P<internship_id>[0-9]+)/', include([
-            url(r'^speciality_assignment/$', main.assign_speciality_for_internship, name='assign_speciality'),
-            url(r'^selection/$', main.view_internship_selection, name='select_specific_internship'),
-            url(r'^selection/(?P<speciality_id>[0-9]+)/$', main.view_internship_selection,
+        url(r'^internship/(?P<internship_id>[0-9]+)/', include([
+            url(r'^speciality_assignment/$', selection.assign_speciality_for_internship, name='assign_speciality'),
+            url(r'^selection/$', selection.view_internship_selection, name='select_specific_internship'),
+            url(r'^selection/(?P<speciality_id>[0-9]+)/$', selection.view_internship_selection,
                 name='select_internship_speciality'),
         ]))
     ]))
