@@ -65,7 +65,6 @@
         </div>
 
         <div class="tab-content">
-
             <div role="tabpanel" class="tab-pane active" id="student_info">
                 <br>
                 <div class="row">
@@ -147,14 +146,18 @@
             {% if publication_allowed %}
             <div role="tabpanel" class="tab-pane" id="affectation">
                 {% for affectation in student_affectations %}
-                <div class="row">
-                <br>
-                    <strong>{{ affectation.period.name }}</strong> ({{ affectation.period.date_start }} - {{ affectation.period.date_end }})
+                    <div class="row">
                     <br>
-                    {{ affectation.speciality.name }} | {{ affectation.organization }}
-                    <br>
-                    Address: {{ affectation.organization.location }}
-                </div>
+                        <strong>{{ affectation.period.name }}</strong> ({{ affectation.period.date_start }} - {{ affectation.period.date_end }})
+                        {% if affectation.internship %}
+                            <br>
+                            {{ affectation.internship.name }}
+                        {% endif %}
+                        <br>
+                        {{ affectation.speciality.name }} | {{ affectation.organization }}
+                        <br>
+                        Address: {{ affectation.organization.location }}
+                    </div>
                 {% endfor %}
             </div>
             {% endif %}
