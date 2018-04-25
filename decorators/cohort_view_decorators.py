@@ -24,9 +24,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
-import base.models as mdl_base
-import internship.models as mdl_internship
 import datetime
+
+import base.models as mdl_base
+from internship.models import internship_student_information
 from functools import wraps
 from dashboard.views import main as dash_main_view
 from django.core.urlresolvers import reverse
@@ -43,9 +44,8 @@ def redirect_if_not_in_cohort(function):
         except MultipleObjectsReturned:
             return dash_main_view.show_multiple_registration_id_error(request)
 
-        if mdl_internship.internship_student_information.InternshipStudentInformation.objects.filter(cohort_id=cohort_id, person_id=student.person_id).count() > 0:
-            response = function(request, cohort_id, *args, **kwargs)
-            return response
+        if student and internship_student_information.find_by_person_in_cohort(cohort_id, student.person_id).count() > 0:
+            return function(request, cohort_id, *args, **kwargs)
         else:
             return redirect(reverse("internship"))
 

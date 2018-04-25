@@ -51,19 +51,19 @@ class TestFindByUser(TestCase):
         self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
 
     def test_with_no_data(self):
-        student_information = mdl_student_information.find_by_user_and_cohort(self.user, self.cohort)
+        student_information = mdl_student_information.find_by_user_in_cohort(self.user, self.cohort)
         self.assertFalse(student_information)
 
     def test_with_no_information_for_user(self):
         other_user = User.objects.create_user('other_user', 'other_user@test.com', 'userpass')
         create_student_information(other_user, cohort=self.cohort)
 
-        student_information = mdl_student_information.find_by_user_and_cohort(self.user, self.cohort)
+        student_information = mdl_student_information.find_by_user_in_cohort(self.user, self.cohort)
         self.assertFalse(student_information)
 
     def test_with_information_for_user(self):
         expected = create_student_information(self.user, cohort=self.cohort)
-        actual = mdl_student_information.find_by_user_and_cohort(self.user, cohort=self.cohort)
+        actual = mdl_student_information.find_by_user_in_cohort(self.user, cohort=self.cohort)
 
         self.assertEqual(expected, actual)
 
