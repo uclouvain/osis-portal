@@ -32,10 +32,6 @@ def is_online_application_opened(user):
     return _is_academic_calendar_event_opened(academic_calendar_type.TEACHING_CHARGE_APPLICATION)
 
 
-def is_summary_course_submission_opened(user):
-    return _is_academic_calendar_event_opened(academic_calendar_type.SUMMARY_COURSE_SUBMISSION)
-
-
 def _is_academic_calendar_event_opened(calendar_type):
     current_academic_year = mdl_base.academic_year.current_academic_year()
     if not current_academic_year:

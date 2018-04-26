@@ -34,13 +34,13 @@
             <p>{% trans 'desc_lnk_my_students_list' %}</p>
         </div>
     </div>
-    {% if is_summary_responsible and summary_course_submission_opened %}
+    {% if is_summary_responsible %}
         <div class="grid-item">
             <i class="fa fa-file-text-o"></i>
             <div class="description">
                 <h4 class="media-heading">
                     <a href="{{manage_courses_url}}" id="lnk_manage_courses">
-                        {% trans 'manage_courses' %}
+                        {% trans 'manage_educational_information' %}
                     </a>
                 </h4>
                 <p>

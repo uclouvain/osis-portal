@@ -160,11 +160,15 @@ def _resolve_learning_container_year_info(application_list, academic_year):
         l_container_year = next((l_container_year for l_container_year in l_container_years if
                                  l_container_year.acronym == application.get('acronym')), None)
         if l_container_year:
-            application['learning_container_year_id'] = l_container_year.id
-            application['title'] = learn_unit_year_by_container_id[l_container_year.id].complete_title
-            for l_component_year in l_container_year.learningcomponentyear_set.all():
-                application[l_component_year.type] = l_component_year.volume_declared_vacant
+            _modify_application(application, l_container_year, learn_unit_year_by_container_id)
     return application_list
+
+
+def _modify_application(application, l_container_year, learn_unit_year_by_container_id):
+    application['learning_container_year_id'] = l_container_year.id
+    application['title'] = learn_unit_year_by_container_id[l_container_year.id].complete_title
+    for l_component_year in l_container_year.learningcomponentyear_set.all():
+        application[l_component_year.type] = l_component_year.volume_declared_vacant
 
 
 def _create_application(global_id, application_to_create):

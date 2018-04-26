@@ -45,20 +45,20 @@ class TutorApplicationTest(TestCase):
         self.academic_year = AcademicYearFactory(year=2017)
         # Create several learning container year - 2017
         self.lbir1200_2017 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LBIR1200")
-        LearningUnitYearFactory(learning_container_year=self.lbir1200_2017)
+        LearningUnitYearFactory(academic_year=self.academic_year, learning_container_year=self.lbir1200_2017)
         self.lbir1250_2017 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LBIR1250")
-        LearningUnitYearFactory(learning_container_year=self.lbir1250_2017)
+        LearningUnitYearFactory(academic_year=self.academic_year, learning_container_year=self.lbir1250_2017)
         self.lbir1300_2017 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LBIR1300")
-        LearningUnitYearFactory(learning_container_year=self.lbir1300_2017)
+        LearningUnitYearFactory(academic_year=self.academic_year, learning_container_year=self.lbir1300_2017)
         self.lagro1200_2017 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LAGRO1200")
-        LearningUnitYearFactory(learning_container_year=self.lagro1200_2017)
+        LearningUnitYearFactory(academic_year=self.academic_year, learning_container_year=self.lagro1200_2017)
 
         # Create several learning container year - 2016
         self.academic_year_2016 = AcademicYearFactory(year=2016)
         self.lbir1200_2016 = LearningContainerYearFactory(academic_year=self.academic_year_2016, acronym="LBIR1200")
-        LearningUnitYearFactory(learning_container_year=self.lbir1200_2016)
+        LearningUnitYearFactory(academic_year=self.academic_year_2016, learning_container_year=self.lbir1200_2016)
         self.lbir1250_2016 = LearningContainerYearFactory(academic_year=self.academic_year_2016, acronym="LBIR1250")
-        LearningUnitYearFactory(learning_container_year=self.lbir1250_2016)
+        LearningUnitYearFactory(academic_year=self.academic_year_2016, learning_container_year=self.lbir1250_2016)
 
         # Creation Person/Tutor
         Group.objects.create(name="tutors")

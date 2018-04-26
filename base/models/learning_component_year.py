@@ -25,10 +25,11 @@
 ##############################################################################
 from base.models.enums import learning_component_year_type
 from django.db import models
-from osis_common.models.auditable_serializable_model import AuditableSerializableModel, AuditableSerializableModelAdmin
+
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
-class LearningComponentYearAdmin(AuditableSerializableModelAdmin):
+class LearningComponentYearAdmin(SerializableModelAdmin):
     list_display = ('learning_container_year', 'acronym', 'type', 'volume_declared_vacant', 'planned_classes')
     fieldsets = ((None, {'fields': ('learning_container_year', 'acronym', 'type', 'volume_declared_vacant', 'planned_classes')}),)
     search_fields = ['acronym', 'learning_container_year__acronym']
@@ -36,7 +37,7 @@ class LearningComponentYearAdmin(AuditableSerializableModelAdmin):
     list_filter = ('learning_container_year__academic_year',)
 
 
-class LearningComponentYear(AuditableSerializableModel):
+class LearningComponentYear(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     changed = models.DateTimeField(null=True, auto_now=True)
     learning_container_year = models.ForeignKey('LearningContainerYear')

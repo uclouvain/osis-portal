@@ -52,6 +52,7 @@ class OfferProposition(SerializableModel):
     start_edit_title = models.DateField(default=timezone.now)
     end_edit_title = models.DateField(default=timezone.now)
     offer_proposition_group = models.ForeignKey(OfferPropositionGroup, null=True, blank=True)
+    global_email_to_commission = models.BooleanField(default=False)
 
     def __str__(self):
         return self.acronym
