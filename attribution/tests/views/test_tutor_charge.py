@@ -354,11 +354,9 @@ class HomeTest(TestCase):
         today = datetime.datetime.today()
         self.academic_year = AcademicYearFactory(year=today.year, start_date=today-datetime.timedelta(days=5),
                                                  end_date=today+datetime.timedelta(days=5))
-        self.learning_unit_year = LearningUnitYearFactory(academic_year=self.academic_year)
-        self.learning_unit_year.learning_container_year = LearningContainerYearFactory(
-            academic_year=self.learning_unit_year.academic_year,
-            in_charge=True)
-        self.learning_unit_year.save()
+        self.learning_unit_year = LearningUnitYearFactory(academic_year=self.academic_year,
+                                                          learning_container_year__academic_year=self.academic_year,
+                                                          learning_container_year__in_charge=True)
         self.attribution = AttributionFactory(function=function.CO_HOLDER,
                                               learning_unit_year=self.learning_unit_year,
                                               tutor=self.tutor,
@@ -537,7 +535,7 @@ class HomeTest(TestCase):
         self.assertEqual(len(response.context['attributions']), 1)
         attribution = response.context['attributions'][0]
         self.assertEqual(attribution['acronym'], self.learning_unit_year.acronym)
-        self.assertEqual(attribution['title'], self.learning_unit_year.specific_title)
+        self.assertEqual(attribution['title'], self.learning_unit_year.complete_title)
         self.assertEqual(attribution['start_year'], self.attribution.start_year)
         self.assertEqual(attribution['lecturing_allocation_charge'], str(LEARNING_UNIT_LECTURING_DURATION))
         self.assertEqual(attribution['practice_allocation_charge'], str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION))

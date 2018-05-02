@@ -24,14 +24,12 @@
 #
 ##############################################################################
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
-from django.contrib import admin
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
-from base.models import student, offer_year
+from base.models import student, offer_year, academic_year
 from . import dissertation_location, proposition_dissertation
-from dissertation.models.dissertation_role import get_promoteur_by_dissertation
-from dissertation.utils.emails_dissert import send_mail_to_teacher_new_dissert
+from dissertation.utils import emails_dissert
 from base import models as mdl
 
 
@@ -97,7 +95,7 @@ class Dissertation(SerializableModel):
     def go_forward(self):
         next_status = get_next_status(self, "go_forward")
         if self.status == 'DRAFT' and next_status == 'DIR_SUBMIT':
-            send_mail_to_teacher_new_dissert(get_promoteur_by_dissertation(self))
+            emails_dissert.send_email_to_all_promotors(self, 'dissertation_adviser_new_project_dissertation')
         self.set_status(next_status)
 
     def accept(self):
@@ -115,9 +113,12 @@ class Dissertation(SerializableModel):
 
 
 def count_by_proposition(subject):
+    current_academic_year = academic_year.starting_academic_year()
     return Dissertation.objects.filter(active=True)\
-                               .filter(proposition_dissertation=subject)\
-                               .exclude(status='DRAFT')\
+                               .filter(proposition_dissertation=subject) \
+                               .filter(offer_year_start__academic_year=current_academic_year) \
+                               .exclude(status='DRAFT') \
+                               .exclude(status='DIR_KO') \
                                .count()
 
 

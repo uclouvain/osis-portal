@@ -26,10 +26,10 @@
 from django.db import models
 
 from base.models.enums import learning_unit_year_subtypes
-from osis_common.models.auditable_serializable_model import AuditableSerializableModel, AuditableSerializableModelAdmin
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
-class LearningUnitYearAdmin(AuditableSerializableModelAdmin):
+class LearningUnitYearAdmin(SerializableModelAdmin):
     list_display = ('acronym', 'specific_title', 'academic_year', 'weight', 'learning_unit', )
     fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'specific_title', 'weight', 'learning_unit',
                  'learning_container_year', 'subtype')}),)
@@ -38,7 +38,7 @@ class LearningUnitYearAdmin(AuditableSerializableModelAdmin):
     raw_id_fields = ('learning_unit', 'learning_container_year')
 
 
-class LearningUnitYear(AuditableSerializableModel):
+class LearningUnitYear(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     acronym = models.CharField(max_length=15, db_index=True)
     specific_title = models.CharField(max_length=255, blank=True, null=True)
@@ -64,6 +64,10 @@ class LearningUnitYear(AuditableSerializableModel):
     @property
     def team(self):
         return self.learning_container_year and self.learning_container_year.team
+
+    @property
+    def complete_title(self):
+        return ' '.join(filter(None, [self.learning_container_year.common_title, self.specific_title]))
 
 
 def search(academic_year_id=None, acronym=None, learning_container_year_id=None, a_learning_unit=None):
@@ -117,3 +121,8 @@ def find_first_by_learning_container_year(learning_container_yr_id):
 
 def find_first_by_exact_acronym(academic_year_id, acronym):
     return search(academic_year_id, acronym, None, None).first()
+
+
+def get_full_by_learning_container_year_id(learning_container_year_id):
+    return LearningUnitYear.objects.get(learning_container_year__id=learning_container_year_id,
+                                        subtype=learning_unit_year_subtypes.FULL)
