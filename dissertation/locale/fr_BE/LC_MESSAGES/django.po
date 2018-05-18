@@ -200,6 +200,9 @@ msgstr "Nouveau statut"
 msgid "no_result"
 msgstr "Aucun résultat trouvé"
 
+msgid "of"
+msgstr "sur"
+
 msgid "offer_proposition"
 msgstr "Programme de cours"
 

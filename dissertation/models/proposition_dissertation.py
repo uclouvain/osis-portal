@@ -29,6 +29,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from dissertation.models import dissertation
 
 
 class PropositionDissertationAdmin(SerializableModelAdmin):
@@ -80,6 +81,9 @@ class PropositionDissertation(SerializableModel):
         author = u"%s %s %s" % (last_name.upper(), first_name, middle_name)
         return author+" - "+str(self.title)
 
+    def get_count_use(self):
+        return dissertation.count_by_proposition(self)
+
     class Meta:
         ordering = ["author__person__last_name", "author__person__middle_name", "author__person__first_name", "title"]
 
@@ -109,3 +113,5 @@ def find_by_id(proposition_id):
 def search_by_offers(offers):
     proposition_ids = proposition_offer.find_by_offers(offers).values('proposition_dissertation_id')
     return PropositionDissertation.objects.filter(pk__in=proposition_ids, active=True, visibility=True)
+
+
