@@ -28,7 +28,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from base.models import student, offer_year, academic_year
-from . import dissertation_location, proposition_dissertation
+from dissertation.models import dissertation_location, proposition_dissertation
 from dissertation.utils import emails_dissert
 from base import models as mdl
 
