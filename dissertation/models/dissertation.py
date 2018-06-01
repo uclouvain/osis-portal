@@ -27,7 +27,7 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
-from base.models import student, offer_year, academic_year
+from base.models import student, offer_year
 from dissertation.models import dissertation_location, proposition_dissertation
 from dissertation.utils import emails_dissert
 from base import models as mdl
@@ -110,7 +110,6 @@ class Dissertation(SerializableModel):
         logged_person = mdl.person.find_by_user(request.user)
         logged_student = mdl.student.find_by_person(logged_person)
         return logged_student == self.author
-
 
 
 def count_submit_by_user(user, offer):
