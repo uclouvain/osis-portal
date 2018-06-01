@@ -48,11 +48,12 @@ def proposition_dissertations(request):
 
 @login_required
 def proposition_dissertation_detail(request, pk):
+    proposition = proposition_dissertation.find_by_id(pk)
     subject = get_object_or_404(proposition_dissertation.PropositionDissertation, pk=pk)
     offer_propositions = proposition_offer.search_by_proposition_dissertation(subject)
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
-    using = dissertation.count_by_proposition(subject)
+    using = proposition.count_dissertations()
     percent = using * 100 / subject.max_number_student if subject.max_number_student else 0
     count_proposition_role = proposition_role.count_by_proposition(subject)
     files = proposition_document_file.find_by_proposition(subject)

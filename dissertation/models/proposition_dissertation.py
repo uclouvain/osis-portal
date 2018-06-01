@@ -23,13 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from base.models import academic_year
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from dissertation.models import proposition_offer
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from dissertation.models import dissertation
 
 
 class PropositionDissertationAdmin(SerializableModelAdmin):
@@ -81,8 +81,14 @@ class PropositionDissertation(SerializableModel):
         author = u"%s %s %s" % (last_name.upper(), first_name, middle_name)
         return author+" - "+str(self.title)
 
-    def get_count_use(self):
-        return dissertation.count_by_proposition(self)
+    def count_dissertations(self):
+        current_academic_year = academic_year.starting_academic_year()
+        return self.dissertation_set \
+            .filter(active=True) \
+            .filter(offer_year_start__academic_year=current_academic_year) \
+            .exclude(status='DRAFT') \
+            .exclude(status='DIR_KO') \
+            .count()
 
     class Meta:
         ordering = ["author__person__last_name", "author__person__middle_name", "author__person__first_name", "title"]

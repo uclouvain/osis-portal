@@ -69,7 +69,7 @@ class DissertationModelTestCase(TestCase):
                                                                        title='Proposition de memoire'
                                                                        )
 
-    def test_count_by_proposition(self):
+    def test_count_dissertations(self):
         self.client.force_login(self.manager.person.user)
         self.dissertation_test_count2015 = DissertationFactory(author=self.student1,
                                                                offer_year_start=self.offer_year_start2015,

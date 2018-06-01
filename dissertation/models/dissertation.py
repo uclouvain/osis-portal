@@ -112,15 +112,6 @@ class Dissertation(SerializableModel):
         return logged_student == self.author
 
 
-def count_by_proposition(subject):
-    current_academic_year = academic_year.starting_academic_year()
-    return Dissertation.objects.filter(active=True)\
-                               .filter(proposition_dissertation=subject) \
-                               .filter(offer_year_start__academic_year=current_academic_year) \
-                               .exclude(status='DRAFT') \
-                               .exclude(status='DIR_KO') \
-                               .count()
-
 
 def count_submit_by_user(user, offer):
     return Dissertation.objects.filter(author=user).filter(offer_year_start__offer=offer)\
