@@ -27,7 +27,7 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
-from base.models import student, offer_year
+from base.models import student, offer_year, academic_year
 from dissertation.models import dissertation_location, proposition_dissertation
 from dissertation.utils import emails_dissert
 from base import models as mdl
@@ -113,8 +113,12 @@ class Dissertation(SerializableModel):
 
 
 def count_submit_by_user(user, offer):
-    return Dissertation.objects.filter(author=user).filter(offer_year_start__offer=offer)\
-        .exclude(status='DRAFT').exclude(status='DIR_KO').filter(active=True).count()
+    return Dissertation.objects.filter(author=user)\
+        .filter(offer_year_start__offer=offer) \
+        .exclude(status='DIR_KO') \
+        .exclude(status='DRAFT')\
+        .filter(active=True)\
+        .count()
 
 
 def get_next_status(memory, operation):
