@@ -150,6 +150,7 @@ def find_by_user(user):
 def find_by_id(dissertation_id):
     return Dissertation.objects.get(pk=dissertation_id)
 
+
 def count_by_proposition(proposition):
     current_academic_year = academic_year.starting_academic_year()
     return Dissertation.objects.filter(proposition_dissertation=proposition) \

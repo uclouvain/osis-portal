@@ -46,9 +46,11 @@ def proposition_dissertations(request):
                           'proposition_offers': proposition_offers,
                           'student': student})
 
+
 def _append_dissertations_count(prop_offer):
     prop_offer.proposition_dissertation.dissertations_count = dissertation.count_by_proposition(prop_offer.proposition_dissertation)
     return prop_offer
+
 
 @login_required
 def proposition_dissertation_detail(request, pk):
