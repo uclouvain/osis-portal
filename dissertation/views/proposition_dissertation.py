@@ -48,7 +48,8 @@ def proposition_dissertations(request):
 
 
 def _append_dissertations_count(prop_offer):
-    prop_offer.proposition_dissertation.dissertations_count = dissertation.count_by_proposition(prop_offer.proposition_dissertation)
+    prop_offer.proposition_dissertation.dissertations_count = \
+        dissertation.count_by_proposition(prop_offer.proposition_dissertation)
     return prop_offer
 
 
