@@ -31,11 +31,13 @@ from base.tests.factories.person import PersonFactory
 from base.tests.factories.offer import OfferFactory
 from base.tests.factories.student import StudentFactory
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
+from dissertation.models import dissertation
+from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
 from dissertation.tests.factories.dissertation import DissertationFactory
-from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
-from dissertation.models import dissertation
+
+
 
 class DissertationModelTestCase(TestCase):
     def setUp(self):
@@ -87,5 +89,4 @@ class DissertationModelTestCase(TestCase):
                                                                dissertation_role__adviser=self.teacher,
                                                                dissertation_role__status='PROMOTEUR')
 
-        self.assertEqual(dissertation.count_by_proposition(self.proposition_dissertation),1)
-
+        self.assertEqual(dissertation.count_by_proposition(self.proposition_dissertation), 1)

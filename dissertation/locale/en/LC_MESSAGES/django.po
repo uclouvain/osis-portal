@@ -200,6 +200,9 @@ msgstr "Next status"
 msgid "no_result"
 msgstr "No result"
 
+msgid "of"
+msgstr "of"
+
 msgid "offer_proposition"
 msgstr "Offer"
 

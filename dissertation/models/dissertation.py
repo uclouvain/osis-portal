@@ -28,7 +28,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from base.models import student, offer_year, academic_year
-from . import dissertation_location, proposition_dissertation
+from dissertation.models import dissertation_location, proposition_dissertation
 from dissertation.utils import emails_dissert
 from base import models as mdl
 
@@ -112,19 +112,13 @@ class Dissertation(SerializableModel):
         return logged_student == self.author
 
 
-def count_by_proposition(subject):
-    current_academic_year = academic_year.starting_academic_year()
-    return Dissertation.objects.filter(active=True)\
-                               .filter(proposition_dissertation=subject) \
-                               .filter(offer_year_start__academic_year=current_academic_year) \
-                               .exclude(status='DRAFT') \
-                               .exclude(status='DIR_KO') \
-                               .count()
-
-
 def count_submit_by_user(user, offer):
-    return Dissertation.objects.filter(author=user).filter(offer_year_start__offer=offer)\
-        .exclude(status='DRAFT').exclude(status='DIR_KO').filter(active=True).count()
+    return Dissertation.objects.filter(author=user)\
+        .filter(offer_year_start__offer=offer) \
+        .exclude(status='DIR_KO') \
+        .exclude(status='DRAFT')\
+        .filter(active=True)\
+        .count()
 
 
 def get_next_status(memory, operation):
@@ -155,3 +149,13 @@ def find_by_user(user):
 
 def find_by_id(dissertation_id):
     return Dissertation.objects.get(pk=dissertation_id)
+
+
+def count_by_proposition(proposition):
+    current_academic_year = academic_year.starting_academic_year()
+    return Dissertation.objects.filter(proposition_dissertation=proposition) \
+        .filter(active=True) \
+        .filter(offer_year_start__academic_year=current_academic_year) \
+        .exclude(status='DRAFT') \
+        .exclude(status='DIR_KO') \
+        .count()
