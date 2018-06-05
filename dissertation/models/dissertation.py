@@ -149,3 +149,12 @@ def find_by_user(user):
 
 def find_by_id(dissertation_id):
     return Dissertation.objects.get(pk=dissertation_id)
+
+def count_by_proposition(proposition):
+    current_academic_year = academic_year.starting_academic_year()
+    return Dissertation.objects.filter(proposition_dissertation=proposition) \
+        .filter(active=True) \
+        .filter(offer_year_start__academic_year=current_academic_year) \
+        .exclude(status='DRAFT') \
+        .exclude(status='DIR_KO') \
+        .count()

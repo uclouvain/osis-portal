@@ -66,7 +66,7 @@
                   <td><a href="{% url 'proposition_dissertation_detail' pk=proposition_offer.proposition_dissertation.pk %}">{{ proposition_offer.proposition_dissertation.title }}</a></td>
                   <td>{{ proposition_offer.proposition_dissertation.author }}</td>
                   <td><span class="label label-default">{{ proposition_offer.offer_proposition }}</span></td>
-                  <td>{{ proposition_offer.proposition_dissertation.count_dissertations }} {% trans 'of' %} {{ proposition_offer.proposition_dissertation.max_number_student }}</td>
+                  <td>{{ proposition_offer.proposition_dissertation.dissertations_count }} {% trans 'of' %} {{ proposition_offer.proposition_dissertation.max_number_student }}</td>
                 </tr>
               {% endfor %}
             </table>

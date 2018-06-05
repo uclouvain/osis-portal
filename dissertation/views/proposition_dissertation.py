@@ -39,12 +39,16 @@ def proposition_dissertations(request):
     student = mdl.student.find_by_person(person)
     offers = mdl.offer.find_by_student(student)
     proposition_offers = proposition_offer.find_by_offers_ordered_by_proposition_dissertation(offers)
+    proposition_offers = [_append_dissertations_count(prop_offer) for prop_offer in proposition_offers]
     date_now = timezone.now().date()
     return layout.render(request, 'proposition_dissertations_list.html',
                          {'date_now': date_now,
                           'proposition_offers': proposition_offers,
                           'student': student})
 
+def _append_dissertations_count(prop_offer):
+    prop_offer.proposition_dissertation.dissertations_count = dissertation.count_by_proposition(prop_offer.proposition_dissertation)
+    return prop_offer
 
 @login_required
 def proposition_dissertation_detail(request, pk):
@@ -53,7 +57,7 @@ def proposition_dissertation_detail(request, pk):
     offer_propositions = proposition_offer.search_by_proposition_dissertation(subject)
     person = mdl.person.find_by_user(request.user)
     student = mdl.student.find_by_person(person)
-    using = proposition.count_dissertations()
+    using = dissertation.count_by_proposition(proposition)
     percent = using * 100 / subject.max_number_student if subject.max_number_student else 0
     count_proposition_role = proposition_role.count_by_proposition(subject)
     files = proposition_document_file.find_by_proposition(subject)

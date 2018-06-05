@@ -31,6 +31,7 @@ from base.tests.factories.person import PersonFactory
 from base.tests.factories.offer import OfferFactory
 from base.tests.factories.student import StudentFactory
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
+from dissertation.models import dissertation
 from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
 from dissertation.tests.factories.dissertation import DissertationFactory
@@ -70,7 +71,7 @@ class DissertationModelTestCase(TestCase):
                                                                        title='Proposition de memoire'
                                                                        )
 
-    def test_count_dissertations(self):
+    def test_count_by_proposition(self):
         self.client.force_login(self.manager.person.user)
         self.dissertation_test_count2015 = DissertationFactory(author=self.student1,
                                                                offer_year_start=self.offer_year_start2015,
@@ -88,4 +89,4 @@ class DissertationModelTestCase(TestCase):
                                                                dissertation_role__adviser=self.teacher,
                                                                dissertation_role__status='PROMOTEUR')
 
-        self.assertEqual(PropositionDissertation.count_dissertations(self.proposition_dissertation), 1)
+        self.assertEqual(dissertation.count_by_proposition(self.proposition_dissertation), 1)
