@@ -30,6 +30,7 @@ from django.db import models
 from base import models as mdl
 from base.models.enums import entity_container_year_link_type as entity_types
 from base.models.enums.learning_unit_year_subtypes import FULL
+from osis_common.utils.numbers import to_float_or_zero
 
 
 class LearningUnitYearWithContext:
@@ -103,20 +104,17 @@ def _append_components(learning_unit):
             vol_req_entity = requirement_entities_volumes.get(entity_types.REQUIREMENT_ENTITY, 0) or 0
             vol_add_req_entity_1 = requirement_entities_volumes.get(entity_types.ADDITIONAL_REQUIREMENT_ENTITY_1, 0) or 0
             vol_add_req_entity_2 = requirement_entities_volumes.get(entity_types.ADDITIONAL_REQUIREMENT_ENTITY_2, 0) or 0
-            volume_total_charge = vol_req_entity + vol_add_req_entity_1 + vol_add_req_entity_2
-            volume_partial = float(component.hourly_volume_partial) if component.hourly_volume_partial else 0
-            planned_classes = component.planned_classes or 1
-            volume_total = volume_total_charge
+            volume_global = vol_req_entity + vol_add_req_entity_1 + vol_add_req_entity_2
 
             learning_unit.components[component] = {
-                'VOLUME_TOTAL': volume_total,
-                'VOLUME_Q1': volume_partial,
-                'VOLUME_Q2': volume_total - volume_partial,
-                'PLANNED_CLASSES': planned_classes,
+                'VOLUME_TOTAL': to_float_or_zero(component.hourly_volume_total_annual),
+                'VOLUME_Q1': to_float_or_zero(component.hourly_volume_partial_q1),
+                'VOLUME_Q2': to_float_or_zero(component.hourly_volume_partial_q2),
+                'PLANNED_CLASSES': component.planned_classes or 1,
                 'VOLUME_' + entity_types.REQUIREMENT_ENTITY: vol_req_entity,
                 'VOLUME_' + entity_types.ADDITIONAL_REQUIREMENT_ENTITY_1: vol_add_req_entity_1,
                 'VOLUME_' + entity_types.ADDITIONAL_REQUIREMENT_ENTITY_2: vol_add_req_entity_2,
-                'VOLUME_TOTAL_REQUIREMENT_ENTITIES': volume_total_charge,
+                'VOLUME_TOTAL_REQUIREMENT_ENTITIES': volume_global,
             }
     return learning_unit
 
