@@ -31,8 +31,8 @@ from osis_common.models.serializable_model import SerializableModelAdmin, Serial
 
 
 class LearningUnitComponentAdmin(SerializableModelAdmin):
-    list_display = ('learning_unit_year', 'type', 'duration')
-    fieldsets = ((None, {'fields': ('learning_unit_year', 'type', 'duration', 'coefficient_repetition')}),)
+    list_display = ('learning_unit_year', 'type')
+    fieldsets = ((None, {'fields': ('learning_unit_year', 'type', 'coefficient_repetition')}),)
     raw_id_fields = ('learning_unit_year', )
     search_fields = ['learning_unit_year__acronym']
 
