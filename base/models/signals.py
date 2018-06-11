@@ -38,6 +38,7 @@ GROUP_STUDENTS = "students"
 GROUP_STUDENTS_INTERNSHIP = "internship_students"
 GROUP_TUTORS = "tutors"
 
+
 @receiver(user_created_signal)
 @receiver(user_updated_signal)
 def update_person(sender, **kwargs):
