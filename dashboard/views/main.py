@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -26,6 +26,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 from base.views import layout
 from attribution.utils import permission
@@ -33,9 +34,12 @@ from attribution.utils import permission
 
 @login_required
 def home(request):
-    # Adapt layout depending on the type of user (student, professor)
-    return layout.render(request, "dashboard.html",
-                         {'online_application_opened': permission.is_online_application_opened(request.user)})
+    return layout.render(request, "dashboard.html", {
+        'online_application_opened': permission.is_online_application_opened(request.user),
+        'is_summary_responsible': permission.is_summary_responsible(request.user),
+        'manage_courses_url': settings.OSIS_MANAGE_COURSES_URL,
+        'osis_vpn_help_url': settings.OSIS_VPN_HELP_URL
+    })
 
 
 @login_required

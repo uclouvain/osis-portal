@@ -41,6 +41,7 @@ class AttributionFactory(factory.DjangoModelFactory):
     tutor = factory.SubFactory(TutorFactory)
     start_year = None
     end_year = None
+    summary_responsible = False
 
 
 class AttributionNewFactory(factory.DjangoModelFactory):

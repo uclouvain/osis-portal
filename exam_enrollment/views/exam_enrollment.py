@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ from django.core.urlresolvers import reverse
 from django.db import connection
 from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
 from django.http import HttpResponse, response
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
 
@@ -109,40 +110,40 @@ def _get_exam_enrollment_form(off_year, request, stud):
     if not learn_unit_enrols:
         messages.add_message(request, messages.WARNING, _('no_learning_unit_enrollment_found').format(off_year.acronym))
         return response.HttpResponseRedirect(reverse('dashboard_home'))
-    data = exam_enrollment_request.find_by_student(stud)
-    if data:
+
+    request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
+    fetch_date_limit = timezone.now() - timezone.timedelta(seconds=request_timeout)
+    exam_enroll_request = exam_enrollment_request.\
+        get_by_student_and_offer_year_acronym_and_fetch_date(stud, off_year.acronym, fetch_date_limit)
+    if exam_enroll_request:
         try:
-            data = json.loads(data.document)
+            data = json.loads(exam_enroll_request.document)
         except json.JSONDecodeError:
             logger.exception("Json data is not valid")
-        finally:
-            exam_enrollment_request.pop_document(data.get('offer_year_acronym'), stud)
+            data = {}
+
         if data.get('error_message'):
             error_message = _(data.get('error_message')).format(off_year.acronym)
         else:
             error_message = data.get('error_message')
-        return layout.render(request, 'exam_enrollment_form.html', {'error_message': error_message,
-                                                                    'exam_enrollments': data.get('exam_enrollments'),
-                                                                    'student': stud,
-                                                                    'current_number_session': data.get(
-                                                                        'current_number_session'),
-                                                                    'academic_year': mdl_base.academic_year.current_academic_year(),
-                                                                    'program': mdl_base.offer_year.find_by_id(
-                                                                        off_year.id),
-                                                                    'request_timeout': settings.QUEUES.get(
-                                                                        "QUEUES_TIMEOUT").get(
-                                                                        "EXAM_ENROLLMENT_FORM_RESPONSE")})
+
+        return layout.render(request, 'exam_enrollment_form.html',
+                             {'error_message': error_message,
+                              'exam_enrollments': data.get('exam_enrollments'),
+                              'student': stud,
+                              'current_number_session': data.get('current_number_session'),
+                              'academic_year': mdl_base.academic_year.current_academic_year(),
+                              'program': mdl_base.offer_year.find_by_id(off_year.id),
+                              'request_timeout': request_timeout})
     else:
         ask_exam_enrollment_form(stud, off_year)
-        return layout.render(request, 'exam_enrollment_form.html', {'exam_enrollments': "",
-                                                                    'student': stud,
-                                                                    'current_number_session': "",
-                                                                    'academic_year': mdl_base.academic_year.current_academic_year(),
-                                                                    'program': mdl_base.offer_year.find_by_id(
-                                                                        off_year.id),
-                                                                    'request_timeout': settings.QUEUES.get(
-                                                                        "QUEUES_TIMEOUT").get(
-                                                                        "EXAM_ENROLLMENT_FORM_RESPONSE")})
+        return layout.render(request, 'exam_enrollment_form.html',
+                             {'exam_enrollments': "",
+                              'student': stud,
+                              'current_number_session': "",
+                              'academic_year': mdl_base.academic_year.current_academic_year(),
+                              'program': mdl_base.offer_year.find_by_id(off_year.id),
+                              'request_timeout': request_timeout})
 
 
 def ask_exam_enrollment_form(stud, off_year):
@@ -194,38 +195,34 @@ def _exam_enrollment_form_message(registration_id, offer_year_acronym, year):
     }
 
 
-def check_exam_enrollment_form(request):
+def check_exam_enrollment_form(request, offer_year_id):
     a_student = mdl_base.student.find_by_user(request.user)
+    off_year = offer_year.find_by_id(offer_year_id)
     if 'exam_enrollment' in settings.INSTALLED_APPS:
-        if _check_offer_enrollments_in_db(a_student):
+        if _exam_enrollment_up_to_date_in_db_with_document(a_student, off_year):
             return HttpResponse(status=200)
         else:
             return HttpResponse(status=404)
     return HttpResponse(status=405)
 
 
-def _check_offer_enrollments_in_db(a_student):
-    an_offer_enrollment = mdl_base.offer_enrollment.find_by_student(a_student)
+def _exam_enrollment_up_to_date_in_db_with_document(a_student, off_year):
+    an_offer_enrollment = mdl_base.offer_enrollment.get_by_student_offer(a_student, off_year)
     if an_offer_enrollment:
-        offer_enrollment_in_db_and_uptodate = check_db_offer_enrollments(a_student)
+        request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
+        fetch_date_limit = timezone.now() - timezone.timedelta(seconds=request_timeout)
+        exam_enroll_request = exam_enrollment_request.\
+            get_by_student_and_offer_year_acronym_and_fetch_date(a_student, off_year.acronym, fetch_date_limit)
+        return exam_enroll_request and exam_enroll_request.document
     else:
-        offer_enrollment_in_db_and_uptodate = False
-        logger.warning("This person doesn't exist")
-    return offer_enrollment_in_db_and_uptodate
-
-
-def check_db_offer_enrollments(a_student):
-    exam_enrollment = exam_enrollment_request.find_by_student(a_student)
-    if not exam_enrollment or not exam_enrollment.document:
+        logger.warning("This student is not enrolled in this offer_year")
         return False
-    else:
-        return True
 
 
 def _process_exam_enrollment_form_submission(off_year, request, stud):
     data_to_submit = _exam_enrollment_form_submission_message(off_year, request, stud)
     json_data = json.dumps(data_to_submit)
-    offer_enrol = offer_enrollment.find_by_student_offer(stud, off_year)
+    offer_enrol = offer_enrollment.get_by_student_offer(stud, off_year)
     if json_data and offer_enrol:
         exam_enrollment_submitted.insert_or_update_document(offer_enrol, json_data)
     queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('EXAM_ENROLLMENT_FORM_SUBMISSION'), data_to_submit)

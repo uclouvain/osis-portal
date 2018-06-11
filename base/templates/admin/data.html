@@ -44,6 +44,13 @@
                             {% trans 'data_management'%}</a></h4>
                         <p>{% trans 'desc_lnk_data_management' %}</p>
                     </div>
+                    {% if request.user.is_superuser and sql_data_management_enabled %}
+                    <div class="col-md-1"><i class="fa fa-database" style="font-size: 400%; color: #6699FF;"></i></div>
+                    <div class="col-md-5">
+                        <h4 class="media-heading"><a href="{% url 'data_maintenance' %}" id="lnk_data_maintenance">{% trans 'data_maintenance' %}</a></h4>
+                        <p>{% trans 'desc_lnk_data_maintenance' %}</p>
+                    </div>
+                    {% endif %}
                 </div>
                 <br>
             {% endif %}

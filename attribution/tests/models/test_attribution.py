@@ -81,23 +81,6 @@ class AttributionTest(TestCase):
         self.person = test_person.create_person_with_user(self.user)
         self.tutor = TutorFactory(person=self.person)
 
-    def test_attribution_deleted_field(self):
-        attribution_id = self.attribution.id
-
-        with connection.cursor() as cursor:
-            cursor.execute("update attribution_attribution set deleted=True where id=%s", [attribution_id])
-
-        with self.assertRaises(ObjectDoesNotExist):
-            mdl_attribution.attribution.Attribution.objects.get(id=attribution_id)
-
-        with connection.cursor() as cursor:
-            cursor.execute("select id, deleted from attribution_attribution where id=%s", [attribution_id])
-            row = cursor.fetchone()
-            db_attribution_id = row[0]
-            db_attribution_deleted = row[1]
-        self.assertEqual(db_attribution_id, attribution_id)
-        self.assertTrue(db_attribution_deleted)
-
     def test_find_by_tutor_year_order_by_acronym_function_check_alphabetical_order(self):
         a_learning_unit_year = LearningUnitYearFactory(academic_year=self.an_academic_year, acronym='LAUT')
         b_learning_unit_year = LearningUnitYearFactory(academic_year=self.an_academic_year, acronym='LBUT')
@@ -111,3 +94,15 @@ class AttributionTest(TestCase):
                                                               function=function.CO_HOLDER,
                                                               learning_unit_year=b_learning_unit_year)
         self.assertListEqual(list(mdl_attribution.attribution.find_by_tutor_year_order_by_acronym_function(self.tutor, self.an_academic_year)), [a_attribution, c_attribution, b_attribution])
+
+
+    def test_is_summary_responsible_tutor(self):
+        a_attribution = self.attribution = AttributionFactory(tutor=self.tutor,
+                                                              summary_responsible=True)
+        return self.assertTrue(mdl_attribution.attribution.is_summary_responsible(self.tutor))
+
+
+    def test_is_not_summary_responsible_tutor(self):
+        a_attribution = self.attribution = AttributionFactory(tutor=self.tutor,
+                                                              summary_responsible=False)
+        return self.assertFalse(mdl_attribution.attribution.is_summary_responsible(self.tutor))

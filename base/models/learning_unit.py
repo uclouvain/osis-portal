@@ -24,40 +24,22 @@
 #
 ##############################################################################
 from django.db import models
-from osis_common.models.auditable_serializable_model import AuditableSerializableModel, AuditableSerializableModelAdmin
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
-class LearningUnitAdmin(AuditableSerializableModelAdmin):
-    list_display = ('acronym', 'title')
-    fieldsets = ((None, {'fields': ('acronym', 'title', 'description')}),)
-    search_fields = ['acronym']
+class LearningUnitAdmin(SerializableModelAdmin):
+    list_display = ('external_id',)
+    fieldsets = ((None, {'fields': ('external_id',)}),)
+    search_fields = ['external_id']
 
 
-class LearningUnit(AuditableSerializableModel):
+class LearningUnit(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    acronym = models.CharField(max_length=15)
-    title = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
-    progress = None
 
     def __str__(self):
-        return u"%s - %s" % (self.acronym, self.title)
+        return u"%s" % self.id
 
     class Meta:
         permissions = (
             ("can_access_learningunit", "Can access learning unit"),
         )
-
-
-def find_by_id(learning_unit_id):
-    return LearningUnit.objects.get(pk=learning_unit_id)
-
-
-def search(acronym=None):
-    queryset = LearningUnit.objects
-
-    if acronym:
-        queryset = queryset.filter(acronym=acronym)
-
-    return queryset
-

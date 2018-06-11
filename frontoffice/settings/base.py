@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -174,6 +174,13 @@ DATABASES = {
 }
 
 
+# SQL Data Management Settings
+# Enable or disable the admin screen to directly query the database
+ENABLE_SQL_DATA_MANAGEMENT = os.environ.get('ENABLE_SQL_DATA_MANAGEMENT', 'False').lower() == 'true'
+SQL_DATA_MANAGEMENT_READONLY = os.environ.get('SQL_DATA_MANAGEMENT_READONLY', 'False').lower() == 'true'
+FORBIDDEN_SQL_KEYWORDS = os.environ.get('FORBIDDEN_SQL_KEYWORDS', '').split()
+
+
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
@@ -258,7 +265,8 @@ LOGO_INSTITUTION_URL = os.environ.get('LOGO_INSTITUTION_URL',
                                       os.path.join(BASE_DIR, "base/static/img/logo_institution.jpg"))
 LOGO_OSIS_URL = os.environ.get('LOGO_OSIS_URL', '')
 OSIS_SCORE_ENCODING_URL = os.environ.get('OSIS_SCORE_ENCODING_URL', None)
-OSIS_SCORE_ENCODING_VPN_HELP_URL = os.environ.get('OSIS_SCORE_ENCODING_VPN_HELP_URL', None)
+OSIS_VPN_HELP_URL = os.environ.get('OSIS_VPN_HELP_URL', None)
+OSIS_MANAGE_COURSES_URL = os.environ.get('OSIS_MANAGE_COURSES_URL', None)
 
 # Queues Definition
 # The queue system uses RabbitMq queues to communicate with other application (ex : osis)

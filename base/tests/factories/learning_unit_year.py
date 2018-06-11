@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ import factory.fuzzy
 import string
 
 from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from base.tests.factories.learning_unit import LearningUnitFactory
 from base.models.enums import learning_unit_year_subtypes
 
@@ -37,11 +38,11 @@ class LearningUnitYearFactory(factory.django.DjangoModelFactory):
         model = "base.LearningUnitYear"
 
     external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    acronym = factory.LazyAttribute(lambda obj: obj.learning_unit.acronym)
-    title = factory.LazyAttribute(lambda obj: obj.learning_unit.title)
+    acronym = factory.Sequence(lambda n: 'LFAC%04d' % n)
+    specific_title = factory.Sequence(lambda n: 'Learning unit year - %d' % n)
     credits = 5
     weight = 5
     academic_year = factory.SubFactory(AcademicYearFactory)
     learning_unit = factory.SubFactory(LearningUnitFactory)
-    learning_container_year = None
+    learning_container_year = factory.SubFactory(LearningContainerYearFactory)
     subtype = learning_unit_year_subtypes.FULL

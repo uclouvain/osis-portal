@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -31,19 +31,24 @@ from django.db import models
 
 
 class ExamEnrollmentRequestdAdmin(admin.ModelAdmin):
-    list_display = ('student',)
-    fieldsets = ((None, {'fields': ('student', 'document')}),)
+    list_display = ('student', 'offer_year_acronym', 'fetch_date')
+    fieldsets = ((None, {'fields': ('student', 'document', 'offer_year_acronym', 'fetch_date')}),)
+    readonly_fields = ('fetch_date',)
     search_fields = ['student__registration_id']
     raw_id_fields = ('student',)
 
 
 class ExamEnrollmentRequest(models.Model):
     student = models.ForeignKey('base.Student')
-    offer_year_acronym = models.CharField(max_length=15, null=True)
+    offer_year_acronym = models.CharField(max_length=15)
     document = JSONField()
+    fetch_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return "{}".format(self.student)
+
+    class Meta:
+        unique_together = ('student', 'offer_year_acronym',)
 
 
 def insert_or_update_document(acronym, student, document):
@@ -52,13 +57,10 @@ def insert_or_update_document(acronym, student, document):
     return exam_enrollment_request_object
 
 
-def find_by_student(student):
+def get_by_student_and_offer_year_acronym_and_fetch_date(student, offer_year_acronym, fetch_date_limit):
     try:
-        exam_enrollments_request = ExamEnrollmentRequest.objects.get(student=student)
-        return exam_enrollments_request
+        return ExamEnrollmentRequest.objects.get(student=student,
+                                                 offer_year_acronym=offer_year_acronym,
+                                                 fetch_date__gte=fetch_date_limit)
     except ObjectDoesNotExist:
         return None
-
-
-def pop_document(offer_year_acronym, student):
-    ExamEnrollmentRequest.objects.get(offer_year_acronym=offer_year_acronym, student=student).delete()

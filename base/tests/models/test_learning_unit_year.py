@@ -1,12 +1,12 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -25,10 +25,15 @@
 ##############################################################################
 import datetime
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 
 from base import models as mdl_base
+from base.models.enums import learning_unit_year_subtypes
+from base.models.learning_container_year import LearningContainerYear
+from base.models.learning_unit_year import LearningUnitYear
 from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from base.tests.factories.learning_unit import LearningUnitFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 
@@ -70,7 +75,10 @@ class LearningUnitYearTest(TestCase):
                                                                learning_unit=a_learning_unit,
                                                                acronym=LDROI1000)
         LearningUnitYearFactory(academic_year=self.an_academic_year, learning_unit=a_learning_unit, acronym=LAUT5263)
-        self.assertEqual(list(mdl_base.learning_unit_year.search(self.an_academic_year, LDROI1000, None, a_learning_unit)),
+        self.assertEqual(list(mdl_base.learning_unit_year.search(self.an_academic_year,
+                                                                 LDROI1000,
+                                                                 None,
+                                                                 a_learning_unit)),
                          [ldroi1000_learning_unit_year])
 
     def test_find_by_acronym(self):
@@ -85,8 +93,58 @@ class LearningUnitYearTest(TestCase):
 
     def test_find_first_by_exact_acronym(self):
         a_learning_unit = LearningUnitFactory()
-        ldroi1000_learning_unit_year = LearningUnitYearFactory(academic_year=self.an_academic_year, learning_unit=a_learning_unit, acronym='LDROI1000')
+        ldroi1000_learning_unit_year = LearningUnitYearFactory(academic_year=self.an_academic_year,
+                                                               learning_unit=a_learning_unit, acronym='LDROI1000')
         ldroi1000_learning_unit_year.save()
-        ldroi1000_learning_unit_year_bis = LearningUnitYearFactory(academic_year=self.an_academic_year, learning_unit=a_learning_unit, acronym='LDROI1000')
+        ldroi1000_learning_unit_year_bis = LearningUnitYearFactory(academic_year=self.an_academic_year,
+                                                                   learning_unit=a_learning_unit, acronym='LDROI1000')
         ldroi1000_learning_unit_year_bis.save()
-        self.assertEqual(mdl_base.learning_unit_year.find_first_by_exact_acronym(self.an_academic_year, 'LDROI1000'), ldroi1000_learning_unit_year)
+        self.assertEqual(mdl_base.learning_unit_year.find_first_by_exact_acronym(self.an_academic_year, 'LDROI1000'),
+                         ldroi1000_learning_unit_year)
+
+    def _create_learning_unit_year_partim(self, common_title, speicific_title):
+        return LearningUnitYear(
+            subtype=learning_unit_year_subtypes.PARTIM,
+            specific_title=speicific_title,
+            learning_container_year=LearningContainerYear(common_title=common_title)
+        )
+
+    def test_complete_title_property_case_common_title_is_none(self):
+        specific_title = 'part 1: Vertebrate'
+        learn_unit_year = self._create_learning_unit_year_partim(None, specific_title)
+        self.assertEqual(learn_unit_year.complete_title, specific_title)
+        learn_unit_year = self._create_learning_unit_year_partim('', specific_title)
+        self.assertEqual(learn_unit_year.complete_title, specific_title)
+
+    def test_complete_title_property_case_specific_title_is_none(self):
+        common_title = 'Zoology'
+        learn_unit_year = self._create_learning_unit_year_partim(common_title, None)
+        self.assertEqual(learn_unit_year.complete_title, common_title)
+        learn_unit_year = self._create_learning_unit_year_partim(common_title, '')
+        self.assertEqual(learn_unit_year.complete_title, common_title)
+
+    def test_complete_title_property_case_common_and_specific_title_are_set(self):
+        specific_title = 'part 1: Vertebrate'
+        common_title = 'Zoology'
+        learn_unit_year = self._create_learning_unit_year_partim(common_title, specific_title)
+        self.assertEqual(learn_unit_year.complete_title, '{} {}'.format(common_title, specific_title))
+
+
+class TestGetFullByLearningContainerYearId(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.full_learning_unit_year = LearningUnitYearFactory(subtype=learning_unit_year_subtypes.FULL)
+        cls.partim_learning_unit_year = LearningUnitYearFactory(
+            subtype=learning_unit_year_subtypes.PARTIM,
+            learning_container_year=cls.full_learning_unit_year.learning_container_year)
+
+        cls.learning_container_year = LearningContainerYearFactory()
+
+    def test_when_no_full_course_attached(self):
+        with self.assertRaises(ObjectDoesNotExist):
+            mdl_base.learning_unit_year.get_full_by_learning_container_year_id(self.learning_container_year.id)
+
+    def test_when_full_course_attached(self):
+        self.assertEqual(self.full_learning_unit_year,
+                         mdl_base.learning_unit_year.get_full_by_learning_container_year_id(
+                             self.partim_learning_unit_year.learning_container_year.id))

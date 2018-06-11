@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -26,22 +26,22 @@
 from django.db import models
 
 from base.models.enums import learning_unit_year_subtypes
-from osis_common.models.auditable_serializable_model import AuditableSerializableModel, AuditableSerializableModelAdmin
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
-class LearningUnitYearAdmin(AuditableSerializableModelAdmin):
-    list_display = ('acronym', 'title', 'academic_year', 'weight', 'learning_unit', )
-    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'title', 'weight', 'learning_unit',
+class LearningUnitYearAdmin(SerializableModelAdmin):
+    list_display = ('acronym', 'specific_title', 'academic_year', 'weight', 'learning_unit', )
+    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'specific_title', 'weight', 'learning_unit',
                  'learning_container_year', 'subtype')}),)
     list_filter = ('academic_year__year', 'subtype',)
     search_fields = ['acronym']
     raw_id_fields = ('learning_unit', 'learning_container_year')
 
 
-class LearningUnitYear(AuditableSerializableModel):
+class LearningUnitYear(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     acronym = models.CharField(max_length=15, db_index=True)
-    title = models.CharField(max_length=255)
+    specific_title = models.CharField(max_length=255, blank=True, null=True)
     credits = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     weight = models.IntegerField(blank=True, null=True)
     academic_year = models.ForeignKey('AcademicYear')
@@ -64,6 +64,10 @@ class LearningUnitYear(AuditableSerializableModel):
     @property
     def team(self):
         return self.learning_container_year and self.learning_container_year.team
+
+    @property
+    def complete_title(self):
+        return ' '.join(filter(None, [self.learning_container_year.common_title, self.specific_title]))
 
 
 def search(academic_year_id=None, acronym=None, learning_container_year_id=None, a_learning_unit=None):
@@ -93,7 +97,7 @@ def search_order_by_acronym(academic_year_id=None):
 
 def find_by_id(learning_unit_year_id):
     return LearningUnitYear.objects.select_related("academic_year",
-                                                    "learning_unit")\
+                                                   "learning_unit")\
         .get(pk=learning_unit_year_id)
 
 
@@ -117,3 +121,8 @@ def find_first_by_learning_container_year(learning_container_yr_id):
 
 def find_first_by_exact_acronym(academic_year_id, acronym):
     return search(academic_year_id, acronym, None, None).first()
+
+
+def get_full_by_learning_container_year_id(learning_container_year_id):
+    return LearningUnitYear.objects.get(learning_container_year__id=learning_container_year_id,
+                                        subtype=learning_unit_year_subtypes.FULL)

@@ -49,3 +49,24 @@ msgstr "You are succesfully logout."
 
 msgid "redirect_to_login"
 msgstr "Click to reconnect"
+
+msgid "sql_command"
+msgstr "SQL command"
+
+msgid "data_maintenance"
+msgstr "Data maintenance"
+
+msgid "desc_lnk_data_maintenance"
+msgstr "Data maintenance by SQL"
+
+msgid "forbidden_sql_keywords"
+msgstr "Forbidden SQL keywords"
+
+msgid "result"
+msgstr "Result"
+
+msgid "are_you_sure"
+msgstr "Are you sure ?"
+
+msgid "sql_readonly"
+msgstr "SQL readonly"

@@ -41,8 +41,6 @@ def create_learning_unit_component(data):
         learning_unit_component.learning_unit_year = data['learning_unit_year']
     if 'type' in data:
         learning_unit_component.type = data['type']
-    if 'duration' in data:
-        learning_unit_component.duration = data['duration']
     learning_unit_component.save()
     return learning_unit_component
 

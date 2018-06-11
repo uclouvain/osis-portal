@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -26,10 +26,10 @@
 from django.db import models
 
 from base.models.enums import learning_unit_enrollment_state
-from osis_common.models.auditable_serializable_model import AuditableSerializableModel, AuditableSerializableModelAdmin
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
-class LearningUnitEnrollmentAdmin(AuditableSerializableModelAdmin):
+class LearningUnitEnrollmentAdmin(SerializableModelAdmin):
     list_display = ('student', 'learning_unit_year', 'date_enrollment', 'enrollment_state', 'changed')
     fieldsets = ((None, {'fields': ('offer_enrollment', 'learning_unit_year', 'date_enrollment', 'enrollment_state',)}),)
     list_filter = ('learning_unit_year__academic_year', 'enrollment_state',)
@@ -41,7 +41,7 @@ class LearningUnitEnrollmentAdmin(AuditableSerializableModelAdmin):
                      'offer_enrollment__student__person__last_name']
 
 
-class LearningUnitEnrollment(AuditableSerializableModel):
+class LearningUnitEnrollment(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     changed = models.DateTimeField(null=True)
     date_enrollment = models.DateField()

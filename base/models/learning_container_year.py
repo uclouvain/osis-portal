@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,29 +23,30 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.auditable_serializable_model import AuditableSerializableModel, AuditableSerializableModelAdmin
-
 from base.models.enums import vacant_declaration_type
 from django.db import models
 
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
-class LearningContainerYearAdmin(AuditableSerializableModelAdmin):
-    list_display = ('learning_container', 'academic_year', 'acronym', 'title')
-    fieldsets = ((None, {'fields': ('learning_container', 'academic_year', 'acronym', 'title',
-                                    'team', 'is_vacant', 'type_declaration_vacant', 'in_charge')}),)
+
+class LearningContainerYearAdmin(SerializableModelAdmin):
+    list_display = ('learning_container', 'academic_year', 'acronym', 'common_title')
+    fieldsets = ((None, {'fields': ('learning_container', 'academic_year', 'acronym', 'common_title',
+                                    'team', 'is_vacant', 'type_declaration_vacant', 'in_charge',
+                                    'common_title_english')}),)
     search_fields = ['acronym']
     raw_id_fields = ('learning_container', )
     list_filter = ('academic_year', 'in_charge', 'is_vacant',)
 
 
-class LearningContainerYear(AuditableSerializableModel):
+class LearningContainerYear(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     changed = models.DateTimeField(null=True, auto_now=True)
     acronym = models.CharField(max_length=10)
     academic_year = models.ForeignKey('AcademicYear')
     learning_container = models.ForeignKey('LearningContainer', null=True)
-    title = models.CharField(max_length=255)
-    title_english = models.CharField(max_length=250, blank=True, null=True)
+    common_title = models.CharField(max_length=255, blank=True, null=True)
+    common_title_english = models.CharField(max_length=250, blank=True, null=True)
     team = models.BooleanField(default=False)
     is_vacant = models.BooleanField(default=False)
     type_declaration_vacant = models.CharField(max_length=100, blank=True, null=True,
@@ -53,7 +54,7 @@ class LearningContainerYear(AuditableSerializableModel):
     in_charge = models.BooleanField(default=False)
 
     def __str__(self):
-        return u"%s - %s" % (self.acronym, self.title)
+        return u"%s - %s" % (self.acronym, self.common_title)
 
 
 def find_by_id(id):

@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@ from attribution.tests.factories.attribution import AttributionNewFactory
 from attribution.utils import tutor_application_epc
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 
@@ -44,14 +45,20 @@ class TutorApplicationTest(TestCase):
         self.academic_year = AcademicYearFactory(year=2017)
         # Create several learning container year - 2017
         self.lbir1200_2017 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LBIR1200")
+        LearningUnitYearFactory(academic_year=self.academic_year, learning_container_year=self.lbir1200_2017)
         self.lbir1250_2017 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LBIR1250")
+        LearningUnitYearFactory(academic_year=self.academic_year, learning_container_year=self.lbir1250_2017)
         self.lbir1300_2017 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LBIR1300")
+        LearningUnitYearFactory(academic_year=self.academic_year, learning_container_year=self.lbir1300_2017)
         self.lagro1200_2017 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LAGRO1200")
+        LearningUnitYearFactory(academic_year=self.academic_year, learning_container_year=self.lagro1200_2017)
 
         # Create several learning container year - 2016
         self.academic_year_2016 = AcademicYearFactory(year=2016)
         self.lbir1200_2016 = LearningContainerYearFactory(academic_year=self.academic_year_2016, acronym="LBIR1200")
+        LearningUnitYearFactory(academic_year=self.academic_year_2016, learning_container_year=self.lbir1200_2016)
         self.lbir1250_2016 = LearningContainerYearFactory(academic_year=self.academic_year_2016, acronym="LBIR1250")
+        LearningUnitYearFactory(academic_year=self.academic_year_2016, learning_container_year=self.lbir1250_2016)
 
         # Creation Person/Tutor
         Group.objects.create(name="tutors")

@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -231,7 +231,8 @@ class ListBuildTest(TestCase):
         filename = "Liste_Insc_Exam.xls"
         self.assertEqual(response.status_code, OK)
         self.assertTrue(mock_fetch.called)
-        self.assertEqual(response['Content-Type'], 'application/vnd.ms-excel')
+        self.assertEqual(response['Content-Type'],
+                         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         self.assertEqual(response['Content-Disposition'], 'attachment; filename="{}"'.format(filename))
         self.assertEqual(response.content.decode(), str(return_sample_xls()))
 
@@ -325,7 +326,8 @@ class AdminListBuildTest(TestCase):
         today = datetime.datetime.today()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                end_date=today + datetime.timedelta(days=5))
-        a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
+        a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year,
+                                                       learning_container_year__academic_year=an_academic_year)
         AttributionFactory(learning_unit_year=a_learning_unit_year, tutor=self.tutor)
 
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
@@ -347,7 +349,8 @@ class AdminListBuildTest(TestCase):
         today = datetime.datetime.today()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                end_date=today + datetime.timedelta(days=5))
-        a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
+        a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year,
+                                                       learning_container_year__academic_year=an_academic_year)
         AttributionFactory(learning_unit_year=a_learning_unit_year, tutor=self.tutor)
 
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
@@ -356,6 +359,7 @@ class AdminListBuildTest(TestCase):
         filename = "Liste_Insc_Exam.xls"
         self.assertEqual(response.status_code, OK)
         self.assertTrue(mock_fetch.called)
-        self.assertEqual(response['Content-Type'], 'application/vnd.ms-excel')
+        self.assertEqual(response['Content-Type'],
+                         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         self.assertEqual(response['Content-Disposition'], 'attachment; filename="{}"'.format(filename))
         self.assertEqual(response.content.decode(), str(return_sample_xls()))

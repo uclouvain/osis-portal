@@ -10,7 +10,7 @@
 * The core business involves the administration of students, teachers,
 * courses, programs and so on.
 *
-* Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+* Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -248,9 +248,9 @@
         function check_result(){
             $.ajax({
                 method: 'GET',
-                url: "{% url 'check_exam_enrollment_form' %}",
+                url: "{% url 'check_exam_enrollment_form' program.id %}",
                 success: function () {
-                    var check_data = '{{exam_enrollments}}'
+                    var check_data = '{{exam_enrollments}}';
                     if(!check_data){
                         location.reload();
                     }
