@@ -26,7 +26,7 @@
 from django.db import models
 from reference.enums import domain_type
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
-from . import decree
+from django.utils.translation import ugettext_lazy as _
 
 
 class DomainAdmin(SerializableModelAdmin):
@@ -38,7 +38,7 @@ class DomainAdmin(SerializableModelAdmin):
 class Domain(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     name = models.CharField(max_length=255)
-    code = models.CharField(max_length=50)
+    code = models.CharField(max_length=50, verbose_name=_('code'))
     parent = models.ForeignKey('self', null=True, blank=True)
     decree = models.ForeignKey('Decree', null=True, blank=True)
     type = models.CharField(max_length=50, choices=domain_type.TYPES, default=domain_type.UNKNOWN)
