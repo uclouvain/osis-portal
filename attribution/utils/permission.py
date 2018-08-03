@@ -37,10 +37,3 @@ def _is_academic_calendar_event_opened(calendar_type):
     if not current_academic_year:
         return False
     return mdl_base.academic_calendar.is_academic_calendar_opened(current_academic_year, calendar_type)
-
-
-def is_summary_responsible(a_user):
-    a_tutor = mdl_base.tutor.find_by_user(a_user)
-    if a_tutor:
-        return mdl_attribution.attribution.is_summary_responsible(a_tutor)
-    return False

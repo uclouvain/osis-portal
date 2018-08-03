@@ -43,4 +43,3 @@ class LearningUnitComponentFactory(factory.django.DjangoModelFactory):
     learning_unit_year = factory.SubFactory(LearningUnitYearFactory)
     learning_component_year = factory.SubFactory(LearningComponentYearFactory)
     type = factory.Iterator(component_type.COMPONENT_TYPES, getter=operator.itemgetter(0))
-    duration = factory.fuzzy.FuzzyDecimal(9)

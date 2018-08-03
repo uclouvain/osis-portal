@@ -3,7 +3,7 @@ env:
     - CC_TEST_REPORTER_ID=350c818a2d0a419ad491d6eb139fbd59dea50ab91a8f4a7970f15e987f2b44ff
 
 language: python
-python: "3.4.5"
+python: "3.5.5"
 
 install:
   - "pip install -r travis-requirements.txt"

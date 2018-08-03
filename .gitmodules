@@ -8,3 +8,6 @@
 [submodule "mobility"]
 	path = mobility
 	url = https://github.com/uclouvain/osis-portal-mobility.git
+[submodule "dissertation"]
+	path = dissertation
+	url = https://github.com/uclouvain/osis-portal-dissertation.git
