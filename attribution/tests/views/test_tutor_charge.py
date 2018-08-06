@@ -228,10 +228,6 @@ class TutorChargeTest(TestCase):
         data_year = self.data[0]
         return data_year.get(key, None)
 
-    def test_sum_learning_unit_year_duration(self):
-        self.assertEqual(tutor_charge.sum_learning_unit_year_duration(self.get_data('learning_unit_year')),
-                         LEARNING_UNIT_LECTURING_DURATION + LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION)
-
     def test_sum_learning_unit_year_with_no_duration(self):
         self.assertEqual(tutor_charge.sum_learning_unit_year_duration(self.create_learning_unit_year_without_duration())
                          , 0)

@@ -67,24 +67,6 @@ class TestHome(TestCase):
         context = response.context
         self.assertTrue(context["online_application_opened"])
 
-    def test_is_not_summary_responsible(self):
-        Group.objects.create(name="tutors")
-        AttributionFactory()
-
-        response = self.client.get(self.url)
-        context = response.context
-        self.assertFalse(context["is_summary_responsible"])
-
-    def test_is_summary_responsible(self):
-        Group.objects.create(name="tutors")
-        an_attribution = AttributionFactory(summary_responsible=True)
-        an_attribution.tutor.person.user = self.user
-        an_attribution.tutor.person.save()
-
-        response = self.client.get(self.url)
-        context = response.context
-        self.assertTrue(context["is_summary_responsible"])
-
     def test_manage_courses_url(self):
         response = self.client.get(self.url)
         context = response.context
