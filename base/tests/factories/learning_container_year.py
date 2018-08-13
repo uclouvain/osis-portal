@@ -24,12 +24,11 @@
 #
 ##############################################################################
 import datetime
-import factory
+
 import factory.fuzzy
 
 from base.models.enums import vacant_declaration_type
 from base.tests.factories.academic_year import AcademicYearFactory
-from osis_common.utils.datetime import get_tzinfo
 
 
 class LearningContainerYearFactory(factory.django.DjangoModelFactory):
@@ -37,8 +36,10 @@ class LearningContainerYearFactory(factory.django.DjangoModelFactory):
         model = "base.LearningContainerYear"
 
     external_id = factory.Sequence(lambda n: '10000000%02d' % n)
-    changed = factory.fuzzy.FuzzyDateTime(datetime.datetime(2016, 1, 1, tzinfo=get_tzinfo()),
-                                          datetime.datetime(2017, 3, 1, tzinfo=get_tzinfo()))
+    changed = factory.fuzzy.FuzzyNaiveDateTime(
+        datetime.datetime(2016, 1, 1),
+        datetime.datetime(2017, 3, 1)
+    )
     acronym = factory.Sequence(lambda n: 'LCY-%d' % n)
     academic_year = factory.SubFactory(AcademicYearFactory)
     common_title = factory.Sequence(lambda n: 'Learning container year - %d' % n)
