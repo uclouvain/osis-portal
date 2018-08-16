@@ -124,3 +124,9 @@ msgstr "Le formulaire d'inscription n'est pas disponible pour l'instant"
 
 msgid "exam_enrollment_form_loading"
 msgstr "Récupération du formulaire d'inscription aux examens."
+
+msgid "exam_enrollment_confirmation_message"
+msgstr "Etes-vous sûr de vouloir vous inscrit aux examens?"
+
+msgid "confirm"
+msgstr "Confirmer"

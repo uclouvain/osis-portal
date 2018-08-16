@@ -74,7 +74,8 @@
                             <tr>
                                 <td>{{ prog.academic_year }}</td>
                                 <td>
-                                    <a href="{% url 'exam_enrollment_form' prog.id %}">
+                                    <a href="#"
+                                       data-toggle="modal" data-target="#modalConfirmExamEnrollment">
                                         {{ prog.acronym }}
                                     </a>
                                 </td>
@@ -87,4 +88,5 @@
 
         </div>
     </div>
+    {% include 'blocks/modal/exam_enrollment_confirm.html' %}
 {% endblock %}
