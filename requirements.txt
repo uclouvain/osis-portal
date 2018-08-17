@@ -19,5 +19,6 @@ unicodecsv==0.14.1
 requests==2.19.1
 openpyxl==2.5.4
 coverage==4.5.1
+pytz==2018.5
 
 -r ./osis_common/requirements.txt
