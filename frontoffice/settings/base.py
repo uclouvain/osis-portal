@@ -80,10 +80,11 @@ APPS_TO_TEST = (
 TEST_RUNNER = os.environ.get('TEST_RUNNER', 'osis_common.tests.runner.InstalledAppsTestRunner')
 SKIP_QUEUES_TESTS = os.environ.get('SKIP_QUEUES_TESTS', 'False').lower() == 'true'
 QUEUES_TESTING_TIMEOUT = float(os.environ.get('QUEUES_TESTING_TIMEOUT', 0.1))
+DEFAULT_QUEUE_TIMEOUT = float(os.environ.get('DEFAULT_QUEUE_TIMEOUT', 15))
 
 # Middleware config
 # Override this tuple in yous environment config (ex dev.py) if you want specific midddleware in specific order
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -138,6 +139,11 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'INFO',
             'propagate': True,
+        },
+        'django.server': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
         }
     },
 }
@@ -268,10 +274,12 @@ OSIS_SCORE_ENCODING_URL = os.environ.get('OSIS_SCORE_ENCODING_URL', None)
 OSIS_VPN_HELP_URL = os.environ.get('OSIS_VPN_HELP_URL', None)
 OSIS_MANAGE_COURSES_URL = os.environ.get('OSIS_MANAGE_COURSES_URL', None)
 
+
 # Queues Definition
 # The queue system uses RabbitMq queues to communicate with other application (ex : osis)
 def get_queue_timeout(timeout_name, default_timeout):
     return float(os.environ.get(timeout_name, QUEUES_TESTING_TIMEOUT if TESTING else default_timeout))
+
 
 if not TESTING or not SKIP_QUEUES_TESTS:
     QUEUES = {
