@@ -346,3 +346,12 @@ ATTESTATION_CONFIG = {
     'SERVER_TO_FETCH_USER': os.environ.get("ATTESTATION_API_USER", ''),
     'SERVER_TO_FETCH_PASSWORD': os.environ.get("ATTESTATION_API_PASSWORD", ''),
 }
+
+
+### Fucntional Tests settings
+FUNCT_TESTS_CONFIG = {
+    'BROWSER': os.environ.get('FT_BROWSER', 'FIREFOX'),
+    'VIRTUAL_DISPLAY': os.environ.get('FT_VIRTUAL_DISPLAY', 'False').lower() == 'true',
+    'GECKO_DRIVER': os.environ.get('FT_GECKO_DRIVER', os.path.join(BASE_DIR, 'base/tests/functional/drivers/geckodriver')),
+    'SCREENSHOTS_DIR': os.environ.get('FT_SCREENSHOT_DIR', os.path.join(BASE_DIR, 'base/tests/functional/screenshots'))
+}
