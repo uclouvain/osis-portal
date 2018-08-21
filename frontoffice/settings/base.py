@@ -353,5 +353,13 @@ FUNCT_TESTS_CONFIG = {
     'BROWSER': os.environ.get('FT_BROWSER', 'FIREFOX'),
     'VIRTUAL_DISPLAY': os.environ.get('FT_VIRTUAL_DISPLAY', 'False').lower() == 'true',
     'GECKO_DRIVER': os.environ.get('FT_GECKO_DRIVER', os.path.join(BASE_DIR, 'base/tests/functional/drivers/geckodriver')),
-    'SCREENSHOTS_DIR': os.environ.get('FT_SCREENSHOT_DIR', os.path.join(BASE_DIR, 'base/tests/functional/screenshots'))
+    'SCREENSHOTS_DIR': os.environ.get('FT_SCREENSHOT_DIR', os.path.join(BASE_DIR, 'base/tests/functional/screenshots')),
+    'DASHBOARD': {
+        'PAGE_TITLE': os.environ.get('FT_DASH_PAGE_TITLE', 'Dashboard'),
+        'STUDENT_LINKS': os.environ.get('FT_DASH_STUDENT_LINKS',
+                                        'lnk_performance lnk_my_attestations lnk_exam_enrollment_offer_choice').split(),
+        'TUTOR_LINKS': os.environ.get('FT_DASH_TUTOR_LINKS',
+                                      'lnk_score_encoding lnk_my_teaching_charge lnk_my_students_list lnk_manage_courses').split(),
+        'ADMIN_LINKS': os.environ.get('FT_DASH_ADMIN_LINKS', 'bt_administrations').split()
+    },
 }

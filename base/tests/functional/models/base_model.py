@@ -4,6 +4,7 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.conf import settings
 from django.test import tag
 from django.urls import reverse
+from selenium.common.exceptions import NoSuchElementException
 
 
 @tag('selenium')
@@ -59,6 +60,37 @@ class FunctionalTestCase(StaticLiveServerTestCase):
         except AssertionError:
             self.take_screenshot("title_{}_error".format(expected_title))
             raise
+
+    def check_page_contains_string(self, expected_string):
+        try:
+            self.assertTrue(expected_string in self.selenium.page_source)
+        except AssertionError:
+            self.take_screenshot("pgae_should_contains_{}".format(expected_string))
+            raise
+
+    def check_page_not_contains_string(self, expected_string):
+        try:
+            self.assertFalse(expected_string in self.selenium.page_source)
+        except AssertionError:
+            self.take_screenshot("pgae_should_not_contains_{}".format(expected_string))
+            raise
+
+    def check_page_contains_ids(self, ids):
+        try:
+            for id in ids:
+                self.selenium.find_element_by_id(id)
+        except NoSuchElementException:
+            self.take_screenshot("{}_should_be_present_on_page".format(id))
+            raise
+
+    def check_page_not_contains_ids(self, ids):
+        for id in ids:
+            try:
+                with self.assertRaises(NoSuchElementException):
+                    self.selenium.find_element_by_id(id)
+            except AssertionError:
+                self.take_screenshot("{}_should_not_be_present_on_page".format(id))
+                raise
 
     def take_screenshot(self, name):
         date_str = "{:%d_%m_%Y}".format(datetime.datetime.today())
