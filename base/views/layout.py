@@ -24,8 +24,10 @@
 #
 ##############################################################################
 from django import shortcuts
-from django.template.context import RequestContext
 from random import randint
+
+from django.template import RequestContext
+
 from osis_common.models import application_notice
 
 
@@ -42,7 +44,7 @@ def _check_notice(request, values):
 
 
 def render(request, template, values=None):
-    if not values:
+    if values is None:
         values = {}
     _check_notice(request, values)
     values['js'] = randint(0, 100)
@@ -50,7 +52,5 @@ def render(request, template, values=None):
 
 
 def render_to_response(request, template, values=None):
-    if not values:
-        values = {}
     _check_notice(request, values)
     return shortcuts.render_to_response(template, values)
