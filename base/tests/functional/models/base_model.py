@@ -7,7 +7,7 @@ from django.urls import reverse
 from selenium.common.exceptions import NoSuchElementException
 
 
-@tag('selenium')
+@tag("selenium")
 class FunctionalTestCase(StaticLiveServerTestCase):
     config = settings.FUNCT_TESTS_CONFIG
 
@@ -17,7 +17,7 @@ class FunctionalTestCase(StaticLiveServerTestCase):
         if cls.config.get('BROWSER') == 'FIREFOX':
             from selenium.webdriver.firefox.webdriver import WebDriver
             cls.selenium = WebDriver(executable_path=cls.config.get('GECKO_DRIVER'))
-            cls.selenium.implicitly_wait(10)
+            # cls.selenium.implicitly_wait(10)
 
     @classmethod
     def tearDownClass(cls):
@@ -65,14 +65,14 @@ class FunctionalTestCase(StaticLiveServerTestCase):
         try:
             self.assertTrue(expected_string in self.selenium.page_source)
         except AssertionError:
-            self.take_screenshot("pgae_should_contains_{}".format(expected_string))
+            self.take_screenshot("page_should_contains_{}".format(expected_string))
             raise
 
     def check_page_not_contains_string(self, expected_string):
         try:
             self.assertFalse(expected_string in self.selenium.page_source)
         except AssertionError:
-            self.take_screenshot("pgae_should_not_contains_{}".format(expected_string))
+            self.take_screenshot("page_should_not_contains_{}".format(expected_string))
             raise
 
     def check_page_contains_ids(self, ids):
