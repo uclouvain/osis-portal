@@ -82,6 +82,8 @@ TEST_RUNNER = os.environ.get('TEST_RUNNER', 'osis_common.tests.runner.InstalledA
 SKIP_QUEUES_TESTS = os.environ.get('SKIP_QUEUES_TESTS', 'False').lower() == 'true'
 QUEUES_TESTING_TIMEOUT = float(os.environ.get('QUEUES_TESTING_TIMEOUT', 0.1))
 DEFAULT_QUEUE_TIMEOUT = float(os.environ.get('DEFAULT_QUEUE_TIMEOUT', 15))
+# Type of tests to launch (ALL, UNIT, SELENIUM)
+TESTS_TYPES = os.environ.get('TESTS_TYPES', 'UNIT').upper()
 
 # Middleware config
 # Override this tuple in yous environment config (ex dev.py) if you want specific midddleware in specific order
@@ -351,7 +353,9 @@ ATTESTATION_CONFIG = {
 ### Fucntional Tests settings
 FUNCT_TESTS_CONFIG = {
     'BROWSER': os.environ.get('FT_BROWSER', 'FIREFOX'),
-    'VIRTUAL_DISPLAY': os.environ.get('FT_VIRTUAL_DISPLAY', 'False').lower() == 'true',
+    'VIRTUAL_DISPLAY': os.environ.get('FT_VIRTUAL_DISPLAY', 'True').lower() == 'true',
+    'DISPLAY_WIDTH': os.environ.get('FT_DISPLAY_WIDTH', 1920),
+    'DISPLAY_HEIGHT': os.environ.get('FT_DISPLAY_HEIGHT', 1080),
     'GECKO_DRIVER': os.environ.get('FT_GECKO_DRIVER', os.path.join(BASE_DIR, 'base/tests/functional/drivers/geckodriver')),
     'SCREENSHOTS_DIR': os.environ.get('FT_SCREENSHOT_DIR', os.path.join(BASE_DIR, 'base/tests/functional/screenshots')),
     'DASHBOARD': {

@@ -5,6 +5,7 @@ from django.conf import settings
 from django.test import tag
 from django.urls import reverse
 from selenium.common.exceptions import NoSuchElementException
+import pyvirtualdisplay
 
 
 @tag("selenium")
@@ -14,14 +15,25 @@ class FunctionalTestCase(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super(FunctionalTestCase, cls).setUpClass()
+        if cls.config.get('VIRTUAL_DISPLAY'):
+            cls.virtual_display = pyvirtualdisplay.Display(size=(cls.config.get('DISPLAY_WIDTH'),
+                                                                 cls.config.get('DISPLAY_HEIGHT')))
+            cls.virtual_display.start()
+
         if cls.config.get('BROWSER') == 'FIREFOX':
             from selenium.webdriver.firefox.webdriver import WebDriver
             cls.selenium = WebDriver(executable_path=cls.config.get('GECKO_DRIVER'))
-            # cls.selenium.implicitly_wait(10)
+
+        if cls.config.get('VIRTUAL_DISPLAY'):
+            cls.selenium.implicitly_wait(5)
+
+        cls.selenium.set_window_size(cls.config.get('DISPLAY_WIDTH'), cls.config.get('DISPLAY_HEIGHT'))
 
     @classmethod
     def tearDownClass(cls):
         cls.selenium.quit()
+        if cls.config.get('VIRTUAL_DISPLAY'):
+            cls.virtual_display.stop()
         super(FunctionalTestCase, cls).tearDownClass()
 
     def openUrl(self, url_name):
