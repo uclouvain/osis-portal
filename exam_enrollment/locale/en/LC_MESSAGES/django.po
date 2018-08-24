@@ -136,5 +136,8 @@ msgstr "Confirm"
 msgid "Do you really want to register for exams or change your registration ?"
 msgstr ""
 
-msgid "You can consult all the states of registration for exams in the summary"
+msgid "yes"
+msgstr ""
+
+msgid "no"
 msgstr ""

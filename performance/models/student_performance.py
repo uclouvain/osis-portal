@@ -52,12 +52,19 @@ class StudentPerformance(models.Model):
     update_date = models.DateTimeField()
     creation_date = models.DateTimeField()
     authorized = models.BooleanField(default=True)
-    offer_registration_state = models.CharField(max_length=50,
-                                                choices=offer_registration_state.OFFER_REGISTRAION_STATES,
-                                                null=True)
-    session_locked = models.CharField(max_length=50,
-                                      choices=session_month.SESSION_MONTHS,
-                                      null=True)
+
+    offer_registration_state = models.CharField(
+        max_length=50,
+        choices=offer_registration_state.OFFER_REGISTRAION_STATES,
+        null=True
+    )
+
+    session_locked = models.CharField(
+        max_length=50,
+        choices=session_month.SESSION_MONTHS,
+        null=True
+    )
+
     courses_registration_validated = models.NullBooleanField(null=True)
     learning_units_outside_catalog = models.NullBooleanField(null=True)
     fetch_timed_out = False
