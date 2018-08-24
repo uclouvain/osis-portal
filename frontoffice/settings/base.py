@@ -68,6 +68,7 @@ INSTALLED_APPS = (
 )
 
 # Tests settings
+INTERNAL_IPS = ()
 TESTING = os.environ.get('TESTING', 'False').lower() == 'true'
 if TESTING:
     # add test packages that have specific models for tests
@@ -80,10 +81,13 @@ APPS_TO_TEST = (
 TEST_RUNNER = os.environ.get('TEST_RUNNER', 'osis_common.tests.runner.InstalledAppsTestRunner')
 SKIP_QUEUES_TESTS = os.environ.get('SKIP_QUEUES_TESTS', 'False').lower() == 'true'
 QUEUES_TESTING_TIMEOUT = float(os.environ.get('QUEUES_TESTING_TIMEOUT', 0.1))
+DEFAULT_QUEUE_TIMEOUT = float(os.environ.get('DEFAULT_QUEUE_TIMEOUT', 15))
+# Type of tests to launch (ALL, UNIT, SELENIUM)
+TESTS_TYPES = os.environ.get('TESTS_TYPES', 'UNIT').upper()
 
 # Middleware config
 # Override this tuple in yous environment config (ex dev.py) if you want specific midddleware in specific order
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -138,6 +142,11 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'INFO',
             'propagate': True,
+        },
+        'django.server': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
         }
     },
 }
@@ -268,49 +277,17 @@ OSIS_SCORE_ENCODING_URL = os.environ.get('OSIS_SCORE_ENCODING_URL', None)
 OSIS_VPN_HELP_URL = os.environ.get('OSIS_VPN_HELP_URL', None)
 OSIS_MANAGE_COURSES_URL = os.environ.get('OSIS_MANAGE_COURSES_URL', None)
 
+
 # Queues Definition
 # The queue system uses RabbitMq queues to communicate with other application (ex : osis)
 def get_queue_timeout(timeout_name, default_timeout):
     return float(os.environ.get(timeout_name, QUEUES_TESTING_TIMEOUT if TESTING else default_timeout))
 
-if not TESTING or not SKIP_QUEUES_TESTS:
-    QUEUES = {
-        'QUEUE_URL': os.environ.get('RABBITMQ_HOST', 'localhost'),
-        'QUEUE_USER': os.environ.get('RABBITMQ_USER', 'guest'),
-        'QUEUE_PASSWORD': os.environ.get('RABBITMQ_PASSWORD', 'guest'),
-        'QUEUE_PORT': int(os.environ.get('RABBITMQ_PORT', 5672)),
-        'QUEUE_CONTEXT_ROOT': os.environ.get('RABBITMQ_CONTEXT_ROOT', '/'),
-        'QUEUES_NAME': {
-            'MIGRATIONS_TO_PRODUCE': 'osis',
-            'MIGRATIONS_TO_CONSUME': 'osis_portal',
-            'PERFORMANCE': 'performance_to_client',
-            'STUDENT_PERFORMANCE': 'rpc_performance_from_client',
-            'PERFORMANCE_UPDATE_EXP_DATE': 'performance_exp_date',
-            'ATTRIBUTION': 'attribution',
-            'ATTESTATION': 'rpc_attestation',
-            'ATTESTATION_STATUS': 'rpc_attestation_status',
-            'EXAM_ENROLLMENT_FORM': 'rpc_exam_enrollment_form',
-            'EXAM_ENROLLMENT_FORM_REQUEST': 'exam_enrollment_form_request',
-            'EXAM_ENROLLMENT_FORM_RESPONSE': 'exam_enrollment_form_response',
-            'EXAM_ENROLLMENT_FORM_SUBMISSION': 'exam_enrollment_form_submission',
-            'SCORE_ENCODING_PDF_REQUEST': 'score_encoding_pdf_request',
-            'SCORE_ENCODING_PDF_RESPONSE': 'score_encoding_pdf_response',
-            'ATTRIBUTION_RESPONSE': 'attribution_response',
-            'APPLICATION_REQUEST': 'application_request',
-            'APPLICATION_RESPONSE': 'application_response',
-            'APPLICATION_OSIS_PORTAL': 'application_osis_portal',
-        },
-        'QUEUES_TIMEOUT': {
-            'EXAM_ENROLLMENT_FORM_RESPONSE': get_queue_timeout('EXAM_ENROLLMENT_FORM_RESPONSE_TIMEOUT', 15),
-            'PAPER_SHEET_TIMEOUT': get_queue_timeout('PAPER_SHEET_TIMEOUT', 60),
-        },
-        'RPC_QUEUES_TIMEOUT': {
-            'STUDENT_PERFORMANCE': get_queue_timeout('STUDENT_PERFORMANCE_TIMEOUT', 15),
-            'ATTESTATION_STATUS': get_queue_timeout('ATTESTATION_STATUS_TIMEOUT', 10),
-            'ATTESTATION': get_queue_timeout('ATTESTATION_TIMEOUT', 60),
-            'EXAM_ENROLLMENT_FORM': get_queue_timeout('EXAM_ENROLLMENT_FORM_TIMEOUT', 15)
-        }
-    }
+# The Queues are optional
+# They are used to ensure the migration of Data between Osis and other application (ex : Osis <> Osis-Portal)
+# See in settings.dev.example to configure the queues
+QUEUES = {}
+
 
 # Additionnal Locale Path
 # Add local path in your environment settings (ex: dev.py)
@@ -370,4 +347,23 @@ ATTESTATION_CONFIG = {
     'ATTESTATION_PATH': os.environ.get("ATTESTATION_API_PATH", ''),
     'SERVER_TO_FETCH_USER': os.environ.get("ATTESTATION_API_USER", ''),
     'SERVER_TO_FETCH_PASSWORD': os.environ.get("ATTESTATION_API_PASSWORD", ''),
+}
+
+
+### Fucntional Tests settings
+FUNCT_TESTS_CONFIG = {
+    'BROWSER': os.environ.get('FT_BROWSER', 'FIREFOX'),
+    'VIRTUAL_DISPLAY': os.environ.get('FT_VIRTUAL_DISPLAY', 'True').lower() == 'true',
+    'DISPLAY_WIDTH': os.environ.get('FT_DISPLAY_WIDTH', 1920),
+    'DISPLAY_HEIGHT': os.environ.get('FT_DISPLAY_HEIGHT', 1080),
+    'GECKO_DRIVER': os.environ.get('FT_GECKO_DRIVER', os.path.join(BASE_DIR, 'base/tests/functional/drivers/geckodriver')),
+    'SCREENSHOTS_DIR': os.environ.get('FT_SCREENSHOT_DIR', os.path.join(BASE_DIR, 'base/tests/functional/screenshots')),
+    'DASHBOARD': {
+        'PAGE_TITLE': os.environ.get('FT_DASH_PAGE_TITLE', 'Dashboard'),
+        'STUDENT_LINKS': os.environ.get('FT_DASH_STUDENT_LINKS',
+                                        'lnk_performance lnk_my_attestations lnk_exam_enrollment_offer_choice').split(),
+        'TUTOR_LINKS': os.environ.get('FT_DASH_TUTOR_LINKS',
+                                      'lnk_score_encoding lnk_my_teaching_charge lnk_my_students_list lnk_manage_courses').split(),
+        'ADMIN_LINKS': os.environ.get('FT_DASH_ADMIN_LINKS', 'bt_administrations').split()
+    },
 }

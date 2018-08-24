@@ -72,7 +72,10 @@ def scores_sheets_admin(request):
 def tutor_scores_sheets(request, global_id):
     person = mdl_base.person.find_by_global_id(global_id)
     scores_in_db_and_uptodate = _check_person_and_scores_in_db(person)
-    request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("PAPER_SHEET_TIMEOUT")
+    if hasattr(settings, 'QUEUES') and settings.QUEUES:
+        request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("PAPER_SHEET_TIMEOUT")
+    else:
+        request_timeout = settings.DEFAULT_QUEUE_TIMEOUT
     return layout.render(request, "scores_sheets.html", locals())
 
 
@@ -89,7 +92,10 @@ def score_encoding(request):
 def scores_sheets(request):
     person = mdl_base.person.find_by_user(request.user)
     scores_in_db_and_uptodate = _check_person_and_scores_in_db(person)
-    request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("PAPER_SHEET_TIMEOUT")
+    if hasattr(settings, 'QUEUES') and settings.QUEUES:
+        request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("PAPER_SHEET_TIMEOUT")
+    else:
+        request_timeout = settings.DEFAULT_QUEUE_TIMEOUT
     return layout.render(request, "scores_sheets.html", locals())
 
 
