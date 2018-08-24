@@ -70,9 +70,3 @@ msgstr "Are you sure ?"
 
 msgid "sql_readonly"
 msgstr "SQL readonly"
-
-msgid "Do you really want to register for exams or change your registration ?"
-msgstr ""
-
-msgid "You can consult all the states of registration for exams in the summary"
-msgstr ""

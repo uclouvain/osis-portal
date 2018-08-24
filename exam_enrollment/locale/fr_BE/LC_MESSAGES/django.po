@@ -130,3 +130,9 @@ msgstr "Etes-vous sûr de vouloir vous inscrit aux examens?"
 
 msgid "confirm"
 msgstr "Confirmer"
+
+msgid "Do you really want to register for exams or change your registration  ?"
+msgstr "Souhaitez-vous réellement vous inscrire aux examens ou modifier votre inscription ?"
+
+msgid "You can consult all the states of registration for exams in the summary"
+msgstr "Vous pouvez consulter l'ensemble des états d'inscriptions aux examens dans le récapitulatif"
