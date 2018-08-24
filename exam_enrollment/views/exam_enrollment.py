@@ -100,8 +100,9 @@ def exam_enrollment_form(request, offer_year_id):
 
 def _get_student_programs(stud, acad_year):
     if stud:
-        return [enrol.offer_year for enrol in list(
-            mdl_base.offer_enrollment.find_by_student_academic_year(stud, acad_year))]
+        return [
+            enrol.offer_year for enrol in list(mdl_base.offer_enrollment.find_by_student_academic_year(stud, acad_year))
+        ]
     return None
 
 
