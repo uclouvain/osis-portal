@@ -119,7 +119,7 @@ def _clean_acronym(acronym):
 @permission_required('base.is_student', raise_exception=True)
 def display_results_by_acronym_and_year(request, acronym, academic_year):
     """
-    Display the reslt for a students , filter by acronym
+    Display the result for a students , filter by acronym
     """
     try:
         stud = student.find_by_user(request.user)
