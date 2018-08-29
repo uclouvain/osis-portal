@@ -48,4 +48,11 @@ def render(request, template, values=None):
         values = {}
     _check_notice(request, values)
     values['js'] = randint(0, 100)
-    return shortcuts.render(request, template, values)
+    return shortcuts.render(request, template, values, RequestContext(request))
+
+
+def render_to_response(request, template, values=None):
+    if values is None:
+        values = {}
+    _check_notice(request, values)
+    return shortcuts.render_to_response(template, values, RequestContext(request))
