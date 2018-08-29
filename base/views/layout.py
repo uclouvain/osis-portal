@@ -26,6 +26,8 @@
 from django import shortcuts
 from random import randint
 
+from django.template import RequestContext
+
 from osis_common.models import application_notice
 
 
@@ -51,4 +53,4 @@ def render(request, template, values=None):
 
 def render_to_response(request, template, values=None):
     _check_notice(request, values)
-    return shortcuts.render_to_response(template, values)
+    return shortcuts.render_to_response(template, values, RequestContext(request))
