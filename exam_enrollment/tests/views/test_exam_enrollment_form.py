@@ -177,12 +177,12 @@ class ExamEnrollmentFormTest(TestCase):
                                                                        mock_current_academic_year,
                                                                        mock_fetch_exam_form,
                                                                        mock_get_student_programs):
-        mock_find_by_id.return_value = Mock()
+        mock_find_by_id.return_value = self.off_year
         mock_current_academic_year.return_value = None
         mock_get_student_programs.return_value = [self.off_year]
         mock_fetch_exam_form.return_value = None
         self.client.force_login(self.user)
-        an_url = reverse('exam_enrollment_form_direct')
+        an_url = reverse('exam_enrollment_form', args=[self.off_year.id])
         response = self.client.get(an_url, follow=True)
         self.assertTrue(mock_current_academic_year.called)
         self.assertRedirects(response, reverse('dashboard_home'))
@@ -213,7 +213,7 @@ class ExamEnrollmentFormTest(TestCase):
         }
         mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
         self.client.force_login(self.user)
-        an_url = reverse('exam_enrollment_form_direct')
+        an_url = reverse('exam_enrollment_form', args=[self.off_year.id])
         response = self.client.get(an_url, follow=True)
         self.assertTrue(mock_current_academic_year.called)
         self.assertEqual('exam_enrollment_form.html', response.templates[0].name)
