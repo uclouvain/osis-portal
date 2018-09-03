@@ -141,3 +141,9 @@ msgstr ""
 
 msgid "no"
 msgstr ""
+
+msgid "Consult all the status of my exam enrollments"
+msgstr ""
+
+msgid "Register to exams or update my exam enrollments"
+msgstr ""

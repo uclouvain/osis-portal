@@ -139,3 +139,9 @@ msgstr "oui"
 
 msgid "no"
 msgstr "non"
+
+msgid "Consult all the status of my exam enrollments"
+msgstr "Consulter l'ensemble de mes états d'inscriptions aux examens"
+
+msgid "Register to exams or update my exam enrollments"
+msgstr "M'inscrire aux examens ou modifier mon inscription aux examens"
