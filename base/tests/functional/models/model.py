@@ -6,6 +6,7 @@ from django.test import tag
 from django.urls import reverse
 from django.utils import translation
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -28,8 +29,7 @@ class FunctionalTestCase(StaticLiveServerTestCase):
             from selenium.webdriver.firefox.webdriver import WebDriver
             cls.selenium = WebDriver(executable_path=cls.config.get('GECKO_DRIVER'))
 
-        if cls.config.get('VIRTUAL_DISPLAY'):
-            cls.selenium.implicitly_wait(5)
+        cls.selenium.implicitly_wait(cls.config.get('DEFAULT_WAITING_TIME'))
 
         cls.selenium.set_window_size(cls.config.get('DISPLAY_WIDTH'), cls.config.get('DISPLAY_HEIGHT'))
 
@@ -41,13 +41,11 @@ class FunctionalTestCase(StaticLiveServerTestCase):
         super(FunctionalTestCase, cls).tearDownClass()
 
     @staticmethod
-    def get_localized_message(message, language=None):
+    def get_localized_message(message, language):
         cur_language = translation.get_language()
-        if language:
-            translation.activate(language)
+        translation.activate(language)
         translated_message = translation.ugettext(message)
-        if language:
-            translation.activate(cur_language)
+        translation.activate(cur_language)
         return translated_message
 
     def openUrlByName(self, url_name):
@@ -123,12 +121,12 @@ class FunctionalTestCase(StaticLiveServerTestCase):
     def take_screenshot(self, name):
         date_str = "{:%d_%m_%Y}".format(datetime.datetime.today())
         complete_path = "{screenshot_dir}/{name}_{date}.png".format(screenshot_dir=self.config.get('SCREENSHOTS_DIR'),
-                                                                    name=name,
+                                                                    name="".join(name.replace("'", "").split()),
                                                                     date=date_str)
         self.selenium.save_screenshot(complete_path)
 
     def wait_until_element_appear(self, element_id, timeout=10):
-        WebDriverWait(self.selenium, timeout).until(EC.visibility_of_element_located(element_id))
+        WebDriverWait(self.selenium, timeout).until(EC.presence_of_element_located((By.ID, element_id)))
 
     def wait_until_tabs_open(self, count_tabs=2, timeout=10):
         WebDriverWait(self.selenium, timeout).until(EC.number_of_windows_to_be(count_tabs))

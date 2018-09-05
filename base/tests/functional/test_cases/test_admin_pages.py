@@ -1,11 +1,13 @@
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
 from base.tests.functional.models.model import FunctionalTestCase
 from base.tests.functional.models.user_type import FacAdministratorMixin, AdministratorMixin
 
 
 class FacAdminPageTestCase(FunctionalTestCase, FacAdministratorMixin):
+
+    @classmethod
+    def setUpClass(cls):
+        super(FacAdminPageTestCase, cls).setUpClass()
+        cls.admin_config = cls.config.get('ADMIN')
 
     def setUp(self):
         super(FacAdminPageTestCase, self).setUp()
@@ -19,16 +21,22 @@ class FacAdminPageTestCase(FunctionalTestCase, FacAdministratorMixin):
         """
         self.login(self.fac_admin.user.username)
         self._got_to_fac_admin_page()
-        self.check_page_title(self.config.get('FAC_ADMIN').get('PAGE_TITLE'))
-        self.check_page_contains_ids(self.config.get('FAC_ADMIN').get('ADMIN_LINKS'))
+        self.check_page_title(self.admin_config.get('FAC_ADMIN').get('PAGE_TITLE'))
+        self.check_page_contains_ids(self.admin_config.get('FAC_ADMIN').get('ADMIN_LINKS'))
 
     def _got_to_fac_admin_page(self):
         self.openUrlByName('home')
-        self.click_element_by_id(self.config.get('FAC_ADMIN').get('FROM_DASH_LINK_1'))
-        self.click_element_by_id(self.config.get('FAC_ADMIN').get('FROM_DASH_LINK_2'))
+        self.click_element_by_id(self.admin_config.get('FAC_ADMIN').get('FROM_DASH_LINK_1'))
+        self.click_element_by_id(self.admin_config.get('FAC_ADMIN').get('FROM_DASH_LINK_2'))
 
 
 class DataAdminPagesTestCase(FunctionalTestCase, AdministratorMixin):
+
+    @classmethod
+    def setUpClass(cls):
+        super(DataAdminPagesTestCase, cls).setUpClass()
+        cls.data_admin_config = cls.config.get('ADMIN').get('DATA_ADMIN')
+        cls.data_management_config = cls.config.get('ADMIN').get('DATA_MANAGEMENT')
 
     def setUp(self):
         super(DataAdminPagesTestCase, self).setUp()
@@ -36,12 +44,12 @@ class DataAdminPagesTestCase(FunctionalTestCase, AdministratorMixin):
 
     def _go_to_data_admin_page(self):
         self.openUrlByName('home')
-        self.click_element_by_id(self.config.get('DATA_ADMIN').get('FROM_DASH_LINK_1'))
-        self.click_element_by_id(self.config.get('DATA_ADMIN').get('FROM_DASH_LINK_2'))
+        self.click_element_by_id(self.data_admin_config.get('FROM_DASH_LINK_1'))
+        self.click_element_by_id(self.data_admin_config.get('FROM_DASH_LINK_2'))
 
     def _go_to_data_management_page(self):
         self.openUrlByName('data')
-        self.click_element_by_id(self.config.get('DATA_MANAGEMENT').get('FROM_DATA_ADMIN_LNK'))
+        self.click_element_by_id(self.data_management_config.get('FROM_DATA_ADMIN_LNK'))
 
     def test_data_admin_page(self):
         """
@@ -51,8 +59,8 @@ class DataAdminPagesTestCase(FunctionalTestCase, AdministratorMixin):
         """
         self.login(self.data_admin.user.username)
         self._go_to_data_admin_page()
-        self.check_page_title(self.config.get('DATA_ADMIN').get('PAGE_TITLE'))
-        self.check_page_contains_ids(self.config.get('DATA_ADMIN').get('ADMIN_LINKS'))
+        self.check_page_title(self.data_admin_config.get('PAGE_TITLE'))
+        self.check_page_contains_ids(self.data_admin_config.get('ADMIN_LINKS'))
 
     def test_data_management_page(self):
         """
@@ -64,4 +72,5 @@ class DataAdminPagesTestCase(FunctionalTestCase, AdministratorMixin):
         self.wait_until_tabs_open()
         tabs = self.selenium.window_handles
         self.selenium.switch_to_window(tabs[1])
-        self.check_page_title(self.config.get('DATA_MANAGEMENT').get('PAGE_TITLE'))
+        self.wait_until_element_appear('site-name', 10)
+        self.check_page_title(self.data_management_config.get('PAGE_TITLE'))

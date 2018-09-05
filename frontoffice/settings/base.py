@@ -352,10 +352,11 @@ ATTESTATION_CONFIG = {
 
 ### Fucntional Tests settings
 FUNCT_TESTS_CONFIG = {
+    'DEFAULT_WAITING_TIME': int(os.environ.get('FT_DEFAULT_WAITING_TIME', 5)),
     'BROWSER': os.environ.get('FT_BROWSER', 'FIREFOX'),
     'VIRTUAL_DISPLAY': os.environ.get('FT_VIRTUAL_DISPLAY', 'True').lower() == 'true',
-    'DISPLAY_WIDTH': os.environ.get('FT_DISPLAY_WIDTH', 1920),
-    'DISPLAY_HEIGHT': os.environ.get('FT_DISPLAY_HEIGHT', 1080),
+    'DISPLAY_WIDTH': int(os.environ.get('FT_DISPLAY_WIDTH', 1920)),
+    'DISPLAY_HEIGHT': int(os.environ.get('FT_DISPLAY_HEIGHT', 1080)),
     'GECKO_DRIVER': os.environ.get('FT_GECKO_DRIVER', os.path.join(BASE_DIR, 'base/tests/functional/drivers/geckodriver')),
     'SCREENSHOTS_DIR': os.environ.get('FT_SCREENSHOT_DIR', os.path.join(BASE_DIR, 'base/tests/functional/screenshots')),
     'DASHBOARD': {
@@ -370,22 +371,28 @@ FUNCT_TESTS_CONFIG = {
     'PERFORMANCE': {
         'PAGE_TITLE': os.environ.get('FT_PERF_PAGE_TITLE', 'Exam Marks'),
         'FROM_DASH_LINK': os.environ.get('FT_PERF_FROM_DASH_LINK', 'lnk_performance'),
+        'EXAM_MARK_LINKS_PATTERN': os.environ.get('FT_PERF_EXAM_MARK_LINKS_PATTERN', 'lnk_perf_{}'),
+        'EXAM_MARK': {
+            'PAGE_TITLE': os.environ.get('FT_EXAM_MARK_PAGE_TITLE', 'Exam Mark'),
+        }
     },
-    'FAC_ADMIN': {
-        'PAGE_TITLE': os.environ.get('FT_FAC_ADMIN_PAGE_TITLE', 'Faculty Administration'),
-        'FROM_DASH_LINK_1': os.environ.get('FT_FAC_ADMIN_DASH_LINK_1', 'bt_administrations'),
-        'FROM_DASH_LINK_2': os.environ.get('FT_FAC_ADMIN_DASH_LINK_2', 'bt_faculty_administration'),
-        'ADMIN_LINKS': os.environ.get('FT_FAC_ADMIN_LINKS', 'lnk_performance_administration lnk_attestation_administration \
-        lnk_attribution_administration lnk_scores_sheets_admin lnk_lists_of_students_exams_enrollments').split()
-    },
-    'DATA_ADMIN': {
-        'PAGE_TITLE': os.environ.get('FT_DATA_ADMIN_PAGE_TITLE', 'Data Administration'),
-        'FROM_DASH_LINK_1': os.environ.get('FT_DATA_ADMIN_DASH_LINK_1', 'bt_administrations'),
-        'FROM_DASH_LINK_2': os.environ.get('FT_DATA_ADMIN_DASH_LINK_2', 'bt_data'),
-        'ADMIN_LINKS': os.environ.get('FT_FAC_ADMIN_LINKS', 'lnk_data_management').split()
-    },
-    'DATA_MANAGEMENT': {
-        'PAGE_TITLE': os.environ.get('FT_DATA_MGMNT_PAGE_TITLE', 'Louvain | Osis-studies'),
-        'FROM_DATA_ADMIN_LNK': os.environ.get('FT_DATA_MGMNT_DATA_ADMIN_LINKS', 'lnk_data_management')
+    'ADMIN': {
+        'FAC_ADMIN': {
+            'PAGE_TITLE': os.environ.get('FT_FAC_ADMIN_PAGE_TITLE', 'Faculty Administration'),
+            'FROM_DASH_LINK_1': os.environ.get('FT_FAC_ADMIN_DASH_LINK_1', 'bt_administrations'),
+            'FROM_DASH_LINK_2': os.environ.get('FT_FAC_ADMIN_DASH_LINK_2', 'bt_faculty_administration'),
+            'ADMIN_LINKS': os.environ.get('FT_FAC_ADMIN_LINKS', 'lnk_performance_administration lnk_attestation_administration \
+            lnk_attribution_administration lnk_scores_sheets_admin lnk_lists_of_students_exams_enrollments').split()
+        },
+        'DATA_ADMIN': {
+            'PAGE_TITLE': os.environ.get('FT_DATA_ADMIN_PAGE_TITLE', 'Data Administration'),
+            'FROM_DASH_LINK_1': os.environ.get('FT_DATA_ADMIN_DASH_LINK_1', 'bt_administrations'),
+            'FROM_DASH_LINK_2': os.environ.get('FT_DATA_ADMIN_DASH_LINK_2', 'bt_data'),
+            'ADMIN_LINKS': os.environ.get('FT_FAC_ADMIN_LINKS', 'lnk_data_management').split()
+        },
+        'DATA_MANAGEMENT': {
+            'PAGE_TITLE': os.environ.get('FT_DATA_MGMNT_PAGE_TITLE', 'Louvain | Osis-studies'),
+            'FROM_DATA_ADMIN_LNK': os.environ.get('FT_DATA_MGMNT_DATA_ADMIN_LINKS', 'lnk_data_management')
+        }
     }
 }
