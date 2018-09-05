@@ -84,7 +84,7 @@ def download_attestation(request, academic_year, attestation_type):
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def attestation_administration(request):
-    return layout.render(request, 'admin/attestation_administration.html')
+    return layout.render(request, 'admin/attestation_administration.html', {})
 
 
 @login_required
