@@ -55,7 +55,7 @@ class TutorMixin(UserMixin):
     def create_tutor(self, user=None):
         """
         Create a tutor object with all related objects and permissions
-        :param user: related user object , if non it will be created
+        :param user: related user object , if none it will be created
         :return: The tutor
         """
         if user:
@@ -72,7 +72,7 @@ class PhdMixin(StudentMixin, TutorMixin):
     def create_phd(self, user=None):
         """
         Create a phd person object with all related objects and permissions
-        :param user: related user object , if non it will be created
+        :param user: related user object , if none it will be created
         :return: The phd person
         """
         if user:
@@ -92,7 +92,7 @@ class AdministratorMixin(UserMixin):
     def create_admin(self, user=None):
         """
         Create an administrator person object with all related objects and permissions
-        :param user: related user object , if non it will be created
+        :param user: related user object , if none it will be created
         :return: The phd person
         """
         if user:
@@ -100,4 +100,26 @@ class AdministratorMixin(UserMixin):
         else:
             super_user = SuperUserFactory()
             person = PersonFactory(user=super_user)
+        return person
+
+
+class FacAdministratorMixin(UserMixin):
+    def create_faculty_administrators_group(self):
+        group, created = self.create_group('faculty_administrators')
+        self.add_permissions_to_group('faculty_administrators', 'is_faculty_administrator')
+        self.add_permissions_to_group('faculty_administrators', 'can_access_administration')
+        return group
+
+    def create_fac_admin(self, user=None):
+        """
+        Create a fac administrator person with all related objects and permissions
+        :param user: related user object , if none it will be created
+        :return: The fac administrator person
+        """
+        if user:
+            person = PersonFactory(user=user)
+        else:
+            person = PersonFactory()
+        faculty_admin_group = self.create_faculty_administrators_group()
+        faculty_admin_group.user_set.add(person.user)
         return person

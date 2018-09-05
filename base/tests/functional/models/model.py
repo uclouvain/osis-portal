@@ -4,7 +4,11 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.conf import settings
 from django.test import tag
 from django.urls import reverse
+from django.utils import translation
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 import pyvirtualdisplay
 
 
@@ -35,6 +39,16 @@ class FunctionalTestCase(StaticLiveServerTestCase):
         if cls.config.get('VIRTUAL_DISPLAY'):
             cls.virtual_display.stop()
         super(FunctionalTestCase, cls).tearDownClass()
+
+    @staticmethod
+    def get_localized_message(message, language=None):
+        cur_language = translation.get_language()
+        if language:
+            translation.activate(language)
+        translated_message = translation.ugettext(message)
+        if language:
+            translation.activate(cur_language)
+        return translated_message
 
     def openUrlByName(self, url_name):
         try:
@@ -112,3 +126,9 @@ class FunctionalTestCase(StaticLiveServerTestCase):
                                                                     name=name,
                                                                     date=date_str)
         self.selenium.save_screenshot(complete_path)
+
+    def wait_until_element_appear(self, element_id, timeout=10):
+        WebDriverWait(self.selenium, timeout).until(EC.visibility_of_element_located(element_id))
+
+    def wait_until_tabs_open(self, count_tabs=2, timeout=10):
+        WebDriverWait(self.selenium, timeout).until(EC.number_of_windows_to_be(count_tabs))

@@ -1,8 +1,5 @@
-from django.utils import translation
-
 from base.tests.factories.user import UserFactory
-from base.tests.functional.models.base_model import FunctionalTestCase
-from django.utils.translation import ugettext as _
+from base.tests.functional.models.model import FunctionalTestCase
 
 from base.tests.functional.models.user_type import StudentMixin, TutorMixin, PhdMixin, AdministratorMixin
 
@@ -35,8 +32,7 @@ class BasicLoginTestCase(FunctionalTestCase):
         I scould not be able to connect
         """
         self.login(self.valid_user.username, 'wrong_password')
-        translation.activate('en')
-        string = _('msg_error_username_password_not_matching')
+        string = self.get_localized_message('msg_error_username_password_not_matching', 'en')
         self.check_page_contains_string(string)
 
 

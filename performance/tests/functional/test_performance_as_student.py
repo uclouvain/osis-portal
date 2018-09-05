@@ -1,8 +1,5 @@
-from django.utils import translation
-from django.utils.translation import ugettext as _
-
-from base.tests.functional.models.base_model import FunctionalTestCase
-from performance.tests.functional.model import StudentWithPerformanceMixin
+from base.tests.functional.models.model import FunctionalTestCase
+from performance.tests.functional.models.model import StudentWithPerformanceMixin
 
 
 class PerformanceAsAStudentTestCase(FunctionalTestCase, StudentWithPerformanceMixin):
@@ -28,10 +25,9 @@ class PerformanceAsAStudentTestCase(FunctionalTestCase, StudentWithPerformanceMi
         """
         self.login(self.student_without_perfs.person.user.username)
         self._got_to_perfomance_page()
-        translation.activate('en')
-        string = _('dont_have_the_score_yet')
+        string = self.get_localized_message('dont_have_the_score_yet')
         self.check_page_contains_string(string)
 
     def _got_to_perfomance_page(self):
-        self.openUrlByName('dashboard')
+        self.openUrlByName('home')
         self.click_element_by_id(self.config.get('PERFORMANCE').get('FROM_DASH_LINK'))

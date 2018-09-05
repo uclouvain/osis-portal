@@ -363,11 +363,29 @@ FUNCT_TESTS_CONFIG = {
         'STUDENT_LINKS': os.environ.get('FT_DASH_STUDENT_LINKS',
                                         'lnk_performance lnk_my_attestations lnk_exam_enrollment_offer_choice').split(),
         'TUTOR_LINKS': os.environ.get('FT_DASH_TUTOR_LINKS',
-                                      'lnk_score_encoding lnk_my_teaching_charge lnk_my_students_list lnk_manage_courses').split(),
+                                      'lnk_score_encoding lnk_my_teaching_charge \
+                                      lnk_my_students_list lnk_manage_courses').split(),
         'ADMIN_LINKS': os.environ.get('FT_DASH_ADMIN_LINKS', 'bt_administrations').split()
     },
     'PERFORMANCE': {
         'PAGE_TITLE': os.environ.get('FT_PERF_PAGE_TITLE', 'Exam Marks'),
         'FROM_DASH_LINK': os.environ.get('FT_PERF_FROM_DASH_LINK', 'lnk_performance'),
+    },
+    'FAC_ADMIN': {
+        'PAGE_TITLE': os.environ.get('FT_FAC_ADMIN_PAGE_TITLE', 'Faculty Administration'),
+        'FROM_DASH_LINK_1': os.environ.get('FT_FAC_ADMIN_DASH_LINK_1', 'bt_administrations'),
+        'FROM_DASH_LINK_2': os.environ.get('FT_FAC_ADMIN_DASH_LINK_2', 'bt_faculty_administration'),
+        'ADMIN_LINKS': os.environ.get('FT_FAC_ADMIN_LINKS', 'lnk_performance_administration lnk_attestation_administration \
+        lnk_attribution_administration lnk_scores_sheets_admin lnk_lists_of_students_exams_enrollments').split()
+    },
+    'DATA_ADMIN': {
+        'PAGE_TITLE': os.environ.get('FT_DATA_ADMIN_PAGE_TITLE', 'Data Administration'),
+        'FROM_DASH_LINK_1': os.environ.get('FT_DATA_ADMIN_DASH_LINK_1', 'bt_administrations'),
+        'FROM_DASH_LINK_2': os.environ.get('FT_DATA_ADMIN_DASH_LINK_2', 'bt_data'),
+        'ADMIN_LINKS': os.environ.get('FT_FAC_ADMIN_LINKS', 'lnk_data_management').split()
+    },
+    'DATA_MANAGEMENT': {
+        'PAGE_TITLE': os.environ.get('FT_DATA_MGMNT_PAGE_TITLE', 'Louvain | Osis-studies'),
+        'FROM_DATA_ADMIN_LNK': os.environ.get('FT_DATA_MGMNT_DATA_ADMIN_LINKS', 'lnk_data_management')
     }
 }
