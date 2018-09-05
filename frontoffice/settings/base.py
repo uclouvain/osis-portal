@@ -366,4 +366,8 @@ FUNCT_TESTS_CONFIG = {
                                       'lnk_score_encoding lnk_my_teaching_charge lnk_my_students_list lnk_manage_courses').split(),
         'ADMIN_LINKS': os.environ.get('FT_DASH_ADMIN_LINKS', 'bt_administrations').split()
     },
+    'PERFORMANCE': {
+        'PAGE_TITLE': os.environ.get('FT_PERF_PAGE_TITLE', 'Exam Marks'),
+        'FROM_DASH_LINK': os.environ.get('FT_PERF_FROM_DASH_LINK', 'lnk_performance'),
+    }
 }

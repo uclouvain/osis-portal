@@ -36,7 +36,7 @@ class FunctionalTestCase(StaticLiveServerTestCase):
             cls.virtual_display.stop()
         super(FunctionalTestCase, cls).tearDownClass()
 
-    def openUrl(self, url_name):
+    def openUrlByName(self, url_name):
         try:
             self.selenium.get(self.live_server_url + reverse(url_name))
         except Exception:
@@ -60,8 +60,10 @@ class FunctionalTestCase(StaticLiveServerTestCase):
             self.take_screenshot("element_{}_error".format(element_id))
             raise
 
-    def login(self, username, password):
-        self.openUrl('login')
+    def login(self, username, password=None):
+        if password is None:
+            password = "password123"
+        self.openUrlByName('login')
         self.fill_element_by_id('id_username', username)
         self.fill_element_by_id('id_password', password)
         self.click_element_by_id('post_login_btn')

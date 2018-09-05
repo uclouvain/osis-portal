@@ -12,28 +12,23 @@ from base.tests.factories.user import SuperUserFactory
 
 class UserMixin:
 
-    def create_group(self, group_name):
+    @staticmethod
+    def create_group(group_name):
         return Group.objects.get_or_create(name=group_name)
 
-    def add_permissions_to_group(self, group_name, *permissions_names):
+    @staticmethod
+    def add_permissions_to_group(group_name, *permissions_names):
         group = Group.objects.get(name=group_name)
         for permission_name in permissions_names:
             permission = Permission.objects.get(codename=permission_name)
             group.permissions.add(permission)
 
+
+class StudentMixin(UserMixin):
     def create_students_group(self):
         group, created = self.create_group('students')
         self.add_permissions_to_group('students', 'is_student')
         return group
-
-    def create_tutors_group(self):
-        group, created = self.create_group('tutors')
-        self.add_permissions_to_group('tutors', 'is_tutor')
-        self.add_permissions_to_group('tutors', 'can_access_attribution')
-        return group
-
-
-class StudentMixin(UserMixin):
 
     def create_student(self, user=None):
         """
@@ -51,6 +46,11 @@ class StudentMixin(UserMixin):
 
 
 class TutorMixin(UserMixin):
+    def create_tutors_group(self):
+        group, created = self.create_group('tutors')
+        self.add_permissions_to_group('tutors', 'is_tutor')
+        self.add_permissions_to_group('tutors', 'can_access_attribution')
+        return group
 
     def create_tutor(self, user=None):
         """
@@ -68,8 +68,7 @@ class TutorMixin(UserMixin):
         return tutor
 
 
-class PhdMixin(UserMixin):
-
+class PhdMixin(StudentMixin, TutorMixin):
     def create_phd(self, user=None):
         """
         Create a phd person object with all related objects and permissions
