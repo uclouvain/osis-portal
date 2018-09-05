@@ -1,8 +1,5 @@
-from django.utils import translation
-
 from base.tests.factories.user import UserFactory
-from base.tests.functional.models.base_model import FunctionalTestCase
-from django.utils.translation import ugettext as _
+from base.tests.functional.models.model import FunctionalTestCase
 
 from base.tests.functional.models.user_type import StudentMixin, TutorMixin, PhdMixin, AdministratorMixin
 
@@ -18,7 +15,7 @@ class BasicLoginTestCase(FunctionalTestCase):
         As a not connected user
         I should see the login page
         """
-        self.openUrl('login')
+        self.openUrlByName('login')
         self.check_page_title('Login')
 
     def test_valid_login(self):
@@ -26,7 +23,7 @@ class BasicLoginTestCase(FunctionalTestCase):
         As a registered user with valid password
         I should be able to connect
         """
-        self.login(self.valid_user.username, 'password123')
+        self.login(self.valid_user.username)
         self.check_page_title(self.config.get('DASHBOARD').get('PAGE_TITLE'))
 
     def test_invalid_login(self):
@@ -35,8 +32,7 @@ class BasicLoginTestCase(FunctionalTestCase):
         I scould not be able to connect
         """
         self.login(self.valid_user.username, 'wrong_password')
-        translation.activate('en')
-        string = _('msg_error_username_password_not_matching')
+        string = self.get_localized_message('msg_error_username_password_not_matching', 'en')
         self.check_page_contains_string(string)
 
 
@@ -59,7 +55,7 @@ class StudentLoginTestCase(FunctionalTestCase, StudentMixin):
          - I should not see the tutor links
          - I should no see the admin links
         """
-        self.login(self.student.person.user.username, 'password123')
+        self.login(self.student.person.user.username)
         self.check_page_contains_ids(self.dashboard_config.get('STUDENT_LINKS'))
         self.check_page_not_contains_ids(self.dashboard_config.get('TUTOR_LINKS'))
         self.check_page_not_contains_ids(self.dashboard_config.get('ADMIN_LINKS'))
@@ -85,7 +81,7 @@ class TutorLoginTestCase(FunctionalTestCase, TutorMixin):
         - I shoul not see the admin links
         :return:
         """
-        self.login(self.tutor.person.user.username, 'password123')
+        self.login(self.tutor.person.user.username)
         self.check_page_contains_ids(self.dashboard_config.get('TUTOR_LINKS'))
         self.check_page_not_contains_ids(self.dashboard_config.get('STUDENT_LINKS'))
         self.check_page_not_contains_ids(self.dashboard_config.get('ADMIN_LINKS'))
@@ -111,7 +107,7 @@ class PhdLoginTestCase(FunctionalTestCase, PhdMixin):
         - I shoul not see the admin links
         :return:
         """
-        self.login(self.phd_person.user.username, 'password123')
+        self.login(self.phd_person.user.username)
         self.check_page_contains_ids(self.dashboard_config.get('TUTOR_LINKS'))
         self.check_page_contains_ids(self.dashboard_config.get('STUDENT_LINKS'))
         self.check_page_not_contains_ids(self.dashboard_config.get('ADMIN_LINKS'))
@@ -137,7 +133,7 @@ class AdminLoginTestCase(FunctionalTestCase, AdministratorMixin):
         - I shoul see the admin links
         :return:
         """
-        self.login(self.admin.user.username, 'password123')
+        self.login(self.admin.user.username)
         self.check_page_contains_ids(self.dashboard_config.get('TUTOR_LINKS'))
         self.check_page_contains_ids(self.dashboard_config.get('STUDENT_LINKS'))
         self.check_page_contains_ids(self.dashboard_config.get('ADMIN_LINKS'))
