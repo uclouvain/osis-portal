@@ -371,7 +371,7 @@ def get_learning_unit_enrollments_list(a_learning_unit_year):
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def attribution_administration(request):
-    return layout.render(request, 'admin/attribution_administration.html')
+    return layout.render(request, 'admin/attribution_administration.html', {})
 
 
 @login_required
