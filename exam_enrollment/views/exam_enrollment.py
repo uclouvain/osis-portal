@@ -63,7 +63,7 @@ def choose_offer(request):
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def choose_offer_direct(request):
-    return navigation(request, True)
+    return navigation(request, False)
 
 
 def navigation(request, navigate_direct_to_form):
