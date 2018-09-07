@@ -1,4 +1,5 @@
-from base.tests.functional.models.model import FunctionalTestCase
+from osis_common.tests.functional.models.model import FunctionalTestCase
+from osis_common.tests.functional.models.report import can_be_reported
 from base.tests.functional.models.user_type import FacAdministratorMixin, AdministratorMixin
 
 
@@ -13,6 +14,7 @@ class FacAdminPageTestCase(FunctionalTestCase, FacAdministratorMixin):
         super(FacAdminPageTestCase, self).setUp()
         self.fac_admin = self.create_fac_admin()
 
+    @can_be_reported
     def test_fac_admin_page(self):
         """
         As a Faculty Administrator
@@ -25,7 +27,7 @@ class FacAdminPageTestCase(FunctionalTestCase, FacAdministratorMixin):
         self.check_page_contains_ids(self.admin_config.get('FAC_ADMIN').get('ADMIN_LINKS'))
 
     def _got_to_fac_admin_page(self):
-        self.openUrlByName('home')
+        self.open_url_by_name('home')
         self.click_element_by_id(self.admin_config.get('FAC_ADMIN').get('FROM_DASH_LINK_1'))
         self.click_element_by_id(self.admin_config.get('FAC_ADMIN').get('FROM_DASH_LINK_2'))
 
@@ -43,14 +45,15 @@ class DataAdminPagesTestCase(FunctionalTestCase, AdministratorMixin):
         self.data_admin = self.create_admin()
 
     def _go_to_data_admin_page(self):
-        self.openUrlByName('home')
+        self.open_url_by_name('home')
         self.click_element_by_id(self.data_admin_config.get('FROM_DASH_LINK_1'))
         self.click_element_by_id(self.data_admin_config.get('FROM_DASH_LINK_2'))
 
     def _go_to_data_management_page(self):
-        self.openUrlByName('data')
+        self.open_url_by_name('data')
         self.click_element_by_id(self.data_management_config.get('FROM_DATA_ADMIN_LNK'))
 
+    @can_be_reported
     def test_data_admin_page(self):
         """
         As a data administrator
@@ -62,6 +65,7 @@ class DataAdminPagesTestCase(FunctionalTestCase, AdministratorMixin):
         self.check_page_title(self.data_admin_config.get('PAGE_TITLE'))
         self.check_page_contains_ids(self.data_admin_config.get('ADMIN_LINKS'))
 
+    @can_be_reported
     def test_data_management_page(self):
         """
         As a data administrator
