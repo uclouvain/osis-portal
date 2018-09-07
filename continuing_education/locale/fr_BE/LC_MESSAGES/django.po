@@ -1,0 +1,248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-04-22 15:14+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "accepted"
+msgstr "Accepté"
+
+msgid "rejected"
+msgstr "Refusé"
+
+msgid "waiting"
+msgstr "En attente"
+
+msgid "admission"
+msgstr "Admission"
+
+msgid "admission_view"
+msgstr "Vue admission"
+
+msgid "administrator"
+msgstr "Gestionnaire"
+
+msgid "awareness"
+msgstr "Comment avez-vous connu l'existence de ce programme ?"
+
+msgid "awareness_ucl_website"
+msgstr "Par le site web de l'UCL"
+
+msgid "awareness_formation_website"
+msgstr "Par le site web de la formation continue"
+
+msgid "awareness_press"
+msgstr "Dans la presse"
+
+msgid "awareness_facebook"
+msgstr "Sur Facebook"
+
+msgid "awareness_linkedin"
+msgstr "Sur LinkedIn"
+
+msgid "awareness_customized_mail"
+msgstr "Par courrier personnalisé"
+
+msgid "awareness_emailing"
+msgstr "Par un emailing"
+
+msgid "activity_sector"
+msgstr "Secteur d'activité"
+
+msgid "assessment_presented"
+msgstr "A présenté l'épreuve d'évaluation"
+
+msgid "assessment_succeeded"
+msgstr "A réussi l'épreuve d'évaluation"
+
+msgid "billing"
+msgstr "Facturation"
+
+msgid "birth_country"
+msgstr "Pays de naissance"
+
+msgid "birth_location"
+msgstr "Lieu de naissance"
+
+msgid "children_number"
+msgstr "Nombre d'enfants"
+
+msgid "citizenship"
+msgstr "Nationalité"
+
+msgid "company_number"
+msgstr "Numéro unique d'entreprise"
+
+msgid "continuing_education"
+msgstr "Formations Continues"
+
+msgid "contact"
+msgstr "Contact"
+
+msgid "courses_formula"
+msgstr "Formule de cours"
+
+msgid "current_occupation"
+msgstr "Fonction actuelle"
+
+msgid "current_employer"
+msgstr "Employeur actuel"
+
+msgid "desc_lnk_continuing_education"
+msgstr "Gestion des étudiants pour la formation continue."
+
+msgid "education"
+msgstr "Education"
+
+msgid "faculty"
+msgstr "Faculty"
+
+msgid "first_name"
+msgstr "Prénom"
+
+msgid "formation"
+msgstr "Formation"
+
+msgid "formation_spreading"
+msgstr "Etalement de la formation"
+
+msgid "formation_administrator"
+msgstr "Gestionnaire de formation"
+
+msgid "formation_title"
+msgstr "Intitulé de la formation"
+
+msgid "head_office_name"
+msgstr "Nom du siège social"
+
+msgid "high_school_diploma"
+msgstr "Diplôme d'études secondaires"
+
+msgid "high_school_graduation_year"
+msgstr "Année d'obtention (secondaire)"
+
+msgid "id_card_number"
+msgstr "Numéro de carte d'identité"
+
+msgid "last_degree_level"
+msgstr "Niveau du dernier diplôme"
+
+msgid "last_degree_field"
+msgstr "Domaine d'étude"
+
+msgid "last_degree_institution"
+msgstr "Institution"
+
+msgid "last_degree_graduation_year"
+msgstr "Année d'obtention"
+
+msgid "marital_status"
+msgstr "Etat civil"
+
+msgid "motivation"
+msgstr "Motivation"
+
+msgid "national_registry_number"
+msgstr "Numéro de registre national belge"
+
+msgid "new_admission"
+msgstr "Nouvelle admission"
+
+msgid "no_admission_yet"
+msgstr "Vous n'avez pas soumis de formulaire d'admission"
+
+msgid "no_document_available"
+msgstr "Pas de document disponible"
+
+msgid "no_registration_yet"
+msgstr "Pas de formulaire d'inscription disponible"
+
+msgid "other_educational_background"
+msgstr "Autres formations"
+
+msgid "passport_number"
+msgstr "Numéro de passeport"
+
+msgid "past_professional_activities"
+msgstr "Expériences professionnelles passées"
+
+msgid "paid"
+msgstr "Payé"
+
+msgid "payment_complete"
+msgstr "En ordre de paiement"
+
+msgid "post"
+msgstr "Courrier"
+
+msgid "previous_ucl_registration"
+msgstr "Avez-vous déjà été inscrit(e) à l'UCL ?"
+
+msgid "previous_noma"
+msgstr "Précédent NOMA"
+
+msgid "prior_experience_validation"
+msgstr "Valorisation des Acquis d'Experience"
+
+msgid "private"
+msgstr "Privé"
+
+msgid "professional_background"
+msgstr "Parcours professionnel"
+
+msgid "professional_status"
+msgstr "Statut professionel"
+
+msgid "professional_impact"
+msgstr "Impact professionnel de la formation"
+
+msgid "program_code"
+msgstr "Code de programme"
+
+msgid "registered"
+msgstr "Inscrit"
+
+msgid "registration"
+msgstr "Inscription"
+
+msgid "registration_view"
+msgstr "Vue inscription"
+
+msgid "registration_complete"
+msgstr "En ordre d'inscription"
+
+msgid "registration_type"
+msgstr "Inscription à titre"
+
+msgid "residence_phone"
+msgstr "Téléphone fixe"
+
+msgid "spouse_name"
+msgstr "Nom du conjoint"
+
+msgid "student_sheet"
+msgstr "Fiche de l'étudiant"
+
+msgid "submit"
+msgstr "Soumettre"
+
+msgid "use_address_for_billing"
+msgstr "Utiliser l'adresse enregistrée pour la facturation"
+
+msgid "use_address_for_post"
+msgstr "Utiliser l'adresse enregistrée pour le courrier"
+
+msgid "vat_number"
+msgstr "Numéro de TVA"

@@ -1,0 +1,152 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'studies' %}">{% trans 'studies' %}</a></li>
+    <li><a href="{% url 'continuing_education' %}">{% trans 'continuing_education' %}</a></li>
+    <li><a class="text-capitalize" href="{% url 'continuing_education' %}">{% trans 'student' %}</a></li>
+    <li class="active">{% trans 'registration' %}</li>
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        {% if admission_id %}
+        <button type="submit" form="form" class="btn btn-default pull-right">
+            <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'save' %}
+        </button>
+        {% endif %}
+        <h2>{% trans 'registration' %}</h2>
+    </div>
+
+    <div class="panel panel-default">
+            <form id="form" method="POST" class="post-form">
+                {% csrf_token %}
+                <div class="panel panel-body">
+                    {% bootstrap_field form.registration_type %}
+                    {% bootstrap_field form.use_address_for_billing %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{% trans 'billing' %}</div>
+                            <div class="panel panel-body">
+                            {% bootstrap_field form.billing_location %}
+                            {% bootstrap_field form.billing_postal_code %}
+                            {% bootstrap_field form.billing_city %}
+                            {% bootstrap_field form.billing_country %}
+                            </div>
+                    </div>
+                    {% bootstrap_field form.head_office_name %}
+                    {% bootstrap_field form.company_number %}
+                    {% bootstrap_field form.vat_number %}
+                    {% bootstrap_field form.national_registry_number %}
+                    {% bootstrap_field form.id_card_number %}
+                    {% bootstrap_field form.passport_number %}
+                    {% bootstrap_field form.marital_status %}
+                    {% bootstrap_field form.spouse_name %}
+                    {% bootstrap_field form.children_number %}
+                    {% bootstrap_field form.previous_ucl_registration %}
+                    {% bootstrap_field form.previous_noma %}
+                    {% bootstrap_field form.use_address_for_post %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{% trans 'post' %}</div>
+                            <div class="panel panel-body">
+                    {% bootstrap_field form.residence_location %}
+                    {% bootstrap_field form.residence_postal_code %}
+                    {% bootstrap_field form.residence_city %}
+                    {% bootstrap_field form.residence_country %}
+                        </div>
+                    </div>
+                    {% bootstrap_field form.residence_phone %}
+                </div>
+                <div class="panel panel-body">
+                    <button type="submit" class="btn btn-primary" title="{%trans 'submit' %}">
+                        <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'submit' %}
+                    </button>
+                    <a class="btn btn-default" id="" href="{% url 'continuing_education' %}">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans 'cancel' %}
+                    </a>
+                </div>
+            </form>
+    </div>
+{% endblock %}
+
+
+{% block script %}
+    <script>
+        //reuse address
+        let address = {
+            location: "{{registration.location | escapejs}}",
+            postal_code: "{{registration.postal_code | escapejs}}",
+            city: "{{registration.city | escapejs}}",
+            country: "{{registration.country_id | escapejs}}",
+        }
+
+        $("#id_use_address_for_billing:checkbox").change(function(){
+            if(this.checked){
+                copy_address("billing");
+            } else {
+                empty_address("billing");
+            }
+        });
+        //check when page is loaded
+        $("#id_use_address_for_billing:checkbox").prop('checked')?copy_address("billing"):empty_address(("billing"));
+
+        $("#id_use_address_for_post:checkbox").change(function(){
+            if(this.checked){
+                copy_address("residence");
+            } else {
+                empty_address("residence");
+            }
+        });
+        //check when page is loaded
+        $("#id_use_address_for_post:checkbox").prop('checked')?copy_address("residence"):empty_address(("residence"));
+
+        //re-enable disabled field on form submit
+        $( "#form" ).submit(function( event ) {
+            $("#id_billing_country").prop( "disabled", false );
+            $("#id_residence_country").prop( "disabled", false );
+        });
+
+        function copy_address(e){
+            ["location", "postal_code", "city"].forEach((field) => {
+                $("#id_"+e+"_"+field).val(address[field]);
+                $("#id_"+e+"_"+field).prop("readonly", true);
+            });
+            $("#id_"+e+"_country").val(address.country);
+            $("#id_"+e+"_country").prop("disabled", true);
+        }
+
+        function empty_address(e){
+            ["location", "postal_code", "city"].forEach((field) => {
+                $("#id_"+e+"_"+field).val('');
+                $("#id_"+e+"_"+field).prop("readonly", false);
+            });
+            $("#id_"+e+"_country").val('');
+            $("#id_"+e+"_country").prop("disabled", false);
+        }
+    </script>
+{% endblock %}

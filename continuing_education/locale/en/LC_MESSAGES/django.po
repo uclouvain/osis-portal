@@ -1,0 +1,248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-04-22 15:14+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "accepted"
+msgstr "Accepted"
+
+msgid "rejected"
+msgstr "Rejected"
+
+msgid "waiting"
+msgstr "Waiting"
+
+msgid "admission"
+msgstr "Admission"
+
+msgid "admission_view"
+msgstr "Admission view"
+
+msgid "administrator"
+msgstr "Administrator"
+
+msgid "awareness"
+msgstr "How did you hear about the program ?"
+
+msgid "awareness_ucl_website"
+msgstr "UCL website"
+
+msgid "awareness_formation_website"
+msgstr "Formation website"
+
+msgid "awareness_press"
+msgstr "Press"
+
+msgid "awareness_facebook"
+msgstr "Facebook"
+
+msgid "awareness_linkedin"
+msgstr "LinkedIn"
+
+msgid "awareness_customized_mail"
+msgstr "Customized mail"
+
+msgid "awareness_emailing"
+msgstr "Emailing"
+
+msgid "activity_sector"
+msgstr "Activity sector"
+
+msgid "assessment_presented"
+msgstr "Assessment presented"
+
+msgid "assessment_succeeded"
+msgstr "Assessment succeeded"
+
+msgid "billing"
+msgstr "Billing"
+
+msgid "birth_country"
+msgstr "Birth country"
+
+msgid "birth_location"
+msgstr "Birth location"
+
+msgid "children_number"
+msgstr "Children number"
+
+msgid "citizenship"
+msgstr "Citizenship"
+
+msgid "company_number"
+msgstr "Company number"
+
+msgid "continuing_education"
+msgstr "Continuing Education"
+
+msgid "contact"
+msgstr "Contact"
+
+msgid "courses_formula"
+msgstr "Courses formula"
+
+msgid "current_occupation"
+msgstr "Current occupation"
+
+msgid "current_employer"
+msgstr "Current employer"
+
+msgid "desc_lnk_continuing_education"
+msgstr "This process controls continuing education offers."
+
+msgid "education"
+msgstr "Education"
+
+msgid "faculty"
+msgstr "Faculty"
+
+msgid "first_name"
+msgstr "First name"
+
+msgid "formation"
+msgstr "Formation"
+
+msgid "formation_spreading"
+msgstr "Formation spreading"
+
+msgid "formation_administrator"
+msgstr "Formation administrator"
+
+msgid "formation_title"
+msgstr "Formation title"
+
+msgid "head_office_name"
+msgstr "Head office name"
+
+msgid "high_school_diploma"
+msgstr "High school diploma"
+
+msgid "high_school_graduation_year"
+msgstr "Graduation year (high school)"
+
+msgid "id_card_number"
+msgstr "ID card number"
+
+msgid "last_degree_level"
+msgstr "Last degree level"
+
+msgid "last_degree_field"
+msgstr "Field of study"
+
+msgid "last_degree_institution"
+msgstr "Institution"
+
+msgid "last_degree_graduation_year"
+msgstr "Graduation year (last degree)"
+
+msgid "marital_status"
+msgstr "Marital status"
+
+msgid "motivation"
+msgstr "Motivation"
+
+msgid "national_registry_number"
+msgstr "National registry number"
+
+msgid "new_admission"
+msgstr "New admission"
+
+msgid "no_admission_yet"
+msgstr "You have no admission form submitted"
+
+msgid "no_document_available"
+msgstr "No document available"
+
+msgid "no_registration_yet"
+msgstr "There is no registration form yet available"
+
+msgid "other_educational_background"
+msgstr "Other educational background"
+
+msgid "passport_number"
+msgstr "Passport number"
+
+msgid "past_professional_activities"
+msgstr "Past professional activities"
+
+msgid "paid"
+msgstr "Paid"
+
+msgid "payment_complete"
+msgstr "Payment complete"
+
+msgid "post"
+msgstr "Post"
+
+msgid "previous_ucl_registration"
+msgstr "Have you previously been registered at UCL ?"
+
+msgid "private"
+msgstr "Private"
+
+msgid "previous_noma"
+msgstr "Previous NOMA"
+
+msgid "prior_experience_validation"
+msgstr "Prior experience validation"
+
+msgid "professional_background"
+msgstr "Professional background"
+
+msgid "professional_status"
+msgstr "Professional status"
+
+msgid "professional_impact"
+msgstr "Professional impact"
+
+msgid "program_code"
+msgstr "Program code"
+
+msgid "registered"
+msgstr "Registered"
+
+msgid "registration"
+msgstr "Registration"
+
+msgid "registration_view"
+msgstr "Registration view"
+
+msgid "registration_complete"
+msgstr "Registration complete"
+
+msgid "registration_type"
+msgstr "Registration type"
+
+msgid "residence_phone"
+msgstr "Residence phone"
+
+msgid "spouse_name"
+msgstr "Spouse name"
+
+msgid "student_sheet"
+msgstr "Student sheet"
+
+msgid "submit"
+msgstr "Submit"
+
+msgid "use_address_for_billing"
+msgstr "Use recorded address for billing"
+
+msgid "use_address_for_post"
+msgstr "Use recorded address for post"
+
+msgid "vat_number"
+msgstr "VAT number"
