@@ -11,3 +11,6 @@
 [submodule "dissertation"]
 	path = dissertation
 	url = https://github.com/uclouvain/osis-portal-dissertation.git
+[submodule "continuing_education"]
+	path = continuing_education
+	url = https://github.com/uclouvain/osis-portal-continuing-education.git
