@@ -33,7 +33,8 @@ OPTIONAL_APPS = (
     'internship',
     'exam_enrollment',
     'attestation',
-    'assessments'
+    'assessments',
+    'continuing_education'
 )
 
 INSTALLED_APPS += OPTIONAL_APPS

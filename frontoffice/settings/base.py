@@ -65,6 +65,7 @@ INSTALLED_APPS = (
     'ckeditor',
     'reference',
     'base',
+    'bootstrap3'
 )
 
 # Tests settings

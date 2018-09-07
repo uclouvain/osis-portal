@@ -63,6 +63,8 @@ if 'attestation' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^attestation/', include('attestation.urls')), )
 if 'assessments' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^assessments/', include('assessments.urls')),)
+if 'continuing_education' in settings.INSTALLED_APPS:
+    urlpatterns = urlpatterns + (url(r'^continuing_education/', include('continuing_education.urls')),)
 
 handler404 = 'base.views.common.page_not_found'
 handler403 = 'base.views.common.access_denied'
