@@ -1,7 +1,8 @@
 from base.tests.factories.user import UserFactory
-from base.tests.functional.models.model import FunctionalTestCase
+from osis_common.tests.functional.models.model import FunctionalTestCase
 
 from base.tests.functional.models.user_type import StudentMixin, TutorMixin, PhdMixin, AdministratorMixin
+from osis_common.tests.functional.models.report import can_be_reported
 
 
 class BasicLoginTestCase(FunctionalTestCase):
@@ -10,14 +11,16 @@ class BasicLoginTestCase(FunctionalTestCase):
         super(BasicLoginTestCase, self).setUp()
         self.valid_user = UserFactory()
 
+    @can_be_reported
     def test_login_page(self):
         """
         As a not connected user
         I should see the login page
         """
-        self.openUrlByName('login')
+        self.open_url_by_name('login')
         self.check_page_title('Login')
 
+    @can_be_reported
     def test_valid_login(self):
         """
         As a registered user with valid password
@@ -26,6 +29,7 @@ class BasicLoginTestCase(FunctionalTestCase):
         self.login(self.valid_user.username)
         self.check_page_title(self.config.get('DASHBOARD').get('PAGE_TITLE'))
 
+    @can_be_reported
     def test_invalid_login(self):
         """
         As a registered user with wrong password
@@ -47,6 +51,7 @@ class StudentLoginTestCase(FunctionalTestCase, StudentMixin):
         super(StudentLoginTestCase, self).setUp()
         self.student = self.create_student()
 
+    @can_be_reported
     def test_student_login(self):
         """
         As a student
@@ -72,6 +77,7 @@ class TutorLoginTestCase(FunctionalTestCase, TutorMixin):
         super(TutorLoginTestCase, self).setUp()
         self.tutor = self.create_tutor()
 
+    @can_be_reported
     def test_tutor_login(self):
         """
         As a tutor
@@ -98,6 +104,7 @@ class PhdLoginTestCase(FunctionalTestCase, PhdMixin):
         super(PhdLoginTestCase, self).setUp()
         self.phd_person = self.create_phd()
 
+    @can_be_reported
     def test_phd_login(self):
         """
         As a phd
@@ -124,6 +131,7 @@ class AdminLoginTestCase(FunctionalTestCase, AdministratorMixin):
         super(AdminLoginTestCase, self).setUp()
         self.admin = self.create_admin()
 
+    @can_be_reported
     def test_admin_login(self):
         """
         As an administrator
