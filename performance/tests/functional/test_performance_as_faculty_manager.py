@@ -20,6 +20,7 @@ class FacultyAdministratorsPerformanceTestCase(FunctionalTestCase, FacAdministra
     def setUpClass(cls):
         super(FacultyAdministratorsPerformanceTestCase, cls).setUpClass()
         cls.perf_config = cls.config.get('PERFORMANCE')
+        cls.perf_fac_admin_config = cls.perf_config.get('FAC_ADMIN')
 
     @can_be_reported
     def test_got_to_exam_marks_admin_page(self):
@@ -31,7 +32,7 @@ class FacultyAdministratorsPerformanceTestCase(FunctionalTestCase, FacAdministra
         """
         self.login(self.faculty_administrator.user.username)
         self.__got_to_performance_administration_page()
-        self.check_page_title('Exam Marks Faculty Administration')
+        self.check_page_title(self.perf_fac_admin_config.get('PAGE_TITLE'))
 
     @can_be_reported
     def test_search_student_with_valid_results(self):
@@ -45,7 +46,6 @@ class FacultyAdministratorsPerformanceTestCase(FunctionalTestCase, FacAdministra
         self.login(self.faculty_administrator.user.username)
         self.__got_to_performance_administration_page()
         self.__search_student_programs(self.student_with_valid_perfs.registration_id)
-        self.check_page_title(self.perf_config.get('PAGE_TITLE'))
         perfs = student_performance.search(registration_id=self.student_with_valid_perfs.registration_id)
         perf_lnk_pattern = self.perf_config.get('EXAM_MARK_LINKS_PATTERN')
         self.check_page_contains_ids([perf_lnk_pattern.format(p.pk) for p in perfs])
@@ -91,15 +91,15 @@ class FacultyAdministratorsPerformanceTestCase(FunctionalTestCase, FacAdministra
         self.__got_to_performance_administration_page()
         self.__search_student_programs(self.student_with_valid_perfs.registration_id)
         self.click_element_by_id(self.__get_first_program_link_id(self.student_with_valid_perfs))
-        self.check_page_title(self.config.get('PERFORMANCE').get('EXAM_MARK').get('PAGE_TITLE'))
+        self.check_page_title(self.perf_config.get('EXAM_MARK').get('PAGE_TITLE'))
 
     def __search_student_programs(self, registration_id):
-        self.fill_element_by_id('registration_id', registration_id)
-        self.click_element_by_id('btn_search_perfs')
+        self.fill_element_by_id(self.perf_fac_admin_config.get('SEARCH_INPUT'), registration_id)
+        self.click_element_by_id(self.perf_fac_admin_config.get('SEARCH_BT'))
 
     def __got_to_performance_administration_page(self):
         self.open_url_by_name('faculty_administration')
-        self.click_element_by_id('lnk_performance_administration')
+        self.click_element_by_id(self.perf_fac_admin_config.get('FROM_FAC_ADMIN_LINK'))
 
     def __get_first_program_link_id(self, student):
         perfs = student_performance.search(registration_id=student.registration_id)
