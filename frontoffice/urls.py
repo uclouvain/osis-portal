@@ -79,7 +79,4 @@ if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
     import debug_toolbar
     urlpatterns += (url(r'^__debug__/', include(debug_toolbar.urls)), )
 
-if settings.DEBUG:
-    urlpatterns += (static(r'/favicon.ico', document_root=os.path.join(settings.BASE_DIR, 'base/static/img/favicon.ico')),)
-
 
