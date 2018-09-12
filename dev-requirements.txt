@@ -1,0 +1,5 @@
+django-pdb
+django-extensions
+django-debug-toolbar
+
+-r requirements.txt
