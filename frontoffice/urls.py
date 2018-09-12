@@ -23,10 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import os
 
 from django.conf import settings
-from django.conf.urls.static import static
 from django.contrib import admin
 from django.conf.urls import url, include
 from django.views.i18n import javascript_catalog
@@ -43,7 +41,7 @@ urlpatterns = (
     url(r'^'+settings.ADMIN_URL, admin.site.urls),
     url(r'', include('base.urls')),
     url(r'^login/$', common.login, name='login'),
-    url(r'^logout/$', common.log_out, name='logout'),
+    url(r'^logout/$', common.logout, name='logout'),
     url(r'^logged_out/$', common.logged_out, name='logged_out'),
     url(r'^403/$', common.access_denied, name="error_403"),
     url(r'^jsi18n/$', javascript_catalog, js_info_dict, name='javascript-catalog'),

@@ -64,7 +64,8 @@ INSTALLED_APPS = (
     'ckeditor',
     'reference',
     'base',
-    'bootstrap3'
+    'bootstrap3',
+    'django_registration'
 )
 
 # Tests settings
@@ -349,6 +350,9 @@ ATTESTATION_CONFIG = {
     'SERVER_TO_FETCH_PASSWORD': os.environ.get("ATTESTATION_API_PASSWORD", ''),
 }
 
+
+#Continuing education settings
+ACCOUNT_ACTIVATION_DAYS = 7
 
 if TESTING and TESTS_TYPES in ('ALL', 'SELENIUM'):
     from .functional_tests import *

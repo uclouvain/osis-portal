@@ -54,5 +54,8 @@ FUNCT_TESTS_CONFIG = {
             'PAGE_TITLE': 'Louvain | Osis-studies',
             'FROM_DATA_ADMIN_LNK': 'lnk_data_management'
         }
+    },
+    'CONTINUING_EDUCATION': {
+        'PAGE_TITLE' : 'Continuing Education'
     }
 }
