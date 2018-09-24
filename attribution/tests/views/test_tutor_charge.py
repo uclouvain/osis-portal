@@ -330,7 +330,7 @@ class TutorChargeTest(TestCase):
         tot_lecturing = teaching_charge["tot_lecturing"]
         tot_practical = teaching_charge["tot_practical"]
 
-        self.assertEqual(len(attributions), 2)
+        self.assertEqual(len(attributions), 3)
         self.assertEqual(tot_lecturing, LEARNING_UNIT_LECTURING_DURATION)
         self.assertEqual(tot_practical, LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION)
 
@@ -385,7 +385,7 @@ class HomeTest(TestCase):
         self.assertTemplateUsed(response, 'tutor_charge.html')
 
         self.assertEqual(response.context['user'], self.person.user)
-        self.assertEqual(response.context['attributions'], None)
+        self.assertEqual(len(response.context['attributions']), 1)
         self.assertEqual(response.context['year'], int(self.academic_year.year))
         self.assertEqual(response.context['tot_lecturing'], 0)
         self.assertEqual(response.context['tot_practical'], 0)
@@ -441,7 +441,7 @@ class HomeTest(TestCase):
         self.assertTemplateUsed(response, 'tutor_charge.html')
 
         self.assertEqual(response.context['user'], self.person.user)
-        self.assertEqual(response.context['attributions'], None)
+        self.assertEqual(len(response.context['attributions']), 1)
         self.assertEqual(response.context['year'], int(datetime.datetime.now().year))
         self.assertEqual(response.context['tot_lecturing'], 0)
         self.assertEqual(response.context['tot_practical'], 0)
@@ -453,6 +453,7 @@ class HomeTest(TestCase):
 
     @mock.patch('requests.get', side_effect=mock_request_none_attribution_charge)
     def test_without_attributions(self, mock_requests_get):
+        self.attribution.delete()
         response = self.client.get(self.url, mock_requests_get)
 
         self.assertTrue(mock_requests_get.called)
@@ -470,7 +471,7 @@ class HomeTest(TestCase):
 
         self.assertIsInstance(response.context['formset'], BaseFormSet)
 
-    @override_settings()
+    @override_settings(ATTRIBUTION_CONFIG={})
     def test_when_not_configuration_for_attribution(self):
         del settings.ATTRIBUTION_CONFIG
 
@@ -479,7 +480,7 @@ class HomeTest(TestCase):
         self.assertTemplateUsed(response, 'tutor_charge.html')
 
         self.assertEqual(response.context['user'], self.person.user)
-        self.assertEqual(response.context['attributions'], None)
+        self.assertEqual(len(response.context['attributions']), 1)
         self.assertEqual(response.context['year'], int(self.academic_year.year))
         self.assertEqual(response.context['tot_lecturing'], 0)
         self.assertEqual(response.context['tot_practical'], 0)
@@ -498,7 +499,7 @@ class HomeTest(TestCase):
         self.assertTemplateUsed(response, 'tutor_charge.html')
 
         self.assertEqual(response.context['user'], self.person.user)
-        self.assertEqual(response.context['attributions'], None)
+        self.assertEqual(len(response.context['attributions']), 1)
         self.assertEqual(response.context['year'], int(self.academic_year.year))
         self.assertEqual(response.context['tot_lecturing'], 0)
         self.assertEqual(response.context['tot_practical'], 0)
@@ -599,7 +600,7 @@ class HomeTest(TestCase):
 
         self.assertIsInstance(response.context['formset'], BaseFormSet)
 
-        self.assertEqual(len(response.context['attributions']), 2)
+        self.assertEqual(len(response.context['attributions']), 3)
 
     @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge_with_missing_values)
     def test_with_missing_values(self, mock_requests_get):

@@ -111,7 +111,7 @@ def get_email_students(an_acronym, year):
 
 
 def get_schedule_url(an_acronym):
-    if string_utils.is_string_not_null_empty(an_acronym):
+    if string_utils.is_string_not_null_empty(an_acronym) and hasattr(settings, 'ATTRIBUTION_CONFIG'):
         return settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_URL').\
             format(settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_NUMBER'), an_acronym.lower())
     return None
@@ -238,7 +238,8 @@ def set_formset_years(a_person):
 
 
 def get_url_learning_unit_year(a_learning_unit_year):
-    if a_learning_unit_year and string_utils.is_string_not_null_empty(a_learning_unit_year.acronym):
+    if a_learning_unit_year and string_utils.is_string_not_null_empty(a_learning_unit_year.acronym) and \
+            hasattr(settings, 'ATTRIBUTION_CONFIG'):
         return settings.ATTRIBUTION_CONFIG.get('CATALOG_URL').format(a_learning_unit_year.academic_year.year,
                                                                      a_learning_unit_year.acronym.lower())
     return None
