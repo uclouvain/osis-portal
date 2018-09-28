@@ -88,6 +88,9 @@
                                         <i class="fa fa-database" aria-hidden="true"></i>
                                         {% trans 'data' %}</a></li>
                                     {% endif %}
+                                    {% if 'dashboard' in installed_apps %}
+                                        {% include 'dashboard_admin_menu.html' %}
+                                    {% endif %}
                                 </ul>
                             </li>
                         {% endif %}

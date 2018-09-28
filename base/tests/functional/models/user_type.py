@@ -93,7 +93,7 @@ class AdministratorMixin(UserMixin):
         """
         Create an administrator person object with all related objects and permissions
         :param user: related user object , if none it will be created
-        :return: The phd person
+        :return: The administrator
         """
         if user:
             person = PersonFactory(user=user)

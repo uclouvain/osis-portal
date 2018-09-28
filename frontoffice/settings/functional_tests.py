@@ -4,7 +4,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 
 ### Fucntional Tests settings
 FUNCT_TESTS_CONFIG = {
-    'DEFAULT_WAITING_TIME': int(os.environ.get('FT_DEFAULT_WAITING_TIME', 10)),
+    'DEFAULT_WAITING_TIME': int(os.environ.get('FT_DEFAULT_WAITING_TIME', 15)),
     'BROWSER': os.environ.get('FT_BROWSER', 'FIREFOX'),
     'VIRTUAL_DISPLAY': os.environ.get('FT_VIRTUAL_DISPLAY', 'True').lower() == 'true',
     'DISPLAY_WIDTH': int(os.environ.get('FT_DISPLAY_WIDTH', 1920)),
