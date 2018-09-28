@@ -31,6 +31,7 @@ from unittest.mock import patch, Mock
 from django.conf import settings
 from django.contrib.auth.models import User, Group, Permission
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseNotAllowed
 from django.test import TestCase, Client, override_settings
 from django.utils import timezone
 
@@ -38,6 +39,7 @@ from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.models import test_student, test_person, test_academic_year, test_offer_year, \
     test_learning_unit_enrollment, test_learning_unit_year
+from base.utils import queue_utils
 from exam_enrollment.models.exam_enrollment_request import ExamEnrollmentRequest
 from exam_enrollment.tests.factories.exam_enrollment_request import ExamEnrollmentRequestFactory
 from exam_enrollment.views import exam_enrollment
@@ -54,7 +56,6 @@ def _create_group(name):
     return group
 
 
-HTTP_RESPONSE_OK = 200
 HTTP_RESPONSE_NOTFOUND = 404
 
 
@@ -115,7 +116,7 @@ class ExamEnrollmentFormTest(TestCase):
         fetch_json.return_value = self.correct_exam_enrol_form
         self.client.force_login(self.user)
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HttpResponse.status_code)
         self.assertTemplateUsed(response, 'exam_enrollment_form.html')
         returned_data = response.context[-1]
         self.assertIn('exam_enrollments', returned_data)
@@ -284,8 +285,12 @@ class ExamEnrollmentFormTest(TestCase):
         self.assertRedirects(response, reverse('dashboard_home'))
 
     def test_get_exam_enrollment_form(self):
-        self.assertEqual(exam_enrollment.ask_exam_enrollment_form(self.student, self.off_year).status_code, 200)
-
+        if hasattr(settings, 'QUEUES') and settings.QUEUES:
+            self.assertEqual(exam_enrollment.ask_exam_enrollment_form(self.student, self.off_year).status_code,
+                             HttpResponse.status_code)
+        else:
+            self.assertEqual(exam_enrollment.ask_exam_enrollment_form(self.student, self.off_year).status_code,
+                             HttpResponseNotAllowed.status_code)
 
     def test_check_exam_enrollment_form_up_to_date_in_db_with_document(self):
         off_year = self.off_enrol.offer_year
@@ -296,8 +301,7 @@ class ExamEnrollmentFormTest(TestCase):
         request_url = reverse(exam_enrollment.check_exam_enrollment_form, args=[off_year.id])
         self.client.force_login(self.user)
         response = self.client.get(request_url)
-        self.assertEqual(response.status_code, HTTP_RESPONSE_OK)
-
+        self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_check_exam_enrollment_form_not_in_db(self):
         off_year = self.off_enrol.offer_year
@@ -306,7 +310,6 @@ class ExamEnrollmentFormTest(TestCase):
         self.client.force_login(self.user)
         response = self.client.get(request_url)
         self.assertEqual(response.status_code, HTTP_RESPONSE_NOTFOUND)
-
 
     def test_check_exam_enrollment_form_up_to_date_in_db_with_empty_document(self):
         off_year = self.off_enrol.offer_year
@@ -319,27 +322,22 @@ class ExamEnrollmentFormTest(TestCase):
         response = self.client.get(request_url)
         self.assertEqual(response.status_code, HTTP_RESPONSE_NOTFOUND)
 
-
     def test_check_exam_enrollment_form_outdated_in_db(self):
-        queues_timeout_settings = settings.QUEUES.get("QUEUES_TIMEOUT")
-        queues_timeout_settings['EXAM_ENROLLMENT_FORM_RESPONSE'] = 15
-        with override_settings(QUEUES_TIMEOUT=queues_timeout_settings):
-            request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
-            outdated_time = timezone.now() - timezone.timedelta(seconds=request_timeout + 1)
-            off_year = self.off_enrol.offer_year
-            ExamEnrollmentRequestFactory(student=self.student,
-                                         offer_year_acronym=off_year.acronym,
-                                         document={"id": 1})
-            # We must update fetch_date without passing trough save() to bypass auto_now :
-            exam_enroll_request_qs = ExamEnrollmentRequest.objects.filter(student=self.student,
-                                                                          offer_year_acronym=off_year.acronym)
-            exam_enroll_request_qs.update(fetch_date=outdated_time)
+        request_timeout = queue_utils.get_timeout_or_default('EXAM_ENROLLMENT_FORM_RESPONSE')
+        outdated_time = timezone.now() - timezone.timedelta(seconds=request_timeout + 1)
+        off_year = self.off_enrol.offer_year
+        ExamEnrollmentRequestFactory(student=self.student,
+                                     offer_year_acronym=off_year.acronym,
+                                     document={"id": 1})
+        # We must update fetch_date without passing trough save() to bypass auto_now :
+        exam_enroll_request_qs = ExamEnrollmentRequest.objects.filter(student=self.student,
+                                                                      offer_year_acronym=off_year.acronym)
+        exam_enroll_request_qs.update(fetch_date=outdated_time)
 
-            request_url = reverse(exam_enrollment.check_exam_enrollment_form, args=[off_year.id])
-            self.client.force_login(self.user)
-            response = self.client.get(request_url)
-            self.assertEqual(response.status_code, HTTP_RESPONSE_NOTFOUND)
-
+        request_url = reverse(exam_enrollment.check_exam_enrollment_form, args=[off_year.id])
+        self.client.force_login(self.user)
+        response = self.client.get(request_url)
+        self.assertEqual(response.status_code, HTTP_RESPONSE_NOTFOUND)
 
     def test_check_exam_enrollment_form_not_in_db_without_offer_enrollment(self):
         off_year = self.off_enrol.offer_year

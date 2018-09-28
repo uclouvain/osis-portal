@@ -70,3 +70,6 @@ msgstr "Are you sure ?"
 
 msgid "sql_readonly"
 msgstr "SQL readonly"
+
+msgid "msg_error_username_password_not_matching"
+msgstr "Invalid Username or Password"
