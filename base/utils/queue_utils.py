@@ -1,4 +1,3 @@
-from debug_toolbar import settings
 from django.conf import settings
 
 
