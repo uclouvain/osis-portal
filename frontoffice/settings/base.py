@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import os
+
 from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
@@ -284,6 +285,7 @@ OSIS_MANAGE_COURSES_URL = os.environ.get('OSIS_MANAGE_COURSES_URL', None)
 def get_queue_timeout(timeout_name, default_timeout):
     return float(os.environ.get(timeout_name, QUEUES_TESTING_TIMEOUT if TESTING else default_timeout))
 
+
 # The Queues are optional
 # They are used to ensure the migration of Data between Osis and other application (ex : Osis <> Osis-Portal)
 # See in settings.dev.example to configure the queues
@@ -351,10 +353,8 @@ ATTESTATION_CONFIG = {
 }
 
 
-#Continuing education settings
+# Continuing education settings
 ACCOUNT_ACTIVATION_DAYS = 7
 
 if TESTING and TESTS_TYPES in ('ALL', 'SELENIUM'):
     from .functional_tests import *
-
-
