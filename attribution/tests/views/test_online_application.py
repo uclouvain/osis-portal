@@ -130,7 +130,7 @@ class TestOnlineApplication(TestCase):
         url = reverse('vacant_attributions_search')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
+        context = response.context[0]
         self.assertEqual(context['a_tutor'], self.tutor)
         self.assertTrue(context['search_form'])
         self.assertFalse(context['attributions_vacant'])
@@ -163,7 +163,7 @@ class TestOnlineApplication(TestCase):
         url = reverse('vacant_attributions_search')
         response = self.client.get(url, data={'learning_container_acronym': 'LAGRO1234'})
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
+        context = response.context[0]
         self.assertEqual(context['a_tutor'], self.tutor)
         self.assertTrue(context['search_form'])
         self.assertFalse(context['attributions_vacant'])
@@ -216,7 +216,7 @@ class TestOnlineApplication(TestCase):
                       kwargs={'learning_container_year_id': self.lagro1600_next.id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
+        context = response.context[0]
         self.assertEqual(context['a_tutor'], self.tutor)
         self.assertEqual(context['learning_container_year'], self.lagro1600_next)
         self.assertTrue(context['form'])
@@ -239,7 +239,7 @@ class TestOnlineApplication(TestCase):
         post_data = _get_application_example(self.lagro1600_next, None, None)
         response = self.client.post(url, data=post_data)
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
+        context = response.context[0]
         self.assertTrue(context.get('form'))
         form = context['form']
         self.assertTrue(form.errors)  # Not valid because not number entered
@@ -262,7 +262,7 @@ class TestOnlineApplication(TestCase):
         post_data = _get_application_example(self.lagro1600_next, '-1', '5')
         response = self.client.post(url, data=post_data)
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
+        context = response.context[0]
         self.assertTrue(context.get('form'))
         form = context['form']
         self.assertTrue(form.errors)  # Not valid because -1 entered
@@ -288,7 +288,7 @@ class TestOnlineApplication(TestCase):
         url = reverse('applications_overview')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
+        context = response.context[0]
         self.assertEqual(len(context['applications']), 1)
         self.assertEqual(context['applications'][0]['acronym'], lbira2101a_next.acronym)
         with self.assertRaises(KeyError):

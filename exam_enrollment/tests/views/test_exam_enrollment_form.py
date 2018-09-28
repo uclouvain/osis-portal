@@ -284,8 +284,10 @@ class ExamEnrollmentFormTest(TestCase):
         self.assertRedirects(response, reverse('dashboard_home'))
 
     def test_get_exam_enrollment_form(self):
-        self.assertEqual(exam_enrollment.ask_exam_enrollment_form(self.student, self.off_year).status_code, 200)
-
+        if hasattr(settings, 'QUEUES') and settings.QUEUES:
+            self.assertEqual(exam_enrollment.ask_exam_enrollment_form(self.student, self.off_year).status_code, 200)
+        else:
+            self.assertEqual(exam_enrollment.ask_exam_enrollment_form(self.student, self.off_year).status_code, 405)
 
     def test_check_exam_enrollment_form_up_to_date_in_db_with_document(self):
         off_year = self.off_enrol.offer_year
@@ -297,7 +299,6 @@ class ExamEnrollmentFormTest(TestCase):
         self.client.force_login(self.user)
         response = self.client.get(request_url)
         self.assertEqual(response.status_code, HTTP_RESPONSE_OK)
-
 
     def test_check_exam_enrollment_form_not_in_db(self):
         off_year = self.off_enrol.offer_year
@@ -319,27 +320,25 @@ class ExamEnrollmentFormTest(TestCase):
         response = self.client.get(request_url)
         self.assertEqual(response.status_code, HTTP_RESPONSE_NOTFOUND)
 
-
     def test_check_exam_enrollment_form_outdated_in_db(self):
-        queues_timeout_settings = settings.QUEUES.get("QUEUES_TIMEOUT")
-        queues_timeout_settings['EXAM_ENROLLMENT_FORM_RESPONSE'] = 15
-        with override_settings(QUEUES_TIMEOUT=queues_timeout_settings):
+        if hasattr(settings, 'QUEUES') and settings.QUEUES:
             request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
-            outdated_time = timezone.now() - timezone.timedelta(seconds=request_timeout + 1)
-            off_year = self.off_enrol.offer_year
-            ExamEnrollmentRequestFactory(student=self.student,
-                                         offer_year_acronym=off_year.acronym,
-                                         document={"id": 1})
-            # We must update fetch_date without passing trough save() to bypass auto_now :
-            exam_enroll_request_qs = ExamEnrollmentRequest.objects.filter(student=self.student,
-                                                                          offer_year_acronym=off_year.acronym)
-            exam_enroll_request_qs.update(fetch_date=outdated_time)
+        else:
+            request_timeout = settings.DEFAULT_QUEUE_TIMEOUT
+        outdated_time = timezone.now() - timezone.timedelta(seconds=request_timeout + 1)
+        off_year = self.off_enrol.offer_year
+        ExamEnrollmentRequestFactory(student=self.student,
+                                     offer_year_acronym=off_year.acronym,
+                                     document={"id": 1})
+        # We must update fetch_date without passing trough save() to bypass auto_now :
+        exam_enroll_request_qs = ExamEnrollmentRequest.objects.filter(student=self.student,
+                                                                      offer_year_acronym=off_year.acronym)
+        exam_enroll_request_qs.update(fetch_date=outdated_time)
 
-            request_url = reverse(exam_enrollment.check_exam_enrollment_form, args=[off_year.id])
-            self.client.force_login(self.user)
-            response = self.client.get(request_url)
-            self.assertEqual(response.status_code, HTTP_RESPONSE_NOTFOUND)
-
+        request_url = reverse(exam_enrollment.check_exam_enrollment_form, args=[off_year.id])
+        self.client.force_login(self.user)
+        response = self.client.get(request_url)
+        self.assertEqual(response.status_code, HTTP_RESPONSE_NOTFOUND)
 
     def test_check_exam_enrollment_form_not_in_db_without_offer_enrollment(self):
         off_year = self.off_enrol.offer_year

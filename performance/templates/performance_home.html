@@ -26,6 +26,8 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
+{% block title %}Exam Marks{%  endblock %}
+
 {% block content %}
 <div class="page-header">
     <h2>{% trans 'my_performance' %}</h2>
@@ -71,7 +73,7 @@
             <tr>
                 <td>{{row.academic_year}}</td>
                 <td>
-                    <a href="{% block student_result_url %}{% endblock %}">
+                    <a href="{% block student_result_url %}{% endblock %}" id="lnk_perf_{{ row.pk }}">
                         {{row.acronym}}
                     </a>
                 </td>
