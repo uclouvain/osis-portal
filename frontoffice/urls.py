@@ -23,15 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import os
 
 from django.conf import settings
-from django.conf.urls.static import static
-from django.contrib import admin
 from django.conf.urls import url, include
+from django.contrib import admin
 from django.views.i18n import javascript_catalog
-from base.views import common
 
+from base.views import common
 
 js_info_dict = {
     'domain': 'djangojs',
@@ -66,6 +64,8 @@ if 'attestation' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^attestation/', include('attestation.urls')), )
 if 'assessments' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^assessments/', include('assessments.urls')),)
+if 'continuing_education' in settings.INSTALLED_APPS:
+    urlpatterns = urlpatterns + (url(r'^continuing_education/', include('continuing_education.urls')),)
 
 handler404 = 'base.views.common.page_not_found'
 handler403 = 'base.views.common.access_denied'
@@ -78,8 +78,3 @@ admin.site.index_title = 'Louvain'
 if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
     import debug_toolbar
     urlpatterns += (url(r'^__debug__/', include(debug_toolbar.urls)), )
-
-if settings.DEBUG:
-    urlpatterns += (static(r'/favicon.ico', document_root=os.path.join(settings.BASE_DIR, 'base/static/img/favicon.ico')),)
-
-

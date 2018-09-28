@@ -30,8 +30,7 @@ from datetime import datetime
 
 
 def generate_email(user, domain=None):
-    if domain is None:
-        domain = factory.Faker('domain_name').generate({})
+    domain = domain or factory.Faker('domain_name').generate({})
     return '{0.first_name}.{0.last_name}@{1}'.format(user, domain).lower()
 
 

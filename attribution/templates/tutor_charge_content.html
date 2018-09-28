@@ -84,7 +84,7 @@
                 </td>
                 <td><a target="_blank" href="{{ attribution.url_schedule }}"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span></a></td>
                 <td><a href="{{ attribution.url_students_list_email }}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a></td>
-                <td>{% trans attribution.function %}</td>
+                <td>{% if attribution.function %}{% trans attribution.function %}{% else %}-{% endif %}</td>
             </tr>
         {% endfor %}
         <tr>

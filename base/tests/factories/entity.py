@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from datetime import datetime
+
 import factory
 from base.tests.factories.organization import OrganizationFactory
 from reference.tests.factories.country import CountryFactory
@@ -33,10 +35,4 @@ class EntityFactory(factory.DjangoModelFactory):
         model = 'base.Entity'
 
     organization = factory.SubFactory(OrganizationFactory)
-    location = factory.Faker('street_address')
-    postal_code = factory.Faker('zipcode')
-    city = factory.Faker('city')
-    country = factory.SubFactory(CountryFactory)
-    website = factory.Faker('url')
-    phone = factory.Faker('phone_number')
-    fax = factory.Faker('phone_number')
+    changed = factory.LazyFunction(datetime.now)
