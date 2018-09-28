@@ -11,7 +11,7 @@ FUNCT_TESTS_CONFIG = {
     'DISPLAY_HEIGHT': int(os.environ.get('FT_DISPLAY_HEIGHT', 1080)),
     'GECKO_DRIVER': os.environ.get(
         'FT_GECKO_DRIVER',
-        os.path.join(BASE_DIR,'base/tests/functional/drivers/geckodriver')
+        os.path.join(BASE_DIR, 'base/tests/functional/drivers/geckodriver')
     ),
     'TAKE_SCREENSHOTS': os.environ.get('FT_TAKE_SCREENSHOTS', 'False').lower() == 'true',
     'SCREENSHOTS_DIR': os.environ.get('FT_SCREENSHOT_DIR', os.path.join(BASE_DIR, 'base/tests/functional/screenshots')),
