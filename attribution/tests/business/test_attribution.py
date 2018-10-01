@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
 from decimal import Decimal
 
 from django.contrib.auth.models import Group
@@ -49,10 +50,10 @@ class AttributionTest(TestCase):
         TutorFactory(person=self.person)
 
         _create_multiple_academic_year()
-        self.academic_year = AcademicYear.objects.get(year=2017)
+        self.academic_year = AcademicYear.objects.get(year=datetime.date.today().year)
 
         # Creation Json which will be store on attribution
-        attributions = _get_attributions_dict()
+        attributions = _get_attributions_dict(self.academic_year.year)
         self.attrib = AttributionNewFactory(global_id=self.person.global_id,
                                             attributions=attributions)
 
@@ -311,14 +312,16 @@ def _create_learning_container_with_components(acronym, academic_year, volume_le
                                      type=component_type.PRACTICAL_EXERCISES)
 
 
-def _get_attributions_dict():
+def _get_attributions_dict(current_year):
+    previous_year = current_year - 1
+    future_year = current_year + 1
     return [
-        {'year': 2016, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00', 'LECTURING': '22.5',
-         'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': 2016},
-        {'year': 2017, 'acronym': 'LBIR1300', 'title': 'Chimie complexe volume 2', 'weight': '7.50',
-         'LECTURING': '12.5', 'PRACTICAL_EXERCISES': '9.5', 'function': 'HOLDER', 'start_year': 2015, 'end_year': 2020},
-        {'year': 2017, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00', 'LECTURING': '20.5',
+        {'year': previous_year, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00', 'LECTURING': '22.5',
+         'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': previous_year},
+        {'year': current_year, 'acronym': 'LBIR1300', 'title': 'Chimie complexe volume 2', 'weight': '7.50',
+         'LECTURING': '12.5', 'PRACTICAL_EXERCISES': '9.5', 'function': 'HOLDER', 'start_year': 2015, 'end_year': future_year},
+        {'year': current_year, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00', 'LECTURING': '20.5',
          'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER', 'start_year': 2013},
-        {'year': 2017, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00', 'LECTURING': '20.5',
-         'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': 2017}
+        {'year': current_year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00', 'LECTURING': '20.5',
+         'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': current_year}
     ]
