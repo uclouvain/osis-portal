@@ -262,7 +262,7 @@ PERSON_EXTERNAL_ID_PATTERN = os.environ.get('PERSON_EXTERNAL_ID_PATTERN', 'osis.
 # Ex : LOGO_INSTITUTION_URL = 'https://www.google.be/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'
 # A relative URL will work on local , but not out of the box on the servers.
 LOGO_INSTITUTION_URL = os.environ.get('LOGO_INSTITUTION_URL',
-                                      os.path.join(BASE_DIR, "base/static/img/logo_institution.jpg"))
+                                      os.path.join(BASE_DIR, "base/static/img/logo_header.jpg"))
 LOGO_OSIS_URL = os.environ.get('LOGO_OSIS_URL', '')
 OSIS_SCORE_ENCODING_URL = os.environ.get('OSIS_SCORE_ENCODING_URL', None)
 OSIS_VPN_HELP_URL = os.environ.get('OSIS_VPN_HELP_URL', None)
