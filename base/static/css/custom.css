@@ -4,8 +4,9 @@ body {
 }
 
 .navbar-brand {
+    margin: 5px 0 5px;
     padding: 0;
-    height: 70px;
+    height: 50px;
 }
 .navbar-brand>img {
     padding: 0;
@@ -29,12 +30,12 @@ body {
 }
 
 .navbar {
-    min-height:85px !important
+    min-height:50px !important
 }
 
 .navbar-nav > li > a {
-    padding-top:45px !important;
-    padding-bottom:5px !important;
+    padding-top:20px !important;
+    padding-bottom:20px !important;
 }
 
 .not-active {
