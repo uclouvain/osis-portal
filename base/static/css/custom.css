@@ -3,6 +3,16 @@ body {
     font-family: 'Armata', sans-serif;
 }
 
+.navbar-brand {
+    padding: 0;
+    height: 100%;
+}
+.navbar-brand>img {
+    padding: 0;
+    height: 100%;
+    width: auto;
+}
+
 .caption {
     font-size: small;
     font-style: italic;
