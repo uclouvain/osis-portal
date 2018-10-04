@@ -126,3 +126,27 @@ msgstr "Form unavailable"
 
 msgid "exam_enrollment_form_loading"
 msgstr "Exam enrollment form is loading."
+
+msgid "exam_enrollment_confirmation_message"
+msgstr "Are you sure you want to enroll to exams?"
+
+msgid "confirm"
+msgstr "Confirm"
+
+msgid "Do you really want to register for exams or change your registration ?"
+msgstr ""
+
+msgid "yes"
+msgstr ""
+
+msgid "no"
+msgstr ""
+
+msgid "Consult all the status of my exam enrollments"
+msgstr ""
+
+msgid "Register to exams or update my exam enrollments"
+msgstr ""
+
+msgid "Which action do you want to perform ?"
+msgstr ""

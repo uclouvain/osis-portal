@@ -56,7 +56,7 @@ from decimal import Decimal
 def outside_period(request):
     text = _('application_denied')
     messages.add_message(request, messages.WARNING, "%s" % text)
-    return layout.render(request, "attribution_access_denied.html")
+    return layout.render(request, "attribution_access_denied.html", {})
 
 
 @login_required

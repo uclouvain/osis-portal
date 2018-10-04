@@ -40,6 +40,7 @@ from django.core.exceptions import PermissionDenied
 
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
+from base.utils import queue_utils
 from base.views import layout
 from osis_common.document import paper_sheet
 from osis_common.decorators.ajax import ajax_required
@@ -72,7 +73,7 @@ def scores_sheets_admin(request):
 def tutor_scores_sheets(request, global_id):
     person = mdl_base.person.find_by_global_id(global_id)
     scores_in_db_and_uptodate = _check_person_and_scores_in_db(person)
-    request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("PAPER_SHEET_TIMEOUT")
+    request_timeout = queue_utils.get_timeout_or_default('PAPER_SHEET_TIMEOUT')
     return layout.render(request, "scores_sheets.html", locals())
 
 
@@ -89,7 +90,7 @@ def score_encoding(request):
 def scores_sheets(request):
     person = mdl_base.person.find_by_user(request.user)
     scores_in_db_and_uptodate = _check_person_and_scores_in_db(person)
-    request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("PAPER_SHEET_TIMEOUT")
+    request_timeout = queue_utils.get_timeout_or_default('PAPER_SHEET_TIMEOUT')
     return layout.render(request, "scores_sheets.html", locals())
 
 

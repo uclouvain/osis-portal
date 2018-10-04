@@ -111,7 +111,7 @@ def get_email_students(an_acronym, year):
 
 
 def get_schedule_url(an_acronym):
-    if string_utils.is_string_not_null_empty(an_acronym):
+    if string_utils.is_string_not_null_empty(an_acronym) and hasattr(settings, 'ATTRIBUTION_CONFIG'):
         return settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_URL').\
             format(settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_NUMBER'), an_acronym.lower())
     return None
@@ -133,8 +133,6 @@ def list_teaching_charge(a_person, an_academic_year):
     tot_practical = NO_ALLOCATION_CHARGE
     attributions_charge_duration = get_attributions_charge_duration(a_person, an_academic_year)
     for an_attribution in list_attributions(a_person, an_academic_year):
-        if not an_attribution.external_id in attributions_charge_duration:
-            continue
         a_learning_unit_year = an_attribution.learning_unit_year
 
         learning_unit_attribution_charge_duration = \
@@ -240,7 +238,8 @@ def set_formset_years(a_person):
 
 
 def get_url_learning_unit_year(a_learning_unit_year):
-    if a_learning_unit_year and string_utils.is_string_not_null_empty(a_learning_unit_year.acronym):
+    if a_learning_unit_year and string_utils.is_string_not_null_empty(a_learning_unit_year.acronym) and \
+            hasattr(settings, 'ATTRIBUTION_CONFIG'):
         return settings.ATTRIBUTION_CONFIG.get('CATALOG_URL').format(a_learning_unit_year.academic_year.year,
                                                                      a_learning_unit_year.acronym.lower())
     return None
@@ -371,7 +370,7 @@ def get_learning_unit_enrollments_list(a_learning_unit_year):
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def attribution_administration(request):
-    return layout.render(request, 'admin/attribution_administration.html')
+    return layout.render(request, 'admin/attribution_administration.html', {})
 
 
 @login_required
