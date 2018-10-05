@@ -70,12 +70,11 @@
                                         {% else %}
                                             href="#"
                                         {% endif %} id="lnk_home">
-                <img src="{% static 'img/logo_institution.jpg' %}" style="margin-top: -10px;"></a>
+                <img src="{% static 'img/logo_header.jpg' %}"></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <h2 class="navbar-text" style="padding-top:6px">{% trans 'institution_identification' %}</h2>
                 <ul class="nav navbar-nav navbar-right">
                     {% if request.user.is_authenticated %}
                         {% if perms.base.can_access_administration %}
