@@ -6,7 +6,7 @@ language: python
 python: "3.5.5"
 
 install:
-  - "pip install -r travis-requirements.txt"
+  - "pip install -r requirements.txt"
 
 before_script:
   - "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter"
@@ -24,4 +24,4 @@ notifications:
 services:
   - rabbitmq
 addons:
-    postgresql: "9.4"
+    postgresql: "9.6"

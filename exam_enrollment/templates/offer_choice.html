@@ -70,15 +70,17 @@
                             <th>{% trans 'acronym' %}</th>
                             <th>{% trans 'program' %}</th>
                         </tr>
-                        {% for prog in programs %}
+                        {% for program in programs %}
                             <tr>
-                                <td>{{ prog.academic_year }}</td>
+
+                                <td>{{ program.academic_year }}</td>
                                 <td>
-                                    <a href="{% url 'exam_enrollment_form' prog.id %}">
-                                        {{ prog.acronym }}
+                                    <a href="#"
+                                       data-toggle="modal" data-target="#modalConfirmExamEnrollment{{ program.id }}">
+                                        {{ program.acronym }}
                                     </a>
                                 </td>
-                                <td>{{ prog.title }}</td>
+                                <td>{{ program.title }}</td>
                             </tr>
                         {% endfor %}
                     </table>
@@ -87,4 +89,10 @@
 
         </div>
     </div>
+
+    {% for program in programs %}
+        {% include 'blocks/modal/exam_enrollment_confirm.html' %}
+    {% endfor %}
+
+
 {% endblock %}

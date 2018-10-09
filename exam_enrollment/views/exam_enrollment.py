@@ -63,7 +63,7 @@ def choose_offer(request):
 @login_required
 @permission_required('base.is_student', raise_exception=True)
 def choose_offer_direct(request):
-    return navigation(request, True)
+    return navigation(request, False)
 
 
 def navigation(request, navigate_direct_to_form):
@@ -100,8 +100,9 @@ def exam_enrollment_form(request, offer_year_id):
 
 def _get_student_programs(stud, acad_year):
     if stud:
-        return [enrol.offer_year for enrol in list(
-            mdl_base.offer_enrollment.find_by_student_academic_year(stud, acad_year))]
+        return [
+            enrol.offer_year for enrol in list(mdl_base.offer_enrollment.find_by_student_academic_year(stud, acad_year))
+        ]
     return None
 
 
@@ -110,8 +111,10 @@ def _get_exam_enrollment_form(off_year, request, stud):
     if not learn_unit_enrols:
         messages.add_message(request, messages.WARNING, _('no_learning_unit_enrollment_found').format(off_year.acronym))
         return response.HttpResponseRedirect(reverse('dashboard_home'))
-
-    request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
+    if hasattr(settings, 'QUEUES') and settings.QUEUES:
+        request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
+    else:
+        request_timeout = settings.DEFAULT_QUEUE_TIMEOUT
     fetch_date_limit = timezone.now() - timezone.timedelta(seconds=request_timeout)
     exam_enroll_request = exam_enrollment_request.\
         get_by_student_and_offer_year_acronym_and_fetch_date(stud, off_year.acronym, fetch_date_limit)
@@ -209,7 +212,10 @@ def check_exam_enrollment_form(request, offer_year_id):
 def _exam_enrollment_up_to_date_in_db_with_document(a_student, off_year):
     an_offer_enrollment = mdl_base.offer_enrollment.get_by_student_offer(a_student, off_year)
     if an_offer_enrollment:
-        request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
+        if hasattr(settings, 'QUEUES') and settings.QUEUES:
+            request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
+        else:
+            request_timeout = settings.DEFAULT_QUEUE_TIMEOUT
         fetch_date_limit = timezone.now() - timezone.timedelta(seconds=request_timeout)
         exam_enroll_request = exam_enrollment_request.\
             get_by_student_and_offer_year_acronym_and_fetch_date(a_student, off_year.acronym, fetch_date_limit)
