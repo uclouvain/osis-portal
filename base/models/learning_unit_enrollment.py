@@ -47,7 +47,10 @@ class LearningUnitEnrollment(SerializableModel):
     date_enrollment = models.DateField()
     learning_unit_year = models.ForeignKey('LearningUnitYear')
     offer_enrollment = models.ForeignKey('OfferEnrollment')
-    enrollment_state = models.CharField(max_length=20, choices=learning_unit_enrollment_state.STATES, blank=True, null=True)
+    enrollment_state = models.CharField(max_length=20, choices=learning_unit_enrollment_state.STATES, default="")
+
+    class Meta:
+        unique_together = ('offer_enrollment', 'learning_unit_year', 'enrollment_state',)
 
     @property
     def student(self):
