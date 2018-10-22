@@ -36,7 +36,7 @@ from base.models.enums import learning_unit_year_subtypes
 class LearningUnitYearFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = "base.LearningUnitYear"
-        django_get_or_create = ('acronym', 'learning_unit', 'academic_year')
+        django_get_or_create = ('acronym', 'academic_year')
 
     external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
     acronym = factory.Sequence(lambda n: 'LFAC%04d' % n)
