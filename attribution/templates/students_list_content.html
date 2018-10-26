@@ -27,10 +27,10 @@
 {% endcomment %}
 
     <h1>{{ learning_unit_year.academic_year }} - {{ learning_unit_year.acronym }} - {{ learning_unit_year.complete_title }}</h1>
-    {% if students|length = 0 %}
-        <h4>{% trans 'no_student_learning_unit' %}</h4>
-    {% else %}
+    {% if students %}
         <h4>{{ students|length }}{% trans 'students_learning_unit' %}</h4>
+    {% else %}
+        <h4>{% trans 'no_student_learning_unit' %}</h4>
     {% endif %}
     {% if students %}
         <form method="get" action="{% url 'produce_xls_students' learning_unit_year.id %}">
