@@ -13,7 +13,7 @@ before_script:
   - "chmod +x ./cc-test-reporter"
   - "./cc-test-reporter before-build"
 
-script: "python3 manage.py compilemessages && coverage run manage.py test"
+script: "python3 manage.py compilemessages && coverage run manage.py test --parallel"
 
 after_script:
   - "coverage xml"
