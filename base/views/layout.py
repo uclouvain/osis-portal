@@ -44,7 +44,9 @@ def _check_notice(request, values):
         values['notice'] = request.session['notice']
 
 
-def render(request, template, values):
+def render(request, template, values=None):
+    if not values:
+        values = {}
     _check_notice(request, values)
     values['js'] = FORCE_CACHE_RENEW
     return shortcuts.render(request, template, values)

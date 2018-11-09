@@ -357,7 +357,9 @@ ATTESTATION_CONFIG = {
 ACCOUNT_ACTIVATION_DAYS = int(os.environ.get('IUFC_ACCOUNT_ACTIVATION_DAYS', 7))
 IUFC_CONFIG = {
     'ACTIVATION_MESSAGES_OUTSIDE_PRODUCTION': os.environ.get('IUFC_ACTIVATION_MAIL_OUTSIDE_PRODUCTION',
-                                                             'false').lower() == 'true'
+                                                             'false').lower() == 'true',
+    'PASSWORD_RESET_MESSAGES_OUTSIDE_PRODUCTION': os.environ.get('IUFC_PASSWORD_RESET_MAIL_OUTSIDE_PRODUCTION',
+                                                                 'false').lower() == 'true'
 }
 
 if TESTING and TESTS_TYPES in ('ALL', 'SELENIUM'):
